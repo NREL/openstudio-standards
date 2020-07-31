@@ -28,7 +28,7 @@ class BTAPPRE1980 < NECB2011
         end
       end
     else
-      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select { |e| File.file? e }
       files.each do |file|
         data = JSON.parse(File.read(file))
         if !data['tables'].nil?
@@ -51,10 +51,15 @@ class BTAPPRE1980 < NECB2011
   def model_apply_standard(model:,
                            epw_file:,
                            sizing_run_dir: Dir.pwd,
-                           primary_heating_fuel: 'DefaultFuel')
+                           primary_heating_fuel: 'DefaultFuel',
+                           dcv_type: 'NECB_Default',
+                           lights_type: 'NECB_Default',
+                           lights_scale: 1.0,
+                           space_height: @space_height,
+                           daylighting_type: 'NECB_Default')
     apply_weather_data(model: model, epw_file: epw_file)
     apply_loads(model: model)
-    apply_envelope( model: model)
+    apply_envelope(model: model)
     #Keeping default window sizes in pre-1980 buildings and removing daylighting
     #apply_fdwr_srr_daylighting(model: model)
     apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
@@ -64,17 +69,18 @@ class BTAPPRE1980 < NECB2011
     return model
   end
 
-  def apply_standard_efficiencies(model:, sizing_run_dir:)
+  def apply_standard_efficiencies(model:, sizing_run_dir:, eff_mod: nil)
     raise('validation of model failed.') unless validate_initial_model(model)
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
     # This is needed for NECB2011 as a workaround for sizing the reheat boxes
-    model.getAirTerminalSingleDuctVAVReheats.each {|iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj)}
+    model.getAirTerminalSingleDuctVAVReheats.each { |iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj) }
     # Apply the prototype HVAC assumptions
     model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
     # Apply the HVAC efficiency standard
     model_apply_hvac_efficiency_standard(model, climate_zone)
     model_apply_existing_building_fan_performance(model: model)
+    modify_equipment_efficiency(model: model, eff_mod: eff_mod)
   end
 
   #occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method

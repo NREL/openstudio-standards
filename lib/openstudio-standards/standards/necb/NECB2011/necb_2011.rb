@@ -40,7 +40,7 @@ class NECB2011 < Standard
     else
       path = "#{File.dirname(__FILE__)}/../common/"
       raise ('Could not find common folder') unless Dir.exist?(path)
-      files = Dir.glob("#{path}/*.json").select {|e| File.file? e}
+      files = Dir.glob("#{path}/*.json").select { |e| File.file? e }
       files.each do |file|
         data = JSON.parse(File.read(file))
         if not data["tables"].nil?
@@ -62,7 +62,7 @@ class NECB2011 < Standard
         end
       end
     else
-      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select { |e| File.file? e }
       files.each do |file|
         data = JSON.parse(File.read(file))
         if not data["tables"].nil?
@@ -117,7 +117,7 @@ class NECB2011 < Standard
   end
 
   def get_all_spacetype_names
-    return @standards_data['space_types'].map {|space_types| [space_types['building_type'], space_types['space_type']]}
+    return @standards_data['space_types'].map { |space_types| [space_types['building_type'], space_types['space_type']] }
   end
 
   # Enter in [latitude, longitude] for each loc and this method will return the distance.
@@ -129,8 +129,8 @@ class NECB2011 < Standard
     dlat_rad = (loc2[0] - loc1[0]) * rad_per_deg # Delta, converted to rad
     dlon_rad = (loc2[1] - loc1[1]) * rad_per_deg
 
-    lat1_rad, lon1_rad = loc1.map {|i| i * rad_per_deg}
-    lat2_rad, lon2_rad = loc2.map {|i| i * rad_per_deg}
+    lat1_rad, lon1_rad = loc1.map { |i| i * rad_per_deg }
+    lat2_rad, lon2_rad = loc2.map { |i| i * rad_per_deg }
 
     a = Math.sin(dlat_rad / 2) ** 2 + Math.cos(lat1_rad) * Math.cos(lat2_rad) * Math.sin(dlon_rad / 2) ** 2
     c = 2 * Math::atan2(Math::sqrt(a), Math::sqrt(1 - a))
@@ -169,11 +169,11 @@ class NECB2011 < Standard
                                    epw_file:,
                                    debug: false,
                                    sizing_run_dir: Dir.pwd,
-                                   primary_heating_fuel: 'DefaultFuel'#,
-                                   # dcv_type:,
-                                   # lights_type:,
-                                   # lights_scale:,
-                                   # space_height:
+                                   primary_heating_fuel: 'DefaultFuel',
+                                   dcv_type: 'NECB_Default',
+                                   lights_type: 'NECB_Default',
+                                   lights_scale: 1.0,
+                                   daylighting_type: 'NECB_Default'
   )
 
     model = load_building_type_from_library(building_type: building_type)
@@ -181,11 +181,11 @@ class NECB2011 < Standard
                                 epw_file: epw_file,
                                 sizing_run_dir: sizing_run_dir,
                                 primary_heating_fuel: primary_heating_fuel,
-                                dcv_type: 'NECB_Default', # Four options: (1) 'NECB_Default', (2) 'No DCV', (3) 'Occupancy-based DCV' , (4) 'CO2-based DCV'
-                                lights_type: 'NECB_Default', # Two options: (1) 'NECB_Default', (2) 'LED'
-                                lights_scale: 1.0,
+                                dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No DCV', (3) 'Occupancy-based DCV' , (4) 'CO2-based DCV'
+                                lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
+                                lights_scale: lights_scale,
                                 space_height: @space_height,
-                                daylighting_type: 'NECB_Default' # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
+                                daylighting_type: daylighting_type # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
     )
   end
 
@@ -206,14 +206,14 @@ class NECB2011 < Standard
                            dcv_type: 'NECB_Default',
                            lights_type: 'NECB_Default',
                            lights_scale: 1.0,
-                           space_height:,
+                           space_height: @space_height,
                            daylighting_type: 'NECB_Default'
   )
     apply_weather_data(model: model, epw_file: epw_file)
     apply_loads(model: model, lights_type: lights_type, lights_scale: lights_scale) #Sara
     apply_envelope(model: model)
     apply_fdwr_srr_daylighting(model: model)
-    apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir, lights_type: lights_type, lights_scale: lights_scale, space_height: space_height)
+    apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir, lights_type: lights_type, lights_scale: lights_scale)
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir) #, dcv_type: dcv_type #Sara
     # puts model
     # raise('check model for dcv')
@@ -227,9 +227,11 @@ class NECB2011 < Standard
     return model
   end
 
-  def apply_loads(model:, lights_type: 'NECB_Default', lights_scale: 1.0) #Sara
-    raise('validation of model failed.') unless validate_initial_model(model)
-    raise('validation of spacetypes failed.') unless validate_and_upate_space_types(model)
+  def apply_loads(model:, lights_type: 'NECB_Default', lights_scale: 1.0, validate: true)
+    if validate
+      raise('validation of model failed.') unless validate_initial_model(model)
+      raise('validation of spacetypes failed.') unless validate_and_upate_space_types(model)
+    end
     #this sets/stores the template version loads that the model uses.
     model.getBuilding.setStandardsTemplate(self.class.name)
     set_occ_sensor_spacetypes(model, @space_type_map)
@@ -247,23 +249,44 @@ class NECB2011 < Standard
   end
 
   def apply_envelope(model:,
-                     properties: {
-                         'outdoors_wall_conductance' => nil,
-                         'outdoors_floor_conductance' => nil,
-                         'outdoors_roofceiling_conductance' => nil,
-                         'ground_wall_conductance' => nil,
-                         'ground_floor_conductance' => nil,
-                         'ground_roofceiling_conductance' => nil,
-                         'outdoors_door_conductance' => nil,
-                         'outdoors_fixedwindow_conductance' => nil
-                     })
+                     ext_wall_cond: nil,
+                     ext_floor_cond: nil,
+                     ext_roof_cond: nil,
+                     ground_wall_cond: nil,
+                     ground_floor_cond: nil,
+                     ground_roof_cond: nil,
+                     door_construction_cond: nil,
+                     fixed_window_cond: nil,
+                     glass_door_cond: nil,
+                     overhead_door_cond: nil,
+                     skylight_cond: nil,
+                     glass_door_solar_trans: nil,
+                     fixed_wind_solar_trans: nil,
+                     skylight_solar_trans: nil)
     raise('validation of model failed.') unless validate_initial_model(model)
     model_apply_infiltration_standard(model)
     model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model.getOutsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model_add_constructions(model)
-    apply_standard_construction_properties(model: model, properties: properties)
+    apply_standard_construction_properties(model: model,
+                                           ext_wall_cond: ext_wall_cond,
+                                           ext_floor_cond: ext_floor_cond,
+                                           ext_roof_cond: ext_roof_cond,
+                                           ground_wall_cond: ground_wall_cond,
+                                           ground_floor_cond: ground_floor_cond,
+                                           ground_roof_cond: ground_roof_cond,
+                                           door_construction_cond: door_construction_cond,
+                                           fixed_window_cond: fixed_window_cond,
+                                           glass_door_cond: glass_door_cond,
+                                           overhead_door_cond: overhead_door_cond,
+                                           skylight_cond: skylight_cond,
+                                           glass_door_solar_trans: glass_door_solar_trans,
+                                           fixed_wind_solar_trans: fixed_wind_solar_trans,
+                                           skylight_solar_trans: skylight_solar_trans)
+
+
     model_create_thermal_zones(model, @space_multiplier_map)
+
   end
 
   # Thermal zones need to be set to determine conditioned spaces when applying fdwr and srr limits.
@@ -281,17 +304,18 @@ class NECB2011 < Standard
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
-  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type:)
+  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type:, eff_mod: nil)
     raise('validation of model failed.') unless validate_initial_model(model)
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
     # This is needed for NECB2011 as a workaround for sizing the reheat boxes
-    model.getAirTerminalSingleDuctVAVReheats.each {|iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj)}
+    model.getAirTerminalSingleDuctVAVReheats.each { |iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj) }
     # Apply the prototype HVAC assumptions
     model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
     # Apply the HVAC efficiency standard
     model_apply_hvac_efficiency_standard(model, climate_zone)
     model_enable_demand_controlled_ventilation(model, dcv_type) #Sara
+    modify_equipment_efficiency(model: model, eff_mod: eff_mod)
   end
 
   def apply_loop_pump_power(model:, sizing_run_dir:)
@@ -319,7 +343,7 @@ class NECB2011 < Standard
     #Now iterate though each vintage
     space_type_vintage_list.each do |template|
       #Create the standard object and get a list of all the spacetypes available for that vintage.
-      standard_space_type_list = Standard.build(template).get_all_spacetype_names.map {|spacetype| [spacetype[0].to_s + '-' + spacetype[1].to_s]}
+      standard_space_type_list = Standard.build(template).get_all_spacetype_names.map { |spacetype| [spacetype[0].to_s + '-' + spacetype[1].to_s] }
       # set array to contain unknown spacetypes.
       unknown_spacetypes = []
       # iterate though all space types that the model is using
@@ -356,7 +380,7 @@ class NECB2011 < Standard
       bt_target_vintage_string = "#{self.class.name}_building_type"
       space_type_upgrade_map = @standards_data['space_type_upgrade_map']
       model.getSpaceTypes.sort.each do |st|
-        space_type_map = space_type_upgrade_map.detect {|row| (row[st_model_vintage_string] == st.standardsSpaceType.get.to_s) && (row[bt_model_vintage_string] == st.standardsBuildingType.get.to_s)}
+        space_type_map = space_type_upgrade_map.detect { |row| (row[st_model_vintage_string] == st.standardsSpaceType.get.to_s) && (row[bt_model_vintage_string] == st.standardsBuildingType.get.to_s) }
         st.setStandardsBuildingType(space_type_map[bt_target_vintage_string].to_s.strip)
         raise('could not set buildingtype') unless st.setStandardsBuildingType(space_type_map[bt_target_vintage_string].to_s.strip)
         raise('could not set this') unless st.setStandardsSpaceType(space_type_map[st_target_vintage_string].to_s.strip)
@@ -934,7 +958,7 @@ class NECB2011 < Standard
     ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their primary_sidelighted_area <= 100m2), as per NECB2011: 4.2.2.2.
     daylight_spaces_exception = []
     primary_sidelighted_area_hash.sort.each do |key_daylight_space_name, value_primary_sidelighted_area|
-      if value_primary_sidelighted_area <= 100.0 && [key_daylight_space_name].any? {|word| offices_larger_25m2.include?(word)} == false
+      if value_primary_sidelighted_area <= 100.0 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
         daylight_spaces_exception << key_daylight_space_name
       end
     end
@@ -942,7 +966,7 @@ class NECB2011 < Standard
     ##### find daylight_spaces which do not need daylight sensor controls based on the sidelighting_effective_aperture as per NECB2011: 4.2.2.8.
     ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their sidelighting_effective_aperture <= 10%), as per NECB2011: 4.2.2.2.
     sidelighting_effective_aperture_hash.sort.each do |key_daylight_space_name, value_sidelighting_effective_aperture|
-      if value_sidelighting_effective_aperture <= 0.1 && [key_daylight_space_name].any? {|word| offices_larger_25m2.include?(word)} == false
+      if value_sidelighting_effective_aperture <= 0.1 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
         daylight_spaces_exception << key_daylight_space_name
       end
     end
@@ -950,7 +974,7 @@ class NECB2011 < Standard
     ##### find daylight_spaces which do not need daylight sensor controls based on the daylighted_area_under_skylights as per NECB2011: 4.2.2.4.
     ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their daylighted_area_under_skylights <= 400m2), as per NECB2011: 4.2.2.2.
     daylighted_area_under_skylights_hash.sort.each do |key_daylight_space_name, value_daylighted_area_under_skylights|
-      if value_daylighted_area_under_skylights <= 400.0 && [key_daylight_space_name].any? {|word| offices_larger_25m2.include?(word)} == false
+      if value_daylighted_area_under_skylights <= 400.0 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
         daylight_spaces_exception << key_daylight_space_name
       end
     end
@@ -958,7 +982,7 @@ class NECB2011 < Standard
     ##### find daylight_spaces which do not need daylight sensor controls based on the skylight_effective_aperture criterion as per NECB2011: 4.2.2.4.
     ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their skylight_effective_aperture <= 0.6%), as per NECB2011: 4.2.2.2.
     skylight_effective_aperture_hash.sort.each do |key_daylight_space_name, value_skylight_effective_aperture|
-      if value_skylight_effective_aperture <= 0.006 && [key_daylight_space_name].any? {|word| offices_larger_25m2.include?(word)} == false
+      if value_skylight_effective_aperture <= 0.006 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
         daylight_spaces_exception << key_daylight_space_name
       end
     end
@@ -1104,7 +1128,9 @@ class NECB2011 < Standard
 
       end #if !zone.empty?
     end #daylight_spaces.each do |daylight_space|
-  end #def model_add_daylighting_controls(model)
+  end
+
+  #def model_add_daylighting_controls(model)
 
 
   def model_enable_demand_controlled_ventilation(model, dcv_type = 'No DCV') # Note: Values for dcv_type are: 'Occupancy-based DCV', 'CO2-based DCV', 'No DCV', 'NECB_Default'
@@ -1244,10 +1270,12 @@ class NECB2011 < Standard
         end #air_loop.supplyComponents.each do |supply_component|
       end #model.getAirLoopHVACs.each do |air_loop|
     end #if dcv_type != 'NECB_Default'
-  end #def model_enable_demand_controlled_ventilation
+  end
+
+  #def model_enable_demand_controlled_ventilation
 
 
-  def set_lighting_per_area_led_lighting(space_type, definition, lighting_per_area_led_lighting, lights_scale, space_height)
+  def set_lighting_per_area_led_lighting(space_type:, definition:, lighting_per_area_led_lighting:, lights_scale:)
     # puts "#{space_type.name.to_s} - 'space_height' - #{space_height.to_s}"
     occ_sens_lpd_frac = 1.0
     # NECB2011 space types that require a reduction in the LPD to account for
@@ -1268,16 +1296,17 @@ class NECB2011 < Standard
     # ##### Since Atrium's LPD for LED lighting depends on atrium's height, the height of the atrium (if applicable) should be found.
     standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil #Sara
     if standards_space_type.include? 'Atrium' #TODO: Note that since none of the archetypes has Atrium, this was tested for 'Dining'. #Atrium
-      puts "#{standards_space_type} - has atrium"  #space_type.name.to_s
-      # puts space_height
-      if space_height < 12.0 #TODO: Note that since none of the archetypes has Atrium, this was tested for 'Dining' with the threshold of 5.0 m for space_height.
+      puts "#{standards_space_type} - has atrium" #space_type.name.to_s
+      # Get the max height for the spacetype.
+      max_space_height_for_spacetype = get_max_space_height_for_space_type(space_type: space_type)
+      if max_space_height_for_spacetype < 12.0 #TODO: Note that since none of the archetypes has Atrium, this was tested for 'Dining' with the threshold of 5.0 m for space_height.
         # TODO: Regarding the below equations, identify which version of ASHRAE 90.1 was used in NECB2015.
         atrium_lpd_eq_smaller_12_intercept = 0
         atrium_lpd_eq_smaller_12_slope = 1.06
         atrium_lpd_eq_larger_12_intercept = 4.3
         atrium_lpd_eq_larger_12_slope = 1.06
         lighting_per_area_led_lighting_atrium = (atrium_lpd_eq_smaller_12_intercept + atrium_lpd_eq_smaller_12_slope * 12.0) * 0.092903 # W/ft2 TODO: Note that for NECB2011, a constant LPD is used for atrium based on NECB2015's equations. NECB2011's threshold for height is 13.0 m.
-      elsif space_height >= 12.0 && space_height < 13.0
+      elsif max_space_height_for_spacetype >= 12.0 && max_space_height_for_spacetype < 13.0
         lighting_per_area_led_lighting_atrium = (atrium_lpd_eq_larger_12_intercept + atrium_lpd_eq_larger_12_slope * 12.5) * 0.092903 # W/ft2
       else #i.e. space_height >= 13.0
         lighting_per_area_led_lighting_atrium = (atrium_lpd_eq_larger_12_intercept + atrium_lpd_eq_larger_12_slope * 13.0) * 0.092903 # W/ft2
@@ -1331,7 +1360,6 @@ class NECB2011 < Standard
       else
         space_height = 0
       end
-      ##### The above loop is added as thespace_type_apply_internal_loads space height is needed for the calculation of atriums' LPD when LED lighting is used in atriums. ***END***
 
       # puts "#{space_type.name.to_s} - 'space_height' - #{space_height.to_s}" #Sara
       # raise('check space_height inside model_add_loads function')
@@ -1340,7 +1368,7 @@ class NECB2011 < Standard
       space_type_apply_rendering_color(space_type)
 
       # Loads
-      space_type_apply_internal_loads(space_type, true, true, true, true, true, true, lights_type, lights_scale, space_height)
+      space_type_apply_internal_loads(space_type: space_type, lights_type: lights_type, lights_scale: lights_scale)
 
       # Schedules
       space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true, true)
@@ -1349,6 +1377,24 @@ class NECB2011 < Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')
 
     return true
+  end
+
+  ##### This method is needed to thespace_type_apply_internal_loads space needed for the calculation of atriums' LPD when LED lighting is used in atriums. ***END***
+
+  def get_max_space_height_for_space_type(space_type:)
+    # initialize return value to zero.
+    max_space_height_for_space_type = 0.0
+    # Interate through all spaces in model.. not just ones that have space type defined.. Is this right sara?
+    space_type.spaces.sort.each do |space|
+      # Get only the wall type surfaces and iterate throught them.
+      space.surfaces.sort.select(&:surfaceType == 'Wall').each do |wall_surface|
+        # Find the vertex with the max z value.
+        vertex_with_max_height = wall_surface.vertices.max_by(&:z)
+        # replace max if this surface has something bigger.
+        max_space_height_for_space_type = vertex_with_max_height.z if vertex_with_max_height.z > max_space_height_for_space_type
+      end
+    end
+    return max_space_height_for_space_type
   end
 
 end

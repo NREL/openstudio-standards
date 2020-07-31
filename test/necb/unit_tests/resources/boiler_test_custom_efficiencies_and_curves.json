@@ -1,0 +1,78 @@
+{
+  "boiler_cust_eff_tests": [
+    {
+      "boiler_eff": {
+        "eff": -1
+      }
+    },
+    {
+      "boiler_eff": {
+        "eff": 0.98
+      }
+    },
+    {
+      "boiler_eff": {
+        "part_load": {
+          "name": "BOILER-EFFFPLR-COND-VIESSMANN",
+          "category": "Boiler",
+          "form": "BiQuadratic",
+          "dependent_variable": "FIRRatio",
+          "independent_variable_1": "QRatio",
+          "independent_variable_2": "TEnteringBoiler",
+          "coeff_1": 1.067091396,
+          "coeff_2": -0.080046749,
+          "coeff_3": 0.078581329,
+          "coeff_4": 0.000365501,
+          "coeff_5": -4.5243E-06,
+          "coeff_6": -0.002185834,
+          "coeff_7": null,
+          "coeff_8": null,
+          "coeff_9": null,
+          "coeff_10": null,
+          "minimum_independent_variable_1": 0.3,
+          "maximum_independent_variable_1": 1.0,
+          "minimum_independent_variable_2": 40,
+          "maximum_independent_variable_2": 90,
+          "minimum_dependent_variable_output": null,
+          "maximum_dependent_variable_output": null,
+          "notes": "From analysis by Kamel Haddad based on Viessmann Vitocrossal 300 CT3-17 condensing boiler."
+        }
+      }
+    },
+    {
+      "boiler_eff": {
+        "eff": 0.29,
+        "part_load": {
+          "name": "BOILER-EFFFPLR-COND-VIESSMANN",
+          "category": "Boiler",
+          "form": "BiQuadratic",
+          "dependent_variable": "FIRRatio",
+          "independent_variable_1": "QRatio",
+          "independent_variable_2": "TEnteringBoiler",
+          "coeff_1": 1.067091396,
+          "coeff_2": -0.080046749,
+          "coeff_3": 0.078581329,
+          "coeff_4": 0.000365501,
+          "coeff_5": -4.5243E-06,
+          "coeff_6": -0.002185834,
+          "coeff_7": null,
+          "coeff_8": null,
+          "coeff_9": null,
+          "coeff_10": null,
+          "minimum_independent_variable_1": 0.3,
+          "maximum_independent_variable_1": 1.0,
+          "minimum_independent_variable_2": 40,
+          "maximum_independent_variable_2": 90,
+          "minimum_dependent_variable_output": null,
+          "maximum_dependent_variable_output": null,
+          "notes": "From analysis by Kamel Haddad based on Viessmann Vitocrossal 300 CT3-17 condensing boiler."
+        }
+      }
+    },
+    {
+      "boiler_eff": {
+        "eff": 0.75
+      }
+    }
+  ]
+}

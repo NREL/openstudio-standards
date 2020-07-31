@@ -1,7 +1,9 @@
 class NECB2011
-  def apply_standard_lights(set_lights, space_type, space_type_properties, lights_type, lights_scale, space_height)
-    # puts space_height
-    # raise('check space_height inside apply_standard_lights function')
+  def apply_standard_lights(set_lights: true,
+                            space_type:, space_type_properties:,
+                            lights_type: 'NECB_Default',
+                            lights_scale: 1.0)
+
     lights_have_info = false
     lighting_per_area = space_type_properties['lighting_per_area'].to_f
     lighting_per_person = space_type_properties['lighting_per_person'].to_f
@@ -9,26 +11,30 @@ class NECB2011
     lights_frac_radiant = space_type_properties['lighting_fraction_radiant'].to_f
     lights_frac_visible = space_type_properties['lighting_fraction_visible'].to_f
     lights_frac_replaceable = space_type_properties['lighting_fraction_replaceable'].to_f
-    lights_have_info = true unless lighting_per_area.zero?
-    lights_have_info = true unless lighting_per_person.zero?
+    lights_have_info = true if !lighting_per_area.zero? or !lighting_per_person.zero?
+
 
     ##### NOTE: Reference for LED lighting's return air, radiant, and visible fraction values is: page 142, NREL (2014), "Proven Energy-Saving Technologies for Commercial Properties", available at https://www.nrel.gov/docs/fy15osti/63807.pdf
     if lights_type == 'LED'
-      led_lights_have_info = false #Sara
-      led_spacetype_data = @standards_data['tables']['led_lighting_data']['table'] #Sara
-      standards_building_type = space_type.standardsBuildingType.is_initialized ? space_type.standardsBuildingType.get : nil #Sara
-      standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil #Sara
-      led_space_type_properties = led_spacetype_data.detect {|s| (s['building_type'] == standards_building_type) && (s['space_type'] == standards_space_type) }
+      led_lights_have_info = false
+      led_spacetype_data = @standards_data['tables']['led_lighting_data']['table']
+      standards_building_type = space_type.standardsBuildingType.is_initialized ? space_type.standardsBuildingType.get : nil
+      standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil
+      led_space_type_properties = led_spacetype_data.detect { |s| (s['building_type'] == standards_building_type) && (s['space_type'] == standards_space_type) }
       if led_space_type_properties.nil?
         raise("#{standards_building_type} for #{standards_space_type} was not found please verify the led lighting database names match the space type names.")
       end
-      lighting_per_area_led_lighting = led_space_type_properties['lighting_per_area'].to_f #Sara
-      lights_frac_to_return_air_led_lighting = led_space_type_properties['lighting_fraction_to_return_air'].to_f #Sara
-      lights_frac_radiant_led_lighting = led_space_type_properties['lighting_fraction_radiant'].to_f #Sara
-      lights_frac_visible_led_lighting = led_space_type_properties['lighting_fraction_visible'].to_f #Sara
-      led_lights_have_info = true unless lighting_per_area_led_lighting.zero? #Sara
+
+      lighting_per_area_led_lighting = led_space_type_properties['lighting_per_area'].to_f
+      lights_frac_to_return_air_led_lighting = led_space_type_properties['lighting_fraction_to_return_air'].to_f
+      lights_frac_radiant_led_lighting = led_space_type_properties['lighting_fraction_radiant'].to_f
+      lights_frac_visible_led_lighting = led_space_type_properties['lighting_fraction_visible'].to_f
+      led_lights_have_info = true unless lighting_per_area_led_lighting.zero?
 
     end
+
+
+
 
     if set_lights && lights_have_info
 
@@ -61,7 +67,10 @@ class NECB2011
           if lights_type == 'NECB_Default'
             set_lighting_per_area(space_type, definition, lighting_per_area)
           elsif lights_type == 'LED'
-            set_lighting_per_area_led_lighting(space_type, definition, lighting_per_area_led_lighting, lights_scale, space_height)
+            set_lighting_per_area_led_lighting(space_type: space_type,
+                                               definition: definition,
+                                               lighting_per_area_led_lighting: lighting_per_area_led_lighting,
+                                               lights_scale: lights_scale)
           end
         end
         unless lighting_per_person.zero?
@@ -110,7 +119,6 @@ class NECB2011
         additional_lights.setName("#{space_type.name} Additional Lights")
         additional_lights.setSpaceType(space_type)
       end
-
     end
   end
 

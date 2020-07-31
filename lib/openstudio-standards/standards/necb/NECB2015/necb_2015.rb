@@ -68,7 +68,7 @@ class NECB2015 < NECB2011
 
 
 
-  def set_lighting_per_area_led_lighting(space_type, definition, lighting_per_area_led_lighting, lights_scale, space_height)
+  def set_lighting_per_area_led_lighting(space_type:, definition:, lighting_per_area_led_lighting:, lights_scale:)
     # puts "#{space_type.name.to_s} - 'space_height' - #{space_height.to_s}"
     #TODO: Note that 'occ_sens_lpd_frac' in this function has been removed for NECB2015 and 2017.
     # ##### Since Atrium's LPD for LED lighting depends on atrium's height, the height of the atrium (if applicable) should be found.
@@ -76,7 +76,7 @@ class NECB2015 < NECB2011
     if standards_space_type.include? 'Atrium' #TODO: Note that since none of the archetypes has Atrium, this was tested for 'Dining'. #Atrium
       puts "#{standards_space_type} - has atrium"  #space_type.name.to_s
       # puts space_height
-      if space_height < 12.0
+      if get_max_space_height_for_space_type(space_type: space_type) < 12.0
         # TODO: Regarding the below equations, identify which version of ASHRAE 90.1 was used in NECB2015.
         atrium_lpd_eq_smaller_12_intercept = 0
         atrium_lpd_eq_smaller_12_slope = 1.06
