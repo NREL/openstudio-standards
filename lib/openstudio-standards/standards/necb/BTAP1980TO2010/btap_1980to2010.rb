@@ -28,7 +28,7 @@ class BTAP1980TO2010 < BTAPPRE1980
         end
       end
     else
-      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select { |e| File.file? e }
       files.each do |file|
         data = JSON.parse(File.read(file))
         if !data['tables'].nil?
@@ -51,15 +51,20 @@ class BTAP1980TO2010 < BTAPPRE1980
   def model_apply_standard(model:,
                            epw_file:,
                            sizing_run_dir: Dir.pwd,
-                           primary_heating_fuel: 'DefaultFuel')
+                           primary_heating_fuel: 'DefaultFuel',
+                           dcv_type: 'NECB_Default',
+                           lights_type: 'NECB_Default',
+                           lights_scale: 1.0,
+                           daylighting_type: 'NECB_Default')
     apply_weather_data(model: model, epw_file: epw_file)
     apply_loads(model: model)
-    apply_envelope( model: model)
+    apply_envelope(model: model)
     #Keeping default window sizes in 1980-2010 buildings and removing daylighting
     #apply_fdwr_srr_daylighting(model: model)
-    apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
+    apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir, lights_type: lights_type, lights_scale: lights_scale)
+
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
-    apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
+    apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir, dcv_type:dcv_type)
     model = apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
     return model
   end
