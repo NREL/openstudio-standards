@@ -185,7 +185,6 @@ class NECB2011 < Standard
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No DCV', (3) 'Occupancy-based DCV' , (4) 'CO2-based DCV'
                                 lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
                                 lights_scale: lights_scale,
-                                space_height: @space_height,
                                 daylighting_type: daylighting_type # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
     )
   end
@@ -1330,36 +1329,6 @@ class NECB2011 < Standard
     # Loop through all the space types currently in the model,
     # which are placeholders, and give them appropriate loads and schedules
     model.getSpaceTypes.sort.each do |space_type|
-      # puts space_type.name.to_s
-      ##### The below loop is added as the space height is needed for the calculation of atriums' LPD when LED lighting is used in atriums. ***START***
-      space_type_spaces = space_type.spaces()
-      space_walls_vertices = []
-      for i in 0..space_type_spaces.length - 1
-        space_type_spaces[i].surfaces.sort.each do |surface|
-          if surface.surfaceType == "Wall"
-            space_walls_vertices << surface.vertices
-          end
-        end
-      end
-      for i in 0..space_walls_vertices.length - 1
-        if i == 0
-          space_height = [space_walls_vertices[i][0].z, space_walls_vertices[i][1].z, space_walls_vertices[i][2].z, space_walls_vertices[i][3].z].max
-        end
-        if space_height < [space_walls_vertices[i][0].z, space_walls_vertices[i][1].z, space_walls_vertices[i][2].z, space_walls_vertices[i][3].z].max
-          space_height = [space_walls_vertices[i][0].z, space_walls_vertices[i][1].z, space_walls_vertices[i][2].z, space_walls_vertices[i][3].z].max
-        else
-          space_height = space_height
-        end
-      end
-      if space_type_spaces.length > 0
-        space_height = space_height
-      else
-        space_height = 0
-      end
-
-      # puts "#{space_type.name.to_s} - 'space_height' - #{space_height.to_s}" #Sara
-      # raise('check space_height inside model_add_loads function')
-
       # Rendering color
       space_type_apply_rendering_color(space_type)
 
