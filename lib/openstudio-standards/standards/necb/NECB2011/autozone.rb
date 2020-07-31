@@ -285,6 +285,7 @@ class NECB2011
   # Something that the code is silent on are smelly humid areas that should not be on the same system as the rest of the
   #  building.. These are the 'wet' spaces and have been defined as locker and washroom areas.. These will be put under
   # their own single system 4 system. These will be set to the dominant floor schedule.
+
   def auto_zone_wet_spaces(model:, lights_type: 'NECB_Default', lights_scale: 1.0)
     wet_zone_array = Array.new
     model.getSpaces.select {|space| is_an_necb_wet_space?(space)}.each do |space|
@@ -305,6 +306,7 @@ class NECB2011
       #this method will determine if the right schedule was used for this wet & wild space if not.. it will reset the space
       # to use the correct schedule version of the wet and wild space type.
       adjust_wildcard_spacetype_schedule(space: space, schedule: dominant_schedule, lights_type: lights_type, lights_scale: lights_scale) #Sara
+
       #Find spacetype thermostat and assign it to the zone.
       thermostat_name = space.spaceType.get.name.get + ' Thermostat'
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
@@ -322,7 +324,7 @@ class NECB2011
       model.getSpaces.select {|s| is_an_necb_wet_space?(s)}.each do |space_target|
         if space_target.thermalZone.empty?
           if are_space_loads_similar?(space_1: space, space_2: space_target) && space.buildingStory().get == space_target.buildingStory().get # added since chris needs zones to not span floors for costing.
-            adjust_wildcard_spacetype_schedule(space_target, dominant_schedule, @lights_type, @lights_scale, @space_height) #Sara
+            adjust_wildcard_spacetype_schedule(space_target, dominant_schedule, lights_type, lights_scale, space_height) #Sara
             space_target.setThermalZone(zone)
           end
         end
@@ -469,7 +471,7 @@ class NECB2011
         schedule_type = determine_dominant_schedule(space.buildingStory.get.spaces)
         zone = other_adjacent_spaces.first.thermalZone.get
         wild_adjacent_spaces.each do |space|
-          adjust_wildcard_spacetype_schedule(space, schedule_type, lights_type, lights_scale, space_height) #Sara
+          adjust_wildcard_spacetype_schedule(space, schedule_type, @lights_type, @lights_scale, @space_height) #Sara
           space.setThermalZone(zone)
         end
       end
@@ -488,7 +490,7 @@ class NECB2011
       dominant_floor_schedule = determine_dominant_schedule(space.buildingStory().get.spaces)
       #this method will determine if the right schedule was used for this wet & wild space if not.. it will reset the space
       # to use the correct schedule version of the wet and wild space type.
-      adjust_wildcard_spacetype_schedule(space, dominant_floor_schedule, lights_type, lights_scale, space_height) #Sara
+      adjust_wildcard_spacetype_schedule(space, dominant_floor_schedule, @lights_type, @lights_scale, @space_height) #Sara
       #Find spacetype thermostat and assign it to the zone.
       thermostat_name = space.spaceType.get.name.get + ' Thermostat'
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
@@ -507,7 +509,7 @@ class NECB2011
         if space_target.thermalZone.empty?
           if are_space_loads_similar?(space_1: space, space_2: space_target) &&
               space.buildingStory().get == space_target.buildingStory().get # added since chris needs zones to not span floors for costing.
-            adjust_wildcard_spacetype_schedule(space_target, dominant_floor_schedule, lights_type, lights_scale, space_height) #Sara
+            adjust_wildcard_spacetype_schedule(space_target, dominant_floor_schedule, @lights_type, @lights_scale, @space_height) #Sara
             space_target.setThermalZone(zone)
           end
         end

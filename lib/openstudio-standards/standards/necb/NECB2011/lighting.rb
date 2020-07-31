@@ -1,4 +1,5 @@
 class NECB2011
+
   def apply_standard_lights(set_lights: true,
                             space_type:, space_type_properties:,
                             lights_type: 'NECB_Default',
@@ -33,9 +34,6 @@ class NECB2011
 
     end
 
-
-
-
     if set_lights && lights_have_info
 
       # Remove all but the first instance
@@ -47,8 +45,10 @@ class NECB2011
         elsif lights_type == 'LED'
           definition.setName("#{space_type.name} Lights Definition - LED lighting")
         end
+        # puts definition.name().to_s
         instance = OpenStudio::Model::Lights.new(definition)
         instance.setName("#{space_type.name} Lights")
+        # puts instance.name.to_s
         instance.setSpaceType(space_type)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} had no lights, one has been created.")
         instances << instance

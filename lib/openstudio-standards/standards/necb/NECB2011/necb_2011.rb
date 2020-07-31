@@ -174,6 +174,7 @@ class NECB2011 < Standard
                                    lights_type: 'NECB_Default',
                                    lights_scale: 1.0,
                                    daylighting_type: 'NECB_Default'
+
   )
 
     model = load_building_type_from_library(building_type: building_type)
@@ -206,20 +207,15 @@ class NECB2011 < Standard
                            dcv_type: 'NECB_Default',
                            lights_type: 'NECB_Default',
                            lights_scale: 1.0,
-                           space_height: @space_height,
                            daylighting_type: 'NECB_Default'
   )
     apply_weather_data(model: model, epw_file: epw_file)
-    apply_loads(model: model, lights_type: lights_type, lights_scale: lights_scale) #Sara
+    apply_loads(model: model, lights_type: lights_type, lights_scale: lights_scale)
     apply_envelope(model: model)
     apply_fdwr_srr_daylighting(model: model)
     apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir, lights_type: lights_type, lights_scale: lights_scale)
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir) #, dcv_type: dcv_type #Sara
-    # puts model
-    # raise('check model for dcv')
     apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir, dcv_type: dcv_type) #Sara
-    # puts model
-    # raise('check model for dcv')
     model = apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
     if daylighting_type == 'add_daylighting_controls'
       model_add_daylighting_controls(model)
@@ -314,7 +310,7 @@ class NECB2011 < Standard
     model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
     # Apply the HVAC efficiency standard
     model_apply_hvac_efficiency_standard(model, climate_zone)
-    model_enable_demand_controlled_ventilation(model, dcv_type) #Sara
+    model_enable_demand_controlled_ventilation(model, dcv_type)
     modify_equipment_efficiency(model: model, eff_mod: eff_mod)
   end
 
@@ -1328,13 +1324,13 @@ class NECB2011 < Standard
   # pulled from sources such as the DOE Reference and DOE Prototype Buildings.
   #
   # @return [Bool] returns true if successful, false if not
-  def model_add_loads(model, lights_type = 'NECB_Default', lights_scale = 1.0)
+  def model_add_loads(model, lights_type, lights_scale)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
 
     # Loop through all the space types currently in the model,
     # which are placeholders, and give them appropriate loads and schedules
     model.getSpaceTypes.sort.each do |space_type|
-
+      # puts space_type.name.to_s
       ##### The below loop is added as the space height is needed for the calculation of atriums' LPD when LED lighting is used in atriums. ***START***
       space_type_spaces = space_type.spaces()
       space_walls_vertices = []
