@@ -186,6 +186,7 @@ class NECB2011 < Standard
                                 lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
                                 lights_scale: lights_scale,
                                 daylighting_type: daylighting_type # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
+
     )
   end
 
