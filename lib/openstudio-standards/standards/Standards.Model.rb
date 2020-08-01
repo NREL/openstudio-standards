@@ -1994,7 +1994,6 @@ class Standard
       if !schedule_type_limits.empty?
         schedule_type_limits = schedule_type_limits.get
         if schedule_type_limits.name.to_s.downcase == 'temperature'
-          schedule_type_limits.setName('Temperature')
           schedule_type_limits.resetLowerLimitValue
           schedule_type_limits.resetUpperLimitValue
           schedule_type_limits.setNumericType('Continuous')
