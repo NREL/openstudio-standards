@@ -367,6 +367,34 @@ class NECB2011
     return true
   end
 
+  # Sets the minimum effectiveness of the heat exchanger per
+  # the standard.
+  def heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(heat_exchanger_air_to_air_sensible_and_latent, erv_name = nil)
+    # Assumed to be sensible and latent at all flow
+    # This will now get data of the erv from the json file instead of hardcoding it. Defaults to NECB2011 erv we have been using.
+    erv_name = 'Rotary-Minimum-Eff-Existing' if erv_name.nil?
+    erv_info = @standards_data['erv'].detect { |item| item['erv_name'] == erv_name }
+
+    raise("Could not find #{erv_name} in #{self.class.name} class' erv.json file or it's parents. The available ervs are #{@standards_data['erv'].map{|item| item['erv_name']}}") if erv_info.nil?
+
+    heat_exchanger_air_to_air_sensible_and_latent.setHeatExchangerType(erv_info['HeatExchangerType'])
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(erv_info['SensibleEffectivenessat100HeatingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100HeatingAirFlow(erv_info['LatentEffectivenessat100HeatingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75HeatingAirFlow(erv_info['SensibleEffectivenessat75HeatingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75HeatingAirFlow(erv_info['LatentEffectivenessat75HeatingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100CoolingAirFlow(erv_info['SensibleEffectivenessat100CoolingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100CoolingAirFlow(erv_info['LatentEffectivenessat100CoolingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75CoolingAirFlow(erv_info['SensibleEffectivenessat75CoolingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75CoolingAirFlow(erv_info['LatentEffectivenessat75CoolingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setSupplyAirOutletTemperatureControl(erv_info['SupplyAirOutletTemperatureControl'])
+    heat_exchanger_air_to_air_sensible_and_latent.setFrostControlType(erv_info['FrostControlType'])
+    heat_exchanger_air_to_air_sensible_and_latent.setEconomizerLockout(erv_info['EconomizerLockout'])
+    heat_exchanger_air_to_air_sensible_and_latent.setThresholdTemperature(erv_info['ThresholdTemperature'])
+    heat_exchanger_air_to_air_sensible_and_latent.setInitialDefrostTimeFraction(erv_info['InitialDefrostTimeFraction'])
+    return true
+  end
+
+
   # Determine if demand control ventilation (DCV) is
   # required for this air loop.
   #
@@ -1995,7 +2023,7 @@ class NECB2011
   def modify_equipment_efficiency(model:, eff_mod: nil)
     return if eff_mod.nil?
     mod_boiler_efficiency(model: model, boiler_eff: eff_mod['boiler_eff']) unless eff_mod['boiler_eff'].nil?
-      #mod_furnace_efficiency(model: model, furnace_eff: eff_mod['furnace_eff']) unless eff_mod['furnace_eff'].nil?
+    #mod_furnace_efficiency(model: model, furnace_eff: eff_mod['furnace_eff']) unless eff_mod['furnace_eff'].nil?
   end
 
   # This model takes an OS model and a boiler efficiency hash sent to it with the following form:
@@ -2097,14 +2125,14 @@ class NECB2011
     else
       # Check to see if a curve with the same name already exists in standards data
       part_load_curve_name = eff["part_load"]["name"]
-      existing_curve = @standards_data['curves'].select {|curve| curve['name'] == part_load_curve_name}
+      existing_curve = @standards_data['curves'].select { |curve| curve['name'] == part_load_curve_name }
       if existing_curve.empty?
         @standards_data['curves'] << eff["part_load"]
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "A part load curve with the name #{part_load_curve_name} already exists. The existing curve will be used. The custom curve will be ignored.")
       end
     end
-    part_load_curve_data = (@standards_data['curves'].select {|curve| curve['name'] == part_load_curve_name})[0]
+    part_load_curve_data = (@standards_data['curves'].select { |curve| curve['name'] == part_load_curve_name })[0]
     if part_load_curve_data['independent_variable_1'].to_s.upcase == 'TEnteringBoiler'.upcase || part_load_curve_data['independent_variable_2'].to_s.upcase == 'TEnteringBoiler'.upcase
       component.setEfficiencyCurveTemperatureEvaluationVariable('EnteringBoiler')
     elsif part_load_curve_data['independent_variable_1'].to_s.upcase == 'TLeavingBoiler'.upcase || part_load_curve_data['independent_variable_2'].to_s.upcase == 'TLeavingBoiler'.upcase

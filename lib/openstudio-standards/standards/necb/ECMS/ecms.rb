@@ -1,4 +1,4 @@
-class ECMS < Standard
+class ECMS < NECB2011
 
   @template = self.new.class.name
   register_standard(@template)
@@ -20,7 +20,7 @@ class ECMS < Standard
         end
       end
     else
-      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select { |e| File.file? e }
       files.each do |file|
         data = JSON.parse(File.read(file))
         if not data["tables"].nil?
@@ -40,5 +40,46 @@ class ECMS < Standard
     @standards_data = self.load_standards_database_new()
     @standards_data['curves'] = standards_data['tables']["curves"]['table']
   end
+
+  def apply_system_ecm(model:, ecm_system_name: nil, template_standard:, runner: nil)
+    # Do nothing if nil.
+    return if ecm_system_name.nil?
+
+    ecm_std = Standard.build("ECMS")
+    systems = model.getAirLoopHVACs
+    map_system_to_zones, system_doas_flags = ecm_std.get_map_systems_to_zones(systems)
+    zone_clg_eqpt_type = ecm_std.get_zone_clg_eqpt_type(model)
+    # when the ecm is associated with adding a new HVAC system, then remove existing system components and loops
+    ecm_add_method_name = "add_ecm_#{ecm_name.downcase}"
+
+    raise("the method #{ecm_add_method_name} does not exist in the ECM class. Please verify that this should be called.") if ecm_std.respond_to? ecm_add_method_name
+
+    ecm_std.remove_all_zone_eqpt(systems)
+    ecm_std.remove_air_loops(model)
+    ecm_std.remove_hw_loops(model)
+    ecm_std.remove_chw_loops(model)
+    ecm_std.remove_cw_loops(model)
+    ecm_std.send(ecm_add_method_name,
+                 model: model,
+                 system_zones_map: map_system_to_zones,
+                 system_doas_flags: system_doas_flags,
+                 zone_clg_eqpt_type: zone_clg_eqpt_type,
+                 standard: template_standard)
+
+  end
+
+  def apply_system_efficiencies_ecm(model:, ecm_system_name: nil)
+    # Do nothing if nil.
+    return if ecm_system_name.nil?
+
+    # Get method name that should be present in the ECM class.
+    ecm_apply_eff_method_name = "apply_efficiency_ecm_#{ecm_system_name.downcase}"
+    # Raise exception if method does not exists.
+    raise("the method #{ecm_apply_eff_method_name} does not exist in the ECM class. Please verify that this should be called.") unless ecm_std.respond_to?(ecm_add_method_name)
+
+    # apply system eff method.
+    ecm_std.send(ecm_apply_eff_method_name, model: model, ecm_name: ecm_system_name)
+  end
+
 
 end
