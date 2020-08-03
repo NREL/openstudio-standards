@@ -274,7 +274,73 @@ def download_google_spreadsheets(spreadsheet_titles)
 
 end
 
-def export_spreadsheet_to_json(spreadsheet_titles)
+def export_spreadsheets_for_lib(spreadsheet_titles)
+  standards_dir = File.expand_path("#{__dir__}/../../lib/openstudio-standards/standards")
+
+  # List of worksheets to skip
+  worksheets_to_skip = []
+  worksheets_to_skip << 'templates'
+  worksheets_to_skip << 'standards'
+  worksheets_to_skip << 'ventilation'
+  worksheets_to_skip << 'occupancy'
+  worksheets_to_skip << 'interior_lighting'
+  worksheets_to_skip << 'lookups'
+  worksheets_to_skip << 'sheetmap'
+  worksheets_to_skip << 'deer_lighting_fractions'
+  worksheets_to_skip << 'window_types_and_weights'
+
+  # List of columns to skip
+  cols_to_skip = []
+  cols_to_skip << 'lookup'
+  cols_to_skip << 'lookupcolumn'
+  cols_to_skip << 'vlookupcolumn'
+  cols_to_skip << 'osm_lighting_per_person'
+  cols_to_skip << 'osm_lighting_per_area'
+  cols_to_skip << 'lighting_per_length'
+  cols_to_skip << 'exhaust_per_unit'
+  cols_to_skip << 'exhaust_fan_power_per_area'
+  cols_to_skip << 'occupancy_standard'
+  cols_to_skip << 'occupancy_primary_space_type'
+  cols_to_skip << 'occupancy_secondary_space_type'
+
+  export_spreadsheet_to_json(spreadsheet_titles, standards_dir, worksheets_to_skip, cols_to_skip)
+end
+
+def export_export_spreadsheets_for_data_repo(spreadsheet_titles)
+  standards_dir = File.expand_path("#{__dir__}/../../data/openstudio-standards/standards/repo_export")
+
+  # List of worksheets to skip
+  # TODO customize for data repo export
+  worksheets_to_skip = []
+  worksheets_to_skip << 'templates'
+  worksheets_to_skip << 'standards'
+  worksheets_to_skip << 'ventilation'
+  worksheets_to_skip << 'occupancy'
+  worksheets_to_skip << 'interior_lighting'
+  worksheets_to_skip << 'lookups'
+  worksheets_to_skip << 'sheetmap'
+  worksheets_to_skip << 'deer_lighting_fractions'
+  worksheets_to_skip << 'window_types_and_weights'
+
+  # List of columns to skip
+  # TODO customize for data repo export
+  cols_to_skip = []
+  cols_to_skip << 'lookup'
+  cols_to_skip << 'lookupcolumn'
+  cols_to_skip << 'vlookupcolumn'
+  cols_to_skip << 'osm_lighting_per_person'
+  cols_to_skip << 'osm_lighting_per_area'
+  cols_to_skip << 'lighting_per_length'
+  cols_to_skip << 'exhaust_per_unit'
+  cols_to_skip << 'exhaust_fan_power_per_area'
+  cols_to_skip << 'occupancy_standard'
+  cols_to_skip << 'occupancy_primary_space_type'
+  cols_to_skip << 'occupancy_secondary_space_type'
+
+  export_spreadsheet_to_json(spreadsheet_titles, standards_dir, worksheets_to_skip, cols_to_skip)
+end
+
+def export_spreadsheet_to_json(spreadsheet_titles, standards_dir, worksheets_to_skip, cols_to_skip)
 
   warnings = []
   duplicate_data = []
@@ -290,32 +356,6 @@ def export_spreadsheet_to_json(spreadsheet_titles)
 
     puts "Parsing #{xlsx_path}"
 
-    # List of worksheets to skip
-    worksheets_to_skip = []
-    worksheets_to_skip << 'templates'
-    worksheets_to_skip << 'standards'
-    worksheets_to_skip << 'ventilation'
-    worksheets_to_skip << 'occupancy'
-    worksheets_to_skip << 'interior_lighting'
-    worksheets_to_skip << 'lookups'
-    worksheets_to_skip << 'sheetmap'
-    worksheets_to_skip << 'deer_lighting_fractions'
-    worksheets_to_skip << 'window_types_and_weights'
-
-    # List of columns to skip
-    cols_to_skip = []
-    cols_to_skip << 'lookup'
-    cols_to_skip << 'lookupcolumn'
-    cols_to_skip << 'vlookupcolumn'
-    cols_to_skip << 'osm_lighting_per_person'
-    cols_to_skip << 'osm_lighting_per_area'
-    cols_to_skip << 'lighting_per_length'
-    cols_to_skip << 'exhaust_per_unit'
-    cols_to_skip << 'exhaust_fan_power_per_area'
-    cols_to_skip << 'occupancy_standard'
-    cols_to_skip << 'occupancy_primary_space_type'
-    cols_to_skip << 'occupancy_secondary_space_type'
-
     # List of columns that are boolean
     # (rubyXL returns 0 or 1, will translate to true/false)
     bool_cols = []
@@ -328,7 +368,6 @@ def export_spreadsheet_to_json(spreadsheet_titles)
     workbook = RubyXL::Parser.parse(xlsx_path)
 
     # Find all the template directories that match the search criteria embedded in the spreadsheet title
-    standards_dir = File.expand_path("#{__dir__}/../../lib/openstudio-standards/standards")
     dirs = spreadsheet_title.gsub('OpenStudio_Standards-', '').gsub(/\(\w*\)/, '').split('-')
     new_dirs = []
     dirs.each { |d| d == 'ALL' ? new_dirs << '*' : new_dirs << "*#{d}*" }
