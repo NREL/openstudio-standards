@@ -32,6 +32,9 @@ class AppendixGPRMTests < Minitest::Test
       # mod is an array of method intended to modify the model
       building_type, template, climate_zone, mod = prototype
 
+      # Concatenate modifier functions and arguments
+      mod_str = mod.map(&:join).join("_")
+
       # Initialize weather file, necessary but not used
       epw_file = 'USA_FL_Miami.Intl.AP.722020_TMY3.epw'
 
@@ -43,7 +46,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # Define model name and run folder if it doesn't already exist,
       # if it does, remove it and re-create it.
-      model_name = "#{building_type}-#{template}-#{climate_zone}"
+      model_name = "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
       run_dir = "#{@test_dir}/#{model_name}"
       if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
@@ -57,10 +60,10 @@ class AppendixGPRMTests < Minitest::Test
       model = prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
 
       # Make modification if requested
-      # TODO: To be tested, all method_mod should return the model
       if !mod.empty?
         mod.each do |method_mod|
-          model = public_send(method_mod, model)
+          mthd, arguments = method_mod
+          model = public_send(mthd, model, arguments)
         end
       end
 
@@ -97,6 +100,9 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_generated.each do |id, model|
       building_type, template, climate_zone, mod = id_prototype_mapping[id]
 
+      # Concatenate modifier functions and arguments
+      mod_str = mod.map(&:join).join("_")
+
       # Initialize Standard class
       prototype_creator = Standard.build('90.1-PRM-2019')
 
@@ -128,7 +134,7 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # Define run directory and run name, delete existing folder if it exists
-      model_name = "#{building_type}-#{template}-#{climate_zone}"
+      model_name = "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
       run_dir = "#{@test_dir}/#{model_name}"
       run_dir_baseline = "#{run_dir}-Baseline"
       if Dir.exist?(run_dir_baseline)
@@ -153,7 +159,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # Load newly generated baseline model
       @test_dir = "#{File.dirname(__FILE__)}/output"
-      model_baseline = OpenStudio::Model::Model.load("#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/final.osm")
+      model_baseline = OpenStudio::Model::Model.load("#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-#{mod_str}-Baseline/final.osm")
       model_baseline = model_baseline.get
 
       # Do sizing run for baseline model
@@ -306,6 +312,10 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = prototype
       # Define name of surfaces used for verification
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
+
+      # Concatenate modifier functions and arguments
+      mod_str = mod.map(&:join).join("_")
+
       opaque_exterior_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['opaque_exterior_name']
       exterior_fenestration_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['exterior_fenestration_name']
       exterior_door_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['exterior_door_name']
@@ -344,8 +354,10 @@ class AppendixGPRMTests < Minitest::Test
   def check_lpd(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
       building_type, template, climate_zone, mod = prototype
+      # Concatenate modifier functions and arguments
+      mod_str = mod.map(&:join).join("_")
       # Define name of spaces used for verification
-      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
+      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
       space_name = JSON.parse(File.read("#{@@json_dir}/lpd.json"))[run_id]
 
       # Get LPD in baseline model
@@ -389,7 +401,11 @@ class AppendixGPRMTests < Minitest::Test
 
     prototypes_base.each do |prototype, model|
       building_type, template, climate_zone, mod = prototype
-      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
+      
+      # Concatenate modifier functions and arguments
+      mod_str = mod.map(&:join).join("_")
+
+      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
 
       # Check if the space envelope area calculations
       spc_env_area = 0
@@ -422,9 +438,13 @@ class AppendixGPRMTests < Minitest::Test
 
     prototypes_base.each do |prototype, model|
       building_type, template, climate_zone, mod = prototype
-      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
       
-      puts "DEM: building_type = #{building_type} , mod[0] = #{mod[0]}"
+      # Concatenate modifier functions and arguments
+      mod_str = mod.map(&:join).join("_")
+
+      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
+      
+      puts "DEM: building_type = #{building_type} , mod = #{mod_str}"
       if mod[0] == 'MakeLabHighDistribZoneExh' || mod[0] == 'MakeLabHighSystemExh'
         # All labs on a given floor of the building should be on a separate MZ system
         model.getAirLoopHVACs.each do |air_loop|
@@ -462,39 +482,41 @@ class AppendixGPRMTests < Minitest::Test
           assert(!(has_lab == true and has_nonlab == false), "System #{air_loop.name} has only lab spaces and lab exhaust < 15,000 cfm.")
 
         end
-      elsif building_type == 'RetailStripmall' && mod[0] == nil
+      elsif building_type == 'RetailStripmall' && mod_str == ''
         # System type should be PSZ
         model.getAirLoopHVACs.each do |air_loop|
           num_zones = air_loop.thermalZones.size
           assert(num_zones == 1, "System #{air_loop.name} is multizone, for retail < 25,000 sq ft.")
         end
-      elsif building_type == 'RetailStripmall' && mod[0] == 'set_zone_multiplier_to_3'
+      elsif building_type == 'RetailStripmall' && mod_str == 'set_zone_multiplier3'
         # System type should be PVAV with 10 zones
         model.getAirLoopHVACs.each do |air_loop|
           num_zones = air_loop.thermalZones.size
           assert(num_zones == 10, "System #{air_loop.name} multizone grouping failed for retail > 25,000 sq ft.")
         end
-      elsif building_type == 'SmallOffice' && mod[0] == 'set_zone_multiplier_to_4'
+      elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier4'
         # 4 to 5 stories, <= 150 ksf --> PVAV
         # System type should be PVAV with 10 zones, area is 22,012 sf
         model.getAirLoopHVACs.each do |air_loop|
           num_zones = air_loop.thermalZones.size
           assert(num_zones == 5, "System #{air_loop.name} multizone grouping failed for other nonres > 4 to 5 stories, <= 150 ksf")
         end
-      elsif building_type == 'SmallOffice' && mod[0] == 'set_zone_multiplier_to_6'
+      elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier6'
         # 6+ stories, any floor area --> VAV/chiller
         # This test has floor area 33,018 sf 
         has_chiller = model.getPlantLoopByName('Chilled Water Loop').is_initialized
         assert(has_chiller, "Building has >= 6 stories but does not have chiller; other non-res category, tested with Small office with zone multiplier = 6")
-      elsif building_type == 'HighriseApartment' && mod[0] == 'change_bldgtype_to_mediumoffice'
+      elsif building_type == 'HighriseApartment' && mod_str == 'change_bldgtype_to_mediumoffice'
         # system type should be VAV with chiller
         # for other non-res building, >= 6 stories, any floor area
         has_chiller = model.getPlantLoopByName('Chilled Water Loop').is_initialized
         assert(has_chiller, "Building has >= 6 stories but does not have chiller; other non-res category, tested with HighriseApartment converted to MediumOffice.")
-      elsif building_type == 'MidriseApartment' && mod[0] == 'change_bldgtype_to_mediumoffice'
+      elsif building_type == 'MidriseApartment' && mod_str == 'change_bldgtype_to_mediumoffice'
         # system type should be PVAV
         # for other non-res building, 4 to 5 stories, 25 to 150 ksf floor area
         is_multizone = false
+        num_zones = 0
+        num_dx_coils = 0
         model.getAirLoopHVACs.each do |air_loop|
           num_zones = air_loop.thermalZones.size
           if num_zones > 1
@@ -517,29 +539,12 @@ class AppendixGPRMTests < Minitest::Test
 
   end
 
-  # Set ZoneMultiplier to 2 for all zones to change the total building area
-  def set_zone_multiplier_to_3(model)
+  # Set ZoneMultiplier
+  def set_zone_multiplier(model, arguments)
+    mult = arguments[0]
     model.getAirLoopHVACs.each do |air_loop|
       air_loop.thermalZones.each do |thermal_zone|
-        thermal_zone.setMultiplier(3)
-      end
-    end
-    return model
-  end
-
-  def set_zone_multiplier_to_4(model)
-    model.getAirLoopHVACs.each do |air_loop|
-      air_loop.thermalZones.each do |thermal_zone|
-        thermal_zone.setMultiplier(4)
-      end
-    end
-    return model
-  end
-
-  def set_zone_multiplier_to_6(model)
-    model.getAirLoopHVACs.each do |air_loop|
-      air_loop.thermalZones.each do |thermal_zone|
-        thermal_zone.setMultiplier(6)
+        thermal_zone.setMultiplier(mult)
       end
     end
     return model
@@ -548,7 +553,7 @@ class AppendixGPRMTests < Minitest::Test
   # Change classroom space types to laboratory
   # Resulting in > 15,000 cfm lab exhaust
   # Add an exhaust fan to each zone
-  def MakeLabHighDistribZoneExh(model)
+  def MakeLabHighDistribZoneExh(model, arguments)
     # Convert all classrooms to laboratory
     convert_spaces_to_laboratory(model, 'PrimarySchoolClassroom')
 
@@ -561,7 +566,7 @@ class AppendixGPRMTests < Minitest::Test
   # Change computer classroom space types to laboratory
   # Resulting in < 15,000 cfm lab exhaust
   # Add an exhaust fan to each zone
-  def MakeLabLowDistribZoneExh(model)
+  def MakeLabLowDistribZoneExh(model, arguments)
     convert_spaces_to_laboratory(model, 'PrimarySchoolComputerRoom')
     # Populate hash to allow this space type to persist when protoype space types are replaced later
  
@@ -574,7 +579,7 @@ class AppendixGPRMTests < Minitest::Test
   # Change classroom space types to laboratory
   # Resulting in > 15,000 cfm lab exhaust
   # Add an exhaust fan to each zone
-  def MakeLabHighSystemExh(model)
+  def MakeLabHighSystemExh(model, arguments)
     # Convert all classrooms to laboratory
     convert_spaces_to_laboratory(model, 'PrimarySchoolClassroom')
 
@@ -638,7 +643,7 @@ class AppendixGPRMTests < Minitest::Test
 
   end
 
-  def change_bldgtype_to_mediumoffice(model)
+  def change_bldgtype_to_mediumoffice(model, arguments)
     @bldg_type_alt_now = 'MediumOffice'
     return model
     end

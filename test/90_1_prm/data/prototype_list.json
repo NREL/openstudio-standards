@@ -1,35 +1,25 @@
 {
     "wwr": [
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""],
-        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", ""]
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
     "daylighting_control": [
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""]
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
     "isresidential": [
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""]
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
     "envelope": [
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""]
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
     "lpd": [
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""],
-        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", ""]
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
     "infiltration": [
-        ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", ""],
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""],
-        ["Warehouse", "90.1-2013", "ASHRAE 169-2013-2A", ""]
+        ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["Warehouse", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
     "hvac_baseline": [
-        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", ["MakeLabHighDistribZoneExh"]],
-        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", ["MakeLabLowDistribZoneExh"]],
-        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", ["MakeLabHighSystemExh"]],
-        ["RetailStripmall", "90.1-2013", "ASHRAE 169-2013-2A", ""],
-        ["RetailStripmall", "90.1-2013", "ASHRAE 169-2013-2A", ["set_zone_multiplier_to_3"]],
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ["set_zone_multiplier_to_4"]],
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ["set_zone_multiplier_to_6"]],
-        ["LargeOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""],
-        ["HighriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", ["change_bldgtype_to_mediumoffice"]],
-        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", ["change_bldgtype_to_mediumoffice"]]
-    ]}
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", [["change_bldgtype_to_mediumoffice",[]]]]]}
