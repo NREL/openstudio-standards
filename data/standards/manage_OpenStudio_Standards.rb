@@ -142,6 +142,10 @@ def unique_properties(sheet_name)
            ['template', 'building_type', 'hvac_system']
          when 'climate_zones'
            ['name', 'standard']
+         when 'energy_recovery'
+           ['Template', 'Climate Zone', 'Under 8000 Hours', '10 to 20 Percent OA', '20 to 30 Percent OA', '30 to 40 Percent OA', '40 to 50 Percent OA', '50 to 60 Percent OA', '60 to 70 Percent OA', '70 to 80 Percent OA', 'Greater Than 80 Percent OA']
+         when 'space_types_lighting_control'
+           ['Template	Building', 'Type', 'Space', 'Type']
          else
            []
          end
@@ -274,36 +278,64 @@ def download_google_spreadsheets(spreadsheet_titles)
 
 end
 
+
+def downselect_columns_to_skip(file_path)
+  csv_file = CSV.read(file_path,headers:true)
+  csv_subset = []
+  csv_file.each do |row|
+    csv_subset << row unless (row[2] == nil)
+  end
+  return csv_subset
+end
+
+def worksheet_and_column_are_in_skiplist(ws, col, skip_list)
+  do_we_have_a_match = false
+  skip_list.each do |row|
+    if (row[0].downcase.gsub(' ', '_') == ws.downcase.gsub(' ', '_')) && (row[1].downcase.gsub(' ', '_') == col.downcase.gsub(' ', '_'))
+      do_we_have_a_match = true
+      break
+    end
+  end
+  return do_we_have_a_match
+end
+
 def export_spreadsheets_for_lib(spreadsheet_titles)
-  standards_dir = File.expand_path("#{__dir__}/../../lib/openstudio-standards/standards")
+  # standards_dir = File.expand_path("#{__dir__}/../../lib/openstudio-standards/standards")
+  standards_dir = File.expand_path("#{__dir__}/../../lib/openstudio-standards/standards_separation")
 
-  # List of worksheets to skip
-  worksheets_to_skip = []
-  worksheets_to_skip << 'templates'
-  worksheets_to_skip << 'standards'
-  worksheets_to_skip << 'ventilation'
-  worksheets_to_skip << 'occupancy'
-  worksheets_to_skip << 'interior_lighting'
-  worksheets_to_skip << 'lookups'
-  worksheets_to_skip << 'sheetmap'
-  worksheets_to_skip << 'deer_lighting_fractions'
-  worksheets_to_skip << 'window_types_and_weights'
+  puts '---------------------------------------'
+  skip_list_file_path = "#{__dir__}/skip_list.csv"
+  skip_list = downselect_columns_to_skip(skip_list_file_path)
 
-  # List of columns to skip
-  cols_to_skip = []
-  cols_to_skip << 'lookup'
-  cols_to_skip << 'lookupcolumn'
-  cols_to_skip << 'vlookupcolumn'
-  cols_to_skip << 'osm_lighting_per_person'
-  cols_to_skip << 'osm_lighting_per_area'
-  cols_to_skip << 'lighting_per_length'
-  cols_to_skip << 'exhaust_per_unit'
-  cols_to_skip << 'exhaust_fan_power_per_area'
-  cols_to_skip << 'occupancy_standard'
-  cols_to_skip << 'occupancy_primary_space_type'
-  cols_to_skip << 'occupancy_secondary_space_type'
+  # puts skip_list
+  puts '---------------------------------------'
+  # # List of worksheets to skip
+  # worksheets_to_skip = []
+  # worksheets_to_skip << 'templates'
+  # worksheets_to_skip << 'standards'
+  # worksheets_to_skip << 'ventilation'
+  # worksheets_to_skip << 'occupancy'
+  # worksheets_to_skip << 'interior_lighting'
+  # worksheets_to_skip << 'lookups'
+  # worksheets_to_skip << 'sheetmap'
+  # worksheets_to_skip << 'deer_lighting_fractions'
+  # worksheets_to_skip << 'window_types_and_weights'
+  #
+  # # List of columns to skip
+  # cols_to_skip = []
+  # cols_to_skip << 'lookup'
+  # cols_to_skip << 'lookupcolumn'
+  # cols_to_skip << 'vlookupcolumn'
+  # cols_to_skip << 'osm_lighting_per_person'
+  # cols_to_skip << 'osm_lighting_per_area'
+  # cols_to_skip << 'lighting_per_length'
+  # cols_to_skip << 'exhaust_per_unit'
+  # cols_to_skip << 'exhaust_fan_power_per_area'
+  # cols_to_skip << 'occupancy_standard'
+  # cols_to_skip << 'occupancy_primary_space_type'
+  # cols_to_skip << 'occupancy_secondary_space_type'
 
-  export_spreadsheet_to_json(spreadsheet_titles, standards_dir, worksheets_to_skip, cols_to_skip)
+  export_spreadsheet_to_json(spreadsheet_titles, standards_dir, skip_list)
 end
 
 def export_export_spreadsheets_for_data_repo(spreadsheet_titles)
@@ -340,7 +372,7 @@ def export_export_spreadsheets_for_data_repo(spreadsheet_titles)
   export_spreadsheet_to_json(spreadsheet_titles, standards_dir, worksheets_to_skip, cols_to_skip)
 end
 
-def export_spreadsheet_to_json(spreadsheet_titles, standards_dir, worksheets_to_skip, cols_to_skip)
+def export_spreadsheet_to_json(spreadsheet_titles, standards_dir, skip_list)
 
   warnings = []
   duplicate_data = []
@@ -384,13 +416,14 @@ def export_spreadsheet_to_json(spreadsheet_titles, standards_dir, worksheets_to_
     workbook.worksheets.each do |worksheet|
       sheet_name = worksheet.sheet_name.snake_case
 
-      # Skip the specified worksheets
-      if worksheets_to_skip.include?(sheet_name)
-        puts "Skipping #{sheet_name}"
-        next
-      else
-        puts "Processing #{sheet_name}"
-      end
+      # # Skip the specified worksheets
+      # if worksheets_to_skip.include?(sheet_name)
+      #   puts "Skipping #{sheet_name}"
+      #   next
+      # else
+      #   puts "Processing #{sheet_name}"
+      # end
+      puts "Processing #{sheet_name}"
 
       # All spreadsheets must have headers in row 3
       # and data from roworksheet 4 onward.
@@ -450,7 +483,8 @@ def export_spreadsheet_to_json(spreadsheet_titles, standards_dir, worksheets_to_
             all_null = false
           end
           # Skip specified columns
-          next if cols_to_skip.include?(headers[j]['name'])
+          next if worksheet_and_column_are_in_skiplist(sheet_name, headers[j]['name'], skip_list)
+          # cols_to_skip.include?(headers[j]['name'])
           # Convert specified columns to boolean
           if bool_cols.include?(headers[j]['name'])
             if val == 1

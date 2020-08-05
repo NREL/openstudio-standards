@@ -1,0 +1,32 @@
+{
+  "heat_rejection": [
+    {
+      "template": "NREL ZNE Ready 2017",
+      "equipment_type": "Closed Cooling Tower",
+      "fan_type": "Centrifugal",
+      "minimum_performance": 7.0,
+      "notes": "From 90.1-2016 Table 6.8.1.7"
+    },
+    {
+      "template": "NREL ZNE Ready 2017",
+      "equipment_type": "Closed Cooling Tower",
+      "fan_type": "Propeller or Axial",
+      "minimum_performance": 16.1,
+      "notes": "From 90.1-2016 Table 6.8.1.7"
+    },
+    {
+      "template": "NREL ZNE Ready 2017",
+      "equipment_type": "Open Cooling Tower",
+      "fan_type": "Centrifugal",
+      "minimum_performance": 20.0,
+      "notes": "From 90.1-2016 Table 6.8.1.7"
+    },
+    {
+      "template": "NREL ZNE Ready 2017",
+      "equipment_type": "Open Cooling Tower",
+      "fan_type": "Propeller or Axial",
+      "minimum_performance": 40.2,
+      "notes": "From 90.1-2016 Table 6.8.1.7"
+    }
+  ]
+}

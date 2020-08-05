@@ -1,0 +1,11 @@
+{
+  "water_source_heat_pumps_heating": [
+    {
+      "template": "ZE AEDG Multifamily",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_coefficient_of_performance_heating": 5.4,
+      "notes": "From ZE AEDG Multifamily Committee"
+    }
+  ]
+}

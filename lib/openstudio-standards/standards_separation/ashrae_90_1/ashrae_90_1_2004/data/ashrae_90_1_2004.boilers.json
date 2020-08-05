@@ -1,0 +1,37 @@
+{
+  "boilers": [
+    {
+      "template": "90.1-2004",
+      "fluid_type": "Hot Water",
+      "fuel_type": "Gas",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 299999.0,
+      "minimum_annual_fuel_utilization_efficiency": 0.8,
+      "minimum_thermal_efficiency": null,
+      "minimum_combustion_efficiency": null,
+      "notes": "From 90.1-2004"
+    },
+    {
+      "template": "90.1-2004",
+      "fluid_type": "Hot Water",
+      "fuel_type": "Gas",
+      "minimum_capacity": 300000.0,
+      "maximum_capacity": 249999999.0,
+      "minimum_annual_fuel_utilization_efficiency": null,
+      "minimum_thermal_efficiency": 0.75,
+      "minimum_combustion_efficiency": null,
+      "notes": "From 90.1-2004"
+    },
+    {
+      "template": "90.1-2004",
+      "fluid_type": "Hot Water",
+      "fuel_type": "Gas",
+      "minimum_capacity": 250000000.0,
+      "maximum_capacity": 9999999999.0,
+      "minimum_annual_fuel_utilization_efficiency": null,
+      "minimum_thermal_efficiency": null,
+      "minimum_combustion_efficiency": 0.8,
+      "notes": "From 90.1-2004"
+    }
+  ]
+}
