@@ -32,7 +32,7 @@ module Warehouse
               end
             end
             # Load older geometry corresponding to older code versions
-            old_geo = load_geometry_osm('geometry/ASHRAEWarehouse.osm')
+            old_geo = load_geometry_osm('geometry/ASHRAE90120042007Warehouse.osm')
             # Clone the skylights from the older geometry
             old_geo.getSubSurfaces.each do |subsurf|
               if subsurf.subSurfaceType.to_s == 'Skylight'

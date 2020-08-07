@@ -11,24 +11,24 @@ class Standard
 
     # Define the envelope component infiltration rates
     component_infil_rates_cfm_per_ft2 = {
-      'baseline' => {
-        'opaque_door' => 0.40,
-        'loading_dock_door' => 0.40,
-        'swinging_or_revolving_glass_door' => 1.0,
-        'vestibule' => 1.0,
-        'sliding_glass_door' => 0.40,
-        'window' => 0.40,
-        'skylight' => 0.40
-      },
-      'advanced' => {
-        'opaque_door' => 0.20,
-        'loading_dock_door' => 0.20,
-        'swinging_or_revolving_glass_door' => 1.0,
-        'vestibule' => 1.0,
-        'sliding_glass_door' => 0.20,
-        'window' => 0.20,
-        'skylight' => 0.20
-      }
+        'baseline' => {
+            'opaque_door' => 0.40,
+            'loading_dock_door' => 0.40,
+            'swinging_or_revolving_glass_door' => 1.0,
+            'vestibule' => 1.0,
+            'sliding_glass_door' => 0.40,
+            'window' => 0.40,
+            'skylight' => 0.40
+        },
+        'advanced' => {
+            'opaque_door' => 0.20,
+            'loading_dock_door' => 0.20,
+            'swinging_or_revolving_glass_door' => 1.0,
+            'vestibule' => 1.0,
+            'sliding_glass_door' => 0.20,
+            'window' => 0.20,
+            'skylight' => 0.20
+        }
     }
 
     boundary_condition = sub_surface.outsideBoundaryCondition
@@ -46,7 +46,7 @@ class Standard
       when 'OverheadDoor'
         infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['loading_dock_door']
       when 'GlassDoor'
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SubSurface', "For #{sub_surface.name}, assuming swinging_or_revolving_glass_door for infiltration calculation.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{sub_surface.name}, assuming swinging_or_revolving_glass_door for infiltration calculation.")
         infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['swinging_or_revolving_glass_door']
       when 'FixedWindow', 'OperableWindow'
         infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['window']
@@ -55,7 +55,7 @@ class Standard
       end
     end
     if infil_rate_cfm_per_ft2.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SubSurface', "For #{sub_surface.name}, could not determine surface type for infiltration, will not be included in calculation.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "For #{sub_surface.name}, could not determine surface type for infiltration, will not be included in calculation.")
       return comp_infil_rate_m3_per_s
     end
 
@@ -183,11 +183,11 @@ class Standard
     # If here, we have a rectangle
     return true
   end
-
   # This method adds a subsurface (a window or a skylight depending on the surface) to the centroid of a surface.  The
   # shape of the subsurface is the same as the surface but is scaled so the area of the subsurface is the defined
   # fraction of the surface (set by area_fraction).  Note that this only works for surfaces that do not fold into
   # themselves (like an 'L' or a 'V').
+
   def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction, model)
     # Get rid of all existing subsurfaces.
     remove_All_Subsurfaces(surface: surface)
@@ -231,7 +231,9 @@ class Standard
   # 'sub_surface_create_centered_subsurface_from_scaled_surface' method because it can handle concave surfaces.
   # However, it takes longer because it uses BTAP::Geometry::Surfaces.make_convex_surfaces which includes many nested
   # loops that cycle through the verticies in a surface.
-  def sub_surface_create_scaled_subsurfaces_from_surface (surface, area_fraction, model)
+  def sub_surface_create_scaled_subsurfaces_from_surface (surface:, area_fraction:, model:, consturction:)
+    # Set geometry tolerences:
+    geometry_tolerence = 12
     # Get rid of all existing subsurfaces.
     remove_All_Subsurfaces(surface: surface)
     # Return vertices of smaller surfaces that fit inside this surface.  This is done in case the surface is
@@ -240,12 +242,12 @@ class Standard
     # Throw an error if the roof is not flat.
     surface.vertices.each do |surf_vert|
       surface.vertices.each do |surf_vert_2|
-        unless surf_vert_2.z.to_f == surf_vert.z.to_f
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.SubSurface', 'Currently skylights can only be added to buildings with non-plenum flat roofs.')
+        unless surf_vert_2.z.to_f.round(geometry_tolerence) == surf_vert.z.to_f.round(geometry_tolerence)
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Currently skylights can only be added to buildings with non-plenum flat roofs.")
         end
       end
     end
-    new_surfaces = BTAP::Geometry::Surfaces.make_convex_surfaces(surface: surface, tol: 12)
+    new_surfaces = BTAP::Geometry::Surfaces.make_convex_surfaces(surface: surface, tol: geometry_tolerence)
 
     # What is the centroid of the surface.
     new_surf_cents = []
@@ -295,6 +297,10 @@ class Standard
       if new_surfaces.length > 1
         new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s + '_' + "#{index}"
       end
+      #Set the skylight type to 'Skylight'
+      new_sub_surface.setSubSurfaceType('Skylight')
+      #Set the skylight construction to whatever was passed (should be the default skylight construction)
+      new_sub_surface.setConstruction(consturction)
       new_sub_surface.setName(new_name)
       # There is now only one surface on the subsurface.  Enforce this
       new_sub_surface.setMultiplier(1)
@@ -303,9 +309,11 @@ class Standard
 
   # This just uses applies 'setWindowToWallRatio' method from the OpenStudio SDK.  The only addition is that it changes
   # the name of the window to be the surface name plus the subsurface type (always 'fixedwindow').
-  def set_Window_To_Wall_Ratio_set_name(surface, area_fraction)
+  def set_Window_To_Wall_Ratio_set_name(surface:, area_fraction:, construction:)
     surface.setWindowToWallRatio(area_fraction)
     surface.subSurfaces.sort.each do |sub_surf|
+      sub_surf.setSubSurfaceType('FixedWindow')
+      sub_surf.setConstruction(construction)
       new_name = surface.name.to_s + '_' + sub_surf.subSurfaceType.to_s
       sub_surf.setName(new_name)
     end
