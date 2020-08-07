@@ -21,7 +21,7 @@ class OpenStudio::Model::CoilHeatingWaterToAirHeatPumpEquationFit
 
     rated_total_heating_capacity = self.autosizedRatedHeatingCapacity
     if rated_total_heating_capacity.is_initialized
-      self.setRatedTotalHeatingCapacity(rated_total_heating_capacity.get) 
+      self.setRatedHeatingCapacity(rated_total_heating_capacity.get)
     end
  
     rated_water_flow_rate = self.autosizedRatedWaterFlowRate
