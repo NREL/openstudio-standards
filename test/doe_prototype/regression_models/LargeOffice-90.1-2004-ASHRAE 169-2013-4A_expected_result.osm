@@ -14974,7 +14974,7 @@ OS:Node,
 
 OS:Node,
   {3d822b30-af6b-417b-96dd-be3c173e09fc}, !- Handle
-  Heat Pump Loop Central Tower 20.0 gpm/hp Inlet Water Node, !- Name
+  Heat Pump Loop CoolingTowerTwoSpeed 20.0 gpm/hp Inlet Water Node, !- Name
   {41b839ac-f7f8-4c10-8a20-00510d64dea1}, !- Inlet Port
   {18228542-a7f3-4b75-8380-579ea6a96ca5}; !- Outlet Port
 
@@ -15202,7 +15202,7 @@ OS:SetpointManager:Scheduled:DualSetpoint,
 
 OS:CoolingTower:TwoSpeed,
   {2a7a976c-24de-4e1c-ad8f-485672196b5e}, !- Handle
-  Heat Pump Loop Central Tower 20.0 gpm/hp, !- Name
+  Heat Pump Loop CoolingTowerTwoSpeed 20.0 gpm/hp, !- Name
   {18228542-a7f3-4b75-8380-579ea6a96ca5}, !- Water Inlet Node Name
   {7e4f165a-061e-4ba6-93e6-235210b80bbc}, !- Water Outlet Node Name
   autosize,                               !- Design Water Flow Rate {m3/s}
@@ -15250,7 +15250,7 @@ OS:CoolingTower:TwoSpeed,
 
 OS:Node,
   {6f0eef66-0638-40d0-98a3-21bf5c2a3436}, !- Handle
-  Heat Pump Loop Central Tower 20.0 gpm/hp Outlet Water Node, !- Name
+  Heat Pump Loop CoolingTowerTwoSpeed 20.0 gpm/hp Outlet Water Node, !- Name
   {7e4f165a-061e-4ba6-93e6-235210b80bbc}, !- Inlet Port
   {0987d8d0-8511-45cc-9ca6-4e1cba9ada71}; !- Outlet Port
 
