@@ -15183,7 +15183,7 @@ OS:Node,
 
 OS:Node,
   {e33a905f-b0bd-494e-8202-ea414eb38cae}, !- Handle
-  Heat Pump Loop Central Tower 20.0 gpm/hp Inlet Water Node, !- Name
+  Heat Pump Loop CoolingTowerTwoSpeed 20.0 gpm/hp Inlet Water Node, !- Name
   {ced47699-4798-4390-86e6-ecc7f536d648}, !- Inlet Port
   {0774d9ed-9246-4932-a8ba-17bd0fd13627}; !- Outlet Port
 
