@@ -15403,7 +15403,7 @@ OS:Connection,
 
 OS:SetpointManager:Scheduled:DualSetpoint,
   {a4d97c36-7032-45b4-ab5f-1d3226da4d56}, !- Handle
-  Heat Pump Loop CoolingTowerTwoSpeed Scheduled Dual Setpoint, !- Name
+  Heat Pump Loop Cooling Tower Scheduled Dual Setpoint, !- Name
   ,                                       !- Control Variable
   {00033d2e-9d7d-4b9e-99ce-477f3441024e}, !- High Setpoint Schedule Name
   {9fca8ffa-297e-44e8-9bd1-d6e66f5c68d2}, !- Low Setpoint Schedule Name
