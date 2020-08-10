@@ -182,7 +182,7 @@ class TestNECBSurfaces8426Custom < CreateDOEPrototypeBuildingTest
       model.create_prototype_building(building,'NECB 2011','NECB HDD Method',weather,output_folder)
       BTAP::Environment::WeatherFile.new(weather).set_weather_file(model)
       model.getSpaces.each do |space|
-        puts space.name
+        #puts space.name
         hash[:"Space: #{space.name}"] = {}
         hash[:"Space: #{space.name}"][:"With Adjacent Surface"] = {}
         hash[:"Space: #{space.name}"][:"No Adjacent surface"] = []

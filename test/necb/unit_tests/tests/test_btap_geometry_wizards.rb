@@ -42,8 +42,7 @@ class TestBTAPGeometryWizards < MiniTest::Test
                                                             perimeter_zone_depth = 4.57,
                                                             initial_height = 0.0)
 
-            # Dump model
-            # BTAP::FileIO::save_osm(model, File.join(File.dirname(__FILE__), "../local_test_output", "test_rectangle.osm"))
+
 
             # Test the model is correctly defined.
             # Floor area.
@@ -128,8 +127,7 @@ class TestBTAPGeometryWizards < MiniTest::Test
                                                           plenum_height = 1.0,
                                                           perimeter_zone_depth = 1.0)
 
-          # Dump model
-          # BTAP::FileIO::save_osm(model, File.join(File.dirname(__FILE__), "../local_test_output", "test_courtyard.osm"))
+
 
           # Test the model is correctly defined.
           # Floor area.
@@ -213,8 +211,7 @@ class TestBTAPGeometryWizards < MiniTest::Test
                                                   floor_to_floor_height = 3.8,
                                                   plenum_height = 1.0,
                                                   perimeter_zone_depth = 4.57)
-          # Dump model
-          # BTAP::FileIO::save_osm(model, File.join(File.dirname(__FILE__), "../local_test_output", "Lshape.osm"))
+
 
           # Test the model is correctly defined.
           # Floor area.
@@ -301,8 +298,7 @@ class TestBTAPGeometryWizards < MiniTest::Test
                                                     perimeter_zone_depth = 1.0)
 
 
-            # Dump model
-            # BTAP::FileIO::save_osm(model, File.join(File.dirname(__FILE__), "../local_test_output", "Tshape.osm"))
+
 
             # Test the model is correctly defined.
             # Floor area.
@@ -391,8 +387,7 @@ class TestBTAPGeometryWizards < MiniTest::Test
                                                   plenum_height = 1,
                                                   perimeter_zone_depth = 0.2)
 
-          # Dump model
-          # BTAP::FileIO::save_osm(model, File.join(File.dirname(__FILE__), "../local_test_output", "Hshape.osm"))
+
 
           # Test the model is correctly defined.
           # Floor area.
@@ -481,8 +476,7 @@ class TestBTAPGeometryWizards < MiniTest::Test
                                                   perimeter_zone_depth = 0.2)
 
 
-          # Dump model
-          # BTAP::FileIO::save_osm(model, File.join(File.dirname(__FILE__), "../local_test_output", "test_Ushape.osm"))
+
 
           # Test the model is correctly defined.
           # Floor area.

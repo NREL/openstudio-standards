@@ -226,7 +226,6 @@ class NECB2011
     qaqc[:os_standards_version] = OpenstudioStandards::VERSION
     qaqc[:openstudio_version] = os_version.strip
     qaqc[:energyplus_version] = eplus_version.strip
-    qaqc[:date] = Time.now
     # Store Building data.
     qaqc[:building] = {}
     qaqc[:building][:name] = model.building.get.name.get
@@ -256,7 +255,7 @@ class NECB2011
     qaqc[:geography] ={}
     qaqc[:geography][:hdd] = get_necb_hdd18(model)
     qaqc[:geography][:cdd] = BTAP::Environment::WeatherFile.new(model.getWeatherFile.path.get.to_s).cdd18
-    qaqc[:geography][:climate_zone] = BTAP::Compliance::NECB2011::get_climate_zone_name(qaqc[:geography][:hdd])
+    qaqc[:geography][:climate_zone] = NECB2011.new().get_climate_zone_name(qaqc[:geography][:hdd])
     qaqc[:geography][:city] = model.getWeatherFile.city
     qaqc[:geography][:state_province_region] = model.getWeatherFile.stateProvinceRegion
     qaqc[:geography][:country] = model.getWeatherFile.country
@@ -287,7 +286,7 @@ class NECB2011
     building_type = 'Commercial'
     province = provinces_names_map[qaqc[:geography][:state_province_region]]
     neb_fuel_list = ['Electricity', 'Natural Gas', "Oil"]
-    neb_eplus_fuel_map = {'Electricity' => 'Electricity', 'Natural Gas' => 'Gas', 'Oil' => "FuelOil#2"}
+    neb_eplus_fuel_map = {'Electricity' => 'Electricity', 'Natural Gas' => 'Gas', 'Oil' => "FuelOilNo2"}
     qaqc[:economics][:total_neb_cost] = 0.0
     qaqc[:economics][:total_neb_cost_per_m2] = 0.0
     neb_eplus_fuel_map.each do |neb_fuel, ep_fuel|
@@ -1250,7 +1249,7 @@ class NECB2011
     # puts JSON.pretty_generate @qaqc_data
     # Exterior Opaque
     necb_section_name = get_qaqc_table(table_name: "exterior_opaque_compliance")['refs'].join(",")
-    climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    climate_index = NECB2011.new().get_climate_zone_index(qaqc[:geography][:hdd])
     puts "HDD #{qaqc[:geography][:hdd]}"
     tolerance = 3
     # puts "\n\n"
@@ -1302,7 +1301,7 @@ class NECB2011
   def necb_exterior_fenestration_compliance(qaqc)
     #Exterior Fenestration
     necb_section_name = get_qaqc_table(table_name: "exterior_fenestration_compliance")['refs'].join(",")
-    climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    climate_index = NECB2011.new().get_climate_zone_index(qaqc[:geography][:hdd])
     tolerance = 3
     # puts "\n\n"
     # puts "climate_index: #{climate_index}"
@@ -1359,7 +1358,7 @@ class NECB2011
   def necb_exterior_ground_surfaces_compliance(qaqc)
     #Exterior Ground surfaces
     necb_section_name = get_qaqc_table(table_name: "exterior_ground_surfaces_compliance")['refs'].join(",")
-    climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    climate_index = NECB2011.new().get_climate_zone_index(qaqc[:geography][:hdd])
     tolerance = 3
     # puts "\n\n"
     # puts "climate_index: #{climate_index}"

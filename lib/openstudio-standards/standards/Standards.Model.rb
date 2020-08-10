@@ -1993,47 +1993,53 @@ class Standard
       schedule_type_limits = model.getScheduleTypeLimitsByName(standard_sch_type_limit)
       if !schedule_type_limits.empty?
         schedule_type_limits = schedule_type_limits.get
+        if schedule_type_limits.name.to_s.downcase == 'temperature'
+          schedule_type_limits.resetLowerLimitValue
+          schedule_type_limits.resetUpperLimitValue
+          schedule_type_limits.setNumericType('Continuous')
+          schedule_type_limits.setUnitType('Temperature')
+        end
       else
         case standard_sch_type_limit.downcase
           when 'temperature'
             schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName("Temperature")
+            schedule_type_limits.setName('Temperature')
             schedule_type_limits.setLowerLimitValue(0.0)
             schedule_type_limits.setUpperLimitValue(100.0)
-            schedule_type_limits.setNumericType("Continuous")
-            schedule_type_limits.setUnitType("Temperature")
+            schedule_type_limits.setNumericType('Continuous')
+            schedule_type_limits.setUnitType('Temperature')
 
           when 'humidity ratio'
             schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName("Humidity Ratio")
+            schedule_type_limits.setName('Humidity Ratio')
             schedule_type_limits.setLowerLimitValue(0.0)
             schedule_type_limits.setUpperLimitValue(0.3)
-            schedule_type_limits.setNumericType("Continuous")
-            schedule_type_limits.setUnitType("Dimensionless")
+            schedule_type_limits.setNumericType('Continuous')
+            schedule_type_limits.setUnitType('Dimensionless')
 
           when 'fraction', 'fractional'
             schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName("Fraction")
+            schedule_type_limits.setName('Fraction')
             schedule_type_limits.setLowerLimitValue(0.0)
             schedule_type_limits.setUpperLimitValue(1.0)
-            schedule_type_limits.setNumericType("Continuous")
-            schedule_type_limits.setUnitType("Dimensionless")
+            schedule_type_limits.setNumericType('Continuous')
+            schedule_type_limits.setUnitType('Dimensionless')
 
           when 'onoff'
             schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName("OnOff")
+            schedule_type_limits.setName('OnOff')
             schedule_type_limits.setLowerLimitValue(0)
             schedule_type_limits.setUpperLimitValue(1)
-            schedule_type_limits.setNumericType("Discrete")
-            schedule_type_limits.setUnitType("Availability")
+            schedule_type_limits.setNumericType('Discrete')
+            schedule_type_limits.setUnitType('Availability')
 
           when 'activity'
             schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName("Activity")
+            schedule_type_limits.setName('Activity')
             schedule_type_limits.setLowerLimitValue(70.0)
             schedule_type_limits.setUpperLimitValue(1000.0)
-            schedule_type_limits.setNumericType("Continuous")
-            schedule_type_limits.setUnitType("ActivityLevel")
+            schedule_type_limits.setNumericType('Continuous')
+            schedule_type_limits.setUnitType('ActivityLevel')
         else
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Invalid standard_sch_type_limit for method model_add_schedule_type_limits.")
         end
@@ -2783,8 +2789,7 @@ class Standard
     end
   end
 
-  # Get the full path to the weather file that is specified in the model.
-  #
+  # Get the full path to the weather file that is specified in the model
   # @return [OpenStudio::OptionalPath]
   def model_get_full_weather_file_path(model)
     full_epw_path = OpenStudio::OptionalPath.new
@@ -3423,10 +3428,12 @@ class Standard
   # @param intended_surface_type [string] the surface type
   # @param standards_construction_type [string]  the type of construction
   # @param building_category [string] the type of building
+  # @param climate_zone [string] the building's climate zone
   # @return [hash] hash of construction properties
-  def model_get_construction_properties(model, intended_surface_type, standards_construction_type, building_category = 'Nonresidential')
+  def model_get_construction_properties(model, intended_surface_type, standards_construction_type, building_category, climate_zone=nil)
+
     # get climate_zone_set
-    climate_zone = model_get_building_climate_zone_and_building_type(model)['climate_zone']
+    climate_zone = model_get_building_climate_zone_and_building_type(model)['climate_zone'] if climate_zone.nil?
     climate_zone_set = model_find_climate_zone_set(model, climate_zone)
 
     # populate search hash
@@ -3442,6 +3449,25 @@ class Standard
     construction_properties = model_find_object(standards_data['construction_properties'], search_criteria)
 
     return construction_properties
+  end
+
+  # Returns standards data for selected construction set
+  #
+  # @param building_category [string] the type of building
+  # @param space_type [string] space type within the building type. Typically nil.
+  # @return [hash] hash of construction set data
+  def model_get_construction_set(building_type, space_type = nil)
+    #populate search hash
+    search_criteria = {
+        'template' => template,
+        'building_type' => building_type,
+        'space_type' => space_type
+    }
+
+    #Search construction sets table for the exterior wall building category and construction type
+    construction_set_data = model_find_object(standards_data['construction_sets'], search_criteria)
+
+    return construction_set_data
   end
 
   # Reduces the WWR to the values specified by the PRM.
@@ -4966,8 +4992,8 @@ class Standard
 
       if htg_fuels.include?('NaturalGas') ||
          htg_fuels.include?('PropaneGas') ||
-         htg_fuels.include?('FuelOil#1') ||
-         htg_fuels.include?('FuelOil#2') ||
+         htg_fuels.include?('FuelOilNo1') ||
+         htg_fuels.include?('FuelOilNo2') ||
          htg_fuels.include?('Coal') ||
          htg_fuels.include?('Diesel') ||
          htg_fuels.include?('Gasoline')

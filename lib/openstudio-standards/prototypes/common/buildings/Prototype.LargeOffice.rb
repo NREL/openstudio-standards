@@ -88,6 +88,13 @@ module LargeOffice
         end
       end
     end
+    
+    model.getPlantLoops.sort.each do |plant_loop|
+      if plant_loop.name.to_s == 'Heat Pump Loop'
+        plant_loop.setFluidType('EthyleneGlycol')
+        plant_loop.setGlycolConcentration(40)
+      end
+    end
 
     return true
   end
