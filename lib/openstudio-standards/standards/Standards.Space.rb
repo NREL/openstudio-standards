@@ -801,7 +801,7 @@ class Standard
   # @todo stop skipping non-horizontal roofs
   # @todo Determine the illuminance setpoint for the controls based on space type
   # @todo rotate sensor to face window (only needed for glare calcs)
-  def space_add_daylighting_controls(space, remove_existing_controls, draw_daylight_areas_for_debugging = false)
+  def space_add_daylighting_controls(space, remove_existing_controls, draw_daylight_areas_for_debugging = false, climate_zone)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "******For #{space.name}, adding daylight controls.")
 
     # Check for existing daylighting controls
