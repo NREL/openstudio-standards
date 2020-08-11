@@ -65,7 +65,15 @@ class Standard
         anti_sweat_heater_control = props['anti_sweat_heater_control']
       end
     end
-
+    if props['restocking_schedule']
+      if props['restocking_schedule'].downcase == 'always off'
+        restocking_sch = model.alwaysOffDiscreteSchedule
+      else
+        restocking_sch = model_add_schedule(model, props['restocking_schedule'])
+      end
+    else
+      restocking_sch = model.alwaysOffDiscreteSchedule
+    end
     if props['fractionofantisweatheaterenergytocase']
       fractionofantisweatheaterenergytocase = props['fractionofantisweatheaterenergytocase']
     end
@@ -120,19 +128,7 @@ class Standard
     else
       ref_case.setUnderCaseHVACReturnAirFraction(0)
     end
-    #-------------
-    if props['restocking_schedule']
-      if props['restocking_schedule'].downcase == 'always off'
-        # restocking_sch = model.alwaysOffDiscreteSchedule
-        ref_case.resetRefrigeratedCaseRestockingSchedule()
-      else
-        restocking_sch = model_add_schedule(model, props['restocking_schedule'])
-        ref_case.setRefrigeratedCaseRestockingSchedule(restocking_sch)
-      end
-    else
-      ref_case.resetRefrigeratedCaseRestockingSchedule()
-    end
-    #--------------
+    ref_case.setRefrigeratedCaseRestockingSchedule(restocking_sch)
 
     if props['case_category']
       ref_case_addprops = ref_case.additionalProperties

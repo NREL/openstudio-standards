@@ -190,7 +190,7 @@ namespace :data do
 
   desc 'Export JSONs for separate data repository'
   task 'export_for_data_repo' do
-    export_spreadsheets_for_data_repo(spreadsheet_titles)
+    export_export_spreadsheets_for_data_repo(spreadsheet_titles)
   end
 
 end
