@@ -503,7 +503,7 @@ Standard.class_eval do
     energy_values = {}
 
     # List of all fuel types, based on Table 5.1 of EnergyPlus' Input Output Reference manual
-    fuel_types = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOil#1', 'FuelOil#2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling',
+    fuel_types = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOilNo1', 'FuelOilNo2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling',
     'DistrictHeating', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
 
     # List of all end uses, based on Table 5.3 of EnergyPlus' Input Output Reference manual

@@ -4,7 +4,7 @@ require_relative '../../../helpers/minitest_helper'
 # This class will perform tests that are Spacetype dependant, Test model will be created
 # to specifically test aspects of the NECB2011 code that are Spacetype dependant.
 class NECB2011SpaceTypesDefaultConstructionsTest < Minitest::Test
-  Templates = ['NECB2011'] #,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
+  Templates = ['NECB2011', 'BTAPPRE1980'] #,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
   def test_spacetype_construction_sets()
     @model = OpenStudio::Model::Model.new
     #Create only above ground geometry (Used for infiltration tests)

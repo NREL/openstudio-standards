@@ -313,7 +313,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {028af023-65bd-494f-805d-65623355f305}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -431,7 +431,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {221e8adf-462f-4102-abb1-0bbedcc1010c}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -585,7 +585,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {6e08b2d6-7428-43a2-bb23-1dba7f241ea7}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -703,7 +703,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {f3f01a65-ee28-4594-ace9-a07c8a1f8e53}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -821,7 +821,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {7cdb8a9e-d879-43e9-9157-d878397b9413}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -921,7 +921,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {beb9ddd0-3c85-46de-b2b6-f852dfd94f00}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -1038,7 +1038,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {b14c3df4-6d5f-4e37-a007-3f230581586d}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -1156,7 +1156,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {0389314a-0c21-4461-800d-cffcf0fed6e9}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -1274,7 +1274,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {5222a123-fcee-4465-a1d8-1fe3a55ed431}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -1392,7 +1392,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {2a9fe3f6-0245-47e1-83d4-2e202cf00843}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -1510,7 +1510,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {99c786c6-085f-4396-970f-e677ee574088}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -1627,7 +1627,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {d98a7b10-1d11-48bd-a2e5-f333793a7830}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -1744,7 +1744,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {3fff5dc0-4827-4f6b-b4bc-87a3a79e5610}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -1862,7 +1862,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {6a4fd8de-ac31-4c2d-8e19-bc00287778e6}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -1980,7 +1980,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {8f6dceaa-19e5-4672-b32e-31cdc78109d8}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -2097,7 +2097,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {f31d9b3a-b907-4dea-8a8a-2b5de88b7c35}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -2215,7 +2215,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {703003c0-a8be-48e2-93b7-57710ac64710}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -2332,7 +2332,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {69c83deb-630e-462f-b9e7-bda39f8a372d}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -2450,7 +2450,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {d1bcd4f1-7920-4f82-a04e-3b6c9d4fab99}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -2568,7 +2568,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {316fddf4-8cea-4c27-b604-515fad8156a5}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -2686,7 +2686,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {f6009d98-ae01-49dd-bf1f-f8d89b2e9054}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -6029,7 +6029,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {d3d3811d-bfc1-4455-b7ad-240f00545023}, !- Space Name
-  OtherSideCoefficients,                  !- Outside Boundary Condition
+  Ground,                                 !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure

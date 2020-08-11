@@ -14,11 +14,16 @@ end
 
 def create_baseline_model(model_name, standard, climate_zone, building_type, custom = nil, debug = false, load_existing_model = true)
 
+  # Get the name of the test that is calling this method and append it to the
+  # model name.  This prevents race conditions when running tests in parallel.
+  caller_test_name = caller_locations.first.label
+  test_specific_model_name = "#{model_name}_#{caller_test_name}"
+
   # If requested, first attempt to load baseline model
   # from file instead of recreating it.
   model = nil
   if load_existing_model
-    model = load_baseline_model(model_name, standard, climate_zone, building_type, custom, debug)
+    model = load_baseline_model(test_specific_model_name, standard, climate_zone, building_type, custom, debug)
   end
   
   # If the existing model was loaded, return that
@@ -120,7 +125,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
   end
 
   # Create a directory for the test result
-  osm_directory = "#{test_dir}/#{model_name}-#{standard}-#{climate_zone}-#{custom}"
+  osm_directory = "#{test_dir}/#{test_specific_model_name}-#{standard}-#{climate_zone}-#{custom}"
   if !Dir.exists?(osm_directory)
     Dir.mkdir(osm_directory)
   end

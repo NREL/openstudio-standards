@@ -1,0 +1,276 @@
+ ! The following Location and Design Day data are produced as possible from the weather source data.
+ ! Wind Speeds follow the traditional values (6.7 m/s heating, 3.35 m/s cooling)
+ ! No special attempts at re-creating or determining missing data parts (e.g. Wind speed or direction)
+ ! are done.  Therefore, you should look at the data and fill in any incorrect values as you desire.
+ 
+ ! SizingPeriod:DesignDay and other objects are formatted to meet criteria of EnergyPlus V7.1 and later
+ 
+ ! Some users have indicated that they would like the actual day of week from the weather file to be
+ ! used as the start day of week for a RunPeriod even though this is relatively meaningless for
+ ! TMY data files as future months will not use their start days of week (simulations need to show
+ ! continuity in day of week presentation).
+ 
+ ! In an effort to accomodate, the following initial month days are included:
+ ! Note JAN 1, 2018 is a Monday
+ ! Note FEB 1, 2012 is a Wednesday
+ ! Note MAR 1, 2018 is a Thursday
+ ! Note APR 1, 2014 is a Tuesday
+ ! Note MAY 1, 2012 is a Tuesday
+ ! Note JUN 1, 2016 is a Wednesday
+ ! Note JUL 1, 2016 is a Friday
+ ! Note AUG 1, 2014 is a Friday
+ ! Note SEP 1, 2017 is a Friday
+ ! Note OCT 1, 2013 is a Tuesday
+ ! Note NOV 1, 2013 is a Friday
+ ! Note DEC 1, 2014 is a Monday
+ 
+ ! Since the RunPeriod object changes in V9.0, the following are RunPeriod objects in comments:
+ ! Version before EnergyPlus release V9.0
+ !RunPeriod,
+ !Weather Data,    !- Name
+ !  1,             !- Begin Month
+ !  1,             !- Begin Day of Month
+ !  12,            !- End Month
+ !  31,            !- End Day of Month
+ !Monday,      !- Day of Week for Start Day
+ !  No,            !- Use Weather File Holidays and Special Days
+ !  No,            !- Use Weather File Daylight Saving Period
+ ! Yes,            !- Apply Weekend Holiday Rule
+ ! Yes,            !- Use Weather File Rain Indicators
+ ! Yes;            !- Use Weather File Snow Indicators
+ 
+ RunPeriod,
+  Weather Data,  !- Name
+  1,             !- Begin Month
+  1,             !- Begin Day of Month
+   ,             !- Begin Year
+  12,            !- End Month
+  31,            !- End Day of Month
+   ,             !- End Year
+  Monday,      !- Day of Week for Start Day Monday 
+  No,            !- Use Weather File Holidays and Special Days
+  No,            !- Use Weather File Daylight Saving Period
+  Yes,           !- Apply Weekend Holiday Rule
+  Yes,           !- Use Weather File Rain Indicators
+  Yes,           !- Use Weather File Snow Indicators
+  ;              !- Treat Weather as Acual
+ 
+ Site:Location,
+  Granby_QC_CAN Design_Conditions,     !- Location Name
+      45.37,     !- Latitude {N+ S-}
+     -72.77,     !- Longitude {W- E+}
+      -5.00,     !- Time Zone Relative to GMT {GMT+/-}
+      86.00;     !- Elevation {m}
+  
+ ! The following Sizing Period objects for Extreme and Typical conditions are calculated
+ ! from the extreme (if any) and typical conditions on the weather source data.
+ ! The actual weeks that will be used will exist on the weather file.
+  
+ SizingPeriod:WeatherFileConditionType,
+   Summer Extreme,
+   SummerExtreme,
+   SummerDesignDay,
+   Yes,                !- Use Weather File Daylight Saving Period
+   Yes;                !- Use Weather File Rain and Snow Indicators
+ SizingPeriod:WeatherFileConditionType,
+   Summer Typical,
+   SummerTypical,
+   Monday,
+   Yes,                !- Use Weather File Daylight Saving Period
+   Yes;                !- Use Weather File Rain and Snow Indicators
+ SizingPeriod:WeatherFileConditionType,
+   Winter Extreme,
+   WinterExtreme,
+   WinterDesignDay,
+   Yes,                !- Use Weather File Daylight Saving Period
+   Yes;                !- Use Weather File Rain and Snow Indicators
+ SizingPeriod:WeatherFileConditionType,
+   Winter Typical,
+   WinterTypical,
+   Monday,
+   Yes,                !- Use Weather File Daylight Saving Period
+   Yes;                !- Use Weather File Rain and Snow Indicators
+ SizingPeriod:WeatherFileConditionType,
+   Autumn Typical,
+   AutumnTypical,
+   Monday,
+   Yes,                !- Use Weather File Daylight Saving Period
+   Yes;                !- Use Weather File Rain and Snow Indicators
+ SizingPeriod:WeatherFileConditionType,
+   Spring Typical,
+   SpringTypical,
+   Monday,
+   Yes,                !- Use Weather File Daylight Saving Period
+   Yes;                !- Use Weather File Rain and Snow Indicators
+ 
+
+
+ ! Site:Precipitation. RoofIrrigation and Schedule:File objects for rainfall
+ ! Data is built from rainfall data on the source data
+  Site:Precipitation,  
+    ScheduleAndDesignLevel,  !- Precipitation Model Type
+    0.000,  !- Design Level for Total Annual Preciptation
+    Rainfall Data from EPW file,    !- Precipitation Rates Schedule Name
+    0.000;  !- Average Total Annual Precipitation
+ 
+  RoofIrrigation,  
+    Schedule,  !- Irridation Model Type
+    Rainfall Data from EPW file,    !- Precipitation Rates Schedule Name
+    ;  !- Irrigation Maximum Saturation Threshold (default used)
+ 
+  Schedule:File, 
+    Rainfall Data from EPW file,  !- Name
+    ,                       !- Schedule Type Limits Name
+    CAN_QC_Granby.710367_TMYx.2004-2018.rain,    !- File Name
+    1,                       !- Column Number
+    1,                       !- Rows to Skip at Top
+    8760;    !- Number of Hours of Data
+
+
+ ! No Design Conditions found for this Location
+ ! Following definitions are created from weather source data
+ ! Granby_QC_CAN Annual Heating 99.6%, MaxDB=-28.2C
+ SizingPeriod:DesignDay,
+  Granby Ann Htg 99.6% Condns DB,     !- Name
+          1,      !- Month
+         21,      !- Day of Month
+  WinterDesignDay,!- Day Type
+      -28.2,      !- Maximum Dry-Bulb Temperature {C}
+        0.0,      !- Daily Dry-Bulb Temperature Range {C}
+ DefaultMultipliers, !- Dry-Bulb Temperature Range Modifier Type
+           ,      !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+    Wetbulb,      !- Humidity Condition Type
+      -28.2,      !- Wetbulb at Maximum Dry-Bulb {C}
+           ,      !- Humidity Indicating Day Schedule Name
+           ,      !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+           ,      !- Enthalpy at Maximum Dry-Bulb {J/kg}
+           ,      !- Daily Wet-Bulb Temperature Range {deltaC}
+    100296.,      !- Barometric Pressure {Pa}
+       6.71,!- [N/A] Wind Speed {m/s} traditional 6.71 m/s (15 mph)
+          0,   !- [N/A] Wind Direction {Degrees; N=0, S=180}
+         No,      !- Rain {Yes/No}
+         No,      !- Snow on ground {Yes/No}
+         No,      !- Daylight Savings Time Indicator
+  ASHRAEClearSky, !- Solar Model Indicator
+           ,      !- Beam Solar Day Schedule Name
+           ,      !- Diffuse Solar Day Schedule Name
+           ,      !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub)
+           ,      !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud)
+       0.00;      !- Clearness {0.0 to 1.1}
+ 
+ ! Granby_QC_CAN Annual Heating 99%, MaxDB=-26.4C
+ SizingPeriod:DesignDay,
+  Granby Ann Htg 99% Condns DB,     !- Name
+          1,      !- Month
+         21,      !- Day of Month
+  WinterDesignDay,!- Day Type
+      -26.4,      !- Maximum Dry-Bulb Temperature {C}
+        0.0,      !- Daily Dry-Bulb Temperature Range {C}
+ DefaultMultipliers, !- Dry-Bulb Temperature Range Modifier Type
+           ,      !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+    Wetbulb,      !- Humidity Condition Type
+      -26.4,      !- Wetbulb at Maximum Dry-Bulb {C}
+           ,      !- Humidity Indicating Day Schedule Name
+           ,      !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+           ,      !- Enthalpy at Maximum Dry-Bulb {J/kg}
+           ,      !- Daily Wet-Bulb Temperature Range {deltaC}
+    100296.,      !- Barometric Pressure {Pa}
+       6.71,!- [N/A] Wind Speed {m/s} traditional 6.71 m/s (15 mph)
+          0,   !- [N/A] Wind Direction {Degrees; N=0, S=180}
+         No,      !- Rain {Yes/No}
+         No,      !- Snow on ground {Yes/No}
+         No,      !- Daylight Savings Time Indicator
+  ASHRAEClearSky, !- Solar Model Indicator
+           ,      !- Beam Solar Day Schedule Name
+           ,      !- Diffuse Solar Day Schedule Name
+           ,      !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub)
+           ,      !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud)
+       0.00;      !- Clearness {0.0 to 1.1}
+ 
+ ! Granby_QC_CAN Annual Cooling (DP=>MDB) .4%, MDB=31.0C DP=21.9C
+ SizingPeriod:DesignDay,
+  Granby Ann Clg .4% Condns DP=>MDB,     !- Name
+          7,      !- Month
+         21,      !- Day of Month
+  SummerDesignDay,!- Day Type
+       31.0,      !- Maximum Dry-Bulb Temperature {C}
+       11.2,      !- Daily Dry-Bulb Temperature Range {C}
+ DefaultMultipliers, !- Dry-Bulb Temperature Range Modifier Type
+           ,      !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+    Dewpoint,     !- Humidity Condition Type
+       21.9,      !- Dewpoint at Maximum Dry-Bulb {C}
+           ,      !- Humidity Indicating Day Schedule Name
+           ,      !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+           ,      !- Enthalpy at Maximum Dry-Bulb {J/kg}
+           ,      !- Daily Wet-Bulb Temperature Range {deltaC}
+    100296.,      !- Barometric Pressure {Pa}
+       3.35,   !- [N/A] Wind Speed {m/s} traditional 3.35 m/s (7mph)
+          0,   !- [N/A] Wind Direction {Degrees; N=0, S=180}
+         No,      !- Rain {Yes/No}
+         No,      !- Snow on ground {Yes/No}
+         No,      !- Daylight Savings Time Indicator
+  ASHRAEClearSky, !- Solar Model Indicator
+           ,      !- Beam Solar Day Schedule Name
+           ,      !- Diffuse Solar Day Schedule Name
+           ,      !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub)
+           ,      !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud)
+       1.00;      !- Clearness {0.0 to 1.1}
+ 
+ ! Granby_QC_CAN Annual Cooling (DP=>MDB) 1%, MDB=30.1C DP=21.3C
+ SizingPeriod:DesignDay,
+  Granby Ann Clg 1% Condns DP=>MDB,     !- Name
+          7,      !- Month
+         21,      !- Day of Month
+  SummerDesignDay,!- Day Type
+       30.1,      !- Maximum Dry-Bulb Temperature {C}
+       11.2,      !- Daily Dry-Bulb Temperature Range {C}
+ DefaultMultipliers, !- Dry-Bulb Temperature Range Modifier Type
+           ,      !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+    Dewpoint,     !- Humidity Condition Type
+       21.3,      !- Dewpoint at Maximum Dry-Bulb {C}
+           ,      !- Humidity Indicating Day Schedule Name
+           ,      !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+           ,      !- Enthalpy at Maximum Dry-Bulb {J/kg}
+           ,      !- Daily Wet-Bulb Temperature Range {deltaC}
+    100296.,      !- Barometric Pressure {Pa}
+       3.35,   !- [N/A] Wind Speed {m/s} traditional 3.35 m/s (7mph)
+          0,   !- [N/A] Wind Direction {Degrees; N=0, S=180}
+         No,      !- Rain {Yes/No}
+         No,      !- Snow on ground {Yes/No}
+         No,      !- Daylight Savings Time Indicator
+  ASHRAEClearSky, !- Solar Model Indicator
+           ,      !- Beam Solar Day Schedule Name
+           ,      !- Diffuse Solar Day Schedule Name
+           ,      !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub)
+           ,      !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud)
+       1.00;      !- Clearness {0.0 to 1.1}
+ 
+ ! Granby_QC_CAN Annual Cooling (DP=>MDB) 2%, MDB=29.3C DP=21.0C
+ SizingPeriod:DesignDay,
+  Granby Ann Clg 2% Condns DP=>MDB,     !- Name
+          7,      !- Month
+         21,      !- Day of Month
+  SummerDesignDay,!- Day Type
+       29.3,      !- Maximum Dry-Bulb Temperature {C}
+       11.2,      !- Daily Dry-Bulb Temperature Range {C}
+ DefaultMultipliers, !- Dry-Bulb Temperature Range Modifier Type
+           ,      !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+    Dewpoint,     !- Humidity Condition Type
+       21.0,      !- Dewpoint at Maximum Dry-Bulb {C}
+           ,      !- Humidity Indicating Day Schedule Name
+           ,      !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+           ,      !- Enthalpy at Maximum Dry-Bulb {J/kg}
+           ,      !- Daily Wet-Bulb Temperature Range {deltaC}
+    100296.,      !- Barometric Pressure {Pa}
+       3.35,   !- [N/A] Wind Speed {m/s} traditional 3.35 m/s (7mph)
+          0,   !- [N/A] Wind Direction {Degrees; N=0, S=180}
+         No,      !- Rain {Yes/No}
+         No,      !- Snow on ground {Yes/No}
+         No,      !- Daylight Savings Time Indicator
+  ASHRAEClearSky, !- Solar Model Indicator
+           ,      !- Beam Solar Day Schedule Name
+           ,      !- Diffuse Solar Day Schedule Name
+           ,      !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub)
+           ,      !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud)
+       1.00;      !- Clearness {0.0 to 1.1}
+ 

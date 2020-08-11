@@ -135,10 +135,9 @@ class NRELZNEReady2017 < ASHRAE901
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end
 
-  # Determine the base infiltration rate at 75 PA.
+  # Baseline infiltration rate
   #
-  # @return [Double] the baseline infiltration rate, in cfm/ft^2
-  # defaults to no infiltration.
+  # @return [Double] the baseline infiltration rate, in cfm/ft^2 exterior above grade wall area at 75 Pa
   def space_infiltration_rate_75_pa(space)
     basic_infil_rate_cfm_per_ft2 = 0.5 # Half of 90.1-2013
     return basic_infil_rate_cfm_per_ft2
