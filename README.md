@@ -1,3 +1,9 @@
+# Purpose
+
+This is what we should have done instead of the schedules measure, create our own schedules.
+
+With this custom setup we can create our own schedules in schedules csv then export that to a SPEEDDataLibrary_schedules.json to be used directly in speed engine.
+
 # PW Fork of OpenStudio-Standards
 
 Install Ruby and OpenStudio as described below for either OpenStudio 3.0.0 or 2.9.1. Note if switching between versions of OpenStudio you will have to delete the `Gemfile.lock` file in the root directory of this repository.
