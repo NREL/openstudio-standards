@@ -7,12 +7,14 @@ module SecondarySchool
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # add transformer
+    transformer_efficiency = nil
     case template
     when '90.1-2004', '90.1-2007'
       transformer_efficiency = 0.974
     when '90.1-2010', '90.1-2013'
       transformer_efficiency = 0.985
     end
+    return true unless !transformer_efficiency.nil?
 
     model_add_transformer(model,
                           wired_lighting_frac: 0.0194,

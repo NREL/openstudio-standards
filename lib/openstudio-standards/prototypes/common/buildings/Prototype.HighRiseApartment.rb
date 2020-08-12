@@ -10,12 +10,14 @@ module HighriseApartment
     add_door_infiltration(climate_zone, model)
 
     # add transformer
+    transformer_efficiency = nil
     case template
     when '90.1-2004', '90.1-2007'
       transformer_efficiency = 0.966
     when '90.1-2010', '90.1-2013'
       transformer_efficiency = 0.98
     end
+    return true unless !transformer_efficiency.nil?
 
     model_add_transformer(model,
                           wired_lighting_frac: 0.0015,

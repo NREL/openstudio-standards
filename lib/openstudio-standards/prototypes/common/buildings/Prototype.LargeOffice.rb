@@ -6,12 +6,14 @@ module LargeOffice
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
 
     # add transformer
+    transformer_efficiency = nil
     case template
     when '90.1-2004', '90.1-2007'
       transformer_efficiency = 0.979
     when '90.1-2010', '90.1-2013'
       transformer_efficiency = 0.987
     end
+    return true unless !transformer_efficiency.nil?
 
     # rename datacenter plug loads sub categories, there should be 2 data center plug load objects in large office
     model.getElectricEquipments.sort.each do |item|
