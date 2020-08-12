@@ -84,8 +84,11 @@ class AppendixGPRMTests < Minitest::Test
   # @return [Hash] Hash of OpenStudio Model of the prototypes
   def generate_baseline(prototypes_generated, id_prototype_mapping)
     baseline_prototypes = {}
-    prototypes_generated.each do |id, model|
+    prototypes_generated.each do |id, proposed_model|
       building_type, template, climate_zone, mod = id_prototype_mapping[id]
+
+      # Create a deep copy of the proposed model
+      model = BTAP::FileIO::deep_copy(proposed_model)
 
       # Initialize Standard class
       prototype_creator = Standard.build('90.1-PRM-2019')
@@ -330,6 +333,102 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # Check lighting occ sensor
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_light_occ_sensor(prototypes,prototypes_base)
+    light_sch = {}
+    prototypes.each do |prototype, model_proto|
+      building_type, template, climate_zone, mod = prototype
+      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
+      # Define name of spaces used for verification
+      space_name = JSON.parse(File.read("#{@@json_dir}/light_occ_sensor.json"))[run_id]
+      
+      # Get lighting schedule in prototype model
+      light_sch_model = {}
+      model_proto.getLightss.sort.each do |lgts|
+        light_sch_model_lgts = {}
+        
+        # get default schedule
+        day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
+        times = day_rule.times()
+        light_sch_model_default_rule = {}
+        times.each do |time|
+          light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
+        end
+        light_sch_model_lgts['default schedule'] = light_sch_model_default_rule
+        
+        # get daily schedule
+        lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
+          light_sch_model_week_rule = {}
+          day_rule = week_rule.daySchedule()
+          times = day_rule.times()
+          times.each do |time|
+            light_sch_model_week_rule[time.to_s] = day_rule.getValue(time)
+          end
+          light_sch_model_lgts[week_rule.name.to_s] = light_sch_model_week_rule
+        end
+        light_sch_model[lgts.name.to_s] = light_sch_model_lgts
+      end
+      light_sch[run_id] = light_sch_model
+    end
+
+    light_sch_base = {}
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, mod = prototype
+      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
+      # Define name of spaces used for verification
+      space_name = JSON.parse(File.read("#{@@json_dir}/light_occ_sensor.json"))[run_id]
+    
+      # Get lighting schedule in baseline model
+      model_baseline.getSpaceTypes.sort.each do |space_type|
+        light_sch_model_base = {}
+        space_type.lights.sort.each do |lgts|
+          light_sch_model_lgts_base = {}
+          light_sch_model_lgts_base['space_type'] = space_type.standardsSpaceType.to_s
+
+          # get default schedule
+          day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
+          times = day_rule.times()
+          light_sch_model_default_rule = {}
+          times.each do |time|
+            light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
+          end
+          light_sch_model_lgts_base['default schedule'] = light_sch_model_default_rule
+          
+          # get daily schedule
+          lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
+            light_sch_model_week_rule_base = {}
+            day_rule = week_rule.daySchedule()
+            times = day_rule.times()
+            times.each do |time|
+              light_sch_model_week_rule_base[time.to_s] = day_rule.getValue(time)
+            end
+            light_sch_model_lgts_base[week_rule.name.to_s] = light_sch_model_week_rule_base
+          end
+          light_sch_model_base[lgts.name.to_s] = light_sch_model_lgts_base
+        end
+      
+        # Check light schedule against expected light schedule
+        light_sch_model_base.each do |key, value|
+          value.each do |key1, value1|
+            if key1 != 'space_type'
+              value1.each do |key2, value2|
+                space_type_var = 0
+                space_name.each do |key3, value3|
+                  if value['space_type'] == key3
+                    space_type_var = value3
+                  end
+                end
+                assert(((light_sch[run_id][key][key1][key2] - value2*(1.0-space_type_var)).abs < 0.001), "Lighting schedule for the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
   # Check baseline infiltration calculations
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -389,6 +488,7 @@ class AppendixGPRMTests < Minitest::Test
       'lpd',
       'isresidential',
       'daylighting_control',
+      'light_occ_sensor',
       'infiltration'
     ]
 
@@ -408,6 +508,7 @@ class AppendixGPRMTests < Minitest::Test
     check_residential_flag(prototypes_base['isresidential']) unless !(tests.include? 'isresidential')
     check_envelope(prototypes_base['envelope']) unless !(tests.include? 'envelope')
     check_lpd(prototypes_base['lpd']) unless !(tests.include? 'lpd')
+    check_light_occ_sensor(prototypes['light_occ_sensor'],prototypes_base['light_occ_sensor']) unless !(tests.include? 'light_occ_sensor')
     check_infiltration(prototypes_base['infiltration']) unless !(tests.include? 'infiltration')
   end
 end

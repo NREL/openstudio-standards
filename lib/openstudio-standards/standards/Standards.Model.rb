@@ -82,7 +82,20 @@ class Standard
         set_infiltration = false
         if /prm/i =~ template
           space_type_apply_int_loads_prm(space_type, model)
-        elsif space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+        else
+          space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+        end
+      end
+      
+      # Modify the lighting schedule to handle lighting occupancy sensors
+      # Modify the upper limit value of fractional schedule to avoid the fatal error caused by schedule value higher than 1
+      if /prm/i =~ template
+        space_type_light_sch_change(model)
+        model.getScheduleTypeLimitss.sort.each do |limit|
+          if limit.name.to_s == 'Fractional'
+            limit.resetUpperLimitValue()
+            limit.setUpperLimitValue(5.0)
+          end
         end
       end
 
@@ -94,7 +107,7 @@ class Standard
       model.getLightss.sort.each do |lights|
         if lights.schedule.empty?
           lights.setSchedule(model.alwaysOffDiscreteSchedule)
-        end      
+        end
       end
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Daylighting Controls ***')
