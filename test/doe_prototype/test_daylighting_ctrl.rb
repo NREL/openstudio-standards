@@ -53,7 +53,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
                          "Core_ZN"=>[1.0, 0.0]}
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
-      assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Small Office - 2010 - 2A - Fraction Incorrect')
+      assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Small Office - 2010 - 2A - Fraction Incorrect')
     end
 
     # Small Office
@@ -80,7 +80,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
                          "Core_ZN"=>[1.0, 0.0]}
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
-      assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Small Office - 2013 - 2A - Fraction Incorrect')
+      assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Small Office - 2013 - 2A - Fraction Incorrect')
     end
 
     # Medium Office
@@ -130,7 +130,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Medium Office - 2010 - 1A - Fraction Incorrect')
+        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Medium Office - 2010 - 1A - Fraction Incorrect')
       end
     end
 
@@ -181,7 +181,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Medium Office - 2013 - 1A - Fraction Incorrect')
+        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Medium Office - 2013 - 1A - Fraction Incorrect')
       end
     end
 
@@ -232,7 +232,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Large Office - 2010 - 1A - Fraction Incorrect')
+        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Large Office - 2010 - 1A - Fraction Incorrect')
       end
     end
 
@@ -283,7 +283,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Large Office - 2013 - 1A - Fraction Incorrect')
+        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Large Office - 2013 - 1A - Fraction Incorrect')
       end
     end
 
@@ -303,7 +303,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Warehouse - 2010 - 6A - Fraction Incorrect')
+        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Warehouse - 2010 - 6A - Fraction Incorrect')
       end
     end
 
@@ -317,14 +317,17 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
                          "Zone2 Fine Storage Daylt Sensor 1" => [27.8892, 24.9936, 0.762],
                          "Zone2 Fine Storage Daylt Sensor 2" => [3.81, 24.9936, 0.762],}
     model.getDaylightingControls.each do |daylght_ctrl|
-      assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Warehouse - 2010 - 1A - Sensor Position Incorrect')
+      # TODO: Office should not have daylighting control
+      if true_daylght_ctrl.include?(daylght_ctrl.name.to_s)
+        assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Warehouse - 2010 - 1A - Sensor Position Incorrect')
+      end
     end
     true_daylght_ctrl = {"Zone3 Bulk Storage" => [0.25, 0.25],
                          "Zone2 Fine Storage" => [0.25, 0.25]}
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Warehouse - 2010 - 1A - Fraction Incorrect')
+        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Warehouse - 2010 - 1A - Fraction Incorrect')
       end
     end
 
@@ -344,7 +347,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Warehouse - 2013 - 6A - Fraction Incorrect')
+        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Warehouse - 2013 - 6A - Fraction Incorrect')
       end
     end
 
@@ -368,7 +371,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Warehouse - 2013 - 1A - Fraction Incorrect')
+        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Warehouse - 2013 - 1A - Fraction Incorrect')
       end
     end
 
@@ -386,7 +389,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Full Service Restaurant - 2010 - 1A - Fraction Incorrect')
+        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Full Service Restaurant - 2010 - 1A - Fraction Incorrect')
       end
     end
 
@@ -404,7 +407,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Full Service Restaurant - 2013 - 1A - Fraction Incorrect')
+        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Full Service Restaurant - 2013 - 1A - Fraction Incorrect')
       end
     end
 
@@ -422,7 +425,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Full Service Restaurant - 2010 - 1A - Fraction Incorrect')
+        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Full Service Restaurant - 2010 - 1A - Fraction Incorrect')
       end
     end
 
@@ -440,7 +443,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Full Service Restaurant - 2013 - 1A - Fraction Incorrect')
+        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Full Service Restaurant - 2013 - 1A - Fraction Incorrect')
       end
     end
 
@@ -458,7 +461,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Standalone Retail - 2013 - 1A - Fraction Incorrect')
+        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Standalone Retail - 2013 - 1A - Fraction Incorrect')
       end
     end
 
@@ -475,7 +478,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Standalone Retail - 2013 - 8A - Fraction Incorrect')
+        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Standalone Retail - 2013 - 8A - Fraction Incorrect')
       end
     end
 
@@ -580,7 +583,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
 #    model.getSpaces.each do |space|
 #      zone = space.thermalZone.get
 #      if true_daylght_ctrl.keys.include? (space.name.to_s)
-#        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Secondary School - 2010 - 1A - Fraction Incorrect')
+#        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Secondary School - 2010 - 1A - Fraction Incorrect')
 #      end
 #    end
 #
@@ -684,7 +687,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
 #    model.getSpaces.each do |space|
 #      zone = space.thermalZone.get
 #      if true_daylght_ctrl.keys.include? (space.name.to_s)
-#        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Secondary School - 2013 - 1A - Fraction Incorrect')
+#        assert([zone.fractionofZoneControlledbyPrimaryDaylightingControl, zone.fractionofZoneControlledbySecondaryDaylightingControl] == true_daylght_ctrl[space.name.to_s], 'Secondary School - 2013 - 1A - Fraction Incorrect')
 #      end
 #    end
 

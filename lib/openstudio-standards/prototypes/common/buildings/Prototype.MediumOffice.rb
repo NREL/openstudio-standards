@@ -242,7 +242,21 @@ module MediumOffice
             end
           end
           # Adjust the secondary sensor
-          if adj['sensor_2_frac'] && zone.secondaryDaylightingControl.is_initialized
+          if adj['sensor_2_frac']
+            # Create second sensor if it doesn't exist
+            if !zone.secondaryDaylightingControl.is_initialized
+              sensor_2 = OpenStudio::Model::DaylightingControl.new(space.model)
+              sensor_2.setName("#{space.name} Daylt Sensor 2")
+              sensor_2.setSpace(space)
+              sensor_2.setIlluminanceSetpoint(375)
+              sensor_2.setLightingControlType('Stepped')
+              sensor_2.setNumberofSteppedControlSteps(3) # all sensors 3-step per design
+              sensor_2.setMinimumInputPowerFractionforContinuousDimmingControl(0.3)
+              sensor_2.setMinimumLightOutputFractionforContinuousDimmingControl(0.2)
+              sensor_2.setProbabilityLightingwillbeResetWhenNeededinManualSteppedControl(1.0)
+              sensor_2.setMaximumAllowableDiscomfortGlareIndex(22.0)
+              zone.setSecondaryDaylightingControl(sensor_2)
+            end
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting secondary daylight sensor to control #{adj['sensor_2_frac']} of the lighting.")
             zone.setFractionofZoneControlledbySecondaryDaylightingControl(adj['sensor_2_frac'])
             sec_ctrl = zone.secondaryDaylightingControl.get
