@@ -176,6 +176,10 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             sim_ctrl = model.getSimulationControl
             sim_ctrl.setRunSimulationforSizingPeriods(true)
             sim_ctrl.setRunSimulationforWeatherFileRunPeriods(false)
+            if model.version >= OpenStudio::VersionString.new('3.0.0')
+              sim_ctrl.setDoHVACSizingSimulationforSizingPeriods(true)
+              sim_ctrl.setMaximumNumberofHVACSizingSimulationPasses(1)
+            end
           end
 
           # Save the model
@@ -203,6 +207,10 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           sim_ctrl = model.getSimulationControl
           sim_ctrl.setRunSimulationforSizingPeriods(true)
           sim_ctrl.setRunSimulationforWeatherFileRunPeriods(false)
+          if model.version >= OpenStudio::VersionString.new('3.0.0')
+            sim_ctrl.setDoHVACSizingSimulationforSizingPeriods(true)
+            sim_ctrl.setMaximumNumberofHVACSizingSimulationPasses(1)
+          end
 
           # Remove all meters
           model.getOutputMeters.each(&:remove)
@@ -210,8 +218,8 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           # EnergyPlus I/O Reference Manual, Table 5.3
           end_uses = ['InteriorLights', 'ExteriorLights', 'InteriorEquipment', 'ExteriorEquipment', 'Fans', 'Pumps', 'Heating', 'Cooling', 'HeatRejection', 'Humidifier', 'HeatRecovery', 'DHW', 'Cogeneration', 'Refrigeration', 'WaterSystems']
 
-          # EnergyPLus I/O Reference Manual, Table 5.1
-          fuels = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOil#1', 'FuelOil#2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling', 'DistrictHeating', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
+          # EnergyPlus I/O Reference Manual, Table 5.1
+          fuels = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOilNo1', 'FuelOilNo2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling', 'DistrictHeating', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
 
           # Creating individual meters
           meters = end_uses.product fuels
@@ -270,6 +278,11 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
             legacy_val = legacy_values["#{end_use}|#{fuel_type}"]
             current_val = current_values["#{end_use}|#{fuel_type}"]
+
+            # check that legacy value exists
+            if legacy_val.nil?
+              OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Legacy value is nil for enduse '#{end_use}' and fuel type '#{fuel_type}'.")
+            end
 
             # round to nearest decimal place per the rounding tolerance
             legacy_val = legacy_val.round(rounding_tolerance)

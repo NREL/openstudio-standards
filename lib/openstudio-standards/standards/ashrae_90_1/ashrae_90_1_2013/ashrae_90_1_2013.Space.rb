@@ -82,7 +82,7 @@ class ASHRAE9012013 < ASHRAE901
         req_pri_ctrl = false
         req_sec_ctrl = false
       # Strip mall
-      when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3', 'Strip mall - type 0A', 'Strip mall - type 0B'
+      when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3'
         req_pri_ctrl = false
         req_sec_ctrl = false
       # Residential apartments

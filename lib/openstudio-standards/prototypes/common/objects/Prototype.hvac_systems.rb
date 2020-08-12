@@ -572,7 +572,11 @@ class Standard
   #
   # @param heating_fuel [String]
   # @param cooling_fuel [String] cooling fuel. Valid options are: Electricity, DistrictCooling
-  # @param cooling_type [String] cooling type if not DistrictCooling.  Valid options are: EvaporativeFluidCoolerSingleSpeed, CoolingTowerTwoSpeed
+  # @param cooling_type [String] cooling type if not DistrictCooling.
+  #   Valid options are:
+  #   CoolingTower, CoolingTowerSingleSpeed, CoolingTowerTwoSpeed, CoolingTowerVariableSpeed,
+  #   FluidCooler, FluidCoolerSingleSpeed, FluidCoolerTwoSpeed,
+  #   EvaporativeFluidCooler, EvaporativeFluidCoolerSingleSpeed, EvaporativeFluidCoolerTwoSpeed
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param sup_wtr_high_temp [Double] target supply water temperature to enable cooling in degrees Fahrenheit, default 65.0F
   # @param sup_wtr_low_temp [Double] target supply water temperature to enable heating in degrees Fahrenheit, default 41.0F
@@ -585,14 +589,15 @@ class Standard
                         cooling_fuel: 'Electricity',
                         cooling_type: 'EvaporativeFluidCooler',
                         system_name: 'Heat Pump Loop',
-                        sup_wtr_high_temp: 65.0,
-                        sup_wtr_low_temp: 41.0,
+                        sup_wtr_high_temp: 87.0,
+                        sup_wtr_low_temp: 67.0,
                         dsgn_sup_wtr_temp: 102.2,
                         dsgn_sup_wtr_temp_delt: 19.8)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding heat pump loop.')
 
     # create heat pump loop
     heat_pump_water_loop = OpenStudio::Model::PlantLoop.new(model)
+    heat_pump_water_loop.setLoadDistributionScheme('SequentialLoad')
     if system_name.nil?
       heat_pump_water_loop.setName('Heat Pump Loop')
     else
@@ -601,13 +606,13 @@ class Standard
 
     # hot water loop sizing and controls
     if sup_wtr_high_temp.nil?
-      sup_wtr_high_temp = 65.0
+      sup_wtr_high_temp = 87.0
       sup_wtr_high_temp_c = OpenStudio.convert(sup_wtr_high_temp, 'F', 'C').get
     else
       sup_wtr_high_temp_c = OpenStudio.convert(sup_wtr_high_temp, 'F', 'C').get
     end
     if sup_wtr_low_temp.nil?
-      sup_wtr_low_temp = 41.0
+      sup_wtr_low_temp = 67.0
       sup_wtr_low_temp_c = OpenStudio.convert(sup_wtr_low_temp, 'F', 'C').get
     else
       sup_wtr_low_temp_c = OpenStudio.convert(sup_wtr_low_temp, 'F', 'C').get
@@ -624,8 +629,8 @@ class Standard
     end
     sizing_plant = heat_pump_water_loop.sizingPlant
     sizing_plant.setLoopType('Heating')
-    heat_pump_water_loop.setMinimumLoopTemperature(5.0)
-    heat_pump_water_loop.setMaximumLoopTemperature(80.0)
+    heat_pump_water_loop.setMinimumLoopTemperature(10.0)
+    heat_pump_water_loop.setMaximumLoopTemperature(35.0)
     sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
     sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
     hp_high_temp_sch = model_add_constant_schedule_ruleset(model,
@@ -662,23 +667,47 @@ class Standard
       cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} District Cooling Scheduled Dual Setpoint")
     else
       case cooling_type
+      when 'CoolingTower', 'CoolingTowerTwoSpeed'
+        cooling_equipment = OpenStudio::Model::CoolingTowerTwoSpeed.new(model)
+        cooling_equipment.setName("#{heat_pump_water_loop.name} CoolingTowerTwoSpeed")
+        heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
+        cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} Cooling Tower Scheduled Dual Setpoint")
+      when 'CoolingTowerSingleSpeed'
+        cooling_equipment = OpenStudio::Model::CoolingTowerSingleSpeed.new(model)
+        cooling_equipment.setName("#{heat_pump_water_loop.name} CoolingTowerSingleSpeed")
+        heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
+        cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} Cooling Tower Scheduled Dual Setpoint")
+      when 'CoolingTowerVariableSpeed'
+        cooling_equipment = OpenStudio::Model::CoolingTowerVariableSpeed.new(model)
+        cooling_equipment.setName("#{heat_pump_water_loop.name} CoolingTowerVariableSpeed")
+        heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
+        cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} Cooling Tower Scheduled Dual Setpoint")
+      when 'FluidCooler', 'FluidCoolerSingleSpeed'
+        cooling_equipment = OpenStudio::Model::FluidCoolerSingleSpeed.new(model)
+        cooling_equipment.setName("#{heat_pump_water_loop.name} FluidCoolerSingleSpeed")
+        heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
+        cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} Fluid Cooler Scheduled Dual Setpoint")
+      when 'FluidCoolerTwoSpeed'
+        cooling_equipment = OpenStudio::Model::FluidCoolerTwoSpeed.new(model)
+        cooling_equipment.setName("#{heat_pump_water_loop.name} FluidCoolerTwoSpeed")
+        heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
+        cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} Fluid Cooler Scheduled Dual Setpoint")
       when 'EvaporativeFluidCooler', 'EvaporativeFluidCoolerSingleSpeed'
         cooling_equipment = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(model)
-        cooling_equipment.setName("#{heat_pump_water_loop.name} Fluid Cooler")
+        cooling_equipment.setName("#{heat_pump_water_loop.name} EvaporativeFluidCoolerSingleSpeed")
         cooling_equipment.setDesignSprayWaterFlowRate(0.002208) # Based on HighRiseApartment
         cooling_equipment.setPerformanceInputMethod('UFactorTimesAreaAndDesignWaterFlowRate')
         heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
         cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} Fluid Cooler Scheduled Dual Setpoint")
-      when 'CoolingTower', 'CoolingTowerTwoSpeed'
-        cooling_equipment = OpenStudio::Model::CoolingTowerTwoSpeed.new(model)
-        cooling_equipment.setName("#{heat_pump_water_loop.name} Central Tower")
+      when 'EvaporativeFluidCoolerTwoSpeed'
+        cooling_equipment = OpenStudio::Model::EvaporativeFluidCoolerTwoSpeed.new(model)
+        cooling_equipment.setName("#{heat_pump_water_loop.name} EvaporativeFluidCoolerTwoSpeed")
+        cooling_equipment.setDesignSprayWaterFlowRate(0.002208) # Based on HighRiseApartment
+        cooling_equipment.setPerformanceInputMethod('UFactorTimesAreaAndDesignWaterFlowRate')
         heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
-        cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} CoolingTowerTwoSpeed Scheduled Dual Setpoint")
-      when 'FluidCooler', 'FluidCoolerTwoSpeed', 'CoolingTowerSingleSpeed', 'CoolingTowerVariableSpeed'
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Cooling fuel type #{cooling_type} is not yet supported, no cooling equipment will be added.")
-        return false
+        cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} Fluid Cooler Scheduled Dual Setpoint")
       else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Cooling fuel type #{cooling_type} is not valid, no cooling equipment will be added.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Cooling fuel type #{cooling_type} is not a valid option, no cooling equipment will be added.")
         return false
       end
     end
@@ -3003,10 +3032,10 @@ class Standard
       # adjusted zone design heating temperature for data center psz_ac
       dsgn_temps['prehtg_dsgn_sup_air_temp_f'] = 64.4
       dsgn_temps['preclg_dsgn_sup_air_temp_f'] = 80.6
-      dsgn_temps['htg_dsgn_sup_air_temp_f'] = 72.5
-      dsgn_temps['clg_dsgn_sup_air_temp_f'] = 72.5
-      dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 72.5
-      dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = 72.5
+      dsgn_temps['htg_dsgn_sup_air_temp_f'] = 55
+      dsgn_temps['clg_dsgn_sup_air_temp_f'] = 55
+      dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = dsgn_temps['htg_dsgn_sup_air_temp_f']
+      dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = dsgn_temps['clg_dsgn_sup_air_temp_f']
       dsgn_temps['prehtg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['prehtg_dsgn_sup_air_temp_f'], 'F', 'C').get
       dsgn_temps['preclg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['preclg_dsgn_sup_air_temp_f'], 'F', 'C').get
       dsgn_temps['htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['htg_dsgn_sup_air_temp_f'], 'F', 'C').get
@@ -3129,7 +3158,7 @@ class Standard
       # Add a setpoint manager for cooling to control the supply air temperature based on the needs of this zone
       if supply_temp_sch.nil?
         supply_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                              dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
+                                                              dsgn_temps['clg_dsgn_sup_air_temp_c'],
                                                               name = "AHU Supply Temp Sch")
       end
       setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerScheduled.new(model, supply_temp_sch)
@@ -3208,8 +3237,8 @@ class Standard
     # adjusted zone design heating temperature for data center psz_ac
     dsgn_temps['prehtg_dsgn_sup_air_temp_f'] = 64.4
     dsgn_temps['preclg_dsgn_sup_air_temp_f'] = 80.6
-    dsgn_temps['htg_dsgn_sup_air_temp_f'] = 72.5
-    dsgn_temps['clg_dsgn_sup_air_temp_f'] = 72.5
+    dsgn_temps['htg_dsgn_sup_air_temp_f'] = 55
+    dsgn_temps['clg_dsgn_sup_air_temp_f'] = 55
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = dsgn_temps['htg_dsgn_sup_air_temp_f']
     dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = dsgn_temps['clg_dsgn_sup_air_temp_f']
     dsgn_temps['prehtg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['prehtg_dsgn_sup_air_temp_f'], 'F', 'C').get
@@ -3225,7 +3254,7 @@ class Standard
     # Add a setpoint manager for cooling to control the supply air temperature based on the needs of this zone
     if supply_temp_sch.nil?
       supply_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                            dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
+                                                            dsgn_temps['clg_dsgn_sup_air_temp_c'],
                                                             name = "AHU Supply Temp Sch")
     end
     setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerScheduled.new(model, supply_temp_sch)
@@ -5683,7 +5712,10 @@ class Standard
   # @param heat_fuel [String] the heating fuel. Valid choices are NaturalGas, Electricity, DistrictHeating
   # @param cool_fuel [String] the cooling fuel. Valid choices are Electricity and DistrictCooling.
   # @param heat_pump_loop_cooling_type [String] the type of cooling equipment if not DistrictCooling.
-  #   Valid choices are: FluidCooler, CoolingTower
+  #   Valid options are:
+  #   CoolingTower, CoolingTowerSingleSpeed, CoolingTowerTwoSpeed, CoolingTowerVariableSpeed,
+  #   FluidCooler, FluidCoolerSingleSpeed, FluidCoolerTwoSpeed,
+  #   EvaporativeFluidCooler, EvaporativeFluidCoolerSingleSpeed, EvaporativeFluidCoolerTwoSpeed
   def model_get_or_add_heat_pump_loop(model, heat_fuel, cool_fuel,
                                       heat_pump_loop_cooling_type: 'EvaporativeFluidCooler')
     # retrieve the existing heat pump loop or add a new one if necessary
@@ -5709,7 +5741,10 @@ class Standard
   # @param chilled_water_loop_cooling_type [String] Archetype for chilled water loops, AirCooled or WaterCooled
   #   only used if HVAC system has a chilled water loop and cool_fuel is Electricity
   # @param heat_pump_loop_cooling_type [String] the type of cooling equipment for heat pump loops if not DistrictCooling.
-  #   Valid choices are: EvaporativeFluidCooler, FluidCooler, CoolingTower
+  #   Valid options are:
+  #   CoolingTower, CoolingTowerSingleSpeed, CoolingTowerTwoSpeed, CoolingTowerVariableSpeed,
+  #   FluidCooler, FluidCoolerSingleSpeed, FluidCoolerTwoSpeed,
+  #   EvaporativeFluidCooler, EvaporativeFluidCoolerSingleSpeed, EvaporativeFluidCoolerTwoSpeed
   # @param air_loop_heating_type [String] type of heating coil serving main air loop, options are Gas, DX, or Water
   # @param air_loop_cooling_type [String] type of cooling coil serving main air loop, options are DX or Water
   # @param zone_equipment_ventilation [Bool] toggle whether to include outdoor air ventilation on zone equipment

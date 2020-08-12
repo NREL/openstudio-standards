@@ -4,6 +4,30 @@
 # building types.
 module LargeOffice
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+
+    # add transformer
+    transformer_efficiency = nil
+    case template
+    when '90.1-2004', '90.1-2007'
+      transformer_efficiency = 0.979
+    when '90.1-2010', '90.1-2013'
+      transformer_efficiency = 0.987
+    end
+    return true unless !transformer_efficiency.nil?
+
+    # rename datacenter plug loads sub categories, there should be 2 data center plug load objects in large office
+    model.getElectricEquipments.sort.each do |item|
+      if item.nameString.include? 'Data Center'
+        item.setEndUseSubcategory('DataCenterPlugLoads')
+      end
+    end
+
+    model_add_transformer(model,
+                          wired_lighting_frac: 0.0281,
+                          transformer_size: 500000,
+                          transformer_efficiency: transformer_efficiency,
+                          excluded_interiorequip_meter: 'DataCenterPlugLoads:InteriorEquipment:Electricity')
+
     system_to_space_map = define_hvac_system_map(building_type, climate_zone)
 
     system_to_space_map.each do |system|
@@ -64,6 +88,13 @@ module LargeOffice
         space.spaceInfiltrationDesignFlowRates.each do |infiltration_object|
           infiltration_object.setSchedule(model_add_schedule(model, 'OfficeLarge INFIL_SCH_PNNL'))
         end
+      end
+    end
+    
+    model.getPlantLoops.sort.each do |plant_loop|
+      if plant_loop.name.to_s == 'Heat Pump Loop'
+        plant_loop.setFluidType('EthyleneGlycol')
+        plant_loop.setGlycolConcentration(40)
       end
     end
 
