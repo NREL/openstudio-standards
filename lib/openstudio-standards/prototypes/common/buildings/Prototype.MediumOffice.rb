@@ -6,6 +6,23 @@ module MediumOffice
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
+    # add transformer
+    transformer_efficiency = nil
+    case template
+    when '90.1-2004', '90.1-2007'
+      transformer_efficiency = 0.961
+    when '90.1-2010', '90.1-2013'
+      transformer_efficiency = 0.977
+    end
+    return true unless !transformer_efficiency.nil?
+
+    model_add_transformer(model,
+                          wired_lighting_frac: 0.0281,
+                          transformer_size: 45000,
+                          transformer_efficiency: transformer_efficiency,
+                          excluded_interiorequip_key: '2 Elevator Lift Motors',
+                          excluded_interiorequip_meter: 'Electric Equipment Electric Energy')
+
     model.getSpaces.sort.each do |space|
       if space.name.get.to_s == 'Core_bottom'
         model_add_elevator(model,
