@@ -66,8 +66,8 @@ Heat Pumps Heating,End Date,YES
 Heat Pumps Heating,Minimum Heating Seasonal Performance Factor,
 Heat Pumps Heating,Minimum Coefficient of Performance Heating (COP_47F),
 Heat Pumps Heating,Minimum Energy Efficiency Ratio (EER),
-Heat Pumps Heating,PTHP_COP_Coefficient_1,
-Heat Pumps Heating,PTHP_COP_Coefficient_2,
+Heat Pumps Heating,PTHP_COP_Coefficient_1,YES
+Heat Pumps Heating,PTHP_COP_Coefficient_2,YES
 Heat Pumps Heating,COPnfcooling,
 Heat Pumps Heating,HEAT CAP FT,YES
 Heat Pumps Heating,HEAT CAP FFLOW,YES
@@ -550,9 +550,9 @@ Climate Zone Sets,Climate Zone38,
 Climate Zone Sets,Climate Zone39,
 Climate Zones,Name,
 Climate Zones,Standard,
-Climate Zones,Representative City,000 (ft^2)
-Climate Zones,BCL Weather Component ID,000 (ft^2)
-Construction Sets,Template,000 (ft^2)
+Climate Zones,Representative City,
+Climate Zones,BCL Weather Component ID,
+Construction Sets,Template,
 Construction Sets,Building Type,
 Construction Sets,Space Type,
 Construction Sets,Is Residential,
