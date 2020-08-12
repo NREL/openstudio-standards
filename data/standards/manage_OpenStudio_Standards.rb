@@ -142,6 +142,8 @@ def unique_properties(sheet_name)
            ['template', 'building_type', 'hvac_system']
          when 'climate_zones'
            ['name', 'standard']
+         when 'energy_recovery'
+           ['Template', 'Climate Zone']
          else
            []
          end
