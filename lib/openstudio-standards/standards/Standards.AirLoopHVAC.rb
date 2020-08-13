@@ -501,7 +501,7 @@ class Standard
       if dsn_air_flow_cfm > 0 
         allowable_fan_bhp = dsn_air_flow_cfm * 0.00094 + fan_pwr_adjustment_bhp
       else
-        allowable_fan_bhp = dsn_air_flow_cfm * 0.00094
+        allowable_fan_bhp = 0.00094
       end
     elsif fan_pwr_limit_type == 'variable volume'
       if dsn_air_flow_cfm > 0 
@@ -520,10 +520,15 @@ class Standard
       return allowable_fan_bhp
     end
 
-    puts "DEM: allowable_fan_bhp = #{allowable_fan_bhp}"
     floor_area_served_ft2 = OpenStudio.convert(floor_area_served_m2, 'm^2', 'ft^2').get
     cfm_per_ft2 = dsn_air_flow_cfm / floor_area_served_ft2
-    cfm_per_hp = dsn_air_flow_cfm / allowable_fan_bhp
+
+    if allowable_fan_bhp.zero?
+      cfm_per_hp = 0  
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "AirLoopHVAC #{air_loop_hvac.name} has zero allowable fan bhp, probably due to zero design air flow cfm'.")
+    else  
+      cfm_per_hp = dsn_air_flow_cfm / allowable_fan_bhp
+    end
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: area served = #{floor_area_served_ft2.round} ft^2.")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: flow per area = #{cfm_per_ft2.round} cfm/ft^2.")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: flow per hp = #{cfm_per_hp.round} cfm/hp.")
