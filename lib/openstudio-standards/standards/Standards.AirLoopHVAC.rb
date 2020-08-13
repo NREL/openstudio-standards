@@ -479,7 +479,7 @@ class Standard
           fan_pwr_limit_type = 'variable volume'
         end
       elsif comp.to_AirLoopHVACUnitarySystem.is_initialized
-        fan = comp.to_AirLoopHVACUnitarySystem.get.supplyFan
+        fan = comp.to_AirLoopHVACUnitarySystem.get.supplyFan.get
         if fan.to_FanConstantVolume.is_initialized || comp.to_FanOnOff.is_initialized
           fan_pwr_limit_type = 'constant volume'
         elsif fan.to_FanVariableVolume.is_initialized
@@ -498,9 +498,17 @@ class Standard
     # Calculate the Allowable Fan System brake horsepower per Table G3.1.2.9
     allowable_fan_bhp = 0
     if fan_pwr_limit_type == 'constant volume'
-      allowable_fan_bhp = dsn_air_flow_cfm * 0.00094 + fan_pwr_adjustment_bhp
+      if dsn_air_flow_cfm > 0 
+        allowable_fan_bhp = dsn_air_flow_cfm * 0.00094 + fan_pwr_adjustment_bhp
+      else
+        allowable_fan_bhp = dsn_air_flow_cfm * 0.00094
+      end
     elsif fan_pwr_limit_type == 'variable volume'
-      allowable_fan_bhp = dsn_air_flow_cfm * 0.0013 + fan_pwr_adjustment_bhp
+      if dsn_air_flow_cfm > 0 
+        allowable_fan_bhp = dsn_air_flow_cfm * 0.0013 + fan_pwr_adjustment_bhp
+      else
+        allowable_fan_bhp = 0.0013
+      end
     end
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Allowable brake horsepower = #{allowable_fan_bhp.round(2)}HP based on #{dsn_air_flow_cfm.round} cfm and #{fan_pwr_adjustment_bhp.round(2)} bhp of adjustment.")
 
@@ -512,6 +520,7 @@ class Standard
       return allowable_fan_bhp
     end
 
+    puts "DEM: allowable_fan_bhp = #{allowable_fan_bhp}"
     floor_area_served_ft2 = OpenStudio.convert(floor_area_served_m2, 'm^2', 'ft^2').get
     cfm_per_ft2 = dsn_air_flow_cfm / floor_area_served_ft2
     cfm_per_hp = dsn_air_flow_cfm / allowable_fan_bhp
