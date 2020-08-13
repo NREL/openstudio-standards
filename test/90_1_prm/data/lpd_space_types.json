@@ -1,5 +1,6 @@
 {
   "LargeOfficePlenum": "plenum",
+  "MediumOfficePlenum": "plenum",
   "AnyPlenum": "plenum",
   "FullServiceRestaurantKitchen": "kitchen",
   "FullServiceRestaurantDining": "dining - family",

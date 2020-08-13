@@ -14,5 +14,6 @@
    "RetailStandalone":"Retail",
    "PrimarySchool":"School/university",
    "SecondarySchool":"School/university",
-   "Warehouse":"Warehouse"
+   "Warehouse":"Warehouse",
+   "Assembly":"All others"
  }

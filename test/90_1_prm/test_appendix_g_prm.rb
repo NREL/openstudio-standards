@@ -33,7 +33,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = prototype
 
       # Concatenate modifier functions and arguments
-      mod_str = mod.map(&:join).join("_")
+      mod_str = mod.flatten.join("_")
 
       # Initialize weather file, necessary but not used
       epw_file = 'USA_FL_Miami.Intl.AP.722020_TMY3.epw'
@@ -101,7 +101,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = id_prototype_mapping[id]
 
       # Concatenate modifier functions and arguments
-      mod_str = mod.map(&:join).join("_")
+      mod_str = mod.flatten.join("_")
 
       # Initialize Standard class
       prototype_creator = Standard.build('90.1-PRM-2019')
@@ -129,6 +129,7 @@ class AppendixGPRMTests < Minitest::Test
           end
         end  
         if alt_space_type_was_found == false
+          puts "DEM: bldg_type_space_type = #{bldg_type_space_type}"
            space_type.setStandardsSpaceType(lpd_space_types[bldg_type_space_type])
         end
       end
@@ -152,7 +153,7 @@ class AppendixGPRMTests < Minitest::Test
                                                                                    @@hvac_building_types[hvac_building_type],
                                                                                    @@wwr_building_types[building_type],
                                                                                    @@swh_building_types[building_type],
-                                                                                   nil, run_dir_baseline, false)
+                                                                                   nil, run_dir_baseline, false, false)
 
       # Check if baseline could be created
       assert(model_baseline, "Baseline model could not be generated for #{building_type}, #{template}, #{climate_zone}.")
@@ -314,7 +315,7 @@ class AppendixGPRMTests < Minitest::Test
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
 
       # Concatenate modifier functions and arguments
-      mod_str = mod.map(&:join).join("_")
+      mod_str = mod.flatten.join("_")
 
       opaque_exterior_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['opaque_exterior_name']
       exterior_fenestration_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['exterior_fenestration_name']
@@ -355,7 +356,7 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_base.each do |prototype, model_baseline|
       building_type, template, climate_zone, mod = prototype
       # Concatenate modifier functions and arguments
-      mod_str = mod.map(&:join).join("_")
+      mod_str = mod.flatten.join("_")
       # Define name of spaces used for verification
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
       space_name = JSON.parse(File.read("#{@@json_dir}/lpd.json"))[run_id]
@@ -403,7 +404,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = prototype
       
       # Concatenate modifier functions and arguments
-      mod_str = mod.map(&:join).join("_")
+      mod_str = mod.flatten.join("_")
 
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
 
@@ -440,14 +441,68 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = prototype
       
       # Concatenate modifier functions and arguments
-      mod_str = mod.map(&:join).join("_")
+      mod_str = mod.flatten.join("_")
 
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
       
-      puts "DEM: building_type = #{building_type} , mod = #{mod_str}"
-      if mod[0] == 'MakeLabHighDistribZoneExh' || mod[0] == 'MakeLabHighSystemExh'
-        # All labs on a given floor of the building should be on a separate MZ system
-        model.getAirLoopHVACs.each do |air_loop|
+    if building_type == 'MidriseApartment' && mod_str == ''
+      # Residential model should be ptac or pthp, depending on climate
+      check_if_pkg_terminal(model, climate_zone, "MidriseApartment")
+    elsif @bldg_type_alt_now == 'Assembly' && building_type == 'MediumOffice'
+      # This is a public assembly < 120 ksf, should be PSZ
+      check_if_psz(model, "Assembly < 120,000 sq ft.")
+    elsif @bldg_type_alt_now == 'Assembly' && building_type == 'HotelLarge'
+      # This is a public assembly > 120 ksf, should be SZ-CV
+      check_if_psz(model, "Assembly < 120,000 sq ft.")
+    elsif building_type == 'Warehouse' && mod_str == ''
+      # System type should be heating and ventilating
+      # check_if_ht_vent(model, "Warehouse")
+    elsif building_type == 'RetailStripmall' && mod_str == ''
+      # System type should be PSZ
+      check_if_psz(model, "RetailStripmall, one story, any area")
+    elsif @bldg_type_alt_now == 'retail' && building_type == 'SchoolPrimary'
+      # Single story retail is PSZ, regardless of floor area
+      check_if_psz(model, "retail, one story, floor area > 25 ksf.")
+    elsif building_type == 'RetailStripmall' && mod_str == 'set_zone_multiplier_3'
+      # System type should be PVAV with 10 zones
+      check_if_pvav(model, "retail > 25,000 sq ft, 3 stories")
+    elsif building_type == 'OfficeSmall' && mod_str == ''
+      # System type should be PSZ
+      check_if_psz(model, "non-res, one story, < 25 ksf")
+      check_heat_type(model, "nonres", "HP")
+    elsif building_type == 'SchoolPrimary' && mod_str == ''
+      # System type should be PVAV, some zones may be on PSZ systems
+      check_if_pvav(model, "nonres > 25,000 sq ft, < 150 ksf , 1 story")
+      check_heat_type(model, "nonres", "ER")
+    elsif building_type == 'SchoolSecondary' && mod_str == ''
+      # System type should be VAV/chiller
+      check_if_pvav(model, "nonres > 150 ksf , 1 to 3 stories")
+      check_heat_type(model, "nonres", "HP")
+    elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier_4'
+      # nonresidential, 4 to 5 stories, <= 25 ksf --> PVAV
+      # System type should be PVAV with 10 zones, area is 22,012 sf
+      check_if_pvav(model, "other nonres > 4 to 5 stories, <= 25 ksf")
+    elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier_5'
+      # nonresidential, 4 to 5 stories, <= 150 ksf --> PVAV
+      # System type should be PVAV with 10 zones, area is 27,515 sf
+      check_if_pvav(model, "other nonres > 4 to 5 stories, <= 150 ksf")
+    elsif building_type == 'SchoolPrimary' && mod_str == 'set_zone_multiplier_4'
+      # nonresidential, 4 to 5 stories, > 150 ksf --> VAV/chiller
+      # System type should be PVAV with 10 zones, area is 22,012 sf
+      check_if_vav_chiller(model, "other nonres > 4 to 5 stories, > 150 ksf")
+    elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier_6'
+      # 6+ stories, any floor area --> VAV/chiller
+      # This test has floor area 33,018 sf 
+      check_if_vav_chiller(model, " other nonres > 6 stories")
+    elsif @bldg_type_alt_now == 'hospital' && building_type == 'OfficeSmall'
+      # Hospital < 25 ksf is PVAV; different rule than non-res
+      check_if_pvav(model, "hospital, floor area < 25 ksf.")
+    elsif building_type == 'Hospital' && mod_str == ''
+      # System type should be VAV/chiller, area is 241 ksf
+      check_if_vav_chiller(model, "hospital > 4 to 5 stories, > 150 ksf")
+    elsif mod[0] == 'MakeLabHighDistribZoneExh' || mod[0] == 'MakeLabHighSystemExh'
+      # All labs on a given floor of the building should be on a separate MZ system
+      model.getAirLoopHVACs.each do |air_loop|
           # identify hours of operation
           has_lab = false
           has_nonlab = false
@@ -463,78 +518,186 @@ class AppendixGPRMTests < Minitest::Test
           end
           assert(!(has_lab == true and has_nonlab == true), "System #{air_loop.name} has lab and nonlab spaces and lab exhaust > 15,000 cfm.")
         end    
-      elsif mod[0] == 'MakeLabLowDistribZoneExh'
-        # Labs on a given floor of the building should be mixed with other space types on the main MZ system
-        model.getAirLoopHVACs.each do |air_loop|
-          # identify hours of operation
-          has_lab = false
-          has_nonlab = false
-          air_loop.thermalZones.each do |thermal_zone|
-            thermal_zone.spaces.each do |space|
-              space_type = space.spaceType.get.standardsSpaceType.get
-              if space_type == 'laboratory'
-                has_lab = true
-              else
-                has_nonlab = true
-              end
+    elsif mod[0] == 'MakeLabLowDistribZoneExh'
+      # Labs on a given floor of the building should be mixed with other space types on the main MZ system
+      model.getAirLoopHVACs.each do |air_loop|
+        # identify hours of operation
+        has_lab = false
+        has_nonlab = false
+        air_loop.thermalZones.each do |thermal_zone|
+          thermal_zone.spaces.each do |space|
+            space_type = space.spaceType.get.standardsSpaceType.get
+            if space_type == 'laboratory'
+              has_lab = true
+            else
+              has_nonlab = true
             end
           end
-          assert(!(has_lab == true and has_nonlab == false), "System #{air_loop.name} has only lab spaces and lab exhaust < 15,000 cfm.")
+        end
+        assert(!(has_lab == true and has_nonlab == false), "System #{air_loop.name} has only lab spaces and lab exhaust < 15,000 cfm.")
 
-        end
-      elsif building_type == 'RetailStripmall' && mod_str == ''
-        # System type should be PSZ
-        model.getAirLoopHVACs.each do |air_loop|
-          num_zones = air_loop.thermalZones.size
-          assert(num_zones == 1, "System #{air_loop.name} is multizone, for retail < 25,000 sq ft.")
-        end
-      elsif building_type == 'RetailStripmall' && mod_str == 'set_zone_multiplier3'
-        # System type should be PVAV with 10 zones
-        model.getAirLoopHVACs.each do |air_loop|
-          num_zones = air_loop.thermalZones.size
-          assert(num_zones == 10, "System #{air_loop.name} multizone grouping failed for retail > 25,000 sq ft.")
-        end
-      elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier4'
-        # 4 to 5 stories, <= 150 ksf --> PVAV
-        # System type should be PVAV with 10 zones, area is 22,012 sf
-        model.getAirLoopHVACs.each do |air_loop|
-          num_zones = air_loop.thermalZones.size
-          assert(num_zones == 5, "System #{air_loop.name} multizone grouping failed for other nonres > 4 to 5 stories, <= 150 ksf")
-        end
-      elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier6'
-        # 6+ stories, any floor area --> VAV/chiller
-        # This test has floor area 33,018 sf 
-        has_chiller = model.getPlantLoopByName('Chilled Water Loop').is_initialized
-        assert(has_chiller, "Building has >= 6 stories but does not have chiller; other non-res category, tested with Small office with zone multiplier = 6")
-      elsif building_type == 'HighriseApartment' && mod_str == 'change_bldgtype_to_mediumoffice'
-        # system type should be VAV with chiller
-        # for other non-res building, >= 6 stories, any floor area
-        has_chiller = model.getPlantLoopByName('Chilled Water Loop').is_initialized
-        assert(has_chiller, "Building has >= 6 stories but does not have chiller; other non-res category, tested with HighriseApartment converted to MediumOffice.")
-      elsif building_type == 'MidriseApartment' && mod_str == 'change_bldgtype_to_mediumoffice'
-        # system type should be PVAV
-        # for other non-res building, 4 to 5 stories, 25 to 150 ksf floor area
-        is_multizone = false
-        num_zones = 0
-        num_dx_coils = 0
-        model.getAirLoopHVACs.each do |air_loop|
-          num_zones = air_loop.thermalZones.size
-          if num_zones > 1
-            is_multizone = true
-          end
-        end
-        puts "DEM: num zones = #{num_zones}"
-        has_chiller = model.getPlantLoopByName('Chilled Water Loop').is_initialized
-        num_dx_coils += model.getCoilCoolingDXSingleSpeeds.size
-        puts "DEM: num zones = #{num_dx_coils}"
-        num_dx_coils += model.getCoilCoolingDXTwoSpeeds.size
-        puts "DEM: num zones = #{num_dx_coils}"
-        num_dx_coils += model.getCoilCoolingDXMultiSpeeds.size
-        puts "DEM: num zones = #{num_dx_coils}"
-
-        assert((has_chiller == false && num_dx_coils > 0), "Building has 4 stories but is not set as PVAV; other non-res category, tested with MidriseApartment converted to MediumOffice.")
       end
+    end
 
+    end
+
+  end
+
+  # Check whether heat type meets expectations
+  # 
+  def check_heat_type(model, climate_zone, sys_flag, expected_heat_type)
+    if sys_flag == "MZ"
+      # Check air loops that have more than one zone  
+      model.getAirLoopHVACs.each do |air_loop|
+        num_zones = air_loop.thermalZones.size
+        if num_zones > 1
+
+  end
+
+  # Get list of fuels for a given air loop
+  def airloop_heating_fuels(air_loop)
+
+    air_loop.supplyComponents.each do |component|
+      # Get the object type
+      obj_type = component.iddObjectType.valueName.to_s
+      case obj_type
+      when 'OS_AirLoopHVAC_UnitaryHeatCool_VAVChangeoverBypass'
+        component = component.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.get
+        fuels += self.coil_heating_fuels(component.heatingCoil)
+      when 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir'
+        component = component.to_AirLoopHVACUnitaryHeatPumpAirToAir.get
+        fuels += self.coil_heating_fuels(component.heatingCoil)
+      when 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir_MultiSpeed'
+        component = component.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get
+        fuels += self.coil_heating_fuels(component.heatingCoil)
+      when 'OS_AirLoopHVAC_UnitarySystem'
+        component = component.to_AirLoopHVACUnitarySystem.get
+        if component.heatingCoil.is_initialized
+          fuels += self.coil_heating_fuels(component.heatingCoil.get)
+        end
+      when 'OS_Coil_Heating_DX_MultiSpeed'
+        fuels += self.coil_heating_fuels(component)
+      when 'OS_Coil_Heating_DX_SingleSpeed'
+        fuels += self.coil_heating_fuels(component)
+      when 'OS_Coil_Heating_DX_VariableSpeed'
+        fuels += self.coil_heating_fuels(component)
+      when 'OS_Coil_Heating_Desuperheater'
+        fuels += self.coil_heating_fuels(component)
+      when 'OS_Coil_Heating_Electric'
+        fuels += self.coil_heating_fuels(component)
+      when 'OS_Coil_Heating_Gas'
+        fuels += self.coil_heating_fuels(component)
+      when 'OS_Coil_Heating_Gas_MultiStage'
+        fuels += self.coil_heating_fuels(component)
+      when 'OS_Coil_Heating_Water'
+        fuels += self.coil_heating_fuels(component)  
+      when 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit'
+        fuels += self.coil_heating_fuels(component)
+      when 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeed_EquationFit'
+        fuels += self.coil_heating_fuels(component)
+      when 'OS_Coil_WaterHeating_AirToWaterHeatPump'
+        fuels += self.coil_heating_fuels(component)
+      when 'OS_Coil_WaterHeating_Desuperheater'
+        fuels += self.coil_heating_fuels(component)
+      when 'OS_Node', 'OS_Fan_ConstantVolume', 'OS_Fan_VariableVolume', 'OS_AirLoopHVAC_OutdoorAirSystem'
+        # To avoid extraneous debug messages  
+      else
+        #OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heating fuel types found for #{obj_type}")
+      end
+    end    
+
+    return fuels.uniq.sort
+  
+
+  end
+
+
+  # Check if all baseline system types are PSZ
+  def check_if_psz(model, sub_text)
+    num_zones = 0
+    num_dx_coils = 0
+    num_dx_coils += model.getCoilCoolingDXSingleSpeeds.size
+    num_dx_coils += model.getCoilCoolingDXTwoSpeeds.size
+    num_dx_coils += model.getCoilCoolingDXMultiSpeeds.size
+    has_chiller = model.getPlantLoopByName('Chilled Water Loop').is_initialized
+    model.getAirLoopHVACs.each do |air_loop|
+      num_zones = air_loop.thermalZones.size
+      # if num zones is greater than 1 for any system, then set as multizone
+      assert(num_zones = 1 && num_dx_coils > 0 && has_chiller == false, "Baseline system selection failed for #{air_loop.name}; should be PSZ for " + sub_text)
+    end
+  end
+
+  # Check if any baseline system type is PVAV
+  def check_if_pvav(model, sub_text)
+    num_zones = 0
+    num_dx_coils = 0
+    num_dx_coils += model.getCoilCoolingDXSingleSpeeds.size
+    num_dx_coils += model.getCoilCoolingDXTwoSpeeds.size
+    num_dx_coils += model.getCoilCoolingDXMultiSpeeds.size
+    has_chiller = model.getPlantLoopByName('Chilled Water Loop').is_initialized
+    has_multizone = false
+    model.getAirLoopHVACs.each do |air_loop|
+      num_zones = air_loop.thermalZones.size
+      # if num zones is greater than 1 for any system, then set as multizone
+      if numzones > 1
+        has_multizone = true
+      end
+    end
+    assert(has_multizone && num_dx_coils > 0 && has_chiller == false, "Baseline system selection failed; should be PVAV for " + sub_text)
+  end
+
+  # Check if building has baseline VAV/chiller for at least one air loop
+  def check_if_vav_chiller(model, sub_text)
+    num_zones = 0
+    num_dx_coils = 0
+    has_chiller = model.getPlantLoopByName('Chilled Water Loop').is_initialized
+    has_multizone = false
+    model.getAirLoopHVACs.each do |air_loop|
+      num_zones = air_loop.thermalZones.size
+      # if num zones is greater than 1 for any system, then set as multizone
+      if numzones > 1
+        has_multizone = true
+      end
+    end
+    assert(has_multizone && has_chiller, "Baseline system selection failed for #{air_loop.name}; should be VAV/chiller for " + sub_text)
+  end
+
+  # Check if baseline system type is PTAC or PTHP
+  def check_if_pkg_terminal(model, climate_zone, sub_text)
+    pass_test = true
+    # building fails if any zone is not packaged terminal unit
+    # or if heat type is incorrect
+    model.getThermalZones.sort.each do |thermal_zone|
+      has_ptac = false
+      has_pthp = false
+      has_unitheater = false
+      thermal_zone.equipment.each do |equip|
+        # Skip HVAC components
+        next unless equip.to_HVACComponent.is_initialized
+        equip = equip.to_HVACComponent.get
+        if equip.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+          has_ptac = true
+        elsif equip.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+          has_pthp = true
+        elsif equip.to_ZoneHVACUnitHeater.is_initialized
+          has_unitheater = true
+        end
+      end
+      # Test for hvac type by climate
+      if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/
+        if has_pthp == false
+          pass_test = false
+        end
+      else
+        if has_ptac == false
+          pass_test = false
+        end
+      end
+    end
+    if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/
+      assert(pass_test , "Baseline system selection failed for climate #{climate_zone}: should be PTHP for " + subtext)
+    else
+      assert(pass_test , "Baseline system selection failed for climate #{climate_zone}: should be PTAC for " + subtext)
     end
 
   end
@@ -643,8 +806,9 @@ class AppendixGPRMTests < Minitest::Test
 
   end
 
-  def change_bldgtype_to_mediumoffice(model, arguments)
-    @bldg_type_alt_now = 'MediumOffice'
+  def change_bldg_type(model, arguments)
+    bldg_type_new = arguments[0]
+    @bldg_type_alt_now = bldg_type_new
     return model
     end
 

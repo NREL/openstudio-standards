@@ -25,19 +25,19 @@ class Standard
   # @return [Bool] returns true if successful, false if not
   
   # Method used for 90.1-2016 and onward
-  def model_create_prm_stable_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
-    model_create_prm_any_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, custom, sizing_run_dir, debug)
+  def model_create_prm_stable_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = true, debug = false)
+    model_create_prm_any_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, custom, sizing_run_dir, run_all_orients, debug)
   end
 
   # Method used for 90.1-2013 and prior
   def model_create_prm_baseline_building(model, building_type, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
-    model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', custom, sizing_run_dir, debug)
+    model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', custom, sizing_run_dir, false, debug)
   end
 
-  def model_create_prm_any_baseline_building(prop_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', custom = nil, sizing_run_dir = Dir.pwd, debug = false)
+  def model_create_prm_any_baseline_building(prop_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, debug = false)
     # Define different orientation from original orientation
     # for each individual baseline models
-    degs_from_org = /prm/i =~ template ? [0, 90, 180, 270] : [0]
+    degs_from_org = run_all_orients ? [0, 90, 180, 270] : [0]
 
     # Create baseline model for each orientation
     degs_from_org.each do |degs|

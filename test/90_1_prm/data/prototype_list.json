@@ -22,13 +22,6 @@
         ["Warehouse", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
     "hvac_baseline": [
-        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["MakeLabHighDistribZoneExh",[]]]],
-        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["MakeLabLowDistribZoneExh",[]]]],
-        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["MakeLabHighSystemExh",[]]]],
-        ["RetailStripmall", "90.1-2013", "ASHRAE 169-2013-2A", []],
-        ["RetailStripmall", "90.1-2013", "ASHRAE 169-2013-2A", [["set_zone_multiplier",[3]]]],
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["set_zone_multiplier",[4]]]],
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["set_zone_multiplier",[6]]]],
-        ["LargeOffice", "90.1-2013", "ASHRAE 169-2013-2A", []],
-        ["HighriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", [["change_bldgtype_to_mediumoffice", []]]],
-        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", [["change_bldgtype_to_mediumoffice",[]]]]]}
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["change_bldg_type",["Assembly"]]]]
+    ]
+}
