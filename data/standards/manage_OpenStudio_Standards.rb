@@ -305,34 +305,6 @@ def export_spreadsheets_for_lib(spreadsheet_titles)
   skip_list_file_path = "#{__dir__}/skip_list_for_lib.csv"
   skip_list = downselect_columns_to_skip(skip_list_file_path)
 
-  # puts skip_list
-  # puts '---------------------------------------'
-  # # List of worksheets to skip
-  # worksheets_to_skip = []
-  # worksheets_to_skip << 'templates'
-  # worksheets_to_skip << 'standards'
-  # worksheets_to_skip << 'ventilation'
-  # worksheets_to_skip << 'occupancy'
-  # worksheets_to_skip << 'interior_lighting'
-  # worksheets_to_skip << 'lookups'
-  # worksheets_to_skip << 'sheetmap'
-  # worksheets_to_skip << 'deer_lighting_fractions'
-  # worksheets_to_skip << 'window_types_and_weights'
-  #
-  # # List of columns to skip
-  # cols_to_skip = []
-  # cols_to_skip << 'lookup'
-  # cols_to_skip << 'lookupcolumn'
-  # cols_to_skip << 'vlookupcolumn'
-  # cols_to_skip << 'osm_lighting_per_person'
-  # cols_to_skip << 'osm_lighting_per_area'
-  # cols_to_skip << 'lighting_per_length'
-  # cols_to_skip << 'exhaust_per_unit'
-  # cols_to_skip << 'exhaust_fan_power_per_area'
-  # cols_to_skip << 'occupancy_standard'
-  # cols_to_skip << 'occupancy_primary_space_type'
-  # cols_to_skip << 'occupancy_secondary_space_type'
-
   export_spreadsheet_to_json(spreadsheet_titles, standards_dir, skip_list)
 end
 
