@@ -64,7 +64,7 @@ class BTAP1980TO2010 < BTAPPRE1980
     apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir, lights_type: lights_type, lights_scale: lights_scale)
 
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
-    apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir, dcv_type:dcv_type)
+    apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir, dcv_type: dcv_type)
     model = apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
     return model
   end

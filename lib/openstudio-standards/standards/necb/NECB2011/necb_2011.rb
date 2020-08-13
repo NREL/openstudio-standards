@@ -300,7 +300,7 @@ class NECB2011 < Standard
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
-  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type:, eff_mod: nil)
+  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', eff_mod: nil)
     raise('validation of model failed.') unless validate_initial_model(model)
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
