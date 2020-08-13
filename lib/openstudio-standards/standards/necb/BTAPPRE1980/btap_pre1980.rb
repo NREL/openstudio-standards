@@ -68,7 +68,7 @@ class BTAPPRE1980 < NECB2011
     return model
   end
 
-  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type:, eff_mod: nil)
+  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB Default', eff_mod: nil)
 
     raise('validation of model failed.') unless validate_initial_model(model)
     climate_zone = 'NECB HDD Method'
