@@ -105,8 +105,8 @@ Unitary ACs,Heating Type,
 Unitary ACs,Subcategory,
 Unitary ACs,Minimum Capacity (Btu/hr),
 Unitary ACs,Maximum Capacity (Btu/hr),
-Unitary ACs,Start Date,
-Unitary ACs,End Date,
+Unitary ACs,Start Date,YES
+Unitary ACs,End Date,YES
 Unitary ACs,Minimum Seasonal Energy Efficiency Ratio (SEER),
 Unitary ACs,Minimum Energy Efficiency Ratio (EER),
 Unitary ACs,Minimum Integrated Part Load Value (kW/ton),

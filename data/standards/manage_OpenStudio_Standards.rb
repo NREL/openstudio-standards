@@ -314,7 +314,7 @@ def export_spreadsheets_for_data_repo(spreadsheet_titles)
   skip_list_file_path = "#{__dir__}/skip_list_for_data_repo.csv"
   skip_list = downselect_columns_to_skip(skip_list_file_path)
 
-  export_spreadsheet_to_json(spreadsheet_titles, standards_dir, worksheets_to_skip, cols_to_skip)
+  export_spreadsheet_to_json(spreadsheet_titles, standards_dir, skip_list)
 end
 
 def export_spreadsheet_to_json(spreadsheet_titles, standards_dir, skip_list)
@@ -358,6 +358,9 @@ def export_spreadsheet_to_json(spreadsheet_titles, standards_dir, skip_list)
     # Export each tab to a hash, where the key is the sheet name
     # and the value is an array of objects
     standards_data = {}
+    list_of_sheets = []
+    list_of_names = []
+    list_of_units = []
     workbook.worksheets.each do |worksheet|
       sheet_name = worksheet.sheet_name.snake_case
 
@@ -379,23 +382,27 @@ def export_spreadsheet_to_json(spreadsheet_titles, standards_dir, skip_list)
 
       # Get the header row data
       header_data = all_data[header_row]
-
-      # Format the headers and parse out units (in parentheses)
       headers = []
+      # Format the headers and parse out units (in parentheses)
       header_data.each do |header_string|
         break if header_string.nil?
         header = {}
         header["name"] = header_string.gsub(/\(.*\)/, '').strip.snake_case
         header_unit_parens = header_string.scan(/\(.*\)/)[0]
+        list_of_sheets << sheet_name
+        list_of_names << header_string.gsub(/\(.*\)/, '').strip.snake_case
         if header_unit_parens.nil?
           header["units"] = nil
+          list_of_units << nil
         else
           header["units"] = header_unit_parens.gsub(/\(|\)/, '').strip
+          list_of_units << header_unit_parens.gsub(/\(|\)/, '').strip
         end
         headers << header
       end
       puts "--found #{headers.size} columns"
 
+      # puts headers
       # Loop through all rows and export
       # data for the row to a hash.
       objs = []
@@ -533,7 +540,9 @@ def export_spreadsheet_to_json(spreadsheet_titles, standards_dir, skip_list)
       # Save the objects to the hash
       standards_data[sheet_name] = objs
     end
-
+    # CSV.open("metadata.csv", "wb") {|csv| headers.to_a.each {|elem| csv << elem} }
+    list_metadata = [list_of_sheets, list_of_names, list_of_units].transpose
+    File.write("metadata.csv", list_metadata.map(&:to_csv).join)
     # Check for duplicate data in space_types_* sheets
     standards_data.each_pair do |sheet_name, objs|
       skip_duplicate_check = []
