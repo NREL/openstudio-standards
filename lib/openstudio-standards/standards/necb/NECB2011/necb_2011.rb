@@ -20,6 +20,48 @@ class NECB2011 < Standard
     puts "do nothing"
   end
 
+  def apply_systems_and_efficiencies(model:,
+                                     primary_heating_fuel:,
+                                     sizing_run_dir:,
+                                     dcv_type: 'NECB_Default',
+                                     ecm_system_name: 'NECB_Default',
+                                     erv_package: 'NECB_Default',
+                                     eff_mod: nil,
+                                     daylighting_type: 'NECB_Default')
+    # Create ECM object.
+    ecm = Standard.build("ECMS")
+
+    # -------- Systems -----------
+
+    # Create Default Systems.
+    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
+
+    # Apply new ECM system. Overwrite standard as required.
+    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self)
+
+
+    # Apply ERV equipment as required.
+    ecm.apply_erv_ecm(model: model, erv_package: erv_package)
+
+
+    # -------- Efficiencies Controls and Sensors ------------
+    #
+    # Set code standard equipment charecteristics.
+    apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
+    ecm.apply_system_efficiencies_ecm(model: model, ecm_system_name: ecm_system_name)
+
+    # Apply ECM ERV charecteristics as required.
+    ecm.apply_erv_ecm_efficiency(model: model, erv_package: erv_package)
+    # Apply DCV as required
+    model_enable_demand_controlled_ventilation(model, dcv_type)
+    # Apply Boiler Efficiency
+    modify_equipment_efficiency(model: model, eff_mod: eff_mod)
+    # Apply daylight controls.
+    model_add_daylighting_controls(model) if daylighting_type == 'add_daylighting_controls'
+    # Apply Pump power as required.
+    apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
+  end
+
 
   # Combine the data from the JSON files into a single hash
   # Load JSON files differently depending on whether loading from
@@ -298,7 +340,7 @@ class NECB2011 < Standard
                                    erv_package: erv_package,
                                    eff_mod: eff_mod,
                                    daylighting_type: daylighting_type
-                                   )
+    )
     return model
   end
 
@@ -320,7 +362,7 @@ class NECB2011 < Standard
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
 
     # Apply new ECM system. Overwrite standard as required.
-    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self.class.name)
+    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self)
 
     # Apply ERV equipment as required.
     ecm.apply_erv_ecm(model: model, erv_package: erv_package)
@@ -330,6 +372,8 @@ class NECB2011 < Standard
     #
     # Set code standard equipment charecteristics.
     apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
+    # Apply System
+    ecm.apply_system_efficiencies_ecm(model: model, ecm_system_name: ecm_system_name)
 
     # Apply ECM ERV charecteristics as required. Part 2 of above ECM.
     ecm.apply_erv_ecm_efficiency(model: model, erv_package: erv_package)

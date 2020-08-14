@@ -50,9 +50,9 @@ class ECMS < NECB2011
     map_system_to_zones, system_doas_flags = ecm_std.get_map_systems_to_zones(systems)
     zone_clg_eqpt_type = ecm_std.get_zone_clg_eqpt_type(model)
     # when the ecm is associated with adding a new HVAC system, then remove existing system components and loops
-    ecm_add_method_name = "add_ecm_#{ecm_name.downcase}"
+    ecm_add_method_name = "add_ecm_#{ecm_system_name.downcase}"
 
-    raise("the method #{ecm_add_method_name} does not exist in the ECM class. Please verify that this should be called.") if ecm_std.respond_to? ecm_add_method_name
+    raise("the method #{ecm_add_method_name} does not exist in the ECM class. Please verify that this should be called.") unless ecm_std.respond_to? ecm_add_method_name
 
     ecm_std.remove_all_zone_eqpt(systems)
     ecm_std.remove_air_loops(model)
@@ -65,21 +65,23 @@ class ECMS < NECB2011
                  system_doas_flags: system_doas_flags,
                  zone_clg_eqpt_type: zone_clg_eqpt_type,
                  standard: template_standard)
+    #ecm_std.add_ecm_hs09_ccashpsys(model:model,system_zones_map:,system_doas_flags:,zone_clg_eqpt_type: nil,standard:,baseboard_flag: true)
 
   end
 
   def apply_system_efficiencies_ecm(model:, ecm_system_name: nil)
     # Do nothing if nil.
-    return if ecm_system_name.nil?
-
+    return if ecm_system_name.nil? || ecm_system_name == 'none' || ecm_system_name == 'NECB_Default'
+    ecm_std = Standard.build("ECMS")
     # Get method name that should be present in the ECM class.
     ecm_apply_eff_method_name = "apply_efficiency_ecm_#{ecm_system_name.downcase}"
     # Raise exception if method does not exists.
-    raise("the method #{ecm_apply_eff_method_name} does not exist in the ECM class. Please verify that this should be called.") unless ecm_std.respond_to?(ecm_add_method_name)
+    raise("the method #{ecm_apply_eff_method_name} does not exist in the ECM class. Please verify that this should be called.") unless ecm_std.respond_to?(ecm_apply_eff_method_name)
 
     # apply system eff method.
     ecm_std.send(ecm_apply_eff_method_name, model: model, ecm_name: ecm_system_name)
   end
+
 
 
 end
