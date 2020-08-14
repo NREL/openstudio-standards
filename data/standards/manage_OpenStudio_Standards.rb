@@ -278,6 +278,19 @@ def download_google_spreadsheets(spreadsheet_titles)
 
 end
 
+def parse_units(unit)
+  useless_units = [nil, 'fraction', '%', 'COP_68F', 'COP_47F', '%/gal', 'Btu/hr/Btu/hr', 'Btu/hr/gal', 'BTU/hr/ft', 'W/BTU/h']
+  unit_parsed = nil
+  if not useless_units.include?(unit)
+    unit_parsed = OpenStudio.createUnit(unit)
+    if unit_parsed.empty?
+      unit_parsed = "Not recognized by OpenStudio"
+    else
+      unit_parsed = unit_parsed.get()
+    end
+  end
+  return unit_parsed
+end
 
 def downselect_columns_to_skip(file_path)
   csv_file = CSV.read(file_path,headers:true)
@@ -361,6 +374,7 @@ def export_spreadsheet_to_json(spreadsheet_titles, standards_dir, skip_list)
     list_of_sheets = []
     list_of_names = []
     list_of_units = []
+    list_of_OS_okay_units = []
     workbook.worksheets.each do |worksheet|
       sheet_name = worksheet.sheet_name.snake_case
 
@@ -394,10 +408,13 @@ def export_spreadsheet_to_json(spreadsheet_titles, standards_dir, skip_list)
         if header_unit_parens.nil?
           header["units"] = nil
           list_of_units << nil
+          list_of_OS_okay_units << nil
         else
           header["units"] = header_unit_parens.gsub(/\(|\)/, '').strip
           list_of_units << header_unit_parens.gsub(/\(|\)/, '').strip
+          list_of_OS_okay_units << parse_units(header_unit_parens.gsub(/\(|\)/, '').strip)
         end
+
         headers << header
       end
       puts "--found #{headers.size} columns"
@@ -541,8 +558,9 @@ def export_spreadsheet_to_json(spreadsheet_titles, standards_dir, skip_list)
       standards_data[sheet_name] = objs
     end
     # CSV.open("metadata.csv", "wb") {|csv| headers.to_a.each {|elem| csv << elem} }
-    list_metadata = [list_of_sheets, list_of_names, list_of_units].transpose
-    File.write("metadata.csv", list_metadata.map(&:to_csv).join)
+    list_metadata = [list_of_sheets, list_of_names, list_of_units, list_of_OS_okay_units].transpose
+    list_metadata.insert(0, ['Sheet', 'Name', 'Unit', 'OS Unit']) # [1, 2, 2.5, 3, 4]
+    File.write("data/standards/metadata_units_#{spreadsheet_title}.csv", list_metadata.map(&:to_csv).join)
     # Check for duplicate data in space_types_* sheets
     standards_data.each_pair do |sheet_name, objs|
       skip_duplicate_check = []
