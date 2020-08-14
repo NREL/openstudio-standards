@@ -37,3 +37,5 @@ coverage/
 *.xlsx
 !Scorecard*.xlsx
 /data/standards/openstudio_standards_duplicates_log.csv
+lib/openstudio-standards/standards/ashrae_90_1/data/ashrae_90_1.standards.json
+lib/openstudio-standards/standards/ashrae_90_1/data/ashrae_90_1.templates.json
