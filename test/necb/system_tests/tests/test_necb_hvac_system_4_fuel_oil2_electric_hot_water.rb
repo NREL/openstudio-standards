@@ -35,7 +35,7 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
     boiler_fueltype = 'FuelOil#2'
     heating_coil = 'Electric'
     baseboard_type = 'Hot Water'
-    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_system_4"
+    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_hvac_system_4_fuel_oil2_electric_hot_water"
 
     name = String.new
     # FileUtils.rm_rf(output_folder)

@@ -38,7 +38,7 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
     chiller_type = 'Centrifugal'
     mua_cooling_type = 'Hydronic'
     fan_coil_type = 'FPFC'
-    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_system_2"
+    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_hvac_system_2_natural_gas_centrifugal_hydronic_fpfc"
 
     name = String.new
     #create folders

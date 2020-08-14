@@ -41,7 +41,7 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
     mau_type = true
     mau_heating_coil_type = 'Hot Water'
     baseboard_type = 'Hot Water'
-    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_system_1"
+    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_hvac_system_1_electricity_true_hot_water_hot_water"
 
 
     FileUtils::mkdir_p(output_folder)

@@ -38,7 +38,7 @@ class NECB_HVAC_System_6_Test < MiniTest::Test
     baseboard_type = 'Hot Water'
     chiller_type = 'Scroll'
     fan_type = 'var_speed_drive'
-    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_system_6"
+    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_hvac_system_6_fuel_oil2_hot_water_hot_water__scroll_var_speed_drive"
     name = 'test_necb_hvac_system_6_fuel_oil2_hot_water_hot_water__scroll_var_speed_drive""'
 
     # FileUtils.rm_rf(output_folder)
