@@ -68,6 +68,7 @@ module OpenstudioStandards
 
   # ECM development
   require_relative "#{stds}/necb/ECMS/ecms.rb"
+  require_relative "#{stds}/necb/ECMS/erv.rb"
   require_relative "#{stds}/necb/ECMS/hvac_systems.rb"
 
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1"

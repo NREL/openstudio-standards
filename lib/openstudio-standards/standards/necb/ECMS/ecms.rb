@@ -42,8 +42,8 @@ class ECMS < NECB2011
   end
 
   def apply_system_ecm(model:, ecm_system_name: nil, template_standard:, runner: nil)
-    # Do nothing if nil.
-    return if ecm_system_name.nil?
+    # Do nothing if nil or other usual suspects.. covering all bases for now.
+    return if ecm_system_name.nil? || ecm_system_name == 'none' || ecm_system_name == 'NECB_Default'
 
     ecm_std = Standard.build("ECMS")
     systems = model.getAirLoopHVACs
