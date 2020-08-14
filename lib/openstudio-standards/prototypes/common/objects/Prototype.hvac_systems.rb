@@ -2407,9 +2407,15 @@ class Standard
       # Cycling: Unitary System
       # CyclingHeatPump: Unitary Heat Pump system
       if fan_type == 'ConstantVolume'
-        fan = create_fan_by_name(model,
+        if heating_type == 'Single Speed Heat Pump'
+          fan = create_fan_by_name(model,
                                  'Packaged_RTU_SZ_AC_CAV_OnOff_Fan',
                                  fan_name: "#{air_loop.name} Fan")
+        else
+          fan = create_fan_by_name(model,
+                                  'Packaged_RTU_SZ_AC_CAV_Fan',
+                                  fan_name: "#{air_loop.name} Fan")
+        end
         fan.setAvailabilitySchedule(hvac_op_sch)
       elsif fan_type == 'Cycling'
         fan = create_fan_by_name(model,
@@ -2561,7 +2567,7 @@ class Standard
       else
         # ConstantVolume: Packaged Rooftop Single Zone Air conditioner
         # Need unitary system wrapper for heat pumps in order to allow control of supplemental heat
-        if heating_type = 'Single Speed Heat Pump'
+        if heating_type == 'Single Speed Heat Pump'
           # CyclingHeatPump: Unitary Heat Pump system
           unitary_system = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
           unitary_system.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
