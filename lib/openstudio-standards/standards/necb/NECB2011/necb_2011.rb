@@ -173,7 +173,26 @@ class NECB2011 < Standard
                                    dcv_type: 'NECB_Default',
                                    lights_type: 'NECB_Default',
                                    lights_scale: 1.0,
-                                   daylighting_type: 'NECB_Default'
+                                   daylighting_type: 'NECB_Default',
+                                   ecm_system_name: 'NECB_Default',
+                                   erv_package: 'NECB_Default',
+                                   eff_mod: nil,
+                                   ext_wall_cond: nil,
+                                   ext_floor_cond: nil,
+                                   ext_roof_cond: nil,
+                                   ground_wall_cond: nil,
+                                   ground_floor_cond: nil,
+                                   ground_roof_cond: nil,
+                                   door_construction_cond: nil,
+                                   fixed_window_cond: nil,
+                                   glass_door_cond: nil,
+                                   overhead_door_cond: nil,
+                                   skylight_cond: nil,
+                                   glass_door_solar_trans: nil,
+                                   fixed_wind_solar_trans: nil,
+                                   skylight_solar_trans: nil,
+                                   fdwr_set: -1.0,
+                                   srr_set: -1.0
 
   )
 
@@ -185,7 +204,26 @@ class NECB2011 < Standard
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No DCV', (3) 'Occupancy-based DCV' , (4) 'CO2-based DCV'
                                 lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
                                 lights_scale: lights_scale,
-                                daylighting_type: daylighting_type # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
+                                daylighting_type: daylighting_type, # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
+                                ecm_system_name: ecm_system_name,
+                                erv_package: erv_package,
+                                eff_mod: eff_mod,
+                                ext_wall_cond: ext_wall_cond,
+                                ext_floor_cond: ext_floor_cond,
+                                ext_roof_cond: ext_roof_cond,
+                                ground_wall_cond: ground_wall_cond,
+                                ground_floor_cond: ground_floor_cond,
+                                ground_roof_cond: ground_roof_cond,
+                                door_construction_cond: door_construction_cond,
+                                fixed_window_cond: fixed_window_cond,
+                                glass_door_cond: glass_door_cond,
+                                overhead_door_cond: overhead_door_cond,
+                                skylight_cond: skylight_cond,
+                                glass_door_solar_trans: glass_door_solar_trans,
+                                fixed_wind_solar_trans: fixed_wind_solar_trans,
+                                skylight_solar_trans: skylight_solar_trans,
+                                fdwr_set: fdwr_set,
+                                srr_set: srr_set
 
     )
   end
@@ -207,21 +245,107 @@ class NECB2011 < Standard
                            dcv_type: 'NECB_Default',
                            lights_type: 'NECB_Default',
                            lights_scale: 1.0,
-                           daylighting_type: 'NECB_Default'
+                           daylighting_type: 'NECB_Default',
+                           ecm_system_name: 'NECB_Default',
+                           erv_package: 'NECB_Default',
+                           eff_mod: nil,
+                           ext_wall_cond: nil,
+                           ext_floor_cond: nil,
+                           ext_roof_cond: nil,
+                           ground_wall_cond: nil,
+                           ground_floor_cond: nil,
+                           ground_roof_cond: nil,
+                           door_construction_cond: nil,
+                           fixed_window_cond: nil,
+                           glass_door_cond: nil,
+                           overhead_door_cond: nil,
+                           skylight_cond: nil,
+                           glass_door_solar_trans: nil,
+                           fixed_wind_solar_trans: nil,
+                           skylight_solar_trans: nil,
+                           fdwr_set: -1,
+                           srr_set: -1
   )
     apply_weather_data(model: model, epw_file: epw_file)
     apply_loads(model: model, lights_type: lights_type, lights_scale: lights_scale)
-    apply_envelope(model: model)
-    apply_fdwr_srr_daylighting(model: model)
-    apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir, lights_type: lights_type, lights_scale: lights_scale)
-    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir) #, dcv_type: dcv_type #Sara
-    apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir, dcv_type: dcv_type) #Sara
-    model = apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
-    if daylighting_type == 'add_daylighting_controls'
-      model_add_daylighting_controls(model)
-    end
+    apply_envelope(model: model,
+                   ext_wall_cond: ext_wall_cond,
+                   ext_floor_cond: ext_floor_cond,
+                   ext_roof_cond: ext_roof_cond,
+                   ground_wall_cond: ground_wall_cond,
+                   ground_floor_cond: ground_floor_cond,
+                   ground_roof_cond: ground_roof_cond,
+                   door_construction_cond: door_construction_cond,
+                   fixed_window_cond: fixed_window_cond,
+                   glass_door_cond: glass_door_cond,
+                   overhead_door_cond: overhead_door_cond,
+                   skylight_cond: skylight_cond,
+                   glass_door_solar_trans: glass_door_solar_trans,
+                   fixed_wind_solar_trans: fixed_wind_solar_trans,
+                   skylight_solar_trans: skylight_solar_trans)
+    apply_fdwr_srr_daylighting(model: model,
+                               fdwr_set: fdwr_set,
+                               srr_set: srr_set)
+    apply_auto_zoning(model: model,
+                      sizing_run_dir: sizing_run_dir,
+                      lights_type: lights_type,
+                      lights_scale: lights_scale)
+    apply_systems_and_efficiencies(model: model,
+                                   primary_heating_fuel: primary_heating_fuel,
+                                   sizing_run_dir: sizing_run_dir,
+                                   dcv_type: dcv_type,
+                                   ecm_system_name: ecm_system_name,
+                                   erv_package: erv_package,
+                                   eff_mod: eff_mod,
+                                   daylighting_type: daylighting_type
+                                   )
     return model
   end
+
+
+  def apply_systems_and_efficiencies(model:,
+                                     primary_heating_fuel:,
+                                     sizing_run_dir:,
+                                     dcv_type: 'NECB_Default',
+                                     ecm_system_name: 'NECB_Default',
+                                     erv_package: 'NECB_Default',
+                                     eff_mod: nil,
+                                     daylighting_type: 'NECB_Default')
+    # Create ECM object.
+    ecm = ECMS.new
+
+    # -------- Systems Layout-----------
+
+    # Create Default Systems.
+    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
+
+    # Apply new ECM system. Overwrite standard as required.
+    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self.class.name)
+
+    # Apply ERV equipment as required.
+    ecm.apply_erv_ecm(model: model, erv_package: erv_package)
+
+
+    # -------- Performace, Efficiencies, Controls and Sensors ------------
+    #
+    # Set code standard equipment charecteristics.
+    apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
+
+    # Apply ECM ERV charecteristics as required. Part 2 of above ECM.
+    ecm.apply_erv_ecm_efficiency(model: model, erv_package: erv_package)
+    # Apply DCV as required
+    model_enable_demand_controlled_ventilation(model, dcv_type)
+    # Apply Boiler Efficiency
+    modify_equipment_efficiency(model: model, eff_mod: eff_mod)
+    # Apply daylight controls.
+    model_add_daylighting_controls(model) if daylighting_type == 'add_daylighting_controls'
+
+
+    # -------Pump sizing required by some vintages----------------
+    # Apply Pump power as required.
+    apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
+  end
+
 
   def apply_loads(model:, lights_type: 'NECB_Default', lights_scale: 1.0, validate: true)
     if validate

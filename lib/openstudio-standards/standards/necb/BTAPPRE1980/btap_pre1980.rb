@@ -55,20 +55,62 @@ class BTAPPRE1980 < NECB2011
                            dcv_type: 'NECB_Default',
                            lights_type: 'NECB_Default',
                            lights_scale: 1.0,
-                           daylighting_type: 'NECB_Default')
-    apply_weather_data(model: model, epw_file: epw_file)
-    apply_loads(model: model)
-    apply_envelope(model: model)
-    #Keeping default window sizes in pre-1980 buildings and removing daylighting
-    #apply_fdwr_srr_daylighting(model: model)
-    apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir, lights_type: lights_type, lights_scale: lights_scale)
-    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
-    apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir, dcv_type: dcv_type)
-    model = apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
-    return model
+                           daylighting_type: 'NECB_Default',
+                           ecm_system_name: 'NECB_Default',
+                           erv_package: 'NECB_Default',
+                           eff_mod: nil,
+                           ext_wall_cond: nil,
+                           ext_floor_cond: nil,
+                           ext_roof_cond: nil,
+                           ground_wall_cond: nil,
+                           ground_floor_cond: nil,
+                           ground_roof_cond: nil,
+                           door_construction_cond: nil,
+                           fixed_window_cond: nil,
+                           glass_door_cond: nil,
+                           overhead_door_cond: nil,
+                           skylight_cond: nil,
+                           glass_door_solar_trans: nil,
+                           fixed_wind_solar_trans: nil,
+                           skylight_solar_trans: nil,
+                           fdwr_set: nil,
+                           srr_set: nil
+  )
+    # This will allow changes to default fdwr/srr for vintages.. but will not touch the existing models if they were
+    # called for with -1.0 in the fdwr_srr method.
+    fdwr_set = -2 if fdwr_set.nil? || fdwr_set == -1.0
+    srr_set = -2 if srr_set.nil? || srr_set == -1.0
+    return super(model: model,
+                 epw_file: epw_file,
+                 sizing_run_dir: sizing_run_dir,
+                 primary_heating_fuel: primary_heating_fuel,
+                 dcv_type: dcv_type,
+                 lights_type: lights_type,
+                 lights_scale: lights_scale,
+                 daylighting_type: daylighting_type,
+                 ecm_system_name: ecm_system_name,
+                 erv_package: erv_package,
+                 eff_mod: eff_mod,
+                 ext_wall_cond: ext_wall_cond,
+                 ext_floor_cond: ext_floor_cond,
+                 ext_roof_cond: ext_roof_cond,
+                 ground_wall_cond: ground_wall_cond,
+                 ground_floor_cond: ground_floor_cond,
+                 ground_roof_cond: ground_roof_cond,
+                 door_construction_cond: door_construction_cond,
+                 fixed_window_cond: fixed_window_cond,
+                 glass_door_cond: glass_door_cond,
+                 overhead_door_cond: overhead_door_cond,
+                 skylight_cond: skylight_cond,
+                 glass_door_solar_trans: glass_door_solar_trans,
+                 fixed_wind_solar_trans: fixed_wind_solar_trans,
+                 skylight_solar_trans: skylight_solar_trans,
+                 fdwr_set: fdwr_set,
+                 srr_set: srr_set)
+
   end
 
-  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB Default', eff_mod: nil)
+  def apply_standard_efficiencies(model:, sizing_run_dir:)
 
     raise('validation of model failed.') unless validate_initial_model(model)
     climate_zone = 'NECB HDD Method'
@@ -80,7 +122,6 @@ class BTAPPRE1980 < NECB2011
     # Apply the HVAC efficiency standard
     model_apply_hvac_efficiency_standard(model, climate_zone)
     model_apply_existing_building_fan_performance(model: model)
-    modify_equipment_efficiency(model: model, eff_mod: eff_mod)
   end
 
   #occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method
