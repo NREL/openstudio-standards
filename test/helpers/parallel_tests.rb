@@ -5,7 +5,7 @@ require 'parallel'
 require 'open3'
 
 
-ProcessorsUsed = (Parallel.processor_count * 1 / 2).floor
+ProcessorsUsed = (Parallel.processor_count * 3 / 4).floor
 
 class String
   # colorization

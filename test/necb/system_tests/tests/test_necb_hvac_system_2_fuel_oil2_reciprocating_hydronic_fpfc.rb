@@ -38,7 +38,7 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
     chiller_type = 'Reciprocating'
     mua_cooling_type = 'Hydronic'
     fan_coil_type = 'FPFC'
-    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_system_2"
+    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_hvac_system_2_fuel_oil2_reciprocating_hydronic_fpfc"
 
     name = String.new
     #create folders
