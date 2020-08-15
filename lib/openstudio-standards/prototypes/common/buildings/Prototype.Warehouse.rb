@@ -90,7 +90,22 @@ module Warehouse
           next if spc_type.standardsSpaceType.empty?
           stds_spc_type = spc_type.standardsSpaceType.get
           # Adjust the primary sensor
-          if adj['sensor_1_frac'] && zone.primaryDaylightingControl.is_initialized
+          if adj['sensor_1_frac'] 
+            # Create primary sensor if it doesn't exist
+            if !zone.primaryDaylightingControl.is_initialized
+              puts zone
+              sensor_1 = OpenStudio::Model::DaylightingControl.new(space.model)
+              sensor_1.setName("#{space.name} Daylt Sensor 2")
+              sensor_1.setSpace(space)
+              sensor_1.setIlluminanceSetpoint(375)
+              sensor_1.setLightingControlType('Stepped')
+              sensor_1.setNumberofSteppedControlSteps(3) # all sensors 3-step per design
+              sensor_1.setMinimumInputPowerFractionforContinuousDimmingControl(0.3)
+              sensor_1.setMinimumLightOutputFractionforContinuousDimmingControl(0.2)
+              sensor_1.setProbabilityLightingwillbeResetWhenNeededinManualSteppedControl(1.0)
+              sensor_1.setMaximumAllowableDiscomfortGlareIndex(22.0)
+              zone.setPrimaryDaylightingControl(sensor_1)
+            end
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting primary daylight sensor to control #{adj['sensor_1_frac']} of the lighting.")
             zone.setFractionofZoneControlledbyPrimaryDaylightingControl(adj['sensor_1_frac'])
             pri_ctrl = zone.primaryDaylightingControl.get
