@@ -167,7 +167,7 @@ module LargeHotel
   end
 
   # Add the daylighting controls for lobby, cafe, dinning and banquet
-  def model_add_daylighting_controls(model)
+  def model_add_daylighting_controls(model, climate_zone)
     space_names = ['Banquet_Flr_6', 'Dining_Flr_6', 'Cafe_Flr_1', 'Lobby_Flr_1']
     space_names.each do |space_name|
       space = model.getSpaceByName(space_name).get
