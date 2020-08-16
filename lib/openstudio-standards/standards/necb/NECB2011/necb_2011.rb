@@ -254,7 +254,7 @@ class NECB2011 < Standard
   def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0)
     apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
     apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
-    model_add_daylighting_controls(model) # to be removed after refactor.
+    model_add_daylighting_controls(model, nil) # to be removed after refactor.
   end
 
   def apply_standard_efficiencies(model:, sizing_run_dir:)
