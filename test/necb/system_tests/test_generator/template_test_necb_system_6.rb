@@ -38,7 +38,7 @@ class NECB_HVAC_System_6_Test < MiniTest::Test
     baseboard_type = '<%=baseboard_type %>'
     chiller_type = '<%=chiller_type %>'
     fan_type = '<%=fan_type %>'
-    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_<%=system[:name] %>"
+    output_folder = "#{File.dirname(__FILE__)}/output/<%=test_name %>"
     name = '<%=test_name %>""'
 
     # FileUtils.rm_rf(output_folder)

@@ -41,7 +41,7 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
     mau_type = <%=mau_type %>
     mau_heating_coil_type = '<%=mau_heating_coil_type %>'
     baseboard_type = '<%=baseboard_type %>'
-    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_system_1"
+    output_folder = "#{File.dirname(__FILE__)}/output/<%=test_name %>"
 
 
     FileUtils::mkdir_p(output_folder)
