@@ -38,7 +38,7 @@ class NECB_HVAC_System_6_Test < MiniTest::Test
     baseboard_type = 'Electric'
     chiller_type = 'Scroll'
     fan_type = 'fc_inletvanes'
-    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_system_6"
+    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_hvac_system_6_electricity_electric_electric__scroll_fc_inletvanes"
     name = 'test_necb_hvac_system_6_electricity_electric_electric__scroll_fc_inletvanes""'
 
     # FileUtils.rm_rf(output_folder)

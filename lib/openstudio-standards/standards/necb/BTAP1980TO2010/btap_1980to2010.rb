@@ -28,7 +28,7 @@ class BTAP1980TO2010 < BTAPPRE1980
         end
       end
     else
-      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select { |e| File.file? e }
       files.each do |file|
         data = JSON.parse(File.read(file))
         if !data['tables'].nil?
@@ -46,23 +46,7 @@ class BTAP1980TO2010 < BTAPPRE1980
     return @standards_data
   end
 
-  # Created this method so that additional methods can be addded for bulding the prototype model in later
-  # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
-  def model_apply_standard(model:,
-                           epw_file:,
-                           sizing_run_dir: Dir.pwd,
-                           primary_heating_fuel: 'DefaultFuel')
-    apply_weather_data(model: model, epw_file: epw_file)
-    apply_loads(model: model)
-    apply_envelope( model: model)
-    #Keeping default window sizes in 1980-2010 buildings and removing daylighting
-    #apply_fdwr_srr_daylighting(model: model)
-    apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
-    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
-    apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
-    model = apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
-    return model
-  end
+
 
   #occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method
   def set_occ_sensor_spacetypes(model, space_type_map)

@@ -1,0 +1,105 @@
+{
+  "tables": {
+    "erv": {
+      "data_type": "table",
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "erv_name": "Rotary-Minimum-Eff-Existing",
+          "application": "Existing-ERVS",
+          "HeatExchangerType": "Rotary",
+          "SensibleEffectivenessat100HeatingAirFlow": 0.5,
+          "LatentEffectivenessat100HeatingAirFlow": 0.5,
+          "SensibleEffectivenessat75HeatingAirFlow": 0.5,
+          "LatentEffectivenessat75HeatingAirFlow": 0.5,
+          "SensibleEffectivenessat100CoolingAirFlow": 0.5,
+          "LatentEffectivenessat100CoolingAirFlow": 0.5,
+          "SensibleEffectivenessat75CoolingAirFlow": 0.5,
+          "LatentEffectivenessat75CoolingAirFlow": 0.5,
+          "SupplyAirOutletTemperatureControl": true,
+          "FrostControlType": "ExhaustOnly",
+          "EconomizerLockout": true,
+          "ThresholdTemperature": -23.3,
+          "InitialDefrostTimeFraction": 0.167,
+          "RateofDefrostTimeFractionIncrease": 1.44
+        },
+        {
+          "erv_name": "Plate-NREL-NZE-ALL",
+          "HeatExchangerType": "Plate",
+          "application": "Add_ERVs_To_All_Airloops",
+          "SensibleEffectivenessat100HeatingAirFlow":0.755,
+          "LatentEffectivenessat100HeatingAirFlow": 0.564,
+          "SensibleEffectivenessat75HeatingAirFlow": 0.791,
+          "LatentEffectivenessat75HeatingAirFlow": 0.625,
+          "SensibleEffectivenessat100CoolingAirFlow": 0.755,
+          "LatentEffectivenessat100CoolingAirFlow": 0.564,
+          "SensibleEffectivenessat75CoolingAirFlow": 0.791,
+          "LatentEffectivenessat75CoolingAirFlow": 0.625,
+          "FrostControlType": "ExhaustOnly",
+          "EconomizerLockout": true,
+          "ThresholdTemperature": -23.3,
+          "InitialDefrostTimeFraction": 0.167,
+          "RateofDefrostTimeFractionIncrease": 1.44,
+          "NominalElectricPower": 0.0
+        },
+        {
+          "erv_name": "Plate-NREL-NZE-EXISTING",
+          "HeatExchangerType": "Plate",
+          "application": "Existing-ERVS",
+          "SensibleEffectivenessat100HeatingAirFlow":0.755,
+          "LatentEffectivenessat100HeatingAirFlow": 0.564,
+          "SensibleEffectivenessat75HeatingAirFlow": 0.791,
+          "LatentEffectivenessat75HeatingAirFlow": 0.625,
+          "SensibleEffectivenessat100CoolingAirFlow": 0.755,
+          "LatentEffectivenessat100CoolingAirFlow": 0.564,
+          "SensibleEffectivenessat75CoolingAirFlow": 0.791,
+          "LatentEffectivenessat75CoolingAirFlow": 0.625,
+          "FrostControlType": "ExhaustOnly",
+          "EconomizerLockout": true,
+          "ThresholdTemperature": -23.3,
+          "InitialDefrostTimeFraction": 0.167,
+          "RateofDefrostTimeFractionIncrease": 1.44,
+          "NominalElectricPower": 0.0
+        },
+        {
+          "HeatExchangerType": "Rotary-NREL-NZE_All_",
+          "application": "Add_ERVs_To_All_Airloops",
+          "SensibleEffectivenessat100HeatingAirFlow": 0.75,
+          "LatentEffectivenessat100HeatingAirFlow": 0.74,
+          "SensibleEffectivenessat75HeatingAirFlow": 0.79,
+          "LatentEffectivenessat75HeatingAirFlow": 0.79,
+          "SensibleEffectivenessat100CoolingAirFlow": 0.75,
+          "LatentEffectivenessat100CoolingAirFlow": 0.74,
+          "SensibleEffectivenessat75CoolingAirFlow": 0.78,
+          "LatentEffectivenessat75CoolingAirFlow": 0.78,
+          "SupplyAirOutletTemperatureControl": true,
+          "FrostControlType": "ExhaustOnly",
+          "EconomizerLockout": true,
+          "ThresholdTemperature": -23.3,
+          "InitialDefrostTimeFraction": 0.167,
+          "RateofDefrostTimeFractionIncrease": 1.44
+        },
+        {
+          "HeatExchangerType": "Rotary-NREL-NZE",
+          "application": "Existing-ERVS",
+          "SensibleEffectivenessat100HeatingAirFlow": 0.75,
+          "LatentEffectivenessat100HeatingAirFlow": 0.74,
+          "SensibleEffectivenessat75HeatingAirFlow": 0.79,
+          "LatentEffectivenessat75HeatingAirFlow": 0.79,
+          "SensibleEffectivenessat100CoolingAirFlow": 0.75,
+          "LatentEffectivenessat100CoolingAirFlow": 0.74,
+          "SensibleEffectivenessat75CoolingAirFlow": 0.78,
+          "LatentEffectivenessat75CoolingAirFlow": 0.78,
+          "SupplyAirOutletTemperatureControl": true,
+          "FrostControlType": "ExhaustOnly",
+          "EconomizerLockout": true,
+          "ThresholdTemperature": -23.3,
+          "InitialDefrostTimeFraction": 0.167,
+          "RateofDefrostTimeFractionIncrease": 1.44
+        }
+      ]
+    }
+  }
+}

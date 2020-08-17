@@ -60,6 +60,11 @@ module CoilDX
           heat_pump = true
         end # TODO: Add other zone hvac systems
       end
+    else
+      if (!coil_dx.airLoopHVAC.get.supplyComponents('OS:Coil:Heating:DX:SingleSpeed'.to_IddObjectType).empty?) ||
+          (!coil_dx.airLoopHVAC.get.supplyComponents('OS:Coil:Heating:DX:VariableSpeed'.to_IddObjectType).empty?)
+        heat_pump = true
+      end
     end
 
     return heat_pump
@@ -139,6 +144,7 @@ module CoilDX
     search_criteria['cooling_type'] = case coil_dx.iddObjectType.valueName.to_s
                                       when 'OS_Coil_Cooling_DX_SingleSpeed',
                                            'OS_Coil_Cooling_DX_TwoSpeed',
+                                           'OS_Coil_Cooling_DX_VariableSpeed',
                                            'OS_Coil_Cooling_DX_MultiSpeed'
                                         coil_dx.condenserType
                                       else

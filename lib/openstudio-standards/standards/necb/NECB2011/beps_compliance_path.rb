@@ -36,8 +36,6 @@ class NECB2011
   end
 
 
-
-
   # Sets the selected internal loads to standards-based or typical values.
   # For each category that is selected get all load instances. Remove all
   # but the first instance if multiple instances.  Add a new instance/definition
@@ -55,13 +53,23 @@ class NECB2011
   # @param set_ventilation [Bool] if true, set the ventilation rates (per-person and per-area)
   # @param set_infiltration [Bool] if true, set the infiltration rates
   # @return [Bool] returns true if successful, false if not
-  def space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+  def space_type_apply_internal_loads(space_type:,
+                                      set_people: true,
+                                      set_lights: true,
+                                      set_electric_equipment: true,
+                                      set_gas_equipment: true,
+                                      set_ventilation: true,
+                                      set_infiltration: true,
+                                      lights_type: 'NECB_Default',
+                                      lights_scale: 1.0)
+
     # Skip plenums
     # Check if the space type name
     # contains the word plenum.
     if space_type.name.get.to_s.downcase.include?('plenum')
       return false
     end
+
     if space_type.standardsSpaceType.is_initialized
       if space_type.standardsSpaceType.get.downcase.include?('plenum')
         return false
@@ -163,7 +171,11 @@ class NECB2011
     end
 
     # Lights
-    apply_standard_lights(set_lights, space_type, space_type_properties)
+    apply_standard_lights(set_lights: set_lights,
+                          space_type: space_type,
+                          space_type_properties: space_type_properties,
+                          lights_type: lights_type,
+                          lights_scale: lights_scale)
 
     # Electric Equipment
     elec_equip_have_info = false

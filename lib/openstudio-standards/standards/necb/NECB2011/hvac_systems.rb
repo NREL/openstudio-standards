@@ -367,6 +367,34 @@ class NECB2011
     return true
   end
 
+  # Sets the minimum effectiveness of the heat exchanger per
+  # the standard.
+  def heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(heat_exchanger_air_to_air_sensible_and_latent, erv_name = nil)
+    # Assumed to be sensible and latent at all flow
+    # This will now get data of the erv from the json file instead of hardcoding it. Defaults to NECB2011 erv we have been using.
+    erv_name = 'Rotary-Minimum-Eff-Existing' if erv_name.nil?
+    erv_info = @standards_data['erv'].detect { |item| item['erv_name'] == erv_name }
+
+    raise("Could not find #{erv_name} in #{self.class.name} class' erv.json file or it's parents. The available ervs are #{@standards_data['erv'].map{|item| item['erv_name']}}") if erv_info.nil?
+
+    heat_exchanger_air_to_air_sensible_and_latent.setHeatExchangerType(erv_info['HeatExchangerType'])
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(erv_info['SensibleEffectivenessat100HeatingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100HeatingAirFlow(erv_info['LatentEffectivenessat100HeatingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75HeatingAirFlow(erv_info['SensibleEffectivenessat75HeatingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75HeatingAirFlow(erv_info['LatentEffectivenessat75HeatingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100CoolingAirFlow(erv_info['SensibleEffectivenessat100CoolingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100CoolingAirFlow(erv_info['LatentEffectivenessat100CoolingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75CoolingAirFlow(erv_info['SensibleEffectivenessat75CoolingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75CoolingAirFlow(erv_info['LatentEffectivenessat75CoolingAirFlow'])
+    heat_exchanger_air_to_air_sensible_and_latent.setSupplyAirOutletTemperatureControl(erv_info['SupplyAirOutletTemperatureControl'])
+    heat_exchanger_air_to_air_sensible_and_latent.setFrostControlType(erv_info['FrostControlType'])
+    heat_exchanger_air_to_air_sensible_and_latent.setEconomizerLockout(erv_info['EconomizerLockout'])
+    heat_exchanger_air_to_air_sensible_and_latent.setThresholdTemperature(erv_info['ThresholdTemperature'])
+    heat_exchanger_air_to_air_sensible_and_latent.setInitialDefrostTimeFraction(erv_info['InitialDefrostTimeFraction'])
+    return true
+  end
+
+
   # Determine if demand control ventilation (DCV) is
   # required for this air loop.
   #
@@ -1930,6 +1958,193 @@ class NECB2011
       day_schedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), data[:clg_value])
     end
     return clg_availability_sch, htg_availability_sch
+  end
+
+  #This method takes the eff_mod hash which should have the following format:
+  #"eff_mod": {
+  #    "boiler_eff": {
+  #        "eff": -1,
+  #        "part_load": {
+  #            "name":  "SAMPLE_CUSTOM_CURVE"
+  #            "form":  "Cubic"
+  #            "independent_variable_1": "QRatio",
+  #            "independent_variable_2": nil,
+  #            "coeff_1": 1,
+  #            "coeff_2": 2,
+  #            "coeff_3": 3,
+  #            "coeff_4": 4,
+  #            "coeff_5": null,
+  #            "coeff_6": null,
+  #            "coeff_7": null,
+  #            "coeff_8": null,
+  #            "coeff_9": null,
+  #            "coeff_10": null,
+  #            "minimum_independent_variable_1": 0.0,
+  #            "maximum_independent_variable_1": 1.0,
+  #            "minimum_independent_variable_2": null,
+  #            "maximum_independent_variable_2": null,
+  #            "minimum_dependent_variable_output": null,
+  #            "maximum_dependent_variable_output": null,
+  #            "notes": "Test entry.  You don't really need to inculde notes but they are handy for others looking at what you did."
+  #        }
+  #    },
+  #    "furnace_eff": {
+  #        "eff": -1,
+  #        "part_load": {
+  #            "name":  "SAMPLE_CUSTOM_CURVE"
+  #            "form":  "Cubic"
+  #            "independent_variable_1": "QRatio",
+  #            "independent_variable_2": nil,
+  #            "coeff_1": 1,
+  #            "coeff_2": 2,
+  #            "coeff_3": 3,
+  #            "coeff_4": 4,
+  #            "coeff_5": null,
+  #            "coeff_6": null,
+  #            "coeff_7": null,
+  #            "coeff_8": null,
+  #            "coeff_9": null,
+  #            "coeff_10": null,
+  #            "minimum_independent_variable_1": 0.0,
+  #            "maximum_independent_variable_1": 1.0,
+  #            "minimum_independent_variable_2": null,
+  #            "maximum_independent_variable_2": null,
+  #            "minimum_dependent_variable_output": null,
+  #            "maximum_dependent_variable_output": null,
+  #            "notes": "Test entry.  You don't really need to inculde notes but they are handy for others looking at what you did."
+  #        }
+  #    }
+  #}
+  # Where if a component key (e.g. "boiler_eff") is present the method calls the appropriate method to find
+  # equipment matching the key name (eg. boilers, furnaces, shw tank) and sets the efficiency or part load curve passed
+  # by the appropriate key.  If any of the component keys are nil the method ignores the associated equipment
+  # type keeps and keeps the efficiency set by the associated standard.  If the hash is nil then the method does
+  # nothing.
+  def modify_equipment_efficiency(model:, eff_mod: nil)
+    return if eff_mod.nil?
+    mod_boiler_efficiency(model: model, boiler_eff: eff_mod['boiler_eff']) unless eff_mod['boiler_eff'].nil?
+    #mod_furnace_efficiency(model: model, furnace_eff: eff_mod['furnace_eff']) unless eff_mod['furnace_eff'].nil?
+  end
+
+  # This model takes an OS model and a boiler efficiency hash sent to it with the following form:
+  #    "boiler_eff": {
+  #        "eff": -1,
+  #        "part_load": {
+  #            "name":  "SAMPLE_CUSTOM_CURVE"
+  #            "form":  "Cubic"
+  #            "independent_variable_1": "QRatio",
+  #            "independent_variable_2": nil,
+  #            "coeff_1": 1,
+  #            "coeff_2": 2,
+  #            "coeff_3": 3,
+  #            "coeff_4": 4,
+  #            "coeff_5": null,
+  #            "coeff_6": null,
+  #            "coeff_7": null,
+  #            "coeff_8": null,
+  #            "coeff_9": null,
+  #            "coeff_10": null,
+  #            "minimum_independent_variable_1": 0.0,
+  #            "maximum_independent_variable_1": 1.0,
+  #            "minimum_independent_variable_2": null,
+  #            "maximum_independent_variable_2": null,
+  #            "minimum_dependent_variable_output": null,
+  #            "maximum_dependent_variable_output": null
+  #            "notes": "Test entry.  You don't really need to inculde notes but they are handy for others looking at what you did."
+  #        }
+  #    }
+  # If both "eff" and "part_load" are nil then it does nothing.  If an efficiency is set but is not between 0.1 and 1.0
+  # and "part_load" is nil then it does nothing.  Otherwise, it looks for plant look supply components that match the
+  # "OS_BoilerHotWater" type.  If it finds one it then calls the reset_boiler_efficiency method which resets either the
+  # boiler efficiency, part load efficiency curve, or both.  The method also looks for a condensing boiler cut-off
+  # efficiency above which the boiler is considered to be a condensing boiler unless a custom part load curve is set.
+  def mod_boiler_efficiency(model:, boiler_eff: nil)
+    return if boiler_eff.nil?
+    unless boiler_eff['eff'].nil?
+      boiler_eff['eff'] = nil if (boiler_eff['eff'] < 0.01 || boiler_eff['eff'] > 1.0)
+    end
+    return if (boiler_eff['eff'].nil? && boiler_eff['part_load'].nil?)
+    plantloops = model.getPlantLoops
+    return if plantloops.nil?
+    cond_lim = @standards_data['constants']['condensing_boiler_lim']['value'].to_f
+    plantloops.sort.each do |plantloop|
+      plantloop.supplyComponents.sort.each do |supplycomp|
+        case supplycomp.iddObjectType.valueName.to_s
+        when 'OS_CentralHeatPumpSystem'
+          puts 'hello'
+        when 'OS_Boiler_HotWater'
+          reset_boiler_efficiency(model: model, component: supplycomp.to_BoilerHotWater.get, eff: boiler_eff, cond_lim: cond_lim)
+        end
+      end
+    end
+  end
+
+  # This method takes an OS model, a "OS_BoilerHotWater" type compenent, condensing efficiency limit and an efficiency
+  # hash which looks like:
+  #    "eff": {
+  #        "eff": -1,
+  #        "part_load": {
+  #            "name":  "SAMPLE_CUSTOM_CURVE"
+  #            "form":  "Cubic"
+  #            "dependent_variable": "FIRRatio",
+  #            "independent_variable_1": "QRatio",
+  #            "independent_variable_2": nil,
+  #            "coeff_1": 1,
+  #            "coeff_2": 2,
+  #            "coeff_3": 3,
+  #            "coeff_4": 4,
+  #            "coeff_5": null,
+  #            "coeff_6": null,
+  #            "coeff_7": null,
+  #            "coeff_8": null,
+  #            "coeff_9": null,
+  #            "coeff_10": null,
+  #            "minimum_independent_variable_1": 0.0,
+  #            "maximum_independent_variable_1": 1.0,
+  #            "minimum_independent_variable_2": null,
+  #            "maximum_independent_variable_2": null,
+  #            "minimum_dependent_variable_output": null,
+  #            "maximum_dependent_variable_output": null,
+  #            "notes": "Test entry.  You don't really need to inculde notes but they are handy for others looking at what you did."
+  #        }
+  #    }
+  # If eff["eff"] is not nil then it sets the boiler efficiency to that number.  The part load curve is defaulted to a
+  # NECB 2011 non-condensing boiler.  If eff["part_load"] is not set and the efficiency of the boiler is >= the
+  # condensing efficiency limit (cond_lim) then the part load curve is set to the NECB 2011 condensing boiler part load
+  # curve.  If eff["part_load"] is set then the method adds the curve to the standards_data curves.  It then uses the
+  # "model_add_curve" to add the look for the part load curve in standards_data and add it to the OS model.  It then
+  # Sets the part load efficiency curve for the boiler to the curve that was just set.  Very few (or no) checks are done
+  # to part load curves so if they are not entered with care it will crash.
+  def reset_boiler_efficiency(model:, component:, eff:, cond_lim:)
+    component.setNominalThermalEfficiency(eff['eff']) unless eff['eff'].nil?
+    part_load_curve_name = @standards_data['constants']['non_condensing_boiler_part_load_curve']['value'].to_s
+    if eff['part_load'].nil?
+      if eff['eff'] >= cond_lim
+        part_load_curve_name = @standards_data['constants']['condensing_boiler_part_load_curve']['value'].to_s
+      end
+    else
+      # Check to see if a curve with the same name already exists in standards data
+      part_load_curve_name = eff["part_load"]["name"]
+      existing_curve = @standards_data['curves'].select { |curve| curve['name'] == part_load_curve_name }
+      if existing_curve.empty?
+        @standards_data['curves'] << eff["part_load"]
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "A part load curve with the name #{part_load_curve_name} already exists. The existing curve will be used. The custom curve will be ignored.")
+      end
+    end
+    part_load_curve_data = (@standards_data['curves'].select { |curve| curve['name'] == part_load_curve_name })[0]
+    if part_load_curve_data['independent_variable_1'].to_s.upcase == 'TEnteringBoiler'.upcase || part_load_curve_data['independent_variable_2'].to_s.upcase == 'TEnteringBoiler'.upcase
+      component.setEfficiencyCurveTemperatureEvaluationVariable('EnteringBoiler')
+    elsif part_load_curve_data['independent_variable_1'].to_s.upcase == 'TLeavingBoiler'.upcase || part_load_curve_data['independent_variable_2'].to_s.upcase == 'TLeavingBoiler'.upcase
+      component.setEfficiencyCurveTemperatureEvaluationVariable('LeavingBoiler')
+    end
+    part_load_curve = model_add_curve(model, part_load_curve_name)
+    if part_load_curve
+      component.setNormalizedBoilerEfficiencyCurve(part_load_curve)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "There was a problem with the custom boiler curve #{part_load_curve_name} for #{component.name}, the curve will not be set.")
+      successfully_set_all_properties = false
+    end
   end
 
 
