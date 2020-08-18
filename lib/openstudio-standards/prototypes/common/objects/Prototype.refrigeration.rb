@@ -65,15 +65,6 @@ class Standard
         anti_sweat_heater_control = props['anti_sweat_heater_control']
       end
     end
-    if props['restocking_schedule']
-      if props['restocking_schedule'].downcase == 'always off'
-        restocking_sch = model.alwaysOffDiscreteSchedule
-      else
-        restocking_sch = model_add_schedule(model, props['restocking_schedule'])
-      end
-    else
-      restocking_sch = model.alwaysOffDiscreteSchedule
-    end
     if props['fractionofantisweatheaterenergytocase']
       fractionofantisweatheaterenergytocase = props['fractionofantisweatheaterenergytocase']
     end
@@ -128,7 +119,17 @@ class Standard
     else
       ref_case.setUnderCaseHVACReturnAirFraction(0)
     end
-    ref_case.setRefrigeratedCaseRestockingSchedule(restocking_sch)
+    if props['restocking_schedule']
+      if props['restocking_schedule'].downcase == 'always off'
+        # restocking_sch = model.alwaysOffDiscreteSchedule
+        ref_case.resetRefrigeratedCaseRestockingSchedule()
+      else
+        restocking_sch = model_add_schedule(model, props['restocking_schedule'])
+        ref_case.setRefrigeratedCaseRestockingSchedule(restocking_sch)
+      end
+    else
+      ref_case.resetRefrigeratedCaseRestockingSchedule()
+    end
 
     if props['case_category']
       ref_case_addprops = ref_case.additionalProperties
@@ -231,7 +232,6 @@ class Standard
       height_of_stocking_doors = OpenStudio.convert(props['height_of_stocking_doors'], 'ft', 'm').get
     end
     lightingschedule = props['lighting_schedule']
-    restockingschedule = props['restocking_schedule']
     temperatureterminationdefrostfractiontoice = props['temperatureterminationdefrostfractiontoice']
 
     # Calculated properties
@@ -311,9 +311,19 @@ class Standard
     if props['temperatureterminationdefrostfractiontoice']
       ref_walkin.setTemperatureTerminationDefrostFractiontoIce(temperatureterminationdefrostfractiontoice)
     end
+
     if props['restocking_schedule']
-      ref_walkin.setRestockingSchedule(model_add_schedule(model, restockingschedule))
+      if props['restocking_schedule'].downcase == 'always off'
+        # restocking_sch = model.alwaysOffDiscreteSchedule
+        ref_walkin.resetRestockingSchedule()
+      else
+        restocking_sch = model_add_schedule(model, props['restocking_schedule'])
+        ref_walkin.setRestockingSchedule(restocking_sch)
+      end
+    else
+      ref_walkin.resetRestockingSchedule()
     end
+
     ref_walkin.setLightingSchedule(model_add_schedule(model, lightingschedule))
     ref_walkin.setZoneBoundaryStockingDoorOpeningScheduleFacingZone(model_add_schedule(model, 'door_wi_sched'))
 

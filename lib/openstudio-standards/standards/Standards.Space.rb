@@ -817,7 +817,7 @@ class Standard
   # @todo stop skipping non-horizontal roofs
   # @todo Determine the illuminance setpoint for the controls based on space type
   # @todo rotate sensor to face window (only needed for glare calcs)
-  def space_add_daylighting_controls(space, remove_existing_controls, draw_daylight_areas_for_debugging = false)
+  def space_add_daylighting_controls(space, remove_existing_controls, draw_daylight_areas_for_debugging = false, climate_zone)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "******For #{space.name}, adding daylight controls.")
 
     # Check for existing daylighting controls
@@ -858,7 +858,7 @@ class Standard
     areas = space_daylighted_areas(space, draw_daylight_areas_for_debugging)
 
     # Determine the type of daylighting controls required
-    req_top_ctrl, req_pri_ctrl, req_sec_ctrl = space_daylighting_control_required?(space, areas)
+    req_top_ctrl, req_pri_ctrl, req_sec_ctrl = space_daylighting_control_required?(space, areas, climate_zone)
 
     # Stop here if no controls are required
     if !req_top_ctrl && !req_pri_ctrl && !req_sec_ctrl
@@ -1067,7 +1067,8 @@ class Standard
                                                                                                              sorted_skylights,
                                                                                                              req_top_ctrl,
                                                                                                              req_pri_ctrl,
-                                                                                                             req_sec_ctrl)
+                                                                                                             req_sec_ctrl,
+                                                                                                             climate_zone)
 
     # Further adjust the sensor controlled fraction for the three
     # office prototypes based on assumptions about geometry that is not explicitly
@@ -1202,7 +1203,7 @@ class Standard
   # @param space [OpenStudio::Model::Space] the space in question
   # @param areas [Hash] a hash of daylighted areas
   # @return [Array<Bool>] req_top_ctrl, req_pri_ctrl, req_sec_ctrl
-  def space_daylighting_control_required?(space, areas)
+  def space_daylighting_control_required?(space, areas, climate_zone)
     req_top_ctrl = false
     req_pri_ctrl = false
     req_sec_ctrl = false
@@ -1222,7 +1223,8 @@ class Standard
                                               sorted_skylights,
                                               req_top_ctrl,
                                               req_pri_ctrl,
-                                              req_sec_ctrl)
+                                              req_sec_ctrl,
+                                              climate_zone)
     sensor_1_frac = 0.0
     sensor_2_frac = 0.0
     sensor_1_window = nil

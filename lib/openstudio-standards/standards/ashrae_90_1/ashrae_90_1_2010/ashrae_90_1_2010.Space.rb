@@ -20,7 +20,7 @@ class ASHRAE9012010 < ASHRAE901
   # @param space [OpenStudio::Model::Space] the space in question
   # @param areas [Hash] a hash of daylighted areas
   # @return [Array<Bool>] req_top_ctrl, req_pri_ctrl, req_sec_ctrl
-  def space_daylighting_control_required?(space, areas)
+  def space_daylighting_control_required?(space, areas, climate_zone)
     req_top_ctrl = true
     req_pri_ctrl = true
     req_sec_ctrl = false
@@ -77,7 +77,7 @@ class ASHRAE9012010 < ASHRAE901
         req_pri_ctrl = false
         req_sec_ctrl = false
       # Strip mall
-      when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3', 'Strip mall - type 0A', 'Strip mall - type 0B'
+      when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3'
         req_pri_ctrl = false
         req_sec_ctrl = false
       # Residential apartments
@@ -106,7 +106,8 @@ class ASHRAE9012010 < ASHRAE901
                                               sorted_skylights,
                                               req_top_ctrl,
                                               req_pri_ctrl,
-                                              req_sec_ctrl)
+                                              req_sec_ctrl,
+                                              climate_zone)
     sensor_1_frac = 0.0
     sensor_2_frac = 0.0
     sensor_1_window = nil
