@@ -7,6 +7,8 @@ require 'open3'
 ProcessorsUsed = (Parallel.processor_count - 1).floor
 
 
+
+
 class String
   # colorization
   def colorize(color_code)
@@ -68,7 +70,8 @@ end
 
 class ParallelTests
 
-  def run(file_list, test_output_folder)
+  def run(file_list, test_output_folder, processors = nil)
+    processors = ProcessorsUsed if processors.nil?
     did_all_tests_pass = true
     @test_output_folder = test_output_folder
     @full_file_list = nil
@@ -115,10 +118,10 @@ class ParallelTests
       eval('module Minitest @@installed_at_exit = false end')
     end
 
-    puts "Running #{test_files_and_test_names.size} tests from #{@full_file_list.size} tests suites in parallel using #{ProcessorsUsed} of #{Parallel.processor_count} available cpus."
+    puts "Running #{test_files_and_test_names.size} tests from #{@full_file_list.size} tests suites in parallel using #{processors} of #{Parallel.processor_count} available cpus."
     puts "To increase or decrease the ProcessorsUsed, please edit the test/test_run_all_locally.rb file."
     timings_json = Hash.new()
-    Parallel.each(test_files_and_test_names, in_threads: (ProcessorsUsed),progress: "Progress :") do |test_file_test_name|
+    Parallel.each(test_files_and_test_names, in_threads: (processors),progress: "Progress :") do |test_file_test_name|
       test_file = test_file_test_name[0]
       file_name = test_file.gsub(/^.+(openstudio-standards\/test\/)/, '')
       test_name = test_file_test_name[1]
@@ -140,7 +143,7 @@ class ParallelTests
         failed_runs << [data["test_file"], data['test_name']]
       end
       puts "Some tests failed the first time. This may have been due to computer performance issues. Rerunning failed tests..."
-      Parallel.each(failed_runs, in_threads: (ProcessorsUsed), progress: "Progress :") do |test_file_test_name|
+      Parallel.each(failed_runs, in_threads: (processors), progress: "Progress :") do |test_file_test_name|
         test_file = test_file_test_name[0]
         file_name = test_file.gsub(/^.+(openstudio-standards\/test\/)/, '')
         test_name = test_file_test_name[1]
