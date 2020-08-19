@@ -69,6 +69,7 @@ necb/unit_tests/tests/test_necb_shw.rb
 necb/unit_tests/tests/test_remove_duplicate_materials_and_constructions.rb
 necb/unit_tests/tests/test_necb_pumppower_rules.rb
 necb/unit_tests/tests/test_necb_weather.rb
+necb/unit_tests/tests/test_necb_weather2.rb
 necb/unit_tests/tests/test_necb_loop_rules.rb
 necb/unit_tests/tests/test_necb_total_and_tz_ceiling_centroid.rb
 necb/unit_tests/tests/test_necb_chiller_rules.rb
