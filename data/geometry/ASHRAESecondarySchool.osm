@@ -880,7 +880,7 @@ OS:Space,
 
 OS:SubSurface,
   {6f7f3c31-4358-4fd4-b22c-a032cbdf881f}, !- Handle
-  Cafeteria_ZN_1_FLR_1_Wall_2_Window_1,   !- Name
+  Cafeteria_ZN_1_FLR_1_Wall_2_Window1,   !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {3e08178f-52af-43f0-9272-fda193992b8a}, !- Surface Name
@@ -892,12 +892,12 @@ OS:SubSurface,
   ,                                       !- Number of Vertices
   24, 0.05, 2.50539,                      !- X,Y,Z Vertex 1 {m}
   24, 0.05, 1.0305818,                    !- X,Y,Z Vertex 2 {m}
-  24, 25.95, 1.0305818,                   !- X,Y,Z Vertex 3 {m}
-  24, 25.95, 2.50539;                     !- X,Y,Z Vertex 4 {m}
+  24, 1.2692, 1.0305818,                   !- X,Y,Z Vertex 3 {m}
+  24, 1.2692, 2.50539;                     !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {6f2f3c21-4352-2fd4-b22d-d032cbdf883d}, !- Handle
-  Cafeteria_ZN_1_FLR_1_Wall_2_Window_2,   !- Name
+  Cafeteria_ZN_1_FLR_1_Wall_2_Window2,   !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {3e08178f-52af-43f0-9272-fda193992b8a}, !- Surface Name
@@ -3476,8 +3476,8 @@ OS:SubSurface,
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
   24, 0.05, 6.502695,                     !- X,Y,Z Vertex 1 {m}
-  24, 0.05, 5.1,                          !- X,Y,Z Vertex 2 {m}
-  24, 51.95, 5.1,                         !- X,Y,Z Vertex 3 {m}
+  24, 0.05, 3.69730532,                          !- X,Y,Z Vertex 2 {m}
+  24, 51.95, 3.69730532,                         !- X,Y,Z Vertex 3 {m}
   24, 51.95, 6.502695;                    !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
@@ -7068,7 +7068,7 @@ OS:SubSurface,
   ,                                       !- Number of Vertices
   0, 23.5116, 2.508295,                   !- X,Y,Z Vertex 1 {m}
   0, 23.5116, 0.9905006,                  !- X,Y,Z Vertex 2 {m}
-  0, 9.058, 0.9905006,                    !- X,Y,Z Vertex 3 {m}
+  0, 9.05, 0.9905006,                    !- X,Y,Z Vertex 3 {m}
   0, 9.05, 2.508295;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
@@ -8324,7 +8324,7 @@ OS:Surface,
 
 OS:SubSurface,
   {2cd17a5f-2566-4247-a8c4-5d024d850058}, !- Handle
-  Aux_Gym_ZN_1_FLR_1_Wall_1_window_1,     !- Name
+  Aux_Gym_ZN_1_FLR_2_Wall_1_window_1,     !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {719c62f3-08bf-4162-8824-54c1a06440fe}, !- Surface Name
@@ -8334,10 +8334,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0.05, 0, 2.505845,                      !- X,Y,Z Vertex 1 {m}
-  0.05, 0, 1.1,                           !- X,Y,Z Vertex 2 {m}
-  23.95, 0, 1.1,                          !- X,Y,Z Vertex 3 {m}
-  23.95, 0, 2.505845;                     !- X,Y,Z Vertex 4 {m}
+  0.05, 0, 6.505845,                      !- X,Y,Z Vertex 1 {m}
+  0.05, 0, 3.69415572,                           !- X,Y,Z Vertex 2 {m}
+  23.95, 0, 3.69415572,                          !- X,Y,Z Vertex 3 {m}
+  23.95, 0, 6.505845;                     !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {ce2a0f30-c572-4bd5-a572-df405d2faf7e}, !- Handle

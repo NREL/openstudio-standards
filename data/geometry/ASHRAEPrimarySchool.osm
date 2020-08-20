@@ -359,7 +359,7 @@ OS:Space,
 
 OS:SubSurface,
   {9aa60026-d9c3-4cf0-b4be-7a2dd0bdf537}, !- Handle
-  Main_Corridor_ZN_1_FLR_1_Wall_7_window_1, !- Name
+  Main_Corridor_ZN_1_FLR_1_Wall_7_Window1, !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {36086409-b5d6-4694-8602-b8abaa99ef6c}, !- Surface Name
@@ -369,10 +369,27 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0, 20.95, 2.5157,                       !- X,Y,Z Vertex 1 {m}
-  0, 20.95, 1.1,                          !- X,Y,Z Vertex 2 {m}
-  0, 12.05, 1.1,                          !- X,Y,Z Vertex 3 {m}
-  0, 12.05, 2.5157;                       !- X,Y,Z Vertex 4 {m}
+  0, 20.95, 2.515715,                       !- X,Y,Z Vertex 1 {m}
+  0, 20.95, 0.8752862,                          !- X,Y,Z Vertex 2 {m}
+  0, 19.7308, 0.8752862,                          !- X,Y,Z Vertex 3 {m}
+  0, 19.7308, 2.515715;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {9ab60b26-d1c3-4c20-b5be-7a2da0bdf531}, !- Handle
+  Main_Corridor_ZN_1_FLR_1_Wall_7_Window2, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {36086409-b5d6-4694-8602-b8abaa99ef6c}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  0, 18.5116, 2.515715,                       !- X,Y,Z Vertex 1 {m}
+  0, 18.5116, 0.8752862,                          !- X,Y,Z Vertex 2 {m}
+  0, 12.05, 0.8752862,                          !- X,Y,Z Vertex 3 {m}
+  0, 12.05, 2.515715;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {36086409-b5d6-4694-8602-b8abaa99ef6c}, !- Handle
@@ -836,7 +853,7 @@ OS:Space,
 
 OS:SubSurface,
   {ff22546f-ea8b-4b86-b8cb-86ce91bd3e2e}, !- Handle
-  Corner_Class_2_Pod_1_ZN_1_FLR_1_Wall_3_window_1, !- Name
+  Corner_Class_2_Pod_1_ZN_1_FLR_1_Wall_3_Window1, !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {6b952f67-0b5a-42eb-8d3f-9fa33628765d}, !- Surface Name
@@ -846,10 +863,27 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  10.95, 9, 2.5128,                       !- X,Y,Z Vertex 1 {m}
-  10.95, 9, 1.1,                          !- X,Y,Z Vertex 2 {m}
-  0.05, 9, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0.05, 9, 2.5128;                        !- X,Y,Z Vertex 4 {m}
+  10.95, 9, 2.512845,                       !- X,Y,Z Vertex 1 {m}
+  10.95, 9, 0.9220476,                          !- X,Y,Z Vertex 2 {m}
+  9.7308, 9, 0.9220476,                           !- X,Y,Z Vertex 3 {m}
+  9.7308, 9, 2.512845;                        !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {fa22546a-ea22-4b8a-b8cd-86ce91bd3e2d}, !- Handle
+  Corner_Class_2_Pod_1_ZN_1_FLR_1_Wall_3_Window2, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {6b952f67-0b5a-42eb-8d3f-9fa33628765d}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  8.5116, 9, 2.512845,                       !- X,Y,Z Vertex 1 {m}
+  8.5116, 9, 0.9220476,                          !- X,Y,Z Vertex 2 {m}
+  0.05, 9, 0.9220476,                           !- X,Y,Z Vertex 3 {m}
+  0.05, 9, 2.512845;                        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {6b952f67-0b5a-42eb-8d3f-9fa33628765d}, !- Handle
@@ -1075,7 +1109,7 @@ OS:Space,
 
 OS:SubSurface,
   {40f50d14-1fe5-4034-b043-830c947b957b}, !- Handle
-  Mult_Class_1_Pod_1_ZN_1_FLR_1_Wall_1_window_1, !- Name
+  Mult_Class_1_Pod_1_ZN_1_FLR_1_Wall_1_Window1, !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {e2ce013a-6c60-4a2f-a494-dacc088ce381}, !- Surface Name
@@ -1085,10 +1119,44 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0.05, 0, 2.5026,                        !- X,Y,Z Vertex 1 {m}
-  0.05, 0, 1.1,                           !- X,Y,Z Vertex 2 {m}
-  52.95, 0, 1.1,                          !- X,Y,Z Vertex 3 {m}
-  52.95, 0, 2.5026;                       !- X,Y,Z Vertex 4 {m}
+  0.05, 0, 2.50266,                        !- X,Y,Z Vertex 1 {m}
+  0.05, 0, 1.0322328,                           !- X,Y,Z Vertex 2 {m}
+  16.870642, 0, 1.0322328,                          !- X,Y,Z Vertex 3 {m}
+  16.870642, 0, 2.50266;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {40f50d22-1fe6-4036-b0a3-830c947b95aa}, !- Handle
+  Mult_Class_1_Pod_1_ZN_1_FLR_1_Wall_1_Window2, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {e2ce013a-6c60-4a2f-a494-dacc088ce381}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  18.089842, 0, 2.50266,                        !- X,Y,Z Vertex 1 {m}
+  18.089842, 0, 1.0322328,                           !- X,Y,Z Vertex 2 {m}
+  34.910484, 0, 1.0322328,                          !- X,Y,Z Vertex 3 {m}
+  34.910484, 0, 2.50266;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {40f51d22-1aa6-4136-a0a3-831a947b95aa}, !- Handle
+  Mult_Class_1_Pod_1_ZN_1_FLR_1_Wall_1_Window3, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {e2ce013a-6c60-4a2f-a494-dacc088ce381}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  36.129684, 0, 2.50266,                        !- X,Y,Z Vertex 1 {m}
+  36.129684, 0, 1.0322328,                           !- X,Y,Z Vertex 2 {m}
+  52.95, 0, 1.0322328,                          !- X,Y,Z Vertex 3 {m}
+  52.95, 0, 2.50266;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {524912e0-19ca-4fb8-b643-f76e94d18479}, !- Handle
@@ -1346,10 +1414,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0, 8.95, 2.5157,                        !- X,Y,Z Vertex 1 {m}
+  0, 8.95, 2.515715,                        !- X,Y,Z Vertex 1 {m}
   0, 8.95, 1.1,                           !- X,Y,Z Vertex 2 {m}
   0, 0.05, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0, 0.05, 2.5157;                        !- X,Y,Z Vertex 4 {m}
+  0, 0.05, 2.515715;                        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {764522c7-be2e-445d-a336-172bbfe23441}, !- Handle
@@ -1530,7 +1598,7 @@ OS:Surface,
 
 OS:SubSurface,
   {0adb70b3-d7b0-4eb5-97a4-2856dc00fe16}, !- Handle
-  Mult_Class_2_Pod_1_ZN_1_FLR_1_Wall_3_window_1, !- Name
+  Mult_Class_2_Pod_1_ZN_1_FLR_1_Wall_3_Window1, !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {b9ecf20c-a45e-4c89-8a09-a285aa5f2aa3}, !- Surface Name
@@ -1540,10 +1608,44 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  52.95, 9, 2.5026,                       !- X,Y,Z Vertex 1 {m}
-  52.95, 9, 1.1,                          !- X,Y,Z Vertex 2 {m}
-  0.05, 9, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0.05, 9, 2.5026;                        !- X,Y,Z Vertex 4 {m}
+  52.95, 9, 2.50266,                       !- X,Y,Z Vertex 1 {m}
+  52.95, 9, 1.0322328,                          !- X,Y,Z Vertex 2 {m}
+  36.129358, 9, 1.0322328,                           !- X,Y,Z Vertex 3 {m}
+  36.129358, 9, 2.50266;                        !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {1adb70c3-d7d0-4ea5-97a2-2856dc00fe26}, !- Handle
+  Mult_Class_2_Pod_1_ZN_1_FLR_1_Wall_3_Window2, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {b9ecf20c-a45e-4c89-8a09-a285aa5f2aa3}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  34.910158, 9, 2.50266,                       !- X,Y,Z Vertex 1 {m}
+  34.910158, 9, 1.0322328,                          !- X,Y,Z Vertex 2 {m}
+  18.089516, 9, 1.0322328,                           !- X,Y,Z Vertex 3 {m}
+  18.089516, 9, 2.50266;                        !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {1adb71b3-d7b0-4bb5-97b2-2856dc00fe33}, !- Handle
+  Mult_Class_2_Pod_1_ZN_1_FLR_1_Wall_3_Window3, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {b9ecf20c-a45e-4c89-8a09-a285aa5f2aa3}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  16.870316, 9, 2.50266,                       !- X,Y,Z Vertex 1 {m}
+  16.870316, 9, 1.0322328,                          !- X,Y,Z Vertex 2 {m}
+  0.05, 9, 1.0322328,                           !- X,Y,Z Vertex 3 {m}
+  0.05, 9, 2.50266;                        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {b9ecf20c-a45e-4c89-8a09-a285aa5f2aa3}, !- Handle
@@ -1662,7 +1764,7 @@ OS:Surface,
 
 OS:SubSurface,
   {d019e447-c24d-4e5c-9c8e-0eca201ad039}, !- Handle
-  Mult_Class_2_Pod_3_ZN_1_FLR_1_Wall_3_window_1, !- Name
+  Mult_Class_2_Pod_3_ZN_1_FLR_1_Wall_3_Window1, !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {e22ab737-3dfa-4d61-b5d4-2bd347e161d4}, !- Surface Name
@@ -1672,10 +1774,44 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  34.95, 9, 2.504,                        !- X,Y,Z Vertex 1 {m}
-  34.95, 9, 1.1,                          !- X,Y,Z Vertex 2 {m}
-  0.05, 9, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0.05, 9, 2.504;                         !- X,Y,Z Vertex 4 {m}
+  34.95, 9, 2.504025,                        !- X,Y,Z Vertex 1 {m}
+  34.95, 9, 0.9945392,                          !- X,Y,Z Vertex 2 {m}
+  24.129346, 9, 0.9945392,                           !- X,Y,Z Vertex 3 {m}
+  24.129346, 9, 2.504025;                         !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {d019e423-c24a-4e5a-9c1e-0eca201ad022}, !- Handle
+  Mult_Class_2_Pod_3_ZN_1_FLR_1_Wall_3_Window2, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {e22ab737-3dfa-4d61-b5d4-2bd347e161d4}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  22.910146, 9, 2.504025,                        !- X,Y,Z Vertex 1 {m}
+  22.910146, 9, 0.9945392,                          !- X,Y,Z Vertex 2 {m}
+  12.089492, 9, 0.9945392,                           !- X,Y,Z Vertex 3 {m}
+  12.089492, 9, 2.504025;                         !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {d019e422-c24d-4e5d-9c1d-0eca201aaa21}, !- Handle
+  Mult_Class_2_Pod_3_ZN_1_FLR_1_Wall_3_Window3, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {e22ab737-3dfa-4d61-b5d4-2bd347e161d4}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  10.870292, 9, 2.504025,                        !- X,Y,Z Vertex 1 {m}
+  10.870292, 9, 0.9945392,                          !- X,Y,Z Vertex 2 {m}
+  0.05, 9, 0.9945392,                           !- X,Y,Z Vertex 3 {m}
+  0.05, 9, 2.504025;                         !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {e22ab737-3dfa-4d61-b5d4-2bd347e161d4}, !- Handle
@@ -1713,7 +1849,7 @@ OS:Surface,
 
 OS:SubSurface,
   {35b77348-1403-49b8-95e8-2a89588355de}, !- Handle
-  Offices_ZN_1_FLR_1_Wall_1_window_1,     !- Name
+  Offices_ZN_1_FLR_1_Wall_1_Window1,     !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {ea22017e-1e72-407c-b349-54cf55dfc0c1}, !- Surface Name
@@ -1723,10 +1859,27 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0.05, 0, 2.5067,                        !- X,Y,Z Vertex 1 {m}
-  0.05, 0, 1.1,                           !- X,Y,Z Vertex 2 {m}
-  20.95, 0, 1.1,                          !- X,Y,Z Vertex 3 {m}
-  20.95, 0, 2.5067;                       !- X,Y,Z Vertex 4 {m}
+  0.05, 0, 2.506685,                        !- X,Y,Z Vertex 1 {m}
+  0.05, 0, 1.0128526,                           !- X,Y,Z Vertex 2 {m}
+  1.2692, 0, 1.0128526,                          !- X,Y,Z Vertex 3 {m}
+  1.2692, 0, 2.506685;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {7cf7228e-90be-4db5-abb4-6a21b396d386}, !- Handle
+  Offices_ZN_1_FLR_1_Wall_1_Window2,     !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {ea22017e-1e72-407c-b349-54cf55dfc0c1}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  2.4884, 0, 2.506685,                       !- X,Y,Z Vertex 1 {m}
+  2.4884, 0, 1.0128526,                          !- X,Y,Z Vertex 2 {m}
+  20.95, 0, 1.0128526,                         !- X,Y,Z Vertex 3 {m}
+  20.95, 0, 2.506685;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {ea22017e-1e72-407c-b349-54cf55dfc0c1}, !- Handle
@@ -1781,10 +1934,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0, 2.95, 2.5483,                        !- X,Y,Z Vertex 1 {m}
+  0, 2.95, 2.548265,                        !- X,Y,Z Vertex 1 {m}
   0, 2.95, 1.1,                           !- X,Y,Z Vertex 2 {m}
   0, 0.05, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0, 0.05, 2.5483;                        !- X,Y,Z Vertex 4 {m}
+  0, 0.05, 2.548265;                        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {858988b8-1945-478c-ba3b-022d651d9144}, !- Handle
@@ -1890,7 +2043,7 @@ OS:Surface,
 
 OS:SubSurface,
   {9dfc64ba-c41b-4d80-a81c-4b25be6f83f1}, !- Handle
-  Cafeteria_ZN_1_FLR_1_Wall_2_window_1,   !- Name
+  Cafeteria_ZN_1_FLR_1_Wall_2_Window1,   !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {abffb2bc-3eaf-4b22-8e08-5abd7ea350e6}, !- Surface Name
@@ -1900,10 +2053,27 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  21, 0.05, 2.5094,                       !- X,Y,Z Vertex 1 {m}
-  21, 0.05, 1.1,                          !- X,Y,Z Vertex 2 {m}
-  21, 14.95, 1.1,                         !- X,Y,Z Vertex 3 {m}
-  21, 14.95, 2.5094;                      !- X,Y,Z Vertex 4 {m}
+  21, 0.05, 2.50938,                       !- X,Y,Z Vertex 1 {m}
+  21, 0.05, 0.974397,                          !- X,Y,Z Vertex 2 {m}
+  21, 1.2692, 0.974397,                         !- X,Y,Z Vertex 3 {m}
+  21, 1.2692, 2.50938;                      !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {9dfc34bd-c43b-4d8f-a81d-4b25be62a3f1}, !- Handle
+  Cafeteria_ZN_1_FLR_1_Wall_2_Window2,   !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {abffb2bc-3eaf-4b22-8e08-5abd7ea350e6}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  21, 2.4884, 2.50938,                       !- X,Y,Z Vertex 1 {m}
+  21, 2.4884, 0.974397,                          !- X,Y,Z Vertex 2 {m}
+  21, 14.95, 0.974397,                         !- X,Y,Z Vertex 3 {m}
+  21, 14.95, 2.50938;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {91aa73b9-2fcf-4a57-8494-1d181158c443}, !- Handle
@@ -2040,7 +2210,7 @@ OS:Output:Meter,
 
 OS:SubSurface,
   {96ae2ff8-0411-424d-92f2-48af8dcebc30}, !- Handle
-  Mult_Class_1_Pod_2_ZN_1_FLR_1_Wall_1_window_1, !- Name
+  Mult_Class_1_Pod_2_ZN_1_FLR_1_Wall_1_Window1, !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {c2043355-e8a1-452a-8998-36a34b6d4588}, !- Surface Name
@@ -2050,10 +2220,44 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0.05, 0, 2.5026,                        !- X,Y,Z Vertex 1 {m}
-  0.05, 0, 1.1,                           !- X,Y,Z Vertex 2 {m}
-  52.95, 0, 1.1,                          !- X,Y,Z Vertex 3 {m}
-  52.95, 0, 2.5026;                       !- X,Y,Z Vertex 4 {m}
+  0.05, 0, 2.50266,                        !- X,Y,Z Vertex 1 {m}
+  0.05, 0, 1.0322328,                           !- X,Y,Z Vertex 2 {m}
+  16.870642, 0, 1.0322328,                          !- X,Y,Z Vertex 3 {m}
+  16.870642, 0, 2.50266;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {96ae2ff2-0412-424a-92a2-48af8dcaac30}, !- Handle
+  Mult_Class_1_Pod_2_ZN_1_FLR_1_Wall_1_Window2, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {c2043355-e8a1-452a-8998-36a34b6d4588}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  18.089842, 0, 2.50266,                        !- X,Y,Z Vertex 1 {m}
+  18.089842, 0, 1.0322328,                           !- X,Y,Z Vertex 2 {m}
+  34.910484, 0, 1.0322328,                          !- X,Y,Z Vertex 3 {m}
+  34.910484, 0, 2.50266;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {96ae2fd2-04d2-422d-91a2-48af8dcaac11}, !- Handle
+  Mult_Class_1_Pod_2_ZN_1_FLR_1_Wall_1_Window3, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {c2043355-e8a1-452a-8998-36a34b6d4588}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  36.129684, 0, 2.50266,                        !- X,Y,Z Vertex 1 {m}
+  36.129684, 0, 1.0322328,                           !- X,Y,Z Vertex 2 {m}
+  52.95, 0, 1.0322328,                          !- X,Y,Z Vertex 3 {m}
+  52.95, 0, 2.50266;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {c2043355-e8a1-452a-8998-36a34b6d4588}, !- Handle
@@ -2135,10 +2339,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0, 8.95, 2.5157,                        !- X,Y,Z Vertex 1 {m}
+  0, 8.95, 2.515715,                        !- X,Y,Z Vertex 1 {m}
   0, 8.95, 1.1,                           !- X,Y,Z Vertex 2 {m}
   0, 0.05, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0, 0.05, 2.5157;                        !- X,Y,Z Vertex 4 {m}
+  0, 0.05, 2.515715;                        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {f56a07db-09ab-4691-b7bd-23694626225c}, !- Handle
@@ -2224,10 +2428,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0, 8.95, 2.5157,                        !- X,Y,Z Vertex 1 {m}
+  0, 8.95, 2.515715,                        !- X,Y,Z Vertex 1 {m}
   0, 8.95, 1.1,                           !- X,Y,Z Vertex 2 {m}
   0, 0.05, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0, 0.05, 2.5157;                        !- X,Y,Z Vertex 4 {m}
+  0, 0.05, 2.515715;                        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {f89f6cfd-d81a-400f-b930-23e47dd3a235}, !- Handle
@@ -2326,10 +2530,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  21, 0.05, 2.5177,                       !- X,Y,Z Vertex 1 {m}
+  21, 0.05, 2.51771,                       !- X,Y,Z Vertex 1 {m}
   21, 0.05, 1.1,                          !- X,Y,Z Vertex 2 {m}
   21, 7.95, 1.1,                          !- X,Y,Z Vertex 3 {m}
-  21, 7.95, 2.5177;                       !- X,Y,Z Vertex 4 {m}
+  21, 7.95, 2.51771;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {540101bb-a07f-4dde-9749-31e74040dcf5}, !- Handle
@@ -2350,7 +2554,7 @@ OS:Surface,
 
 OS:SubSurface,
   {f8e15577-a201-4d10-966c-2c583abd95a4}, !- Handle
-  Gym_ZN_1_FLR_1_Wall_2_window_1,         !- Name
+  Gym_ZN_1_FLR_1_Wall_2_Window1,         !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {d74d74ab-f566-4cd2-b187-b35fc5cfd8b3}, !- Surface Name
@@ -2360,10 +2564,27 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  21, 0.05, 2.5083,                       !- X,Y,Z Vertex 1 {m}
-  21, 0.05, 1.1,                          !- X,Y,Z Vertex 2 {m}
-  21, 16.95, 1.1,                         !- X,Y,Z Vertex 3 {m}
-  21, 16.95, 2.5083;                      !- X,Y,Z Vertex 4 {m}
+  21, 0.05, 2.508295,                       !- X,Y,Z Vertex 1 {m}
+  21, 0.05, 0.990591320106,                          !- X,Y,Z Vertex 2 {m}
+  21, 1.2692, 0.990591320106,                         !- X,Y,Z Vertex 3 {m}
+  21, 1.2692, 2.508295;                      !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {f8e15173-a221-4d20-961c-2c58a1bd95a4}, !- Handle
+  Gym_ZN_1_FLR_1_Wall_2_Window2,         !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {d74d74ab-f566-4cd2-b187-b35fc5cfd8b3}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  21, 2.4884, 2.508295,                       !- X,Y,Z Vertex 1 {m}
+  21, 2.4884, 0.990591320106,                          !- X,Y,Z Vertex 2 {m}
+  21, 16.95, 0.990591320106,                         !- X,Y,Z Vertex 3 {m}
+  21, 16.95, 2.508295;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {82ff02a8-9a10-40e8-8138-4d4a28e88d82}, !- Handle
@@ -2561,7 +2782,7 @@ OS:Surface,
 
 OS:SubSurface,
   {17c0f5cc-6abb-4cf7-b5f8-b78f04bb9cbb}, !- Handle
-  Mult_Class_1_Pod_3_ZN_1_FLR_1_Wall_1_window_1, !- Name
+  Mult_Class_1_Pod_3_ZN_1_FLR_1_Wall_1_Window1, !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {0c46071a-9513-463f-bf07-ab23f6fa723e}, !- Surface Name
@@ -2571,10 +2792,44 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0.05, 0, 2.5026,                        !- X,Y,Z Vertex 1 {m}
-  0.05, 0, 1.1,                           !- X,Y,Z Vertex 2 {m}
-  52.95, 0, 1.1,                          !- X,Y,Z Vertex 3 {m}
-  52.95, 0, 2.5026;                       !- X,Y,Z Vertex 4 {m}
+  0.05, 0, 2.50266,                        !- X,Y,Z Vertex 1 {m}
+  0.05, 0, 1.032268691398,                           !- X,Y,Z Vertex 2 {m}
+  16.870642, 0, 1.032268691398,                          !- X,Y,Z Vertex 3 {m}
+  16.870642, 0, 2.50266;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {17c0f5ac-6aba-4cf2-b5f1-b78f04bb9cdd}, !- Handle
+  Mult_Class_1_Pod_3_ZN_1_FLR_1_Wall_1_Window2, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {0c46071a-9513-463f-bf07-ab23f6fa723e}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  18.089842, 0, 2.50266,                        !- X,Y,Z Vertex 1 {m}
+  18.089842, 0, 1.032268691398,                           !- X,Y,Z Vertex 2 {m}
+  34.910484, 0, 1.032268691398,                          !- X,Y,Z Vertex 3 {m}
+  34.910484, 0, 2.50266;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {17c1d5ac-6dda-3cf2-b2f1-b11f04bb9ada}, !- Handle
+  Mult_Class_1_Pod_3_ZN_1_FLR_1_Wall_1_Window3, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {0c46071a-9513-463f-bf07-ab23f6fa723e}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  36.129684, 0, 2.50266,                        !- X,Y,Z Vertex 1 {m}
+  36.129684, 0, 1.032268691398,                           !- X,Y,Z Vertex 2 {m}
+  52.95, 0, 1.032268691398,                          !- X,Y,Z Vertex 3 {m}
+  52.95, 0, 2.50266;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {0c46071a-9513-463f-bf07-ab23f6fa723e}, !- Handle
@@ -2646,7 +2901,7 @@ OS:Surface,
 
 OS:SubSurface,
   {3fdd7126-d13b-4042-b6b6-e52119fd310d}, !- Handle
-  Corner_Class_2_Pod_2_ZN_1_FLR_1_Wall_3_window_1, !- Name
+  Corner_Class_2_Pod_2_ZN_1_FLR_1_Wall_3_Window1, !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {7b9cf9d7-4cae-4ca4-b9af-9a4983d0f670}, !- Surface Name
@@ -2656,10 +2911,27 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  10.95, 9, 2.5128,                       !- X,Y,Z Vertex 1 {m}
-  10.95, 9, 1.1,                          !- X,Y,Z Vertex 2 {m}
-  0.05, 9, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0.05, 9, 2.5128;                        !- X,Y,Z Vertex 4 {m}
+  10.95, 9, 2.512845,                       !- X,Y,Z Vertex 1 {m}
+  10.95, 9, 0.9220476,                          !- X,Y,Z Vertex 2 {m}
+  9.7308, 9, 0.9220476,                           !- X,Y,Z Vertex 3 {m}
+  9.7308, 9, 2.512845;                        !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {3fdd7125-d15b-4442-b6b4-e52119fd311a}, !- Handle
+  Corner_Class_2_Pod_2_ZN_1_FLR_1_Wall_3_Window2, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {7b9cf9d7-4cae-4ca4-b9af-9a4983d0f670}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  8.5116, 9, 2.512845,                       !- X,Y,Z Vertex 1 {m}
+  8.5116, 9, 0.9220476,                          !- X,Y,Z Vertex 2 {m}
+  0.05, 9, 0.9220476,                           !- X,Y,Z Vertex 3 {m}
+  0.05, 9, 2.512845;                        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {a29206ca-0a39-4f57-96d9-e04a4748bc36}, !- Handle
@@ -2789,7 +3061,7 @@ OS:Surface,
 
 OS:SubSurface,
   {be041e72-82f6-4e0e-89b4-de94363fa07b}, !- Handle
-  Computer_Class_ZN_1_FLR_1_Wall_3_window_1, !- Name
+  Computer_Class_ZN_1_FLR_1_Wall_3_Window1, !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {6aa65fbd-f888-4936-87c6-a0d20e465b7c}, !- Surface Name
@@ -2799,10 +3071,28 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  17.95, 9, 2.5078,                       !- X,Y,Z Vertex 1 {m}
-  17.95, 9, 1.1,                          !- X,Y,Z Vertex 2 {m}
-  0.05, 9, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0.05, 9, 2.5078;                        !- X,Y,Z Vertex 4 {m}
+  17.95, 9, 2.507805,                       !- X,Y,Z Vertex 1 {m}
+  17.95, 9, 0.9971046,                          !- X,Y,Z Vertex 2 {m}
+  16.7308, 9, 0.9971046,                           !- X,Y,Z Vertex 3 {m}
+  16.7308, 9, 2.507805;                        !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {be042a72-82a6-4c0e-8cb4-de943a3fa07d}, !- Handle
+  Computer_Class_ZN_1_FLR_1_Wall_3_Window2, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {6aa65fbd-f888-4936-87c6-a0d20e465b7c}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  15.5116, 9, 2.507805,                       !- X,Y,Z Vertex 1 {m}
+  15.5116, 9, 0.9971046,                          !- X,Y,Z Vertex 2 {m}
+  0.05, 9, 0.9971046,                           !- X,Y,Z Vertex 3 {m}
+  0.05, 9, 2.507805;                        !- X,Y,Z Vertex 4 {m}
+
 
 OS:Surface,
   {6aa65fbd-f888-4936-87c6-a0d20e465b7c}, !- Handle
@@ -2959,7 +3249,7 @@ OS:Surface,
 
 OS:SubSurface,
   {2b053a9f-1b73-4508-a200-8acf17a31509}, !- Handle
-  Library_Media_Center_ZN_1_FLR_1_Wall_2_window_1, !- Name
+  Library_Media_Center_ZN_1_FLR_1_Wall_2_Window1, !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {5c856922-aa96-4906-86c5-379e4d12e5d4}, !- Surface Name
@@ -2969,10 +3259,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  19, 0.05, 2.5067,                       !- X,Y,Z Vertex 1 {m}
-  19, 0.05, 1.1,                          !- X,Y,Z Vertex 2 {m}
-  19, 20.95, 1.1,                         !- X,Y,Z Vertex 3 {m}
-  19, 20.95, 2.5067;                      !- X,Y,Z Vertex 4 {m}
+  19, 0.05, 2.506685,                       !- X,Y,Z Vertex 1 {m}
+  19, 0.05, 1.0130812,                          !- X,Y,Z Vertex 2 {m}
+  19, 1.2692, 1.0130812,                         !- X,Y,Z Vertex 3 {m}
+  19, 1.2692, 2.506685;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Output:Meter,
   {4d5659b2-a3f1-4e03-8189-749859e44c53}, !- Handle
@@ -2983,7 +3273,7 @@ OS:Output:Meter,
 
 OS:SubSurface,
   {c5c59a95-5005-4366-9127-c06e1aa082a4}, !- Handle
-  Corner_Class_2_Pod_3_ZN_1_FLR_1_Wall_3_window_1, !- Name
+  Corner_Class_2_Pod_3_ZN_1_FLR_1_Wall_3_Window1, !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {e1b44bf7-612a-4ba3-8026-73898fc86d6a}, !- Surface Name
@@ -2993,10 +3283,27 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  10.95, 9, 2.5128,                       !- X,Y,Z Vertex 1 {m}
-  10.95, 9, 1.1,                          !- X,Y,Z Vertex 2 {m}
-  0.05, 9, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0.05, 9, 2.5128;                        !- X,Y,Z Vertex 4 {m}
+  10.95, 9, 2.512845,                       !- X,Y,Z Vertex 1 {m}
+  10.95, 9, 0.922073,                          !- X,Y,Z Vertex 2 {m}
+  9.7308, 9, 0.922073,                           !- X,Y,Z Vertex 3 {m}
+  9.7308, 9, 2.512845;                        !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {c5c59a91-5115-4322-9147-c06e1ab082a4}, !- Handle
+  Corner_Class_2_Pod_3_ZN_1_FLR_1_Wall_3_window2, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {e1b44bf7-612a-4ba3-8026-73898fc86d6a}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  8.477938173266, 9, 2.512845,                       !- X,Y,Z Vertex 1 {m}
+  8.477938173266, 9, 0.922073,                          !- X,Y,Z Vertex 2 {m}
+  0.05, 9, 0.922073,                           !- X,Y,Z Vertex 3 {m}
+  0.05, 9, 2.512845;                        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {e42ddd72-db2a-45a3-801c-bb449ae6f57e}, !- Handle
@@ -3126,7 +3433,7 @@ OS:Surface,
 
 OS:SubSurface,
   {77b1926c-8824-4cc2-a628-410ab4ab303b}, !- Handle
-  Corner_Class_1_Pod_1_ZN_1_FLR_1_Wall_1_window_1, !- Name
+  Corner_Class_1_Pod_1_ZN_1_FLR_1_Wall_1_Window1, !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {d4e5c3cc-a3de-4566-a4bf-ec7bf831a57c}, !- Surface Name
@@ -3136,10 +3443,27 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0.05, 0, 2.5128,                        !- X,Y,Z Vertex 1 {m}
-  0.05, 0, 1.1,                           !- X,Y,Z Vertex 2 {m}
-  10.95, 0, 1.1,                          !- X,Y,Z Vertex 3 {m}
-  10.95, 0, 2.5128;                       !- X,Y,Z Vertex 4 {m}
+  0.05, 0, 2.512845,                        !- X,Y,Z Vertex 1 {m}
+  0.05, 0, 0.9220476,                           !- X,Y,Z Vertex 2 {m}
+  1.2692, 0, 0.9220476,                          !- X,Y,Z Vertex 3 {m}
+  1.2692, 0, 2.512845;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {77b1923c-8833-4cd2-a6dd-410af4ab303b}, !- Handle
+  Corner_Class_1_Pod_1_ZN_1_FLR_1_Wall_1_Window2, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {d4e5c3cc-a3de-4566-a4bf-ec7bf831a57c}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  2.4884, 0, 2.512845,                        !- X,Y,Z Vertex 1 {m}
+  2.4884, 0, 0.9220476,                           !- X,Y,Z Vertex 2 {m}
+  10.95, 0, 0.9220476,                          !- X,Y,Z Vertex 3 {m}
+  10.95, 0, 2.512845;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {d4e5c3cc-a3de-4566-a4bf-ec7bf831a57c}, !- Handle
@@ -3204,10 +3528,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0, 8.95, 2.5157,                        !- X,Y,Z Vertex 1 {m}
+  0, 8.95, 2.515715,                        !- X,Y,Z Vertex 1 {m}
   0, 8.95, 1.1,                           !- X,Y,Z Vertex 2 {m}
   0, 0.05, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0, 0.05, 2.5157;                        !- X,Y,Z Vertex 4 {m}
+  0, 0.05, 2.515715;                        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {ca9843d4-c7f1-48f9-bdf5-208c72fc1358}, !- Handle
@@ -3255,10 +3579,27 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  18.95, 21, 2.5074,                      !- X,Y,Z Vertex 1 {m}
+  18.95, 21, 2.50742,                      !- X,Y,Z Vertex 1 {m}
   18.95, 21, 1.1,                         !- X,Y,Z Vertex 2 {m}
   0.05, 21, 1.1,                          !- X,Y,Z Vertex 3 {m}
-  0.05, 21, 2.5074;                       !- X,Y,Z Vertex 4 {m}
+  0.05, 21, 2.50742;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {6d681a14-d345-45b6-825d-4db69322adbd}, !- Handle
+  Library_Media_Center_ZN_1_FLR_1_Wall_2_Window2, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {5c856922-aa96-4906-86c5-379e4d12e5d4}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  19, 2.4884, 2.506685,                      !- X,Y,Z Vertex 1 {m}
+  19, 2.4884, 1.0130812,                         !- X,Y,Z Vertex 2 {m}
+  19, 20.95, 1.0130812,                          !- X,Y,Z Vertex 3 {m}
+  19, 20.95, 2.506685;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {e8c9cbd6-879c-4f76-b25a-51100f478557}, !- Handle
@@ -3391,10 +3732,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0, 8.95, 2.5157,                        !- X,Y,Z Vertex 1 {m}
+  0, 8.95, 2.515715,                        !- X,Y,Z Vertex 1 {m}
   0, 8.95, 1.1,                           !- X,Y,Z Vertex 2 {m}
   0, 0.05, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0, 0.05, 2.5157;                        !- X,Y,Z Vertex 4 {m}
+  0, 0.05, 2.515715;                        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {36da85da-0eda-4d00-9884-b045ae7e03b5}, !- Handle
@@ -3425,10 +3766,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0, 2.95, 2.5483,                        !- X,Y,Z Vertex 1 {m}
+  0, 2.95, 2.548265,                        !- X,Y,Z Vertex 1 {m}
   0, 2.95, 1.1,                           !- X,Y,Z Vertex 2 {m}
   0, 0.05, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0, 0.05, 2.5483;                        !- X,Y,Z Vertex 4 {m}
+  0, 0.05, 2.548265;                        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {047a2540-8a4b-4bfe-a57d-9b88ac25ec24}, !- Handle
@@ -3476,10 +3817,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0, 2.95, 2.5483,                        !- X,Y,Z Vertex 1 {m}
+  0, 2.95, 2.548265,                        !- X,Y,Z Vertex 1 {m}
   0, 2.95, 1.1,                           !- X,Y,Z Vertex 2 {m}
   0, 0.05, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0, 0.05, 2.5483;                        !- X,Y,Z Vertex 4 {m}
+  0, 0.05, 2.548265;                        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {c79e7dee-32d3-48dd-bf43-d659df177f0d}, !- Handle
@@ -3527,10 +3868,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0, 9.95, 2.5141,                        !- X,Y,Z Vertex 1 {m}
+  0, 9.95, 2.51414,                        !- X,Y,Z Vertex 1 {m}
   0, 9.95, 1.1,                           !- X,Y,Z Vertex 2 {m}
   0, 0.05, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0, 0.05, 2.5141;                        !- X,Y,Z Vertex 4 {m}
+  0, 0.05, 2.51414;                        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {3f6975f1-7bf0-40b7-ba32-29f8ccc7bc54}, !- Handle
@@ -3743,7 +4084,7 @@ OS:Surface,
 
 OS:SubSurface,
   {39cfb497-688c-43e9-9f51-48b64d951fce}, !- Handle
-  Corner_Class_1_Pod_2_ZN_1_FLR_1_Wall_1_window_1, !- Name
+  Corner_Class_1_Pod_2_ZN_1_FLR_1_Wall_1_Window1, !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {7763a796-7a24-4ccb-93ee-d74a1ec88fc4}, !- Surface Name
@@ -3753,10 +4094,27 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0.05, 0, 2.5128,                        !- X,Y,Z Vertex 1 {m}
-  0.05, 0, 1.1,                           !- X,Y,Z Vertex 2 {m}
-  10.95, 0, 1.1,                          !- X,Y,Z Vertex 3 {m}
-  10.95, 0, 2.5128;                       !- X,Y,Z Vertex 4 {m}
+  0.05, 0, 2.512845,                        !- X,Y,Z Vertex 1 {m}
+  0.05, 0, 0.9220476,                           !- X,Y,Z Vertex 2 {m}
+  1.2692, 0, 0.9220476,                          !- X,Y,Z Vertex 3 {m}
+  1.2692, 0, 2.512845;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {44cfb497-684c-44e9-9f21-48b14d952fce}, !- Handle
+  Corner_Class_1_Pod_2_ZN_1_FLR_1_Wall_1_Window2, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {7763a796-7a24-4ccb-93ee-d74a1ec88fc4}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  2.4884, 0, 2.512845,                        !- X,Y,Z Vertex 1 {m}
+  2.4884, 0, 0.9220476,                           !- X,Y,Z Vertex 2 {m}
+  10.95, 0, 0.9220476,                          !- X,Y,Z Vertex 3 {m}
+  10.95, 0, 2.512845;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {7763a796-7a24-4ccb-93ee-d74a1ec88fc4}, !- Handle
@@ -3794,7 +4152,7 @@ OS:Surface,
 
 OS:SubSurface,
   {f9ff7f35-3c4b-4b12-8f98-8a7533c033b6}, !- Handle
-  Mult_Class_2_Pod_2_ZN_1_FLR_1_Wall_3_window_1, !- Name
+  Mult_Class_2_Pod_2_ZN_1_FLR_1_Wall_3_Window1, !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {0ce619bc-2b03-4d02-8669-0bfcbf78f13d}, !- Surface Name
@@ -3804,10 +4162,44 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  52.95, 9, 2.5026,                       !- X,Y,Z Vertex 1 {m}
-  52.95, 9, 1.1,                          !- X,Y,Z Vertex 2 {m}
-  0.05, 9, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0.05, 9, 2.5026;                        !- X,Y,Z Vertex 4 {m}
+  52.95, 9, 2.50266,                       !- X,Y,Z Vertex 1 {m}
+  52.95, 9, 1.0322328,                          !- X,Y,Z Vertex 2 {m}
+  36.129358, 9, 1.0322328,                           !- X,Y,Z Vertex 3 {m}
+  36.129358, 9, 2.50266;                        !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {f9ff7f25-3c7b-4b72-8f77-8a7533c031a6}, !- Handle
+  Mult_Class_2_Pod_2_ZN_1_FLR_1_Wall_3_Window2, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {0ce619bc-2b03-4d02-8669-0bfcbf78f13d}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  34.910158, 9, 2.50266,                       !- X,Y,Z Vertex 1 {m}
+  34.910158, 9, 1.0322328,                          !- X,Y,Z Vertex 2 {m}
+  18.089516, 9, 1.0322328,                           !- X,Y,Z Vertex 3 {m}
+  18.089516, 9, 2.50266;                        !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {f9ff7f3a-3c6b-4b76-8f67-8a7533c066a6}, !- Handle
+  Mult_Class_2_Pod_2_ZN_1_FLR_1_Wall_3_Window3, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {0ce619bc-2b03-4d02-8669-0bfcbf78f13d}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  16.870316, 9, 2.50266,                       !- X,Y,Z Vertex 1 {m}
+  16.870316, 9, 1.0322328,                          !- X,Y,Z Vertex 2 {m}
+  0.05, 9, 1.0322328,                           !- X,Y,Z Vertex 3 {m}
+  0.05, 9, 2.50266;                        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {0ce619bc-2b03-4d02-8669-0bfcbf78f13d}, !- Handle
@@ -4007,7 +4399,7 @@ OS:Output:Meter,
 
 OS:SubSurface,
   {d7e824ea-38b0-45ba-a92e-8e89faac1fe3}, !- Handle
-  Corner_Class_1_Pod_3_ZN_1_FLR_1_Wall_1_window_1, !- Name
+  Corner_Class_1_Pod_3_ZN_1_FLR_1_Wall_1_Window1, !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {fb0e998a-e406-48b5-b477-3c6433e5bb14}, !- Surface Name
@@ -4017,10 +4409,27 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0.05, 0, 2.5128,                        !- X,Y,Z Vertex 1 {m}
-  0.05, 0, 1.1,                           !- X,Y,Z Vertex 2 {m}
-  10.95, 0, 1.1,                          !- X,Y,Z Vertex 3 {m}
-  10.95, 0, 2.5128;                       !- X,Y,Z Vertex 4 {m}
+  0.05, 0, 2.512845,                        !- X,Y,Z Vertex 1 {m}
+  0.05, 0, 0.9220476,                           !- X,Y,Z Vertex 2 {m}
+  1.2692, 0, 0.9220476,                          !- X,Y,Z Vertex 3 {m}
+  1.2692, 0, 2.512845;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {d7e824e3-38b1-45da-a92a-8e89faac1aa3}, !- Handle
+  Corner_Class_1_Pod_3_ZN_1_FLR_1_Wall_1_Window2, !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {fb0e998a-e406-48b5-b477-3c6433e5bb14}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  2.4884, 0, 2.512845,                        !- X,Y,Z Vertex 1 {m}
+  2.4884, 0, 0.9220476,                           !- X,Y,Z Vertex 2 {m}
+  10.95, 0, 0.9220476,                          !- X,Y,Z Vertex 3 {m}
+  10.95, 0, 2.512845;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {37e8a154-0c16-4802-943d-b055ccbf1c99}, !- Handle
@@ -4124,10 +4533,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  21, 0.05, 2.5067,                       !- X,Y,Z Vertex 1 {m}
+  21, 0.05, 2.506685,                       !- X,Y,Z Vertex 1 {m}
   21, 0.05, 1.1,                          !- X,Y,Z Vertex 2 {m}
   21, 20.95, 1.1,                         !- X,Y,Z Vertex 3 {m}
-  21, 20.95, 2.5067;                      !- X,Y,Z Vertex 4 {m}
+  21, 20.95, 2.506685;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Building,
   {9a5048da-f51f-4a23-bf2e-fd970cdf8aae}, !- Handle
@@ -4147,7 +4556,7 @@ OS:Building,
 
 OS:SubSurface,
   {8165a1dc-69e8-4c65-8fd4-5760c146d23c}, !- Handle
-  Lobby_ZN_1_FLR_1_Wall_1_window_1,       !- Name
+  Lobby_ZN_1_FLR_1_Wall_1_Window1,       !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {944e2d06-7f8a-4b48-9a99-f57a7e8347f8}, !- Surface Name
@@ -4157,10 +4566,27 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0.05, 0, 2.5074,                        !- X,Y,Z Vertex 1 {m}
-  0.05, 0, 1.1,                           !- X,Y,Z Vertex 2 {m}
-  18.95, 0, 1.1,                          !- X,Y,Z Vertex 3 {m}
-  18.95, 0, 2.5074;                       !- X,Y,Z Vertex 4 {m}
+  0.05, 0, 2.50742,                        !- X,Y,Z Vertex 1 {m}
+  0.05, 0, 1.0029466,                           !- X,Y,Z Vertex 2 {m}
+  1.2692, 0, 1.0029466,                          !- X,Y,Z Vertex 3 {m}
+  1.2692, 0, 2.50742;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {8165a1bc-67e8-4c67-7fd4-5760c146d77c}, !- Handle
+  Lobby_ZN_1_FLR_1_Wall_1_Window2,       !- Name
+  FixedWindow,                            !- Sub Surface Type
+  ,                                       !- Construction Name
+  {944e2d06-7f8a-4b48-9a99-f57a7e8347f8}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  2.4884, 0, 2.50742,                        !- X,Y,Z Vertex 1 {m}
+  2.4884, 0, 1.0029466,                           !- X,Y,Z Vertex 2 {m}
+  18.95, 0, 1.0029466,                          !- X,Y,Z Vertex 3 {m}
+  18.95, 0, 2.50742;                       !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {0493d370-ff73-4f30-9137-39a6f9f85e14}, !- Handle
@@ -4174,10 +4600,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  0, 8.95, 2.5157,                        !- X,Y,Z Vertex 1 {m}
+  0, 8.95, 2.515715,                        !- X,Y,Z Vertex 1 {m}
   0, 8.95, 1.1,                           !- X,Y,Z Vertex 2 {m}
   0, 0.05, 1.1,                           !- X,Y,Z Vertex 3 {m}
-  0, 0.05, 2.5157;                        !- X,Y,Z Vertex 4 {m}
+  0, 0.05, 2.515715;                        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {1e2f1808-823e-45bd-bab7-4fbc7ca12267}, !- Handle
@@ -6920,3 +7346,157 @@ OS:SubSurface,
   1.38745334022, 0, 0,                    !- X,Y,Z Vertex 2 {m}
   2.30185334022, 0, 0,                    !- X,Y,Z Vertex 3 {m}
   2.30185334022, 0, 2.1336;               !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {4ad4a147-1ab7-493d-8dca-7a37db802fa4}, !- Handle
+  Gym_ZN_1_FLR_1_Ceiling_skylight_1,             !- Name
+  Skylight,                               !- Sub Surface Type
+  ,                                       !- Construction Name
+  {858988b8-1945-478c-ba3b-022d651d9144}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  2.8904, 2.2237, 4,                      !- X,Y,Z Vertex 1 {m}
+  4.1096, 2.2237, 4,                      !- X,Y,Z Vertex 2 {m}
+  4.1096, 3.4429, 4,                       !- X,Y,Z Vertex 3 {m}
+  2.8904, 3.4429, 4;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {4ad4a197-8ab7-49f9-8cca-7037db802fb4}, !- Handle
+  Gym_ZN_1_FLR_1_Ceiling_skylight_2,             !- Name
+  Skylight,                               !- Sub Surface Type
+  ,                                       !- Construction Name
+  {858988b8-1945-478c-ba3b-022d651d9144}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  9.8904, 2.2237, 4,                      !- X,Y,Z Vertex 1 {m}
+  11.1096, 2.2237, 4,                      !- X,Y,Z Vertex 2 {m}
+  11.1096, 3.4429, 4,                       !- X,Y,Z Vertex 3 {m}
+  9.8904, 3.4429, 4;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {4ad4a127-8ac7-19f9-8ccd-7237db102fb4}, !- Handle
+  Gym_ZN_1_FLR_1_Ceiling_skylight_3,             !- Name
+  Skylight,                               !- Sub Surface Type
+  ,                                       !- Construction Name
+  {858988b8-1945-478c-ba3b-022d651d9144}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  16.8904, 2.2237, 4,                      !- X,Y,Z Vertex 1 {m}
+  18.1096, 2.2237, 4,                      !- X,Y,Z Vertex 2 {m}
+  18.1096, 3.4429, 4,                       !- X,Y,Z Vertex 3 {m}
+  16.8904, 3.4429, 4;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {4ad4b137-8ad7-19f2-5ccd-5237db102fe4}, !- Handle
+  Gym_ZN_1_FLR_1_Ceiling_skylight_4,             !- Name
+  Skylight,                               !- Sub Surface Type
+  ,                                       !- Construction Name
+  {858988b8-1945-478c-ba3b-022d651d9144}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  2.8904, 7.8904, 4,                      !- X,Y,Z Vertex 1 {m}
+  4.1096, 7.8904, 4,                      !- X,Y,Z Vertex 2 {m}
+  4.1096, 9.1096, 4,                       !- X,Y,Z Vertex 3 {m}
+  2.8904, 9.1096, 4;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {2ad4b127-8ac7-16f2-5c2d-5117db102fe4}, !- Handle
+  Gym_ZN_1_FLR_1_Ceiling_skylight_5,             !- Name
+  Skylight,                               !- Sub Surface Type
+  ,                                       !- Construction Name
+  {858988b8-1945-478c-ba3b-022d651d9144}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  9.8904, 7.8904, 4,                      !- X,Y,Z Vertex 1 {m}
+  11.1096, 7.8904, 4,                      !- X,Y,Z Vertex 2 {m}
+  11.1096, 9.1096, 4,                       !- X,Y,Z Vertex 3 {m}
+  9.8904, 9.1096, 4;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {2ad4b144-8dd7-12e2-5d2d-5237db101fe4}, !- Handle
+  Gym_ZN_1_FLR_1_Ceiling_skylight_6,             !- Name
+  Skylight,                               !- Sub Surface Type
+  ,                                       !- Construction Name
+  {858988b8-1945-478c-ba3b-022d651d9144}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  16.8904, 7.8904, 4,                      !- X,Y,Z Vertex 1 {m}
+  18.1096, 7.8904, 4,                      !- X,Y,Z Vertex 2 {m}
+  18.1096, 9.1096, 4,                       !- X,Y,Z Vertex 3 {m}
+  16.8904, 9.1096, 4;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {2ad4c142-8fd7-1fe2-5dfd-5237fb101ce2}, !- Handle
+  Gym_ZN_1_FLR_1_Ceiling_skylight_7,             !- Name
+  Skylight,                               !- Sub Surface Type
+  ,                                       !- Construction Name
+  {858988b8-1945-478c-ba3b-022d651d9144}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  2.8904, 13.5571, 4,                      !- X,Y,Z Vertex 1 {m}
+  4.1096, 13.5571, 4,                      !- X,Y,Z Vertex 2 {m}
+  4.1096, 14.7763, 4,                       !- X,Y,Z Vertex 3 {m}
+  2.8904, 14.7763, 4;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {2ad4c172-2fd7-10e2-5d0d-5c37fb102ce2}, !- Handle
+  Gym_ZN_1_FLR_1_Ceiling_skylight_8,             !- Name
+  Skylight,                               !- Sub Surface Type
+  ,                                       !- Construction Name
+  {858988b8-1945-478c-ba3b-022d651d9144}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  9.8904, 13.5571, 4,                      !- X,Y,Z Vertex 1 {m}
+  11.1096, 13.5571, 4,                      !- X,Y,Z Vertex 2 {m}
+  11.1096, 14.7763, 4,                       !- X,Y,Z Vertex 3 {m}
+  9.8904, 14.7763, 4;                       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {2ad2a172-2f32-13e2-530d-5c37fb332ce2}, !- Handle
+  Gym_ZN_1_FLR_1_Ceiling_skylight_9,             !- Name
+  Skylight,                               !- Sub Surface Type
+  ,                                       !- Construction Name
+  {858988b8-1945-478c-ba3b-022d651d9144}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  16.8904, 13.5571, 4,                      !- X,Y,Z Vertex 1 {m}
+  18.1096, 13.5571, 4,                      !- X,Y,Z Vertex 2 {m}
+  18.1096, 14.7763, 4,                       !- X,Y,Z Vertex 3 {m}
+  16.8904, 14.7763, 4;                       !- X,Y,Z Vertex 4 {m}
+
