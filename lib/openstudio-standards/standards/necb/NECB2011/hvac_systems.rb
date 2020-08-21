@@ -1588,51 +1588,7 @@ class NECB2011
 
     return clg_tower
   end
-
-
-  # Creates thermal zones to contain each space, as defined for each building in the
-  # system_to_space_map inside the Prototype.building_name
-  # e.g. (Prototype.secondary_school.rb) file.
-  #
-  # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
-  def model_create_thermal_zones(model,
-                                 space_multiplier_map = nil)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
-    space_multiplier_map = {} if space_multiplier_map.nil?
-
-    # Remove any Thermal zones assigned
-    model.getThermalZones.each(&:remove)
-
-    # Create a thermal zone for each space in the self
-    model.getSpaces.sort.each do |space|
-      zone = OpenStudio::Model::ThermalZone.new(model)
-      zone.setName("#{space.name} ZN")
-      unless space_multiplier_map[space.name.to_s].nil? || (space_multiplier_map[space.name.to_s] == 1)
-        zone.setMultiplier(space_multiplier_map[space.name.to_s])
-      end
-      space.setThermalZone(zone)
-
-      # Skip thermostat for spaces with no space type
-      next if space.spaceType.empty?
-
-      # Add a thermostat
-      space_type_name = space.spaceType.get.name.get
-      thermostat_name = space_type_name + ' Thermostat'
-      thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
-      if thermostat.empty?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
-      else
-        thermostat_clone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
-        zone.setThermostatSetpointDualSetpoint(thermostat_clone)
-        # Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing.
-        ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
-        ideal_loads.addToThermalZone(zone)
-      end
-    end
-
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
-  end
+  
 
   # This method cycles through the spaces in a thermal zone and then sorts them by story.  The method then cycles
   # through the spaces on a story and then calculates the centroid of the spaces in the thermal zone on that floor.  The
