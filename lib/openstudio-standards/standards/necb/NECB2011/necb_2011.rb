@@ -880,6 +880,7 @@ class NECB2011 < Standard
       skylight_area_weighted_vt_handle = 0.0
       skylight_area_weighted_vt = 0.0
       skylight_area_sum = 0.0
+      daylighted_under_skylight_area = 0.0 #TODO: revised when costing
 
       ##### Loop through the surfaces of each daylight_space to calculate daylighted_area_under_skylights and skylight_effective_aperture for each daylight_space
       daylight_space.surfaces.sort.each do |surface|
@@ -1040,11 +1041,13 @@ class NECB2011 < Standard
             end #daylight_space.surfaces.each do |surface|
 
             skylight_area_weighted_vt = skylight_area_weighted_vt_handle / skylight_area_sum
-            daylighted_area_under_skylights_hash[daylight_space.name.to_s] = daylighted_under_skylight_length * daylighted_under_skylight_width
 
             ##### Calculate skylight_effective_aperture as per NECB2011: 4.2.2.7.
             ##### Note that it was assumed that the skylight is flush with the ceiling. Therefore, area-weighted average well factor (WF) was set to 0.9 in the below Equation.
             skylight_effective_aperture_hash[daylight_space.name.to_s] = 0.85 * skylight_area_sum * skylight_area_weighted_vt * 0.9 / (daylighted_under_skylight_length * daylighted_under_skylight_width)
+
+            daylighted_under_skylight_area += daylighted_under_skylight_length * daylighted_under_skylight_width #TODO: revised when costing
+            daylighted_area_under_skylights_hash[daylight_space.name.to_s] = daylighted_under_skylight_area #TODO: revised when costing
 
           end #if subsurface.subSurfaceType == "Skylight"
         end #surface.subSurfaces.each do |subsurface|
