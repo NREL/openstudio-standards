@@ -215,7 +215,7 @@ class NECB2011 < Standard
                                    dcv_type: 'NECB_Default',
                                    lights_type: 'NECB_Default',
                                    lights_scale: 1.0,
-                                   daylighting_type: 'NECB_Default',
+                                   daylighting_type: 'add_daylighting_controls', #add_daylighting_controls  #NECB_Default
                                    ecm_system_name: 'NECB_Default',
                                    erv_package: 'NECB_Default',
                                    eff_mod: nil,
@@ -731,7 +731,7 @@ class NECB2011 < Standard
   end
 
 
-  def model_add_daylighting_controls(model)
+  def model_add_daylighting_controls(model:)
 
     ##### Ask user's inputs for daylighting controls illuminance setpoint and number of stepped control steps.
     ##### Note that the minimum number of stepped control steps is two steps as per NECB2011.
