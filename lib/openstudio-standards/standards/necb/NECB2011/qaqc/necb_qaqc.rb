@@ -62,6 +62,14 @@ class NECB2011
           Units='#{unit}'
 "
           column_name = "#{col}".gsub(/\s+/, "_").downcase
+          # If the column name is "additional_fuel" and the file contains a boiler with a FuelOilNo2 fuel type assume
+          # the column name should be "fueloilno2".
+          if column_name.include? "additional_fuel"
+            model.getPlantLoops.sort.each do |iplantloop|
+              boilers = iplantloop.components.select {|icomponent| icomponent.to_BoilerHotWater.is_initialized}
+              column_name = "fueloilno2" unless boilers.select {|boiler| boiler.to_BoilerHotWater.get.fuelType.to_s == "FuelOilNo2"}.empty?
+            end
+          end
           column_name = column_name + "_#{unit}" if unit != ''
           value = model.sqlFile.get.execAndReturnFirstString(query)
           next if value.empty? || value.get.nil?
