@@ -730,7 +730,7 @@ class NECB2011
         vbz = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName='Zone Ventilation Parameters' AND ColumnName='Breathing Zone Outdoor Airflow - Vbz' AND Units='m3/s' AND RowName='#{zone.name.get.to_s.upcase}' ")
         vbz = validate_optional(vbz, model, 0)
         air_loop_info[:total_breathing_zone_outdoor_airflow_vbz] += vbz
-        air_loop_info[:total_floor_area_served] += zone.floorArea
+        air_loop_info[:total_floor_area_served] += zone.floorArea*zone.multiplier.to_f
       end
       air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName='System Ventilation Parameters' AND ColumnName='Area Outdoor Air Rate - Ra' AND Units='m3/s-m2' AND RowName='#{air_loop_info[:name].to_s.upcase}' ")
       air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] = validate_optional(air_loop_info[:area_outdoor_air_rate_m3_per_s_m2], model, -1.0)
