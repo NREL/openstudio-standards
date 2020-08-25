@@ -67,12 +67,12 @@ class YourTestName_Test < Minitest::Test
                 #loads osm geometry and spactypes from library.
                 model = standard.load_building_type_from_library(building_type: building_type)
 
-                # this runs the step in the model. You can remove steps after what'FullServiceRestaurant', you want to test if you wish to make the test run faster.
+                # this runs the step in the model.
                 standard.apply_weather_data(model: model, epw_file: epw_file)
                 standard.apply_loads(model: model, lights_type: lighting_type, lights_scale: 1.0)
                 standard.apply_envelope(model: model)
                 standard.apply_fdwr_srr_daylighting(model: model)
-                standard.model_add_daylighting_controls(model)
+                standard.model_add_daylighting_controls(model: model)
 
                 # # comment out for regular tests
                 # BTAP::FileIO.save_osm(model, File.join(@output_folder,"#{template}-#{building_type}-daylighting-sensor-control.osm"))
@@ -215,6 +215,7 @@ class YourTestName_Test < Minitest::Test
                   skylight_area_weighted_vt_handle = 0.0
                   skylight_area_weighted_vt = 0.0
                   skylight_area_sum = 0.0
+                  daylighted_under_skylight_area = 0.0
 
                   ##### Loop through the surfaces of each daylight_space to calculate daylighted_area_under_skylights and skylight_effective_aperture for each daylight_space
                   daylight_space.surfaces.sort.each do |surface|
@@ -375,11 +376,13 @@ class YourTestName_Test < Minitest::Test
                         end #daylight_space.surfaces.each do |surface|
 
                         skylight_area_weighted_vt = skylight_area_weighted_vt_handle / skylight_area_sum
-                        daylighted_area_under_skylights_hash[daylight_space.name.to_s] = daylighted_under_skylight_length * daylighted_under_skylight_width
 
                         ##### Calculate skylight_effective_aperture as per NECB2011: 4.2.2.7.
                         ##### Note that it was assumed that the skylight is flush with the ceiling. Therefore, area-weighted average well factor (WF) was set to 0.9 in the below Equation.
                         skylight_effective_aperture_hash[daylight_space.name.to_s] = 0.85 * skylight_area_sum * skylight_area_weighted_vt * 0.9 / (daylighted_under_skylight_length * daylighted_under_skylight_width)
+
+                        daylighted_under_skylight_area += daylighted_under_skylight_length * daylighted_under_skylight_width
+                        daylighted_area_under_skylights_hash[daylight_space.name.to_s] = daylighted_under_skylight_area
 
                       end #if subsurface.subSurfaceType == "Skylight"
                     end #surface.subSurfaces.each do |subsurface|
