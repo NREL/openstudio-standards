@@ -215,7 +215,7 @@ class NECB2011 < Standard
                                    dcv_type: 'NECB_Default',
                                    lights_type: 'NECB_Default',
                                    lights_scale: 1.0,
-                                   daylighting_type: 'add_daylighting_controls', #add_daylighting_controls  #NECB_Default
+                                   daylighting_type: 'NECB_Default',
                                    ecm_system_name: 'NECB_Default',
                                    erv_package: 'NECB_Default',
                                    eff_mod: nil,
