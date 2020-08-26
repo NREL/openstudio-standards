@@ -351,6 +351,8 @@ class NECB2011 < Standard
     model_enable_demand_controlled_ventilation(model, dcv_type)
     # Apply Boiler Efficiency
     ecm.modify_boiler_efficiency(model: model, boiler_eff: boiler_eff)
+    # Apply Furnace Efficiency
+    ecm.modify_furnace_efficiency(model: model, furnace_eff: furnace_eff)
     # Apply daylight controls.
     model_add_daylighting_controls(model) if daylighting_type == 'add_daylighting_controls'
 

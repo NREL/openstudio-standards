@@ -1,0 +1,17 @@
+{
+  "tables": {
+    "furnace_eff_ecm": {
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "name": "NECB 95% Efficient Condensing Furnace",
+          "efficiency": 0.95,
+          "part_load_curve": "FURNACE-EFFPLR-COND-NECB2011",
+          "notes": "From NECB 2011."
+        }
+      ]
+    }
+  }
+}

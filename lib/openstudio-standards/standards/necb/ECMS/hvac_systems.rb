@@ -686,4 +686,67 @@ class ECMS
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ECMS', "There was a problem setting the boiler part load curve named #{part_load_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json or boiler_set.json files.")
     end
   end
+
+  # ============================================================================================================================
+  # Apply Furnace efficiency
+  # This model takes an OS model and a furnace efficiency hash sent to it with the following form:
+  #    "furnace_eff": {
+  #        "name" => "NECB 95% Efficient Condensing Furnace",
+  #        "efficiency" => 0.95,
+  #        "part_load_curve" => "Furnace-EFFPLR-COND-NECB2011",
+  #        "notes" => "From NECB 2011."
+  #    }
+  # If furnace_eff is nill then it does nothing.  If either "efficiency" and "part_load_curve" are nil then it returns an
+  # error.  If an efficiency is set but is not between 0.01 and 1.0 it returns an error.  Otherwise, it looks for air
+  # loop supply components that match the "OS_CoilHeatingGas" type.  If it finds one it then calls the
+  # reset_furnace_efficiency method which resets the the furnace efficiency and looks for the part load efficiency curve
+  # in the curves.json file.  If it finds a curve it sets the part load curve to that, otherwise it returns an error.
+  # It also renames the furnace to include the "furnace_eff"["name"].
+  def modify_furnace_efficiency(model:, furnace_eff: nil)
+    return if furnace_eff.nil?
+    unless furnace_eff['efficiency'].nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ECMS', "You attempted to set the efficiencies of furnaces in this model to: #{furnace_eff['efficiency']}. Please check the ECMS class furnace_set.json and make sure the efficiency you set is between 0.01 and 1.0.") if (furnace_eff['efficiency'] < 0.01 || furnace_eff['efficiency'] > 1.0)
+      furnace_eff['efficiency'] = nil if (furnace_eff['efficiency'] < 0.01 || furnace_eff['efficiency'] > 1.0)
+    end
+    OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ECMS', "You attempted to set either the efficiency or the part load curve of the furnaces in this model to nil.  Please check the ECMS class furnace_set.json and ensure that both the efficiency and part load curve are set.") if (furnace_eff['efficiency'].nil? || furnace_eff['part_load_curve'].nil?)
+    airloops = model.getAirLoopHVACs
+    return if airloops.nil?
+    airloops.sort.each do |airloop|
+      mod_furnaces = airloop.supplyComponents.select {|supplycomp| supplycomp.to_CoilHeatingGas.is_initialized}
+      unless mod_furnaces.empty?
+        mod_furnaces.sort.each do |mod_furnace|
+          reset_furnace_efficiency(model: model, component: mod_furnace.to_CoilHeatingGas.get, eff: furnace_eff)
+        end
+      end
+    end
+  end
+
+  # This method takes an OS model, a "OS_CoilHeatingGas" type compenent, and an efficiency hash which looks like:
+  #    "eff": {
+  #        "name": "NECB 95% Efficient Condensing Furnace",
+  #        "efficiency" => 86,
+  #        "part_load_curve" => "FURNACE-EFFPLR-COND-NECB2011",
+  #        "notes" => "From NECB 2011."
+  #    }
+  # If the hash is nil then it does nothing.  If eff["efficiency"] is nil, eff["part_load"] is nil, or eff["efficiency"]
+  # is not between 0.01 and 1.0 then it returns an error.  If both are set then it sets the efficiency of the furnace to
+  # whatever is entered in eff["efficiency"].  It then looks for the "part_load_curve" value in the curves.json file.
+  # If it does not find one it returns an error.  If it finds one it reset the part load curve to whatever was found.
+  # It then renames the furnace according to the following pattern:
+  # "eff["name"] + <furnace number (whatever was there before)>".
+  def reset_furnace_efficiency(model:, component:, eff:)
+    component.setGasBurnerEfficiency(eff['efficiency'])
+    part_load_curve_name = eff["part_load_curve"].to_s
+    existing_curve = @standards_data['curves'].select { |curve| curve['name'] == part_load_curve_name }
+    OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ECMS', "No furnace part load curve with the name #{part_load_curve_name} could be found in the ECMS class curves.json file.  Please check both the ECMS class curves.json and furnace_set.json files to ensure the curve is entered and referenced correctly.") if existing_curve.empty?
+    part_load_curve = model_add_curve(model, part_load_curve_name)
+    if part_load_curve
+      component.setPartLoadFractionCorrelationCurve(part_load_curve)
+      furnace_num = component.name.to_s.gsub(/[^0-9]/, '')
+      new_furnace_name = eff['name'] + " #{furnace_num}"
+      component.setName(new_furnace_name)
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ECMS', "There was a problem setting the furnace part load curve named #{part_load_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json or furnace_set.json files.")
+    end
+  end
 end
