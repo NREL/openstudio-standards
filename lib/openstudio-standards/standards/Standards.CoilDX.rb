@@ -145,7 +145,8 @@ module CoilDX
                                       when 'OS_Coil_Cooling_DX_SingleSpeed',
                                            'OS_Coil_Cooling_DX_TwoSpeed',
                                            'OS_Coil_Cooling_DX_VariableSpeed',
-                                           'OS_Coil_Cooling_DX_MultiSpeed'
+                                           'OS_Coil_Cooling_DX_MultiSpeed',
+                                           'OS_AirConditioner_VariableRefrigerantFlow'
                                         coil_dx.condenserType
                                       else
                                         'AirCooled'

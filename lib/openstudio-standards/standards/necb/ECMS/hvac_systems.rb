@@ -97,6 +97,286 @@ class ECMS
   end
 
   # =============================================================================================================================
+  # Return hash of flags for whether storey is conditioned and average ceiling z-coordinates of building storeys.
+  def get_storey_avg_clg_zcoords(model)
+    storey_avg_clg_zcoords = {}
+    model.getBuildingStorys.each do |storey|
+      storey_avg_clg_zcoords[storey] = []
+      storey_cond = false
+      total_area = 0.0
+      sum = 0.0
+      storey.spaces.each do |space|
+        # Determine if any of the spaces/zones of the storey are conditioned? If yes then the floor is considered to be conditioned
+        if space.thermalZone.is_initialized
+          zone = space.thermalZone.get
+          if zone.thermostat.is_initialized
+            if zone.thermostat.get.to_ThermostatSetpointDualSetpoint.is_initialized
+              if zone.thermostat.get.to_ThermostatSetpointDualSetpoint.get.heatingSetpointTemperatureSchedule.is_initialized ||
+                  zone.thermostat.get.to_ThermostatSetpointDualSetpoint.get.coolingSetpointTemperatureSchedule.is_initialized
+                storey_cond = true
+              end
+            end
+          end
+        end
+        # Find average height of z-coordinates of ceiling/roof of floor
+        space.surfaces.each do |surf|
+          if (surf.surfaceType.to_s.upcase == "ROOFCEILING")
+            sum += (surf.centroid.z.to_f + space.zOrigin.to_f) * surf.grossArea.to_f
+            total_area += surf.grossArea.to_f
+          end
+        end
+      end
+      storey_avg_clg_zcoords[storey] << storey_cond
+      storey_avg_clg_zcoords[storey] << (sum / total_area)
+    end
+
+    return storey_avg_clg_zcoords
+  end
+
+  # =============================================================================================================================
+  # Return x,y,z coordinates of exterior wall with largest area on the lowest floor
+  def get_lowest_floor_ext_wall_centroid_coords(storeys_clg_zcoords)
+    ext_wall,ext_wall_x,ext_wall_y,ext_wall_z = nil,nil,nil,nil
+    storeys_clg_zcoords.keys.each do |storey|
+      max_area = 0.0
+      sorted_spaces = storey.spaces.sort_by {|space| space.name.to_s}
+      sorted_spaces.each do |space|
+        ext_walls = space.surfaces.select {|surf| (surf.surfaceType.to_s.upcase == "WALL") && (surf.outsideBoundaryCondition.to_s.upcase == "OUTDOORS")}
+        ext_walls = ext_walls.sort_by {|wall| wall.grossArea.to_f}
+        if not ext_walls.empty?
+          if ext_walls.last.grossArea.to_f > max_area
+            max_area = ext_walls.last.grossArea.to_f
+            ext_wall_x = ext_walls.last.centroid.x.to_f + space.xOrigin.to_f
+            ext_wall_y = ext_walls.last.centroid.y.to_f + space.yOrigin.to_f
+            ext_wall_z = ext_walls.last.centroid.z.to_f + space.zOrigin.to_f
+            ext_wall = ext_walls.last
+          end
+        end
+      end
+      break unless not ext_wall
+    end
+    if not ext_wall
+      OpenStudio.logFree(OpenStudio::Info, 'openstudiostandards.get_lowest_floor_ext_wall_centroid_coords','Did not find an exteior wall in the building!')
+    end
+
+    return ext_wall_x,ext_wall_y,ext_wall_z
+  end
+
+  # =============================================================================================================================
+  # Return x,y,z coordinates of space centroid
+  def get_space_centroid_coords(space)
+    total_area = 0.0
+    sum_x,sum_y,sum_z = 0.0,0.0,0.0
+    space.surfaces.each do |surf|
+      total_area += surf.grossArea.to_f
+      sum_x += (surf.centroid.x.to_f + space.xOrigin.to_f) * surf.grossArea.to_f
+      sum_y += (surf.centroid.y.to_f + space.yOrigin.to_f) * surf.grossArea.to_f
+      sum_z += (surf.centroid.z.to_f + space.zOrigin.to_f) * surf.grossArea.to_f
+    end
+    space_centroid_x = sum_x / total_area
+    space_centroid_y = sum_y / total_area
+    space_centroid_z = sum_z / total_area
+
+    return space_centroid_x,space_centroid_y,space_centroid_z
+  end
+
+  # =============================================================================================================================
+  # Return x,y,z coordinates of the centroid of the roof of the storey
+  def get_roof_centroid_coords(storey)
+    sum_x,sum_y,sum_z,total_area = 0.0,0.0,0.0,0.0
+    cent_x,cent_y,cent_z = nil,nil,nil
+    storey.spaces.each do |space|
+      roof_surfaces = space.surfaces.select {|surf| (surf.surfaceType.to_s.upcase == "ROOFCEILING") && (surf.outsideBoundaryCondition.to_s.upcase == "OUTDOORS")}
+      roof_surfaces.each do |surf|
+        sum_x += (surf.centroid.x.to_f + space.xOrigin.to_f) * surf.grossArea.to_f
+        sum_y += (surf.centroid.y.to_f + space.yOrigin.to_f) * surf.grossArea.to_f
+        sum_z += (surf.centroid.z.to_f + space.zOrigin.to_f) * surf.grossArea.to_f
+        total_area += surf.grossArea.to_f
+      end
+    end
+    if total_area > 0.0
+      cent_x = sum_x / total_area
+      cent_y = sum_y / total_area
+      cent_z = sum_z / total_area
+    else
+      OpenStudio.logFree(OpenStudio::Info, 'openstudiostandards.get_roof_centroid_coords','Did not find a roof on the top floor!')
+    end
+
+    return cent_x,cent_y,cent_z
+  end
+
+  # =============================================================================================================================
+  # Determine maximum equivalent and net vertical pipe runs for VRF model
+  def get_max_vrf_pipe_lengths(model)
+    # Get and sort floors average ceilings z-coordinates hash
+    storeys_clg_zcoords = get_storey_avg_clg_zcoords(model)
+    storeys_clg_zcoords = storeys_clg_zcoords.sort_by {|key,value| value[1]}.to_h  # sort storeys hash based on ceiling/roof z-coordinate
+    if storeys_clg_zcoords.values.last[0]
+      # If the top floor is conditioned, then assume the top floor is not an attic floor and place the VRF outdoor unit at the roof centroid
+      location_cent_x,location_cent_y,location_cent_z = get_roof_centroid_coords(storeys_clg_zcoords.keys.last)
+    else
+      # If the top floor is not conditioned, then assume it's an attic floor. In this case place the VRF outdoor unit next to the centroid
+      # of the exterior wall with the largest area on the lowest floor.
+      location_cent_x,location_cent_y,location_cent_z = get_lowest_floor_ext_wall_centroid_coords(storeys_clg_zcoords)
+    end
+    # Initialize distances
+    max_equiv_distance = 0.0
+    max_vert_distance = 0.0
+    min_vert_distance = 0.0
+    storeys_clg_zcoords.keys.each do |storey|
+      next unless storeys_clg_zcoords[storey][0]
+      storey.spaces.each do |space|
+        # Is there a VRF terminal unit in the space/zone?
+        vrf_term_units = []
+        if space.thermalZone.is_initialized
+          vrf_term_units = space.thermalZone.get.equipment.select {|eqpt| eqpt.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized}
+        end
+        next unless not vrf_term_units.empty?
+        space_centroid_x,space_centroid_y,space_centroid_z = get_space_centroid_coords(space)
+        # Update max horizontal and vertical distances if needed
+        equiv_distance = (location_cent_x.to_f - space_centroid_x.to_f).abs +
+            (location_cent_y.to_f - space_centroid_y.to_f).abs +
+            (location_cent_z.to_f - space_centroid_z.to_f).abs
+        if equiv_distance > max_equiv_distance then max_equiv_distance = equiv_distance end
+        pos_vert_distance = [space_centroid_z.to_f-location_cent_z.to_f,0.0].max
+        if pos_vert_distance > max_vert_distance then max_vert_distance = pos_vert_distance end
+        neg_vert_distance = [space_centroid_z.to_f-location_cent_z.to_f,0.0].min
+        if neg_vert_distance < min_vert_distance then min_vert_distance = neg_vert_distance end
+      end
+    end
+    max_net_vert_distance = max_vert_distance + min_vert_distance
+    max_net_vert_distance = [max_net_vert_distance,0.000001].max
+
+    return max_equiv_distance,max_net_vert_distance
+  end
+
+  # =============================================================================================================================
+  # Add an outdoor VRF unit
+  def add_outdoor_vrf_unit(model:,ecm_name: nil,condenser_type: "AirCooled")
+    outdoor_vrf_unit = OpenStudio::Model::AirConditionerVariableRefrigerantFlow.new(model)
+    outdoor_vrf_unit.setName("VRF Outdoor Unit")
+    outdoor_vrf_unit.setHeatPumpWasteHeatRecovery(true)
+    outdoor_vrf_unit.setRatedHeatingCOP(4.0)
+    outdoor_vrf_unit.setRatedCoolingCOP(4.0)
+    outdoor_vrf_unit.setMinimumOutdoorTemperatureinHeatingMode(-25.0)
+    outdoor_vrf_unit.setHeatingPerformanceCurveOutdoorTemperatureType("WetBulbTemperature")
+    outdoor_vrf_unit.setMasterThermostatPriorityControlType("ThermostatOffsetPriority")
+    outdoor_vrf_unit.setDefrostControl('OnDemand')
+    outdoor_vrf_unit.setDefrostStrategy('ReverseCycle')
+    outdoor_vrf_unit.autosizeResistiveDefrostHeaterCapacity
+    outdoor_vrf_unit.setPipingCorrectionFactorforHeightinHeatingModeCoefficient(-0.00019231)
+    outdoor_vrf_unit.setPipingCorrectionFactorforHeightinCoolingModeCoefficient(-0.00019231)
+    outdoor_vrf_unit.setMinimumOutdoorTemperatureinHeatRecoveryMode(-5.0)
+    outdoor_vrf_unit.setMaximumOutdoorTemperatureinHeatRecoveryMode(26.2)
+    outdoor_vrf_unit.setInitialHeatRecoveryCoolingCapacityFraction(0.5)
+    outdoor_vrf_unit.setHeatRecoveryCoolingCapacityTimeConstant(0.15)
+    outdoor_vrf_unit.setInitialHeatRecoveryCoolingEnergyFraction(1.0)
+    outdoor_vrf_unit.setHeatRecoveryCoolingEnergyTimeConstant(0.0)
+    outdoor_vrf_unit.setInitialHeatRecoveryHeatingCapacityFraction(1.0)
+    outdoor_vrf_unit.setHeatRecoveryHeatingCapacityTimeConstant(0.15)
+    outdoor_vrf_unit.setInitialHeatRecoveryHeatingEnergyFraction(1.0)
+    outdoor_vrf_unit.setHeatRecoveryCoolingEnergyTimeConstant(0.0)
+    outdoor_vrf_unit.setMinimumHeatPumpPartLoadRatio(0.5)
+    outdoor_vrf_unit.setCondenserType(condenser_type)
+    outdoor_vrf_unit.setCrankcaseHeaterPowerperCompressor(0.001)
+    heat_defrost_eir_ft = nil
+    if ecm_name
+      search_criteria = coil_dx_find_search_criteria(outdoor_vrf_unit)
+      props =  model_find_object(standards_data['tables']["heat_pumps_heating_ecm_#{ecm_name.downcase}"]['table'], search_criteria, 1.0, Date.today)
+      heat_defrost_eir_ft = model_add_curve(model, props['heat_defrost_eir_ft'])
+    end
+    if heat_defrost_eir_ft
+      outdoor_vrf_unit.setDefrostEnergyInputRatioModifierFunctionofTemperatureCurve(heat_defrost_eir_ft)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{outdoor_vrf_unit.name}, cannot find heat_defrost_eir_ft curve, will not be set.")
+    end
+
+    return outdoor_vrf_unit
+  end
+
+  # =============================================================================================================================
+  # Add indoor VRF units and update horizontal and vertical pipe runs for outdoor VRF unit
+  def add_indoor_vrf_units(model:,system_zones_map:,outdoor_vrf_unit:)
+    always_on = model.alwaysOnDiscreteSchedule
+    always_off = model.alwaysOffDiscreteSchedule
+    system_zones_map.sort.each do |sname,zones|
+      zones.sort.each do |izone|
+        zone_vrf_fan = OpenStudio::Model::FanOnOff.new(model, always_on)
+        zone_vrf_fan.setName("#{izone.name} VRF Fan")
+        zone_vrf_clg_coil = OpenStudio::Model::CoilCoolingDXVariableRefrigerantFlow.new(model)
+        zone_vrf_clg_coil.setName("#{izone.name} VRF Clg Coil")
+        zone_vrf_htg_coil = OpenStudio::Model::CoilHeatingDXVariableRefrigerantFlow.new(model)
+        zone_vrf_htg_coil.setName("#{izone.name} VRF Htg Coil")
+        zone_vrf_unit = OpenStudio::Model::ZoneHVACTerminalUnitVariableRefrigerantFlow.new(model,zone_vrf_clg_coil,zone_vrf_htg_coil,zone_vrf_fan)
+        zone_vrf_unit.setName("#{izone.name} VRF Indoor Unit")
+        zone_vrf_unit.setOutdoorAirFlowRateDuringCoolingOperation(0.000001)
+        zone_vrf_unit.setOutdoorAirFlowRateDuringHeatingOperation(0.000001)
+        zone_vrf_unit.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(0.000001)
+        zone_vrf_unit.setZoneTerminalUnitOffParasiticElectricEnergyUse(0.000001)
+        zone_vrf_unit.setZoneTerminalUnitOnParasiticElectricEnergyUse(0.000001)
+        zone_vrf_unit.setSupplyAirFanOperatingModeSchedule(always_off)
+        zone_vrf_unit.setRatedTotalHeatingCapacitySizingRatio(1.3)
+        zone_vrf_unit.addToThermalZone(izone)
+        outdoor_vrf_unit.addTerminal(zone_vrf_unit)
+        # VRF terminal unit does not have a backup coil, use a unit heater as backup coil
+        zone_unitheater_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on) # OS does not support an OnOff fan for unit heaters
+        zone_unitheater_fan.setName("#{izone.name} Unit Heater Fan")
+        zone_unitheater_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+        zone_unitheater_htg_coil.setName("#{izone.name} Unit Heater Htg Coil")
+        zone_unit_heater = OpenStudio::Model::ZoneHVACUnitHeater.new(model,always_on,zone_unitheater_fan,zone_unitheater_htg_coil)
+        zone_unit_heater.setName("#{izone.name} Unit Heater")
+        zone_unit_heater.setFanControlType("OnOff")
+        zone_unit_heater.addToThermalZone(izone)
+      end
+    end
+    # Now we can find and apply maximum horizontal and vertical distances between outdoor vrf unit and zones with vrf terminal units
+    max_hor_pipe_length,max_vert_pipe_length = get_max_vrf_pipe_lengths(model)
+    #raise("test1:#{max_hor_pipe_length},#{max_vert_pipe_length}")
+    outdoor_vrf_unit.setEquivalentPipingLengthusedforPipingCorrectionFactorinCoolingMode(max_hor_pipe_length)
+    outdoor_vrf_unit.setEquivalentPipingLengthusedforPipingCorrectionFactorinHeatingMode(max_hor_pipe_length)
+    outdoor_vrf_unit.setVerticalHeightusedforPipingCorrectionFactor(max_vert_pipe_length)
+  end
+
+  # =============================================================================================================================
+  # Add a dedicated outside air loop with cold-climate heat pump with electric backup
+  # Add cold-climate zonal terminal VRF units
+  def add_ecm_hs08_vrfzonal(model:,system_zones_map:,system_doas_flags:,zone_clg_eqpt_type:, standard:)
+    # Update system doas flags
+    system_doas_flags.keys.each {|sname| system_doas_flags[sname] = true}
+    # Add doas with cold-climate air-source heat pump and electric backup
+    add_ecm_hs09_ccashpsys(model: model,system_zones_map: system_zones_map,system_doas_flags: system_doas_flags,standard: standard,baseboard_flag: false)
+    # Add outdoor VRF unit
+    outdoor_vrf_unit = add_outdoor_vrf_unit(model: model,ecm_name: "hs08_vrfzonal")
+    # Add indoor VRF terminal units
+    add_indoor_vrf_units(model: model,system_zones_map: system_zones_map,outdoor_vrf_unit: outdoor_vrf_unit)
+  end
+
+  # =============================================================================================================================
+  # Apply efficiencies and performance curves for ECM 'hs08_vrfzonal'
+  def apply_efficiency_ecm_hs08_vrfzonal(model:,ecm_name:)
+    # Use same performance data as ECM "hs09_ccashpsys" for air system
+    apply_efficiency_ecm_hs09_ccashpsys(model: model,ecm_name: "hs09_ccashpsys")
+    # Apply efficiency and curves for VRF units
+    model.getAirConditionerVariableRefrigerantFlows.sort.each do |vrf_unit|
+      airconditioner_variablerefrigerantflow_cooling_apply_efficiency_and_curves(vrf_unit,ecm_name)
+      airconditioner_variablerefrigerantflow_heating_apply_efficiency_and_curves(vrf_unit,ecm_name)
+    end
+    # Set fan size of VRF terminal units
+    fan_power_per_flow_rate = 150.0  # based on Mitsubishi data: 100 low and 200 high (W-s/m3)
+    model.getZoneHVACTerminalUnitVariableRefrigerantFlows.each do |iunit|
+      fan = iunit.supplyAirFan.to_FanOnOff.get
+      fan_pr_rise = fan_power_per_flow_rate*(fan.fanEfficiency*fan.motorEfficiency)
+      fan.setPressureRise(fan_pr_rise)
+    end
+    # Set fan size of unit heaters
+    model.getZoneHVACUnitHeaters.each do |iunit|
+      fan = iunit.supplyAirFan.to_FanConstantVolume.get
+      fan_pr_rise = fan_power_per_flow_rate*(fan.fanEfficiency*fan.motorEfficiency)
+      fan.setPressureRise(fan_pr_rise)
+    end
+  end
+
+  # =============================================================================================================================
   # Add air loops with cold-climate heat pump with electric backup coil.
   # Add zone electric baseboards
   def add_ecm_hs09_ccashpsys(model:,system_zones_map:,system_doas_flags:,zone_clg_eqpt_type: nil,standard:,baseboard_flag: true)
@@ -437,6 +717,277 @@ class ECMS
   end
 
   # =============================================================================================================================
+  # Applies the standard cooling efficiency ratings and typical performance curves to "AirConditionerVariableRefrigerantFlow" object.
+  def airconditioner_variablerefrigerantflow_cooling_apply_efficiency_and_curves(airconditioner_variablerefrigerantflow,ecm_name)
+    successfully_set_all_properties = true
+
+    # Get the search criteria
+    search_criteria = coil_dx_find_search_criteria(airconditioner_variablerefrigerantflow)
+
+    # Get the capacity
+    capacity_w = airconditioner_variablerefrigerantflow_cooling_find_capacity(airconditioner_variablerefrigerantflow)
+    capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
+    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
+
+    # Lookup efficiencies
+    props =  model_find_object(standards_data['tables']["heat_pumps_ecm_#{ecm_name.downcase}"]['table'], search_criteria, capacity_btu_per_hr, Date.today)
+
+    # Check to make sure properties were found
+    if props.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the COOL-CAP-FT Low curve
+    cool_cap_ft_low = model_add_curve(airconditioner_variablerefrigerantflow.model, props['cool_cap_ft_low'])
+    if cool_cap_ft_low
+      airconditioner_variablerefrigerantflow.setCoolingCapacityRatioModifierFunctionofLowTemperatureCurve(cool_cap_ft_low)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find cool_cap_ft_low curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the COOL-CAP-FT boundary curve
+    cool_cap_ft_boundary = model_add_curve(airconditioner_variablerefrigerantflow.model, props['cool_cap_ft_boundary'])
+    if cool_cap_ft_boundary
+      airconditioner_variablerefrigerantflow.setCoolingCapacityRatioBoundaryCurve(cool_cap_ft_boundary)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find cool_cap_ft_boundary curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the COOL-CAP-FT high curve
+    cool_cap_ft_high = model_add_curve(airconditioner_variablerefrigerantflow.model, props['cool_cap_ft_high'])
+    if cool_cap_ft_high
+      airconditioner_variablerefrigerantflow.setCoolingCapacityRatioModifierFunctionofHighTemperatureCurve(cool_cap_ft_high)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find cool_cap_ft_high curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the COOL-EIR-FT low curve
+    cool_eir_ft_low = model_add_curve(airconditioner_variablerefrigerantflow.model, props['cool_eir_ft_low'])
+    if cool_eir_ft_low
+      airconditioner_variablerefrigerantflow.setCoolingEnergyInputRatioModifierFunctionofLowTemperatureCurve(cool_eir_ft_low)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find cool_eir_ft_low curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the COOL-EIR-FT boundary curve
+    cool_eir_ft_boundary = model_add_curve(airconditioner_variablerefrigerantflow.model, props['cool_eir_ft_boundary'])
+    if cool_eir_ft_boundary
+      airconditioner_variablerefrigerantflow.setCoolingEnergyInputRatioBoundaryCurve(cool_eir_ft_boundary)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find cool_eir_ft_boundary curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the COOL-EIR-FT high curve
+    cool_eir_ft_high = model_add_curve(airconditioner_variablerefrigerantflow.model, props['cool_eir_ft_high'])
+    if cool_eir_ft_high
+      airconditioner_variablerefrigerantflow.setCoolingEnergyInputRatioModifierFunctionofHighTemperatureCurve(cool_eir_ft_high)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find cool_eir_ft_high curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the COOL-EIR-FPLR low curve
+    cool_eir_fplr_low = model_add_curve(airconditioner_variablerefrigerantflow.model, props['cool_eir_fplr_low'])
+    if cool_eir_fplr_low
+      airconditioner_variablerefrigerantflow.setCoolingEnergyInputRatioModifierFunctionofLowPartLoadRatioCurve(cool_eir_fplr_low)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find cool_eir_fplr_low curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the COOL-EIR-FPLR high curve
+    cool_eir_fplr_high = model_add_curve(airconditioner_variablerefrigerantflow.model, props['cool_eir_fplr_high'])
+    if cool_eir_fplr_high
+      airconditioner_variablerefrigerantflow.setCoolingEnergyInputRatioModifierFunctionofHighPartLoadRatioCurve(cool_eir_fplr_high)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find cool_eir_fplr_high curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the COOL-CCR curve
+    cool_ccr = model_add_curve(airconditioner_variablerefrigerantflow.model, props['cool_ccr'])
+    if cool_ccr
+      airconditioner_variablerefrigerantflow.setCoolingCombinationRatioCorrectionFactorCurve(cool_ccr)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find cool_ccr curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the COOL-PLF-FPLR curve
+    cool_plf_fplr = model_add_curve(airconditioner_variablerefrigerantflow.model, props['cool_plf_fplr'])
+    if cool_plf_fplr
+      airconditioner_variablerefrigerantflow.setCoolingPartLoadFractionCorrelationCurve(cool_plf_fplr)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find cool_plf_fplr curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the COOL-PLF-FPLR curve
+    cool_plf_fplr = model_add_curve(airconditioner_variablerefrigerantflow.model, props['cool_plf_fplr'])
+    if cool_plf_fplr
+      airconditioner_variablerefrigerantflow.setCoolingPartLoadFractionCorrelationCurve(cool_plf_fplr)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find cool_plf_fplr curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the COOL-CAP-FPL curve
+    cool_cap_fpl = model_add_curve(airconditioner_variablerefrigerantflow.model, props['cool_cap_fpl'])
+    if cool_cap_fpl
+      airconditioner_variablerefrigerantflow.setPipingCorrectionFactorforLengthinCoolingModeCurve(cool_cap_fpl)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find cool_cap_fpl curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Find the minimum COP
+    cop = airconditioner_variablerefrigerantflow_cooling_standard_minimum_cop(airconditioner_variablerefrigerantflow, false, ecm_name)
+
+    # Set the efficiency values
+    unless cop.nil?
+      airconditioner_variablerefrigerantflow.setRatedCoolingCOP(cop.to_f)
+    end
+
+  end
+
+  # =============================================================================================================================
+  # Applies the standard heating efficiency ratings and typical performance curves to "AirConditionerVariableRefrigerantFlow" object.
+  def airconditioner_variablerefrigerantflow_heating_apply_efficiency_and_curves(airconditioner_variablerefrigerantflow,ecm_name)
+    successfully_set_all_properties = true
+
+    # Get the search criteria
+    search_criteria = coil_dx_find_search_criteria(airconditioner_variablerefrigerantflow)
+
+    # Get the capacity
+    capacity_w = airconditioner_variablerefrigerantflow_heating_find_capacity(airconditioner_variablerefrigerantflow)
+    capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
+    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
+
+    # Lookup efficiencies
+    props =  model_find_object(standards_data['tables']["heat_pumps_heating_ecm_#{ecm_name.downcase}"]['table'], search_criteria, capacity_btu_per_hr, Date.today)
+
+    # Check to make sure properties were found
+    if props.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find heating efficiency info using #{search_criteria}, cannot apply efficiency.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the HEAT-CAP-FT Low curve
+    heat_cap_ft_low = model_add_curve(airconditioner_variablerefrigerantflow.model, props['heat_cap_ft_low'])
+    if heat_cap_ft_low
+      airconditioner_variablerefrigerantflow.setHeatingCapacityRatioModifierFunctionofLowTemperatureCurve(heat_cap_ft_low)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find heat_cap_ft_low curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the HEAT-CAP-FT boundary curve
+    heat_cap_ft_boundary = model_add_curve(airconditioner_variablerefrigerantflow.model, props['heat_cap_ft_boundary'])
+    if heat_cap_ft_boundary
+      airconditioner_variablerefrigerantflow.setHeatingCapacityRatioBoundaryCurve(heat_cap_ft_boundary)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find heat_cap_ft_boundary curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the HEAT-CAP-FT high curve
+    heat_cap_ft_high = model_add_curve(airconditioner_variablerefrigerantflow.model, props['heat_cap_ft_high'])
+    if heat_cap_ft_high
+      airconditioner_variablerefrigerantflow.setHeatingCapacityRatioModifierFunctionofHighTemperatureCurve(heat_cap_ft_high)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find heat_cap_ft_high curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the HEAT-EIR-FT low curve
+    heat_eir_ft_low = model_add_curve(airconditioner_variablerefrigerantflow.model, props['heat_eir_ft_low'])
+    if heat_eir_ft_low
+      airconditioner_variablerefrigerantflow.setHeatingEnergyInputRatioModifierFunctionofLowTemperatureCurve(heat_eir_ft_low)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find heat_eir_ft_low curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the HEAT-EIR-FT boundary curve
+    heat_eir_ft_boundary = model_add_curve(airconditioner_variablerefrigerantflow.model, props['heat_eir_ft_boundary'])
+    if heat_eir_ft_boundary
+      airconditioner_variablerefrigerantflow.setHeatingEnergyInputRatioBoundaryCurve(heat_eir_ft_boundary)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find heat_eir_ft_boundary curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the HEAT-EIR-FT high curve
+    heat_eir_ft_high = model_add_curve(airconditioner_variablerefrigerantflow.model, props['heat_eir_ft_high'])
+    if heat_eir_ft_high
+      airconditioner_variablerefrigerantflow.setHeatingEnergyInputRatioModifierFunctionofHighTemperatureCurve(heat_eir_ft_high)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find heat_eir_ft_high curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the HEAT-EIR-FPLR low curve
+    heat_eir_fplr_low = model_add_curve(airconditioner_variablerefrigerantflow.model, props['heat_eir_fplr_low'])
+    if heat_eir_fplr_low
+      airconditioner_variablerefrigerantflow.setHeatingEnergyInputRatioModifierFunctionofLowPartLoadRatioCurve(heat_eir_fplr_low)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find heat_eir_fplr_low curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the HEAT-EIR-FPLR high curve
+    heat_eir_fplr_high = model_add_curve(airconditioner_variablerefrigerantflow.model, props['heat_eir_fplr_high'])
+    if heat_eir_fplr_high
+      airconditioner_variablerefrigerantflow.setHeatingEnergyInputRatioModifierFunctionofHighPartLoadRatioCurve(heat_eir_fplr_high)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find heat_eir_fplr_high curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the HEAT-HCR curve
+    heat_hcr = model_add_curve(airconditioner_variablerefrigerantflow.model, props['heat_hcr'])
+    if heat_hcr
+      airconditioner_variablerefrigerantflow.setHeatingCombinationRatioCorrectionFactorCurve(heat_hcr)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find heat_hcr curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the HEAT-PLF-FPLR curve
+    heat_plf_fplr = model_add_curve(airconditioner_variablerefrigerantflow.model, props['heat_plf_fplr'])
+    if heat_plf_fplr
+      airconditioner_variablerefrigerantflow.setHeatingPartLoadFractionCorrelationCurve(heat_plf_fplr)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find cool_plf_fplr curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Make the HEAT-CAP-FPL curve
+    heat_cap_fpl = model_add_curve(airconditioner_variablerefrigerantflow.model, props['heat_cap_fpl'])
+    if heat_cap_fpl
+      airconditioner_variablerefrigerantflow.setPipingCorrectionFactorforLengthinHeatingModeCurve(heat_cap_fpl)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find heat_cap_fpl curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # Find the minimum COP and rename with efficiency rating
+    cop = airconditioner_variablerefrigerantflow_heating_standard_minimum_cop(airconditioner_variablerefrigerantflow, true, ecm_name)
+
+    # Set the efficiency values
+    unless cop.nil?
+      airconditioner_variablerefrigerantflow.setRatedHeatingCOP(cop.to_f)
+    end
+
+  end
+
+  # =============================================================================================================================
   # Find minimum efficiency for "CoilCoolingDXVariableSpeed" object
   def coil_cooling_dx_variable_speed_standard_minimum_cop(coil_cooling_dx_variable_speed, rename = false,ecm_name)
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_variable_speed)
@@ -575,6 +1126,132 @@ class ECMS
   end
 
   # =============================================================================================================================
+  # Find minimum cooling efficiency for "AirConditionerVariableRefrigerantFlow" object
+  def airconditioner_variablerefrigerantflow_cooling_standard_minimum_cop(airconditioner_variablerefrigerantflow, rename = false, ecm_name)
+    search_criteria = coil_dx_find_search_criteria(airconditioner_variablerefrigerantflow)
+    cooling_type = search_criteria['cooling_type']
+    heating_type = search_criteria['heating_type']
+    sub_category = search_criteria['subcategory']
+    capacity_w = airconditioner_variablerefrigerantflow_cooling_find_capacity(airconditioner_variablerefrigerantflow)
+    capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
+    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
+
+    # Look up the efficiency characteristics
+    props = model_find_object(standards_data['tables']["heat_pumps_ecm_#{ecm_name.downcase}"], search_criteria, capacity_btu_per_hr, Date.today)
+
+    # Check to make sure properties were found
+    if props.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      successfully_set_all_properties = false
+      return successfully_set_all_properties
+    end
+
+    # Get the minimum efficiency standards
+    cop = nil
+
+    # If specified as EER
+    unless props['minimum_energy_efficiency_ratio'].nil?
+      min_eer = props['minimum_energy_efficiency_ratio']
+      cop = eer_to_cop(min_eer)
+      new_comp_name = "#{airconditioner_variablerefrigerantflow.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+    end
+
+    # if specified as HSPF (heat pump)
+    unless props['minimum_heating_seasonal_performance_factor'].nil?
+      min_hspf = props['minimum_heating_seasonal_performance_factor']
+      cop = hspf_to_cop_heating_with_fan(min_hspf)
+      new_comp_name = "#{coil_heating_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}HSPF"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
+    end
+
+    # If specified as EER (heat pump)
+    unless props['minimum_full_load_efficiency'].nil?
+      min_eer = props['minimum_full_load_efficiency']
+      cop = eer_to_cop(min_eer)
+      new_comp_name = "#{airconditioner_variablerefrigerantflow.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+    end
+
+    # If specified as COP
+    unless props['minimum_coefficient_of_performance_cooling'].nil?
+      cop = props['minimum_coefficient_of_performance_cooling']
+      new_comp_name = "#{airconditioner_variablerefrigerantflow.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{cop}COP"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+    end
+
+    # Rename
+    if rename
+      airconditioner_variablerefrigerantflow.setName(new_comp_name)
+    end
+
+    return cop
+  end
+
+  # =============================================================================================================================
+  # Find minimum heating efficiency for "AirConditionerVariableRefrigerantFlow" object
+  def airconditioner_variablerefrigerantflow_heating_standard_minimum_cop(airconditioner_variablerefrigerantflow, rename = false, ecm_name)
+    search_criteria = coil_dx_find_search_criteria(airconditioner_variablerefrigerantflow)
+    cooling_type = search_criteria['cooling_type']
+    heating_type = search_criteria['heating_type']
+    sub_category = search_criteria['subcategory']
+    capacity_w = airconditioner_variablerefrigerantflow_heating_find_capacity(airconditioner_variablerefrigerantflow)
+    capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
+    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
+
+    # Look up the efficiency characteristics
+    props = model_find_object(standards_data['tables']["heat_pumps_heating_ecm_#{ecm_name.downcase}"], search_criteria, capacity_btu_per_hr, Date.today)
+
+    # Check to make sure properties were found
+    if props.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find heating efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      successfully_set_all_properties = false
+      return successfully_set_all_properties
+    end
+
+    # Get the minimum efficiency standards
+    cop = nil
+
+    # If specified as EER
+    unless props['minimum_energy_efficiency_ratio'].nil?
+      min_eer = props['minimum_energy_efficiency_ratio']
+      cop = eer_to_cop(min_eer)
+      new_comp_name = "#{airconditioner_variablerefrigerantflow.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+    end
+
+    # if specified as HSPF (heat pump)
+    unless props['minimum_heating_seasonal_performance_factor'].nil?
+      min_hspf = props['minimum_heating_seasonal_performance_factor']
+      cop = hspf_to_cop_heating_with_fan(min_hspf)
+      new_comp_name = "#{coil_heating_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}HSPF"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
+    end
+
+    # If specified as EER (heat pump)
+    unless props['minimum_full_load_efficiency'].nil?
+      min_eer = props['minimum_full_load_efficiency']
+      cop = eer_to_cop(min_eer)
+      new_comp_name = "#{airconditioner_variablerefrigerantflow.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+    end
+
+    # If specified as COP
+    unless props['minimum_coefficient_of_performance_heating'].nil?
+      cop = props['minimum_coefficient_of_performance_heating']
+      new_comp_name = "#{airconditioner_variablerefrigerantflow.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{cop}COP"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+    end
+
+    # Rename
+    if rename
+      airconditioner_variablerefrigerantflow.setName(new_comp_name)
+    end
+
+    return cop
+  end
+
+  # =============================================================================================================================
   # Find cooling capacity for "CoilCoolingDXVariableSpeed" object
   def coil_cooling_dx_variable_speed_find_capacity(coil_cooling_dx_variable_speed)
     capacity_w = nil
@@ -600,6 +1277,40 @@ class ECMS
       capacity_w = coil_heating_dx_variable_speed.autosizedRatedHeatingCapacityAtSelectedNominalSpeedLevel.get
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{coil_heating_dx_variable_speed.name} capacity is not available, cannot apply efficiency standard.")
+      return 0.0
+    end
+
+    return capacity_w
+  end
+
+  # =============================================================================================================================
+  # Find cooling capacity for "AirConditionerVariableRefrigerantFlow" object
+  def airconditioner_variablerefrigerantflow_cooling_find_capacity(airconditioner_variablerefrigerantflow)
+    capacity_w = nil
+    if airconditioner_variablerefrigerantflow.ratedTotalCoolingCapacity.is_initialized
+      capacity_w = airconditioner_variablerefrigerantflow.ratedTotalCoolingCapacity.get
+    elsif airconditioner_variablerefrigerantflow.autosizedRatedTotalCoolingCapacity.is_initialized
+      capacity_w = airconditioner_variablerefrigerantflow.autosizedRatedTotalCoolingCapacity.get
+      airconditioner_variablerefrigerantflow.setRatedTotalCoolingCapacity(capacity_w)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name} cooling capacity is not available, cannot apply efficiency standard.")
+      return 0.0
+    end
+
+    return capacity_w
+  end
+
+  # =============================================================================================================================
+  # Find heating capacity for "AirConditionerVariableRefrigerantFlow" object
+  def airconditioner_variablerefrigerantflow_heating_find_capacity(airconditioner_variablerefrigerantflow)
+    capacity_w = nil
+    if airconditioner_variablerefrigerantflow.ratedTotalHeatingCapacity.is_initialized
+      capacity_w = airconditioner_variablerefrigerantflow.ratedTotalHeatingCapacity.get
+    elsif airconditioner_variablerefrigerantflow.autosizedRatedTotalHeatingCapacity.is_initialized
+      capacity_w = airconditioner_variablerefrigerantflow.autosizedRatedTotalHeatingCapacity.get
+      airconditioner_variablerefrigerantflow.setRatedTotalHeatingCapacity(capacity_w)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name} heating capacity is not available, cannot apply efficiency standard.")
       return 0.0
     end
 
