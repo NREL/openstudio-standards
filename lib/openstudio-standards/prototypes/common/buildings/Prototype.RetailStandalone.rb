@@ -8,7 +8,7 @@ module RetailStandalone
   # TODO: The HeatExchangerAirToAir is not calculating correctly. It does not equal the legacy IDF and has higher energy usage due to that.
   # TODO: Need to determine if WaterHeater can be alone or if we need to 'fake' it.
 
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # Add the door infiltration for template 2004,2007,2010,2013
@@ -178,12 +178,12 @@ module RetailStandalone
     return true
   end
 
-  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
+  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input, additional_params)
 
     return true
   end
 
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting geometry input')
     case template
     when '90.1-2010', '90.1-2013'

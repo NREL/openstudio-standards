@@ -3,7 +3,7 @@
 # These are changes that are inconsistent with other prototype
 # building types.
 module HighriseApartment
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
     # add elevator and lights&fans for the ground floor corridor
     add_extra_equip_corridor(model)
     # add extra infiltration for ground floor corridor
@@ -86,12 +86,12 @@ module HighriseApartment
     end
   end
 
-  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
+  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input, additional_params)
 
     return true
   end
 
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
 
     return true
   end

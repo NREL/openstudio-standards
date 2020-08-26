@@ -3,7 +3,7 @@
 # These are changes that are inconsistent with other prototype
 # building types.
 module LargeOffice
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
     system_to_space_map = define_hvac_system_map(building_type, climate_zone)
 
     system_to_space_map.each do |system|
@@ -70,12 +70,12 @@ module LargeOffice
     return true
   end
 
-  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
+  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input, additional_params)
 
     return true
   end
 
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
 
     return true
   end
