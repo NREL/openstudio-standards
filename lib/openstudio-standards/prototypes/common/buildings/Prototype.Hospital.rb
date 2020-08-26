@@ -6,6 +6,19 @@ module Hospital
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
 
+    # add transformer
+    case template
+    when '90.1-2004', '90.1-2007'
+      transformer_efficiency = 0.979
+    when '90.1-2010', '90.1-2013'
+      transformer_efficiency = 0.987
+    end
+
+    model_add_transformer(model,
+                          wired_lighting_frac: 0.022,
+                          transformer_size: 500000,
+                          transformer_efficiency: transformer_efficiency)
+
     # add extra equipment for kitchen
     add_extra_equip_kitchen(model)
 
@@ -233,7 +246,7 @@ module Hospital
     end
   end
 
-  def model_add_daylighting_controls(model)
+  def model_add_daylighting_controls(model, climate_zone)
     space_names = ['Office1_Flr_5', 'Office3_Flr_5', 'Lobby_Records_Flr_1']
     space_names.each do |space_name|
       space = model.getSpaceByName(space_name).get

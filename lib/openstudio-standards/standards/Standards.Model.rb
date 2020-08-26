@@ -69,7 +69,7 @@ class Standard
 
     # Add daylighting controls to each space
     model.getSpaces.sort.each do |space|
-      added = space_add_daylighting_controls(space, false, false)
+      added = space_add_daylighting_controls(space, false, false, climate_zone)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
@@ -1549,12 +1549,12 @@ class Standard
   end
 
   # Applies daylighting controls to each space in the model per the standard.
-  def model_add_daylighting_controls(model)
+  def model_add_daylighting_controls(model, climate_zone)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding daylighting controls.')
 
     # Add daylighting controls to each space
     model.getSpaces.sort.each do |space|
-      added = space_add_daylighting_controls(space, false, false)
+      added = space_add_daylighting_controls(space, false, false, climate_zone)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding daylighting controls.')
@@ -1993,47 +1993,53 @@ class Standard
       schedule_type_limits = model.getScheduleTypeLimitsByName(standard_sch_type_limit)
       if !schedule_type_limits.empty?
         schedule_type_limits = schedule_type_limits.get
+        if schedule_type_limits.name.to_s.downcase == 'temperature'
+          schedule_type_limits.resetLowerLimitValue
+          schedule_type_limits.resetUpperLimitValue
+          schedule_type_limits.setNumericType('Continuous')
+          schedule_type_limits.setUnitType('Temperature')
+        end
       else
         case standard_sch_type_limit.downcase
           when 'temperature'
             schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName("Temperature")
+            schedule_type_limits.setName('Temperature')
             schedule_type_limits.setLowerLimitValue(0.0)
             schedule_type_limits.setUpperLimitValue(100.0)
-            schedule_type_limits.setNumericType("Continuous")
-            schedule_type_limits.setUnitType("Temperature")
+            schedule_type_limits.setNumericType('Continuous')
+            schedule_type_limits.setUnitType('Temperature')
 
           when 'humidity ratio'
             schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName("Humidity Ratio")
+            schedule_type_limits.setName('Humidity Ratio')
             schedule_type_limits.setLowerLimitValue(0.0)
             schedule_type_limits.setUpperLimitValue(0.3)
-            schedule_type_limits.setNumericType("Continuous")
-            schedule_type_limits.setUnitType("Dimensionless")
+            schedule_type_limits.setNumericType('Continuous')
+            schedule_type_limits.setUnitType('Dimensionless')
 
           when 'fraction', 'fractional'
             schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName("Fraction")
+            schedule_type_limits.setName('Fraction')
             schedule_type_limits.setLowerLimitValue(0.0)
             schedule_type_limits.setUpperLimitValue(1.0)
-            schedule_type_limits.setNumericType("Continuous")
-            schedule_type_limits.setUnitType("Dimensionless")
+            schedule_type_limits.setNumericType('Continuous')
+            schedule_type_limits.setUnitType('Dimensionless')
 
           when 'onoff'
             schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName("OnOff")
+            schedule_type_limits.setName('OnOff')
             schedule_type_limits.setLowerLimitValue(0)
             schedule_type_limits.setUpperLimitValue(1)
-            schedule_type_limits.setNumericType("Discrete")
-            schedule_type_limits.setUnitType("Availability")
+            schedule_type_limits.setNumericType('Discrete')
+            schedule_type_limits.setUnitType('Availability')
 
           when 'activity'
             schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName("Activity")
+            schedule_type_limits.setName('Activity')
             schedule_type_limits.setLowerLimitValue(70.0)
             schedule_type_limits.setUpperLimitValue(1000.0)
-            schedule_type_limits.setNumericType("Continuous")
-            schedule_type_limits.setUnitType("ActivityLevel")
+            schedule_type_limits.setNumericType('Continuous')
+            schedule_type_limits.setUnitType('ActivityLevel')
         else
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Invalid standard_sch_type_limit for method model_add_schedule_type_limits.")
         end
@@ -4990,8 +4996,8 @@ class Standard
 
       if htg_fuels.include?('NaturalGas') ||
          htg_fuels.include?('PropaneGas') ||
-         htg_fuels.include?('FuelOil#1') ||
-         htg_fuels.include?('FuelOil#2') ||
+         htg_fuels.include?('FuelOilNo1') ||
+         htg_fuels.include?('FuelOilNo2') ||
          htg_fuels.include?('Coal') ||
          htg_fuels.include?('Diesel') ||
          htg_fuels.include?('Gasoline')

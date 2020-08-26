@@ -44,7 +44,7 @@ module BTAP
     qaqc[:geography] ={}
     qaqc[:geography][:hdd] = BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).hdd18
     qaqc[:geography][:cdd] = BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).cdd18
-    qaqc[:geography][:climate_zone] = BTAP::Compliance::NECB2011::get_climate_zone_name(qaqc[:geography][:hdd])
+    qaqc[:geography][:climate_zone] = NECB2011.new().get_climate_zone_name(qaqc[:geography][:hdd])
     qaqc[:geography][:city] = model.getWeatherFile.city
     qaqc[:geography][:state_province_region] = model.getWeatherFile.stateProvinceRegion
     qaqc[:geography][:country] = model.getWeatherFile.country
@@ -890,7 +890,7 @@ def necb_2011_qaqc(qaqc, model)
   end
   #Exterior Opaque
   necb_section_name = "NECB2011-Section 3.2.2.2"
-  climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+  climate_index = NECB2011.new().get_climate_zone_index(qaqc[:geography][:hdd])
   result_value_index = 6
   round_precision = 3
   data = {}
@@ -910,7 +910,7 @@ def necb_2011_qaqc(qaqc, model)
   }
   #Exterior Fenestration
   necb_section_name = "NECB2011-Section 3.2.2.3"
-  climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+  climate_index = NECB2011.new().get_climate_zone_index(qaqc[:geography][:hdd])
   result_value_index = 6
   round_precision = 3
   data = {}
@@ -933,7 +933,7 @@ def necb_2011_qaqc(qaqc, model)
   end    
   #Exterior Ground surfaces
   necb_section_name = "NECB2011-Section 3.2.3.1"
-  climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+  climate_index = NECB2011.new().get_climate_zone_index(qaqc[:geography][:hdd])
   result_value_index = 6
   round_precision = 3
   data = {}

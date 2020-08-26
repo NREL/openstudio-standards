@@ -31,10 +31,6 @@ class Standard
         if model.getPlantLoopByName('Chilled Water Loop').is_initialized
           chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
         else
-          num_chillers = 1
-          if (not system['num_chillers'].nil?) && (system['num_chillers'].to_i > 0)
-            num_chillers = system['num_chillers'].to_i
-          end
           condenser_water_loop = nil
           if system['chiller_cooling_type'] == 'WaterCooled'
 
@@ -45,7 +41,10 @@ class Standard
                                                      number_of_cells_per_tower: 2,
                                                      number_cooling_towers: num_chillers)
           end
-
+          num_chillers = prototype_input['chw_number_chillers']
+          if num_chillers == nil || num_chillers.to_i < 1
+            num_chillers = 1
+          end
           chilled_water_loop = model_add_chw_loop(model,
                                                   cooling_fuel: 'Electricity',
                                                   dsgn_sup_wtr_temp: system['chilled_water_design_supply_water_temperature'],
@@ -54,8 +53,8 @@ class Standard
                                                   chiller_cooling_type: system['chiller_cooling_type'],
                                                   chiller_condenser_type: system['chiller_condenser_type'],
                                                   chiller_compressor_type: system['chiller_compressor_type'],
-                                                  num_chillers: num_chillers,
-                                                  condenser_water_loop: condenser_water_loop)
+                                                  condenser_water_loop: condenser_water_loop,
+                                                  num_chillers: num_chillers.to_i)
         end
 
         # Add the VAV

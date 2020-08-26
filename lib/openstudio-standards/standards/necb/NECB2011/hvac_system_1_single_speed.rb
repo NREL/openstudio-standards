@@ -50,7 +50,7 @@ class NECB2011
     # MAU heating coil: hot water coil or electric, depending on argument mau_heating_coil_type
     # mau_heating_coil_type choices are "Hot Water", "Electric"
     # boiler_fueltype choices match OS choices for Boiler component fuel type, i.e.
-    # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
+    # "NaturalGas","Electricity","PropaneGas","FuelOilNo1","FuelOilNo2","Coal","Diesel","Gasoline","OtherFuel1"
 
     # Some system parameters are set after system is set up; by applying method 'apply_hvac_efficiency_standard'
 

@@ -43,6 +43,7 @@ Standard.class_eval do
     model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
     model_add_daylight_savings(model)
+    model_add_daylight_savings(model)
     model_add_ground_temperatures(model, @instvarbuilding_type, climate_zone)
     model_apply_sizing_parameters(model, @instvarbuilding_type)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
@@ -74,7 +75,7 @@ Standard.class_eval do
     # Add daylighting controls per standard
     # only four zones in large hotel have daylighting controls
     # todo: YXC to merge to the main function
-    model_add_daylighting_controls(model)
+    model_add_daylighting_controls(model, climate_zone)
     model_custom_daylighting_tweaks(building_type, climate_zone, @prototype_input, model)
     model_update_exhaust_fan_efficiency(model)
     model_update_fan_efficiency(model)

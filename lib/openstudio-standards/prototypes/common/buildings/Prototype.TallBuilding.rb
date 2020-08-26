@@ -783,7 +783,7 @@ module TallBuilding
             "chiller_cooling_type": "WaterCooled",
             "chiller_condenser_type": nil,
             "chiller_compressor_type": "Centrifugal",
-            "num_chillers": num_chillers,
+            "chw_number_chillers": num_chillers,
             "space_names": space_names
         }
 
@@ -798,7 +798,7 @@ module TallBuilding
             "chiller_cooling_type": "WaterCooled",
             "chiller_condenser_type": nil,
             "chiller_compressor_type": "Centrifugal",
-            "num_chillers": num_chillers,
+            "chw_number_chillers": num_chillers,
             "space_names": space_names
         }
 
@@ -813,7 +813,7 @@ module TallBuilding
             "chiller_cooling_type": "WaterCooled",
             "chiller_condenser_type": nil,
             "chiller_compressor_type": "Centrifugal",
-            "num_chillers": num_chillers,
+            "chw_number_chillers": num_chillers,
             "economizer_control_method": "DifferentialDryBulb",
             "space_names": space_names
         }
@@ -831,7 +831,7 @@ module TallBuilding
             "chiller_cooling_type": "WaterCooled",
             "chiller_condenser_type": nil,
             "chiller_compressor_type": "Centrifugal",
-            "num_chillers": num_chillers,
+            "chw_number_chillers": num_chillers,
             "economizer_control_method": "DifferentialDryBulb",
             "space_names": space_names
         }
@@ -846,7 +846,7 @@ module TallBuilding
             "chiller_cooling_type": "WaterCooled",
             "chiller_condenser_type": nil,
             "chiller_compressor_type": "Centrifugal",
-            "num_chillers": num_chillers,
+            "chw_number_chillers": num_chillers,
             "space_names": space_names
         }
 
@@ -878,7 +878,7 @@ module TallBuilding
           "chiller_cooling_type": "WaterCooled",
           "chiller_condenser_type": nil,
           "chiller_compressor_type": "Centrifugal",
-          "num_chillers": num_chillers,
+          "chw_number_chillers": num_chillers,
           "space_names": hotel_common_spaces
       }
       new_json.push(hotel_common_hvac_obj)

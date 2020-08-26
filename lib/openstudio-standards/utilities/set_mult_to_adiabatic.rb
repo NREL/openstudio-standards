@@ -12,7 +12,7 @@ converted = []
 spaces.each{|space|
 	# check for multiplier
 	if space.multiplier > 1
-		puts space.name
+    puts space.name
 		surfaces = space.surfaces
 		# get surfaces of a space
 		surfaces.each{|surface|
