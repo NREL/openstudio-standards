@@ -606,4 +606,84 @@ class ECMS
     return capacity_w
   end
 
+  # ============================================================================================================================
+  # Apply boiler efficiency
+  # This model takes an OS model and a boiler efficiency hash sent to it with the following form:
+  #    "boiler_eff": {
+  #        "name" => "NECB Condensing Boiler",
+  #        "efficiency" => 86,
+  #        "part_load_curve" => "BOILER-EFFPLR-COND-NECB2011",
+  #        "notes" => "From NECB 2011."
+  #    }
+  # If boiler_eff is nill then it does nothing.  If either "efficiency" and "part_load_curve" are nil then it returns an
+  # error.  If an efficiency is set but is not between 0.01 and 1.0 it returns an error.  Otherwise, it looks for plant
+  # loop supply components that match the "OS_BoilerHotWater" type.  If it finds one it then calls the
+  # reset_boiler_efficiency method which resets the the boiler efficiency and looks for the part load efficiency curve
+  # in the curves.json file.  If it finds a curve it sets the part load curve to that, otherwise it returns an error.
+  # It also renames the boiler to include the "boiler_eff"["name"].
+  def modify_boiler_efficiency(model:, boiler_eff: nil)
+    return if boiler_eff.nil?
+    unless boiler_eff['efficiency'].nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ECMS', "You attempted to set the efficiencies of boilers in this model to: #{boiler_eff['efficiency']}. Please check the ECMS class boiler_set.json and make sure the efficiency you set is between 0.01 and 1.0.") if (boiler_eff['efficiency'] < 0.01 || boiler_eff['efficiency'] > 1.0)
+      boiler_eff['efficiency'] = nil if (boiler_eff['efficiency'] < 0.01 || boiler_eff['efficiency'] > 1.0)
+    end
+    OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ECMS', "You attempted to set either the efficiency or the part load curve of the boilers in this model to nil.  Please check the ECMS class boiler_set.json and ensure that both the efficiency and part load curve are set.") if (boiler_eff['efficiency'].nil? || boiler_eff['part_load_curve'].nil?)
+    plantloops = model.getPlantLoops
+    return if plantloops.nil?
+    plantloops.sort.each do |plantloop|
+      mod_boilers = plantloop.supplyComponents.select {|supplycomp| supplycomp.to_BoilerHotWater.is_initialized}
+      unless mod_boilers.empty?
+        mod_boilers.sort.each do |mod_boiler|
+          reset_boiler_efficiency(model: model, component: mod_boiler.to_BoilerHotWater.get, eff: boiler_eff)
+        end
+      end
+    end
+  end
+
+  # This method takes an OS model, a "OS_BoilerHotWater" type compenent, condensing efficiency limit and an efficiency
+  # hash which looks like:
+  #    "eff": {
+  #        "name": "NECB Condensing Boiler",
+  #        "efficiency" => 86,
+  #        "part_load_curve" => "BOILER-EFFPLR-COND-NECB2011",
+  #        "notes" => "From NECB 2011."
+  #    }
+  # If the hash is nil then it does nothing.  If eff["efficiency"] is nil, eff["part_load"] is nil, or eff["efficiency"]
+  # is not between 0.01 and 1.0 then it returns an error.  If both are set then it sets the efficiency of the boiler to
+  # whatever is entered in eff["efficiency"].  It then looks for the "part_load_curve" value in the curves.json file.
+  # If it does not find one it returns an error.  If it finds one it reset the part load curve to whatever was found.
+  # It then determines the nominal capacity of the boiler.  If the nominal capacity is greater than 1W the boiler is
+  # considered a primary boiler (for the name only) if the capacity is less than 1W the boiler is considered a secondary
+  # boiler (for the name only).  It then renames the boiler according to the following pattern:
+  # "Primary/Secondary eff["name"] capacity kBtu/hr".
+  def reset_boiler_efficiency(model:, component:, eff:)
+    component.setNominalThermalEfficiency(eff['efficiency'])
+    part_load_curve_name = eff["part_load_curve"].to_s
+    existing_curve = @standards_data['curves'].select { |curve| curve['name'] == part_load_curve_name }
+    OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ECMS', "No boiler with the name #{part_load_curve_name} could be found in the ECMS class curves.json file.  Please check both the ECMS class curves.json and boiler_set.json files to ensure the curve is entered and referenced correctly.") if existing_curve.empty?
+    part_load_curve_data = (@standards_data["curves"].select { |curve| curve['name'] == part_load_curve_name })[0]
+    if part_load_curve_data['independent_variable_1'].to_s.upcase == 'TEnteringBoiler'.upcase || part_load_curve_data['independent_variable_2'].to_s.upcase == 'TEnteringBoiler'.upcase
+      component.setEfficiencyCurveTemperatureEvaluationVariable('EnteringBoiler')
+    elsif part_load_curve_data['independent_variable_1'].to_s.upcase == 'TLeavingBoiler'.upcase || part_load_curve_data['independent_variable_2'].to_s.upcase == 'TLeavingBoiler'.upcase
+      component.setEfficiencyCurveTemperatureEvaluationVariable('LeavingBoiler')
+    end
+    part_load_curve = model_add_curve(model, part_load_curve_name)
+    if part_load_curve
+      component.setNormalizedBoilerEfficiencyCurve(part_load_curve)
+      if component.isNominalCapacityAutosized
+        boiler_size_W = model.getAutosizedValue(component, 'Design Size Nominal Capacity', 'W').to_f
+      else
+        boiler_size_W = component.nominalCapacity.to_f
+      end
+      boiler_size_kbtu_per_hour = (OpenStudio.convert(boiler_size_W, 'W', 'kBtu/h').get)
+      boiler_primacy = 'Primary '
+      if boiler_size_W < 1.0
+        boiler_primacy = 'Secondary '
+      end
+      new_boiler_name = boiler_primacy + eff['name'] + " #{boiler_size_kbtu_per_hour.round(0)} kBtu/hr"
+      component.setName(new_boiler_name)
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ECMS', "There was a problem setting the boiler part load curve named #{part_load_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json or boiler_set.json files.")
+    end
+  end
 end
