@@ -12,6 +12,8 @@ class ASHRAE9012013 < ASHRAE901
                             0.2
                           when 'Electricity', 'NaturalGas'
                             0.3
+                          else
+                            0.2
                           end
 
     # Set the minimum flow fraction

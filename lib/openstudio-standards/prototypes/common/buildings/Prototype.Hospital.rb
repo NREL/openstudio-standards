@@ -246,7 +246,7 @@ module Hospital
     end
   end
 
-  def model_add_daylighting_controls(model, climate_zone)
+  def model_add_daylighting_controls(model)
     space_names = ['Office1_Flr_5', 'Office3_Flr_5', 'Lobby_Records_Flr_1']
     space_names.each do |space_name|
       space = model.getSpaceByName(space_name).get
