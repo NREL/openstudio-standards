@@ -153,7 +153,6 @@ class Standard
                                    space.multiplier
                                end
 
-            puts "space: #{space_name}"
             water_fixture = model_add_swh_end_uses_by_space(model,
                                             main_swh_loop,
                                             space,

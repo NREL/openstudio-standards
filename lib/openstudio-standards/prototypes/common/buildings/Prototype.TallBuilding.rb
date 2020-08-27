@@ -19,6 +19,9 @@ module TallBuilding
     # apply vertical weather variations to tall buildings
     apply_vertical_weather_variation(model)
 
+    # add thermostat to highriseapartment corridors
+    add_thermostat_to_corridor(model)
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
     return true
@@ -263,12 +266,10 @@ module TallBuilding
 
     model.getSpaceInfiltrationDesignFlowRates.sort.each do |infiltration|
       orin_infil_name = infiltration.name.to_s
-      puts "infiltration: #{orin_infil_name}"
       hvac_sch = nil
       hvac_off_sch = nil
       space_name = infiltration.space.get.name.to_s
       space_name = space_name.split(" ")[-1]
-      puts "space: #{space_name}"
       if space_name.start_with?"Office"
         hvac_sch = office_hvac_sch
         hvac_off_sch = office_hvac_off_sch
@@ -318,6 +319,25 @@ module TallBuilding
     #
     # end
 
+  end
+
+  # HighriseApartment doesn't apply thermostat to corridor spaces
+  def add_thermostat_to_corridor(model)
+    thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(model)
+    thermostat.setName("HighriseApartment Corridor Thermostat")
+    thermostat.setHeatingSetpointTemperatureSchedule(model_add_schedule(model, "ApartmentHighRise HTGSETP_APT_SCH"))
+    thermostat.setCoolingSetpointTemperatureSchedule(model_add_schedule(model, "ApartmentHighRise CLGSETP_APT_SCH"))
+
+    model.getSpaceTypes.each do |space_type|
+      unless space_type.standardsBuildingType.empty? || space_type.standardsSpaceType.empty?
+        if space_type.standardsBuildingType.get == "HighriseApartment" && space_type.standardsSpaceType.get == "Corridor"
+          space_type.spaces.each do |space|
+            thermostat_clone = thermostat.clone(model).to_ThermostatSetpointDualSetpoint.get
+            space.thermalZone.get.setThermostatSetpointDualSetpoint(thermostat_clone)
+          end
+        end
+      end
+    end
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input, additional_params)
@@ -784,6 +804,7 @@ module TallBuilding
             "chiller_condenser_type": nil,
             "chiller_compressor_type": "Centrifugal",
             "chw_number_chillers": num_chillers,
+            "number_cooling_towers": num_chillers,
             "space_names": space_names
         }
 
@@ -799,6 +820,7 @@ module TallBuilding
             "chiller_condenser_type": nil,
             "chiller_compressor_type": "Centrifugal",
             "chw_number_chillers": num_chillers,
+            "number_cooling_towers": num_chillers,
             "space_names": space_names
         }
 
@@ -814,6 +836,7 @@ module TallBuilding
             "chiller_condenser_type": nil,
             "chiller_compressor_type": "Centrifugal",
             "chw_number_chillers": num_chillers,
+            "number_cooling_towers": num_chillers,
             "economizer_control_method": "DifferentialDryBulb",
             "space_names": space_names
         }
@@ -832,6 +855,7 @@ module TallBuilding
             "chiller_condenser_type": nil,
             "chiller_compressor_type": "Centrifugal",
             "chw_number_chillers": num_chillers,
+            "number_cooling_towers": num_chillers,
             "economizer_control_method": "DifferentialDryBulb",
             "space_names": space_names
         }
@@ -847,6 +871,7 @@ module TallBuilding
             "chiller_condenser_type": nil,
             "chiller_compressor_type": "Centrifugal",
             "chw_number_chillers": num_chillers,
+            "number_cooling_towers": num_chillers,
             "space_names": space_names
         }
 
@@ -879,6 +904,7 @@ module TallBuilding
           "chiller_condenser_type": nil,
           "chiller_compressor_type": "Centrifugal",
           "chw_number_chillers": num_chillers,
+          "number_cooling_towers": num_chillers,
           "space_names": hotel_common_spaces
       }
       new_json.push(hotel_common_hvac_obj)

@@ -23,7 +23,7 @@ module PrimarySchool
 
     #
     # add extra equipment for kitchen
-    # add_extra_equip_kitchen(model)
+    add_extra_equip_kitchen(model)
     return true
   end
 

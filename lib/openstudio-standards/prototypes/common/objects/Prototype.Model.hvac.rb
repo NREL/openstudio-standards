@@ -31,19 +31,30 @@ class Standard
         if model.getPlantLoopByName('Chilled Water Loop').is_initialized
           chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
         else
+          # get num_chillers from prototype_input
+          num_chillers = prototype_input['chw_number_chillers']
+          if num_chillers == nil || num_chillers.to_i < 1
+            num_chillers = 1
+          end
+          # update num_chillers if specified in @system_to_space_map
+          if system['chw_number_chillers'] !=nil && system['chw_number_chillers'].to_i >0
+            num_chillers = system['chw_number_chillers']
+          end
+
+          # get number_cooling_towers if specified in @system_to_space_map
+          number_cooling_towers = 1
+          if system['number_cooling_towers'] !=nil && system['number_cooling_towers'].to_i >0
+            number_cooling_towers = system['number_cooling_towers']
+          end
+
           condenser_water_loop = nil
           if system['chiller_cooling_type'] == 'WaterCooled'
-
             condenser_water_loop = model_add_cw_loop(model,
                                                      cooling_tower_type: 'Open Cooling Tower',
                                                      cooling_tower_fan_type: 'Centrifugal',
                                                      cooling_tower_capacity_control: 'Variable Speed Fan',
                                                      number_of_cells_per_tower: 2,
-                                                     number_cooling_towers: num_chillers)
-          end
-          num_chillers = prototype_input['chw_number_chillers']
-          if num_chillers == nil || num_chillers.to_i < 1
-            num_chillers = 1
+                                                     number_cooling_towers: number_cooling_towers.to_i)
           end
           chilled_water_loop = model_add_chw_loop(model,
                                                   cooling_fuel: 'Electricity',

@@ -86,7 +86,7 @@ def unique_properties(sheet_name)
            ['name']
          when 'materials'
            ['name', 'code_category']
-         when 'space_types', 'space_types_lighting', 'space_types_rendering_color', 'space_types_ventilation', 'space_types_occupancy', 'space_types_infiltration', 'space_types_equipment', 'space_types_thermostats', 'space_types_swh', 'space_types_exhaust'
+         when 'space_types', 'space_types_lighting', 'space_types_rendering_color', 'space_types_ventilation', 'space_types_occupancy', 'space_types_infiltration', 'space_types_equipment', 'space_types_thermostats', 'space_types_swh', 'space_types_exhaust', 'space_types_lighting_control'
            ['template', 'building_type', 'space_type']
          when 'exterior_lighting'
            ['exterior_lighting_zone_number', 'template']
@@ -303,6 +303,13 @@ def export_spreadsheet_to_json(spreadsheet_titles)
     worksheets_to_skip << 'sheetmap'
     worksheets_to_skip << 'deer_lighting_fractions'
     worksheets_to_skip << 'window_types_and_weights'
+
+    # TODO remove
+    worksheets_to_skip.push("climate_zones", "climate_zone_sets", "parking", "entryways", "deer_lighting_fractions", "materials", "construction_sets", "construction_properties", "constructions", "window_types_and_weights", "boilers", "chillers", "heat_rejection", "water_source_heat_pumps", "water_source_heat_pumps_heating", "heat_pumps", "heat_pumps_heating", "unitary_acs", "water_heaters", "elevators", "refrigeration_system_lineup", "refrigeration_system", "refrigerated_cases", "refrigeration_walkins", "refrigeration_condenser", "refrigeration_compressors", "economizers", "curves", "fans", "motors", "ground_temperatures", "hvac_inference", "energy_recovery", "size_category", "lookups")
+
+
+
+
 
     # List of columns to skip
     cols_to_skip = []
