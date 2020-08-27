@@ -344,7 +344,7 @@ class NECB2011 < Standard
 
 
   # Determine whether or not water fixtures are attached to spaces
-  def model_attach_water_fixtures_to_spaces?(model)
+  def model_attach_water_fixtures_to_spaces?(model, building_type=nil)
     return true
   end
 
