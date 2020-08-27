@@ -1167,7 +1167,7 @@ class NECB2011
     # Assuming all fan motors are 4-pole ODP
     motor_use = 'FAN'
     motor_type = ''
-    if fan.class.name == 'OpenStudio::Model::FanConstantVolume'
+    if (fan.class.name == 'OpenStudio::Model::FanConstantVolume') || (fan.class.name == 'OpenStudio::Model::FanOnOff')
       motor_type = 'CONSTANT'
     elsif fan.class.name == 'OpenStudio::Model::FanVariableVolume'
       # Is this a return or supply fan
