@@ -62,12 +62,9 @@ class Standard
         model.getThermalZones.each do |zone|
           port_list = zone.returnPortList
           port_list_objects = port_list.modelObjects
-          #  puts "DEM: exhaust port list size: #{port_list_objects.size}"
           port_list_objects.each do |node|
             node_name = node.nameString
             node_list << node_name
-            #    puts "DEM: next node: #{node_name}"
-            # node_array.each do |variable|
             output = OpenStudio::Model::OutputVariable.new(var_name,model)
             output.setKeyValue(node_name)
             output.setReportingFrequency(frequency)
@@ -79,8 +76,6 @@ class Standard
         frequency = 'hourly'
         model.getAirLoopHVACs.sort.each do |air_loop_hvac|
           relief_node = air_loop_hvac.reliefAirNode.get
-          puts "DEM: air loop #{air_loop_hvac.nameString}"
-          puts "DEM: relief_node #{relief_node.nameString}"
           output = OpenStudio::Model::OutputVariable.new(var_name,model)
           output.setKeyValue(relief_node.nameString)
           output.setReportingFrequency(frequency)
@@ -253,7 +248,6 @@ class Standard
           end
 
           # Add the system type for these zones
-          puts "DEM: before add prm baseline"
           model_add_prm_baseline_system(model,
                                         system_type[0],
                                         system_type[1],
@@ -520,7 +514,6 @@ class Standard
 
   # Determine the dominant and exceptional areas of the
   # building based on fuel types and occupancy types.
-  #
   # @return [Array<Hash>] an array of hashes of area information,
   # with keys area_ft2, type, fuel, and zones (an array of zones)
   def model_prm_baseline_system_groups(model, custom)
@@ -783,7 +776,9 @@ class Standard
   # For now, there is only one building area type for a model
   # For stable baseline, heating type is based on climate, not proposed heating type
   # Isolate zones that have heating-only or district (purchased) heat or chilled water
-
+  # @param hvac_building_type [String] key for prm_baseline_hvac table
+  # @return [Array<Hash>] an array of hashes of area information,
+  # with keys area_ft2, type, fuel, and zones (an array of zones)
   def model_prm_stable_baseline_system_groups(model, custom, hvac_building_type)
 
     # Build zones hash of [zone, zone area, occupancy type, building type, fuel]
@@ -843,9 +838,9 @@ class Standard
       end
     end
     
-  lab_exhaust_si = 0
-  lab_relief_si = 0
-  if !lab_zones.empty?
+    lab_exhaust_si = 0
+    lab_relief_si = 0
+    if !lab_zones.empty?
       # Build a hash of return_node:zone_name
       node_list = {}
       zone_return_flow_si = Hash.new(0)
@@ -935,11 +930,8 @@ class Standard
       end
     end
 
-    puts "DEM: lab exhaust = #{lab_exhaust_si}"
-    puts "DEM: lab relief = #{lab_relief_si}"
     lab_exhaust_si += lab_relief_si
     lab_exhaust_cfm = OpenStudio.convert(lab_exhaust_si, 'm^3/s', 'cfm').get
-    puts "DEM: lab exhaust = #{lab_exhaust_cfm}"
 
     # Isolate computer rooms onto separate groups
     # Computer rooms may need to be split to two groups, depending on load
@@ -958,12 +950,10 @@ class Standard
 
     total_area_ft2 = 0
     zones.each do |zn|
-      puts "fill zones arrays zone 1 = #{zn['zone'].name.get}"
       if thermal_zone_heated?(zn['zone']) && !thermal_zone_cooled?(zn['zone'])
         heated_only_zones << zn['zone']
       elsif comp_room_loads[zn['zone'].name.get] > 0
         # This is a computer room zone
-        puts "DEM: comp room zone"
         if bldg_comp_room_load > 3_000_000 || comp_room_loads[zn['zone'].name.get] > 600_000
           # System 11
           if zn['fuel'].include?('DistrictCooling')
@@ -992,13 +982,10 @@ class Standard
       total_area_ft2 += OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
     end
 
-    puts "DEM: #{total_area_ft2}"
-    puts "DEM: after fill zones arrays"
-
     # Build final_groups array
     unless heated_only_zones.empty?
       htd_only_group = {}
-      htd_only_group['occ'] = 'heatedonly'
+      htd_only_group['occ'] = 'heated-only storage'
       htd_only_group['fuel'] = 'any'
       area_m2 = 0
       heated_only_zones.each do |zone|
@@ -1029,7 +1016,6 @@ class Standard
     unless heated_cooled_zones.empty?
       heated_cooled_group = {}
       heated_cooled_group['occ'] = hvac_building_type
-      puts "DEM: occ =  #{heated_cooled_group['occ']}  =================="
 
       heated_cooled_group['fuel'] = 'any'
       area_m2 = 0
@@ -1141,11 +1127,11 @@ class Standard
       end
     end
 
-    puts "DEM: ngroups = #{ngrps}"
     return final_groups
   end
 
   # Before deleting proposed HVAC components, determine for each zone if it has district heating
+  # @return [Hash] of boolean with zone name as key
   def get_district_heating_zones(model)
     has_district_hash = {}
     model.getThermalZones.sort.each do |zone|
@@ -1161,7 +1147,9 @@ class Standard
     return has_district_hash
   end  
 
-  # get list of heat types across a list of zones
+  # Get list of heat types across a list of zones
+  # @param zones [array of objects] array of zone objects
+  # @return [string] concatenated string showing different fuel types in a group of zones
   def get_group_heat_types(model, zones)
     heat_list = ''
     has_district_heat = false
@@ -1332,7 +1320,6 @@ class Standard
     # First filter by number of stories
     iStoryGroup = 0
     props = {}
-    puts "DEM: in baseline system type"
     0.upto(9) do |i|
       iStoryGroup += 1
       props = model_find_object(standards_data['prm_baseline_hvac'],
@@ -1340,6 +1327,8 @@ class Standard
         'hvac_building_type' => area_type,
         'flrs_range_group' => iStoryGroup,
         'area_range_group' => 1)
+      puts "Area type = #{area_type}"
+      puts "hvac_building_type = #{hvac_building_type}"
 
       if !props
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
@@ -1396,8 +1385,6 @@ class Standard
 
     heat_type = find_prm_heat_type(hvac_building_type, climate_zone)
 
-    puts "DEM: heat type = #{heat_type}"
-
     # hash to relate apx G systype categories to sys types for model
     sys_hash = {}
     if heat_type == 'fuel'
@@ -1423,8 +1410,6 @@ class Standard
     end     
   
     model_sys_type = sys_hash[props['system_type']]
-    puts "DEM: model sys type = #{model_sys_type}"
-    puts "DEM: fuel_type = #{fuel_type}"
 
     if /districtheating/i =~ fuel_type
       central_heat = 'DistrictHeating'
@@ -1447,16 +1432,15 @@ class Standard
       cool_type = nil
     end
 
-    puts "DEM: after check district"
-
     system_type = [model_sys_type, central_heat, zone_heat, cool_type]
-    puts "DEM: system type: "
-    p system_type
     return system_type
 
   end
 
   # determine whether heaing type is fuel or electric
+  # @param hvac_building_type [String] Key for lookup of baseline system type
+  # @param climate_zone [String] full name of climate zone
+  # @return [String] fuel or electric
   def find_prm_heat_type(hvac_building_type, climate_zone)
     climate_code = get_climate_zone_code(climate_zone)
     heat_type_props = model_find_object(standards_data['prm_heat_type'],
@@ -1484,8 +1468,10 @@ class Standard
     end
   end  
 
+  # Get ASHRAE ID code for climate zone
+  # @param climate_zone [String] full name of climate zone
+  # @return [String] ASHRAE ID code for climate zone
   def get_climate_zone_code(climate_zone)
-    puts "DEM: #{climate_zone}"
     cz_codes = []
     cz_codes << '0A'
     cz_codes << '0B'
@@ -1529,7 +1515,6 @@ class Standard
   # @param cool_fuel [String] cooling fuel.  Valid choices are Electricity, DistrictCooling
   # TODO: Add 90.1-2013 systems 11-13
   def model_add_prm_baseline_system(model, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones)
-    puts "DEM: #{system_type}"
     case system_type
       when 'PTAC' # System 1
         unless zones.empty?

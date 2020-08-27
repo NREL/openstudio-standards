@@ -60,6 +60,7 @@ class AppendixGPRMTests < Minitest::Test
       model = prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
 
       # Make modification if requested
+      @bldg_type_alt_now = nil
       if !mod.empty?
         mod.each do |method_mod|
           mthd, arguments = method_mod
@@ -130,7 +131,6 @@ class AppendixGPRMTests < Minitest::Test
           end
         end  
         if alt_space_type_was_found == false
-          puts "DEM: bldg_type_space_type = #{bldg_type_space_type}"
            space_type.setStandardsSpaceType(lpd_space_types[bldg_type_space_type])
         end
       end
@@ -429,10 +429,6 @@ class AppendixGPRMTests < Minitest::Test
   # Expected outcome depends on prototype name and 'mod' variation defined with 
   #
   # @param prototypes_base [Hash] Baseline prototypes
-
-  #DEM: questions:
-  # what does "mod = prototype" do?
-
   def check_hvac_type(prototypes_base)
 
     prototypes_base.each do |prototype, model|
@@ -444,9 +440,6 @@ class AppendixGPRMTests < Minitest::Test
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
       @bldg_type_alt_now = @bldg_type_alt[prototype]
 
-      puts "DEM:  @bldg_type_alt_now = #{@bldg_type_alt_now}, bldg type = #{building_type}"
-      puts "DEM: mod_str = #{mod_str}"
-      
       if building_type == 'MidriseApartment' && mod_str == ''
         # Residential model should be ptac or pthp, depending on climate
         check_if_pkg_terminal(model, climate_zone, "MidriseApartment")
@@ -521,7 +514,6 @@ class AppendixGPRMTests < Minitest::Test
                 end
               end
             end
-            puts "DEM: has lab = #{has_lab}, has_nonlab = #{has_nonlab} "
             assert(!(has_lab == true and has_nonlab == true), "System #{air_loop.name} has lab and nonlab spaces and lab exhaust > 15,000 cfm.")
           end    
       elsif mod_str == 'make_lab_low_distrib_zone_exh'
@@ -573,7 +565,7 @@ class AppendixGPRMTests < Minitest::Test
       end
     end
 
-    # Also check zone equipment
+    # TODO: Also check zone equipment
     if mz_or_sz == 'PTU' or mz_or_sz == 'SZ'
 
     end
@@ -582,6 +574,7 @@ class AppendixGPRMTests < Minitest::Test
 
 
   # Check if all baseline system types are PSZ
+  # @param model, sub_text for error messages
   def check_if_psz(model, sub_text)
     num_zones = 0
     num_dx_coils = 0
@@ -597,6 +590,7 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   # Check if any baseline system type is PVAV
+  # @param model, sub_text for error messages
   def check_if_pvav(model, sub_text)
     num_zones = 0
     num_dx_coils = 0
@@ -616,6 +610,7 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   # Check if building has baseline VAV/chiller for at least one air loop
+  # @param model, sub_text for error messages
   def check_if_vav_chiller(model, sub_text)
     num_zones = 0
     num_dx_coils = 0
@@ -632,6 +627,7 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   # Check if baseline system type is PTAC or PTHP
+  # @param model, sub_text for error messages
   def check_if_pkg_terminal(model, climate_zone, sub_text)
     pass_test = true
     # building fails if any zone is not packaged terminal unit
@@ -664,14 +660,15 @@ class AppendixGPRMTests < Minitest::Test
       end
     end
     if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/
-      assert(pass_test , "Baseline system selection failed for climate #{climate_zone}: should be PTHP for " + subtext)
+      assert(pass_test , "Baseline system selection failed for climate #{climate_zone}: should be PTHP for " + sub_text)
     else
-      assert(pass_test , "Baseline system selection failed for climate #{climate_zone}: should be PTAC for " + subtext)
+      assert(pass_test , "Baseline system selection failed for climate #{climate_zone}: should be PTAC for " + sub_text)
     end
 
   end
 
-  # Set ZoneMultiplier
+  # Set ZoneMultiplier to passed value for all zones
+  # @param model, arguments[]
   def set_zone_multiplier(model, arguments)
     mult = arguments[0]
     model.getAirLoopHVACs.each do |air_loop|
@@ -685,12 +682,13 @@ class AppendixGPRMTests < Minitest::Test
   # Change classroom space types to laboratory
   # Resulting in > 15,000 cfm lab exhaust
   # Add an exhaust fan to each zone
+  # @param model, arguments[]
   def make_lab_high_distrib_zone_exh(model, arguments)
     # Convert all classrooms to laboratory
     convert_spaces_to_laboratory(model, 'PrimarySchoolClassroom')
 
     # add exhaust fans to lab zones
-    add_exhaust_fan_per_zone(model)
+    add_exhaust_fan_per_lab_zone(model)
 
     return model
   end
@@ -698,19 +696,20 @@ class AppendixGPRMTests < Minitest::Test
   # Change computer classroom space types to laboratory
   # Resulting in < 15,000 cfm lab exhaust
   # Add an exhaust fan to each zone
+  # @param model, arguments[]
   def make_lab_low_distrib_zone_exh(model, arguments)
     convert_spaces_to_laboratory(model, 'PrimarySchoolComputerRoom')
     # Populate hash to allow this space type to persist when protoype space types are replaced later
  
     # add exhaust fans to lab zones
-    add_exhaust_fan_per_zone(model)
+    add_exhaust_fan_per_lab_zone(model)
 
     return model
   end
 
   # Change classroom space types to laboratory
   # Resulting in > 15,000 cfm lab exhaust
-  # Add an exhaust fan to each zone
+  # @param model, arguments[]
   def make_lab_high_system_exh(model, arguments)
     # Convert all classrooms to laboratory
     convert_spaces_to_laboratory(model, 'PrimarySchoolClassroom')
@@ -726,6 +725,8 @@ class AppendixGPRMTests < Minitest::Test
     return model
   end
 
+  # Convert specified space types to laboratory space type
+  # @param model, bldg_space_to_convert is name of existing space type to convert to laboratory
   def convert_spaces_to_laboratory(model, bldg_space_to_convert)
     # Convert all spaces of type to convert to laboratory
     model.getSpaceTypes.sort.each do |space_type|
@@ -736,7 +737,6 @@ class AppendixGPRMTests < Minitest::Test
                              end
       std_bldg_type = space_type.standardsBuildingType.get
       bldg_type_space_type = std_bldg_type + space_type.standardsSpaceType.get
-      # DEM: puts "std_bldg_type_sptyp = #{bldg_type_space_type}"
       if bldg_type_space_type == bldg_space_to_convert
         space_type.setStandardsSpaceType('laboratory')
         # Populate hash to allow this space type to persist when protoype space types are replaced later
@@ -745,7 +745,9 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
-  def add_exhaust_fan_per_zone(model)
+  # Add exhaust fan object to each lab zone in model
+  # @param model
+  def add_exhaust_fan_per_lab_zone(model)
     model.getThermalZones.sort.each do |thermal_zone|
       lab_is_found = false
       zone_area = 0
@@ -775,6 +777,8 @@ class AppendixGPRMTests < Minitest::Test
 
   end
 
+  # Change model to different building type
+  # @param model, arguments => new building type
   def change_bldg_type(model, arguments)
     bldg_type_new = arguments[0]
     @bldg_type_alt_now = bldg_type_new
@@ -788,12 +792,12 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      # 'wwr',
-      # 'envelope',
-      # 'lpd',
-      # 'isresidential',
-      # 'daylighting_control',
-      # 'infiltration',
+      'wwr',
+      'envelope',
+      'lpd',
+      'isresidential',
+      'daylighting_control',
+      'infiltration',
       'hvac_baseline'
     ]
 

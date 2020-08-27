@@ -1,6 +1,46 @@
 {
+    "wwr": [
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", []]
+    ],
+    "daylighting_control": [
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
+    ],
+    "isresidential": [
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
+    ],
+    "envelope": [
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
+    ],
+    "lpd": [
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", []]
+    ],
+    "infiltration": [
+        ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["Warehouse", "90.1-2013", "ASHRAE 169-2013-2A", []]
+    ],
     "hvac_baseline": [
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["change_bldg_type",["Assembly"]]]],
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-4A", [["change_bldg_type",["Assembly"]]]],
+        ["RetailStripmall", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["change_bldg_type",["Retail"]]]],
+        ["RetailStripmall", "90.1-2013", "ASHRAE 169-2013-2A", [["set_zone_multiplier",[3]]]],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-4A", []],
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", []],
+        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", []],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["set_zone_multiplier",[4]]]],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["set_zone_multiplier",[5]]]],
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["set_zone_multiplier",[4]]]],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["set_zone_multiplier",[6]]]],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["change_bldg_type",["Hospital"]]]],
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["make_lab_high_distrib_zone_exh",[]]]],
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["make_lab_low_distrib_zone_exh",[]]]],
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["make_lab_high_system_exh",[]]]]
-
-    ]
+        ]
 }

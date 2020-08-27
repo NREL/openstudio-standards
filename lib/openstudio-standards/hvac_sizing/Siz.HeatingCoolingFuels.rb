@@ -267,7 +267,6 @@ class OpenStudio::Model::Model
     has_hp = false
     if fuels.size > 0
       fuels.sort.each do |fuel|
-        puts "fuel = #{fuel}"
         case fuel
         when 'Electricity'
           has_electric = true
