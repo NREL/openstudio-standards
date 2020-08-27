@@ -178,7 +178,9 @@ class NECB2011 < Standard
                                    daylighting_type: 'NECB_Default',
                                    ecm_system_name: 'NECB_Default',
                                    erv_package: 'NECB_Default',
-                                   eff_mod: nil,
+                                   boiler_eff: nil,
+                                   furnace_eff: nil,
+                                   shw_eff: nil,
                                    ext_wall_cond: nil,
                                    ext_floor_cond: nil,
                                    ext_roof_cond: nil,
@@ -209,7 +211,9 @@ class NECB2011 < Standard
                                 daylighting_type: daylighting_type, # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
                                 ecm_system_name: ecm_system_name,
                                 erv_package: erv_package,
-                                eff_mod: eff_mod,
+                                boiler_eff: boiler_eff,
+                                furnace_eff: furnace_eff,
+                                shw_eff: shw_eff,
                                 ext_wall_cond: ext_wall_cond,
                                 ext_floor_cond: ext_floor_cond,
                                 ext_roof_cond: ext_roof_cond,
@@ -250,7 +254,9 @@ class NECB2011 < Standard
                            daylighting_type: 'NECB_Default',
                            ecm_system_name: 'NECB_Default',
                            erv_package: 'NECB_Default',
-                           eff_mod: nil,
+                           boiler_eff: nil,
+                           furnace_eff: nil,
+                           shw_eff: nil,
                            ext_wall_cond: nil,
                            ext_floor_cond: nil,
                            ext_roof_cond: nil,
@@ -298,7 +304,9 @@ class NECB2011 < Standard
                                    dcv_type: dcv_type,
                                    ecm_system_name: ecm_system_name,
                                    erv_package: erv_package,
-                                   eff_mod: eff_mod,
+                                   boiler_eff: boiler_eff,
+                                   furnace_eff: furnace_eff,
+                                   shw_eff: shw_eff,
                                    daylighting_type: daylighting_type
     )
     return model
@@ -311,7 +319,9 @@ class NECB2011 < Standard
                                      dcv_type: 'NECB_Default',
                                      ecm_system_name: 'NECB_Default',
                                      erv_package: 'NECB_Default',
-                                     eff_mod: nil,
+                                     boiler_eff: nil,
+                                     furnace_eff: nil,
+                                     shw_eff: nil,
                                      daylighting_type: 'NECB_Default')
     # Create ECM object.
     ecm = ECMS.new
@@ -340,7 +350,9 @@ class NECB2011 < Standard
     # Apply DCV as required
     model_enable_demand_controlled_ventilation(model, dcv_type)
     # Apply Boiler Efficiency
-    modify_equipment_efficiency(model: model, eff_mod: eff_mod)
+    ecm.modify_boiler_efficiency(model: model, boiler_eff: boiler_eff)
+    # Apply Furnace Efficiency
+    ecm.modify_furnace_efficiency(model: model, furnace_eff: furnace_eff)
     # Apply daylight controls.
     model_add_daylighting_controls(model) if daylighting_type == 'add_daylighting_controls'
 
@@ -428,7 +440,7 @@ class NECB2011 < Standard
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
-  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', eff_mod: nil)
+  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default')
     raise('validation of model failed.') unless validate_initial_model(model)
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
@@ -439,7 +451,6 @@ class NECB2011 < Standard
     # Apply the HVAC efficiency standard
     model_apply_hvac_efficiency_standard(model, climate_zone)
     model_enable_demand_controlled_ventilation(model, dcv_type)
-    modify_equipment_efficiency(model: model, eff_mod: eff_mod)
   end
 
   def apply_loop_pump_power(model:, sizing_run_dir:)
