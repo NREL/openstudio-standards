@@ -311,7 +311,6 @@ class NECB_HVAC_Tests < MiniTest::Test
     FileUtils.mkdir_p(output_folder)
 
     # Generate the osm files for all relevant cases to generate the test data for system 1
-    custom_eff_test_data = JSON.parse(File.read(File.join(@resources_folder, "boiler_test_custom_efficiencies_and_curves.json")))
     mau_type = true
     mau_heating_coil_type = 'Hot Water'
     baseboard_type = 'Hot Water'
@@ -321,16 +320,11 @@ class NECB_HVAC_Tests < MiniTest::Test
     test_res = []
     templates.each do |template|
       standard = Standard.build(template)
+      standard_ecms = Standard.build("ECMS")
       boiler_fueltype = 'NaturalGas'
       boiler_cap = 1500000
-      custom_eff_test_data["boiler_cust_eff_tests"].each do |cust_eff_test|
-        cust_eff_test_name = ""
-        if cust_eff_test["boiler_eff"]["eff"].nil?
-          cust_eff_test_name = "default"
-        else
-          cust_eff_test_name = ((cust_eff_test["boiler_eff"]["eff"].to_f)*100).round(0).to_s
-        end
-        name = "#{template}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}_efficiency-#{cust_eff_test_name}"
+      standard_ecms.standards_data["tables"]["boiler_eff_ecm"]["table"].each do |cust_eff_test|
+        name = "#{template}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}_efficiency-#{cust_eff_test["name"].to_s}"
         puts "***************************************#{name}*******************************************************\n"
         model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
@@ -349,7 +343,7 @@ class NECB_HVAC_Tests < MiniTest::Test
         # run the standards
         result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
         # customize the efficiency
-        standard.modify_equipment_efficiency(model: model, eff_mod: cust_eff_test)
+        standard_ecms.modify_boiler_efficiency(model: model, boiler_eff: cust_eff_test)
         # Save the model
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
         assert_equal(true, result, "test_boiler_efficiency: Failure in Standards for #{name}")

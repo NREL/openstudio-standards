@@ -6,6 +6,12 @@
       ],
       "table": [
         {
+          "name": "Standard Default",
+          "efficiency": null,
+          "part_load_curve": null,
+          "notes": "Do nothing."
+        },
+        {
           "name": "NECB 85% Efficient Condensing Gas Furnace",
           "efficiency": 0.85,
           "part_load_curve": "FURNACE-EFFPLR-COND-NECB2011",

@@ -1326,19 +1326,20 @@ class ECMS
   #        "part_load_curve" => "BOILER-EFFPLR-COND-NECB2011",
   #        "notes" => "From NECB 2011."
   #    }
-  # If boiler_eff is nill then it does nothing.  If either "efficiency" and "part_load_curve" are nil then it returns an
-  # error.  If an efficiency is set but is not between 0.01 and 1.0 it returns an error.  Otherwise, it looks for plant
+  # If boiler_eff is nill then it does nothing.  If both "efficiency" and "part_load_curve" are nil then it does
+  # nothing.  If an efficiency is set but is not between 0.01 and 1.0 it returns an error.  Otherwise, it looks for plant
   # loop supply components that match the "OS_BoilerHotWater" type.  If it finds one it then calls the
   # reset_boiler_efficiency method which resets the the boiler efficiency and looks for the part load efficiency curve
   # in the curves.json file.  If it finds a curve it sets the part load curve to that, otherwise it returns an error.
   # It also renames the boiler to include the "boiler_eff"["name"].
   def modify_boiler_efficiency(model:, boiler_eff: nil)
     return if boiler_eff.nil?
+    return if boiler_eff["efficiency"].nil? && boiler_eff["part_load_curve"].nil?
     unless boiler_eff['efficiency'].nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ECMS', "You attempted to set the efficiency of boilers in this model to: #{boiler_eff['efficiency']}. Please check the ECMS class boiler_set.json and make sure the efficiency you set is between 0.01 and 1.0.") if (boiler_eff['efficiency'] < 0.01 || boiler_eff['efficiency'] > 1.0)
       boiler_eff['efficiency'] = nil if (boiler_eff['efficiency'] < 0.01 || boiler_eff['efficiency'] > 1.0)
     end
-    OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ECMS', "You attempted to set either the efficiency or the part load curve of the boilers in this model to nil.  Please check the ECMS class boiler_set.json and ensure that both the efficiency and part load curve are set.") if (boiler_eff['efficiency'].nil? || boiler_eff['part_load_curve'].nil?)
+    OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ECMS', "You attempted to set the part load curve of boilers in this model to nil.  Please check the ECMS class boiler_set.json and ensure that both the efficiency and part load curve are set.") if boiler_eff['part_load_curve'].nil?
     plantloops = model.getPlantLoops
     return if plantloops.nil?
     plantloops.sort.each do |plantloop|
@@ -1359,13 +1360,12 @@ class ECMS
   #        "part_load_curve" => "BOILER-EFFPLR-COND-NECB2011",
   #        "notes" => "From NECB 2011."
   #    }
-  # If the hash is nil then it does nothing.  If eff["efficiency"] is nil, eff["part_load"] is nil, or eff["efficiency"]
-  # is not between 0.01 and 1.0 then it returns an error.  If both are set then it sets the efficiency of the boiler to
-  # whatever is entered in eff["efficiency"].  It then looks for the "part_load_curve" value in the curves.json file.
-  # If it does not find one it returns an error.  If it finds one it reset the part load curve to whatever was found.
-  # It then determines the nominal capacity of the boiler.  If the nominal capacity is greater than 1W the boiler is
-  # considered a primary boiler (for the name only) if the capacity is less than 1W the boiler is considered a secondary
-  # boiler (for the name only).  It then renames the boiler according to the following pattern:
+  # This method sets efficiency of the boiler to whatever is entered in eff["efficiency"].  It then looks for the
+  # "part_load_curve" value in the curves.json file. If it does not find one it returns an error.  If it finds one it
+  # reset the part load curve to whatever was found. It then determines the nominal capacity of the boiler.  If the
+  # nominal capacity is greater than 1W the boiler is considered a primary boiler (for the name only) if the capacity is
+  # less than 1W the boiler is considered a secondary boiler (for the name only).  It then renames the boiler according
+  # to the following pattern:
   # "Primary/Secondary eff["name"] capacity kBtu/hr".
   def reset_boiler_efficiency(model:, component:, eff:)
     component.setNominalThermalEfficiency(eff['efficiency'])
@@ -1407,19 +1407,20 @@ class ECMS
   #        "part_load_curve" => "FURNACE-EFFPLR-COND-NECB2011",
   #        "notes" => "From NECB 2011."
   #    }
-  # If furnace_eff is nill then it does nothing.  If either "efficiency" and "part_load_curve" are nil then it returns an
-  # error.  If an efficiency is set but is not between 0.01 and 1.0 it returns an error.  Otherwise, it looks for air
+  # If furnace_eff is nill then it does nothing.  If both "efficiency" and "part_load_curve" are nil then it does
+  # nothing.  If an efficiency is set but is not between 0.01 and 1.0 it returns an error.  Otherwise, it looks for air
   # loop supply components that match the "OS_CoilHeatingGas" type.  If it finds one it then calls the
   # reset_furnace_efficiency method which resets the the furnace efficiency and looks for the part load efficiency curve
   # in the curves.json file.  If it finds a curve it sets the part load curve to that, otherwise it returns an error.
   # It also renames the furnace to include the "furnace_eff"["name"].
   def modify_furnace_efficiency(model:, furnace_eff: nil)
     return if furnace_eff.nil?
+    return if furnace_eff["efficiency"].nil? && furnace_eff["part_load_curve"].nil?
     unless furnace_eff['efficiency'].nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ECMS', "You attempted to set the efficiency of furnaces in this model to: #{furnace_eff['efficiency']}. Please check the ECMS class furnace_set.json and make sure the efficiency you set is between 0.01 and 1.0.") if (furnace_eff['efficiency'] < 0.01 || furnace_eff['efficiency'] > 1.0)
       furnace_eff['efficiency'] = nil if (furnace_eff['efficiency'] < 0.01 || furnace_eff['efficiency'] > 1.0)
     end
-    OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ECMS', "You attempted to set either the efficiency or the part load curve of a furnaces in this model to nil.  Please check the ECMS class furnace_set.json and ensure that both the efficiency and part load curve are set.") if (furnace_eff['efficiency'].nil? || furnace_eff['part_load_curve'].nil?)
+    OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ECMS', "You attempted to set the part load curve of furnaces in this model to nil.  Please check the ECMS class furnace_set.json and ensure that both the efficiency and part load curve are set.") if furnace_eff['part_load_curve'].nil?
     airloops = model.getAirLoopHVACs
     return if airloops.nil?
     airloops.sort.each do |airloop|
@@ -1439,11 +1440,9 @@ class ECMS
   #        "part_load_curve" => "FURNACE-EFFPLR-COND-NECB2011",
   #        "notes" => "From NECB 2011."
   #    }
-  # If the hash is nil then it does nothing.  If eff["efficiency"] is nil, eff["part_load"] is nil, or eff["efficiency"]
-  # is not between 0.01 and 1.0 then it returns an error.  If both are set then it sets the efficiency of the furnace to
-  # whatever is entered in eff["efficiency"].  It then looks for the "part_load_curve" value in the curves.json file.
-  # If it does not find one it returns an error.  If it finds one it reset the part load curve to whatever was found.
-  # It then renames the furnace according to the following pattern:
+  # This method sets the efficiency of the furnace to whatever is entered in eff["efficiency"].  It then looks for the
+  # "part_load_curve" value in the curves.json file.  If it does not find one it returns an error.  If it finds one it
+  # reset the part load curve to whatever was found.  It then renames the furnace according to the following pattern:
   # "eff["name"] + <furnace number (whatever was there before)>".
   def reset_furnace_efficiency(model:, component:, eff:)
     component.setGasBurnerEfficiency(eff['efficiency'])
