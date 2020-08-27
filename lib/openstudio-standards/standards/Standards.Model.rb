@@ -53,7 +53,6 @@ class Standard
       # Perform a sizing run of the proposed model.
       # Intent is to get individual space load to determine each space's
       # conditioning type: conditioned, unconditioned, semiheated.
-      puts "DEM: ------ before SR_PROP sizing run --------------------"
       if model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
         # Set up some special reports to be used for baseline system selection later
         # Zone return air flows
@@ -1345,7 +1344,6 @@ class Standard
       if !props
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
       end
-
       if num_stories <= props['bldg_flrs_max']
         # Story Group Is found
         break
@@ -3104,6 +3102,7 @@ class Standard
     # Add the material layers to the construction
     layers = OpenStudio::Model::MaterialVector.new
     data['materials'].each do |material_name|
+
       material = model_add_material(model, material_name)
       if material
         layers << material
@@ -3127,15 +3126,18 @@ class Standard
       if target_u_value_ip
 
         # Handle Opaque and Fenestration Constructions differently
-        if construction.isFenestration && construction_simple_glazing?(construction)
-          # Set the U-Value and SHGC
-          construction_set_glazing_u_value(construction, target_u_value_ip.to_f, data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
-          construction_set_glazing_shgc(construction, target_shgc.to_f)
-        else # if !data['intended_surface_type'] == 'ExteriorWindow' && !data['intended_surface_type'] == 'Skylight'
-          # Set the U-Value
-          construction_set_u_value(construction, target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
-        # else
-          # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Not modifying U-value for #{data['intended_surface_type']} u_val #{target_u_value_ip} f_fac #{target_f_factor_ip} c_fac #{target_c_factor_ip}")
+        # if construction.isFenestration && construction_simple_glazing?(construction)
+        if construction.isFenestration 
+          if construction_simple_glazing?(construction)
+            # Set the U-Value and SHGC
+            construction_set_glazing_u_value(construction, target_u_value_ip.to_f, data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
+            construction_set_glazing_shgc(construction, target_shgc.to_f)
+          else # if !data['intended_surface_type'] == 'ExteriorWindow' && !data['intended_surface_type'] == 'Skylight'
+            # Set the U-Value
+            construction_set_u_value(construction, target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
+          # else
+            # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Not modifying U-value for #{data['intended_surface_type']} u_val #{target_u_value_ip} f_fac #{target_f_factor_ip} c_fac #{target_c_factor_ip}")
+          end
         end
 
       elsif target_f_factor_ip && data['intended_surface_type'] == 'GroundContactFloor'

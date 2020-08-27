@@ -236,6 +236,7 @@ class Standard
     end
 
     # Not simple unless the layer is a SimpleGlazing material
+    # if construction.layers.first.to_SimpleGlazing.empty?
     if construction.layers.first.to_SimpleGlazing.empty?
       return false
     end
