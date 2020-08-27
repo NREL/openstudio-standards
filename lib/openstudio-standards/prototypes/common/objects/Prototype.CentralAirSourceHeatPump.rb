@@ -191,6 +191,7 @@ class Standard
 
     # metered output variable
     elec_mtr_out_var = OpenStudio::Model::EnergyManagementSystemMeteredOutputVariable.new(model, "#{plant_comp.name} Electricity Consumption")
+    elec_mtr_out_var.setName("#{plant_comp.name} Electricity Consumption")
     elec_mtr_out_var.setEMSVariableName('Elec')
     elec_mtr_out_var.setUpdateFrequency('SystemTimestep')
     elec_mtr_out_var.setString(4, sim_pgrm.handle.to_s)
