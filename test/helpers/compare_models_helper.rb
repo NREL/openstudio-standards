@@ -24,6 +24,7 @@ def compare_osm_files(model_true, model_compare, look_for_renamed_objects = fals
     'OS:EnergyManagementSystem:Sensor', # Names are UIDs
     'OS:EnergyManagementSystem:Program', # Names are UIDs
     'OS:EnergyManagementSystem:Actuator', # Names are UIDs
+    'OS:EnergyManagementSystem:OutputVariable', # getString() returns UIDs instead of variable name
     'OS:Connection', # Names are UIDs
     'OS:PortList', # Names are UIDs
     'OS:Building', # Name includes timestamp of creation

@@ -20,7 +20,7 @@ class NRELZNEReady2017 < ASHRAE901
   # @param space [OpenStudio::Model::Space] the space in question
   # @param areas [Hash] a hash of daylighted areas
   # @return [Array<Bool>] req_top_ctrl, req_pri_ctrl, req_sec_ctrl
-  def space_daylighting_control_required?(space, areas)
+  def space_daylighting_control_required?(space, areas, climate_zone)
     req_top_ctrl = true
     req_pri_ctrl = true
     req_sec_ctrl = true
@@ -88,7 +88,8 @@ class NRELZNEReady2017 < ASHRAE901
                                               sorted_skylights,
                                               req_top_ctrl,
                                               req_pri_ctrl,
-                                              req_sec_ctrl)
+                                              req_sec_ctrl,
+                                              climate_zone)
     sensor_1_frac = 0.0
     sensor_2_frac = 0.0
     sensor_1_window = nil
