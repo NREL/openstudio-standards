@@ -360,7 +360,36 @@ class Standard
   # @retrun [Double] UA product in W/K
   def surface_subsurface_ua(surface)
     # Compute the surface UA product
-    ua = surface.uFactor.get * surface.netArea
+    if surface.outsideBoundaryCondition.to_s == "GroundFCfactorMethod" && surface.construction.is_initialized
+      cons = surface.construction.get
+      fc_obj_type = cons.iddObjectType.valueName.to_s
+      case fc_obj_type
+        when 'OS_Construction_FfactorGroundFloor'
+          cons = surface.construction.get.to_FFactorGroundFloorConstruction.get
+          ffac = cons.fFactor
+          area = cons.area
+          peri = cons.perimeterExposed
+          ua = ffac * peri * surface.netArea / area
+        when 'OS_Construction_CfactorUndergroundWall'
+          cons = surface.construction.get.to_CFactorUndergroundWallConstruction.get
+          cfac = cons.cFactor
+          heig = cons.height
+
+          # From 90.1-2019 Section A.9.4.1: Interior vertical surfaces (SI units)
+          r_inside_film = 0.1197548
+          r_outside_film = 0.0
+
+          # EnergyPlus Engineering Manual equation 3.195
+          r_soil = 0.0607 + 0.3479 * heig
+
+          r_eff = 1 / cfac + r_soil
+          u_eff = 1 / (r_eff + r_inside_film + r_outside_film)
+          
+          ua = u_eff * surface.netArea
+      end
+    else
+      ua = surface.uFactor.get * surface.netArea
+    end
 
     surface.subSurfaces.sort.each do |subsurface|
       # the uFactor() method does not work for complex glazing inputs
