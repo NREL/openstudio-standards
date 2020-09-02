@@ -38,6 +38,7 @@ module OpenstudioStandards
   require_relative "#{stds}/necb/NECB2011/hvac_system_1_single_speed"
   require_relative "#{stds}/necb/NECB2011/hvac_system_2_and_5"
   require_relative "#{stds}/necb/NECB2011/hvac_system_3_and_8_single_speed"
+  require_relative "#{stds}/necb/NECB2011/hvac_system_3_and_8_multi_speed"
   require_relative "#{stds}/necb/NECB2011/hvac_system_4"
   require_relative "#{stds}/necb/NECB2011/hvac_system_6"
   require_relative "#{stds}/necb/NECB2011/service_water_heating"
