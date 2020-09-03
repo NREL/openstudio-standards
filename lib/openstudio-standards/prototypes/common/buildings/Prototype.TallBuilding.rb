@@ -244,19 +244,19 @@ module TallBuilding
 
   # update the infiltration coefficients of tall buildings based on Lisa Ng's research (from NIST)
   def update_infil_coeff(model)
-    #     System On  |   System Off
-    #  A:  -0.00061	 |   0
-    #  B:  0.05536	 |   0.061367
-    #  D:  0.218262	 |   0.015928
+    #      System On     |   System Off
+    #  A:  -0.03973203	 |   0
+    #  B:  0.02282265	   |   0.031045705
+    #  D:  0.083767524	 |   0.016210069
     # Step1: replace the original infiltration schedule to airloop availability schedule, change the coeff to System On set
     # Step2: add new infiltration obj, assign with HVAC off schedule, assign the coeff to System Off set.
     # hotel and apartment HVAC are always on, so just do Step1, no Step2
 
     puts "*"*150
     puts "*"*150
-    # TODO test
-    coeff_a_on, coeff_b_on, coeff_d_on =  -0.00061, 0.05536, 0.218262
-    coeff_a_off, coeff_b_off, coeff_d_off =  0.0, 0.061367, 0.015928
+
+    coeff_a_on, coeff_b_on, coeff_d_on =  -0.03973203, 0.02282265, 0.083767524
+    coeff_a_off, coeff_b_off, coeff_d_off =  0.0, 0.031045705, 0.016210069
     office_hvac_sch = model_add_schedule(model, "OfficeLarge HVACOperationSchd")
     office_hvac_off_sch = model_add_schedule(model, "OfficeLarge HVACOperationOFFSchd")
     retail_hvac_sch = model_add_schedule(model, "RetailStandalone HVACOperationSchd")
@@ -355,9 +355,6 @@ module TallBuilding
       num_retail_flr, num_office_flr, num_resi_flr, num_hotel_flr = 2, 18, 9, 9
     elsif additional_params.is_a?(Hash)
       keys = [:num_of_floor_retail,:num_of_floor_office,:num_of_floor_residential,:num_of_floor_hotel]
-      puts " additional_params = #{additional_params.keys.inspect}"
-      puts "keys: #{keys.inspect}"
-      puts "additional_params.keys & keys = #{(additional_params.keys & keys).inspect}"
       if (additional_params.keys & keys).any?  # if any function type is assigned with number of floor
         if additional_params.key?(:num_of_floor_retail) && additional_params[:num_of_floor_retail].is_a?(Numeric)
           num_retail_flr = additional_params[:num_of_floor_retail].to_i
@@ -385,6 +382,11 @@ module TallBuilding
           OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model',
                               'The building is not eligible as a tall building because the total number of floors is less than 20')
           return false
+        elsif num_retail_flr + num_office_flr + num_resi_flr + num_hotel_flr >= 75
+          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model',
+                              "The building has #{num_retail_flr + num_office_flr + num_resi_flr + num_hotel_flr} floors, which should "\
+                                "be classified as super tall building. Please select SuperTall Building as the building type instead.")
+          return false
         end
       else   # if no number of floor is given for any function type
         num_retail_flr, num_office_flr, num_resi_flr, num_hotel_flr = 2, 18, 9, 9
@@ -393,27 +395,6 @@ module TallBuilding
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'additional_params is not a Hash')
       return false
     end
-
-    # update the number of floors in additional_params
-    additional_params[:num_of_floor_retail] = num_retail_flr
-    additional_params[:num_of_floor_office] = num_office_flr
-    additional_params[:num_of_floor_residential] = num_resi_flr
-    additional_params[:num_of_floor_hotel] = num_hotel_flr
-
-    total_num_of_flr = num_retail_flr+num_office_flr+num_resi_flr+num_hotel_flr
-    model.getBuilding.setStandardsNumberOfAboveGroundStories(total_num_of_flr)
-    model.getBuilding.setStandardsNumberOfStories(total_num_of_flr)
-
-    puts "*"*150
-    puts "num_retail_flr = #{num_retail_flr}"
-    puts "num_office_flr = #{num_office_flr}"
-    puts "num_resi_flr = #{num_resi_flr}"
-    puts "num_hotel_flr = #{num_hotel_flr}"
-
-    f_to_f_height_retail = 4.8768
-    f_to_c_height_retail = 4.2672
-    f_to_f_height_non_retail = 3.5052
-    f_to_c_height_non_retail = 2.7432
 
     # Validate number of floors values, can't be negative
     if num_retail_flr < 0
@@ -433,6 +414,23 @@ module TallBuilding
       return false
     end
 
+    # update the number of floors in additional_params
+    additional_params[:num_of_floor_retail] = num_retail_flr
+    additional_params[:num_of_floor_office] = num_office_flr
+    additional_params[:num_of_floor_residential] = num_resi_flr
+    additional_params[:num_of_floor_hotel] = num_hotel_flr
+
+    puts "*"*150
+    puts "num_retail_flr = #{num_retail_flr}"
+    puts "num_office_flr = #{num_office_flr}"
+    puts "num_resi_flr = #{num_resi_flr}"
+    puts "num_hotel_flr = #{num_hotel_flr}"
+
+    f_to_f_height_retail = 4.8768
+    f_to_c_height_retail = 4.2672
+    f_to_f_height_non_retail = 3.5052
+    f_to_c_height_non_retail = 2.7432
+
     # Steps:
     # 1. Determine multiplier for each basic floor (as long as not bottom/top floor, don't need to separate floor)
     # 2. Modify name and Z origins for each floor as needed
@@ -449,6 +447,10 @@ module TallBuilding
     # else if num_resi_flr == 2, the resi_mid story works as the top floor
     # else if num_resi_flr == 1, the resi_bot story works as the top floor
     # similar for office and retail
+
+    total_num_of_flr = num_retail_flr+num_office_flr+num_resi_flr+num_hotel_flr
+    model.getBuilding.setStandardsNumberOfAboveGroundStories(total_num_of_flr)
+    model.getBuilding.setStandardsNumberOfStories(total_num_of_flr+1)      # one basement story
 
     current_story = 1
     current_height = 0
@@ -467,6 +469,7 @@ module TallBuilding
     else  # num_retail_flr >= 1
       # deal with retail_f1_story
       retail_f1_story_orin.setNominalZCoordinate(current_height)
+      retail_f1_story_orin.setNominalFloortoFloorHeight(f_to_f_height_retail)
       retail_f1_story_orin.spaces.each do |space|
         space.setName("F#{current_story} " + space.name.to_s)
       end
@@ -479,9 +482,9 @@ module TallBuilding
           multiplier = multiplier_list
           z_origin = current_height + f_to_f_height_retail*(multiplier/2.0-0.5)
           if multiplier == 1 && num_office_flr >= 2
-            deep_copy_story(model, retail_f2_story_orin, 1, z_origin, f_to_c_height_retail, current_story, if_ground_story_plenum_adiabatic: true)
+            deep_copy_story(model, retail_f2_story_orin, 1, z_origin, f_to_c_height_retail, f_to_f_height_retail, current_story, if_ground_story_plenum_adiabatic: true)
           else
-            deep_copy_story(model, retail_f2_story_orin, multiplier, z_origin, f_to_c_height_retail, current_story)
+            deep_copy_story(model, retail_f2_story_orin, multiplier, z_origin, f_to_c_height_retail, f_to_f_height_retail, current_story)
           end
 
           # update the story # and height #
@@ -490,7 +493,7 @@ module TallBuilding
         elsif multiplier_list.is_a? Array
           multiplier_list.each do |multiplier|
             z_origin = current_height + f_to_f_height_retail*(multiplier/2.0-0.5)
-            deep_copy_story(model, retail_f2_story_orin, multiplier, z_origin, f_to_c_height_retail, current_story)
+            deep_copy_story(model, retail_f2_story_orin, multiplier, z_origin, f_to_c_height_retail, f_to_f_height_retail, current_story)
 
             # update the story # and height #
             current_story += multiplier
@@ -518,6 +521,7 @@ module TallBuilding
     elsif num_office_flr == 1
       # only update the z origin and name
       office_story_orin.setNominalZCoordinate(current_height)
+      office_story_orin.setNominalFloortoFloorHeight(f_to_f_height_non_retail)
       office_story_orin.spaces.each do |space|
         space.setName("F#{current_story} " + space.name.to_s)
         if space.name.to_s.include?"Plenum"
@@ -541,7 +545,7 @@ module TallBuilding
         if num_office_flr_w_mult > 1
           if_ground_story_plenum_adiabatic = true
         end
-        deep_copy_story(model, office_story_orin, 1, z_origin, f_to_c_height_non_retail, current_story, if_ground_story_plenum_adiabatic: if_ground_story_plenum_adiabatic)
+        deep_copy_story(model, office_story_orin, 1, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story, if_ground_story_plenum_adiabatic: if_ground_story_plenum_adiabatic)
 
         # update the story # and height #
         current_story += 1
@@ -558,7 +562,7 @@ module TallBuilding
         if num_office_flr_w_mult > 1
           if_top_story_floor_adiabatic = true
         end
-        deep_copy_story(model, office_story_orin, 1, z_origin, f_to_c_height_non_retail, top_story_num, if_top_story_floor_adiabatic: if_top_story_floor_adiabatic)
+        deep_copy_story(model, office_story_orin, 1, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, top_story_num, if_top_story_floor_adiabatic: if_top_story_floor_adiabatic)
       end
 
       if num_office_flr_w_mult >= 1
@@ -566,7 +570,7 @@ module TallBuilding
         if multiplier_list.is_a? Numeric
           multiplier = multiplier_list
           z_origin = current_height + f_to_f_height_non_retail*(multiplier/2.0-0.5)
-          deep_copy_story(model, office_story_orin, multiplier, z_origin, f_to_c_height_non_retail, current_story)
+          deep_copy_story(model, office_story_orin, multiplier, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
           # update the story # and height #
           current_story += multiplier
@@ -574,7 +578,7 @@ module TallBuilding
         elsif multiplier_list.is_a? Array
           multiplier_list.each do |multiplier|
             z_origin = current_height + f_to_f_height_non_retail*(multiplier/2.0-0.5)
-            deep_copy_story(model, office_story_orin, multiplier, z_origin, f_to_c_height_non_retail, current_story)
+            deep_copy_story(model, office_story_orin, multiplier, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
             # update the story # and height #
             current_story += multiplier
@@ -606,6 +610,7 @@ module TallBuilding
     else  # num_resi_flr >= 1
       # deal with resi_bot story
       resi_bot_story_orin.setNominalZCoordinate(current_height)
+      resi_bot_story_orin.setNominalFloortoFloorHeight(f_to_f_height_non_retail)
       resi_bot_story_orin.setName("F#{current_story} " + resi_bot_story_orin.name.to_s)
       resi_bot_story_orin.spaces.each do |space|
         space.setName("F#{current_story} " + space.name.to_s)
@@ -630,7 +635,7 @@ module TallBuilding
           if num_resi_mid_flr_w_mult > 1
             if_top_story_floor_adiabatic = true
           end
-          deep_copy_story(model, resi_mid_story_orin, 1, z_origin, f_to_c_height_non_retail, top_story_num, if_top_story_floor_adiabatic: if_top_story_floor_adiabatic)
+          deep_copy_story(model, resi_mid_story_orin, 1, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, top_story_num, if_top_story_floor_adiabatic: if_top_story_floor_adiabatic)
         end
 
         if num_resi_mid_flr_w_mult >= 1
@@ -638,14 +643,14 @@ module TallBuilding
           if multiplier_list.is_a? Numeric
             multiplier = multiplier_list
             z_origin = current_height + f_to_f_height_non_retail*(multiplier/2.0-0.5)
-            deep_copy_story(model, resi_mid_story_orin, multiplier, z_origin, f_to_c_height_non_retail, current_story)
+            deep_copy_story(model, resi_mid_story_orin, multiplier, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
             current_story += multiplier
             current_height += f_to_f_height_non_retail * multiplier
           elsif multiplier_list.is_a? Array
             multiplier_list.each do |multiplier|
               z_origin = current_height + f_to_f_height_non_retail*(multiplier/2.0-0.5)
-              deep_copy_story(model, resi_mid_story_orin, multiplier, z_origin, f_to_c_height_non_retail, current_story)
+              deep_copy_story(model, resi_mid_story_orin, multiplier, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
               # update the story # and height #
               current_story += multiplier
@@ -680,6 +685,7 @@ module TallBuilding
       # deal with hotel_top_story
       hotel_top_origin = num_retail_flr * f_to_f_height_retail + (num_office_flr+num_resi_flr+num_hotel_flr-1) * f_to_f_height_non_retail
       hotel_top_story_orin.setNominalZCoordinate(hotel_top_origin)
+      hotel_top_story_orin.setNominalFloortoFloorHeight(f_to_f_height_non_retail)
       hotel_top_story_orin.setName("F#{total_num_of_flr} " + hotel_top_story_orin.name.to_s)
       hotel_top_story_orin.spaces.each do |space|
         space.setName("F#{total_num_of_flr} " + space.name.to_s)
@@ -693,6 +699,7 @@ module TallBuilding
       if num_hotel_flr > 1
         # deal with hotel_bot_story
         hotel_bot_story_orin.setNominalZCoordinate(current_height)
+      	hotel_bot_story_orin.setNominalFloortoFloorHeight(f_to_f_height_non_retail)
         hotel_bot_story_orin.setName("F#{current_story} " + hotel_bot_story_orin.name.to_s)
         hotel_bot_story_orin.spaces.each do |space|
           space.setName("F#{current_story} " + space.name.to_s)
@@ -711,12 +718,12 @@ module TallBuilding
           if multiplier_list.is_a? Numeric
             multiplier = multiplier_list
             z_origin = current_height + f_to_f_height_non_retail*(multiplier/2.0-0.5)
-            deep_copy_story(model, hotel_mid_story_orin, multiplier, z_origin, f_to_c_height_non_retail, current_story)
+            deep_copy_story(model, hotel_mid_story_orin, multiplier, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
           elsif multiplier_list.is_a? Array
             multiplier_list.each do |multiplier|
               z_origin = current_height + f_to_f_height_non_retail*(multiplier/2.0-0.5)
-              deep_copy_story(model, hotel_mid_story_orin, multiplier, z_origin, f_to_c_height_non_retail, current_story)
+              deep_copy_story(model, hotel_mid_story_orin, multiplier, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
               # update the story # and height #
               current_story += multiplier
@@ -967,10 +974,12 @@ module TallBuilding
     end
   end
 
-  def deep_copy_story(model, original_story, multiplier, new_z_origin, f_to_c_height, current_story, if_top_story_floor_adiabatic: false, if_ground_story_plenum_adiabatic: false)
+  def deep_copy_story(model, original_story, multiplier, new_z_origin, f_to_c_height, f_to_f_height, current_story, if_top_story_floor_adiabatic: false, if_ground_story_plenum_adiabatic: false)
     # clone the story
     new_story = original_story.clone(model).to_BuildingStory.get
     new_story.setNominalZCoordinate(new_z_origin)
+    new_story.setNominalFloortoFloorHeight(f_to_f_height)
+    new_story.setNominalFloortoCeilingHeight(f_to_c_height)
     if multiplier == 1
       new_story.setName("F#{current_story} " + original_story.name.to_s)
     else

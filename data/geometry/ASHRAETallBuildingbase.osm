@@ -39394,7 +39394,7 @@ OS:Building,
   ,                                       !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  38,                                     !- Standards Number of Stories
+  39,                                     !- Standards Number of Stories
   38,                                     !- Standards Number of Above Ground Stories
   ,                                       !- Standards Template
   ;                                       !- Standards Building Type
@@ -54350,7 +54350,7 @@ OS:BuildingStory,
   {9ad0fb37-ca9c-4e39-a80d-14fc8f7086d1}, !- Handle
   Basement story,                         !- Name
   -4.8768,                                !- Nominal Z Coordinate {m}
-  ,                                       !- Nominal Floor to Floor Height {m}
+  4.8768,                                 !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   ;                                       !- Group Rendering Name
