@@ -31,6 +31,8 @@ class TestAddHVACSystems < Minitest::Test
        unmet_hrs_htg: 650.0},
       {system_type: 'VAV Reheat', main_heat_fuel: 'NaturalGas', zone_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity',
        unmet_hrs_htg: 450.0},
+      # {system_type: 'VAV No Reheat', main_heat_fuel: 'NaturalGas', zone_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity',
+      #  unmet_hrs_htg: 450.0},
 
       # Electric, Electric, forced air
       {system_type: 'PTHP', main_heat_fuel: 'Electricity', zone_heat_fuel: nil, cool_fuel: 'Electricity'},
