@@ -279,9 +279,13 @@ def download_google_spreadsheets(spreadsheet_titles)
 end
 
 def parse_units(unit)
-  useless_units = [nil, 'fraction', '%', 'COP_68F', 'COP_47F', '%/gal', 'Btu/hr/Btu/hr', 'Btu/hr/gal', 'BTU/hr/ft', 'W/BTU/h']
+  # useless_units = [nil, 'fraction', '%', 'COP_68F', 'COP_47F', '%/gal', 'Btu/hr/Btu/hr', 'Btu/hr/gal', 'BTU/hr/ft', 'W/BTU/h']
+  units_to_skip = [nil, 'fraction', '%', 'EER']
   unit_parsed = nil
-  if not useless_units.include?(unit)
+  if not units_to_skip.include?(unit)
+    if unit == '%/gal'
+      unit = '1/gal'
+    end
     unit_parsed = OpenStudio.createUnit(unit)
     if unit_parsed.empty?
       unit_parsed = "Not recognized by OpenStudio"
@@ -558,8 +562,9 @@ def export_spreadsheet_to_json(spreadsheet_titles, standards_dir, skip_list)
       standards_data[sheet_name] = objs
     end
     # CSV.open("metadata.csv", "wb") {|csv| headers.to_a.each {|elem| csv << elem} }
-    list_metadata = [list_of_sheets, list_of_names, list_of_units, list_of_OS_okay_units].transpose
-    list_metadata.insert(0, ['Sheet', 'Name', 'Unit', 'OS Unit']) # [1, 2, 2.5, 3, 4]
+    # list_metadata = [list_of_sheets, list_of_names, list_of_units, list_of_OS_okay_units].transpose
+    list_metadata = [list_of_sheets, list_of_names, list_of_units].transpose
+    list_metadata.insert(0, ['Sheet', 'Name', 'Unit']) # [1, 2, 2.5, 3, 4]
     File.write("data/standards/metadata_units_#{spreadsheet_title}.csv", list_metadata.map(&:to_csv).join)
     # Check for duplicate data in space_types_* sheets
     standards_data.each_pair do |sheet_name, objs|
