@@ -109,7 +109,7 @@ class Standard
       # to per-area values only so DCV performance is only
       # based on the subset of zones that required DCV.
       air_loop_hvac.thermalZones.sort.each do |zone|
-        if thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
+        unless thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
           thermal_zone_convert_oa_req_to_per_area(zone)
         end
       end
@@ -151,7 +151,7 @@ class Standard
     # Zones that require DCV preserve both per-area and per-person OA reqs.
     # Other zones have OA reqs converted to per-area values only so that DCV
     air_loop_hvac.thermalZones.sort.each do |zone|
-      if thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
+      unless thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
         thermal_zone_convert_oa_req_to_per_area(zone)
       end
     end
@@ -2189,6 +2189,7 @@ class Standard
 
     # Enable DCV in the controller mechanical ventilation
     controller_mv.setDemandControlledVentilation(true)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "Enabled DCV for air loop: #{air_loop_hvac.name}.")
 
     return true
   end
