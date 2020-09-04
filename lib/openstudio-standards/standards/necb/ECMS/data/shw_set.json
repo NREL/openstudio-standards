@@ -1,6 +1,6 @@
 {
   "tables": {
-    "boiler_eff_ecm": {
+    "shw_eff_ecm": {
       "refs": [
         "assumption"
       ],
@@ -12,16 +12,16 @@
           "notes": "Do nothing."
         },
         {
-          "name": "NECB 88% Efficient Condensing Boiler",
-          "efficiency": 0.88,
+          "name": "Natural Gas Power Vent with Electric Ignition",
+          "efficiency": 0.94,
           "part_load_curve": "SWH-EFFFPLR-NECB2011",
-          "notes": "From NECB 2011 and AHRI."
+          "notes": "From AHRI."
         },
         {
-          "name": "Viessmann Vitocrossal 300 CT3-17 96.2% Efficient Condensing Gas Boiler",
-          "efficiency": 0.962,
+          "name": "Natural Gas Direct Vent with Electric Ignition",
+          "efficiency": 0.91,
           "part_load_curve": "SWH-EFFFPLR-NECB2011",
-          "notes": "From analysis by Kamel Haddad based on Viessmann Vitocrossal 300 CT3-17 condensing boiler."
+          "notes": "From AHRI."
         }
       ]
     }
