@@ -3123,7 +3123,10 @@ class Standard
           # else
             # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Not modifying U-value for #{data['intended_surface_type']} u_val #{target_u_value_ip} f_fac #{target_f_factor_ip} c_fac #{target_c_factor_ip}")
           end
-        end
+        else
+          # Set the U-Value
+          construction_set_u_value(construction, target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
+      end
 
       elsif target_f_factor_ip && data['intended_surface_type'] == 'GroundContactFloor'
 

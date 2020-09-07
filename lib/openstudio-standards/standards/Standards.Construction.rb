@@ -21,6 +21,8 @@ class Standard
   def construction_set_u_value(construction, target_u_value_ip, insulation_layer_name = nil, intended_surface_type = 'ExteriorWall', target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting U-Value for #{construction.name}.")
 
+    puts "set uvalue for Cons = #{construction.name.get}"
+
     # Skip layer-by-layer fenestration constructions
     if construction.isFenestration
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Can only set the u-value of opaque constructions or simple glazing. #{construction.name} is not opaque or simple glazing.")
@@ -646,6 +648,8 @@ class Standard
 
   def apply_changes_to_surface_construction(model, surface, conductance = nil, shgc = nil, tvis = nil, is_percentage = false)
     # If user has no changes...do nothing and return true.
+
+    puts "DEM: apply changes to surface cons ========================================================"
     return true if conductance.nil? and shgc.nil? and tvis.nil?
     standard = Standard.new()
     construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get

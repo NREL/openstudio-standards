@@ -263,7 +263,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # Check WWR against expected WWR
       wwr_goal = 100 * @@wwr_values[building_type].to_f
-      assert(wwr_baseline == wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+      assert((wwr_baseline - wwr_goal).abs < 0.1, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
     end
   end
 
@@ -309,11 +309,12 @@ class AppendixGPRMTests < Minitest::Test
   def check_envelope(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
       building_type, template, climate_zone, mod = prototype
-      # Define name of surfaces used for verification
-      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
 
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join("_")
+
+      # Define name of surfaces used for verification
+      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
 
       opaque_exterior_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['opaque_exterior_name']
       exterior_fenestration_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['exterior_fenestration_name']
@@ -792,13 +793,13 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      'wwr',
+      #'wwr',
       'envelope',
-      'lpd',
-      'isresidential',
-      'daylighting_control',
-      'infiltration',
-      'hvac_baseline'
+      #'lpd',
+      #'isresidential',
+      #'daylighting_control',
+      'infiltration'
+      #'hvac_baseline'
     ]
 
     # Get list of unique prototypes
