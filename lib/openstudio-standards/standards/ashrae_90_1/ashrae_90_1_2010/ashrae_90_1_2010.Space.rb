@@ -115,6 +115,9 @@ class ASHRAE9012010 < ASHRAE901
     # Get the area of the space
     space_area_m2 = space.floorArea
 
+    # get the climate zone
+    climate_zone = model_standards_climate_zone(space.model)
+
     if req_top_ctrl && req_pri_ctrl
       # Sensor 1 controls toplighted area
       sensor_1_frac = areas['toplighted_area'] / space_area_m2

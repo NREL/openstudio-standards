@@ -1379,27 +1379,46 @@ class Baseline9012013Test2 < Minitest::Test
           unless thermal_zones_attached == 1
             failure_array << "Expected 1 Thermal Zone to be attached to System #{airloop_name}; found #{thermal_zones_attached} Zone(s) attached"
           end
-          # check fan type
-          unless airloop.supplyFan.is_initialized
-            failure_array << "No supply fan attached to System #{airloop_name}"
-          else
-            # get fan type
-            supply_fan = airloop.supplyFan.get
-            unless supply_fan.to_FanConstantVolume.is_initialized
-              failure_array << "Expected fan of type ConstantVolume for System #{airloop_name}"
+
+          # check system type
+          if airloop.supplyComponents('OS_AirLoopHVAC_UnitarySystem'.to_IddObjectType).length >= 1 
+            airloop.supplyComponents('OS_AirLoopHVAC_UnitarySystem'.to_IddObjectType).each do |usys|
+              usys = usys.to_AirLoopHVACUnitarySystem.get
+              unless usys.supplyFan.get.iddObjectType.valueName.to_s == 'OS_Fan_OnOff'
+                failure_array << "Expected fan of type OnOff for System #{airloop_name}"
+              end
+              unless usys.heatingCoil.get.iddObjectType.valueName.to_s == 'OS_Coil_Heating_DX_SingleSpeed'
+                failure_array << "Expected heating coil of type CoilHeatingDXSingleSpeed for System #{airloop_name}"
+              end
+              unless usys.coolingCoil.get.iddObjectType.valueName.to_s == 'OS_Coil_Cooling_DX_SingleSpeed'
+                failure_array << "Expected cooling coil of type CoilCoolingDXSingleSpeed for System #{airloop_name}"
+              end
             end
+            # PSZ system checks end here
+            next
+          else
+            # check fan type
+            unless airloop.supplyFan.is_initialized
+              failure_array << "No supply fan attached to System #{airloop_name}"
+            else
+              # get fan type
+              supply_fan = airloop.supplyFan.get
+              unless supply_fan.to_FanConstantVolume.is_initialized
+                failure_array << "Expected fan of type ConstantVolume for System #{airloop_name}"
+              end
+            end
+            # check heating and cooling coil types
+            # heating coil
+            unless airloop.supplyComponents('OS_Coil_Heating_DX_SingleSpeed'.to_IddObjectType).length == 1
+              failure_array << "Expected heating coil of type CoilHeatingDXSingleSpeed for System #{airloop_name}"
+            end
+            # cooling coil
+            unless airloop.supplyComponents('OS_Coil_Cooling_DX_SingleSpeed'.to_IddObjectType).length == 1
+              failure_array << "Expected cooling coil of type CoilCoolingDXSingleSpeed for System #{airloop_name}"
+            end
+            # PSZ system checks end here
+            next
           end
-          # check heating and cooling coil types
-          # heating coil
-          unless airloop.supplyComponents('OS_Coil_Heating_DX_SingleSpeed'.to_IddObjectType).length == 1
-            failure_array << "Expected heating coil of type CoilHeatingDXSingleSpeed for System #{airloop_name}"
-          end
-          # cooling coil
-          unless airloop.supplyComponents('OS_Coil_Cooling_DX_SingleSpeed'.to_IddObjectType).length == 1
-            failure_array << "Expected cooling coil of type CoilCoolingDXSingleSpeed for System #{airloop_name}"
-          end
-          # PSZ system checks end here
-          next
         end
       else
         system_type_confirmed = true
