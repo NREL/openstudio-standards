@@ -3124,7 +3124,7 @@ class Standard
         else
           # Set the U-Value
           construction_set_u_value(construction, target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
-      end
+        end
 
       elsif target_f_factor_ip && data['intended_surface_type'] == 'GroundContactFloor'
 
