@@ -1327,17 +1327,38 @@ class ECMS
   #        "notes" => "From NECB 2011."
   #    }
   # If boiler_eff is nill then it does nothing.  If both "efficiency" and "part_load_curve" are nil then it does
-  # nothing.  If an efficiency is set but is not between 0.01 and 1.0 it returns an error.  Otherwise, it looks for plant
-  # loop supply components that match the "OS_BoilerHotWater" type.  If it finds one it then calls the
-  # reset_boiler_efficiency method which resets the the boiler efficiency and looks for the part load efficiency curve
+  # nothing.  If a boiler_eff["name"] is present but both the efficiency and part load curve are nill then it looks for
+  # the boiler_eff["name"] in the boiler_set.json file and get the associated boiler performance details from the file.
+  # If an efficiency is set but is not between 0.01 and 1.0 it returns an error.  Otherwise, it looks for plant loop
+  # supply components that match the "OS_BoilerHotWater" type.  If it finds one it then calls the
+  # "reset_boiler_efficiency method which resets the the boiler efficiency and looks for the part load efficiency curve
   # in the curves.json file.  If it finds a curve it sets the part load curve to that, otherwise it returns an error.
   # It also renames the boiler to include the "boiler_eff"["name"].
   def modify_boiler_efficiency(model:, boiler_eff: nil)
     return if boiler_eff.nil?
+    # If nothing is passed in the boiler_eff hash then assume this was not supposed to be used and return without doing
+    # anything.
+    return if boiler_eff["name"].nil? && boiler_eff["efficiency"].nil? && boiler_eff["part_load_curve"].nil?
+    # If a name, and nothing else is passed then assume that the user wants to use one of the packaged ecms in the
+    # boiler_set.json file.
+    if boiler_eff["name"] && boiler_eff["efficiency"].nil? && boiler_eff["part_load_curve"].nil?
+      boiler_eff_packages = @standards_data['tables']['boiler_eff_ecm']['table']
+      boiler_eff_package = boiler_eff_packages.select{|boiler_eff_pack_info| boiler_eff_pack_info["name"] == boiler_eff["name"]}
+      if boiler_eff_package.empty?
+        raise "Cannot not find #{boiler_eff["name"]} in the ECMS boiler_set.json file and no boiler efficiency or part load curve are supplied.  Please check that the name is correctly spelled in the ECMS class boiler_set.json and in the code calling (directly or through another method) the ECMS class modify_boiler_efficiency method."
+      elsif boiler_eff_package.size > 1
+        raise "More than one boiler efficiency package with the name #{boiler_eff["name"]} was found.  Please check the ECMS class boiler_set.json file and make sure that each boiler efficiency package has a unique name."
+      else
+        boiler_eff['efficiency'] = boiler_eff_package[0]['efficiency']
+        boiler_eff['part_load_curve'] = boiler_eff_package[0]['part_load_curve']
+      end
+    end
+    # If no efficiency or partload curve are found (either passed directly or via the boiler_set.json file) then assume
+    # that the current SHW setting should not be changed.  Return without changing anything.
     return if boiler_eff["efficiency"].nil? && boiler_eff["part_load_curve"].nil?
-    raise "You attempted to set the efficiency of boilers in this model to nil. Please check the boiler_set.json in the measure and make sure the efficiency is properly set" if boiler_eff["efficiency"].nil?
-    raise "You attempted to set the efficiency of boilers in this model to: #{boiler_eff['efficiency']}. Please check the measure boiler_set.json and make sure the efficiency you set is between 0.01 and 1.0." if (boiler_eff['efficiency'] < 0.01 || boiler_eff['efficiency'] > 1.0)
-    raise "You attempted to set the part load curve of boilers in this model to nil.  Please check the measure boiler_set.json and ensure that both the efficiency and part load curve are set." if boiler_eff['part_load_curve'].nil?
+    raise "You attempted to set the efficiency of boilers in this model to nil. Please check the ECMS class boiler_set.json and make sure the efficiency is properly set" if boiler_eff["efficiency"].nil?
+    raise "You attempted to set the efficiency of boilers in this model to: #{boiler_eff['efficiency']}. Please check the ECMS class boiler_set.json and make sure the efficiency you set is between 0.01 and 1.0." if (boiler_eff['efficiency'] < 0.01 || boiler_eff['efficiency'] > 1.0)
+    raise "You attempted to set the part load curve of boilers in this model to nil.  Please check the ECMS class boiler_set.json file and ensure that both the efficiency and part load curve are set." if boiler_eff['part_load_curve'].nil?
     model.getBoilerHotWaters.sort.each do |mod_boiler|
       reset_boiler_efficiency(model: model, component: mod_boiler.to_BoilerHotWater.get, eff: boiler_eff)
     end
@@ -1362,7 +1383,7 @@ class ECMS
     component.setNominalThermalEfficiency(eff['efficiency'])
     part_load_curve_name = eff["part_load_curve"].to_s
     existing_curve = @standards_data['curves'].select { |curve| curve['name'] == part_load_curve_name }
-    raise "No boiler with the name #{part_load_curve_name} could be found in the ECMS class curves.json file.  Please check both the measure boiler_set.json and ECMS class curves.json files to ensure the curve is entered and referenced correctly." if existing_curve.empty?
+    raise "No boiler with the name #{part_load_curve_name} could be found in the ECMS class curves.json file.  Please check both the ECMS class boiler_set.json and class curves.json files to ensure the curve is entered and referenced correctly." if existing_curve.empty?
     part_load_curve_data = (@standards_data["curves"].select { |curve| curve['name'] == part_load_curve_name })[0]
     if part_load_curve_data['independent_variable_1'].to_s.upcase == 'TEnteringBoiler'.upcase || part_load_curve_data['independent_variable_2'].to_s.upcase == 'TEnteringBoiler'.upcase
       component.setEfficiencyCurveTemperatureEvaluationVariable('EnteringBoiler')
@@ -1382,10 +1403,15 @@ class ECMS
       if boiler_size_W < 1.0
         boiler_primacy = 'Secondary '
       end
-      new_boiler_name = boiler_primacy + eff['name'] + " #{boiler_size_kbtu_per_hour.round(0)} kBtu/hr"
+      if eff['name'].nil?
+        eff_measure_name = "Revised Performance Boiler"
+      else
+        eff_measure_name = eff['name']
+      end
+      new_boiler_name = boiler_primacy + eff_measure_name + " #{boiler_size_kbtu_per_hour.round(0)}kBtu/hr #{component.nominalThermalEfficiency} Thermal Eff"
       component.setName(new_boiler_name)
     else
-      raise "There was a problem setting the boiler part load curve named #{part_load_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json or measure boiler_set.json files."
+      raise "There was a problem setting the boiler part load curve named #{part_load_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json and boiler_set.json files."
     end
   end
 
@@ -1398,18 +1424,41 @@ class ECMS
   #        "part_load_curve" => "FURNACE-EFFPLR-COND-NECB2011",
   #        "notes" => "From NECB 2011."
   #    }
-  # If furnace_eff is nill then it does nothing.  If both "efficiency" and "part_load_curve" are nil then it does
-  # nothing.  If an efficiency is set but is not between 0.01 and 1.0 it returns an error.  Otherwise, it looks for air
-  # loop supply components that match the "OS_CoilHeatingGas" type.  If it finds one it then calls the
-  # reset_furnace_efficiency method which resets the the furnace efficiency and looks for the part load efficiency curve
-  # in the curves.json file.  If it finds a curve it sets the part load curve to that, otherwise it returns an error.
-  # It also renames the furnace to include the "furnace_eff"["name"].
+  # If furnace_eff is nil then it does nothing.  If both "efficiency" and "part_load_curve" are nil then it does
+  # nothing.  If a furnace_eff["name"] is present but not an efficiency or part load curve then it looks for the
+  # furnace_eff["name"] in the furnace_set.json file and get the information.  If an efficiency is set but is not
+  # between 0.01 and 1.0 it returns an error.  Otherwise, it looks for air loop supply components that match the
+  # "OS_CoilHeatingGas" type.  If it finds one it then calls the reset_furnace_efficiency method which resets the the
+  # furnace efficiency and looks for the part load efficiency curve in the curves.json file.  If it finds a curve it
+  # sets the part load curve to that, otherwise it returns an error. It also renames the furnace to include the
+  # "furnace_eff"["name"].
   def modify_furnace_efficiency(model:, furnace_eff: nil)
     return if furnace_eff.nil?
+    # If nothing is passed in the furnace_eff hash then assume this was not supposed to be used and return without doing
+    # anything.
+    return if furnace_eff["name"].nil? && furnace_eff["efficiency"].nil? && furnace_eff["part_load_curve"].nil?
+    # If a name, and nothing else is passed then assume that the user wants to use one of the packaged ecms in the
+    # furnace_set.json file.
+    if furnace_eff["name"] && furnace_eff["efficiency"].nil? && furnace_eff["part_load_curve"].nil?
+      eff_packages = @standards_data['tables']['furnace_eff_ecm']['table']
+      eff_package = eff_packages.select{|eff_pack_info| eff_pack_info["name"] == furnace_eff["name"]}
+      if eff_package.empty?
+        raise "Cannot not find #{furnace_eff["name"]} in the ECMS furnace_set.json file and no furnace efficiency or part load curve are supplied.  Please check that the name is correctly spelled in the ECMS class furnace_set.json and in the code calling (directly or through another method) the ECMS class modify_furnace_efficiency method."
+      elsif eff_package.size > 1
+        raise "More than one furnace efficiency package with the name #{furnace_eff["name"]} was found.  Please check the ECMS class furnace_set.json file and make sure that each boiler efficiency package has a unique name."
+      else
+        return if eff_package['efficiency'].nil? && eff_package['part_load_curve'].nil?
+        raise "You attempted to set either the efficiency or part load curve for this furnace to nil.  Please check the ECMS class furnace_set.json file and make sure that either both efficiency and part load curve are properly set or both are nil (if you do not want to change the furnace performance properties)." if eff_package['efficiency'].nil? || eff_package['part_load_curve'].nil?
+        furnace_eff['efficiency'] = eff_package['efficiency']
+        furnace_eff['part_load_curve'] = eff_package['part_load_curve']
+      end
+    end
+    # If no efficiency or partload curve are found (either passed directly or via the furnace_set.json file) then assume
+    # that the current furance performance settings should not be changed.  Return without changing anything.
     return if furnace_eff["efficiency"].nil? && furnace_eff["part_load_curve"].nil?
-    raise "You attempted to set the efficiency of furnaces in this model to nil.  Please check the furnace_set.json in the measure and make sure the efficiency is set" if furnace_eff["efficiency"].nil?
-    raise "You attempted to set the efficiency of furnaces in this model to: #{furnace_eff['efficiency']}. Please check the measure furnace_set.json and make sure the efficiency you set is between 0.01 and 1.0." if (furnace_eff['efficiency'] < 0.01 || furnace_eff['efficiency'] > 1.0)
-    raise "You attempted to set the part load curve of furnaces in this model to nil.  Please check the measure furnace_set.json and ensure that both the efficiency and part load curve are set." if furnace_eff['part_load_curve'].nil?
+    raise "You attempted to set the efficiency of furnaces in this model to nil.  Please check the ECMS class furnace_set.json file and make sure the efficiency is set" if furnace_eff["efficiency"].nil?
+    raise "You attempted to set the efficiency of furnaces in this model to: #{furnace_eff['efficiency']}. Please check the ECMS class furnace_set.json file and make sure the efficiency you set is between 0.01 and 1.0." if (furnace_eff['efficiency'] < 0.01 || furnace_eff['efficiency'] > 1.0)
+    raise "You attempted to set the part load curve of furnaces in this model to nil.  Please check the ECMS class furnace_set.json file and ensure that both the efficiency and part load curve are set." if furnace_eff['part_load_curve'].nil?
     model.getCoilHeatingGass.sort.each do |mod_furnace|
       reset_furnace_efficiency(model: model, component: mod_furnace.to_CoilHeatingGas.get, eff: furnace_eff)
     end
@@ -1434,8 +1483,13 @@ class ECMS
     part_load_curve = model_add_curve(model, part_load_curve_name)
     raise "There was a problem setting the furnace part load curve named #{part_load_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json or measure furnace_set.json files." unless part_load_curve
     component.setPartLoadFractionCorrelationCurve(part_load_curve)
+    if eff['name'].nil?
+      ecm_package_name = "Revised Performance Furnace"
+    else
+      ecm_package_name = eff['name']
+    end
     furnace_num = component.name.to_s.gsub(/[^0-9]/, '')
-    new_furnace_name = eff['name'] + " #{furnace_num}"
+    new_furnace_name = ecm_package_name + " #{furnace_num}"
     component.setName(new_furnace_name)
   end
 
@@ -1448,17 +1502,40 @@ class ECMS
   #        "part_load_curve" => "SWH-EFFFPLR-NECB2011"
   #        "notes" => "From NECB 2011."
   #    }
-  # If shw_eff is nill then it does nothing.  If both "efficiency" and "part_load_curve" are nil then it does nothing.
-  # If an efficiency is set but is not between 0.01 and 1.0 it returns an error.  Otherwise, it looks for mixed water
-  # heaters.  If it finds any it then calls the reset_shw_efficiency method which resets the the shw efficiency and the
-  # part load curve. It also renames the shw tank with the following pattern:
+  # If shw_eff is nil then it does nothing.  If both "efficiency" and "part_load_curve" are nil then it does nothing.
+  # If shw_eff["name"] is present but the efficiency and part load curve are nil then it looks for the shw_eff["name"]
+  # in the shw_set.json file for the details on the tank.  If an efficiency is set but is not between 0.01 and 1.0 it
+  # returns an error.  Otherwise, it looks for mixed water heaters.  If it finds any it then calls the
+  # reset_shw_efficiency method which resets the the shw efficiency and the part load curve. It also renames the shw
+  # tank with the following pattern:
   # {valume}Gal {eff_name} Water Heater - {Capacity}kBtu/hr {efficiency} Therm Eff
   def modify_shw_efficiency(model:, shw_eff: nil)
     return if shw_eff.nil?
+    # If nothing is passed in the furnace_eff hash then assume this was not supposed to be used and return without doing
+    # anything.
+    return if shw_eff["name"].nil? && shw_eff["efficiency"].nil? && shw_eff["part_load_curve"].nil?
+    # If a name, and nothing else is passed then assume that the user wants to use one of the packaged ecms in the
+    # furnace_set.json file.
+    if shw_eff["name"] && shw_eff["efficiency"].nil? && shw_eff["part_load_curve"].nil?
+      eff_packages = @standards_data['tables']['shw_eff_ecm']['table']
+      eff_package = eff_packages.select{|eff_pack_info| eff_pack_info["name"] == shw_eff["name"]}
+      if eff_package.empty?
+        raise "Cannot not find #{shw_eff["name"]} in the ECMS shw_set.json file and no shw efficiency or part load curve are supplied.  Please check that the name is correctly spelled in the ECMS class shw_set.json and in the code calling (directly or through another method) the ECMS class modify_shw_efficiency method."
+      elsif eff_package.size > 1
+        raise "More than one shw efficiency package with the name #{shw_eff["name"]} was found.  Please check the ECMS class shw_set.json file and make sure that each boiler efficiency package has a unique name."
+      else
+        return if eff_package['efficiency'].nil? && eff_package['part_load_curve'].nil?
+        raise "You attempted to set either the efficiency or part load curve for this shw tank to nil.  Please check the ECMS class shw_set.json file and make sure that either both efficiency and part load curve are properly set or both are nil (if you do not want to change the shw performance properties)." if eff_package['efficiency'].nil? || eff_package['part_load_curve'].nil?
+        shw_eff['efficiency'] = eff_package['efficiency']
+        shw_eff['part_load_curve'] = eff_package['part_load_curve']
+      end
+    end
+    # If no efficiency or partload curve are found (either passed directly or via the shw_set.json file) then assume
+    # that the current shw performance settings should not be changed.  Return without changing anything.
     return if shw_eff["efficiency"].nil? && shw_eff["part_load_curve"].nil?
-    raise "You attempted to set the efficiency of shw tanks in this model to nil.  Please check the shw_set.json in the measure and make sure the efficiency is set" if shw_eff["efficiency"].nil?
-    raise "You attempted to set the efficiency of shw tanks in this model to: #{shw_eff['efficiency']}. Please check the measure shw_set.json and make sure the efficiency you set is between 0.01 and 1.0." if (shw_eff['efficiency'] < 0.01 || shw_eff['efficiency'] > 1.0)
-    raise "You attempted to set the part load curve of shw tanks in this model to nil.  Please check the measure shw_set.json and ensure that both the efficiency and part load curve are set." if shw_eff['part_load_curve'].nil?
+    raise "You attempted to set the efficiency of shw tanks in this model to nil.  Please check the ECMS class shw_set.json file and make sure the efficiency is set" if shw_eff["efficiency"].nil?
+    raise "You attempted to set the efficiency of shw tanks in this model to: #{shw_eff['efficiency']}. Please check the ECMS class shw_set.json and make sure the efficiency you set is between 0.01 and 1.0." if (shw_eff['efficiency'] < 0.01 || shw_eff['efficiency'] > 1.0)
+    raise "You attempted to set the part load curve of shw tanks in this model to nil.  Please check the ECMS class shw_set.json file and ensure that both the efficiency and part load curve are set." if shw_eff['part_load_curve'].nil?
     model.getWaterHeaterMixeds.sort.each do |shw_mod|
       reset_shw_efficiency(model: model, component: shw_mod, eff: shw_eff)
     end
@@ -1478,13 +1555,14 @@ class ECMS
   def reset_shw_efficiency(model:, component:, eff:)
     return if component.heaterFuelType.to_s.upcase == 'ELECTRICITY'
     eff_result = component.setHeaterThermalEfficiency(eff['efficiency'].to_f)
-    raise "There was a problem setting the efficiency of the SHW #{component.name.to_s}.  Please check the shw_set.json file or the model." unless eff_result
+    raise "There was a problem setting the efficiency of the SHW #{component.name.to_s}.  Please check the ECMS class shw_set.json file or the model." unless eff_result
     part_load_curve_name = eff["part_load_curve"].to_s
     existing_curve = @standards_data['curves'].select { |curve| curve['name'] == part_load_curve_name }
-    raise "No furnace part load curve with the name #{part_load_curve_name} could be found in the ECMS class curves.json file.  Please check both the ECMS class curves.json and the measure shw_set.json files to ensure the curve is entered and referenced correctly." if existing_curve.empty?
+    raise "No shw tank part load curve with the name #{part_load_curve_name} could be found in the ECMS class curves.json file.  Please check both the ECMS class curves.json and the measure shw_set.json files to ensure the curve is entered and referenced correctly." if existing_curve.empty?
     part_load_curve = model_add_curve(model, part_load_curve_name)
-    raise "There was a problem setting the shw tank part load curve named #{part_load_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json or measure shw_set.json files." unless part_load_curve
+    raise "There was a problem setting the shw tank part load curve named #{part_load_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json and shw_set.json files." unless part_load_curve
     component.setPartLoadFactorCurve(part_load_curve)
+    #Get the volume and capacity of the SHW tank.
     if component.isTankVolumeAutosized
       shw_vol_gal = "auto_size"
     else
@@ -1497,7 +1575,13 @@ class ECMS
       shw_capacity_W = component.heaterMaximumCapacity.to_f
       shw_capacity_kBtu_hr = (OpenStudio.convert(shw_capacity_W, 'W', 'kBtu/h').get).to_f.round(0)
     end
-    shw_name = "#{shw_vol_gal} Gal #{eff["name"]} Water Heater - #{shw_capacity_kBtu_hr}kBtu/hr #{eff["efficiency"]} Therm Eff"
+    # Set a default revised shw tank name if no name is present in the eff hash.
+    if eff["name"].nil?
+      shw_ecm_package_name = "Revised"
+    else
+      shw_ecm_package_name = eff["name"]
+    end
+    shw_name = "#{shw_vol_gal} Gal #{shw_ecm_package_name} Water Heater - #{shw_capacity_kBtu_hr}kBtu/hr #{eff["efficiency"]} Therm Eff"
     component.setName(shw_name)
   end
 end
