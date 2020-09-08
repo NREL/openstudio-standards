@@ -31,6 +31,7 @@ class SHW_test < Minitest::Test
     #get shw efficiency measure data from ECMS class shw_set.json
     ecm_standard = Standard.build("ECMS")
     shw_measures = ecm_standard.standards_data['tables']['shw_eff_ecm']['table']
+    shw_ecms = ["NECB_Default", "Natural Gas Power Vent with Electric Ignition"]
 
     #Iterate through NECB2011 and NECB2015 as well as weather locations heated by gas and electricity.
     Templates.sort.each do |template|
@@ -89,14 +90,18 @@ class SHW_test < Minitest::Test
           apply_shw_ecm = false
           model.getWaterHeaterMixeds.sort.each do |waterheater_test|
             if waterheater_test.heaterFuelType == "NaturalGas"
-              shw_measures.each do |shw_measure|
-                #ecm_standard.modify_shw_efficiency(model: model, shw_eff: shw_measure)
+              shw_ecms.each do |shw_ecm|
+                shw_measure = shw_measures.select{|shw_measure_info| shw_measure_info["name"] == shw_ecm}[0]
+                ecm_standard.modify_shw_efficiency(model: model, shw_eff: shw_measure)
+                add_shw_test_output_info(model: model, output_array: output_array, template: template, epw_file: epw_file, space_type_names: space_type_names)
               end
+            else
+              add_shw_test_output_info(model: model, output_array: output_array, template: template, epw_file: epw_file, space_type_names: space_type_names)
             end
           end
 
           # Collect shw loop info to add to output
-          add_shw_test_output_info(model: model, output_array: output_array, template: template, epw_file: epw_file, space_type_names: space_type_names)
+          #add_shw_test_output_info(model: model, output_array: output_array, template: template, epw_file: epw_file, space_type_names: space_type_names)
         end
       end #loop to the next epw_file
     end #loop to the next Template
@@ -184,9 +189,17 @@ class SHW_test < Minitest::Test
       # Add the water heater tank volume and capacity and the pump head and moter efficiency to a hash.  Although
       # I collect all of the pumps and water heaters in the plant loop above here I assume there is only one of
       # each in the model.  I really should check, but I don't.
+      # Adding water heater efficiency and part load curve (if one is applied).
+      part_load_curve_name = "none"
+      if water_heaters[0].partLoadFactorCurve.is_initialized
+        part_load_curve_name = water_heaters[0].partLoadFactorCurve.get.name.to_s
+      end
       supply_equip_info = {
+          "water_heater_fuel_type" => water_heaters[0].heaterFuelType,
           "water_heater_vol_m3" => water_heaters[0].tankVolume,
           "water_heater_capacity_w" => water_heaters[0].heaterMaximumCapacity,
+          "water_heater_efficiency" => water_heaters[0].heaterThermalEfficiency,
+          "water_heater_part_load_curve_name" => part_load_curve_name,
           "pump_head_Pa" => pumps[0].ratedPumpHead.to_f.round(8),
           "pump_motor_eff" => pumps[0].motorEfficiency
       }
