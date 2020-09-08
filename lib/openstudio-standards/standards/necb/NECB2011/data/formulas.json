@@ -1,0 +1,29 @@
+{
+  "formulas": {
+    "fdwr_formula": {
+      "data_type": "formula",
+      "refs": [
+        "NECB2011_S_3.2.1.4(1)"
+      ],
+      "required_variables": [
+        "hdd"
+      ],
+      "value": "( hdd < 4000.0) ? 0.4 : ( hdd >= 4000.0 and hdd < 7000.0 ) ? ( (2000.0 - 0.2 * hdd) / 3000.00) : 0.2;",
+      "units": "ratio",
+      "notes": "Requires hdd to be defined to be evaluated in code."
+    },
+    "occupancy_sensors_space_types_formula": {
+      "data_type": "formula",
+      "refs": [
+        "NECB2011_S_8.4.4.6(3)"
+      ],
+      "required_variables": [
+        "standard_space_type_name",
+        "floor_area"
+      ],
+      "value": " ( [ 'Storage area','Storage area - refrigerated','Hospital - medical supply'].include?(standard_space_type_name) and floor_area < 100.0) or ( 'Office - enclosed' == standard_space_type_name and floor_area < 25.0) ? true : false ",
+      "units": "bool",
+      "notes": " using eval returns true if spaces require occupancy sensors"
+    }
+  }
+}

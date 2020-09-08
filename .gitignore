@@ -5,6 +5,7 @@
 # Developer installation
 /.bundle/
 /Gemfile.lock
+/vendor
 
 # Build output
 /pkg/
@@ -24,8 +25,15 @@ coverage/
 /test/reports
 /test/necb/data/*test_results.csv
 
+# auto generated CI files
+/test/ci_test_files/models
+/test/ci_test_files/*.rb
+
 # Miscelaneous
 /lib/openstudio-standards/prototypes/common/do_not_edit_metaclasses.rb
 /test/refactor/
 /data/costing/rs_means_auth
 /tmp/
+*.xlsx
+!Scorecard*.xlsx
+/data/standards/openstudio_standards_duplicates_log.csv

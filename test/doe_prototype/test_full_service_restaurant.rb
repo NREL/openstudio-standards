@@ -7,9 +7,8 @@ class TestFullServiceRestaurant < CreateDOEPrototypeBuildingTest
   climate_zones = ['ASHRAE 169-2013-2A','ASHRAE 169-2013-3B','ASHRAE 169-2013-5A','ASHRAE 169-2013-8A']
   epw_files = ['USA_FL_Miami.Intl.AP.722020_TMY3.epw'] # not used for ASHRAE/DOE archetypes, but required for call
   create_models = true
-  run_models = false
+  run_models = true
   compare_results = false
   debug = false
   TestFullServiceRestaurant.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
-  # TestFullServiceRestaurant.compare_test_results(building_types, templates, climate_zones, file_ext="")
 end

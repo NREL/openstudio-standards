@@ -1,0 +1,18 @@
+{
+  "formulas": {
+    "heat_recovery_requirement_formula": {
+      "data_type": "formula",
+      "refs": [
+        "NECB2017_S_5.2.10.1(1)"
+      ],
+      "required_variables": [
+        "hdd",
+        "oaf",
+        "flow"
+      ],
+      "value": "( hdd < 3000.0 and oaf >= 0.2 and oaf < 0.3 and flow >= 9.2 )  ? true : ( hdd < 3000.0 and oaf >= 0.3 and oaf < 0.4 and flow >= 4.25 ) ? true : ( hdd < 3000.0 and oaf >= 0.4 and oaf < 0.5 and flow >= 2.36 ) ? true : ( hdd < 3000.0 and oaf >= 0.5 and oaf < 0.6 and flow >= 1.89 ) ? true : ( hdd < 3000.0 and oaf >= 0.6 and oaf < 0.7 and flow >= 1.42 ) ? true : ( hdd < 3000.0 and oaf >= 0.7 and oaf < 0.8 and flow >= 0.71 ) ? true : ( hdd < 3000.0 and oaf >= 0.8 ) ? true : ( hdd >= 3000.0 ) ? true : false;",
+      "units": "bool",
+      "notes": " Requires hdd, oaf, and flow defined in the code"
+    }
+  }
+}

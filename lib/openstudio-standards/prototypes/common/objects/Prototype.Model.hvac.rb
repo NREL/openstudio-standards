@@ -116,7 +116,7 @@ class Standard
         # Special logic to make a heat pump loop if necessary
         heat_pump_loop = nil
         if system['heating_type'] == 'Water To Air Heat Pump'
-          heat_pump_loop = model_add_hp_loop(model)
+          heat_pump_loop = model_get_or_add_heat_pump_loop(model, 'NaturalGas', 'Electricity', heat_pump_loop_cooling_type: 'EvaporativeFluidCooler')
         end
 
         model_add_psz_ac(model,
@@ -214,22 +214,61 @@ class Standard
                                      hot_water_loop: hot_water_loop,
                                      ventilation: false)
 
-      when 'DC' # Data Center
-        # Retrieve the existing hot water loop
-        # or add a new one if necessary.
+      when 'Packaged DOAS'
+        # Retrieve the existing hot water loop or add a new one if necessary.
         hot_water_loop = nil
         hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
                            model.getPlantLoopByName('Hot Water Loop').get
                          else
                            model_add_hw_loop(model, 'NaturalGas')
                          end
+        # check inputs
+        doas_type = system['doas_type'] ? system['doas_type'] : 'DOASCV'
+        econo_ctrl_mthd = system['economizer_control_method'] ? system['economizer_control_method'] : 'NoEconomizer'
+        doas_control_strategy = system['doas_control_strategy'] ? system['doas_control_strategy'] : 'NeutralSupplyAir'
+        clg_dsgn_sup_air_temp = system['cooling_design_supply_air_temperature'] ? system['cooling_design_supply_air_temperature'] : 60.0
+        htg_dsgn_sup_air_temp = system['heating_design_supply_air_temperature'] ? system['heating_design_supply_air_temperature'] : 70.0
 
+        # for boolean input, this makes sure we get the correct input translation
+        if system['include_exhaust_fan'].nil? || true?(system['include_exhaust_fan'])
+          include_exhaust_fan = true
+        else
+          include_exhaust_fan = false
+        end
+        if system['energy_recovery'].nil? || true?(system['energy_recovery'])
+          energy_recovery = true
+        else
+          energy_recovery = false
+        end
+        if true?(system['demand_control_ventilation'])
+          demand_control_ventilation = true
+        else
+          demand_control_ventilation = false
+        end
+
+        model_add_doas(model,
+                       thermal_zones,
+                       system_name: system['name'],
+                       doas_type: doas_type,
+                       hot_water_loop: hot_water_loop,
+                       chilled_water_loop: nil,
+                       hvac_op_sch: system['operation_schedule'],
+                       min_oa_sch: system['oa_damper_schedule'],
+                       min_frac_oa_sch: system['minimum_fraction_of_outdoor_air_schedule'],
+                       fan_maximum_flow_rate: system['fan_maximum_flow_rate'],
+                       econo_ctrl_mthd: econo_ctrl_mthd,
+                       include_exhaust_fan: include_exhaust_fan,
+                       energy_recovery: energy_recovery,
+                       demand_control_ventilation: demand_control_ventilation,
+                       doas_control_strategy: doas_control_strategy,
+                       clg_dsgn_sup_air_temp: clg_dsgn_sup_air_temp,
+                       htg_dsgn_sup_air_temp: htg_dsgn_sup_air_temp)
+
+      when 'DC' # Data Center in Large Office building
+        # Retrieve the existing hot water loop or add a new one if necessary.
+        hot_water_loop = model_get_or_add_hot_water_loop(model, 'NaturalGas')
         # Retrieve the existing heat pump loop or add a new one if necessary.
-        heat_pump_loop = if model.getPlantLoopByName('Heat Pump Loop').is_initialized
-                           model.getPlantLoopByName('Heat Pump Loop').get
-                         else
-                           model_add_hp_loop(model)
-                         end
+        heat_pump_loop = model_get_or_add_heat_pump_loop(model, 'NaturalGas', 'Electricity', heat_pump_loop_cooling_type: 'CoolingTowerTwoSpeed')
         model_add_data_center_hvac(model,
                                    thermal_zones,
                                    hot_water_loop,
@@ -237,6 +276,50 @@ class Standard
                                    hvac_op_sch: system['flow_fraction_schedule'],
                                    oa_damper_sch: system['flow_fraction_schedule'],
                                    main_data_center: system['main_data_center'])
+
+      when 'CRAC' # Small Data Center
+        model_add_crac(model,
+                       thermal_zones,
+                       climate_zone,
+                       system_name: system['name'],
+                       hvac_op_sch: system['CRAC_operation_schedule'],
+                       oa_damper_sch: system['CRAC_oa_damper_schedule'],
+                       fan_location: 'DrawThrough',
+                       fan_type: system['CRAC_fan_type'],
+                       cooling_type: system['CRAC_cooling_type'])
+
+      when 'CRAH' # Large Data Center (standalone)
+        # Retrieve the existing chilled water loop or add a new one if necessary.
+        chilled_water_loop = nil
+        if model.getPlantLoopByName('Chilled Water Loop').is_initialized
+          chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
+        else
+          condenser_water_loop = nil
+          if system['chiller_cooling_type'] == 'WaterCooled'
+            condenser_water_loop = model_add_cw_loop(model,
+                                                     cooling_tower_type: 'Open Cooling Tower',
+                                                     cooling_tower_fan_type: 'Centrifugal',
+                                                     cooling_tower_capacity_control: 'Fan Cycling',
+                                                     number_of_cells_per_tower: 2,
+                                                     number_cooling_towers: 1)
+          end
+          chilled_water_loop = model_add_chw_loop(model,
+                                                  cooling_fuel: 'Electricity',
+                                                  dsgn_sup_wtr_temp: system['chilled_water_design_supply_water_temperature'],
+                                                  dsgn_sup_wtr_temp_delt: system['chilled_water_design_supply_water_temperature_delta'],
+                                                  chw_pumping_type: system['chw_pumping_type'],
+                                                  chiller_cooling_type: system['chiller_cooling_type'],
+                                                  chiller_condenser_type: system['chiller_condenser_type'],
+                                                  chiller_compressor_type: system['chiller_compressor_type'],
+                                                  condenser_water_loop: condenser_water_loop)
+        end
+        model_add_crah(model,
+                       thermal_zones,
+                       system_name: system['name'],
+                       chilled_water_loop: chilled_water_loop,
+                       hvac_op_sch: system['operation_schedule'],
+                       oa_damper_sch: system['oa_damper_schedule'],
+                       return_plenum: nil)
 
       when 'SAC'
         model_add_split_ac(model,
@@ -312,14 +395,17 @@ class Standard
       when 'WSHP'
         condenser_loop = case system['heating_type']
                          when 'Gas'
-                           model_get_or_add_heat_pump_loop(model)
+                           model_get_or_add_heat_pump_loop(model,
+                                                           system['heating_type'],
+                                                           system['cooling_type'],
+                                                           heat_pump_loop_cooling_type: 'CoolingTowerTwoSpeed')
                          else
                            model_get_or_add_ambient_water_loop(model)
                          end
         model_add_water_source_hp(model,
                                   thermal_zones,
                                   condenser_loop,
-                                  ventilation:true)
+                                  ventilation: true)
 
       when 'Fan Coil'
         case system['heating_type']

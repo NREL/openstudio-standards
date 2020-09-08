@@ -39,7 +39,23 @@ class Standard
       end
     # If the fan lives on an airloop
     elsif fan_variable_volume.airLoopHVAC.is_initialized
-      pressure_rise_in_h2o = fan_variable_volume_airloop_fan_pressure_rise(fan_variable_volume)
+      # For Data centers: the air flow rate could be huge
+      airloop_name = fan_variable_volume.airLoopHVAC.get.name.to_s
+      if airloop_name.include?('CRAC') || airloop_name.include?('CRAH')
+        pressure_rise_in_h2o = if maximum_flow_rate_cfm < 4648
+                                 4.0
+                               elsif maximum_flow_rate_cfm >= 4648 && maximum_flow_rate_cfm < 20000
+                                 5.58
+                               elsif maximum_flow_rate_cfm >= 20000 && maximum_flow_rate_cfm < 50000
+                                 8.0
+                               elsif maximum_flow_rate_cfm >= 50000 && maximum_flow_rate_cfm < 200000
+                                 12.0
+                               else
+                                 20.0
+                               end
+      else
+        pressure_rise_in_h2o = fan_variable_volume_airloop_fan_pressure_rise(fan_variable_volume)
+      end
     end
 
     # Set the fan pressure rise
@@ -80,7 +96,7 @@ class Standard
                            end
 
     return pressure_rise_in_h2o
-    end
+  end
 
   def create_fan_variable_volume(model,
                                  fan_name: nil,

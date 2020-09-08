@@ -12,11 +12,11 @@ def log_messages_to_runner(runner, debug = false)
     # DLM: you can filter on log channel here for now
     if /openstudio.*/ =~ msg.logChannel # /openstudio\.model\..*/
       # Skip certain messages that are irrelevant/misleading
-      next if msg.logMessage.include?('Skipping layer') || # Annoying/bogus "Skipping layer" warnings
+      next if msg.logMessage.include?('UseWeatherFile') || # 'UseWeatherFile' is not yet a supported option for YearDescription
+              msg.logMessage.include?('Skipping layer') || # Annoying/bogus "Skipping layer" warnings
               msg.logChannel.include?('runmanager') || # RunManager messages
               msg.logChannel.include?('setFileExtension') || # .ddy extension unexpected
               msg.logChannel.include?('Translator') || # Forward translator and geometry translator
-              msg.logMessage.include?('UseWeatherFile') || # 'UseWeatherFile' is not yet a supported option for YearDescription
               msg.logMessage.include?('Successive data points') || # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
               msg.logMessage.include?('has multiple parents') || # Bogus errors about curves having multiple parents
               msg.logMessage.include?('does not have an Output') || # Warning from EMS translation
@@ -48,11 +48,11 @@ def log_messages_to_file(file_path, debug = false)
       # DLM: you can filter on log channel here for now
       if /openstudio.*/ =~ msg.logChannel # /openstudio\.model\..*/
         # Skip certain messages that are irrelevant/misleading
-        next if msg.logMessage.include?('Skipping layer') || # Annoying/bogus "Skipping layer" warnings
+        next if msg.logMessage.include?('UseWeatherFile') || # 'UseWeatherFile' is not yet a supported option for YearDescription
+                msg.logMessage.include?('Skipping layer') || # Annoying/bogus "Skipping layer" warnings
                 msg.logChannel.include?('runmanager') || # RunManager messages
                 msg.logChannel.include?('setFileExtension') || # .ddy extension unexpected
                 msg.logChannel.include?('Translator') || # Forward translator and geometry translator
-                msg.logMessage.include?('UseWeatherFile') || # 'UseWeatherFile' is not yet a supported option for YearDescription
                 msg.logMessage.include?('Successive data points') || # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
                 msg.logMessage.include?('has multiple parents') || # Bogus errors about curves having multiple parents
                 msg.logMessage.include?('does not have an Output') || # Warning from EMS translation
@@ -90,11 +90,11 @@ def get_logs(log_type = OpenStudio::Error)
   $OPENSTUDIO_LOG.logMessages.each do |msg| # rubocop:disable Style/GlobalVars
     if /openstudio.*/ =~ msg.logChannel
       # Skip certain messages that are irrelevant/misleading
-      next if msg.logMessage.include?('Skipping layer') || # Annoying/bogus "Skipping layer" warnings
+      next if msg.logMessage.include?('UseWeatherFile') || # 'UseWeatherFile' is not yet a supported option for YearDescription
+              msg.logMessage.include?('Skipping layer') || # Annoying/bogus "Skipping layer" warnings
               msg.logChannel.include?('runmanager') || # RunManager messages
               msg.logChannel.include?('setFileExtension') || # .ddy extension unexpected
               msg.logChannel.include?('Translator') || # Forward translator and geometry translator
-              msg.logMessage.include?('UseWeatherFile') || # 'UseWeatherFile' is not yet a supported option for YearDescription
               msg.logMessage.include?('Successive data points') || # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
               msg.logMessage.include?('has multiple parents') || # Bogus errors about curves having multiple parents
               msg.logMessage.include?('does not have an Output') || # Warning from EMS translation

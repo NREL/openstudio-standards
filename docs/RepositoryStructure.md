@@ -64,4 +64,4 @@ This directory contains unit tests which run various portions of the code and en
 
 ## docs
 
-This is where the documentation (like this very page) lives.  Note that the code documentation is not here.  Those pages are generated on-the-fly from the source code, and are not committed to the repository.
+This is where the documentation (like this very page) lives.  Note that the code documentation is not here.  Those pages are generated on-the-fly from the source code, and are not committed to the repository.  The scorecards directory contains model information for the SmallOfficeDetailed, MediumOfficeDetailed, LargeOfficeDetailed, Laboratory, and Supermarket prototypes.

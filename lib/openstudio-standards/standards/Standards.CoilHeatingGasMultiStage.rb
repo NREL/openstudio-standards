@@ -16,7 +16,7 @@ class Standard
     elsif coil_heating_gas_multi_stage.autosizedStage4NominalCapacity.is_initialized
       capacity_w = coil_heating_gas_multi_stage.autosizedStage4NominalCapacity.get
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_heating_gas_multi_stage.name} capacity is not available, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingGasMultiStage', "For #{coil_heating_gas_multi_stage.name} capacity is not available, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end

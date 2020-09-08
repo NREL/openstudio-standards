@@ -1,3 +1,4 @@
+=begin
 require "#{File.dirname(__FILE__)}/btap"
   
 module BTAP
@@ -623,6 +624,7 @@ module BTAP
       module ZoneEquipment
 
 
+
         #Test Plant Module
         if __FILE__ == $0
           require 'test/unit'
@@ -676,6 +678,7 @@ module BTAP
 
           end
         end # End Test ZoneEquipment
+
 
         def self.add_ideal_air_loads(model,zone)
           zone.setUseIdealAirLoads(true)
@@ -821,6 +824,7 @@ module BTAP
       module HVACTemplates
         module OS
 
+
           def self.add_rooftop_vav_with_reheat( model, zones = [] )
             airloop = OpenStudio::Model::addSystemType3(model).to_AirLoopHVAC.get
             zones.each { |zone| airloop.addBranchForZone(zone) }
@@ -867,6 +871,7 @@ module BTAP
             zones.each { |zone| airloop.addBranchForZone(zone) }
             return airloop
           end
+
         end #OpenStudio
         module ASHRAE90_1
           #These methods are works in progresss from Andrew Parker at NREL.
@@ -1168,7 +1173,11 @@ module BTAP
               air_loop_sizing = air_loop.sizingSystem # TODO units
               air_loop_sizing.setTypeofLoadtoSizeOn("Sensible")
               air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-              air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              if model.version < OpenStudio::VersionString.new('2.7.0')
+                air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              else
+                air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+              end
               air_loop_sizing.setPreheatDesignTemperature(7.0)
               air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
               air_loop_sizing.setPrecoolDesignTemperature(12.8)
@@ -1296,7 +1305,11 @@ module BTAP
               air_loop_sizing = air_loop.sizingSystem
               air_loop_sizing.setTypeofLoadtoSizeOn("Sensible")
               air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-              air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              if model.version < OpenStudio::VersionString.new('2.7.0')
+                air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              else
+                air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+              end
               air_loop_sizing.setPreheatDesignTemperature(7.0)
               air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
               air_loop_sizing.setPrecoolDesignTemperature(12.8)
@@ -2181,7 +2194,11 @@ module BTAP
               sizingSystem = air_loop.sizingSystem
               sizingSystem.setTypeofLoadtoSizeOn("Sensible")
               sizingSystem.autosizeDesignOutdoorAirFlowRate()
-              sizingSystem.setMinimumSystemAirFlowRatio(1.0)
+              if model.version < OpenStudio::VersionString.new('2.7.0')
+                air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              else
+                air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+              end
               sizingSystem.setPreheatDesignTemperature(7.0)
               sizingSystem.setPreheatDesignHumidityRatio(0.008)
               sizingSystem.setPrecoolDesignTemperature(12.8)
@@ -2245,7 +2262,11 @@ module BTAP
               sizingSystem = air_loop.sizingSystem
               sizingSystem.setTypeofLoadtoSizeOn("Sensible")
               sizingSystem.autosizeDesignOutdoorAirFlowRate()
-              sizingSystem.setMinimumSystemAirFlowRatio(1.0)
+              if model.version < OpenStudio::VersionString.new('2.7.0')
+                air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              else
+                air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+              end
               sizingSystem.setPreheatDesignTemperature(7.0)
               sizingSystem.setPreheatDesignHumidityRatio(0.008)
               sizingSystem.setPrecoolDesignTemperature(12.8)
@@ -2297,6 +2318,7 @@ module BTAP
 
           end
         end
+
 
         module NECB2011
 
@@ -2380,7 +2402,11 @@ module BTAP
               air_loop_sizing = mau_air_loop.sizingSystem # TODO units
               air_loop_sizing.setTypeofLoadtoSizeOn("VentilationRequirement")
               air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-              air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              if model.version < OpenStudio::VersionString.new('2.7.0')
+                air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              else
+                air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+              end
               air_loop_sizing.setPreheatDesignTemperature(7.0)
               air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
               air_loop_sizing.setPrecoolDesignTemperature(13.0)
@@ -2580,7 +2606,11 @@ module BTAP
               air_loop_sizing = mau_air_loop.sizingSystem # TODO units
               air_loop_sizing.setTypeofLoadtoSizeOn("Sensible")
               air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-              air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              if model.version < OpenStudio::VersionString.new('2.7.0')
+                air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              else
+                air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+              end
               air_loop_sizing.setPreheatDesignTemperature(7.0)
               air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
               air_loop_sizing.setPrecoolDesignTemperature(12.8)
@@ -2847,7 +2877,11 @@ module BTAP
             air_loop_sizing = air_loop.sizingSystem # TODO units
             air_loop_sizing.setTypeofLoadtoSizeOn("Sensible")
             air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-            air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+            if model.version < OpenStudio::VersionString.new('2.7.0')
+              air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+            else
+              air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+            end
             air_loop_sizing.setPreheatDesignTemperature(7.0)
             air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
             air_loop_sizing.setPrecoolDesignTemperature(13.0)
@@ -2975,7 +3009,11 @@ module BTAP
               air_loop_sizing = air_loop.sizingSystem # TODO units
               air_loop_sizing.setTypeofLoadtoSizeOn("Sensible")
               air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-              air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              if model.version < OpenStudio::VersionString.new('2.7.0')
+                air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              else
+                air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+              end
               air_loop_sizing.setPreheatDesignTemperature(7.0)
               air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
               air_loop_sizing.setPrecoolDesignTemperature(13.0)
@@ -3130,7 +3168,11 @@ module BTAP
               air_loop_sizing = air_loop.sizingSystem # TODO units
               air_loop_sizing.setTypeofLoadtoSizeOn("Sensible")
               air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-              air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              if model.version < OpenStudio::VersionString.new('2.7.0')
+                air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              else
+                air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+              end
               air_loop_sizing.setPreheatDesignTemperature(7.0)
               air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
               air_loop_sizing.setPrecoolDesignTemperature(13.0)
@@ -3302,7 +3344,11 @@ module BTAP
               air_loop_sizing = air_loop.sizingSystem # TODO units
               air_loop_sizing.setTypeofLoadtoSizeOn("Sensible")
               air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-              air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              if model.version < OpenStudio::VersionString.new('2.7.0')
+                air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+              else
+                air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+              end
               air_loop_sizing.setPreheatDesignTemperature(7.0)
               air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
               air_loop_sizing.setPrecoolDesignTemperature(13.0)
@@ -3456,7 +3502,11 @@ module BTAP
                 sizingSystem.setCentralCoolingDesignSupplyAirTemperature(13.0)
                 sizingSystem.setCentralHeatingDesignSupplyAirTemperature(13.1)
                 sizingSystem.autosizeDesignOutdoorAirFlowRate
-                sizingSystem.setMinimumSystemAirFlowRatio(0.3)
+                if model.version < OpenStudio::VersionString.new('2.7.0')
+                  air_loop_sizing.setMinimumSystemAirFlowRatio(0.3)
+                else
+                  air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(0.3)
+                end
                 sizingSystem.setPreheatDesignTemperature(7.0)
                 sizingSystem.setPreheatDesignHumidityRatio(0.008)
                 sizingSystem.setPrecoolDesignTemperature(13.0)
@@ -3709,9 +3759,11 @@ module BTAP
 
         end
 
+
       end # module HVACTemplates
       
     end #module HVAC
 
   end #module Resources
 end
+=end

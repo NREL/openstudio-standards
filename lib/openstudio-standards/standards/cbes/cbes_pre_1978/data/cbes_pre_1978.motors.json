@@ -1,0 +1,14 @@
+{
+  "motors": [
+    {
+      "template": "CBES Pre-1978",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 99999.0,
+      "nominal_full_load_efficiency": 0.825,
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
+    }
+  ]
+}
