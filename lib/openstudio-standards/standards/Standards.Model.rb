@@ -1327,8 +1327,6 @@ class Standard
         'hvac_building_type' => area_type,
         'flrs_range_group' => iStoryGroup,
         'area_range_group' => 1)
-      puts "Area type = #{area_type}"
-      puts "hvac_building_type = #{hvac_building_type}"
 
       if !props
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
