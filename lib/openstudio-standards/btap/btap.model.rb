@@ -60,7 +60,7 @@ class OpenStudio::Model::Construction
     if self.isOpaque
 
     minimum_resistance = 0
-    name_prefix = "Customized opaque construction #{construction.handle()} to conductance of #{conductance}"
+    name_prefix = "#{construction.handle()} U- #{conductance}"
 
     #Check to see if we already made one like this.
     existing_construction = OpenStudio::Model::getConstructionByName(self.model,name_prefix)
@@ -100,7 +100,7 @@ class OpenStudio::Model::Construction
     elsif self.isFenestration()
 
         #get equivilant values for tsol, tvis, and conductances.
-        solarTransmittanceatNormalIncidence = self.get_tsol(model, construction) if solarTransmittanceatNormalIncidence == nil
+        solarTransmittanceatNormalIncidence = self.get_shgc(model, construction) if solarTransmittanceatNormalIncidence == nil
         visibleTransmittance = self.get_tvis(model,construction) if visibleTransmittance == nil
         conductance = self.get_conductance(construction) if conductance == nil
         frontSideSolarReflectanceatNormalIncidence = 1.0 - solarTransmittanceatNormalIncidence
@@ -589,10 +589,10 @@ class OpenStudio::Model::Model
   #@param factor [Float]
   def scale_oa_loads(factor)
     self.getDesignSpecificationOutdoorAirs.sort.each do |oa_def|
-      oa_def.setOutdoorAirFlowperPerson(oa_def.getOutdoorAirFlowperPerson * factor) unless oa_def.isOutdoorAirFlowperPersonDefaulted
-      oa_def.setOutdoorAirFlowperFloorArea(oa_def.getOutdoorAirFlowperFloorArea * factor) unless oa_def.isOutdoorAirFlowperFloorAreaDefaulted
-      oa_def.setOutdoorAirFlowRate(oa_def.getOutdoorAirFlowRate * factor) unless oa_def.isOutdoorAirFlowRateDefaulted
-      oa_def.setOutdoorAirFlowAirChangesperHour(oa_def.getOutdoorAirFlowAirChangesperHour * factor) unless oa_def.isOutdoorAirFlowAirChangesperHourDefaulted
+      oa_def.setOutdoorAirFlowperPerson(oa_def.outdoorAirFlowperPerson * factor) unless oa_def.isOutdoorAirFlowperPersonDefaulted
+      oa_def.setOutdoorAirFlowperFloorArea(oa_def.outdoorAirFlowperFloorArea * factor) unless oa_def.isOutdoorAirFlowperFloorAreaDefaulted
+      oa_def.setOutdoorAirFlowRate(oa_def.outdoorAirFlowRate * factor) unless oa_def.isOutdoorAirFlowRateDefaulted
+      oa_def.setOutdoorAirFlowAirChangesperHour(oa_def.outdoorAirFlowAirChangesperHour * factor) unless oa_def.isOutdoorAirFlowAirChangesperHourDefaulted
     end
   end
 

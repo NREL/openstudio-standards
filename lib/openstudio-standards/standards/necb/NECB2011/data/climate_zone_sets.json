@@ -1,0 +1,17 @@
+{
+  "tables": {
+    "climate_zone_sets": {
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "name": "NECB-CNEB ClimatZone 4-8",
+          "climate_zones": [
+            "NECB HDD Method"
+          ]
+        }
+      ]
+    }
+  }
+}

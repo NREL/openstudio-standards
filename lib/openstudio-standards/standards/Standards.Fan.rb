@@ -22,7 +22,7 @@ module Fan
     # zone exhaust, fan coil, and fan powered terminals.
     # In this case, 0.5 HP is used for the lookup.
     if fan_small_fan?(fan)
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{fan.name}: motor eff = #{(motor_eff * 100).round(2)}%; assumed to represent several < 1 HP motors.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{fan.name}: motor eff = #{(motor_eff * 100).round(2)}%; assumed to represent several less than 1 HP motors.")
     else
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{fan.name}: motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_eff * 100).round(2)}%.")
     end
@@ -261,6 +261,7 @@ module Fan
     # Get the efficiency based on the nominal horsepower
     # Add 0.01 hp to avoid search errors.
     motor_properties = model_find_object(motors, search_criteria, nominal_hp + 0.01)
+
     if motor_properties.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
       return [fan_motor_eff, nominal_hp]
@@ -281,14 +282,22 @@ module Fan
     # Exhaust fan
     if fan.to_FanZoneExhaust.is_initialized
       is_small = true
-    # Fan coil unit, unit heater, PTAC, PTHP
+    # Fan coil unit, unit heater, PTAC, PTHP, VRF terminals, WSHP, ERV
     elsif fan.containingZoneHVACComponent.is_initialized
       zone_hvac = fan.containingZoneHVACComponent.get
       if zone_hvac.to_ZoneHVACFourPipeFanCoil.is_initialized
         is_small = true
+      # elsif zone_hvac.to_ZoneHVACUnitHeater.is_initialized
+      #   is_small = true
       elsif zone_hvac.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
         is_small = true
       elsif zone_hvac.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+        is_small = true
+      elsif zone_hvac.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized
+        is_small = true
+      elsif zone_hvac.to_ZoneHVACWaterToAirHeatPump.is_initialized
+        is_small = true
+      elsif zone_hvac.to_ZoneHVACEnergyRecoveryVentilator.is_initialized
         is_small = true
       end
     # Powered VAV terminal

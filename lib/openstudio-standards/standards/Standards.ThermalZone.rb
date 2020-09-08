@@ -64,7 +64,7 @@ class Standard
     # Convert to cfm
     tot_oa_flow_rate_cfm = OpenStudio.convert(tot_oa_flow_rate, 'm^3/s', 'cfm').get
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{thermal_zone.name}, design min OA = #{tot_oa_flow_rate_cfm.round} cfm.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, design min OA = #{tot_oa_flow_rate_cfm.round} cfm.")
 
     return tot_oa_flow_rate
   end
@@ -100,10 +100,12 @@ class Standard
   def thermal_zone_convert_oa_req_to_per_area(thermal_zone)
     # For each space in the zone, convert
     # all design OA to per-area
+    # unless the "Outdoor Air Method" is "Maximum"
     thermal_zone.spaces.each do |space|
       dsn_oa = space.designSpecificationOutdoorAir
       next if dsn_oa.empty?
       dsn_oa = dsn_oa.get
+      next if dsn_oa.outdoorAirMethod == 'Maximum'
 
       # Get the space properties
       floor_area = space.floorArea
@@ -190,10 +192,24 @@ class Standard
   # @param sch_name [String] the name of the generated occupancy schedule
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
   #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
-  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule
+  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule based on threshold_calc_method
+  # @param threshold_calc_method [String] customizes behavior of occupied_percentage_threshold
+  # fractional passes raw value through,
+  # normalized_annual_range evaluates each value against the min/max range for the year
+  # normalized_daily_range evaluates each value against the min/max range for the day.
+  # The goal is a dynamic threshold that calibrates each day.
   # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
   # @todo Speed up this method.  Bottleneck is ScheduleRule.getDaySchedules
-  def spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil)
+  def spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil, threshold_calc_method: "value")
+
+    annual_normalized_tol = nil
+    if threshold_calc_method == "normalized_annual_range"
+      # run this method without threshold to get annual min and max
+      temp_merged = spaces_get_occupancy_schedule(spaces)
+      tem_min_max = schedule_ruleset_annual_min_max_value(temp_merged)
+      annual_normalized_tol = tem_min_max['min'] + (tem_min_max['max'] - tem_min_max['min']) * occupied_percentage_threshold
+      temp_merged.remove
+    end
     # Get all the occupancy schedules in spaces.
     # Include people added via the SpaceType and hard-assigned to the Space itself.
     occ_schedules_num_occ = {}
@@ -238,36 +254,68 @@ class Standard
     end
 
     unless sch_name.nil?
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "Finding space schedules for #{sch_name}.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Finding space schedules for #{sch_name}.")
     end
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "The #{spaces.size} spaces have #{occ_schedules_num_occ.size} unique occ schedules.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "The #{spaces.size} spaces have #{occ_schedules_num_occ.size} unique occ schedules.")
     occ_schedules_num_occ.each do |occ_sch, num_occ|
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "...#{occ_sch.name} - #{num_occ.round} people")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "...#{occ_sch.name} - #{num_occ.round} people")
     end
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "   Total #{max_occ_in_spaces.round} people in #{spaces.size} spaces.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "   Total #{max_occ_in_spaces.round} people in #{spaces.size} spaces.")
+
+    # Store arrays of 365 day schedules used by each occ schedule once for later
+    # Store arrays of day schedule times for later
+    occ_schedules_day_schedules = {}
+    day_schedule_times = {}
+    year = spaces[0].model.getYearDescription
+    first_date_of_year = year.makeDate(1)
+    end_date_of_year = year.makeDate(365)
+    occ_schedules_num_occ.each do |occ_sch, num_occ|
+      day_schedules = occ_sch.getDaySchedules(first_date_of_year, end_date_of_year)
+      # Store array of day schedules
+      occ_schedules_day_schedules[occ_sch] = day_schedules
+      day_schedules.uniq.each do |day_sch|
+        # Skip schedules that have been stored previously
+        next unless day_schedule_times[day_sch].nil?
+        # Store times
+        times = []
+        day_sch.times.each do |time|
+          times << time.toString
+        end
+        day_schedule_times[day_sch] = times
+      end
+    end
 
     # For each day of the year, determine time_value_pairs = []
-    year = spaces[0].model.getYearDescription
     yearly_data = []
-    yearly_times = OpenStudio::DateTimeVector.new
-    yearly_values = []
     (1..365).each do |i|
       times_on_this_day = []
       os_date = year.makeDate(i)
       day_of_week = os_date.dayOfWeek.valueName
 
       # Get the unique time indices and corresponding day schedules
-      occ_schedules_day_schs = {}
       day_sch_num_occ = {}
       occ_schedules_num_occ.each do |occ_sch, num_occ|
-        # Get the day schedules for this day
-        # (there should only be one)
-        day_schs = occ_sch.getDaySchedules(os_date, os_date)
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "Schedule #{occ_sch.name} has #{day_schs.size} day schs") unless day_schs.size == 1
-        day_schs[0].times.each do |time|
-          times_on_this_day << time.toString
+        daily_sch = occ_schedules_day_schedules[occ_sch][i-1]
+        times_on_this_day += day_schedule_times[daily_sch]
+        day_sch_num_occ[daily_sch] = num_occ
+      end
+
+      daily_normalized_tol = nil
+      if threshold_calc_method == "normalized_daily_range"
+        # pre-process day to get daily min and max
+        daily_spaces_occ_frac = []
+        times_on_this_day.uniq.sort.each do |time|
+          os_time = OpenStudio::Time.new(time)
+          # Total number of people at each time
+          tot_occ_at_time = 0
+          day_sch_num_occ.each do |day_sch, num_occ|
+            occ_frac = day_sch.getValue(os_time)
+            tot_occ_at_time += occ_frac * num_occ
+          end
+          # Total fraction for the spaces at each time
+          daily_spaces_occ_frac << tot_occ_at_time / max_occ_in_spaces
+          daily_normalized_tol = daily_spaces_occ_frac.min + (daily_spaces_occ_frac.max - daily_spaces_occ_frac.min) * occupied_percentage_threshold
         end
-        day_sch_num_occ[day_schs[0]] = num_occ
       end
 
       # Determine the total fraction for the spaces at each time
@@ -277,7 +325,6 @@ class Standard
       daily_occs = []
       times_on_this_day.uniq.sort.each do |time|
         os_time = OpenStudio::Time.new(time)
-        os_date_time = OpenStudio::DateTime.new(os_date, os_time)
         # Total number of people at each time
         tot_occ_at_time = 0
         day_sch_num_occ.each do |day_sch, num_occ|
@@ -292,6 +339,16 @@ class Standard
         # Otherwise use the actual spaces_occ_frac
         if occupied_percentage_threshold.nil?
           occ_status = spaces_occ_frac
+        elsif threshold_calc_method == "normalized_annual_range"
+          occ_status = 0 # unoccupied
+          if spaces_occ_frac >= annual_normalized_tol
+            occ_status = 1
+          end
+        elsif threshold_calc_method == "normalized_daily_range"
+          occ_status = 0 # unoccupied
+          if spaces_occ_frac > daily_normalized_tol
+            occ_status = 1
+          end
         else
           occ_status = 0 # unoccupied
           if spaces_occ_frac >= occupied_percentage_threshold
@@ -325,13 +382,19 @@ class Standard
 
     # Create a TimeSeries from the data
     # time_series = OpenStudio::TimeSeries.new(times, values, 'unitless')
-
     # Make a schedule ruleset
     if sch_name.nil?
       sch_name = "#{spaces.size} space(s) Occ Sch"
     end
     sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(spaces[0].model)
     sch_ruleset.setName(sch_name.to_s)
+    # add properties to schedule
+    props = sch_ruleset.additionalProperties
+    props.setFeature("max_occ_in_spaces",max_occ_in_spaces)
+    props.setFeature("number_of_spaces_included",spaces.size)
+    # nothing uses this but can make user be aware if this may be out of sync with current state of occupancy profiles
+    props.setFeature("date_parent_object_last_edited",Time.now.getgm.to_s)
+    props.setFeature("date_parent_object_created",Time.now.getgm.to_s)
 
     # Default - All Occupied
     day_sch = sch_ruleset.defaultDaySchedule
@@ -363,7 +426,7 @@ class Standard
         date = daily_data['date']
         times = daily_data['times']
         values = daily_data['values']
-        daily_occs = daily_data['daily_occs']
+        daily_os_times = daily_data['daily_os_times']
 
         # If the next (Monday, Tuesday, etc.) is the same as today, keep going
         # If the next is different, or if we've reached the end of the year, create a new rule
@@ -373,11 +436,8 @@ class Standard
           next if times == next_day_times && values == next_day_values
         end
 
-        daily_os_times = daily_data['daily_os_times']
-        daily_occs = daily_data['daily_occs']
-
         # If here, we need to make a rule to cover from the previous rule to today
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "Making a new rule for #{weekday} from #{end_of_prev_rule} to #{date}")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Making a new rule for #{weekday} from #{end_of_prev_rule} to #{date}")
         sch_rule = OpenStudio::Model::ScheduleRule.new(sch_ruleset)
         sch_rule.setName("#{sch_name} #{weekday} Rule")
         day_sch = sch_rule.daySchedule
@@ -390,7 +450,14 @@ class Standard
 
         # Set the dates when the rule applies
         sch_rule.setStartDate(end_of_prev_rule)
-        sch_rule.setEndDate(date)
+        # for end dates in last week of year force it to use 12/31. Avoids issues if year or start day of week changes
+        start_of_last_week = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 25, year.assumedYear)
+        if date >= start_of_last_week
+          year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year.assumedYear)
+          sch_rule.setEndDate(year_end_date)
+        else
+          sch_rule.setEndDate(date)
+        end
 
         # Individual Days
         sch_rule.setApplyMonday(true) if weekday == 'Monday'
@@ -404,6 +471,46 @@ class Standard
         # Reset the previous rule end date
         end_of_prev_rule = date + OpenStudio::Time.new(0, 24, 0, 0)
       end
+    end
+
+    # utilize default profile and common similar days of week for same date range
+    # todo - if move to method in Standards.ScheduleRuleset.rb udpate code to check if default profile is used before replacing it with lowest priority rule.
+    # todo - also merging non adjacent priority rules without getting rid of any rules between the two could create unexpected reults
+    prior_rules = []
+    sch_ruleset.scheduleRules.each do |rule|
+      if prior_rules.size == 0
+        prior_rules << rule
+        next
+      else
+        rules_combined = false
+        prior_rules.each do |prior_rule|
+          # see if they are similar
+          next if rules_combined
+          # todo - update to combine adjacent date ranges vs. just matching date ranges
+          next if prior_rule.startDate.get != rule.startDate.get
+          next if prior_rule.endDate.get != rule.endDate.get
+          next if prior_rule.daySchedule.times.to_a != rule.daySchedule.times.to_a
+          next if prior_rule.daySchedule.values.to_a != rule.daySchedule.values.to_a
+
+          # combine dates of week
+          if rule.applyMonday then prior_rule.setApplyMonday(true) && rules_combined = true end
+          if rule.applyTuesday then prior_rule.setApplyTuesday(true) && rules_combined = true end
+          if rule.applyWednesday then prior_rule.setApplyWednesday(true) && rules_combined = true end
+          if rule.applyThursday then prior_rule.setApplyThursday(true) && rules_combined = true end
+          if rule.applyFriday then prior_rule.setApplyFriday(true) && rules_combined = true end
+          if rule.applySaturday then prior_rule.setApplySaturday(true) && rules_combined = true end
+          if rule.applySunday then prior_rule.setApplySunday(true) && rules_combined = true end
+        end
+        if rules_combined then rule.remove else prior_rules << rule end
+      end
+    end
+    # replace unused default profile with lowest priority rule
+    values = prior_rules.last.daySchedule.values
+    times = prior_rules.last.daySchedule.times
+    prior_rules.last.remove
+    sch_ruleset.defaultDaySchedule.clearValues
+    values.size.times do |i|
+      sch_ruleset.defaultDaySchedule.addValue(times[i],values[i])
     end
 
     return sch_ruleset
@@ -523,7 +630,7 @@ class Standard
     elsif htg_fuels.size.zero? && clg_fuels.size.zero?
       fuel_type = 'unconditioned'
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "For #{thermal_zone.name}, could not determine fuel type, assuming fossil.  Heating fuels = #{htg_fuels.join(', ')}; cooling fuels = #{clg_fuels.join(', ')}.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, could not determine fuel type, assuming fossil.  Heating fuels = #{htg_fuels.join(', ')}; cooling fuels = #{clg_fuels.join(', ')}.")
       fuel_type = 'fossil'
     end
 
@@ -578,25 +685,25 @@ class Standard
     # Electric and fossil and district
     if htg_fuels.include?('Electricity') && htg_fuels.include?('DistrictHeating') && fossil
       is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{thermal_zone.name}, heating mixed electricity, fossil, and district.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed electricity, fossil, and district.")
     end
 
     # Electric and fossil
     if htg_fuels.include?('Electricity') && fossil
       is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{thermal_zone.name}, heating mixed electricity and fossil.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed electricity and fossil.")
     end
 
     # Electric and district
     if htg_fuels.include?('Electricity') && htg_fuels.include?('DistrictHeating')
       is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{thermal_zone.name}, heating mixed electricity and district.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed electricity and district.")
     end
 
     # Fossil and district
     if fossil && htg_fuels.include?('DistrictHeating')
       is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{thermal_zone.name}, heating mixed fossil and district.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed fossil and district.")
     end
 
     return is_mixed
@@ -1112,14 +1219,25 @@ class Standard
     # From Table 3.1 Heated Space Criteria
     htg_lim_btu_per_ft2 = 0.0
     case climate_zone
-    when 'ASHRAE 169-2006-1A',
+    when 'ASHRAE 169-2006-0A',
+        'ASHRAE 169-2006-0B',
+        'ASHRAE 169-2006-1A',
         'ASHRAE 169-2006-1B',
         'ASHRAE 169-2006-2A',
-        'ASHRAE 169-2006-2B'
+        'ASHRAE 169-2006-2B',
+        'ASHRAE 169-2013-0A',
+        'ASHRAE 169-2013-0B',
+        'ASHRAE 169-2013-1A',
+        'ASHRAE 169-2013-1B',
+        'ASHRAE 169-2013-2A',
+        'ASHRAE 169-2013-2B'
       htg_lim_btu_per_ft2 = 5
     when 'ASHRAE 169-2006-3A',
         'ASHRAE 169-2006-3B',
-        'ASHRAE 169-2006-3C'
+        'ASHRAE 169-2006-3C',
+        'ASHRAE 169-2013-3A',
+        'ASHRAE 169-2013-3B',
+        'ASHRAE 169-2013-3C'
       htg_lim_btu_per_ft2 = 10
     when 'ASHRAE 169-2006-4A',
         'ASHRAE 169-2006-4B',
@@ -1127,15 +1245,26 @@ class Standard
         'ASHRAE 169-2006-5A',
         'ASHRAE 169-2006-5B',
         'ASHRAE 169-2006-5C',
+        'ASHRAE 169-2013-4A',
+        'ASHRAE 169-2013-4B',
+        'ASHRAE 169-2013-4C',
+        'ASHRAE 169-2013-5A',
+        'ASHRAE 169-2013-5B',
+        'ASHRAE 169-2013-5C'
       htg_lim_btu_per_ft2 = 15
     when 'ASHRAE 169-2006-6A',
         'ASHRAE 169-2006-6B',
         'ASHRAE 169-2006-7A',
         'ASHRAE 169-2006-7B',
+        'ASHRAE 169-2013-6A',
+        'ASHRAE 169-2013-6B',
+        'ASHRAE 169-2013-7A',
+        'ASHRAE 169-2013-7B'
       htg_lim_btu_per_ft2 = 20
-    when
-        'ASHRAE 169-2006-8A',
-        'ASHRAE 169-2006-8B'
+    when 'ASHRAE 169-2006-8A',
+        'ASHRAE 169-2006-8B',
+        'ASHRAE 169-2013-8A',
+        'ASHRAE 169-2013-8B'
       htg_lim_btu_per_ft2 = 25
     end
 
@@ -1556,12 +1685,15 @@ class Standard
       next if exhaust_per_area.nil?
       maximum_flow_rate_ip = exhaust_per_area * floor_area_ip
       maximum_flow_rate_si = OpenStudio.convert(maximum_flow_rate_ip, 'cfm', 'm^3/s').get
-      if space_type_properties['exhaust_schedule'].nil?
+      if space_type_properties['exhaust_availability_schedule'].nil?
         exhaust_schedule = thermal_zone.model.alwaysOnDiscreteSchedule
+        exhaust_flow_schedule = exhaust_schedule
       else
-        sch_name = space_type_properties['exhaust_schedule']
+        sch_name = space_type_properties['exhaust_availability_schedule']
         exhaust_schedule = model_add_schedule(thermal_zone.model, sch_name)
-        unless exhaust_schedule
+        flow_sch_name = space_type_properties['exhaust_flow_fraction_schedule']
+        exhaust_flow_schedule = model_add_schedule(thermal_zone.model, flow_sch_name)
+          unless exhaust_schedule
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "Could not find an exhaust schedule called #{sch_name}, exhaust fans will run continuously.")
           exhaust_schedule = thermal_zone.model.alwaysOnDiscreteSchedule
         end
@@ -1571,6 +1703,7 @@ class Standard
       zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(thermal_zone.model)
       zone_exhaust_fan.setName(thermal_zone.name.to_s + ' Exhaust Fan')
       zone_exhaust_fan.setAvailabilitySchedule(exhaust_schedule)
+      zone_exhaust_fan.setFlowFractionSchedule(exhaust_flow_schedule)
       # not using zone_exhaust_fan.setFlowFractionSchedule. Exhaust fans are on when available
       zone_exhaust_fan.setMaximumFlowRate(maximum_flow_rate_si)
       zone_exhaust_fan.setEndUseSubcategory('Zone Exhaust Fans')

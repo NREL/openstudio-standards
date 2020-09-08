@@ -132,7 +132,7 @@ class Standard
               'building_type' => model_get_lookup_name(building_type),
               'space_type' => space_type_name
           }
-          data = model_find_object(standards_data['space_types'], search_criteria)
+          data = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
 
           # Skip space types with no data
           next if data.nil?
@@ -281,7 +281,7 @@ class Standard
         num_units = space_type_hash[space_type][:num_units].round # First try number of units
         num_units = space_type_hash[space_type][:effective_num_spaces].round if num_units.zero? # Fall back on number of spaces
         peak_flow_rate_gal_per_hr = num_units * peak_flow_rate_gal_per_hr
-        peak_flow_rate_m3_per_s = num_units * OpenStudio.convert(peak_flow_rate_gal_per_hr, 'gal/hr', 'm^3/s').get
+        peak_flow_rate_m3_per_s = OpenStudio.convert(peak_flow_rate_gal_per_hr, 'gal/hr', 'm^3/s').get
         use_name = "#{space_type.name} #{num_units} units"
       else
         # TODO: - add building type or sice specific logic or just assume Gas? (SmallOffice and Warehouse are only non unit prototypes with Electric heating)

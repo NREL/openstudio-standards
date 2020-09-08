@@ -1,0 +1,13 @@
+{
+  "constants": {
+    "skylight_to_roof_ratio_max_value": {
+      "data_type": "value",
+      "refs": [
+        "NECB2017_S_3.2.1.4(2)"
+      ],
+      "value": 0.02,
+      "units": "ratio",
+      "notes": ""
+    }
+  }
+}

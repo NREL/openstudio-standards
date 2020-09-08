@@ -17,8 +17,8 @@ def distance(loc1, loc2)
 end
 
 array_of_hashes = []
-necb_data_file_path = "#{File.dirname(__FILE__)}/../standards/necb/necb_2011/data/necb_2015_table_c1.json"
-epw_data_file_path = "#{File.dirname(__FILE__)}/../standards/necb/necb_2011/data/epw_data.json"
+necb_data_file_path = "#{File.dirname(__FILE__)}/../standards/necb/NECB2011/data/necb_2015_table_c1.json"
+epw_data_file_path = "#{File.dirname(__FILE__)}/../standards/necb/NECB2011/data/epw_data.json"
 JSON.parse(File.read(epw_data_file_path)).each do |epw|
   epw['necb_tbl_c_city'] = nil
   epw['necb_tbl_c_prov'] = nil
@@ -39,7 +39,7 @@ JSON.parse(File.read(epw_data_file_path)).each do |epw|
                       'hdd18' => necb_closest['degree_days_below_18_c']
                       }
 end
-File.write("#{File.dirname(__FILE__)}/../standards/necb/necb_2011/data/epw_file_to_necb_hdd_map.json", JSON.pretty_generate(array_of_hashes))
+File.write("#{File.dirname(__FILE__)}/../standards/necb/NECB2011/data/epw_file_to_necb_hdd_map.json", JSON.pretty_generate(array_of_hashes))
 
 # Load NECB Table c
 # Create new EPW to NECB Map

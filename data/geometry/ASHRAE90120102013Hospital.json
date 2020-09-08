@@ -176,39 +176,16 @@
     ]
   },
   {
-    "type": "Refrigeration",
-    "case_type": "Walkin Freezer",
-    "cooling_capacity_per_length": 734,
-    "length": 10.98,
-    "evaporator_fan_pwr_per_length": 69,
-    "lighting_per_length": 33,
-    "defrost_pwr_per_length": 364,
-    "cop": 1.5,
-    "cop_f_of_t_curve_name": "RACK1_RackCOPfTCurve",
-    "condenser_fan_pwr": 1000,
-    "condenser_fan_pwr_curve_name": "RACK1_RackCondFanCurve2",
-    "lighting_schedule": "Hospital BLDG_LIGHT_SCH",
-    "restocking_schedule": "Hospital Kitchen_Flr_5_Case:1_WALKINFREEZER_WalkInStockingSched",
-    "space_names": [
-      "Kitchen_Flr_5"
-    ]
-  },
-  {
-    "type": "Refrigeration",
-    "case_type": "Display Case",
-    "cooling_capacity_per_length": 886.5,
-    "length": 8.93,
-    "evaporator_fan_pwr_per_length": 67,
-    "lighting_per_length": 40,
-    "defrost_pwr_per_length": 0.0,
-    "cop": 3.0,
-    "cop_f_of_t_curve_name": "RACK2_RackCOPfTCurve",
-    "condenser_fan_pwr": 1000,
-    "condenser_fan_pwr_curve_name": "RACK1_RackCondFanCurve2",
-    "lighting_schedule": "Hospital BLDG_LIGHT_SCH",
-    "restocking_schedule": "Hospital Kitchen_Flr_5_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched",
-    "space_names": [
-      "Kitchen_Flr_5"
-    ]
-  }
+    "type": "Refrigeration_system",
+    "compressor_type": "Low Temp",
+    "cases": [{
+      "case_type": "Case Hospital",
+      "space_names": ["Kitchen_Flr_5"]}],
+    "walkins": [{
+      "walkin_type": "Walk-In Hospital",
+      "space_names": ["Kitchen_Flr_5"],
+      "number_of_walkins": 1 }],
+    "name": "RefrSystem - Hospital",
+    "space_names": ["Kitchen_Flr_5"]}
 ]
+

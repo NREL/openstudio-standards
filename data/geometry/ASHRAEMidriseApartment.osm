@@ -1517,7 +1517,18 @@ OS:Surface,
 
 OS:Timestep,
   {edfa6676-4fa1-4f8d-b586-211f30877da9}, !- Handle
-  4;                                      !- Number of Timesteps per Hour
+  6;                                      !- Number of Timesteps per Hour
+
+OS:Sizing:Parameters,
+  {27c11d43-ff6a-4633-939d-880c011bda1e}, !- Handle
+  1.2,                                    !- Heating Sizing Factor
+  1.2,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
+OS:ConvergenceLimits,
+  {d394069b-86c5-4324-ab0b-d91ac89a915d}, !- Handle
+  1,                                      !- Minimum System Timestep {minutes}
+  20;                                     !- Maximum HVAC Iterations
 
 OS:Surface,
   {b22ddd3a-c80b-4104-aba6-2c3c2faedf30}, !- Handle

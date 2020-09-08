@@ -1,0 +1,18 @@
+{
+  "economizers": [
+    {
+      "template": "DEER 2065",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": 54000.0,
+      "notes": "Same as 90.1-2016"
+    },
+    {
+      "template": "DEER 2065",
+      "climate_zone": "Any",
+      "data_center": true,
+      "capacity_limit": 54000.0,
+      "notes": "Same as 90.1-2016"
+    }
+  ]
+}

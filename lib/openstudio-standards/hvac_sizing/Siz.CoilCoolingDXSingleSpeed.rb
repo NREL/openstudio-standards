@@ -40,15 +40,15 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
 
   # returns the autosized rated total cooling capacity as an optional double
   def autosizedRatedTotalCoolingCapacity
-
+    
     return self.model.getAutosizedValue(self, 'Design Size Gross Rated Total Cooling Capacity', 'W')
     
   end
   
   # returns the autosized rated sensible heat ratio as an optional double
   def autosizedRatedSensibleHeatRatio
-
-    return self.model.getAutosizedValue(self, 'Design Size Rated Sensible Heat Ratio', '')   
+    
+    return self.model.getAutosizedValue(self, 'Design Size Gross Rated Sensible Heat Ratio', '')   
     
   end
 

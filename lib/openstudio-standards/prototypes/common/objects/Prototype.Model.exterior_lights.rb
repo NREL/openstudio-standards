@@ -15,7 +15,7 @@ class Standard
     }
 
     # load exterior_lighting_properties
-    exterior_lighting_properties = model_find_object(standards_data['exterior_lighting'], search_criteria)
+    exterior_lighting_properties = standards_lookup_table_first(table_name: 'exterior_lighting', search_criteria: search_criteria)
 
     # make sure lighting properties were found
     if exterior_lighting_properties.nil?
@@ -225,7 +225,7 @@ class Standard
       name_prefix = 'Drive Through Windows'
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/drive through window of lighting for #{multiplier} drie through windows.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/drive through window of lighting for #{multiplier} drive through windows.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
       ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
       ext_lights_def.setDesignLevel(power)
@@ -259,7 +259,7 @@ class Standard
       name_prefix = 'Base Site Allowance'
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W of non landscape tradable exterior lighting. Wil follow occupancy setback reduction.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W of non landscape tradable exterior lighting. Will follow occupancy setback reduction.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
       ext_lights_def.setName("#{name_prefix} Def (W)")
       ext_lights_def.setDesignLevel(power)
@@ -333,7 +333,7 @@ class Standard
 
       # load illuminated parking area properties for standards building type
       search_criteria = { 'building_type' => building_type }
-      illuminated_parking_area_lookup = model_find_object(standards_data['parking'], search_criteria)
+      illuminated_parking_area_lookup = standards_lookup_table_first(table_name: 'parking', search_criteria: search_criteria)
       if illuminated_parking_area_lookup.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.exterior_lights', "Could not find parking data for #{building_type}.")
         return {} # empty hash
@@ -357,7 +357,8 @@ class Standard
 
       # load entryways data for standards building type
       search_criteria = { 'building_type' => building_type }
-      exterior_lighting_assumptions_lookup = model_find_object(standards_data['entryways'], search_criteria)
+      exterior_lighting_assumptions_lookup = standards_lookup_table_first(table_name: 'entryways', search_criteria: search_criteria)
+
       if exterior_lighting_assumptions_lookup.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.exterior_lights', "Could not find entryway data for #{building_type}.")
         return {} # empty hash
