@@ -5,6 +5,12 @@ require 'json'
 require 'rubyXL'
 require 'csv'
 
+def rubyxl_extract_data(worksheet)
+  worksheet.sheet_data.rows.map { |row|
+    row.cells.map { |c| c && c.value() } unless row.nil?
+  }
+end
+
 class String
 
   def snake_case
@@ -142,6 +148,8 @@ def unique_properties(sheet_name)
            ['template', 'building_type', 'hvac_system']
          when 'climate_zones'
            ['name', 'standard']
+         when 'energy_recovery'
+           ['Template', 'Climate Zone']
          else
            []
          end
@@ -279,6 +287,7 @@ def export_spreadsheet_to_json(spreadsheet_titles)
   warnings = []
   duplicate_data = []
   spreadsheet_titles.each do |spreadsheet_title|
+    puts "Looking for #{spreadsheet_title}"
 
     # Path to the xlsx file
     xlsx_path = "#{__dir__}/#{spreadsheet_title}.xlsx"
@@ -358,7 +367,8 @@ def export_spreadsheet_to_json(spreadsheet_titles)
       header_row = 2 # Base 0
 
       # Get all data
-      all_data = worksheet.extract_data
+      puts "worksheet.class = #{worksheet.class}"
+      all_data = rubyxl_extract_data(worksheet)
 
       # Get the header row data
       header_data = all_data[header_row]
