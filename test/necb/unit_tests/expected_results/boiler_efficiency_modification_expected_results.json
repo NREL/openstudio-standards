@@ -29,7 +29,7 @@
   },
   {
     "template": "NECB2011",
-    "boiler_name": "Secondary NECB 88% Efficient Condensing Boiler 0 kBtu/hr",
+    "boiler_name": "Secondary NECB 88% Efficient Condensing Boiler 0kBtu/hr 0.88 Thermal Eff",
     "boiler_eff": 0.88,
     "eff_curve_name": "BOILER-EFFPLR-COND-NECB2011",
     "curve_coefficients": [
@@ -43,7 +43,7 @@
   },
   {
     "template": "NECB2011",
-    "boiler_name": "Primary NECB 88% Efficient Condensing Boiler 5118 kBtu/hr",
+    "boiler_name": "Primary NECB 88% Efficient Condensing Boiler 5118kBtu/hr 0.88 Thermal Eff",
     "boiler_eff": 0.88,
     "eff_curve_name": "BOILER-EFFPLR-COND-NECB2011",
     "curve_coefficients": [
@@ -57,7 +57,7 @@
   },
   {
     "template": "NECB2011",
-    "boiler_name": "Secondary Viessmann Vitocrossal 300 CT3-17 96.2% Efficient Condensing Gas Boiler 0 kBtu/hr",
+    "boiler_name": "Secondary Viessmann Vitocrossal 300 CT3-17 96.2% Efficient Condensing Gas Boiler 0kBtu/hr 0.962 Thermal Eff",
     "boiler_eff": 0.962,
     "eff_curve_name": "BOILER-EFFPLR-COND-VIESSMANN",
     "curve_coefficients": [
@@ -75,7 +75,7 @@
   },
   {
     "template": "NECB2011",
-    "boiler_name": "Primary Viessmann Vitocrossal 300 CT3-17 96.2% Efficient Condensing Gas Boiler 5118 kBtu/hr",
+    "boiler_name": "Primary Viessmann Vitocrossal 300 CT3-17 96.2% Efficient Condensing Gas Boiler 5118kBtu/hr 0.962 Thermal Eff",
     "boiler_eff": 0.962,
     "eff_curve_name": "BOILER-EFFPLR-COND-VIESSMANN",
     "curve_coefficients": [
@@ -121,7 +121,7 @@
   },
   {
     "template": "BTAPPRE1980",
-    "boiler_name": "Secondary NECB 88% Efficient Condensing Boiler 0 kBtu/hr",
+    "boiler_name": "Secondary NECB 88% Efficient Condensing Boiler 0kBtu/hr 0.88 Thermal Eff",
     "boiler_eff": 0.88,
     "eff_curve_name": "BOILER-EFFPLR-COND-NECB2011",
     "curve_coefficients": [
@@ -135,7 +135,7 @@
   },
   {
     "template": "BTAPPRE1980",
-    "boiler_name": "Primary NECB 88% Efficient Condensing Boiler 5118 kBtu/hr",
+    "boiler_name": "Primary NECB 88% Efficient Condensing Boiler 5118kBtu/hr 0.88 Thermal Eff",
     "boiler_eff": 0.88,
     "eff_curve_name": "BOILER-EFFPLR-COND-NECB2011",
     "curve_coefficients": [
@@ -149,7 +149,7 @@
   },
   {
     "template": "BTAPPRE1980",
-    "boiler_name": "Secondary Viessmann Vitocrossal 300 CT3-17 96.2% Efficient Condensing Gas Boiler 0 kBtu/hr",
+    "boiler_name": "Secondary Viessmann Vitocrossal 300 CT3-17 96.2% Efficient Condensing Gas Boiler 0kBtu/hr 0.962 Thermal Eff",
     "boiler_eff": 0.962,
     "eff_curve_name": "BOILER-EFFPLR-COND-VIESSMANN",
     "curve_coefficients": [
@@ -167,7 +167,7 @@
   },
   {
     "template": "BTAPPRE1980",
-    "boiler_name": "Primary Viessmann Vitocrossal 300 CT3-17 96.2% Efficient Condensing Gas Boiler 5118 kBtu/hr",
+    "boiler_name": "Primary Viessmann Vitocrossal 300 CT3-17 96.2% Efficient Condensing Gas Boiler 5118kBtu/hr 0.962 Thermal Eff",
     "boiler_eff": 0.962,
     "eff_curve_name": "BOILER-EFFPLR-COND-VIESSMANN",
     "curve_coefficients": [
