@@ -1319,7 +1319,7 @@ class ECMS
 
   # ============================================================================================================================
   # Apply boiler efficiency
-  # This model takes an OS model and a boiler efficiency hash sent to it with the following form:
+  # This model takes an OS model and a boiler efficiency string or hash sent to it with the following form:
   #    "boiler_eff": {
   #        "name" => "NECB 88% Efficient Condensing Boiler",
   #        "efficiency" => 0.88,
@@ -1327,8 +1327,8 @@ class ECMS
   #        "notes" => "From NECB 2011."
   #    }
   # If boiler_eff is nill then it does nothing.  If both "efficiency" and "part_load_curve" are nil then it does
-  # nothing.  If a boiler_eff["name"] is present but both the efficiency and part load curve are nill then it looks for
-  # the boiler_eff["name"] in the boiler_set.json file and get the associated boiler performance details from the file.
+  # nothing.  If a boiler_eff is passed as a string and not a hash then it looks for a "name" field in the
+  # boiler_set.json file that matches boiler_eff and gets the associated boiler performance details from the file.
   # If an efficiency is set but is not between 0.01 and 1.0 it returns an error.  Otherwise, it looks for plant loop
   # supply components that match the "OS_BoilerHotWater" type.  If it finds one it then calls the
   # "reset_boiler_efficiency method which resets the the boiler efficiency and looks for the part load efficiency curve
@@ -1336,23 +1336,27 @@ class ECMS
   # It also renames the boiler to include the "boiler_eff"["name"].
   def modify_boiler_efficiency(model:, boiler_eff: nil)
     return if boiler_eff.nil?
+    # If boiler_eff is a string rather than a hash then assume it is the name of a boiler efficiency package and look
+    # for a package with that name in boiler_set.json.
+    if boiler_eff.is_a?(String)
+      eff_packages = @standards_data['tables']['boiler_eff_ecm']['table']
+      eff_package = eff_packages.select{|eff_pack_info| eff_pack_info["name"] == boiler_eff}
+      if eff_package.empty?
+        raise "Cannot not find #{boiler_eff} in the ECMS boiler_set.json file.  Please check that the name is correctly spelled in the ECMS class boiler_set.json and in the code calling (directly or through another method) the ECMS class modify_boiler_efficiency method."
+      elsif eff_package.size > 1
+        raise "More than one boiler efficiency package with the name #{boiler_eff} was found.  Please check the ECMS class boiler_set.json file and make sure that each boiler efficiency package has a unique name."
+      else
+        ecm_name = boiler_eff
+        boiler_eff = {
+            "name" => ecm_name,
+            "efficiency" => eff_package[0]['efficiency'],
+            "part_load_curve" => eff_package[0]['part_load_curve']
+        }
+      end
+    end
     # If nothing is passed in the boiler_eff hash then assume this was not supposed to be used and return without doing
     # anything.
     return if boiler_eff["name"].nil? && boiler_eff["efficiency"].nil? && boiler_eff["part_load_curve"].nil?
-    # If a name, and nothing else is passed then assume that the user wants to use one of the packaged ecms in the
-    # boiler_set.json file.
-    if boiler_eff["name"] && boiler_eff["efficiency"].nil? && boiler_eff["part_load_curve"].nil?
-      boiler_eff_packages = @standards_data['tables']['boiler_eff_ecm']['table']
-      boiler_eff_package = boiler_eff_packages.select{|boiler_eff_pack_info| boiler_eff_pack_info["name"] == boiler_eff["name"]}
-      if boiler_eff_package.empty?
-        raise "Cannot not find #{boiler_eff["name"]} in the ECMS boiler_set.json file and no boiler efficiency or part load curve are supplied.  Please check that the name is correctly spelled in the ECMS class boiler_set.json and in the code calling (directly or through another method) the ECMS class modify_boiler_efficiency method."
-      elsif boiler_eff_package.size > 1
-        raise "More than one boiler efficiency package with the name #{boiler_eff["name"]} was found.  Please check the ECMS class boiler_set.json file and make sure that each boiler efficiency package has a unique name."
-      else
-        boiler_eff['efficiency'] = boiler_eff_package[0]['efficiency']
-        boiler_eff['part_load_curve'] = boiler_eff_package[0]['part_load_curve']
-      end
-    end
     # If no efficiency or partload curve are found (either passed directly or via the boiler_set.json file) then assume
     # that the current SHW setting should not be changed.  Return without changing anything.
     return if boiler_eff["efficiency"].nil? && boiler_eff["part_load_curve"].nil?
@@ -1417,7 +1421,7 @@ class ECMS
 
   # ============================================================================================================================
   # Apply Furnace efficiency
-  # This model takes an OS model and a furnace efficiency hash sent to it with the following form:
+  # This model takes an OS model and a furnace efficiency string or hash sent to it with the following form:
   #    "furnace_eff": {
   #        "name" => "NECB 85% Efficient Condensing Furnace",
   #        "efficiency" => 0.85,
@@ -1425,32 +1429,35 @@ class ECMS
   #        "notes" => "From NECB 2011."
   #    }
   # If furnace_eff is nil then it does nothing.  If both "efficiency" and "part_load_curve" are nil then it does
-  # nothing.  If a furnace_eff["name"] is present but not an efficiency or part load curve then it looks for the
-  # furnace_eff["name"] in the furnace_set.json file and get the information.  If an efficiency is set but is not
-  # between 0.01 and 1.0 it returns an error.  Otherwise, it looks for air loop supply components that match the
-  # "OS_CoilHeatingGas" type.  If it finds one it then calls the reset_furnace_efficiency method which resets the the
-  # furnace efficiency and looks for the part load efficiency curve in the curves.json file.  If it finds a curve it
-  # sets the part load curve to that, otherwise it returns an error. It also renames the furnace to include the
-  # "furnace_eff"["name"].
+  # nothing.  If a furnace_eff is a string it looks for furnace_eff as a "name" in the furnace_set.json file to find
+  # the performance details.  If an efficiency is set but is not between 0.01 and 1.0 it returns an error.  Otherwise,
+  # it looks for air loop supply components that match the "OS_CoilHeatingGas" type.  If it finds one it then calls the
+  # reset_furnace_efficiency method which resets the the furnace efficiency and looks for the part load efficiency curve
+  # in the curves.json file.  If it finds a curve it sets the part load curve to that, otherwise it returns an error. It
+  # also renames the furnace to include the "furnace_eff"["name"].
   def modify_furnace_efficiency(model:, furnace_eff: nil)
     return if furnace_eff.nil?
+    # If furnace_eff is a string rather than a hash then assume it is the name of a furnace efficiency package and look
+    # for a package with that name in furnace_set.json.
+    if furnace_eff.is_a?(String)
+      eff_packages = @standards_data['tables']['furnace_eff_ecm']['table']
+      eff_package = eff_packages.select{|eff_pack_info| eff_pack_info["name"] == furnace_eff}
+      if eff_package.empty?
+        raise "Cannot not find #{furnace_eff} in the ECMS furnace_set.json file.  Please check that the name is correctly spelled in the ECMS class furnace_set.json and in the code calling (directly or through another method) the ECMS class modify_furnace_efficiency method."
+      elsif eff_package.size > 1
+        raise "More than one furnace efficiency package with the name #{furnace_eff} was found.  Please check the ECMS class furnace_set.json file and make sure that each furnace efficiency package has a unique name."
+      else
+        ecm_name = furnace_eff
+        furnace_eff = {
+            "name" => ecm_name,
+            "efficiency" => eff_package[0]['efficiency'],
+            "part_load_curve" => eff_package[0]['part_load_curve']
+        }
+      end
+    end
     # If nothing is passed in the furnace_eff hash then assume this was not supposed to be used and return without doing
     # anything.
     return if furnace_eff["name"].nil? && furnace_eff["efficiency"].nil? && furnace_eff["part_load_curve"].nil?
-    # If a name, and nothing else is passed then assume that the user wants to use one of the packaged ecms in the
-    # furnace_set.json file.
-    if furnace_eff["name"] && furnace_eff["efficiency"].nil? && furnace_eff["part_load_curve"].nil?
-      eff_packages = @standards_data['tables']['furnace_eff_ecm']['table']
-      eff_package = eff_packages.select{|eff_pack_info| eff_pack_info["name"] == furnace_eff["name"]}
-      if eff_package.empty?
-        raise "Cannot not find #{furnace_eff["name"]} in the ECMS furnace_set.json file and no furnace efficiency or part load curve are supplied.  Please check that the name is correctly spelled in the ECMS class furnace_set.json and in the code calling (directly or through another method) the ECMS class modify_furnace_efficiency method."
-      elsif eff_package.size > 1
-        raise "More than one furnace efficiency package with the name #{furnace_eff["name"]} was found.  Please check the ECMS class furnace_set.json file and make sure that each boiler efficiency package has a unique name."
-      else
-        furnace_eff['efficiency'] = eff_package[0]['efficiency']
-        furnace_eff['part_load_curve'] = eff_package[0]['part_load_curve']
-      end
-    end
     # If no efficiency or partload curve are found (either passed directly or via the furnace_set.json file) then assume
     # that the current furance performance settings should not be changed.  Return without changing anything.
     return if furnace_eff["efficiency"].nil? && furnace_eff["part_load_curve"].nil?
@@ -1493,7 +1500,7 @@ class ECMS
 
   # ============================================================================================================================
   # Apply shw efficiency
-  # This model takes an OS model and a shw efficiency hash sent to it with the following form:
+  # This model takes an OS model and a shw efficiency string or hash sent to it with the following form:
   #    "shw_eff": {
   #        "name" => "Natural Gas Power Vent with Electric Ignition",
   #        "efficiency" => 0.94,
@@ -1501,31 +1508,34 @@ class ECMS
   #        "notes" => "From NECB 2011."
   #    }
   # If shw_eff is nil then it does nothing.  If both "efficiency" and "part_load_curve" are nil then it does nothing.
-  # If shw_eff["name"] is present but the efficiency and part load curve are nil then it looks for the shw_eff["name"]
-  # in the shw_set.json file for the details on the tank.  If an efficiency is set but is not between 0.01 and 1.0 it
-  # returns an error.  Otherwise, it looks for mixed water heaters.  If it finds any it then calls the
-  # reset_shw_efficiency method which resets the the shw efficiency and the part load curve. It also renames the shw
-  # tank with the following pattern:
+  # If shw_eff is a string then it looks for shw_eff as a "name" in the shw_set.json file for the details on the tank.
+  # If an efficiency is set but is not between 0.01 and 1.0 it returns an error.  Otherwise, it looks for mixed water
+  # heaters.  If it finds any it then calls the reset_shw_efficiency method which resets the the shw efficiency and the
+  # part load curve. It also renames the shw tank with the following pattern:
   # {valume}Gal {eff_name} Water Heater - {Capacity}kBtu/hr {efficiency} Therm Eff
   def modify_shw_efficiency(model:, shw_eff: nil)
     return if shw_eff.nil?
-    # If nothing is passed in the furnace_eff hash then assume this was not supposed to be used and return without doing
-    # anything.
-    return if shw_eff["name"].nil? && shw_eff["efficiency"].nil? && shw_eff["part_load_curve"].nil?
-    # If a name, and nothing else is passed then assume that the user wants to use one of the packaged ecms in the
-    # furnace_set.json file.
-    if shw_eff["name"] && shw_eff["efficiency"].nil? && shw_eff["part_load_curve"].nil?
+    # If shw_eff is a string rather than a hash then assume it is the name of a shw efficiency package and look
+    # for a package with that name in shw_set.json.
+    if shw_eff.is_a?(String)
       eff_packages = @standards_data['tables']['shw_eff_ecm']['table']
-      eff_package = eff_packages.select{|eff_pack_info| eff_pack_info["name"] == shw_eff["name"]}
+      eff_package = eff_packages.select{|eff_pack_info| eff_pack_info["name"] == shw_eff}
       if eff_package.empty?
-        raise "Cannot not find #{shw_eff["name"]} in the ECMS shw_set.json file and no shw efficiency or part load curve are supplied.  Please check that the name is correctly spelled in the ECMS class shw_set.json and in the code calling (directly or through another method) the ECMS class modify_shw_efficiency method."
+        raise "Cannot not find #{shw_eff} in the ECMS shw_set.json file.  Please check that the name is correctly spelled in the ECMS class shw_set.json and in the code calling (directly or through another method) the ECMS class modify_shw_efficiency method."
       elsif eff_package.size > 1
-        raise "More than one shw efficiency package with the name #{shw_eff["name"]} was found.  Please check the ECMS class shw_set.json file and make sure that each boiler efficiency package has a unique name."
+        raise "More than one shw tank efficiency package with the name #{shw_eff} was found.  Please check the ECMS class shw_set.json file and make sure that each shw tank efficiency package has a unique name."
       else
-        shw_eff['efficiency'] = eff_package[0]['efficiency']
-        shw_eff['part_load_curve'] = eff_package[0]['part_load_curve']
+        ecm_name = shw_eff
+        shw_eff = {
+            "name" => ecm_name,
+            "efficiency" => eff_package[0]['efficiency'],
+            "part_load_curve" => eff_package[0]['part_load_curve']
+        }
       end
     end
+    # If nothing is passed in the shw_eff hash then assume this was not supposed to be used and return without doing
+    # anything.
+    return if shw_eff["name"].nil? && shw_eff["efficiency"].nil? && shw_eff["part_load_curve"].nil?
     # If no efficiency or partload curve are found (either passed directly or via the shw_set.json file) then assume
     # that the current shw performance settings should not be changed.  Return without changing anything.
     return if shw_eff["efficiency"].nil? && shw_eff["part_load_curve"].nil?
