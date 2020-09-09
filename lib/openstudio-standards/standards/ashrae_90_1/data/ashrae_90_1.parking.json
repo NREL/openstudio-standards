@@ -1,6 +1,15 @@
 {
   "parking": [
     {
+      "building_type": "College",
+      "building_area_per_spot": null,
+      "units_per_spot": null,
+      "students_per_spot": null,
+      "beds_per_spot": null,
+      "parking_area_per_spot": 405.0,
+      "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
       "building_type": "Courthouse",
       "building_area_per_spot": null,
       "units_per_spot": null,
