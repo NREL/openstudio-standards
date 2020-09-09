@@ -131,7 +131,7 @@ space_types_occupancy,space_type,
 space_types_occupancy,occupancy_standard,
 space_types_occupancy,occupancy_primary_space_type,
 space_types_occupancy,occupancy_secondary_space_type,
-space_types_occupancy,occupancy_per_area,people/1000 ft^2
+space_types_occupancy,occupancy_per_area,person/1000*ft^2
 space_types_occupancy,occupancy_schedule,
 space_types_occupancy,occupancy_activity_schedule,
 space_types_occupancy,is_residential,
@@ -140,8 +140,8 @@ space_types_occupancy,notes,
 space_types_infiltration,template,
 space_types_infiltration,building_type,
 space_types_infiltration,space_type,
-space_types_infiltration,infiltration_per_exterior_area,ft^3/min*ft^2 ext
-space_types_infiltration,infiltration_per_exterior_wall_area,ft^3/min*ft^2 ext
+space_types_infiltration,infiltration_per_exterior_area,ft^3/min*ft^2
+space_types_infiltration,infiltration_per_exterior_wall_area,ft^3/min*ft^2
 space_types_infiltration,infiltration_air_changes,ach
 space_types_infiltration,infiltration_schedule,
 space_types_infiltration,infiltration_schedule_perimeter,
@@ -168,7 +168,7 @@ space_types_swh,notes,
 space_types_exhaust,template,
 space_types_exhaust,building_type,
 space_types_exhaust,space_type,
-space_types_exhaust,exhaust_per_area,cfm/ft2
+space_types_exhaust,exhaust_per_area,cfm/ft^2
 space_types_exhaust,exhaust_per_unit,cfm
 space_types_exhaust,exhaust_fan_power_per_area,W/ft^2
 space_types_exhaust,exhaust_fan_efficiency,

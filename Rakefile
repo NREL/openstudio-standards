@@ -174,7 +174,7 @@ namespace :data do
       'OpenStudio_Standards-cbes(space_types)'
   ]
 
-  spreadsheet_titles = spreadsheets_ashrae + spreadsheets_deer + spreadsheets_comstock + spreadsheets_cbes
+  spreadsheet_titles = spreadsheets_ashrae
   spreadsheet_titles = spreadsheet_titles.uniq
 
   desc 'Download all OpenStudio_Standards spreadsheets from Google & export JSONs'
@@ -185,7 +185,7 @@ namespace :data do
 
   desc 'Export JSONs from OpenStudio_Standards'
   task 'update:manual' do
-    export_spreadsheets_for_lib(spreadsheet_titles)
+    export_spreadsheets_for_data_repo(spreadsheet_titles)
   end
 
 

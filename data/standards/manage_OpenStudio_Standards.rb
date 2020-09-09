@@ -280,7 +280,7 @@ end
 
 def parse_units(unit)
   # useless_units = [nil, 'fraction', '%', 'COP_68F', 'COP_47F', '%/gal', 'Btu/hr/Btu/hr', 'Btu/hr/gal', 'BTU/hr/ft', 'W/BTU/h']
-  units_to_skip = [nil, 'fraction', '%', 'EER']
+  units_to_skip = [nil, 'fraction', '%', 'EER', '>23m^2', '>84m^2', '<23m^2', '<84m^2']
   unit_parsed = nil
   if not units_to_skip.include?(unit)
     if unit == '%/gal'
