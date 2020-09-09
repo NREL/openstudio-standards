@@ -1447,10 +1447,8 @@ class ECMS
       elsif eff_package.size > 1
         raise "More than one furnace efficiency package with the name #{furnace_eff["name"]} was found.  Please check the ECMS class furnace_set.json file and make sure that each boiler efficiency package has a unique name."
       else
-        return if eff_package['efficiency'].nil? && eff_package['part_load_curve'].nil?
-        raise "You attempted to set either the efficiency or part load curve for this furnace to nil.  Please check the ECMS class furnace_set.json file and make sure that either both efficiency and part load curve are properly set or both are nil (if you do not want to change the furnace performance properties)." if eff_package['efficiency'].nil? || eff_package['part_load_curve'].nil?
-        furnace_eff['efficiency'] = eff_package['efficiency']
-        furnace_eff['part_load_curve'] = eff_package['part_load_curve']
+        furnace_eff['efficiency'] = eff_package[0]['efficiency']
+        furnace_eff['part_load_curve'] = eff_package[0]['part_load_curve']
       end
     end
     # If no efficiency or partload curve are found (either passed directly or via the furnace_set.json file) then assume
@@ -1524,10 +1522,8 @@ class ECMS
       elsif eff_package.size > 1
         raise "More than one shw efficiency package with the name #{shw_eff["name"]} was found.  Please check the ECMS class shw_set.json file and make sure that each boiler efficiency package has a unique name."
       else
-        return if eff_package['efficiency'].nil? && eff_package['part_load_curve'].nil?
-        raise "You attempted to set either the efficiency or part load curve for this shw tank to nil.  Please check the ECMS class shw_set.json file and make sure that either both efficiency and part load curve are properly set or both are nil (if you do not want to change the shw performance properties)." if eff_package['efficiency'].nil? || eff_package['part_load_curve'].nil?
-        shw_eff['efficiency'] = eff_package['efficiency']
-        shw_eff['part_load_curve'] = eff_package['part_load_curve']
+        shw_eff['efficiency'] = eff_package[0]['efficiency']
+        shw_eff['part_load_curve'] = eff_package[0]['part_load_curve']
       end
     end
     # If no efficiency or partload curve are found (either passed directly or via the shw_set.json file) then assume
