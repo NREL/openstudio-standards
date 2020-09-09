@@ -455,7 +455,7 @@ class ASHRAE9012013 < ASHRAE901
       elsif pct_oa >= 0.3 && pct_oa < 0.4
         erv_cfm = energy_recovery_limits['30_to_40_percent_oa']
       elsif pct_oa >= 0.4 && pct_oa < 0.5
-        erv_cfm = energy_recovery_limits['40_to_40_percent_oa']
+        erv_cfm = energy_recovery_limits['40_to_50_percent_oa']
       elsif pct_oa >= 0.5 && pct_oa < 0.6
         erv_cfm = energy_recovery_limits['50_to_60_percent_oa']
       elsif pct_oa >= 0.6 && pct_oa < 0.7
@@ -482,7 +482,7 @@ class ASHRAE9012013 < ASHRAE901
       elsif pct_oa >= 0.3 && pct_oa < 0.4
         erv_cfm = energy_recovery_limits['30_to_40_percent_oa']
       elsif pct_oa >= 0.4 && pct_oa < 0.5
-        erv_cfm = energy_recovery_limits['40_to_40_percent_oa']
+        erv_cfm = energy_recovery_limits['40_to_50_percent_oa']
       elsif pct_oa >= 0.5 && pct_oa < 0.6
         erv_cfm = energy_recovery_limits['50_to_60_percent_oa']
       elsif pct_oa >= 0.6 && pct_oa < 0.7
