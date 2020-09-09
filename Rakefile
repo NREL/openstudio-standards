@@ -180,12 +180,12 @@ namespace :data do
   desc 'Download all OpenStudio_Standards spreadsheets from Google & export JSONs'
   task 'update' do
     download_google_spreadsheets(spreadsheet_titles)
-    export_spreadsheet_to_json(spreadsheet_titles)
+    export_spreadsheets_for_lib(spreadsheet_titles)
   end
 
   desc 'Export JSONs from OpenStudio_Standards'
   task 'update:manual' do
-    export_spreadsheet_to_json(spreadsheet_titles)
+    export_spreadsheets_for_lib(spreadsheet_titles)
   end
 
 
