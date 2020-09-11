@@ -1,0 +1,22 @@
+  # outside air flow rate
+weather_files = {'albuquerque'=>{'USA_NM_Albuquerque.Intl.Sunport.723650_TMY3.epw',
+        'atlanta'=>{'USA_GA_Atlanta-Hartsfield.Jackson.Intl.AP.722190_TMY3.epw',
+        'buffalo'=>{'USA_NY_Buffalo.Niagara.Intl.AP.725280_TMY3.epw',
+        'denver'=>{'USA_CO_Denver-Aurora-Buckley.AFB.724695_TMY3.epw',
+        'elpaso'=>{'USA_TX_El.Paso.Intl.AP.722700_TMY3.epw',
+        'fairbanks'=>{'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
+        'greatfalls'=>{'USA_MT_Great.Falls.Intl.AP.727750_TMY3.epw',
+        'honolulu'=>{'USA_HI_Honolulu.Intl.AP.911820_TMY3.epw',
+        'internationalfalls'=>{'USA_MN_International.Falls.Intl.AP.727470_TMY3.epw',
+        'newyork'=>{'USA_NY_New.York-John.F.Kennedy.Intl.AP.744860_TMY3.epw',
+        'portangeles'=>{'USA_WA_Port.Angeles-William.R.Fairchild.Intl.AP.727885_TMY3.epw',
+        'rochester'=>{'USA_MN_Rochester.Intl.AP.726440_TMY3.epw',
+        'sandiego'=>{'USA_CA_San.Deigo-Brown.Field.Muni.AP.722904_TMY3.epw',
+        'seattle'=>{'USA_WA_Seattle-Tacoma.Intl.AP.727930_TMY3.epw',
+        'tampa'=>{'USA_FL_Tampa-MacDill.AFB.747880_TMY3.epw',
+        'tucson'=>{'USA_AZ_Tucson-Davis-Monthan.AFB.722745_TMY3.epw'}
+
+
+
+
+
