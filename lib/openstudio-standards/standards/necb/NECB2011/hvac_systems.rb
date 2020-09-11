@@ -826,32 +826,70 @@ class NECB2011
   # @return [Bool] true if successful, false if not
   def coil_cooling_dx_multi_speed_apply_efficiency_and_curves(coil_cooling_dx_multi_speed, sql_db_vars_map)
     successfully_set_all_properties = true
+    model = coil_cooling_dx_multi_speed.model
+    multi_speed_heat_pump = coil_cooling_dx_multi_speed.containingHVACComponent.get.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get
+    airloop = nil
+    if multi_speed_heat_pump.airLoopHVAC.is_initialized then airloop = multi_speed_heat_pump.airLoopHVAC.get end
 
     # Define the criteria to find the properties in the hvac standards data set
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_multi_speed)
     capacity_w = coil_cooling_dx_multi_speed_find_capacity(coil_cooling_dx_multi_speed)
 
-    # Set number of stages
+    # Find design outside air flow
+    controller_oa = nil
+    if airloop.airLoopHVACOutdoorAirSystem.is_initialized
+      oa_system = airloop.airLoopHVACOutdoorAirSystem.get
+      controller_oa = oa_system.getControllerOutdoorAir
+    end
+    min_oa_flow,oaf = 0.0,0.0
+    if controller_oa
+      min_oa_flow = nil
+      if controller_oa.minimumOutdoorAirFlowRate.is_initialized
+        min_oa_flow = controller_oa.minimumOutdoorAirFlowRate.get
+      elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
+        min_oa_flow = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
+      end
+      if min_oa_flow then oaf = min_oa_flow.to_f / airloop.autosizedDesignSupplyAirFlowRate.to_f end
+    end
+
+    # Set number of stages and the air flow for stage 1 so that it's always greater than the minimum
+    # outside air flow
     clg_stages = coil_cooling_dx_multi_speed.stages
     max_num_stages = clg_stages.size
     stage_cap = []
     num_stages = (capacity_w / (66.0 * 1000.0) + 0.5).round
-    num_stages = [num_stages, 4].min
+    #num_stages = [num_stages, 4].min
+    max_cap = 66.0 * 1000.0 * num_stages
     final_num_stages = num_stages
     case num_stages
     when 1
       stage_cap[0] = capacity_w / 2.0
       stage_cap[1] = 2.0 * stage_cap[0]
       final_num_stages = 2
+      if oaf > 0.5
+        multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow)
+      end
     else
       stage_cap[0] = 66.0 * 1000.0
       stage_cap[1] = 2.0 * stage_cap[0]
       case num_stages
+      when 2
+        if oaf > 0.5
+          multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow)
+        end
       when 3
         stage_cap[2] = 3.0 * stage_cap[0]
-      when 4
+        if oaf > 0.333
+          multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow)
+        end
+      else
+        final_num_stages = 4
         stage_cap[2] = 3.0 * stage_cap[0]
-        stage_cap[3] = [4.0 * stage_cap[0],capacity_w].max
+        stage_cap[3] = max_cap #[4.0 * stage_cap[0],capacity_w].max
+        speed1_cap_ratio = stage_cap[0] / max_cap
+        if oaf > speed1_cap_ratio
+          multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow)
+        end
       end
     end
 
@@ -859,13 +897,12 @@ class NECB2011
     clg_stages[0].setGrossRatedTotalCoolingCapacity(stage_cap[0])
     clg_stages[1].setGrossRatedTotalCoolingCapacity(stage_cap[1])
     for istage in 2..final_num_stages-1
-      new_clg_stage = OpenStudio::Model::CoilCoolingDXMultiSpeedStageData.new(coil_cooling_dx_multi_speed.model)
+      new_clg_stage = OpenStudio::Model::CoilCoolingDXMultiSpeedStageData.new(model)
       coil_cooling_dx_multi_speed.addStage(new_clg_stage)
       new_clg_stage.setGrossRatedTotalCoolingCapacity(stage_cap[istage])
     end
 
-    # update number of heating stages
-    multi_speed_heat_pump = coil_cooling_dx_multi_speed.containingHVACComponent.get.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get
+    # update number of cooling stages
     multi_speed_heat_pump.setNumberofSpeedsforCooling(final_num_stages)
 
     # Convert capacity to Btu/hr
@@ -891,7 +928,7 @@ class NECB2011
     clg_stages = coil_cooling_dx_multi_speed.stages
 
     # Make the COOL-CAP-FT curve
-    cool_cap_ft = model_add_curve(coil_cooling_dx_multi_speed.model, ac_props['cool_cap_ft'])
+    cool_cap_ft = model_add_curve(model, ac_props['cool_cap_ft'])
     if cool_cap_ft
       clg_stages.each do |stage|
         stage.setTotalCoolingCapacityFunctionofTemperatureCurve(cool_cap_ft)
@@ -903,7 +940,7 @@ class NECB2011
     end
 
     # Make the COOL-CAP-FFLOW curve
-    cool_cap_fflow = model_add_curve(coil_cooling_dx_multi_speed.model, ac_props['cool_cap_fflow'])
+    cool_cap_fflow = model_add_curve(model, ac_props['cool_cap_fflow'])
     if cool_cap_fflow
       clg_stages.each do |stage|
         stage.setTotalCoolingCapacityFunctionofFlowFractionCurve(cool_cap_fflow)
@@ -915,7 +952,7 @@ class NECB2011
     end
 
     # Make the COOL-EIR-FT curve
-    cool_eir_ft = model_add_curve(coil_cooling_dx_multi_speed.model, ac_props['cool_eir_ft'])
+    cool_eir_ft = model_add_curve(model, ac_props['cool_eir_ft'])
     if cool_eir_ft
       clg_stages.each do |stage|
         stage.setEnergyInputRatioFunctionofTemperatureCurve(cool_eir_ft)
@@ -927,7 +964,7 @@ class NECB2011
     end
 
     # Make the COOL-EIR-FFLOW curve
-    cool_eir_fflow = model_add_curve(coil_cooling_dx_multi_speed.model, ac_props['cool_eir_fflow'])
+    cool_eir_fflow = model_add_curve(model, ac_props['cool_eir_fflow'])
     if cool_eir_fflow
       clg_stages.each do |stage|
         stage.setEnergyInputRatioFunctionofFlowFractionCurve(cool_eir_fflow)
@@ -939,7 +976,7 @@ class NECB2011
     end
 
     # Make the COOL-PLF-FPLR curve
-    cool_plf_fplr = model_add_curve(coil_cooling_dx_multi_speed.model, ac_props['cool_plf_fplr'])
+    cool_plf_fplr = model_add_curve(model, ac_props['cool_plf_fplr'])
     if cool_plf_fplr
       clg_stages.each do |stage|
         stage.setPartLoadFractionCorrelationCurve(cool_plf_fplr)
@@ -967,6 +1004,55 @@ class NECB2011
       end
     end
 
+    # It was found that the heat pump OS object doesn't respond to the call to turn on from sent by the
+    # system availability manager night cycle. This EMS script is then implemented to check the status
+    # of the system availability manager night cycle and force the heat pump to turn on when needed. The
+    # heat pump is still turned on when its availability schedule calls for it.
+    avail_manager_name = nil
+    if multi_speed_heat_pump.airLoopHVAC.is_initialized
+      if not multi_speed_heat_pump.airLoopHVAC.get.availabilityManagers.empty?
+        avail_manager_name = multi_speed_heat_pump.airLoopHVAC.get.availabilityManagers[0].name.to_s
+      end
+    end
+    if avail_manager_name
+      avail_manager_out_var_name = "Availability Manager Night Cycle Control Status"
+      avail_manager_out_var = OpenStudio::Model::OutputVariable.new(avail_manager_out_var_name, model)
+      avail_manager_out_var.setKeyValue(avail_manager_name)
+      avail_manager_out_var.setReportingFrequency("Timestep")
+      night_cycle_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, avail_manager_out_var)
+      heat_pump_avail_sch = nil
+      if multi_speed_heat_pump.availabilitySchedule.is_initialized
+        heat_pump_avail_sch = multi_speed_heat_pump.availabilitySchedule.get
+      elsif multi_speed_heat_pump.airLoopHVAC.get.availabilitySchedule.is_initialized
+        heat_pump_avail_sch = multi_speed_heat_pump.airLoopHVAC.get.availabilitySchedule.get
+      else
+        heat_pump_avail_sch = OpenStudio::Model::ScheduleConstant.new(model)
+        heat_pump_avail_sch.setValue(1.0)
+      end
+      heat_pump_avail_sch_var = OpenStudio::Model::OutputVariable.new("Schedule Value", model)
+      heat_pump_avail_sch_var.setKeyValue(heat_pump_avail_sch.name.to_s)
+      heat_pump_avail_sch_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, heat_pump_avail_sch_var)
+      updated_heat_pump_avail_sch = OpenStudio::Model::ScheduleConstant.new(model)
+      multi_speed_heat_pump.setAvailabilitySchedule(updated_heat_pump_avail_sch)
+      heat_pump_avail_sch_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(updated_heat_pump_avail_sch, "Schedule:Constant", "Schedule Value")
+      heat_pump_avail_sch_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+      heat_pump_avail_sch_prog.setName("#{multi_speed_heat_pump.name.to_s.gsub(/[ +-.]/,'_')} Availability Schedule Program by Line")
+      heat_pump_avail_sch_prog_body = <<-EMS
+        IF #{heat_pump_avail_sch_sensor.handle} > 0.0 
+          SET #{heat_pump_avail_sch_actuator.handle} = #{heat_pump_avail_sch_sensor.handle}
+        ELSEIF #{night_cycle_sensor.handle} == 2.0
+          SET #{heat_pump_avail_sch_actuator.handle} = 1.0
+        ELSE
+          SET #{heat_pump_avail_sch_actuator.handle} = 0.0
+        ENDIF
+      EMS
+      heat_pump_avail_sch_prog.setBody(heat_pump_avail_sch_prog_body)
+      pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+      pcm.setName("#{heat_pump_avail_sch_prog.name.to_s.gsub(/[ +-.]/,'_')} Calling Manager")
+      pcm.setCallingPoint('InsideHVACSystemIterationLoop')
+      pcm.addProgram(heat_pump_avail_sch_prog)
+    end
+
     return sql_db_vars_map
 
   end
@@ -976,16 +1062,47 @@ class NECB2011
   # @return [Bool] true if successful, false if not
   def coil_heating_gas_multi_stage_apply_efficiency_and_curves(coil_heating_gas_multi_stage)
     successfully_set_all_properties = true
+    model = coil_heating_gas_multi_stage.model
+
+    # get multi speed heat pump and air loop
+    multi_speed_heat_pump = nil
+    multi_speed_heat_pumps = model.getAirLoopHVACUnitaryHeatPumpAirToAirMultiSpeeds
+    multi_speed_heat_pumps.each do |iheat_pump|
+      htg_coil = iheat_pump.heatingCoil
+      if htg_coil.name.to_s.strip == coil_heating_gas_multi_stage.name.to_s.strip
+        multi_speed_heat_pump = iheat_pump
+        break
+      end
+    end
+    airloop = nil
+    if multi_speed_heat_pump.airLoopHVAC.is_initialized then airloop = multi_speed_heat_pump.airLoopHVAC.get end
 
     # Define the criteria to find the properties in the hvac standards data set.
     search_criteria = coil_heating_gas_multi_stage_find_search_criteria(coil_heating_gas_multi_stage)
     fuel_type = search_criteria["fuel_type"]
     capacity_w = coil_heating_gas_multi_stage_find_capacity(coil_heating_gas_multi_stage)
 
+    # Find design outside air flow
+    controller_oa = nil
+    if airloop.airLoopHVACOutdoorAirSystem.is_initialized
+      oa_system = airloop.airLoopHVACOutdoorAirSystem.get
+      controller_oa = oa_system.getControllerOutdoorAir
+    end
+    min_oa_flow,oaf = 0.0,0.0
+    if controller_oa
+      min_oa_flow = nil
+      if controller_oa.minimumOutdoorAirFlowRate.is_initialized
+        min_oa_flow = controller_oa.minimumOutdoorAirFlowRate.get
+      elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
+        min_oa_flow = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
+      end
+      if min_oa_flow then oaf = min_oa_flow.to_f / airloop.autosizedDesignSupplyAirFlowRate.to_f end
+    end
+
     # Set number of stages
     htg_stages = coil_heating_gas_multi_stage.stages
     num_stages = (capacity_w / (66.0 * 1000.0) + 0.5).round
-    num_stages = [num_stages, 4].min
+    max_cap = 66.0 * 1000.0 * num_stages
     stage_cap = []
     final_num_stages = num_stages
     if capacity_w == 0.001
@@ -997,15 +1114,30 @@ class NECB2011
         stage_cap[0] = capacity_w / 2.0
         stage_cap[1] = 2.0 * stage_cap[0]
         final_num_stages = 2
+        if oaf > 0.5
+          multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow)
+        end
       else
         stage_cap[0] = 66.0 * 1000.0
         stage_cap[1] = 2.0 * stage_cap[0]
         case num_stages
+        when 2
+          if oaf > 0.5
+            multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow)
+          end
         when 3
           stage_cap[2] = 3.0 * stage_cap[0]
-        when 4
+          if oaf > 0.333
+            multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow)
+          end
+        else
+          final_num_stages = 4
           stage_cap[2] = 3.0 * stage_cap[0]
-          stage_cap[3] = [4.0 * stage_cap[0],capacity_w].max
+          stage_cap[3] = max_cap
+          speed1_cap_ratio = stage_cap[0] / max_cap
+          if oaf > speed1_cap_ratio
+            multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow)
+          end
         end
       end
     end
@@ -1013,22 +1145,9 @@ class NECB2011
     # set capacities for stages
     htg_stages[0].setNominalCapacity(stage_cap[0])
     for istage in 1..final_num_stages-1
-      new_htg_stage = OpenStudio::Model::CoilHeatingGasMultiStageStageData.new(coil_heating_gas_multi_stage.model)
+      new_htg_stage = OpenStudio::Model::CoilHeatingGasMultiStageStageData.new(model)
       coil_heating_gas_multi_stage.addStage(new_htg_stage)
       new_htg_stage.setNominalCapacity(stage_cap[istage])
-    end
-
-    # update number of heating stages
-    #multi_speed_heat_pump = coil_heating_gas_multi_stage.containingHVACComponent.get.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get
-    #multi_speed_heat_pump.setNumberofSpeedsforHeating(final_num_stages)
-    multi_speed_heat_pump = nil
-    multi_speed_heat_pumps = coil_heating_gas_multi_stage.model.getAirLoopHVACUnitaryHeatPumpAirToAirMultiSpeeds
-    multi_speed_heat_pumps.each do |iheat_pump|
-      htg_coil = iheat_pump.heatingCoil
-      if htg_coil.name.to_s.strip == coil_heating_gas_multi_stage.name.to_s.strip
-        multi_speed_heat_pump = iheat_pump
-        break
-      end
     end
 
     # update number of heating stages

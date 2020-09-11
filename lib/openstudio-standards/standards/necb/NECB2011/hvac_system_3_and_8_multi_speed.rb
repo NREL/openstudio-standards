@@ -110,7 +110,7 @@ class NECB2011
       clg_stage_2 = OpenStudio::Model::CoilCoolingDXMultiSpeedStageData.new(model)
       clg_coil.addStage(clg_stage_1)
       clg_coil.addStage(clg_stage_2)
-      clg_coil.setApplyPartLoadFractiontoSpeedsGreaterthan1(true)
+      clg_coil.setApplyPartLoadFractiontoSpeedsGreaterthan1(false)
       htg_coil = OpenStudio::Model::CoilHeatingGasMultiStage.new(model)
       htg_stage_1 = OpenStudio::Model::CoilHeatingGasMultiStageStageData.new(model)
       htg_coil.addStage(htg_stage_1)

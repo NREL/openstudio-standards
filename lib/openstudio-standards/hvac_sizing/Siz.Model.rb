@@ -17,6 +17,7 @@ class OpenStudio::Model::Model
   require_relative 'Siz.AirTermSnglDuctUncontrolled'
   require_relative 'Siz.AirLoopHVAC'
   require_relative 'Siz.AirLoopHVACUnitaryHeatPumpAirToAir'
+  require_relative 'Siz.AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed'
   require_relative 'Siz.FanConstantVolume'
   require_relative 'Siz.FanVariableVolume'
   require_relative 'Siz.FanOnOff'
