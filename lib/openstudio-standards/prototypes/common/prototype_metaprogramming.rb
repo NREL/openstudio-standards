@@ -609,7 +609,7 @@ end
   # specific to be coded generically.
   #
   # @return [Bool] returns true if successful, false if not
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
+  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     return true
   end
 
@@ -617,7 +617,7 @@ end
   # specific to be coded generically.
   #
   # @return [Bool] returns true if successful, false if not
-  def model_custom_swh_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
+  def model_custom_swh_tweaks(building_type, climate_zone, prototype_input, model)
     return true
   end
 
@@ -625,7 +625,7 @@ end
   # specific to be coded generically.
   #
   # @return [Bool] returns true if successful, false if not
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
 
     return true
   end
@@ -783,7 +783,7 @@ end
   # specific to be coded generically.
   #
   # @return [Bool] returns true if successful, false if not
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
+  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     return true
   end
 
@@ -791,7 +791,7 @@ end
   # specific to be coded generically.
   #
   # @return [Bool] returns true if successful, false if not
-  def model_custom_swh_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
+  def model_custom_swh_tweaks(building_type, climate_zone, prototype_input, model)
     return true
   end
 
@@ -799,7 +799,7 @@ end
   # specific to be coded generically.
   #
   # @return [Bool] returns true if successful, false if not
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
 
     return true
   end

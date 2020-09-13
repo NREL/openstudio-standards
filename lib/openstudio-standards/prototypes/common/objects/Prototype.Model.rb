@@ -1,7 +1,7 @@
 Standard.class_eval do
   # @!group Model
 
-  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil, additional_params: nil)
+  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil)
     building_type = @instvarbuilding_type
     raise 'no building_type!' if @instvarbuilding_type.nil?
     model = nil
@@ -24,7 +24,7 @@ Standard.class_eval do
       epw_file = ''
     end
     model = load_geometry_osm(@geometry_file)
-    model_custom_geometry_tweaks(building_type, climate_zone, @prototype_input, model, additional_params)
+    model_custom_geometry_tweaks(building_type, climate_zone, @prototype_input, model)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.getBuilding.setName(self.class.to_s)
     # save new basefile to new geometry folder as class name.
@@ -37,9 +37,9 @@ Standard.class_eval do
     model_add_design_days_and_weather_file(model, climate_zone, epw_file)
     model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
     model_add_constructions(model, @instvarbuilding_type, climate_zone)
-    model_custom_hvac_tweaks(building_type, climate_zone, @prototype_input, model, additional_params)
+    model_custom_hvac_tweaks(building_type, climate_zone, @prototype_input, model)
     model_add_internal_mass(model, @instvarbuilding_type)
-    model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file, additional_params)
+    model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
     model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
     model_add_daylight_savings(model)
@@ -68,7 +68,7 @@ Standard.class_eval do
     model_apply_hvac_efficiency_standard(model, climate_zone)
     # Apply prototype changes that supersede the HVAC efficiency standard
     model_apply_prototype_hvac_efficiency_adjustments(model)
-    model_custom_swh_tweaks(model, @instvarbuilding_type, climate_zone, @prototype_input, additional_params)
+    model_custom_swh_tweaks(model, @instvarbuilding_type, climate_zone, @prototype_input)
     # Fix EMS references.
     # Temporary workaround for OS issue #2598
     model_temp_fix_ems_references(model)

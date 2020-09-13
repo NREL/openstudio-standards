@@ -1,5 +1,5 @@
 class Standard
-  def model_add_swh(model, building_type, climate_zone, prototype_input, epw_file, additional_params)
+  def model_add_swh(model, building_type, climate_zone, prototype_input, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 
     # Add the main service water heating loop, if specified
@@ -191,32 +191,28 @@ class Standard
     end
 
     # Add the laundry water heater, if specified
-    unless prototype_input['laundry_water_heater_volume'].nil?
-      # for tall and super tall buildings, there is laundry only if hotel has more than 1 floors
-      # hotel_bot has laundry, if only one floor, doesn't have hotel_bot
-      if (building_type != 'TallBuilding' && building_type != 'SuperTallBuilding') ||
-          ((building_type == 'TallBuilding' || building_type == 'SuperTallBuilding') && additional_params[:num_of_floor_hotel].to_i > 1)
-        # Add the laundry service water heating loop
-        laundry_swh_loop = model_add_swh_loop(model,
-                                              'Laundry Service Water Loop',
-                                              nil,
-                                              OpenStudio.convert(prototype_input['laundry_service_water_temperature'], 'F', 'C').get,
-                                              prototype_input['laundry_service_water_pump_head'].to_f,
-                                              prototype_input['laundry_service_water_pump_motor_efficiency'],
-                                              OpenStudio.convert(prototype_input['laundry_water_heater_capacity'], 'Btu/hr', 'W').get,
-                                              OpenStudio.convert(prototype_input['laundry_water_heater_volume'], 'gal', 'm^3').get,
-                                              prototype_input['laundry_water_heater_fuel'],
-                                              OpenStudio.convert(prototype_input['laundry_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get)
+    # for tall and super tall buildings, add laundry swh in model_custom_hvac_tweaks
+    unless prototype_input['laundry_water_heater_volume'].nil? || (building_type=='TallBuilding' || building_type == 'SuperTallBuilding')
+      # Add the laundry service water heating loop
+      laundry_swh_loop = model_add_swh_loop(model,
+                                            'Laundry Service Water Loop',
+                                            nil,
+                                            OpenStudio.convert(prototype_input['laundry_service_water_temperature'], 'F', 'C').get,
+                                            prototype_input['laundry_service_water_pump_head'].to_f,
+                                            prototype_input['laundry_service_water_pump_motor_efficiency'],
+                                            OpenStudio.convert(prototype_input['laundry_water_heater_capacity'], 'Btu/hr', 'W').get,
+                                            OpenStudio.convert(prototype_input['laundry_water_heater_volume'], 'gal', 'm^3').get,
+                                            prototype_input['laundry_water_heater_fuel'],
+                                            OpenStudio.convert(prototype_input['laundry_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get)
 
-        # Attach the end uses if specified in prototype inputs
-        model_add_swh_end_uses(model,
-                               'Laundry',
-                               laundry_swh_loop,
-                               OpenStudio.convert(prototype_input['laundry_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
-                               prototype_input['laundry_service_water_flowrate_schedule'],
-                               OpenStudio.convert(prototype_input['laundry_water_use_temperature'], 'F', 'C').get,
-                               nil)
-      end
+      # Attach the end uses if specified in prototype inputs
+      model_add_swh_end_uses(model,
+                             'Laundry',
+                             laundry_swh_loop,
+                             OpenStudio.convert(prototype_input['laundry_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
+                             prototype_input['laundry_service_water_flowrate_schedule'],
+                             OpenStudio.convert(prototype_input['laundry_water_use_temperature'], 'F', 'C').get,
+                             nil)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')

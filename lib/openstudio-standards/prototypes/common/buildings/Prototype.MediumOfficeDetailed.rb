@@ -3,7 +3,7 @@
 # These are changes that are inconsistent with other prototype
 # building types.
 module MediumOfficeDetailed
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
+  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     model.getSpaces.sort.each do |space|
@@ -122,13 +122,13 @@ module MediumOfficeDetailed
     end
   end
 
-  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input, additional_params)
+  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     update_waterheater_loss_coefficient(model)
 
     return true
   end
 
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
 
     return true
   end

@@ -1,11 +1,18 @@
-
 # Custom changes for the TallBuilding prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
 module SuperTallBuilding
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
-
+  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
+
+    # TODO: make additional parameters mutable by the user
+    # the number of floors for each function type is defined in additional_params
+    additional_params = {
+        num_of_floor_retail: 3,
+        num_of_floor_office: 34,
+        num_of_floor_residential: 17,
+        num_of_floor_hotel: 17
+    }
 
     # add tall building elevators to the elevator machine room
     add_elevator_system_loads(model, additional_params)
@@ -13,8 +20,10 @@ module SuperTallBuilding
     # for tall and super tall buildings, add main (multiple) and booster swh here instead of model_add_swh
     add_swh_tall_bldg(model, prototype_input, additional_params)
 
-    # update the infiltration coefficients of tall buildings based on Lisa Ng's research (from NIST)
-    update_infil_coeff(model)
+    # # update the infiltration coefficients of tall buildings based on Lisa Ng's research (from NIST)
+    # # The set of coefficients are not quite appropriate for tall buildings, leading to super high infiltration rate
+    # # TODO: further infiltration research is needed
+    # update_infil_coeff(model)
 
     # apply vertical weather variations to tall buildings
     apply_vertical_weather_variation(model)
@@ -27,24 +36,23 @@ module SuperTallBuilding
     return true
   end
 
-
   # Add elevators to elevator machine room
   # schedules:
-  # Large Office BLDG ELEVATORS,	OfficeLarge ELEV_LIGHT_FAN_SCH_ADD_DF
-  # HotelLarge BLDG_ELEVATORS,	HotelLarge ELEV_LIGHT_FAN_SCH_ADD_DF
-  # ApartmentMidRise BLDG_ELEVATORS,	ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7
+  # Large Office BLDG ELEVATORS, OfficeLarge ELEV_LIGHT_FAN_SCH_ADD_DF
+  # HotelLarge BLDG_ELEVATORS, HotelLarge ELEV_LIGHT_FAN_SCH_ADD_DF
+  # ApartmentMidRise BLDG_ELEVATORS, ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7
   # Retail elevator schedule developed
   def add_elevator_system_loads(model, additional_params)
     # get the elevator machine room space from the model
-    if model.getSpaceTypeByName("Elevator Machine Room").empty?
+    if model.getSpaceTypeByName('Elevator Machine Room').empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No Elevator Machine Room spacetype was found.')
       return false
     else
-      elev_mc_rooms = model.getSpaceTypeByName("Elevator Machine Room").get.spaces
+      elev_mc_rooms = model.getSpaceTypeByName('Elevator Machine Room').get.spaces
       if elev_mc_rooms.size > 1
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'More than one elevator machine room in the model.')
         return false
-      elsif elev_mc_rooms.size == 0
+      elsif elev_mc_rooms.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No elevator machine room in the model.')
         return false
       else
@@ -57,32 +65,29 @@ module SuperTallBuilding
     num_office_flr = additional_params[:num_of_floor_office].to_i
     num_resi_flr = additional_params[:num_of_floor_residential].to_i
     num_hotel_flr = additional_params[:num_of_floor_hotel].to_i
-    area_per_flr = 20000   # 20000 ft2 per floor
-    motor_power_per_elev = 44600      # See scorecard SuperTall Building
-    fan_light_power_per_elev = 161.9      # See scorecard SuperTall Building
+    area_per_flr = 20000 # 20000 ft2 per floor
+    motor_power_per_elev = 44600 # See scorecard SuperTall Building
+    fan_light_power_per_elev = 161.9 # See scorecard SuperTall Building
 
-    num_elev_retail = (num_retail_flr * area_per_flr/45000.0).ceil
-    num_elev_office = (num_office_flr * area_per_flr/45000.0).ceil
-    num_elev_resi = (num_resi_flr * area_per_flr/45000.0).ceil
-    num_elev_hotel = (num_hotel_flr * area_per_flr/45000.0).ceil
+    num_elev_retail = (num_retail_flr * area_per_flr / 45000.0).ceil
+    num_elev_office = (num_office_flr * area_per_flr / 45000.0).ceil
+    num_elev_resi = (num_resi_flr * area_per_flr / 45000.0).ceil
+    num_elev_hotel = (num_hotel_flr * area_per_flr / 45000.0).ceil
 
     # create the equipment object for elevator motor and fan/lights separately, for each function type
     # Elevator lift motor
-    add_elevator_equip(model, elev_mc_room, num_elev_retail, "Retail", motor_power_per_elev, fan_light_power_per_elev,
-                       "RetailStandalone BLDG_ELEVATORS", "RetailStandalone ELEV_LIGHT_FAN_SCH_24_7")
-    add_elevator_equip(model, elev_mc_room, num_elev_office, "Office", motor_power_per_elev, fan_light_power_per_elev,
-                       "OfficeLarge BLDG_ELEVATORS", "OfficeLarge ELEV_LIGHT_FAN_SCH_24_7")
-    add_elevator_equip(model, elev_mc_room, num_elev_resi, "Apartment", motor_power_per_elev, fan_light_power_per_elev,
-                       "ApartmentMidRise BLDG_ELEVATORS", "ApartmentHighRise ELEV_LIGHT_FAN_SCH_24_7")
-    add_elevator_equip(model, elev_mc_room, num_elev_hotel, "Hotel", motor_power_per_elev, fan_light_power_per_elev,
-                       "HotelLarge BLDG_ELEVATORS", "HotelLarge ELEV_LIGHT_FAN_SCH_24_7")
-
+    add_elevator_equip(model, elev_mc_room, num_elev_retail, 'Retail', motor_power_per_elev, fan_light_power_per_elev,
+                       'RetailStandalone BLDG_ELEVATORS', 'RetailStandalone ELEV_LIGHT_FAN_SCH_24_7')
+    add_elevator_equip(model, elev_mc_room, num_elev_office, 'Office', motor_power_per_elev, fan_light_power_per_elev,
+                       'OfficeLarge BLDG_ELEVATORS', 'OfficeLarge ELEV_LIGHT_FAN_SCH_24_7')
+    add_elevator_equip(model, elev_mc_room, num_elev_resi, 'Apartment', motor_power_per_elev, fan_light_power_per_elev,
+                       'ApartmentMidRise BLDG_ELEVATORS', 'ApartmentHighRise ELEV_LIGHT_FAN_SCH_24_7')
+    add_elevator_equip(model, elev_mc_room, num_elev_hotel, 'Hotel', motor_power_per_elev, fan_light_power_per_elev,
+                       'HotelLarge BLDG_ELEVATORS', 'HotelLarge ELEV_LIGHT_FAN_SCH_24_7')
   end
-
 
   def add_elevator_equip(model, space, num_of_elev, function_type, motor_power_per_elev, fan_light_power_per_elev,
                          elev_power_sch_name, elev_fan_light_sch_name)
-
     motor_equip_frac_loss = 0.85
     motor_equip_frac_radiant = 0.05
     fan_light_equip_frac_radiant = 0.5
@@ -112,54 +117,43 @@ module SuperTallBuilding
     elevator_fan_sch = model_add_schedule(model, elev_fan_light_sch_name)
     elevator_fan_equipment.setSchedule(elevator_fan_sch)
     elevator_fan_equipment.setSpace(space)
-
   end
-
 
   # for tall and super tall buildings, add main (multiple) and booster swh in model_custom_hvac_tweaks
   def add_swh_tall_bldg(model, prototype_input, additional_params)
-
     # get all building stories and rank based on Z-origin
-    puts "*"*150
-    puts "*"*150
     story_info = {}
     model.getBuildingStorys.sort.each  do |story|
-      next if story.name.to_s.include?"ElevatorMachineRm"
-      puts "story: #{story.name.to_s}"
+      next if story.name.to_s.include? 'ElevatorMachineRm'
+
       story_info[story.name.to_s] = {}
       story_info[story.name.to_s]['z_coordinate'] = story.nominalZCoordinate.get.to_f
       story_info[story.name.to_s]['multiplier'] = story.spaces[0].multiplier
     end
-    stories_ranked = story_info.sort_by{|story_name, story| story['z_coordinate']}
-    puts stories_ranked.inspect
+    stories_ranked = story_info.sort_by { |story_name, story| story['z_coordinate'] }
 
     # combine stories that add up to no more than 12 floors
     swh_system_stories = []
-    num_of_stories = 0   # initial
+    num_of_stories = 0 # initial
     hotel_swh_loop = nil
     stories_ranked.each_with_index do |story_pair, index|
-      puts "story_pair: #{story_pair}"
-      puts "swh_system_stories: #{swh_system_stories}"
-      puts "num_of_stories: #{num_of_stories}"
       story_multiplier = story_pair[1]['multiplier']
       combined_num_of_story = num_of_stories + story_multiplier
-      puts "story_multiplier: #{story_multiplier}"
-      puts "num_of_stories + story_multiplier = #{num_of_stories + story_multiplier}"
       # if the top story (last one), combine into the last swh loop
-      if combined_num_of_story <= 12 || (index == stories_ranked.size-1)   # 12 is based on large office prototype model
+      if combined_num_of_story <= 12 || (index == stories_ranked.size - 1) # 12 is based on large office prototype model
         swh_system_stories.push(story_pair[0])
         num_of_stories = combined_num_of_story
       end
 
       # if the top story (last one), create swh loop
-      if combined_num_of_story > 12 || (index == stories_ranked.size-1)
+      if combined_num_of_story > 12 || (index == stories_ranked.size - 1)
         # when combined stories reaches limitation, create the SWH system
         swh_fueltype = prototype_input['main_water_heater_fuel']
         # Add the main service water loop
         if swh_system_stories.size == 1
-          swh_loop_name = "#{swh_system_stories[0].split(" story")[0]}} Service Water Loop"
+          swh_loop_name = "#{swh_system_stories[0].split(' story')[0]}} Service Water Loop"
         elsif swh_system_stories.size > 1
-          swh_loop_name = "#{swh_system_stories[0].split(" story")[0]} to #{swh_system_stories[-1].split(" story")[0]} Service Water Loop"
+          swh_loop_name = "#{swh_system_stories[0].split(' story')[0]} to #{swh_system_stories[-1].split(' story')[0]} Service Water Loop"
         else
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No story info in the SWH loop.')
           return false
@@ -176,19 +170,19 @@ module SuperTallBuilding
                                            OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get)
 
         # Attach the end uses based on floor function type
-        #   Office and retail: add to mechanical room only
-        # 	Hotel and apartment: add to each space
+        # Office and retail: add to mechanical room only
+        # Hotel and apartment: add to each space
         swh_system_stories.each do |story_name|
           OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', 'Adding shw by story spaces for Tall Building')
 
-          hotel_swh_loop = main_swh_loop if story_name.include?"Hotel_top"  # locate the swh loop that supplies hotel top floor, where kitchen is. For booster
+          hotel_swh_loop = main_swh_loop if story_name.include? 'Hotel_top' # locate the swh loop that supplies hotel top floor, where kitchen is. For booster
 
           # Log how many water fixtures are added
           water_fixtures = []
 
           story = model.getBuildingStoryByName(story_name).get
           story.spaces.each do |space|
-            next if space.name.to_s.downcase.include?"plenum"
+            next if space.name.to_s.downcase.include? 'plenum'
 
             search_criteria = {
                 'template' => template,
@@ -201,7 +195,7 @@ module SuperTallBuilding
             next if data.nil?
 
             # Skip space types with no water use, unless it is a NECB archetype (these do not have peak flow rates defined)
-            next if data['service_water_heating_peak_flow_rate'].to_f==0.0 && data['service_water_heating_peak_flow_per_area'].to_f==0.0
+            next if data['service_water_heating_peak_flow_rate'].to_f == 0.0 && data['service_water_heating_peak_flow_per_area'].to_f == 0.0
 
             # Add a service water use for each space
             space_multiplier = space.multiplier
@@ -242,49 +236,71 @@ module SuperTallBuilding
                                      OpenStudio.convert(prototype_input['booster_water_use_temperature'], 'F', 'C').get)
     end
 
+    # for tall and super tall buildings, there is laundry only if hotel has more than 1 floors
+    # hotel_bot has laundry, if only one floor, doesn't have hotel_bot
+    if additional_params[:num_of_floor_hotel].to_i > 1
+      # Add the laundry service water heating loop
+      laundry_swh_loop = model_add_swh_loop(model,
+                                            'Laundry Service Water Loop',
+                                            nil,
+                                            OpenStudio.convert(prototype_input['laundry_service_water_temperature'], 'F', 'C').get,
+                                            prototype_input['laundry_service_water_pump_head'].to_f,
+                                            prototype_input['laundry_service_water_pump_motor_efficiency'],
+                                            OpenStudio.convert(prototype_input['laundry_water_heater_capacity'], 'Btu/hr', 'W').get,
+                                            OpenStudio.convert(prototype_input['laundry_water_heater_volume'], 'gal', 'm^3').get,
+                                            prototype_input['laundry_water_heater_fuel'],
+                                            OpenStudio.convert(prototype_input['laundry_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get)
+
+      # Attach the end uses if specified in prototype inputs
+      model_add_swh_end_uses(model,
+                             'Laundry',
+                             laundry_swh_loop,
+                             OpenStudio.convert(prototype_input['laundry_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
+                             prototype_input['laundry_service_water_flowrate_schedule'],
+                             OpenStudio.convert(prototype_input['laundry_water_use_temperature'], 'F', 'C').get,
+                             nil)
+    end
   end
 
   # update the infiltration coefficients of super tall buildings based on Lisa Ng's research (from NIST)
   def update_infil_coeff(model)
-    #      System On     |   System Off
-    #  A:  -0.019024771	 |   0
-    #  B:  0.057038142	 |   0.064905216
-    #  D:  0.221309293	 |   0.013202036
+    #      System On    |  System Off
+    #  A:  -0.019024771 |  0
+    #  B:  0.057038142  |  0.064905216
+    #  D:  0.221309293  |  0.013202036
     # Step1: replace the original infiltration schedule to airloop availability schedule, change the coeff to System On set
     # Step2: add new infiltration obj, assign with HVAC off schedule, assign the coeff to System Off set.
     # hotel and apartment HVAC are always on, so just do Step1, no Step2
 
-    puts "*"*150
-    puts "*"*150
     coeff_a_on, coeff_b_on, coeff_d_on =  -0.019024771, 0.057038142, 0.221309293
     coeff_a_off, coeff_b_off, coeff_d_off =  0.0, 0.064905216, 0.013202036
-    office_hvac_sch = model_add_schedule(model, "OfficeLarge HVACOperationSchd")
-    office_hvac_off_sch = model_add_schedule(model, "OfficeLarge HVACOperationOFFSchd")
-    retail_hvac_sch = model_add_schedule(model, "RetailStandalone HVACOperationSchd")
-    retail_hvac_off_sch = model_add_schedule(model, "RetailStandalone HVACOperationOFFSchd")
-    resi_hvac_sch = model_add_schedule(model, "Always On")
-    hotel_hvac_sch = model_add_schedule(model, "HotelLarge HVACOperationSchd")
+    office_hvac_sch = model_add_schedule(model, 'OfficeLarge HVACOperationSchd')
+    office_hvac_off_sch = model_add_schedule(model, 'OfficeLarge HVACOperationOFFSchd')
+    retail_hvac_sch = model_add_schedule(model, 'RetailStandalone HVACOperationSchd')
+    retail_hvac_off_sch = model_add_schedule(model, 'RetailStandalone HVACOperationOFFSchd')
+    resi_hvac_sch = model_add_schedule(model, 'Always On')
+    hotel_hvac_sch = model_add_schedule(model, 'HotelLarge HVACOperationSchd')
 
     model.getSpaceInfiltrationDesignFlowRates.sort.each do |infiltration|
       orin_infil_name = infiltration.name.to_s
       hvac_sch = nil
       hvac_off_sch = nil
       space_name = infiltration.space.get.name.to_s
-      space_name = space_name.split(" ")[-1]
-      if space_name.start_with?"Office"
+      space_name = space_name.split(' ')[-1]
+      if space_name.start_with? 'Office'
         hvac_sch = office_hvac_sch
         hvac_off_sch = office_hvac_off_sch
-      elsif space_name.start_with?"Retail"
+      elsif space_name.start_with? 'Retail'
         hvac_sch = retail_hvac_sch
         hvac_off_sch = retail_hvac_off_sch
-      elsif space_name.start_with?"Resi"
+      elsif space_name.start_with? 'Resi'
         hvac_sch = resi_hvac_sch
-      elsif (space_name.start_with?"Hotel") || (space_name.start_with?"Skylobby")
+      elsif (space_name.start_with? 'Hotel') || (space_name.start_with? 'Skylobby')
         hvac_sch = hotel_hvac_sch
       end
 
       unless hvac_sch.nil?
-        infiltration.setName(orin_infil_name + " HVAC On")
+        infiltration.setName(orin_infil_name + ' HVAC On')
         infiltration.setSchedule(hvac_sch)
       end
       # coeff will be updated anyway
@@ -295,43 +311,39 @@ module SuperTallBuilding
 
       unless hvac_off_sch.nil?
         infiltration_hvac_off = infiltration.clone(model).to_SpaceInfiltrationDesignFlowRate.get
-        infiltration_hvac_off.setName(orin_infil_name + " HVAC Off")
+        infiltration_hvac_off.setName(orin_infil_name + ' HVAC Off')
         infiltration_hvac_off.setSchedule(hvac_off_sch)
         infiltration_hvac_off.setConstantTermCoefficient(coeff_a_off)
         infiltration_hvac_off.setTemperatureTermCoefficient(coeff_b_off)
         infiltration_hvac_off.setVelocityTermCoefficient(0)
         infiltration_hvac_off.setVelocitySquaredTermCoefficient(coeff_d_off)
-        puts "infiltration_hvac_off: #{infiltration_hvac_off}"
       end
-
     end
   end
 
   # apply vertical weather variations to tall buildings
   # current method is using the E+ default variation trend by specifying the height of outdoor air nodes
   def apply_vertical_weather_variation(model)
-
-    # TODO OA node height is not implemented OpenStudio yet.
-    # TODO Temporary fix to be done via adding EnergyPlus measure.
+    # TODO: OA node height is not implemented OpenStudio yet.
+    # TODO: Temporary fix to be done via adding EnergyPlus measure.
     # model.getAirLoopHVACOutdoorAirSystems.each do |oa_system|
     #   # get the outdoor air system outdoor air node
     #   oa_node = oa_system.outdoorAirModelObject.get.to_Node.get
     #   # get the height of the plenum if any, assign to outdoor air node
     #
     # end
-
   end
 
   # HighriseApartment doesn't apply thermostat to corridor spaces
   def add_thermostat_to_corridor(model)
     thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(model)
-    thermostat.setName("HighriseApartment Corridor Thermostat")
-    thermostat.setHeatingSetpointTemperatureSchedule(model_add_schedule(model, "ApartmentHighRise HTGSETP_APT_SCH"))
-    thermostat.setCoolingSetpointTemperatureSchedule(model_add_schedule(model, "ApartmentHighRise CLGSETP_APT_SCH"))
+    thermostat.setName('HighriseApartment Corridor Thermostat')
+    thermostat.setHeatingSetpointTemperatureSchedule(model_add_schedule(model, 'ApartmentHighRise HTGSETP_APT_SCH'))
+    thermostat.setCoolingSetpointTemperatureSchedule(model_add_schedule(model, 'ApartmentHighRise CLGSETP_APT_SCH'))
 
     model.getSpaceTypes.each do |space_type|
       unless space_type.standardsBuildingType.empty? || space_type.standardsSpaceType.empty?
-        if space_type.standardsBuildingType.get == "HighriseApartment" && space_type.standardsSpaceType.get == "Corridor"
+        if space_type.standardsBuildingType.get == 'HighriseApartment' && space_type.standardsSpaceType.get == 'Corridor'
           space_type.spaces.each do |space|
             thermostat_clone = thermostat.clone(model).to_ThermostatSetpointDualSetpoint.get
             space.thermalZone.get.setThermostatSetpointDualSetpoint(thermostat_clone)
@@ -341,23 +353,29 @@ module SuperTallBuilding
     end
   end
 
-
-  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input, additional_params)
+  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     # customized swh system is not added here, but in model_custom_hvac_tweaks instead
     # because model_custom_swh_tweaks is performed in Prototype.Model after efficiency assignment. If swh added here, efficiency can't be updated.
     # this can't be moved upwards in Prototype.Model as it will affect other building types (e.g. SmallOfficeDetailed, LargeOfficeDetailed).
-
-  return true
+    return true
   end
 
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model, additional_params)
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # TODO: make additional parameters mutable by the user
+    # the number of floors for each function type is defined in additional_params
+    additional_params = {
+        num_of_floor_retail: 3,
+        num_of_floor_office: 34,
+        num_of_floor_residential: 17,
+        num_of_floor_hotel: 17
+    }
 
     # get the number of floors for each function
     if additional_params.nil?
       num_retail_flr, num_office_flr, num_resi_flr, num_hotel_flr = 4, 34, 17, 17
     elsif additional_params.is_a?(Hash)
-      keys = [:num_of_floor_retail,:num_of_floor_office,:num_of_floor_residential,:num_of_floor_hotel]
-      if (additional_params.keys & keys).any?  # if any function type is assigned with number of floor
+      keys = [:num_of_floor_retail, :num_of_floor_office, :num_of_floor_residential, :num_of_floor_hotel]
+      if (additional_params.keys & keys).any? # if any function type is assigned with number of floor
         if additional_params.key?(:num_of_floor_retail) && additional_params[:num_of_floor_retail].is_a?(Numeric)
           num_retail_flr = additional_params[:num_of_floor_retail].to_i
         else
@@ -385,7 +403,7 @@ module SuperTallBuilding
                               'The building is not eligible as a supertall building because the total number of floors is less than 60')
           return false
         end
-      else   # if no number of floor is given for any function type
+      else # if no number of floor is given for any function type
         num_retail_flr, num_office_flr, num_resi_flr, num_hotel_flr = 4, 34, 17, 17
       end
     else
@@ -406,7 +424,7 @@ module SuperTallBuilding
     elsif num_hotel_flr < 0
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Number of floors for Hotel is negative.')
       return false
-    elsif num_retail_flr==0 && num_office_flr==0 && num_resi_flr==0 && num_hotel_flr==0
+    elsif num_retail_flr == 0 && num_office_flr == 0 && num_resi_flr == 0 && num_hotel_flr == 0
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Number of floors for all function types are all zero.')
       return false
     end
@@ -417,7 +435,7 @@ module SuperTallBuilding
     additional_params[:num_of_floor_residential] = num_resi_flr
     additional_params[:num_of_floor_hotel] = num_hotel_flr
 
-    puts "*"*150
+    puts '*' * 150
     puts "num_retail_flr = #{num_retail_flr}"
     puts "num_office_flr = #{num_office_flr}"
     puts "num_resi_flr = #{num_resi_flr}"
@@ -427,7 +445,6 @@ module SuperTallBuilding
     f_to_c_height_retail = 4.2672
     f_to_f_height_non_retail = 4.20624
     f_to_c_height_non_retail = 3.2004
-
 
     # Steps:
     # 1. Determine multiplier for each basic floor (as long as not bottom/top floor, don't need to separate floor)
@@ -446,9 +463,9 @@ module SuperTallBuilding
     # else if num_resi_flr == 1, the resi_bot story works as the top floor
     # similar for office and retail
 
-    total_num_of_flr = num_retail_flr+num_office_flr+num_resi_flr+num_hotel_flr+1   # skylobby
+    total_num_of_flr = num_retail_flr + num_office_flr + num_resi_flr + num_hotel_flr + 1 # skylobby
     model.getBuilding.setStandardsNumberOfAboveGroundStories(total_num_of_flr)
-    model.getBuilding.setStandardsNumberOfStories(total_num_of_flr+1)      # one basement story
+    model.getBuilding.setStandardsNumberOfStories(total_num_of_flr + 1) # one basement story
 
     current_story = 1
     current_height = 0
@@ -464,7 +481,7 @@ module SuperTallBuilding
         end
         story.remove
       end
-    else  # num_retail_flr >= 1
+    else # num_retail_flr >= 1
       # deal with retail_f1_story
       retail_f1_story_orin.setNominalZCoordinate(current_height)
       retail_f1_story_orin.setNominalFloortoFloorHeight(f_to_f_height_retail)
@@ -475,10 +492,10 @@ module SuperTallBuilding
       current_story += 1
       # deal with retail_f2_story, deep copy as needed
       if num_retail_flr > 1
-        multiplier_list = get_multiplier_list(num_retail_flr-1)
+        multiplier_list = get_multiplier_list(num_retail_flr - 1)
         if multiplier_list.is_a? Numeric
           multiplier = multiplier_list
-          z_origin = current_height + f_to_f_height_retail*(multiplier/2.0-0.5)
+          z_origin = current_height + f_to_f_height_retail * (multiplier / 2.0 - 0.5)
           if multiplier == 1 && num_office_flr >= 2
             deep_copy_story(model, retail_f2_story_orin, 1, z_origin, f_to_c_height_retail, f_to_f_height_retail, current_story, if_ground_story_plenum_adiabatic: true)
           else
@@ -489,13 +506,13 @@ module SuperTallBuilding
           current_story += multiplier
           current_height += f_to_f_height_retail * multiplier
         elsif multiplier_list.is_a? Array
-          multiplier_list.each do |multiplier|
-            z_origin = current_height + f_to_f_height_retail*(multiplier/2.0-0.5)
-            deep_copy_story(model, retail_f2_story_orin, multiplier, z_origin, f_to_c_height_retail, f_to_f_height_retail, current_story)
+          multiplier_list.each do |mpl|
+            z_origin = current_height + f_to_f_height_retail * (mpl / 2.0 - 0.5)
+            deep_copy_story(model, retail_f2_story_orin, mpl, z_origin, f_to_c_height_retail, f_to_f_height_retail, current_story)
 
             # update the story # and height #
-            current_story += multiplier
-            current_height += f_to_f_height_retail * multiplier
+            current_story += mpl
+            current_height += f_to_f_height_retail * mpl
           end
         end
       end
@@ -506,7 +523,6 @@ module SuperTallBuilding
       end
       retail_f2_story_orin.remove
     end
-
 
     # Office
     office_story_orin = model.getBuildingStoryByName('Office story').get
@@ -522,7 +538,7 @@ module SuperTallBuilding
       office_story_orin.setNominalFloortoFloorHeight(f_to_f_height_non_retail)
       office_story_orin.spaces.each do |space|
         space.setName("F#{current_story} " + space.name.to_s)
-        if space.name.to_s.include?"Plenum"
+        if space.name.to_s.include? 'Plenum'
           space.setZOrigin(current_height + f_to_c_height_non_retail)
         else
           space.setZOrigin(current_height)
@@ -553,10 +569,9 @@ module SuperTallBuilding
       # if no residential and hotel, separate one floor as top floor
       if num_resi_flr + num_hotel_flr == 0
         if_top_story_floor_adiabatic = false
-        z_origin = num_retail_flr * f_to_f_height_retail + (num_office_flr-1) * f_to_f_height_non_retail
+        z_origin = num_retail_flr * f_to_f_height_retail + (num_office_flr - 1) * f_to_f_height_non_retail
         top_story_num = num_retail_flr + num_office_flr
         num_office_flr_w_mult -= 1
-        puts "num_office_flr_w_mult = #{num_office_flr_w_mult}"
         if num_office_flr_w_mult > 1
           if_top_story_floor_adiabatic = true
         end
@@ -567,20 +582,20 @@ module SuperTallBuilding
         multiplier_list = get_multiplier_list(num_office_flr_w_mult)
         if multiplier_list.is_a? Numeric
           multiplier = multiplier_list
-          z_origin = current_height + f_to_f_height_non_retail*(multiplier/2.0-0.5)
+          z_origin = current_height + f_to_f_height_non_retail * (multiplier / 2.0 - 0.5)
           deep_copy_story(model, office_story_orin, multiplier, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
           # update the story # and height #
           current_story += multiplier
           current_height += f_to_f_height_non_retail * multiplier
         elsif multiplier_list.is_a? Array
-          multiplier_list.each do |multiplier|
-            z_origin = current_height + f_to_f_height_non_retail*(multiplier/2.0-0.5)
-            deep_copy_story(model, office_story_orin, multiplier, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
+          multiplier_list.each do |mpl|
+            z_origin = current_height + f_to_f_height_non_retail * (mpl / 2.0 - 0.5)
+            deep_copy_story(model, office_story_orin, mpl, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
             # update the story # and height #
-            current_story += multiplier
-            current_height += f_to_f_height_non_retail * multiplier
+            current_story += mpl
+            current_height += f_to_f_height_non_retail * mpl
           end
         end
       end
@@ -593,7 +608,6 @@ module SuperTallBuilding
       office_story_orin.remove
     end
 
-
     # Apartment
     resi_bot_story_orin = model.getBuildingStoryByName('Resi_bot story').get
     resi_mid_story_orin = model.getBuildingStoryByName('Resi_mid story').get
@@ -605,14 +619,14 @@ module SuperTallBuilding
         end
         story.remove
       end
-    else  # num_resi_flr >= 1
+    else # num_resi_flr >= 1
       # deal with resi_bot story
       resi_bot_story_orin.setNominalZCoordinate(current_height)
       resi_bot_story_orin.setNominalFloortoFloorHeight(f_to_f_height_non_retail)
       resi_bot_story_orin.setName("F#{current_story} " + resi_bot_story_orin.name.to_s)
       resi_bot_story_orin.spaces.each do |space|
         space.setName("F#{current_story} " + space.name.to_s)
-        if space.name.to_s.include?"Plenum"
+        if space.name.to_s.include? 'Plenum'
           space.setZOrigin(current_height + f_to_c_height_non_retail)
         else
           space.setZOrigin(current_height)
@@ -627,7 +641,7 @@ module SuperTallBuilding
         # if no hotel, separate one floor from resi_mid story as top floor
         if num_hotel_flr == 0
           if_top_story_floor_adiabatic = false
-          z_origin = num_retail_flr * f_to_f_height_retail + (num_office_flr+num_resi_flr-1) * f_to_f_height_non_retail
+          z_origin = num_retail_flr * f_to_f_height_retail + (num_office_flr + num_resi_flr - 1) * f_to_f_height_non_retail
           top_story_num = num_retail_flr + num_office_flr + num_resi_flr
           num_resi_mid_flr_w_mult -= 1
           if num_resi_mid_flr_w_mult > 1
@@ -640,19 +654,19 @@ module SuperTallBuilding
           multiplier_list = get_multiplier_list(num_resi_mid_flr_w_mult)
           if multiplier_list.is_a? Numeric
             multiplier = multiplier_list
-            z_origin = current_height + f_to_f_height_non_retail*(multiplier/2.0-0.5)
+            z_origin = current_height + f_to_f_height_non_retail * (multiplier / 2.0 - 0.5)
             deep_copy_story(model, resi_mid_story_orin, multiplier, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
             current_story += multiplier
             current_height += f_to_f_height_non_retail * multiplier
           elsif multiplier_list.is_a? Array
-            multiplier_list.each do |multiplier|
-              z_origin = current_height + f_to_f_height_non_retail*(multiplier/2.0-0.5)
-              deep_copy_story(model, resi_mid_story_orin, multiplier, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
+            multiplier_list.each do |mpl|
+              z_origin = current_height + f_to_f_height_non_retail * (mpl / 2.0 - 0.5)
+              deep_copy_story(model, resi_mid_story_orin, mpl, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
               # update the story # and height #
-              current_story += multiplier
-              current_height += f_to_f_height_non_retail * multiplier
+              current_story += mpl
+              current_height += f_to_f_height_non_retail * mpl
             end
           end
         end
@@ -666,7 +680,6 @@ module SuperTallBuilding
       resi_mid_story_orin.remove
     end
 
-
     # Hotel
     hotel_bot_story_orin = model.getBuildingStoryByName('Hotel_bot story').get
     hotel_mid_story_orin = model.getBuildingStoryByName('Hotel_mid story').get
@@ -679,15 +692,15 @@ module SuperTallBuilding
         end
         story.remove
       end
-    else  # num_hotel_flr >= 1
+    else # num_hotel_flr >= 1
       # deal with hotel_top_story
-      hotel_top_origin = num_retail_flr * f_to_f_height_retail + (num_office_flr+num_resi_flr+num_hotel_flr-1) * f_to_f_height_non_retail
+      hotel_top_origin = num_retail_flr * f_to_f_height_retail + (num_office_flr + num_resi_flr + num_hotel_flr - 1) * f_to_f_height_non_retail
       hotel_top_story_orin.setNominalZCoordinate(hotel_top_origin)
       hotel_top_story_orin.setNominalFloortoFloorHeight(f_to_f_height_non_retail)
       hotel_top_story_orin.setName("F#{total_num_of_flr} " + hotel_top_story_orin.name.to_s)
       hotel_top_story_orin.spaces.each do |space|
         space.setName("F#{total_num_of_flr} " + space.name.to_s)
-        if space.name.to_s.include?"Plenum"
+        if space.name.to_s.include? 'Plenum'
           space.setZOrigin(hotel_top_origin + f_to_c_height_non_retail)
         else
           space.setZOrigin(hotel_top_origin)
@@ -701,7 +714,7 @@ module SuperTallBuilding
         hotel_bot_story_orin.setName("F#{current_story} " + hotel_bot_story_orin.name.to_s)
         hotel_bot_story_orin.spaces.each do |space|
           space.setName("F#{current_story} " + space.name.to_s)
-          if space.name.to_s.include?"Plenum"
+          if space.name.to_s.include? 'Plenum'
             space.setZOrigin(current_height + f_to_c_height_non_retail)
           else
             space.setZOrigin(current_height)
@@ -712,24 +725,24 @@ module SuperTallBuilding
         current_height += f_to_f_height_non_retail
 
         if num_hotel_flr >= 3
-          multiplier_list = get_multiplier_list(num_hotel_flr-2)
+          multiplier_list = get_multiplier_list(num_hotel_flr - 2)
           if multiplier_list.is_a? Numeric
             multiplier = multiplier_list
-            z_origin = current_height + f_to_f_height_non_retail*(multiplier/2.0-0.5)
+            z_origin = current_height + f_to_f_height_non_retail * (multiplier / 2.0 - 0.5)
             deep_copy_story(model, hotel_mid_story_orin, multiplier, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
           elsif multiplier_list.is_a? Array
-            multiplier_list.each do |multiplier|
-              z_origin = current_height + f_to_f_height_non_retail*(multiplier/2.0-0.5)
-              deep_copy_story(model, hotel_mid_story_orin, multiplier, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
+            multiplier_list.each do |mpl|
+              z_origin = current_height + f_to_f_height_non_retail * (mpl / 2.0 - 0.5)
+              deep_copy_story(model, hotel_mid_story_orin, mpl, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
               # update the story # and height #
-              current_story += multiplier
-              current_height += f_to_f_height_non_retail * multiplier
+              current_story += mpl
+              current_height += f_to_f_height_non_retail * mpl
             end
           end
         end
-      else  # num_hotel_flr == 1
+      else # num_hotel_flr == 1
         hotel_bot_story_orin.spaces.each do |space|
           space.thermalZone.get.remove
           space.remove
@@ -745,7 +758,7 @@ module SuperTallBuilding
       hotel_mid_story_orin.remove
     end
 
-    building_height = num_retail_flr * f_to_f_height_retail + (num_office_flr+num_resi_flr+num_hotel_flr+1) * f_to_f_height_non_retail  # add skylobby story
+    building_height = num_retail_flr * f_to_f_height_retail + (num_office_flr + num_resi_flr + num_hotel_flr + 1) * f_to_f_height_non_retail # add skylobby story
 
     # add skylobby story and relocate all stories above it
     add_skylobby_story(model, building_height)
@@ -765,7 +778,6 @@ module SuperTallBuilding
     OpenStudio::Model.intersectSurfaces(spaces)
     OpenStudio::Model.matchSurfaces(spaces)
 
-
     # Update the hvac system map based on updated geometry
     new_hvac_map_str = generate_new_json(model, additional_params)
     @system_to_space_map = JSON.parse(new_hvac_map_str)
@@ -783,130 +795,130 @@ module SuperTallBuilding
     num_hotel_flr = additional_params[:num_of_floor_hotel].to_i
 
     # one chiller per 13 floors, +1 is basement. Ref: large office prototype model
-    num_chillers = ((num_retail_flr + num_office_flr + num_resi_flr + num_hotel_flr + 1)/13.0).ceil
+    num_chillers = ((num_retail_flr + num_office_flr + num_resi_flr + num_hotel_flr + 1) / 13.0).ceil
     hotel_common_spaces = []
     hotel_top_plenum_space = nil
     model.getBuildingStorys.each do |story|
       story_name = story.name.to_s
       space_names = []
-      plenum_space = ""
+      plenum_space = ''
       story.spaces.sort.each do |space|
-        if space.name.to_s.include?"Plenum"
+        if space.name.to_s.include? 'Plenum'
           plenum_space = space.name.to_s
-        elsif (story_name.include? "Hotel") && (!space.name.to_s.downcase.include?"guest")
+        elsif (story_name.include? 'Hotel') && (!space.name.to_s.downcase.include? 'guest')
           hotel_common_spaces.push(space.name.to_s)
         else
           space_names.push(space.name.to_s)
         end
       end
-      if story_name.include? "Office"
+      if story_name.include? 'Office'
         hvac_obj = {
-            "type": "VAV",
-            "name": story_name + " VAV WITH REHEAT",
+            "type": 'VAV',
+            "name": story_name + ' VAV WITH REHEAT',
             "return_plenum": plenum_space,
-            "operation_schedule": "OfficeLarge HVACOperationSchd",
-            "oa_damper_schedule": "OfficeLarge MinOA_MotorizedDamper_Sched",
-            "chw_pumping_type": "const_pri_var_sec",
-            "chiller_cooling_type": "WaterCooled",
+            "operation_schedule": 'OfficeLarge HVACOperationSchd',
+            "oa_damper_schedule": 'OfficeLarge MinOA_MotorizedDamper_Sched',
+            "chw_pumping_type": 'const_pri_var_sec',
+            "chiller_cooling_type": 'WaterCooled',
             "chiller_condenser_type": nil,
-            "chiller_compressor_type": "Centrifugal",
+            "chiller_compressor_type": 'Centrifugal',
             "chw_number_chillers": num_chillers,
             "number_cooling_towers": num_chillers,
             "space_names": space_names
         }
 
-      elsif story_name.include? "Retail"
+      elsif story_name.include? 'Retail'
         hvac_obj = {
-            "type": "VAV",
-            "name": story_name + " VAV WITH REHEAT",
+            "type": 'VAV',
+            "name": story_name + ' VAV WITH REHEAT',
             "return_plenum": plenum_space,
-            "operation_schedule": "RetailStandalone HVACOperationSchd",
-            "oa_damper_schedule": "RetailStandalone MinOA_MotorizedDamper_Sched",
-            "chw_pumping_type": "const_pri_var_sec",
-            "chiller_cooling_type": "WaterCooled",
+            "operation_schedule": 'RetailStandalone HVACOperationSchd',
+            "oa_damper_schedule": 'RetailStandalone MinOA_MotorizedDamper_Sched',
+            "chw_pumping_type": 'const_pri_var_sec',
+            "chiller_cooling_type": 'WaterCooled',
             "chiller_condenser_type": nil,
-            "chiller_compressor_type": "Centrifugal",
+            "chiller_compressor_type": 'Centrifugal',
             "chw_number_chillers": num_chillers,
             "number_cooling_towers": num_chillers,
             "space_names": space_names
         }
 
-      elsif story_name.include? "Hotel"
+      elsif story_name.include? 'Hotel'
         hvac_obj = {
-            "type": "DOAS Cold Supply",
-            "name": story_name + " DOAS",
+            "type": 'DOAS Cold Supply',
+            "name": story_name + ' DOAS',
             "return_plenum": plenum_space,
-            "operation_schedule": "HotelLarge HVACOperationSchd",
-            "oa_damper_schedule": "HotelLarge MinOA_MotorizedDamper_Sched",
-            "chw_pumping_type": "const_pri_var_sec",
-            "chiller_cooling_type": "WaterCooled",
+            "operation_schedule": 'HotelLarge HVACOperationSchd',
+            "oa_damper_schedule": 'HotelLarge MinOA_MotorizedDamper_Sched',
+            "chw_pumping_type": 'const_pri_var_sec',
+            "chiller_cooling_type": 'WaterCooled',
             "chiller_condenser_type": nil,
-            "chiller_compressor_type": "Centrifugal",
+            "chiller_compressor_type": 'Centrifugal',
             "chw_number_chillers": num_chillers,
             "number_cooling_towers": num_chillers,
-            "economizer_control_method": "DifferentialDryBulb",
+            "economizer_control_method": 'DifferentialDryBulb',
             "space_names": space_names
         }
         # get the top floor plenum for hotel common areas' VAV system
-        hotel_top_plenum_space = plenum_space if story_name.include? "top"
+        hotel_top_plenum_space = plenum_space if story_name.include? 'top'
 
-      elsif story_name.include? "Resi"
+      elsif story_name.include? 'Resi'
         hvac_obj = {
-            "type": "DOAS Cold Supply",
-            "name": story_name + " DOAS",
+            "type": 'DOAS Cold Supply',
+            "name": story_name + ' DOAS',
             "return_plenum": plenum_space,
-            "operation_schedule": "Always On",
-            "oa_damper_schedule": "Always On",
-            "chw_pumping_type": "const_pri_var_sec",
-            "chiller_cooling_type": "WaterCooled",
+            "operation_schedule": 'Always On',
+            "oa_damper_schedule": 'Always On',
+            "chw_pumping_type": 'const_pri_var_sec',
+            "chiller_cooling_type": 'WaterCooled',
             "chiller_condenser_type": nil,
-            "chiller_compressor_type": "Centrifugal",
+            "chiller_compressor_type": 'Centrifugal',
             "chw_number_chillers": num_chillers,
             "number_cooling_towers": num_chillers,
-            "economizer_control_method": "DifferentialDryBulb",
+            "economizer_control_method": 'DifferentialDryBulb',
             "space_names": space_names
         }
 
-      elsif story_name.include? "Basement"
+      elsif story_name.include? 'Basement'
         hvac_obj = {
-            "type": "CAV",
-            "name": "CAV_bas",
-            "operation_schedule": "OfficeLarge HVACOperationSchd",
-            "oa_damper_schedule": "OfficeLarge MinOA_MotorizedDamper_Sched",
-            "chw_pumping_type": "const_pri_var_sec",
-            "chiller_cooling_type": "WaterCooled",
+            "type": 'CAV',
+            "name": 'CAV_bas',
+            "operation_schedule": 'OfficeLarge HVACOperationSchd',
+            "oa_damper_schedule": 'OfficeLarge MinOA_MotorizedDamper_Sched',
+            "chw_pumping_type": 'const_pri_var_sec',
+            "chiller_cooling_type": 'WaterCooled',
             "chiller_condenser_type": nil,
-            "chiller_compressor_type": "Centrifugal",
+            "chiller_compressor_type": 'Centrifugal',
             "chw_number_chillers": num_chillers,
             "number_cooling_towers": num_chillers,
             "space_names": space_names
         }
 
-      elsif story_name.include? "Skylobby"
+      elsif story_name.include? 'Skylobby'
         hvac_obj = {
-            "type": "VAV",
-            "name": story_name + " VAV WITH REHEAT",
+            "type": 'VAV',
+            "name": story_name + ' VAV WITH REHEAT',
             "return_plenum": plenum_space,
-            "operation_schedule": "HotelLarge HVACOperationSchd",
-            "oa_damper_schedule": "HotelLarge MinOA_MotorizedDamper_Sched",
-            "chw_pumping_type": "const_pri_var_sec",
-            "chiller_cooling_type": "WaterCooled",
+            "operation_schedule": 'HotelLarge HVACOperationSchd',
+            "oa_damper_schedule": 'HotelLarge MinOA_MotorizedDamper_Sched',
+            "chw_pumping_type": 'const_pri_var_sec',
+            "chiller_cooling_type": 'WaterCooled',
             "chiller_condenser_type": nil,
-            "chiller_compressor_type": "Centrifugal",
+            "chiller_compressor_type": 'Centrifugal',
             "chw_number_chillers": num_chillers,
             "number_cooling_towers": num_chillers,
             "space_names": space_names
         }
 
-      elsif story_name.include? "ElevatorMachineRm"
+      elsif story_name.include? 'ElevatorMachineRm'
         hvac_obj = {
-            "type": "PSZ-AC",
-            "name": story_name + " PSZ-AC",
-            "operation_schedule": "Always On",
-            "oa_damper_schedule": "Always On",
-            "cooling_type": "Single Speed DX AC",
-            "heating_type": "Electricity",
-            "fan_type": "ConstantVolume",
+            "type": 'PSZ-AC',
+            "name": story_name + ' PSZ-AC',
+            "operation_schedule": 'Always On',
+            "oa_damper_schedule": 'Always On',
+            "cooling_type": 'Single Speed DX AC',
+            "heating_type": 'Electricity',
+            "fan_type": 'ConstantVolume',
             "space_names": space_names
         }
       end
@@ -917,15 +929,15 @@ module SuperTallBuilding
     # add VAV system for all hotel common area spaces
     if num_hotel_flr >= 1
       hotel_common_hvac_obj = {
-          "type": "VAV",
-          "name": "Hotel Common Areas VAV WITH REHEAT",
+          "type": 'VAV',
+          "name": 'Hotel Common Areas VAV WITH REHEAT',
           "return_plenum": hotel_top_plenum_space,
-          "operation_schedule": "HotelLarge HVACOperationSchd",
-          "oa_damper_schedule": "HotelLarge MinOA_MotorizedDamper_Sched",
-          "chw_pumping_type": "const_pri_var_sec",
-          "chiller_cooling_type": "WaterCooled",
+          "operation_schedule": 'HotelLarge HVACOperationSchd',
+          "oa_damper_schedule": 'HotelLarge MinOA_MotorizedDamper_Sched',
+          "chw_pumping_type": 'const_pri_var_sec',
+          "chiller_cooling_type": 'WaterCooled',
           "chiller_condenser_type": nil,
-          "chiller_compressor_type": "Centrifugal",
+          "chiller_compressor_type": 'Centrifugal',
           "chw_number_chillers": num_chillers,
           "number_cooling_towers": num_chillers,
           "space_names": hotel_common_spaces
@@ -936,34 +948,32 @@ module SuperTallBuilding
     return JSON.pretty_generate(new_json)
   end
 
-
   def get_multiplier_list(num_floors)
-    a = (num_floors.to_f/10).ceil   #  a = (25.0/10).ceil => 3
+    a = (num_floors.to_f / 10).ceil #  a = (25.0/10).ceil => 3
     return num_floors if a == 1
 
     multiplier_list = []
-    multiplier = (num_floors.to_f/a).ceil   # multiplier = (25.0/3).ceil = 9
-    multiplier_rep_times = num_floors / multiplier   # multiplier_rep_times = 25/9 = 2
+    multiplier = (num_floors.to_f / a).ceil # multiplier = (25.0/3).ceil = 9
+    multiplier_rep_times = num_floors / multiplier # multiplier_rep_times = 25/9 = 2
     if num_floors % multiplier == 0
-      multiplier_list.fill(multiplier, multiplier_list.size, multiplier_rep_times)   # [multiplier,multiplier,multiplier...]
+      multiplier_list.fill(multiplier, multiplier_list.size, multiplier_rep_times) # [multiplier,multiplier,multiplier...]
     else
-      spare_multiplier = num_floors % multiplier    # spare_multiplier = 25 % 9 = 7
+      spare_multiplier = num_floors % multiplier # spare_multiplier = 25 % 9 = 7
       i = 0
       while i < multiplier_rep_times
         multiplier_list << multiplier
         i += 1
       end
-      multiplier_list << spare_multiplier   # [multiplier, multiplier, spare_multiplier]
+      multiplier_list << spare_multiplier # [multiplier, multiplier, spare_multiplier]
     end
     return multiplier_list
   end
 
-
   def update_space_outside_boundary_to_adiabatic(space, if_top_story_floor_adiabatic: false, if_ground_story_plenum_adiabatic: false)
-    if (space.name.to_s.include?"Plenum") && (not if_top_story_floor_adiabatic)
+    if (space.name.to_s.include? 'Plenum') && !if_top_story_floor_adiabatic
       space.surfaces.each do |surface|
         if surface.surfaceType.to_s == 'RoofCeiling'
-          if surface.outsideBoundaryCondition.to_s == "Surface"
+          if surface.outsideBoundaryCondition.to_s == 'Surface'
             if !surface.adjacentSurface.empty?
               adj_surface = surface.adjacentSurface.get
               adj_surface.setOutsideBoundaryCondition('Adiabatic')
@@ -977,7 +987,7 @@ module SuperTallBuilding
       unless if_ground_story_plenum_adiabatic
         space.surfaces.each do |surface|
           if surface.surfaceType.to_s == 'Floor'
-            if surface.outsideBoundaryCondition.to_s == "Surface"
+            if surface.outsideBoundaryCondition.to_s == 'Surface'
               if !surface.adjacentSurface.empty?
                 adj_surface = surface.adjacentSurface.get
                 adj_surface.setOutsideBoundaryCondition('Adiabatic')
@@ -999,7 +1009,7 @@ module SuperTallBuilding
     if multiplier == 1
       new_story.setName("F#{current_story} " + original_story.name.to_s)
     else
-      new_story.setName("F#{current_story}-" + "F#{current_story+multiplier-1} " + original_story.name.to_s)
+      new_story.setName("F#{current_story}-" + "F#{current_story + multiplier - 1} " + original_story.name.to_s)
     end
 
     # clone the spaces on the story
@@ -1008,26 +1018,24 @@ module SuperTallBuilding
       if multiplier == 1
         new_name = "F#{current_story} " + old_name
       else
-        new_name = "F#{current_story}-" + "F#{current_story+multiplier-1} " + old_name
+        new_name = "F#{current_story}-" + "F#{current_story + multiplier - 1} " + old_name
       end
       # clone space
       new_space = space.clone(model).to_Space.get
       new_space.setName(new_name)
       # assign new Z Origin
-      if old_name.include?"Plenum"
+      if old_name.include? 'Plenum'
         new_space.setZOrigin(new_z_origin + f_to_c_height)
       else
         new_space.setZOrigin(new_z_origin)
       end
       # clone thermal zone and assign
       new_t_zone = space.thermalZone.get.clone(model).to_ThermalZone.get
-      new_t_zone.setName("TZ-" + new_name)
-      new_t_zone.setMultiplier(multiplier * (space.thermalZone.get.multiplier))   # story multiplier and original thermal zone multiplier
+      new_t_zone.setName('TZ-' + new_name)
+      new_t_zone.setMultiplier(multiplier * space.thermalZone.get.multiplier) # story multiplier and original thermal zone multiplier
       new_space.setThermalZone(new_t_zone)
       # assign new building story
       new_space.setBuildingStory(new_story)
-
-      puts "new space: #{new_space.name.to_s}"
 
       # update boundary condition to adiabatic as needed
       # for top story, when the story below has a multiplier
@@ -1043,22 +1051,22 @@ module SuperTallBuilding
     # locate the skylobby story (find the most middle story bottom, add skylobby below it)
     # rank the stories from low to high (not including the elevator machine room, which hasn't assign the nominal Z coordinate)
     all_stories = model.getBuildingStorys
-    all_stories = all_stories.select {|story| !story.nominalZCoordinate.empty?}
-    all_stories = all_stories.sort {|a,b| a.nominalZCoordinate.get.to_f <=> b.nominalZCoordinate.get.to_f}
-    all_stories_names = all_stories.map {|story| story.name.to_s}
+    all_stories = all_stories.select { |story| !story.nominalZCoordinate.empty? }
+    all_stories = all_stories.sort { |a, b| a.nominalZCoordinate.get.to_f <=> b.nominalZCoordinate.get.to_f }
+    all_stories_names = all_stories.map { |story| story.name.to_s }
 
     # the Z coordinates of the bottom of the stories (if story has multiplier, this refers to the real bottom)
     z_coordinates_bot = []
     all_stories.each do |story|
       raise "nominal floor to floor height missing in story #{story.name.to_s}." if story.nominalFloortoFloorHeight.empty?
+
       f_to_f_height = story.nominalFloortoFloorHeight.get
       multiplier = story.spaces[0].multiplier
-      z_coordinates_bot.push(story.nominalZCoordinate.get.to_f - (multiplier - 1)/2.0 * f_to_f_height)
+      z_coordinates_bot.push(story.nominalZCoordinate.get.to_f - (multiplier - 1) / 2.0 * f_to_f_height)
     end
 
-    dist_from_middle = z_coordinates_bot.map {|z_cor| (z_cor - (building_height/2.0)).abs}
+    dist_from_middle = z_coordinates_bot.map { |z_cor| (z_cor - (building_height / 2.0)).abs }
     all_stories_names.each_with_index do |story_name, idx|
-      puts "story #{story_name},  z_coordinate: #{model.getBuildingStoryByName(story_name).get.nominalZCoordinate.get},  z_coordinates_bot: #{z_coordinates_bot[idx]},  dist_from_middle: #{dist_from_middle[idx]}"
     end
     # each_with_index.min returns the array [minimum value, index of the minimum value]
     mid_story_idx = dist_from_middle.each_with_index.min[1]
@@ -1066,16 +1074,10 @@ module SuperTallBuilding
     skylobby_num_flr = story_above_skylobby.scan(/\d+/)[0].to_i
     skylobby_z_origin = z_coordinates_bot[mid_story_idx]
 
-    puts "skylobby location:"
-    puts all_stories_names[mid_story_idx]
-
-    puts  "stories after skylobby:"
-    puts all_stories_names.drop(mid_story_idx)
-
     # add skylobby story by deepcopy
     f_to_f_height = 4.20624
     f_to_c_height = 3.2004
-    orin_skylobby_story = model.getBuildingStoryByName("Skylobby story").get
+    orin_skylobby_story = model.getBuildingStoryByName('Skylobby story').get
     deep_copy_story(model, orin_skylobby_story, 1, skylobby_z_origin, f_to_c_height, f_to_f_height, skylobby_num_flr)
     # remove the original skylobby floor
     orin_skylobby_story.spaces.each do |space|
@@ -1088,10 +1090,9 @@ module SuperTallBuilding
     all_stories_names.drop(mid_story_idx).each do |story_name|
       # reset story name with new floor number
       story = model.getBuildingStoryByName(story_name).get
-      orin_num_flrs = story_name.scan(/\d+/).map {|x| x.to_i}
-      puts "#{story_name} orin_num_flrs: #{orin_num_flrs.inspect}"
+      orin_num_flrs = story_name.scan(/\d+/).map { |x| x.to_i }
 
-      new_num_flrs = orin_num_flrs.map {|x| x+1}
+      new_num_flrs = orin_num_flrs.map { |x| x + 1 }
       if new_num_flrs.size == 1
         new_story_name = "F#{new_num_flrs[0]}" + story_name.split(/\d+/)[-1]
       elsif new_num_flrs.size == 2
@@ -1109,7 +1110,5 @@ module SuperTallBuilding
         space.setZOrigin(orin_z_orin + f_to_f_height)
       end
     end
-
   end
-
 end
