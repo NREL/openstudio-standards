@@ -901,17 +901,12 @@ class NECB2011
         end
       when 3
         group_similar_zones_together(zones).each do |zones|
-#          add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-#                                                                                             zones: zones,
-#                                                                                             heating_coil_type: heating_coil_type_sys3,
-#                                                                                             baseboard_type: baseboard_type,
-#                                                                                             hw_loop: @hw_loop)
-
-          add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
-                                                                                             zones: zones,
-                                                                                             heating_coil_type: heating_coil_type_sys3,
-                                                                                             baseboard_type: baseboard_type,
-                                                                                             hw_loop: @hw_loop)
+          add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
+                                                                                zones: zones,
+                                                                                heating_coil_type: heating_coil_type_sys3,
+                                                                                baseboard_type: baseboard_type,
+                                                                                hw_loop: @hw_loop,
+                                                                                multispeed: true)
         end
       when 4
         group_similar_zones_together(zones).each do |zones|
@@ -1053,33 +1048,21 @@ class NECB2011
 
       when 3
         if dwelling_shared_ahu
-#          add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-#                                                                                             zones: zones,
-#                                                                                             heating_coil_type: heating_coil_type_sys3,
-#                                                                                            baseboard_type: baseboard_type,
-#                                                                                            hw_loop: @hw_loop)
-
-          add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
-                                                                                             zones: zones,
-                                                                                             heating_coil_type: heating_coil_type_sys3,
-                                                                                             baseboard_type: baseboard_type,
-                                                                                             hw_loop: @hw_loop)
-
+          add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
+                                                                                zones: zones,
+                                                                                heating_coil_type: heating_coil_type_sys3,
+                                                                                baseboard_type: baseboard_type,
+                                                                                hw_loop: @hw_loop,
+                                                                                multispeed: true)
         else
           #Create a separate air loop for each unit.
           zones.each do |zone|
-#            add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-#                                                                                               zones: [zone],
-#                                                                                               heating_coil_type: heating_coil_type_sys3,
-#                                                                                               baseboard_type: baseboard_type,
-#                                                                                               hw_loop: @hw_loop)
-
-            add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
-                                                                                               zones: [zone],
-                                                                                               heating_coil_type: heating_coil_type_sys3,
-                                                                                               baseboard_type: baseboard_type,
-                                                                                               hw_loop: @hw_loop)
-
+            add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
+                                                                                  zones: [zone],
+                                                                                  heating_coil_type: heating_coil_type_sys3,
+                                                                                  baseboard_type: baseboard_type,
+                                                                                  hw_loop: @hw_loop,
+                                                                                  multispeed: true)
           end
         end
       end

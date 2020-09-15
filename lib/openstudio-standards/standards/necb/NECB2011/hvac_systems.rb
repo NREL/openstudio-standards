@@ -828,37 +828,32 @@ class NECB2011
     successfully_set_all_properties = true
     model = coil_cooling_dx_multi_speed.model
     multi_speed_heat_pump = coil_cooling_dx_multi_speed.containingHVACComponent.get.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get
-    airloop = nil
-    if multi_speed_heat_pump.airLoopHVAC.is_initialized then airloop = multi_speed_heat_pump.airLoopHVAC.get end
+    airloop = multi_speed_heat_pump.airLoopHVAC.get
 
     # Define the criteria to find the properties in the hvac standards data set
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_multi_speed)
     capacity_w = coil_cooling_dx_multi_speed_find_capacity(coil_cooling_dx_multi_speed)
 
-    # Find design outside air flow
+    # Find design outside air flow rate and flow fraction
     controller_oa = nil
     if airloop.airLoopHVACOutdoorAirSystem.is_initialized
       oa_system = airloop.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir
     end
-    min_oa_flow,oaf = 0.0,0.0
+    min_oa_flow_rate, oaf = 0.0,0.0
     if controller_oa
-      min_oa_flow = nil
+      min_oa_flow_rate = nil
       if controller_oa.minimumOutdoorAirFlowRate.is_initialized
-        min_oa_flow = controller_oa.minimumOutdoorAirFlowRate.get
+        min_oa_flow_rate = controller_oa.minimumOutdoorAirFlowRate.get
       elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
-        min_oa_flow = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
+        min_oa_flow_rate = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
       end
-      if min_oa_flow then oaf = min_oa_flow.to_f / airloop.autosizedDesignSupplyAirFlowRate.to_f end
+      if min_oa_flow_rate then oaf = min_oa_flow_rate.to_f / airloop.autosizedDesignSupplyAirFlowRate.to_f end
     end
 
-    # Set number of stages and the air flow for stage 1 so that it's always greater than the minimum
-    # outside air flow
-    clg_stages = coil_cooling_dx_multi_speed.stages
-    max_num_stages = clg_stages.size
+    # Find required capacity of each stage and total number of stages based on NECB rules
     stage_cap = []
     num_stages = (capacity_w / (66.0 * 1000.0) + 0.5).round
-    #num_stages = [num_stages, 4].min
     max_cap = 66.0 * 1000.0 * num_stages
     final_num_stages = num_stages
     case num_stages
@@ -866,48 +861,59 @@ class NECB2011
       stage_cap[0] = capacity_w / 2.0
       stage_cap[1] = 2.0 * stage_cap[0]
       final_num_stages = 2
-      if oaf > 0.5
-        multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow)
-      end
     else
       stage_cap[0] = 66.0 * 1000.0
       stage_cap[1] = 2.0 * stage_cap[0]
       case num_stages
       when 2
-        if oaf > 0.5
-          multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow)
-        end
       when 3
         stage_cap[2] = 3.0 * stage_cap[0]
-        if oaf > 0.333
-          multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow)
-        end
       else
         final_num_stages = 4
         stage_cap[2] = 3.0 * stage_cap[0]
-        stage_cap[3] = max_cap #[4.0 * stage_cap[0],capacity_w].max
-        speed1_cap_ratio = stage_cap[0] / max_cap
-        if oaf > speed1_cap_ratio
-          multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow)
-        end
+        stage_cap[3] = max_cap
       end
     end
 
-    # set capacities for stages
-    clg_stages[0].setGrossRatedTotalCoolingCapacity(stage_cap[0])
-    clg_stages[1].setGrossRatedTotalCoolingCapacity(stage_cap[1])
+    # Set final number of cooling stages and create missing stages if needed
     for istage in 2..final_num_stages-1
       new_clg_stage = OpenStudio::Model::CoilCoolingDXMultiSpeedStageData.new(model)
       coil_cooling_dx_multi_speed.addStage(new_clg_stage)
-      new_clg_stage.setGrossRatedTotalCoolingCapacity(stage_cap[istage])
     end
-
-    # update number of cooling stages
     multi_speed_heat_pump.setNumberofSpeedsforCooling(final_num_stages)
 
-    # Convert capacity to Btu/hr
-    capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
-    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
+    # Set final capacities for each of the stages. The flow rate for each of the stages
+    # is maintained above the outside air flow rate
+    coil_cooling_dx_multi_speed.stages[0].setGrossRatedTotalCoolingCapacity(stage_cap[0])
+    coil_cooling_dx_multi_speed.stages[1].setGrossRatedTotalCoolingCapacity(stage_cap[1])
+    case  coil_cooling_dx_multi_speed.stages.size
+    when 2
+      if (oaf > 0.5) then multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate) end
+    when 3
+      coil_cooling_dx_multi_speed.stages[2].setGrossRatedTotalCoolingCapacity(stage_cap[2])
+      if (oaf > 0.333) && (oaf <= 0.666)
+        multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
+      elsif (oaf > 0.666)
+        multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
+        multi_speed_heat_pump.setSpeed2SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
+      end
+    when 4
+      coil_cooling_dx_multi_speed.stages[2].setGrossRatedTotalCoolingCapacity(stage_cap[2])
+      coil_cooling_dx_multi_speed.stages[3].setGrossRatedTotalCoolingCapacity(stage_cap[3])
+      if (oaf > 0.25) && (oaf <= 0.5)
+        multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
+      elsif (oaf > 0.5) && (oaf <= 0.75)
+        multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
+        multi_speed_heat_pump.setSpeed2SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
+      elsif (oaf > 0.75)
+        multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
+        multi_speed_heat_pump.setSpeed2SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
+        multi_speed_heat_pump.setSpeed3SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
+      end
+    end
+
+    capacity_btu_per_hr = OpenStudio.convert(stage_cap.last, 'W', 'Btu/hr').get
+    capacity_kbtu_per_hr = OpenStudio.convert(stage_cap.last, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
@@ -997,17 +1003,21 @@ class NECB2011
     sql_db_vars_map[new_comp_name] = coil_cooling_dx_multi_speed.name.to_s
     coil_cooling_dx_multi_speed.setName(new_comp_name)
 
-    # Set the efficiency values
-    unless cop.nil?
-      clg_stages.each do |istage|
-        istage.setGrossRatedCoolingCOP(cop)
-      end
-    end
-
-    # It was found that the heat pump OS object doesn't respond to the call to turn on from sent by the
+    # It was found that the heat pump OS object doesn't respond to the call to turn on from the
     # system availability manager night cycle. This EMS script is then implemented to check the status
     # of the system availability manager night cycle and force the heat pump to turn on when needed. The
     # heat pump is still turned on when its availability schedule calls for it.
+    create_ems_to_turn_on_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed_for_night_cycle(multi_speed_heat_pump)
+
+    return sql_db_vars_map
+
+  end
+
+  # Create EMS to turn on "AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed" in response to a call
+  # from the night cycle availability manager of the air loop. It was found that this object
+  # doesn't respond properly to this call from the night cycle
+  def create_ems_to_turn_on_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed_for_night_cycle(multi_speed_heat_pump)
+    model = multi_speed_heat_pump.model
     avail_manager_name = nil
     if multi_speed_heat_pump.airLoopHVAC.is_initialized
       if not multi_speed_heat_pump.airLoopHVAC.get.availabilityManagers.empty?
@@ -1052,9 +1062,6 @@ class NECB2011
       pcm.setCallingPoint('InsideHVACSystemIterationLoop')
       pcm.addProgram(heat_pump_avail_sch_prog)
     end
-
-    return sql_db_vars_map
-
   end
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
@@ -1074,32 +1081,31 @@ class NECB2011
         break
       end
     end
-    airloop = nil
-    if multi_speed_heat_pump.airLoopHVAC.is_initialized then airloop = multi_speed_heat_pump.airLoopHVAC.get end
+    airloop = multi_speed_heat_pump.airLoopHVAC.get
 
     # Define the criteria to find the properties in the hvac standards data set.
     search_criteria = coil_heating_gas_multi_stage_find_search_criteria(coil_heating_gas_multi_stage)
     fuel_type = search_criteria["fuel_type"]
     capacity_w = coil_heating_gas_multi_stage_find_capacity(coil_heating_gas_multi_stage)
 
-    # Find design outside air flow
+    # Find system design outside air flow rate and fraction
     controller_oa = nil
     if airloop.airLoopHVACOutdoorAirSystem.is_initialized
       oa_system = airloop.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir
     end
-    min_oa_flow,oaf = 0.0,0.0
+    min_oa_flow_rate, oaf = 0.0,0.0
     if controller_oa
-      min_oa_flow = nil
+      min_oa_flow_rate = nil
       if controller_oa.minimumOutdoorAirFlowRate.is_initialized
-        min_oa_flow = controller_oa.minimumOutdoorAirFlowRate.get
+        min_oa_flow_rate = controller_oa.minimumOutdoorAirFlowRate.get
       elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
-        min_oa_flow = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
+        min_oa_flow_rate = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
       end
-      if min_oa_flow then oaf = min_oa_flow.to_f / airloop.autosizedDesignSupplyAirFlowRate.to_f end
+      if min_oa_flow_rate then oaf = min_oa_flow_rate.to_f / airloop.autosizedDesignSupplyAirFlowRate.to_f end
     end
 
-    # Set number of stages
+    # Find capacities of each of the stages and the total number of stages required based on NECB rules
     htg_stages = coil_heating_gas_multi_stage.stages
     num_stages = (capacity_w / (66.0 * 1000.0) + 0.5).round
     max_cap = 66.0 * 1000.0 * num_stages
@@ -1114,48 +1120,63 @@ class NECB2011
         stage_cap[0] = capacity_w / 2.0
         stage_cap[1] = 2.0 * stage_cap[0]
         final_num_stages = 2
-        if oaf > 0.5
-          multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow)
-        end
       else
         stage_cap[0] = 66.0 * 1000.0
         stage_cap[1] = 2.0 * stage_cap[0]
         case num_stages
         when 2
-          if oaf > 0.5
-            multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow)
-          end
         when 3
           stage_cap[2] = 3.0 * stage_cap[0]
-          if oaf > 0.333
-            multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow)
-          end
         else
           final_num_stages = 4
           stage_cap[2] = 3.0 * stage_cap[0]
           stage_cap[3] = max_cap
-          speed1_cap_ratio = stage_cap[0] / max_cap
-          if oaf > speed1_cap_ratio
-            multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow)
-          end
         end
       end
     end
 
-    # set capacities for stages
-    htg_stages[0].setNominalCapacity(stage_cap[0])
+    # Set final number of stages and create missing stages if needed
     for istage in 1..final_num_stages-1
       new_htg_stage = OpenStudio::Model::CoilHeatingGasMultiStageStageData.new(model)
       coil_heating_gas_multi_stage.addStage(new_htg_stage)
-      new_htg_stage.setNominalCapacity(stage_cap[istage])
     end
-
-    # update number of heating stages
     multi_speed_heat_pump.setNumberofSpeedsforHeating(final_num_stages)
 
+    # Set final capacities for each of the stages. The air flow rate for each of the stages
+    # is maintained above the outside air flow rate
+    coil_heating_gas_multi_stage.stages[0].setNominalCapacity(stage_cap[0])
+    case  coil_heating_gas_multi_stage.stages.size
+    when 2
+      coil_heating_gas_multi_stage.stages[1].setNominalCapacity(stage_cap[1])
+      if (oaf > 0.5) then multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate) end
+    when 3
+      coil_heating_gas_multi_stage.stages[1].setNominalCapacity(stage_cap[1])
+      coil_heating_gas_multi_stage.stages[2].setNominalCapacity(stage_cap[2])
+      if (oaf > 0.333) && (oaf <= 0.666)
+        multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
+      elsif (oaf > 0.666)
+        multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
+        multi_speed_heat_pump.setSpeed2SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
+      end
+    when 4
+      coil_heating_gas_multi_stage.stages[1].setNominalCapacity(stage_cap[1])
+      coil_heating_gas_multi_stage.stages[2].setNominalCapacity(stage_cap[2])
+      coil_heating_gas_multi_stage.stages[3].setNominalCapacity(stage_cap[3])
+      if (oaf > 0.25) && (oaf <= 0.5)
+        multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
+      elsif (oaf > 0.5) && (oaf <= 0.75)
+        multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
+        multi_speed_heat_pump.setSpeed2SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
+      elsif (oaf > 0.75)
+        multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
+        multi_speed_heat_pump.setSpeed2SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
+        multi_speed_heat_pump.setSpeed3SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
+      end
+    end
+
     # Convert capacity to Btu/hr
-    capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
-    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
+    capacity_btu_per_hr = OpenStudio.convert(stage_cap.last, 'W', 'Btu/hr').get
+    capacity_kbtu_per_hr = OpenStudio.convert(stage_cap.last, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies
     heater_props = nil

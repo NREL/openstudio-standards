@@ -1,5 +1,29 @@
 class NECB2011
 
+  def add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model:,
+                                                                            zones:,
+                                                                            heating_coil_type:,
+                                                                            baseboard_type:,
+                                                                            hw_loop:,
+                                                                            new_auto_zoner: true,
+                                                                            multispeed: false)
+    if multispeed
+      add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
+                                                                                         zones: zones,
+                                                                                         heating_coil_type: heating_coil_type,
+                                                                                         baseboard_type: baseboard_type,
+                                                                                         hw_loop: hw_loop,
+                                                                                         new_auto_zoner: new_auto_zoner)
+    else
+      add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                        zones: zones,
+                                                                                        heating_coil_type: heating_coil_type,
+                                                                                        baseboard_type: baseboard_type,
+                                                                                        hw_loop: hw_loop,
+                                                                                        new_auto_zoner: new_auto_zoner)
+    end
+  end
+
   # Some tests still require a simple way to set up a system without sizing.. so we are keeping the auto_zoner flag for this  method.
   #
   def add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model:,
