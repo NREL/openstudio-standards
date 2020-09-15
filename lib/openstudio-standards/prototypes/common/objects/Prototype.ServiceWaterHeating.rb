@@ -954,7 +954,7 @@ class Standard
     water_fixture.setName("#{space.name.get} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gpm")
     swh_connection.addWaterUseEquipment(water_fixture)
     # Assign water fixture to a space
-    water_fixture.setSpace(space) if model_attach_water_fixtures_to_spaces?(model, building_type)
+    water_fixture.setSpace(space) if model_attach_water_fixtures_to_spaces?(model)
 
     # Connect the water use connection to the SWH loop
     swh_loop.addDemandBranchForComponent(swh_connection)
@@ -962,13 +962,11 @@ class Standard
   end
 
   # Determine whether or not water fixtures are attached to spaces
-  def model_attach_water_fixtures_to_spaces?(model, building_type=nil)
-    # TODO to enable later.
-    # # For hotels and apartments, water fixtures are added to spaces
+  def model_attach_water_fixtures_to_spaces?(model)
+    # TODO: For hotels and apartments, add the water fixture at the space level
     # if building_type!=nil && ((building_type.downcase.include?"hotel") || (building_type.downcase.include?"apartment"))
     #   return true
     # end
-
     return false
   end
 
