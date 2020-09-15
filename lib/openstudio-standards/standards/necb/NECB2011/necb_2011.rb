@@ -205,7 +205,7 @@ class NECB2011 < Standard
                                 epw_file: epw_file,
                                 sizing_run_dir: sizing_run_dir,
                                 primary_heating_fuel: primary_heating_fuel,
-                                dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No DCV', (3) 'Occupancy-based DCV' , (4) 'CO2-based DCV'
+                                dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
                                 lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
                                 lights_scale: lights_scale,
                                 daylighting_type: daylighting_type, # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
@@ -373,7 +373,7 @@ class NECB2011 < Standard
     #this sets/stores the template version loads that the model uses.
     model.getBuilding.setStandardsTemplate(self.class.name)
     set_occ_sensor_spacetypes(model, @space_type_map)
-    model_add_loads(model, lights_type, lights_scale) #Sara
+    model_add_loads(model, lights_type, lights_scale)
   end
 
   def apply_weather_data(model:, epw_file:)
@@ -1051,9 +1051,9 @@ class NECB2011 < Standard
   #def model_add_daylighting_controls(model)
 
 
-  def model_enable_demand_controlled_ventilation(model, dcv_type = 'No DCV') # Note: Values for dcv_type are: 'Occupancy-based DCV', 'CO2-based DCV', 'No DCV', 'NECB_Default'
+  def model_enable_demand_controlled_ventilation(model, dcv_type = 'No_DCV') # Note: Values for dcv_type are: 'Occupancy_based_DCV', 'CO2_based_DCV', 'No_DCV', 'NECB_Default'
     if dcv_type != 'NECB_Default'
-      if dcv_type == 'Occupancy-based DCV' || dcv_type == 'CO2-based DCV'
+      if dcv_type == 'Occupancy_based_DCV' || dcv_type == 'CO2_based_DCV'
         #TODO: IMPORTANT: (upon other BTAP tasks) Set a value for the "Outdoor Air Flow per Person" field of the "OS:DesignSpecification:OutdoorAir" object
         # Note: The "Outdoor Air Flow per Person" field is required for occupancy-based DCV.
         # Note: The "Outdoor Air Flow per Person" values should be based on ASHRAE 62.1: Article 6.2.2.1.
@@ -1149,7 +1149,7 @@ class NECB2011 < Standard
           zone.setZoneControlContaminantController(zone_control_co2)
         end
 
-      end #if dcv_type == "Occupancy-based DCV" || dcv_type == "CO2-based DCV"
+      end #if dcv_type == "Occupancy_based_DCV" || dcv_type == "CO2_based_DCV"
 
       ##### Loop through AirLoopHVACs
       model.getAirLoopHVACs.sort.each do |air_loop|
@@ -1170,15 +1170,15 @@ class NECB2011 < Standard
             controller_mv = controller_oa.controllerMechanicalVentilation
 
             ##### Set "Demand Controlled Ventilation" to "Yes" or "No" in Controller:MechanicalVentilation depending on dcv_type.
-            if (dcv_type == 'CO2-based DCV') || (dcv_type == 'Occupancy-based DCV') #Occupancy
+            if (dcv_type == 'CO2_based_DCV') || (dcv_type == 'Occupancy_based_DCV') #Occupancy
               controller_mv.setDemandControlledVentilation(true)
               ##### Set the "System Outdoor Air Method" field based on dcv_type in the Controller:MechanicalVentilation object
-              if dcv_type == 'CO2-based DCV'
+              if dcv_type == 'CO2_based_DCV'
                 controller_mv.setSystemOutdoorAirMethod('IndoorAirQualityProcedure')
-              else #dcv_type == 'Occupancy-based DCV'
+              else #dcv_type == 'Occupancy_based_DCV'
                 controller_mv.setSystemOutdoorAirMethod('ZoneSum')
               end
-            elsif dcv_type == 'No DCV'
+            elsif dcv_type == 'No_DCV'
               controller_mv.setDemandControlledVentilation(false)
             end
             # puts controller_mv
@@ -1212,7 +1212,7 @@ class NECB2011 < Standard
     end
 
     # ##### Since Atrium's LPD for LED lighting depends on atrium's height, the height of the atrium (if applicable) should be found.
-    standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil #Sara
+    standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil
     if standards_space_type.include? 'Atrium' #TODO: Note that since none of the archetypes has Atrium, this was tested for 'Dining'. #Atrium
       puts "#{standards_space_type} - has atrium" #space_type.name.to_s
       # Get the max height for the spacetype.

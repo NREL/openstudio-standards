@@ -95,7 +95,7 @@ class NECB2011
 
   # Organizes Zones and assigns them to appropriate systems according to NECB 2011-17 systems spacetype rules in Sec 8.
   # requires requires fuel type to be assigned for each system aspect. Defaults to gas hydronic.
-  def apply_systems(model:, primary_heating_fuel:, sizing_run_dir:) #, dcv_type: "No DCV" #Sara
+  def apply_systems(model:, primary_heating_fuel:, sizing_run_dir:)
     raise('validation of model failed.') unless validate_initial_model(model)
     # Check to see if model is using another vintage of spacetypes. If so overwrite the @standards for the object with the
     # other spacetype data. This is required for correct system mapping.
@@ -194,7 +194,6 @@ class NECB2011
     model.getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
     model.getOutputControlReportingTolerances.setToleranceforTimeCoolingSetpointNotMet(1.0)
 
-    # model_enable_demand_controlled_ventilation(model, dcv_type) #Sara
   end
 
   # Method to store space sizing loads. This is needed because later when the zones are destroyed this information will be lost.
@@ -305,7 +304,7 @@ class NECB2011
 
       #this method will determine if the right schedule was used for this wet & wild space if not.. it will reset the space
       # to use the correct schedule version of the wet and wild space type.
-      adjust_wildcard_spacetype_schedule(space: space, schedule: dominant_schedule, lights_type: lights_type, lights_scale: lights_scale) #Sara
+      adjust_wildcard_spacetype_schedule(space: space, schedule: dominant_schedule, lights_type: lights_type, lights_scale: lights_scale)
 
       #Find spacetype thermostat and assign it to the zone.
       thermostat_name = space.spaceType.get.name.get + ' Thermostat'
@@ -324,7 +323,7 @@ class NECB2011
       model.getSpaces.select {|s| is_an_necb_wet_space?(s)}.each do |space_target|
         if space_target.thermalZone.empty?
           if are_space_loads_similar?(space_1: space, space_2: space_target) && space.buildingStory().get == space_target.buildingStory().get # added since chris needs zones to not span floors for costing.
-            adjust_wildcard_spacetype_schedule(space_target, dominant_schedule, lights_type, lights_scale, space_height) #Sara
+            adjust_wildcard_spacetype_schedule(space_target, dominant_schedule, lights_type, lights_scale, space_height)
             space_target.setThermalZone(zone)
           end
         end
@@ -471,7 +470,7 @@ class NECB2011
         schedule_type = determine_dominant_schedule(space.buildingStory.get.spaces)
         zone = other_adjacent_spaces.first.thermalZone.get
         wild_adjacent_spaces.each do |space|
-          adjust_wildcard_spacetype_schedule(space, schedule_type, @lights_type, @lights_scale, @space_height) #Sara
+          adjust_wildcard_spacetype_schedule(space, schedule_type, @lights_type, @lights_scale, @space_height)
           space.setThermalZone(zone)
         end
       end
@@ -490,7 +489,7 @@ class NECB2011
       dominant_floor_schedule = determine_dominant_schedule(space.buildingStory().get.spaces)
       #this method will determine if the right schedule was used for this wet & wild space if not.. it will reset the space
       # to use the correct schedule version of the wet and wild space type.
-      adjust_wildcard_spacetype_schedule(space, dominant_floor_schedule, @lights_type, @lights_scale, @space_height) #Sara
+      adjust_wildcard_spacetype_schedule(space, dominant_floor_schedule, @lights_type, @lights_scale, @space_height)
       #Find spacetype thermostat and assign it to the zone.
       thermostat_name = space.spaceType.get.name.get + ' Thermostat'
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
@@ -509,7 +508,7 @@ class NECB2011
         if space_target.thermalZone.empty?
           if are_space_loads_similar?(space_1: space, space_2: space_target) &&
               space.buildingStory().get == space_target.buildingStory().get # added since chris needs zones to not span floors for costing.
-            adjust_wildcard_spacetype_schedule(space_target, dominant_floor_schedule, @lights_type, @lights_scale, @space_height) #Sara
+            adjust_wildcard_spacetype_schedule(space_target, dominant_floor_schedule, @lights_type, @lights_scale, @space_height)
             space_target.setThermalZone(zone)
           end
         end

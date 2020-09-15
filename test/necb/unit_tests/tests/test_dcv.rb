@@ -39,8 +39,7 @@ class YourTestName_Test < Minitest::Test
     ]
     @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
     @primary_heating_fuels = ['DefaultFuel']
-    # @dcv_types = ['Occupancy-based DCV']
-    @dcv_types = ['Occupancy-based DCV', 'CO2-based DCV'] #['No DCV'] #['NECB_Default']
+    @dcv_types = ['Occupancy_based_DCV', 'CO2_based_DCV'] #['No_DCV'] #['NECB_Default']
     @lighting_types = ['NECB_Default'] #LED  #NECB_Default
 
     # Test results storage array.
