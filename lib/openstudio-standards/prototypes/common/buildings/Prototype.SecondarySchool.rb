@@ -108,6 +108,7 @@ module SecondarySchool
     return true
   end
 
+
   def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting daylight sensor positions and fractions')
 
