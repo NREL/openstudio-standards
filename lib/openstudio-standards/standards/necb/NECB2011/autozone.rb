@@ -887,7 +887,8 @@ class NECB2011
                                                                mau_type: mau_type,
                                                                mau_heating_coil_type: mau_heating_coil_type,
                                                                baseboard_type: baseboard_type,
-                                                               hw_loop: @hw_loop)
+                                                               hw_loop: @hw_loop,
+                                                               multispeed: true)
         end
       when 2
         group_similar_zones_together(zones).each do |zones|
@@ -1031,7 +1032,8 @@ class NECB2011
                                                 mau_type: mau_type,
                                                 mau_heating_coil_type: mau_heating_coil_type,
                                                 baseboard_type: baseboard_type,
-                                                hw_loop: @hw_loop)
+                                                hw_loop: @hw_loop,
+                                                multispeed: true)
         else
           #Create a separate air loop for each unit.
           zones.each do |zone|
@@ -1040,7 +1042,8 @@ class NECB2011
                                                   mau_type: mau_type,
                                                   mau_heating_coil_type: mau_heating_coil_type,
                                                   baseboard_type: baseboard_type,
-                                                  hw_loop: @hw_loop)
+                                                  hw_loop: @hw_loop,
+                                                  multispeed: true)
 
           end
         end
