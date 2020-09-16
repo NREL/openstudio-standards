@@ -12,12 +12,16 @@ module Hospital
       transformer_efficiency = 0.979
     when '90.1-2010', '90.1-2013'
       transformer_efficiency = 0.987
+    else
+      transformer_efficiency = nil
     end
 
-    model_add_transformer(model,
-                          wired_lighting_frac: 0.022,
-                          transformer_size: 500000,
-                          transformer_efficiency: transformer_efficiency)
+    unless transformer_efficiency.nil?
+      model_add_transformer(model,
+                            wired_lighting_frac: 0.022,
+                            transformer_size: 500000,
+                            transformer_efficiency: transformer_efficiency)
+    end
 
     # add extra equipment for kitchen
     add_extra_equip_kitchen(model)

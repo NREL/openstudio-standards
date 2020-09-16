@@ -260,11 +260,6 @@ class Standard
         else
           include_exhaust_fan = false
         end
-        if system['energy_recovery'].nil? || true?(system['energy_recovery'])
-          energy_recovery = true
-        else
-          energy_recovery = false
-        end
         if true?(system['demand_control_ventilation'])
           demand_control_ventilation = true
         else
@@ -283,7 +278,6 @@ class Standard
                        fan_maximum_flow_rate: system['fan_maximum_flow_rate'],
                        econo_ctrl_mthd: econo_ctrl_mthd,
                        include_exhaust_fan: include_exhaust_fan,
-                       energy_recovery: energy_recovery,
                        demand_control_ventilation: demand_control_ventilation,
                        doas_control_strategy: doas_control_strategy,
                        clg_dsgn_sup_air_temp: clg_dsgn_sup_air_temp,
