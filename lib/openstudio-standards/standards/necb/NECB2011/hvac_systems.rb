@@ -852,6 +852,9 @@ class NECB2011
     end
 
     # Find required capacity of each stage and total number of stages based on NECB rules
+    # This implementation is limited to 4 stages only. The capacity of stages 1-3 is set to
+    # 66 kW as stipulated by NECB. The capacity of the 4th stage is then allowed to exceed 66 kW
+    # up to the design capacity.
     stage_cap = []
     num_stages = (capacity_w / (66.0 * 1000.0) + 0.5).round
     max_cap = 66.0 * 1000.0 * num_stages
@@ -1105,7 +1108,9 @@ class NECB2011
       if min_oa_flow_rate then oaf = min_oa_flow_rate.to_f / airloop.autosizedDesignSupplyAirFlowRate.to_f end
     end
 
-    # Find capacities of each of the stages and the total number of stages required based on NECB rules
+    # Find capacities of each of the stages and the total number of stages required based on NECB rules.
+    # This implementation is limited to 4 stages. The capacity of stages 1-3 is set to 66 kW as stipulated
+    # by NECB. The capacity of the 4th stage can exceed 66 kW up to the design capacity.
     htg_stages = coil_heating_gas_multi_stage.stages
     num_stages = (capacity_w / (66.0 * 1000.0) + 0.5).round
     max_cap = 66.0 * 1000.0 * num_stages
