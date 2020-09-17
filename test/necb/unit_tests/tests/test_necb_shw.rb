@@ -6,7 +6,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # use equipment are being defined correctly.  Test takes all space types defined in the appropriate NECB spacetypes.json
 # file and applies them to the outpatient.osm file (actually, it just changes the name of the space types in the
 # outpatient.osm file).
-class SHW_test < Minitest::Test
+class NECB_SHW_tests < Minitest::Test
   #Standards
   Templates = ['NECB2011', 'NECB2015', 'NECB2017', 'BTAPPRE1980']
   Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw', 'CAN_QC_Kuujjuaq.AP.719060_CWEC2016.epw']
