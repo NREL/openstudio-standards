@@ -2,9 +2,9 @@ require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
 require 'json'
 
-class YourTestName_Test < Minitest::Test
+class NECB_DCV_Tests < Minitest::Test
 
-  def test_what_are_you_testing()
+  def test_dcv()
 
     # File paths.
     @output_folder = File.join(__dir__, 'output/test_dcv')
