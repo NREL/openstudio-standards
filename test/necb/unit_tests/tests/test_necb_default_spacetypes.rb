@@ -4,7 +4,7 @@ require_relative '../../../helpers/minitest_helper'
 
 # This class will perform tests that are Spacetype dependant, Test model will be created
 # to specifically test aspects of the NECB2011 code that are Spacetype dependant. 
-class NECB2011DefaultSpaceTypesTests < Minitest::Test
+class NECB_Default_SpaceTypes_Tests < Minitest::Test
   #Standards
   Templates = ['NECB2011', 'NECB2015', 'BTAPPRE1980']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
 
