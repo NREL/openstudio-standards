@@ -2,11 +2,17 @@ class Standard
   # Add transformers for some prototypes
 
   def model_add_transformer(model,
-                            wired_lighting_frac:,
-                            transformer_size:,
-                            transformer_efficiency:,
+                            wired_lighting_frac: nil,
+                            transformer_size: nil,
+                            transformer_efficiency: nil,
                             excluded_interiorequip_key: '',
                             excluded_interiorequip_meter: nil)
+    # throw an error if transformer properties are missing
+    if wired_lighting_frac.nil? || transformer_size.nil? || transformer_efficiency.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.transformers', "Either 'wired_lighting_frac', 'transformer_size', or 'transformer_efficiency' is unspecified.  Cannot add transformer.")
+      return false
+    end
+
     # TODO: default values are for testing only.
     # ems sensor for interior lighting
     facility_int_ltg = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'InteriorLights:Electricity')
