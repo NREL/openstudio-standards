@@ -5,7 +5,11 @@ class ASHRAE901PRM < Standard
   # the impact of air leakage requirements in the standard.
   #
   # @return [Double] true if successful, false if not
-  def space_apply_infiltration_rate(space, tot_infil_m3_per_s, infil_method, infil_coefficients, climate_zone)
+  def space_apply_infiltration_rate(space, tot_infil_m3_per_s, infil_method, infil_coefficients)
+
+    # get the climate zone
+    climate_zone = model_standards_climate_zone(space.model)
+
     # Calculate infiltration rate
     case infil_method.to_s
       when 'Flow/ExteriorWallArea'

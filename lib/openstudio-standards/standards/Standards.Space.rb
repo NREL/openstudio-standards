@@ -1460,6 +1460,7 @@ class Standard
         end
       end
     end
+
     return area_m2 * space.multiplier
   end
 

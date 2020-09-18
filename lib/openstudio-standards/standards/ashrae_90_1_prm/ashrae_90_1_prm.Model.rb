@@ -172,7 +172,7 @@ class ASHRAE901PRM < Standard
 
     # Set the infiltration rate at each space
     model.getSpaces.sort.each do |space|
-      space_apply_infiltration_rate(space, tot_infil_m3_per_s, infil_method, infil_coefficients, climate_zone)
+      space_apply_infiltration_rate(space, tot_infil_m3_per_s, infil_method, infil_coefficients)
     end
 
     # Remove infiltration rates set at the space type
