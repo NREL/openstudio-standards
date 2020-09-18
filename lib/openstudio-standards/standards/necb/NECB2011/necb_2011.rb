@@ -277,7 +277,7 @@ class NECB2011 < Standard
                            scale_z: nil
   )
 
-    BTAP::Geometry::rotate_model(model,rotation_degrees) unless rotation_degrees.nil?
+    BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees.nil?
     unless scale_x.nil? && scale_y.nil? && scale_z.nil?
       scale_x = 1 if scale_x.nil?
       scale_y = 1 if scale_y.nil?
