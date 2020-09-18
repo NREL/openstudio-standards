@@ -14,7 +14,7 @@ report_path = "#{run_dir}/report.html"
 
 
 #LargeOffice
-class TestNECBQAQC < CreateDOEPrototypeBuildingTest
+class NECB_QAQC_Single_Test < CreateDOEPrototypeBuildingTest
 
   def test_single_qaqc()
        test_name = "#{info['building']}_#{info['epw']}"

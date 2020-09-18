@@ -6,7 +6,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # components are created from scratch to ensure model are up to date and we will
 # not run into version issues with the test.
 ## to specifically test aspects of the NECB2011 code that are HDD dependant.
-class NECBTestVintageMap < Minitest::Test
+class NECB_VintageMap_Test < Minitest::Test
 
 
   def test_necb2011()
