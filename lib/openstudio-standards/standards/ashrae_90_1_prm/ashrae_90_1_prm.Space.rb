@@ -5,14 +5,16 @@ class ASHRAE901PRM < Standard
   # the impact of air leakage requirements in the standard.
   #
   # @return [Double] true if successful, false if not
-  def space_apply_infiltration_rate(space, tot_infil_m3_per_s, infil_method, infil_coefficients)
+  def space_apply_infiltration_rate(space, tot_infil_m3_per_s, infil_method, infil_coefficients, climate_zone)
     # Calculate infiltration rate
     case infil_method.to_s
       when 'Flow/ExteriorWallArea'
         # Spread the total infiltration rate
         total_exterior_wall_area = 0
         space.model.getSpaces.sort.each do |spc|
-          total_exterior_wall_area += spc.exteriorWallArea
+          # Get the space conditioning type
+          space_cond_type = space_conditioning_category(spc, climate_zone)
+          total_exterior_wall_area += spc.exteriorWallArea unless space_cond_type == "Unconditioned"
         end
         adj_infil_flow_ext_wall_area = tot_infil_m3_per_s / total_exterior_wall_area
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, adj infil = #{adj_infil_flow_ext_wall_area.round(8)} m^3/s*m^2 of above grade wall area.")
@@ -20,7 +22,9 @@ class ASHRAE901PRM < Standard
         # Spread the total infiltration rate
         total_floor_area = 0
         space.model.getSpaces.sort.each do |spc|
-          total_floor_area += spc.floorArea
+          # Get the space conditioning type
+          space_cond_type = space_conditioning_category(spc, climate_zone)
+          total_floor_area += spc.floorArea unless space_cond_type == "Unconditioned" || space.exteriorArea == 0
         end
         adj_infil_flow_area = tot_infil_m3_per_s / total_floor_area
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, adj infil = #{adj_infil_flow_area.round(8)} m^3/s*m^2 of space floor area.")
@@ -53,23 +57,27 @@ class ASHRAE901PRM < Standard
 
     # Remove all pre-existing space infiltration objects
     space.spaceInfiltrationDesignFlowRates.each(&:remove)
+    
+    # Get the space conditioning type
+    space_cond_type = space_conditioning_category(space, climate_zone)
+    if space_cond_type != "Unconditioned"
+      # Create an infiltration rate object for this space
+      infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space.model)
+      infiltration.setName("#{space.name} Infiltration")
+      case infil_method.to_s
+        when 'Flow/ExteriorWallArea'
+          infiltration.setFlowperExteriorWallArea(adj_infil_flow_ext_wall_area.round(13))
+        when 'Flow/Area'
+          infiltration.setFlowperSpaceFloorArea(adj_infil_flow_area.round(13)) if space.exteriorArea > 0
+      end
+      infiltration.setSchedule(infil_sch)
+      infiltration.setConstantTermCoefficient(infil_coefficients[0])
+      infiltration.setTemperatureTermCoefficient(infil_coefficients[1])
+      infiltration.setVelocityTermCoefficient(infil_coefficients[2])
+      infiltration.setVelocitySquaredTermCoefficient(infil_coefficients[3])
 
-    # Create an infiltration rate object for this space
-    infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space.model)
-    infiltration.setName("#{space.name} Infiltration")
-    case infil_method.to_s
-      when 'Flow/ExteriorWallArea'
-        infiltration.setFlowperExteriorWallArea(adj_infil_flow_ext_wall_area.round(13))
-      when 'Flow/Area'
-        infiltration.setFlowperSpaceFloorArea(adj_infil_flow_area.round(13))
+      infiltration.setSpace(space)
     end
-    infiltration.setSchedule(infil_sch)
-    infiltration.setConstantTermCoefficient(infil_coefficients[0])
-    infiltration.setTemperatureTermCoefficient(infil_coefficients[1])
-    infiltration.setVelocityTermCoefficient(infil_coefficients[2])
-    infiltration.setVelocitySquaredTermCoefficient(infil_coefficients[3])
-
-    infiltration.setSpace(space)
 
     return true
   end

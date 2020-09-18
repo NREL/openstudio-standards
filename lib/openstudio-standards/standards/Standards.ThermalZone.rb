@@ -1221,6 +1221,7 @@ class Standard
     # From Table 3.1 Heated Space Criteria
     htg_lim_btu_per_ft2 = 0.0
     case template
+      # TODO: Add addendum db rules to 90.1-2019 for 90.1-2022
     when '90.1-2016', '90.1-PRM-2019'
       case climate_zone
       when 'ASHRAE 169-2006-0A',
