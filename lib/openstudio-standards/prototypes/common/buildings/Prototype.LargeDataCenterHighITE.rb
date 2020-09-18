@@ -168,7 +168,7 @@ module LargeDataCenterHighITE
     return supply_temp_sch
   end
 
-  def model_custom_swh_tweaks(model, building_type, climate_zone)
+  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
 
     return true
   end
