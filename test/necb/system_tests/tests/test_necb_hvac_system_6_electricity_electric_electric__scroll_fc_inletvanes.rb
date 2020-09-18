@@ -24,7 +24,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # Hopefully this makes is easier to debug the HVAC stuff!
 
 
-class NECB_HVAC_System_6_Test < MiniTest::Test
+class NECB_HVAC_System_6_Test_E_E_E_S_FC_IV < MiniTest::Test
 
   def test_necb_hvac_system_6_electricity_electric_electric__scroll_fc_inletvanes()
 
