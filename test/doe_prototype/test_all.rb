@@ -18,7 +18,8 @@ class TestAllBldgTypes < CreateDOEPrototypeBuildingTest
     'FullServiceRestaurant',
     'MidriseApartment',
     'HighriseApartment',
-    'Warehouse'
+    'Warehouse',
+	'College'
   ]
   templates = [
      'DOE Ref Pre-1980',
