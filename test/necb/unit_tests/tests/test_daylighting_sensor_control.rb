@@ -2,9 +2,9 @@ require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
 require 'json'
 
-class YourTestName_Test < Minitest::Test
+class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
 
-  def test_what_are_you_testing()
+  def test_daylighting_sensor_control()
 
     # File paths.
     @output_folder = File.join(__dir__, 'output/test_daylight_sensor')
