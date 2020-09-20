@@ -129,6 +129,8 @@ module OpenstudioStandards
   require_relative "#{stds}/cbes/cbes_t24_2005/cbes_t24_2005"
   require_relative "#{stds}/cbes/cbes_t24_2008/cbes_t24_2008"
 
+  require_relative "#{stds}/speed/speed"
+
   # Files with modules
   require_relative "#{stds}/Standards.Fan"
   require_relative "#{stds}/Standards.CoilDX"

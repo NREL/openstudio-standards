@@ -14,6 +14,7 @@ Run the commands:
 ```
 bundle update
 bundle exec rake data:update:manual
+bundle exec rake library:export_speed_schedules
 ```
 
 JSON data files are generated in `./data/standards/` folder.
