@@ -165,9 +165,9 @@ class ASHRAE901PRM < Standard
     #
     # If multiple methods are used, use per above grade wall
     # area (i.e. exterior wall area), if air/changes per hour
-    # or exterior surface area is used, use flow/area
+    # or exterior surface area is used, use Flow/ExteriorWallArea
     infil_method = model_get_infiltration_method(model)
-    infil_method = 'Flow/Area' if infil_method != 'Flow/Area' || infil_method != 'Flow/ExteriorWallArea'
+    infil_method = 'Flow/ExteriorWallArea' if infil_method != 'Flow/Area' || infil_method != 'Flow/ExteriorWallArea'
     infil_coefficients = model_get_infiltration_coefficients(model)
 
     # Set the infiltration rate at each space

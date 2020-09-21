@@ -146,6 +146,8 @@ def unique_properties(sheet_name)
            ['template', 'building_type', 'hvac_system']
          when 'climate_zones'
            ['name', 'standard']
+         when 'energy_recovery'
+           ['Template', 'Climate Zone']
          when 'prm_hvac_bldg_type'
            ['template', 'hvac_building_type']
          when 'prm_swh_bldg_type'

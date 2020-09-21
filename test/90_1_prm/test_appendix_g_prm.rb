@@ -99,11 +99,13 @@ class AppendixGPRMTests < Minitest::Test
   # @return [Hash] Hash of OpenStudio Model of the prototypes
   def generate_baseline(prototypes_generated, id_prototype_mapping)
     baseline_prototypes = {}
-    prototypes_generated.each do |id, model|
+    prototypes_generated.each do |id, proposed_model|
       building_type, template, climate_zone, mod = id_prototype_mapping[id]
 
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join("_")
+      # Create a deep copy of the proposed model
+      model = BTAP::FileIO::deep_copy(proposed_model)
 
       # Initialize Standard class
       prototype_creator = Standard.build('90.1-PRM-2019')
@@ -198,7 +200,7 @@ class AppendixGPRMTests < Minitest::Test
     ColumnName = '#{column_name}' AND
     Units = '#{units}'"
     # Run the query if the expected output is a string
-    return model.sqlFile.get.execAndReturnFirstString(query).get unless !units.empty?
+    return model.sqlFile.get.execAndReturnFirstString(query).get if units.empty?
 
     # Run the query if the expected output is a double
     return model.sqlFile.get.execAndReturnFirstDouble(query).get
@@ -374,10 +376,106 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # Check lighting occ sensor
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_light_occ_sensor(prototypes,prototypes_base)
+    light_sch = {}
+    prototypes.each do |prototype, model_proto|
+      building_type, template, climate_zone, mod = prototype
+      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
+      # Define name of spaces used for verification
+      space_name = JSON.parse(File.read("#{@@json_dir}/light_occ_sensor.json"))[run_id]
+      
+      # Get lighting schedule in prototype model
+      light_sch_model = {}
+      model_proto.getLightss.sort.each do |lgts|
+        light_sch_model_lgts = {}
+        
+        # get default schedule
+        day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
+        times = day_rule.times()
+        light_sch_model_default_rule = {}
+        times.each do |time|
+          light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
+        end
+        light_sch_model_lgts['default schedule'] = light_sch_model_default_rule
+        
+        # get daily schedule
+        lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
+          light_sch_model_week_rule = {}
+          day_rule = week_rule.daySchedule()
+          times = day_rule.times()
+          times.each do |time|
+            light_sch_model_week_rule[time.to_s] = day_rule.getValue(time)
+          end
+          light_sch_model_lgts[week_rule.name.to_s] = light_sch_model_week_rule
+        end
+        light_sch_model[lgts.name.to_s] = light_sch_model_lgts
+      end
+      light_sch[run_id] = light_sch_model
+    end
+
+    light_sch_base = {}
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, mod = prototype
+      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
+      # Define name of spaces used for verification
+      space_name = JSON.parse(File.read("#{@@json_dir}/light_occ_sensor.json"))[run_id]
+    
+      # Get lighting schedule in baseline model
+      model_baseline.getSpaceTypes.sort.each do |space_type|
+        light_sch_model_base = {}
+        space_type.lights.sort.each do |lgts|
+          light_sch_model_lgts_base = {}
+          light_sch_model_lgts_base['space_type'] = space_type.standardsSpaceType.to_s
+
+          # get default schedule
+          day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
+          times = day_rule.times()
+          light_sch_model_default_rule = {}
+          times.each do |time|
+            light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
+          end
+          light_sch_model_lgts_base['default schedule'] = light_sch_model_default_rule
+          
+          # get daily schedule
+          lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
+            light_sch_model_week_rule_base = {}
+            day_rule = week_rule.daySchedule()
+            times = day_rule.times()
+            times.each do |time|
+              light_sch_model_week_rule_base[time.to_s] = day_rule.getValue(time)
+            end
+            light_sch_model_lgts_base[week_rule.name.to_s] = light_sch_model_week_rule_base
+          end
+          light_sch_model_base[lgts.name.to_s] = light_sch_model_lgts_base
+        end
+      
+        # Check light schedule against expected light schedule
+        light_sch_model_base.each do |key, value|
+          value.each do |key1, value1|
+            if key1 != 'space_type'
+              value1.each do |key2, value2|
+                space_type_var = 0
+                space_name.each do |key3, value3|
+                  if value['space_type'] == key3
+                    space_type_var = value3
+                  end
+                end
+                assert(((light_sch[run_id][key][key1][key2] - value2*(1.0-space_type_var)).abs < 0.001), "Lighting schedule for the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
   # Check baseline infiltration calculations
   #
   # @param prototypes_base [Hash] Baseline prototypes
-  def check_infiltration(prototypes_base)
+  def check_infiltration(prototypes, prototypes_base)
     std = Standard.build('90.1-PRM-2019')
     space_env_areas = JSON.parse(File.read("#{@@json_dir}/space_envelope_areas.json"))
 
@@ -399,6 +497,21 @@ class AppendixGPRMTests < Minitest::Test
                                                                     infil_object.velocityTermCoefficient,
                                                                     infil_object.velocitySquaredTermCoefficient], 'Error in infiltration coeffcient retrieval.')
 
+    # Retrieve space envelope area for input prototypes
+    prototypes_spc_area_calc = {}
+    prototypes.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
+
+      # Get space envelope area
+      spc_env_area = 0
+      model.getSpaces.sort.each do |spc|
+        spc_env_area += std.space_envelope_area(spc, climate_zone)
+      end
+
+      prototypes_spc_area_calc[prototype] = spc_env_area
+    end
+
     prototypes_base.each do |prototype, model|
       building_type, template, climate_zone, mod = prototype
       
@@ -412,7 +525,7 @@ class AppendixGPRMTests < Minitest::Test
       model.getSpaces.sort.each do |spc|
         spc_env_area += std.space_envelope_area(spc, climate_zone)
       end
-      assert((space_env_areas[run_id].to_f - spc_env_area.round(2)).abs < 0.001, "Space envelope calculation is incorrect for the #{building_type}, #{template}, #{climate_zone} model: #{spc_env_area} (model) vs. #{space_env_areas[run_id]} (expected).")
+      assert((space_env_areas[run_id].to_f - spc_env_area.round(2)).abs < 0.001, "Space envelope calculation is incorrect for the #{building_type}, #{template}, #{climate_zone} model: #{spc_env_area.round(2)} (model) vs. #{space_env_areas[run_id]} (expected).")
 
       # Check that infiltrations are not assigned at
       # the space type level
@@ -421,8 +534,13 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # Back calculate the I_75 (cfm/ft2), expected value is 1 cfm/ft2 in 90.1-PRM-2019
+      # Use input prototype's space envelope area because, even though the baseline model space 
+      # conditioning can be different, 90.1-2019 Appendix G specified that:
+      # "The baseline building design shall be modeled with the same number of floors and 
+      # identical conditioned floor area as the proposed design."
+      # So it is assumed that the baseline space conditioning category shall be the same as the proposed.
       conv_fact = OpenStudio.convert(1, 'm^3/s', 'ft^3/min').to_f / OpenStudio.convert(1, 'm^2', 'ft^2').to_f
-      assert((std.model_current_building_envelope_infiltration_at_75pa(model, spc_env_area) * conv_fact).round(2) == 1.0, 'The baseline air leakage rate of the building envelope at a fixed building pressure of 75 Pa is different that the requirement (1 cfm/ft2).')
+      assert((std.model_current_building_envelope_infiltration_at_75pa(model, prototypes_spc_area_calc[prototype]) * conv_fact).round(2) == 1.0, 'The baseline air leakage rate of the building envelope at a fixed building pressure of 75 Pa is different that the requirement (1 cfm/ft2).')
     end
   end
 
@@ -798,6 +916,7 @@ class AppendixGPRMTests < Minitest::Test
       'lpd',
       'isresidential',
       'daylighting_control',
+      'light_occ_sensor',
       'infiltration',
       'hvac_baseline'
     ]
@@ -813,6 +932,7 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
 
     # Run tests
+<<<<<<< HEAD
     check_wwr(prototypes_base['wwr']) unless !(tests.include? 'wwr')
     check_daylighting_control(prototypes_base['daylighting_control']) unless !(tests.include? 'daylighting_control')
     check_residential_flag(prototypes_base['isresidential']) unless !(tests.include? 'isresidential')
@@ -820,5 +940,14 @@ class AppendixGPRMTests < Minitest::Test
     check_lpd(prototypes_base['lpd']) unless !(tests.include? 'lpd')
     check_infiltration(prototypes_base['infiltration']) unless !(tests.include? 'infiltration')
     check_hvac_type(prototypes_base['hvac_baseline']) unless !(tests.include? 'hvac_baseline')
+=======
+    check_wwr(prototypes_base['wwr']) if (tests.include? 'wwr')
+    check_daylighting_control(prototypes_base['daylighting_control']) if (tests.include? 'daylighting_control')
+    check_residential_flag(prototypes_base['isresidential']) if (tests.include? 'isresidential')
+    check_envelope(prototypes_base['envelope']) if (tests.include? 'envelope')
+    check_lpd(prototypes_base['lpd']) if (tests.include? 'lpd')
+    check_light_occ_sensor(prototypes['light_occ_sensor'],prototypes_base['light_occ_sensor']) if (tests.include? 'light_occ_sensor')
+    check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if (tests.include? 'infiltration')
+>>>>>>> AppendixG_Dev
   end
 end
