@@ -385,6 +385,8 @@ class Standard
   # @param cooling_tower_capacity_control [String] valid choices are Fluid Bypass, Fan Cycling, TwoSpeed Fan, Variable Speed Fan
   # @param number_of_cells_per_tower [Integer] the number of discrete cells per tower
   # @param number_cooling_towers [Integer] the number of cooling towers to be added (in parallel)
+  # @param use_90_1_design_sizing [Boolean] will determine the design sizing temperatures based on the 90.1 Appendix G approach.
+  #   Overrides sup_wtr_temp, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt, and wet_bulb_approach if true.
   # @param sup_wtr_temp [Double] supply water temperature in degrees Fahrenheit, default 70F
   # @param dsgn_sup_wtr_temp [Double] design supply water temperature in degrees Fahrenheit, default 85F
   # @param dsgn_sup_wtr_temp_delt [Double] design water range temperature in degrees Rankine, default 10R
@@ -399,6 +401,7 @@ class Standard
                         cooling_tower_capacity_control: 'TwoSpeed Fan',
                         number_of_cells_per_tower: 1,
                         number_cooling_towers: 1,
+                        use_90_1_design_sizing: true,
                         sup_wtr_temp: 70.0,
                         dsgn_sup_wtr_temp: 85.0,
                         dsgn_sup_wtr_temp_delt: 10.0,
@@ -521,6 +524,11 @@ class Standard
         cooling_tower.setNumberofCells(number_of_cells_per_tower)
         condenser_water_loop.addSupplyBranchForComponent(cooling_tower)
       end
+    end
+
+    # apply 90.1 sizing temperatures
+    if use_90_1_design_sizing
+      plant_loop_apply_prm_baseline_condenser_water_temperatures(condenser_water_loop)
     end
 
     # Condenser water loop pipes
