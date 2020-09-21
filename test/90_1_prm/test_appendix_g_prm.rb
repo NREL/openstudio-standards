@@ -164,7 +164,7 @@ class AppendixGPRMTests < Minitest::Test
     ColumnName = '#{column_name}' AND
     Units = '#{units}'"
     # Run the query if the expected output is a string
-    return model.sqlFile.get.execAndReturnFirstString(query).get unless !units.empty?
+    return model.sqlFile.get.execAndReturnFirstString(query).get if units.empty?
 
     # Run the query if the expected output is a double
     return model.sqlFile.get.execAndReturnFirstDouble(query).get
@@ -432,7 +432,7 @@ class AppendixGPRMTests < Minitest::Test
   # Check baseline infiltration calculations
   #
   # @param prototypes_base [Hash] Baseline prototypes
-  def check_infiltration(prototypes_base)
+  def check_infiltration(prototypes, prototypes_base)
     std = Standard.build('90.1-PRM-2019')
     space_env_areas = JSON.parse(File.read("#{@@json_dir}/space_envelope_areas.json"))
 
@@ -454,6 +454,21 @@ class AppendixGPRMTests < Minitest::Test
                                                                     infil_object.velocityTermCoefficient,
                                                                     infil_object.velocitySquaredTermCoefficient], 'Error in infiltration coeffcient retrieval.')
 
+    # Retrieve space envelope area for input prototypes
+    prototypes_spc_area_calc = {}
+    prototypes.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
+
+      # Get space envelope area
+      spc_env_area = 0
+      model.getSpaces.sort.each do |spc|
+        spc_env_area += std.space_envelope_area(spc, climate_zone)
+      end
+
+      prototypes_spc_area_calc[prototype] = spc_env_area
+    end
+
     prototypes_base.each do |prototype, model|
       building_type, template, climate_zone, mod = prototype
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
@@ -463,7 +478,7 @@ class AppendixGPRMTests < Minitest::Test
       model.getSpaces.sort.each do |spc|
         spc_env_area += std.space_envelope_area(spc, climate_zone)
       end
-      assert((space_env_areas[run_id].to_f - spc_env_area.round(2)).abs < 0.001, "Space envelope calculation is incorrect for the #{building_type}, #{template}, #{climate_zone} model: #{spc_env_area} (model) vs. #{space_env_areas[run_id]} (expected).")
+      assert((space_env_areas[run_id].to_f - spc_env_area.round(2)).abs < 0.001, "Space envelope calculation is incorrect for the #{building_type}, #{template}, #{climate_zone} model: #{spc_env_area.round(2)} (model) vs. #{space_env_areas[run_id]} (expected).")
 
       # Check that infiltrations are not assigned at
       # the space type level
@@ -472,8 +487,13 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # Back calculate the I_75 (cfm/ft2), expected value is 1 cfm/ft2 in 90.1-PRM-2019
+      # Use input prototype's space envelope area because, even though the baseline model space 
+      # conditioning can be different, 90.1-2019 Appendix G specified that:
+      # "The baseline building design shall be modeled with the same number of floors and 
+      # identical conditioned floor area as the proposed design."
+      # So it is assumed that the baseline space conditioning category shall be the same as the proposed.
       conv_fact = OpenStudio.convert(1, 'm^3/s', 'ft^3/min').to_f / OpenStudio.convert(1, 'm^2', 'ft^2').to_f
-      assert((std.model_current_building_envelope_infiltration_at_75pa(model, spc_env_area) * conv_fact).round(2) == 1.0, 'The baseline air leakage rate of the building envelope at a fixed building pressure of 75 Pa is different that the requirement (1 cfm/ft2).')
+      assert((std.model_current_building_envelope_infiltration_at_75pa(model, prototypes_spc_area_calc[prototype]) * conv_fact).round(2) == 1.0, 'The baseline air leakage rate of the building envelope at a fixed building pressure of 75 Pa is different that the requirement (1 cfm/ft2).')
     end
   end
 
@@ -503,12 +523,12 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
 
     # Run tests
-    check_wwr(prototypes_base['wwr']) unless !(tests.include? 'wwr')
-    check_daylighting_control(prototypes_base['daylighting_control']) unless !(tests.include? 'daylighting_control')
-    check_residential_flag(prototypes_base['isresidential']) unless !(tests.include? 'isresidential')
-    check_envelope(prototypes_base['envelope']) unless !(tests.include? 'envelope')
-    check_lpd(prototypes_base['lpd']) unless !(tests.include? 'lpd')
-    check_light_occ_sensor(prototypes['light_occ_sensor'],prototypes_base['light_occ_sensor']) unless !(tests.include? 'light_occ_sensor')
-    check_infiltration(prototypes_base['infiltration']) unless !(tests.include? 'infiltration')
+    check_wwr(prototypes_base['wwr']) if (tests.include? 'wwr')
+    check_daylighting_control(prototypes_base['daylighting_control']) if (tests.include? 'daylighting_control')
+    check_residential_flag(prototypes_base['isresidential']) if (tests.include? 'isresidential')
+    check_envelope(prototypes_base['envelope']) if (tests.include? 'envelope')
+    check_lpd(prototypes_base['lpd']) if (tests.include? 'lpd')
+    check_light_occ_sensor(prototypes['light_occ_sensor'],prototypes_base['light_occ_sensor']) if (tests.include? 'light_occ_sensor')
+    check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if (tests.include? 'infiltration')
   end
 end

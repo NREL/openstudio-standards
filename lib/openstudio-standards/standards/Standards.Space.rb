@@ -1435,12 +1435,9 @@ class Standard
       # Conditioned space OR semi-heated space <-> ground
       #
       # isGroundSurface does not check for Foundation outside boundary condition
-      # TODO: 90.1 excludes slab-on-grade as "floors", hence, they're currently excluded
       if surface.outsideBoundaryCondition == 'Outdoors' ||
-         (surface.isGroundSurface && surface.surfaceType == 'Wall') ||
-         (surface.outsideBoundaryCondition == 'Foundation' && surface.surfaceType == 'Wall') ||
-         (surface.isGroundSurface && surface.surfaceType == 'Roof') ||
-         (surface.outsideBoundaryCondition == 'Foundation' && surface.surfaceType == 'Roof')
+         surface.isGroundSurface ||
+         surface.outsideBoundaryCondition == 'Foundation'
         surf_cnt = true
       end
 
