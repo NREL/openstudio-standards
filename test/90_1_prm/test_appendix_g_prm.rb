@@ -33,7 +33,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = prototype
 
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_")
+      mod_str = mod.flatten.join("_") unless mod.length()
 
       # Initialize weather file, necessary but not used
       epw_file = 'USA_FL_Miami.Intl.AP.722020_TMY3.epw'
@@ -103,7 +103,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = id_prototype_mapping[id]
 
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_")
+      mod_str = mod.flatten.join("_") unless mod.length()
       # Create a deep copy of the proposed model
       model = BTAP::FileIO::deep_copy(proposed_model)
 
@@ -313,7 +313,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = prototype
 
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_")
+      mod_str = mod.flatten.join("_") unless mod.length()
 
       # Define name of surfaces used for verification
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
@@ -357,7 +357,7 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_base.each do |prototype, model_baseline|
       building_type, template, climate_zone, mod = prototype
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_")
+      mod_str = mod.flatten.join("_") unless mod.length()
       # Define name of spaces used for verification
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
       space_name = JSON.parse(File.read("#{@@json_dir}/lpd.json"))[run_id]
@@ -516,7 +516,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = prototype
       
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_")
+      mod_str = mod.flatten.join("_") unless mod.length()
 
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
 
@@ -554,7 +554,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = prototype
       
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_")
+      mod_str = mod.flatten.join("_") unless mod.length()
 
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
       @bldg_type_alt_now = @bldg_type_alt[prototype]
