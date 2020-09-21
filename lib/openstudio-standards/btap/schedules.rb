@@ -747,12 +747,15 @@ module BTAP
         end
         return ruleset
       end
+
       def self.create_annual_fraction_ruleset_schedule(model,name,hourArrayValues)
         self.create_annual_ruleset_schedule(model,name,"FRACTION",hourArrayValues)
       end
+
       def self.create_annual_on_off_ruleset_schedule(model,name,hourArrayValues)
         self.create_annual_ruleset_schedule(model,name,"ON_OFF",hourArrayValues)
       end
+
       def self.create_annual_temperature_ruleset_schedule(model,name,hourArrayValues)
         self.create_annual_ruleset_schedule(model,name,"TEMPERATURE",hourArrayValues)
       end
@@ -857,18 +860,6 @@ module BTAP
         # end
         # return ruleset
       # end
-
-      def self.create_annual_fraction_ruleset_schedule(model,name,hourArrayValues)
-        self.create_annual_ruleset_schedule(model,name,"FRACTION",hourArrayValues)
-      end
-
-      def self.create_annual_on_off_ruleset_schedule(model,name,hourArrayValues)
-        self.create_annual_ruleset_schedule(model,name,"ON_OFF",hourArrayValues)
-      end
-
-      def self.create_annual_temperature_ruleset_schedule(model,name,hourArrayValues)
-        self.create_annual_ruleset_schedule(model,name,"TEMPERATURE",hourArrayValues)
-      end
 
 
 

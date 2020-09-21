@@ -6,7 +6,30 @@ class NECB2011
                                             mau_heating_coil_type:,
                                             baseboard_type:,
                                             hw_loop:,
-                                            multi_speed: false)
+                                            multispeed: false)
+    if multispeed
+      add_sys1_unitary_ac_baseboard_heating_multi_speed(model: model,
+                                                        zones: zones,
+                                                        mau_type: mau_type,
+                                                        mau_heating_coil_type: mau_heating_coil_type,
+                                                        baseboard_type: baseboard_type,
+                                                        hw_loop: hw_loop)
+    else
+      add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
+                                                         zones: zones,
+                                                         mau_type: mau_type,
+                                                         mau_heating_coil_type: mau_heating_coil_type,
+                                                         baseboard_type: baseboard_type,
+                                                         hw_loop: hw_loop)
+    end
+  end
+
+  def add_sys1_unitary_ac_baseboard_heating_single_speed(model:,
+                                            zones:,
+                                            mau_type:,
+                                            mau_heating_coil_type:,
+                                            baseboard_type:,
+                                            hw_loop:)
 
     # Keep all data and assumptions for both systems on the top here for easy reference.
     system_data = Hash.new

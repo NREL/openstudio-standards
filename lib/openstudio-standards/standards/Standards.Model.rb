@@ -1511,6 +1511,7 @@ class Standard
     # Unitary ACs
     model.getCoilCoolingDXTwoSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
     model.getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
+    model.getCoilCoolingDXMultiSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_multi_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
 
     # WSHPs
     # set WSHP heating coils before cooling coils to get cooling coil capacities before they are renamed
@@ -1544,6 +1545,7 @@ class Standard
 
     # Gas Heaters
     model.getCoilHeatingGass.sort.each { |obj| coil_heating_gas_apply_efficiency_and_curves(obj) }
+    model.getCoilHeatingGasMultiStages.each {|obj| coil_heating_gas_multi_stage_apply_efficiency_and_curves(obj)}
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
   end
