@@ -932,15 +932,6 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
 
     # Run tests
-<<<<<<< HEAD
-    check_wwr(prototypes_base['wwr']) unless !(tests.include? 'wwr')
-    check_daylighting_control(prototypes_base['daylighting_control']) unless !(tests.include? 'daylighting_control')
-    check_residential_flag(prototypes_base['isresidential']) unless !(tests.include? 'isresidential')
-    check_envelope(prototypes_base['envelope']) unless !(tests.include? 'envelope')
-    check_lpd(prototypes_base['lpd']) unless !(tests.include? 'lpd')
-    check_infiltration(prototypes_base['infiltration']) unless !(tests.include? 'infiltration')
-    check_hvac_type(prototypes_base['hvac_baseline']) unless !(tests.include? 'hvac_baseline')
-=======
     check_wwr(prototypes_base['wwr']) if (tests.include? 'wwr')
     check_daylighting_control(prototypes_base['daylighting_control']) if (tests.include? 'daylighting_control')
     check_residential_flag(prototypes_base['isresidential']) if (tests.include? 'isresidential')
@@ -948,6 +939,6 @@ class AppendixGPRMTests < Minitest::Test
     check_lpd(prototypes_base['lpd']) if (tests.include? 'lpd')
     check_light_occ_sensor(prototypes['light_occ_sensor'],prototypes_base['light_occ_sensor']) if (tests.include? 'light_occ_sensor')
     check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if (tests.include? 'infiltration')
->>>>>>> AppendixG_Dev
+    check_hvac_type(prototypes_base['hvac_baseline']) if (tests.include? 'hvac_baseline')
   end
 end
