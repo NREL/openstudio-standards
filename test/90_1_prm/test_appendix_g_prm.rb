@@ -31,9 +31,9 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_to_generate.each do |id, prototype|
       # mod is an array of method intended to modify the model
       building_type, template, climate_zone, mod = prototype
-
+  
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_") unless mod.length()
+      mod_str = mod.flatten.join("_") unless mod.length == 0
 
       # Initialize weather file, necessary but not used
       epw_file = 'USA_FL_Miami.Intl.AP.722020_TMY3.epw'
@@ -46,7 +46,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # Define model name and run folder if it doesn't already exist,
       # if it does, remove it and re-create it.
-      model_name = "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
+      model_name = mod.length == 0 ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
       run_dir = "#{@test_dir}/#{model_name}"
       if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
@@ -103,7 +103,8 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = id_prototype_mapping[id]
 
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_") unless mod.length()
+      mod_str = mod.flatten.join("_") unless mod.length == 0
+
       # Create a deep copy of the proposed model
       model = BTAP::FileIO::deep_copy(proposed_model)
 
@@ -138,7 +139,7 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # Define run directory and run name, delete existing folder if it exists
-      model_name = "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
+      model_name = mod.length == 0 ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
       run_dir = "#{@test_dir}/#{model_name}"
       run_dir_baseline = "#{run_dir}-Baseline"
       if Dir.exist?(run_dir_baseline)
@@ -163,7 +164,8 @@ class AppendixGPRMTests < Minitest::Test
 
       # Load newly generated baseline model
       @test_dir = "#{File.dirname(__FILE__)}/output"
-      model_baseline = OpenStudio::Model::Model.load("#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-#{mod_str}-Baseline/final.osm")
+      model_baseline_file_name = mod.length == 0 ? "#{building_type}-#{template}-#{climate_zone}-Baseline/final.osm" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}-Baseline/final.osm"
+      model_baseline = OpenStudio::Model::Model.load("#{@test_dir}/#{model_baseline_file_name}")
       model_baseline = model_baseline.get
 
       # Do sizing run for baseline model
@@ -313,7 +315,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = prototype
 
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_") unless mod.length()
+      mod_str = mod.flatten.join("_") unless mod.length == 0
 
       # Define name of surfaces used for verification
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
@@ -355,9 +357,12 @@ class AppendixGPRMTests < Minitest::Test
   # @param prototypes_base [Hash] Baseline prototypes
   def check_lpd(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
+
       building_type, template, climate_zone, mod = prototype
+
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_") unless mod.length()
+      mod_str = mod.flatten.join("_") unless mod.length == 0
+
       # Define name of spaces used for verification
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
       space_name = JSON.parse(File.read("#{@@json_dir}/lpd.json"))[run_id]
@@ -516,7 +521,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = prototype
       
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_") unless mod.length()
+      mod_str = mod.flatten.join("_") unless mod.length == 0
 
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
 
@@ -554,7 +559,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = prototype
       
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_") unless mod.length()
+      mod_str = mod.flatten.join("_") unless mod.length == 0
 
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
       @bldg_type_alt_now = @bldg_type_alt[prototype]
@@ -689,8 +694,6 @@ class AppendixGPRMTests < Minitest::Test
 
     end
   end
-
-
 
   # Check if all baseline system types are PSZ
   # @param model, sub_text for error messages
@@ -902,8 +905,12 @@ class AppendixGPRMTests < Minitest::Test
     bldg_type_new = arguments[0]
     @bldg_type_alt_now = bldg_type_new
     return model
-    end
+  end
 
+  def remove_transformer(model, arguments)
+    model.getElectricLoadCenterTransformers.each(&:remove)
+    return model
+  end
 
   # Run test suite for the ASHRAE 90.1 appendix G Performance
   # Rating Method (PRM) baseline automation implementation
