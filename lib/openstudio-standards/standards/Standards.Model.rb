@@ -9,6 +9,42 @@ class Standard
   end
 
   # @!group Model
+  
+  # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
+  # Method used for 90.1-2016 and onward
+  #
+  # @note Per 90.1, the Performance Rating Method "does NOT offer an alternative compliance path for minimum standard compliance."
+  # This means you can't use this method for code compliance to get a permit.
+  # @param user_model [OpenStudio::model::Model] User specified OpenStudio model
+  # @param building_type [String] the building type
+  # @param climate_zone [String] the climate zone
+  # @param hvac_building_type [String] the building type for baseline HVAC system determination (90.1-2016 and onward)
+  # @param wwr_building_type [String] the building type for baseline WWR determination (90.1-2016 and onward)
+  # @param swh_building_type [String] the building type for baseline SWH determination (90.1-2016 and onward)
+  # @param custom [String] the custom logic that will be applied during baseline creation.  Valid choices are 'Xcel Energy CO EDA' or '90.1-2007 with addenda dn'.
+  #   If nothing is specified, no custom logic will be applied; the process will follow the template logic explicitly.
+  # @param sizing_run_dir [String] the directory where the sizing runs will be performed
+  # @param run_all_orients [Boolean] indicate weather a baseline model should be created for all 4 orientations: same as user model, +90 deg, +180 deg, +270 deg
+  # @param debug [Boolean] If true, will report out more detailed debugging output
+  # @return [Bool] returns true if successful, false if not
+  
+  # Method used for 90.1-2016 and onward
+  def model_create_prm_stable_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = true, debug = false)
+    model_create_prm_any_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, true, custom, sizing_run_dir, run_all_orients, debug)
+  end
+
+  # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
+  # Method used for 90.1-2013 and prior
+  # @param user_model [OpenStudio::model::Model] User specified OpenStudio model
+  # @param building_type [String] the building type
+  # @param climate_zone [String] the climate zone
+  # @param custom [String] the custom logic that will be applied during baseline creation.  Valid choices are 'Xcel Energy CO EDA' or '90.1-2007 with addenda dn'.
+  #   If nothing is specified, no custom logic will be applied; the process will follow the template logic explicitly.
+  # @param sizing_run_dir [String] the directory where the sizing runs will be performed
+  # @param debug [Boolean] If true, will report out more detailed debugging output
+  def model_create_prm_baseline_building(model, building_type, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
+    model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', false, custom, sizing_run_dir, false, debug)
+  end
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
   # based on the inputs currently in the model.
@@ -16,25 +52,20 @@ class Standard
   #
   # @note Per 90.1, the Performance Rating Method "does NOT offer an alternative compliance path for minimum standard compliance."
   # This means you can't use this method for code compliance to get a permit.
+  # @param user_model [OpenStudio::model::Model] User specified OpenStudio model
   # @param building_type [String] the building type
   # @param climate_zone [String] the climate zone
+  # @param hvac_building_type [String] the building type for baseline HVAC system determination (90.1-2016 and onward)
+  # @param wwr_building_type [String] the building type for baseline WWR determination (90.1-2016 and onward)
+  # @param swh_building_type [String] the building type for baseline SWH determination (90.1-2016 and onward)
+  # @param model_deep_copy [Boolean] indicate if the baseline model is created based on a deep copy of the user specified model
   # @param custom [String] the custom logic that will be applied during baseline creation.  Valid choices are 'Xcel Energy CO EDA' or '90.1-2007 with addenda dn'.
   #   If nothing is specified, no custom logic will be applied; the process will follow the template logic explicitly.
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
+  # @param run_all_orients [Boolean] indicate weather a baseline model should be created for all 4 orientations: same as user model, +90 deg, +180 deg, +270 deg
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
-  
-  # Method used for 90.1-2016 and onward
-  def model_create_prm_stable_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = true, debug = false)
-    model_create_prm_any_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, custom, sizing_run_dir, run_all_orients, debug)
-  end
-
-  # Method used for 90.1-2013 and prior
-  def model_create_prm_baseline_building(model, building_type, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
-    model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', custom, sizing_run_dir, false, debug)
-  end
-
-  def model_create_prm_any_baseline_building(prop_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, debug = false)
+  def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, debug = false)
     # Define different orientation from original orientation
     # for each individual baseline models
     degs_from_org = run_all_orients ? [0, 90, 180, 270] : [0]
@@ -43,7 +74,8 @@ class Standard
     degs_from_org.each do |degs|
       # New baseline model:
       # Starting point is the original proposed model
-      model = BTAP::FileIO::deep_copy(prop_model)
+      # Create a deep copy of the user model if requested
+      model = model_deep_copy ? BTAP::FileIO::deep_copy(user_model) : user_model
       model.getBuilding.setName("#{template}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
 
       # Rotate building if requested,
