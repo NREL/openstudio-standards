@@ -14,5 +14,7 @@
     "RetailStandalone":"retail",
     "PrimarySchool":"other nonresidential",
     "SecondarySchool":"other nonresidential",
-    "Warehouse":"heated-only storage"
+    "Warehouse":"heated-only storage",
+    "Assembly":"public assembly",
+    "Retail":"retail"
  }

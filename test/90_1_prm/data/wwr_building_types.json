@@ -14,5 +14,6 @@
     "RetailStandalone":"Retail (stand alone)",
     "PrimarySchool":"School (primary)",
     "SecondarySchool":"School (secondary and university)",
-    "Warehouse":"Warehouse (nonrefrigerated)"
+    "Warehouse":"Warehouse (nonrefrigerated)",
+    "Assembly":"All others"
  }

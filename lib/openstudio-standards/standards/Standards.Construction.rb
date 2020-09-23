@@ -236,6 +236,7 @@ class Standard
     end
 
     # Not simple unless the layer is a SimpleGlazing material
+    # if construction.layers.first.to_SimpleGlazing.empty?
     if construction.layers.first.to_SimpleGlazing.empty?
       return false
     end
@@ -590,7 +591,7 @@ class Standard
   end
 
   def change_construction_properties_in_model(model, values, is_percentage = false)
-    puts JSON.pretty_generate(values)
+    # puts JSON.pretty_generate(values)
     #copy orginal model for reporting.
     before_measure_model = BTAP::FileIO.deep_copy(model)
     #report change as Info
@@ -645,6 +646,7 @@ class Standard
 
   def apply_changes_to_surface_construction(model, surface, conductance = nil, shgc = nil, tvis = nil, is_percentage = false)
     # If user has no changes...do nothing and return true.
+
     return true if conductance.nil? and shgc.nil? and tvis.nil?
     standard = Standard.new()
     construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get

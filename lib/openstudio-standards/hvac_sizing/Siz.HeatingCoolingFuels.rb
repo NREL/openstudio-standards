@@ -194,6 +194,358 @@ class OpenStudio::Model::Model
 
   end
 
+  # Get type of heat for coil for Appendix G system type selections
+  # 
+  # @param heating_coil [object] 
+  # @return string description of heat type: Fuel, Electric, District, HeatPump, Solar, Mixed
+  def coil_heat_type(heating_coil)
+    fuels = []
+    heat_type = ''
+    # Get the object type
+    obj_type = heating_coil.iddObjectType.valueName.to_s
+    case obj_type
+    when 'OS_Coil_Heating_DX_MultiSpeed'
+      heat_type = 'HeatPump'
+    when 'OS_Coil_Heating_DX_SingleSpeed'
+      heat_type = 'HeatPump'
+    when 'OS_Coil_Heating_DX_VariableRefrigerantFlow'
+      heat_type = 'HeatPump'
+    when 'OS_Coil_Heating_DX_VariableSpeed'
+      heat_type = 'HeatPump'
+    when 'OS_Coil_Heating_Desuperheater'
+      heat_type = 'Electric'
+    when 'OS_Coil_Heating_Electric'
+      heat_type = 'Electric'
+    when 'OS_Coil_Heating_Gas'
+      heat_type = 'Fuel'
+    when 'OS_Coil_Heating_Gas_MultiStage'
+      heat_type = 'Fuel'
+    when 'OS_Coil_Heating_Water'
+      heating_coil = heating_coil.to_CoilHeatingWater.get
+      if heating_coil.plantLoop.is_initialized
+        fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
+      end
+    when 'OS_Coil_Heating_Water_BaseboardRadiant'
+      heating_coil = heating_coil.to_CoilHeatingWaterBaseboardRadiant.get
+        if heating_coil.plantLoop.is_initialized
+        fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
+      end  
+    when 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit'
+      fuels << 'Electricity'
+      heating_coil = heating_coil.to_CoilHeatingWaterToAirHeatPumpEquationFit.get
+      if heating_coil.plantLoop.is_initialized
+        fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
+      end
+    when 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit'
+      fuels << 'Electricity'
+      heating_coil = heating_coil.to_CoilHeatingWaterToAirHeatPumpVariableSpeedEquationFit.get
+      if heating_coil.plantLoop.is_initialized
+        fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
+      end
+    when 'OS_Coil_Heating_LowTemperatureRadiant_ConstantFlow'
+      heating_coil = heating_coil.to_CoilHeatingLowTempRadiantConstFlow.get
+      if heating_coil.plantLoop.is_initialized
+        fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
+      end
+    when 'OS_Coil_Heating_LowTemperatureRadiant_VariableFlow'
+      heating_coil = heating_coil.to_CoilHeatingLowTempRadiantVarFlow.get
+      if heating_coil.plantLoop.is_initialized
+        fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
+      end
+    when 'OS_Coil_WaterHeating_AirToWaterHeatPump'
+      heat_type = 'Electricity'
+    when 'OS_Coil_WaterHeating_Desuperheater'
+      heat_type = 'Electricity'
+    else
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heating fuel types found for #{obj_type}")
+    end
+
+    has_electric = false
+    has_fuel = false
+    has_district = false
+    has_solar = false
+    has_hp = false
+    if fuels.size > 0
+      fuels.sort.each do |fuel|
+        case fuel
+        when 'Electricity'
+          has_electric = true
+        when 'DistrictHeating'
+          has_district = true
+        when 'SolarEnergy'
+          has_solar = true
+        when 'NaturalGas', 'PropaneGas', 'Coal', 'Diesel'
+          has_fuel = true
+        when 'FuelOilNo1', 'FuelOilNo2'
+          has_fuel = true
+        end
+      end
+    end
+    
+    # Choose only one heat type, or Mixed if there are multiple
+    if heat_type == ''
+      if has_fuel == true
+        heat_type = 'Fuel'
+      end
+      if has_district == true  && heat_type != 'District'
+        if heat_type == ''
+          heat_type = 'District'
+        else
+          heat_type = 'Mixed'
+        end
+      end
+      if has_electric == true && heat_type != 'Electric'
+        if heat_type == ''
+          heat_type = 'Electric'
+        else
+          heat_type = 'Mixed'
+        end
+      end
+      if has_solar == true && heat_type != 'Solar'
+        if heat_type == ''
+          heat_type = 'Solar'
+        else
+          heat_type = 'Mixed'
+        end
+      end
+      if has_hp == true && heat_type != 'HeatPump'
+        if heat_type == ''
+          heat_type = 'HeatPump'
+        elsif heat_type != 'HeatPump'
+          heat_type = 'Mixed'
+        end
+      end
+    end
+
+    return heat_type
+  end
+
+  # Get primary type of heat for one air loop for Appendix G system type selections
+  # 
+  # @param air_loop [object] 
+  # @return string description of heat type: Fuel, Electric, District, HeatPump, Solar, Mixed
+  def airloop_primary_heat_type(air_loop)
+
+    heat_types = []
+    air_loop.supplyComponents.each do |component|
+      # Get the object type
+      obj_type = component.iddObjectType.valueName.to_s
+      case obj_type
+      when 'OS_AirLoopHVAC_UnitaryHeatCool_VAVChangeoverBypass'
+        component = component.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.get
+        heat_types << self.coil_heat_type(component.heatingCoil)
+      when 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir'
+        component = component.to_AirLoopHVACUnitaryHeatPumpAirToAir.get
+        heat_types << self.coil_heat_type(component.heatingCoil)
+      when 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir_MultiSpeed'
+        component = component.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get
+        heat_types << self.coil_heat_type(component.heatingCoil)
+      when 'OS_AirLoopHVAC_UnitarySystem'
+        component = component.to_AirLoopHVACUnitarySystem.get
+        if component.heatingCoil.is_initialized
+          heat_types << self.coil_heat_type(component.heatingCoil.get)
+        end
+      when 'OS_Coil_Heating_DX_MultiSpeed'
+        heat_types << self.coil_heat_type(component)
+      when 'OS_Coil_Heating_DX_SingleSpeed'
+        heat_types << self.coil_heat_type(component)
+      when 'OS_Coil_Heating_DX_VariableSpeed'
+        heat_types << self.coil_heat_type(component)
+      when 'OS_Coil_Heating_Desuperheater'
+        heat_types << self.coil_heat_type(component)
+      when 'OS_Coil_Heating_Electric'
+        heat_types << self.coil_heat_type(component)
+      when 'OS_Coil_Heating_Gas'
+        heat_types << self.coil_heat_type(component)
+      when 'OS_Coil_Heating_Gas_MultiStage'
+        heat_types << self.coil_heat_type(component)
+      when 'OS_Coil_Heating_Water'
+        heat_types << self.coil_heat_type(component)  
+      when 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit'
+        heat_types << self.coil_heat_type(component)
+      when 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeed_EquationFit'
+        heat_types << self.coil_heat_type(component)
+      when 'OS_Coil_WaterHeating_AirToWaterHeatPump'
+        heat_types << self.coil_heat_type(component)
+      when 'OS_Coil_WaterHeating_Desuperheater'
+        heat_types << self.coil_heat_type(component)
+      when 'OS_Node', 'OS_Fan_ConstantVolume', 'OS_Fan_VariableVolume', 'OS_AirLoopHVAC_OutdoorAirSystem'
+        # To avoid extraneous debug messages  
+      else
+        #OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heating fuel types found for #{obj_type}")
+      end
+    end    
+
+    has_electric = false
+    has_fuel = false
+    has_district = false
+    has_solar = false
+    has_hp = false
+    has_mixed = false
+    if heat_types.size > 0
+      heat_types.sort.each do |heat_type|
+         case heat_type
+        when 'Electricity', 'Electric'
+          has_electric = true
+        when 'DistrictHeating', 'District'
+          has_district = true
+        when 'SolarEnergy', 'Solar'
+          has_solar = true
+        when 'NaturalGas', 'Fuel', 'PropaneGas', 'Coal', 'Diesel'
+          has_fuel = true
+        when 'FuelOilNo1', 'FuelOilNo2'
+          has_fuel = true
+        when 'HeatPump'
+          has_hp = true
+        when 'Mixed'
+          has_mixed = true
+        end
+      end
+    end
+
+    # Choose only one heat type, or Mixed if there are multiple
+    heat_type = ''
+    if has_mixed == true
+      heat_type = 'Mixed'
+    end
+    if has_fuel == true && heat_type != 'Fuel'
+      if heat_type == ''
+        heat_type = 'Fuel'
+      else
+        heat_type = 'Mixed'
+      end
+    end
+    if has_district == true && heat_type != 'District'
+      if heat_type == ''
+        heat_type = 'District'
+      else
+        heat_type = 'Mixed'
+      end
+    end
+    if has_electric == true && heat_type != 'Electric'
+      if heat_type == ''
+        heat_type = 'Electric'
+      else
+        heat_type = 'Mixed'
+      end
+    end
+    if has_solar == true && heat_type != 'Solar'
+      if heat_type == ''
+        heat_type = 'Solar'
+      else
+        heat_type = 'Mixed'
+      end
+    end
+    if has_hp == true && heat_type != 'HeatPump'
+      # Assume any additional heat types are supplemental
+      heat_type = 'HeatPump'
+    end
+
+    return heat_type
+
+  end
+
+  # Get primary type of heat for one air loop for Appendix G system type selections
+  # 
+  # @param air_loop [object] 
+  # @return string description of heat type: Fuel, Electric, District, HeatPump, Solar, Mixed
+  def zone_equipment_heat_type(zone)
+    fuels = []
+    heat_type = ''
+    # Get the heating fuels for all zone HVAC equipment
+    zone.equipment.each do |equipment|
+      # Get the object type
+      obj_type = equipment.iddObjectType.valueName.to_s
+      case obj_type
+      when 'OS_AirTerminal_SingleDuct_ConstantVolume_FourPipeInduction'
+        equipment = equipment.to_AirTerminalSingleDuctConstantVolumeFourPipeInduction.get
+        heat_type = self.coil_heat_type(equipment.heatingCoil)
+      when 'OS_AirTerminal_SingleDuct_ConstantVolume_Reheat'
+        equipment = equipment.to_AirTerminalSingleDuctConstantVolumeReheat.get
+        heat_type = self.coil_heat_type(equipment.reheatCoil)  
+      when 'OS_AirTerminal_SingleDuct_InletSideMixer'
+        # TODO
+      when 'OS_AirTerminal_SingleDuct_ParallelPIUReheat'
+        equipment = equipment.to_AirTerminalSingleDuctParallelPIUReheat.get
+        heat_type = self.coil_heat_type(equipment.reheatCoil) 
+      when 'OS_AirTerminal_SingleDuct_SeriesPIUReheat'
+        equipment = equipment.to_AirTerminalSingleDuctSeriesPIUReheat.get
+        heat_type = self.coil_heat_type(equipment.reheatCoil) 
+      when 'OS_AirTerminal_SingleDuct_VAVHeatAndCool_Reheat'
+        equipment = equipment.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.get
+        heat_type = self.coil_heat_type(equipment.reheatCoil) 
+      when 'OS_AirTerminal_SingleDuct_VAV_Reheat'
+        equipment = equipment.to_AirTerminalSingleDuctVAVReheat.get
+        heat_type = self.coil_heat_type(equipment.reheatCoil)
+      when 'OS_ZoneHVAC_Baseboard_Convective_Water'
+        equipment = equipment.to_ZoneHVACBaseboardConvectiveWater.get
+        heat_type = self.coil_heat_type(equipment.heatingCoil) 
+      when 'OS_ZoneHVAC_Baseboard_RadiantConvective_Water'
+        equipment = equipment.to_ZoneHVACBaseboardRadiantConvectiveWater.get
+        heat_type = self.coil_heat_type(equipment.heatingCoil) 
+      when 'OS_ZoneHVAC_FourPipeFanCoil'
+        equipment = equipment.to_ZoneHVACFourPipeFanCoil.get
+        heat_type = self.coil_heat_type(equipment.heatingCoil) 
+      when 'OS_ZoneHVAC_LowTemperatureRadiant_ConstantFlow'
+        equipment = equipment.to_ZoneHVACLowTempRadiantConstFlow.get
+        heat_type = self.coil_heat_type(equipment.heatingCoil) 
+      when 'OS_ZoneHVAC_LowTemperatureRadiant_VariableFlow'
+        equipment = equipment.to_ZoneHVACLowTempRadiantVarFlow.get
+        heat_type = self.coil_heat_type(equipment.heatingCoil) 
+      when 'OS_ZoneHVAC_UnitHeater'
+        equipment = equipment.to_ZoneHVACUnitHeater.get
+        heat_type = self.coil_heat_type(equipment.heatingCoil) 
+      when 'OS_ZoneHVAC_UnitVentilator'
+        equipment = equipment.to_ZoneHVACUnitVentilator.get
+        if equipment.heatingCoil.is_initialized
+          heat_type = self.coil_heat_type(equipment.heatingCoil.get) 
+        end 
+      when 'OS_ZoneHVAC_Baseboard_Convective_Electric'
+        heat_type = 'Electric'
+      when 'OS_ZoneHVAC_Baseboard_RadiantConvective_Electric'
+        heat_type = 'Electric'
+      when 'OS_ZoneHVAC_HighTemperatureRadiant'
+        equipment = equipment.to_ZoneHVACHighTemperatureRadiant.get
+        case equipment.fuelType
+        when 'Electricity'
+          heat_type = 'Electric'
+        when 'DistrictHeating', 'District'
+          heat_type = 'District'
+        when 'SolarEnergy', 'Solar'
+          heat_type = 'Solar'
+        when 'NaturalGas', 'Fuel', 'PropaneGas', 'Coal', 'Diesel'
+          heat_type = 'Fuel'
+        when 'FuelOilNo1', 'FuelOilNo2'
+          heat_type = 'Fuel'
+        when 'HeatPump'
+          heat_type = 'HeatPump'
+        else
+          heat_type = 'Other'
+        end
+      when 'OS_ZoneHVAC_IdealLoadsAirSystem'
+        heat_type = 'District'
+      when 'OS_ZoneHVAC_LowTemperatureRadiant_Electric'
+        heat_type = 'Electric'
+      when 'OS_ZoneHVAC_PackagedTerminalAirConditioner'
+        equipment = equipment.to_ZoneHVACPackagedTerminalAirConditioner.get
+        heat_type = self.coil_heating_fuels(equipment.heatingCoil)
+      when 'OS_ZoneHVAC_PackagedTerminalHeatPump'
+        heat_type = 'HeatPump'
+      when 'OS_ZoneHVAC_TerminalUnit_VariableRefrigerantFlow'
+        heat_type = 'HeatPump'
+      when 'OS_ZoneHVAC_WaterToAirHeatPump'
+        # We also go check what fuel serves the loop on which the WSHP heating coil is
+        equipment = equipment.to_ZoneHVACWaterToAirHeatPump.get
+        heat_type = self.coil_heat_type(equipment.heatingCoil)
+      else
+        OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heat type found for #{obj_type}")      end
+    end
+    
+    return heat_type
+    
+  end
+
+
   # Get the cooling fuel type of a cooling coil
   def coil_cooling_fuels(cooling_coil)
     fuels = []
