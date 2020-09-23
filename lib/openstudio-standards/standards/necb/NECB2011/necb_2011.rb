@@ -21,8 +21,6 @@ class NECB2011 < Standard
   end
 
 
-
-
   # Combine the data from the JSON files into a single hash
   # Load JSON files differently depending on whether loading from
   # the OpenStudio CLI embedded filesystem or from typical gem installation
@@ -272,8 +270,21 @@ class NECB2011 < Standard
                            fixed_wind_solar_trans: nil,
                            skylight_solar_trans: nil,
                            fdwr_set: -1,
-                           srr_set: -1
+                           srr_set: -1,
+                           rotation_degrees: nil,
+                           scale_x: nil,
+                           scale_y: nil,
+                           scale_z: nil
   )
+
+    BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees.nil?
+    unless scale_x.nil? && scale_y.nil? && scale_z.nil?
+      scale_x = 1 if scale_x.nil?
+      scale_y = 1 if scale_y.nil?
+      scale_z = 1 if scale_y.nil?
+      BTAP::Geometry::scale_model(model, scale_x, scale_y, scale_z)
+    end
+
     apply_weather_data(model: model, epw_file: epw_file)
     apply_loads(model: model, lights_type: lights_type, lights_scale: lights_scale)
     apply_envelope(model: model,
