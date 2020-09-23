@@ -963,6 +963,10 @@ class Standard
 
   # Determine whether or not water fixtures are attached to spaces
   def model_attach_water_fixtures_to_spaces?(model)
+    # TODO: For hotels and apartments, add the water fixture at the space level
+    # if building_type!=nil && ((building_type.downcase.include?"hotel") || (building_type.downcase.include?"apartment"))
+    #   return true
+    # end
     return false
   end
 

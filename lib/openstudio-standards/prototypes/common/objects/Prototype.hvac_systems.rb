@@ -3268,9 +3268,6 @@ class Standard
     setpoint_mgr_cooling.addToNode(air_loop.supplyOutletNode)
 
     # create fan
-    # ConstantVolume: Packaged Rooftop Single Zone Air conditioner
-    # Cycling: Unitary System
-    # CyclingHeatPump: Unitary Heat Pump system
     fan = create_fan_by_name(model,
                              'VAV_System_Fan',
                              fan_name: "#{air_loop.name} Fan")

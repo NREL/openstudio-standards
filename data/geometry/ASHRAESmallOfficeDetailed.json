@@ -2,7 +2,7 @@
   {
     "type": "PSZ-AC",
     "name": "PSZ-AC-1",
-	"operation_schedule": "OfficeSmall HVACOperationSchd",
+    "operation_schedule": "OfficeSmall HVACOperationSchd",
     "oa_damper_schedule": "OfficeSmall MinOA_Sched",
     "fan_type": "Cycling",
     "cooling_type": "Single Speed Heat Pump",
@@ -101,7 +101,6 @@
     "supplemental_heating_type": "Gas",
     "space_names": [
       "EnclosedOffice_4"
-	  
     ]
   },
    {

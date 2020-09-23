@@ -69,7 +69,7 @@ class Standard
 
     # Add daylighting controls to each space
     model.getSpaces.sort.each do |space|
-      added = space_add_daylighting_controls(space, false, false, climate_zone)
+      added = space_add_daylighting_controls(space, false, false)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
@@ -1551,12 +1551,12 @@ class Standard
   end
 
   # Applies daylighting controls to each space in the model per the standard.
-  def model_add_daylighting_controls(model, climate_zone)
+  def model_add_daylighting_controls(model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding daylighting controls.')
 
     # Add daylighting controls to each space
     model.getSpaces.sort.each do |space|
-      added = space_add_daylighting_controls(space, false, false, climate_zone)
+      added = space_add_daylighting_controls(space, false, false)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding daylighting controls.')
@@ -4055,6 +4055,10 @@ class Standard
       building_type = 'LrgDCHighITE'
     elsif building_type == 'Laboratory'
       building_type = 'Laboratory'
+    elsif building_type == 'TallBuilding'
+      building_type = 'TallBldg'
+    elsif building_type == 'SuperTallBuilding'
+      building_type = 'SpTallBldg'
     end
 
     parts = [template]
