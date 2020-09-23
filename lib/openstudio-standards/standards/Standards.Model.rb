@@ -207,11 +207,6 @@ class Standard
         # district_heat_zones.each {|key, value| puts "#{key} = #{value}" }
       end
       
-      # Remove all HVAC from model, excluding service water heating
-      model_remove_prm_hvac(model)
-
-      # Remove all EMS objects from the model
-      model_remove_prm_ems_objects(model)
       # Set the construction properties of all the surfaces in the model
       if /prm/i !~ template
         model_apply_standard_constructions(model, climate_zone)
