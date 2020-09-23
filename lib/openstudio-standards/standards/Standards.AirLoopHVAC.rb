@@ -114,16 +114,6 @@ class Standard
           thermal_zone_convert_oa_req_to_per_area(zone)
         end
       end
-    else
-      # For systems that do not require DCV,
-      # convert OA requirements to per-area values
-      # so that other features such as
-      # multizone VAV optimization do not
-      # incorrectly take variable occupancy into account.
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Converting ventilation requirements to per-area for all zones served because DCV not required for system.")
-      air_loop_hvac.thermalZones.sort.each do |zone|
-        thermal_zone_convert_oa_req_to_per_area(zone)
-      end
     end
 
     # SAT reset

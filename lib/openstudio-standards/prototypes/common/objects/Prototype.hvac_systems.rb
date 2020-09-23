@@ -1620,7 +1620,7 @@ class Standard
     end
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
-    controller_mv.setSystemOutdoorAirMethod('VentilationRateProcedure')
+    controller_mv.setSystemOutdoorAirMethod('ZoneSum')
     oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_intake_controller)
     oa_intake.setName("#{air_loop.name} OA System")
     oa_intake.addToNode(air_loop.supplyInletNode)
@@ -1797,7 +1797,7 @@ class Standard
     # oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
-    controller_mv.setSystemOutdoorAirMethod('VentilationRateProcedure')
+    controller_mv.setSystemOutdoorAirMethod('ZoneSum')
     oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_intake_controller)
     oa_intake.setName("#{air_loop.name} OA System")
     oa_intake.addToNode(air_loop.supplyInletNode)
@@ -2117,7 +2117,7 @@ class Standard
     oa_intake_controller.resetEconomizerMinimumLimitDryBulbTemperature
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
-    controller_mv.setSystemOutdoorAirMethod('VentilationRateProcedure')
+    controller_mv.setSystemOutdoorAirMethod('ZoneSum')
 
     oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_intake_controller)
     oa_intake.setName("#{air_loop.name} OA System")
