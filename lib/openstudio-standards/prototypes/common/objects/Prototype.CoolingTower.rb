@@ -17,14 +17,18 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "For condenser loop #{condenser_loop.name}, no design day OATwb conditions given.  CTI rating condition of 78F OATwb will be used for sizing cooling towers.")
     end
 
-    # There is an EnergyPlus model limitation that the design_oat_wb_f < 80F for cooling towers
+    # EnergyPlus has a minimum limit of 68F and maximum limit of 80F for cooling towers
     design_wet_bulb_f = OpenStudio.convert(design_wet_bulb_c, 'C', 'F').get
-    ep_max_design_wet_bulb_f = 80.0
-    if design_wet_bulb_f > ep_max_design_wet_bulb_f
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.CoolingTower', "For condenser loop #{condenser_loop.name}, reduced design OATwb from #{design_wet_bulb_f.round(1)} F to E+ model max input of #{ep_max_design_wet_bulb_f} F.")
-      design_wet_bulb_f = ep_max_design_wet_bulb_f
-      design_wet_bulb_c = OpenStudio.convert(design_wet_bulb_f, 'F', 'C').get
+    eplus_min_design_wet_bulb_f = 68.0
+    eplus_max_design_wet_bulb_f = 80.0
+    if design_wet_bulb_f < eplus_min_design_wet_bulb_f
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.CoolingTower', "For condenser loop #{condenser_loop.name}, increased design OATwb from #{design_wet_bulb_f.round(1)} F to EneryPlus model minimum limit of #{eplus_min_design_wet_bulb_f} F.")
+      design_wet_bulb_f = eplus_min_design_wet_bulb_f
+    elsif design_wet_bulb_f > eplus_max_design_wet_bulb_f
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.CoolingTower', "For condenser loop #{condenser_loop.name}, reduced design OATwb from #{design_wet_bulb_f.round(1)} F to EneryPlus model maximum limit of #{eplus_max_design_wet_bulb_f} F.")
+      design_wet_bulb_f = eplus_max_design_wet_bulb_f
     end
+    design_wet_bulb_c = OpenStudio.convert(design_wet_bulb_f, 'F', 'C').get
 
     # Determine the design CW temperature, approach, and range
     leaving_cw_t_c, approach_k, range_k = prototype_condenser_water_temperatures(design_wet_bulb_c)
@@ -36,10 +40,6 @@ class Standard
 
     # Report out design conditions
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Prototype.CoolingTower', "For condenser loop #{condenser_loop.name}, design OATwb = #{design_wet_bulb_f.round(1)} F, approach = #{approach_r.round(1)} deltaF, range = #{range_r.round(1)} deltaF, leaving condenser water temperature = #{leaving_cw_t_f.round(1)} F.")
-
-    # Set the CW sizing parameters
-    sizing_plant.setDesignLoopExitTemperature(leaving_cw_t_c)
-    sizing_plant.setLoopDesignTemperatureDifference(range_k)
 
     # Set Cooling Tower sizing parameters.
     # Only the variable speed cooling tower in E+ allows you to set the design temperatures.
@@ -55,18 +55,17 @@ class Standard
     condenser_loop.supplyComponents.each do |sc|
       if sc.to_CoolingTowerVariableSpeed.is_initialized
         ct = sc.to_CoolingTowerVariableSpeed.get
-        # E+ has a minimum limit of 68F (20C) for this field.
-        # Check against limit before attempting to set value.
-        eplus_design_oat_wb_c_lim = 20
-        if design_wet_bulb_c < eplus_design_oat_wb_c_lim
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.Prototype.CoolingTower', "For condenser loop #{condenser_loop.name}, a design OATwb of 68F will be used for sizing the cooling towers because the actual design value is below the limit EnergyPlus accepts for this input.")
-          design_wet_bulb_c = eplus_design_oat_wb_c_lim
-        end
         ct.setDesignInletAirWetBulbTemperature(design_wet_bulb_c)
         ct.setDesignApproachTemperature(approach_k)
         ct.setDesignRangeTemperature(range_k)
       end
     end
+
+    # Set the CW sizing parameters
+    # EnergyPlus autosizing routine assumes 85F and 10F temperature difference
+    energyplus_design_loop_exit_temperature_c = OpenStudio.convert(85.0, 'F', 'C').get
+    sizing_plant.setDesignLoopExitTemperature(energyplus_design_loop_exit_temperature_c)
+    sizing_plant.setLoopDesignTemperatureDifference(OpenStudio.convert(10.0, 'R', 'K').get)
 
     # Cooling Tower operational controls
     # G3.1.3.11 - Tower shall be controlled to maintain a 70F LCnWT where weather permits,
@@ -112,11 +111,11 @@ class Standard
     # 90.1-2010 G3.1.3.11 - CW supply temp = 85F or 10F approaching design wet bulb temperature, whichever is lower.
     # Design range = 10F
     # Design Temperature rise of 10F => Range: 10F
-    range_r = 10
+    range_r = 10.0
 
     # Determine the leaving CW temp
-    max_leaving_cw_t_f = 85
-    leaving_cw_t_10f_approach_f = design_oat_wb_f + 10
+    max_leaving_cw_t_f = 85.0
+    leaving_cw_t_10f_approach_f = design_oat_wb_f + 10.0
     leaving_cw_t_f = [max_leaving_cw_t_f, leaving_cw_t_10f_approach_f].min
 
     # Calculate the approach
