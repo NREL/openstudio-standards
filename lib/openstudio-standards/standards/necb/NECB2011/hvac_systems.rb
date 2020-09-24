@@ -939,7 +939,7 @@ class NECB2011
     # Make the COOL-CAP-FT curve
     cool_cap_ft = model_add_curve(model, ac_props['cool_cap_ft'])
     if cool_cap_ft
-      clg_stages.each do |stage|
+      clg_stages.sort.each do |stage|
         stage.setTotalCoolingCapacityFunctionofTemperatureCurve(cool_cap_ft)
       end
     else
@@ -951,7 +951,7 @@ class NECB2011
     # Make the COOL-CAP-FFLOW curve
     cool_cap_fflow = model_add_curve(model, ac_props['cool_cap_fflow'])
     if cool_cap_fflow
-      clg_stages.each do |stage|
+      clg_stages.sort.each do |stage|
         stage.setTotalCoolingCapacityFunctionofFlowFractionCurve(cool_cap_fflow)
       end
     else
@@ -963,7 +963,7 @@ class NECB2011
     # Make the COOL-EIR-FT curve
     cool_eir_ft = model_add_curve(model, ac_props['cool_eir_ft'])
     if cool_eir_ft
-      clg_stages.each do |stage|
+      clg_stages.sort.each do |stage|
         stage.setEnergyInputRatioFunctionofTemperatureCurve(cool_eir_ft)
       end
     else
@@ -975,7 +975,7 @@ class NECB2011
     # Make the COOL-EIR-FFLOW curve
     cool_eir_fflow = model_add_curve(model, ac_props['cool_eir_fflow'])
     if cool_eir_fflow
-      clg_stages.each do |stage|
+      clg_stages.sort.each do |stage|
         stage.setEnergyInputRatioFunctionofFlowFractionCurve(cool_eir_fflow)
       end
     else
@@ -987,7 +987,7 @@ class NECB2011
     # Make the COOL-PLF-FPLR curve
     cool_plf_fplr = model_add_curve(model, ac_props['cool_plf_fplr'])
     if cool_plf_fplr
-      clg_stages.each do |stage|
+      clg_stages.sort.each do |stage|
         stage.setPartLoadFractionCorrelationCurve(cool_plf_fplr)
       end
     else
@@ -999,7 +999,7 @@ class NECB2011
     # Set the COP values
     cop, new_comp_name = coil_cooling_dx_multi_speed_standard_minimum_cop(coil_cooling_dx_multi_speed)
     unless cop.nil?
-      clg_stages.each do |istage|
+      clg_stages.sort.each do |istage|
         istage.setGrossRatedCoolingCOP(cop)
       end
     end
@@ -1077,7 +1077,7 @@ class NECB2011
     # get multi speed heat pump and air loop
     multi_speed_heat_pump = nil
     multi_speed_heat_pumps = model.getAirLoopHVACUnitaryHeatPumpAirToAirMultiSpeeds
-    multi_speed_heat_pumps.each do |iheat_pump|
+    multi_speed_heat_pumps.sort.each do |iheat_pump|
       htg_coil = iheat_pump.heatingCoil
       if htg_coil.name.to_s.strip == coil_heating_gas_multi_stage.name.to_s.strip
         multi_speed_heat_pump = iheat_pump
@@ -1239,7 +1239,7 @@ class NECB2011
 
     # Set the efficiency values
     unless thermal_eff.nil?
-      htg_stages.each do |stage|
+      htg_stages.sort.each do |stage|
         stage.setGasBurnerEfficiency(thermal_eff)
       end
     end

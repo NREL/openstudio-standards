@@ -1590,4 +1590,80 @@ class ECMS
     shw_name = "#{shw_vol_gal} Gal #{shw_ecm_package_name} Water Heater - #{shw_capacity_kBtu_hr}kBtu/hr #{eff["efficiency"]} Therm Eff"
     component.setName(shw_name)
   end
+
+  # ============================================================================================================================
+  # Method to update the cop and/or the performance curves of unitary dx coils. The method input 'unitary_cop' can either be a
+  # string or a hash. When it's a string it's used to find a hash in the json table 'unitary_cop_ecm'. When it's a hash it holds
+  # the parameters needed to update the cop and/or the performance curves of the unitary coil.
+  def modify_unitary_cop(model:, unitary_cop:,sql_db_vars_map:)
+    return if unitary_cop.nil?
+    coils = model.getCoilCoolingDXSingleSpeeds + model.getCoilCoolingDXMultiSpeeds
+    unitary_cop_copy = unitary_cop.dup
+    coils.sort.each do |coil|
+      coil_type = "SingleSpeed"
+      coil_type = "MultiSpeed" if coil.class.name.to_s.include? 'CoilCoolingDXMultiSpeed'
+      # if the parameter 'unitary_cop' is a string then get the information on the new parameters for the coils from
+      # the json table 'unitary_cop_ecm'
+      if unitary_cop_copy.is_a?(String)
+        search_criteria = {}
+        search_criteria['name'] = unitary_cop_copy
+        coil_name = coil.name.to_s
+        coil.setName(sql_db_vars_map[coil_name])
+        if coil_type == "SingleSpeed"
+          capacity_w = coil_cooling_dx_single_speed_find_capacity(coil)
+        elsif coil_type == "MultiSpeed"
+          capacity_w = coil_cooling_dx_multi_speed_find_capacity(coil)
+        end
+        coil.setName(coil_name)
+        cop_package = model_find_object(@standards_data['tables']['unitary_cop_ecm'], search_criteria, capacity_w)
+        raise "Cannot not find #{unitary_cop_ecm} in the ECMS unitary_acs.json file.  Please check that the name is correctly spelled in the ECMS class unitary_acs.json file and in the code calling (directly or through another method) the ECMS class modify_unitary_eff method." if cop_package.empty?
+        ecm_name = unitary_cop_copy
+        unitary_cop = {
+          "name" => ecm_name,
+          "minimum_energy_efficiency_ratio" => cop_package['minimum_energy_efficiency_ratio'],
+          "cool_cap_ft" => cop_package['cool_cap_ft'],
+          "cool_cap_fflow" => cop_package['cool_cap_fflow'],
+          "cool_eir_ft" => cop_package['cool_eir_ft'],
+          "cool_eir_fflow" => cop_package['cool_eir_fflow'],
+          "cool_plf_fplr" => cop_package['cool_eir_fplr']
+        }
+      end
+      next if (unitary_cop['minimum_energy_efficiency_ratio'].nil? && unitary_eff['cool_cap_ft'].nil? && unitary_eff['cool_cap_fflow'].nil? &&
+          unitary_eff['cool_eir_ft'].nil? && unitary_eff['cool_eir_fflow'].nil? && unitary_eff['cool_plf_fplr'].nil?)
+
+      # If the dx coil is on an air loop then update its cop and the performance curves when these are specified in the ecm data
+      if (coil_type == "SingleSpeed" && coil.airLoopHVAC.is_initialized) ||
+          (coil_type == "MultiSpeed" && coil.containingHVACComponent.get.airLoopHVAC.is_initialized)
+        cop = nil
+        cop = eer_to_cop(unitary_cop['minimum_energy_efficiency_ratio'].to_f) if unitary_cop['minimum_energy_efficiency_ratio']
+        cool_cap_ft = nil
+        cool_cap_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_ft'] } if unitary_cop['cool_cap_ft']
+        cool_cap_fflow = nil
+        cool_cap_fflow = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_fflow'] } if unitary_cop['cool_cap_fflow']
+        cool_eir_ft = nil
+        cool_eir_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_eir_ft'] } if unitary_cop['cool_eir_ft']
+        cool_eir_fflow = nil
+        cool_eir_fflow = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_eir_fflow'] } if unitary_cop['cool_eir_fflow']
+        cool_plf_fplr = nil
+        cool_plf_fplr = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_plf_fplr'] } if unitary_cop['cool_plf_fplr']
+        if coil_type == "SingleSpeed"
+          coil.setRatedCOP(cop) if cop
+          coil.setTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft) if cool_cap_ft
+          coil.setTotalCoolingCapacityFunctionOfFlowFractionCurve(cool_cap_fflow) if cool_cap_fflow
+          coil.setEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft) if cool_eir_ft
+          coil.setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow) if cool_eir_fflow
+          coil.setPartLoadFractionCorrelationCurve(cool_plf_fplr) if cool_plf_fplr
+        elsif coil_type == "MultiSpeed"
+          coil.stages.sort.each do |stage|
+            stage.setGrossRatedCoolingCOP(cop) if cop
+            stage.setTotalCoolingCapacityFunctionofTemperatureCurve(cool_cap_ft) if cool_cap_ft
+            stage.setTotalCoolingCapacityFunctionofFlowFractionCurve(cool_cap_fflow) if cool_cap_fflow
+            stage.setEnergyInputRatioFunctionofTemperatureCurve(cool_eir_ft) if cool_eir_ft
+            stage.setEnergyInputRatioFunctionofFlowFractionCurve(cool_eir_fflow) if cool_eir_fflow
+            stage.setPartLoadFractionCorrelationCurve(cool_plf_fplr) if cool_plf_fplr
+          end
+        end
+      end
+    end
+  end
 end

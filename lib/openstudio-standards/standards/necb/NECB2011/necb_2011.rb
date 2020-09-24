@@ -256,6 +256,7 @@ class NECB2011 < Standard
                            erv_package: 'NECB_Default',
                            boiler_eff: nil,
                            furnace_eff: nil,
+                           unitary_cop: nil,
                            shw_eff: nil,
                            ext_wall_cond: nil,
                            ext_floor_cond: nil,
@@ -305,6 +306,7 @@ class NECB2011 < Standard
                                    ecm_system_name: ecm_system_name,
                                    erv_package: erv_package,
                                    boiler_eff: boiler_eff,
+                                   unitary_cop: unitary_cop,
                                    furnace_eff: furnace_eff,
                                    shw_eff: shw_eff,
                                    daylighting_type: daylighting_type
@@ -321,6 +323,7 @@ class NECB2011 < Standard
                                      erv_package: 'NECB_Default',
                                      boiler_eff: nil,
                                      furnace_eff: nil,
+                                     unitary_cop: nil,
                                      shw_eff: nil,
                                      daylighting_type: 'NECB_Default')
     # Create ECM object.
@@ -341,7 +344,7 @@ class NECB2011 < Standard
     # -------- Performace, Efficiencies, Controls and Sensors ------------
     #
     # Set code standard equipment charecteristics.
-    apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
+    sql_db_vars_map = apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
     # Apply System
     ecm.apply_system_efficiencies_ecm(model: model, ecm_system_name: ecm_system_name)
 
@@ -353,6 +356,8 @@ class NECB2011 < Standard
     ecm.modify_boiler_efficiency(model: model, boiler_eff: boiler_eff)
     # Apply Furnace Efficiency
     ecm.modify_furnace_efficiency(model: model, furnace_eff: furnace_eff)
+    # Apply Unitary efficiency
+    ecm.modify_unitary_cop(model: model,unitary_cop: unitary_cop,sql_db_vars_map: sql_db_vars_map)
     # Apply SHW Efficiency
     ecm.modify_shw_efficiency(model: model, shw_eff: shw_eff)
     # Apply daylight controls.
@@ -451,8 +456,10 @@ class NECB2011 < Standard
     # Apply the prototype HVAC assumptions
     model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
     # Apply the HVAC efficiency standard
-    model_apply_hvac_efficiency_standard(model, climate_zone)
+    sql_db_vars_map = {}
+    model_apply_hvac_efficiency_standard(model, climate_zone, sql_db_vars_map: sql_db_vars_map)
     model_enable_demand_controlled_ventilation(model, dcv_type)
+    return sql_db_vars_map
   end
 
   def apply_loop_pump_power(model:, sizing_run_dir:)
