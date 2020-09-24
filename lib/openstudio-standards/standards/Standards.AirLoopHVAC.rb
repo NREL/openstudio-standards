@@ -108,19 +108,11 @@ class Standard
       # Other zones have OA requirements converted
       # to per-area values only so DCV performance is only
       # based on the subset of zones that required DCV.
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Converting ventilation requirements to per-area for all zones served that do not require DCV.")
       air_loop_hvac.thermalZones.sort.each do |zone|
         unless thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
           thermal_zone_convert_oa_req_to_per_area(zone)
         end
-      end
-    else
-      # For systems that do not require DCV,
-      # convert OA requirements to per-area values
-      # so that other features such as
-      # multizone VAV optimization do not
-      # incorrectly take variable occupancy into account.
-      air_loop_hvac.thermalZones.sort.each do |zone|
-        thermal_zone_convert_oa_req_to_per_area(zone)
       end
     end
 
@@ -146,14 +138,6 @@ class Standard
       air_loop_hvac_add_motorized_oa_damper(air_loop_hvac, 0.15, air_loop_hvac.availabilitySchedule)
     else
       air_loop_hvac_remove_motorized_oa_damper(air_loop_hvac)
-    end
-
-    # Zones that require DCV preserve both per-area and per-person OA reqs.
-    # Other zones have OA reqs converted to per-area values only so that DCV
-    air_loop_hvac.thermalZones.sort.each do |zone|
-      unless thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
-        thermal_zone_convert_oa_req_to_per_area(zone)
-      end
     end
 
     # Optimum Start
@@ -2154,7 +2138,7 @@ class Standard
 
     # Enable DCV in the controller mechanical ventilation
     controller_mv.setDemandControlledVentilation(true)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "Enabled DCV for air loop: #{air_loop_hvac.name}.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Enabled DCV.")
 
     return true
   end
