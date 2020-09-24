@@ -1511,6 +1511,7 @@ class Standard
     # Unitary ACs
     model.getCoilCoolingDXTwoSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
     model.getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
+    model.getCoilCoolingDXMultiSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_multi_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
 
     # WSHPs
     # set WSHP heating coils before cooling coils to get cooling coil capacities before they are renamed
@@ -1544,6 +1545,7 @@ class Standard
 
     # Gas Heaters
     model.getCoilHeatingGass.sort.each { |obj| coil_heating_gas_apply_efficiency_and_curves(obj) }
+    model.getCoilHeatingGasMultiStages.each {|obj| coil_heating_gas_multi_stage_apply_efficiency_and_curves(obj)}
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
   end
@@ -2783,6 +2785,33 @@ class Standard
         curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
         curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
         return curve
+      when 'MultiVariableLookupTable'
+        num_ind_var = data['number_independent_variables'].to_i
+        table = OpenStudio::Model::TableMultiVariableLookup.new(model,num_ind_var)
+        table.setName(data['name'])
+        table.setInterpolationMethod(data['interpolation_method'])
+        table.setNumberofInterpolationPoints(data['number_of_interpolation_points'])
+        table.setCurveType(data['curve_type'])
+        table.setTableDataFormat('SingleLineIndependentVariableWithMatrix')
+        table.setNormalizationReference(data['normalization_reference'].to_f)
+        table.setOutputUnitType(data['output_unit_type'])
+        table.setMinimumValueofX1(data['minimum_independent_variable_1'].to_f)
+        table.setMaximumValueofX1(data['maximum_independent_variable_1'].to_f)
+        table.setInputUnitTypeforX1(data['input_unit_type_x1'])
+        if num_ind_var == 2
+          table.setMinimumValueofX2(data['minimum_independent_variable_2'].to_f)
+          table.setMaximumValueofX2(data['maximum_independent_variable_2'].to_f)
+          table.setInputUnitTypeforX2(data['input_unit_type_x2'])
+        end
+        data_points = data.each.select {|key,value| key.include? "data_point"}
+        data_points.each do |key,value|
+          if num_ind_var == 1
+            table.addPoint(value.split(',')[0].to_f,value.split(',')[1].to_f)
+          elsif num_ind_var == 2
+            table.addPoint(value.split(',')[0].to_f,value.split(',')[1].to_f,value.split(',')[2].to_f)
+          end
+        end
+        return table
       else
         OpenStudio::logFree(OpenStudio::Error, "openstudio.Model.Model", "#{curve_name}' has an invalid form: #{data['form']}', cannot create this curve.")
         return nil

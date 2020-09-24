@@ -1,0 +1,23 @@
+{
+  "tables": {
+    "furnace_eff_ecm": {
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "name": "NECB_Default",
+          "efficiency": null,
+          "part_load_curve": null,
+          "notes": "Do nothing."
+        },
+        {
+          "name": "NECB 85% Efficient Condensing Gas Furnace",
+          "efficiency": 0.85,
+          "part_load_curve": "FURNACE-EFFPLR-COND-NECB2011",
+          "notes": "From NECB 2011 and AHRI."
+        }
+      ]
+    }
+  }
+}

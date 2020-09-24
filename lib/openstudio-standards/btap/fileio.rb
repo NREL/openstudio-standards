@@ -807,6 +807,7 @@ module BTAP
           next if field_name.include?('Cooling Control Zone or Zone List Name')
           next if field_name.include?('Heating Control Zone or Zone List Name')
           next if field_name.include?('Heating Zone Fans Only Zone or Zone List Name')
+          next if field_name.include?('Zone Terminal Unit List')
 
           # Don't compare the names of schedule type limits
           # because they appear to be created non-deteministically

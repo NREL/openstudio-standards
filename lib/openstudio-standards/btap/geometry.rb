@@ -2176,6 +2176,26 @@ module BTAP
     end
 
 
+    def self.rotate_building(model: , degrees: nil)
+
+      # report as not applicable if effective relative rotation is 0
+      if degrees == 0 || degrees.nil?
+        puts ('The requested rotation was 0 or nil degrees. The model was not rotated.')
+        return
+      end
+
+      # check the relative_building_rotation for reasonableness
+      degrees -= 360.0 * (degrees / 360.0).truncate if (degrees > 360) || (degrees < -360)
+
+      # reporting initial condition of model
+      building = model.getBuilding
+      # rotate the building
+      final_building_angle = building.setNorthAxis(building.northAxis + degrees)
+    end
+
+
+
+
     module BuildingStoreys
 
       #This method will delete any exisiting stories and then try to assign stories based on 
@@ -2824,7 +2844,7 @@ module BTAP
         #a bit of acrobatics to get the construction object from the ConstrustionBase object's name.
         construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get
         #create a new construction with the requested RSI value based on the current construction.
-        return BTAP::Resources::Envelope::Constructions::get_shgc(model,construction)
+        return BTAP::Resources::Envelope::Constructions::get_shgc(surface.model,construction)
       end
 
       #This method gets the tvis for the surface

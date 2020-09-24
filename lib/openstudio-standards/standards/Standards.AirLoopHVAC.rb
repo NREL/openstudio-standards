@@ -809,10 +809,17 @@ class Standard
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
           end
         end
+      elsif sc.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
+        unitary = sc.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get
+        clg_coil = unitary.coolingCoil
+        # CoilCoolingDXMultSpeed
+        if clg_coil.to_CoilCoolingDXMultiSpeed.is_initialized
+          coil = clg_coil.to_CoilCoolingDXMultiSpeed.get
+          total_cooling_capacity_w = coil_cooling_dx_multi_speed_find_capacity(coil)
+        end
       elsif sc.to_CoilCoolingDXMultiSpeed.is_initialized ||
             sc.to_CoilCoolingCooledBeam.is_initialized ||
             sc.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.is_initialized ||
-            sc.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized ||
             sc.to_AirLoopHVACUnitarySystem.is_initialized
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} has a cooling coil named #{sc.name}, whose type is not yet covered by economizer checks.")
         # CoilCoolingDXMultiSpeed
@@ -820,7 +827,6 @@ class Standard
         # CoilCoolingWaterToAirHeatPumpEquationFit
         # AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass
         # AirLoopHVACUnitaryHeatPumpAirToAir
-        # AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed
         # AirLoopHVACUnitarySystem
       end
     end
@@ -3046,6 +3052,9 @@ class Standard
 
     # Set HVAC availability schedule to follow occupancy
     air_loop_hvac.setAvailabilitySchedule(loop_occ_sch)
+    air_loop_hvac.supplyComponents('OS:AirLoopHVAC:UnitaryHeatPump:AirToAir:MultiSpeed'.to_IddObjectType).each do |comp|
+      comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.setAvailabilitySchedule(loop_occ_sch)
+    end
 
     return true
   end

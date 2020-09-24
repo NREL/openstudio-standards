@@ -1,0 +1,29 @@
+{
+  "tables": {
+    "boiler_eff_ecm": {
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "name": "NECB_Default",
+          "efficiency": null,
+          "part_load_curve": null,
+          "notes": "Do nothing."
+        },
+        {
+          "name": "NECB 88% Efficient Condensing Boiler",
+          "efficiency": 0.88,
+          "part_load_curve": "BOILER-EFFPLR-COND-NECB2011",
+          "notes": "From NECB 2011 and AHRI."
+        },
+        {
+          "name": "Viessmann Vitocrossal 300 CT3-17 96.2% Efficient Condensing Gas Boiler",
+          "efficiency": 0.962,
+          "part_load_curve": "BOILER-EFFPLR-COND-VIESSMANN",
+          "notes": "From analysis by Kamel Haddad based on Viessmann Vitocrossal 300 CT3-17 condensing boiler."
+        }
+      ]
+    }
+  }
+}

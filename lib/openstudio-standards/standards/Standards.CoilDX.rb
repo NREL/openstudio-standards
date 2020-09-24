@@ -52,13 +52,21 @@ module CoilDX
         containing_comp = coil_dx.containingHVACComponent.get
         if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
           heat_pump = true
-        end # TODO: Add other unitary systems
+        elsif containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
+          htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.heatingCoil
+          if htg_coil.to_CoilHeatingDXMultiSpeed.is_initialized then heat_pump = true end
+        end
       elsif coil_dx.containingZoneHVACComponent.is_initialized
         containing_comp = coil_dx.containingZoneHVACComponent.get
         # PTHP
         if containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
           heat_pump = true
         end # TODO: Add other zone hvac systems
+      end
+    else
+      if (!coil_dx.airLoopHVAC.get.supplyComponents('OS:Coil:Heating:DX:SingleSpeed'.to_IddObjectType).empty?) ||
+          (!coil_dx.airLoopHVAC.get.supplyComponents('OS:Coil:Heating:DX:VariableSpeed'.to_IddObjectType).empty?)
+        heat_pump = true
       end
     end
 
@@ -79,6 +87,14 @@ module CoilDX
           htg_type = 'Electric Resistance or None'
         elsif containing_comp.to_AirLoopHVACUnitarySystem.is_initialized
           if containing_comp.name.to_s.include? 'Minisplit'
+            htg_type = 'All Other'
+          end
+        elsif containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
+          htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.heatingCoil
+          supp_htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.supplementalHeatingCoil
+          if htg_coil.to_CoilHeatingDXMultiSpeed.is_initialized || supp_htg_coil.to_CoilHeatingElectric.is_initialized
+            htg_type = 'Electric Resistance or None'
+          elsif htg_coil.to_CoilHeatingGasMultiStage.is_initialized
             htg_type = 'All Other'
           end
         end # TODO: Add other unitary systems
@@ -139,7 +155,9 @@ module CoilDX
     search_criteria['cooling_type'] = case coil_dx.iddObjectType.valueName.to_s
                                       when 'OS_Coil_Cooling_DX_SingleSpeed',
                                            'OS_Coil_Cooling_DX_TwoSpeed',
-                                           'OS_Coil_Cooling_DX_MultiSpeed'
+                                           'OS_Coil_Cooling_DX_VariableSpeed',
+                                           'OS_Coil_Cooling_DX_MultiSpeed',
+                                           'OS_AirConditioner_VariableRefrigerantFlow'
                                         coil_dx.condenserType
                                       else
                                         'AirCooled'
