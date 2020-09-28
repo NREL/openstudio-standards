@@ -36,8 +36,10 @@ module OpenstudioStandards
   require_relative "#{stds}/necb/NECB2011/hvac_systems"
   require_relative "#{stds}/necb/NECB2011/autozone"
   require_relative "#{stds}/necb/NECB2011/hvac_system_1_single_speed"
+  require_relative "#{stds}/necb/NECB2011/hvac_system_1_multi_speed"
   require_relative "#{stds}/necb/NECB2011/hvac_system_2_and_5"
   require_relative "#{stds}/necb/NECB2011/hvac_system_3_and_8_single_speed"
+  require_relative "#{stds}/necb/NECB2011/hvac_system_3_and_8_multi_speed"
   require_relative "#{stds}/necb/NECB2011/hvac_system_4"
   require_relative "#{stds}/necb/NECB2011/hvac_system_6"
   require_relative "#{stds}/necb/NECB2011/service_water_heating"
@@ -65,7 +67,12 @@ module OpenstudioStandards
   # NECB QAQC
   require_relative "#{stds}/necb/NECB2011/qaqc/necb_qaqc.rb"
   require_relative "#{stds}/necb/NECB2015/qaqc/necb_2015_qaqc.rb"
-  
+
+  # ECM development
+  require_relative "#{stds}/necb/ECMS/ecms.rb"
+  require_relative "#{stds}/necb/ECMS/erv.rb"
+  require_relative "#{stds}/necb/ECMS/hvac_systems.rb"
+
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1"
   require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980"
   require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/comstock_doe_ref_pre_1980/comstock_doe_ref_pre_1980"

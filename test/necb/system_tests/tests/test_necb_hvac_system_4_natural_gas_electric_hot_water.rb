@@ -24,7 +24,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # Hopefully this makes is easier to debug the HVAC stuff!
 
 
-class NECB_HVAC_System_4_Test < MiniTest::Test
+class NECB_HVAC_System_4_Test_NG_E_HW < MiniTest::Test
 
   def test_necb_hvac_system_4_natural_gas_electric_hot_water()
     vintage = ['NECB2011']
@@ -35,7 +35,7 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
     boiler_fueltype = 'NaturalGas'
     heating_coil = 'Electric'
     baseboard_type = 'Hot Water'
-    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_system_4"
+    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_hvac_system_4_natural_gas_electric_hot_water"
 
     name = String.new
     # FileUtils.rm_rf(output_folder)

@@ -62,6 +62,14 @@ class NECB2011
           Units='#{unit}'
 "
           column_name = "#{col}".gsub(/\s+/, "_").downcase
+          # If the column name is "additional_fuel" and the file contains a boiler with a FuelOilNo2 fuel type assume
+          # the column name should be "fueloilno2".
+          if column_name.include? "additional_fuel"
+            model.getPlantLoops.sort.each do |iplantloop|
+              boilers = iplantloop.components.select {|icomponent| icomponent.to_BoilerHotWater.is_initialized}
+              column_name = "fueloilno2" unless boilers.select {|boiler| boiler.to_BoilerHotWater.get.fuelType.to_s == "FuelOilNo2"}.empty?
+            end
+          end
           column_name = column_name + "_#{unit}" if unit != ''
           value = model.sqlFile.get.execAndReturnFirstString(query)
           next if value.empty? || value.get.nil?
@@ -730,7 +738,7 @@ class NECB2011
         vbz = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName='Zone Ventilation Parameters' AND ColumnName='Breathing Zone Outdoor Airflow - Vbz' AND Units='m3/s' AND RowName='#{zone.name.get.to_s.upcase}' ")
         vbz = validate_optional(vbz, model, 0)
         air_loop_info[:total_breathing_zone_outdoor_airflow_vbz] += vbz
-        air_loop_info[:total_floor_area_served] += zone.floorArea
+        air_loop_info[:total_floor_area_served] += zone.floorArea*zone.multiplier.to_f
       end
       air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName='System Ventilation Parameters' AND ColumnName='Area Outdoor Air Rate - Ra' AND Units='m3/s-m2' AND RowName='#{air_loop_info[:name].to_s.upcase}' ")
       air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] = validate_optional(air_loop_info[:area_outdoor_air_rate_m3_per_s_m2], model, -1.0)

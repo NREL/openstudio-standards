@@ -1,0 +1,29 @@
+{
+  "tables": {
+    "shw_eff_ecm": {
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "name": "NECB_Default",
+          "efficiency": null,
+          "part_load_curve": null,
+          "notes": "Do nothing."
+        },
+        {
+          "name": "Natural Gas Power Vent with Electric Ignition",
+          "efficiency": 0.94,
+          "part_load_curve": "SWH-EFFFPLR-NECB2011",
+          "notes": "From AHRI."
+        },
+        {
+          "name": "Natural Gas Direct Vent with Electric Ignition",
+          "efficiency": 0.91,
+          "part_load_curve": "SWH-EFFFPLR-NECB2011",
+          "notes": "From AHRI."
+        }
+      ]
+    }
+  }
+}

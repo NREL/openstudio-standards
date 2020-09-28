@@ -180,7 +180,7 @@ class OpenStudio::Model::Model
     #Add baseline
     models << {:name => 'baseline', :model => model}
     #Add copies of model with elimination of a characteristic.
-    models << {:name => 'elim_ext_wall', :model => model.clone(true).to_Model.set_all_ext_wall_conductances_to(conductance)}
+    models << {:name => 'elim_ext_wall', :model => model.clone(true).to_Model}
 =begin
     models << {:name => 'elim_ext_roof', :model => model.clone(true).to_Model.set_all_ext_roof_conductances_to(conductance)}
     models << {:name => 'elim_ground_floor', :model => model.clone(true).to_Model.set_all_ground_floor_conductances_to(conductance)}

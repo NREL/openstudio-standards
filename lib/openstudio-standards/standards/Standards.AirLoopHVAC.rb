@@ -108,19 +108,11 @@ class Standard
       # Other zones have OA requirements converted
       # to per-area values only so DCV performance is only
       # based on the subset of zones that required DCV.
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Converting ventilation requirements to per-area for all zones served that do not require DCV.")
       air_loop_hvac.thermalZones.sort.each do |zone|
         unless thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
           thermal_zone_convert_oa_req_to_per_area(zone)
         end
-      end
-    else
-      # For systems that do not require DCV,
-      # convert OA requirements to per-area values
-      # so that other features such as
-      # multizone VAV optimization do not
-      # incorrectly take variable occupancy into account.
-      air_loop_hvac.thermalZones.sort.each do |zone|
-        thermal_zone_convert_oa_req_to_per_area(zone)
       end
     end
 
@@ -146,14 +138,6 @@ class Standard
       air_loop_hvac_add_motorized_oa_damper(air_loop_hvac, 0.15, air_loop_hvac.availabilitySchedule)
     else
       air_loop_hvac_remove_motorized_oa_damper(air_loop_hvac)
-    end
-
-    # Zones that require DCV preserve both per-area and per-person OA reqs.
-    # Other zones have OA reqs converted to per-area values only so that DCV
-    air_loop_hvac.thermalZones.sort.each do |zone|
-      unless thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
-        thermal_zone_convert_oa_req_to_per_area(zone)
-      end
     end
 
     # Optimum Start
@@ -825,10 +809,17 @@ class Standard
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
           end
         end
+      elsif sc.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
+        unitary = sc.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get
+        clg_coil = unitary.coolingCoil
+        # CoilCoolingDXMultSpeed
+        if clg_coil.to_CoilCoolingDXMultiSpeed.is_initialized
+          coil = clg_coil.to_CoilCoolingDXMultiSpeed.get
+          total_cooling_capacity_w = coil_cooling_dx_multi_speed_find_capacity(coil)
+        end
       elsif sc.to_CoilCoolingDXMultiSpeed.is_initialized ||
             sc.to_CoilCoolingCooledBeam.is_initialized ||
             sc.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.is_initialized ||
-            sc.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized ||
             sc.to_AirLoopHVACUnitarySystem.is_initialized
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} has a cooling coil named #{sc.name}, whose type is not yet covered by economizer checks.")
         # CoilCoolingDXMultiSpeed
@@ -836,7 +827,6 @@ class Standard
         # CoilCoolingWaterToAirHeatPumpEquationFit
         # AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass
         # AirLoopHVACUnitaryHeatPumpAirToAir
-        # AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed
         # AirLoopHVACUnitarySystem
       end
     end
@@ -2148,7 +2138,7 @@ class Standard
 
     # Enable DCV in the controller mechanical ventilation
     controller_mv.setDemandControlledVentilation(true)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "Enabled DCV for air loop: #{air_loop_hvac.name}.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Enabled DCV.")
 
     return true
   end
@@ -3062,6 +3052,9 @@ class Standard
 
     # Set HVAC availability schedule to follow occupancy
     air_loop_hvac.setAvailabilitySchedule(loop_occ_sch)
+    air_loop_hvac.supplyComponents('OS:AirLoopHVAC:UnitaryHeatPump:AirToAir:MultiSpeed'.to_IddObjectType).each do |comp|
+      comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.setAvailabilitySchedule(loop_occ_sch)
+    end
 
     return true
   end

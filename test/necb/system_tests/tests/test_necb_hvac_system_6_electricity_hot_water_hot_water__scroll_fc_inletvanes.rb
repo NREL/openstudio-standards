@@ -24,7 +24,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # Hopefully this makes is easier to debug the HVAC stuff!
 
 
-class NECB_HVAC_System_6_Test < MiniTest::Test
+class NECB_HVAC_System_6_Test_E_HW_HW_S_FC_IV < MiniTest::Test
 
   def test_necb_hvac_system_6_electricity_hot_water_hot_water__scroll_fc_inletvanes()
 
@@ -38,7 +38,7 @@ class NECB_HVAC_System_6_Test < MiniTest::Test
     baseboard_type = 'Hot Water'
     chiller_type = 'Scroll'
     fan_type = 'fc_inletvanes'
-    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_system_6"
+    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_hvac_system_6_electricity_hot_water_hot_water__scroll_fc_inletvanes"
     name = 'test_necb_hvac_system_6_electricity_hot_water_hot_water__scroll_fc_inletvanes""'
 
     # FileUtils.rm_rf(output_folder)
