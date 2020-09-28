@@ -158,6 +158,10 @@ namespace :data do
       'OpenStudio_Standards-ashrae_90_1(speed)'
   ]
 
+  spreadsheets_speed = [
+      'OpenStudio_Standards-speed(schedules)'
+  ]
+
   spreadsheets_deer = [
       'OpenStudio_Standards-deer',
       'OpenStudio_Standards-deer(space_types)',
@@ -175,7 +179,7 @@ namespace :data do
       'OpenStudio_Standards-cbes(space_types)'
   ]
 
-  spreadsheet_titles = spreadsheets_ashrae + spreadsheets_deer + spreadsheets_comstock + spreadsheets_cbes
+  spreadsheet_titles = spreadsheets_ashrae + spreadsheets_speed + spreadsheets_deer + spreadsheets_comstock + spreadsheets_cbes
   spreadsheet_titles = spreadsheet_titles.uniq
 
   desc 'Download all OpenStudio_Standards spreadsheets from Google & export JSONs'
@@ -199,6 +203,19 @@ namespace :library do
   desc 'Export libraries for OpenStudio installer'
   task 'export' do
     export_openstudio_libraries
+  end
+
+  task 'export_speed_schedules' do
+    model = OpenStudio::Model::Model.new
+
+    std = Standard.build('Speed')
+
+    names = std.standards_data['schedules'].map {|sch| sch['name']}
+    names.uniq.each do |name|
+      sch = std.model_add_schedule(model, name)
+    end
+
+    model.save('SpeedSchedules.osm', true)
   end
 end
 
