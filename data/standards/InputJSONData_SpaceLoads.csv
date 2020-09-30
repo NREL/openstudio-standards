@@ -1,0 +1,454 @@
+template,building_type,space_type,Notes,lighting_per_area,electric_equipment_per_area,template_speed,building_type_speed,space_type_speed
+90.1-2007,Office,OfficeLarge Data Center,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-DataCenter
+90.1-2007,Office,Stair,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-Stair
+90.1-2007,Office,Lobby,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-Lobby
+90.1-2007,Office,Elec/MechRoom,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-MechRoom
+90.1-2007,Office,Corridor,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-Corridor
+90.1-2007,Office,Conference,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-Conference 
+90.1-2007,Office,BreakRoom,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-BreakRoom
+90.1-2007,Office,Storage,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-Storage
+90.1-2007,Office,Restroom,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-Restroom
+90.1-2007,Office,OpenOffice,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-OpenOffice
+90.1-2007,Office,ClosedOffice,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-PrivateOffice
+90.1-2007,Office,Dining,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-Dining
+90.1-2007,Office,Classroom,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-Classroom
+90.1-2007,Office,OfficeLarge Data Center,This same object as for large office 2007 above must be duplicated for MediumOffice and SmallOffice building_type_speed for 2007 for both lighting and equipment.,x,x,ASHRAE_90_1_2007,MediumOffice,Office-DataCenter
+90.1-2007,Office,MediumOffice - Stair,,x,x,ASHRAE_90_1_2007,MediumOffice,Office-Stair
+90.1-2007,Office,MediumOffice - Lobby,,x,x,ASHRAE_90_1_2007,MediumOffice,Office-Lobby
+90.1-2007,Office,MediumOffice - Elec/MechRoom,,x,x,ASHRAE_90_1_2007,MediumOffice,Office-MechRoom
+90.1-2007,Office,MediumOffice - Corridor,,x,x,ASHRAE_90_1_2007,MediumOffice,Office-Corridor
+90.1-2007,Office,MediumOffice - Conference,,x,x,ASHRAE_90_1_2007,MediumOffice,Office-Conference
+90.1-2007,Office,MediumOffice - Breakroom,,x,x,ASHRAE_90_1_2007,MediumOffice,Office-BreakRoom
+90.1-2007,Office,MediumOffice - Storage,,x,x,ASHRAE_90_1_2007,MediumOffice,Office-Storage
+90.1-2007,Office,MediumOffice - Restroom,,x,x,ASHRAE_90_1_2007,MediumOffice,Office-Restroom
+90.1-2007,Office,MediumOffice - OpenOffice,,x,x,ASHRAE_90_1_2007,MediumOffice,Office-OpenOffice
+90.1-2007,Office,MediumOffice - ClosedOffice,,x,x,ASHRAE_90_1_2007,MediumOffice,Office-PrivateOffice
+90.1-2007,Office,MediumOffice - Dining,,x,x,ASHRAE_90_1_2007,MediumOffice,Office-Dining
+90.1-2007,Office,MediumOffice - Classroom,,x,x,ASHRAE_90_1_2007,MediumOffice,Office-Classroom
+90.1-2007,Office,OfficeLarge Data Center,This same object as for large office 2007 above must be duplicated for MediumOffice and SmallOffice building_type_speed for 2007 for both lighting and equipment.,x,x,ASHRAE_90_1_2007,SmallOffice,Office-DataCenter
+90.1-2007,Office,SmallOffice - Stair,,x,x,ASHRAE_90_1_2007,SmallOffice,Office-Stair
+90.1-2007,Office,SmallOffice - Lobby,,x,x,ASHRAE_90_1_2007,SmallOffice,Office-Lobby
+90.1-2007,Office,SmallOffice - Elec/MechRoom,,x,x,ASHRAE_90_1_2007,SmallOffice,Office-MechRoom
+90.1-2007,Office,SmallOffice - Corridor,,x,x,ASHRAE_90_1_2007,SmallOffice,Office-Corridor
+90.1-2007,Office,SmallOffice - Conference,,x,x,ASHRAE_90_1_2007,SmallOffice,Office-Conference
+90.1-2007,Office,SmallOffice - Breakroom,,x,x,ASHRAE_90_1_2007,SmallOffice,Office-BreakRoom
+90.1-2007,Office,SmallOffice - Storage,,x,x,ASHRAE_90_1_2007,SmallOffice,Office-Storage
+90.1-2007,Office,SmallOffice - Restroom,,x,x,ASHRAE_90_1_2007,SmallOffice,Office-Restroom
+90.1-2007,Office,SmallOffice - OpenOffice,,x,x,ASHRAE_90_1_2007,SmallOffice,Office-OpenOffice
+90.1-2007,Office,SmallOffice - ClosedOffice,,x,x,ASHRAE_90_1_2007,SmallOffice,Office-PrivateOffice
+90.1-2007,Office,SmallOffice - Dining,,x,x,ASHRAE_90_1_2007,SmallOffice,Office-Dining
+90.1-2007,Office,SmallOffice - Classroom,,x,x,ASHRAE_90_1_2007,SmallOffice,Office-Classroom
+90.1-2007,FullServiceRestaurant,Kitchen,,x,x,ASHRAE_90_1_2007,FullServiceRestaurant,FullServiceRestaurant-Kitchen
+90.1-2007,FullServiceRestaurant,Dining,,x,x,ASHRAE_90_1_2007,FullServiceRestaurant,FullServiceRestaurant-Dining
+90.1-2007,HighriseApartment,Apartment,,x,x,ASHRAE_90_1_2007,HighriseApartment,HighriseApt-Apartment
+90.1-2007,HighriseApartment,Corridor,,x,x,ASHRAE_90_1_2007,HighriseApartment,HighriseApt-Corridor
+90.1-2007,HighriseApartment,Office,,x,x,ASHRAE_90_1_2007,HighriseApartment,HighriseApt-Office
+90.1-2007,Hospital,Kitchen,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-Kitchen
+90.1-2007,Hospital,Basement,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-Basement
+90.1-2007,Hospital,Corridor,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-Corridor
+90.1-2007,Hospital,Dining,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-Dining
+90.1-2007,Hospital,ER_Exam,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-ER_Exam
+90.1-2007,Hospital,ER_NurseStn,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-ER_NurseStn
+90.1-2007,Hospital,ER_Trauma,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-ER_Trauma
+90.1-2007,Hospital,ER_Triage,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-ER_Triage
+90.1-2007,Hospital,ICU_NurseStn,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-ICU_NurseStn
+90.1-2007,Hospital,ICU_Open,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-ICU_Open
+90.1-2007,Hospital,ICU_PatRm,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-ICU_PatRm
+90.1-2007,Hospital,Lab,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-Lab
+90.1-2007,Hospital,Lobby,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-Lobby
+90.1-2007,Hospital,NurseStn,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-NurseStn
+90.1-2007,Hospital,Office,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-Office
+90.1-2007,Hospital,OR,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-OR
+90.1-2007,Hospital,PatRoom,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-PatRoom
+90.1-2007,Hospital,PhysTherapy,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-PhysTherapy
+90.1-2007,Hospital,Radiology,,x,x,ASHRAE_90_1_2007,Hospital,Hospital-Radiology
+90.1-2007,LargeHotel,Kitchen,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Kitchen
+90.1-2007,LargeHotel,Banquet,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Banquet
+90.1-2007,LargeHotel,Basement,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Basement
+90.1-2007,LargeHotel,Cafe,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Café
+90.1-2007,LargeHotel,Corridor,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Corridor
+90.1-2007,LargeHotel,GuestRoom,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-GuestRoom
+90.1-2007,LargeHotel,Laundry,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Laundry
+90.1-2007,LargeHotel,Lobby,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Lobby
+90.1-2007,LargeHotel,Mechanical,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Mech
+90.1-2007,LargeHotel,Retail,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Retail
+90.1-2007,LargeHotel,Storage,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Storage
+90.1-2007,MidriseApartment,Apartment,,x,x,ASHRAE_90_1_2007,MidriseApartment,MidriseApt-Apartment
+90.1-2007,MidriseApartment,Corridor,,x,x,ASHRAE_90_1_2007,MidriseApartment,MidriseApt-Corridor
+90.1-2007,MidriseApartment,Office,,x,x,ASHRAE_90_1_2007,MidriseApartment,MidriseApt-Office
+90.1-2007,Outpatient,Anesthesia,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Anesthesia
+90.1-2007,Outpatient,BioHazard,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-BioHazard
+90.1-2007,Outpatient,Cafe,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Café
+90.1-2007,Outpatient,Conference,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Conference
+90.1-2007,Outpatient,DressingRoom,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-DressingRoom
+90.1-2007,Outpatient,Elec/MechRoom,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Mechanical
+90.1-2007,Outpatient,Exam,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Exam
+90.1-2007,Outpatient,Hall,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Hall
+90.1-2007,Outpatient,IT_Room,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-IT_Room
+90.1-2007,Outpatient,Janitor,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Janitor
+90.1-2007,Outpatient,Lobby,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Lobby
+90.1-2007,Outpatient,LockerRoom,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-LockerRoom
+90.1-2007,Outpatient,Lounge,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Lounge
+90.1-2007,Outpatient,MedGas,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-MedGas
+90.1-2007,Outpatient,MRI,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-MRI
+90.1-2007,Outpatient,NurseStation,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-NurseStation
+90.1-2007,Outpatient,Office,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Office
+90.1-2007,Outpatient,OR,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-OR
+90.1-2007,Outpatient,PACU,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-PACU
+90.1-2007,Outpatient,PhysicalTherapy,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-PhysTherapy
+90.1-2007,Outpatient,PreOp,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-PreOp
+90.1-2007,Outpatient,ProcedureRoom,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-ProcedureRoom
+90.1-2007,Outpatient,Reception,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Reception
+90.1-2007,Outpatient,Stair,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Stair
+90.1-2007,Outpatient,Toilet,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Toilet
+90.1-2007,Outpatient,Xray,,x,x,ASHRAE_90_1_2007,PrimarySchool,Outpatient-Xray
+90.1-2007,PrimarySchool,Restroom,,x,x,ASHRAE_90_1_2007,PrimarySchool,PrimarySchool-Restroom
+90.1-2007,PrimarySchool,Office,,x,x,ASHRAE_90_1_2007,PrimarySchool,PrimarySchool-Office
+90.1-2007,PrimarySchool,Mechanical,,x,x,ASHRAE_90_1_2007,PrimarySchool,PrimarySchool-Mechanical
+90.1-2007,PrimarySchool,Lobby,,x,x,ASHRAE_90_1_2007,PrimarySchool,PrimarySchool-Lobby
+90.1-2007,PrimarySchool,Library,,x,x,ASHRAE_90_1_2007,PrimarySchool,PrimarySchool-Library
+90.1-2007,PrimarySchool,Gym,,x,x,ASHRAE_90_1_2007,PrimarySchool,PrimarySchool-Gym
+90.1-2007,PrimarySchool,Corridor,,x,x,ASHRAE_90_1_2007,PrimarySchool,PrimarySchool-Corridor
+90.1-2007,PrimarySchool,Classroom,,x,x,ASHRAE_90_1_2007,PrimarySchool,PrimarySchool-Classroom
+90.1-2007,PrimarySchool,Cafeteria,,x,x,ASHRAE_90_1_2007,PrimarySchool,PrimarySchool-Cafeteria
+90.1-2007,PrimarySchool,Kitchen,,x,x,ASHRAE_90_1_2007,PrimarySchool,PrimarySchool-Kitchen
+90.1-2007,PrimarySchool,ComputerRoom,,x,x,ASHRAE_90_1_2007,PrimarySchool,PrimarySchool-Computer
+90.1-2007,QuickServiceRestaurant,Dining,,x,x,ASHRAE_90_1_2007,QuickServiceRestaurant,QuickServiceRestaurant-Dining
+90.1-2007,QuickServiceRestaurant,Kitchen,,x,x,ASHRAE_90_1_2007,QuickServiceRestaurant,QuickServiceRestaurant-Kitchen
+90.1-2007,Retail,Back_Space,,x,x,ASHRAE_90_1_2007,Retail,Retail-Storage
+90.1-2007,Retail,Point_of_Sale,,x,x,ASHRAE_90_1_2007,Retail,Retail-Point_of_Sale
+90.1-2007,Retail,Retail,,x,x,ASHRAE_90_1_2007,Retail,Retail-Retail
+90.1-2007,SecondarySchool,Auditorium,,x,x,ASHRAE_90_1_2007,SecondarySchool,SecondarySchool-Auditorium
+90.1-2007,SecondarySchool,Cafeteria,,x,x,ASHRAE_90_1_2007,SecondarySchool,SecondarySchool-Cafeteria
+90.1-2007,SecondarySchool,Classroom,,x,x,ASHRAE_90_1_2007,SecondarySchool,SecondarySchool-Classroom
+90.1-2007,SecondarySchool,Corridor,,x,x,ASHRAE_90_1_2007,SecondarySchool,SecondarySchool-Corridor
+90.1-2007,SecondarySchool,Gym,,x,x,ASHRAE_90_1_2007,SecondarySchool,SecondarySchool-Gym
+90.1-2007,SecondarySchool,Library,,x,x,ASHRAE_90_1_2007,SecondarySchool,SecondarySchool-Library
+90.1-2007,SecondarySchool,Lobby,,x,x,ASHRAE_90_1_2007,SecondarySchool,SecondarySchool-Lobby
+90.1-2007,SecondarySchool,Mechanical,,x,x,ASHRAE_90_1_2007,SecondarySchool,SecondarySchool-Mechanical
+90.1-2007,SecondarySchool,Office,,x,x,ASHRAE_90_1_2007,SecondarySchool,SecondarySchool-Office
+90.1-2007,SecondarySchool,Restroom,,x,x,ASHRAE_90_1_2007,SecondarySchool,SecondarySchool-Restroom
+90.1-2007,SecondarySchool,Kitchen,,x,x,ASHRAE_90_1_2007,SecondarySchool,SecondarySchool-Kitchen
+90.1-2007,SecondarySchool,ComputerRoom,,x,x,ASHRAE_90_1_2007,SecondarySchool,SecondarySchool-Computer
+90.1-2007,SmallHotel,Corridor,,x,x,ASHRAE_90_1_2007,SmallHotel,SmallHotel-Corridor
+90.1-2007,SmallHotel,Elec/MechRoom,,x,x,ASHRAE_90_1_2007,SmallHotel,SmallHotel-Mechanical
+90.1-2007,SmallHotel,ElevatorCore,,x,x,ASHRAE_90_1_2007,SmallHotel,SmallHotel-ElevatorCore
+90.1-2007,SmallHotel,Exercise,,x,x,ASHRAE_90_1_2007,SmallHotel,SmallHotel-Exercise
+90.1-2007,SmallHotel,GuestLounge,,x,x,ASHRAE_90_1_2007,SmallHotel,SmallHotel-GuestLounge
+90.1-2007,SmallHotel,GuestRoom123Occ,,x,x,ASHRAE_90_1_2007,SmallHotel,SmallHotel-GuestRoomOcc
+90.1-2007,SmallHotel,GuestRoom123Vac,,x,x,ASHRAE_90_1_2007,SmallHotel,SmallHotel-GuestRoomVac
+90.1-2007,SmallHotel,Laundry,,x,x,ASHRAE_90_1_2007,SmallHotel,SmallHotel-Laundry
+90.1-2007,SmallHotel,Meeting,,x,x,ASHRAE_90_1_2007,SmallHotel,SmallHotel-Meeting
+90.1-2007,SmallHotel,Office,,x,x,ASHRAE_90_1_2007,SmallHotel,SmallHotel-Office
+90.1-2007,SmallHotel,PublicRestroom,,x,x,ASHRAE_90_1_2007,SmallHotel,SmallHotel-Restroom
+90.1-2007,SmallHotel,StaffLounge,,x,x,ASHRAE_90_1_2007,SmallHotel,SmallHotel-Lounge
+90.1-2007,SmallHotel,Stair,,x,x,ASHRAE_90_1_2007,SmallHotel,SmallHotel-Stair
+90.1-2007,SmallHotel,Storage,,x,x,ASHRAE_90_1_2007,SmallHotel,SmallHotel-Storage
+90.1-2007,SuperMarket,Sales,,x,x,ASHRAE_90_1_2007,SuperMarket,SuperMarket-Sales
+90.1-2007,SuperMarket,Office,,x,x,ASHRAE_90_1_2007,SuperMarket,SuperMarket-Office
+90.1-2007,SuperMarket,DryStorage,,x,x,ASHRAE_90_1_2007,SuperMarket,SuperMarket-Storage
+90.1-2007,SuperMarket,Sales,,x,x,ASHRAE_90_1_2007,SuperMarket,SuperMarket-Main
+90.1-2007,Warehouse,Office,,x,x,ASHRAE_90_1_2007,Warehouse,Warehouse-Office
+90.1-2007,Warehouse,Bulk,,x,x,ASHRAE_90_1_2007,Warehouse,Warehouse-Storage
+90.1-2010,Office,OfficeLarge Data Center,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-DataCenter
+90.1-2010,Office,Stair,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-Stair
+90.1-2010,Office,Lobby,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-Lobby
+90.1-2010,Office,Elec/MechRoom,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-MechRoom
+90.1-2010,Office,Corridor,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-Corridor
+90.1-2010,Office,Conference,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-Conference 
+90.1-2010,Office,BreakRoom,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-BreakRoom
+90.1-2010,Office,Storage,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-Storage
+90.1-2010,Office,Restroom,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-Restroom
+90.1-2010,Office,OpenOffice,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-OpenOffice
+90.1-2010,Office,ClosedOffice,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-PrivateOffice
+90.1-2010,Office,Dining,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-Dining
+90.1-2010,Office,Classroom,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-Classroom
+90.1-2010,Office,OfficeLarge Data Center,This same object as for large office 2010 above must be duplicated for MediumOffice and SmallOffice 2010 building_type_speed for both lighting and equipment.,x,x,ASHRAE_90_1_2010,MediumOffice,Office-DataCenter
+90.1-2010,Office,MediumOffice - Stair,,x,x,ASHRAE_90_1_2010,MediumOffice,Office-Stair
+90.1-2010,Office,MediumOffice - Lobby,,x,x,ASHRAE_90_1_2010,MediumOffice,Office-Lobby
+90.1-2010,Office,MediumOffice - Elec/MechRoom,,x,x,ASHRAE_90_1_2010,MediumOffice,Office-MechRoom
+90.1-2010,Office,MediumOffice - Corridor,,x,x,ASHRAE_90_1_2010,MediumOffice,Office-Corridor
+90.1-2010,Office,MediumOffice - Conference,,x,x,ASHRAE_90_1_2010,MediumOffice,Office-Conference
+90.1-2010,Office,MediumOffice - Breakroom,,x,x,ASHRAE_90_1_2010,MediumOffice,Office-BreakRoom
+90.1-2010,Office,MediumOffice - Storage,,x,x,ASHRAE_90_1_2010,MediumOffice,Office-Storage
+90.1-2010,Office,MediumOffice - Restroom,,x,x,ASHRAE_90_1_2010,MediumOffice,Office-Restroom
+90.1-2010,Office,MediumOffice - OpenOffice,,x,x,ASHRAE_90_1_2010,MediumOffice,Office-OpenOffice
+90.1-2010,Office,MediumOffice - ClosedOffice,,x,x,ASHRAE_90_1_2010,MediumOffice,Office-PrivateOffice
+90.1-2010,Office,MediumOffice - Dining,,x,x,ASHRAE_90_1_2010,MediumOffice,Office-Dining
+90.1-2010,Office,MediumOffice - Classroom,,x,x,ASHRAE_90_1_2010,MediumOffice,Office-Classroom
+90.1-2010,Office,OfficeLarge Data Center,This same object as for large office 2010 above must be duplicated for MediumOffice and SmallOffice 2010 building_type_speed for both lighting and equipment.,x,x,ASHRAE_90_1_2010,SmallOffice,Office-DataCenter
+90.1-2010,Office,SmallOffice - Stair,,x,x,ASHRAE_90_1_2010,SmallOffice,Office-Stair
+90.1-2010,Office,SmallOffice - Lobby,,x,x,ASHRAE_90_1_2010,SmallOffice,Office-Lobby
+90.1-2010,Office,SmallOffice - Elec/MechRoom,,x,x,ASHRAE_90_1_2010,SmallOffice,Office-MechRoom
+90.1-2010,Office,SmallOffice - Corridor,,x,x,ASHRAE_90_1_2010,SmallOffice,Office-Corridor
+90.1-2010,Office,SmallOffice - Conference,,x,x,ASHRAE_90_1_2010,SmallOffice,Office-Conference
+90.1-2010,Office,SmallOffice - Breakroom,,x,x,ASHRAE_90_1_2010,SmallOffice,Office-BreakRoom
+90.1-2010,Office,SmallOffice - Storage,,x,x,ASHRAE_90_1_2010,SmallOffice,Office-Storage
+90.1-2010,Office,SmallOffice - Restroom,,x,x,ASHRAE_90_1_2010,SmallOffice,Office-Restroom
+90.1-2010,Office,SmallOffice - OpenOffice,,x,x,ASHRAE_90_1_2010,SmallOffice,Office-OpenOffice
+90.1-2010,Office,SmallOffice - ClosedOffice,,x,x,ASHRAE_90_1_2010,SmallOffice,Office-PrivateOffice
+90.1-2010,Office,SmallOffice - Dining,,x,x,ASHRAE_90_1_2010,SmallOffice,Office-Dining
+90.1-2010,Office,SmallOffice - Classroom,,x,x,ASHRAE_90_1_2010,SmallOffice,Office-Classroom
+90.1-2010,FullServiceRestaurant,Kitchen,,x,x,ASHRAE_90_1_2010,FullServiceRestaurant,FullServiceRestaurant-Kitchen
+90.1-2010,FullServiceRestaurant,Dining,,x,x,ASHRAE_90_1_2010,FullServiceRestaurant,FullServiceRestaurant-Dining
+90.1-2010,HighriseApartment,Apartment,,x,x,ASHRAE_90_1_2010,HighriseApartment,HighriseApt-Apartment
+90.1-2010,HighriseApartment,Corridor,,x,x,ASHRAE_90_1_2010,HighriseApartment,HighriseApt-Corridor
+90.1-2010,HighriseApartment,Office,,x,x,ASHRAE_90_1_2010,HighriseApartment,HighriseApt-Office
+90.1-2010,Hospital,Kitchen,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-Kitchen
+90.1-2010,Hospital,Basement,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-Basement
+90.1-2010,Hospital,Corridor,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-Corridor
+90.1-2010,Hospital,Dining,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-Dining
+90.1-2010,Hospital,ER_Exam,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-ER_Exam
+90.1-2010,Hospital,ER_NurseStn,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-ER_NurseStn
+90.1-2010,Hospital,ER_Trauma,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-ER_Trauma
+90.1-2010,Hospital,ER_Triage,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-ER_Triage
+90.1-2010,Hospital,ICU_NurseStn,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-ICU_NurseStn
+90.1-2010,Hospital,ICU_Open,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-ICU_Open
+90.1-2010,Hospital,ICU_PatRm,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-ICU_PatRm
+90.1-2010,Hospital,Lab,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-Lab
+90.1-2010,Hospital,Lobby,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-Lobby
+90.1-2010,Hospital,NurseStn,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-NurseStn
+90.1-2010,Hospital,Office,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-Office
+90.1-2010,Hospital,OR,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-OR
+90.1-2010,Hospital,PatRoom,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-PatRoom
+90.1-2010,Hospital,PhysTherapy,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-PhysTherapy
+90.1-2010,Hospital,Radiology,,x,x,ASHRAE_90_1_2010,Hospital,Hospital-Radiology
+90.1-2010,LargeHotel,Kitchen,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Kitchen
+90.1-2010,LargeHotel,Banquet,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Banquet
+90.1-2010,LargeHotel,Basement,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Basement
+90.1-2010,LargeHotel,Cafe,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Café
+90.1-2010,LargeHotel,Corridor,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Corridor
+90.1-2010,LargeHotel,GuestRoom,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-GuestRoom
+90.1-2010,LargeHotel,Laundry,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Laundry
+90.1-2010,LargeHotel,Lobby,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Lobby
+90.1-2010,LargeHotel,Mechanical,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Mech
+90.1-2010,LargeHotel,Retail,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Retail
+90.1-2010,LargeHotel,Storage,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Storage
+90.1-2010,MidriseApartment,Apartment,,x,x,ASHRAE_90_1_2010,MidriseApartment,MidriseApt-Apartment
+90.1-2010,MidriseApartment,Corridor,,x,x,ASHRAE_90_1_2010,MidriseApartment,MidriseApt-Corridor
+90.1-2010,MidriseApartment,Office,,x,x,ASHRAE_90_1_2010,MidriseApartment,MidriseApt-Office
+90.1-2010,Outpatient,Anesthesia,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Anesthesia
+90.1-2010,Outpatient,BioHazard,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-BioHazard
+90.1-2010,Outpatient,Cafe,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Café
+90.1-2010,Outpatient,Conference,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Conference
+90.1-2010,Outpatient,DressingRoom,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-DressingRoom
+90.1-2010,Outpatient,Elec/MechRoom,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Mechanical
+90.1-2010,Outpatient,Exam,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Exam
+90.1-2010,Outpatient,Hall,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Hall
+90.1-2010,Outpatient,IT_Room,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-IT_Room
+90.1-2010,Outpatient,Janitor,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Janitor
+90.1-2010,Outpatient,Lobby,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Lobby
+90.1-2010,Outpatient,LockerRoom,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-LockerRoom
+90.1-2010,Outpatient,Lounge,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Lounge
+90.1-2010,Outpatient,MedGas,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-MedGas
+90.1-2010,Outpatient,MRI,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-MRI
+90.1-2010,Outpatient,NurseStation,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-NurseStation
+90.1-2010,Outpatient,Office,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Office
+90.1-2010,Outpatient,OR,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-OR
+90.1-2010,Outpatient,PACU,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-PACU
+90.1-2010,Outpatient,PhysicalTherapy,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-PhysTherapy
+90.1-2010,Outpatient,PreOp,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-PreOp
+90.1-2010,Outpatient,ProcedureRoom,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-ProcedureRoom
+90.1-2010,Outpatient,Reception,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Reception
+90.1-2010,Outpatient,Stair,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Stair
+90.1-2010,Outpatient,Toilet,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Toilet
+90.1-2010,Outpatient,Xray,,x,x,ASHRAE_90_1_2010,PrimarySchool,Outpatient-Xray
+90.1-2010,PrimarySchool,Restroom,,x,x,ASHRAE_90_1_2010,PrimarySchool,PrimarySchool-Restroom
+90.1-2010,PrimarySchool,Office,,x,x,ASHRAE_90_1_2010,PrimarySchool,PrimarySchool-Office
+90.1-2010,PrimarySchool,Mechanical,,x,x,ASHRAE_90_1_2010,PrimarySchool,PrimarySchool-Mechanical
+90.1-2010,PrimarySchool,Lobby,,x,x,ASHRAE_90_1_2010,PrimarySchool,PrimarySchool-Lobby
+90.1-2010,PrimarySchool,Library,,x,x,ASHRAE_90_1_2010,PrimarySchool,PrimarySchool-Library
+90.1-2010,PrimarySchool,Gym,,x,x,ASHRAE_90_1_2010,PrimarySchool,PrimarySchool-Gym
+90.1-2010,PrimarySchool,Corridor,,x,x,ASHRAE_90_1_2010,PrimarySchool,PrimarySchool-Corridor
+90.1-2010,PrimarySchool,Classroom,,x,x,ASHRAE_90_1_2010,PrimarySchool,PrimarySchool-Classroom
+90.1-2010,PrimarySchool,Cafeteria,,x,x,ASHRAE_90_1_2010,PrimarySchool,PrimarySchool-Cafeteria
+90.1-2010,PrimarySchool,Kitchen,,x,x,ASHRAE_90_1_2010,PrimarySchool,PrimarySchool-Kitchen
+90.1-2010,PrimarySchool,ComputerRoom,,x,x,ASHRAE_90_1_2010,PrimarySchool,PrimarySchool-Computer
+90.1-2010,QuickServiceRestaurant,Dining,,x,x,ASHRAE_90_1_2010,QuickServiceRestaurant,QuickServiceRestaurant-Dining
+90.1-2010,QuickServiceRestaurant,Kitchen,,x,x,ASHRAE_90_1_2010,QuickServiceRestaurant,QuickServiceRestaurant-Kitchen
+90.1-2010,Retail,Back_Space,,x,x,ASHRAE_90_1_2010,Retail,Retail-Storage
+90.1-2010,Retail,Point_of_Sale,,x,x,ASHRAE_90_1_2010,Retail,Retail-Point_of_Sale
+90.1-2010,Retail,Retail,,x,x,ASHRAE_90_1_2010,Retail,Retail-Retail
+90.1-2010,SecondarySchool,Auditorium,,x,x,ASHRAE_90_1_2010,SecondarySchool,SecondarySchool-Auditorium
+90.1-2010,SecondarySchool,Cafeteria,,x,x,ASHRAE_90_1_2010,SecondarySchool,SecondarySchool-Cafeteria
+90.1-2010,SecondarySchool,Classroom,,x,x,ASHRAE_90_1_2010,SecondarySchool,SecondarySchool-Classroom
+90.1-2010,SecondarySchool,Corridor,,x,x,ASHRAE_90_1_2010,SecondarySchool,SecondarySchool-Corridor
+90.1-2010,SecondarySchool,Gym,,x,x,ASHRAE_90_1_2010,SecondarySchool,SecondarySchool-Gym
+90.1-2010,SecondarySchool,Library,,x,x,ASHRAE_90_1_2010,SecondarySchool,SecondarySchool-Library
+90.1-2010,SecondarySchool,Lobby,,x,x,ASHRAE_90_1_2010,SecondarySchool,SecondarySchool-Lobby
+90.1-2010,SecondarySchool,Mechanical,,x,x,ASHRAE_90_1_2010,SecondarySchool,SecondarySchool-Mechanical
+90.1-2010,SecondarySchool,Office,,x,x,ASHRAE_90_1_2010,SecondarySchool,SecondarySchool-Office
+90.1-2010,SecondarySchool,Restroom,,x,x,ASHRAE_90_1_2010,SecondarySchool,SecondarySchool-Restroom
+90.1-2010,SecondarySchool,Kitchen,,x,x,ASHRAE_90_1_2010,SecondarySchool,SecondarySchool-Kitchen
+90.1-2010,SecondarySchool,ComputerRoom,,x,x,ASHRAE_90_1_2010,SecondarySchool,SecondarySchool-Computer
+90.1-2010,SmallHotel,Corridor,,x,x,ASHRAE_90_1_2010,SmallHotel,SmallHotel-Corridor
+90.1-2010,SmallHotel,Elec/MechRoom,,x,x,ASHRAE_90_1_2010,SmallHotel,SmallHotel-Mechanical
+90.1-2010,SmallHotel,ElevatorCore,,x,x,ASHRAE_90_1_2010,SmallHotel,SmallHotel-ElevatorCore
+90.1-2010,SmallHotel,Exercise,,x,x,ASHRAE_90_1_2010,SmallHotel,SmallHotel-Exercise
+90.1-2010,SmallHotel,GuestLounge,,x,x,ASHRAE_90_1_2010,SmallHotel,SmallHotel-GuestLounge
+90.1-2010,SmallHotel,GuestRoom123Occ,,x,x,ASHRAE_90_1_2010,SmallHotel,SmallHotel-GuestRoomOcc
+90.1-2010,SmallHotel,GuestRoom123Vac,,x,x,ASHRAE_90_1_2010,SmallHotel,SmallHotel-GuestRoomVac
+90.1-2010,SmallHotel,Laundry,,x,x,ASHRAE_90_1_2010,SmallHotel,SmallHotel-Laundry
+90.1-2010,SmallHotel,Meeting,,x,x,ASHRAE_90_1_2010,SmallHotel,SmallHotel-Meeting
+90.1-2010,SmallHotel,Office,,x,x,ASHRAE_90_1_2010,SmallHotel,SmallHotel-Office
+90.1-2010,SmallHotel,PublicRestroom,,x,x,ASHRAE_90_1_2010,SmallHotel,SmallHotel-Restroom
+90.1-2010,SmallHotel,StaffLounge,,x,x,ASHRAE_90_1_2010,SmallHotel,SmallHotel-Lounge
+90.1-2010,SmallHotel,Stair,,x,x,ASHRAE_90_1_2010,SmallHotel,SmallHotel-Stair
+90.1-2010,SmallHotel,Storage,,x,x,ASHRAE_90_1_2010,SmallHotel,SmallHotel-Storage
+90.1-2010,SuperMarket,Sales,,x,x,ASHRAE_90_1_2010,SuperMarket,SuperMarket-Sales
+90.1-2010,SuperMarket,Office,,x,x,ASHRAE_90_1_2010,SuperMarket,SuperMarket-Office
+90.1-2010,SuperMarket,DryStorage,,x,x,ASHRAE_90_1_2010,SuperMarket,SuperMarket-Storage
+90.1-2010,SuperMarket,Sales,,x,x,ASHRAE_90_1_2010,SuperMarket,SuperMarket-Main
+90.1-2010,Warehouse,Office,,x,x,ASHRAE_90_1_2010,Warehouse,Warehouse-Office
+90.1-2010,Warehouse,Bulk,,x,x,ASHRAE_90_1_2010,Warehouse,Warehouse-Storage
+90.1-2013,Office,OfficeLarge Data Center,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-DataCenter
+90.1-2013,Office,Stair,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-Stair
+90.1-2013,Office,Lobby,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-Lobby
+90.1-2013,Office,Elec/MechRoom,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-MechRoom
+90.1-2013,Office,Corridor,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-Corridor
+90.1-2013,Office,Conference,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-Conference 
+90.1-2013,Office,BreakRoom,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-BreakRoom
+90.1-2013,Office,Storage,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-Storage
+90.1-2013,Office,Restroom,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-Restroom
+90.1-2013,Office,OpenOffice,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-OpenOffice
+90.1-2013,Office,ClosedOffice,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-PrivateOffice
+90.1-2013,Office,Dining,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-Dining
+90.1-2013,Office,Classroom,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-Classroom
+90.1-2013,Office,OfficeLarge Data Center,This same object as for large office 2013 above must be duplicated for MediumOffice and SmallOffice building_type_speed 2013 for lighting and equipment.,x,x,ASHRAE_90_1_2013,MediumOffice,Office-DataCenter
+90.1-2013,Office,MediumOffice - Stair,,x,x,ASHRAE_90_1_2013,MediumOffice,Office-Stair
+90.1-2013,Office,MediumOffice - Lobby,,x,x,ASHRAE_90_1_2013,MediumOffice,Office-Lobby
+90.1-2013,Office,MediumOffice - Elec/MechRoom,,x,x,ASHRAE_90_1_2013,MediumOffice,Office-MechRoom
+90.1-2013,Office,MediumOffice - Corridor,,x,x,ASHRAE_90_1_2013,MediumOffice,Office-Corridor
+90.1-2013,Office,MediumOffice - Conference,,x,x,ASHRAE_90_1_2013,MediumOffice,Office-Conference
+90.1-2013,Office,MediumOffice - Breakroom,,x,x,ASHRAE_90_1_2013,MediumOffice,Office-BreakRoom
+90.1-2013,Office,MediumOffice - Storage,,x,x,ASHRAE_90_1_2013,MediumOffice,Office-Storage
+90.1-2013,Office,MediumOffice - Restroom,,x,x,ASHRAE_90_1_2013,MediumOffice,Office-Restroom
+90.1-2013,Office,MediumOffice - OpenOffice,,x,x,ASHRAE_90_1_2013,MediumOffice,Office-OpenOffice
+90.1-2013,Office,MediumOffice - ClosedOffice,,x,x,ASHRAE_90_1_2013,MediumOffice,Office-PrivateOffice
+90.1-2013,Office,MediumOffice - Dining,,x,x,ASHRAE_90_1_2013,MediumOffice,Office-Dining
+90.1-2013,Office,MediumOffice - Classroom,,x,x,ASHRAE_90_1_2013,MediumOffice,Office-Classroom
+90.1-2013,Office,OfficeLarge Data Center,This same object as for large office 2013 above must be duplicated for MediumOffice and SmallOffice building_type_speed 2013 for lighting and equipment.,x,x,ASHRAE_90_1_2013,SmallOffice,Office-DataCenter
+90.1-2013,Office,SmallOffice - Stair,,x,x,ASHRAE_90_1_2013,SmallOffice,Office-Stair
+90.1-2013,Office,SmallOffice - Lobby,,x,x,ASHRAE_90_1_2013,SmallOffice,Office-Lobby
+90.1-2013,Office,SmallOffice - Elec/MechRoom,,x,x,ASHRAE_90_1_2013,SmallOffice,Office-MechRoom
+90.1-2013,Office,SmallOffice - Corridor,,x,x,ASHRAE_90_1_2013,SmallOffice,Office-Corridor
+90.1-2013,Office,SmallOffice - Conference,,x,x,ASHRAE_90_1_2013,SmallOffice,Office-Conference
+90.1-2013,Office,SmallOffice - Breakroom,,x,x,ASHRAE_90_1_2013,SmallOffice,Office-BreakRoom
+90.1-2013,Office,SmallOffice - Storage,,x,x,ASHRAE_90_1_2013,SmallOffice,Office-Storage
+90.1-2013,Office,SmallOffice - Restroom,,x,x,ASHRAE_90_1_2013,SmallOffice,Office-Restroom
+90.1-2013,Office,SmallOffice - OpenOffice,,x,x,ASHRAE_90_1_2013,SmallOffice,Office-OpenOffice
+90.1-2013,Office,SmallOffice - ClosedOffice,,x,x,ASHRAE_90_1_2013,SmallOffice,Office-PrivateOffice
+90.1-2013,Office,SmallOffice - Dining,,x,x,ASHRAE_90_1_2013,SmallOffice,Office-Dining
+90.1-2013,Office,SmallOffice - Classroom,,x,x,ASHRAE_90_1_2013,SmallOffice,Office-Classroom
+90.1-2013,FullServiceRestaurant,Kitchen,,x,x,ASHRAE_90_1_2013,FullServiceRestaurant,FullServiceRestaurant-Kitchen
+90.1-2013,FullServiceRestaurant,Dining,,x,x,ASHRAE_90_1_2013,FullServiceRestaurant,FullServiceRestaurant-Dining
+90.1-2013,HighriseApartment,Apartment,,x,x,ASHRAE_90_1_2013,HighriseApartment,HighriseApt-Apartment
+90.1-2013,HighriseApartment,Corridor,,x,x,ASHRAE_90_1_2013,HighriseApartment,HighriseApt-Corridor
+90.1-2013,HighriseApartment,Office,,x,x,ASHRAE_90_1_2013,HighriseApartment,HighriseApt-Office
+90.1-2013,Hospital,Kitchen,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-Kitchen
+90.1-2013,Hospital,Basement,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-Basement
+90.1-2013,Hospital,Corridor,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-Corridor
+90.1-2013,Hospital,Dining,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-Dining
+90.1-2013,Hospital,ER_Exam,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-ER_Exam
+90.1-2013,Hospital,ER_NurseStn,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-ER_NurseStn
+90.1-2013,Hospital,ER_Trauma,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-ER_Trauma
+90.1-2013,Hospital,ER_Triage,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-ER_Triage
+90.1-2013,Hospital,ICU_NurseStn,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-ICU_NurseStn
+90.1-2013,Hospital,ICU_Open,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-ICU_Open
+90.1-2013,Hospital,ICU_PatRm,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-ICU_PatRm
+90.1-2013,Hospital,Lab,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-Lab
+90.1-2013,Hospital,Lobby,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-Lobby
+90.1-2013,Hospital,NurseStn,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-NurseStn
+90.1-2013,Hospital,Office,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-Office
+90.1-2013,Hospital,OR,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-OR
+90.1-2013,Hospital,PatRoom,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-PatRoom
+90.1-2013,Hospital,PhysTherapy,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-PhysTherapy
+90.1-2013,Hospital,Radiology,,x,x,ASHRAE_90_1_2013,Hospital,Hospital-Radiology
+90.1-2013,LargeHotel,Kitchen,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Kitchen
+90.1-2013,LargeHotel,Banquet,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Banquet
+90.1-2013,LargeHotel,Basement,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Basement
+90.1-2013,LargeHotel,Cafe,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Café
+90.1-2013,LargeHotel,Corridor,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Corridor
+90.1-2013,LargeHotel,GuestRoom,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-GuestRoom
+90.1-2013,LargeHotel,Laundry,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Laundry
+90.1-2013,LargeHotel,Lobby,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Lobby
+90.1-2013,LargeHotel,Mechanical,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Mech
+90.1-2013,LargeHotel,Retail,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Retail
+90.1-2013,LargeHotel,Storage,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Storage
+90.1-2013,MidriseApartment,Apartment,,x,x,ASHRAE_90_1_2013,MidriseApartment,MidriseApt-Apartment
+90.1-2013,MidriseApartment,Corridor,,x,x,ASHRAE_90_1_2013,MidriseApartment,MidriseApt-Corridor
+90.1-2013,MidriseApartment,Office,,x,x,ASHRAE_90_1_2013,MidriseApartment,MidriseApt-Office
+90.1-2013,Outpatient,Anesthesia,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Anesthesia
+90.1-2013,Outpatient,BioHazard,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-BioHazard
+90.1-2013,Outpatient,Cafe,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Café
+90.1-2013,Outpatient,Conference,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Conference
+90.1-2013,Outpatient,DressingRoom,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-DressingRoom
+90.1-2013,Outpatient,Elec/MechRoom,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Mechanical
+90.1-2013,Outpatient,Exam,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Exam
+90.1-2013,Outpatient,Hall,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Hall
+90.1-2013,Outpatient,IT_Room,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-IT_Room
+90.1-2013,Outpatient,Janitor,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Janitor
+90.1-2013,Outpatient,Lobby,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Lobby
+90.1-2013,Outpatient,LockerRoom,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-LockerRoom
+90.1-2013,Outpatient,Lounge,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Lounge
+90.1-2013,Outpatient,MedGas,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-MedGas
+90.1-2013,Outpatient,MRI,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-MRI
+90.1-2013,Outpatient,NurseStation,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-NurseStation
+90.1-2013,Outpatient,Office,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Office
+90.1-2013,Outpatient,OR,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-OR
+90.1-2013,Outpatient,PACU,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-PACU
+90.1-2013,Outpatient,PhysicalTherapy,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-PhysTherapy
+90.1-2013,Outpatient,PreOp,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-PreOp
+90.1-2013,Outpatient,ProcedureRoom,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-ProcedureRoom
+90.1-2013,Outpatient,Reception,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Reception
+90.1-2013,Outpatient,Stair,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Stair
+90.1-2013,Outpatient,Toilet,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Toilet
+90.1-2013,Outpatient,Xray,,x,x,ASHRAE_90_1_2013,PrimarySchool,Outpatient-Xray
+90.1-2013,PrimarySchool,Restroom,,x,x,ASHRAE_90_1_2013,PrimarySchool,PrimarySchool-Restroom
+90.1-2013,PrimarySchool,Office,,x,x,ASHRAE_90_1_2013,PrimarySchool,PrimarySchool-Office
+90.1-2013,PrimarySchool,Mechanical,,x,x,ASHRAE_90_1_2013,PrimarySchool,PrimarySchool-Mechanical
+90.1-2013,PrimarySchool,Lobby,,x,x,ASHRAE_90_1_2013,PrimarySchool,PrimarySchool-Lobby
+90.1-2013,PrimarySchool,Library,,x,x,ASHRAE_90_1_2013,PrimarySchool,PrimarySchool-Library
+90.1-2013,PrimarySchool,Gym,,x,x,ASHRAE_90_1_2013,PrimarySchool,PrimarySchool-Gym
+90.1-2013,PrimarySchool,Corridor,,x,x,ASHRAE_90_1_2013,PrimarySchool,PrimarySchool-Corridor
+90.1-2013,PrimarySchool,Classroom,,x,x,ASHRAE_90_1_2013,PrimarySchool,PrimarySchool-Classroom
+90.1-2013,PrimarySchool,Cafeteria,,x,x,ASHRAE_90_1_2013,PrimarySchool,PrimarySchool-Cafeteria
+90.1-2013,PrimarySchool,Kitchen,,x,x,ASHRAE_90_1_2013,PrimarySchool,PrimarySchool-Kitchen
+90.1-2013,PrimarySchool,ComputerRoom,,x,x,ASHRAE_90_1_2013,PrimarySchool,PrimarySchool-Computer
+90.1-2013,QuickServiceRestaurant,Dining,,x,x,ASHRAE_90_1_2013,QuickServiceRestaurant,QuickServiceRestaurant-Dining
+90.1-2013,QuickServiceRestaurant,Kitchen,,x,x,ASHRAE_90_1_2013,QuickServiceRestaurant,QuickServiceRestaurant-Kitchen
+90.1-2013,Retail,Back_Space,,x,x,ASHRAE_90_1_2013,Retail,Retail-Storage
+90.1-2013,Retail,Point_of_Sale,,x,x,ASHRAE_90_1_2013,Retail,Retail-Point_of_Sale
+90.1-2013,Retail,Retail,,x,x,ASHRAE_90_1_2013,Retail,Retail-Retail
+90.1-2013,SecondarySchool,Auditorium,,x,x,ASHRAE_90_1_2013,SecondarySchool,SecondarySchool-Auditorium
+90.1-2013,SecondarySchool,Cafeteria,,x,x,ASHRAE_90_1_2013,SecondarySchool,SecondarySchool-Cafeteria
+90.1-2013,SecondarySchool,Classroom,,x,x,ASHRAE_90_1_2013,SecondarySchool,SecondarySchool-Classroom
+90.1-2013,SecondarySchool,Corridor,,x,x,ASHRAE_90_1_2013,SecondarySchool,SecondarySchool-Corridor
+90.1-2013,SecondarySchool,Gym,,x,x,ASHRAE_90_1_2013,SecondarySchool,SecondarySchool-Gym
+90.1-2013,SecondarySchool,Library,,x,x,ASHRAE_90_1_2013,SecondarySchool,SecondarySchool-Library
+90.1-2013,SecondarySchool,Lobby,,x,x,ASHRAE_90_1_2013,SecondarySchool,SecondarySchool-Lobby
+90.1-2013,SecondarySchool,Mechanical,,x,x,ASHRAE_90_1_2013,SecondarySchool,SecondarySchool-Mechanical
+90.1-2013,SecondarySchool,Office,,x,x,ASHRAE_90_1_2013,SecondarySchool,SecondarySchool-Office
+90.1-2013,SecondarySchool,Restroom,,x,x,ASHRAE_90_1_2013,SecondarySchool,SecondarySchool-Restroom
+90.1-2013,SecondarySchool,Kitchen,,x,x,ASHRAE_90_1_2013,SecondarySchool,SecondarySchool-Kitchen
+90.1-2013,SecondarySchool,ComputerRoom,,x,x,ASHRAE_90_1_2013,SecondarySchool,SecondarySchool-Computer
+90.1-2013,SmallHotel,Corridor,,x,x,ASHRAE_90_1_2013,SmallHotel,SmallHotel-Corridor
+90.1-2013,SmallHotel,Elec/MechRoom,,x,x,ASHRAE_90_1_2013,SmallHotel,SmallHotel-Mechanical
+90.1-2013,SmallHotel,ElevatorCore,,x,x,ASHRAE_90_1_2013,SmallHotel,SmallHotel-ElevatorCore
+90.1-2013,SmallHotel,Exercise,,x,x,ASHRAE_90_1_2013,SmallHotel,SmallHotel-Exercise
+90.1-2013,SmallHotel,GuestLounge,,x,x,ASHRAE_90_1_2013,SmallHotel,SmallHotel-GuestLounge
+90.1-2013,SmallHotel,GuestRoom123Occ,,x,x,ASHRAE_90_1_2013,SmallHotel,SmallHotel-GuestRoomOcc
+90.1-2013,SmallHotel,GuestRoom123Vac,,x,x,ASHRAE_90_1_2013,SmallHotel,SmallHotel-GuestRoomVac
+90.1-2013,SmallHotel,Laundry,,x,x,ASHRAE_90_1_2013,SmallHotel,SmallHotel-Laundry
+90.1-2013,SmallHotel,Meeting,,x,x,ASHRAE_90_1_2013,SmallHotel,SmallHotel-Meeting
+90.1-2013,SmallHotel,Office,,x,x,ASHRAE_90_1_2013,SmallHotel,SmallHotel-Office
+90.1-2013,SmallHotel,PublicRestroom,,x,x,ASHRAE_90_1_2013,SmallHotel,SmallHotel-Restroom
+90.1-2013,SmallHotel,StaffLounge,,x,x,ASHRAE_90_1_2013,SmallHotel,SmallHotel-Lounge
+90.1-2013,SmallHotel,Stair,,x,x,ASHRAE_90_1_2013,SmallHotel,SmallHotel-Stair
+90.1-2013,SmallHotel,Storage,,x,x,ASHRAE_90_1_2013,SmallHotel,SmallHotel-Storage
+90.1-2013,SuperMarket,Sales,,x,x,ASHRAE_90_1_2013,SuperMarket,SuperMarket-Sales
+90.1-2013,SuperMarket,Office,,x,x,ASHRAE_90_1_2013,SuperMarket,SuperMarket-Office
+90.1-2013,SuperMarket,DryStorage,,x,x,ASHRAE_90_1_2013,SuperMarket,SuperMarket-Storage
+90.1-2013,SuperMarket,Sales,,x,x,ASHRAE_90_1_2013,SuperMarket,SuperMarket-Main
+90.1-2013,Warehouse,Office,,x,x,ASHRAE_90_1_2013,Warehouse,Warehouse-Office
+90.1-2013,Warehouse,Bulk,,x,x,ASHRAE_90_1_2013,Warehouse,Warehouse-Storage
