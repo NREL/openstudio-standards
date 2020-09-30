@@ -13,8 +13,7 @@ Edit `./data/standards/OpenStudio_Standards.xslx`.
 Run the commands:
 ```
 bundle update
-bundle exec rake data:update:manual
-bundle exec rake library:export_speed_schedules
+bundle exec rake library:export_speed
 ```
 
 JSON data files are generated in `./data/standards/` folder.

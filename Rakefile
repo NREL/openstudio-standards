@@ -190,6 +190,8 @@ namespace :data do
 
   desc 'Export JSONs from OpenStudio_Standards'
   task 'update:manual' do
+    # reads data from data/standards/OpenStudio_Standards-speed(schedules).xlsx
+    # exports data from sheet 'Schedules' to lib/openstudio-standards/standards/speed/data/speed.schedules.json
     export_spreadsheet_to_json(spreadsheet_titles)
   end
 
@@ -200,12 +202,15 @@ end
 # the OpenStudio installer
 namespace :library do
   require "#{File.dirname(__FILE__)}/data/standards/export_OpenStudio_libraries.rb"
-  desc 'Export libraries for OpenStudio installer'
-  task 'export' do
-    export_openstudio_libraries
-  end
 
-  task 'export_speed_schedules' do
+  #desc 'Export libraries for OpenStudio installer'
+  #task 'export' do
+  #  export_openstudio_libraries
+  #end
+
+  task 'export_speed_schedules' => ['data:update:manual'] do
+    # reads data from lib/openstudio-standards/standards/speed/data/speed.schedules.json
+    # exports OSM to data/standards/SpeedSchedules.osm
     model = OpenStudio::Model::Model.new
 
     std = Standard.build('Speed')
@@ -219,15 +224,30 @@ namespace :library do
   end
 
   task 'export_speed_constructions' do
+    # reads data from lib/openstudio-standards/standards/ashrae_90_1/data/*json
+    # exports JSON to data/standards/construction_inputs_new.json
+    # exports OSM to data/standards/SpeedConstructions.osm
     require "#{File.dirname(__FILE__)}/data/standards/export_speed_constructions.rb"
   end
 
   task 'export_speed_space_loads' do
+    # reads data from data/standards/InputJSONData_SpaceLoads.csv
+    # exports JSON to data/standards/space_loads_inputs_new.json
     require "#{File.dirname(__FILE__)}/data/standards/export_speed_space_loads.rb"
   end
 
+  task 'export_speed_other' do
+    # reads data from data/standards/InputJSONData.xlsx
+    # exports JSON to data/standards/other_inputs_new.json
+    require "#{File.dirname(__FILE__)}/data/standards/export_speed_other.rb"
+  end
+
   task 'export_speed' => ['export_speed_schedules', 'export_speed_constructions', 'export_speed_space_loads'] do
-    puts 'Export Speed Data'
+    # reads JSON from data/standards/construction_inputs_new.json
+    # reads JSON from data/standards/space_loads_inputs_new.json
+    # reads JSON from data/standards/other_inputs_new.json
+    # exports JSON to data/standards/inputs_new.json - TODO
+    puts 'Exported Speed Data'
   end
 end
 
