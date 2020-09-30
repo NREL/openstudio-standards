@@ -215,7 +215,19 @@ namespace :library do
       sch = std.model_add_schedule(model, name)
     end
 
-    model.save('SpeedSchedules.osm', true)
+    model.save("#{File.dirname(__FILE__)}/data/standards/SpeedSchedules.osm", true)
+  end
+
+  task 'export_speed_constructions' do
+    require "#{File.dirname(__FILE__)}/data/standards/export_speed_constructions.rb"
+  end
+
+  task 'export_speed_space_loads' do
+    require "#{File.dirname(__FILE__)}/data/standards/export_speed_space_loads.rb"
+  end
+
+  task 'export_speed' => ['export_speed_schedules', 'export_speed_constructions', 'export_speed_space_loads'] do
+    puts 'Export Speed Data'
   end
 end
 
