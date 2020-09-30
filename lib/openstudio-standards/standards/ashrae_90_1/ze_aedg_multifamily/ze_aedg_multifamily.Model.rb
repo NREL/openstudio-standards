@@ -5,7 +5,7 @@ class ZEAEDGMultifamily < ASHRAE901
   def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true)
     sql_db_vars_map = {}
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards for nrel_zne_ready_2017 template.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.ze_aedg_multifamily.Model', "Started applying HVAC efficiency standards for #{template} template.")
 
     # Air Loop Controls
     if apply_controls.nil? || apply_controls == true
@@ -13,6 +13,9 @@ class ZEAEDGMultifamily < ASHRAE901
     end
 
     # Plant Loop Controls
+    if apply_controls.nil? || apply_controls == true
+      model.getPlantLoops.sort.each { |obj| plant_loop_apply_standard_controls(obj, climate_zone) }
+    end
 
     # Zone HVAC Controls
     model.getZoneHVACComponents.sort.each { |obj| zone_hvac_component_apply_standard_controls(obj) }
@@ -75,6 +78,6 @@ class ZEAEDGMultifamily < ASHRAE901
     # Gas Heaters
     model.getCoilHeatingGass.sort.each { |obj| coil_heating_gas_apply_efficiency_and_curves(obj) }
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards for ZE AEDG Multifamily template.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.ze_aedg_multifamily.Model', "Finished applying HVAC efficiency standards for #{template} template.")
   end
 end
