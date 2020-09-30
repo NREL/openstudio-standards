@@ -143,7 +143,9 @@ def unique_properties(sheet_name)
          when 'climate_zones'
            ['name', 'standard']
          when 'energy_recovery'
-           ['Template', 'Climate Zone']
+           ['template', 'climate_zone', 'under_8000_hours']
+         when 'space_types_lighting_control'
+           ['template', 'building_type', 'space_type']
          else
            []
          end
@@ -323,6 +325,7 @@ def export_spreadsheet_to_json(spreadsheet_titles)
     bool_cols = []
     bool_cols << 'hx'
     bool_cols << 'data_center'
+    bool_cols << 'under_8000_hours'
     bool_cols << 'u_value_includes_interior_film_coefficient'
     bool_cols << 'u_value_includes_exterior_film_coefficient'
 

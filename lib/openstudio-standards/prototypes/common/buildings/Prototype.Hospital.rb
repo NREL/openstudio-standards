@@ -12,12 +12,16 @@ module Hospital
       transformer_efficiency = 0.979
     when '90.1-2010', '90.1-2013'
       transformer_efficiency = 0.987
+    else
+      transformer_efficiency = nil
     end
 
-    model_add_transformer(model,
-                          wired_lighting_frac: 0.022,
-                          transformer_size: 500000,
-                          transformer_efficiency: transformer_efficiency)
+    unless transformer_efficiency.nil?
+      model_add_transformer(model,
+                            wired_lighting_frac: 0.022,
+                            transformer_size: 500000,
+                            transformer_efficiency: transformer_efficiency)
+    end
 
     # add extra equipment for kitchen
     add_extra_equip_kitchen(model)
@@ -246,7 +250,7 @@ module Hospital
     end
   end
 
-  def model_add_daylighting_controls(model, climate_zone)
+  def model_add_daylighting_controls(model)
     space_names = ['Office1_Flr_5', 'Office3_Flr_5', 'Lobby_Records_Flr_1']
     space_names.each do |space_name|
       space = model.getSpaceByName(space_name).get

@@ -1,5 +1,4 @@
-
-# Custom changes for the QuickServiceRestaurant prototype.
+# Custom changes for the LargeDataCenterLowITE prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
 module LargeDataCenterLowITE
@@ -18,7 +17,6 @@ module LargeDataCenterLowITE
 
     return true
   end
-
 
   # add IT equipment (ITE object) for data center building types
   # Normal electric equipment has been added in model_add_load prior to this
@@ -67,8 +65,6 @@ module LargeDataCenterLowITE
     # remove normal electric equipment
     model.getElectricEquipments.each(&:remove)
   end
-
-
 
   # TODO (maybe not): for large data center, if sized AHU is too big, implement multiple AHUs to the same zone.
 =begin
@@ -161,8 +157,8 @@ module LargeDataCenterLowITE
       supply_temp_diff_max = it_equip.supplyTemperatureDifference if it_equip.supplyTemperatureDifference > supply_temp_diff_max
       if supply_temp_diff_max > 0
         supply_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                              it_equip.designEnteringAirTemperature-supply_temp_diff_max,
-                                                              name = "AHU Supply Temp Sch updated")
+                                                              it_equip.designEnteringAirTemperature - supply_temp_diff_max,
+                                                              name = 'AHU Supply Temp Sch updated')
       end
     end
 
@@ -170,12 +166,10 @@ module LargeDataCenterLowITE
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-
     return true
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-
     return true
   end
 end

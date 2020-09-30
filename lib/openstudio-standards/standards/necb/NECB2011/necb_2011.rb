@@ -31,8 +31,8 @@ class NECB2011 < Standard
     if __dir__[0] == ':' # Running from OpenStudio CLI
       embedded_files_relative('../common', /.*\.json/).each do |file|
         data = JSON.parse(EmbeddedScripting.getFileAsString(file))
-        if not data["tables"].nil? and data["tables"].first["data_type"] == "table"
-          @standards_data["tables"] << data["tables"].first
+        if not data["tables"].nil?
+          @standards_data["tables"] = [*@standards_data["tables"], *data["tables"]].to_h
         else
           @standards_data[data.keys.first] = data[data.keys.first]
         end
@@ -55,8 +55,8 @@ class NECB2011 < Standard
     if __dir__[0] == ':' # Running from OpenStudio CLI
       embedded_files_relative('data/', /.*\.json/).each do |file|
         data = JSON.parse(EmbeddedScripting.getFileAsString(file))
-        if not data["tables"].nil? and data["tables"].first["data_type"] == "table"
-          @standards_data["tables"] << data["tables"].first
+        if not data["tables"].nil?
+          @standards_data["tables"] = [*@standards_data["tables"], *data["tables"]].to_h
         else
           @standards_data[data.keys.first] = data[data.keys.first]
         end

@@ -3,7 +3,7 @@ class Standard
   # @!group ThermalZone
 
   # Calculates the zone outdoor airflow requirement (Voz)
-  # based on the inputs in the DesignSpecification:OutdoorAir obects
+  # based on the inputs in the DesignSpecification:OutdoorAir objects
   # in all spaces in the zone.
   #
   # @return [Double] the zone outdoor air flow rate
@@ -102,6 +102,8 @@ class Standard
     # all design OA to per-area
     # unless the "Outdoor Air Method" is "Maximum"
     thermal_zone.spaces.each do |space|
+      # Find the design OA, which may be assigned at either the
+      # SpaceType or directly at the Space
       dsn_oa = space.designSpecificationOutdoorAir
       next if dsn_oa.empty?
       dsn_oa = dsn_oa.get
@@ -122,12 +124,35 @@ class Standard
       # Convert total to per-area
       tot_oa_per_area = tot_oa / floor_area
 
+      # Check if there is another design OA object that has already
+      # been converted from per-person to per-area that matches.
+      # If so, reuse that instead of creating a duplicate.
+      new_dsn_oa_name = "#{dsn_oa.name} to per-area"
+      if thermal_zone.model.getDesignSpecificationOutdoorAirByName(new_dsn_oa_name).is_initialized
+        new_dsn_oa = thermal_zone.model.getDesignSpecificationOutdoorAirByName(new_dsn_oa_name).get
+      else
+        new_dsn_oa = OpenStudio::Model::DesignSpecificationOutdoorAir.new(thermal_zone.model)
+        new_dsn_oa.setName(new_dsn_oa_name)
+      end
+
+      # Assign this new design OA to the space
+      space.setDesignSpecificationOutdoorAir(new_dsn_oa)
+
+      # Set the method
+      new_dsn_oa.setOutdoorAirMethod('Sum')
       # Set the per-area requirement
-      dsn_oa.setOutdoorAirFlowperFloorArea(tot_oa_per_area)
+      new_dsn_oa.setOutdoorAirFlowperFloorArea(tot_oa_per_area)
       # Zero-out the per-person, ACH, and flow requirements
-      dsn_oa.setOutdoorAirFlowperPerson(0.0)
-      dsn_oa.setOutdoorAirFlowAirChangesperHour(0.0)
-      dsn_oa.setOutdoorAirFlowRate(0.0)
+      new_dsn_oa.setOutdoorAirFlowperPerson(0.0)
+      new_dsn_oa.setOutdoorAirFlowAirChangesperHour(0.0)
+      new_dsn_oa.setOutdoorAirFlowRate(0.0)
+      # Copy the orignal OA schedule, if any
+      if dsn_oa.outdoorAirFlowRateFractionSchedule.is_initialized
+        oa_sch = dsn_oa.outdoorAirFlowRateFractionSchedule.get
+        new_dsn_oa.setOutdoorAirFlowRateFractionSchedule(oa_sch)
+      end
+
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}: Converted total ventilation requirements to per-area value.")
     end
 
     return true
@@ -1625,6 +1650,14 @@ class Standard
     end
 
     # If here, DCV is required
+    if min_area_m2 && min_area_m2_per_occ
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: DCV is required since the occupant density of #{occ_per_1000_ft2.round} people/1000 ft2 is above minimum occupant density of #{min_occ_per_1000_ft2.round} people/1000 ft2 and the area of #{area_served_ft2.round} ft2 is above the minimum size of #{min_area_ft2.round} ft2.")
+    elsif min_area_m2
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: DCV is required since the area of #{area_served_ft2.round} ft2 is above the minimum size of #{min_area_ft2.round} ft2.")
+    elsif min_area_m2_per_occ
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: DCV is required since the occupant density of #{occ_per_1000_ft2.round} people/1000 ft2 is above minimum occupant density of #{min_occ_per_1000_ft2.round} people/1000 ft2.")
+    end
+
     dcv_required = true
 
     return dcv_required
