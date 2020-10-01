@@ -31,6 +31,41 @@ class String
   end
 end
 
+def get_option(all_data, i, j)
+
+  option = all_data[i][j]
+  option = all_data[i][j - 1] if option.nil? || option.empty?
+  option = 'Default' if option == 'A'
+  option = 'Options' if option == 'Option'
+
+  return option
+end
+
+def process_column(all_data, cell_data, option_row, j, num_rows, indent)
+
+  option = get_option(all_data, option_row, j)
+
+  puts "#{indent}#{option}"
+
+  if option == 'Default'
+    cell_data[option] = all_data[option_row + 1][j]
+  elsif option == 'Options'
+    options = []
+    ((option_row+1)...num_rows).each do |i|
+      value = all_data[i][j] if all_data[i]
+      options << value if value
+    end
+    cell_data[option] = options
+  elsif option == 'Num_Zones' || option == 'Type'
+    cell_data[option] = all_data[option_row + 1][j]
+  elsif option.nil? || option.empty?
+    # no-op
+  else
+    cell_data[option] = {} if cell_data[option].nil?
+    process_column(all_data, cell_data[option], option_row + 1, j, num_rows, indent + '  ')
+  end
+end
+
 workbook.worksheets.each do |worksheet|
   sheet_data = {}
   sheet_name = worksheet.sheet_name.underscore
@@ -45,42 +80,27 @@ workbook.worksheets.each do |worksheet|
   num_rows = all_data.size
   num_cols = all_data[header_row].size
   (0...num_cols).each do |j|
-    key = all_data[header_row][j]
-    key = all_data[header_row][j - 1] if key.nil? || key.empty?
+    key = nil
+    offset = 0
+    while key.nil? || key.empty?
+      key = all_data[header_row][j-offset]
+      offset += 1
+    end
 
     puts "  #{key}"
 
     sheet_data[key] = {} if sheet_data[key].nil?
 
-    option = all_data[option_row][j]
-    option = 'Default' if option == 'A'
-    option = 'Options' if option == 'Option'
+    process_column(all_data, sheet_data[key], option_row, j, num_rows, '    ')
 
-    next if option.nil? || option.empty?
-
-    puts "    #{option}"
-
-    if option == 'Default'
-      sheet_data[key][option] = all_data[option_row + 1][j]
-    elsif option = 'Options'
-      options = []
-      ((option_row+1)...num_rows).each do |i|
-        if key == 'Site_Orientation'
-          puts "#{i}, #{j}, #{all_data[i][j]}"
-        end
-        options << all_data[i][j] if all_data[i]
-      end
-      sheet_data[key][option] = options
-      if key == 'Site_Orientation'
-        puts "#{sheet_data[key][option]}"
-      end
-    else
-      puts "Unknown option #{option}"
-    end
   end
 
   other_data[sheet_name] = sheet_data
 end
+
+# additional data
+
+other_data['Project_Information']['Units'] = { "Default"=>"IP", "Options"=>["IP"] }
 
 # Inputs JSON
 File.open(File.join(base_path, 'other_inputs_new.json'), 'w') do |f|
