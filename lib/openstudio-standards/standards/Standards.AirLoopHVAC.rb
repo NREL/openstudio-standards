@@ -1570,9 +1570,18 @@ class Standard
       return false
     end
 
-    # Create an ERV and add it to the OA system
-    erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(air_loop_hvac.model)
-    erv.addToNode(oa_system.outboardOANode.get)
+    # Get the existing ERV or create an ERV and add it to the OA system
+    erv = nil
+    air_loop_hvac.supplyComponents.each do |supply_comp|
+      if supply_comp.to_HeatExchangerAirToAirSensibleAndLatent.is_initialized
+        erv = supply_comp.to_HeatExchangerAirToAirSensibleAndLatent.get
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, adjusting properties for existing ERV #{erv.name} instead of adding another one.")
+      end
+    end
+    if erv.nil?
+      erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(air_loop_hvac.model)
+      erv.addToNode(oa_system.outboardOANode.get)
+    end
 
     # Determine whether to use an ERV and HRV and heat exchanger style
     erv_type = air_loop_hvac_energy_recovery_ventilator_type(air_loop_hvac, climate_zone)
