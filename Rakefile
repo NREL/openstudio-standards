@@ -246,8 +246,8 @@ namespace :library do
     # reads JSON from data/standards/construction_inputs_new.json
     # reads JSON from data/standards/space_loads_inputs_new.json
     # reads JSON from data/standards/other_inputs_new.json
-    # exports JSON to data/standards/inputs_new.json - TODO
-    puts 'Exported Speed Data'
+    # exports JSON to data/standards/inputs_new.json
+    require "#{File.dirname(__FILE__)}/data/standards/export_speed.rb"
   end
 end
 
