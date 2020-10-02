@@ -27,7 +27,7 @@ module SpeedConstructions
       'ExteriorRoof' => {'key' => 'Roof', 'method' => 'Roof', 'gui' => 'Roof'},
       'ExteriorWall' => {'key' => 'Exterior_Walls', 'method' => 'Wall', 'gui' => 'Wall'},
       'ExteriorWindow' => {'key' => 'Exterior_Window', 'method' => 'Window', 'gui' => 'Window'},
-      'GroundContactFloor' => {'key' => 'Foundation', 'method' => 'Slab', 'gui' => 'Insulated Slab'},
+      'GroundContactFloor' => {'key' => 'Foundation', 'method' => 'Slab', 'gui' => 'Slab'},
       'InteriorFloor' => {'key' => 'Floors', 'method' => 'Floor', 'gui' => 'Floor'},
       'InteriorWall' => {'key' => 'Interior_Walls', 'method' => 'Int_Wall', 'gui' => 'Interior Wall'},
       # Standards Construction Types
@@ -39,7 +39,7 @@ module SpeedConstructions
       'Metal framing (curtainwall/storefront)' => {'key' => 'Metal_Framing_CurtainWall', 'gui' => 'Mtl Framed CW'},
       'Nonmetal framing (all)' => {'key' => 'Non-Metal_Framing', 'gui' => 'Non Mtl Framed'},
       'SteelFramed' => {'key' => 'Steel_Framed', 'gui' => 'Steel Framed'},
-      'Unheated' => {'key' => 'Slab_Type', 'gui' => 'Insulated Slab'},
+      'Unheated' => {'key' => 'Slab_Type', 'gui' => 'Insulated'},
       'WoodFramed' => {'key' => 'Wood_Framed', 'gui' => 'Wood Framed'}
     }
 
@@ -205,7 +205,7 @@ module SpeedConstructions
 
     # Create a new SPEED name for the contruction
     if construction_props
-      puts "INFO Making construction for #{construction_props['standards_construction_type']}-#{construction_props['intended_surface_type']}-#{climate_zone}"
+      # puts "INFO Making construction for #{construction_props['standards_construction_type']}-#{construction_props['intended_surface_type']}-#{climate_zone}"
       speed_const_type = speed_enum(construction_props['standards_construction_type'], 'gui')
       speed_surf_type = speed_enum(construction_props['intended_surface_type'], 'gui')
       speed_climate_zone = speed_enum(climate_zone, 'gui')
@@ -217,11 +217,14 @@ module SpeedConstructions
       target_c_factor_ip = construction_props['assembly_maximum_c_factor']
       target_shgc = construction_props['assembly_maximum_solar_heat_gain_coefficient'].to_f
 
-      # SPEED includes VT in the construction name, but this property is not directly
-      # available from detailed glazing assemblies.
-      # Estimate VT / SHGC = 1.1, therefore VT = SHGC * 1.1
+      # If the minimum VT to SHGC ratio is included in the construction properties,
+      # set the VT using this ratio.  Otherwise, omit the VT from the name
+      # and the model input.  E+ will auto-calculate an appropriate VT in this case.
+      target_vt = nil
       if construction_props['intended_surface_type'] == 'ExteriorWindow'
-        target_vt = target_shgc * 1.1
+        if construction_props['assembly_minimum_vt_shgc']
+          target_vt = target_shgc * construction_props['assembly_minimum_vt_shgc'].to_f
+        end
       end
 
       # SPEED uses R-values for all contructions, as opposed to using the F-Factor or C-Factor
@@ -239,7 +242,11 @@ module SpeedConstructions
       # Construction names differ between windows and opaque constructions
       if construction_props['intended_surface_type'] == 'ExteriorWindow'
         construction_name = "#{speed_const_type} #{speed_climate_zone}" # Leave ExteriorWindow out of the name
-        construction_name = "#{construction_name} U-#{target_u_value_ip.to_f.round(2)} SHGC-#{target_shgc.round(2)} VT-#{target_vt.round(2)}"
+        if target_vt
+          construction_name = "#{construction_name} U-#{target_u_value_ip.to_f.round(2)} SHGC-#{target_shgc.round(2)} VT-#{target_vt.round(2)}"
+        else
+          construction_name = "#{construction_name} U-#{target_u_value_ip.to_f.round(2)} SHGC-#{target_shgc.round(2)}"
+        end
       elsif target_u_value_ip
         construction_name = "#{construction_name} R-#{target_r_value_ip.round(0)}"
       end
@@ -249,7 +256,7 @@ module SpeedConstructions
     existing_constructions = model.getConstructions.sort
     existing_constructions.each do |existing_construction|
       if existing_construction.name.get.to_s == construction_name
-        puts("INFO Reusing #{construction_name}, already in model")
+        # puts("INFO Reusing #{construction_name}, already in model")
         return existing_construction
       end
     end
@@ -272,6 +279,7 @@ module SpeedConstructions
     if construction_props && construction_props['intended_surface_type'] == 'ExteriorWindow' && construction_props['convert_to_simple_glazing'] == 'yes'
       # For SPEED, instead of using specified detailed glazing layers, sometimes use a SimpleGlazing material
       material = OpenStudio::Model::SimpleGlazing.new(model)
+      material.setName('Simple Glazing')
       layers << material
     else
       data['materials'].each do |material_name|
@@ -294,7 +302,9 @@ module SpeedConstructions
           # Set the U-Value, SHGC, and VT
           construction_set_glazing_u_value(construction, target_u_value_ip.to_f, data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
           construction_set_glazing_shgc(construction, target_shgc.to_f)
-          construction_set_glazing_visible_transmittance(construction, target_vt)
+          if target_vt
+            construction_set_glazing_visible_transmittance(construction, target_vt)
+          end
         else
           # Set the U-Value
           construction_set_u_value(construction, target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
@@ -313,7 +323,7 @@ module SpeedConstructions
       end
     end
 
-    puts("INFO Added construction #{construction.name}.")
+    # puts("INFO Added construction #{construction.name}.")
 
     return construction
   end
@@ -367,7 +377,7 @@ module SpeedConstructions
     max_u_value_ip = OpenStudio.convert(max_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
     if target_u_value_ip >= max_u_value_ip
       target_u_value_ip = 1.0 / OpenStudio.convert(min_r_value_si + 0.001, 'm^2*K/W', 'ft^2*hr*R/Btu').get
-      puts("WARNING Requested U-value of #{target_u_value_ip} for #{construction.name} is greater than the sum of the inside and outside resistance, and the max U-value (6.636 SI) is used instead.")
+      puts("WARNING Requested U-value of #{target_u_value_ip.round(3)} for #{construction.name} is greater than the sum of the inside and outside resistance, and the max U-value (6.636 SI) is used instead.")
     end
 
     # Convert the target U-value to SI
@@ -399,8 +409,8 @@ module SpeedConstructions
     # This is the desired R-value of the insulation.
     ins_r_value_si = target_r_value_si - other_layer_r_value_si
     if ins_r_value_si <= 0.0
-      puts("WARNING Requested U-value of #{target_u_value_ip} for #{construction.name} is too low given the other materials in the construction; insulation layer will not be modified.")
-      return true
+      puts("WARNING Requested U-value of #{target_u_value_ip.round(3)} for #{construction.name} is too low given the R-values of the other materials in the construction; insulation layer will be set to R-0.01")
+      ins_r_value_si = OpenStudio.convert(0.01, 'ft^2*h*R/Btu', 'm^2*K/W').get
     end
     ins_r_value_ip = OpenStudio.convert(ins_r_value_si, 'm^2*K/W', 'ft^2*h*R/Btu').get
 
@@ -429,8 +439,13 @@ module SpeedConstructions
     return true
   end
 
-  # Sets the U-value of a construction to a specified value
-  # by modifying the thickness of the insulation layer.
+  # Sets the U-value of a simple glazing construction to a specified value.
+  # The U-value input for SimpleGlazing constructions in EnergyPlus includes
+  # the U-values of the inside and outside air films.
+  # https://bigladdersoftware.com/epx/docs/9-2/input-output-reference/group-surface-construction-elements.html#field-u-factor
+  # If the specified U-value already includes these air films (as NFRC values specified in 90.1 do, for example),
+  # then this U-value will be input directly. If the specified U-value does not already include
+  # air films, then surface-type-appropriate air film U-values will be added to the target before being input.
   #
   # @param target_u_value_ip [Double] U-Value (Btu/ft^2*hr*R)
   # @param intended_surface_type [String]
@@ -439,10 +454,10 @@ module SpeedConstructions
   #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor',
   #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
   #   'GroundContactWall', 'GroundContactRoof'
-  # @param target_includes_int_film_coefficients [Bool] if true, subtracts off standard film interior coefficients from your
-  #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
-  # @param target_includes_ext_film_coefficients [Bool] if true, subtracts off standard exterior film coefficients from your
-  #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
+  # @param target_includes_int_film_coefficients [Bool] if true, then no air film value will be added.  If false, then
+  #   an air film value from 90.1-2010 A9.4.1 Air Films will be added to the U-value being input to EnergyPlus.
+  # @param target_includes_ext_film_coefficients [Bool] if true, then no air film value will be added.  If false, then
+  #   an air film value from 90.1-2010 A9.4.1 Air Films will be added to the U-value being input to EnergyPlus.
   # @return [Bool] returns true if successful, false if not
   def construction_set_glazing_u_value(construction, target_u_value_ip, intended_surface_type = 'ExteriorWall', target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
     # puts("DEBUG Setting U-Value for #{construction.name}.")
@@ -471,7 +486,7 @@ module SpeedConstructions
 
     # Determine the R-value of the air films, if requested
     film_coeff_r_value_si = 0.0
-    film_coeff_r_value_si += film_coefficients_r_value(intended_surface_type, target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
+    film_coeff_r_value_si += film_coefficients_r_value(intended_surface_type, !target_includes_int_film_coefficients, !target_includes_ext_film_coefficients)
     film_coeff_u_value_si = 1.0 / film_coeff_r_value_si
     film_coeff_u_value_ip = OpenStudio.convert(film_coeff_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
     film_coeff_r_value_ip = 1.0 / film_coeff_u_value_ip
@@ -486,23 +501,25 @@ module SpeedConstructions
     # This is the desired R-value of the insulation.
     ins_r_value_si = target_r_value_si - film_coeff_r_value_si
     if ins_r_value_si <= 0.0
-      puts("WARNING Requested U-value of #{target_u_value_ip} Btu/ft^2*hr*R for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)} Btu/ft^2*hr*R; U-value will not be modified.")
+      puts("WARNING Requested U-value of #{target_u_value_ip.round(3)} Btu/ft^2*hr*R for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)} Btu/ft^2*hr*R; U-value will not be modified.")
       return false
     end
     ins_u_value_si = 1.0 / ins_r_value_si
     
-    if ins_u_value_si > 7.0
-      puts("WARNING Requested U-value of #{target_u_value_ip} for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)}; setting U-value to EnergyPlus limit of 7.0 W/m^2*K (1.23 Btu/ft^2*hr*R).")
-      ins_u_value_si = 7.0
+    # Per the E+ documentation: https://bigladdersoftware.com/epx/docs/9-2/input-output-reference/group-surface-construction-elements.html#field-u-factor
+    # "Although the maximum allowable input is U-7.0 W/m^2*K, the effective upper limit of the glazings generated by the underlying model is around U-5.8 W/m^2*K"
+    if ins_u_value_si > 5.8
+      puts("WARNING Requested U-value of #{target_u_value_ip.round(3)} for #{construction.name} is too high because film coefficients alone make most of this U-value; setting U-value to EnergyPlus limit of 1.021 Btu/ft^2*hr*R (5.8 W/m^2*K)")
+      ins_u_value_si = 5.8
     end
-    
+ 
     ins_u_value_ip = OpenStudio.convert(ins_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
     ins_r_value_ip = 1.0 / ins_u_value_ip
 
     # Set the U-value of the insulation layer
     glass_layer = construction.layers.first.to_SimpleGlazing.get
     glass_layer.setUFactor(ins_u_value_si)
-    glass_layer.setName("#{glass_layer.name} U-#{ins_u_value_ip.round(2)}")
+    glass_layer.setName("#{glass_layer.name} U-#{ins_u_value_ip.round(4)}")
     
     # puts("DEBUG ---ins_r_value_ip = #{ins_r_value_ip.round(2)} for #{construction.name}.")
     # puts("DEBUG ---ins_u_value_ip = #{ins_u_value_ip.round(2)} for #{construction.name}.")
@@ -549,7 +566,7 @@ module SpeedConstructions
     # Set the SHGC
     glass_layer = construction.layers.first.to_SimpleGlazing.get
     glass_layer.setSolarHeatGainCoefficient(target_shgc)
-    glass_layer.setName("#{glass_layer.name} SHGC-#{target_shgc.round(2)}")
+    glass_layer.setName("#{glass_layer.name} SHGC-#{target_shgc.round(4)}")
 
     return true
   end
@@ -573,18 +590,16 @@ module SpeedConstructions
   end
 
   # Infer the U-Value of a slab based on F-Factor.
-  # Uses a regression based on the values from
-  # 90.1-2004 Table A6.3 Assembly F-Factors for Slab-on-Grade Floors,
-  # assuming an unheated, fully insulated slab.
+  # For SPEED, always return R-3 IP, which should make
+  # sense coupled with the chosen ground temperature approach.
   #
   # @param target_f_factor_ip [Double] F-Factor
   # @return [Double] the corresponding U-value
   def infer_slab_u_value_from_f_factor(target_f_factor_ip)
-    # Regression from table A6.3 unheated, fully insulated slab
-    r_value_ip = 1.0248 * target_f_factor_ip**-2.186
+    r_value_ip = 3.0
     u_value_ip = 1.0 / r_value_ip
 
-    puts("INFO Inferred U-Value of #{u_value_ip.round(2)} for F-Factor #{target_f_factor_ip}")
+    # puts("INFO Inferred U-Value of #{u_value_ip.round(2)} for F-Factor #{target_f_factor_ip}")
 
     return u_value_ip
   end
@@ -601,7 +616,7 @@ module SpeedConstructions
     r_value_ip = 0.775 * target_c_factor_ip**-1.067
     u_value_ip = 1.0 / r_value_ip
 
-    puts("INFO Inferred U-Value of #{u_value_ip.round(2)} for C-Factor #{target_c_factor_ip}")
+    # puts("INFO Inferred U-Value of #{u_value_ip.round(2)} for C-Factor #{target_c_factor_ip}")
 
     return u_value_ip
   end
@@ -670,5 +685,252 @@ module SpeedConstructions
       film_r_si += film_int_surf_ht_flow_up_r_si if int_film # Inside
     end
     return film_r_si
+  end
+  
+  # The path where the construction library .osm is saved
+  def construction_lib_path
+    return "#{__dir__}/construction_library.osm"
+  end
+
+  # Takes all of the window constructions in the construction library
+  # and makes a punched window for each in the long_rect.osm model.
+  # Then, runs a sizing run, wherein EnergyPlus calculated the window
+  # properties for all constructions.
+  #
+  # @param std [Standard] the standard (doesn't matter which one)
+  # @param model [OpenStudio::Model::Model] the contruction library model
+  def do_window_property_sizing_run(std, model)
+    # Load the geometry model
+    geom_model = std.safe_load_model("#{__dir__}/long_rect.osm")
+
+    # Get a long wall surface
+    wall = geom_model.getSurfaceByName('Face 3').get
+
+    # Find the bottom leftmost corner
+    bot_left_x = 999.9
+    bot_left_y = 999.9
+    bot_left_z = 999.9
+    wall.vertices.each do |vertex|  
+      # puts "#{vertex.x}, #{vertex.y}, #{vertex.z}"
+      bot_left_x = vertex.x if vertex.x < bot_left_x
+      bot_left_y = vertex.y if vertex.y < bot_left_y
+      bot_left_z = vertex.z if vertex.z < bot_left_z
+    end
+
+    # puts 'Bottom left corner of wall:'
+    # puts "#{bot_left_x}, #{bot_left_y}, #{bot_left_z}"
+
+    # Define new window dimensions
+    sill_z = bot_left_z += 0.5
+    head_z = bot_left_z += 1.0
+    width = 0.1
+    spacing = 0.2
+
+    # Clone the detailed glazing constructions from the library model
+    # and make a window on this wall for each one.
+    i = 0
+    model.getConstructions.each do |const|
+      next unless const.isFenestration
+      const_clone = const.clone(geom_model).to_Construction.get
+      # puts "cloned:  #{const_clone.name}"
+
+      # Define vertices for new window
+      new_vertices = []
+      new_vertices << OpenStudio::Point3d.new(bot_left_x + (i * spacing), bot_left_y, sill_z)
+      new_vertices << OpenStudio::Point3d.new(bot_left_x + (i * spacing) + width, bot_left_y, sill_z)
+      new_vertices << OpenStudio::Point3d.new(bot_left_x + (i * spacing) + width, bot_left_y, head_z)
+      new_vertices << OpenStudio::Point3d.new(bot_left_x + (i * spacing), bot_left_y, head_z)
+      # puts "Window #{i}"
+      # new_vertices.each do |vertex|  
+        # puts "#{vertex.x}, #{vertex.y}, #{vertex.z}"
+      # end
+
+      # Create a new subsurface with the vertices determined above.
+      new_sub_surface = OpenStudio::Model::SubSurface.new(new_vertices, geom_model)
+      new_sub_surface.setSurface(wall)
+      new_sub_surface.setName("Window #{i}")
+
+      # Assign the construction to the surface
+      new_sub_surface.setConstruction(const_clone)
+
+      i += 1 # Don't use default ruby iterator b/c want to only iterate for window constructions
+    end
+
+    # Add design days and weather file
+    std.model_add_design_days_and_weather_file(geom_model, 'ASHRAE 169-2013-5B', 'USA_CO_Denver-Aurora-Buckley.AFB.724695_TMY3.epw')
+
+    # Save the model with the windows added
+    # geom_model.save("#{Dir.pwd}/long_rect_with_windows.osm", true)
+
+    # Do a sizing run
+    if std.model_run_sizing_run(geom_model, "#{__dir__}/SizingRunWindows") == false
+      puts "ERROR Failed window property sizing run"
+      return false
+    end
+    
+    return true
+  end
+
+  # Compares the window construction properties in the name with the E+ values
+  #
+  # @param std [Standard] the standard (doesn't matter which one)
+  # @param model [OpenStudio::Model::Model] the contruction library model
+  # @param tolerance [Double] the acceptable threshold above which differencs are reported. 5.0 = 5%
+  def compare_window_construction_properties(std, model, tolerance)
+    # model = std.safe_load_model("#{__dir__}/long_rect_with_windows.osm")
+
+    # Set sql file
+    sql_path = "#{__dir__}/SizingRunWindows/run/eplusout.sql"
+    sql_file = OpenStudio::SqlFile.new(sql_path)
+    model.setSqlFile(sql_file)
+
+    # Compare window properties from name vs. E+ calculated
+    model.getConstructions.sort.each do |const|
+      next unless const.isFenestration
+
+      # Determine the glazing type
+      glazing_type = if std.construction_simple_glazing?(const)
+                       'Simple'
+                     else
+                       'Layered'
+                     end
+
+      # Get the properties from the name
+      name = const.name.get.to_s
+      matches = name.match(/.*(U-\d*\.\d*).*(SHGC-\d*\.\d*).*(VT-\d*\.\d*)/)
+      name_u_ip = matches[1].gsub('U-','').to_f
+      name_shgc = matches[2].gsub('SHGC-','').to_f
+      name_vt = matches[3].gsub('VT-','').to_f
+      # puts name
+      # puts ".... from name U = #{name_u_ip}"
+      # puts ".... from name SHGC = #{name_shgc}"
+      # puts ".... from name VT = #{name_vt}"
+      
+      # Get the properties from the E+ output
+      eplus_u_si = std.construction_calculated_u_factor(const) # W/m2-K
+      eplus_u_ip = OpenStudio.convert(eplus_u_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get.round(3)
+      eplus_shgc = std.construction_calculated_solar_heat_gain_coefficient(const)
+      eplus_vt = std.construction_calculated_visible_transmittance(const)
+      # puts ".... from eplus U = #{eplus_u_ip}"
+      # puts ".... from eplus SHGC = #{eplus_shgc}"
+      # puts ".... from eplus VT = #{eplus_vt}"
+      
+      # Compare the properties      
+      u_pct_diff = (((name_u_ip - eplus_u_ip) / eplus_u_ip).abs * 100.0).round(1)
+      if u_pct_diff > tolerance
+        puts "ERROR For #{glazing_type} Glazing called #{name}, name U = #{name_u_ip}, eplus U = #{eplus_u_ip}, difference = #{u_pct_diff}%" 
+      end
+      
+      shgc_pct_diff = (((name_shgc - eplus_shgc) / eplus_shgc).abs * 100.0).round(1)
+      if shgc_pct_diff > tolerance
+        puts "ERROR For #{glazing_type} Glazing called #{name}, name SHGC = #{name_shgc}, eplus SHGC = #{eplus_shgc}, difference = #{shgc_pct_diff}%" 
+      end  
+
+      vt_diff = (((name_vt - eplus_vt) / eplus_vt).abs * 100.0).round(1)
+      if vt_diff > tolerance
+        puts "ERROR For #{glazing_type} Glazing called #{name}, name VT = #{name_vt}, eplus VT = #{eplus_vt}, difference = #{vt_diff}%" 
+      end 
+    end
+  end
+
+  # Update the window construction properties in the name and the SimpleGlazing with the E+ values 
+  #
+  # @param std [Standard] the standard (doesn't matter which one)
+  # @param model [OpenStudio::Model::Model] the contruction library model
+  # @return [Hash] a has where the key is the original construction name and the value is the new name
+  def update_window_construction_names_with_vt(std, model)
+    # Set sql file
+    sql_path = "#{__dir__}/SizingRunWindows/run/eplusout.sql"
+    sql_file = OpenStudio::SqlFile.new(sql_path)
+    model.setSqlFile(sql_file)
+
+    # Pull the VT
+    old_to_new_map = {}
+    model.getConstructions.sort.each do |const|
+      next unless const.isFenestration
+
+      # Determine the glazing type
+      unless std.construction_simple_glazing?(const)
+        # puts "INFO Only modifying VT for SimpleGlazing, but #{const.name} is detailed"
+        next
+      end
+
+      # Determine if the VT is already set in the construction
+      glass_layer = const.layers.first.to_SimpleGlazing.get
+      if glass_layer.visibleTransmittance.is_initialized
+        # puts "INFO For construction #{const.name}, VT was already set, not modifying"
+        next
+      end
+
+      # Get the VT from the output
+      eplus_vt = std.construction_calculated_visible_transmittance(const)
+
+      # Append the VT to the name
+      old_name = const.name.get.to_s
+      new_name = "#{old_name} VT-#{eplus_vt.round(2)}"
+      const.setName(new_name)
+      # puts "INFO For construction #{old_name} renamed to #{new_name}"
+      old_to_new_map[old_name] = new_name
+
+      # Modify the VT
+      glass_layer.setVisibleTransmittance(eplus_vt)
+    end
+    
+    # Close the sql file
+    sql_file.close
+    
+    return old_to_new_map
+  end
+
+  # Checks the construction properties in the name vs. the sum of all the layers
+  #
+  # @param std [Standard] the standard (doesn't matter which one)
+  # @param model [OpenStudio::Model::Model] the contruction library model
+  # @param tolerance [Double] the acceptable threshold above which differencs are reported. 5.0 = 5%
+  def compare_opaque_contruction_properties(std, model, tolerance)
+    # Compare R-values from name vs. sum of layers
+    model.getConstructions.sort.each do |const|
+      next if const.isFenestration
+
+      # Get the R-Value from the name
+      name = const.name.get.to_s
+      matches = name.match(/.*(R-\d*).*/)
+      if matches.nil?
+        puts "ERROR For #{name}, could not find properties in name of construction, cannot compare to model inputs."
+        next
+      end
+      name_r_ip = matches[1].gsub('R-','').to_f
+      # puts name
+      # puts ".... from name R IP = #{name_r_ip}"
+      
+      # Get the layers R-Value from the model inputs
+      layers_u_si = const.thermalConductance # (W/m^2*K, does not include film coefficients)
+      if layers_u_si.empty?
+        puts "ERROR Could not get thermalConductance for construction #{name}, cannot compare to name."
+        next
+      end
+      layers_u_ip = OpenStudio.convert(layers_u_si.get, 'W/m^2*K', 'Btu/ft^2*hr*R').get
+      layers_r_ip = (1.0 / layers_u_ip).round(3)
+
+      # Get the film coefficients assumed by openstudio-standards, which should match E+ closely
+      if const.standardsInformation.intendedSurfaceType.empty?
+        puts "ERROR Could not get surface type for construction #{name}, cannot compare to name."
+        next
+      end
+      film_r_si = std.film_coefficients_r_value(const.standardsInformation.intendedSurfaceType.get, true, true)
+      film_u_si = 1.0 / film_r_si
+      film_u_ip = OpenStudio.convert(film_u_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
+      film_r_ip = (1.0 / film_u_ip).round(3)
+
+      # Add model + film coefficients
+      model_r_ip = (layers_r_ip + film_r_ip).round(3)
+      # puts ".... from model input total R IP = #{model_r_ip} = layers #{layers_r_ip} + #{film_r_ip} film"
+
+      # Compare the properties
+      r_pct_diff = (((name_r_ip - model_r_ip) / model_r_ip).abs * 100.0).round(1)
+      if r_pct_diff > tolerance
+        puts "ERROR For opaque construction called #{name}, name R IP = #{name_r_ip}, model input R IP = #{model_r_ip} = layers #{layers_r_ip} + #{film_r_ip} film, difference = #{r_pct_diff}%" 
+      end
+    end
   end
 end
