@@ -529,7 +529,7 @@ class Standard
     # apply 90.1 sizing temperatures
     if use_90_1_design_sizing
       # use the formulation in 90.1-2010 G3.1.3.11 to set the approach temperature
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Prototype.hvac_systems', "Using the 90.1-2010 G3.1.3.11 approach temperature sizing methodology for condenser loop #{condenser_water_loop}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Prototype.hvac_systems', "Using the 90.1-2010 G3.1.3.11 approach temperature sizing methodology for condenser loop #{condenser_water_loop.name}.")
 
       # first, look in the model design day objects for sizing information
       summer_oat_wbs_f = []
