@@ -320,6 +320,9 @@ module OpenstudioStandards
   require_relative "#{proto}/common/buildings/Prototype.MediumOfficeDetailed"
   require_relative "#{proto}/common/buildings/Prototype.SmallOfficeDetailed"
   require_relative "#{proto}/common/buildings/Prototype.Laboratory"
+  require_relative "#{proto}/common/buildings/Prototype.College"
+  require_relative "#{proto}/common/buildings/Prototype.TallBuilding"
+  require_relative "#{proto}/common/buildings/Prototype.SuperTallBuilding"
 
   # NECB Building Types
   require_relative "#{proto}/common/prototype_metaprogramming.rb"
@@ -340,6 +343,7 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.CoilHeatingWater"
   require_relative "#{proto}/common/objects/Prototype.CoilHeatingWaterToAirHeatPumpEquationFit"
   require_relative "#{proto}/common/objects/Prototype.ControllerWaterCoil"
+  require_relative "#{proto}/common/objects/Prototype.CoolingTower"
   require_relative "#{proto}/common/objects/Prototype.radiant_system_controls"
   require_relative "#{proto}/common/objects/Prototype.Fan"
   require_relative "#{proto}/common/objects/Prototype.FanConstantVolume"

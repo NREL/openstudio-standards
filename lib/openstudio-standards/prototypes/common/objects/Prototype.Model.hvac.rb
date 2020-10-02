@@ -31,6 +31,22 @@ class Standard
         if model.getPlantLoopByName('Chilled Water Loop').is_initialized
           chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
         else
+          # get num_chillers from prototype_input
+          num_chillers = prototype_input['chw_number_chillers']
+          if num_chillers == nil || num_chillers.to_i < 1
+            num_chillers = 1
+          end
+          # update num_chillers if specified in @system_to_space_map
+          if system['chw_number_chillers'] !=nil && system['chw_number_chillers'].to_i >0
+            num_chillers = system['chw_number_chillers']
+          end
+
+          # get number_cooling_towers if specified in @system_to_space_map
+          number_cooling_towers = 1
+          if system['number_cooling_towers'] !=nil && system['number_cooling_towers'].to_i >0
+            number_cooling_towers = system['number_cooling_towers']
+          end
+
           condenser_water_loop = nil
           if system['chiller_cooling_type'] == 'WaterCooled'
             condenser_water_loop = model_add_cw_loop(model,
@@ -38,10 +54,8 @@ class Standard
                                                      cooling_tower_fan_type: 'Centrifugal',
                                                      cooling_tower_capacity_control: 'Variable Speed Fan',
                                                      number_of_cells_per_tower: 2,
-                                                     number_cooling_towers: 1)
+                                                     number_cooling_towers: number_cooling_towers.to_i)
           end
-          num_chillers = prototype_input['chw_number_chillers']
-          num_chillers = 1 if num_chillers == nil
           chilled_water_loop = model_add_chw_loop(model,
                                                   cooling_fuel: 'Electricity',
                                                   dsgn_sup_wtr_temp: system['chilled_water_design_supply_water_temperature'],
@@ -121,6 +135,9 @@ class Standard
         if system['heating_type'] == 'Water To Air Heat Pump'
           heat_pump_loop = model_get_or_add_heat_pump_loop(model, 'NaturalGas', 'Electricity', heat_pump_loop_cooling_type: 'EvaporativeFluidCooler')
         end
+        # if water to air heat pump is using existing chilled water loop and hot water loop as source
+        # get existing loops, and assign heat_pump_cool_loop = chilled_water_loop, heat_pump_heat_loop = hot_water_loop
+        # applicable to super tall building elevator machine room that is in the middle of the building
 
         model_add_psz_ac(model,
                          thermal_zones,
@@ -178,6 +195,10 @@ class Standard
         if model.getPlantLoopByName('Chilled Water Loop').is_initialized
           chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
         else
+          num_chillers = 1
+          if (not system['num_chillers'].nil?) && (system['num_chillers'].to_i > 0)
+            num_chillers = system['num_chillers'].to_i
+          end
           condenser_water_loop = nil
           if system['chiller_cooling_type'] == 'WaterCooled'
             condenser_water_loop = model_add_cw_loop(model,
@@ -185,7 +206,7 @@ class Standard
                                                      cooling_tower_fan_type: 'Centrifugal',
                                                      cooling_tower_capacity_control: 'Fan Cycling',
                                                      number_of_cells_per_tower: 2,
-                                                     number_cooling_towers: 1)
+                                                     number_cooling_towers: num_chillers)
           end
           chilled_water_loop = model_add_chw_loop(model,
                                                   cooling_fuel: 'Electricity',
@@ -195,6 +216,7 @@ class Standard
                                                   chiller_cooling_type: system['chiller_cooling_type'],
                                                   chiller_condenser_type: system['chiller_condenser_type'],
                                                   chiller_compressor_type: system['chiller_compressor_type'],
+                                                  num_chillers: num_chillers,
                                                   condenser_water_loop: condenser_water_loop)
         end
         model_add_doas_cold_supply(model,
@@ -238,11 +260,6 @@ class Standard
         else
           include_exhaust_fan = false
         end
-        if system['energy_recovery'].nil? || true?(system['energy_recovery'])
-          energy_recovery = true
-        else
-          energy_recovery = false
-        end
         if true?(system['demand_control_ventilation'])
           demand_control_ventilation = true
         else
@@ -261,7 +278,6 @@ class Standard
                        fan_maximum_flow_rate: system['fan_maximum_flow_rate'],
                        econo_ctrl_mthd: econo_ctrl_mthd,
                        include_exhaust_fan: include_exhaust_fan,
-                       energy_recovery: energy_recovery,
                        demand_control_ventilation: demand_control_ventilation,
                        doas_control_strategy: doas_control_strategy,
                        clg_dsgn_sup_air_temp: clg_dsgn_sup_air_temp,

@@ -14,13 +14,7 @@ class NECB2011
       space_type.setStandardsBuildingType(spacedata["building_type"])
       space_type.setName("#{spacedata['building_type']} #{spacedata['space_type']}")
       # Loads
-      self.space_type_apply_internal_loads(space_type,
-                                           true,
-                                           true,
-                                           true,
-                                           true,
-                                           true,
-                                           true)
+      self.space_type_apply_internal_loads(space_type: space_type)
 
       # Schedules
       self.space_type_apply_internal_load_schedules(space_type,
@@ -278,6 +272,7 @@ class NECB2011
     ventilation_per_area = space_type_properties['ventilation_per_area'].to_f
     ventilation_per_person = space_type_properties['ventilation_per_person'].to_f
     ventilation_ach = space_type_properties['ventilation_air_changes'].to_f
+    ventilation_occupancy_per_area = space_type_properties['ventilation_occupancy_rate_people_per_1000ft2'].to_f
     ventilation_have_info = true unless ventilation_per_area.zero?
     ventilation_have_info = true unless ventilation_per_person.zero?
     ventilation_have_info = true unless ventilation_ach.zero?
@@ -302,8 +297,12 @@ class NECB2011
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set ventilation per area to #{ventilation_per_area} cfm/ft^2.")
       end
       unless ventilation_per_person.zero?
-        ventilation.setOutdoorAirFlowperPerson(OpenStudio.convert(ventilation_per_person.to_f, 'ft^3/min*person', 'm^3/s*person').get)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set ventilation per person to #{ventilation_per_person} cfm/person.")
+        # For BTAP we often use an occupancy per area rate for ventilation which is different from the one used for
+        # everything else.  The mod_ventilation_per_person rate adjusts the per person ventilation rate so that the
+        # proper ventilation rate is calculated when using the general occupant per area rate.
+        mod_ventilation_per_person = ventilation_per_person*ventilation_occupancy_per_area/occupancy_per_area
+        ventilation.setOutdoorAirFlowperPerson(OpenStudio.convert(mod_ventilation_per_person.to_f, 'ft^3/min*person', 'm^3/s*person').get)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set ventilation per person to #{mod_ventilation_per_person} cfm/person.")
       end
       unless ventilation_ach.zero?
         ventilation.setOutdoorAirFlowAirChangesperHour(ventilation_ach)

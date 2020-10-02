@@ -69,7 +69,7 @@ class Standard
 
     # Add daylighting controls to each space
     model.getSpaces.sort.each do |space|
-      added = space_add_daylighting_controls(space, false, false, climate_zone)
+      added = space_add_daylighting_controls(space, false, false)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
@@ -1474,7 +1474,7 @@ class Standard
   def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true, sql_db_vars_map: nil)
     sql_db_vars_map = {} if sql_db_vars_map.nil?
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Started applying HVAC efficiency standards for #{template} template.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Started applying HVAC efficiency standards for #{template} template.")
 
     # Air Loop Controls
     if apply_controls.nil? || apply_controls == true
@@ -1482,8 +1482,9 @@ class Standard
     end
 
     # Plant Loop Controls
-    # TODO refactor: enable this code (missing before refactor)
-    # getPlantLoops.sort.each { |obj| plant_loop_apply_standard_controls(obj, template, climate_zone) }
+    if apply_controls.nil? || apply_controls == true
+      model.getPlantLoops.sort.each { |obj| plant_loop_apply_standard_controls(obj, climate_zone) }
+    end
 
     # Zone HVAC Controls
     model.getZoneHVACComponents.sort.each { |obj| zone_hvac_component_apply_standard_controls(obj) }
@@ -1547,16 +1548,16 @@ class Standard
     model.getCoilHeatingGass.sort.each { |obj| coil_heating_gas_apply_efficiency_and_curves(obj) }
     model.getCoilHeatingGasMultiStages.each {|obj| coil_heating_gas_multi_stage_apply_efficiency_and_curves(obj)}
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Finished applying HVAC efficiency standards for #{template} template.")
   end
 
   # Applies daylighting controls to each space in the model per the standard.
-  def model_add_daylighting_controls(model, climate_zone)
+  def model_add_daylighting_controls(model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding daylighting controls.')
 
     # Add daylighting controls to each space
     model.getSpaces.sort.each do |space|
-      added = space_add_daylighting_controls(space, false, false, climate_zone)
+      added = space_add_daylighting_controls(space, false, false)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding daylighting controls.')
@@ -4055,6 +4056,10 @@ class Standard
       building_type = 'LrgDCHighITE'
     elsif building_type == 'Laboratory'
       building_type = 'Laboratory'
+    elsif building_type == 'TallBuilding'
+      building_type = 'TallBldg'
+    elsif building_type == 'SuperTallBuilding'
+      building_type = 'SpTallBldg'
     end
 
     parts = [template]

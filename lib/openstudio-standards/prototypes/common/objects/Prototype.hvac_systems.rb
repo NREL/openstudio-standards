@@ -385,6 +385,8 @@ class Standard
   # @param cooling_tower_capacity_control [String] valid choices are Fluid Bypass, Fan Cycling, TwoSpeed Fan, Variable Speed Fan
   # @param number_of_cells_per_tower [Integer] the number of discrete cells per tower
   # @param number_cooling_towers [Integer] the number of cooling towers to be added (in parallel)
+  # @param use_90_1_design_sizing [Boolean] will determine the design sizing temperatures based on the 90.1 Appendix G approach.
+  #   Overrides sup_wtr_temp, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt, and wet_bulb_approach if true.
   # @param sup_wtr_temp [Double] supply water temperature in degrees Fahrenheit, default 70F
   # @param dsgn_sup_wtr_temp [Double] design supply water temperature in degrees Fahrenheit, default 85F
   # @param dsgn_sup_wtr_temp_delt [Double] design water range temperature in degrees Rankine, default 10R
@@ -399,6 +401,7 @@ class Standard
                         cooling_tower_capacity_control: 'TwoSpeed Fan',
                         number_of_cells_per_tower: 1,
                         number_cooling_towers: 1,
+                        use_90_1_design_sizing: true,
                         sup_wtr_temp: 70.0,
                         dsgn_sup_wtr_temp: 85.0,
                         dsgn_sup_wtr_temp_delt: 10.0,
@@ -406,16 +409,6 @@ class Standard
                         pump_spd_ctrl: 'Constant',
                         pump_tot_hd: 49.7)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding condenser water loop.')
-
-    # retrieve cooling design day 0.4% evaporation design wet-bulb temperature from ddy file
-    wb_0p4pct_mcbd = nil
-    if model.weatherFile.is_initialized
-      wb_0p4pct_mcbd = get_wb_mcb(model.weatherFile.get.path.get.to_s)
-      # correct wet-bulb temperature as per cooling tower model limits:
-      # minimum is 20 deg. C as design inlet air wet bulb temperature of the cooling tower object is 20 deg. C
-      # maximum value is 26.66 otherwise the design inlet air wet bulb temperature is out of the model bounds (-1.00 and 26.67 degrees C)
-      wb_0p4pct_mcbd = [26.66,[20, wb_0p4pct_mcbd].max].min
-    end
 
     # create condenser water loop
     condenser_water_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -435,8 +428,6 @@ class Standard
     if dsgn_sup_wtr_temp.nil?
       dsgn_sup_wtr_temp = 85.0
       dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
-      # Per 90.1-2010 G3.1.3.13, 85F or 10F approaching design wet-bulb temperature, whichever is lower, with a design temperature rise of 10F (range temperature).
-      dsgn_sup_wtr_temp_c = min(dsgn_sup_wtr_temp_c, wb_0p4pct_mcbd + 10) ? !wb_0p4pct_mcbd.nil? : dsgn_sup_wtr_temp_c
     else
       dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
     end
@@ -517,22 +508,13 @@ class Standard
         # cooling_tower.setLowSpeedNominalCapacitySizingFactor
       when 'Variable Speed Fan'
         cooling_tower = OpenStudio::Model::CoolingTowerVariableSpeed.new(model)
-        # Design outdoor air wet-bulb temperature from EPW file
-        # Design range temperature is set to 10F dT per 90.1-2010 G3.1.3.13
-        # Design approach temperature per 90.1-2010 G3.1.3.13, condenser water
-        # design temperature shall be 85F or 10F approaching design wet-bulb
-        # temperature, whichever is lower, with a design temperature rise of 10F.
-        # Design approach temperature to set condenser water design supply temperature
-        # = min (10F, (85 - Design OA WbT from EPW))
-        # 11.11 and 1.11 are EnergyPlus limits
-        cooling_tower.setDesignInletAirWetBulbTemperature(wb_0p4pct_mcbd) unless wb_0p4pct_mcbd.nil?
         cooling_tower.setDesignRangeTemperature(dsgn_sup_wtr_temp_delt_k)
-        cooling_tower.setDesignApproachTemperature([11.11, [1.11, [OpenStudio.convert(10.0, 'R', 'K').get, OpenStudio.convert(85.0, 'F', 'C').get - wb_0p4pct_mcbd].min].max].min)
+        cooling_tower.setDesignApproachTemperature(wet_bulb_approach_k)
         cooling_tower.setFractionofTowerCapacityinFreeConvectionRegime(0.125)
         twr_fan_curve = model_add_curve(model, 'VSD-TWR-FAN-FPLR')
         cooling_tower.setFanPowerRatioFunctionofAirFlowRateRatioCurve(twr_fan_curve)
       else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "#{cooling_tower_capacity_control} is not a valid choice of cooling tower capacity control.  Valid choices are Fluid Bypass, Fan Cycling, TwoSpeed Fan, Variable Speed Fan.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Prototype.hvac_systems', "#{cooling_tower_capacity_control} is not a valid choice of cooling tower capacity control.  Valid choices are Fluid Bypass, Fan Cycling, TwoSpeed Fan, Variable Speed Fan.")
       end
 
       # Set the properties that apply to all tower types and attach to the condenser loop.
@@ -542,6 +524,65 @@ class Standard
         cooling_tower.setNumberofCells(number_of_cells_per_tower)
         condenser_water_loop.addSupplyBranchForComponent(cooling_tower)
       end
+    end
+
+    # apply 90.1 sizing temperatures
+    if use_90_1_design_sizing
+      # use the formulation in 90.1-2010 G3.1.3.11 to set the approach temperature
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Prototype.hvac_systems', "Using the 90.1-2010 G3.1.3.11 approach temperature sizing methodology for condenser loop #{condenser_water_loop}.")
+
+      # first, look in the model design day objects for sizing information
+      summer_oat_wbs_f = []
+      condenser_water_loop.model.getDesignDays.sort.each do |dd|
+        next unless dd.dayType == 'SummerDesignDay'
+        next unless dd.name.get.to_s.include?('WB=>MDB')
+
+        if dd.humidityIndicatingType == 'Wetbulb'
+          summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
+          summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "For #{dd.name}, humidity is specified as #{dd.humidityIndicatingType}; cannot determine Twb.")
+        end
+      end
+
+      # if no design day objects are present in the model, attempt to load the .ddy file directly
+      if summer_oat_wbs_f.size.zero?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', 'No valid WB=>MDB Summer Design Days were found in the model.  Attempting to load wet bulb sizing from the .ddy file directly.')
+        if model.weatherFile.is_initialized && model.weatherFile.get.path.is_initialized
+          weather_file = model.weatherFile.get.path.get.to_s
+          # Attempt to load in the ddy file based on convention that it is in the same directory and has the same basename as the epw file.
+          ddy_file = "#{File.join(File.dirname(weather_file), File.basename(weather_file, '.*'))}.ddy"
+          if File.exist? ddy_file
+            ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file).get
+            ddy_model.getDesignDays.sort.each do |dd|
+              # Save the model wetbulb design conditions Condns WB=>MDB
+              if dd.name.get.include? '4% Condns WB=>MDB'
+                summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
+                summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+              end
+            end
+          else
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file}")
+          end
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', 'The model does not have a weather file object or path specified in the object. Cannot get .ddy file directory.')
+        end
+      end
+
+      # if values are still absent, use the CTI rating condition 78F
+      design_oat_wb_f = nil
+      if summer_oat_wbs_f.size.zero?
+        design_oat_wb_f = 78.0
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "For condenser loop #{condenser_water_loop.name}, no design day OATwb conditions found.  CTI rating condition of 78F OATwb will be used for sizing cooling towers.")
+      else
+        # Take worst case condition
+        design_oat_wb_f = summer_oat_wbs_f.max
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Prototype.hvac_systems', "The maximum design wet bulb temperature from the Summer Design Day WB=>MDB is #{design_oat_wb_f} F")
+      end
+      design_oat_wb_c = OpenStudio.convert(design_oat_wb_f, 'F', 'C').get
+
+      # call method to apply design sizing to the condenser water loop
+      prototype_apply_condenser_water_temperatures(condenser_water_loop, design_wet_bulb_c: design_oat_wb_c)
     end
 
     # Condenser water loop pipes
@@ -1620,7 +1661,7 @@ class Standard
     end
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
-    controller_mv.setSystemOutdoorAirMethod('VentilationRateProcedure')
+    controller_mv.setSystemOutdoorAirMethod('ZoneSum')
     oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_intake_controller)
     oa_intake.setName("#{air_loop.name} OA System")
     oa_intake.addToNode(air_loop.supplyInletNode)
@@ -1797,7 +1838,7 @@ class Standard
     # oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
-    controller_mv.setSystemOutdoorAirMethod('VentilationRateProcedure')
+    controller_mv.setSystemOutdoorAirMethod('ZoneSum')
     oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_intake_controller)
     oa_intake.setName("#{air_loop.name} OA System")
     oa_intake.addToNode(air_loop.supplyInletNode)
@@ -2117,7 +2158,7 @@ class Standard
     oa_intake_controller.resetEconomizerMinimumLimitDryBulbTemperature
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
-    controller_mv.setSystemOutdoorAirMethod('VentilationRateProcedure')
+    controller_mv.setSystemOutdoorAirMethod('ZoneSum')
 
     oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_intake_controller)
     oa_intake.setName("#{air_loop.name} OA System")
@@ -3268,9 +3309,6 @@ class Standard
     setpoint_mgr_cooling.addToNode(air_loop.supplyOutletNode)
 
     # create fan
-    # ConstantVolume: Packaged Rooftop Single Zone Air conditioner
-    # Cycling: Unitary System
-    # CyclingHeatPump: Unitary Heat Pump system
     fan = create_fan_by_name(model,
                              'VAV_System_Fan',
                              fan_name: "#{air_loop.name} Fan")

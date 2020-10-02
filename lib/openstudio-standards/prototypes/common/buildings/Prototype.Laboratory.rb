@@ -1,5 +1,5 @@
 
-# Custom changes for the QuickServiceRestaurant prototype.
+# Custom changes for the Laboratory prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
 module Laboratory

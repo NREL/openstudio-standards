@@ -491,7 +491,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "8 in. Concrete Block Basement Wall",
+        "8 in. Normalweight Concrete Floor",
         "Typical Carpet Pad"
       ]
     },
@@ -2975,6 +2975,16 @@
       "skylight_framing": null,
       "materials": [
         "U1.23_SHGC0.82_SimpleGlazing_Window_10"
+      ]
+    },
+    {
+      "name": "Uninsulated Steel Stud Wall",
+      "intended_surface_type": "InteriorPartition",
+      "standards_construction_type": "SteelFramed",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "Metal Framed Wall - 24inOC - 2x4 - R0 ins."
       ]
     },
     {
