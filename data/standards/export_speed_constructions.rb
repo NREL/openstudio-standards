@@ -23,7 +23,7 @@ templates.each do |template|
   puts "*** Exporting constructions for #{template} ***"
   template_data = {} # Hash to store data for JSON level
   std = Standard.build(template)
-  
+
   # Loop through climate zones
   (1..8).each do |climate_zone|
     climate_zone = climate_zone.to_s
@@ -31,11 +31,11 @@ templates.each do |template|
 
     # Find the climate zone set that this climate zone falls into
     climate_zone_set = "ClimateZone #{climate_zone}"
- 
+
     # Loop through surface types
     intended_surface_types.each do |intended_surface_type|
       surf_type_data = {} # Hash to store data for JSON level
-      
+
       # Downselect construction properties to this template/climate_zone/surface type combination
       search_criteria = {
         'template' => template,
@@ -57,10 +57,10 @@ templates.each do |template|
           end
           next
         else
-          standards_construction_types << standards_construction_type 
+          standards_construction_types << standards_construction_type
         end
       end
-  
+
       # Only export Unheated GroundContactFloor
       if intended_surface_type == 'GroundContactFloor'
         # puts("INFO only making Unheated GroundContactFloor constructions")
@@ -80,7 +80,7 @@ templates.each do |template|
           'building_category' => building_category
         }
         props = std.model_find_object(std.standards_data['construction_properties'], search_criteria)
-        
+
         # Make sure that a construction is specified
         if props['construction'].nil?
           puts "ERROR No typical construction is specified for construction properties of: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}, cannot add constructions for this combination."
@@ -92,7 +92,7 @@ templates.each do |template|
         when 'ExteriorRoof', 'ExteriorWall'
           type_data = {'Default' => '', 'Options' => []}
           r_val_data = {'Default' => '', 'Options' => []}
-        
+
           # Make the default construction
           default = SpeedConstructions.model_add_construction(std, model, props['construction'], props, climate_zone)
           # Prepend "Typical" for the default construction
@@ -134,7 +134,7 @@ templates.each do |template|
           const_type_data[SpeedConstructions.speed_enum(intended_surface_type, 'method') + '_R_Value'] = r_val_data
         when 'GroundContactFloor'
           type_data = {'Default' => '', 'Options' => []}
-        
+
           # Make the default construction
           default = SpeedConstructions.model_add_construction(std, model, props['construction'], props, climate_zone)
           # Prepend "Typical" for the default construction
@@ -158,10 +158,10 @@ templates.each do |template|
           # No options for GroundContactFloor
 
           # Store the outputs
-          const_type_data = type_data        
+          const_type_data = type_data
         when 'ExteriorWindow'
           type_data = {'Default' => '', 'Options' => []}
-        
+
           # Make the default construction, using SimpleGlazing
           props['convert_to_simple_glazing'] = 'yes'
           default = SpeedConstructions.model_add_construction(std, model, props['construction'], props, climate_zone)
@@ -180,7 +180,7 @@ templates.each do |template|
           # Make four incrementally better constructions
           shgc_decreases = [0.1, 0.2, 0.3, 0.4]
           u_val_decreases = [0.2, 0.3, 0.4, 0.5]
-                           
+
           shgc_decreases.zip(u_val_decreases).each do |shgc_decrease, u_val_decrease|
             upgraded_props = SpeedConstructions.upgrade_window_construction_properties(props, shgc_decrease, u_val_decrease)
             # Use SimpleGlazing for the beyond-code options
@@ -191,7 +191,7 @@ templates.each do |template|
           end
 
           # Store the outputs
-          const_type_data[SpeedConstructions.speed_enum(intended_surface_type, 'method') + '_Type'] = type_data        
+          const_type_data[SpeedConstructions.speed_enum(intended_surface_type, 'method') + '_Type'] = type_data
         end
 
         surf_type_data[SpeedConstructions.speed_enum(standards_construction_type)] = const_type_data
@@ -208,7 +208,7 @@ templates.each do |template|
     method_data['Options'] = [default.name.get.to_s]
     method_type = SpeedConstructions.speed_enum(intended_surface_type, 'method') + '_Type'
     surf_type_data[method_type] = method_data
-    cz_data[SpeedConstructions.speed_enum(intended_surface_type)] = surf_type_data 
+    cz_data[SpeedConstructions.speed_enum(intended_surface_type)] = surf_type_data
 
     # Add one type of default Interior Floors
     intended_surface_type = 'InteriorFloor'
@@ -238,12 +238,12 @@ SpeedConstructions.do_window_property_sizing_run(std, model)
 puts ''
 puts '*** Modifying construction name and properties to include E+ calculated VT ***'
 window_rename_map = SpeedConstructions.update_window_construction_names_with_vt(std, model)
-File.open("window_rename_map.json", 'w') do |f|
+File.open("#{__dir__}/window_rename_map.json", 'w') do |f|
   f.write(JSON.pretty_generate(window_rename_map, {:indent => "    "}))
 end
 
-# Inputs JSON 
-File.open("inputs_new_before_rename.json", 'w') do |f|
+# Inputs JSON
+File.open("#{__dir__}/construction_inputs_new_before_rename.json", 'w') do |f|
   f.write(JSON.pretty_generate(inputs, {:indent => "    "}))
 end
 
@@ -288,11 +288,11 @@ puts ''
 puts "*** Checking opaque construction properties in names against model inputs using tolerance of #{r_tol}% ***"
 SpeedConstructions.compare_opaque_contruction_properties(std, model, r_tol)
 
-# Inputs JSON 
-File.open("inputs_new.json", 'w') do |f|
+# Inputs JSON
+File.open("#{__dir__}/construction_inputs_new.json", 'w') do |f|
   f.write(JSON.pretty_generate(inputs, {:indent => "    "}))
 end
- 
+
 # OSM library
 model.save(SpeedConstructions.construction_lib_path, true)
 
