@@ -699,50 +699,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Typical Insulated Slab Insulated Slab CZ1 R-2",
+            "Default": "Typical Insulated Slab CZ1 R-3",
             "Options": [
-              "Typical Insulated Slab Insulated Slab CZ1 R-2",
-              "Insulated Slab Insulated Slab CZ1 R-7",
-              "Insulated Slab Insulated Slab CZ1 R-12",
-              "Insulated Slab Insulated Slab CZ1 R-17",
-              "Insulated Slab Insulated Slab CZ1 R-22"
+              "Typical Insulated Slab CZ1 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.28",
+              "Default": "Typical Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.11",
               "Options": [
-                "Typical Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.28",
-                "Mtl Framed CZ1 U-0.96 SHGC-0.23 VT-0.25",
-                "Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.22",
-                "Mtl Framed CZ1 U-0.72 SHGC-0.18 VT-0.19",
-                "Mtl Framed CZ1 U-0.6 SHGC-0.15 VT-0.17"
+                "Typical Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.11",
+                "Mtl Framed CZ1 U-0.96 SHGC-0.23 VT-0.09",
+                "Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.08",
+                "Mtl Framed CZ1 U-0.72 SHGC-0.18 VT-0.07",
+                "Mtl Framed CZ1 U-0.6 SHGC-0.15 VT-0.06"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CW CZ1 U-1.2 SHGC-0.25 VT-0.28",
+              "Default": "Typical Mtl Framed CW CZ1 U-1.2 SHGC-0.25 VT-0.11",
               "Options": [
-                "Typical Mtl Framed CW CZ1 U-1.2 SHGC-0.25 VT-0.28",
-                "Mtl Framed CW CZ1 U-0.96 SHGC-0.23 VT-0.25",
-                "Mtl Framed CW CZ1 U-0.84 SHGC-0.2 VT-0.22",
-                "Mtl Framed CW CZ1 U-0.72 SHGC-0.18 VT-0.19",
-                "Mtl Framed CW CZ1 U-0.6 SHGC-0.15 VT-0.17"
+                "Typical Mtl Framed CW CZ1 U-1.2 SHGC-0.25 VT-0.11",
+                "Mtl Framed CW CZ1 U-0.96 SHGC-0.23 VT-0.09",
+                "Mtl Framed CW CZ1 U-0.84 SHGC-0.2 VT-0.08",
+                "Mtl Framed CW CZ1 U-0.72 SHGC-0.18 VT-0.07",
+                "Mtl Framed CW CZ1 U-0.6 SHGC-0.15 VT-0.06"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Non Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.28",
+              "Default": "Typical Non Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.11",
               "Options": [
-                "Typical Non Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.28",
-                "Non Mtl Framed CZ1 U-0.96 SHGC-0.23 VT-0.25",
-                "Non Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.22",
-                "Non Mtl Framed CZ1 U-0.72 SHGC-0.18 VT-0.19",
-                "Non Mtl Framed CZ1 U-0.6 SHGC-0.15 VT-0.17"
+                "Typical Non Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.11",
+                "Non Mtl Framed CZ1 U-0.96 SHGC-0.23 VT-0.09",
+                "Non Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.08",
+                "Non Mtl Framed CZ1 U-0.72 SHGC-0.18 VT-0.07",
+                "Non Mtl Framed CZ1 U-0.6 SHGC-0.15 VT-0.06"
               ]
             }
           }
@@ -925,50 +921,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Typical Insulated Slab Insulated Slab CZ2 R-2",
+            "Default": "Typical Insulated Slab CZ2 R-3",
             "Options": [
-              "Typical Insulated Slab Insulated Slab CZ2 R-2",
-              "Insulated Slab Insulated Slab CZ2 R-7",
-              "Insulated Slab Insulated Slab CZ2 R-12",
-              "Insulated Slab Insulated Slab CZ2 R-17",
-              "Insulated Slab Insulated Slab CZ2 R-22"
+              "Typical Insulated Slab CZ2 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.28",
+              "Default": "Typical Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.12",
               "Options": [
-                "Typical Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.28",
-                "Mtl Framed CZ2 U-0.6 SHGC-0.23 VT-0.25",
-                "Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.22",
-                "Mtl Framed CZ2 U-0.45 SHGC-0.18 VT-0.19",
-                "Mtl Framed CZ2 U-0.38 SHGC-0.15 VT-0.17"
+                "Typical Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.12",
+                "Mtl Framed CZ2 U-0.6 SHGC-0.23 VT-0.14",
+                "Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.11",
+                "Mtl Framed CZ2 U-0.45 SHGC-0.18 VT-0.09",
+                "Mtl Framed CZ2 U-0.38 SHGC-0.15 VT-0.06"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CW CZ2 U-0.7 SHGC-0.25 VT-0.28",
+              "Default": "Typical Mtl Framed CW CZ2 U-0.7 SHGC-0.25 VT-0.14",
               "Options": [
-                "Typical Mtl Framed CW CZ2 U-0.7 SHGC-0.25 VT-0.28",
-                "Mtl Framed CW CZ2 U-0.56 SHGC-0.23 VT-0.25",
-                "Mtl Framed CW CZ2 U-0.49 SHGC-0.2 VT-0.22",
-                "Mtl Framed CW CZ2 U-0.42 SHGC-0.18 VT-0.19",
-                "Mtl Framed CW CZ2 U-0.35 SHGC-0.15 VT-0.17"
+                "Typical Mtl Framed CW CZ2 U-0.7 SHGC-0.25 VT-0.14",
+                "Mtl Framed CW CZ2 U-0.56 SHGC-0.23 VT-0.14",
+                "Mtl Framed CW CZ2 U-0.49 SHGC-0.2 VT-0.11",
+                "Mtl Framed CW CZ2 U-0.42 SHGC-0.18 VT-0.09",
+                "Mtl Framed CW CZ2 U-0.35 SHGC-0.15 VT-0.06"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Non Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.28",
+              "Default": "Typical Non Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.12",
               "Options": [
-                "Typical Non Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.28",
-                "Non Mtl Framed CZ2 U-0.6 SHGC-0.23 VT-0.25",
-                "Non Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.22",
-                "Non Mtl Framed CZ2 U-0.45 SHGC-0.18 VT-0.19",
-                "Non Mtl Framed CZ2 U-0.38 SHGC-0.15 VT-0.17"
+                "Typical Non Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.12",
+                "Non Mtl Framed CZ2 U-0.6 SHGC-0.23 VT-0.14",
+                "Non Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.11",
+                "Non Mtl Framed CZ2 U-0.45 SHGC-0.18 VT-0.09",
+                "Non Mtl Framed CZ2 U-0.38 SHGC-0.15 VT-0.06"
               ]
             }
           }
@@ -1151,50 +1143,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Typical Insulated Slab Insulated Slab CZ3 R-2",
+            "Default": "Typical Insulated Slab CZ3 R-3",
             "Options": [
-              "Typical Insulated Slab Insulated Slab CZ3 R-2",
-              "Insulated Slab Insulated Slab CZ3 R-7",
-              "Insulated Slab Insulated Slab CZ3 R-12",
-              "Insulated Slab Insulated Slab CZ3 R-17",
-              "Insulated Slab Insulated Slab CZ3 R-22"
+              "Typical Insulated Slab CZ3 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.28",
+              "Default": "Typical Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.15",
               "Options": [
-                "Typical Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.28",
-                "Mtl Framed CZ3 U-0.52 SHGC-0.23 VT-0.25",
-                "Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.22",
-                "Mtl Framed CZ3 U-0.39 SHGC-0.18 VT-0.19",
-                "Mtl Framed CZ3 U-0.33 SHGC-0.15 VT-0.17"
+                "Typical Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.15",
+                "Mtl Framed CZ3 U-0.52 SHGC-0.23 VT-0.14",
+                "Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.11",
+                "Mtl Framed CZ3 U-0.39 SHGC-0.18 VT-0.09",
+                "Mtl Framed CZ3 U-0.33 SHGC-0.15 VT-0.06"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CW CZ3 U-0.6 SHGC-0.25 VT-0.28",
+              "Default": "Typical Mtl Framed CW CZ3 U-0.6 SHGC-0.25 VT-0.16",
               "Options": [
-                "Typical Mtl Framed CW CZ3 U-0.6 SHGC-0.25 VT-0.28",
-                "Mtl Framed CW CZ3 U-0.48 SHGC-0.23 VT-0.25",
-                "Mtl Framed CW CZ3 U-0.42 SHGC-0.2 VT-0.22",
-                "Mtl Framed CW CZ3 U-0.36 SHGC-0.18 VT-0.19",
-                "Mtl Framed CW CZ3 U-0.3 SHGC-0.15 VT-0.17"
+                "Typical Mtl Framed CW CZ3 U-0.6 SHGC-0.25 VT-0.16",
+                "Mtl Framed CW CZ3 U-0.48 SHGC-0.23 VT-0.14",
+                "Mtl Framed CW CZ3 U-0.42 SHGC-0.2 VT-0.11",
+                "Mtl Framed CW CZ3 U-0.36 SHGC-0.18 VT-0.09",
+                "Mtl Framed CW CZ3 U-0.3 SHGC-0.15 VT-0.06"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Non Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.28",
+              "Default": "Typical Non Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.15",
               "Options": [
-                "Typical Non Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.28",
-                "Non Mtl Framed CZ3 U-0.52 SHGC-0.23 VT-0.25",
-                "Non Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.22",
-                "Non Mtl Framed CZ3 U-0.39 SHGC-0.18 VT-0.19",
-                "Non Mtl Framed CZ3 U-0.33 SHGC-0.15 VT-0.17"
+                "Typical Non Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.15",
+                "Non Mtl Framed CZ3 U-0.52 SHGC-0.23 VT-0.14",
+                "Non Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.11",
+                "Non Mtl Framed CZ3 U-0.39 SHGC-0.18 VT-0.09",
+                "Non Mtl Framed CZ3 U-0.33 SHGC-0.15 VT-0.06"
               ]
             }
           }
@@ -1377,50 +1365,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Typical Insulated Slab Insulated Slab CZ4 R-2",
+            "Default": "Typical Insulated Slab CZ4 R-3",
             "Options": [
-              "Typical Insulated Slab Insulated Slab CZ4 R-2",
-              "Insulated Slab Insulated Slab CZ4 R-7",
-              "Insulated Slab Insulated Slab CZ4 R-12",
-              "Insulated Slab Insulated Slab CZ4 R-17",
-              "Insulated Slab Insulated Slab CZ4 R-22"
+              "Typical Insulated Slab CZ4 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CZ4 U-0.55 SHGC-0.4 VT-0.44",
+              "Default": "Typical Mtl Framed CZ4 U-0.55 SHGC-0.4 VT-0.32",
               "Options": [
-                "Typical Mtl Framed CZ4 U-0.55 SHGC-0.4 VT-0.44",
-                "Mtl Framed CZ4 U-0.44 SHGC-0.36 VT-0.4",
-                "Mtl Framed CZ4 U-0.39 SHGC-0.32 VT-0.35",
-                "Mtl Framed CZ4 U-0.33 SHGC-0.28 VT-0.31",
-                "Mtl Framed CZ4 U-0.28 SHGC-0.24 VT-0.26"
+                "Typical Mtl Framed CZ4 U-0.55 SHGC-0.4 VT-0.32",
+                "Mtl Framed CZ4 U-0.44 SHGC-0.36 VT-0.27",
+                "Mtl Framed CZ4 U-0.39 SHGC-0.32 VT-0.23",
+                "Mtl Framed CZ4 U-0.33 SHGC-0.28 VT-0.19",
+                "Mtl Framed CZ4 U-0.28 SHGC-0.24 VT-0.15"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CW CZ4 U-0.5 SHGC-0.4 VT-0.44",
+              "Default": "Typical Mtl Framed CW CZ4 U-0.5 SHGC-0.4 VT-0.32",
               "Options": [
-                "Typical Mtl Framed CW CZ4 U-0.5 SHGC-0.4 VT-0.44",
-                "Mtl Framed CW CZ4 U-0.4 SHGC-0.36 VT-0.4",
-                "Mtl Framed CW CZ4 U-0.35 SHGC-0.32 VT-0.35",
-                "Mtl Framed CW CZ4 U-0.3 SHGC-0.28 VT-0.31",
-                "Mtl Framed CW CZ4 U-0.25 SHGC-0.24 VT-0.26"
+                "Typical Mtl Framed CW CZ4 U-0.5 SHGC-0.4 VT-0.32",
+                "Mtl Framed CW CZ4 U-0.4 SHGC-0.36 VT-0.27",
+                "Mtl Framed CW CZ4 U-0.35 SHGC-0.32 VT-0.23",
+                "Mtl Framed CW CZ4 U-0.3 SHGC-0.28 VT-0.19",
+                "Mtl Framed CW CZ4 U-0.25 SHGC-0.24 VT-0.15"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Non Mtl Framed CZ4 U-0.4 SHGC-0.4 VT-0.44",
+              "Default": "Typical Non Mtl Framed CZ4 U-0.4 SHGC-0.4 VT-0.32",
               "Options": [
-                "Typical Non Mtl Framed CZ4 U-0.4 SHGC-0.4 VT-0.44",
-                "Non Mtl Framed CZ4 U-0.32 SHGC-0.36 VT-0.4",
-                "Non Mtl Framed CZ4 U-0.28 SHGC-0.32 VT-0.35",
-                "Non Mtl Framed CZ4 U-0.24 SHGC-0.28 VT-0.31",
-                "Non Mtl Framed CZ4 U-0.2 SHGC-0.24 VT-0.26"
+                "Typical Non Mtl Framed CZ4 U-0.4 SHGC-0.4 VT-0.32",
+                "Non Mtl Framed CZ4 U-0.32 SHGC-0.36 VT-0.27",
+                "Non Mtl Framed CZ4 U-0.28 SHGC-0.32 VT-0.23",
+                "Non Mtl Framed CZ4 U-0.24 SHGC-0.28 VT-0.19",
+                "Non Mtl Framed CZ4 U-0.2 SHGC-0.24 VT-0.15"
               ]
             }
           }
@@ -1603,50 +1587,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Typical Insulated Slab Insulated Slab CZ5 R-2",
+            "Default": "Typical Insulated Slab CZ5 R-3",
             "Options": [
-              "Typical Insulated Slab Insulated Slab CZ5 R-2",
-              "Insulated Slab Insulated Slab CZ5 R-7",
-              "Insulated Slab Insulated Slab CZ5 R-12",
-              "Insulated Slab Insulated Slab CZ5 R-17",
-              "Insulated Slab Insulated Slab CZ5 R-22"
+              "Typical Insulated Slab CZ5 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CZ5 U-0.55 SHGC-0.4 VT-0.44",
+              "Default": "Typical Mtl Framed CZ5 U-0.55 SHGC-0.4 VT-0.32",
               "Options": [
-                "Typical Mtl Framed CZ5 U-0.55 SHGC-0.4 VT-0.44",
-                "Mtl Framed CZ5 U-0.44 SHGC-0.36 VT-0.4",
-                "Mtl Framed CZ5 U-0.39 SHGC-0.32 VT-0.35",
-                "Mtl Framed CZ5 U-0.33 SHGC-0.28 VT-0.31",
-                "Mtl Framed CZ5 U-0.28 SHGC-0.24 VT-0.26"
+                "Typical Mtl Framed CZ5 U-0.55 SHGC-0.4 VT-0.32",
+                "Mtl Framed CZ5 U-0.44 SHGC-0.36 VT-0.27",
+                "Mtl Framed CZ5 U-0.39 SHGC-0.32 VT-0.23",
+                "Mtl Framed CZ5 U-0.33 SHGC-0.28 VT-0.19",
+                "Mtl Framed CZ5 U-0.28 SHGC-0.24 VT-0.15"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CW CZ5 U-0.45 SHGC-0.4 VT-0.44",
+              "Default": "Typical Mtl Framed CW CZ5 U-0.45 SHGC-0.4 VT-0.32",
               "Options": [
-                "Typical Mtl Framed CW CZ5 U-0.45 SHGC-0.4 VT-0.44",
-                "Mtl Framed CW CZ5 U-0.36 SHGC-0.36 VT-0.4",
-                "Mtl Framed CW CZ5 U-0.32 SHGC-0.32 VT-0.35",
-                "Mtl Framed CW CZ5 U-0.27 SHGC-0.28 VT-0.31",
-                "Mtl Framed CW CZ5 U-0.23 SHGC-0.24 VT-0.26"
+                "Typical Mtl Framed CW CZ5 U-0.45 SHGC-0.4 VT-0.32",
+                "Mtl Framed CW CZ5 U-0.36 SHGC-0.36 VT-0.27",
+                "Mtl Framed CW CZ5 U-0.32 SHGC-0.32 VT-0.23",
+                "Mtl Framed CW CZ5 U-0.27 SHGC-0.28 VT-0.19",
+                "Mtl Framed CW CZ5 U-0.23 SHGC-0.24 VT-0.15"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Non Mtl Framed CZ5 U-0.35 SHGC-0.4 VT-0.44",
+              "Default": "Typical Non Mtl Framed CZ5 U-0.35 SHGC-0.4 VT-0.32",
               "Options": [
-                "Typical Non Mtl Framed CZ5 U-0.35 SHGC-0.4 VT-0.44",
-                "Non Mtl Framed CZ5 U-0.28 SHGC-0.36 VT-0.4",
-                "Non Mtl Framed CZ5 U-0.24 SHGC-0.32 VT-0.35",
-                "Non Mtl Framed CZ5 U-0.21 SHGC-0.28 VT-0.31",
-                "Non Mtl Framed CZ5 U-0.18 SHGC-0.24 VT-0.26"
+                "Typical Non Mtl Framed CZ5 U-0.35 SHGC-0.4 VT-0.32",
+                "Non Mtl Framed CZ5 U-0.28 SHGC-0.36 VT-0.27",
+                "Non Mtl Framed CZ5 U-0.24 SHGC-0.32 VT-0.23",
+                "Non Mtl Framed CZ5 U-0.21 SHGC-0.28 VT-0.19",
+                "Non Mtl Framed CZ5 U-0.18 SHGC-0.24 VT-0.15"
               ]
             }
           }
@@ -1829,50 +1809,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Typical Insulated Slab Insulated Slab CZ6 R-4",
+            "Default": "Typical Insulated Slab CZ6 R-3",
             "Options": [
-              "Typical Insulated Slab Insulated Slab CZ6 R-4",
-              "Insulated Slab Insulated Slab CZ6 R-9",
-              "Insulated Slab Insulated Slab CZ6 R-14",
-              "Insulated Slab Insulated Slab CZ6 R-19",
-              "Insulated Slab Insulated Slab CZ6 R-24"
+              "Typical Insulated Slab CZ6 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CZ6 U-0.55 SHGC-0.4 VT-0.44",
+              "Default": "Typical Mtl Framed CZ6 U-0.55 SHGC-0.4 VT-0.32",
               "Options": [
-                "Typical Mtl Framed CZ6 U-0.55 SHGC-0.4 VT-0.44",
-                "Mtl Framed CZ6 U-0.44 SHGC-0.36 VT-0.4",
-                "Mtl Framed CZ6 U-0.39 SHGC-0.32 VT-0.35",
-                "Mtl Framed CZ6 U-0.33 SHGC-0.28 VT-0.31",
-                "Mtl Framed CZ6 U-0.28 SHGC-0.24 VT-0.26"
+                "Typical Mtl Framed CZ6 U-0.55 SHGC-0.4 VT-0.32",
+                "Mtl Framed CZ6 U-0.44 SHGC-0.36 VT-0.27",
+                "Mtl Framed CZ6 U-0.39 SHGC-0.32 VT-0.23",
+                "Mtl Framed CZ6 U-0.33 SHGC-0.28 VT-0.19",
+                "Mtl Framed CZ6 U-0.28 SHGC-0.24 VT-0.15"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CW CZ6 U-0.45 SHGC-0.4 VT-0.44",
+              "Default": "Typical Mtl Framed CW CZ6 U-0.45 SHGC-0.4 VT-0.32",
               "Options": [
-                "Typical Mtl Framed CW CZ6 U-0.45 SHGC-0.4 VT-0.44",
-                "Mtl Framed CW CZ6 U-0.36 SHGC-0.36 VT-0.4",
-                "Mtl Framed CW CZ6 U-0.32 SHGC-0.32 VT-0.35",
-                "Mtl Framed CW CZ6 U-0.27 SHGC-0.28 VT-0.31",
-                "Mtl Framed CW CZ6 U-0.23 SHGC-0.24 VT-0.26"
+                "Typical Mtl Framed CW CZ6 U-0.45 SHGC-0.4 VT-0.32",
+                "Mtl Framed CW CZ6 U-0.36 SHGC-0.36 VT-0.27",
+                "Mtl Framed CW CZ6 U-0.32 SHGC-0.32 VT-0.23",
+                "Mtl Framed CW CZ6 U-0.27 SHGC-0.28 VT-0.19",
+                "Mtl Framed CW CZ6 U-0.23 SHGC-0.24 VT-0.15"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Non Mtl Framed CZ6 U-0.35 SHGC-0.4 VT-0.44",
+              "Default": "Typical Non Mtl Framed CZ6 U-0.35 SHGC-0.4 VT-0.32",
               "Options": [
-                "Typical Non Mtl Framed CZ6 U-0.35 SHGC-0.4 VT-0.44",
-                "Non Mtl Framed CZ6 U-0.28 SHGC-0.36 VT-0.4",
-                "Non Mtl Framed CZ6 U-0.24 SHGC-0.32 VT-0.35",
-                "Non Mtl Framed CZ6 U-0.21 SHGC-0.28 VT-0.31",
-                "Non Mtl Framed CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                "Typical Non Mtl Framed CZ6 U-0.35 SHGC-0.4 VT-0.32",
+                "Non Mtl Framed CZ6 U-0.28 SHGC-0.36 VT-0.27",
+                "Non Mtl Framed CZ6 U-0.24 SHGC-0.32 VT-0.23",
+                "Non Mtl Framed CZ6 U-0.21 SHGC-0.28 VT-0.19",
+                "Non Mtl Framed CZ6 U-0.18 SHGC-0.24 VT-0.15"
               ]
             }
           }
@@ -2055,50 +2031,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Typical Insulated Slab Insulated Slab CZ7 R-4",
+            "Default": "Typical Insulated Slab CZ7 R-3",
             "Options": [
-              "Typical Insulated Slab Insulated Slab CZ7 R-4",
-              "Insulated Slab Insulated Slab CZ7 R-9",
-              "Insulated Slab Insulated Slab CZ7 R-14",
-              "Insulated Slab Insulated Slab CZ7 R-19",
-              "Insulated Slab Insulated Slab CZ7 R-24"
+              "Typical Insulated Slab CZ7 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CZ7 U-0.45 SHGC-0.45 VT-0.5",
+              "Default": "Typical Mtl Framed CZ7 U-0.45 SHGC-0.45 VT-0.37",
               "Options": [
-                "Typical Mtl Framed CZ7 U-0.45 SHGC-0.45 VT-0.5",
-                "Mtl Framed CZ7 U-0.36 SHGC-0.41 VT-0.45",
-                "Mtl Framed CZ7 U-0.32 SHGC-0.36 VT-0.4",
-                "Mtl Framed CZ7 U-0.27 SHGC-0.32 VT-0.35",
-                "Mtl Framed CZ7 U-0.23 SHGC-0.27 VT-0.3"
+                "Typical Mtl Framed CZ7 U-0.45 SHGC-0.45 VT-0.37",
+                "Mtl Framed CZ7 U-0.36 SHGC-0.41 VT-0.32",
+                "Mtl Framed CZ7 U-0.32 SHGC-0.36 VT-0.27",
+                "Mtl Framed CZ7 U-0.27 SHGC-0.32 VT-0.23",
+                "Mtl Framed CZ7 U-0.23 SHGC-0.27 VT-0.18"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CW CZ7 U-0.4 SHGC-0.45 VT-0.5",
+              "Default": "Typical Mtl Framed CW CZ7 U-0.4 SHGC-0.45 VT-0.37",
               "Options": [
-                "Typical Mtl Framed CW CZ7 U-0.4 SHGC-0.45 VT-0.5",
-                "Mtl Framed CW CZ7 U-0.32 SHGC-0.41 VT-0.45",
-                "Mtl Framed CW CZ7 U-0.28 SHGC-0.36 VT-0.4",
-                "Mtl Framed CW CZ7 U-0.24 SHGC-0.32 VT-0.35",
-                "Mtl Framed CW CZ7 U-0.2 SHGC-0.27 VT-0.3"
+                "Typical Mtl Framed CW CZ7 U-0.4 SHGC-0.45 VT-0.37",
+                "Mtl Framed CW CZ7 U-0.32 SHGC-0.41 VT-0.32",
+                "Mtl Framed CW CZ7 U-0.28 SHGC-0.36 VT-0.27",
+                "Mtl Framed CW CZ7 U-0.24 SHGC-0.32 VT-0.23",
+                "Mtl Framed CW CZ7 U-0.2 SHGC-0.27 VT-0.18"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Non Mtl Framed CZ7 U-0.35 SHGC-0.45 VT-0.5",
+              "Default": "Typical Non Mtl Framed CZ7 U-0.35 SHGC-0.45 VT-0.37",
               "Options": [
-                "Typical Non Mtl Framed CZ7 U-0.35 SHGC-0.45 VT-0.5",
-                "Non Mtl Framed CZ7 U-0.28 SHGC-0.41 VT-0.45",
-                "Non Mtl Framed CZ7 U-0.24 SHGC-0.36 VT-0.4",
-                "Non Mtl Framed CZ7 U-0.21 SHGC-0.32 VT-0.35",
-                "Non Mtl Framed CZ7 U-0.18 SHGC-0.27 VT-0.3"
+                "Typical Non Mtl Framed CZ7 U-0.35 SHGC-0.45 VT-0.37",
+                "Non Mtl Framed CZ7 U-0.28 SHGC-0.41 VT-0.32",
+                "Non Mtl Framed CZ7 U-0.24 SHGC-0.36 VT-0.27",
+                "Non Mtl Framed CZ7 U-0.21 SHGC-0.32 VT-0.23",
+                "Non Mtl Framed CZ7 U-0.18 SHGC-0.27 VT-0.18"
               ]
             }
           }
@@ -2281,50 +2253,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Typical Insulated Slab Insulated Slab CZ8 R-4",
+            "Default": "Typical Insulated Slab CZ8 R-3",
             "Options": [
-              "Typical Insulated Slab Insulated Slab CZ8 R-4",
-              "Insulated Slab Insulated Slab CZ8 R-9",
-              "Insulated Slab Insulated Slab CZ8 R-14",
-              "Insulated Slab Insulated Slab CZ8 R-19",
-              "Insulated Slab Insulated Slab CZ8 R-24"
+              "Typical Insulated Slab CZ8 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CZ8 U-0.45 SHGC-0.45 VT-0.5",
+              "Default": "Typical Mtl Framed CZ8 U-0.45 SHGC-0.45 VT-0.37",
               "Options": [
-                "Typical Mtl Framed CZ8 U-0.45 SHGC-0.45 VT-0.5",
-                "Mtl Framed CZ8 U-0.36 SHGC-0.41 VT-0.45",
-                "Mtl Framed CZ8 U-0.32 SHGC-0.36 VT-0.4",
-                "Mtl Framed CZ8 U-0.27 SHGC-0.32 VT-0.35",
-                "Mtl Framed CZ8 U-0.23 SHGC-0.27 VT-0.3"
+                "Typical Mtl Framed CZ8 U-0.45 SHGC-0.45 VT-0.37",
+                "Mtl Framed CZ8 U-0.36 SHGC-0.41 VT-0.32",
+                "Mtl Framed CZ8 U-0.32 SHGC-0.36 VT-0.27",
+                "Mtl Framed CZ8 U-0.27 SHGC-0.32 VT-0.23",
+                "Mtl Framed CZ8 U-0.23 SHGC-0.27 VT-0.18"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Typical Mtl Framed CW CZ8 U-0.4 SHGC-0.45 VT-0.5",
+              "Default": "Typical Mtl Framed CW CZ8 U-0.4 SHGC-0.45 VT-0.37",
               "Options": [
-                "Typical Mtl Framed CW CZ8 U-0.4 SHGC-0.45 VT-0.5",
-                "Mtl Framed CW CZ8 U-0.32 SHGC-0.41 VT-0.45",
-                "Mtl Framed CW CZ8 U-0.28 SHGC-0.36 VT-0.4",
-                "Mtl Framed CW CZ8 U-0.24 SHGC-0.32 VT-0.35",
-                "Mtl Framed CW CZ8 U-0.2 SHGC-0.27 VT-0.3"
+                "Typical Mtl Framed CW CZ8 U-0.4 SHGC-0.45 VT-0.37",
+                "Mtl Framed CW CZ8 U-0.32 SHGC-0.41 VT-0.32",
+                "Mtl Framed CW CZ8 U-0.28 SHGC-0.36 VT-0.27",
+                "Mtl Framed CW CZ8 U-0.24 SHGC-0.32 VT-0.23",
+                "Mtl Framed CW CZ8 U-0.2 SHGC-0.27 VT-0.18"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Typical Non Mtl Framed CZ8 U-0.35 SHGC-0.45 VT-0.5",
+              "Default": "Typical Non Mtl Framed CZ8 U-0.35 SHGC-0.45 VT-0.37",
               "Options": [
-                "Typical Non Mtl Framed CZ8 U-0.35 SHGC-0.45 VT-0.5",
-                "Non Mtl Framed CZ8 U-0.28 SHGC-0.41 VT-0.45",
-                "Non Mtl Framed CZ8 U-0.24 SHGC-0.36 VT-0.4",
-                "Non Mtl Framed CZ8 U-0.21 SHGC-0.32 VT-0.35",
-                "Non Mtl Framed CZ8 U-0.18 SHGC-0.27 VT-0.3"
+                "Typical Non Mtl Framed CZ8 U-0.35 SHGC-0.45 VT-0.37",
+                "Non Mtl Framed CZ8 U-0.28 SHGC-0.41 VT-0.32",
+                "Non Mtl Framed CZ8 U-0.24 SHGC-0.36 VT-0.27",
+                "Non Mtl Framed CZ8 U-0.21 SHGC-0.32 VT-0.23",
+                "Non Mtl Framed CZ8 U-0.18 SHGC-0.27 VT-0.18"
               ]
             }
           }
@@ -2352,9 +2320,9 @@
         "Roof": {
           "Attic_and_Other": {
             "Roof_Type": {
-              "Default": "Attic & Other Roof CZ1 R-29",
+              "Default": "Typical Attic & Other Roof CZ1 R-29",
               "Options": [
-                "Attic & Other Roof CZ1 R-29",
+                "Typical Attic & Other Roof CZ1 R-29",
                 "Attic & Other Roof CZ1 R-39",
                 "Attic & Other Roof CZ1 R-44",
                 "Attic & Other Roof CZ1 R-49",
@@ -2374,9 +2342,9 @@
           },
           "IEAD": {
             "Roof_Type": {
-              "Default": "IEAD Roof CZ1 R-16",
+              "Default": "Typical IEAD Roof CZ1 R-16",
               "Options": [
-                "IEAD Roof CZ1 R-16",
+                "Typical IEAD Roof CZ1 R-16",
                 "IEAD Roof CZ1 R-26",
                 "IEAD Roof CZ1 R-31",
                 "IEAD Roof CZ1 R-36",
@@ -2396,9 +2364,9 @@
           },
           "Metal_Building": {
             "Roof_Type": {
-              "Default": "Metal Roof CZ1 R-15",
+              "Default": "Typical Metal Roof CZ1 R-15",
               "Options": [
-                "Metal Roof CZ1 R-15",
+                "Typical Metal Roof CZ1 R-15",
                 "Metal Roof CZ1 R-25",
                 "Metal Roof CZ1 R-30",
                 "Metal Roof CZ1 R-35",
@@ -2420,9 +2388,9 @@
         "Exterior_Walls": {
           "Mass": {
             "Wall_Type": {
-              "Default": "Mass Wall CZ1 R-2",
+              "Default": "Typical Mass Wall CZ1 R-2",
               "Options": [
-                "Mass Wall CZ1 R-2",
+                "Typical Mass Wall CZ1 R-2",
                 "Mass Wall CZ1 R-7",
                 "Mass Wall CZ1 R-12",
                 "Mass Wall CZ1 R-17",
@@ -2464,9 +2432,9 @@
           },
           "Steel_Framed": {
             "Wall_Type": {
-              "Default": "Steel Framed Wall CZ1 R-8",
+              "Default": "Typical Steel Framed Wall CZ1 R-8",
               "Options": [
-                "Steel Framed Wall CZ1 R-8",
+                "Typical Steel Framed Wall CZ1 R-8",
                 "Steel Framed Wall CZ1 R-13",
                 "Steel Framed Wall CZ1 R-18",
                 "Steel Framed Wall CZ1 R-23",
@@ -2486,9 +2454,9 @@
           },
           "Wood_Framed": {
             "Wall_Type": {
-              "Default": "Wood Framed Wall CZ1 R-11",
+              "Default": "Typical Wood Framed Wall CZ1 R-11",
               "Options": [
-                "Wood Framed Wall CZ1 R-11",
+                "Typical Wood Framed Wall CZ1 R-11",
                 "Wood Framed Wall CZ1 R-16",
                 "Wood Framed Wall CZ1 R-21",
                 "Wood Framed Wall CZ1 R-26",
@@ -2509,50 +2477,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Insulated Slab Insulated Slab CZ1 R-2",
+            "Default": "Typical Insulated Slab CZ1 R-3",
             "Options": [
-              "Insulated Slab Insulated Slab CZ1 R-2",
-              "Insulated Slab Insulated Slab CZ1 R-7",
-              "Insulated Slab Insulated Slab CZ1 R-12",
-              "Insulated Slab Insulated Slab CZ1 R-17",
-              "Insulated Slab Insulated Slab CZ1 R-22"
+              "Typical Insulated Slab CZ1 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.28",
+              "Default": "Typical Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.11",
               "Options": [
-                "Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.28",
-                "Mtl Framed CZ1 U-0.96 SHGC-0.23 VT-0.25",
-                "Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.22",
-                "Mtl Framed CZ1 U-0.72 SHGC-0.18 VT-0.19",
-                "Mtl Framed CZ1 U-0.6 SHGC-0.15 VT-0.17"
+                "Typical Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.11",
+                "Mtl Framed CZ1 U-0.96 SHGC-0.23 VT-0.09",
+                "Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.08",
+                "Mtl Framed CZ1 U-0.72 SHGC-0.18 VT-0.07",
+                "Mtl Framed CZ1 U-0.6 SHGC-0.15 VT-0.06"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Mtl Framed CW CZ1 U-1.2 SHGC-0.25 VT-0.28",
+              "Default": "Typical Mtl Framed CW CZ1 U-1.2 SHGC-0.25 VT-0.11",
               "Options": [
-                "Mtl Framed CW CZ1 U-1.2 SHGC-0.25 VT-0.28",
-                "Mtl Framed CW CZ1 U-0.96 SHGC-0.23 VT-0.25",
-                "Mtl Framed CW CZ1 U-0.84 SHGC-0.2 VT-0.22",
-                "Mtl Framed CW CZ1 U-0.72 SHGC-0.18 VT-0.19",
-                "Mtl Framed CW CZ1 U-0.6 SHGC-0.15 VT-0.17"
+                "Typical Mtl Framed CW CZ1 U-1.2 SHGC-0.25 VT-0.11",
+                "Mtl Framed CW CZ1 U-0.96 SHGC-0.23 VT-0.09",
+                "Mtl Framed CW CZ1 U-0.84 SHGC-0.2 VT-0.08",
+                "Mtl Framed CW CZ1 U-0.72 SHGC-0.18 VT-0.07",
+                "Mtl Framed CW CZ1 U-0.6 SHGC-0.15 VT-0.06"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Non Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.28",
+              "Default": "Typical Non Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.11",
               "Options": [
-                "Non Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.28",
-                "Non Mtl Framed CZ1 U-0.96 SHGC-0.23 VT-0.25",
-                "Non Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.22",
-                "Non Mtl Framed CZ1 U-0.72 SHGC-0.18 VT-0.19",
-                "Non Mtl Framed CZ1 U-0.6 SHGC-0.15 VT-0.17"
+                "Typical Non Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.11",
+                "Non Mtl Framed CZ1 U-0.96 SHGC-0.23 VT-0.09",
+                "Non Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.08",
+                "Non Mtl Framed CZ1 U-0.72 SHGC-0.18 VT-0.07",
+                "Non Mtl Framed CZ1 U-0.6 SHGC-0.15 VT-0.06"
               ]
             }
           }
@@ -2578,9 +2542,9 @@
         "Roof": {
           "Attic_and_Other": {
             "Roof_Type": {
-              "Default": "Attic & Other Roof CZ2 R-37",
+              "Default": "Typical Attic & Other Roof CZ2 R-37",
               "Options": [
-                "Attic & Other Roof CZ2 R-37",
+                "Typical Attic & Other Roof CZ2 R-37",
                 "Attic & Other Roof CZ2 R-47",
                 "Attic & Other Roof CZ2 R-52",
                 "Attic & Other Roof CZ2 R-57",
@@ -2600,9 +2564,9 @@
           },
           "IEAD": {
             "Roof_Type": {
-              "Default": "IEAD Roof CZ2 R-21",
+              "Default": "Typical IEAD Roof CZ2 R-21",
               "Options": [
-                "IEAD Roof CZ2 R-21",
+                "Typical IEAD Roof CZ2 R-21",
                 "IEAD Roof CZ2 R-31",
                 "IEAD Roof CZ2 R-36",
                 "IEAD Roof CZ2 R-41",
@@ -2646,9 +2610,9 @@
         "Exterior_Walls": {
           "Mass": {
             "Wall_Type": {
-              "Default": "Mass Wall CZ2 R-7",
+              "Default": "Typical Mass Wall CZ2 R-7",
               "Options": [
-                "Mass Wall CZ2 R-7",
+                "Typical Mass Wall CZ2 R-7",
                 "Mass Wall CZ2 R-12",
                 "Mass Wall CZ2 R-17",
                 "Mass Wall CZ2 R-22",
@@ -2690,9 +2654,9 @@
           },
           "Steel_Framed": {
             "Wall_Type": {
-              "Default": "Steel Framed Wall CZ2 R-8",
+              "Default": "Typical Steel Framed Wall CZ2 R-8",
               "Options": [
-                "Steel Framed Wall CZ2 R-8",
+                "Typical Steel Framed Wall CZ2 R-8",
                 "Steel Framed Wall CZ2 R-13",
                 "Steel Framed Wall CZ2 R-18",
                 "Steel Framed Wall CZ2 R-23",
@@ -2712,9 +2676,9 @@
           },
           "Wood_Framed": {
             "Wall_Type": {
-              "Default": "Wood Framed Wall CZ2 R-11",
+              "Default": "Typical Wood Framed Wall CZ2 R-11",
               "Options": [
-                "Wood Framed Wall CZ2 R-11",
+                "Typical Wood Framed Wall CZ2 R-11",
                 "Wood Framed Wall CZ2 R-16",
                 "Wood Framed Wall CZ2 R-21",
                 "Wood Framed Wall CZ2 R-26",
@@ -2735,50 +2699,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Insulated Slab Insulated Slab CZ2 R-2",
+            "Default": "Typical Insulated Slab CZ2 R-3",
             "Options": [
-              "Insulated Slab Insulated Slab CZ2 R-2",
-              "Insulated Slab Insulated Slab CZ2 R-7",
-              "Insulated Slab Insulated Slab CZ2 R-12",
-              "Insulated Slab Insulated Slab CZ2 R-17",
-              "Insulated Slab Insulated Slab CZ2 R-22"
+              "Typical Insulated Slab CZ2 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.28",
+              "Default": "Typical Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.12",
               "Options": [
-                "Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.28",
-                "Mtl Framed CZ2 U-0.6 SHGC-0.23 VT-0.25",
-                "Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.22",
-                "Mtl Framed CZ2 U-0.45 SHGC-0.18 VT-0.19",
-                "Mtl Framed CZ2 U-0.38 SHGC-0.15 VT-0.17"
+                "Typical Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.12",
+                "Mtl Framed CZ2 U-0.6 SHGC-0.23 VT-0.14",
+                "Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.11",
+                "Mtl Framed CZ2 U-0.45 SHGC-0.18 VT-0.09",
+                "Mtl Framed CZ2 U-0.38 SHGC-0.15 VT-0.06"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Mtl Framed CW CZ2 U-0.7 SHGC-0.25 VT-0.28",
+              "Default": "Typical Mtl Framed CW CZ2 U-0.7 SHGC-0.25 VT-0.14",
               "Options": [
-                "Mtl Framed CW CZ2 U-0.7 SHGC-0.25 VT-0.28",
-                "Mtl Framed CW CZ2 U-0.56 SHGC-0.23 VT-0.25",
-                "Mtl Framed CW CZ2 U-0.49 SHGC-0.2 VT-0.22",
-                "Mtl Framed CW CZ2 U-0.42 SHGC-0.18 VT-0.19",
-                "Mtl Framed CW CZ2 U-0.35 SHGC-0.15 VT-0.17"
+                "Typical Mtl Framed CW CZ2 U-0.7 SHGC-0.25 VT-0.14",
+                "Mtl Framed CW CZ2 U-0.56 SHGC-0.23 VT-0.14",
+                "Mtl Framed CW CZ2 U-0.49 SHGC-0.2 VT-0.11",
+                "Mtl Framed CW CZ2 U-0.42 SHGC-0.18 VT-0.09",
+                "Mtl Framed CW CZ2 U-0.35 SHGC-0.15 VT-0.06"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Non Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.28",
+              "Default": "Typical Non Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.12",
               "Options": [
-                "Non Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.28",
-                "Non Mtl Framed CZ2 U-0.6 SHGC-0.23 VT-0.25",
-                "Non Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.22",
-                "Non Mtl Framed CZ2 U-0.45 SHGC-0.18 VT-0.19",
-                "Non Mtl Framed CZ2 U-0.38 SHGC-0.15 VT-0.17"
+                "Typical Non Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.12",
+                "Non Mtl Framed CZ2 U-0.6 SHGC-0.23 VT-0.14",
+                "Non Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.11",
+                "Non Mtl Framed CZ2 U-0.45 SHGC-0.18 VT-0.09",
+                "Non Mtl Framed CZ2 U-0.38 SHGC-0.15 VT-0.06"
               ]
             }
           }
@@ -2804,9 +2764,9 @@
         "Roof": {
           "Attic_and_Other": {
             "Roof_Type": {
-              "Default": "Attic & Other Roof CZ3 R-37",
+              "Default": "Typical Attic & Other Roof CZ3 R-37",
               "Options": [
-                "Attic & Other Roof CZ3 R-37",
+                "Typical Attic & Other Roof CZ3 R-37",
                 "Attic & Other Roof CZ3 R-47",
                 "Attic & Other Roof CZ3 R-52",
                 "Attic & Other Roof CZ3 R-57",
@@ -2826,9 +2786,9 @@
           },
           "IEAD": {
             "Roof_Type": {
-              "Default": "IEAD Roof CZ3 R-21",
+              "Default": "Typical IEAD Roof CZ3 R-21",
               "Options": [
-                "IEAD Roof CZ3 R-21",
+                "Typical IEAD Roof CZ3 R-21",
                 "IEAD Roof CZ3 R-31",
                 "IEAD Roof CZ3 R-36",
                 "IEAD Roof CZ3 R-41",
@@ -2872,9 +2832,9 @@
         "Exterior_Walls": {
           "Mass": {
             "Wall_Type": {
-              "Default": "Mass Wall CZ3 R-8",
+              "Default": "Typical Mass Wall CZ3 R-8",
               "Options": [
-                "Mass Wall CZ3 R-8",
+                "Typical Mass Wall CZ3 R-8",
                 "Mass Wall CZ3 R-13",
                 "Mass Wall CZ3 R-18",
                 "Mass Wall CZ3 R-23",
@@ -2916,9 +2876,9 @@
           },
           "Steel_Framed": {
             "Wall_Type": {
-              "Default": "Steel Framed Wall CZ3 R-12",
+              "Default": "Typical Steel Framed Wall CZ3 R-12",
               "Options": [
-                "Steel Framed Wall CZ3 R-12",
+                "Typical Steel Framed Wall CZ3 R-12",
                 "Steel Framed Wall CZ3 R-17",
                 "Steel Framed Wall CZ3 R-22",
                 "Steel Framed Wall CZ3 R-27",
@@ -2938,9 +2898,9 @@
           },
           "Wood_Framed": {
             "Wall_Type": {
-              "Default": "Wood Framed Wall CZ3 R-11",
+              "Default": "Typical Wood Framed Wall CZ3 R-11",
               "Options": [
-                "Wood Framed Wall CZ3 R-11",
+                "Typical Wood Framed Wall CZ3 R-11",
                 "Wood Framed Wall CZ3 R-16",
                 "Wood Framed Wall CZ3 R-21",
                 "Wood Framed Wall CZ3 R-26",
@@ -2961,50 +2921,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Insulated Slab Insulated Slab CZ3 R-2",
+            "Default": "Typical Insulated Slab CZ3 R-3",
             "Options": [
-              "Insulated Slab Insulated Slab CZ3 R-2",
-              "Insulated Slab Insulated Slab CZ3 R-7",
-              "Insulated Slab Insulated Slab CZ3 R-12",
-              "Insulated Slab Insulated Slab CZ3 R-17",
-              "Insulated Slab Insulated Slab CZ3 R-22"
+              "Typical Insulated Slab CZ3 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.28",
+              "Default": "Typical Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.15",
               "Options": [
-                "Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.28",
-                "Mtl Framed CZ3 U-0.52 SHGC-0.23 VT-0.25",
-                "Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.22",
-                "Mtl Framed CZ3 U-0.39 SHGC-0.18 VT-0.19",
-                "Mtl Framed CZ3 U-0.33 SHGC-0.15 VT-0.17"
+                "Typical Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.15",
+                "Mtl Framed CZ3 U-0.52 SHGC-0.23 VT-0.14",
+                "Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.11",
+                "Mtl Framed CZ3 U-0.39 SHGC-0.18 VT-0.09",
+                "Mtl Framed CZ3 U-0.33 SHGC-0.15 VT-0.06"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Mtl Framed CW CZ3 U-0.6 SHGC-0.25 VT-0.28",
+              "Default": "Typical Mtl Framed CW CZ3 U-0.6 SHGC-0.25 VT-0.16",
               "Options": [
-                "Mtl Framed CW CZ3 U-0.6 SHGC-0.25 VT-0.28",
-                "Mtl Framed CW CZ3 U-0.48 SHGC-0.23 VT-0.25",
-                "Mtl Framed CW CZ3 U-0.42 SHGC-0.2 VT-0.22",
-                "Mtl Framed CW CZ3 U-0.36 SHGC-0.18 VT-0.19",
-                "Mtl Framed CW CZ3 U-0.3 SHGC-0.15 VT-0.17"
+                "Typical Mtl Framed CW CZ3 U-0.6 SHGC-0.25 VT-0.16",
+                "Mtl Framed CW CZ3 U-0.48 SHGC-0.23 VT-0.14",
+                "Mtl Framed CW CZ3 U-0.42 SHGC-0.2 VT-0.11",
+                "Mtl Framed CW CZ3 U-0.36 SHGC-0.18 VT-0.09",
+                "Mtl Framed CW CZ3 U-0.3 SHGC-0.15 VT-0.06"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Non Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.28",
+              "Default": "Typical Non Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.15",
               "Options": [
-                "Non Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.28",
-                "Non Mtl Framed CZ3 U-0.52 SHGC-0.23 VT-0.25",
-                "Non Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.22",
-                "Non Mtl Framed CZ3 U-0.39 SHGC-0.18 VT-0.19",
-                "Non Mtl Framed CZ3 U-0.33 SHGC-0.15 VT-0.17"
+                "Typical Non Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.15",
+                "Non Mtl Framed CZ3 U-0.52 SHGC-0.23 VT-0.14",
+                "Non Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.11",
+                "Non Mtl Framed CZ3 U-0.39 SHGC-0.18 VT-0.09",
+                "Non Mtl Framed CZ3 U-0.33 SHGC-0.15 VT-0.06"
               ]
             }
           }
@@ -3030,9 +2986,9 @@
         "Roof": {
           "Attic_and_Other": {
             "Roof_Type": {
-              "Default": "Attic & Other Roof CZ4 R-37",
+              "Default": "Typical Attic & Other Roof CZ4 R-37",
               "Options": [
-                "Attic & Other Roof CZ4 R-37",
+                "Typical Attic & Other Roof CZ4 R-37",
                 "Attic & Other Roof CZ4 R-47",
                 "Attic & Other Roof CZ4 R-52",
                 "Attic & Other Roof CZ4 R-57",
@@ -3052,9 +3008,9 @@
           },
           "IEAD": {
             "Roof_Type": {
-              "Default": "IEAD Roof CZ4 R-21",
+              "Default": "Typical IEAD Roof CZ4 R-21",
               "Options": [
-                "IEAD Roof CZ4 R-21",
+                "Typical IEAD Roof CZ4 R-21",
                 "IEAD Roof CZ4 R-31",
                 "IEAD Roof CZ4 R-36",
                 "IEAD Roof CZ4 R-41",
@@ -3098,9 +3054,9 @@
         "Exterior_Walls": {
           "Mass": {
             "Wall_Type": {
-              "Default": "Mass Wall CZ4 R-10",
+              "Default": "Typical Mass Wall CZ4 R-10",
               "Options": [
-                "Mass Wall CZ4 R-10",
+                "Typical Mass Wall CZ4 R-10",
                 "Mass Wall CZ4 R-15",
                 "Mass Wall CZ4 R-20",
                 "Mass Wall CZ4 R-25",
@@ -3142,9 +3098,9 @@
           },
           "Steel_Framed": {
             "Wall_Type": {
-              "Default": "Steel Framed Wall CZ4 R-16",
+              "Default": "Typical Steel Framed Wall CZ4 R-16",
               "Options": [
-                "Steel Framed Wall CZ4 R-16",
+                "Typical Steel Framed Wall CZ4 R-16",
                 "Steel Framed Wall CZ4 R-21",
                 "Steel Framed Wall CZ4 R-26",
                 "Steel Framed Wall CZ4 R-31",
@@ -3164,9 +3120,9 @@
           },
           "Wood_Framed": {
             "Wall_Type": {
-              "Default": "Wood Framed Wall CZ4 R-11",
+              "Default": "Typical Wood Framed Wall CZ4 R-11",
               "Options": [
-                "Wood Framed Wall CZ4 R-11",
+                "Typical Wood Framed Wall CZ4 R-11",
                 "Wood Framed Wall CZ4 R-16",
                 "Wood Framed Wall CZ4 R-21",
                 "Wood Framed Wall CZ4 R-26",
@@ -3187,50 +3143,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Insulated Slab Insulated Slab CZ4 R-2",
+            "Default": "Typical Insulated Slab CZ4 R-3",
             "Options": [
-              "Insulated Slab Insulated Slab CZ4 R-2",
-              "Insulated Slab Insulated Slab CZ4 R-7",
-              "Insulated Slab Insulated Slab CZ4 R-12",
-              "Insulated Slab Insulated Slab CZ4 R-17",
-              "Insulated Slab Insulated Slab CZ4 R-22"
+              "Typical Insulated Slab CZ4 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Mtl Framed CZ4 U-0.55 SHGC-0.4 VT-0.44",
+              "Default": "Typical Mtl Framed CZ4 U-0.55 SHGC-0.4 VT-0.32",
               "Options": [
-                "Mtl Framed CZ4 U-0.55 SHGC-0.4 VT-0.44",
-                "Mtl Framed CZ4 U-0.44 SHGC-0.36 VT-0.4",
-                "Mtl Framed CZ4 U-0.39 SHGC-0.32 VT-0.35",
-                "Mtl Framed CZ4 U-0.33 SHGC-0.28 VT-0.31",
-                "Mtl Framed CZ4 U-0.28 SHGC-0.24 VT-0.26"
+                "Typical Mtl Framed CZ4 U-0.55 SHGC-0.4 VT-0.32",
+                "Mtl Framed CZ4 U-0.44 SHGC-0.36 VT-0.27",
+                "Mtl Framed CZ4 U-0.39 SHGC-0.32 VT-0.23",
+                "Mtl Framed CZ4 U-0.33 SHGC-0.28 VT-0.19",
+                "Mtl Framed CZ4 U-0.28 SHGC-0.24 VT-0.15"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Mtl Framed CW CZ4 U-0.5 SHGC-0.4 VT-0.44",
+              "Default": "Typical Mtl Framed CW CZ4 U-0.5 SHGC-0.4 VT-0.32",
               "Options": [
-                "Mtl Framed CW CZ4 U-0.5 SHGC-0.4 VT-0.44",
-                "Mtl Framed CW CZ4 U-0.4 SHGC-0.36 VT-0.4",
-                "Mtl Framed CW CZ4 U-0.35 SHGC-0.32 VT-0.35",
-                "Mtl Framed CW CZ4 U-0.3 SHGC-0.28 VT-0.31",
-                "Mtl Framed CW CZ4 U-0.25 SHGC-0.24 VT-0.26"
+                "Typical Mtl Framed CW CZ4 U-0.5 SHGC-0.4 VT-0.32",
+                "Mtl Framed CW CZ4 U-0.4 SHGC-0.36 VT-0.27",
+                "Mtl Framed CW CZ4 U-0.35 SHGC-0.32 VT-0.23",
+                "Mtl Framed CW CZ4 U-0.3 SHGC-0.28 VT-0.19",
+                "Mtl Framed CW CZ4 U-0.25 SHGC-0.24 VT-0.15"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Non Mtl Framed CZ4 U-0.4 SHGC-0.4 VT-0.44",
+              "Default": "Typical Non Mtl Framed CZ4 U-0.4 SHGC-0.4 VT-0.32",
               "Options": [
-                "Non Mtl Framed CZ4 U-0.4 SHGC-0.4 VT-0.44",
-                "Non Mtl Framed CZ4 U-0.32 SHGC-0.36 VT-0.4",
-                "Non Mtl Framed CZ4 U-0.28 SHGC-0.32 VT-0.35",
-                "Non Mtl Framed CZ4 U-0.24 SHGC-0.28 VT-0.31",
-                "Non Mtl Framed CZ4 U-0.2 SHGC-0.24 VT-0.26"
+                "Typical Non Mtl Framed CZ4 U-0.4 SHGC-0.4 VT-0.32",
+                "Non Mtl Framed CZ4 U-0.32 SHGC-0.36 VT-0.27",
+                "Non Mtl Framed CZ4 U-0.28 SHGC-0.32 VT-0.23",
+                "Non Mtl Framed CZ4 U-0.24 SHGC-0.28 VT-0.19",
+                "Non Mtl Framed CZ4 U-0.2 SHGC-0.24 VT-0.15"
               ]
             }
           }
@@ -3256,9 +3208,9 @@
         "Roof": {
           "Attic_and_Other": {
             "Roof_Type": {
-              "Default": "Attic & Other Roof CZ5 R-37",
+              "Default": "Typical Attic & Other Roof CZ5 R-37",
               "Options": [
-                "Attic & Other Roof CZ5 R-37",
+                "Typical Attic & Other Roof CZ5 R-37",
                 "Attic & Other Roof CZ5 R-47",
                 "Attic & Other Roof CZ5 R-52",
                 "Attic & Other Roof CZ5 R-57",
@@ -3278,9 +3230,9 @@
           },
           "IEAD": {
             "Roof_Type": {
-              "Default": "IEAD Roof CZ5 R-21",
+              "Default": "Typical IEAD Roof CZ5 R-21",
               "Options": [
-                "IEAD Roof CZ5 R-21",
+                "Typical IEAD Roof CZ5 R-21",
                 "IEAD Roof CZ5 R-31",
                 "IEAD Roof CZ5 R-36",
                 "IEAD Roof CZ5 R-41",
@@ -3324,9 +3276,9 @@
         "Exterior_Walls": {
           "Mass": {
             "Wall_Type": {
-              "Default": "Mass Wall CZ5 R-11",
+              "Default": "Typical Mass Wall CZ5 R-11",
               "Options": [
-                "Mass Wall CZ5 R-11",
+                "Typical Mass Wall CZ5 R-11",
                 "Mass Wall CZ5 R-16",
                 "Mass Wall CZ5 R-21",
                 "Mass Wall CZ5 R-26",
@@ -3368,9 +3320,9 @@
           },
           "Steel_Framed": {
             "Wall_Type": {
-              "Default": "Steel Framed Wall CZ5 R-16",
+              "Default": "Typical Steel Framed Wall CZ5 R-16",
               "Options": [
-                "Steel Framed Wall CZ5 R-16",
+                "Typical Steel Framed Wall CZ5 R-16",
                 "Steel Framed Wall CZ5 R-21",
                 "Steel Framed Wall CZ5 R-26",
                 "Steel Framed Wall CZ5 R-31",
@@ -3390,9 +3342,9 @@
           },
           "Wood_Framed": {
             "Wall_Type": {
-              "Default": "Wood Framed Wall CZ5 R-16",
+              "Default": "Typical Wood Framed Wall CZ5 R-16",
               "Options": [
-                "Wood Framed Wall CZ5 R-16",
+                "Typical Wood Framed Wall CZ5 R-16",
                 "Wood Framed Wall CZ5 R-21",
                 "Wood Framed Wall CZ5 R-26",
                 "Wood Framed Wall CZ5 R-31",
@@ -3413,50 +3365,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Insulated Slab Insulated Slab CZ5 R-2",
+            "Default": "Typical Insulated Slab CZ5 R-3",
             "Options": [
-              "Insulated Slab Insulated Slab CZ5 R-2",
-              "Insulated Slab Insulated Slab CZ5 R-7",
-              "Insulated Slab Insulated Slab CZ5 R-12",
-              "Insulated Slab Insulated Slab CZ5 R-17",
-              "Insulated Slab Insulated Slab CZ5 R-22"
+              "Typical Insulated Slab CZ5 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Mtl Framed CZ5 U-0.55 SHGC-0.4 VT-0.44",
+              "Default": "Typical Mtl Framed CZ5 U-0.55 SHGC-0.4 VT-0.32",
               "Options": [
-                "Mtl Framed CZ5 U-0.55 SHGC-0.4 VT-0.44",
-                "Mtl Framed CZ5 U-0.44 SHGC-0.36 VT-0.4",
-                "Mtl Framed CZ5 U-0.39 SHGC-0.32 VT-0.35",
-                "Mtl Framed CZ5 U-0.33 SHGC-0.28 VT-0.31",
-                "Mtl Framed CZ5 U-0.28 SHGC-0.24 VT-0.26"
+                "Typical Mtl Framed CZ5 U-0.55 SHGC-0.4 VT-0.32",
+                "Mtl Framed CZ5 U-0.44 SHGC-0.36 VT-0.27",
+                "Mtl Framed CZ5 U-0.39 SHGC-0.32 VT-0.23",
+                "Mtl Framed CZ5 U-0.33 SHGC-0.28 VT-0.19",
+                "Mtl Framed CZ5 U-0.28 SHGC-0.24 VT-0.15"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Mtl Framed CW CZ5 U-0.45 SHGC-0.4 VT-0.44",
+              "Default": "Typical Mtl Framed CW CZ5 U-0.45 SHGC-0.4 VT-0.32",
               "Options": [
-                "Mtl Framed CW CZ5 U-0.45 SHGC-0.4 VT-0.44",
-                "Mtl Framed CW CZ5 U-0.36 SHGC-0.36 VT-0.4",
-                "Mtl Framed CW CZ5 U-0.32 SHGC-0.32 VT-0.35",
-                "Mtl Framed CW CZ5 U-0.27 SHGC-0.28 VT-0.31",
-                "Mtl Framed CW CZ5 U-0.23 SHGC-0.24 VT-0.26"
+                "Typical Mtl Framed CW CZ5 U-0.45 SHGC-0.4 VT-0.32",
+                "Mtl Framed CW CZ5 U-0.36 SHGC-0.36 VT-0.27",
+                "Mtl Framed CW CZ5 U-0.32 SHGC-0.32 VT-0.23",
+                "Mtl Framed CW CZ5 U-0.27 SHGC-0.28 VT-0.19",
+                "Mtl Framed CW CZ5 U-0.23 SHGC-0.24 VT-0.15"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Non Mtl Framed CZ5 U-0.35 SHGC-0.4 VT-0.44",
+              "Default": "Typical Non Mtl Framed CZ5 U-0.35 SHGC-0.4 VT-0.32",
               "Options": [
-                "Non Mtl Framed CZ5 U-0.35 SHGC-0.4 VT-0.44",
-                "Non Mtl Framed CZ5 U-0.28 SHGC-0.36 VT-0.4",
-                "Non Mtl Framed CZ5 U-0.24 SHGC-0.32 VT-0.35",
-                "Non Mtl Framed CZ5 U-0.21 SHGC-0.28 VT-0.31",
-                "Non Mtl Framed CZ5 U-0.18 SHGC-0.24 VT-0.26"
+                "Typical Non Mtl Framed CZ5 U-0.35 SHGC-0.4 VT-0.32",
+                "Non Mtl Framed CZ5 U-0.28 SHGC-0.36 VT-0.27",
+                "Non Mtl Framed CZ5 U-0.24 SHGC-0.32 VT-0.23",
+                "Non Mtl Framed CZ5 U-0.21 SHGC-0.28 VT-0.19",
+                "Non Mtl Framed CZ5 U-0.18 SHGC-0.24 VT-0.15"
               ]
             }
           }
@@ -3482,9 +3430,9 @@
         "Roof": {
           "Attic_and_Other": {
             "Roof_Type": {
-              "Default": "Attic & Other Roof CZ6 R-37",
+              "Default": "Typical Attic & Other Roof CZ6 R-37",
               "Options": [
-                "Attic & Other Roof CZ6 R-37",
+                "Typical Attic & Other Roof CZ6 R-37",
                 "Attic & Other Roof CZ6 R-47",
                 "Attic & Other Roof CZ6 R-52",
                 "Attic & Other Roof CZ6 R-57",
@@ -3504,9 +3452,9 @@
           },
           "IEAD": {
             "Roof_Type": {
-              "Default": "IEAD Roof CZ6 R-21",
+              "Default": "Typical IEAD Roof CZ6 R-21",
               "Options": [
-                "IEAD Roof CZ6 R-21",
+                "Typical IEAD Roof CZ6 R-21",
                 "IEAD Roof CZ6 R-31",
                 "IEAD Roof CZ6 R-36",
                 "IEAD Roof CZ6 R-41",
@@ -3550,9 +3498,9 @@
         "Exterior_Walls": {
           "Mass": {
             "Wall_Type": {
-              "Default": "Mass Wall CZ6 R-13",
+              "Default": "Typical Mass Wall CZ6 R-13",
               "Options": [
-                "Mass Wall CZ6 R-13",
+                "Typical Mass Wall CZ6 R-13",
                 "Mass Wall CZ6 R-18",
                 "Mass Wall CZ6 R-23",
                 "Mass Wall CZ6 R-28",
@@ -3594,9 +3542,9 @@
           },
           "Steel_Framed": {
             "Wall_Type": {
-              "Default": "Steel Framed Wall CZ6 R-16",
+              "Default": "Typical Steel Framed Wall CZ6 R-16",
               "Options": [
-                "Steel Framed Wall CZ6 R-16",
+                "Typical Steel Framed Wall CZ6 R-16",
                 "Steel Framed Wall CZ6 R-21",
                 "Steel Framed Wall CZ6 R-26",
                 "Steel Framed Wall CZ6 R-31",
@@ -3616,9 +3564,9 @@
           },
           "Wood_Framed": {
             "Wall_Type": {
-              "Default": "Wood Framed Wall CZ6 R-20",
+              "Default": "Typical Wood Framed Wall CZ6 R-20",
               "Options": [
-                "Wood Framed Wall CZ6 R-20",
+                "Typical Wood Framed Wall CZ6 R-20",
                 "Wood Framed Wall CZ6 R-25",
                 "Wood Framed Wall CZ6 R-30",
                 "Wood Framed Wall CZ6 R-35",
@@ -3639,50 +3587,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Insulated Slab Insulated Slab CZ6 R-4",
+            "Default": "Typical Insulated Slab CZ6 R-3",
             "Options": [
-              "Insulated Slab Insulated Slab CZ6 R-4",
-              "Insulated Slab Insulated Slab CZ6 R-9",
-              "Insulated Slab Insulated Slab CZ6 R-14",
-              "Insulated Slab Insulated Slab CZ6 R-19",
-              "Insulated Slab Insulated Slab CZ6 R-24"
+              "Typical Insulated Slab CZ6 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Mtl Framed CZ6 U-0.55 SHGC-0.4 VT-0.44",
+              "Default": "Typical Mtl Framed CZ6 U-0.55 SHGC-0.4 VT-0.32",
               "Options": [
-                "Mtl Framed CZ6 U-0.55 SHGC-0.4 VT-0.44",
-                "Mtl Framed CZ6 U-0.44 SHGC-0.36 VT-0.4",
-                "Mtl Framed CZ6 U-0.39 SHGC-0.32 VT-0.35",
-                "Mtl Framed CZ6 U-0.33 SHGC-0.28 VT-0.31",
-                "Mtl Framed CZ6 U-0.28 SHGC-0.24 VT-0.26"
+                "Typical Mtl Framed CZ6 U-0.55 SHGC-0.4 VT-0.32",
+                "Mtl Framed CZ6 U-0.44 SHGC-0.36 VT-0.27",
+                "Mtl Framed CZ6 U-0.39 SHGC-0.32 VT-0.23",
+                "Mtl Framed CZ6 U-0.33 SHGC-0.28 VT-0.19",
+                "Mtl Framed CZ6 U-0.28 SHGC-0.24 VT-0.15"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Mtl Framed CW CZ6 U-0.45 SHGC-0.4 VT-0.44",
+              "Default": "Typical Mtl Framed CW CZ6 U-0.45 SHGC-0.4 VT-0.32",
               "Options": [
-                "Mtl Framed CW CZ6 U-0.45 SHGC-0.4 VT-0.44",
-                "Mtl Framed CW CZ6 U-0.36 SHGC-0.36 VT-0.4",
-                "Mtl Framed CW CZ6 U-0.32 SHGC-0.32 VT-0.35",
-                "Mtl Framed CW CZ6 U-0.27 SHGC-0.28 VT-0.31",
-                "Mtl Framed CW CZ6 U-0.23 SHGC-0.24 VT-0.26"
+                "Typical Mtl Framed CW CZ6 U-0.45 SHGC-0.4 VT-0.32",
+                "Mtl Framed CW CZ6 U-0.36 SHGC-0.36 VT-0.27",
+                "Mtl Framed CW CZ6 U-0.32 SHGC-0.32 VT-0.23",
+                "Mtl Framed CW CZ6 U-0.27 SHGC-0.28 VT-0.19",
+                "Mtl Framed CW CZ6 U-0.23 SHGC-0.24 VT-0.15"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Non Mtl Framed CZ6 U-0.35 SHGC-0.4 VT-0.44",
+              "Default": "Typical Non Mtl Framed CZ6 U-0.35 SHGC-0.4 VT-0.32",
               "Options": [
-                "Non Mtl Framed CZ6 U-0.35 SHGC-0.4 VT-0.44",
-                "Non Mtl Framed CZ6 U-0.28 SHGC-0.36 VT-0.4",
-                "Non Mtl Framed CZ6 U-0.24 SHGC-0.32 VT-0.35",
-                "Non Mtl Framed CZ6 U-0.21 SHGC-0.28 VT-0.31",
-                "Non Mtl Framed CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                "Typical Non Mtl Framed CZ6 U-0.35 SHGC-0.4 VT-0.32",
+                "Non Mtl Framed CZ6 U-0.28 SHGC-0.36 VT-0.27",
+                "Non Mtl Framed CZ6 U-0.24 SHGC-0.32 VT-0.23",
+                "Non Mtl Framed CZ6 U-0.21 SHGC-0.28 VT-0.19",
+                "Non Mtl Framed CZ6 U-0.18 SHGC-0.24 VT-0.15"
               ]
             }
           }
@@ -3708,9 +3652,9 @@
         "Roof": {
           "Attic_and_Other": {
             "Roof_Type": {
-              "Default": "Attic & Other Roof CZ7 R-37",
+              "Default": "Typical Attic & Other Roof CZ7 R-37",
               "Options": [
-                "Attic & Other Roof CZ7 R-37",
+                "Typical Attic & Other Roof CZ7 R-37",
                 "Attic & Other Roof CZ7 R-47",
                 "Attic & Other Roof CZ7 R-52",
                 "Attic & Other Roof CZ7 R-57",
@@ -3730,9 +3674,9 @@
           },
           "IEAD": {
             "Roof_Type": {
-              "Default": "IEAD Roof CZ7 R-21",
+              "Default": "Typical IEAD Roof CZ7 R-21",
               "Options": [
-                "IEAD Roof CZ7 R-21",
+                "Typical IEAD Roof CZ7 R-21",
                 "IEAD Roof CZ7 R-31",
                 "IEAD Roof CZ7 R-36",
                 "IEAD Roof CZ7 R-41",
@@ -3776,9 +3720,9 @@
         "Exterior_Walls": {
           "Mass": {
             "Wall_Type": {
-              "Default": "Mass Wall CZ7 R-14",
+              "Default": "Typical Mass Wall CZ7 R-14",
               "Options": [
-                "Mass Wall CZ7 R-14",
+                "Typical Mass Wall CZ7 R-14",
                 "Mass Wall CZ7 R-19",
                 "Mass Wall CZ7 R-24",
                 "Mass Wall CZ7 R-29",
@@ -3798,9 +3742,9 @@
           },
           "Metal_Building": {
             "Wall_Type": {
-              "Default": "Metal Wall CZ7 R-18",
+              "Default": "Typical Metal Wall CZ7 R-18",
               "Options": [
-                "Metal Wall CZ7 R-18",
+                "Typical Metal Wall CZ7 R-18",
                 "Metal Wall CZ7 R-23",
                 "Metal Wall CZ7 R-28",
                 "Metal Wall CZ7 R-33",
@@ -3820,9 +3764,9 @@
           },
           "Steel_Framed": {
             "Wall_Type": {
-              "Default": "Steel Framed Wall CZ7 R-16",
+              "Default": "Typical Steel Framed Wall CZ7 R-16",
               "Options": [
-                "Steel Framed Wall CZ7 R-16",
+                "Typical Steel Framed Wall CZ7 R-16",
                 "Steel Framed Wall CZ7 R-21",
                 "Steel Framed Wall CZ7 R-26",
                 "Steel Framed Wall CZ7 R-31",
@@ -3842,9 +3786,9 @@
           },
           "Wood_Framed": {
             "Wall_Type": {
-              "Default": "Wood Framed Wall CZ7 R-20",
+              "Default": "Typical Wood Framed Wall CZ7 R-20",
               "Options": [
-                "Wood Framed Wall CZ7 R-20",
+                "Typical Wood Framed Wall CZ7 R-20",
                 "Wood Framed Wall CZ7 R-25",
                 "Wood Framed Wall CZ7 R-30",
                 "Wood Framed Wall CZ7 R-35",
@@ -3865,50 +3809,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Insulated Slab Insulated Slab CZ7 R-4",
+            "Default": "Typical Insulated Slab CZ7 R-3",
             "Options": [
-              "Insulated Slab Insulated Slab CZ7 R-4",
-              "Insulated Slab Insulated Slab CZ7 R-9",
-              "Insulated Slab Insulated Slab CZ7 R-14",
-              "Insulated Slab Insulated Slab CZ7 R-19",
-              "Insulated Slab Insulated Slab CZ7 R-24"
+              "Typical Insulated Slab CZ7 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Mtl Framed CZ7 U-0.45 SHGC-0.45 VT-0.5",
+              "Default": "Typical Mtl Framed CZ7 U-0.45 SHGC-0.45 VT-0.37",
               "Options": [
-                "Mtl Framed CZ7 U-0.45 SHGC-0.45 VT-0.5",
-                "Mtl Framed CZ7 U-0.36 SHGC-0.41 VT-0.45",
-                "Mtl Framed CZ7 U-0.32 SHGC-0.36 VT-0.4",
-                "Mtl Framed CZ7 U-0.27 SHGC-0.32 VT-0.35",
-                "Mtl Framed CZ7 U-0.23 SHGC-0.27 VT-0.3"
+                "Typical Mtl Framed CZ7 U-0.45 SHGC-0.45 VT-0.37",
+                "Mtl Framed CZ7 U-0.36 SHGC-0.41 VT-0.32",
+                "Mtl Framed CZ7 U-0.32 SHGC-0.36 VT-0.27",
+                "Mtl Framed CZ7 U-0.27 SHGC-0.32 VT-0.23",
+                "Mtl Framed CZ7 U-0.23 SHGC-0.27 VT-0.18"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Mtl Framed CW CZ7 U-0.4 SHGC-0.45 VT-0.5",
+              "Default": "Typical Mtl Framed CW CZ7 U-0.4 SHGC-0.45 VT-0.37",
               "Options": [
-                "Mtl Framed CW CZ7 U-0.4 SHGC-0.45 VT-0.5",
-                "Mtl Framed CW CZ7 U-0.32 SHGC-0.41 VT-0.45",
-                "Mtl Framed CW CZ7 U-0.28 SHGC-0.36 VT-0.4",
-                "Mtl Framed CW CZ7 U-0.24 SHGC-0.32 VT-0.35",
-                "Mtl Framed CW CZ7 U-0.2 SHGC-0.27 VT-0.3"
+                "Typical Mtl Framed CW CZ7 U-0.4 SHGC-0.45 VT-0.37",
+                "Mtl Framed CW CZ7 U-0.32 SHGC-0.41 VT-0.32",
+                "Mtl Framed CW CZ7 U-0.28 SHGC-0.36 VT-0.27",
+                "Mtl Framed CW CZ7 U-0.24 SHGC-0.32 VT-0.23",
+                "Mtl Framed CW CZ7 U-0.2 SHGC-0.27 VT-0.18"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Non Mtl Framed CZ7 U-0.35 SHGC-0.45 VT-0.5",
+              "Default": "Typical Non Mtl Framed CZ7 U-0.35 SHGC-0.45 VT-0.37",
               "Options": [
-                "Non Mtl Framed CZ7 U-0.35 SHGC-0.45 VT-0.5",
-                "Non Mtl Framed CZ7 U-0.28 SHGC-0.41 VT-0.45",
-                "Non Mtl Framed CZ7 U-0.24 SHGC-0.36 VT-0.4",
-                "Non Mtl Framed CZ7 U-0.21 SHGC-0.32 VT-0.35",
-                "Non Mtl Framed CZ7 U-0.18 SHGC-0.27 VT-0.3"
+                "Typical Non Mtl Framed CZ7 U-0.35 SHGC-0.45 VT-0.37",
+                "Non Mtl Framed CZ7 U-0.28 SHGC-0.41 VT-0.32",
+                "Non Mtl Framed CZ7 U-0.24 SHGC-0.36 VT-0.27",
+                "Non Mtl Framed CZ7 U-0.21 SHGC-0.32 VT-0.23",
+                "Non Mtl Framed CZ7 U-0.18 SHGC-0.27 VT-0.18"
               ]
             }
           }
@@ -3934,9 +3874,9 @@
         "Roof": {
           "Attic_and_Other": {
             "Roof_Type": {
-              "Default": "Attic & Other Roof CZ8 R-48",
+              "Default": "Typical Attic & Other Roof CZ8 R-48",
               "Options": [
-                "Attic & Other Roof CZ8 R-48",
+                "Typical Attic & Other Roof CZ8 R-48",
                 "Attic & Other Roof CZ8 R-58",
                 "Attic & Other Roof CZ8 R-63",
                 "Attic & Other Roof CZ8 R-68",
@@ -3956,9 +3896,9 @@
           },
           "IEAD": {
             "Roof_Type": {
-              "Default": "IEAD Roof CZ8 R-21",
+              "Default": "Typical IEAD Roof CZ8 R-21",
               "Options": [
-                "IEAD Roof CZ8 R-21",
+                "Typical IEAD Roof CZ8 R-21",
                 "IEAD Roof CZ8 R-31",
                 "IEAD Roof CZ8 R-36",
                 "IEAD Roof CZ8 R-41",
@@ -4002,9 +3942,9 @@
         "Exterior_Walls": {
           "Mass": {
             "Wall_Type": {
-              "Default": "Mass Wall CZ8 R-14",
+              "Default": "Typical Mass Wall CZ8 R-14",
               "Options": [
-                "Mass Wall CZ8 R-14",
+                "Typical Mass Wall CZ8 R-14",
                 "Mass Wall CZ8 R-19",
                 "Mass Wall CZ8 R-24",
                 "Mass Wall CZ8 R-29",
@@ -4024,9 +3964,9 @@
           },
           "Metal_Building": {
             "Wall_Type": {
-              "Default": "Metal Wall CZ8 R-18",
+              "Default": "Typical Metal Wall CZ8 R-18",
               "Options": [
-                "Metal Wall CZ8 R-18",
+                "Typical Metal Wall CZ8 R-18",
                 "Metal Wall CZ8 R-23",
                 "Metal Wall CZ8 R-28",
                 "Metal Wall CZ8 R-33",
@@ -4046,9 +3986,9 @@
           },
           "Steel_Framed": {
             "Wall_Type": {
-              "Default": "Steel Framed Wall CZ8 R-16",
+              "Default": "Typical Steel Framed Wall CZ8 R-16",
               "Options": [
-                "Steel Framed Wall CZ8 R-16",
+                "Typical Steel Framed Wall CZ8 R-16",
                 "Steel Framed Wall CZ8 R-21",
                 "Steel Framed Wall CZ8 R-26",
                 "Steel Framed Wall CZ8 R-31",
@@ -4068,9 +4008,9 @@
           },
           "Wood_Framed": {
             "Wall_Type": {
-              "Default": "Wood Framed Wall CZ8 R-28",
+              "Default": "Typical Wood Framed Wall CZ8 R-28",
               "Options": [
-                "Wood Framed Wall CZ8 R-28",
+                "Typical Wood Framed Wall CZ8 R-28",
                 "Wood Framed Wall CZ8 R-33",
                 "Wood Framed Wall CZ8 R-38",
                 "Wood Framed Wall CZ8 R-43",
@@ -4091,50 +4031,46 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Insulated Slab Insulated Slab CZ8 R-4",
+            "Default": "Typical Insulated Slab CZ8 R-3",
             "Options": [
-              "Insulated Slab Insulated Slab CZ8 R-4",
-              "Insulated Slab Insulated Slab CZ8 R-9",
-              "Insulated Slab Insulated Slab CZ8 R-14",
-              "Insulated Slab Insulated Slab CZ8 R-19",
-              "Insulated Slab Insulated Slab CZ8 R-24"
+              "Typical Insulated Slab CZ8 R-3"
             ]
           }
         },
         "Exterior_Window": {
           "Metal_Framing": {
             "Window_Type": {
-              "Default": "Mtl Framed CZ8 U-0.45 SHGC-0.45 VT-0.5",
+              "Default": "Typical Mtl Framed CZ8 U-0.45 SHGC-0.45 VT-0.37",
               "Options": [
-                "Mtl Framed CZ8 U-0.45 SHGC-0.45 VT-0.5",
-                "Mtl Framed CZ8 U-0.36 SHGC-0.41 VT-0.45",
-                "Mtl Framed CZ8 U-0.32 SHGC-0.36 VT-0.4",
-                "Mtl Framed CZ8 U-0.27 SHGC-0.32 VT-0.35",
-                "Mtl Framed CZ8 U-0.23 SHGC-0.27 VT-0.3"
+                "Typical Mtl Framed CZ8 U-0.45 SHGC-0.45 VT-0.37",
+                "Mtl Framed CZ8 U-0.36 SHGC-0.41 VT-0.32",
+                "Mtl Framed CZ8 U-0.32 SHGC-0.36 VT-0.27",
+                "Mtl Framed CZ8 U-0.27 SHGC-0.32 VT-0.23",
+                "Mtl Framed CZ8 U-0.23 SHGC-0.27 VT-0.18"
               ]
             }
           },
           "Metal_Framing_CurtainWall": {
             "Window_Type": {
-              "Default": "Mtl Framed CW CZ8 U-0.4 SHGC-0.45 VT-0.5",
+              "Default": "Typical Mtl Framed CW CZ8 U-0.4 SHGC-0.45 VT-0.37",
               "Options": [
-                "Mtl Framed CW CZ8 U-0.4 SHGC-0.45 VT-0.5",
-                "Mtl Framed CW CZ8 U-0.32 SHGC-0.41 VT-0.45",
-                "Mtl Framed CW CZ8 U-0.28 SHGC-0.36 VT-0.4",
-                "Mtl Framed CW CZ8 U-0.24 SHGC-0.32 VT-0.35",
-                "Mtl Framed CW CZ8 U-0.2 SHGC-0.27 VT-0.3"
+                "Typical Mtl Framed CW CZ8 U-0.4 SHGC-0.45 VT-0.37",
+                "Mtl Framed CW CZ8 U-0.32 SHGC-0.41 VT-0.32",
+                "Mtl Framed CW CZ8 U-0.28 SHGC-0.36 VT-0.27",
+                "Mtl Framed CW CZ8 U-0.24 SHGC-0.32 VT-0.23",
+                "Mtl Framed CW CZ8 U-0.2 SHGC-0.27 VT-0.18"
               ]
             }
           },
           "Non-Metal_Framing": {
             "Window_Type": {
-              "Default": "Non Mtl Framed CZ8 U-0.35 SHGC-0.45 VT-0.5",
+              "Default": "Typical Non Mtl Framed CZ8 U-0.35 SHGC-0.45 VT-0.37",
               "Options": [
-                "Non Mtl Framed CZ8 U-0.35 SHGC-0.45 VT-0.5",
-                "Non Mtl Framed CZ8 U-0.28 SHGC-0.41 VT-0.45",
-                "Non Mtl Framed CZ8 U-0.24 SHGC-0.36 VT-0.4",
-                "Non Mtl Framed CZ8 U-0.21 SHGC-0.32 VT-0.35",
-                "Non Mtl Framed CZ8 U-0.18 SHGC-0.27 VT-0.3"
+                "Typical Non Mtl Framed CZ8 U-0.35 SHGC-0.45 VT-0.37",
+                "Non Mtl Framed CZ8 U-0.28 SHGC-0.41 VT-0.32",
+                "Non Mtl Framed CZ8 U-0.24 SHGC-0.36 VT-0.27",
+                "Non Mtl Framed CZ8 U-0.21 SHGC-0.32 VT-0.23",
+                "Non Mtl Framed CZ8 U-0.18 SHGC-0.27 VT-0.18"
               ]
             }
           }
@@ -4230,9 +4166,9 @@
         "Exterior_Walls": {
           "Mass": {
             "Wall_Type": {
-              "Default": "Mass Wall CZ1 R-2",
+              "Default": "Typical Mass Wall CZ1 R-2",
               "Options": [
-                "Mass Wall CZ1 R-2",
+                "Typical Mass Wall CZ1 R-2",
                 "Mass Wall CZ1 R-7",
                 "Mass Wall CZ1 R-12",
                 "Mass Wall CZ1 R-17",
@@ -4252,9 +4188,9 @@
           },
           "Metal_Building": {
             "Wall_Type": {
-              "Default": "Metal Wall CZ1 R-11",
+              "Default": "Typical Metal Wall CZ1 R-11",
               "Options": [
-                "Metal Wall CZ1 R-11",
+                "Typical Metal Wall CZ1 R-11",
                 "Metal Wall CZ1 R-16",
                 "Metal Wall CZ1 R-21",
                 "Metal Wall CZ1 R-26",
@@ -4274,9 +4210,9 @@
           },
           "Steel_Framed": {
             "Wall_Type": {
-              "Default": "Steel Framed Wall CZ1 R-8",
+              "Default": "Typical Steel Framed Wall CZ1 R-8",
               "Options": [
-                "Steel Framed Wall CZ1 R-8",
+                "Typical Steel Framed Wall CZ1 R-8",
                 "Steel Framed Wall CZ1 R-13",
                 "Steel Framed Wall CZ1 R-18",
                 "Steel Framed Wall CZ1 R-23",
@@ -4296,9 +4232,9 @@
           },
           "Wood_Framed": {
             "Wall_Type": {
-              "Default": "Wood Framed Wall CZ1 R-11",
+              "Default": "Typical Wood Framed Wall CZ1 R-11",
               "Options": [
-                "Wood Framed Wall CZ1 R-11",
+                "Typical Wood Framed Wall CZ1 R-11",
                 "Wood Framed Wall CZ1 R-16",
                 "Wood Framed Wall CZ1 R-21",
                 "Wood Framed Wall CZ1 R-26",
@@ -4319,13 +4255,9 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Insulated Slab Insulated Slab CZ1 R-2",
+            "Default": "Typical Insulated Slab CZ1 R-3",
             "Options": [
-              "Insulated Slab Insulated Slab CZ1 R-2",
-              "Insulated Slab Insulated Slab CZ1 R-7",
-              "Insulated Slab Insulated Slab CZ1 R-12",
-              "Insulated Slab Insulated Slab CZ1 R-17",
-              "Insulated Slab Insulated Slab CZ1 R-22"
+              "Typical Insulated Slab CZ1 R-3"
             ]
           }
         },
@@ -4388,9 +4320,9 @@
         "Roof": {
           "Attic_and_Other": {
             "Roof_Type": {
-              "Default": "Attic & Other Roof CZ2 R-37",
+              "Default": "Typical Attic & Other Roof CZ2 R-37",
               "Options": [
-                "Attic & Other Roof CZ2 R-37",
+                "Typical Attic & Other Roof CZ2 R-37",
                 "Attic & Other Roof CZ2 R-47",
                 "Attic & Other Roof CZ2 R-52",
                 "Attic & Other Roof CZ2 R-57",
@@ -4456,9 +4388,9 @@
         "Exterior_Walls": {
           "Mass": {
             "Wall_Type": {
-              "Default": "Mass Wall CZ2 R-7",
+              "Default": "Typical Mass Wall CZ2 R-7",
               "Options": [
-                "Mass Wall CZ2 R-7",
+                "Typical Mass Wall CZ2 R-7",
                 "Mass Wall CZ2 R-12",
                 "Mass Wall CZ2 R-17",
                 "Mass Wall CZ2 R-22",
@@ -4478,9 +4410,9 @@
           },
           "Metal_Building": {
             "Wall_Type": {
-              "Default": "Metal Wall CZ2 R-11",
+              "Default": "Typical Metal Wall CZ2 R-11",
               "Options": [
-                "Metal Wall CZ2 R-11",
+                "Typical Metal Wall CZ2 R-11",
                 "Metal Wall CZ2 R-16",
                 "Metal Wall CZ2 R-21",
                 "Metal Wall CZ2 R-26",
@@ -4522,9 +4454,9 @@
           },
           "Wood_Framed": {
             "Wall_Type": {
-              "Default": "Wood Framed Wall CZ2 R-11",
+              "Default": "Typical Wood Framed Wall CZ2 R-11",
               "Options": [
-                "Wood Framed Wall CZ2 R-11",
+                "Typical Wood Framed Wall CZ2 R-11",
                 "Wood Framed Wall CZ2 R-16",
                 "Wood Framed Wall CZ2 R-21",
                 "Wood Framed Wall CZ2 R-26",
@@ -4545,13 +4477,9 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Insulated Slab Insulated Slab CZ2 R-2",
+            "Default": "Typical Insulated Slab CZ2 R-3",
             "Options": [
-              "Insulated Slab Insulated Slab CZ2 R-2",
-              "Insulated Slab Insulated Slab CZ2 R-7",
-              "Insulated Slab Insulated Slab CZ2 R-12",
-              "Insulated Slab Insulated Slab CZ2 R-17",
-              "Insulated Slab Insulated Slab CZ2 R-22"
+              "Typical Insulated Slab CZ2 R-3"
             ]
           }
         },
@@ -4614,9 +4542,9 @@
         "Roof": {
           "Attic_and_Other": {
             "Roof_Type": {
-              "Default": "Attic & Other Roof CZ3 R-37",
+              "Default": "Typical Attic & Other Roof CZ3 R-37",
               "Options": [
-                "Attic & Other Roof CZ3 R-37",
+                "Typical Attic & Other Roof CZ3 R-37",
                 "Attic & Other Roof CZ3 R-47",
                 "Attic & Other Roof CZ3 R-52",
                 "Attic & Other Roof CZ3 R-57",
@@ -4682,9 +4610,9 @@
         "Exterior_Walls": {
           "Mass": {
             "Wall_Type": {
-              "Default": "Mass Wall CZ3 R-8",
+              "Default": "Typical Mass Wall CZ3 R-8",
               "Options": [
-                "Mass Wall CZ3 R-8",
+                "Typical Mass Wall CZ3 R-8",
                 "Mass Wall CZ3 R-13",
                 "Mass Wall CZ3 R-18",
                 "Mass Wall CZ3 R-23",
@@ -4748,9 +4676,9 @@
           },
           "Wood_Framed": {
             "Wall_Type": {
-              "Default": "Wood Framed Wall CZ3 R-11",
+              "Default": "Typical Wood Framed Wall CZ3 R-11",
               "Options": [
-                "Wood Framed Wall CZ3 R-11",
+                "Typical Wood Framed Wall CZ3 R-11",
                 "Wood Framed Wall CZ3 R-16",
                 "Wood Framed Wall CZ3 R-21",
                 "Wood Framed Wall CZ3 R-26",
@@ -4771,13 +4699,9 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Insulated Slab Insulated Slab CZ3 R-2",
+            "Default": "Typical Insulated Slab CZ3 R-3",
             "Options": [
-              "Insulated Slab Insulated Slab CZ3 R-2",
-              "Insulated Slab Insulated Slab CZ3 R-7",
-              "Insulated Slab Insulated Slab CZ3 R-12",
-              "Insulated Slab Insulated Slab CZ3 R-17",
-              "Insulated Slab Insulated Slab CZ3 R-22"
+              "Typical Insulated Slab CZ3 R-3"
             ]
           }
         },
@@ -4908,9 +4832,9 @@
         "Exterior_Walls": {
           "Mass": {
             "Wall_Type": {
-              "Default": "Mass Wall CZ4 R-10",
+              "Default": "Typical Mass Wall CZ4 R-10",
               "Options": [
-                "Mass Wall CZ4 R-10",
+                "Typical Mass Wall CZ4 R-10",
                 "Mass Wall CZ4 R-15",
                 "Mass Wall CZ4 R-20",
                 "Mass Wall CZ4 R-25",
@@ -4952,9 +4876,9 @@
           },
           "Steel_Framed": {
             "Wall_Type": {
-              "Default": "Steel Framed Wall CZ4 R-16",
+              "Default": "Typical Steel Framed Wall CZ4 R-16",
               "Options": [
-                "Steel Framed Wall CZ4 R-16",
+                "Typical Steel Framed Wall CZ4 R-16",
                 "Steel Framed Wall CZ4 R-21",
                 "Steel Framed Wall CZ4 R-26",
                 "Steel Framed Wall CZ4 R-31",
@@ -4997,13 +4921,9 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Typical Insulated Slab Insulated Slab CZ4 R-4",
+            "Default": "Typical Insulated Slab CZ4 R-3",
             "Options": [
-              "Typical Insulated Slab Insulated Slab CZ4 R-4",
-              "Insulated Slab Insulated Slab CZ4 R-9",
-              "Insulated Slab Insulated Slab CZ4 R-14",
-              "Insulated Slab Insulated Slab CZ4 R-19",
-              "Insulated Slab Insulated Slab CZ4 R-24"
+              "Typical Insulated Slab CZ4 R-3"
             ]
           }
         },
@@ -5134,9 +5054,9 @@
         "Exterior_Walls": {
           "Mass": {
             "Wall_Type": {
-              "Default": "Mass Wall CZ5 R-11",
+              "Default": "Typical Mass Wall CZ5 R-11",
               "Options": [
-                "Mass Wall CZ5 R-11",
+                "Typical Mass Wall CZ5 R-11",
                 "Mass Wall CZ5 R-16",
                 "Mass Wall CZ5 R-21",
                 "Mass Wall CZ5 R-26",
@@ -5223,13 +5143,9 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Typical Insulated Slab Insulated Slab CZ5 R-4",
+            "Default": "Typical Insulated Slab CZ5 R-3",
             "Options": [
-              "Typical Insulated Slab Insulated Slab CZ5 R-4",
-              "Insulated Slab Insulated Slab CZ5 R-9",
-              "Insulated Slab Insulated Slab CZ5 R-14",
-              "Insulated Slab Insulated Slab CZ5 R-19",
-              "Insulated Slab Insulated Slab CZ5 R-24"
+              "Typical Insulated Slab CZ5 R-3"
             ]
           }
         },
@@ -5360,9 +5276,9 @@
         "Exterior_Walls": {
           "Mass": {
             "Wall_Type": {
-              "Default": "Mass Wall CZ6 R-13",
+              "Default": "Typical Mass Wall CZ6 R-13",
               "Options": [
-                "Mass Wall CZ6 R-13",
+                "Typical Mass Wall CZ6 R-13",
                 "Mass Wall CZ6 R-18",
                 "Mass Wall CZ6 R-23",
                 "Mass Wall CZ6 R-28",
@@ -5426,9 +5342,9 @@
           },
           "Wood_Framed": {
             "Wall_Type": {
-              "Default": "Wood Framed Wall CZ6 R-20",
+              "Default": "Typical Wood Framed Wall CZ6 R-20",
               "Options": [
-                "Wood Framed Wall CZ6 R-20",
+                "Typical Wood Framed Wall CZ6 R-20",
                 "Wood Framed Wall CZ6 R-25",
                 "Wood Framed Wall CZ6 R-30",
                 "Wood Framed Wall CZ6 R-35",
@@ -5449,13 +5365,9 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Insulated Slab Insulated Slab CZ6 R-4",
+            "Default": "Typical Insulated Slab CZ6 R-3",
             "Options": [
-              "Insulated Slab Insulated Slab CZ6 R-4",
-              "Insulated Slab Insulated Slab CZ6 R-9",
-              "Insulated Slab Insulated Slab CZ6 R-14",
-              "Insulated Slab Insulated Slab CZ6 R-19",
-              "Insulated Slab Insulated Slab CZ6 R-24"
+              "Typical Insulated Slab CZ6 R-3"
             ]
           }
         },
@@ -5586,9 +5498,9 @@
         "Exterior_Walls": {
           "Mass": {
             "Wall_Type": {
-              "Default": "Mass Wall CZ7 R-14",
+              "Default": "Typical Mass Wall CZ7 R-14",
               "Options": [
-                "Mass Wall CZ7 R-14",
+                "Typical Mass Wall CZ7 R-14",
                 "Mass Wall CZ7 R-19",
                 "Mass Wall CZ7 R-24",
                 "Mass Wall CZ7 R-29",
@@ -5652,9 +5564,9 @@
           },
           "Wood_Framed": {
             "Wall_Type": {
-              "Default": "Wood Framed Wall CZ7 R-20",
+              "Default": "Typical Wood Framed Wall CZ7 R-20",
               "Options": [
-                "Wood Framed Wall CZ7 R-20",
+                "Typical Wood Framed Wall CZ7 R-20",
                 "Wood Framed Wall CZ7 R-25",
                 "Wood Framed Wall CZ7 R-30",
                 "Wood Framed Wall CZ7 R-35",
@@ -5675,13 +5587,9 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Insulated Slab Insulated Slab CZ7 R-4",
+            "Default": "Typical Insulated Slab CZ7 R-3",
             "Options": [
-              "Insulated Slab Insulated Slab CZ7 R-4",
-              "Insulated Slab Insulated Slab CZ7 R-9",
-              "Insulated Slab Insulated Slab CZ7 R-14",
-              "Insulated Slab Insulated Slab CZ7 R-19",
-              "Insulated Slab Insulated Slab CZ7 R-24"
+              "Typical Insulated Slab CZ7 R-3"
             ]
           }
         },
@@ -5901,13 +5809,9 @@
         },
         "Foundation": {
           "Slab_Type": {
-            "Default": "Typical Insulated Slab Insulated Slab CZ8 R-6",
+            "Default": "Typical Insulated Slab CZ8 R-3",
             "Options": [
-              "Typical Insulated Slab Insulated Slab CZ8 R-6",
-              "Insulated Slab Insulated Slab CZ8 R-11",
-              "Insulated Slab Insulated Slab CZ8 R-16",
-              "Insulated Slab Insulated Slab CZ8 R-21",
-              "Insulated Slab Insulated Slab CZ8 R-26"
+              "Typical Insulated Slab CZ8 R-3"
             ]
           }
         },
