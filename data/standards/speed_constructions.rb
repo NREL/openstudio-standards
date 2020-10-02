@@ -218,12 +218,19 @@ module SpeedConstructions
       target_shgc = construction_props['assembly_maximum_solar_heat_gain_coefficient'].to_f
 
       # If the minimum VT to SHGC ratio is included in the construction properties,
-      # set the VT using this ratio.  Otherwise, omit the VT from the name
-      # and the model input.  E+ will auto-calculate an appropriate VT in this case.
+      # set the VT using this ratio.
+      # If it is not specified by the standard, for SPEED,
+      # always set the ratio of VT / SHGC = 1.1
+      # This is done to avoid allowing E+ to infer VT,
+      # which results in very low VTs that are only found in windows
+      # with reflective metal films.  These window types are not
+      # representative of typical design practice.
       target_vt = nil
       if construction_props['intended_surface_type'] == 'ExteriorWindow'
         if construction_props['assembly_minimum_vt_shgc']
           target_vt = target_shgc * construction_props['assembly_minimum_vt_shgc'].to_f
+        else
+          target_vt = target_shgc * 1.1
         end
       end
 

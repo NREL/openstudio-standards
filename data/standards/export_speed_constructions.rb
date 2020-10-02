@@ -228,49 +228,7 @@ end
 # Add the Constructions key as the top level of the hash
 inputs = {'Constructions' => inputs}
 
-# Do a sizing run to calculate window properties with E+
-puts ''
-puts '*** Performing a sizing run to calculate window properties using E+ ***'
-std = Standard.build('90.1-2007') # doesn't matter which one, properties aren't used
-SpeedConstructions.do_window_property_sizing_run(std, model)
-
-# Pull the VTs from the E+ output, modify window construction names and hard-code VT to this value
-puts ''
-puts '*** Modifying construction name and properties to include E+ calculated VT ***'
-window_rename_map = SpeedConstructions.update_window_construction_names_with_vt(std, model)
-File.open("#{__dir__}/window_rename_map.json", 'w') do |f|
-  f.write(JSON.pretty_generate(window_rename_map, {:indent => "    "}))
-end
-
-# Inputs JSON
-File.open("#{__dir__}/construction_inputs_new_before_rename.json", 'w') do |f|
-  f.write(JSON.pretty_generate(inputs, {:indent => "    "}))
-end
-
-# Rename the windows in the JSON inputs to match the construction library
-inputs['Constructions'].each do |t, template_data|
-  template_data.each do |cz, cz_data|
-    cz_data.each do |st, st_data|
-      next unless st == 'Exterior_Window'
-      st_data.each do |ct, ct_data|
-        # Default
-        default_name = ct_data['Window_Type']['Default']
-        if window_rename_map[default_name]
-          inputs['Constructions'][t][cz][st][ct]['Window_Type']['Default'] = window_rename_map[default_name]
-        end
-
-        # Options
-        ct_data['Window_Type']['Options'].each_with_index do |option_name, i|
-          if window_rename_map[option_name]
-            inputs['Constructions'][t][cz][st][ct]['Window_Type']['Options'][i] = window_rename_map[option_name]
-          end
-        end
-      end
-    end
-  end
-end
-
-# Do another sizing run to calculate window properties with E+ using hard-coded VT values
+# Do a sizing run to calculate window properties with E+ using hard-coded VT values
 puts ''
 puts '*** Performing a sizing run to calculate window properties using E+ ***'
 std = Standard.build('90.1-2007') # doesn't matter which one, properties aren't used
