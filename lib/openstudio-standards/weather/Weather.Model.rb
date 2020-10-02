@@ -310,8 +310,8 @@ module BTAP
       else
         Dir.glob("#{File.dirname(__FILE__)}/../../../**/*.epw").each do |file|
           canadian_file_names << File.basename(file).to_s
-          puts "File.basename = #{File.basename(file)}"
-          puts "File.dirname = #{File.dirname(file)}"
+          # puts "File.basename = #{File.basename(file)}"
+          # puts "File.dirname = #{File.dirname(file)}"
         end
       end
       return canadian_file_names
