@@ -20,12 +20,6 @@
         "Quick_Service_Restaurant",
         "Supermarket"
       ]
-    },
-    "Units": {
-      "Default": "IP",
-      "Options": [
-        "IP"
-      ]
     }
   },
   "Site_Context": {
@@ -244,50 +238,287 @@
         "T-Shape",
         "U-Shape",
         "Plus-Shape"
-      ]
-    },
-    "Footprint_Shape_Details": {
-      "Box-Shape": {
-        "Num_Zones": 5
-      },
-      "Massing_Generator": {
-        "Default": "Generator 1",
-        "Options": [
-          "Generator 1",
-          "Generator 2"
-        ]
-      },
-      "Relationship": {
-        "Generator_1": {
-          "Footprint_Dimensions": {
-            "Length": {
-              "Type": "I"
+      ],
+      "Footprint_Shape_Details": [
+        {
+          "Box-Shape": {
+            "Num_Zones": 5,
+            "Massing_Generator": {
+              "Default": "Generator 1",
+              "Options": [
+                "Generator 1",
+                "Generator 2"
+              ],
+              "Relationship": [
+                {
+                  "Generator_1": {
+                    "Footprint_Dimensions": {
+                      "Length": {
+                        "Type": "I"
+                      },
+                      "Width": {
+                        "Type": "I"
+                      },
+                      "Thickness": {
+                        "Type": "D"
+                      },
+                      "Perimeter_Depth": {
+                        "Type": "D"
+                      }
+                    }
+                  },
+                  "Generator_2": {
+                    "Footprint_Dimensions": {
+                      "Length": {
+                        "Type": "I"
+                      },
+                      "Width": {
+                        "Type": "I"
+                      },
+                      "Thickness": {
+                        "Type": "D"
+                      },
+                      "Perimeter_Depth": {
+                        "Type": "D"
+                      }
+                    }
+                  }
+                }
+              ]
             }
-          }
-        },
-        "Generator_2": {
-          "Footprint_Dimensions": {
-            "Length": {
-              "Type": "I"
+          },
+          "L-Shape": {
+            "Num_Zones": 7,
+            "Massing_Generator": {
+              "Default": "Generator 1",
+              "Options": [
+                "Generator 1",
+                "Generator 2"
+              ],
+              "Relationship": [
+                {
+                  "Generator_1": {
+                    "Footprint_Dimensions": {
+                      "Length": {
+                        "Type": "I"
+                      },
+                      "Width": {
+                        "Type": "I"
+                      },
+                      "Thickness": {
+                        "Type": "D"
+                      },
+                      "Perimeter_Depth": {
+                        "Type": "D"
+                      }
+                    }
+                  },
+                  "Generator_2": {
+                    "Footprint_Dimensions": {
+                      "Length": {
+                        "Type": "I"
+                      },
+                      "Width": {
+                        "Type": "I"
+                      },
+                      "Thickness": {
+                        "Type": "D"
+                      },
+                      "Perimeter_Depth": {
+                        "Type": "D"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "H-Shape": {
+            "Num_Zones": 13,
+            "Massing_Generator": {
+              "Default": "Generator 1",
+              "Options": [
+                "Generator 1",
+                "Generator 2"
+              ],
+              "Relationship": [
+                {
+                  "Generator_1": {
+                    "Footprint_Dimensions": {
+                      "Length": {
+                        "Type": "I"
+                      },
+                      "Width": {
+                        "Type": "I"
+                      },
+                      "Thickness": {
+                        "Type": "D"
+                      },
+                      "Perimeter_Depth": {
+                        "Type": "D"
+                      }
+                    }
+                  },
+                  "Generator_2": {
+                    "Footprint_Dimensions": {
+                      "Length": {
+                        "Type": "I"
+                      },
+                      "Width": {
+                        "Type": "I"
+                      },
+                      "Thickness": {
+                        "Type": "D"
+                      },
+                      "Perimeter_Depth": {
+                        "Type": "D"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "U-Shape": {
+            "Num_Zones": 9,
+            "Massing_Generator": {
+              "Default": "Generator 1",
+              "Options": [
+                "Generator 1",
+                "Generator 2"
+              ],
+              "Relationship": [
+                {
+                  "Generator_1": {
+                    "Footprint_Dimensions": {
+                      "Length": {
+                        "Type": "I"
+                      },
+                      "Width": {
+                        "Type": "I"
+                      },
+                      "Thickness": {
+                        "Type": "D"
+                      },
+                      "Perimeter_Depth": {
+                        "Type": "D"
+                      }
+                    }
+                  },
+                  "Generator_2": {
+                    "Footprint_Dimensions": {
+                      "Length": {
+                        "Type": "I"
+                      },
+                      "Width": {
+                        "Type": "I"
+                      },
+                      "Thickness": {
+                        "Type": "D"
+                      },
+                      "Perimeter_Depth": {
+                        "Type": "D"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "Plus-Shape": {
+            "Num_Zones": 13,
+            "Massing_Generator": {
+              "Default": "Generator 1",
+              "Options": [
+                "Generator 1",
+                "Generator 2"
+              ],
+              "Relationship": [
+                {
+                  "Generator_1": {
+                    "Footprint_Dimensions": {
+                      "Length": {
+                        "Type": "I"
+                      },
+                      "Width": {
+                        "Type": "I"
+                      },
+                      "Thickness": {
+                        "Type": "D"
+                      },
+                      "Perimeter_Depth": {
+                        "Type": "D"
+                      }
+                    }
+                  },
+                  "Generator_2": {
+                    "Footprint_Dimensions": {
+                      "Length": {
+                        "Type": "I"
+                      },
+                      "Width": {
+                        "Type": "I"
+                      },
+                      "Thickness": {
+                        "Type": "D"
+                      },
+                      "Perimeter_Depth": {
+                        "Type": "D"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "T-Shape": {
+            "Num_Zones": 9,
+            "Massing_Generator": {
+              "Default": "Generator 1",
+              "Options": [
+                "Generator 1",
+                "Generator 2"
+              ],
+              "Relationship": [
+                {
+                  "Generator_1": {
+                    "Footprint_Dimensions": {
+                      "Length": {
+                        "Type": "I"
+                      },
+                      "Width": {
+                        "Type": "I"
+                      },
+                      "Thickness": {
+                        "Type": "D"
+                      },
+                      "Perimeter_Depth": {
+                        "Type": "D"
+                      }
+                    }
+                  },
+                  "Generator_2": {
+                    "Footprint_Dimensions": {
+                      "Length": {
+                        "Type": "I"
+                      },
+                      "Width": {
+                        "Type": "I"
+                      },
+                      "Thickness": {
+                        "Type": "D"
+                      },
+                      "Perimeter_Depth": {
+                        "Type": "D"
+                      }
+                    }
+                  }
+                }
+              ]
             }
           }
         }
-      },
-      "L-Shape": {
-        "Num_Zones": 7
-      },
-      "H-Shape": {
-        "Num_Zones": 13
-      },
-      "U-Shape": {
-        "Num_Zones": 9
-      },
-      "Plus-Shape": {
-        "Num_Zones": 13
-      },
-      "T-Shape": {
-        "Num_Zones": 9
-      }
+      ]
     },
     "Orientation": {
       "Default": 0,
@@ -26542,22 +26773,20 @@
     }
   },
   "HVAC": {
-    "HVAC": {
-      "HVAC_Type": {
-        "Default": "VAV with Water-Cooled Chiller and Boiler HW Reheat",
-        "Options": [
-          "PTAC with Boiler HW Heating",
-          "PTAC with Electric Baseboard Heating",
-          "PTHP with Electric Auxiliary Heating",
-          "PSZ-AC with Gas Heating",
-          "PSZ-HP with Gas Auxiliary Heating",
-          "Fan Coils with Water-Cooled Chiller and Boiler HW Heating",
-          "Fan Coils with Air-Cooled Chiller and Boiler HW Heating",
-          "VAV with Water-Cooled Chiller and Boiler HW Reheat",
-          "VAV with Air-Cooled Chiller and Boiler HW Reheat",
-          "Packaged VAV with Boiler HW Reheat"
-        ]
-      },
+    "HVAC_TYPE": {
+      "Default": "VAV with Water-Cooled Chiller and Boiler HW Reheat",
+      "Options": [
+        "PTAC with Boiler HW Heating",
+        "PTAC with Electric Baseboard Heating",
+        "PTHP with Electric Auxiliary Heating",
+        "PSZ-AC with Gas Heating",
+        "PSZ-HP with Gas Auxiliary Heating",
+        "Fan Coils with Water-Cooled Chiller and Boiler HW Heating",
+        "Fan Coils with Air-Cooled Chiller and Boiler HW Heating",
+        "VAV with Water-Cooled Chiller and Boiler HW Reheat",
+        "VAV with Air-Cooled Chiller and Boiler HW Reheat",
+        "Packaged VAV with Boiler HW Reheat"
+      ],
       "Heating_Load_Factor": {
         "Default": 1.25,
         "Options": [

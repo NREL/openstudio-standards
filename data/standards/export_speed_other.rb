@@ -38,7 +38,7 @@ def process_column(all_data, cell_data, option_row, j, num_rows, indent)
 
   option = get_option(all_data, option_row, j)
 
-  puts "#{indent}#{option}"
+  #puts "#{indent}#{option}"
 
   if option == 'Default'
     cell_data[option] = all_data[option_row + 1][j]
@@ -49,8 +49,30 @@ def process_column(all_data, cell_data, option_row, j, num_rows, indent)
       options << value if value
     end
     cell_data[option] = options
+  elsif option == 'Footprint_Dimensions'
+    cell_data[option] = {}
+
+    num = 0
+    while true
+      key_1 = all_data[option_row + 3*num + 1][j]
+      key_2 = all_data[option_row + 3*num + 2][j]
+      val_3 = all_data[option_row + 3*num + 3][j]
+
+      if key_1.nil? || key_1.empty? || key_2.nil? || key_2.empty? || val_3.nil? || val_3.empty?
+        break
+      end
+
+      #puts "#{key_1}, #{key_2}, #{val_3}"
+
+      cell_data[option][key_1] = {key_2 => val_3}
+      num += 1
+    end
+
   elsif option == 'Num_Zones' || option == 'Type'
     cell_data[option] = all_data[option_row + 1][j]
+  elsif option == 'Footprint_Shape_Details' || option == 'Relationship'
+    cell_data[option] = [{}] if cell_data[option].nil?
+    process_column(all_data, cell_data[option][0], option_row + 1, j, num_rows, indent + '  ')
   elsif option.nil? || option.empty?
     STDOUT.flush
     raise "This should not happen"
@@ -61,7 +83,8 @@ def process_column(all_data, cell_data, option_row, j, num_rows, indent)
 end
 
 workbook.worksheets.each do |worksheet|
-  next unless worksheet.sheet_name == 'HVAC'
+  #next unless worksheet.sheet_name == 'Geometry'
+
   sheet_data = {}
   sheet_name = worksheet.sheet_name.underscore
   puts "Processing #{sheet_name}"
@@ -82,7 +105,7 @@ workbook.worksheets.each do |worksheet|
       offset += 1
     end
 
-    puts "  #{key}"
+    #puts "  #{key}"
 
     sheet_data[key] = {} if sheet_data[key].nil?
 
