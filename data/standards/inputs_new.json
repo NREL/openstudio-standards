@@ -228,13 +228,7 @@
           4
         ]
       },
-      "Analysis_Type_2": {
-        "Default": 1,
-        "Options": [
-          1
-        ]
-      },
-      "Analysis_Type_3": {
+      "Analysis_Type_2_3": {
         "Default": 1,
         "Options": [
           1
@@ -379,6 +373,18 @@
         },
         "Display_Ground": {
           "Default": "false"
+        },
+        "Display_SunPath": {
+          "Default": "false"
+        },
+        "Display_SunlightHours": {
+          "Default": "false"
+        },
+        "Display_SolarRadiation": {
+          "Default": "false"
+        },
+        "Display_Map": {
+          "Default": "false"
         }
       },
       "Shadow_Analysis": {
@@ -387,6 +393,25 @@
         },
         "Date": {
           "Default": "true"
+        },
+        "DateValue": {
+          "Default": 15
+        },
+        "Hour": {
+          "Default": "true"
+        },
+        "HourValue": {
+          "Default": 12
+        },
+        "Season": {
+          "Default": "null",
+          "Options": [
+            "Winter",
+            "Spring",
+            "Summer",
+            "Fall",
+            "Annual"
+          ]
         }
       },
       "SunlightHour_Analysis": {
@@ -395,6 +420,19 @@
         },
         "Date": {
           "Default": "true"
+        },
+        "DateValue": {
+          "Default": 15
+        },
+        "Season": {
+          "Default": "null",
+          "Options": [
+            "Winter",
+            "Spring",
+            "Summer",
+            "Fall",
+            "Annual"
+          ]
         }
       },
       "SolarRadiation_Analysis": {
@@ -403,6 +441,16 @@
         },
         "DateValue": {
           "Default": 15
+        },
+        "Season": {
+          "Default": "null",
+          "Options": [
+            "Winter",
+            "Spring",
+            "Summer",
+            "Fall",
+            "Annual"
+          ]
         }
       },
       "Map_Overlay": {
@@ -26494,20 +26542,44 @@
     }
   },
   "HVAC": {
-    "HVAC_Type": {
-      "Default": "VAV with Water-Cooled Chiller and Boiler HW Reheat",
-      "Options": [
-        "PTAC with Boiler HW Heating",
-        "PTAC with Electric Baseboard Heating",
-        "PTHP with Electric Auxiliary Heating",
-        "PSZ-AC with Gas Heating",
-        "PSZ-HP with Gas Auxiliary Heating",
-        "Fan Coils with Water-Cooled Chiller and Boiler HW Heating",
-        "Fan Coils with Air-Cooled Chiller and Boiler HW Heating",
-        "VAV with Water-Cooled Chiller and Boiler HW Reheat",
-        "VAV with Air-Cooled Chiller and Boiler HW Reheat",
-        "Packaged VAV with Boiler HW Reheat"
-      ]
+    "HVAC": {
+      "HVAC_Type": {
+        "Default": "VAV with Water-Cooled Chiller and Boiler HW Reheat",
+        "Options": [
+          "PTAC with Boiler HW Heating",
+          "PTAC with Electric Baseboard Heating",
+          "PTHP with Electric Auxiliary Heating",
+          "PSZ-AC with Gas Heating",
+          "PSZ-HP with Gas Auxiliary Heating",
+          "Fan Coils with Water-Cooled Chiller and Boiler HW Heating",
+          "Fan Coils with Air-Cooled Chiller and Boiler HW Heating",
+          "VAV with Water-Cooled Chiller and Boiler HW Reheat",
+          "VAV with Air-Cooled Chiller and Boiler HW Reheat",
+          "Packaged VAV with Boiler HW Reheat"
+        ]
+      },
+      "Heating_Load_Factor": {
+        "Default": 1.25,
+        "Options": [
+          1.25,
+          1.3,
+          1.35,
+          1.4,
+          1.45,
+          1.5
+        ]
+      },
+      "Cooling_Load_Factor": {
+        "Default": 1.15,
+        "Options": [
+          1.15,
+          1.2,
+          1.25,
+          1.3,
+          1.35,
+          1.4
+        ]
+      }
     }
   },
   "Daylighting": {

@@ -5,18 +5,6 @@ xlsx_path = File.join(base_path, 'InputJSONData.xlsx')
 
 puts "Parsing #{xlsx_path}"
 
-# List of worksheets
-worksheets = []
-worksheets << 'ProjectInformation'
-worksheets << 'SiteContext'
-worksheets << 'Geometry'
-worksheets << 'Envelope'
-worksheets << 'SpaceLayout'
-worksheets << 'HVAC'
-worksheets << 'SizingLoadFactors'
-worksheets << 'Daylighting'
-worksheets << 'Photovoltaics'
-
 # Open workbook
 workbook = RubyXL::Parser.parse(xlsx_path)
 
@@ -33,8 +21,13 @@ end
 
 def get_option(all_data, i, j)
 
-  option = all_data[i][j]
-  option = all_data[i][j - 1] if option.nil? || option.empty?
+  option = nil
+  offset = 0
+  while option.nil? || option.empty?
+    option = all_data[i][j-offset]
+    offset += 1
+  end
+
   option = 'Default' if option == 'A'
   option = 'Options' if option == 'Option'
 
@@ -59,7 +52,8 @@ def process_column(all_data, cell_data, option_row, j, num_rows, indent)
   elsif option == 'Num_Zones' || option == 'Type'
     cell_data[option] = all_data[option_row + 1][j]
   elsif option.nil? || option.empty?
-    # no-op
+    STDOUT.flush
+    raise "This should not happen"
   else
     cell_data[option] = {} if cell_data[option].nil?
     process_column(all_data, cell_data[option], option_row + 1, j, num_rows, indent + '  ')
