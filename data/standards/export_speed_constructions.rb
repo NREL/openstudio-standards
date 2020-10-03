@@ -3,7 +3,6 @@ require 'openstudio-standards'
 require 'json'
 require_relative 'speed_constructions'
 
-
 # Standards to export
 templates = ['90.1-2007', '90.1-2010', '90.1-2013']
 
@@ -15,6 +14,7 @@ building_category = 'Nonresidential'
 
 # Store the results
 inputs = {}
+csv_rows = []
 model = OpenStudio::Model::Model.new
 
 # Export each standard to JSON and OSM simultaneously
@@ -253,6 +253,39 @@ end
 
 # OSM library
 model.save(SpeedConstructions.construction_lib_path, true)
+
+# Save CSV that can be used to fill in cost data
+construction_csv = []
+construction_csv << ['energy_code', 'climate_zone', 'surface_type', 'assembly_type', 'construction_name']
+constructions = inputs['Constructions']
+constructions.keys.each do |energy_code_key|
+  energy_code = constructions[energy_code_key]
+  energy_code.keys.each do |climate_zone_key|
+    climate_zone = energy_code[climate_zone_key]
+    climate_zone.keys.each do |surface_type_key|
+      surface_type = climate_zone[surface_type_key]
+      surface_type.keys.each do |assembly_type_key|
+        assembly_type = surface_type[assembly_type_key]
+        assembly_type.keys.each do |type_key|
+          next unless /.*_Type/.match(type_key)
+          type = assembly_type[type_key]
+          options = type['Options']
+          next unless options
+          options.each do |construction_name|
+            construction_csv << [energy_code_key, climate_zone_key, surface_type_key, assembly_type_key, construction_name]
+          end
+        end
+      end
+    end
+  end
+end
+
+File.open("#{__dir__}/constructions_list.csv", 'w') do |f|
+  construction_csv.each do |line|
+    f.puts line.join(',')
+  end
+end
+
 
 
 

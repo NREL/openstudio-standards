@@ -61,6 +61,7 @@ def process_column(all_data, cell_data, option_row, j, num_rows, indent)
 end
 
 workbook.worksheets.each do |worksheet|
+  next unless worksheet.sheet_name == 'HVAC'
   sheet_data = {}
   sheet_name = worksheet.sheet_name.underscore
   puts "Processing #{sheet_name}"
@@ -94,7 +95,7 @@ end
 
 # additional data
 
-other_data['Project_Information']['Units'] = { "Default"=>"IP", "Options"=>["IP"] }
+#other_data['Project_Information']['Units'] = { "Default"=>"IP", "Options"=>["IP"] }
 
 # Inputs JSON
 File.open(File.join(base_path, 'other_inputs_new.json'), 'w') do |f|
