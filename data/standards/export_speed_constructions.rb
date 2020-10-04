@@ -264,15 +264,24 @@ constructions.keys.each do |energy_code_key|
     climate_zone = energy_code[climate_zone_key]
     climate_zone.keys.each do |surface_type_key|
       surface_type = climate_zone[surface_type_key]
-      surface_type.keys.each do |assembly_type_key|
-        assembly_type = surface_type[assembly_type_key]
-        assembly_type.keys.each do |type_key|
-          next unless /.*_Type/.match(type_key)
-          type = assembly_type[type_key]
+      surface_type.keys.each do |assembly_or_type_key|
+        if /.*_Type/.match(assembly_or_type_key)
+          type = surface_type[assembly_or_type_key]
           options = type['Options']
           next unless options
           options.each do |construction_name|
-            construction_csv << [energy_code_key, climate_zone_key, surface_type_key, assembly_type_key, construction_name]
+            construction_csv << [energy_code_key, climate_zone_key, surface_type_key, '', construction_name]
+          end
+        else
+          assembly_type = surface_type[assembly_or_type_key]
+          assembly_type.keys.each do |type_key|
+            next unless /.*_Type/.match(type_key)
+            type = assembly_type[type_key]
+            options = type['Options']
+            next unless options
+            options.each do |construction_name|
+              construction_csv << [energy_code_key, climate_zone_key, surface_type_key, assembly_or_type_key, construction_name]
+            end
           end
         end
       end

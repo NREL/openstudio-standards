@@ -34,6 +34,7 @@ ASHRAE_90_1_2007,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-16
 ASHRAE_90_1_2007,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-21
 ASHRAE_90_1_2007,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-26
 ASHRAE_90_1_2007,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-31
+ASHRAE_90_1_2007,1,Foundation,,Typical Insulated Slab CZ1 R-3
 ASHRAE_90_1_2007,1,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.28
 ASHRAE_90_1_2007,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.96 SHGC-0.23 VT-0.25
 ASHRAE_90_1_2007,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.22
@@ -49,6 +50,8 @@ ASHRAE_90_1_2007,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.96 S
 ASHRAE_90_1_2007,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.22
 ASHRAE_90_1_2007,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.72 SHGC-0.18 VT-0.19
 ASHRAE_90_1_2007,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.6 SHGC-0.15 VT-0.17
+ASHRAE_90_1_2007,1,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2007,1,Floors,,Typical Interior Floor
 ASHRAE_90_1_2007,2,Roof,Attic_and_Other,Typical Attic & Other Roof CZ2 R-37
 ASHRAE_90_1_2007,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-47
 ASHRAE_90_1_2007,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-52
@@ -84,6 +87,7 @@ ASHRAE_90_1_2007,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-16
 ASHRAE_90_1_2007,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-21
 ASHRAE_90_1_2007,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-26
 ASHRAE_90_1_2007,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-31
+ASHRAE_90_1_2007,2,Foundation,,Typical Insulated Slab CZ2 R-3
 ASHRAE_90_1_2007,2,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.28
 ASHRAE_90_1_2007,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.6 SHGC-0.23 VT-0.25
 ASHRAE_90_1_2007,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.22
@@ -99,6 +103,8 @@ ASHRAE_90_1_2007,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.6 SH
 ASHRAE_90_1_2007,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.22
 ASHRAE_90_1_2007,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.45 SHGC-0.18 VT-0.19
 ASHRAE_90_1_2007,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.38 SHGC-0.15 VT-0.17
+ASHRAE_90_1_2007,2,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2007,2,Floors,,Typical Interior Floor
 ASHRAE_90_1_2007,3,Roof,Attic_and_Other,Typical Attic & Other Roof CZ3 R-37
 ASHRAE_90_1_2007,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-47
 ASHRAE_90_1_2007,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-52
@@ -134,6 +140,7 @@ ASHRAE_90_1_2007,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-16
 ASHRAE_90_1_2007,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-21
 ASHRAE_90_1_2007,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-26
 ASHRAE_90_1_2007,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-31
+ASHRAE_90_1_2007,3,Foundation,,Typical Insulated Slab CZ3 R-3
 ASHRAE_90_1_2007,3,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.28
 ASHRAE_90_1_2007,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.52 SHGC-0.23 VT-0.25
 ASHRAE_90_1_2007,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.22
@@ -149,6 +156,8 @@ ASHRAE_90_1_2007,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.52 S
 ASHRAE_90_1_2007,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.22
 ASHRAE_90_1_2007,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.39 SHGC-0.18 VT-0.19
 ASHRAE_90_1_2007,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.33 SHGC-0.15 VT-0.17
+ASHRAE_90_1_2007,3,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2007,3,Floors,,Typical Interior Floor
 ASHRAE_90_1_2007,4,Roof,Attic_and_Other,Typical Attic & Other Roof CZ4 R-37
 ASHRAE_90_1_2007,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-47
 ASHRAE_90_1_2007,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-52
@@ -184,6 +193,7 @@ ASHRAE_90_1_2007,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-16
 ASHRAE_90_1_2007,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-21
 ASHRAE_90_1_2007,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-26
 ASHRAE_90_1_2007,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-31
+ASHRAE_90_1_2007,4,Foundation,,Typical Insulated Slab CZ4 R-3
 ASHRAE_90_1_2007,4,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ4 U-0.55 SHGC-0.4 VT-0.44
 ASHRAE_90_1_2007,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.44 SHGC-0.36 VT-0.4
 ASHRAE_90_1_2007,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.39 SHGC-0.32 VT-0.35
@@ -199,6 +209,8 @@ ASHRAE_90_1_2007,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.32 S
 ASHRAE_90_1_2007,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.28 SHGC-0.32 VT-0.35
 ASHRAE_90_1_2007,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.24 SHGC-0.28 VT-0.31
 ASHRAE_90_1_2007,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.2 SHGC-0.24 VT-0.26
+ASHRAE_90_1_2007,4,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2007,4,Floors,,Typical Interior Floor
 ASHRAE_90_1_2007,5,Roof,Attic_and_Other,Typical Attic & Other Roof CZ5 R-37
 ASHRAE_90_1_2007,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-47
 ASHRAE_90_1_2007,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-52
@@ -234,6 +246,7 @@ ASHRAE_90_1_2007,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-21
 ASHRAE_90_1_2007,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-26
 ASHRAE_90_1_2007,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-31
 ASHRAE_90_1_2007,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-36
+ASHRAE_90_1_2007,5,Foundation,,Typical Insulated Slab CZ5 R-3
 ASHRAE_90_1_2007,5,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ5 U-0.55 SHGC-0.4 VT-0.44
 ASHRAE_90_1_2007,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.44 SHGC-0.36 VT-0.4
 ASHRAE_90_1_2007,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.39 SHGC-0.32 VT-0.35
@@ -249,6 +262,8 @@ ASHRAE_90_1_2007,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.28 S
 ASHRAE_90_1_2007,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.24 SHGC-0.32 VT-0.35
 ASHRAE_90_1_2007,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.21 SHGC-0.28 VT-0.31
 ASHRAE_90_1_2007,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.18 SHGC-0.24 VT-0.26
+ASHRAE_90_1_2007,5,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2007,5,Floors,,Typical Interior Floor
 ASHRAE_90_1_2007,6,Roof,Attic_and_Other,Typical Attic & Other Roof CZ6 R-37
 ASHRAE_90_1_2007,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-47
 ASHRAE_90_1_2007,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-52
@@ -284,6 +299,7 @@ ASHRAE_90_1_2007,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-25
 ASHRAE_90_1_2007,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-30
 ASHRAE_90_1_2007,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-35
 ASHRAE_90_1_2007,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-40
+ASHRAE_90_1_2007,6,Foundation,,Typical Insulated Slab CZ6 R-3
 ASHRAE_90_1_2007,6,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ6 U-0.55 SHGC-0.4 VT-0.44
 ASHRAE_90_1_2007,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.44 SHGC-0.36 VT-0.4
 ASHRAE_90_1_2007,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.39 SHGC-0.32 VT-0.35
@@ -299,6 +315,8 @@ ASHRAE_90_1_2007,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.28 S
 ASHRAE_90_1_2007,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.24 SHGC-0.32 VT-0.35
 ASHRAE_90_1_2007,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.21 SHGC-0.28 VT-0.31
 ASHRAE_90_1_2007,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.18 SHGC-0.24 VT-0.26
+ASHRAE_90_1_2007,6,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2007,6,Floors,,Typical Interior Floor
 ASHRAE_90_1_2007,7,Roof,Attic_and_Other,Typical Attic & Other Roof CZ7 R-37
 ASHRAE_90_1_2007,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-47
 ASHRAE_90_1_2007,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-52
@@ -334,6 +352,7 @@ ASHRAE_90_1_2007,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-25
 ASHRAE_90_1_2007,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-30
 ASHRAE_90_1_2007,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-35
 ASHRAE_90_1_2007,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-40
+ASHRAE_90_1_2007,7,Foundation,,Typical Insulated Slab CZ7 R-3
 ASHRAE_90_1_2007,7,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ7 U-0.45 SHGC-0.45 VT-0.5
 ASHRAE_90_1_2007,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.36 SHGC-0.41 VT-0.45
 ASHRAE_90_1_2007,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.32 SHGC-0.36 VT-0.4
@@ -349,6 +368,8 @@ ASHRAE_90_1_2007,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.28 S
 ASHRAE_90_1_2007,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.24 SHGC-0.36 VT-0.4
 ASHRAE_90_1_2007,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.21 SHGC-0.32 VT-0.35
 ASHRAE_90_1_2007,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.18 SHGC-0.27 VT-0.3
+ASHRAE_90_1_2007,7,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2007,7,Floors,,Typical Interior Floor
 ASHRAE_90_1_2007,8,Roof,Attic_and_Other,Typical Attic & Other Roof CZ8 R-48
 ASHRAE_90_1_2007,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-58
 ASHRAE_90_1_2007,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-63
@@ -384,6 +405,7 @@ ASHRAE_90_1_2007,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-33
 ASHRAE_90_1_2007,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-38
 ASHRAE_90_1_2007,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-43
 ASHRAE_90_1_2007,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-48
+ASHRAE_90_1_2007,8,Foundation,,Typical Insulated Slab CZ8 R-3
 ASHRAE_90_1_2007,8,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ8 U-0.45 SHGC-0.45 VT-0.5
 ASHRAE_90_1_2007,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.36 SHGC-0.41 VT-0.45
 ASHRAE_90_1_2007,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.32 SHGC-0.36 VT-0.4
@@ -399,6 +421,8 @@ ASHRAE_90_1_2007,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.28 S
 ASHRAE_90_1_2007,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.24 SHGC-0.36 VT-0.4
 ASHRAE_90_1_2007,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.21 SHGC-0.32 VT-0.35
 ASHRAE_90_1_2007,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.18 SHGC-0.27 VT-0.3
+ASHRAE_90_1_2007,8,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2007,8,Floors,,Typical Interior Floor
 ASHRAE_90_1_2010,1,Roof,Attic_and_Other,Typical Attic & Other Roof CZ1 R-29
 ASHRAE_90_1_2010,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-39
 ASHRAE_90_1_2010,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-44
@@ -434,6 +458,7 @@ ASHRAE_90_1_2010,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-16
 ASHRAE_90_1_2010,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-21
 ASHRAE_90_1_2010,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-26
 ASHRAE_90_1_2010,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-31
+ASHRAE_90_1_2010,1,Foundation,,Typical Insulated Slab CZ1 R-3
 ASHRAE_90_1_2010,1,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.28
 ASHRAE_90_1_2010,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.96 SHGC-0.23 VT-0.25
 ASHRAE_90_1_2010,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.22
@@ -449,6 +474,8 @@ ASHRAE_90_1_2010,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.96 S
 ASHRAE_90_1_2010,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.22
 ASHRAE_90_1_2010,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.72 SHGC-0.18 VT-0.19
 ASHRAE_90_1_2010,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.6 SHGC-0.15 VT-0.17
+ASHRAE_90_1_2010,1,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2010,1,Floors,,Typical Interior Floor
 ASHRAE_90_1_2010,2,Roof,Attic_and_Other,Typical Attic & Other Roof CZ2 R-37
 ASHRAE_90_1_2010,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-47
 ASHRAE_90_1_2010,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-52
@@ -484,6 +511,7 @@ ASHRAE_90_1_2010,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-16
 ASHRAE_90_1_2010,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-21
 ASHRAE_90_1_2010,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-26
 ASHRAE_90_1_2010,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-31
+ASHRAE_90_1_2010,2,Foundation,,Typical Insulated Slab CZ2 R-3
 ASHRAE_90_1_2010,2,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.28
 ASHRAE_90_1_2010,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.6 SHGC-0.23 VT-0.25
 ASHRAE_90_1_2010,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.22
@@ -499,6 +527,8 @@ ASHRAE_90_1_2010,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.6 SH
 ASHRAE_90_1_2010,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.22
 ASHRAE_90_1_2010,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.45 SHGC-0.18 VT-0.19
 ASHRAE_90_1_2010,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.38 SHGC-0.15 VT-0.17
+ASHRAE_90_1_2010,2,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2010,2,Floors,,Typical Interior Floor
 ASHRAE_90_1_2010,3,Roof,Attic_and_Other,Typical Attic & Other Roof CZ3 R-37
 ASHRAE_90_1_2010,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-47
 ASHRAE_90_1_2010,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-52
@@ -534,6 +564,7 @@ ASHRAE_90_1_2010,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-16
 ASHRAE_90_1_2010,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-21
 ASHRAE_90_1_2010,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-26
 ASHRAE_90_1_2010,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-31
+ASHRAE_90_1_2010,3,Foundation,,Typical Insulated Slab CZ3 R-3
 ASHRAE_90_1_2010,3,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.28
 ASHRAE_90_1_2010,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.52 SHGC-0.23 VT-0.25
 ASHRAE_90_1_2010,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.22
@@ -549,6 +580,8 @@ ASHRAE_90_1_2010,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.52 S
 ASHRAE_90_1_2010,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.22
 ASHRAE_90_1_2010,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.39 SHGC-0.18 VT-0.19
 ASHRAE_90_1_2010,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.33 SHGC-0.15 VT-0.17
+ASHRAE_90_1_2010,3,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2010,3,Floors,,Typical Interior Floor
 ASHRAE_90_1_2010,4,Roof,Attic_and_Other,Typical Attic & Other Roof CZ4 R-37
 ASHRAE_90_1_2010,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-47
 ASHRAE_90_1_2010,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-52
@@ -584,6 +617,7 @@ ASHRAE_90_1_2010,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-16
 ASHRAE_90_1_2010,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-21
 ASHRAE_90_1_2010,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-26
 ASHRAE_90_1_2010,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-31
+ASHRAE_90_1_2010,4,Foundation,,Typical Insulated Slab CZ4 R-3
 ASHRAE_90_1_2010,4,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ4 U-0.55 SHGC-0.4 VT-0.44
 ASHRAE_90_1_2010,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.44 SHGC-0.36 VT-0.4
 ASHRAE_90_1_2010,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.39 SHGC-0.32 VT-0.35
@@ -599,6 +633,8 @@ ASHRAE_90_1_2010,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.32 S
 ASHRAE_90_1_2010,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.28 SHGC-0.32 VT-0.35
 ASHRAE_90_1_2010,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.24 SHGC-0.28 VT-0.31
 ASHRAE_90_1_2010,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.2 SHGC-0.24 VT-0.26
+ASHRAE_90_1_2010,4,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2010,4,Floors,,Typical Interior Floor
 ASHRAE_90_1_2010,5,Roof,Attic_and_Other,Typical Attic & Other Roof CZ5 R-37
 ASHRAE_90_1_2010,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-47
 ASHRAE_90_1_2010,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-52
@@ -634,6 +670,7 @@ ASHRAE_90_1_2010,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-21
 ASHRAE_90_1_2010,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-26
 ASHRAE_90_1_2010,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-31
 ASHRAE_90_1_2010,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-36
+ASHRAE_90_1_2010,5,Foundation,,Typical Insulated Slab CZ5 R-3
 ASHRAE_90_1_2010,5,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ5 U-0.55 SHGC-0.4 VT-0.44
 ASHRAE_90_1_2010,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.44 SHGC-0.36 VT-0.4
 ASHRAE_90_1_2010,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.39 SHGC-0.32 VT-0.35
@@ -649,6 +686,8 @@ ASHRAE_90_1_2010,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.28 S
 ASHRAE_90_1_2010,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.24 SHGC-0.32 VT-0.35
 ASHRAE_90_1_2010,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.21 SHGC-0.28 VT-0.31
 ASHRAE_90_1_2010,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.18 SHGC-0.24 VT-0.26
+ASHRAE_90_1_2010,5,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2010,5,Floors,,Typical Interior Floor
 ASHRAE_90_1_2010,6,Roof,Attic_and_Other,Typical Attic & Other Roof CZ6 R-37
 ASHRAE_90_1_2010,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-47
 ASHRAE_90_1_2010,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-52
@@ -684,6 +723,7 @@ ASHRAE_90_1_2010,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-25
 ASHRAE_90_1_2010,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-30
 ASHRAE_90_1_2010,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-35
 ASHRAE_90_1_2010,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-40
+ASHRAE_90_1_2010,6,Foundation,,Typical Insulated Slab CZ6 R-3
 ASHRAE_90_1_2010,6,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ6 U-0.55 SHGC-0.4 VT-0.44
 ASHRAE_90_1_2010,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.44 SHGC-0.36 VT-0.4
 ASHRAE_90_1_2010,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.39 SHGC-0.32 VT-0.35
@@ -699,6 +739,8 @@ ASHRAE_90_1_2010,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.28 S
 ASHRAE_90_1_2010,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.24 SHGC-0.32 VT-0.35
 ASHRAE_90_1_2010,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.21 SHGC-0.28 VT-0.31
 ASHRAE_90_1_2010,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.18 SHGC-0.24 VT-0.26
+ASHRAE_90_1_2010,6,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2010,6,Floors,,Typical Interior Floor
 ASHRAE_90_1_2010,7,Roof,Attic_and_Other,Typical Attic & Other Roof CZ7 R-37
 ASHRAE_90_1_2010,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-47
 ASHRAE_90_1_2010,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-52
@@ -734,6 +776,7 @@ ASHRAE_90_1_2010,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-25
 ASHRAE_90_1_2010,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-30
 ASHRAE_90_1_2010,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-35
 ASHRAE_90_1_2010,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-40
+ASHRAE_90_1_2010,7,Foundation,,Typical Insulated Slab CZ7 R-3
 ASHRAE_90_1_2010,7,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ7 U-0.45 SHGC-0.45 VT-0.5
 ASHRAE_90_1_2010,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.36 SHGC-0.41 VT-0.45
 ASHRAE_90_1_2010,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.32 SHGC-0.36 VT-0.4
@@ -749,6 +792,8 @@ ASHRAE_90_1_2010,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.28 S
 ASHRAE_90_1_2010,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.24 SHGC-0.36 VT-0.4
 ASHRAE_90_1_2010,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.21 SHGC-0.32 VT-0.35
 ASHRAE_90_1_2010,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.18 SHGC-0.27 VT-0.3
+ASHRAE_90_1_2010,7,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2010,7,Floors,,Typical Interior Floor
 ASHRAE_90_1_2010,8,Roof,Attic_and_Other,Typical Attic & Other Roof CZ8 R-48
 ASHRAE_90_1_2010,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-58
 ASHRAE_90_1_2010,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-63
@@ -784,6 +829,7 @@ ASHRAE_90_1_2010,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-33
 ASHRAE_90_1_2010,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-38
 ASHRAE_90_1_2010,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-43
 ASHRAE_90_1_2010,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-48
+ASHRAE_90_1_2010,8,Foundation,,Typical Insulated Slab CZ8 R-3
 ASHRAE_90_1_2010,8,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ8 U-0.45 SHGC-0.45 VT-0.5
 ASHRAE_90_1_2010,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.36 SHGC-0.41 VT-0.45
 ASHRAE_90_1_2010,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.32 SHGC-0.36 VT-0.4
@@ -799,6 +845,8 @@ ASHRAE_90_1_2010,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.28 S
 ASHRAE_90_1_2010,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.24 SHGC-0.36 VT-0.4
 ASHRAE_90_1_2010,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.21 SHGC-0.32 VT-0.35
 ASHRAE_90_1_2010,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.18 SHGC-0.27 VT-0.3
+ASHRAE_90_1_2010,8,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2010,8,Floors,,Typical Interior Floor
 ASHRAE_90_1_2013,1,Roof,Attic_and_Other,Typical Attic & Other Roof CZ1 R-37
 ASHRAE_90_1_2013,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-47
 ASHRAE_90_1_2013,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-52
@@ -834,6 +882,7 @@ ASHRAE_90_1_2013,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-16
 ASHRAE_90_1_2013,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-21
 ASHRAE_90_1_2013,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-26
 ASHRAE_90_1_2013,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-31
+ASHRAE_90_1_2013,1,Foundation,,Typical Insulated Slab CZ1 R-3
 ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ1 U-1.1 SHGC-0.25 VT-0.28
 ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.88 SHGC-0.23 VT-0.25
 ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.77 SHGC-0.2 VT-0.22
@@ -849,6 +898,8 @@ ASHRAE_90_1_2013,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.4 SH
 ASHRAE_90_1_2013,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.35 SHGC-0.2 VT-0.22
 ASHRAE_90_1_2013,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.3 SHGC-0.18 VT-0.19
 ASHRAE_90_1_2013,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.25 SHGC-0.15 VT-0.17
+ASHRAE_90_1_2013,1,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2013,1,Floors,,Typical Interior Floor
 ASHRAE_90_1_2013,2,Roof,Attic_and_Other,Typical Attic & Other Roof CZ2 R-37
 ASHRAE_90_1_2013,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-47
 ASHRAE_90_1_2013,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-52
@@ -884,6 +935,7 @@ ASHRAE_90_1_2013,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-16
 ASHRAE_90_1_2013,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-21
 ASHRAE_90_1_2013,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-26
 ASHRAE_90_1_2013,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-31
+ASHRAE_90_1_2013,2,Foundation,,Typical Insulated Slab CZ2 R-3
 ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ2 U-0.83 SHGC-0.25 VT-0.28
 ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.66 SHGC-0.23 VT-0.25
 ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.58 SHGC-0.2 VT-0.22
@@ -899,6 +951,8 @@ ASHRAE_90_1_2013,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.32 S
 ASHRAE_90_1_2013,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.28 SHGC-0.2 VT-0.22
 ASHRAE_90_1_2013,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.24 SHGC-0.18 VT-0.19
 ASHRAE_90_1_2013,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.2 SHGC-0.15 VT-0.17
+ASHRAE_90_1_2013,2,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2013,2,Floors,,Typical Interior Floor
 ASHRAE_90_1_2013,3,Roof,Attic_and_Other,Typical Attic & Other Roof CZ3 R-37
 ASHRAE_90_1_2013,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-47
 ASHRAE_90_1_2013,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-52
@@ -934,6 +988,7 @@ ASHRAE_90_1_2013,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-16
 ASHRAE_90_1_2013,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-21
 ASHRAE_90_1_2013,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-26
 ASHRAE_90_1_2013,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-31
+ASHRAE_90_1_2013,3,Foundation,,Typical Insulated Slab CZ3 R-3
 ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ3 U-0.77 SHGC-0.25 VT-0.28
 ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.62 SHGC-0.23 VT-0.25
 ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.54 SHGC-0.2 VT-0.22
@@ -949,6 +1004,8 @@ ASHRAE_90_1_2013,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.28 S
 ASHRAE_90_1_2013,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.24 SHGC-0.2 VT-0.22
 ASHRAE_90_1_2013,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.21 SHGC-0.18 VT-0.19
 ASHRAE_90_1_2013,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.18 SHGC-0.15 VT-0.17
+ASHRAE_90_1_2013,3,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2013,3,Floors,,Typical Interior Floor
 ASHRAE_90_1_2013,4,Roof,Attic_and_Other,Typical Attic & Other Roof CZ4 R-48
 ASHRAE_90_1_2013,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-58
 ASHRAE_90_1_2013,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-63
@@ -984,6 +1041,7 @@ ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-21
 ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-26
 ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-31
 ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-36
+ASHRAE_90_1_2013,4,Foundation,,Typical Insulated Slab CZ4 R-3
 ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ4 U-0.77 SHGC-0.4 VT-0.44
 ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.62 SHGC-0.36 VT-0.4
 ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.54 SHGC-0.32 VT-0.35
@@ -999,6 +1057,8 @@ ASHRAE_90_1_2013,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.28 S
 ASHRAE_90_1_2013,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.24 SHGC-0.32 VT-0.35
 ASHRAE_90_1_2013,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.21 SHGC-0.28 VT-0.31
 ASHRAE_90_1_2013,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.18 SHGC-0.24 VT-0.26
+ASHRAE_90_1_2013,4,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2013,4,Floors,,Typical Interior Floor
 ASHRAE_90_1_2013,5,Roof,Attic_and_Other,Typical Attic & Other Roof CZ5 R-48
 ASHRAE_90_1_2013,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-58
 ASHRAE_90_1_2013,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-63
@@ -1034,6 +1094,7 @@ ASHRAE_90_1_2013,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-25
 ASHRAE_90_1_2013,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-30
 ASHRAE_90_1_2013,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-35
 ASHRAE_90_1_2013,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-40
+ASHRAE_90_1_2013,5,Foundation,,Typical Insulated Slab CZ5 R-3
 ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ5 U-0.77 SHGC-0.4 VT-0.44
 ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.62 SHGC-0.36 VT-0.4
 ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.54 SHGC-0.32 VT-0.35
@@ -1049,6 +1110,8 @@ ASHRAE_90_1_2013,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.26 S
 ASHRAE_90_1_2013,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.22 SHGC-0.32 VT-0.35
 ASHRAE_90_1_2013,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.19 SHGC-0.28 VT-0.31
 ASHRAE_90_1_2013,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.16 SHGC-0.24 VT-0.26
+ASHRAE_90_1_2013,5,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2013,5,Floors,,Typical Interior Floor
 ASHRAE_90_1_2013,6,Roof,Attic_and_Other,Typical Attic & Other Roof CZ6 R-48
 ASHRAE_90_1_2013,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-58
 ASHRAE_90_1_2013,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-63
@@ -1084,6 +1147,7 @@ ASHRAE_90_1_2013,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-25
 ASHRAE_90_1_2013,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-30
 ASHRAE_90_1_2013,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-35
 ASHRAE_90_1_2013,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-40
+ASHRAE_90_1_2013,6,Foundation,,Typical Insulated Slab CZ6 R-3
 ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ6 U-0.77 SHGC-0.4 VT-0.44
 ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.62 SHGC-0.36 VT-0.4
 ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.54 SHGC-0.32 VT-0.35
@@ -1099,6 +1163,8 @@ ASHRAE_90_1_2013,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.26 S
 ASHRAE_90_1_2013,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.22 SHGC-0.32 VT-0.35
 ASHRAE_90_1_2013,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.19 SHGC-0.28 VT-0.31
 ASHRAE_90_1_2013,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.16 SHGC-0.24 VT-0.26
+ASHRAE_90_1_2013,6,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2013,6,Floors,,Typical Interior Floor
 ASHRAE_90_1_2013,7,Roof,Attic_and_Other,Typical Attic & Other Roof CZ7 R-59
 ASHRAE_90_1_2013,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-69
 ASHRAE_90_1_2013,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-74
@@ -1134,6 +1200,7 @@ ASHRAE_90_1_2013,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-25
 ASHRAE_90_1_2013,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-30
 ASHRAE_90_1_2013,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-35
 ASHRAE_90_1_2013,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-40
+ASHRAE_90_1_2013,7,Foundation,,Typical Insulated Slab CZ7 R-3
 ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ7 U-0.77 SHGC-0.45 VT-0.5
 ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.62 SHGC-0.41 VT-0.45
 ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.54 SHGC-0.36 VT-0.4
@@ -1149,6 +1216,8 @@ ASHRAE_90_1_2013,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.26 S
 ASHRAE_90_1_2013,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.22 SHGC-0.36 VT-0.4
 ASHRAE_90_1_2013,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.19 SHGC-0.32 VT-0.35
 ASHRAE_90_1_2013,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.16 SHGC-0.27 VT-0.3
+ASHRAE_90_1_2013,7,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2013,7,Floors,,Typical Interior Floor
 ASHRAE_90_1_2013,8,Roof,Attic_and_Other,Typical Attic & Other Roof CZ8 R-59
 ASHRAE_90_1_2013,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-69
 ASHRAE_90_1_2013,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-74
@@ -1184,6 +1253,7 @@ ASHRAE_90_1_2013,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-36
 ASHRAE_90_1_2013,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-41
 ASHRAE_90_1_2013,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-46
 ASHRAE_90_1_2013,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-51
+ASHRAE_90_1_2013,8,Foundation,,Typical Insulated Slab CZ8 R-3
 ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ8 U-0.77 SHGC-0.45 VT-0.5
 ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.62 SHGC-0.41 VT-0.45
 ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.54 SHGC-0.36 VT-0.4
@@ -1199,3 +1269,5 @@ ASHRAE_90_1_2013,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.26 S
 ASHRAE_90_1_2013,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.22 SHGC-0.36 VT-0.4
 ASHRAE_90_1_2013,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.19 SHGC-0.32 VT-0.35
 ASHRAE_90_1_2013,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.16 SHGC-0.27 VT-0.3
+ASHRAE_90_1_2013,8,Interior_Walls,,Typical Interior Wall
+ASHRAE_90_1_2013,8,Floors,,Typical Interior Floor
