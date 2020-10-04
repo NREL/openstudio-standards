@@ -1,0 +1,1273 @@
+energy_code,climate_zone,surface_type,assembly_type,construction_name,cost ($/ft2)
+ASHRAE_90_1_2007,1,Exterior_Walls,Mass,Typical Mass Wall CZ1 R-2,21.73
+ASHRAE_90_1_2007,1,Exterior_Walls,Mass,Mass Wall CZ1 R-7,21.83
+ASHRAE_90_1_2007,1,Exterior_Walls,Mass,Mass Wall CZ1 R-12,21.94
+ASHRAE_90_1_2007,1,Exterior_Walls,Mass,Mass Wall CZ1 R-17,22.04
+ASHRAE_90_1_2007,1,Exterior_Walls,Mass,Mass Wall CZ1 R-22,22.15
+ASHRAE_90_1_2010,1,Exterior_Walls,Mass,Typical Mass Wall CZ1 R-2,25.47
+ASHRAE_90_1_2010,1,Exterior_Walls,Mass,Mass Wall CZ1 R-7,26.31
+ASHRAE_90_1_2010,1,Exterior_Walls,Mass,Mass Wall CZ1 R-12,27.14
+ASHRAE_90_1_2010,1,Exterior_Walls,Mass,Mass Wall CZ1 R-17,27.98
+ASHRAE_90_1_2010,1,Exterior_Walls,Mass,Mass Wall CZ1 R-22,28.82
+ASHRAE_90_1_2013,1,Exterior_Walls,Mass,Typical Mass Wall CZ1 R-2,30.03
+ASHRAE_90_1_2013,1,Exterior_Walls,Mass,Mass Wall CZ1 R-7,31.16
+ASHRAE_90_1_2013,1,Exterior_Walls,Mass,Mass Wall CZ1 R-12,32.29
+ASHRAE_90_1_2013,1,Exterior_Walls,Mass,Mass Wall CZ1 R-17,33.41
+ASHRAE_90_1_2013,1,Exterior_Walls,Mass,Mass Wall CZ1 R-22,34.54
+ASHRAE_90_1_2007,2,Exterior_Walls,Mass,Typical Mass Wall CZ2 R-7,27.86
+ASHRAE_90_1_2007,2,Exterior_Walls,Mass,Mass Wall CZ2 R-12,29.30
+ASHRAE_90_1_2007,2,Exterior_Walls,Mass,Mass Wall CZ2 R-17,30.74
+ASHRAE_90_1_2007,2,Exterior_Walls,Mass,Mass Wall CZ2 R-22,32.18
+ASHRAE_90_1_2007,2,Exterior_Walls,Mass,Mass Wall CZ2 R-27,33.63
+ASHRAE_90_1_2010,2,Exterior_Walls,Mass,Typical Mass Wall CZ2 R-7,35.51
+ASHRAE_90_1_2010,2,Exterior_Walls,Mass,Mass Wall CZ2 R-12,37.32
+ASHRAE_90_1_2010,2,Exterior_Walls,Mass,Mass Wall CZ2 R-17,39.12
+ASHRAE_90_1_2010,2,Exterior_Walls,Mass,Mass Wall CZ2 R-22,40.93
+ASHRAE_90_1_2010,2,Exterior_Walls,Mass,Mass Wall CZ2 R-27,42.74
+ASHRAE_90_1_2013,2,Exterior_Walls,Mass,Typical Mass Wall CZ2 R-7,29.16
+ASHRAE_90_1_2013,2,Exterior_Walls,Mass,Mass Wall CZ2 R-12,31.06
+ASHRAE_90_1_2013,2,Exterior_Walls,Mass,Mass Wall CZ2 R-17,32.96
+ASHRAE_90_1_2013,2,Exterior_Walls,Mass,Mass Wall CZ2 R-22,34.86
+ASHRAE_90_1_2013,2,Exterior_Walls,Mass,Mass Wall CZ2 R-27,36.75
+ASHRAE_90_1_2007,3,Exterior_Walls,Mass,Typical Mass Wall CZ3 R-8,31.74
+ASHRAE_90_1_2007,3,Exterior_Walls,Mass,Mass Wall CZ3 R-13,33.91
+ASHRAE_90_1_2007,3,Exterior_Walls,Mass,Mass Wall CZ3 R-18,36.09
+ASHRAE_90_1_2007,3,Exterior_Walls,Mass,Mass Wall CZ3 R-23,38.27
+ASHRAE_90_1_2007,3,Exterior_Walls,Mass,Mass Wall CZ3 R-28,40.44
+ASHRAE_90_1_2010,3,Exterior_Walls,Mass,Typical Mass Wall CZ3 R-8,40.82
+ASHRAE_90_1_2010,3,Exterior_Walls,Mass,Mass Wall CZ3 R-13,44.11
+ASHRAE_90_1_2010,3,Exterior_Walls,Mass,Mass Wall CZ3 R-18,47.40
+ASHRAE_90_1_2010,3,Exterior_Walls,Mass,Mass Wall CZ3 R-23,50.69
+ASHRAE_90_1_2010,3,Exterior_Walls,Mass,Mass Wall CZ3 R-28,53.98
+ASHRAE_90_1_2013,3,Exterior_Walls,Mass,Typical Mass Wall CZ3 R-8,21.73
+ASHRAE_90_1_2013,3,Exterior_Walls,Mass,Mass Wall CZ3 R-13,21.83
+ASHRAE_90_1_2013,3,Exterior_Walls,Mass,Mass Wall CZ3 R-18,21.94
+ASHRAE_90_1_2013,3,Exterior_Walls,Mass,Mass Wall CZ3 R-23,22.04
+ASHRAE_90_1_2013,3,Exterior_Walls,Mass,Mass Wall CZ3 R-28,22.15
+ASHRAE_90_1_2007,4,Exterior_Walls,Mass,Typical Mass Wall CZ4 R-10,30.03
+ASHRAE_90_1_2007,4,Exterior_Walls,Mass,Mass Wall CZ4 R-15,31.16
+ASHRAE_90_1_2007,4,Exterior_Walls,Mass,Mass Wall CZ4 R-20,32.29
+ASHRAE_90_1_2007,4,Exterior_Walls,Mass,Mass Wall CZ4 R-25,33.41
+ASHRAE_90_1_2007,4,Exterior_Walls,Mass,Mass Wall CZ4 R-30,34.54
+ASHRAE_90_1_2010,4,Exterior_Walls,Mass,Typical Mass Wall CZ4 R-10,27.86
+ASHRAE_90_1_2010,4,Exterior_Walls,Mass,Mass Wall CZ4 R-15,29.30
+ASHRAE_90_1_2010,4,Exterior_Walls,Mass,Mass Wall CZ4 R-20,30.74
+ASHRAE_90_1_2010,4,Exterior_Walls,Mass,Mass Wall CZ4 R-25,32.18
+ASHRAE_90_1_2010,4,Exterior_Walls,Mass,Mass Wall CZ4 R-30,33.63
+ASHRAE_90_1_2013,4,Exterior_Walls,Mass,Typical Mass Wall CZ4 R-10,35.51
+ASHRAE_90_1_2013,4,Exterior_Walls,Mass,Mass Wall CZ4 R-15,37.32
+ASHRAE_90_1_2013,4,Exterior_Walls,Mass,Mass Wall CZ4 R-20,39.12
+ASHRAE_90_1_2013,4,Exterior_Walls,Mass,Mass Wall CZ4 R-25,40.93
+ASHRAE_90_1_2013,4,Exterior_Walls,Mass,Mass Wall CZ4 R-30,42.74
+ASHRAE_90_1_2007,5,Exterior_Walls,Mass,Typical Mass Wall CZ5 R-11,29.16
+ASHRAE_90_1_2007,5,Exterior_Walls,Mass,Mass Wall CZ5 R-16,31.06
+ASHRAE_90_1_2007,5,Exterior_Walls,Mass,Mass Wall CZ5 R-21,32.96
+ASHRAE_90_1_2007,5,Exterior_Walls,Mass,Mass Wall CZ5 R-26,34.86
+ASHRAE_90_1_2007,5,Exterior_Walls,Mass,Mass Wall CZ5 R-31,36.75
+ASHRAE_90_1_2010,5,Exterior_Walls,Mass,Typical Mass Wall CZ5 R-11,25.47
+ASHRAE_90_1_2010,5,Exterior_Walls,Mass,Mass Wall CZ5 R-16,26.31
+ASHRAE_90_1_2010,5,Exterior_Walls,Mass,Mass Wall CZ5 R-21,27.14
+ASHRAE_90_1_2010,5,Exterior_Walls,Mass,Mass Wall CZ5 R-26,27.98
+ASHRAE_90_1_2010,5,Exterior_Walls,Mass,Mass Wall CZ5 R-31,28.82
+ASHRAE_90_1_2013,5,Exterior_Walls,Mass,Typical Mass Wall CZ5 R-11,31.74
+ASHRAE_90_1_2013,5,Exterior_Walls,Mass,Mass Wall CZ5 R-16,33.91
+ASHRAE_90_1_2013,5,Exterior_Walls,Mass,Mass Wall CZ5 R-21,36.09
+ASHRAE_90_1_2013,5,Exterior_Walls,Mass,Mass Wall CZ5 R-26,38.27
+ASHRAE_90_1_2013,5,Exterior_Walls,Mass,Mass Wall CZ5 R-31,40.44
+ASHRAE_90_1_2007,6,Exterior_Walls,Mass,Typical Mass Wall CZ6 R-13,40.82
+ASHRAE_90_1_2007,6,Exterior_Walls,Mass,Mass Wall CZ6 R-18,44.11
+ASHRAE_90_1_2007,6,Exterior_Walls,Mass,Mass Wall CZ6 R-23,47.40
+ASHRAE_90_1_2007,6,Exterior_Walls,Mass,Mass Wall CZ6 R-28,50.69
+ASHRAE_90_1_2007,6,Exterior_Walls,Mass,Mass Wall CZ6 R-33,53.98
+ASHRAE_90_1_2010,6,Exterior_Walls,Mass,Typical Mass Wall CZ6 R-13,21.73
+ASHRAE_90_1_2010,6,Exterior_Walls,Mass,Mass Wall CZ6 R-18,21.83
+ASHRAE_90_1_2010,6,Exterior_Walls,Mass,Mass Wall CZ6 R-23,21.94
+ASHRAE_90_1_2010,6,Exterior_Walls,Mass,Mass Wall CZ6 R-28,22.04
+ASHRAE_90_1_2010,6,Exterior_Walls,Mass,Mass Wall CZ6 R-33,22.15
+ASHRAE_90_1_2013,6,Exterior_Walls,Mass,Typical Mass Wall CZ6 R-13,25.47
+ASHRAE_90_1_2013,6,Exterior_Walls,Mass,Mass Wall CZ6 R-18,26.31
+ASHRAE_90_1_2013,6,Exterior_Walls,Mass,Mass Wall CZ6 R-23,27.14
+ASHRAE_90_1_2013,6,Exterior_Walls,Mass,Mass Wall CZ6 R-28,27.98
+ASHRAE_90_1_2013,6,Exterior_Walls,Mass,Mass Wall CZ6 R-33,28.82
+ASHRAE_90_1_2007,7,Exterior_Walls,Mass,Typical Mass Wall CZ7 R-14,30.03
+ASHRAE_90_1_2007,7,Exterior_Walls,Mass,Mass Wall CZ7 R-19,31.16
+ASHRAE_90_1_2007,7,Exterior_Walls,Mass,Mass Wall CZ7 R-24,32.29
+ASHRAE_90_1_2007,7,Exterior_Walls,Mass,Mass Wall CZ7 R-29,33.41
+ASHRAE_90_1_2007,7,Exterior_Walls,Mass,Mass Wall CZ7 R-34,34.54
+ASHRAE_90_1_2010,7,Exterior_Walls,Mass,Typical Mass Wall CZ7 R-14,27.86
+ASHRAE_90_1_2010,7,Exterior_Walls,Mass,Mass Wall CZ7 R-19,29.30
+ASHRAE_90_1_2010,7,Exterior_Walls,Mass,Mass Wall CZ7 R-24,30.74
+ASHRAE_90_1_2010,7,Exterior_Walls,Mass,Mass Wall CZ7 R-29,32.18
+ASHRAE_90_1_2010,7,Exterior_Walls,Mass,Mass Wall CZ7 R-34,33.63
+ASHRAE_90_1_2013,7,Exterior_Walls,Mass,Typical Mass Wall CZ7 R-14,35.51
+ASHRAE_90_1_2013,7,Exterior_Walls,Mass,Mass Wall CZ7 R-19,37.32
+ASHRAE_90_1_2013,7,Exterior_Walls,Mass,Mass Wall CZ7 R-24,39.12
+ASHRAE_90_1_2013,7,Exterior_Walls,Mass,Mass Wall CZ7 R-29,40.93
+ASHRAE_90_1_2013,7,Exterior_Walls,Mass,Mass Wall CZ7 R-34,42.74
+ASHRAE_90_1_2007,8,Exterior_Walls,Mass,Typical Mass Wall CZ8 R-14,29.16
+ASHRAE_90_1_2007,8,Exterior_Walls,Mass,Mass Wall CZ8 R-19,31.06
+ASHRAE_90_1_2007,8,Exterior_Walls,Mass,Mass Wall CZ8 R-24,32.96
+ASHRAE_90_1_2007,8,Exterior_Walls,Mass,Mass Wall CZ8 R-29,34.86
+ASHRAE_90_1_2007,8,Exterior_Walls,Mass,Mass Wall CZ8 R-34,36.75
+ASHRAE_90_1_2010,8,Exterior_Walls,Mass,Typical Mass Wall CZ8 R-14,31.74
+ASHRAE_90_1_2010,8,Exterior_Walls,Mass,Mass Wall CZ8 R-19,33.91
+ASHRAE_90_1_2010,8,Exterior_Walls,Mass,Mass Wall CZ8 R-24,36.09
+ASHRAE_90_1_2010,8,Exterior_Walls,Mass,Mass Wall CZ8 R-29,38.27
+ASHRAE_90_1_2010,8,Exterior_Walls,Mass,Mass Wall CZ8 R-34,40.44
+ASHRAE_90_1_2013,8,Exterior_Walls,Mass,Typical Mass Wall CZ8 R-21,42.21
+ASHRAE_90_1_2013,8,Exterior_Walls,Mass,Mass Wall CZ8 R-26,47.31
+ASHRAE_90_1_2013,8,Exterior_Walls,Mass,Mass Wall CZ8 R-31,52.40
+ASHRAE_90_1_2013,8,Exterior_Walls,Mass,Mass Wall CZ8 R-36,57.49
+ASHRAE_90_1_2013,8,Exterior_Walls,Mass,Mass Wall CZ8 R-41,62.59
+ASHRAE_90_1_2007,1,Exterior_Walls,Metal_Building,Typical Metal Wall CZ1 R-9,16.60
+ASHRAE_90_1_2007,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-14,18.31
+ASHRAE_90_1_2007,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-19,20.03
+ASHRAE_90_1_2007,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-24,21.74
+ASHRAE_90_1_2007,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-29,23.45
+ASHRAE_90_1_2010,1,Exterior_Walls,Metal_Building,Typical Metal Wall CZ1 R-11,16.93
+ASHRAE_90_1_2010,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-16,19.02
+ASHRAE_90_1_2010,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-21,21.12
+ASHRAE_90_1_2010,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-26,23.22
+ASHRAE_90_1_2010,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-31,25.32
+ASHRAE_90_1_2013,1,Exterior_Walls,Metal_Building,Typical Metal Wall CZ1 R-11,16.93
+ASHRAE_90_1_2013,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-16,19.02
+ASHRAE_90_1_2013,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-21,21.12
+ASHRAE_90_1_2013,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-26,23.22
+ASHRAE_90_1_2013,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-31,25.32
+ASHRAE_90_1_2007,2,Exterior_Walls,Metal_Building,Typical Metal Wall CZ2 R-9,18.73
+ASHRAE_90_1_2007,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-14,20.49
+ASHRAE_90_1_2007,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-19,22.24
+ASHRAE_90_1_2007,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-24,24.00
+ASHRAE_90_1_2007,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-29,25.76
+ASHRAE_90_1_2010,2,Exterior_Walls,Metal_Building,Typical Metal Wall CZ2 R-11,19.06
+ASHRAE_90_1_2010,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-16,21.21
+ASHRAE_90_1_2010,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-21,23.37
+ASHRAE_90_1_2010,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-26,25.52
+ASHRAE_90_1_2010,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-31,27.67
+ASHRAE_90_1_2013,2,Exterior_Walls,Metal_Building,Typical Metal Wall CZ2 R-11,19.06
+ASHRAE_90_1_2013,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-16,21.21
+ASHRAE_90_1_2013,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-21,23.37
+ASHRAE_90_1_2013,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-26,25.52
+ASHRAE_90_1_2013,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-31,27.67
+ASHRAE_90_1_2007,3,Exterior_Walls,Metal_Building,Typical Metal Wall CZ3 R-9,21.98
+ASHRAE_90_1_2007,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-14,24.00
+ASHRAE_90_1_2007,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-19,26.01
+ASHRAE_90_1_2007,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-24,28.03
+ASHRAE_90_1_2007,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-29,30.05
+ASHRAE_90_1_2010,3,Exterior_Walls,Metal_Building,Typical Metal Wall CZ3 R-12,22.55
+ASHRAE_90_1_2010,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-17,25.25
+ASHRAE_90_1_2010,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-22,27.95
+ASHRAE_90_1_2010,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-27,30.65
+ASHRAE_90_1_2010,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-32,33.35
+ASHRAE_90_1_2013,3,Exterior_Walls,Metal_Building,Typical Metal Wall CZ3 R-11,22.36
+ASHRAE_90_1_2013,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-16,24.83
+ASHRAE_90_1_2013,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-21,27.31
+ASHRAE_90_1_2013,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-26,29.78
+ASHRAE_90_1_2013,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-31,32.25
+ASHRAE_90_1_2007,4,Exterior_Walls,Metal_Building,Typical Metal Wall CZ4 R-9,20.14
+ASHRAE_90_1_2007,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-14,22.13
+ASHRAE_90_1_2007,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-19,24.12
+ASHRAE_90_1_2007,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-24,26.10
+ASHRAE_90_1_2007,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-29,28.09
+ASHRAE_90_1_2010,4,Exterior_Walls,Metal_Building,Typical Metal Wall CZ4 R-12,20.71
+ASHRAE_90_1_2010,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-17,23.36
+ASHRAE_90_1_2010,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-22,26.02
+ASHRAE_90_1_2010,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-27,28.68
+ASHRAE_90_1_2010,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-32,31.34
+ASHRAE_90_1_2013,4,Exterior_Walls,Metal_Building,Typical Metal Wall CZ4 R-17,21.65
+ASHRAE_90_1_2013,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-22,25.42
+ASHRAE_90_1_2013,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-27,29.20
+ASHRAE_90_1_2013,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-32,32.98
+ASHRAE_90_1_2013,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-37,36.75
+ASHRAE_90_1_2007,5,Exterior_Walls,Metal_Building,Typical Metal Wall CZ5 R-9,25.55
+ASHRAE_90_1_2007,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-14,27.78
+ASHRAE_90_1_2007,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-19,30.01
+ASHRAE_90_1_2007,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-24,32.25
+ASHRAE_90_1_2007,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-29,34.48
+ASHRAE_90_1_2010,5,Exterior_Walls,Metal_Building,Typical Metal Wall CZ5 R-14,26.60
+ASHRAE_90_1_2010,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-19,30.09
+ASHRAE_90_1_2010,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-24,33.59
+ASHRAE_90_1_2010,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-29,37.08
+ASHRAE_90_1_2010,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-34,40.57
+ASHRAE_90_1_2013,5,Exterior_Walls,Metal_Building,Typical Metal Wall CZ5 R-20,27.87
+ASHRAE_90_1_2013,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-25,32.87
+ASHRAE_90_1_2013,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-30,37.87
+ASHRAE_90_1_2013,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-35,42.88
+ASHRAE_90_1_2013,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-40,47.88
+ASHRAE_90_1_2007,6,Exterior_Walls,Metal_Building,Typical Metal Wall CZ6 R-9,20.67
+ASHRAE_90_1_2007,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-14,22.62
+ASHRAE_90_1_2007,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-19,24.57
+ASHRAE_90_1_2007,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-24,26.51
+ASHRAE_90_1_2007,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-29,28.46
+ASHRAE_90_1_2010,6,Exterior_Walls,Metal_Building,Typical Metal Wall CZ6 R-14,21.59
+ASHRAE_90_1_2010,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-19,24.64
+ASHRAE_90_1_2010,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-24,27.68
+ASHRAE_90_1_2010,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-29,30.73
+ASHRAE_90_1_2010,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-34,33.77
+ASHRAE_90_1_2013,6,Exterior_Walls,Metal_Building,Typical Metal Wall CZ6 R-20,22.70
+ASHRAE_90_1_2013,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-25,27.06
+ASHRAE_90_1_2013,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-30,31.42
+ASHRAE_90_1_2013,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-35,35.78
+ASHRAE_90_1_2013,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-40,40.14
+ASHRAE_90_1_2007,7,Exterior_Walls,Metal_Building,Typical Metal Wall CZ7 R-18,24.87
+ASHRAE_90_1_2007,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-23,29.19
+ASHRAE_90_1_2007,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-28,33.51
+ASHRAE_90_1_2007,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-33,37.83
+ASHRAE_90_1_2007,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-38,42.15
+ASHRAE_90_1_2010,7,Exterior_Walls,Metal_Building,Typical Metal Wall CZ7 R-18,24.87
+ASHRAE_90_1_2010,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-23,29.19
+ASHRAE_90_1_2010,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-28,33.51
+ASHRAE_90_1_2010,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-33,37.83
+ASHRAE_90_1_2010,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-38,42.15
+ASHRAE_90_1_2013,7,Exterior_Walls,Metal_Building,Typical Metal Wall CZ7 R-23,25.89
+ASHRAE_90_1_2013,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-28,31.42
+ASHRAE_90_1_2013,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-33,36.95
+ASHRAE_90_1_2013,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-38,42.47
+ASHRAE_90_1_2013,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-43,48.00
+ASHRAE_90_1_2007,8,Exterior_Walls,Metal_Building,Typical Metal Wall CZ8 R-18,32.72
+ASHRAE_90_1_2007,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-23,39.25
+ASHRAE_90_1_2007,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-28,45.77
+ASHRAE_90_1_2007,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-33,52.30
+ASHRAE_90_1_2007,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-38,58.82
+ASHRAE_90_1_2010,8,Exterior_Walls,Metal_Building,Typical Metal Wall CZ8 R-18,32.72
+ASHRAE_90_1_2010,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-23,39.25
+ASHRAE_90_1_2010,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-28,45.77
+ASHRAE_90_1_2010,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-33,52.30
+ASHRAE_90_1_2010,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-38,58.82
+ASHRAE_90_1_2013,8,Exterior_Walls,Metal_Building,Typical Metal Wall CZ8 R-26,35.18
+ASHRAE_90_1_2013,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-31,44.62
+ASHRAE_90_1_2013,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-36,54.07
+ASHRAE_90_1_2013,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-41,63.51
+ASHRAE_90_1_2013,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-46,72.96
+ASHRAE_90_1_2007,1,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ1 R-8,22.61
+ASHRAE_90_1_2007,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-13,23.61
+ASHRAE_90_1_2007,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-18,24.61
+ASHRAE_90_1_2007,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-23,25.62
+ASHRAE_90_1_2007,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-28,26.62
+ASHRAE_90_1_2010,1,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ1 R-8,22.61
+ASHRAE_90_1_2010,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-13,23.61
+ASHRAE_90_1_2010,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-18,24.61
+ASHRAE_90_1_2010,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-23,25.62
+ASHRAE_90_1_2010,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-28,26.62
+ASHRAE_90_1_2013,1,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ1 R-8,22.61
+ASHRAE_90_1_2013,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-13,23.61
+ASHRAE_90_1_2013,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-18,24.61
+ASHRAE_90_1_2013,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-23,25.62
+ASHRAE_90_1_2013,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-28,26.62
+ASHRAE_90_1_2007,2,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ2 R-8,25.32
+ASHRAE_90_1_2007,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-13,26.35
+ASHRAE_90_1_2007,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-18,27.38
+ASHRAE_90_1_2007,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-23,28.41
+ASHRAE_90_1_2007,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-28,29.44
+ASHRAE_90_1_2010,2,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ2 R-8,25.32
+ASHRAE_90_1_2010,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-13,26.35
+ASHRAE_90_1_2010,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-18,27.38
+ASHRAE_90_1_2010,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-23,28.41
+ASHRAE_90_1_2010,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-28,29.44
+ASHRAE_90_1_2013,2,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ2 R-12,25.98
+ASHRAE_90_1_2013,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-17,27.60
+ASHRAE_90_1_2013,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-22,29.21
+ASHRAE_90_1_2013,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-27,30.82
+ASHRAE_90_1_2013,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-32,32.43
+ASHRAE_90_1_2007,3,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ3 R-12,30.28
+ASHRAE_90_1_2007,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-17,32.13
+ASHRAE_90_1_2007,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-22,33.98
+ASHRAE_90_1_2007,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-27,35.83
+ASHRAE_90_1_2007,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-32,37.68
+ASHRAE_90_1_2010,3,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ3 R-12,30.28
+ASHRAE_90_1_2010,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-17,32.13
+ASHRAE_90_1_2010,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-22,33.98
+ASHRAE_90_1_2010,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-27,35.83
+ASHRAE_90_1_2010,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-32,37.68
+ASHRAE_90_1_2013,3,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ3 R-13,30.47
+ASHRAE_90_1_2013,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-18,32.49
+ASHRAE_90_1_2013,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-23,34.51
+ASHRAE_90_1_2013,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-28,36.52
+ASHRAE_90_1_2013,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-33,38.54
+ASHRAE_90_1_2007,4,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ4 R-16,28.59
+ASHRAE_90_1_2007,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-21,31.07
+ASHRAE_90_1_2007,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-26,33.55
+ASHRAE_90_1_2007,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-31,36.03
+ASHRAE_90_1_2007,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-36,38.51
+ASHRAE_90_1_2010,4,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ4 R-16,28.59
+ASHRAE_90_1_2010,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-21,31.07
+ASHRAE_90_1_2010,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-26,33.55
+ASHRAE_90_1_2010,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-31,36.03
+ASHRAE_90_1_2010,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-36,38.51
+ASHRAE_90_1_2013,4,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ4 R-16,28.59
+ASHRAE_90_1_2013,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-21,31.07
+ASHRAE_90_1_2013,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-26,33.55
+ASHRAE_90_1_2013,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-31,36.03
+ASHRAE_90_1_2013,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-36,38.51
+ASHRAE_90_1_2007,5,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ5 R-16,35.55
+ASHRAE_90_1_2007,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-21,38.34
+ASHRAE_90_1_2007,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-26,41.13
+ASHRAE_90_1_2007,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-31,43.92
+ASHRAE_90_1_2007,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-36,46.71
+ASHRAE_90_1_2010,5,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ5 R-16,35.55
+ASHRAE_90_1_2010,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-21,38.34
+ASHRAE_90_1_2010,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-26,41.13
+ASHRAE_90_1_2010,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-31,43.92
+ASHRAE_90_1_2010,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-36,46.71
+ASHRAE_90_1_2013,5,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ5 R-18,35.97
+ASHRAE_90_1_2013,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-23,39.13
+ASHRAE_90_1_2013,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-28,42.29
+ASHRAE_90_1_2013,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-33,45.45
+ASHRAE_90_1_2013,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-38,48.62
+ASHRAE_90_1_2007,6,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ6 R-16,29.16
+ASHRAE_90_1_2007,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-21,31.59
+ASHRAE_90_1_2007,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-26,34.02
+ASHRAE_90_1_2007,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-31,36.45
+ASHRAE_90_1_2007,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-36,38.89
+ASHRAE_90_1_2010,6,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ6 R-16,29.16
+ASHRAE_90_1_2010,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-21,31.59
+ASHRAE_90_1_2010,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-26,34.02
+ASHRAE_90_1_2010,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-31,36.45
+ASHRAE_90_1_2010,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-36,38.89
+ASHRAE_90_1_2013,6,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ6 R-20,29.91
+ASHRAE_90_1_2013,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-25,32.99
+ASHRAE_90_1_2013,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-30,36.08
+ASHRAE_90_1_2013,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-35,39.17
+ASHRAE_90_1_2013,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-40,42.26
+ASHRAE_90_1_2007,7,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ7 R-16,31.41
+ASHRAE_90_1_2007,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-21,33.99
+ASHRAE_90_1_2007,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-26,36.56
+ASHRAE_90_1_2007,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-31,39.13
+ASHRAE_90_1_2007,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-36,41.70
+ASHRAE_90_1_2010,7,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ7 R-16,31.41
+ASHRAE_90_1_2010,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-21,33.99
+ASHRAE_90_1_2010,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-26,36.56
+ASHRAE_90_1_2010,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-31,39.13
+ASHRAE_90_1_2010,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-36,41.70
+ASHRAE_90_1_2013,7,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ7 R-20,31.95
+ASHRAE_90_1_2013,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-25,35.21
+ASHRAE_90_1_2013,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-30,38.48
+ASHRAE_90_1_2013,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-35,41.74
+ASHRAE_90_1_2013,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-40,45.01
+ASHRAE_90_1_2007,8,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ8 R-16,40.35
+ASHRAE_90_1_2007,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-21,44.23
+ASHRAE_90_1_2007,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-26,48.12
+ASHRAE_90_1_2007,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-31,52.00
+ASHRAE_90_1_2007,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-36,55.89
+ASHRAE_90_1_2010,8,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ8 R-16,40.35
+ASHRAE_90_1_2010,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-21,44.23
+ASHRAE_90_1_2010,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-26,48.12
+ASHRAE_90_1_2010,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-31,52.00
+ASHRAE_90_1_2010,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-36,55.89
+ASHRAE_90_1_2013,8,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ8 R-27,42.55
+ASHRAE_90_1_2013,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-32,49.28
+ASHRAE_90_1_2013,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-37,56.02
+ASHRAE_90_1_2013,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-42,62.76
+ASHRAE_90_1_2013,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-47,69.50
+ASHRAE_90_1_2007,1,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ1 R-11,12.72
+ASHRAE_90_1_2007,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-16,14.15
+ASHRAE_90_1_2007,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-21,15.58
+ASHRAE_90_1_2007,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-26,17.00
+ASHRAE_90_1_2007,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-31,18.43
+ASHRAE_90_1_2010,1,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ1 R-11,12.72
+ASHRAE_90_1_2010,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-16,14.15
+ASHRAE_90_1_2010,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-21,15.58
+ASHRAE_90_1_2010,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-26,17.00
+ASHRAE_90_1_2010,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-31,18.43
+ASHRAE_90_1_2013,1,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ1 R-11,12.72
+ASHRAE_90_1_2013,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-16,14.15
+ASHRAE_90_1_2013,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-21,15.58
+ASHRAE_90_1_2013,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-26,17.00
+ASHRAE_90_1_2013,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-31,18.43
+ASHRAE_90_1_2007,2,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ2 R-11,14.12
+ASHRAE_90_1_2007,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-16,15.58
+ASHRAE_90_1_2007,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-21,17.05
+ASHRAE_90_1_2007,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-26,18.52
+ASHRAE_90_1_2007,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-31,19.98
+ASHRAE_90_1_2010,2,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ2 R-11,14.12
+ASHRAE_90_1_2010,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-16,15.58
+ASHRAE_90_1_2010,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-21,17.05
+ASHRAE_90_1_2010,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-26,18.52
+ASHRAE_90_1_2010,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-31,19.98
+ASHRAE_90_1_2013,2,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ2 R-11,14.12
+ASHRAE_90_1_2013,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-16,15.58
+ASHRAE_90_1_2013,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-21,17.05
+ASHRAE_90_1_2013,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-26,18.52
+ASHRAE_90_1_2013,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-31,19.98
+ASHRAE_90_1_2007,3,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ3 R-11,16.47
+ASHRAE_90_1_2007,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-16,18.15
+ASHRAE_90_1_2007,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-21,19.84
+ASHRAE_90_1_2007,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-26,21.52
+ASHRAE_90_1_2007,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-31,23.20
+ASHRAE_90_1_2010,3,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ3 R-11,16.47
+ASHRAE_90_1_2010,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-16,18.15
+ASHRAE_90_1_2010,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-21,19.84
+ASHRAE_90_1_2010,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-26,21.52
+ASHRAE_90_1_2010,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-31,23.20
+ASHRAE_90_1_2013,3,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ3 R-11,16.47
+ASHRAE_90_1_2013,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-16,18.15
+ASHRAE_90_1_2013,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-21,19.84
+ASHRAE_90_1_2013,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-26,21.52
+ASHRAE_90_1_2013,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-31,23.20
+ASHRAE_90_1_2007,4,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ4 R-11,15.18
+ASHRAE_90_1_2007,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-16,16.83
+ASHRAE_90_1_2007,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-21,18.49
+ASHRAE_90_1_2007,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-26,20.15
+ASHRAE_90_1_2007,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-31,21.81
+ASHRAE_90_1_2010,4,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ4 R-11,15.18
+ASHRAE_90_1_2010,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-16,16.83
+ASHRAE_90_1_2010,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-21,18.49
+ASHRAE_90_1_2010,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-26,20.15
+ASHRAE_90_1_2010,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-31,21.81
+ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ4 R-16,16.11
+ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-21,18.60
+ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-26,21.08
+ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-31,23.56
+ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-36,26.04
+ASHRAE_90_1_2007,5,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ5 R-16,19.79
+ASHRAE_90_1_2007,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-21,22.58
+ASHRAE_90_1_2007,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-26,25.37
+ASHRAE_90_1_2007,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-31,28.16
+ASHRAE_90_1_2007,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-36,30.95
+ASHRAE_90_1_2010,5,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ5 R-16,19.79
+ASHRAE_90_1_2010,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-21,22.58
+ASHRAE_90_1_2010,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-26,25.37
+ASHRAE_90_1_2010,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-31,28.16
+ASHRAE_90_1_2010,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-36,30.95
+ASHRAE_90_1_2013,5,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ5 R-20,20.64
+ASHRAE_90_1_2013,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-25,24.19
+ASHRAE_90_1_2013,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-30,27.73
+ASHRAE_90_1_2013,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-35,31.27
+ASHRAE_90_1_2013,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-40,34.82
+ASHRAE_90_1_2007,6,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ6 R-20,17.08
+ASHRAE_90_1_2007,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-25,20.16
+ASHRAE_90_1_2007,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-30,23.25
+ASHRAE_90_1_2007,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-35,26.34
+ASHRAE_90_1_2007,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-40,29.43
+ASHRAE_90_1_2010,6,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ6 R-20,17.08
+ASHRAE_90_1_2010,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-25,20.16
+ASHRAE_90_1_2010,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-30,23.25
+ASHRAE_90_1_2010,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-35,26.34
+ASHRAE_90_1_2010,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-40,29.43
+ASHRAE_90_1_2013,6,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ6 R-20,17.08
+ASHRAE_90_1_2013,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-25,20.16
+ASHRAE_90_1_2013,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-30,23.25
+ASHRAE_90_1_2013,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-35,26.34
+ASHRAE_90_1_2013,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-40,29.43
+ASHRAE_90_1_2007,7,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ7 R-20,17.72
+ASHRAE_90_1_2007,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-25,20.99
+ASHRAE_90_1_2007,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-30,24.25
+ASHRAE_90_1_2007,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-35,27.52
+ASHRAE_90_1_2007,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-40,30.78
+ASHRAE_90_1_2010,7,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ7 R-20,17.72
+ASHRAE_90_1_2010,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-25,20.99
+ASHRAE_90_1_2010,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-30,24.25
+ASHRAE_90_1_2010,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-35,27.52
+ASHRAE_90_1_2010,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-40,30.78
+ASHRAE_90_1_2013,7,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ7 R-20,17.72
+ASHRAE_90_1_2013,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-25,20.99
+ASHRAE_90_1_2013,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-30,24.25
+ASHRAE_90_1_2013,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-35,27.52
+ASHRAE_90_1_2013,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-40,30.78
+ASHRAE_90_1_2007,8,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ8 R-28,7.84
+ASHRAE_90_1_2007,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-33,14.84
+ASHRAE_90_1_2007,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-38,21.83
+ASHRAE_90_1_2007,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-43,28.83
+ASHRAE_90_1_2007,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-48,35.82
+ASHRAE_90_1_2010,8,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ8 R-28,7.84
+ASHRAE_90_1_2010,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-33,14.84
+ASHRAE_90_1_2010,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-38,21.83
+ASHRAE_90_1_2010,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-43,28.83
+ASHRAE_90_1_2010,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-48,35.82
+ASHRAE_90_1_2013,8,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ8 R-31,8.44
+ASHRAE_90_1_2013,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-36,16.21
+ASHRAE_90_1_2013,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-41,23.98
+ASHRAE_90_1_2013,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-46,31.74
+ASHRAE_90_1_2013,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-51,39.51
+ASHRAE_90_1_2007,1,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.28,20.65
+ASHRAE_90_1_2007,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.96 SHGC-0.23 VT-0.25,23.96
+ASHRAE_90_1_2007,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.22,27.26
+ASHRAE_90_1_2007,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.72 SHGC-0.18 VT-0.19,30.56
+ASHRAE_90_1_2007,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.6 SHGC-0.15 VT-0.17,33.87
+ASHRAE_90_1_2010,1,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.28,20.65
+ASHRAE_90_1_2010,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.96 SHGC-0.23 VT-0.25,23.96
+ASHRAE_90_1_2010,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.22,27.26
+ASHRAE_90_1_2010,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.72 SHGC-0.18 VT-0.19,30.56
+ASHRAE_90_1_2010,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.6 SHGC-0.15 VT-0.17,33.87
+ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ1 U-1.1 SHGC-0.25 VT-0.28,20.65
+ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.88 SHGC-0.23 VT-0.25,23.96
+ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.77 SHGC-0.2 VT-0.22,27.26
+ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.66 SHGC-0.18 VT-0.19,30.56
+ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.55 SHGC-0.15 VT-0.17,33.87
+ASHRAE_90_1_2007,2,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.28,23.28
+ASHRAE_90_1_2007,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.6 SHGC-0.23 VT-0.25,27.01
+ASHRAE_90_1_2007,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.22,30.74
+ASHRAE_90_1_2007,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.45 SHGC-0.18 VT-0.19,34.46
+ASHRAE_90_1_2007,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.38 SHGC-0.15 VT-0.17,38.19
+ASHRAE_90_1_2010,2,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.28,23.28
+ASHRAE_90_1_2010,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.6 SHGC-0.23 VT-0.25,27.01
+ASHRAE_90_1_2010,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.22,30.74
+ASHRAE_90_1_2010,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.45 SHGC-0.18 VT-0.19,34.46
+ASHRAE_90_1_2010,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.38 SHGC-0.15 VT-0.17,38.19
+ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ2 U-0.83 SHGC-0.25 VT-0.28,23.28
+ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.66 SHGC-0.23 VT-0.25,27.01
+ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.58 SHGC-0.2 VT-0.22,30.74
+ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.5 SHGC-0.18 VT-0.19,34.46
+ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.42 SHGC-0.15 VT-0.17,38.19
+ASHRAE_90_1_2007,3,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.28,27.11
+ASHRAE_90_1_2007,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.52 SHGC-0.23 VT-0.25,31.45
+ASHRAE_90_1_2007,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.22,35.78
+ASHRAE_90_1_2007,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.39 SHGC-0.18 VT-0.19,40.12
+ASHRAE_90_1_2007,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.33 SHGC-0.15 VT-0.17,44.46
+ASHRAE_90_1_2010,3,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.28,27.11
+ASHRAE_90_1_2010,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.52 SHGC-0.23 VT-0.25,31.45
+ASHRAE_90_1_2010,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.22,35.78
+ASHRAE_90_1_2010,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.39 SHGC-0.18 VT-0.19,40.12
+ASHRAE_90_1_2010,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.33 SHGC-0.15 VT-0.17,44.46
+ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ3 U-0.77 SHGC-0.25 VT-0.28,27.11
+ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.62 SHGC-0.23 VT-0.25,31.45
+ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.54 SHGC-0.2 VT-0.22,35.78
+ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.46 SHGC-0.18 VT-0.19,40.12
+ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.39 SHGC-0.15 VT-0.17,44.46
+ASHRAE_90_1_2007,4,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ4 U-0.55 SHGC-0.4 VT-0.44,24.83
+ASHRAE_90_1_2007,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.44 SHGC-0.36 VT-0.4,28.80
+ASHRAE_90_1_2007,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.39 SHGC-0.32 VT-0.35,32.77
+ASHRAE_90_1_2007,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.33 SHGC-0.28 VT-0.31,36.74
+ASHRAE_90_1_2007,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.28 SHGC-0.24 VT-0.26,40.71
+ASHRAE_90_1_2010,4,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ4 U-0.55 SHGC-0.4 VT-0.44,24.83
+ASHRAE_90_1_2010,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.44 SHGC-0.36 VT-0.4,28.80
+ASHRAE_90_1_2010,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.39 SHGC-0.32 VT-0.35,32.77
+ASHRAE_90_1_2010,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.33 SHGC-0.28 VT-0.31,36.74
+ASHRAE_90_1_2010,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.28 SHGC-0.24 VT-0.26,40.71
+ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ4 U-0.77 SHGC-0.4 VT-0.44,24.83
+ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.62 SHGC-0.36 VT-0.4,28.80
+ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.54 SHGC-0.32 VT-0.35,32.77
+ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.46 SHGC-0.28 VT-0.31,36.74
+ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.39 SHGC-0.24 VT-0.26,40.71
+ASHRAE_90_1_2007,5,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ5 U-0.55 SHGC-0.4 VT-0.44,31.37
+ASHRAE_90_1_2007,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.44 SHGC-0.36 VT-0.4,36.39
+ASHRAE_90_1_2007,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.39 SHGC-0.32 VT-0.35,41.41
+ASHRAE_90_1_2007,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.33 SHGC-0.28 VT-0.31,46.43
+ASHRAE_90_1_2007,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.28 SHGC-0.24 VT-0.26,51.45
+ASHRAE_90_1_2010,5,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ5 U-0.55 SHGC-0.4 VT-0.44,31.37
+ASHRAE_90_1_2010,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.44 SHGC-0.36 VT-0.4,36.39
+ASHRAE_90_1_2010,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.39 SHGC-0.32 VT-0.35,41.41
+ASHRAE_90_1_2010,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.33 SHGC-0.28 VT-0.31,46.43
+ASHRAE_90_1_2010,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.28 SHGC-0.24 VT-0.26,51.45
+ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ5 U-0.77 SHGC-0.4 VT-0.44,31.37
+ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.62 SHGC-0.36 VT-0.4,36.39
+ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.54 SHGC-0.32 VT-0.35,41.41
+ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.46 SHGC-0.28 VT-0.31,46.43
+ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.39 SHGC-0.24 VT-0.26,51.45
+ASHRAE_90_1_2007,6,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ6 U-0.55 SHGC-0.4 VT-0.44,25.54
+ASHRAE_90_1_2007,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.44 SHGC-0.36 VT-0.4,29.62
+ASHRAE_90_1_2007,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.39 SHGC-0.32 VT-0.35,33.71
+ASHRAE_90_1_2007,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.33 SHGC-0.28 VT-0.31,37.79
+ASHRAE_90_1_2007,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.28 SHGC-0.24 VT-0.26,41.88
+ASHRAE_90_1_2010,6,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ6 U-0.55 SHGC-0.4 VT-0.44,25.54
+ASHRAE_90_1_2010,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.44 SHGC-0.36 VT-0.4,29.62
+ASHRAE_90_1_2010,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.39 SHGC-0.32 VT-0.35,33.71
+ASHRAE_90_1_2010,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.33 SHGC-0.28 VT-0.31,37.79
+ASHRAE_90_1_2010,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.28 SHGC-0.24 VT-0.26,41.88
+ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ6 U-0.77 SHGC-0.4 VT-0.44,25.54
+ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.62 SHGC-0.36 VT-0.4,29.62
+ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.54 SHGC-0.32 VT-0.35,33.71
+ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.46 SHGC-0.28 VT-0.31,37.79
+ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.39 SHGC-0.24 VT-0.26,41.88
+ASHRAE_90_1_2007,7,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ7 U-0.45 SHGC-0.45 VT-0.5,28.59
+ASHRAE_90_1_2007,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.36 SHGC-0.41 VT-0.45,33.17
+ASHRAE_90_1_2007,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.32 SHGC-0.36 VT-0.4,37.74
+ASHRAE_90_1_2007,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.27 SHGC-0.32 VT-0.35,42.31
+ASHRAE_90_1_2007,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.23 SHGC-0.27 VT-0.3,46.89
+ASHRAE_90_1_2010,7,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ7 U-0.45 SHGC-0.45 VT-0.5,28.59
+ASHRAE_90_1_2010,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.36 SHGC-0.41 VT-0.45,33.17
+ASHRAE_90_1_2010,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.32 SHGC-0.36 VT-0.4,37.74
+ASHRAE_90_1_2010,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.27 SHGC-0.32 VT-0.35,42.31
+ASHRAE_90_1_2010,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.23 SHGC-0.27 VT-0.3,46.89
+ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ7 U-0.77 SHGC-0.45 VT-0.5,28.59
+ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.62 SHGC-0.41 VT-0.45,33.17
+ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.54 SHGC-0.36 VT-0.4,37.74
+ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.46 SHGC-0.32 VT-0.35,42.31
+ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.39 SHGC-0.27 VT-0.3,46.89
+ASHRAE_90_1_2007,8,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ8 U-0.45 SHGC-0.45 VT-0.5,33.67
+ASHRAE_90_1_2007,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.36 SHGC-0.41 VT-0.45,39.05
+ASHRAE_90_1_2007,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.32 SHGC-0.36 VT-0.4,44.44
+ASHRAE_90_1_2007,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.27 SHGC-0.32 VT-0.35,49.82
+ASHRAE_90_1_2007,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.23 SHGC-0.27 VT-0.3,55.21
+ASHRAE_90_1_2010,8,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ8 U-0.45 SHGC-0.45 VT-0.5,33.67
+ASHRAE_90_1_2010,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.36 SHGC-0.41 VT-0.45,39.05
+ASHRAE_90_1_2010,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.32 SHGC-0.36 VT-0.4,44.44
+ASHRAE_90_1_2010,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.27 SHGC-0.32 VT-0.35,49.82
+ASHRAE_90_1_2010,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.23 SHGC-0.27 VT-0.3,55.21
+ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ8 U-0.77 SHGC-0.45 VT-0.5,33.67
+ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.62 SHGC-0.41 VT-0.45,39.05
+ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.54 SHGC-0.36 VT-0.4,44.44
+ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.46 SHGC-0.32 VT-0.35,49.82
+ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.39 SHGC-0.27 VT-0.3,55.21
+ASHRAE_90_1_2007,1,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ1 U-1.2 SHGC-0.25 VT-0.28,81.38
+ASHRAE_90_1_2007,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.96 SHGC-0.23 VT-0.25,94.40
+ASHRAE_90_1_2007,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.84 SHGC-0.2 VT-0.22,107.42
+ASHRAE_90_1_2007,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.72 SHGC-0.18 VT-0.19,120.44
+ASHRAE_90_1_2007,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.6 SHGC-0.15 VT-0.17,133.46
+ASHRAE_90_1_2010,1,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ1 U-1.2 SHGC-0.25 VT-0.28,81.38
+ASHRAE_90_1_2010,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.96 SHGC-0.23 VT-0.25,94.40
+ASHRAE_90_1_2010,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.84 SHGC-0.2 VT-0.22,107.42
+ASHRAE_90_1_2010,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.72 SHGC-0.18 VT-0.19,120.44
+ASHRAE_90_1_2010,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.6 SHGC-0.15 VT-0.17,133.46
+ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ1 U-0.57 SHGC-0.25 VT-0.28,81.38
+ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.46 SHGC-0.23 VT-0.25,94.40
+ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.4 SHGC-0.2 VT-0.22,107.42
+ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.34 SHGC-0.18 VT-0.19,120.44
+ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.29 SHGC-0.15 VT-0.17,133.46
+ASHRAE_90_1_2007,2,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ2 U-0.7 SHGC-0.25 VT-0.28,91.75
+ASHRAE_90_1_2007,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.56 SHGC-0.23 VT-0.25,106.43
+ASHRAE_90_1_2007,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.49 SHGC-0.2 VT-0.22,121.11
+ASHRAE_90_1_2007,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.42 SHGC-0.18 VT-0.19,135.79
+ASHRAE_90_1_2007,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.35 SHGC-0.15 VT-0.17,150.47
+ASHRAE_90_1_2010,2,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ2 U-0.7 SHGC-0.25 VT-0.28,91.75
+ASHRAE_90_1_2010,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.56 SHGC-0.23 VT-0.25,106.43
+ASHRAE_90_1_2010,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.49 SHGC-0.2 VT-0.22,121.11
+ASHRAE_90_1_2010,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.42 SHGC-0.18 VT-0.19,135.79
+ASHRAE_90_1_2010,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.35 SHGC-0.15 VT-0.17,150.47
+ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ2 U-0.57 SHGC-0.25 VT-0.28,91.75
+ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.46 SHGC-0.23 VT-0.25,106.43
+ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.4 SHGC-0.2 VT-0.22,121.11
+ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.34 SHGC-0.18 VT-0.19,135.79
+ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.29 SHGC-0.15 VT-0.17,150.47
+ASHRAE_90_1_2007,3,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ3 U-0.6 SHGC-0.25 VT-0.28,106.82
+ASHRAE_90_1_2007,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.48 SHGC-0.23 VT-0.25,123.91
+ASHRAE_90_1_2007,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.42 SHGC-0.2 VT-0.22,141.00
+ASHRAE_90_1_2007,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.36 SHGC-0.18 VT-0.19,158.09
+ASHRAE_90_1_2007,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.3 SHGC-0.15 VT-0.17,175.18
+ASHRAE_90_1_2010,3,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ3 U-0.6 SHGC-0.25 VT-0.28,106.82
+ASHRAE_90_1_2010,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.48 SHGC-0.23 VT-0.25,123.91
+ASHRAE_90_1_2010,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.42 SHGC-0.2 VT-0.22,141.00
+ASHRAE_90_1_2010,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.36 SHGC-0.18 VT-0.19,158.09
+ASHRAE_90_1_2010,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.3 SHGC-0.15 VT-0.17,175.18
+ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ3 U-0.5 SHGC-0.25 VT-0.28,106.82
+ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.4 SHGC-0.23 VT-0.25,123.91
+ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.35 SHGC-0.2 VT-0.22,141.00
+ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.3 SHGC-0.18 VT-0.19,158.09
+ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.25 SHGC-0.15 VT-0.17,175.18
+ASHRAE_90_1_2007,4,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ4 U-0.5 SHGC-0.4 VT-0.44,97.83
+ASHRAE_90_1_2007,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.4 SHGC-0.36 VT-0.4,113.48
+ASHRAE_90_1_2007,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.35 SHGC-0.32 VT-0.35,129.13
+ASHRAE_90_1_2007,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.3 SHGC-0.28 VT-0.31,144.78
+ASHRAE_90_1_2007,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.25 SHGC-0.24 VT-0.26,160.43
+ASHRAE_90_1_2010,4,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ4 U-0.5 SHGC-0.4 VT-0.44,97.83
+ASHRAE_90_1_2010,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.4 SHGC-0.36 VT-0.4,113.48
+ASHRAE_90_1_2010,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.35 SHGC-0.32 VT-0.35,129.13
+ASHRAE_90_1_2010,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.3 SHGC-0.28 VT-0.31,144.78
+ASHRAE_90_1_2010,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.25 SHGC-0.24 VT-0.26,160.43
+ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ4 U-0.42 SHGC-0.4 VT-0.44,97.83
+ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.34 SHGC-0.36 VT-0.4,113.48
+ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.29 SHGC-0.32 VT-0.35,129.13
+ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.25 SHGC-0.28 VT-0.31,144.78
+ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.21 SHGC-0.24 VT-0.26,160.43
+ASHRAE_90_1_2007,5,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ5 U-0.45 SHGC-0.4 VT-0.44,123.63
+ASHRAE_90_1_2007,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.36 SHGC-0.36 VT-0.4,143.41
+ASHRAE_90_1_2007,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.32 SHGC-0.32 VT-0.35,163.19
+ASHRAE_90_1_2007,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.27 SHGC-0.28 VT-0.31,182.97
+ASHRAE_90_1_2007,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.23 SHGC-0.24 VT-0.26,202.75
+ASHRAE_90_1_2010,5,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ5 U-0.45 SHGC-0.4 VT-0.44,123.63
+ASHRAE_90_1_2010,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.36 SHGC-0.36 VT-0.4,143.41
+ASHRAE_90_1_2010,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.32 SHGC-0.32 VT-0.35,163.19
+ASHRAE_90_1_2010,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.27 SHGC-0.28 VT-0.31,182.97
+ASHRAE_90_1_2010,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.23 SHGC-0.24 VT-0.26,202.75
+ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ5 U-0.42 SHGC-0.4 VT-0.44,123.63
+ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.34 SHGC-0.36 VT-0.4,143.41
+ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.29 SHGC-0.32 VT-0.35,163.19
+ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.25 SHGC-0.28 VT-0.31,182.97
+ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.21 SHGC-0.24 VT-0.26,202.75
+ASHRAE_90_1_2007,6,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ6 U-0.45 SHGC-0.4 VT-0.44,100.62
+ASHRAE_90_1_2007,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.36 SHGC-0.36 VT-0.4,116.72
+ASHRAE_90_1_2007,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.32 SHGC-0.32 VT-0.35,132.82
+ASHRAE_90_1_2007,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.27 SHGC-0.28 VT-0.31,148.92
+ASHRAE_90_1_2007,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.23 SHGC-0.24 VT-0.26,165.02
+ASHRAE_90_1_2010,6,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ6 U-0.45 SHGC-0.4 VT-0.44,100.62
+ASHRAE_90_1_2010,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.36 SHGC-0.36 VT-0.4,116.72
+ASHRAE_90_1_2010,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.32 SHGC-0.32 VT-0.35,132.82
+ASHRAE_90_1_2010,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.27 SHGC-0.28 VT-0.31,148.92
+ASHRAE_90_1_2010,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.23 SHGC-0.24 VT-0.26,165.02
+ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ6 U-0.42 SHGC-0.4 VT-0.44,100.62
+ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.34 SHGC-0.36 VT-0.4,116.72
+ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.29 SHGC-0.32 VT-0.35,132.82
+ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.25 SHGC-0.28 VT-0.31,148.92
+ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.21 SHGC-0.24 VT-0.26,165.02
+ASHRAE_90_1_2007,7,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ7 U-0.4 SHGC-0.45 VT-0.5,112.66
+ASHRAE_90_1_2007,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.32 SHGC-0.41 VT-0.45,130.69
+ASHRAE_90_1_2007,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.28 SHGC-0.36 VT-0.4,148.71
+ASHRAE_90_1_2007,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.24 SHGC-0.32 VT-0.35,166.74
+ASHRAE_90_1_2007,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.2 SHGC-0.27 VT-0.3,184.76
+ASHRAE_90_1_2010,7,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ7 U-0.4 SHGC-0.45 VT-0.5,112.66
+ASHRAE_90_1_2010,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.32 SHGC-0.41 VT-0.45,130.69
+ASHRAE_90_1_2010,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.28 SHGC-0.36 VT-0.4,148.71
+ASHRAE_90_1_2010,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.24 SHGC-0.32 VT-0.35,166.74
+ASHRAE_90_1_2010,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.2 SHGC-0.27 VT-0.3,184.76
+ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ7 U-0.38 SHGC-0.45 VT-0.5,112.66
+ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.3 SHGC-0.41 VT-0.45,130.69
+ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.27 SHGC-0.36 VT-0.4,148.71
+ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.23 SHGC-0.32 VT-0.35,166.74
+ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.19 SHGC-0.27 VT-0.3,184.76
+ASHRAE_90_1_2007,8,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ8 U-0.4 SHGC-0.45 VT-0.5,132.66
+ASHRAE_90_1_2007,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.32 SHGC-0.41 VT-0.45,153.88
+ASHRAE_90_1_2007,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.28 SHGC-0.36 VT-0.4,175.10
+ASHRAE_90_1_2007,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.24 SHGC-0.32 VT-0.35,196.33
+ASHRAE_90_1_2007,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.2 SHGC-0.27 VT-0.3,217.55
+ASHRAE_90_1_2010,8,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ8 U-0.4 SHGC-0.45 VT-0.5,132.66
+ASHRAE_90_1_2010,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.32 SHGC-0.41 VT-0.45,153.88
+ASHRAE_90_1_2010,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.28 SHGC-0.36 VT-0.4,175.10
+ASHRAE_90_1_2010,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.24 SHGC-0.32 VT-0.35,196.33
+ASHRAE_90_1_2010,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.2 SHGC-0.27 VT-0.3,217.55
+ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ8 U-0.38 SHGC-0.45 VT-0.5,132.66
+ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.3 SHGC-0.41 VT-0.45,153.88
+ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.27 SHGC-0.36 VT-0.4,175.10
+ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.23 SHGC-0.32 VT-0.35,196.33
+ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.19 SHGC-0.27 VT-0.3,217.55
+ASHRAE_90_1_2007,1,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.28,23.24
+ASHRAE_90_1_2007,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.96 SHGC-0.23 VT-0.25,26.96
+ASHRAE_90_1_2007,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.22,30.68
+ASHRAE_90_1_2007,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.72 SHGC-0.18 VT-0.19,34.40
+ASHRAE_90_1_2007,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.6 SHGC-0.15 VT-0.17,38.12
+ASHRAE_90_1_2010,1,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ1 U-1.2 SHGC-0.25 VT-0.28,23.24
+ASHRAE_90_1_2010,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.96 SHGC-0.23 VT-0.25,26.96
+ASHRAE_90_1_2010,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.84 SHGC-0.2 VT-0.22,30.68
+ASHRAE_90_1_2010,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.72 SHGC-0.18 VT-0.19,34.40
+ASHRAE_90_1_2010,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.6 SHGC-0.15 VT-0.17,38.12
+ASHRAE_90_1_2013,1,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ1 U-0.5 SHGC-0.25 VT-0.28,23.24
+ASHRAE_90_1_2013,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.4 SHGC-0.23 VT-0.25,26.96
+ASHRAE_90_1_2013,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.35 SHGC-0.2 VT-0.22,30.68
+ASHRAE_90_1_2013,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.3 SHGC-0.18 VT-0.19,34.40
+ASHRAE_90_1_2013,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.25 SHGC-0.15 VT-0.17,38.12
+ASHRAE_90_1_2007,2,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.28,26.21
+ASHRAE_90_1_2007,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.6 SHGC-0.23 VT-0.25,30.40
+ASHRAE_90_1_2007,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.22,34.59
+ASHRAE_90_1_2007,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.45 SHGC-0.18 VT-0.19,38.78
+ASHRAE_90_1_2007,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.38 SHGC-0.15 VT-0.17,42.98
+ASHRAE_90_1_2010,2,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ2 U-0.75 SHGC-0.25 VT-0.28,26.21
+ASHRAE_90_1_2010,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.6 SHGC-0.23 VT-0.25,30.40
+ASHRAE_90_1_2010,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.52 SHGC-0.2 VT-0.22,34.59
+ASHRAE_90_1_2010,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.45 SHGC-0.18 VT-0.19,38.78
+ASHRAE_90_1_2010,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.38 SHGC-0.15 VT-0.17,42.98
+ASHRAE_90_1_2013,2,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ2 U-0.4 SHGC-0.25 VT-0.28,26.21
+ASHRAE_90_1_2013,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.32 SHGC-0.23 VT-0.25,30.40
+ASHRAE_90_1_2013,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.28 SHGC-0.2 VT-0.22,34.59
+ASHRAE_90_1_2013,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.24 SHGC-0.18 VT-0.19,38.78
+ASHRAE_90_1_2013,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.2 SHGC-0.15 VT-0.17,42.98
+ASHRAE_90_1_2007,3,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.28,30.51
+ASHRAE_90_1_2007,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.52 SHGC-0.23 VT-0.25,35.39
+ASHRAE_90_1_2007,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.22,40.27
+ASHRAE_90_1_2007,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.39 SHGC-0.18 VT-0.19,45.15
+ASHRAE_90_1_2007,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.33 SHGC-0.15 VT-0.17,50.04
+ASHRAE_90_1_2010,3,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ3 U-0.65 SHGC-0.25 VT-0.28,30.51
+ASHRAE_90_1_2010,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.52 SHGC-0.23 VT-0.25,35.39
+ASHRAE_90_1_2010,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.45 SHGC-0.2 VT-0.22,40.27
+ASHRAE_90_1_2010,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.39 SHGC-0.18 VT-0.19,45.15
+ASHRAE_90_1_2010,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.33 SHGC-0.15 VT-0.17,50.04
+ASHRAE_90_1_2013,3,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ3 U-0.35 SHGC-0.25 VT-0.28,30.51
+ASHRAE_90_1_2013,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.28 SHGC-0.23 VT-0.25,35.39
+ASHRAE_90_1_2013,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.24 SHGC-0.2 VT-0.22,40.27
+ASHRAE_90_1_2013,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.21 SHGC-0.18 VT-0.19,45.15
+ASHRAE_90_1_2013,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.18 SHGC-0.15 VT-0.17,50.04
+ASHRAE_90_1_2007,4,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ4 U-0.4 SHGC-0.4 VT-0.44,27.94
+ASHRAE_90_1_2007,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.32 SHGC-0.36 VT-0.4,32.41
+ASHRAE_90_1_2007,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.28 SHGC-0.32 VT-0.35,36.88
+ASHRAE_90_1_2007,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.24 SHGC-0.28 VT-0.31,41.35
+ASHRAE_90_1_2007,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.2 SHGC-0.24 VT-0.26,45.82
+ASHRAE_90_1_2010,4,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ4 U-0.4 SHGC-0.4 VT-0.44,27.94
+ASHRAE_90_1_2010,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.32 SHGC-0.36 VT-0.4,32.41
+ASHRAE_90_1_2010,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.28 SHGC-0.32 VT-0.35,36.88
+ASHRAE_90_1_2010,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.24 SHGC-0.28 VT-0.31,41.35
+ASHRAE_90_1_2010,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.2 SHGC-0.24 VT-0.26,45.82
+ASHRAE_90_1_2013,4,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ4 U-0.35 SHGC-0.4 VT-0.44,27.94
+ASHRAE_90_1_2013,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.28 SHGC-0.36 VT-0.4,32.41
+ASHRAE_90_1_2013,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.24 SHGC-0.32 VT-0.35,36.88
+ASHRAE_90_1_2013,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.21 SHGC-0.28 VT-0.31,41.35
+ASHRAE_90_1_2013,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.18 SHGC-0.24 VT-0.26,45.82
+ASHRAE_90_1_2007,5,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ5 U-0.35 SHGC-0.4 VT-0.44,35.31
+ASHRAE_90_1_2007,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.28 SHGC-0.36 VT-0.4,40.96
+ASHRAE_90_1_2007,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.24 SHGC-0.32 VT-0.35,46.61
+ASHRAE_90_1_2007,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.21 SHGC-0.28 VT-0.31,52.26
+ASHRAE_90_1_2007,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.18 SHGC-0.24 VT-0.26,57.91
+ASHRAE_90_1_2010,5,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ5 U-0.35 SHGC-0.4 VT-0.44,35.31
+ASHRAE_90_1_2010,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.28 SHGC-0.36 VT-0.4,40.96
+ASHRAE_90_1_2010,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.24 SHGC-0.32 VT-0.35,46.61
+ASHRAE_90_1_2010,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.21 SHGC-0.28 VT-0.31,52.26
+ASHRAE_90_1_2010,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.18 SHGC-0.24 VT-0.26,57.91
+ASHRAE_90_1_2013,5,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ5 U-0.32 SHGC-0.4 VT-0.44,35.31
+ASHRAE_90_1_2013,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.26 SHGC-0.36 VT-0.4,40.96
+ASHRAE_90_1_2013,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.22 SHGC-0.32 VT-0.35,46.61
+ASHRAE_90_1_2013,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.19 SHGC-0.28 VT-0.31,52.26
+ASHRAE_90_1_2013,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.16 SHGC-0.24 VT-0.26,57.91
+ASHRAE_90_1_2007,6,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ6 U-0.35 SHGC-0.4 VT-0.44,28.74
+ASHRAE_90_1_2007,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.28 SHGC-0.36 VT-0.4,33.34
+ASHRAE_90_1_2007,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.24 SHGC-0.32 VT-0.35,37.94
+ASHRAE_90_1_2007,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.21 SHGC-0.28 VT-0.31,42.53
+ASHRAE_90_1_2007,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.18 SHGC-0.24 VT-0.26,47.13
+ASHRAE_90_1_2010,6,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ6 U-0.35 SHGC-0.4 VT-0.44,28.74
+ASHRAE_90_1_2010,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.28 SHGC-0.36 VT-0.4,33.34
+ASHRAE_90_1_2010,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.24 SHGC-0.32 VT-0.35,37.94
+ASHRAE_90_1_2010,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.21 SHGC-0.28 VT-0.31,42.53
+ASHRAE_90_1_2010,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.18 SHGC-0.24 VT-0.26,47.13
+ASHRAE_90_1_2013,6,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ6 U-0.32 SHGC-0.4 VT-0.44,28.74
+ASHRAE_90_1_2013,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.26 SHGC-0.36 VT-0.4,33.34
+ASHRAE_90_1_2013,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.22 SHGC-0.32 VT-0.35,37.94
+ASHRAE_90_1_2013,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.19 SHGC-0.28 VT-0.31,42.53
+ASHRAE_90_1_2013,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.16 SHGC-0.24 VT-0.26,47.13
+ASHRAE_90_1_2007,7,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ7 U-0.35 SHGC-0.45 VT-0.5,32.18
+ASHRAE_90_1_2007,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.28 SHGC-0.41 VT-0.45,37.33
+ASHRAE_90_1_2007,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.24 SHGC-0.36 VT-0.4,42.47
+ASHRAE_90_1_2007,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.21 SHGC-0.32 VT-0.35,47.62
+ASHRAE_90_1_2007,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.18 SHGC-0.27 VT-0.3,52.77
+ASHRAE_90_1_2010,7,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ7 U-0.35 SHGC-0.45 VT-0.5,32.18
+ASHRAE_90_1_2010,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.28 SHGC-0.41 VT-0.45,37.33
+ASHRAE_90_1_2010,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.24 SHGC-0.36 VT-0.4,42.47
+ASHRAE_90_1_2010,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.21 SHGC-0.32 VT-0.35,47.62
+ASHRAE_90_1_2010,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.18 SHGC-0.27 VT-0.3,52.77
+ASHRAE_90_1_2013,7,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ7 U-0.32 SHGC-0.45 VT-0.5,32.18
+ASHRAE_90_1_2013,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.26 SHGC-0.41 VT-0.45,37.33
+ASHRAE_90_1_2013,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.22 SHGC-0.36 VT-0.4,42.47
+ASHRAE_90_1_2013,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.19 SHGC-0.32 VT-0.35,47.62
+ASHRAE_90_1_2013,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.16 SHGC-0.27 VT-0.3,52.77
+ASHRAE_90_1_2007,8,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ8 U-0.35 SHGC-0.45 VT-0.5,37.89
+ASHRAE_90_1_2007,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.28 SHGC-0.41 VT-0.45,43.95
+ASHRAE_90_1_2007,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.24 SHGC-0.36 VT-0.4,50.01
+ASHRAE_90_1_2007,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.21 SHGC-0.32 VT-0.35,56.07
+ASHRAE_90_1_2007,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.18 SHGC-0.27 VT-0.3,62.14
+ASHRAE_90_1_2010,8,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ8 U-0.35 SHGC-0.45 VT-0.5,37.89
+ASHRAE_90_1_2010,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.28 SHGC-0.41 VT-0.45,43.95
+ASHRAE_90_1_2010,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.24 SHGC-0.36 VT-0.4,50.01
+ASHRAE_90_1_2010,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.21 SHGC-0.32 VT-0.35,56.07
+ASHRAE_90_1_2010,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.18 SHGC-0.27 VT-0.3,62.14
+ASHRAE_90_1_2013,8,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ8 U-0.32 SHGC-0.45 VT-0.5,37.89
+ASHRAE_90_1_2013,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.26 SHGC-0.41 VT-0.45,43.95
+ASHRAE_90_1_2013,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.22 SHGC-0.36 VT-0.4,50.01
+ASHRAE_90_1_2013,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.19 SHGC-0.32 VT-0.35,56.07
+ASHRAE_90_1_2013,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.16 SHGC-0.27 VT-0.3,62.14
+ASHRAE_90_1_2007,1,Floors,,Typical Interior Floor,29.29
+ASHRAE_90_1_2010,1,Floors,,Typical Interior Floor,29.29
+ASHRAE_90_1_2013,1,Floors,,Typical Interior Floor,29.29
+ASHRAE_90_1_2007,2,Floors,,Typical Interior Floor,29.39
+ASHRAE_90_1_2010,2,Floors,,Typical Interior Floor,29.39
+ASHRAE_90_1_2013,2,Floors,,Typical Interior Floor,29.39
+ASHRAE_90_1_2007,3,Floors,,Typical Interior Floor,32.62
+ASHRAE_90_1_2010,3,Floors,,Typical Interior Floor,32.62
+ASHRAE_90_1_2013,3,Floors,,Typical Interior Floor,32.62
+ASHRAE_90_1_2007,4,Floors,,Typical Interior Floor,32.59
+ASHRAE_90_1_2010,4,Floors,,Typical Interior Floor,32.59
+ASHRAE_90_1_2013,4,Floors,,Typical Interior Floor,32.59
+ASHRAE_90_1_2007,5,Floors,,Typical Interior Floor,36.09
+ASHRAE_90_1_2010,5,Floors,,Typical Interior Floor,36.09
+ASHRAE_90_1_2013,5,Floors,,Typical Interior Floor,36.09
+ASHRAE_90_1_2007,6,Floors,,Typical Interior Floor,31.65
+ASHRAE_90_1_2010,6,Floors,,Typical Interior Floor,31.65
+ASHRAE_90_1_2013,6,Floors,,Typical Interior Floor,31.65
+ASHRAE_90_1_2007,7,Floors,,Typical Interior Floor,34.00
+ASHRAE_90_1_2010,7,Floors,,Typical Interior Floor,34.00
+ASHRAE_90_1_2013,7,Floors,,Typical Interior Floor,34.00
+ASHRAE_90_1_2007,8,Floors,,Typical Interior Floor,40.03
+ASHRAE_90_1_2010,8,Floors,,Typical Interior Floor,40.03
+ASHRAE_90_1_2013,8,Floors,,Typical Interior Floor,40.03
+ASHRAE_90_1_2007,1,Foundation,,Typical Insulated Slab CZ1 R-3,6.60
+ASHRAE_90_1_2010,1,Foundation,,Typical Insulated Slab CZ1 R-3,6.60
+ASHRAE_90_1_2013,1,Foundation,,Typical Insulated Slab CZ1 R-3,6.60
+ASHRAE_90_1_2007,2,Foundation,,Typical Insulated Slab CZ2 R-3,6.39
+ASHRAE_90_1_2010,2,Foundation,,Typical Insulated Slab CZ2 R-3,6.39
+ASHRAE_90_1_2013,2,Foundation,,Typical Insulated Slab CZ2 R-3,6.39
+ASHRAE_90_1_2007,3,Foundation,,Typical Insulated Slab CZ3 R-3,6.60
+ASHRAE_90_1_2010,3,Foundation,,Typical Insulated Slab CZ3 R-3,6.60
+ASHRAE_90_1_2013,3,Foundation,,Typical Insulated Slab CZ3 R-3,6.60
+ASHRAE_90_1_2007,4,Foundation,,Typical Insulated Slab CZ4 R-3,6.60
+ASHRAE_90_1_2010,4,Foundation,,Typical Insulated Slab CZ4 R-3,6.60
+ASHRAE_90_1_2013,4,Foundation,,Typical Insulated Slab CZ4 R-3,6.60
+ASHRAE_90_1_2007,5,Foundation,,Typical Insulated Slab CZ5 R-3,4.01
+ASHRAE_90_1_2010,5,Foundation,,Typical Insulated Slab CZ5 R-3,4.01
+ASHRAE_90_1_2013,5,Foundation,,Typical Insulated Slab CZ5 R-3,4.01
+ASHRAE_90_1_2007,6,Foundation,,Typical Insulated Slab CZ6 R-3,6.60
+ASHRAE_90_1_2010,6,Foundation,,Typical Insulated Slab CZ6 R-3,6.60
+ASHRAE_90_1_2013,6,Foundation,,Typical Insulated Slab CZ6 R-3,6.60
+ASHRAE_90_1_2007,7,Foundation,,Typical Insulated Slab CZ7 R-3,6.51
+ASHRAE_90_1_2010,7,Foundation,,Typical Insulated Slab CZ7 R-3,6.51
+ASHRAE_90_1_2013,7,Foundation,,Typical Insulated Slab CZ7 R-3,6.51
+ASHRAE_90_1_2007,8,Foundation,,Typical Insulated Slab CZ8 R-3,8.87
+ASHRAE_90_1_2010,8,Foundation,,Typical Insulated Slab CZ8 R-3,8.87
+ASHRAE_90_1_2013,8,Foundation,,Typical Insulated Slab CZ8 R-3,8.87
+ASHRAE_90_1_2007,1,Interior_Walls,,Typical Interior Wall,4.67
+ASHRAE_90_1_2010,1,Interior_Walls,,Typical Interior Wall,4.67
+ASHRAE_90_1_2013,1,Interior_Walls,,Typical Interior Wall,4.67
+ASHRAE_90_1_2007,2,Interior_Walls,,Typical Interior Wall,5.02
+ASHRAE_90_1_2010,2,Interior_Walls,,Typical Interior Wall,5.02
+ASHRAE_90_1_2013,2,Interior_Walls,,Typical Interior Wall,5.02
+ASHRAE_90_1_2007,3,Interior_Walls,,Typical Interior Wall,5.68
+ASHRAE_90_1_2010,3,Interior_Walls,,Typical Interior Wall,5.68
+ASHRAE_90_1_2013,3,Interior_Walls,,Typical Interior Wall,5.68
+ASHRAE_90_1_2007,4,Interior_Walls,,Typical Interior Wall,5.28
+ASHRAE_90_1_2010,4,Interior_Walls,,Typical Interior Wall,5.28
+ASHRAE_90_1_2013,4,Interior_Walls,,Typical Interior Wall,5.28
+ASHRAE_90_1_2007,5,Interior_Walls,,Typical Interior Wall,6.07
+ASHRAE_90_1_2010,5,Interior_Walls,,Typical Interior Wall,6.07
+ASHRAE_90_1_2013,5,Interior_Walls,,Typical Interior Wall,6.07
+ASHRAE_90_1_2007,6,Interior_Walls,,Typical Interior Wall,5.26
+ASHRAE_90_1_2010,6,Interior_Walls,,Typical Interior Wall,5.26
+ASHRAE_90_1_2013,6,Interior_Walls,,Typical Interior Wall,5.26
+ASHRAE_90_1_2007,7,Interior_Walls,,Typical Interior Wall,5.90
+ASHRAE_90_1_2010,7,Interior_Walls,,Typical Interior Wall,5.90
+ASHRAE_90_1_2013,7,Interior_Walls,,Typical Interior Wall,5.90
+ASHRAE_90_1_2007,8,Interior_Walls,,Typical Interior Wall,7.30
+ASHRAE_90_1_2010,8,Interior_Walls,,Typical Interior Wall,7.30
+ASHRAE_90_1_2013,8,Interior_Walls,,Typical Interior Wall,7.30
+ASHRAE_90_1_2007,1,Roof,Attic_and_Other,Typical Attic & Other Roof CZ1 R-29,17.50
+ASHRAE_90_1_2007,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-39,25.61
+ASHRAE_90_1_2007,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-44,29.67
+ASHRAE_90_1_2007,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-49,33.72
+ASHRAE_90_1_2007,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-54,37.78
+ASHRAE_90_1_2010,1,Roof,Attic_and_Other,Typical Attic & Other Roof CZ1 R-29,19.42
+ASHRAE_90_1_2010,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-39,30.08
+ASHRAE_90_1_2010,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-44,35.41
+ASHRAE_90_1_2010,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-49,40.73
+ASHRAE_90_1_2010,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-54,46.06
+ASHRAE_90_1_2013,1,Roof,Attic_and_Other,Typical Attic & Other Roof CZ1 R-37,22.26
+ASHRAE_90_1_2013,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-47,34.49
+ASHRAE_90_1_2013,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-52,40.61
+ASHRAE_90_1_2013,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-57,46.73
+ASHRAE_90_1_2013,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-62,52.84
+ASHRAE_90_1_2007,2,Roof,Attic_and_Other,Typical Attic & Other Roof CZ2 R-37,21.70
+ASHRAE_90_1_2007,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-47,33.74
+ASHRAE_90_1_2007,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-52,39.77
+ASHRAE_90_1_2007,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-57,45.79
+ASHRAE_90_1_2007,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-62,51.81
+ASHRAE_90_1_2010,2,Roof,Attic_and_Other,Typical Attic & Other Roof CZ2 R-37,24.81
+ASHRAE_90_1_2010,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-47,38.35
+ASHRAE_90_1_2010,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-52,45.13
+ASHRAE_90_1_2010,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-57,51.90
+ASHRAE_90_1_2010,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-62,58.68
+ASHRAE_90_1_2013,2,Roof,Attic_and_Other,Typical Attic & Other Roof CZ2 R-37,21.27
+ASHRAE_90_1_2013,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-47,33.08
+ASHRAE_90_1_2013,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-52,38.98
+ASHRAE_90_1_2013,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-57,44.89
+ASHRAE_90_1_2013,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-62,50.79
+ASHRAE_90_1_2007,3,Roof,Attic_and_Other,Typical Attic & Other Roof CZ3 R-37,20.91
+ASHRAE_90_1_2007,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-47,33.39
+ASHRAE_90_1_2007,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-52,39.63
+ASHRAE_90_1_2007,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-57,45.87
+ASHRAE_90_1_2007,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-62,52.12
+ASHRAE_90_1_2010,3,Roof,Attic_and_Other,Typical Attic & Other Roof CZ3 R-37,31.35
+ASHRAE_90_1_2010,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-47,55.88
+ASHRAE_90_1_2010,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-52,68.15
+ASHRAE_90_1_2010,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-57,80.41
+ASHRAE_90_1_2010,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-62,92.68
+ASHRAE_90_1_2013,3,Roof,Attic_and_Other,Typical Attic & Other Roof CZ3 R-37,17.50
+ASHRAE_90_1_2013,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-47,25.61
+ASHRAE_90_1_2013,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-52,29.67
+ASHRAE_90_1_2013,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-57,33.72
+ASHRAE_90_1_2013,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-62,37.78
+ASHRAE_90_1_2007,4,Roof,Attic_and_Other,Typical Attic & Other Roof CZ4 R-37,22.26
+ASHRAE_90_1_2007,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-47,34.49
+ASHRAE_90_1_2007,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-52,40.61
+ASHRAE_90_1_2007,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-57,46.73
+ASHRAE_90_1_2007,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-62,52.84
+ASHRAE_90_1_2010,4,Roof,Attic_and_Other,Typical Attic & Other Roof CZ4 R-37,21.70
+ASHRAE_90_1_2010,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-47,33.74
+ASHRAE_90_1_2010,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-52,39.77
+ASHRAE_90_1_2010,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-57,45.79
+ASHRAE_90_1_2010,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-62,51.81
+ASHRAE_90_1_2013,4,Roof,Attic_and_Other,Typical Attic & Other Roof CZ4 R-48,24.81
+ASHRAE_90_1_2013,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-58,38.35
+ASHRAE_90_1_2013,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-63,45.13
+ASHRAE_90_1_2013,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-68,51.90
+ASHRAE_90_1_2013,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-73,58.68
+ASHRAE_90_1_2007,5,Roof,Attic_and_Other,Typical Attic & Other Roof CZ5 R-37,21.27
+ASHRAE_90_1_2007,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-47,33.08
+ASHRAE_90_1_2007,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-52,38.98
+ASHRAE_90_1_2007,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-57,44.89
+ASHRAE_90_1_2007,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-62,50.79
+ASHRAE_90_1_2010,5,Roof,Attic_and_Other,Typical Attic & Other Roof CZ5 R-37,19.42
+ASHRAE_90_1_2010,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-47,30.08
+ASHRAE_90_1_2010,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-52,35.41
+ASHRAE_90_1_2010,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-57,40.73
+ASHRAE_90_1_2010,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-62,46.06
+ASHRAE_90_1_2013,5,Roof,Attic_and_Other,Typical Attic & Other Roof CZ5 R-48,20.91
+ASHRAE_90_1_2013,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-58,33.39
+ASHRAE_90_1_2013,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-63,39.63
+ASHRAE_90_1_2013,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-68,45.87
+ASHRAE_90_1_2013,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-73,52.12
+ASHRAE_90_1_2007,6,Roof,Attic_and_Other,Typical Attic & Other Roof CZ6 R-37,31.35
+ASHRAE_90_1_2007,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-47,55.88
+ASHRAE_90_1_2007,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-52,68.15
+ASHRAE_90_1_2007,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-57,80.41
+ASHRAE_90_1_2007,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-62,92.68
+ASHRAE_90_1_2010,6,Roof,Attic_and_Other,Typical Attic & Other Roof CZ6 R-37,18.79
+ASHRAE_90_1_2010,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-47,29.18
+ASHRAE_90_1_2010,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-52,34.37
+ASHRAE_90_1_2010,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-57,39.56
+ASHRAE_90_1_2010,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-62,44.75
+ASHRAE_90_1_2013,6,Roof,Attic_and_Other,Typical Attic & Other Roof CZ6 R-48,19.42
+ASHRAE_90_1_2013,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-58,30.08
+ASHRAE_90_1_2013,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-63,35.41
+ASHRAE_90_1_2013,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-68,40.73
+ASHRAE_90_1_2013,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-73,46.06
+ASHRAE_90_1_2007,7,Roof,Attic_and_Other,Typical Attic & Other Roof CZ7 R-37,22.26
+ASHRAE_90_1_2007,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-47,34.49
+ASHRAE_90_1_2007,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-52,40.61
+ASHRAE_90_1_2007,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-57,46.73
+ASHRAE_90_1_2007,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-62,52.84
+ASHRAE_90_1_2010,7,Roof,Attic_and_Other,Typical Attic & Other Roof CZ7 R-37,23.76
+ASHRAE_90_1_2010,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-47,39.43
+ASHRAE_90_1_2010,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-52,47.27
+ASHRAE_90_1_2010,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-57,55.11
+ASHRAE_90_1_2010,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-62,62.94
+ASHRAE_90_1_2013,7,Roof,Attic_and_Other,Typical Attic & Other Roof CZ7 R-59,27.13
+ASHRAE_90_1_2013,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-69,44.75
+ASHRAE_90_1_2013,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-74,53.57
+ASHRAE_90_1_2013,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-79,62.38
+ASHRAE_90_1_2013,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-84,71.19
+ASHRAE_90_1_2007,8,Roof,Attic_and_Other,Typical Attic & Other Roof CZ8 R-48,23.29
+ASHRAE_90_1_2007,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-58,38.66
+ASHRAE_90_1_2007,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-63,46.34
+ASHRAE_90_1_2007,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-68,54.02
+ASHRAE_90_1_2007,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-73,61.70
+ASHRAE_90_1_2010,8,Roof,Attic_and_Other,Typical Attic & Other Roof CZ8 R-48,23.80
+ASHRAE_90_1_2010,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-58,43.79
+ASHRAE_90_1_2010,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-63,53.79
+ASHRAE_90_1_2010,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-68,63.79
+ASHRAE_90_1_2010,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-73,73.79
+ASHRAE_90_1_2013,8,Roof,Attic_and_Other,Typical Attic & Other Roof CZ8 R-59,33.53
+ASHRAE_90_1_2013,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-69,63.74
+ASHRAE_90_1_2013,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-74,78.84
+ASHRAE_90_1_2013,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-79,93.94
+ASHRAE_90_1_2013,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-84,109.05
+ASHRAE_90_1_2007,1,Roof,IEAD,Typical IEAD Roof CZ1 R-16,14.18
+ASHRAE_90_1_2007,1,Roof,IEAD,IEAD Roof CZ1 R-26,18.59
+ASHRAE_90_1_2007,1,Roof,IEAD,IEAD Roof CZ1 R-31,20.79
+ASHRAE_90_1_2007,1,Roof,IEAD,IEAD Roof CZ1 R-36,22.99
+ASHRAE_90_1_2007,1,Roof,IEAD,IEAD Roof CZ1 R-41,25.19
+ASHRAE_90_1_2010,1,Roof,IEAD,Typical IEAD Roof CZ1 R-16,15.23
+ASHRAE_90_1_2010,1,Roof,IEAD,IEAD Roof CZ1 R-26,21.20
+ASHRAE_90_1_2010,1,Roof,IEAD,IEAD Roof CZ1 R-31,24.19
+ASHRAE_90_1_2010,1,Roof,IEAD,IEAD Roof CZ1 R-36,27.18
+ASHRAE_90_1_2010,1,Roof,IEAD,IEAD Roof CZ1 R-41,30.17
+ASHRAE_90_1_2013,1,Roof,IEAD,Typical IEAD Roof CZ1 R-21,17.34
+ASHRAE_90_1_2013,1,Roof,IEAD,IEAD Roof CZ1 R-31,24.20
+ASHRAE_90_1_2013,1,Roof,IEAD,IEAD Roof CZ1 R-36,27.63
+ASHRAE_90_1_2013,1,Roof,IEAD,IEAD Roof CZ1 R-41,31.06
+ASHRAE_90_1_2013,1,Roof,IEAD,IEAD Roof CZ1 R-46,34.49
+ASHRAE_90_1_2007,2,Roof,IEAD,Typical IEAD Roof CZ2 R-21,17.19
+ASHRAE_90_1_2007,2,Roof,IEAD,IEAD Roof CZ2 R-31,23.94
+ASHRAE_90_1_2007,2,Roof,IEAD,IEAD Roof CZ2 R-36,27.32
+ASHRAE_90_1_2007,2,Roof,IEAD,IEAD Roof CZ2 R-41,30.70
+ASHRAE_90_1_2007,2,Roof,IEAD,IEAD Roof CZ2 R-46,34.08
+ASHRAE_90_1_2010,2,Roof,IEAD,Typical IEAD Roof CZ2 R-21,19.79
+ASHRAE_90_1_2010,2,Roof,IEAD,IEAD Roof CZ2 R-31,27.38
+ASHRAE_90_1_2010,2,Roof,IEAD,IEAD Roof CZ2 R-36,31.18
+ASHRAE_90_1_2010,2,Roof,IEAD,IEAD Roof CZ2 R-41,34.98
+ASHRAE_90_1_2010,2,Roof,IEAD,IEAD Roof CZ2 R-46,38.78
+ASHRAE_90_1_2013,2,Roof,IEAD,Typical IEAD Roof CZ2 R-26,16.73
+ASHRAE_90_1_2013,2,Roof,IEAD,IEAD Roof CZ2 R-36,23.35
+ASHRAE_90_1_2013,2,Roof,IEAD,IEAD Roof CZ2 R-41,26.67
+ASHRAE_90_1_2013,2,Roof,IEAD,IEAD Roof CZ2 R-46,29.98
+ASHRAE_90_1_2013,2,Roof,IEAD,IEAD Roof CZ2 R-51,33.29
+ASHRAE_90_1_2007,3,Roof,IEAD,Typical IEAD Roof CZ3 R-21,16.76
+ASHRAE_90_1_2007,3,Roof,IEAD,IEAD Roof CZ3 R-31,23.76
+ASHRAE_90_1_2007,3,Roof,IEAD,IEAD Roof CZ3 R-36,27.26
+ASHRAE_90_1_2007,3,Roof,IEAD,IEAD Roof CZ3 R-41,30.76
+ASHRAE_90_1_2007,3,Roof,IEAD,IEAD Roof CZ3 R-46,34.26
+ASHRAE_90_1_2010,3,Roof,IEAD,Typical IEAD Roof CZ3 R-21,25.71
+ASHRAE_90_1_2010,3,Roof,IEAD,IEAD Roof CZ3 R-31,36.29
+ASHRAE_90_1_2010,3,Roof,IEAD,IEAD Roof CZ3 R-36,41.57
+ASHRAE_90_1_2010,3,Roof,IEAD,IEAD Roof CZ3 R-41,46.86
+ASHRAE_90_1_2010,3,Roof,IEAD,IEAD Roof CZ3 R-46,52.15
+ASHRAE_90_1_2013,3,Roof,IEAD,Typical IEAD Roof CZ3 R-26,14.18
+ASHRAE_90_1_2013,3,Roof,IEAD,IEAD Roof CZ3 R-36,18.59
+ASHRAE_90_1_2013,3,Roof,IEAD,IEAD Roof CZ3 R-41,20.79
+ASHRAE_90_1_2013,3,Roof,IEAD,IEAD Roof CZ3 R-46,22.99
+ASHRAE_90_1_2013,3,Roof,IEAD,IEAD Roof CZ3 R-51,25.19
+ASHRAE_90_1_2007,4,Roof,IEAD,Typical IEAD Roof CZ4 R-21,17.34
+ASHRAE_90_1_2007,4,Roof,IEAD,IEAD Roof CZ4 R-31,24.20
+ASHRAE_90_1_2007,4,Roof,IEAD,IEAD Roof CZ4 R-36,27.63
+ASHRAE_90_1_2007,4,Roof,IEAD,IEAD Roof CZ4 R-41,31.06
+ASHRAE_90_1_2007,4,Roof,IEAD,IEAD Roof CZ4 R-46,34.49
+ASHRAE_90_1_2010,4,Roof,IEAD,Typical IEAD Roof CZ4 R-21,17.19
+ASHRAE_90_1_2010,4,Roof,IEAD,IEAD Roof CZ4 R-31,23.94
+ASHRAE_90_1_2010,4,Roof,IEAD,IEAD Roof CZ4 R-36,27.32
+ASHRAE_90_1_2010,4,Roof,IEAD,IEAD Roof CZ4 R-41,30.70
+ASHRAE_90_1_2010,4,Roof,IEAD,IEAD Roof CZ4 R-46,34.08
+ASHRAE_90_1_2013,4,Roof,IEAD,Typical IEAD Roof CZ4 R-31,19.79
+ASHRAE_90_1_2013,4,Roof,IEAD,IEAD Roof CZ4 R-41,27.38
+ASHRAE_90_1_2013,4,Roof,IEAD,IEAD Roof CZ4 R-46,31.18
+ASHRAE_90_1_2013,4,Roof,IEAD,IEAD Roof CZ4 R-51,34.98
+ASHRAE_90_1_2013,4,Roof,IEAD,IEAD Roof CZ4 R-56,38.78
+ASHRAE_90_1_2007,5,Roof,IEAD,Typical IEAD Roof CZ5 R-21,16.73
+ASHRAE_90_1_2007,5,Roof,IEAD,IEAD Roof CZ5 R-31,23.35
+ASHRAE_90_1_2007,5,Roof,IEAD,IEAD Roof CZ5 R-36,26.67
+ASHRAE_90_1_2007,5,Roof,IEAD,IEAD Roof CZ5 R-41,29.98
+ASHRAE_90_1_2007,5,Roof,IEAD,IEAD Roof CZ5 R-46,33.29
+ASHRAE_90_1_2010,5,Roof,IEAD,Typical IEAD Roof CZ5 R-21,15.23
+ASHRAE_90_1_2010,5,Roof,IEAD,IEAD Roof CZ5 R-31,21.20
+ASHRAE_90_1_2010,5,Roof,IEAD,IEAD Roof CZ5 R-36,24.19
+ASHRAE_90_1_2010,5,Roof,IEAD,IEAD Roof CZ5 R-41,27.18
+ASHRAE_90_1_2010,5,Roof,IEAD,IEAD Roof CZ5 R-46,30.17
+ASHRAE_90_1_2013,5,Roof,IEAD,Typical IEAD Roof CZ5 R-31,16.76
+ASHRAE_90_1_2013,5,Roof,IEAD,IEAD Roof CZ5 R-41,23.76
+ASHRAE_90_1_2013,5,Roof,IEAD,IEAD Roof CZ5 R-46,27.26
+ASHRAE_90_1_2013,5,Roof,IEAD,IEAD Roof CZ5 R-51,30.76
+ASHRAE_90_1_2013,5,Roof,IEAD,IEAD Roof CZ5 R-56,34.26
+ASHRAE_90_1_2007,6,Roof,IEAD,Typical IEAD Roof CZ6 R-21,25.71
+ASHRAE_90_1_2007,6,Roof,IEAD,IEAD Roof CZ6 R-31,36.29
+ASHRAE_90_1_2007,6,Roof,IEAD,IEAD Roof CZ6 R-36,41.57
+ASHRAE_90_1_2007,6,Roof,IEAD,IEAD Roof CZ6 R-41,46.86
+ASHRAE_90_1_2007,6,Roof,IEAD,IEAD Roof CZ6 R-46,52.15
+ASHRAE_90_1_2010,6,Roof,IEAD,Typical IEAD Roof CZ6 R-21,14.99
+ASHRAE_90_1_2010,6,Roof,IEAD,IEAD Roof CZ6 R-31,20.82
+ASHRAE_90_1_2010,6,Roof,IEAD,IEAD Roof CZ6 R-36,23.73
+ASHRAE_90_1_2010,6,Roof,IEAD,IEAD Roof CZ6 R-41,26.64
+ASHRAE_90_1_2010,6,Roof,IEAD,IEAD Roof CZ6 R-46,29.55
+ASHRAE_90_1_2013,6,Roof,IEAD,Typical IEAD Roof CZ6 R-31,16.07
+ASHRAE_90_1_2013,6,Roof,IEAD,IEAD Roof CZ6 R-41,23.52
+ASHRAE_90_1_2013,6,Roof,IEAD,IEAD Roof CZ6 R-46,27.25
+ASHRAE_90_1_2013,6,Roof,IEAD,IEAD Roof CZ6 R-51,30.97
+ASHRAE_90_1_2013,6,Roof,IEAD,IEAD Roof CZ6 R-56,34.70
+ASHRAE_90_1_2007,7,Roof,IEAD,Typical IEAD Roof CZ7 R-21,18.30
+ASHRAE_90_1_2007,7,Roof,IEAD,IEAD Roof CZ7 R-31,26.86
+ASHRAE_90_1_2007,7,Roof,IEAD,IEAD Roof CZ7 R-36,31.13
+ASHRAE_90_1_2007,7,Roof,IEAD,IEAD Roof CZ7 R-41,35.41
+ASHRAE_90_1_2007,7,Roof,IEAD,IEAD Roof CZ7 R-46,39.69
+ASHRAE_90_1_2010,7,Roof,IEAD,Typical IEAD Roof CZ7 R-21,19.08
+ASHRAE_90_1_2010,7,Roof,IEAD,IEAD Roof CZ7 R-31,29.15
+ASHRAE_90_1_2010,7,Roof,IEAD,IEAD Roof CZ7 R-36,34.18
+ASHRAE_90_1_2010,7,Roof,IEAD,IEAD Roof CZ7 R-41,39.22
+ASHRAE_90_1_2010,7,Roof,IEAD,IEAD Roof CZ7 R-46,44.25
+ASHRAE_90_1_2013,7,Roof,IEAD,Typical IEAD Roof CZ7 R-36,21.91
+ASHRAE_90_1_2013,7,Roof,IEAD,IEAD Roof CZ7 R-46,33.24
+ASHRAE_90_1_2013,7,Roof,IEAD,IEAD Roof CZ7 R-51,38.90
+ASHRAE_90_1_2013,7,Roof,IEAD,IEAD Roof CZ7 R-56,44.56
+ASHRAE_90_1_2013,7,Roof,IEAD,IEAD Roof CZ7 R-61,50.23
+ASHRAE_90_1_2007,8,Roof,IEAD,Typical IEAD Roof CZ8 R-21,18.59
+ASHRAE_90_1_2007,8,Roof,IEAD,IEAD Roof CZ8 R-31,28.46
+ASHRAE_90_1_2007,8,Roof,IEAD,IEAD Roof CZ8 R-36,33.39
+ASHRAE_90_1_2007,8,Roof,IEAD,IEAD Roof CZ8 R-41,38.33
+ASHRAE_90_1_2007,8,Roof,IEAD,IEAD Roof CZ8 R-46,43.26
+ASHRAE_90_1_2010,8,Roof,IEAD,Typical IEAD Roof CZ8 R-21,18.74
+ASHRAE_90_1_2010,8,Roof,IEAD,IEAD Roof CZ8 R-31,30.88
+ASHRAE_90_1_2010,8,Roof,IEAD,IEAD Roof CZ8 R-36,36.95
+ASHRAE_90_1_2010,8,Roof,IEAD,IEAD Roof CZ8 R-41,43.02
+ASHRAE_90_1_2010,8,Roof,IEAD,IEAD Roof CZ8 R-46,49.09
+ASHRAE_90_1_2013,8,Roof,IEAD,Typical IEAD Roof CZ8 R-36,28.71
+ASHRAE_90_1_2013,8,Roof,IEAD,IEAD Roof CZ8 R-46,47.05
+ASHRAE_90_1_2013,8,Roof,IEAD,IEAD Roof CZ8 R-51,56.22
+ASHRAE_90_1_2013,8,Roof,IEAD,IEAD Roof CZ8 R-56,65.39
+ASHRAE_90_1_2013,8,Roof,IEAD,IEAD Roof CZ8 R-61,74.56
+ASHRAE_90_1_2007,1,Roof,Metal_Building,Typical Metal Roof CZ1 R-15,24.06
+ASHRAE_90_1_2007,1,Roof,Metal_Building,Metal Roof CZ1 R-25,28.29
+ASHRAE_90_1_2007,1,Roof,Metal_Building,Metal Roof CZ1 R-30,30.40
+ASHRAE_90_1_2007,1,Roof,Metal_Building,Metal Roof CZ1 R-35,32.51
+ASHRAE_90_1_2007,1,Roof,Metal_Building,Metal Roof CZ1 R-40,34.62
+ASHRAE_90_1_2010,1,Roof,Metal_Building,Typical Metal Roof CZ1 R-15,24.54
+ASHRAE_90_1_2010,1,Roof,Metal_Building,Metal Roof CZ1 R-25,28.87
+ASHRAE_90_1_2010,1,Roof,Metal_Building,Metal Roof CZ1 R-30,31.04
+ASHRAE_90_1_2010,1,Roof,Metal_Building,Metal Roof CZ1 R-35,33.21
+ASHRAE_90_1_2010,1,Roof,Metal_Building,Metal Roof CZ1 R-40,35.38
+ASHRAE_90_1_2013,1,Roof,Metal_Building,Typical Metal Roof CZ1 R-24,28.03
+ASHRAE_90_1_2013,1,Roof,Metal_Building,Metal Roof CZ1 R-34,33.00
+ASHRAE_90_1_2013,1,Roof,Metal_Building,Metal Roof CZ1 R-39,35.49
+ASHRAE_90_1_2013,1,Roof,Metal_Building,Metal Roof CZ1 R-44,37.98
+ASHRAE_90_1_2013,1,Roof,Metal_Building,Metal Roof CZ1 R-49,40.47
+ASHRAE_90_1_2007,2,Roof,Metal_Building,Typical Metal Roof CZ2 R-15,27.71
+ASHRAE_90_1_2007,2,Roof,Metal_Building,Metal Roof CZ2 R-25,32.62
+ASHRAE_90_1_2007,2,Roof,Metal_Building,Metal Roof CZ2 R-30,35.07
+ASHRAE_90_1_2007,2,Roof,Metal_Building,Metal Roof CZ2 R-35,37.52
+ASHRAE_90_1_2007,2,Roof,Metal_Building,Metal Roof CZ2 R-40,39.97
+ASHRAE_90_1_2010,2,Roof,Metal_Building,Typical Metal Roof CZ2 R-18,31.62
+ASHRAE_90_1_2010,2,Roof,Metal_Building,Metal Roof CZ2 R-28,37.14
+ASHRAE_90_1_2010,2,Roof,Metal_Building,Metal Roof CZ2 R-33,39.89
+ASHRAE_90_1_2010,2,Roof,Metal_Building,Metal Roof CZ2 R-38,42.65
+ASHRAE_90_1_2010,2,Roof,Metal_Building,Metal Roof CZ2 R-43,45.40
+ASHRAE_90_1_2013,2,Roof,Metal_Building,Typical Metal Roof CZ2 R-24,27.04
+ASHRAE_90_1_2013,2,Roof,Metal_Building,Metal Roof CZ2 R-34,31.85
+ASHRAE_90_1_2013,2,Roof,Metal_Building,Metal Roof CZ2 R-39,34.25
+ASHRAE_90_1_2013,2,Roof,Metal_Building,Metal Roof CZ2 R-44,36.65
+ASHRAE_90_1_2013,2,Roof,Metal_Building,Metal Roof CZ2 R-49,39.05
+ASHRAE_90_1_2007,3,Roof,Metal_Building,Typical Metal Roof CZ3 R-15,28.52
+ASHRAE_90_1_2007,3,Roof,Metal_Building,Metal Roof CZ3 R-25,33.60
+ASHRAE_90_1_2007,3,Roof,Metal_Building,Metal Roof CZ3 R-30,36.14
+ASHRAE_90_1_2007,3,Roof,Metal_Building,Metal Roof CZ3 R-35,38.68
+ASHRAE_90_1_2007,3,Roof,Metal_Building,Metal Roof CZ3 R-40,41.22
+ASHRAE_90_1_2010,3,Roof,Metal_Building,Typical Metal Roof CZ3 R-18,44.48
+ASHRAE_90_1_2010,3,Roof,Metal_Building,Metal Roof CZ3 R-28,54.73
+ASHRAE_90_1_2010,3,Roof,Metal_Building,Metal Roof CZ3 R-33,59.85
+ASHRAE_90_1_2010,3,Roof,Metal_Building,Metal Roof CZ3 R-38,64.98
+ASHRAE_90_1_2010,3,Roof,Metal_Building,Metal Roof CZ3 R-43,70.10
+ASHRAE_90_1_2013,3,Roof,Metal_Building,Typical Metal Roof CZ3 R-24,24.06
+ASHRAE_90_1_2013,3,Roof,Metal_Building,Metal Roof CZ3 R-34,28.29
+ASHRAE_90_1_2013,3,Roof,Metal_Building,Metal Roof CZ3 R-39,30.40
+ASHRAE_90_1_2013,3,Roof,Metal_Building,Metal Roof CZ3 R-44,32.51
+ASHRAE_90_1_2013,3,Roof,Metal_Building,Metal Roof CZ3 R-49,34.62
+ASHRAE_90_1_2007,4,Roof,Metal_Building,Typical Metal Roof CZ4 R-15,28.60
+ASHRAE_90_1_2007,4,Roof,Metal_Building,Metal Roof CZ4 R-25,34.58
+ASHRAE_90_1_2007,4,Roof,Metal_Building,Metal Roof CZ4 R-30,37.57
+ASHRAE_90_1_2007,4,Roof,Metal_Building,Metal Roof CZ4 R-35,40.56
+ASHRAE_90_1_2007,4,Roof,Metal_Building,Metal Roof CZ4 R-40,43.55
+ASHRAE_90_1_2010,4,Roof,Metal_Building,Typical Metal Roof CZ4 R-18,28.28
+ASHRAE_90_1_2010,4,Roof,Metal_Building,Metal Roof CZ4 R-28,34.17
+ASHRAE_90_1_2010,4,Roof,Metal_Building,Metal Roof CZ4 R-33,37.11
+ASHRAE_90_1_2010,4,Roof,Metal_Building,Metal Roof CZ4 R-38,40.06
+ASHRAE_90_1_2010,4,Roof,Metal_Building,Metal Roof CZ4 R-43,43.00
+ASHRAE_90_1_2013,4,Roof,Metal_Building,Typical Metal Roof CZ4 R-27,32.26
+ASHRAE_90_1_2013,4,Roof,Metal_Building,Metal Roof CZ4 R-37,38.88
+ASHRAE_90_1_2013,4,Roof,Metal_Building,Metal Roof CZ4 R-42,42.19
+ASHRAE_90_1_2013,4,Roof,Metal_Building,Metal Roof CZ4 R-47,45.50
+ASHRAE_90_1_2013,4,Roof,Metal_Building,Metal Roof CZ4 R-52,48.82
+ASHRAE_90_1_2007,5,Roof,Metal_Building,Typical Metal Roof CZ5 R-15,27.96
+ASHRAE_90_1_2007,5,Roof,Metal_Building,Metal Roof CZ5 R-25,34.38
+ASHRAE_90_1_2007,5,Roof,Metal_Building,Metal Roof CZ5 R-30,37.59
+ASHRAE_90_1_2007,5,Roof,Metal_Building,Metal Roof CZ5 R-35,40.80
+ASHRAE_90_1_2007,5,Roof,Metal_Building,Metal Roof CZ5 R-40,44.01
+ASHRAE_90_1_2010,5,Roof,Metal_Building,Typical Metal Roof CZ5 R-18,25.03
+ASHRAE_90_1_2010,5,Roof,Metal_Building,Metal Roof CZ5 R-28,30.24
+ASHRAE_90_1_2010,5,Roof,Metal_Building,Metal Roof CZ5 R-33,32.85
+ASHRAE_90_1_2010,5,Roof,Metal_Building,Metal Roof CZ5 R-38,35.45
+ASHRAE_90_1_2010,5,Roof,Metal_Building,Metal Roof CZ5 R-43,38.06
+ASHRAE_90_1_2013,5,Roof,Metal_Building,Typical Metal Roof CZ5 R-27,29.18
+ASHRAE_90_1_2013,5,Roof,Metal_Building,Metal Roof CZ5 R-37,35.96
+ASHRAE_90_1_2013,5,Roof,Metal_Building,Metal Roof CZ5 R-42,39.36
+ASHRAE_90_1_2013,5,Roof,Metal_Building,Metal Roof CZ5 R-47,42.75
+ASHRAE_90_1_2013,5,Roof,Metal_Building,Metal Roof CZ5 R-52,46.14
+ASHRAE_90_1_2007,6,Roof,Metal_Building,Typical Metal Roof CZ6 R-15,46.26
+ASHRAE_90_1_2007,6,Roof,Metal_Building,Metal Roof CZ6 R-25,61.16
+ASHRAE_90_1_2007,6,Roof,Metal_Building,Metal Roof CZ6 R-30,68.60
+ASHRAE_90_1_2007,6,Roof,Metal_Building,Metal Roof CZ6 R-35,76.05
+ASHRAE_90_1_2007,6,Roof,Metal_Building,Metal Roof CZ6 R-40,83.50
+ASHRAE_90_1_2010,6,Roof,Metal_Building,Typical Metal Roof CZ6 R-20,25.52
+ASHRAE_90_1_2010,6,Roof,Metal_Building,Metal Roof CZ6 R-30,32.30
+ASHRAE_90_1_2010,6,Roof,Metal_Building,Metal Roof CZ6 R-35,35.69
+ASHRAE_90_1_2010,6,Roof,Metal_Building,Metal Roof CZ6 R-40,39.08
+ASHRAE_90_1_2010,6,Roof,Metal_Building,Metal Roof CZ6 R-45,42.47
+ASHRAE_90_1_2013,6,Roof,Metal_Building,Typical Metal Roof CZ6 R-32,26.03
+ASHRAE_90_1_2013,6,Roof,Metal_Building,Metal Roof CZ6 R-42,32.99
+ASHRAE_90_1_2013,6,Roof,Metal_Building,Metal Roof CZ6 R-47,36.47
+ASHRAE_90_1_2013,6,Roof,Metal_Building,Metal Roof CZ6 R-52,39.95
+ASHRAE_90_1_2013,6,Roof,Metal_Building,Metal Roof CZ6 R-57,43.43
+ASHRAE_90_1_2007,7,Roof,Metal_Building,Typical Metal Roof CZ7 R-15,29.74
+ASHRAE_90_1_2007,7,Roof,Metal_Building,Metal Roof CZ7 R-25,37.73
+ASHRAE_90_1_2007,7,Roof,Metal_Building,Metal Roof CZ7 R-30,41.73
+ASHRAE_90_1_2007,7,Roof,Metal_Building,Metal Roof CZ7 R-35,45.72
+ASHRAE_90_1_2007,7,Roof,Metal_Building,Metal Roof CZ7 R-40,49.72
+ASHRAE_90_1_2010,7,Roof,Metal_Building,Typical Metal Roof CZ7 R-20,29.97
+ASHRAE_90_1_2010,7,Roof,Metal_Building,Metal Roof CZ7 R-30,38.82
+ASHRAE_90_1_2010,7,Roof,Metal_Building,Metal Roof CZ7 R-35,43.25
+ASHRAE_90_1_2010,7,Roof,Metal_Building,Metal Roof CZ7 R-40,47.68
+ASHRAE_90_1_2010,7,Roof,Metal_Building,Metal Roof CZ7 R-45,52.10
+ASHRAE_90_1_2013,7,Roof,Metal_Building,Typical Metal Roof CZ7 R-34,34.16
+ASHRAE_90_1_2013,7,Roof,Metal_Building,Metal Roof CZ7 R-44,44.12
+ASHRAE_90_1_2013,7,Roof,Metal_Building,Metal Roof CZ7 R-49,49.10
+ASHRAE_90_1_2013,7,Roof,Metal_Building,Metal Roof CZ7 R-54,54.08
+ASHRAE_90_1_2013,7,Roof,Metal_Building,Metal Roof CZ7 R-59,59.05
+ASHRAE_90_1_2007,8,Roof,Metal_Building,Typical Metal Roof CZ8 R-20,30.17
+ASHRAE_90_1_2007,8,Roof,Metal_Building,Metal Roof CZ8 R-30,40.47
+ASHRAE_90_1_2007,8,Roof,Metal_Building,Metal Roof CZ8 R-35,45.61
+ASHRAE_90_1_2007,8,Roof,Metal_Building,Metal Roof CZ8 R-40,50.76
+ASHRAE_90_1_2007,8,Roof,Metal_Building,Metal Roof CZ8 R-45,55.91
+ASHRAE_90_1_2010,8,Roof,Metal_Building,Typical Metal Roof CZ8 R-29,31.02
+ASHRAE_90_1_2010,8,Roof,Metal_Building,Metal Roof CZ8 R-39,42.58
+ASHRAE_90_1_2010,8,Roof,Metal_Building,Metal Roof CZ8 R-44,48.37
+ASHRAE_90_1_2010,8,Roof,Metal_Building,Metal Roof CZ8 R-49,54.15
+ASHRAE_90_1_2010,8,Roof,Metal_Building,Metal Roof CZ8 R-54,59.93
+ASHRAE_90_1_2013,8,Roof,Metal_Building,Typical Metal Roof CZ8 R-38,48.05
+ASHRAE_90_1_2013,8,Roof,Metal_Building,Metal Roof CZ8 R-48,67.59
+ASHRAE_90_1_2013,8,Roof,Metal_Building,Metal Roof CZ8 R-53,77.35
+ASHRAE_90_1_2013,8,Roof,Metal_Building,Metal Roof CZ8 R-58,87.12
+ASHRAE_90_1_2013,8,Roof,Metal_Building,Metal Roof CZ8 R-63,96.89

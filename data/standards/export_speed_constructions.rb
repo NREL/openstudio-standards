@@ -251,12 +251,100 @@ File.open("#{__dir__}/construction_inputs_new.json", 'w') do |f|
   f.write(JSON.pretty_generate(inputs, {:indent => "    "}))
 end
 
+# Read Construction Costs
+options = { :headers => true }
+File.open("#{__dir__}/construction_costs.csv", 'r') do |f|
+  csv = CSV.parse(f.read, options)
+  m2_per_ft2 = 10.7639
+  csv.each do |row|
+    name = row['construction_name']
+    cost = 10.7639 * row['cost ($/ft2)'].to_f
+
+    construction = model.getConstructionByName(name)
+    if construction.empty?
+      puts "Warning: Cannot find construction '#{name}' to apply costs"
+      next
+    end
+
+    construction = construction.get
+
+    if construction.lifeCycleCosts.size > 1
+      puts "Warning: Construction '#{name}' has multiple existing costs, removing"
+      construction.removeLifeCycleCosts
+    end
+
+    if construction.lifeCycleCosts.size == 1
+      existing_lcc = construction.lifeCycleCosts[0]
+
+      old_name = existing_lcc.nameString
+      old_category = existing_lcc.category
+      old_cost = existing_lcc.cost
+      old_cost_units = existing_lcc.costUnits
+      old_start_of_costs = existing_lcc.startOfCosts
+      old_repeat_period_years = existing_lcc.repeatPeriodYears
+
+      existing_lcc.setName("LCC_MAT - #{name}")
+      existing_lcc.setCategory('Construction')
+      existing_lcc.setCost(cost)
+      existing_lcc.setCostUnits('CostPerArea')
+      existing_lcc.setStartOfCosts('ServicePeriod')
+      existing_lcc.setRepeatPeriodYears(20)
+
+      new_name = existing_lcc.nameString
+      new_category = existing_lcc.category
+      new_cost = existing_lcc.cost
+      new_cost_units = existing_lcc.costUnits
+      new_start_of_costs = existing_lcc.startOfCosts
+      new_repeat_period_years = existing_lcc.repeatPeriodYears
+
+      diff = []
+      diff << "name: #{old_name} -> #{new_name}" if old_name != new_name
+      diff << "name: #{old_category} -> #{new_category}" if old_category != new_category
+      diff << "name: #{old_cost} -> #{new_cost}" if old_cost != new_cost
+      diff << "name: #{old_cost_units} -> #{new_cost_units}" if old_cost_units != new_cost_units
+      diff << "name: #{old_start_of_costs} -> #{new_start_of_costs}" if old_start_of_costs != new_start_of_costs
+      diff << "name: #{old_repeat_period_years} -> #{new_repeat_period_years}" if old_repeat_period_years != new_repeat_period_years
+
+      if !diff.empty?
+        puts "Warning: Construction '#{name}' cost changed - #{diff.join(',')}"
+      end
+
+    else
+      lcc = OpenStudio::Model::LifeCycleCost.new(construction)
+      lcc.setName("LCC_MAT - #{name}")
+      lcc.setCategory('Construction')
+      lcc.setCost(cost)
+      lcc.setCostUnits('CostPerArea')
+      lcc.setStartOfCosts('ServicePeriod')
+      lcc.setRepeatPeriodYears(20)
+    end
+
+  end
+end
+
+# check that every construction has one cost associated
+model.getConstructions.each do |construction|
+  if construction.lifeCycleCosts.size != 1
+    puts "Warning: Construction '#{construction.nameString}' has #{construction.lifeCycleCosts.size} cost objects, expected 1.  Adding default cost of $99/m2"
+
+    construction.removeLifeCycleCosts
+    lcc = OpenStudio::Model::LifeCycleCost.new(construction)
+    lcc.setName("LCC_MAT - #{construction.nameString}")
+    lcc.setCategory('Construction')
+    lcc.setCost(99)
+    lcc.setCostUnits('CostPerArea')
+    lcc.setStartOfCosts('ServicePeriod')
+    lcc.setRepeatPeriodYears(20)
+  end
+end
+
 # OSM library
 model.save(SpeedConstructions.construction_lib_path, true)
 
-# Save CSV that can be used to fill in cost data
+# Save CSV that can be used to fill in cost data for next run
+construction_names = {}
 construction_csv = []
-construction_csv << ['energy_code', 'climate_zone', 'surface_type', 'assembly_type', 'construction_name']
+construction_csv << ['energy_code', 'climate_zone', 'surface_type', 'assembly_type', 'construction_name', 'is_duplicate']
 constructions = inputs['Constructions']
 constructions.keys.each do |energy_code_key|
   energy_code = constructions[energy_code_key]
@@ -270,7 +358,9 @@ constructions.keys.each do |energy_code_key|
           options = type['Options']
           next unless options
           options.each do |construction_name|
-            construction_csv << [energy_code_key, climate_zone_key, surface_type_key, '', construction_name]
+            is_duplicate = construction_names.include?(construction_name)
+            construction_csv << [energy_code_key, climate_zone_key, surface_type_key, '', construction_name, is_duplicate]
+            construction_names[construction_name] = true
           end
         else
           assembly_type = surface_type[assembly_or_type_key]
@@ -280,7 +370,9 @@ constructions.keys.each do |energy_code_key|
             options = type['Options']
             next unless options
             options.each do |construction_name|
-              construction_csv << [energy_code_key, climate_zone_key, surface_type_key, assembly_or_type_key, construction_name]
+              is_duplicate = construction_names.include?(construction_name)
+              construction_csv << [energy_code_key, climate_zone_key, surface_type_key, assembly_or_type_key, construction_name, is_duplicate]
+              construction_names[construction_name] = true
             end
           end
         end
@@ -289,9 +381,9 @@ constructions.keys.each do |energy_code_key|
   end
 end
 
-File.open("#{__dir__}/constructions_list.csv", 'w') do |f|
+CSV.open("#{__dir__}/constructions_list.csv", 'w') do |f|
   construction_csv.each do |line|
-    f.puts line.join(',')
+    f << line
   end
 end
 
