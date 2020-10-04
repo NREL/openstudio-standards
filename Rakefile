@@ -242,7 +242,7 @@ namespace :library do
     require "#{File.dirname(__FILE__)}/data/standards/export_speed_other.rb"
   end
 
-  task 'export_speed' => ['export_speed_schedules', 'export_speed_constructions', 'export_speed_space_loads'] do
+  task 'export_speed' => ['export_speed_schedules', 'export_speed_constructions', 'export_speed_space_loads', 'export_speed_other'] do
     # reads JSON from data/standards/construction_inputs_new.json
     # reads JSON from data/standards/space_loads_inputs_new.json
     # reads JSON from data/standards/other_inputs_new.json

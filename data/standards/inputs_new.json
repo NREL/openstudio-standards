@@ -20,6 +20,12 @@
         "Quick_Service_Restaurant",
         "Supermarket"
       ]
+    },
+    "Units": {
+      "Default": "IP",
+      "Options": [
+        "IP"
+      ]
     }
   },
   "Site_Context": {
@@ -223,10 +229,7 @@
         ]
       },
       "Analysis_Type_2_3": {
-        "Default": 1,
-        "Options": [
-          1
-        ]
+        "Default": 1
       }
     },
     "Footprint_Shape": {

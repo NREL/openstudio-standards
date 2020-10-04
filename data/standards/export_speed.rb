@@ -32,7 +32,8 @@ inputs['Photovoltaics'] = other_inputs['Photovoltaics']
 
 inputs.each_key do |key|
   if inputs[key].nil?
-    puts "Error: No input data for #{key}"
+    STDOUT.flush
+    raise "Error: No input data for #{key}"
   end
 end
 

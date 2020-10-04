@@ -38,7 +38,7 @@ def process_column(all_data, cell_data, option_row, j, num_rows, indent)
 
   option = get_option(all_data, option_row, j)
 
-  #puts "#{indent}#{option}"
+  puts "#{indent}#{option}"
 
   if option == 'Default'
     cell_data[option] = all_data[option_row + 1][j]
@@ -62,7 +62,7 @@ def process_column(all_data, cell_data, option_row, j, num_rows, indent)
         break
       end
 
-      #puts "#{key_1}, #{key_2}, #{val_3}"
+      puts "#{key_1}, #{key_2}, #{val_3}"
 
       cell_data[option][key_1] = {key_2 => val_3}
       num += 1
@@ -83,7 +83,7 @@ def process_column(all_data, cell_data, option_row, j, num_rows, indent)
 end
 
 workbook.worksheets.each do |worksheet|
-  #next unless worksheet.sheet_name == 'Geometry'
+  #next unless worksheet.sheet_name == 'ProjectInformation'
 
   sheet_data = {}
   sheet_name = worksheet.sheet_name.underscore
@@ -105,7 +105,7 @@ workbook.worksheets.each do |worksheet|
       offset += 1
     end
 
-    #puts "  #{key}"
+    puts "  #{key}"
 
     sheet_data[key] = {} if sheet_data[key].nil?
 
