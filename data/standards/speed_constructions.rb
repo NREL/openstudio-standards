@@ -696,7 +696,7 @@ module SpeedConstructions
 
   # The path where the construction library .osm is saved
   def construction_lib_path
-    return "#{__dir__}/SpeedConstructions.osm"
+    return "#{__dir__}/construction_lib.osm"
   end
 
   # Takes all of the window constructions in the construction library

@@ -655,7 +655,7 @@ ASHRAE_90_1_2010,5,Exterior_Walls,Mass,Mass Wall CZ5 R-16,true
 ASHRAE_90_1_2010,5,Exterior_Walls,Mass,Mass Wall CZ5 R-21,true
 ASHRAE_90_1_2010,5,Exterior_Walls,Mass,Mass Wall CZ5 R-26,true
 ASHRAE_90_1_2010,5,Exterior_Walls,Mass,Mass Wall CZ5 R-31,true
-ASHRAE_90_1_2010,5,Exterior_Walls,Metal_Building,Typical Metal Wall CZ5 R-14,false
+ASHRAE_90_1_2010,5,Exterior_Walls,Metal_Building,Typical Metal Wall CZ5 R-14,true
 ASHRAE_90_1_2010,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-19,true
 ASHRAE_90_1_2010,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-24,true
 ASHRAE_90_1_2010,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-29,true
@@ -708,7 +708,7 @@ ASHRAE_90_1_2010,6,Exterior_Walls,Mass,Mass Wall CZ6 R-18,true
 ASHRAE_90_1_2010,6,Exterior_Walls,Mass,Mass Wall CZ6 R-23,true
 ASHRAE_90_1_2010,6,Exterior_Walls,Mass,Mass Wall CZ6 R-28,true
 ASHRAE_90_1_2010,6,Exterior_Walls,Mass,Mass Wall CZ6 R-33,true
-ASHRAE_90_1_2010,6,Exterior_Walls,Metal_Building,Typical Metal Wall CZ6 R-14,false
+ASHRAE_90_1_2010,6,Exterior_Walls,Metal_Building,Typical Metal Wall CZ6 R-14,true
 ASHRAE_90_1_2010,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-19,true
 ASHRAE_90_1_2010,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-24,true
 ASHRAE_90_1_2010,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-29,true
@@ -1011,7 +1011,7 @@ ASHRAE_90_1_2013,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-58,false
 ASHRAE_90_1_2013,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-63,false
 ASHRAE_90_1_2013,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-68,false
 ASHRAE_90_1_2013,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-73,false
-ASHRAE_90_1_2013,4,Roof,IEAD,Typical IEAD Roof CZ4 R-31,false
+ASHRAE_90_1_2013,4,Roof,IEAD,Typical IEAD Roof CZ4 R-31,true
 ASHRAE_90_1_2013,4,Roof,IEAD,IEAD Roof CZ4 R-41,true
 ASHRAE_90_1_2013,4,Roof,IEAD,IEAD Roof CZ4 R-46,true
 ASHRAE_90_1_2013,4,Roof,IEAD,IEAD Roof CZ4 R-51,false
@@ -1026,7 +1026,7 @@ ASHRAE_90_1_2013,4,Exterior_Walls,Mass,Mass Wall CZ4 R-15,true
 ASHRAE_90_1_2013,4,Exterior_Walls,Mass,Mass Wall CZ4 R-20,true
 ASHRAE_90_1_2013,4,Exterior_Walls,Mass,Mass Wall CZ4 R-25,true
 ASHRAE_90_1_2013,4,Exterior_Walls,Mass,Mass Wall CZ4 R-30,true
-ASHRAE_90_1_2013,4,Exterior_Walls,Metal_Building,Typical Metal Wall CZ4 R-17,false
+ASHRAE_90_1_2013,4,Exterior_Walls,Metal_Building,Typical Metal Wall CZ4 R-17,true
 ASHRAE_90_1_2013,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-22,true
 ASHRAE_90_1_2013,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-27,true
 ASHRAE_90_1_2013,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-32,true
@@ -1036,7 +1036,7 @@ ASHRAE_90_1_2013,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-21,true
 ASHRAE_90_1_2013,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-26,true
 ASHRAE_90_1_2013,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-31,true
 ASHRAE_90_1_2013,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-36,true
-ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ4 R-16,false
+ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ4 R-16,true
 ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-21,true
 ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-26,true
 ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-31,true
@@ -1064,7 +1064,7 @@ ASHRAE_90_1_2013,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-58,false
 ASHRAE_90_1_2013,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-63,false
 ASHRAE_90_1_2013,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-68,false
 ASHRAE_90_1_2013,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-73,false
-ASHRAE_90_1_2013,5,Roof,IEAD,Typical IEAD Roof CZ5 R-31,false
+ASHRAE_90_1_2013,5,Roof,IEAD,Typical IEAD Roof CZ5 R-31,true
 ASHRAE_90_1_2013,5,Roof,IEAD,IEAD Roof CZ5 R-41,true
 ASHRAE_90_1_2013,5,Roof,IEAD,IEAD Roof CZ5 R-46,true
 ASHRAE_90_1_2013,5,Roof,IEAD,IEAD Roof CZ5 R-51,false
@@ -1117,7 +1117,7 @@ ASHRAE_90_1_2013,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-58,false
 ASHRAE_90_1_2013,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-63,false
 ASHRAE_90_1_2013,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-68,false
 ASHRAE_90_1_2013,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-73,false
-ASHRAE_90_1_2013,6,Roof,IEAD,Typical IEAD Roof CZ6 R-31,false
+ASHRAE_90_1_2013,6,Roof,IEAD,Typical IEAD Roof CZ6 R-31,true
 ASHRAE_90_1_2013,6,Roof,IEAD,IEAD Roof CZ6 R-41,true
 ASHRAE_90_1_2013,6,Roof,IEAD,IEAD Roof CZ6 R-46,true
 ASHRAE_90_1_2013,6,Roof,IEAD,IEAD Roof CZ6 R-51,false
@@ -1170,7 +1170,7 @@ ASHRAE_90_1_2013,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-69,false
 ASHRAE_90_1_2013,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-74,false
 ASHRAE_90_1_2013,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-79,false
 ASHRAE_90_1_2013,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-84,false
-ASHRAE_90_1_2013,7,Roof,IEAD,Typical IEAD Roof CZ7 R-36,false
+ASHRAE_90_1_2013,7,Roof,IEAD,Typical IEAD Roof CZ7 R-36,true
 ASHRAE_90_1_2013,7,Roof,IEAD,IEAD Roof CZ7 R-46,true
 ASHRAE_90_1_2013,7,Roof,IEAD,IEAD Roof CZ7 R-51,false
 ASHRAE_90_1_2013,7,Roof,IEAD,IEAD Roof CZ7 R-56,false
@@ -1185,7 +1185,7 @@ ASHRAE_90_1_2013,7,Exterior_Walls,Mass,Mass Wall CZ7 R-19,true
 ASHRAE_90_1_2013,7,Exterior_Walls,Mass,Mass Wall CZ7 R-24,true
 ASHRAE_90_1_2013,7,Exterior_Walls,Mass,Mass Wall CZ7 R-29,true
 ASHRAE_90_1_2013,7,Exterior_Walls,Mass,Mass Wall CZ7 R-34,true
-ASHRAE_90_1_2013,7,Exterior_Walls,Metal_Building,Typical Metal Wall CZ7 R-23,false
+ASHRAE_90_1_2013,7,Exterior_Walls,Metal_Building,Typical Metal Wall CZ7 R-23,true
 ASHRAE_90_1_2013,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-28,true
 ASHRAE_90_1_2013,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-33,true
 ASHRAE_90_1_2013,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-38,true
@@ -1223,7 +1223,7 @@ ASHRAE_90_1_2013,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-69,false
 ASHRAE_90_1_2013,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-74,false
 ASHRAE_90_1_2013,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-79,false
 ASHRAE_90_1_2013,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-84,false
-ASHRAE_90_1_2013,8,Roof,IEAD,Typical IEAD Roof CZ8 R-36,false
+ASHRAE_90_1_2013,8,Roof,IEAD,Typical IEAD Roof CZ8 R-36,true
 ASHRAE_90_1_2013,8,Roof,IEAD,IEAD Roof CZ8 R-46,true
 ASHRAE_90_1_2013,8,Roof,IEAD,IEAD Roof CZ8 R-51,false
 ASHRAE_90_1_2013,8,Roof,IEAD,IEAD Roof CZ8 R-56,false

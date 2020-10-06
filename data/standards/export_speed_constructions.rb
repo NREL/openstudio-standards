@@ -12,6 +12,9 @@ intended_surface_types = ['ExteriorRoof', 'ExteriorWall', 'GroundContactFloor', 
 # Building categories to export
 building_category = 'Nonresidential'
 
+# Typical prefix
+typical_prefix = 'Typical '
+
 # Store the results
 inputs = {}
 csv_rows = []
@@ -96,8 +99,9 @@ templates.each do |template|
           # Make the default construction
           default = SpeedConstructions.model_add_construction(std, model, props['construction'], props, climate_zone)
           # Prepend "Typical" for the default construction
-          default_name = "Typical #{default.name}"
+          default_name = "#{typical_prefix}#{default.name}"
           if model.getConstructionByName(default_name).empty?
+            default = default.clone(model).to_Construction.get
             default.setName(default_name)
           else
             default = model.getConstructionByName(default_name).get
@@ -138,8 +142,9 @@ templates.each do |template|
           # Make the default construction
           default = SpeedConstructions.model_add_construction(std, model, props['construction'], props, climate_zone)
           # Prepend "Typical" for the default construction
-          default_name = "Typical #{default.name}"
+          default_name = "#{typical_prefix}#{default.name}"
           if model.getConstructionByName(default_name).empty?
+            default = default.clone(model).to_Construction.get
             default.setName(default_name)
           else
             default = model.getConstructionByName(default_name).get
@@ -166,8 +171,9 @@ templates.each do |template|
           props['convert_to_simple_glazing'] = 'yes'
           default = SpeedConstructions.model_add_construction(std, model, props['construction'], props, climate_zone)
           # Prepend "Typical" for the default construction
-          default_name = "Typical #{default.name}"
+          default_name = "#{typical_prefix}#{default.name}"
           if model.getConstructionByName(default_name).empty?
+            default = default.clone(model).to_Construction.get
             default.setName(default_name)
           else
             default = model.getConstructionByName(default_name).get
@@ -299,11 +305,11 @@ File.open("#{__dir__}/construction_costs.csv", 'r') do |f|
 
       diff = []
       diff << "name: #{old_name} -> #{new_name}" if old_name != new_name
-      diff << "name: #{old_category} -> #{new_category}" if old_category != new_category
-      diff << "name: #{old_cost} -> #{new_cost}" if old_cost != new_cost
-      diff << "name: #{old_cost_units} -> #{new_cost_units}" if old_cost_units != new_cost_units
-      diff << "name: #{old_start_of_costs} -> #{new_start_of_costs}" if old_start_of_costs != new_start_of_costs
-      diff << "name: #{old_repeat_period_years} -> #{new_repeat_period_years}" if old_repeat_period_years != new_repeat_period_years
+      diff << "category: #{old_category} -> #{new_category}" if old_category != new_category
+      diff << "cost: #{old_cost} -> #{new_cost}" if old_cost != new_cost
+      diff << "cost_units: #{old_cost_units} -> #{new_cost_units}" if old_cost_units != new_cost_units
+      diff << "start_of_costs: #{old_start_of_costs} -> #{new_start_of_costs}" if old_start_of_costs != new_start_of_costs
+      diff << "repeat_period_years: #{old_repeat_period_years} -> #{new_repeat_period_years}" if old_repeat_period_years != new_repeat_period_years
 
       if !diff.empty?
         puts "Warning: Construction '#{name}' cost changed - #{diff.join(',')}"
@@ -360,7 +366,11 @@ constructions.keys.each do |energy_code_key|
           options.each do |construction_name|
             is_duplicate = construction_names.include?(construction_name)
             construction_csv << [energy_code_key, climate_zone_key, surface_type_key, '', construction_name, is_duplicate]
+
+            # for costing 'IEAD Roof CZ5 R-31' and 'Typical IEAD Roof CZ5 R-31' are the same
             construction_names[construction_name] = true
+            construction_names[typical_prefix + construction_name] = true
+            construction_names[construction_name.gsub(typical_prefix,'')] = true
           end
         else
           assembly_type = surface_type[assembly_or_type_key]
@@ -372,7 +382,11 @@ constructions.keys.each do |energy_code_key|
             options.each do |construction_name|
               is_duplicate = construction_names.include?(construction_name)
               construction_csv << [energy_code_key, climate_zone_key, surface_type_key, assembly_or_type_key, construction_name, is_duplicate]
+
+              # for costing 'IEAD Roof CZ5 R-31' and 'Typical IEAD Roof CZ5 R-31' are the same
               construction_names[construction_name] = true
+              construction_names[typical_prefix + construction_name] = true
+              construction_names[construction_name.gsub(typical_prefix,'')] = true
             end
           end
         end
