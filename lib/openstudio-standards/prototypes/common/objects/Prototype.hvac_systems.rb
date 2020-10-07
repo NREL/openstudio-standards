@@ -3763,11 +3763,7 @@ class Standard
                                                                                   clg_coil)
       ptac_system.setName("#{zone.name} PTAC")
       ptac_system.setFanPlacement('DrawThrough')
-      if fan_type == 'ConstantVolume'
-        ptac_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOnDiscreteSchedule)
-      elsif fan_type == 'Cycling'
-        ptac_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
-      end
+      ptac_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
       unless ventilation
         ptac_system.setOutdoorAirFlowRateDuringCoolingOperation(0.0)
         ptac_system.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
@@ -3848,11 +3844,7 @@ class Standard
                                                                             supplemental_htg_coil)
       pthp_system.setName("#{zone.name} PTHP")
       pthp_system.setFanPlacement('DrawThrough')
-      if fan_type == 'ConstantVolume'
-        pthp_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOnDiscreteSchedule)
-      elsif fan_type == 'Cycling'
-        pthp_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
-      end
+      pthp_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
       unless ventilation
         pthp_system.setOutdoorAirFlowRateDuringCoolingOperation(0.0)
         pthp_system.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
