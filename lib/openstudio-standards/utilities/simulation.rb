@@ -139,7 +139,7 @@ Standard.class_eval do
       end
     end
 
-    # Report severe errors in the run
+    # Report severe or fatal errors in the run
     error_query = "SELECT ErrorMessage
         FROM Errors
         WHERE ErrorType in(1,2)"
@@ -148,26 +148,16 @@ Standard.class_eval do
       errs = errs.get
     end
 
-    # Check that the run completed
-    completed_query = 'SELECT Completed FROM Simulations'
-    completed = model.sqlFile.get.execAndReturnFirstDouble(completed_query)
-    if completed.is_initialized
-      completed = completed.get
-      if completed.zero?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "The run did not finish and had following errors: #{errs.join('\n')}")
-        return false
-      end
+    # Check that the run completed successfully
+    end_file_stringpath = "#{run_dir}/run/eplusout.end"
+    end_file_path = OpenStudio::Path.new(end_file_stringpath)
+    if OpenStudio.exists(end_file_path)
+      endstring = File.read(end_file_stringpath)
     end
 
-    # Check that the run completed with no severe errors
-    completed_successfully_query = 'SELECT CompletedSuccessfully FROM Simulations'
-    completed_successfully = model.sqlFile.get.execAndReturnFirstDouble(completed_successfully_query)
-    if completed_successfully.is_initialized
-      completed_successfully = completed_successfully.get
-      if completed_successfully.zero?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "The run failed with the following severe or fatal errors: #{errs.join('\n')}")
-        return false
-      end
+    if not endstring.include?("EnergyPlus Completed Successfully")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "The run did not finish and had following errors: #{errs.join('\n')}")
+      return false
     end
 
     # Log any severe errors that did not cause simulation to fail
