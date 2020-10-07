@@ -573,7 +573,7 @@ class AppendixGPRMTests < Minitest::Test
         check_heat_type(model, climate_zone,"SZ", "HeatPump")
       elsif @bldg_type_alt_now == 'Assembly' && building_type == 'HotelLarge'
         # This is a public assembly > 120 ksf, should be SZ-CV
-        # check_if_szcv(model, "Assembly < 120,000 sq ft.")
+        check_if_sz_cv(model, "Assembly < 120,000 sq ft.")
       elsif building_type == 'Warehouse' && mod_str == ''
         # System type should be heating and ventilating
         # check_if_ht_vent(model, "Warehouse")
@@ -789,6 +789,34 @@ class AppendixGPRMTests < Minitest::Test
 
   end
 
+  # Check if baseline system type is four pipe fan coil/ constant speed
+  # @param model, sub_text for error messages
+  def check_if_sz_cv(model, climate_zone, sub_text)
+    # building fails if any zone is not packaged terminal unit
+    # or if heat type is incorrect
+    model.getThermalZones.sort.each do |thermal_zone|
+      pass_test = false
+      is_fpfc = false
+        heat_type = ''
+      thermal_zone.equipment.each do |equip|
+        # Skip HVAC components
+        next unless equip.to_HVACComponent.is_initialized
+        equip = equip.to_HVACComponent.get
+        is_fpfc = equip.to_ZoneHVACFourPipeFanCoil.is_initialized
+        assert(is_fpfc, "Baseline system selection failed: should be FPFC for " + sub_text)  
+        if is_fpfc
+          # Also check heat type
+          heat_type = model.coil_heat_type(equip.heatingCoil) 
+          if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/ 
+            assert(heat_type == 'Electric', "Baseline system selection failed for climate #{climate_zone}: should be FPFC with electric heat for " + sub_text)
+          else
+            assert(heat_type == 'Fuel', "Baseline system selection failed for climate #{climate_zone}: should be FPFC wit hot water heat for " + sub_text)
+          end
+        end
+      end
+    end
+  end
+
   # Set ZoneMultiplier to passed value for all zones
   # @param model, arguments[]
   def set_zone_multiplier(model, arguments)
@@ -918,13 +946,13 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      'wwr',
-      'envelope',
-      'lpd',
-      'isresidential',
-      'daylighting_control',
-      'light_occ_sensor',
-      'infiltration',
+      #'wwr',
+      #'envelope',
+      #'lpd',
+      #'isresidential',
+      #'daylighting_control',
+      #'light_occ_sensor',
+      #'infiltration',
       'hvac_baseline'
     ]
 

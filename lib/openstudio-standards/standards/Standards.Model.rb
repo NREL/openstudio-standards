@@ -1923,6 +1923,37 @@ class Standard
                                heating_type: main_heat_fuel)
         end
 
+      when 'SZ_CV' # System 12 (gas or district heat) or System 13 (electric resistance heat)
+        unless zones.empty?
+          hot_water_loop = nil
+          if zone_heat_fuel == 'DistrictHeating' || zone_heat_fuel == 'NaturalGas'
+            heating_type = 'Water'
+            hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
+                              model.getPlantLoopByName('Hot Water Loop').get
+                            else
+                              model_add_hw_loop(model, main_heat_fuel)
+                            end
+          else
+            # If no hot water loop is defined, heat will default to electric resistance
+            heating_type = 'Electric'
+          end
+          cooling_type = 'Water'
+          chilled_water_loop = if model.getPlantLoopByName('Chilled Water Loop').is_initialized
+                                model.getPlantLoopByName('Chilled Water Loop').get
+                              else
+                                model_add_chw_loop(model,
+                                                    cooling_fuel: cool_fuel,
+                                                    chw_pumping_type: 'const_pri')
+                              end
+
+          model_add_four_pipe_fan_coil(model,
+                                       zones,
+                                       chilled_water_loop,
+                                       hot_water_loop: hot_water_loop,
+                                       ventilation: true,
+                                       capacity_control_method: 'ConstantVolume')          
+        end  
+
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "System type #{system_type} is not a valid choice, nothing will be added to the model.")
         return false
