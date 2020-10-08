@@ -172,7 +172,9 @@ class AppendixGPRMTests < Minitest::Test
       sim_control = model_baseline.getSimulationControl
       sim_control.setRunSimulationforSizingPeriods(true)
       sim_control.setRunSimulationforWeatherFileRunPeriods(false)
+      puts "DEM: before final baseline run ================ "
       baseline_run = prototype_creator.model_run_simulation_and_log_errors(model_baseline, "#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/SR1")
+      puts "DEM: after final baseline run ================ "
 
       # Add prototype to the list of baseline prototypes generated
       baseline_prototypes[id] = model_baseline
@@ -564,6 +566,9 @@ class AppendixGPRMTests < Minitest::Test
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
       @bldg_type_alt_now = @bldg_type_alt[prototype]
 
+      puts "DEM: bldgtype alt now = #{@bldg_type_alt_now}"
+      puts "DEM: bldgtype = #{building_type}"
+
       if building_type == 'MidriseApartment' && mod_str == ''
         # Residential model should be ptac or pthp, depending on climate
         check_if_pkg_terminal(model, climate_zone, "MidriseApartment")
@@ -571,9 +576,9 @@ class AppendixGPRMTests < Minitest::Test
         # This is a public assembly < 120 ksf, should be PSZ
         check_if_psz(model, "Assembly < 120,000 sq ft.")
         check_heat_type(model, climate_zone,"SZ", "HeatPump")
-      elsif @bldg_type_alt_now == 'Assembly' && building_type == 'HotelLarge'
+      elsif @bldg_type_alt_now == 'Assembly' && building_type == 'LargeHotel'
         # This is a public assembly > 120 ksf, should be SZ-CV
-        check_if_sz_cv(model, "Assembly < 120,000 sq ft.")
+        check_if_sz_cv(model, climate_zone, "Assembly < 120,000 sq ft.")
       elsif building_type == 'Warehouse' && mod_str == ''
         # System type should be heating and ventilating
         # check_if_ht_vent(model, "Warehouse")
@@ -794,26 +799,34 @@ class AppendixGPRMTests < Minitest::Test
   def check_if_sz_cv(model, climate_zone, sub_text)
     # building fails if any zone is not packaged terminal unit
     # or if heat type is incorrect
+    puts "DEM: before zone loop  --------------"
     model.getThermalZones.sort.each do |thermal_zone|
       pass_test = false
       is_fpfc = false
-        heat_type = ''
+      heat_type = ''
+      puts "DEM: zone = #{thermal_zone.name.get}  --------------"
       thermal_zone.equipment.each do |equip|
         # Skip HVAC components
         next unless equip.to_HVACComponent.is_initialized
         equip = equip.to_HVACComponent.get
         is_fpfc = equip.to_ZoneHVACFourPipeFanCoil.is_initialized
-        assert(is_fpfc, "Baseline system selection failed: should be FPFC for " + sub_text)  
+        if is_fpfc
+          # pass test for FPFC if at least one zone equip is FPFC; others may be exhaust fan, or possibly something else
+          pass_test = true
+        end  
+        puts "DEM: is_fpfc = #{is_fpfc}  --------------"
         if is_fpfc
           # Also check heat type
+          equip = equip.to_ZoneHVACFourPipeFanCoil.get
           heat_type = model.coil_heat_type(equip.heatingCoil) 
           if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/ 
-            assert(heat_type == 'Electric', "Baseline system selection failed for climate #{climate_zone}: should be FPFC with electric heat for " + sub_text)
+            assert(heat_type == 'Electric', "Baseline system selection failed for climate #{climate_zone}: FPFC should have electric heat for " + sub_text)
           else
-            assert(heat_type == 'Fuel', "Baseline system selection failed for climate #{climate_zone}: should be FPFC wit hot water heat for " + sub_text)
+            assert(heat_type == 'Fuel', "Baseline system selection failed for climate #{climate_zone}: FPFC should have hot water heat for " + sub_text)
           end
         end
       end
+      assert(pass_test, "Baseline system selection failed: should be FPFC for " + sub_text)  
     end
   end
 
@@ -963,7 +976,9 @@ class AppendixGPRMTests < Minitest::Test
     # Create all unique baseline
     prototypes_baseline_generated = generate_baseline(prototypes_generated, prototypes_to_generate)
     # Assign prototypes and baseline to each test
+    puts "DEM: before assign prototypes"
     prototypes = assign_prototypes(prototypes_generated, tests, prototypes_to_generate)
+    puts "DEM: before assign prototypes base"
     prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
 
     # Run tests
@@ -974,6 +989,7 @@ class AppendixGPRMTests < Minitest::Test
     check_lpd(prototypes_base['lpd']) if (tests.include? 'lpd')
     check_light_occ_sensor(prototypes['light_occ_sensor'],prototypes_base['light_occ_sensor']) if (tests.include? 'light_occ_sensor')
     check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if (tests.include? 'infiltration')
+    puts "DEM: before check hvac"
     check_hvac_type(prototypes_base['hvac_baseline']) if (tests.include? 'hvac_baseline')
   end
 end

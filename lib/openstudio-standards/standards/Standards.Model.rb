@@ -214,19 +214,11 @@ class Standard
         model_apply_standard_constructions(model, climate_zone, wwr_building_type, wwr_info)
       end
 
-      if /prm/i !~ template
+      # Remove all HVAC from model, excluding service water heating
+      model_remove_prm_hvac(model)
 
-        # Get the groups of zones that define the baseline HVAC systems for later use.
-        # This must be done before removing the HVAC systems because it requires knowledge of proposed HVAC fuels.
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Grouping Zones by Fuel Type and Occupancy Type ***')
-        sys_groups = model_prm_baseline_system_groups(model, custom)
-
-        # Remove all HVAC from model, excluding service water heating
-        model_remove_prm_hvac(model)
-
-        # Remove all EMS objects from the model
-        model_remove_prm_ems_objects(model)
-      end
+      # Remove all EMS objects from the model
+      model_remove_prm_ems_objects(model)
 
       if /prm/i !~ template
 
@@ -267,6 +259,7 @@ class Standard
 
       else
         # Path for standard versions 2016 and later
+        puts "DEM: before call to model_prm_stable_baseline_system_type --------------------"
         sys_groups.each do |sys_group|
           # Determine the primary baseline system type
           system_type = model_prm_stable_baseline_system_type(model,
@@ -416,13 +409,45 @@ class Standard
       # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
       # It won't be taken into account, while it should: only self shading from the building itself should be turned off but to my knowledge there isn't a way to do this in E+
 
+
+
+      model.getThermalZones.sort.each do |thermal_zone|
+        pass_test = false
+        is_fpfc = false
+          heat_type = ''
+        thermal_zone.equipment.each do |equip|
+          # Skip HVAC components
+          next unless equip.to_HVACComponent.is_initialized
+          equip = equip.to_HVACComponent.get
+          is_fpfc = equip.to_ZoneHVACFourPipeFanCoil.is_initialized
+          puts "DEM: is_fpfc = #{is_fpfc}"
+          #assert(is_fpfc, "Baseline system selection failed: should be FPFC for " + sub_text)  
+          if is_fpfc
+            equip = equip.to_ZoneHVACFourPipeFanCoil.get
+            # Also check heat type
+            heat_type = model.coil_heat_type(equip.heatingCoil) 
+            if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/ 
+              # assert(heat_type == 'Electric', "Baseline system selection failed for climate #{climate_zone}: should be FPFC with electric heat for " + sub_text)
+              puts "DEM: heat type = #{heat_type}"
+            else
+              # assert(heat_type == 'Fuel', "Baseline system selection failed for climate #{climate_zone}: should be FPFC wit hot water heat for " + sub_text)
+              puts "DEM: heat type = #{heat_type}"
+            end
+          end
+        end
+      end
+  
+
+
       model_status = degs > 0 ? "final_#{degs}" : 'final'
+      puts "DEM: os model = #{sizing_run_dir}/#{model_status}.osm ++++++++++++++++++++"
       model.save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
 
       # Translate to IDF and save for debugging
       forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
       idf = forward_translator.translateModel(model)
       idf_path = OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.idf")
+      puts "DEM: idf_path = #{idf_path} +++++++++++++++++++++++"
       idf.save(idf_path, true)
     end
     return true
@@ -1356,6 +1381,8 @@ class Standard
     #             [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
     system_type = [nil, nil, nil, nil]
 
+    puts "DEM: start of set system type ---------------------"
+
     # Find matching record from prm baseline hvac table
     # First filter by number of stories
     iStoryGroup = 0
@@ -1376,6 +1403,7 @@ class Standard
         break
       end
     end
+    puts "DEM: check 1 ---------------------"
     # Next filter by floor area
     iAreaGroup = 0
     baseine_is_found = false
@@ -1421,6 +1449,8 @@ class Standard
       end
     end
 
+    puts "DEM: check 2 ---------------------"
+
     heat_type = find_prm_heat_type(hvac_building_type, climate_zone)
 
     # hash to relate apx G systype categories to sys types for model
@@ -1448,6 +1478,7 @@ class Standard
     end     
   
     model_sys_type = sys_hash[props['system_type']]
+    puts "DEM: check 3 ---------------------"
 
     if /districtheating/i =~ fuel_type
       central_heat = 'DistrictHeating'
@@ -1471,6 +1502,8 @@ class Standard
     end
 
     system_type = [model_sys_type, central_heat, zone_heat, cool_type]
+    puts "DEM: Before print system type ----------------------------------------"
+    p system_type
     return system_type
 
   end
@@ -1946,12 +1979,14 @@ class Standard
                                                     chw_pumping_type: 'const_pri')
                               end
 
+          puts "DEM: before add fpfc ---------------------"
           model_add_four_pipe_fan_coil(model,
                                        zones,
                                        chilled_water_loop,
                                        hot_water_loop: hot_water_loop,
                                        ventilation: true,
                                        capacity_control_method: 'ConstantVolume')          
+          puts "DEM: after add fpfc"
         end  
 
       else

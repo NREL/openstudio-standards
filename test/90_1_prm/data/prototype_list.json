@@ -26,6 +26,6 @@
         ["Warehouse", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
     "hvac_baseline": [
-        ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", [["change_bldg_type",["Assembly"]], ["remove_transformer", []]]]
+        ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-4A", [["change_bldg_type",["Assembly"]], ["remove_transformer", []]]]
         ]
 }
