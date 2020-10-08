@@ -99,32 +99,32 @@ class Standard
 
     ventilation = false
     # Zone HVAC operating schedule if providing ventilation
-    if zone_hvac_component.ZoneHVACFourPipeFanCoil.is_initialized
-      zone_hvac_component = zone_hvac_component.ZoneHVACFourPipeFanCoil.get
+    if zone_hvac_component.to_ZoneHVACFourPipeFanCoil.is_initialized
+      zone_hvac_component = zone_hvac_component.to_ZoneHVACFourPipeFanCoil.get
       if zone_hvac_component.maximumOutdoorAirFlowRate.is_initialized
         oa_rate = zone_hvac_component.maximumOutdoorAirFlowRate.get
         ventilation = true if oa_rate > 0.0
       end
-    elsif zone_hvac_component.ZoneHVACPackagedTerminalAirConditioner.is_initialized
-      zone_hvac_component = zone_hvac_component.ZoneHVACPackagedTerminalAirConditioner.get
+    elsif zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+      zone_hvac_component = zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.get
       if zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.is_initialized
         oa_rate = zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.get
         ventilation = true if oa_rate > 0.0
       end
-    elsif zone_hvac_component.ZoneHVACPackagedTerminalHeatPump.is_initialized
-      zone_hvac_component = zone_hvac_component.ZoneHVACPackagedTerminalHeatPump.get
+    elsif zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+      zone_hvac_component = zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.get
       if zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.is_initialized
         oa_rate = zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.get
         ventilation = true if oa_rate > 0.0
       end
-    elsif zone_hvac_component.ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized
-      zone_hvac_component = zone_hvac_component.ZoneHVACTerminalUnitVariableRefrigerantFlow.get
+    elsif zone_hvac_component.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized
+      zone_hvac_component = zone_hvac_component.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.get
       if zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.is_initialized
         oa_rate = zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.get
         ventilation = true if oa_rate > 0.0
       end
-    elsif zone_hvac_component.ZoneHVACWaterToAirHeatPump.is_initialized
-      zone_hvac_component = zone_hvac_component.ZoneHVACWaterToAirHeatPump.get
+    elsif zone_hvac_component.to_ZoneHVACWaterToAirHeatPump.is_initialized
+      zone_hvac_component = zone_hvac_component.to_ZoneHVACWaterToAirHeatPump.get
       if zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.is_initialized
         oa_rate = zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.get
         ventilation = true if oa_rate > 0.0
