@@ -172,9 +172,7 @@ class AppendixGPRMTests < Minitest::Test
       sim_control = model_baseline.getSimulationControl
       sim_control.setRunSimulationforSizingPeriods(true)
       sim_control.setRunSimulationforWeatherFileRunPeriods(false)
-      puts "DEM: before final baseline run ================ "
       baseline_run = prototype_creator.model_run_simulation_and_log_errors(model_baseline, "#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/SR1")
-      puts "DEM: after final baseline run ================ "
 
       # Add prototype to the list of baseline prototypes generated
       baseline_prototypes[id] = model_baseline
@@ -566,9 +564,6 @@ class AppendixGPRMTests < Minitest::Test
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
       @bldg_type_alt_now = @bldg_type_alt[prototype]
 
-      puts "DEM: bldgtype alt now = #{@bldg_type_alt_now}"
-      puts "DEM: bldgtype = #{building_type}"
-
       if building_type == 'MidriseApartment' && mod_str == ''
         # Residential model should be ptac or pthp, depending on climate
         check_if_pkg_terminal(model, climate_zone, "MidriseApartment")
@@ -799,12 +794,10 @@ class AppendixGPRMTests < Minitest::Test
   def check_if_sz_cv(model, climate_zone, sub_text)
     # building fails if any zone is not packaged terminal unit
     # or if heat type is incorrect
-    puts "DEM: before zone loop  --------------"
     model.getThermalZones.sort.each do |thermal_zone|
       pass_test = false
       is_fpfc = false
       heat_type = ''
-      puts "DEM: zone = #{thermal_zone.name.get}  --------------"
       thermal_zone.equipment.each do |equip|
         # Skip HVAC components
         next unless equip.to_HVACComponent.is_initialized
@@ -814,7 +807,6 @@ class AppendixGPRMTests < Minitest::Test
           # pass test for FPFC if at least one zone equip is FPFC; others may be exhaust fan, or possibly something else
           pass_test = true
         end  
-        puts "DEM: is_fpfc = #{is_fpfc}  --------------"
         if is_fpfc
           # Also check heat type
           equip = equip.to_ZoneHVACFourPipeFanCoil.get
@@ -959,13 +951,13 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      #'wwr',
-      #'envelope',
-      #'lpd',
-      #'isresidential',
-      #'daylighting_control',
-      #'light_occ_sensor',
-      #'infiltration',
+      'wwr',
+      'envelope',
+      'lpd',
+      'isresidential',
+      'daylighting_control',
+      'light_occ_sensor',
+      'infiltration',
       'hvac_baseline'
     ]
 
@@ -976,9 +968,7 @@ class AppendixGPRMTests < Minitest::Test
     # Create all unique baseline
     prototypes_baseline_generated = generate_baseline(prototypes_generated, prototypes_to_generate)
     # Assign prototypes and baseline to each test
-    puts "DEM: before assign prototypes"
     prototypes = assign_prototypes(prototypes_generated, tests, prototypes_to_generate)
-    puts "DEM: before assign prototypes base"
     prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
 
     # Run tests
@@ -989,7 +979,6 @@ class AppendixGPRMTests < Minitest::Test
     check_lpd(prototypes_base['lpd']) if (tests.include? 'lpd')
     check_light_occ_sensor(prototypes['light_occ_sensor'],prototypes_base['light_occ_sensor']) if (tests.include? 'light_occ_sensor')
     check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if (tests.include? 'infiltration')
-    puts "DEM: before check hvac"
     check_hvac_type(prototypes_base['hvac_baseline']) if (tests.include? 'hvac_baseline')
   end
 end
