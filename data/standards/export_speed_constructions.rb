@@ -228,6 +228,9 @@ templates.each do |template|
     cz_data[SpeedConstructions.speed_enum(intended_surface_type)] = surf_type_data
 
     template_data[SpeedConstructions.speed_enum(climate_zone)] = cz_data
+
+    reverse_floor = default.reverseConstruction
+    reverse_floor.setName('Typical Interior Floor Reversed')
   end
   inputs[SpeedConstructions.speed_enum(template)] = template_data
 end
@@ -331,6 +334,10 @@ end
 # check that every construction has one cost associated
 model.getConstructions.each do |construction|
   if construction.lifeCycleCosts.size != 1
+
+    # don't add default costs to these constructions
+    next if construction.nameString.match(/Typical Interior Floor Reversed/)
+
     puts "Warning: Construction '#{construction.nameString}' has #{construction.lifeCycleCosts.size} cost objects, expected 1.  Adding default cost of $99/m2"
 
     construction.removeLifeCycleCosts
