@@ -2591,6 +2591,7 @@ class Standard
           fan = create_fan_by_name(model,
                                    'Packaged_RTU_SZ_AC_CAV_OnOff_Fan',
                                    fan_name: "#{air_loop.name} Fan")
+          fan.setAvailabilitySchedule(hvac_op_sch)
           # CyclingHeatPump: Unitary Heat Pump system
           unitary_system = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
           unitary_system.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
