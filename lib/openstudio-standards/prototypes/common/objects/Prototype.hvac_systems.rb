@@ -2383,7 +2383,7 @@ class Standard
                        heating_type: nil,
                        supplemental_heating_type: nil,
                        fan_location: 'DrawThrough',
-                       fan_type: 'Cycling',
+                       fan_type: 'ConstantVolume',
                        hvac_op_sch: nil,
                        oa_damper_sch: nil)
 
@@ -2442,25 +2442,6 @@ class Standard
       sizing_zone = zone.sizingZone
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
-
-      # create fan
-      # ConstantVolume: Packaged Rooftop Single Zone Air conditioner
-      # Cycling: Unitary System
-      # CyclingHeatPump: Unitary Heat Pump system
-      if fan_type == 'ConstantVolume'
-        fan = create_fan_by_name(model,
-                                 'Packaged_RTU_SZ_AC_CAV_Fan',
-                                 fan_name: "#{air_loop.name} Fan")
-        fan.setAvailabilitySchedule(hvac_op_sch)
-      elsif fan_type == 'Cycling'
-        fan = create_fan_by_name(model,
-                                 'Packaged_RTU_SZ_AC_Cycling_Fan',
-                                 fan_name: "#{air_loop.name} Fan")
-        fan.setAvailabilitySchedule(hvac_op_sch)
-      else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Fan type '#{fan_type}' not recognized, cannot add PSZ-AC.")
-        return []
-      end
 
       # create heating coil
       case heating_type
@@ -2554,6 +2535,10 @@ class Standard
 
       # wrap coils in a unitary system if cycling
       if fan_type == 'Cycling'
+        # Use a Fan:OnOff in the unitary system object
+        fan = create_fan_by_name(model,
+                                 'Packaged_RTU_SZ_AC_Cycling_Fan',
+                                 fan_name: "#{air_loop.name} Fan")
         case heating_type
         when 'Water To Air Heat Pump'
           # Cycling: Unitary System
@@ -2602,6 +2587,10 @@ class Standard
         # ConstantVolume: Packaged Rooftop Single Zone Air conditioner
         # Need unitary system wrapper for heat pumps in order to allow control of supplemental heat
         if heating_type == 'Single Speed Heat Pump'
+          # Use a Fan:OnOff in the unitary system object
+          fan = create_fan_by_name(model,
+                                   'Packaged_RTU_SZ_AC_CAV_OnOff_Fan',
+                                   fan_name: "#{air_loop.name} Fan")
           # CyclingHeatPump: Unitary Heat Pump system
           unitary_system = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
           unitary_system.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
@@ -2616,6 +2605,10 @@ class Standard
           unitary_system.setSupplyAirFanOperatingModeSchedule(hvac_op_sch)
           unitary_system.addToNode(air_loop.supplyInletNode)
         elsif fan_location == 'DrawThrough'
+          # Use a Fan:ConstantVolume placed directly on the air loop
+          fan = create_fan_by_name(model,
+                                   'Packaged_RTU_SZ_AC_CAV_Fan',
+                                   fan_name: "#{air_loop.name} Fan")
           fan.addToNode(air_loop.supplyInletNode) unless fan.nil?
           supplemental_htg_coil.addToNode(air_loop.supplyInletNode) unless supplemental_htg_coil.nil?
           unless htg_coil.nil?
@@ -2629,6 +2622,10 @@ class Standard
             clg_coil.controllerWaterCoil.get.setName("#{clg_coil.name} Controller") if cooling_type == 'Water'
           end
         elsif fan_location == 'BlowThrough'
+          # Use a Fan:ConstantVolume placed directly on the air loop
+          fan = create_fan_by_name(model,
+                                   'Packaged_RTU_SZ_AC_CAV_Fan',
+                                   fan_name: "#{air_loop.name} Fan")
           supplemental_htg_coil.addToNode(air_loop.supplyInletNode) unless supplemental_htg_coil.nil?
           clg_coil.addToNode(air_loop.supplyInletNode) unless clg_coil.nil?
           htg_coil.addToNode(air_loop.supplyInletNode) unless htg_coil.nil?
@@ -3699,15 +3696,14 @@ class Standard
         fan = create_fan_by_name(model,
                                  'PTAC_CAV_Fan',
                                  fan_name: "#{zone.name} PTAC Fan")
-        fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
       elsif fan_type == 'Cycling'
         fan = create_fan_by_name(model,
                                  'PTAC_Cycling_Fan',
                                  fan_name: "#{zone.name} PTAC Fan")
-        fan.setAvailabilitySchedule(model.alwaysOffDiscreteSchedule)
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "ptac_fan_type of #{fan_type} is not recognized.")
       end
+      fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
 
       # add heating coil
       case heating_type
@@ -3807,16 +3803,15 @@ class Standard
         fan = create_fan_by_name(model,
                                  'PTAC_CAV_Fan',
                                  fan_name: "#{zone.name} PTHP Fan")
-        fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
       elsif fan_type == 'Cycling'
         fan = create_fan_by_name(model,
                                  'PTAC_Cycling_Fan',
                                  fan_name: "#{zone.name} PTHP Fan")
-        fan.setAvailabilitySchedule(model.alwaysOffDiscreteSchedule)
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "PTHP fan_type of #{fan_type} is not recognized.")
         return false
       end
+      fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
 
       # add heating coil
       htg_coil = create_coil_heating_dx_single_speed(model,
@@ -5879,7 +5874,7 @@ class Standard
                        heating_type: heating_type,
                        supplemental_heating_type: supplemental_heating_type,
                        fan_location: 'DrawThrough',
-                       fan_type: 'Cycling')
+                       fan_type: 'ConstantVolume')
 
     when 'PSZ-HP'
       model_add_psz_ac(model,
