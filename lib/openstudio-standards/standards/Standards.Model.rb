@@ -312,12 +312,12 @@ class Standard
 
       end
 
-      if /prm/i !~ template
-        # SAT reset, economizers
-        model.getAirLoopHVACs.sort.each do |air_loop|
-          air_loop_hvac_apply_prm_baseline_controls(air_loop, climate_zone)
-        end
+      # SAT reset, economizers
+      model.getAirLoopHVACs.sort.each do |air_loop|
+        air_loop_hvac_apply_prm_baseline_controls(air_loop, climate_zone)
+      end
 
+      if /prm/i !~ template
         # Apply the minimum damper positions, assuming no DDC control of VAV terminals
         model.getAirLoopHVACs.sort.each do |air_loop|
           air_loop_hvac_apply_minimum_vav_damper_positions(air_loop, false)
