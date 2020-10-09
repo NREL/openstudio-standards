@@ -4418,29 +4418,35 @@ class Standard
       end
 
       # Determine the space category
-      # TODO: This should really use the heating/cooling loads from the proposed building.
-      # However, in an attempt to avoid another sizing run just for this purpose,
-      # conditioned status is based on heating/cooling setpoints.
-      # If heated-only, will be assumed Semiheated.
-      # The full-bore method is on the next line in case needed.
-      # cat = thermal_zone_conditioning_category(space, template, climate_zone)
-      cooled = space_cooled?(space)
-      heated = space_heated?(space)
-      cat = 'Unconditioned'
-      # Unconditioned
-      if !heated && !cooled
-        cat = 'Unconditioned'
-        # Heated-Only
-      elsif heated && !cooled
-        cat = 'Semiheated'
-        # Heated and Cooled
+      if model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
+        # For PRM 90.1-2019 and onward, determine space category
+        # based on sizing run results
+        cat = space_conditioning_category(space)
       else
-        res = space_residential?(space)
-        cat = if res
-                'ResConditioned'
-              else
-                'NonResConditioned'
-              end
+        # TODO: This should really use the heating/cooling loads from the proposed building.
+        # However, in an attempt to avoid another sizing run just for this purpose,
+        # conditioned status is based on heating/cooling setpoints.
+        # If heated-only, will be assumed Semiheated.
+        # The full-bore method is on the next line in case needed.
+        # cat = thermal_zone_conditioning_category(space, template, climate_zone)
+        cooled = space_cooled?(space)
+        heated = space_heated?(space)
+        cat = 'Unconditioned'
+        # Unconditioned
+        if !heated && !cooled
+          cat = 'Unconditioned'
+          # Heated-Only
+        elsif heated && !cooled
+          cat = 'Semiheated'
+          # Heated and Cooled
+        else
+          res = space_residential?(space)
+          cat = if res
+                  'ResConditioned'
+                else
+                  'NonResConditioned'
+                end
+        end
       end
       space_cats[space] = cat
 
