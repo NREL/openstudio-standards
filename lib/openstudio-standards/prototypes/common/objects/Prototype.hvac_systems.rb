@@ -2609,6 +2609,7 @@ class Standard
           fan = create_fan_by_name(model,
                                    'Packaged_RTU_SZ_AC_CAV_Fan',
                                    fan_name: "#{air_loop.name} Fan")
+          fan.setAvailabilitySchedule(hvac_op_sch)
           fan.addToNode(air_loop.supplyInletNode) unless fan.nil?
           supplemental_htg_coil.addToNode(air_loop.supplyInletNode) unless supplemental_htg_coil.nil?
           unless htg_coil.nil?
@@ -2626,6 +2627,7 @@ class Standard
           fan = create_fan_by_name(model,
                                    'Packaged_RTU_SZ_AC_CAV_Fan',
                                    fan_name: "#{air_loop.name} Fan")
+          fan.setAvailabilitySchedule(hvac_op_sch)
           supplemental_htg_coil.addToNode(air_loop.supplyInletNode) unless supplemental_htg_coil.nil?
           clg_coil.addToNode(air_loop.supplyInletNode) unless clg_coil.nil?
           htg_coil.addToNode(air_loop.supplyInletNode) unless htg_coil.nil?
@@ -3752,7 +3754,11 @@ class Standard
                                                                                   clg_coil)
       ptac_system.setName("#{zone.name} PTAC")
       ptac_system.setFanPlacement('DrawThrough')
-      ptac_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
+      if fan_type == 'ConstantVolume'
+        ptac_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOnDiscreteSchedule)
+      else
+        ptac_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
+      end
       unless ventilation
         ptac_system.setOutdoorAirFlowRateDuringCoolingOperation(0.0)
         ptac_system.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
@@ -3833,6 +3839,11 @@ class Standard
       pthp_system.setName("#{zone.name} PTHP")
       pthp_system.setFanPlacement('DrawThrough')
       pthp_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
+      if fan_type == 'ConstantVolume'
+        pthp_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOnDiscreteSchedule)
+      else
+        pthp_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
+      end
       unless ventilation
         pthp_system.setOutdoorAirFlowRateDuringCoolingOperation(0.0)
         pthp_system.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
