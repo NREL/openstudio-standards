@@ -1422,7 +1422,7 @@ class Standard
     area_m2 = 0.0
 
     # Get the space conditioning type
-    space_cond_type = space_conditioning_category(space, climate_zone)
+    space_cond_type = space_conditioning_category(space)
 
     # Loop through all surfaces in this space
     space.surfaces.sort.each do |surface|
@@ -1446,7 +1446,7 @@ class Standard
         # TODO: add a case for 'Zone' when supported
         if surface.outsideBoundaryCondition == 'Surface'
           adj_space = surface.adjacentSurface.get.space.get
-          adj_space_cond_type = space_conditioning_category(adj_space, climate_zone)
+          adj_space_cond_type = space_conditioning_category(adj_space)
           surf_cnt = true unless adj_space_cond_type != 'Unconditioned'
         end
       end
@@ -1588,7 +1588,10 @@ class Standard
   # @param climate_zone [String] climate zone
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
   # @todo add logic to detect indirectly-conditioned spaces based on air transfer
-  def space_conditioning_category(space, climate_zone)
+  def space_conditioning_category(space)
+    # Get climate zone
+    climate_zone = model_standards_climate_zone(space.model)
+
     # Get the zone this space is inside
     zone = space.thermalZone
 

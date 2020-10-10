@@ -346,4 +346,79 @@ class ASHRAE901PRM < Standard
 
     return tot_infil_m3_per_s
   end
+
+  # Reduces the SRR to the values specified by the PRM. SRR reduction will be done by shrinking vertices toward the centroid.
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  def model_apply_prm_baseline_skylight_to_roof_ratio(model)
+    # Loop through all spaces in the model, and
+    # per the 90.1-2019 PRM User Manual, only
+    # account for exterior roofs for enclosed 
+    # spaces. Include space multipliers.
+    roof_m2 = 0.001 # Avoids divide by zero errors later
+    sky_m2 = 0
+    total_roof_m2 = 0.001
+    total_subsurface_m2 = 0
+    model.getSpaces.sort.each do |space|
+      next if space_conditioning_category(space) == 'Unconditioned'
+      # Loop through all surfaces in this space
+      roof_area_m2 = 0
+      sky_area_m2 = 0
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType == 'RoofCeiling'
+        # This roof's gross area (including skylight area)
+        roof_area_m2 += surface.grossArea * space.multiplier
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |ss|
+          next unless ss.subSurfaceType == 'Skylight'
+          sky_area_m2 += ss.netArea * space.multiplier
+        end
+      end
+
+      total_roof_m2 += roof_area_m2
+      total_subsurface_m2 += sky_area_m2
+    end
+
+    # Calculate the SRR of each category
+    srr = ((total_subsurface_m2 / total_roof_m2) * 100.0).round(1)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The skylight to roof ratios (SRRs) is: : #{srr.round}%.")
+
+    # SRR limit
+    srr_lim = model_prm_skylight_to_roof_ratio_limit(model)
+
+    # Check against SRR limit
+    red = srr > srr_lim
+
+    # Stop here unless skylights need reducing
+    return true unless red
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all skylights equally down to the limit of #{srr_lim.round}%.")
+
+    # Determine the factors by which to reduce the skylight area
+    mult = srr_lim / srr
+
+    # Reduce the skylight area if any of the categories necessary
+    model.getSpaces.sort.each do |space|
+      next if space_conditioning_category(space) == 'Unconditioned'
+      # Loop through all surfaces in this space
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType == 'RoofCeiling'
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |ss|
+          next unless ss.subSurfaceType == 'Skylight'
+          # Reduce the size of the skylight
+          red = 1.0 - mult
+          sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
+        end
+      end
+    end
+
+    return true
+  end
 end

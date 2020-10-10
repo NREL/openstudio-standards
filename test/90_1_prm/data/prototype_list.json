@@ -3,6 +3,9 @@
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []],
         ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", [["remove_transformer", []]]]
     ],
+    "srr": [
+        ["RetailStandalone", "90.1-2010", "ASHRAE 169-2013-2A", [["increase_skylight_size", [10]]]]
+    ],
     "daylighting_control": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
