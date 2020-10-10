@@ -194,9 +194,14 @@ class NECB2011 < Standard
                                    fixed_wind_solar_trans: nil,
                                    skylight_solar_trans: nil,
                                    fdwr_set: -1.0,
-                                   srr_set: -1.0
-
+                                   srr_set: -1.0,
+                                   pv_ground_type: nil,
+                                   pv_ground_area_total_m2: nil,
+                                   pv_ground_tilt_angle: nil,
+                                   pv_ground_azimuth_angle: nil,
+                                   pv_ground_module: nil
   )
+
 
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
@@ -227,9 +232,14 @@ class NECB2011 < Standard
                                 fixed_wind_solar_trans: fixed_wind_solar_trans,
                                 skylight_solar_trans: skylight_solar_trans,
                                 fdwr_set: fdwr_set,
-                                srr_set: srr_set
-
+                                srr_set: srr_set,
+                                pv_ground_type: nil,  # Two options: (1) nil OR FALSE, (2) TRUE
+                                pv_ground_area_total_m2: nil, # e.g. 50
+                                pv_ground_tilt_angle: nil, # e.g. 2
+                                pv_ground_azimuth_angle: nil, # e.g. 180
+                                pv_ground_module: nil, # Options: polycrystaline, #TODO: Add other options  #Sara
     )
+
   end
 
   def load_building_type_from_library(building_type:)
@@ -275,7 +285,12 @@ class NECB2011 < Standard
                            rotation_degrees: nil,
                            scale_x: nil,
                            scale_y: nil,
-                           scale_z: nil
+                           scale_z: nil,
+                           pv_ground_type: nil,
+                           pv_ground_area_total_m2: nil ,
+                           pv_ground_tilt_angle: nil,
+                           pv_ground_azimuth_angle: nil,
+                           pv_ground_module: nil
   )
 
     BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees.nil?
@@ -320,8 +335,14 @@ class NECB2011 < Standard
                                    unitary_cop: unitary_cop,
                                    furnace_eff: furnace_eff,
                                    shw_eff: shw_eff,
-                                   daylighting_type: daylighting_type
+                                   daylighting_type: daylighting_type,
+                                   pv_ground_type: pv_ground_type,
+                                   pv_ground_area_total_m2: pv_ground_area_total_m2,
+                                   pv_ground_tilt_angle: pv_ground_tilt_angle,
+                                   pv_ground_azimuth_angle: pv_ground_azimuth_angle,
+                                   pv_ground_module: pv_ground_module
     )
+
     return model
   end
 
@@ -336,7 +357,14 @@ class NECB2011 < Standard
                                      furnace_eff: nil,
                                      unitary_cop: nil,
                                      shw_eff: nil,
-                                     daylighting_type: 'NECB_Default')
+                                     daylighting_type: 'NECB_Default',
+                                     pv_ground_type:,
+                                     pv_ground_area_total_m2:,
+                                     pv_ground_tilt_angle:,
+                                     pv_ground_azimuth_angle:,
+                                     pv_ground_module:
+  )
+
     # Create ECM object.
     ecm = ECMS.new
 
@@ -378,6 +406,15 @@ class NECB2011 < Standard
     # -------Pump sizing required by some vintages----------------
     # Apply Pump power as required.
     apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
+
+    # -------Ground-mounted PV panels----------------   #Sara
+    # Apply ground-mounted PV panels as required.
+    ecm.apply_pv_ground(model: model,
+                        pv_ground_type: pv_ground_type,
+                        pv_ground_area_total_m2: pv_ground_area_total_m2,
+                        pv_ground_tilt_angle: pv_ground_tilt_angle,
+                        pv_ground_azimuth_angle: pv_ground_azimuth_angle,
+                        pv_ground_module: pv_ground_module)
   end
 
 

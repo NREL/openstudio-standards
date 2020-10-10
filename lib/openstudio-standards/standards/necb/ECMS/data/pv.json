@@ -1,0 +1,16 @@
+{
+  "tables": {
+    "pv": {
+      "data_type": "table",
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "pv_module": "polycrystaline",
+          "pv_wattage": 250
+        }
+      ]
+    }
+  }
+}
