@@ -1271,3 +1271,5 @@ ASHRAE_90_1_2013,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.19 S
 ASHRAE_90_1_2013,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.16 SHGC-0.27 VT-0.3,false
 ASHRAE_90_1_2013,8,Interior_Walls,"",Typical Interior Wall,true
 ASHRAE_90_1_2013,8,Floors,"",Typical Interior Floor,true
+"","","","",Typical Interior Floor Reversed,false
+"","","","",ShadingDevices,false

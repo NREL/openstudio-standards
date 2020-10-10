@@ -229,11 +229,35 @@ templates.each do |template|
 
     template_data[SpeedConstructions.speed_enum(climate_zone)] = cz_data
 
+    # Add a reversed floor (i.e. interior ceiling), add to construction list explicitly below
     reverse_floor = default.reverseConstruction
     reverse_floor.setName('Typical Interior Floor Reversed')
+
   end
+
   inputs[SpeedConstructions.speed_enum(template)] = template_data
 end
+
+# Add a shading construction, add to construction list explicitly below
+shading = OpenStudio::Model::Construction.new(model)
+shading_info = shading.standardsInformation
+shading.setName('ShadingDevices')
+
+shading_material = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+shading_material.setName('1 in. lightweight concrete highly reflective')
+shading_material.setRoughness('MediumRough')
+shading_material.setThickness(0.0254)
+shading_material.setConductivity(2.31)
+shading_material.setDensity(2321.99999999999)
+shading_material.setSpecificHeat(814.22222222222)
+shading_material.setThermalAbsorptance(0.1)
+shading_material.setSolarAbsorptance(0.1)
+shading_material.setVisibleAbsorptance(0.1)
+
+layers = OpenStudio::Model::MaterialVector.new
+layers << shading_material
+shading.setLayers(layers)
+
 # Add the Constructions key as the top level of the hash
 inputs = {'Constructions' => inputs}
 
@@ -338,13 +362,19 @@ model.getConstructions.each do |construction|
     # don't add default costs to these constructions
     next if construction.nameString.match(/Typical Interior Floor Reversed/)
 
-    puts "Warning: Construction '#{construction.nameString}' has #{construction.lifeCycleCosts.size} cost objects, expected 1.  Adding default cost of $99/m2"
+    default_cost = 99
+
+    if construction.nameString.match(/ShadingDevices/)
+      default_cost = 1076.39104167097
+    end
+
+    puts "Warning: Construction '#{construction.nameString}' has #{construction.lifeCycleCosts.size} cost objects, expected 1.  Adding default cost of $#{default_cost}/m2"
 
     construction.removeLifeCycleCosts
     lcc = OpenStudio::Model::LifeCycleCost.new(construction)
     lcc.setName("LCC_MAT - #{construction.nameString}")
     lcc.setCategory('Construction')
-    lcc.setCost(99)
+    lcc.setCost(default_cost)
     lcc.setCostUnits('CostPerArea')
     lcc.setStartOfCosts('ServicePeriod')
     lcc.setRepeatPeriodYears(20)
@@ -401,6 +431,10 @@ constructions.keys.each do |energy_code_key|
     end
   end
 end
+
+# add hard coded constructions
+construction_csv << ['', '', '', '', 'Typical Interior Floor Reversed', false]
+construction_csv << ['', '', '', '', 'ShadingDevices', false]
 
 CSV.open("#{__dir__}/constructions_list.csv", 'w') do |f|
   construction_csv.each do |line|

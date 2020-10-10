@@ -26788,7 +26788,8 @@
         "Fan Coils with Air-Cooled Chiller and Boiler HW Heating",
         "VAV with Water-Cooled Chiller and Boiler HW Reheat",
         "VAV with Air-Cooled Chiller and Boiler HW Reheat",
-        "Packaged VAV with Boiler HW Reheat"
+        "Packaged VAV with Boiler HW Reheat",
+        "Ideal Air Loads with Ventilation"
       ],
       "Heating_Load_Factor": {
         "Default": 1.25,
