@@ -295,12 +295,10 @@ module MediumOffice
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-
     return true
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-
     return true
   end
 
@@ -318,7 +316,6 @@ module MediumOffice
   # @param air_loop_hvac [OpenStudio::model::AirLoopHVAC] Airloop
   # @return [String] Returns type of SAT reset
   def air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
-
     return 'oa'
   end
 end
