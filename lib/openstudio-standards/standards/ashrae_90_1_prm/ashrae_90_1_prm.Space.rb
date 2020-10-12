@@ -17,7 +17,7 @@ class ASHRAE901PRM < Standard
         total_exterior_wall_area = 0
         space.model.getSpaces.sort.each do |spc|
           # Get the space conditioning type
-          space_cond_type = space_conditioning_category(spc, climate_zone)
+          space_cond_type = space_conditioning_category(spc)
           total_exterior_wall_area += spc.exteriorWallArea unless space_cond_type == "Unconditioned"
         end
         adj_infil_flow_ext_wall_area = tot_infil_m3_per_s / total_exterior_wall_area
@@ -27,7 +27,7 @@ class ASHRAE901PRM < Standard
         total_floor_area = 0
         space.model.getSpaces.sort.each do |spc|
           # Get the space conditioning type
-          space_cond_type = space_conditioning_category(spc, climate_zone)
+          space_cond_type = space_conditioning_category(spc)
           total_floor_area += spc.floorArea unless space_cond_type == "Unconditioned" || space.exteriorArea == 0
         end
         adj_infil_flow_area = tot_infil_m3_per_s / total_floor_area
@@ -63,7 +63,7 @@ class ASHRAE901PRM < Standard
     space.spaceInfiltrationDesignFlowRates.each(&:remove)
     
     # Get the space conditioning type
-    space_cond_type = space_conditioning_category(space, climate_zone)
+    space_cond_type = space_conditioning_category(space)
     if space_cond_type != "Unconditioned"
       # Create an infiltration rate object for this space
       infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space.model)
