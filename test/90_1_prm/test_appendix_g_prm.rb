@@ -571,9 +571,9 @@ class AppendixGPRMTests < Minitest::Test
         # This is a public assembly < 120 ksf, should be PSZ
         check_if_psz(model, "Assembly < 120,000 sq ft.")
         check_heat_type(model, climate_zone,"SZ", "HeatPump")
-      elsif @bldg_type_alt_now == 'Assembly' && building_type == 'HotelLarge'
+      elsif @bldg_type_alt_now == 'Assembly' && building_type == 'LargeHotel'
         # This is a public assembly > 120 ksf, should be SZ-CV
-        # check_if_szcv(model, "Assembly < 120,000 sq ft.")
+        check_if_sz_cv(model, climate_zone, "Assembly < 120,000 sq ft.")
       elsif building_type == 'Warehouse' && mod_str == ''
         # System type should be heating and ventilating
         # check_if_ht_vent(model, "Warehouse")
@@ -787,6 +787,39 @@ class AppendixGPRMTests < Minitest::Test
       assert(pass_test , "Baseline system selection failed for climate #{climate_zone}: should be PTAC for " + sub_text)
     end
 
+  end
+
+  # Check if baseline system type is four pipe fan coil/ constant speed
+  # @param model, sub_text for error messages
+  def check_if_sz_cv(model, climate_zone, sub_text)
+    # building fails if any zone is not packaged terminal unit
+    # or if heat type is incorrect
+    model.getThermalZones.sort.each do |thermal_zone|
+      pass_test = false
+      is_fpfc = false
+      heat_type = ''
+      thermal_zone.equipment.each do |equip|
+        # Skip HVAC components
+        next unless equip.to_HVACComponent.is_initialized
+        equip = equip.to_HVACComponent.get
+        is_fpfc = equip.to_ZoneHVACFourPipeFanCoil.is_initialized
+        if is_fpfc
+          # pass test for FPFC if at least one zone equip is FPFC; others may be exhaust fan, or possibly something else
+          pass_test = true
+        end  
+        if is_fpfc
+          # Also check heat type
+          equip = equip.to_ZoneHVACFourPipeFanCoil.get
+          heat_type = model.coil_heat_type(equip.heatingCoil) 
+          if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/ 
+            assert(heat_type == 'Electric', "Baseline system selection failed for climate #{climate_zone}: FPFC should have electric heat for " + sub_text)
+          else
+            assert(heat_type == 'Fuel', "Baseline system selection failed for climate #{climate_zone}: FPFC should have hot water heat for " + sub_text)
+          end
+        end
+      end
+      assert(pass_test, "Baseline system selection failed: should be FPFC for " + sub_text)  
+    end
   end
 
   # Set ZoneMultiplier to passed value for all zones
