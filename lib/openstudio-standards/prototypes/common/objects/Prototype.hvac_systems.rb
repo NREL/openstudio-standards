@@ -550,10 +550,30 @@ class Standard
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', 'No valid WB=>MDB Summer Design Days were found in the model.  Attempting to load wet bulb sizing from the .ddy file directly.')
         if model.weatherFile.is_initialized && model.weatherFile.get.path.is_initialized
           weather_file = model.weatherFile.get.path.get.to_s
-          # Attempt to load in the ddy file based on convention that it is in the same directory and has the same basename as the epw file.
-          ddy_file = "#{File.join(File.dirname(weather_file), File.basename(weather_file, '.*'))}.ddy"
-          if File.exist? ddy_file
-            ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file).get
+          # Run differently depending on whether running from embedded filesystem in OpenStudio CLI or not
+          if weather_file[0] == ':' # Running from OpenStudio CLI
+            # Attempt to load in the ddy file based on convention that it is in the same directory and has the same basename as the epw file.
+            ddy_file = weather_file.gsub('.epw', '.ddy')
+            if EmbeddedScripting::hasFile(ddy_file)
+              ddy_string = EmbeddedScripting::getFileAsString(ddy_file)
+              temp_ddy_path = "#{Dir.pwd}/in.ddy"
+              File.open(temp_ddy_path, 'wb') { |f| f << ddy_string; f.flush }
+              ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(temp_ddy_path).get
+              File.delete(temp_ddy_path) if File.exist?(temp_ddy_path)
+            else
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file}")
+            end
+          else
+            # Attempt to load in the ddy file based on convention that it is in the same directory and has the same basename as the epw file.
+            ddy_file = "#{File.join(File.dirname(weather_file), File.basename(weather_file, '.*'))}.ddy"
+            if File.exist? ddy_file
+              ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file).get
+            else
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file}")
+            end
+          end
+
+          unless ddy_model.nil?
             ddy_model.getDesignDays.sort.each do |dd|
               # Save the model wetbulb design conditions Condns WB=>MDB
               if dd.name.get.include? '4% Condns WB=>MDB'
@@ -561,8 +581,6 @@ class Standard
                 summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
               end
             end
-          else
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file}")
           end
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', 'The model does not have a weather file object or path specified in the object. Cannot get .ddy file directory.')
