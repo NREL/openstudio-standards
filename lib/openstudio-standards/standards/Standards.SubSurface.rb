@@ -80,7 +80,8 @@ class Standard
   # @param percent_reduction [Double] the fractional amount
   # to reduce the area.
   def sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(sub_surface, percent_reduction)
-    mult = 1 - percent_reduction
+    # if percent_reduction > 1=> percent increase instead of reduction
+    mult = percent_reduction <= 1 ? 1 - percent_reduction : percent_reduction
     scale_factor = mult**0.5
 
     # Get the centroid (Point3d)
