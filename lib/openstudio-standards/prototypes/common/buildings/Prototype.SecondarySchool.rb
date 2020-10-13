@@ -16,12 +16,19 @@ module SecondarySchool
     end
     return true unless !transformer_efficiency.nil?
 
+    # Change to output variable name in E+ 9.4 (OS 3.1.0)
+    excluded_interiorequip_variable = if model.version < OpenStudio::VersionString.new('3.1.0')
+                                        'Electric Equipment Electric Energy'
+                                      else
+                                        'Electric Equipment Electricity Energy'
+                                      end
+
     model_add_transformer(model,
                           wired_lighting_frac: 0.0194,
                           transformer_size: 225000,
                           transformer_efficiency: transformer_efficiency,
                           excluded_interiorequip_key: '2 Elevator Lift Motors',
-                          excluded_interiorequip_meter: 'Electric Equipment Electric Energy')
+                          excluded_interiorequip_meter: excluded_interiorequip_variable)
 
     # add extra equipment for kitchen
     add_extra_equip_kitchen(model)
