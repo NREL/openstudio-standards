@@ -7,8 +7,16 @@
       ],
       "table": [
         {
-          "pv_module": "polycrystaline",
-          "pv_wattage": 250
+          "pv_module": "Standard",
+          "pv_wattage": 150
+        },
+        {
+          "pv_module": "Premium",
+          "pv_wattage": 100
+        },
+        {
+          "pv_module": "ThinFilm",
+          "pv_wattage": 80
         }
       ]
     }

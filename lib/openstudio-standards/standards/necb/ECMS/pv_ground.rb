@@ -7,7 +7,7 @@ class ECMS
     return if pv_ground_type.nil? || pv_ground_type == FALSE
 
     ##### Calculate number of PV panels
-    #TODO: Note: assuming 5 ft x 2 ft as PV panel's size since it seems to fit the racking system used for ground mounts as per Mike Lubun's comment.
+    # Note: assuming 5 ft x 2 ft as PV panel's size since it seems to fit the racking system used for ground mounts as per Mike Lubun's comment.
     pv_area_each_ft2 = 5.0 * 2.0
     pv_area_each_m2 = (OpenStudio.convert(pv_area_each_ft2, 'ft^2', 'm^2').get) #convert pv_area_each_ft2 to m2
     # puts pv_area_each_m2
@@ -23,20 +23,20 @@ class ECMS
     dc_system_capacity = pv_number_panels * pv_watt
     # puts dc_system_capacity
     generator = OpenStudio::Model::GeneratorPVWatts.new(model,dc_system_capacity)
-    generator.setModuleType('Standard') #TODO: Question: module type?
-    generator.setArrayType('FixedOpenRack')   #TODO: Check which option should be used
+    generator.setModuleType(pv_ground_module)
+    generator.setArrayType('OneAxis')   #Note: This array type has been chosen as per Mike Lubun's costing spec.
     generator.setTiltAngle(pv_ground_tilt_angle)
     generator.setAzimuthAngle(pv_ground_azimuth_angle)
 
     ##### Create the inverter
     inverter = OpenStudio::Model::ElectricLoadCenterInverterPVWatts.new(model)
-    inverter.setDCToACSizeRatio(1.1)   #TODO: Question: DCToACSizeRatio?
-    inverter.setInverterEfficiency(0.96)   #TODO: Question: InverterEfficiency?
+    inverter.setDCToACSizeRatio(1.1)   #Note: This DC to AC size ratio has been chosen as per Mike Lubun's costing spec.
+    inverter.setInverterEfficiency(0.96)   #Note: This inverter efficiency has been chosen as per Mike Lubun's costing spec.
 
     ##### Get distribution systems and set relevant parameters
     model.getElectricLoadCenterDistributions.sort.each  do |elc_distribution|
       elc_distribution.setInverter(inverter)
-      elc_distribution.setGeneratorOperationSchemeType('Baseload')  #TODO: Check which option should be used
+      elc_distribution.setGeneratorOperationSchemeType('Baseload')  #Note: This scheme type has been chosen as per Mike Lubun's costing spec.
     end
 
   end

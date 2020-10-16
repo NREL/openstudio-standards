@@ -234,10 +234,10 @@ class NECB2011 < Standard
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
                                 pv_ground_type: nil,  # Two options: (1) nil OR FALSE, (2) TRUE
-                                pv_ground_area_total_m2: nil, # e.g. 50
-                                pv_ground_tilt_angle: nil, # e.g. 2
-                                pv_ground_azimuth_angle: nil, # e.g. 180
-                                pv_ground_module: nil, # Options: polycrystaline, #TODO: Add other options  #Sara
+                                pv_ground_area_total_m2: 50, # e.g. 50
+                                pv_ground_tilt_angle: 20, # e.g. 20
+                                pv_ground_azimuth_angle: 180, # e.g. 180
+                                pv_ground_module: 'Standard', # Options: 'Standard', 'Premium', 'ThinFilm' #TODO: Add other options  #Sara
     )
 
   end
