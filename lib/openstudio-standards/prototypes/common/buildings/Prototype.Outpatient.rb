@@ -86,7 +86,7 @@ module Outpatient
     elec_equip.setName('Elevator Pump Room Elevator Equipment')
     elec_equip.setSpace(elevator_pump_room)
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         elec_equip.setSchedule(model_add_schedule(model, 'OutPatientHealthCare BLDG_ELEVATORS'))
 
         # add elevator fan and lights for 90.1 prototypes
@@ -101,7 +101,7 @@ module Outpatient
           elec_equip_def2.setDesignLevel(485.7)
         when '90.1-2010'
           elec_equip_def2.setDesignLevel(317.7)
-        when '90.1-2013'
+        when '90.1-2013', '90.1-2016', '90.1-2019'
           elec_equip_def2.setDesignLevel(188)
         end
 
@@ -112,7 +112,7 @@ module Outpatient
         case template # light fan schedule for outpatient already exist in the schedule data sheet.
         when '90.1-2004', '90.1-2007'
           elec_equip2.setSchedule(model_add_schedule(model, 'OutPatientHealthCare ELEV_LIGHT_FAN_SCH_24_7'))
-        when '90.1-2010', '90.1-2013'
+        when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
           elec_equip2.setSchedule(model_add_schedule(model, 'OutPatientHealthCare ELEV_LIGHT_FAN_SCH_ADD_DF'))
         end
 
@@ -193,7 +193,7 @@ module Outpatient
           when '90.1-2004'
             infiltration_rate_vestibule_door = 1.186002811
             infiltration_vestibule_door.setSchedule(model_add_schedule(model, 'OutPatientHealthCare INFIL_Door_Opening_SCH_0.144'))
-          when '90.1-2007', '90.1-2010', '90.1-2013'
+          when '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
             case climate_zone
               when 'ASHRAE 169-2006-1A',
                    'ASHRAE 169-2006-2A',
@@ -239,7 +239,7 @@ module Outpatient
         humidifier.addToNode(heating_coil_outlet_node)
         humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(model)
         case template
-          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
             create_coil_heating_electric(model,
                                          air_loop_node: supply_outlet_node,
                                          name: 'AHU1 extra Electric Htg Coil')
@@ -267,9 +267,9 @@ module Outpatient
         controller_mv.setAvailabilitySchedule(model.alwaysOffDiscreteSchedule)
         # add minimum fraction of outdoor air schedule to AHU1
         controller_oa.setMinimumFractionofOutdoorAirSchedule(model_add_schedule(model, 'OutPatientHealthCare AHU-1_OAminOAFracSchedule'))
-        # for AHU2, at vintages '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', the minimum OA schedule is not the same as
+        # for AHU2, at vintages '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019' the minimum OA schedule is not the same as
         # airloop availability schedule, but separately assigned.
-      elsif template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013'
+      elsif template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
         controller_oa.setMinimumOutdoorAirSchedule(model_add_schedule(model, 'OutPatientHealthCare BLDG_OA_SCH'))
         # add minimum fraction of outdoor air schedule to AHU2
         controller_oa.setMinimumFractionofOutdoorAirSchedule(model_add_schedule(model, 'OutPatientHealthCare BLDG_OA_FRAC_SCH'))
@@ -323,7 +323,7 @@ module Outpatient
           # Based on AIA 2001 ventilation requirements
           # See Section 5.2.2.16 in Thornton et al. 2010
           # https://www.energycodes.gov/sites/default/files/documents/BECP_Energy_Cost_Savings_STD2010_May2011_v00.pdf
-          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
             zone_name = zone.name.to_s.upcase.gsub(' ZN', '').strip
             if init_mdp.key? zone_name
               air_terminal.setConstantMinimumAirFlowFraction(init_mdp[zone_name])
@@ -334,14 +334,14 @@ module Outpatient
     end
   end
 
-  # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
+  # For operating room 1&2 in 2010, 2013, 2016, and 2019 VAV minimum air flow is set by schedule
   # This is NOT called in model_custom_hvac_tweaks,
   # instead it is called by model_reset_or_room_vav_minimum_damper AFTER the sizing run,
   # so that the system is sized at a constant airflow fraction of 1.0,
   # not 0.3 as defaulted in the zone sizing object
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
     case template
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
       model.getAirTerminalSingleDuctVAVReheats.sort.each do |air_terminal|
         air_terminal_name = air_terminal.name.get
         if air_terminal_name.include?('Floor 1 Operating Room 1') || air_terminal_name.include?('Floor 1 Operating Room 2')
@@ -362,7 +362,7 @@ module Outpatient
 
   def model_update_exhaust_fan_efficiency(model)
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         model.getFanZoneExhausts.sort.each do |exhaust_fan|
           fan_name = exhaust_fan.name.to_s
           if (fan_name.include? 'X-Ray') || (fan_name.include? 'MRI Room')
@@ -413,7 +413,7 @@ module Outpatient
       case template
         when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
           sizingzone.setCoolingMinimumAirFlow(minimum_airflow_per_zone)
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
           sizingzone.setCoolingMinimumAirFlowperZoneFloorArea(minimum_airflow_per_zone_floor_area)
       end
     end
@@ -457,7 +457,7 @@ module Outpatient
         'FLOOR 3 STORAGE 1' => 1.0,
         'FLOOR 3 TREATMENT' => 1.0
       }
-    elsif template == '90.1-2010' || template == '90.1-2013'
+    elsif template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
       min_damper_position = 0.2
       init_mdp = {
         'FLOOR 2 CONFERENCE TOILET' => 1.0,

@@ -17,66 +17,89 @@ module Warehouse
 
     adjustments = case climate_zone
     when 'ASHRAE 169-2006-6A',
-         'ASHRAE 169-2006-6B',
-         'ASHRAE 169-2006-7A',
-         'ASHRAE 169-2006-8A',
-         'ASHRAE 169-2013-6A',
-         'ASHRAE 169-2013-6B',
-         'ASHRAE 169-2013-7A',
-         'ASHRAE 169-2013-8A'
-        [
-                    { '90.1-2010' => { 'Zone3 Bulk Storage' => { 'sensor_1_frac' => 0.116,
-                                                                 'sensor_1_xyz' => [6.096, 45.718514, 0],
-																												},
-                                       'Zone1 Office' =>       { 'sensor_1_frac' => 0.11,
-                                                                 'sensor_2_frac' => 0.11,
-                                                                 'sensor_1_xyz' => [2.4384, 2.4384, 0.762],
-                                                                 'sensor_2_xyz' => [20.4216, 1.6154, 0.762],
-																												},
-                                      },
-                      '90.1-2013' => { 'Zone3 Bulk Storage' => { 'sensor_1_frac' => 0.116,
-                                                                 'sensor_1_xyz' => [6.096, 45.718514, 0],
-																												},
-                                       'Zone1 Office' =>       { 'sensor_1_frac' => 0.29,
-                                                                 'sensor_2_frac' => 0.1,
-                                                                 'sensor_1_xyz' => [3.2675, 4.5718, 0.762],
-                                                                 'sensor_2_xyz' => [20.4216, 4.5718, 0.762],
-																												},
-                                      },
-										}
-                  ]
-      else
-        [
-                    { '90.1-2010' => { 'Zone3 Bulk Storage' => { 'sensor_1_frac' => 0.25,
-                                                                 'sensor_2_frac' => 0.25,
-                                                                 'sensor_1_xyz' => [22.9, 48, 0],
-                                                                 'sensor_2_xyz' => [22.9, 34.7, 0],
-																												},
-                                       'Zone2 Fine Storage' => { 'sensor_1_frac' => 0.25,
-                                                                 'sensor_2_frac' => 0.25,
-                                                                 'sensor_1_xyz' => [27.8892, 24.9936, 0.762],
-                                                                 'sensor_2_xyz' => [3.81, 24.9936, 0.762],
-																												},
-                                      },
-                      '90.1-2013' => { 'Zone1 Office' =>       { 'sensor_1_frac' => 0.29,
-                                                                 'sensor_2_frac' => 0.1,
-                                                                 'sensor_1_xyz' => [3.2675, 4.5718, 0.762],
-                                                                 'sensor_2_xyz' => [20.4216, 4.5718, 0.762],
-																												},
-                                       'Zone3 Bulk Storage' => { 'sensor_1_frac' => 0.25,
-                                                                 'sensor_2_frac' => 0.25,
-                                                                 'sensor_1_xyz' => [22.9, 48, 0],
-                                                                 'sensor_2_xyz' => [22.9, 34.7, 0],
-																												},
-                                       'Zone2 Fine Storage' => { 'sensor_1_frac' => 0.25,
-                                                                 'sensor_2_frac' => 0.25,
-                                                                 'sensor_1_xyz' => [27.8892, 24.9936, 0.762],
-                                                                 'sensor_2_xyz' => [3.81, 24.9936, 0.762],
-																												},
-                                      },
-										}
-                  ]
-        end
+'ASHRAE 169-2006-6B',
+'ASHRAE 169-2006-7A',
+'ASHRAE 169-2006-8A',
+'ASHRAE 169-2013-6A',
+'ASHRAE 169-2013-6B',
+'ASHRAE 169-2013-7A',
+'ASHRAE 169-2013-8A'
+      [
+        { '90.1-2010' => { 'Zone3 Bulk Storage' => { 'sensor_1_frac' => 0.116,
+                                                     'sensor_1_xyz' => [6.096, 45.718514, 0] },
+                           'Zone1 Office' => { 'sensor_1_frac' => 0.11,
+                                               'sensor_2_frac' => 0.11,
+                                               'sensor_1_xyz' => [2.4384, 2.4384, 0.762],
+                                               'sensor_2_xyz' => [20.4216, 1.6154, 0.762] } },
+          '90.1-2013' => { 'Zone3 Bulk Storage' => { 'sensor_1_frac' => 0.116,
+                                                     'sensor_1_xyz' => [6.096, 45.718514, 0] },
+                           'Zone1 Office' => { 'sensor_1_frac' => 0.29,
+                                               'sensor_2_frac' => 0.1,
+                                               'sensor_1_xyz' => [3.2675, 4.5718, 0.762],
+                                               'sensor_2_xyz' => [20.4216, 4.5718, 0.762] } },
+          '90.1-2016' => { 'Zone3 Bulk Storage' => { 'sensor_1_frac' => 0.116,
+                                                     'sensor_1_xyz' => [6.096, 45.718514, 0] },
+                           'Zone1 Office' => { 'sensor_1_frac' => 0.29,
+                                               'sensor_2_frac' => 0.1,
+                                               'sensor_1_xyz' => [3.2675, 4.5718, 0.762],
+                                               'sensor_2_xyz' => [20.4216, 4.5718, 0.762] } },
+          '90.1-2019' => { 'Zone3 Bulk Storage' => { 'sensor_1_frac' => 0.116,
+                                                     'sensor_1_xyz' => [6.096, 45.718514, 0] },
+                           'Zone1 Office' => { 'sensor_1_frac' => 0.29,
+                                               'sensor_2_frac' => 0.1,
+                                               'sensor_1_xyz' => [3.2675, 4.5718, 0.762],
+                                               'sensor_2_xyz' => [20.4216, 4.5718, 0.762] } }, 
+                                              }
+      ]
+    else
+      [
+        { '90.1-2010' => { 'Zone3 Bulk Storage' => { 'sensor_1_frac' => 0.25,
+                                                     'sensor_2_frac' => 0.25,
+                                                     'sensor_1_xyz' => [22.9, 48, 0],
+                                                     'sensor_2_xyz' => [22.9, 34.7, 0] },
+                           'Zone2 Fine Storage' => { 'sensor_1_frac' => 0.25,
+                                                     'sensor_2_frac' => 0.25,
+                                                     'sensor_1_xyz' => [27.8892, 24.9936, 0.762],
+                                                     'sensor_2_xyz' => [3.81, 24.9936, 0.762] } },
+          '90.1-2013' => { 'Zone1 Office' => { 'sensor_1_frac' => 0.29,
+                                               'sensor_2_frac' => 0.1,
+                                               'sensor_1_xyz' => [3.2675, 4.5718, 0.762],
+                                               'sensor_2_xyz' => [20.4216, 4.5718, 0.762] },
+                           'Zone3 Bulk Storage' => { 'sensor_1_frac' => 0.25,
+                                                     'sensor_2_frac' => 0.25,
+                                                     'sensor_1_xyz' => [22.9, 48, 0],
+                                                     'sensor_2_xyz' => [22.9, 34.7, 0] },
+                           'Zone2 Fine Storage' => { 'sensor_1_frac' => 0.25,
+                                                     'sensor_2_frac' => 0.25,
+                                                     'sensor_1_xyz' => [27.8892, 24.9936, 0.762],
+                                                     'sensor_2_xyz' => [3.81, 24.9936, 0.762] } },
+          '90.1-2016' => { 'Zone1 Office' => { 'sensor_1_frac' => 0.29,
+                                               'sensor_2_frac' => 0.1,
+                                               'sensor_1_xyz' => [3.2675, 4.5718, 0.762],
+                                               'sensor_2_xyz' => [20.4216, 4.5718, 0.762] },
+                           'Zone3 Bulk Storage' => { 'sensor_1_frac' => 0.25,
+                                                     'sensor_2_frac' => 0.25,
+                                                     'sensor_1_xyz' => [22.9, 48, 0],
+                                                     'sensor_2_xyz' => [22.9, 34.7, 0] },
+                           'Zone2 Fine Storage' => { 'sensor_1_frac' => 0.25,
+                                                     'sensor_2_frac' => 0.25,
+                                                     'sensor_1_xyz' => [27.8892, 24.9936, 0.762],
+                                                     'sensor_2_xyz' => [3.81, 24.9936, 0.762] } },
+          '90.1-2019' => { 'Zone1 Office' => { 'sensor_1_frac' => 0.29,
+                                               'sensor_2_frac' => 0.1,
+                                               'sensor_1_xyz' => [3.2675, 4.5718, 0.762],
+                                               'sensor_2_xyz' => [20.4216, 4.5718, 0.762] },
+                           'Zone3 Bulk Storage' => { 'sensor_1_frac' => 0.25,
+                                                     'sensor_2_frac' => 0.25,
+                                                     'sensor_1_xyz' => [22.9, 48, 0],
+                                                     'sensor_2_xyz' => [22.9, 34.7, 0] },
+                           'Zone2 Fine Storage' => { 'sensor_1_frac' => 0.25,
+                                                     'sensor_2_frac' => 0.25,
+                                                     'sensor_1_xyz' => [27.8892, 24.9936, 0.762],
+                                                     'sensor_2_xyz' => [3.81, 24.9936, 0.762] } },
+                                                  }
+      ]
+end
 
     # Adjust daylight sensors in each space
     model.getSpaces.each do |space|
@@ -156,7 +179,7 @@ module Warehouse
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting geometry input')
     case template
-      when '90.1-2010', '90.1-2013'
+      when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         case climate_zone
           when 'ASHRAE 169-2006-6A',
                'ASHRAE 169-2006-6B',

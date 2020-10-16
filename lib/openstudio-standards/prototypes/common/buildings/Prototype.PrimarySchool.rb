@@ -11,7 +11,7 @@ module PrimarySchool
     case template
     when '90.1-2004', '90.1-2007'
       transformer_efficiency = 0.969
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
       transformer_efficiency = 0.982
     end
     return true unless !transformer_efficiency.nil?
@@ -37,14 +37,14 @@ module PrimarySchool
     elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
     elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         elec_equip_def1.setFractionLatent(0)
         elec_equip_def1.setFractionRadiant(0.25)
         elec_equip_def1.setFractionLost(0)
         elec_equip_def2.setFractionLatent(0)
         elec_equip_def2.setFractionRadiant(0.25)
         elec_equip_def2.setFractionLost(0)
-        if template == '90.1-2013'
+        if template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
           elec_equip_def1.setDesignLevel(915)
           elec_equip_def2.setDesignLevel(570)
         else
@@ -85,7 +85,7 @@ module PrimarySchool
   end
 
   def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
-    min_damper_position = template == '90.1-2010' || template == '90.1-2013' ? 0.2 : 0.3
+    min_damper_position = template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019' ? 0.2 : 0.3
 
     # Set the minimum flow fraction
     air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)

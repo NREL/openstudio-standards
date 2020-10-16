@@ -65,7 +65,7 @@ Standard.class_eval do
     # custom economizer controls
     # For 90.1-2010 Outpatient, AHU1 doesn't have economizer and AHU2 set minimum outdoor air flow rate as 0
     model_modify_oa_controller(model)
-    # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
+    # For operating room 1&2 in 2010, 2013, 2016, and 2019, VAV minimum air flow is set by schedule
     model_reset_or_room_vav_minimum_damper(@prototype_input, model)
     # Apply the HVAC efficiency standard
     model_apply_hvac_efficiency_standard(model, climate_zone)
@@ -811,7 +811,7 @@ Standard.class_eval do
     unless (template == 'NECB2011') ||
            (building_type.include?('DataCenter')) ||
            ((building_type == 'SmallHotel') &&
-            (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
+            (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019' || template == 'NREL ZNE Ready 2017'))
       internal_mass_def = OpenStudio::Model::InternalMassDefinition.new(model)
       internal_mass_def.setSurfaceAreaperSpaceFloorArea(2.0)
       internal_mass_def.setConstruction(construction)
@@ -1283,7 +1283,7 @@ Standard.class_eval do
     # impacts wind speed, and in turn infiltration
     terrain = 'City'
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019', 'NREL ZNE Ready 2017'
         case building_type
           when 'Warehouse'
             terrain = 'Urban'
@@ -1388,7 +1388,7 @@ Standard.class_eval do
             clg = 1.33
             htg = 1.33
         end
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         # exit if is one of the 90.1 templates as their sizing paramters are explicitly specified in geometry osms
         return
       when 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
@@ -2097,9 +2097,17 @@ Standard.class_eval do
       economizer_required = false
 
       if air_loop_hvac_humidifier_count(air_loop) > 0
-        # If airloop includes it is assumed that exception c to 90.1-2004 Section 6.5.1 applies
-        # This exception exist through 90.1-2013, see Section 6.5.1.3
-        economizer_required = false
+        # If airloop includes a humidifier it is assumed
+        # that exception c to 90.1-2004/7 Section 6.5.1 applies.
+        if template == '90.1-2004' || template == '90.1-2007'
+          economizer_required = false
+                  end
+        # This exception exist through 90.1-2019, for hospitals
+        # see Section 6.5.1 exception 4
+        if @instvarbuilding_type == 'Hospital' &&
+          (template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019')
+          economizer_required = false
+        end
       elsif @instvarbuilding_type == 'LargeOffice' &&
             air_loop.name.to_s.downcase.include?('datacenter') &&
             air_loop.name.to_s.downcase.include?('basement') &&

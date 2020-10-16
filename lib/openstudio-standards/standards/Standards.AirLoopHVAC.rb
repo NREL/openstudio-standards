@@ -13,7 +13,7 @@ class Standard
     # First time adjustment:
     # Only applies to multi-zone vav systems
     # exclusion: for Outpatient: (1) both AHU1 and AHU2 in 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004'
-    # (2) AHU1 in 2004-2013
+    # (2) AHU1 in 2004-2019
     # TODO refactor: move building-type-specific code to Prototype classes
     if air_loop_hvac_multizone_vav_system?(air_loop_hvac) && !(air_loop_hvac.name.to_s.include? 'Outpatient F1')
       air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
@@ -879,7 +879,7 @@ class Standard
     infinity_btu_per_hr = 999_999_999_999
     minimum_capacity_btu_per_hr = infinity_btu_per_hr if minimum_capacity_btu_per_hr.nil?
 
-    # Exception valid for 90.1-2004 (6.5.1.(e)) through 90.1-2013 (6.5.1.5)
+    # Exception valid for 90.1-2004 (6.5.1.(e)) through 90.1-2019 (6.5.1.4)
     if is_res
       minimum_capacity_btu_per_hr *= 5
     end

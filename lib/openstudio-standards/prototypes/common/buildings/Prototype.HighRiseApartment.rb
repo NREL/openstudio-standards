@@ -14,7 +14,7 @@ module HighriseApartment
     case template
     when '90.1-2004', '90.1-2007'
       transformer_efficiency = 0.966
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
       transformer_efficiency = 0.98
     end
     return true unless !transformer_efficiency.nil?
@@ -53,7 +53,7 @@ module HighriseApartment
     elec_equip_def2.setFractionLost(0.95)
     elec_equip_def1.setDesignLevel(20_370)
     case template
-      when '90.1-2013'
+      when '90.1-2013', '90.1-2016', '90.1-2019'
         elec_equip_def2.setDesignLevel(63)
       when '90.1-2010'
         elec_equip_def2.setDesignLevel(105.9)
@@ -71,7 +71,7 @@ module HighriseApartment
     case template
       when '90.1-2004', '90.1-2007'
         elec_equip2.setSchedule(model_add_schedule(model, 'ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7'))
-      when '90.1-2010', '90.1-2013'
+      when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         elec_equip2.setSchedule(model_add_schedule(model, 'ApartmentMidRise ELEV_LIGHT_FAN_SCH_ADD_DF'))
     end
   end
@@ -86,7 +86,7 @@ module HighriseApartment
       when '90.1-2004'
         infiltration_g_corridor_door.setDesignFlowRate(1.523916863)
         infiltration_g_corridor_door.setSchedule(model_add_schedule(model, 'ApartmentHighRise INFIL_Door_Opening_SCH_0.144'))
-      when '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         case climate_zone
           when 'ASHRAE 169-2006-1A',
                'ASHRAE 169-2006-2A',

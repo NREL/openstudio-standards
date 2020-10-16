@@ -10,7 +10,7 @@ module Hospital
     case template
     when '90.1-2004', '90.1-2007'
       transformer_efficiency = 0.979
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
       transformer_efficiency = 0.987
     else
       transformer_efficiency = nil
@@ -37,7 +37,7 @@ module Hospital
     end
     if hot_water_loop
       case template
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
           space_names = ['ER_Exam3_Mult4_Flr_1', 'OR2_Mult5_Flr_2', 'ICU_Flr_2', 'PatRoom5_Mult10_Flr_4', 'Lab_Flr_3']
           space_names.each do |space_name|
             add_humidifier(space_name, hot_water_loop, model)
@@ -132,14 +132,14 @@ module Hospital
     elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
     elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         elec_equip_def1.setFractionLatent(0)
         elec_equip_def1.setFractionRadiant(0.25)
         elec_equip_def1.setFractionLost(0)
         elec_equip_def2.setFractionLatent(0)
         elec_equip_def2.setFractionRadiant(0.25)
         elec_equip_def2.setFractionLost(0)
-        if template == '90.1-2013'
+        if template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
           elec_equip_def1.setDesignLevel(915)
           elec_equip_def2.setDesignLevel(855)
         else
@@ -186,7 +186,7 @@ module Hospital
     ventilation.setOutdoorAirFlowperPerson(0)
     ventilation.setOutdoorAirFlowperFloorArea(0)
     case template
-      when '90.1-2010', '90.1-2013'
+      when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         ventilation.setOutdoorAirFlowRate(3.398)
       when '90.1-2004', '90.1-2007', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         ventilation.setOutdoorAirFlowRate(3.776)
@@ -195,7 +195,7 @@ module Hospital
 
   def model_update_exhaust_fan_efficiency(model)
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         model.getFanZoneExhausts.sort.each do |exhaust_fan|
           exhaust_fan.setFanEfficiency(0.16)
           exhaust_fan.setPressureRise(125)
@@ -234,7 +234,7 @@ module Hospital
         humidifier.addToNode(heating_coil_outlet_node)
         humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(model)
         case template
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
           create_coil_heating_electric(model,
                                        air_loop_node: supply_outlet_node,
                                        name: "#{space_name} Electric Htg Coil")
@@ -284,7 +284,7 @@ module Hospital
           # https://www.energycodes.gov/sites/default/files/documents/BECP_Energy_Cost_Savings_STD2010_May2011_v00.pdf
           when '90.1-2004', '90.1-2007'
             air_terminal.setConstantMinimumAirFlowFraction(1.0) unless airlp.name.to_s.include?('VAV_1') || airlp.name.to_s.include?('VAV_2')
-          when '90.1-2010', '90.1-2013'
+          when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
             air_terminal.setConstantMinimumAirFlowFraction(1.0) unless airlp.name.to_s.include?('VAV_1') || airlp.name.to_s.include?('VAV_2')
             air_terminal.setConstantMinimumAirFlowFraction(0.5) if vav_name.include? 'PatRoom'
           end
@@ -295,7 +295,7 @@ module Hospital
 
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
     case template
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
       model.getAirTerminalSingleDuctVAVReheats.sort.each do |air_terminal|
         air_terminal_name = air_terminal.name.get
         if air_terminal_name.include?('OR1') || air_terminal_name.include?('OR2') || air_terminal_name.include?('OR3') || air_terminal_name.include?('OR4')
@@ -325,7 +325,7 @@ module Hospital
   end
 
   def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
-    min_damper_position = template == '90.1-2010' || template == '90.1-2013' ? 0.2 : 0.3
+    min_damper_position = template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019' ? 0.2 : 0.3
 
     # Set the minimum flow fraction
     air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)

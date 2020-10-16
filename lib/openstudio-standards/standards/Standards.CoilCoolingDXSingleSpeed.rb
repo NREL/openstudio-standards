@@ -109,7 +109,7 @@ class Standard
     # If CRAC, use equations if coefficients are specified
     crac_minimum_scop = ac_props['minimum_scop']
     if sub_category == 'CRAC' && !crac_minimum_scop.nil?
-      # TABLE 6.8.1K in 90.1-2010, TABLE 6.8.1-11 in 90.1-2013
+      # TABLE 6.8.1K in 90.1-2010, TABLE 6.8.1-10 in 90.1-2019
       # cop = scop/sensible heat ratio
       if coil_cooling_dx_single_speed.ratedSensibleHeatRatio.is_initialized
         crac_sensible_heat_ratio = coil_cooling_dx_single_speed.ratedSensibleHeatRatio.get

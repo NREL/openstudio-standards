@@ -28,20 +28,23 @@ module FullServiceRestaurant
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting daylight sensor positions and fractions')
 
     adjustments = [
-                    { '90.1-2010' => { 'Dining' => { 'sensor_1_frac' => 0.135,
-                                                     'sensor_2_frac' => 0.135,
-                                                     'sensor_1_xyz' => [1.9812, 1.9812, 0.762],
-                                                     'sensor_2_xyz' => [20.574, 1.9812, 0.762],
-																									 },
-                                      },
-                      '90.1-2013' => { 'Dining' => { 'sensor_1_frac' => 0.25,
-                                                     'sensor_2_frac' => 0.25,
-                                                     'sensor_1_xyz' => [2.6548, 2.6548, 0.762],
-                                                     'sensor_2_xyz' => [19.9539, 2.6548, 0.762],
-																												},
-                                      },
-										}
-                  ]
+      { '90.1-2010' => { 'Dining' => { 'sensor_1_frac' => 0.135,
+                                       'sensor_2_frac' => 0.135,
+                                       'sensor_1_xyz' => [1.9812, 1.9812, 0.762],
+                                       'sensor_2_xyz' => [20.574, 1.9812, 0.762] } },
+        '90.1-2013' => { 'Dining' => { 'sensor_1_frac' => 0.25,
+                                       'sensor_2_frac' => 0.25,
+                                       'sensor_1_xyz' => [2.6548, 2.6548, 0.762],
+                                       'sensor_2_xyz' => [19.9539, 2.6548, 0.762] } },
+        '90.1-2016' => { 'Dining' => { 'sensor_1_frac' => 0.25,
+                                       'sensor_2_frac' => 0.25,
+                                       'sensor_1_xyz' => [2.6548, 2.6548, 0.762],
+                                       'sensor_2_xyz' => [19.9539, 2.6548, 0.762] } },
+        '90.1-2019' => { 'Dining' => { 'sensor_1_frac' => 0.25,
+                                       'sensor_2_frac' => 0.25,
+                                       'sensor_1_xyz' => [2.6548, 2.6548, 0.762],
+                                       'sensor_2_xyz' => [19.9539, 2.6548, 0.762] } } }
+    ]
 
     # Adjust daylight sensors in each space
     model.getSpaces.each do |space|
@@ -132,7 +135,7 @@ module FullServiceRestaurant
             infiltration_per_zone_diningdoor = 0.389828222
             infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown VESTIBULE_DOOR_INFIL_SCH'))
         end
-      elsif template == '90.1-2010' || template == '90.1-2013'
+      elsif template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
         case climate_zone
           when 'ASHRAE 169-2006-1A',
                'ASHRAE 169-2006-2A',
@@ -163,7 +166,7 @@ module FullServiceRestaurant
 
   def model_update_exhaust_fan_efficiency(model)
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         model.getFanZoneExhausts.sort.each do |exhaust_fan|
           fan_name = exhaust_fan.name.to_s
           if fan_name.include? 'Dining'
@@ -190,7 +193,7 @@ module FullServiceRestaurant
     case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         zone_mixing_kitchen.setDesignFlowRate(1.828)
-      when '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         zone_mixing_kitchen.setDesignFlowRate(1.33143208)
       when '90.1-2004'
         zone_mixing_kitchen.setDesignFlowRate(2.64397817)
@@ -209,14 +212,14 @@ module FullServiceRestaurant
     elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
     elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         elec_equip_def1.setFractionLatent(0)
         elec_equip_def1.setFractionRadiant(0.25)
         elec_equip_def1.setFractionLost(0)
         elec_equip_def2.setFractionLatent(0)
         elec_equip_def2.setFractionRadiant(0.25)
         elec_equip_def2.setFractionLost(0)
-        if template == '90.1-2013'
+        if template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
           elec_equip_def1.setDesignLevel(457.5)
           elec_equip_def2.setDesignLevel(570)
         else
@@ -247,7 +250,7 @@ module FullServiceRestaurant
 
   def update_sizing_zone(model)
     case template
-      when '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         zone_sizing = model.getSpaceByName('Dining').get.thermalZone.get.sizingZone
         zone_sizing.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
         zone_sizing.setCoolingMinimumAirFlowperZoneFloorArea(0.003581176)
@@ -298,7 +301,7 @@ module FullServiceRestaurant
     ventilation.setOutdoorAirFlowperPerson(0)
     ventilation.setOutdoorAirFlowperFloorArea(0)
     case template
-      when '90.1-2010', '90.1-2013'
+      when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         ventilation.setOutdoorAirFlowRate(1.21708392)
       when '90.1-2007'
         ventilation.setOutdoorAirFlowRate(1.50025792)

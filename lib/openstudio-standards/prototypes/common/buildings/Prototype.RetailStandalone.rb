@@ -11,7 +11,7 @@ module RetailStandalone
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
-    # Add the door infiltration for template 2004,2007,2010,2013
+    # Add the door infiltration for template 2004,2007,2010,2013,2016,2019
     case template
     when '90.1-2004'
       entry_space = model.getSpaceByName('Front_Entry').get
@@ -23,7 +23,7 @@ module RetailStandalone
       infiltration_entry.setSpace(entry_space)
 
       # temporal solution for CZ dependent door infiltration rate.  In fact other standards need similar change as well
-    when '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
       entry_space = model.getSpaceByName('Front_Entry').get
       infiltration_entry = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
       infiltration_entry.setName('Entry door Infiltration')
@@ -55,7 +55,7 @@ module RetailStandalone
     end
 
     case template
-    when '90.1-2013'
+    when '90.1-2013', '90.1-2016', '90.1-2019'
       # Add EMS for controlling the system serving the front entry zone
       oa_sens = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
       oa_sens.setName('OAT_F')
@@ -117,13 +117,21 @@ module RetailStandalone
         [
                     { '90.1-2010' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
                                                           'sensor_1_xyz' => [9.144, 24.698, 0],
-																												},
+                                                                                                                },
                                       },
                       '90.1-2013' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
                                                           'sensor_1_xyz' => [9.144, 24.698, 0],
-																												},
+                                                                                                                },
                                       },
-										}
+                      '90.1-2016' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
+                                                          'sensor_1_xyz' => [9.144, 24.698, 0],
+                                                                                                                },
+                                      },
+                      '90.1-2019' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
+                                                          'sensor_1_xyz' => [9.144, 24.698, 0],
+                                                                                                                },
+                                      },
+                                        }
                   ]
       else
         [
@@ -131,15 +139,27 @@ module RetailStandalone
                                                           'sensor_2_frac' => 0.25,
                                                           'sensor_1_xyz' => [14.2, 14.2, 0],
                                                           'sensor_2_xyz' => [3.4, 14.2, 0],
-																												},
+                                                                                                                },
                                       },
                       '90.1-2013' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
                                                           'sensor_2_frac' => 0.25,
                                                           'sensor_1_xyz' => [14.2, 14.2, 0],
                                                           'sensor_2_xyz' => [3.4, 14.2, 0],
-																												},
+                                                                                                                },
                                       },
-										}
+                      '90.1-2016' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
+                                                          'sensor_2_frac' => 0.25,
+                                                          'sensor_1_xyz' => [14.2, 14.2, 0],
+                                                          'sensor_2_xyz' => [3.4, 14.2, 0],
+                                                                                                                },
+                                      },
+                      '90.1-2019' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
+                                                          'sensor_2_frac' => 0.25,
+                                                          'sensor_1_xyz' => [14.2, 14.2, 0],
+                                                          'sensor_2_xyz' => [3.4, 14.2, 0],
+                                                                                                                },
+                                      },
+                                        }
                   ]
         end
 
@@ -202,7 +222,7 @@ module RetailStandalone
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting geometry input')
     case template
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
       case climate_zone
       when 'ASHRAE 169-2006-6A',
           'ASHRAE 169-2006-6B',

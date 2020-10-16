@@ -45,7 +45,7 @@ module MidriseApartment
     elec_equip_def1.setName('Ground Corridor Electric Equipment Definition1')
     elec_equip_def2.setName('Ground Corridor Electric Equipment Definition2')
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         elec_equip_def1.setFractionLatent(0)
         elec_equip_def1.setFractionRadiant(0)
         elec_equip_def1.setFractionLost(0.95)
@@ -53,7 +53,7 @@ module MidriseApartment
         elec_equip_def2.setFractionRadiant(0)
         elec_equip_def2.setFractionLost(0.95)
         elec_equip_def1.setDesignLevel(16_055)
-        if template == '90.1-2013'
+        if template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
           elec_equip_def2.setDesignLevel(63)
         elsif template == '90.1-2010'
           elec_equip_def2.setDesignLevel(105.9)
@@ -71,7 +71,7 @@ module MidriseApartment
         case template
           when '90.1-2004', '90.1-2007'
             elec_equip2.setSchedule(model_add_schedule(model, 'ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7'))
-          when '90.1-2010', '90.1-2013'
+          when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
             elec_equip2.setSchedule(model_add_schedule(model, 'ApartmentMidRise ELEV_LIGHT_FAN_SCH_ADD_DF'))
         end
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -92,7 +92,7 @@ module MidriseApartment
     case template
       when 'DOE Ref 1980-2004', 'DOE Ref Pre-1980'
         # no door infiltration in these two vintages
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         g_corridor = model.getSpaceByName('G Corridor').get
         infiltration_g_corridor_door = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
         infiltration_g_corridor_door.setName('G Corridor door Infiltration')
@@ -116,7 +116,7 @@ module MidriseApartment
                 infiltration_g_corridor_door.setDesignFlowRate(0.327531218)
             end
             infiltration_g_corridor_door.setSchedule(model_add_schedule(model, 'ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007'))
-          when '90.1-2010', '90.1-2013'
+          when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
             case climate_zone
               when 'ASHRAE 169-2006-1A',
                    'ASHRAE 169-2006-1B',

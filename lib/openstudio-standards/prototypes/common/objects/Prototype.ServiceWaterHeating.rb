@@ -216,7 +216,7 @@ class Standard
     if water_heater_thermal_zone.nil?
       # Assume the water heater is indoors at 70F or 72F
       case template
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
 	      indoor_temp = 71.6
         else
 	      indoor_temp = 70
@@ -659,7 +659,7 @@ class Standard
     if booster_water_heater_thermal_zone.nil?
       # Assume the water heater is indoors at 70F or 72F
       case template
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
 	      indoor_temp = 71.6
         else
 	      indoor_temp = 70.0
