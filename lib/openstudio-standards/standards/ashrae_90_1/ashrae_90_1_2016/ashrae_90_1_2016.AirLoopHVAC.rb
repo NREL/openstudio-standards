@@ -72,65 +72,6 @@ class ASHRAE9012016 < ASHRAE901
     return integrated_economizer_required
   end
 
-  # Determine the economizer type and limits for the the PRM Defaults to 90.1-2007 logic.
-  # @return [Array<Double>] [economizer_type, drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
-  def air_loop_hvac_prm_economizer_type_and_limits(air_loop_hvac, climate_zone)
-    economizer_type = 'NoEconomizer'
-    drybulb_limit_f = nil
-    enthalpy_limit_btu_per_lb = nil
-    dewpoint_limit_f = nil
-
-    case climate_zone
-    when 'ASHRAE 169-2006-1B',
-         'ASHRAE 169-2006-2B',
-         'ASHRAE 169-2006-3B',
-         'ASHRAE 169-2006-3C',
-         'ASHRAE 169-2006-4B',
-         'ASHRAE 169-2006-4C',
-         'ASHRAE 169-2006-5B',
-         'ASHRAE 169-2006-5C',
-         'ASHRAE 169-2006-6B',
-         'ASHRAE 169-2006-7B',
-         'ASHRAE 169-2006-8A',
-         'ASHRAE 169-2006-8B',
-         'ASHRAE 169-2013-1B',
-         'ASHRAE 169-2013-2B',
-         'ASHRAE 169-2013-3B',
-         'ASHRAE 169-2013-3C',
-         'ASHRAE 169-2013-4B',
-         'ASHRAE 169-2013-4C',
-         'ASHRAE 169-2013-5B',
-         'ASHRAE 169-2013-5C',
-         'ASHRAE 169-2013-6B',
-         'ASHRAE 169-2013-7B',
-         'ASHRAE 169-2013-8A',
-         'ASHRAE 169-2013-8B'
-      economizer_type = 'FixedDryBulb'
-      drybulb_limit_f = 75
-    when 'ASHRAE 169-2006-2A',
-         'ASHRAE 169-2006-3A',
-         'ASHRAE 169-2006-4A',
-         'ASHRAE 169-2013-2A',
-         'ASHRAE 169-2013-3A',
-         'ASHRAE 169-2013-4A'
-      economizer_type = 'FixedEnthalpy'
-      enthalpy_limit_btu_per_lb = 28
-    when 'ASHRAE 169-2006-5A',
-         'ASHRAE 169-2006-6A',
-         'ASHRAE 169-2006-7A',
-         'ASHRAE 169-2013-5A',
-         'ASHRAE 169-2013-6A',
-         'ASHRAE 169-2013-7A'
-      economizer_type = 'FixedDryBulb'
-      drybulb_limit_f = 70
-    else
-      economizer_type = 'FixedDryBulb'
-      drybulb_limit_f = 65
-    end
-
-    return [economizer_type, drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
-  end
-
   # Check the economizer type currently specified in the ControllerOutdoorAir object on this air loop
   # is acceptable per the standard.
   #
