@@ -883,11 +883,11 @@ ASHRAE_90_1_2013,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-21,true
 ASHRAE_90_1_2013,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-26,true
 ASHRAE_90_1_2013,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-31,true
 ASHRAE_90_1_2013,1,Foundation,"",Typical Insulated Slab CZ1 R-3,true
-ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ1 U-1.1 SHGC-0.25 VT-0.28,false
-ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.88 SHGC-0.23 VT-0.25,false
-ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.77 SHGC-0.2 VT-0.22,false
-ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.66 SHGC-0.18 VT-0.19,false
-ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.55 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ1 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.29 SHGC-0.15 VT-0.17,false
 ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ1 U-0.57 SHGC-0.25 VT-0.28,false
 ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.46 SHGC-0.23 VT-0.25,false
 ASHRAE_90_1_2013,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.4 SHGC-0.2 VT-0.22,false
@@ -936,11 +936,11 @@ ASHRAE_90_1_2013,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-21,true
 ASHRAE_90_1_2013,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-26,true
 ASHRAE_90_1_2013,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-31,true
 ASHRAE_90_1_2013,2,Foundation,"",Typical Insulated Slab CZ2 R-3,true
-ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ2 U-0.83 SHGC-0.25 VT-0.28,false
-ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.66 SHGC-0.23 VT-0.25,false
-ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.58 SHGC-0.2 VT-0.22,false
-ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.5 SHGC-0.18 VT-0.19,false
-ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.42 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ2 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.29 SHGC-0.15 VT-0.17,false
 ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ2 U-0.57 SHGC-0.25 VT-0.28,false
 ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.46 SHGC-0.23 VT-0.25,false
 ASHRAE_90_1_2013,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.4 SHGC-0.2 VT-0.22,false
@@ -989,11 +989,11 @@ ASHRAE_90_1_2013,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-21,true
 ASHRAE_90_1_2013,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-26,true
 ASHRAE_90_1_2013,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-31,true
 ASHRAE_90_1_2013,3,Foundation,"",Typical Insulated Slab CZ3 R-3,true
-ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ3 U-0.77 SHGC-0.25 VT-0.28,false
-ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.62 SHGC-0.23 VT-0.25,false
-ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.54 SHGC-0.2 VT-0.22,false
-ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.46 SHGC-0.18 VT-0.19,false
-ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.39 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ3 U-0.5 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.4 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.35 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.3 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.25 SHGC-0.15 VT-0.17,false
 ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ3 U-0.5 SHGC-0.25 VT-0.28,false
 ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.4 SHGC-0.23 VT-0.25,false
 ASHRAE_90_1_2013,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.35 SHGC-0.2 VT-0.22,false
@@ -1042,11 +1042,11 @@ ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-26,true
 ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-31,true
 ASHRAE_90_1_2013,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-36,false
 ASHRAE_90_1_2013,4,Foundation,"",Typical Insulated Slab CZ4 R-3,true
-ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ4 U-0.77 SHGC-0.4 VT-0.44,false
-ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.62 SHGC-0.36 VT-0.4,false
-ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.54 SHGC-0.32 VT-0.35,false
-ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.46 SHGC-0.28 VT-0.31,false
-ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.39 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ4 U-0.42 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.34 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.29 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.25 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.21 SHGC-0.24 VT-0.26,false
 ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ4 U-0.42 SHGC-0.4 VT-0.44,false
 ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.34 SHGC-0.36 VT-0.4,false
 ASHRAE_90_1_2013,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.29 SHGC-0.32 VT-0.35,false
@@ -1095,11 +1095,11 @@ ASHRAE_90_1_2013,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-30,false
 ASHRAE_90_1_2013,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-35,false
 ASHRAE_90_1_2013,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-40,false
 ASHRAE_90_1_2013,5,Foundation,"",Typical Insulated Slab CZ5 R-3,true
-ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ5 U-0.77 SHGC-0.4 VT-0.44,false
-ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.62 SHGC-0.36 VT-0.4,false
-ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.54 SHGC-0.32 VT-0.35,false
-ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.46 SHGC-0.28 VT-0.31,false
-ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.39 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ5 U-0.42 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.34 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.29 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.25 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.21 SHGC-0.24 VT-0.26,false
 ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ5 U-0.42 SHGC-0.4 VT-0.44,false
 ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.34 SHGC-0.36 VT-0.4,false
 ASHRAE_90_1_2013,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.29 SHGC-0.32 VT-0.35,false
@@ -1148,11 +1148,11 @@ ASHRAE_90_1_2013,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-30,true
 ASHRAE_90_1_2013,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-35,true
 ASHRAE_90_1_2013,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-40,true
 ASHRAE_90_1_2013,6,Foundation,"",Typical Insulated Slab CZ6 R-3,true
-ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ6 U-0.77 SHGC-0.4 VT-0.44,false
-ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.62 SHGC-0.36 VT-0.4,false
-ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.54 SHGC-0.32 VT-0.35,false
-ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.46 SHGC-0.28 VT-0.31,false
-ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.39 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ6 U-0.42 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.34 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.29 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.25 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.21 SHGC-0.24 VT-0.26,false
 ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ6 U-0.42 SHGC-0.4 VT-0.44,false
 ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.34 SHGC-0.36 VT-0.4,false
 ASHRAE_90_1_2013,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.29 SHGC-0.32 VT-0.35,false
@@ -1201,11 +1201,11 @@ ASHRAE_90_1_2013,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-30,true
 ASHRAE_90_1_2013,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-35,true
 ASHRAE_90_1_2013,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-40,true
 ASHRAE_90_1_2013,7,Foundation,"",Typical Insulated Slab CZ7 R-3,true
-ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ7 U-0.77 SHGC-0.45 VT-0.5,false
-ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.62 SHGC-0.41 VT-0.45,false
-ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.54 SHGC-0.36 VT-0.4,false
-ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.46 SHGC-0.32 VT-0.35,false
-ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.39 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ7 U-0.38 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.3 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.27 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.23 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.19 SHGC-0.27 VT-0.3,false
 ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ7 U-0.38 SHGC-0.45 VT-0.5,false
 ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.3 SHGC-0.41 VT-0.45,false
 ASHRAE_90_1_2013,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.27 SHGC-0.36 VT-0.4,false
@@ -1254,11 +1254,11 @@ ASHRAE_90_1_2013,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-41,false
 ASHRAE_90_1_2013,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-46,false
 ASHRAE_90_1_2013,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-51,false
 ASHRAE_90_1_2013,8,Foundation,"",Typical Insulated Slab CZ8 R-3,true
-ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ8 U-0.77 SHGC-0.45 VT-0.5,false
-ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.62 SHGC-0.41 VT-0.45,false
-ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.54 SHGC-0.36 VT-0.4,false
-ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.46 SHGC-0.32 VT-0.35,false
-ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.39 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ8 U-0.38 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.3 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.27 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.23 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.19 SHGC-0.27 VT-0.3,false
 ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ8 U-0.38 SHGC-0.45 VT-0.5,false
 ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.3 SHGC-0.41 VT-0.45,false
 ASHRAE_90_1_2013,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.27 SHGC-0.36 VT-0.4,false

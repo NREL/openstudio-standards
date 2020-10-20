@@ -3727,13 +3727,13 @@
                 "Exterior_Window": {
                     "Metal_Framing": {
                         "Window_Type": {
-                            "Default": "Typical Mtl Framed CZ1 U-1.1 SHGC-0.25 VT-0.28",
+                            "Default": "Typical Mtl Framed CZ1 U-0.57 SHGC-0.25 VT-0.28",
                             "Options": [
-                                "Typical Mtl Framed CZ1 U-1.1 SHGC-0.25 VT-0.28",
-                                "Mtl Framed CZ1 U-0.88 SHGC-0.23 VT-0.25",
-                                "Mtl Framed CZ1 U-0.77 SHGC-0.2 VT-0.22",
-                                "Mtl Framed CZ1 U-0.66 SHGC-0.18 VT-0.19",
-                                "Mtl Framed CZ1 U-0.55 SHGC-0.15 VT-0.17"
+                                "Typical Mtl Framed CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "Mtl Framed CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "Mtl Framed CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "Mtl Framed CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "Mtl Framed CZ1 U-0.29 SHGC-0.15 VT-0.17"
                             ]
                         }
                     },
@@ -3949,13 +3949,13 @@
                 "Exterior_Window": {
                     "Metal_Framing": {
                         "Window_Type": {
-                            "Default": "Typical Mtl Framed CZ2 U-0.83 SHGC-0.25 VT-0.28",
+                            "Default": "Typical Mtl Framed CZ2 U-0.57 SHGC-0.25 VT-0.28",
                             "Options": [
-                                "Typical Mtl Framed CZ2 U-0.83 SHGC-0.25 VT-0.28",
-                                "Mtl Framed CZ2 U-0.66 SHGC-0.23 VT-0.25",
-                                "Mtl Framed CZ2 U-0.58 SHGC-0.2 VT-0.22",
-                                "Mtl Framed CZ2 U-0.5 SHGC-0.18 VT-0.19",
-                                "Mtl Framed CZ2 U-0.42 SHGC-0.15 VT-0.17"
+                                "Typical Mtl Framed CZ2 U-0.57 SHGC-0.25 VT-0.28",
+                                "Mtl Framed CZ2 U-0.46 SHGC-0.23 VT-0.25",
+                                "Mtl Framed CZ2 U-0.4 SHGC-0.2 VT-0.22",
+                                "Mtl Framed CZ2 U-0.34 SHGC-0.18 VT-0.19",
+                                "Mtl Framed CZ2 U-0.29 SHGC-0.15 VT-0.17"
                             ]
                         }
                     },
@@ -4171,13 +4171,13 @@
                 "Exterior_Window": {
                     "Metal_Framing": {
                         "Window_Type": {
-                            "Default": "Typical Mtl Framed CZ3 U-0.77 SHGC-0.25 VT-0.28",
+                            "Default": "Typical Mtl Framed CZ3 U-0.5 SHGC-0.25 VT-0.28",
                             "Options": [
-                                "Typical Mtl Framed CZ3 U-0.77 SHGC-0.25 VT-0.28",
-                                "Mtl Framed CZ3 U-0.62 SHGC-0.23 VT-0.25",
-                                "Mtl Framed CZ3 U-0.54 SHGC-0.2 VT-0.22",
-                                "Mtl Framed CZ3 U-0.46 SHGC-0.18 VT-0.19",
-                                "Mtl Framed CZ3 U-0.39 SHGC-0.15 VT-0.17"
+                                "Typical Mtl Framed CZ3 U-0.5 SHGC-0.25 VT-0.28",
+                                "Mtl Framed CZ3 U-0.4 SHGC-0.23 VT-0.25",
+                                "Mtl Framed CZ3 U-0.35 SHGC-0.2 VT-0.22",
+                                "Mtl Framed CZ3 U-0.3 SHGC-0.18 VT-0.19",
+                                "Mtl Framed CZ3 U-0.25 SHGC-0.15 VT-0.17"
                             ]
                         }
                     },
@@ -4393,13 +4393,13 @@
                 "Exterior_Window": {
                     "Metal_Framing": {
                         "Window_Type": {
-                            "Default": "Typical Mtl Framed CZ4 U-0.77 SHGC-0.4 VT-0.44",
+                            "Default": "Typical Mtl Framed CZ4 U-0.42 SHGC-0.4 VT-0.44",
                             "Options": [
-                                "Typical Mtl Framed CZ4 U-0.77 SHGC-0.4 VT-0.44",
-                                "Mtl Framed CZ4 U-0.62 SHGC-0.36 VT-0.4",
-                                "Mtl Framed CZ4 U-0.54 SHGC-0.32 VT-0.35",
-                                "Mtl Framed CZ4 U-0.46 SHGC-0.28 VT-0.31",
-                                "Mtl Framed CZ4 U-0.39 SHGC-0.24 VT-0.26"
+                                "Typical Mtl Framed CZ4 U-0.42 SHGC-0.4 VT-0.44",
+                                "Mtl Framed CZ4 U-0.34 SHGC-0.36 VT-0.4",
+                                "Mtl Framed CZ4 U-0.29 SHGC-0.32 VT-0.35",
+                                "Mtl Framed CZ4 U-0.25 SHGC-0.28 VT-0.31",
+                                "Mtl Framed CZ4 U-0.21 SHGC-0.24 VT-0.26"
                             ]
                         }
                     },
@@ -4615,13 +4615,13 @@
                 "Exterior_Window": {
                     "Metal_Framing": {
                         "Window_Type": {
-                            "Default": "Typical Mtl Framed CZ5 U-0.77 SHGC-0.4 VT-0.44",
+                            "Default": "Typical Mtl Framed CZ5 U-0.42 SHGC-0.4 VT-0.44",
                             "Options": [
-                                "Typical Mtl Framed CZ5 U-0.77 SHGC-0.4 VT-0.44",
-                                "Mtl Framed CZ5 U-0.62 SHGC-0.36 VT-0.4",
-                                "Mtl Framed CZ5 U-0.54 SHGC-0.32 VT-0.35",
-                                "Mtl Framed CZ5 U-0.46 SHGC-0.28 VT-0.31",
-                                "Mtl Framed CZ5 U-0.39 SHGC-0.24 VT-0.26"
+                                "Typical Mtl Framed CZ5 U-0.42 SHGC-0.4 VT-0.44",
+                                "Mtl Framed CZ5 U-0.34 SHGC-0.36 VT-0.4",
+                                "Mtl Framed CZ5 U-0.29 SHGC-0.32 VT-0.35",
+                                "Mtl Framed CZ5 U-0.25 SHGC-0.28 VT-0.31",
+                                "Mtl Framed CZ5 U-0.21 SHGC-0.24 VT-0.26"
                             ]
                         }
                     },
@@ -4837,13 +4837,13 @@
                 "Exterior_Window": {
                     "Metal_Framing": {
                         "Window_Type": {
-                            "Default": "Typical Mtl Framed CZ6 U-0.77 SHGC-0.4 VT-0.44",
+                            "Default": "Typical Mtl Framed CZ6 U-0.42 SHGC-0.4 VT-0.44",
                             "Options": [
-                                "Typical Mtl Framed CZ6 U-0.77 SHGC-0.4 VT-0.44",
-                                "Mtl Framed CZ6 U-0.62 SHGC-0.36 VT-0.4",
-                                "Mtl Framed CZ6 U-0.54 SHGC-0.32 VT-0.35",
-                                "Mtl Framed CZ6 U-0.46 SHGC-0.28 VT-0.31",
-                                "Mtl Framed CZ6 U-0.39 SHGC-0.24 VT-0.26"
+                                "Typical Mtl Framed CZ6 U-0.42 SHGC-0.4 VT-0.44",
+                                "Mtl Framed CZ6 U-0.34 SHGC-0.36 VT-0.4",
+                                "Mtl Framed CZ6 U-0.29 SHGC-0.32 VT-0.35",
+                                "Mtl Framed CZ6 U-0.25 SHGC-0.28 VT-0.31",
+                                "Mtl Framed CZ6 U-0.21 SHGC-0.24 VT-0.26"
                             ]
                         }
                     },
@@ -5059,13 +5059,13 @@
                 "Exterior_Window": {
                     "Metal_Framing": {
                         "Window_Type": {
-                            "Default": "Typical Mtl Framed CZ7 U-0.77 SHGC-0.45 VT-0.5",
+                            "Default": "Typical Mtl Framed CZ7 U-0.38 SHGC-0.45 VT-0.5",
                             "Options": [
-                                "Typical Mtl Framed CZ7 U-0.77 SHGC-0.45 VT-0.5",
-                                "Mtl Framed CZ7 U-0.62 SHGC-0.41 VT-0.45",
-                                "Mtl Framed CZ7 U-0.54 SHGC-0.36 VT-0.4",
-                                "Mtl Framed CZ7 U-0.46 SHGC-0.32 VT-0.35",
-                                "Mtl Framed CZ7 U-0.39 SHGC-0.27 VT-0.3"
+                                "Typical Mtl Framed CZ7 U-0.38 SHGC-0.45 VT-0.5",
+                                "Mtl Framed CZ7 U-0.3 SHGC-0.41 VT-0.45",
+                                "Mtl Framed CZ7 U-0.27 SHGC-0.36 VT-0.4",
+                                "Mtl Framed CZ7 U-0.23 SHGC-0.32 VT-0.35",
+                                "Mtl Framed CZ7 U-0.19 SHGC-0.27 VT-0.3"
                             ]
                         }
                     },
@@ -5281,13 +5281,13 @@
                 "Exterior_Window": {
                     "Metal_Framing": {
                         "Window_Type": {
-                            "Default": "Typical Mtl Framed CZ8 U-0.77 SHGC-0.45 VT-0.5",
+                            "Default": "Typical Mtl Framed CZ8 U-0.38 SHGC-0.45 VT-0.5",
                             "Options": [
-                                "Typical Mtl Framed CZ8 U-0.77 SHGC-0.45 VT-0.5",
-                                "Mtl Framed CZ8 U-0.62 SHGC-0.41 VT-0.45",
-                                "Mtl Framed CZ8 U-0.54 SHGC-0.36 VT-0.4",
-                                "Mtl Framed CZ8 U-0.46 SHGC-0.32 VT-0.35",
-                                "Mtl Framed CZ8 U-0.39 SHGC-0.27 VT-0.3"
+                                "Typical Mtl Framed CZ8 U-0.38 SHGC-0.45 VT-0.5",
+                                "Mtl Framed CZ8 U-0.3 SHGC-0.41 VT-0.45",
+                                "Mtl Framed CZ8 U-0.27 SHGC-0.36 VT-0.4",
+                                "Mtl Framed CZ8 U-0.23 SHGC-0.32 VT-0.35",
+                                "Mtl Framed CZ8 U-0.19 SHGC-0.27 VT-0.3"
                             ]
                         }
                     },

@@ -27,6 +27,55 @@ templates.each do |template|
   template_data = {} # Hash to store data for JSON level
   std = Standard.build(template)
 
+  # Correct the U-value and SHGC for ExteriorWindow: Metal framing (all other) in 90.1-2013
+  #
+  # TODO Remove
+  # Bug where the U-value and SHGC for ExteriorWindow: Metal framing (all other) in 90.1-2013 matches
+  # the U-value for Vertical Glazing, 0%-40% of Wall: Metal framing, entrance door
+  # instead of Vertical Glazing, 0%-40% of Wall: Metal framing, fixed
+  if template == '90.1-2013'
+    # Get the construction properties
+    const_props = std.standards_data['construction_properties']
+
+    # Loop through climate zones
+    (1..8).each do |climate_zone|
+      # Find the climate zone set that this climate zone falls into
+      climate_zone = climate_zone.to_s
+      climate_zone_set = "ClimateZone #{climate_zone}"
+
+      # Find the U-value and SHGC for ExteriorWindow: Metal framing (curtainwall/storefront)
+      search_criteria = {
+          'template' => template,
+          'climate_zone_set' => climate_zone_set,
+          'intended_surface_type' => 'ExteriorWindow',
+          'standards_construction_type' => 'Metal framing (curtainwall/storefront)',
+          'building_category' => building_category
+      }
+      correct_props = std.model_find_object(std.standards_data['construction_properties'], search_criteria)
+
+      # Modify the props for all Metal framing (all other) to match Metal framing (curtainwall/storefront)
+      const_props.each do |p|
+        next unless p['intended_surface_type'] == 'ExteriorWindow'
+        next unless p['climate_zone_set'] == climate_zone_set
+        next unless p['building_category'] == building_category
+        next unless p['standards_construction_type'] == 'Metal framing (all other)'
+        old_u = p['assembly_maximum_u_value']
+        old_shgc = p['assembly_maximum_solar_heat_gain_coefficient']
+        old_ratio = p['assembly_minimum_vt_shgc']
+        new_u = correct_props['assembly_maximum_u_value']
+        new_shgc = correct_props['assembly_maximum_solar_heat_gain_coefficient']
+        new_ratio = correct_props['assembly_minimum_vt_shgc']
+        puts "TEMP BUGFIX ExteriorWindow Metal framing (all other) U: #{old_u} to #{new_u}, SHGC: #{old_shgc} to #{new_shgc}, ratio: #{old_ratio} to #{new_ratio}"
+        p['assembly_maximum_u_value'] = correct_props['assembly_maximum_u_value']
+        p['assembly_maximum_solar_heat_gain_coefficient'] = correct_props['assembly_maximum_solar_heat_gain_coefficient']
+        p['assembly_minimum_vt_shgc'] = correct_props['assembly_minimum_vt_shgc']
+      end
+    end
+
+    # Reassign the modified construction properties to the standard
+    std.standards_data['construction_properties'] = const_props
+  end
+
   # Loop through climate zones
   (1..8).each do |climate_zone|
     climate_zone = climate_zone.to_s
