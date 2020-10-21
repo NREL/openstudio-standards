@@ -1,1 +1,0 @@
-This directory holds the scripts used to generate the input.json for SPEED and the construction_lib.osm generated from Andrew's custom script
