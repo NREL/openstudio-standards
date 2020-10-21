@@ -1621,6 +1621,7 @@ class ECMS
         unitary_cop = {
           "name" => ecm_name,
           "minimum_energy_efficiency_ratio" => cop_package['minimum_energy_efficiency_ratio'],
+          "minimum_seasonal_energy_efficiency_ratio" => cop_package['minimum_seasonal_energy_efficiency_ratio'],
           "cool_cap_ft" => cop_package['cool_cap_ft'],
           "cool_cap_fflow" => cop_package['cool_cap_fflow'],
           "cool_eir_ft" => cop_package['cool_eir_ft'],
@@ -1628,14 +1629,18 @@ class ECMS
           "cool_plf_fplr" => cop_package['cool_eir_fplr']
         }
       end
-      next if (unitary_cop['minimum_energy_efficiency_ratio'].nil? && unitary_eff['cool_cap_ft'].nil? && unitary_eff['cool_cap_fflow'].nil? &&
-          unitary_eff['cool_eir_ft'].nil? && unitary_eff['cool_eir_fflow'].nil? && unitary_eff['cool_plf_fplr'].nil?)
+      next if (unitary_cop['minimum_energy_efficiency_ratio'].nil? && unitary_cop['minimum_seasonal_energy_efficiency_ratio'].nil? && unitary_cop['cool_cap_ft'].nil? &&
+          unitary_cop['cool_cap_fflow'].nil? && unitary_cop['cool_eir_ft'].nil? && unitary_cop['cool_eir_fflow'].nil? && unitary_cop['cool_plf_fplr'].nil?)
 
       # If the dx coil is on an air loop then update its cop and the performance curves when these are specified in the ecm data
       if (coil_type == "SingleSpeed" && coil.airLoopHVAC.is_initialized) ||
           (coil_type == "MultiSpeed" && coil.containingHVACComponent.get.airLoopHVAC.is_initialized)
         cop = nil
-        cop = eer_to_cop(unitary_cop['minimum_energy_efficiency_ratio'].to_f) if unitary_cop['minimum_energy_efficiency_ratio']
+        if unitary_cop['minimum_energy_efficiency_ratio']
+          cop = eer_to_cop(unitary_cop['minimum_energy_efficiency_ratio'].to_f)
+        elsif unitary_cop['minimum_seasonal_energy_efficiency_ratio']
+          cop = seer_to_cop_cooling_with_fan(unitary_cop['minimum_seasonal_energy_efficiency_ratio'].to_f)
+        end
         cool_cap_ft = nil
         cool_cap_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_ft'] } if unitary_cop['cool_cap_ft']
         cool_cap_fflow = nil
