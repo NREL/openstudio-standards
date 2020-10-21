@@ -394,7 +394,8 @@ module BTAP
           data['cdd18'] = wf.cdd18
           data['latitude'] = wf.latitude
           data['longitude'] = wf.longitude
-          data['elevation'] = wf.delta_dry_bulb
+          data['elevation'] = wf.elevation
+          data['delta_drybulb'] = wf.delta_dry_bulb
           data['climate_zone'] = wf.climate_zone.force_encoding('ISO-8859-1').encode('UTF-8')
           data['standard'] = wf.standard
           data['summer_wet_months'] = wf.summer_wet_months.force_encoding('ISO-8859-1').encode('UTF-8')
