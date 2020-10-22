@@ -43,10 +43,10 @@ class NECB_PVground_Tests < Minitest::Test
     @primary_heating_fuels = ['DefaultFuel']
     @pv_ground_types = [true]  #true, false
 
-    pv_ground_area_total_m2 = 50  #TODO: Question: is this the way I should give inputs for these four parameters?
-    pv_ground_tilt_angle = 20
-    pv_ground_azimuth_angle = 180
-    pv_ground_module = 'Standard'  #'ThinFilm', 'Premium'
+    pv_ground_total_area_pv_panels_m2 = 50
+    pv_ground_tilt_angle = 'NECB_Default'
+    pv_ground_azimuth_angle = 'NECB_Default'
+    pv_ground_module_description = 'NECB_Default'
 
     # Test results storage array.
     @test_results_array = []
@@ -72,8 +72,7 @@ class NECB_PVground_Tests < Minitest::Test
               #loads osm geometry and spactypes from library.
               model = standard.load_building_type_from_library(building_type: building_type)
 
-              # this runs the step in the model.
-
+              # this runs the steps in the model.
               standard.apply_weather_data(model: model, epw_file: epw_file)
               standard.apply_loads(model: model, lights_type: 'NECB_Default', lights_scale: 1.0)
               standard.apply_envelope(model: model,
@@ -110,26 +109,15 @@ class NECB_PVground_Tests < Minitest::Test
                                              shw_eff: nil,
                                              daylighting_type: 'NECB_Default',
                                              pv_ground_type: pv_ground_type,
-                                             pv_ground_area_total_m2: pv_ground_area_total_m2,
+                                             pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
                                              pv_ground_tilt_angle: pv_ground_tilt_angle,
                                              pv_ground_azimuth_angle: pv_ground_azimuth_angle,
-                                             pv_ground_module: pv_ground_module
+                                             pv_ground_module_description: pv_ground_module_description
               )
 
               # # comment out for regular tests
               # BTAP::FileIO.save_osm(model, File.join(@output_folder,"#{template}-#{building_type}-pv_ground-#{pv_ground_type}.osm"))
               # puts File.join(@output_folder,"#{template}-#{building_type}-pv_ground-#{pv_ground_type}.osm")
-
-              ##### Calculate number of PV panels
-              # Note: assuming 5 ft x 2 ft as PV panel's size since it seems to fit the racking system used for ground mounts as per Mike Lubun's comment.
-              pv_area_each_ft2 = 5.0 * 2.0
-              pv_area_each_m2 = (OpenStudio.convert(pv_area_each_ft2, 'ft^2', 'm^2').get) #convert pv_area_each_ft2 to m2
-              pv_number_panels = pv_ground_area_total_m2/pv_area_each_m2
-              #### Get data of the PV panel from the json file
-              pv_info = ecm.standards_data['tables']['pv']['table'].detect { |item| item['pv_module'] == pv_ground_module }
-              pv_watt = pv_info['pv_wattage']
-              ##### Calculate DC system capacity based on the number of PV panels and capacity of each PV panel
-              dc_system_capacity = pv_number_panels * pv_watt
 
               ##### Gather generators data
               model.getGeneratorPVWattss.sort.each do |generator_PVWatt|

@@ -196,10 +196,10 @@ class NECB2011 < Standard
                                    fdwr_set: -1.0,
                                    srr_set: -1.0,
                                    pv_ground_type: nil,
-                                   pv_ground_area_total_m2: nil,
+                                   pv_ground_total_area_pv_panels_m2: nil,
                                    pv_ground_tilt_angle: nil,
                                    pv_ground_azimuth_angle: nil,
-                                   pv_ground_module: nil
+                                   pv_ground_module_description: nil
   )
 
 
@@ -233,11 +233,11 @@ class NECB2011 < Standard
                                 skylight_solar_trans: skylight_solar_trans,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
-                                pv_ground_type: nil,  # Two options: (1) nil OR FALSE, (2) TRUE
-                                pv_ground_area_total_m2: 50, # e.g. 50
-                                pv_ground_tilt_angle: 20, # e.g. 20
-                                pv_ground_azimuth_angle: 180, # e.g. 180
-                                pv_ground_module: 'Standard', # Options: 'Standard', 'Premium', 'ThinFilm' #TODO: Add other options  #Sara
+                                pv_ground_type: TRUE,  # Two options: (1) nil OR FALSE, (2) TRUE
+                                pv_ground_total_area_pv_panels_m2: 50, # e.g. 50
+                                pv_ground_tilt_angle: 'NECB_Default', # Options: (1) 'NECB_Default' (i.e. latitude), (2) tilt angle value (e.g. 20)
+                                pv_ground_azimuth_angle: 'NECB_Default', # Options: (1) 'NECB_Default' (i.e. south), (2) azimuth angle value (e.g. 90)
+                                pv_ground_module_description: 'NECB_Default' # Options: (1) 'NECB_Default' (i.e. Standard), (2) other options ('Standard', 'Premium', ThinFilm')
     )
 
   end
@@ -287,10 +287,10 @@ class NECB2011 < Standard
                            scale_y: nil,
                            scale_z: nil,
                            pv_ground_type: nil,
-                           pv_ground_area_total_m2: nil ,
+                           pv_ground_total_area_pv_panels_m2: nil ,
                            pv_ground_tilt_angle: nil,
                            pv_ground_azimuth_angle: nil,
-                           pv_ground_module: nil
+                           pv_ground_module_description: nil
   )
 
     BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees.nil?
@@ -337,10 +337,10 @@ class NECB2011 < Standard
                                    shw_eff: shw_eff,
                                    daylighting_type: daylighting_type,
                                    pv_ground_type: pv_ground_type,
-                                   pv_ground_area_total_m2: pv_ground_area_total_m2,
+                                   pv_ground_total_area_pv_panels_m2: pv_ground_area_total_m2,
                                    pv_ground_tilt_angle: pv_ground_tilt_angle,
                                    pv_ground_azimuth_angle: pv_ground_azimuth_angle,
-                                   pv_ground_module: pv_ground_module
+                                   pv_ground_module_description: pv_ground_module_description
     )
 
     return model
@@ -359,10 +359,10 @@ class NECB2011 < Standard
                                      shw_eff: nil,
                                      daylighting_type: 'NECB_Default',
                                      pv_ground_type:,
-                                     pv_ground_area_total_m2:,
+                                     pv_ground_total_area_pv_panels_m2:,
                                      pv_ground_tilt_angle:,
                                      pv_ground_azimuth_angle:,
-                                     pv_ground_module:
+                                     pv_ground_module_description:
   )
 
     # Create ECM object.
@@ -411,10 +411,10 @@ class NECB2011 < Standard
     # Apply ground-mounted PV panels as required.
     ecm.apply_pv_ground(model: model,
                         pv_ground_type: pv_ground_type,
-                        pv_ground_area_total_m2: pv_ground_area_total_m2,
+                        pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
                         pv_ground_tilt_angle: pv_ground_tilt_angle,
                         pv_ground_azimuth_angle: pv_ground_azimuth_angle,
-                        pv_ground_module: pv_ground_module)
+                        pv_ground_module_description: pv_ground_module_description)
   end
 
 
