@@ -233,11 +233,11 @@ class NECB2011 < Standard
                                 skylight_solar_trans: skylight_solar_trans,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
-                                pv_ground_type: TRUE,  # Two options: (1) nil OR FALSE, (2) TRUE
-                                pv_ground_total_area_pv_panels_m2: 50, # e.g. 50
-                                pv_ground_tilt_angle: 'NECB_Default', # Options: (1) 'NECB_Default' (i.e. latitude), (2) tilt angle value (e.g. 20)
-                                pv_ground_azimuth_angle: 'NECB_Default', # Options: (1) 'NECB_Default' (i.e. south), (2) azimuth angle value (e.g. 90)
-                                pv_ground_module_description: 'NECB_Default' # Options: (1) 'NECB_Default' (i.e. Standard), (2) other options ('Standard', 'Premium', ThinFilm')
+                                pv_ground_type: nil,  # Two options: (1) nil OR FALSE, (2) TRUE
+                                pv_ground_total_area_pv_panels_m2: nil, # e.g. 50
+                                pv_ground_tilt_angle: nil, # Options: (1) 'NECB_Default' (i.e. latitude), (2) tilt angle value (e.g. 20)
+                                pv_ground_azimuth_angle: nil, # Options: (1) 'NECB_Default' (i.e. south), (2) azimuth angle value (e.g. 90)
+                                pv_ground_module_description: nil # Options: (1) 'NECB_Default' (i.e. Standard), (2) other options ('Standard', 'Premium', ThinFilm')
     )
 
   end
