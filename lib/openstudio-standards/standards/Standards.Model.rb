@@ -214,19 +214,11 @@ class Standard
         model_apply_standard_constructions(model, climate_zone, wwr_building_type, wwr_info)
       end
 
-      if /prm/i !~ template
+      # Remove all HVAC from model, excluding service water heating
+      model_remove_prm_hvac(model)
 
-        # Get the groups of zones that define the baseline HVAC systems for later use.
-        # This must be done before removing the HVAC systems because it requires knowledge of proposed HVAC fuels.
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Grouping Zones by Fuel Type and Occupancy Type ***')
-        sys_groups = model_prm_baseline_system_groups(model, custom)
-
-        # Remove all HVAC from model, excluding service water heating
-        model_remove_prm_hvac(model)
-
-        # Remove all EMS objects from the model
-        model_remove_prm_ems_objects(model)
-      end
+      # Remove all EMS objects from the model
+      model_remove_prm_ems_objects(model)
 
       if /prm/i !~ template
 
@@ -1376,6 +1368,7 @@ class Standard
         break
       end
     end
+
     # Next filter by floor area
     iAreaGroup = 0
     baseine_is_found = false
@@ -1922,6 +1915,37 @@ class Standard
                                fan_pressure_rise: 0.2,
                                heating_type: main_heat_fuel)
         end
+
+      when 'SZ_CV' # System 12 (gas or district heat) or System 13 (electric resistance heat)
+        unless zones.empty?
+          hot_water_loop = nil
+          if zone_heat_fuel == 'DistrictHeating' || zone_heat_fuel == 'NaturalGas'
+            heating_type = 'Water'
+            hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
+                              model.getPlantLoopByName('Hot Water Loop').get
+                            else
+                              model_add_hw_loop(model, main_heat_fuel)
+                            end
+          else
+            # If no hot water loop is defined, heat will default to electric resistance
+            heating_type = 'Electric'
+          end
+          cooling_type = 'Water'
+          chilled_water_loop = if model.getPlantLoopByName('Chilled Water Loop').is_initialized
+                                model.getPlantLoopByName('Chilled Water Loop').get
+                              else
+                                model_add_chw_loop(model,
+                                                    cooling_fuel: cool_fuel,
+                                                    chw_pumping_type: 'const_pri')
+                              end
+
+          model_add_four_pipe_fan_coil(model,
+                                       zones,
+                                       chilled_water_loop,
+                                       hot_water_loop: hot_water_loop,
+                                       ventilation: true,
+                                       capacity_control_method: 'ConstantVolume')          
+        end  
 
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "System type #{system_type} is not a valid choice, nothing will be added to the model.")
@@ -4418,29 +4442,35 @@ class Standard
       end
 
       # Determine the space category
-      # TODO: This should really use the heating/cooling loads from the proposed building.
-      # However, in an attempt to avoid another sizing run just for this purpose,
-      # conditioned status is based on heating/cooling setpoints.
-      # If heated-only, will be assumed Semiheated.
-      # The full-bore method is on the next line in case needed.
-      # cat = thermal_zone_conditioning_category(space, template, climate_zone)
-      cooled = space_cooled?(space)
-      heated = space_heated?(space)
-      cat = 'Unconditioned'
-      # Unconditioned
-      if !heated && !cooled
-        cat = 'Unconditioned'
-        # Heated-Only
-      elsif heated && !cooled
-        cat = 'Semiheated'
-        # Heated and Cooled
+      if model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
+        # For PRM 90.1-2019 and onward, determine space category
+        # based on sizing run results
+        cat = space_conditioning_category(space)
       else
-        res = space_residential?(space)
-        cat = if res
-                'ResConditioned'
-              else
-                'NonResConditioned'
-              end
+        # TODO: This should really use the heating/cooling loads from the proposed building.
+        # However, in an attempt to avoid another sizing run just for this purpose,
+        # conditioned status is based on heating/cooling setpoints.
+        # If heated-only, will be assumed Semiheated.
+        # The full-bore method is on the next line in case needed.
+        # cat = thermal_zone_conditioning_category(space, template, climate_zone)
+        cooled = space_cooled?(space)
+        heated = space_heated?(space)
+        cat = 'Unconditioned'
+        # Unconditioned
+        if !heated && !cooled
+          cat = 'Unconditioned'
+          # Heated-Only
+        elsif heated && !cooled
+          cat = 'Semiheated'
+          # Heated and Cooled
+        else
+          res = space_residential?(space)
+          cat = if res
+                  'ResConditioned'
+                else
+                  'NonResConditioned'
+                end
+        end
       end
       space_cats[space] = cat
 

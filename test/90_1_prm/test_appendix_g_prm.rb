@@ -56,8 +56,8 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # Create the prototype
-      prototype_creator = Standard.build("#{template}_#{building_type}")
-      model = prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
+      @prototype_creator = Standard.build("#{template}_#{building_type}")
+      model = @prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
 
       # Make modification if requested
       @bldg_type_alt_now = nil
@@ -109,7 +109,7 @@ class AppendixGPRMTests < Minitest::Test
       model = BTAP::FileIO::deep_copy(proposed_model)
 
       # Initialize Standard class
-      prototype_creator = Standard.build('90.1-PRM-2019')
+      @prototype_creator = Standard.build('90.1-PRM-2019')
 
       # Convert standardSpaceType string for each space to values expected for prm creation
       lpd_space_types = JSON.parse(File.read("#{@@json_dir}/lpd_space_types.json"))
@@ -153,7 +153,7 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # Create baseline model
-      model_baseline = prototype_creator.model_create_prm_stable_baseline_building(model, building_type, climate_zone,
+      model_baseline = @prototype_creator.model_create_prm_stable_baseline_building(model, building_type, climate_zone,
                                                                                    @@hvac_building_types[hvac_building_type],
                                                                                    @@wwr_building_types[building_type],
                                                                                    @@swh_building_types[building_type],
@@ -172,7 +172,7 @@ class AppendixGPRMTests < Minitest::Test
       sim_control = model_baseline.getSimulationControl
       sim_control.setRunSimulationforSizingPeriods(true)
       sim_control.setRunSimulationforWeatherFileRunPeriods(false)
-      baseline_run = prototype_creator.model_run_simulation_and_log_errors(model_baseline, "#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/SR1")
+      baseline_run = @prototype_creator.model_run_simulation_and_log_errors(model_baseline, "#{@test_dir}/#{model_baseline_file_name}-SR")
 
       # Add prototype to the list of baseline prototypes generated
       baseline_prototypes[id] = model_baseline
@@ -268,6 +268,22 @@ class AppendixGPRMTests < Minitest::Test
       # Check WWR against expected WWR
       wwr_goal = 100 * @@wwr_values[building_type].to_f
       assert((wwr_baseline - wwr_goal).abs < 0.1, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+    end
+  end
+
+  # Check Skylight-to-Roof Ratio (SRR) for the baseline models
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_srr(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, mod = prototype
+
+      # Get srr of baseline model
+      srr_baseline = run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Skylight-Roof Ratio', 'Skylight-Roof Ratio', 'Total', '%').to_f
+
+      # Check WWR against expected WWR
+      srr_goal = 3
+      assert((srr_baseline - srr_goal).abs < 0.1, "Baseline SRR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The SRR of the baseline model is #{srr_baseline} but should be #{srr_goal}.")
     end
   end
 
@@ -571,9 +587,9 @@ class AppendixGPRMTests < Minitest::Test
         # This is a public assembly < 120 ksf, should be PSZ
         check_if_psz(model, "Assembly < 120,000 sq ft.")
         check_heat_type(model, climate_zone,"SZ", "HeatPump")
-      elsif @bldg_type_alt_now == 'Assembly' && building_type == 'HotelLarge'
+      elsif @bldg_type_alt_now == 'Assembly' && building_type == 'LargeHotel'
         # This is a public assembly > 120 ksf, should be SZ-CV
-        # check_if_szcv(model, "Assembly < 120,000 sq ft.")
+        check_if_sz_cv(model, climate_zone, "Assembly < 120,000 sq ft.")
       elsif building_type == 'Warehouse' && mod_str == ''
         # System type should be heating and ventilating
         # check_if_ht_vent(model, "Warehouse")
@@ -789,6 +805,39 @@ class AppendixGPRMTests < Minitest::Test
 
   end
 
+  # Check if baseline system type is four pipe fan coil/ constant speed
+  # @param model, sub_text for error messages
+  def check_if_sz_cv(model, climate_zone, sub_text)
+    # building fails if any zone is not packaged terminal unit
+    # or if heat type is incorrect
+    model.getThermalZones.sort.each do |thermal_zone|
+      pass_test = false
+      is_fpfc = false
+      heat_type = ''
+      thermal_zone.equipment.each do |equip|
+        # Skip HVAC components
+        next unless equip.to_HVACComponent.is_initialized
+        equip = equip.to_HVACComponent.get
+        is_fpfc = equip.to_ZoneHVACFourPipeFanCoil.is_initialized
+        if is_fpfc
+          # pass test for FPFC if at least one zone equip is FPFC; others may be exhaust fan, or possibly something else
+          pass_test = true
+        end  
+        if is_fpfc
+          # Also check heat type
+          equip = equip.to_ZoneHVACFourPipeFanCoil.get
+          heat_type = model.coil_heat_type(equip.heatingCoil) 
+          if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/ 
+            assert(heat_type == 'Electric', "Baseline system selection failed for climate #{climate_zone}: FPFC should have electric heat for " + sub_text)
+          else
+            assert(heat_type == 'Fuel', "Baseline system selection failed for climate #{climate_zone}: FPFC should have hot water heat for " + sub_text)
+          end
+        end
+      end
+      assert(pass_test, "Baseline system selection failed: should be FPFC for " + sub_text)  
+    end
+  end
+
   # Set ZoneMultiplier to passed value for all zones
   # @param model, arguments[]
   def set_zone_multiplier(model, arguments)
@@ -907,8 +956,37 @@ class AppendixGPRMTests < Minitest::Test
     return model
   end
 
+  # Remove transformer from model
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param arguments [Array] List of arguments
   def remove_transformer(model, arguments)
     model.getElectricLoadCenterTransformers.each(&:remove)
+    return model
+  end
+
+  # Increase the size of the skylights in a model
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param arguments [Array] List of arguments
+  def increase_skylight_size(model, arguments)
+    mult = arguments[0]
+    model.getSpaces.sort.each do |space|
+      next if @prototype_creator.space_conditioning_category(space) == 'Unconditioned'
+      # Loop through all surfaces in this space
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType == 'RoofCeiling'
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |ss|
+          next unless ss.subSurfaceType == 'Skylight'
+          # increase the size of the skylight
+
+          @prototype_creator.sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, mult)
+        end
+      end
+    end
+
     return model
   end
 
@@ -919,6 +997,7 @@ class AppendixGPRMTests < Minitest::Test
     # Select test to run
     tests = [
       'wwr',
+      'srr',
       'envelope',
       'lpd',
       'isresidential',
@@ -940,6 +1019,7 @@ class AppendixGPRMTests < Minitest::Test
 
     # Run tests
     check_wwr(prototypes_base['wwr']) if (tests.include? 'wwr')
+    check_srr(prototypes_base['srr']) if (tests.include? 'srr')
     check_daylighting_control(prototypes_base['daylighting_control']) if (tests.include? 'daylighting_control')
     check_residential_flag(prototypes_base['isresidential']) if (tests.include? 'isresidential')
     check_envelope(prototypes_base['envelope']) if (tests.include? 'envelope')
