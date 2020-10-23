@@ -4,7 +4,7 @@ template,building_type,space_type,Notes,lighting_per_area,electric_equipment_per
 90.1-2007,Office,Lobby,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-Lobby
 90.1-2007,Office,Elec/MechRoom,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-MechRoom
 90.1-2007,Office,Corridor,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-Corridor
-90.1-2007,Office,Conference,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-Conference 
+90.1-2007,Office,Conference,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-Conference
 90.1-2007,Office,BreakRoom,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-BreakRoom
 90.1-2007,Office,Storage,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-Storage
 90.1-2007,Office,Restroom,,x,x,ASHRAE_90_1_2007,LargeOffice,Office-Restroom
@@ -155,7 +155,7 @@ template,building_type,space_type,Notes,lighting_per_area,electric_equipment_per
 90.1-2010,Office,Lobby,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-Lobby
 90.1-2010,Office,Elec/MechRoom,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-MechRoom
 90.1-2010,Office,Corridor,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-Corridor
-90.1-2010,Office,Conference,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-Conference 
+90.1-2010,Office,Conference,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-Conference
 90.1-2010,Office,BreakRoom,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-BreakRoom
 90.1-2010,Office,Storage,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-Storage
 90.1-2010,Office,Restroom,,x,x,ASHRAE_90_1_2010,LargeOffice,Office-Restroom
@@ -306,7 +306,7 @@ template,building_type,space_type,Notes,lighting_per_area,electric_equipment_per
 90.1-2013,Office,Lobby,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-Lobby
 90.1-2013,Office,Elec/MechRoom,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-MechRoom
 90.1-2013,Office,Corridor,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-Corridor
-90.1-2013,Office,Conference,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-Conference 
+90.1-2013,Office,Conference,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-Conference
 90.1-2013,Office,BreakRoom,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-BreakRoom
 90.1-2013,Office,Storage,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-Storage
 90.1-2013,Office,Restroom,,x,x,ASHRAE_90_1_2013,LargeOffice,Office-Restroom
