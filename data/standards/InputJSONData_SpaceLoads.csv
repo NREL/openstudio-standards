@@ -65,7 +65,7 @@ template,building_type,space_type,Notes,lighting_per_area,electric_equipment_per
 90.1-2007,LargeHotel,Kitchen,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Kitchen
 90.1-2007,LargeHotel,Banquet,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Banquet
 90.1-2007,LargeHotel,Basement,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Basement
-90.1-2007,LargeHotel,Cafe,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Café
+90.1-2007,LargeHotel,Cafe,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Cafe
 90.1-2007,LargeHotel,Corridor,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Corridor
 90.1-2007,LargeHotel,GuestRoom,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-GuestRoom
 90.1-2007,LargeHotel,Laundry,,x,x,ASHRAE_90_1_2007,LargeHotel,LrgHotel-Laundry
@@ -78,7 +78,7 @@ template,building_type,space_type,Notes,lighting_per_area,electric_equipment_per
 90.1-2007,MidriseApartment,Office,,x,x,ASHRAE_90_1_2007,MidriseApartment,MidriseApt-Office
 90.1-2007,Outpatient,Anesthesia,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Anesthesia
 90.1-2007,Outpatient,BioHazard,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-BioHazard
-90.1-2007,Outpatient,Cafe,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Café
+90.1-2007,Outpatient,Cafe,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Cafe
 90.1-2007,Outpatient,Conference,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Conference
 90.1-2007,Outpatient,DressingRoom,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-DressingRoom
 90.1-2007,Outpatient,Elec/MechRoom,,x,x,ASHRAE_90_1_2007,Outpatient,Outpatient-Mechanical
@@ -216,7 +216,7 @@ template,building_type,space_type,Notes,lighting_per_area,electric_equipment_per
 90.1-2010,LargeHotel,Kitchen,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Kitchen
 90.1-2010,LargeHotel,Banquet,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Banquet
 90.1-2010,LargeHotel,Basement,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Basement
-90.1-2010,LargeHotel,Cafe,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Café
+90.1-2010,LargeHotel,Cafe,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Cafe
 90.1-2010,LargeHotel,Corridor,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Corridor
 90.1-2010,LargeHotel,GuestRoom,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-GuestRoom
 90.1-2010,LargeHotel,Laundry,,x,x,ASHRAE_90_1_2010,LargeHotel,LrgHotel-Laundry
@@ -229,7 +229,7 @@ template,building_type,space_type,Notes,lighting_per_area,electric_equipment_per
 90.1-2010,MidriseApartment,Office,,x,x,ASHRAE_90_1_2010,MidriseApartment,MidriseApt-Office
 90.1-2010,Outpatient,Anesthesia,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Anesthesia
 90.1-2010,Outpatient,BioHazard,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-BioHazard
-90.1-2010,Outpatient,Cafe,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Café
+90.1-2010,Outpatient,Cafe,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Cafe
 90.1-2010,Outpatient,Conference,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Conference
 90.1-2010,Outpatient,DressingRoom,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-DressingRoom
 90.1-2010,Outpatient,Elec/MechRoom,,x,x,ASHRAE_90_1_2010,Outpatient,Outpatient-Mechanical
@@ -367,7 +367,7 @@ template,building_type,space_type,Notes,lighting_per_area,electric_equipment_per
 90.1-2013,LargeHotel,Kitchen,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Kitchen
 90.1-2013,LargeHotel,Banquet,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Banquet
 90.1-2013,LargeHotel,Basement,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Basement
-90.1-2013,LargeHotel,Cafe,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Café
+90.1-2013,LargeHotel,Cafe,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Cafe
 90.1-2013,LargeHotel,Corridor,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Corridor
 90.1-2013,LargeHotel,GuestRoom,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-GuestRoom
 90.1-2013,LargeHotel,Laundry,,x,x,ASHRAE_90_1_2013,LargeHotel,LrgHotel-Laundry
@@ -380,7 +380,7 @@ template,building_type,space_type,Notes,lighting_per_area,electric_equipment_per
 90.1-2013,MidriseApartment,Office,,x,x,ASHRAE_90_1_2013,MidriseApartment,MidriseApt-Office
 90.1-2013,Outpatient,Anesthesia,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Anesthesia
 90.1-2013,Outpatient,BioHazard,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-BioHazard
-90.1-2013,Outpatient,Cafe,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Café
+90.1-2013,Outpatient,Cafe,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Cafe
 90.1-2013,Outpatient,Conference,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Conference
 90.1-2013,Outpatient,DressingRoom,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-DressingRoom
 90.1-2013,Outpatient,Elec/MechRoom,,x,x,ASHRAE_90_1_2013,Outpatient,Outpatient-Mechanical

@@ -2984,7 +2984,7 @@
                         ]
                     }
                 },
-                "LrgHotel-Café": {
+                "LrgHotel-Cafe": {
                     "Lighting_Power_Density": {
                         "Default": 1.3,
                         "Options": [
@@ -3573,7 +3573,7 @@
                         ]
                     }
                 },
-                "Outpatient-Café": {
+                "Outpatient-Cafe": {
                     "Lighting_Power_Density": {
                         "Default": 0.9,
                         "Options": [
@@ -9813,7 +9813,7 @@
                         ]
                     }
                 },
-                "LrgHotel-Café": {
+                "LrgHotel-Cafe": {
                     "Lighting_Power_Density": {
                         "Default": 0.89,
                         "Options": [
@@ -10402,7 +10402,7 @@
                         ]
                     }
                 },
-                "Outpatient-Café": {
+                "Outpatient-Cafe": {
                     "Lighting_Power_Density": {
                         "Default": 0.65,
                         "Options": [
@@ -16642,7 +16642,7 @@
                         ]
                     }
                 },
-                "LrgHotel-Café": {
+                "LrgHotel-Cafe": {
                     "Lighting_Power_Density": {
                         "Default": 0.89,
                         "Options": [
@@ -17231,7 +17231,7 @@
                         ]
                     }
                 },
-                "Outpatient-Café": {
+                "Outpatient-Cafe": {
                     "Lighting_Power_Density": {
                         "Default": 0.65,
                         "Options": [
