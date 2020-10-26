@@ -233,7 +233,7 @@ class NECB2011
   # # Returns the heating load per area for zone after sizing runs has been done.
   def stored_zone_heating_load(zone)
     total = 0.0
-    zone.spaces.sort.each do |space|
+    zone.spaces.each do |space|
       total += stored_space_heating_load(space)
     end
     return total
@@ -242,7 +242,7 @@ class NECB2011
   # Returns the cooling load per area for zone after sizing runs has been done.
   def stored_zone_cooling_load(zone)
     total = 0.0
-    zone.spaces.sort.each do |space|
+    zone.spaces.each do |space|
       total += stored_space_cooling_load(space)
     end
     return total
@@ -255,7 +255,7 @@ class NECB2011
   def auto_zone_dwelling_units(model)
     dwelling_tz_array = []
     # ----Dwelling units----------- will always have their own system per unit, so they should have their own thermal zone.
-    model.getSpaces.select {|space| is_a_necb_dwelling_unit?(space)}.sort.each do |space|
+    model.getSpaces.select {|space| is_a_necb_dwelling_unit?(space)}.each do |space|
       zone = OpenStudio::Model::ThermalZone.new(model)
       zone.setName("DU_BT=#{space.spaceType.get.standardsBuildingType.get}_ST=#{space.spaceType.get.standardsSpaceType.get}_FL=#{space.buildingStory().get.name}_SCH#{ determine_dominant_schedule([space])}")
       unless space_multiplier_map[space.name.to_s].nil? || (space_multiplier_map[space.name.to_s] == 1)
@@ -284,11 +284,10 @@ class NECB2011
   # Something that the code is silent on are smelly humid areas that should not be on the same system as the rest of the
   #  building.. These are the 'wet' spaces and have been defined as locker and washroom areas.. These will be put under
   # their own single system 4 system. These will be set to the dominant floor schedule.
-  def auto_zone_wet_spaces(model)
 
   def auto_zone_wet_spaces(model:, lights_type: 'NECB_Default', lights_scale: 1.0)
     wet_zone_array = Array.new
-    model.getSpaces.select {|space| is_an_necb_wet_space?(space)}.sort.each do |space|
+    model.getSpaces.select {|space| is_an_necb_wet_space?(space)}.each do |space|
       #if this space was already assigned to something skip it.
       next unless space.thermalZone.empty?
       # get space to dominant schedule
@@ -321,7 +320,7 @@ class NECB2011
         ideal_loads.addToThermalZone(zone)
       end
       # Go through other spaces to see if there are similar spaces with similar loads on the same floor that can be grouped.
-      model.getSpaces.select {|s| is_an_necb_wet_space?(s)}.sort.each do |space_target|
+      model.getSpaces.select {|s| is_an_necb_wet_space?(s)}.each do |space_target|
         if space_target.thermalZone.empty?
           if are_space_loads_similar?(space_1: space, space_2: space_target) && space.buildingStory().get == space_target.buildingStory().get # added since chris needs zones to not span floors for costing.
             adjust_wildcard_spacetype_schedule(space_target, dominant_schedule, lights_type, lights_scale, space_height)
@@ -340,7 +339,7 @@ class NECB2011
   def auto_zone_all_other_spaces(model)
     other_tz_array = Array.new
     #iterate through all non wildcard spaces.
-    model.getSpaces.select {|space| not is_a_necb_dwelling_unit?(space) and not is_an_necb_wildcard_space?(space)}.sort.each do |space|
+    model.getSpaces.select {|space| not is_a_necb_dwelling_unit?(space) and not is_an_necb_wildcard_space?(space)}.each do |space|
       #skip if already assigned to a thermal zone.
       next unless space.thermalZone.empty?
       #create new zone for this space based on the space name.
@@ -369,7 +368,7 @@ class NECB2011
         ideal_loads.addToThermalZone(zone)
       end
       # Go through other spaces and if you find something with similar loads on the same floor, add it to the zone.
-      model.getSpaces.select {|space| not is_a_necb_dwelling_unit?(space) and not is_an_necb_wildcard_space?(space)}.sort.each do |space_target|
+      model.getSpaces.select {|space| not is_a_necb_dwelling_unit?(space) and not is_an_necb_wildcard_space?(space)}.each do |space_target|
         if space_target.thermalZone.empty?
           if are_space_loads_similar?(space_1: space, space_2: space_target) and space.buildingStory().get == space_target.buildingStory().get # added since chris needs zones to not span floors for costing.
             space_target.setThermalZone(zone)
@@ -386,7 +385,7 @@ class NECB2011
   def auto_zone_wild_spaces(model:, lights_type: 'NECB_Default', lights_scale: 1.0)
     other_tz_array = Array.new
     #iterate through wildcard spaces.
-    model.getSpaces.select {|space| is_an_necb_wildcard_space?(space) and not is_an_necb_wet_space?(space)}.sort.each do |space|
+    model.getSpaces.select {|space| is_an_necb_wildcard_space?(space) and not is_an_necb_wet_space?(space)}.each do |space|
       #skip if already assigned to a thermal zone.
       next unless space.thermalZone.empty?
       #create new zone for this space based on the space name.
@@ -423,7 +422,7 @@ class NECB2011
         ideal_loads.addToThermalZone(zone)
       end
       # Go through other spaces and if you find something with similar loads on the same floor, add it to the zone.
-      model.getSpaces.select {|space| is_an_necb_wildcard_space?(space) and not is_an_necb_wet_space?(space)}.sort.each do |space_target|
+      model.getSpaces.select {|space| is_an_necb_wildcard_space?(space) and not is_an_necb_wet_space?(space)}.each do |space_target|
         if space_target.thermalZone.empty?
           if are_space_loads_similar?(space_1: space, space_2: space_target) and
               space.buildingStory().get == space_target.buildingStory().get # added since chris needs zones to not span floors for costing.
@@ -437,7 +436,7 @@ class NECB2011
 
     wild_zone_array = []
     #Get a list of all the wild spaces.
-    model.getSpaces.select {|space| is_an_necb_wildcard_space?(space) and not is_an_necb_wet_space?(space)}.sort.each do |space|
+    model.getSpaces.select {|space| is_an_necb_wildcard_space?(space) and not is_an_necb_wet_space?(space)}.each do |space|
       #if this space was already assigned to something skip it.
       next unless space.thermalZone.empty?
       #find adjacent spaces to the current space.
@@ -470,7 +469,7 @@ class NECB2011
         #assign the space(s) to the adjacent thermal zone.
         schedule_type = determine_dominant_schedule(space.buildingStory.get.spaces)
         zone = other_adjacent_spaces.first.thermalZone.get
-        wild_adjacent_spaces.sort.each do |space|
+        wild_adjacent_spaces.each do |space|
           adjust_wildcard_spacetype_schedule(space, schedule_type, @lights_type, @lights_scale, @space_height)
           space.setThermalZone(zone)
         end
@@ -505,7 +504,7 @@ class NECB2011
         ideal_loads.addToThermalZone(zone)
       end
       # Go through other spaces to see if there are similar spaces with similar loads on the same floor that can be grouped.
-      model.getSpaces.select {|s| is_an_necb_wildcard_space?(s) and not is_an_necb_wet_space?(s)}.sort.each do |space_target|
+      model.getSpaces.select {|s| is_an_necb_wildcard_space?(s) and not is_an_necb_wet_space?(s)}.each do |space_target|
         if space_target.thermalZone.empty?
           if are_space_loads_similar?(space_1: space, space_2: space_target) &&
               space.buildingStory().get == space_target.buildingStory().get # added since chris needs zones to not span floors for costing.
@@ -524,8 +523,8 @@ class NECB2011
     #make sure they have the same number of spaces.
     truthes = []
     return false if zone_1.spaces.size != zone_2.spaces.size
-    zone_1.spaces.sort.each do |space_1|
-      zone_2.spaces.sort.each do |space_2|
+    zone_1.spaces.each do |space_1|
+      zone_2.spaces.each do |space_2|
         if are_space_loads_similar?(space_1: space_1, space_2: space_2)
           truthes << true
         end
@@ -582,7 +581,7 @@ class NECB2011
     surface_report = []
     space_floor_area = space.floorArea
     ['Outdoors', 'Ground'].each do |bc|
-      surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(space.surfaces, [bc]).sort.each do |surface|
+      surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(space.surfaces, [bc]).each do |surface|
         #sum wall area and subsurface area by direction. This is the old way so excluding top and bottom surfaces.
         #new way
         glazings = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(surface.subSurfaces, ["FixedWindow",
@@ -699,7 +698,7 @@ class NECB2011
   # Determines what system index number is required for the thermal zone based on the spacetypes it contains
   def get_necb_thermal_zone_system_selection(tz)
     systems = []
-    tz.spaces.sort.each do |space|
+    tz.spaces.each do |space|
       systems << get_necb_spacetype_system_selection(space)
     end
     systems.uniq!
@@ -728,7 +727,7 @@ class NECB2011
 
     #if the new spacetype does not match the old space type. we gotta update the space with the new spacetype.
     if space_type_name != new_spacetype_name
-      new_spacetype = space.model.getSpaceTypes.sort.detect do |spacetype|
+      new_spacetype = space.model.getSpaceTypes.detect do |spacetype|
         (not spacetype.standardsBuildingType.empty?) and #need to do this to prevent an exception.
             spacetype.standardsBuildingType.get == space.spaceType.get.standardsBuildingType.get and
             (not spacetype.standardsSpaceType.empty?) and #need to do this to prevent an exception.
@@ -781,7 +780,7 @@ class NECB2011
         'Q', 0
     ]
     # iterate through spaces in building.
-    spaces.select {|space| not is_an_necb_wildcard_space?(space) and not space.spaceType.get.standardsSpaceType.get == '- undefined -'}.sort.each do |space|
+    spaces.select {|space| not is_an_necb_wildcard_space?(space) and not space.spaceType.get.standardsSpaceType.get == '- undefined -'}.each do |space|
 
       # Ensure space floors are multiplied.
       mult = @space_multiplier_map[space.name.to_s].nil? ? 1.0 : @space_multiplier_map[space.name.to_s]
@@ -820,8 +819,8 @@ class NECB2011
     systems_used = []
     model.getSpaces.sort.each do |space|
       systems_used << get_necb_spacetype_system_selection(space)
+      systems_used.uniq!
     end
-    systems_used.uniq!
 
     #See if we need to create a hot water loop based on fueltype and systems used.
     hw_loop_needed = false
@@ -871,7 +870,7 @@ class NECB2011
 
     # The goal is to minimize the number of system when possible.
     system_zones_hash = {}
-    zones.sort.each do |zone|
+    zones.each do |zone|
       system_zones_hash[get_necb_thermal_zone_system_selection(zone)] = [] if system_zones_hash[get_necb_thermal_zone_system_selection(zone)].nil?
       system_zones_hash[get_necb_thermal_zone_system_selection(zone)] << zone
     end
@@ -882,15 +881,17 @@ class NECB2011
       when 0, nil
         # Do nothing no system assigned to zone. Used for Unconditioned spaces
       when 1
-        group_similar_zones_together(zones).sort.each do |zones|
+        group_similar_zones_together(zones).each do |zones|
           mau_air_loop = add_sys1_unitary_ac_baseboard_heating(model: model,
                                                                zones: zones,
                                                                mau_type: mau_type,
                                                                mau_heating_coil_type: mau_heating_coil_type,
                                                                baseboard_type: baseboard_type,
+                                                               hw_loop: @hw_loop,
+                                                               multispeed: false)
         end
       when 2
-        group_similar_zones_together(zones).sort.each do |zones|
+        group_similar_zones_together(zones).each do |zones|
           add_sys2_FPFC_sys5_TPFC(model: model,
                                   zones: zones,
                                   chiller_type: chiller_type,
@@ -899,7 +900,7 @@ class NECB2011
                                   hw_loop: @hw_loop)
         end
       when 3
-        group_similar_zones_together(zones).sort.each do |zones|
+        group_similar_zones_together(zones).each do |zones|
           add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
                                                                                 zones: zones,
                                                                                 heating_coil_type: heating_coil_type_sys3,
@@ -908,7 +909,7 @@ class NECB2011
                                                                                 multispeed: false)
         end
       when 4
-        group_similar_zones_together(zones).sort.each do |zones|
+        group_similar_zones_together(zones).each do |zones|
           add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
                                                                        zones: zones,
                                                                        heating_coil_type: heating_coil_type_sys4,
@@ -922,7 +923,7 @@ class NECB2011
 #                                                                                multispeed: false)
         end
       when 5
-        group_similar_zones_together(zones).sort.each do |zones|
+        group_similar_zones_together(zones).each do |zones|
           add_sys2_FPFC_sys5_TPFC(model: model,
                                   zones: zones,
                                   chiller_type: chiller_type,
@@ -940,7 +941,7 @@ class NECB2011
                                                                    hw_loop: @hw_loop)
 
       when 7
-        group_similar_zones_together(zones).sort.each do |zones|
+        group_similar_zones_together(zones).each do |zones|
           add_sys2_FPFC_sys5_TPFC(model: model,
                                   zones: zones,
                                   chiller_type: chiller_type,
@@ -973,7 +974,7 @@ class NECB2011
           (not is_an_necb_wildcard_space?(space)) and
           (not is_an_necb_storage_space?(space))
     end
-    other_spaces.sort.each do |space|
+    other_spaces.each do |space|
       zones << space.thermalZone.get
     end
     zones.uniq!
@@ -1016,13 +1017,13 @@ class NECB2011
     dwelling_shared_ahu = model.getBuilding.standardsNumberOfAboveGroundStories.get > 4
     # store dwelling zones into array
     zones = []
-    model.getSpaces.select {|space| is_a_necb_dwelling_unit?(space)}.sort.each do |space|
+    model.getSpaces.select {|space| is_a_necb_dwelling_unit?(space)}.each do |space|
       zones << space.thermalZone.get
     end
     zones.uniq!
 
     #sort system 1 or 3 used for each dwelling unit as per T8.4.4.8.A NECB 2011-17
-    zones.sort.each do |zone|
+    zones.each do |zone|
       system_zones_hash[get_necb_thermal_zone_system_selection(zone)] = [] if system_zones_hash[get_necb_thermal_zone_system_selection(zone)].nil?
       system_zones_hash[get_necb_thermal_zone_system_selection(zone)] << zone
     end
@@ -1041,7 +1042,7 @@ class NECB2011
                                                 multispeed: false)
         else
           #Create a separate air loop for each unit.
-          zones.sort.each do |zone|
+          zones.each do |zone|
             add_sys1_unitary_ac_baseboard_heating(model: model,
                                                   zones: [zone],
                                                   mau_type: mau_type,
@@ -1063,7 +1064,7 @@ class NECB2011
                                                                                 multispeed: false)
         else
           #Create a separate air loop for each unit.
-          zones.sort.each do |zone|
+          zones.each do |zone|
             add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
                                                                                   zones: [zone],
                                                                                   heating_coil_type: heating_coil_type_sys3,
@@ -1084,7 +1085,7 @@ class NECB2011
     #Determine what zones are wet zones.
     wet_tz = []
     model.getSpaces.select {|space|
-      is_an_necb_wet_space?(space)}.sort.each do |space|
+      is_an_necb_wet_space?(space)}.each do |space|
       wet_tz << space.thermalZone.get
     end
     wet_tz.uniq!
@@ -1113,7 +1114,7 @@ class NECB2011
     #Determine what zones are wet zones.
     tz = []
     model.getSpaces.select {|space|
-      is_an_necb_storage_space?(space)}.sort.each do |space|
+      is_an_necb_storage_space?(space)}.each do |space|
       tz << space.thermalZone.get
     end
     tz.uniq!
@@ -1142,7 +1143,7 @@ class NECB2011
 
     zones = []
     model.getSpaces.select {|space|
-      not is_an_necb_wet_space?(space) and is_an_necb_wildcard_space?(space)}.sort.each do |space|
+      not is_an_necb_wet_space?(space) and is_an_necb_wildcard_space?(space)}.each do |space|
       zones << space.thermalZone.get
     end
     zones.uniq!
@@ -1168,7 +1169,7 @@ class NECB2011
     # but this is preferred to unmet heating.
     #Iterate through zones.
     zone_heating_load_hash = {}
-    zones.sort.each {|zone| zone_heating_load_hash[zone] = self.stored_zone_heating_load(zone)}
+    zones.each {|zone| zone_heating_load_hash[zone] = self.stored_zone_heating_load(zone)}
     return zone_heating_load_hash.max_by(&:last).first
   end
 
@@ -1178,12 +1179,12 @@ class NECB2011
     array_of_array_of_zones = []
     accounted_for = []
     # Go through other zones to see if there are similar zones with similar loads on the same floor that can be grouped.
-    zones.sort.each do |zone|
+    zones.each do |zone|
       similar_array_of_zones = []
       next if accounted_for.include?(zone.name.to_s)
       similar_array_of_zones << zone
       accounted_for << zone.name.to_s
-      zones.sort.each do |zone_target|
+      zones.each do |zone_target|
         unless accounted_for.include?(zone_target.name.to_s)
           if are_zone_loads_similar?(zone_1: zone,
                                      zone_2: zone_target)
@@ -1195,7 +1196,7 @@ class NECB2011
       array_of_array_of_zones << similar_array_of_zones
     end
     total_zones_output = 0
-    array_of_array_of_zones.sort.each do |zones|
+    array_of_array_of_zones.each do |zones|
       total_zones_output += zones.size
     end
     #puts total_zones_output
