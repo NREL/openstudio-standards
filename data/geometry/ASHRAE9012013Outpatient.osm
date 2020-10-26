@@ -6758,23 +6758,6 @@ OS:Surface,
   -0.9144, -2.4384, 0,                    !- X,Y,Z Vertex 3 {m}
   -0.9144, -2.4384, 3.048;                !- X,Y,Z Vertex 4 {m}
 
-OS:SubSurface,
-  {1ee70d2d-0659-4069-a266-a1d0a8f4725f}, !- Handle
-  5E66D1,                                 !- Name
-  Door,                                   !- Sub Surface Type
-  ,                                       !- Construction Name
-  {bd7fe4c5-0fb0-42d5-8a77-3f6c550a46ba}, !- Surface Name
-  ,                                       !- Outside Boundary Condition Object
-  ,                                       !- View Factor to Ground
-  ,                                       !- Shading Control Name
-  ,                                       !- Frame and Divider Name
-  1,                                      !- Multiplier
-  ,                                       !- Number of Vertices
-  0, 0.6096, 2.4384,                      !- X,Y,Z Vertex 1 {m}
-  0, 0.6096, 0,                           !- X,Y,Z Vertex 2 {m}
-  0, 3.048, 0,                            !- X,Y,Z Vertex 3 {m}
-  0, 3.048, 2.4384;                       !- X,Y,Z Vertex 4 {m}
-
 OS:Surface,
   {bd7fe4c5-0fb0-42d5-8a77-3f6c550a46ba}, !- Handle
   529072,                                 !- Name
@@ -11798,23 +11781,6 @@ OS:Surface,
   -1.8288, 0, 0,                          !- X,Y,Z Vertex 3 {m}
   -1.8288, 0, 3.048;                      !- X,Y,Z Vertex 4 {m}
 
-OS:SubSurface,
-  {ca1cabba-e2fb-4580-864c-f781273665f6}, !- Handle
-  E14DAE,                                 !- Name
-  Door,                                   !- Sub Surface Type
-  ,                                       !- Construction Name
-  {114ef892-f819-4fee-8429-5ac76cbfd8c1}, !- Surface Name
-  ,                                       !- Outside Boundary Condition Object
-  ,                                       !- View Factor to Ground
-  ,                                       !- Shading Control Name
-  ,                                       !- Frame and Divider Name
-  1,                                      !- Multiplier
-  ,                                       !- Number of Vertices
-  0, 3.6576, 2.4384,                      !- X,Y,Z Vertex 1 {m}
-  0, 3.6576, 0,                           !- X,Y,Z Vertex 2 {m}
-  0, 4.8768, 0,                           !- X,Y,Z Vertex 3 {m}
-  0, 4.8768, 2.4384;                      !- X,Y,Z Vertex 4 {m}
-
 OS:Surface,
   {d2ea831e-84c5-4c6d-80d9-763266ab5ad1}, !- Handle
   14C7EF,                                 !- Name
@@ -13972,23 +13938,6 @@ OS:Surface,
   0, -20.1168, 0,                         !- X,Y,Z Vertex 3 {m}
   0, 0, 0;                                !- X,Y,Z Vertex 4 {m}
 
-OS:SubSurface,
-  {be04c2e3-35ff-417d-93de-7fcd9abb2924}, !- Handle
-  84A1D5,                                 !- Name
-  Door,                                   !- Sub Surface Type
-  ,                                       !- Construction Name
-  {fc573bc3-04fa-45c0-b511-f440eb283d58}, !- Surface Name
-  ,                                       !- Outside Boundary Condition Object
-  ,                                       !- View Factor to Ground
-  ,                                       !- Shading Control Name
-  ,                                       !- Frame and Divider Name
-  1,                                      !- Multiplier
-  ,                                       !- Number of Vertices
-  0, -0.6096, 2.4384,                     !- X,Y,Z Vertex 1 {m}
-  0, -0.6096, 0,                          !- X,Y,Z Vertex 2 {m}
-  0, -1.8288, 0,                          !- X,Y,Z Vertex 3 {m}
-  0, -1.8288, 2.4384;                     !- X,Y,Z Vertex 4 {m}
-
 OS:Surface,
   {d3206426-8cf9-4d0d-bf01-b8eae348f3fe}, !- Handle
   427B0D,                                 !- Name
@@ -15986,23 +15935,6 @@ OS:Surface,
   0, -10.0584, 0,                         !- X,Y,Z Vertex 3 {m}
   0, -10.0584, 3.048;                     !- X,Y,Z Vertex 4 {m}
 
-OS:SubSurface,
-  {98dc3591-5bcc-4ac0-a187-11630f962cc2}, !- Handle
-  EDE769,                                 !- Name
-  Door,                                   !- Sub Surface Type
-  ,                                       !- Construction Name
-  {d7c6b6ff-be93-4890-a51e-28f7bd5bddd1}, !- Surface Name
-  ,                                       !- Outside Boundary Condition Object
-  ,                                       !- View Factor to Ground
-  ,                                       !- Shading Control Name
-  ,                                       !- Frame and Divider Name
-  1,                                      !- Multiplier
-  ,                                       !- Number of Vertices
-  -8.8392, 1.8288, 2.4384,                !- X,Y,Z Vertex 1 {m}
-  -8.8392, 1.8288, 0,                     !- X,Y,Z Vertex 2 {m}
-  -8.8392, 0.6096, 0,                     !- X,Y,Z Vertex 3 {m}
-  -8.8392, 0.6096, 2.4384;                !- X,Y,Z Vertex 4 {m}
-
 OS:Surface,
   {db1c12a3-57b9-4503-b3ee-f4959b810d65}, !- Handle
   7A8E3F,                                 !- Name
@@ -17570,23 +17502,6 @@ OS:Surface,
   2.1336, -1.8288, 3.048;                 !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
-  {bf664890-459c-4e78-9d0c-9dfaf6fd8ab8}, !- Handle
-  9CB8E5,                                 !- Name
-  Door,                                   !- Sub Surface Type
-  ,                                       !- Construction Name
-  {318aee34-8bbc-4f02-bf25-c87ca9ca1b27}, !- Surface Name
-  ,                                       !- Outside Boundary Condition Object
-  ,                                       !- View Factor to Ground
-  ,                                       !- Shading Control Name
-  ,                                       !- Frame and Divider Name
-  1,                                      !- Multiplier
-  ,                                       !- Number of Vertices
-  -4.877, 2.1336, 2.4384,                 !- X,Y,Z Vertex 1 {m}
-  -4.877, 2.1336, 0,                      !- X,Y,Z Vertex 2 {m}
-  -6.096, 2.1336, 0,                      !- X,Y,Z Vertex 3 {m}
-  -6.096, 2.1336, 2.4384;                 !- X,Y,Z Vertex 4 {m}
-
-OS:SubSurface,
   {55b1aa72-5fa9-4d31-b9bf-15973fdc6676}, !- Handle
   137A56,                                 !- Name
   FixedWindow,                            !- Sub Surface Type
@@ -17933,6 +17848,12 @@ OS:Surface,
 OS:Timestep,
   {72296ac1-ddf8-4ec4-9255-66a1797a4c29}, !- Handle
   6;                                      !- Number of Timesteps per Hour
+
+OS:Sizing:Parameters,
+  {b187ffb6-d70c-4cfb-b3e7-f3e486351100}, !- Handle
+  1.0,                                    !- Heating Sizing Factor
+  1.0,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
 
 OS:SubSurface,
   {daca5bc8-4441-41bd-b232-ed4d943964b8}, !- Handle
@@ -19488,23 +19409,6 @@ OS:Surface,
   0, 0, 0,                                !- X,Y,Z Vertex 3 {m}
   0, 0, 3.048;                            !- X,Y,Z Vertex 4 {m}
 
-OS:SubSurface,
-  {58bf24ec-3d33-4a7c-ba23-ded884941047}, !- Handle
-  71E924,                                 !- Name
-  Door,                                   !- Sub Surface Type
-  ,                                       !- Construction Name
-  {83cb2ac3-5c1b-4066-8d43-ba437d78d832}, !- Surface Name
-  ,                                       !- Outside Boundary Condition Object
-  ,                                       !- View Factor to Ground
-  ,                                       !- Shading Control Name
-  ,                                       !- Frame and Divider Name
-  1,                                      !- Multiplier
-  ,                                       !- Number of Vertices
-  -11.5824, -0.6096, 2.4384,              !- X,Y,Z Vertex 1 {m}
-  -11.5824, -0.6096, 0,                   !- X,Y,Z Vertex 2 {m}
-  -11.5824, -1.8288, 0,                   !- X,Y,Z Vertex 3 {m}
-  -11.5824, -1.8288, 2.4384;              !- X,Y,Z Vertex 4 {m}
-
 OS:Surface,
   {288b9e90-1f7d-4293-91d6-7087a1aefe9d}, !- Handle
   Floor 1 Operating Room 1 Slab,          !- Name
@@ -20699,8 +20603,8 @@ OS:Surface,
 
 OS:ConvergenceLimits,
   {64aa306c-2382-4dc5-b047-54a8a3734d44}, !- Handle
-  5,                                      !- Minimum System Timestep {minutes}
-  25;                                     !- Maximum HVAC Iterations
+  1,                                      !- Minimum System Timestep {minutes}
+  20;                                     !- Maximum HVAC Iterations
 
 OS:Surface,
   {37eb549a-975b-46a6-b99d-a8f81a12dd6b}, !- Handle
@@ -33498,3 +33402,393 @@ OS:Rendering:Color,
   230,                                    !- Rendering Green Value
   199;                                    !- Rendering Blue Value
 
+OS:SubSurface,
+  {a122a541-11af-11f1-f415-c43fc4bb4d12}, !- Handle
+  71E924,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {83cb2ac3-5c1b-4066-8d43-ba437d78d832}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  -11.582, -0.6096, 2.4384,               !- X,Y,Z Vertex 1 {m}
+  -11.582, -0.6096, 0,                    !- X,Y,Z Vertex 2 {m}
+  -11.582, -1.8288, 0,                    !- X,Y,Z Vertex 3 {m}
+  -11.582, -1.8288, 2.4384;               !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {b322a521-11ab-11b1-f212-c22fc4bb4a11}, !- Handle
+  5E66D1,                                 !- Name
+  OverheadDoor,                           !- Sub Surface Type
+  ,                                       !- Construction Name
+  {bd7fe4c5-0fb0-42d5-8a77-3f6c550a46ba}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  0, 0.6096, 2.4384,                      !- X,Y,Z Vertex 1 {m}
+  0, 0.6096, 0,                           !- X,Y,Z Vertex 2 {m}
+  0, 3.6576, 0,                           !- X,Y,Z Vertex 3 {m}
+  0, 3.6576, 2.4384;                      !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {c322a535-13ab-13b1-f232-f22fc4bc2b31}, !- Handle
+  E14DAE,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {114ef892-f819-4fee-8429-5ac76cbfd8c1}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  0, 3.9624, 2.1336,                      !- X,Y,Z Vertex 1 {m}
+  0, 3.9624, 0,                           !- X,Y,Z Vertex 2 {m}
+  0, 4.8768, 0,                           !- X,Y,Z Vertex 3 {m}
+  0, 4.8768, 2.1336;                      !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {c143a434-43ac-13c3-f434-f44fc4bc2a34}, !- Handle
+  84A1D5,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {fc573bc3-04fa-45c0-b511-f440eb283d58}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  0, -0.9144, 2.1336,                     !- X,Y,Z Vertex 1 {m}
+  0, -0.9144, 0,                          !- X,Y,Z Vertex 2 {m}
+  0, -1.8288, 0,                          !- X,Y,Z Vertex 3 {m}
+  0, -1.8288, 2.1336;                     !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {c143a452-43aa-21c3-c411-e44fe4bc2a31}, !- Handle
+  9CB8E5,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {318aee34-8bbc-4f02-bf25-c87ca9ca1b27}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  -5.18159934, 2.1336, 2.1336,            !- X,Y,Z Vertex 1 {m}
+  -5.18159934, 2.1336, 0,                 !- X,Y,Z Vertex 2 {m}
+  -6.096, 2.1336, 0,                      !- X,Y,Z Vertex 3 {m}
+  -6.096, 2.1336, 2.1336;                 !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {c143c426-43ea-21e3-e411-e44fe4bc2e33}, !- Handle
+  EDE769,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {d7c6b6ff-be93-4890-a51e-28f7bd5bddd1}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  -8.8392, 1.524, 2.1336,                 !- X,Y,Z Vertex 1 {m}
+  -8.8392, 1.524, 0,                      !- X,Y,Z Vertex 2 {m}
+  -8.8392, 0.6096, 0,                     !- X,Y,Z Vertex 3 {m}
+  -8.8392, 0.6096, 2.1336;                !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {c143e423-33ee-35e3-e555-e55fe4bc2c11}, !- Handle
+  3C44F9,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {f3e32017-d5ae-4f88-9870-40f62bc67cf8}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  0.33214950899, 0, 2.1336,               !- X,Y,Z Vertex 1 {m}
+  0.33214950899, 0, 0,                    !- X,Y,Z Vertex 2 {m}
+  -0.58225049101, 0, 0,                   !- X,Y,Z Vertex 3 {m}
+  -0.58225049101, 0, 2.1336;              !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {c236e466-33cc-35d3-d515-d51fe4dc2c55}, !- Handle
+  49526E,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {f3e32017-d5ae-4f88-9870-40f62bc67cf8}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  -3.251663578822, 0, 2.1336,             !- X,Y,Z Vertex 1 {m}
+  -3.251663578822, 0, 0,                  !- X,Y,Z Vertex 2 {m}
+  -4.166063578822, 0, 0,                  !- X,Y,Z Vertex 3 {m}
+  -4.166063578822, 0, 2.1336;             !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {c236d426-33dc-31d3-d343-d31fe4dc2b54}, !- Handle
+  865AE8,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {f3e32017-d5ae-4f88-9870-40f62bc67cf8}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  -6.843642449399, 0, 2.1336,             !- X,Y,Z Vertex 1 {m}
+  -6.843642449399, 0, 0,                  !- X,Y,Z Vertex 2 {m}
+  -7.758042449399, 0, 0,                  !- X,Y,Z Vertex 3 {m}
+  -7.758042449399, 0, 2.1336;             !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {c612d325-33ac-31b5-d553-b31ff4df2f51}, !- Handle
+  7EB6E7,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {9b396d03-a7c6-4a5b-bcc8-e44197aed3ab}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  -0.529788491608, 2.1336, 2.1336,        !- X,Y,Z Vertex 1 {m}
+  -0.529788491608, 2.1336, 0,             !- X,Y,Z Vertex 2 {m}
+  -1.444188491608, 2.1336, 0,             !- X,Y,Z Vertex 3 {m}
+  -1.444188491608, 2.1336, 2.1336;        !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {c612d613-66ac-36b6-d566-c31cf4df2c26}, !- Handle
+  E4A528,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {318aee34-8bbc-4f02-bf25-c87ca9ca1b27}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  -0.852260978031, 2.1336, 2.1336,        !- X,Y,Z Vertex 1 {m}
+  -0.852260978031, 2.1336, 0,             !- X,Y,Z Vertex 2 {m}
+  -1.766660978031, 2.1336, 0,             !- X,Y,Z Vertex 3 {m}
+  -1.766660978031, 2.1336, 2.1336;        !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {a612a613-61ad-16b6-b516-b61cf4df2b66}, !- Handle
+  D18914,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {7b7b0e36-f804-4a16-9e78-ac9a7c8bd89a}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  -0.321005657422, 0, 2.1336,             !- X,Y,Z Vertex 1 {m}
+  -0.321005657422, 0, 0,                  !- X,Y,Z Vertex 2 {m}
+  -1.235405657422, 0, 0,                  !- X,Y,Z Vertex 3 {m}
+  -1.235405657422, 0, 2.1336;             !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {a512a513-51bd-15b5-b615-b51af4df2b65}, !- Handle
+  1C9872,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {69017491-f153-487a-b663-348b6a1690e0}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  -6.165282257085, 2.4384, 2.1336,        !- X,Y,Z Vertex 1 {m}
+  -6.165282257085, 2.4384, 0,             !- X,Y,Z Vertex 2 {m}
+  -7.079682257085, 2.4384, 0,             !- X,Y,Z Vertex 3 {m}
+  -7.079682257085, 2.4384, 2.1336;        !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {a512a444-44bd-15b4-b454-b41af4af4b64}, !- Handle
+  F67E1F,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {02b995c7-4f1d-4d9b-92a3-1d56fb7856ca}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  0, -6.536084367549, 2.1336,             !- X,Y,Z Vertex 1 {m}
+  0, -6.536084367549, 0,                  !- X,Y,Z Vertex 2 {m}
+  0, -7.450484367549, 0,                  !- X,Y,Z Vertex 3 {m}
+  0, -7.450484367549, 2.1336;             !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {a512b433-44bb-12e4-b252-b21af5df4b65}, !- Handle
+  F402E9,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {ee7f67a9-03f1-42e5-9c32-34b5ced0ff32}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  1.2192, -0.693305528848, 2.1336,        !- X,Y,Z Vertex 1 {m}
+  1.2192, -0.693305528848, 0,             !- X,Y,Z Vertex 2 {m}
+  1.2192, -1.607705528848, 0,             !- X,Y,Z Vertex 3 {m}
+  1.2192, -1.607705528848, 2.1336;        !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {b531b433-43db-12c4-b452-c21af5dc4b35}, !- Handle
+  24BAF7,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {b038a802-4696-441f-bb1b-7b93b66a3c8a}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  0.583580901044, -6.096, 2.1336,         !- X,Y,Z Vertex 1 {m}
+  0.583580901044, -6.096, 0,              !- X,Y,Z Vertex 2 {m}
+  1.497980901044, -6.096, 0,              !- X,Y,Z Vertex 3 {m}
+  1.497980901044, -6.096, 2.1336;         !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {b222b233-43ae-55d4-b112-c11ef5dc4b45}, !- Handle
+  62B5AF,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {add339a8-9b19-483d-8fe7-389126d2368e}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  0.722547134444, 0, 2.1336,              !- X,Y,Z Vertex 1 {m}
+  0.722547134444, 0, 0,                   !- X,Y,Z Vertex 2 {m}
+  1.636947134444, 0, 0,                   !- X,Y,Z Vertex 3 {m}
+  1.636947134444, 0, 2.1336;              !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {a222e443-43bd-52e4-b152-c51ea5fc4b41}, !- Handle
+  D2D3BC,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {4059be6e-c01b-4895-ac12-0301d4dfb6b7}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  11.6094450871, 0, 2.1336,               !- X,Y,Z Vertex 1 {m}
+  11.6094450871, 0, 0,                    !- X,Y,Z Vertex 2 {m}
+  12.5238450871, 0, 0,                    !- X,Y,Z Vertex 3 {m}
+  12.5238450871, 0, 2.1336;               !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {a253e453-55bd-32a4-f442-f51ea5fc4e33}, !- Handle
+  C528DA,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {4059be6e-c01b-4895-ac12-0301d4dfb6b7}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  5.348024528725, 0, 2.1336,              !- X,Y,Z Vertex 1 {m}
+  5.348024528725, 0, 0,                   !- X,Y,Z Vertex 2 {m}
+  6.262424528725, 0, 0,                   !- X,Y,Z Vertex 3 {m}
+  6.262424528725, 0, 2.1336;              !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {d253e453-33dd-34e4-f652-f51ea5fc6e36}, !- Handle
+  EFD3F9,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {4059be6e-c01b-4895-ac12-0301d4dfb6b7}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  17.846191534115, 0, 2.1336,             !- X,Y,Z Vertex 1 {m}
+  17.846191534115, 0, 0,                  !- X,Y,Z Vertex 2 {m}
+  18.760591534115, 0, 0,                  !- X,Y,Z Vertex 3 {m}
+  18.760591534115, 0, 2.1336;             !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {d336e663-66dd-36e6-f656-f61ea5fa5e36}, !- Handle
+  D4B39B,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {c181583d-ee00-486e-8fc2-ab8c870f1b9c}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  5.7912, 3.034639920911, 2.1336,         !- X,Y,Z Vertex 1 {m}
+  5.7912, 3.034639920911, 0,              !- X,Y,Z Vertex 2 {m}
+  5.7912, 3.949039920911, 0,              !- X,Y,Z Vertex 3 {m}
+  5.7912, 3.949039920911, 2.1336;         !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {d366f663-66fd-36f6-f666-a61fa5fa5e16}, !- Handle
+  19E57D,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {dff03bee-83c0-427d-97b4-24a1251cf568}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  0, -1.002141792669, 2.1336,             !- X,Y,Z Vertex 1 {m}
+  0, -1.002141792669, 0,                  !- X,Y,Z Vertex 2 {m}
+  0, -1.916541792669, 0,                  !- X,Y,Z Vertex 3 {m}
+  0, -1.916541792669, 2.1336;             !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {d311f153-16fd-31f6-f626-a21fa5fa5e12}, !- Handle
+  BA05F7,                                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {e1608faa-ab22-489a-9940-587d3fe47806}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  -3.9624, -0.590297247822, 2.1336,       !- X,Y,Z Vertex 1 {m}
+  -3.9624, -0.590297247822, 0,            !- X,Y,Z Vertex 2 {m}
+  -3.9624, -1.504697247822, 0,            !- X,Y,Z Vertex 3 {m}
+  -3.9624, -1.504697247822, 2.1336;       !- X,Y,Z Vertex 4 {m}

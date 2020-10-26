@@ -1,5 +1,6 @@
 require 'bundler/gem_tasks'
 require 'json'
+require 'fileutils'
 begin
   Bundler.setup
 rescue Bundler::BundlerError => e
@@ -28,6 +29,10 @@ namespace :test do
 
   desc 'parallel_run_all_tests_locally'
   Rake::TestTask.new('parallel_run_all_tests_locally') do |t|
+    # Make an empty test/reports directory
+    report_dir = 'test/reports'
+    FileUtils.rm_rf(report_dir) if Dir.exist?(report_dir)
+    Dir.mkdir(report_dir)
     file_list = FileList.new('test/parallel_run_all_tests_locally.rb')
     t.libs << 'test'
     t.test_files = file_list
@@ -143,15 +148,44 @@ end
 # Tasks to manage the spreadsheet data
 namespace :data do
   require "#{File.dirname(__FILE__)}/data/standards/manage_OpenStudio_Standards.rb"
-  desc 'Download OpenStudio_Standards from Google & export JSONs'
+
+  # OpenStudio Standards spreadsheet names
+  # Order matters: most general/shared must be first,
+  # as data may be overwritten when parsing later spreadsheets.
+  spreadsheets_ashrae = [
+      'OpenStudio_Standards-ashrae_90_1',
+      'OpenStudio_Standards-ashrae_90_1(space_types)'
+  ]
+
+  spreadsheets_deer = [
+      'OpenStudio_Standards-deer',
+      'OpenStudio_Standards-deer(space_types)',
+  ]
+
+  spreadsheets_comstock = [
+      'OpenStudio_Standards-ashrae_90_1',
+      'OpenStudio_Standards-ashrae_90_1-ALL-comstock(space_types)',
+      'OpenStudio_Standards-deer',
+      'OpenStudio_Standards-deer-ALL-comstock(space_types)',
+  ]
+
+  spreadsheets_cbes = [
+      'OpenStudio_Standards-cbes',
+      'OpenStudio_Standards-cbes(space_types)'
+  ]
+
+  spreadsheet_titles = spreadsheets_ashrae + spreadsheets_deer + spreadsheets_comstock + spreadsheets_cbes
+  spreadsheet_titles = spreadsheet_titles.uniq
+
+  desc 'Download all OpenStudio_Standards spreadsheets from Google & export JSONs'
   task 'update' do
-    download_google_spreadsheet
-    export_spreadsheet_to_json
+    download_google_spreadsheets(spreadsheet_titles)
+    export_spreadsheet_to_json(spreadsheet_titles)
   end
 
   desc 'Export JSONs from OpenStudio_Standards'
   task 'update:manual' do
-    export_spreadsheet_to_json
+    export_spreadsheet_to_json(spreadsheet_titles)
   end
 
 

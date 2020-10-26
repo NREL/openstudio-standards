@@ -19,14 +19,6 @@ class ASHRAE9012010 < ASHRAE901
       air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
     end
 
-    # Second time adjustment:
-    # Only apply to 2010 and 2013 Outpatient (both AHU1 and AHU2)
-    # TODO maybe apply to hospital as well?
-    # TODO refactor: move building-type-specific code to Prototype classes
-    if air_loop_hvac.name.to_s.include? 'Outpatient'
-      air_loop_hvac_adjust_minimum_vav_damper_positions_outpatient(air_loop_hvac)
-    end
-
     return true
   end
 
@@ -52,40 +44,12 @@ class ASHRAE9012010 < ASHRAE901
     when 'NoEconomizer'
       return [nil, nil, nil]
     when 'FixedDryBulb'
-      case climate_zone
-      when 'ASHRAE 169-2006-1B',
-           'ASHRAE 169-2006-2B',
-           'ASHRAE 169-2006-3B',
-           'ASHRAE 169-2006-3C',
-           'ASHRAE 169-2006-4B',
-           'ASHRAE 169-2006-4C',
-           'ASHRAE 169-2006-5B',
-           'ASHRAE 169-2006-5C',
-           'ASHRAE 169-2006-6B',
-           'ASHRAE 169-2006-7A',
-           'ASHRAE 169-2006-7B',
-           'ASHRAE 169-2006-8A',
-           'ASHRAE 169-2006-8B',
-           'ASHRAE 169-2013-1B',
-           'ASHRAE 169-2013-2B',
-           'ASHRAE 169-2013-3B',
-           'ASHRAE 169-2013-3C',
-           'ASHRAE 169-2013-4B',
-           'ASHRAE 169-2013-4C',
-           'ASHRAE 169-2013-5B',
-           'ASHRAE 169-2013-5C',
-           'ASHRAE 169-2013-6B',
-           'ASHRAE 169-2013-7A',
-           'ASHRAE 169-2013-7B',
-           'ASHRAE 169-2013-8A',
-           'ASHRAE 169-2013-8B'
-        drybulb_limit_f = 75
-      when 'ASHRAE 169-2006-5A',
-           'ASHRAE 169-2006-6A',
-           'ASHRAE 169-2013-5A',
-           'ASHRAE 169-2013-6A'
-        drybulb_limit_f = 70
-      end
+      search_criteria = {
+          'template' => template,
+          'climate_zone' => climate_zone
+      }
+      econ_limits = model_find_object(standards_data['economizers'], search_criteria)
+      drybulb_limit_f = econ_limits['fixed_dry_bulb_high_limit_shutoff_temp']
     when 'FixedEnthalpy'
       enthalpy_limit_btu_per_lb = 28
     when 'FixedDewPointAndDryBulb'
@@ -400,120 +364,29 @@ class ASHRAE9012010 < ASHRAE901
   # if nil, ERV is never required.
   def air_loop_hvac_energy_recovery_ventilator_flow_limit(air_loop_hvac, climate_zone, pct_oa)
     # Table 6.5.6.1
-    case climate_zone
-    when 'ASHRAE 169-2006-3B',
-         'ASHRAE 169-2006-3C',
-         'ASHRAE 169-2006-4B',
-         'ASHRAE 169-2006-4C',
-         'ASHRAE 169-2006-5B',
-         'ASHRAE 169-2013-3B',
-         'ASHRAE 169-2013-3C',
-         'ASHRAE 169-2013-4B',
-         'ASHRAE 169-2013-4C',
-         'ASHRAE 169-2013-5B'
-      if pct_oa < 0.3
-        erv_cfm = nil
-      elsif pct_oa >= 0.3 && pct_oa < 0.4
-        erv_cfm = nil
-      elsif pct_oa >= 0.4 && pct_oa < 0.5
-        erv_cfm = nil
-      elsif pct_oa >= 0.5 && pct_oa < 0.6
-        erv_cfm = nil
-      elsif pct_oa >= 0.6 && pct_oa < 0.7
-        erv_cfm = nil
-      elsif pct_oa >= 0.7 && pct_oa < 0.8
-        erv_cfm = 5000
-      elsif pct_oa >= 0.8
-        erv_cfm = 5000
-      end
-    when 'ASHRAE 169-2006-1B',
-         'ASHRAE 169-2006-2B',
-         'ASHRAE 169-2006-5C',
-         'ASHRAE 169-2013-1B',
-         'ASHRAE 169-2013-2B',
-         'ASHRAE 169-2013-5C'
-      if pct_oa < 0.3
-        erv_cfm = nil
-      elsif pct_oa >= 0.3 && pct_oa < 0.4
-        erv_cfm = nil
-      elsif pct_oa >= 0.4 && pct_oa < 0.5
-        erv_cfm = nil
-      elsif pct_oa >= 0.5 && pct_oa < 0.6
-        erv_cfm = 26_000
-      elsif pct_oa >= 0.6 && pct_oa < 0.7
-        erv_cfm = 12_000
-      elsif pct_oa >= 0.7 && pct_oa < 0.8
-        erv_cfm = 5000
-      elsif pct_oa >= 0.8
-        erv_cfm = 4000
-      end
-    when 'ASHRAE 169-2006-6B',
-         'ASHRAE 169-2013-6B'
-      if pct_oa < 0.3
-        erv_cfm = nil
-      elsif pct_oa >= 0.3 && pct_oa < 0.4
-        erv_cfm = 11_000
-      elsif pct_oa >= 0.4 && pct_oa < 0.5
-        erv_cfm = 5500
-      elsif pct_oa >= 0.5 && pct_oa < 0.6
-        erv_cfm = 4500
-      elsif pct_oa >= 0.6 && pct_oa < 0.7
-        erv_cfm = 3500
-      elsif pct_oa >= 0.7 && pct_oa < 0.8
-        erv_cfm = 2500
-      elsif pct_oa >= 0.8
-        erv_cfm = 1500
-      end
-    when 'ASHRAE 169-2006-1A',
-         'ASHRAE 169-2006-2A',
-         'ASHRAE 169-2006-3A',
-         'ASHRAE 169-2006-4A',
-         'ASHRAE 169-2006-5A',
-         'ASHRAE 169-2006-6A',
-         'ASHRAE 169-2013-1A',
-         'ASHRAE 169-2013-2A',
-         'ASHRAE 169-2013-3A',
-         'ASHRAE 169-2013-4A',
-         'ASHRAE 169-2013-5A',
-         'ASHRAE 169-2013-6A'
-      if pct_oa < 0.3
-        erv_cfm = nil
-      elsif pct_oa >= 0.3 && pct_oa < 0.4
-        erv_cfm = 5500
-      elsif pct_oa >= 0.4 && pct_oa < 0.5
-        erv_cfm = 4500
-      elsif pct_oa >= 0.5 && pct_oa < 0.6
-        erv_cfm = 3500
-      elsif pct_oa >= 0.6 && pct_oa < 0.7
-        erv_cfm = 2000
-      elsif pct_oa >= 0.7 && pct_oa < 0.8
-        erv_cfm = 1000
-      elsif pct_oa >= 0.8
-        erv_cfm = 0
-      end
-    when 'ASHRAE 169-2006-7A',
-         'ASHRAE 169-2006-7B',
-         'ASHRAE 169-2006-8A',
-         'ASHRAE 169-2006-8B',
-         'ASHRAE 169-2013-7A',
-         'ASHRAE 169-2013-7B',
-         'ASHRAE 169-2013-8A',
-         'ASHRAE 169-2013-8B'
-      if pct_oa < 0.3
-        erv_cfm = nil
-      elsif pct_oa >= 0.3 && pct_oa < 0.4
-        erv_cfm = 2500
-      elsif pct_oa >= 0.4 && pct_oa < 0.5
-        erv_cfm = 1000
-      elsif pct_oa >= 0.5 && pct_oa < 0.6
-        erv_cfm = 0
-      elsif pct_oa >= 0.6 && pct_oa < 0.7
-        erv_cfm = 0
-      elsif pct_oa >= 0.7 && pct_oa < 0.8
-        erv_cfm = 0
-      elsif pct_oa >= 0.8
-        erv_cfm = 0
-      end
+    search_criteria = {
+        'template' => template,
+        'climate_zone' => climate_zone
+    }
+    energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
+    if pct_oa < 0.1
+      erv_cfm = nil
+    elsif pct_oa >= 0.1 && pct_oa < 0.2
+      erv_cfm = nil
+    elsif pct_oa >= 0.2 && pct_oa < 0.3
+      erv_cfm = energy_recovery_limits['20_to_30_percent_oa']
+    elsif pct_oa >= 0.3 && pct_oa < 0.4
+      erv_cfm = energy_recovery_limits['30_to_40_percent_oa']
+    elsif pct_oa >= 0.4 && pct_oa < 0.5
+      erv_cfm = energy_recovery_limits['40_to_50_percent_oa']
+    elsif pct_oa >= 0.5 && pct_oa < 0.6
+      erv_cfm = energy_recovery_limits['50_to_60_percent_oa']
+    elsif pct_oa >= 0.6 && pct_oa < 0.7
+      erv_cfm = energy_recovery_limits['60_to_70_percent_oa']
+    elsif pct_oa >= 0.7 && pct_oa < 0.8
+      erv_cfm = energy_recovery_limits['70_to_80_percent_oa']
+    elsif pct_oa >= 0.8
+      erv_cfm = energy_recovery_limits['greater_than_80_percent_oa']
     end
 
     return erv_cfm

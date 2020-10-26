@@ -2,7 +2,7 @@ require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
 
 
-class NECB2015PumpPowerTest < MiniTest::Test
+class NECB_2015PumpPower_Test < MiniTest::Test
   #set to true to run the standards in the test.
   PERFORM_STANDARDS = true
   #set to true to run the simulations.

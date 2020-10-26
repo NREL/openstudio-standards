@@ -21,8 +21,6 @@ class GeneratorNECBRegressionTests
 
   def initialize()
     @file_out_dir = File.absolute_path(File.join(__dir__, "..", 'tests'))
-
-
     reset_folder(@file_out_dir)
   end
 
@@ -39,17 +37,17 @@ class GeneratorNECBRegressionTests
   def generate_necb_bldg_test_files
     reset_folder(@file_out_dir)
 
-    epw_files = [
+    @epw_files = [
         'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
     ]
-    templates = [
+    @templates = [
         'NECB2011',
         'NECB2015',
         'NECB2017',
         'BTAPPRE1980',
         'BTAP1980TO2010'
     ]
-    building_types = [
+    @building_types = [
         "FullServiceRestaurant",
         "HighriseApartment",
         "Hospital",
@@ -68,19 +66,20 @@ class GeneratorNECBRegressionTests
         "Warehouse"
 
     ]
-    primary_heating_fuels =
+    @primary_heating_fuels =
         [
             'NaturalGas',
             'Electricity',
         ]
+
+    @run_simulation = false
     #load regression necb template
     necb_bldg_template = File.read("#{__dir__}/template_test_necb_bldg.erb")
     filenames = []
-    templates.each do |template|
-      building_types.each do |building_type|
-        primary_heating_fuels.each do |primary_heating_fuel|
-          epw_files.each do |epw_file|
-            test_name =
+    @templates.each do |template|
+      @building_types.each do |building_type|
+        @primary_heating_fuels.each do |primary_heating_fuel|
+          @epw_files.each do |epw_file|
             filename = File.join(@file_out_dir, "test_necb_bldg_#{building_type}_#{template}_#{primary_heating_fuel}.rb")
             file_string = ERB.new(necb_bldg_template, 0, "", "@html").result(binding)
             File.open(filename, 'w') {|file| file.write(file_string)}
@@ -93,6 +92,7 @@ class GeneratorNECBRegressionTests
   end
 end
 puts GeneratorNECBRegressionTests.new().generate_necb_bldg_test_files
+#run test files
 
 
 

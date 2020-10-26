@@ -1,8 +1,5 @@
 require 'minitest/unit'
-require 'deepsort'
 require 'json'
-require 'yajl'
-require 'json-compare'
 
 
 class NECBRegressionHelper < Minitest::Test

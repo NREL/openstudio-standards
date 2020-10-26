@@ -1,0 +1,7 @@
+Heating Type,Min Capacity (W),Max Capacity (W),Seasonal Energy Efficiency Ratio (SEER),Energy Efficiency Ratio (EER)
+Electric Resistance,0,19044.8,17.3,
+Electric Resistance,19044.8,77960.0,,13.1
+Electric Resistance,77960.0,9999999,,12.0
+All Other,0,17585.0,17.3,
+All Other,17585.0,77960.0,,13.1
+All Other,77960.0,9999999,,12.0

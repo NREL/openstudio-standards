@@ -177,29 +177,41 @@ class BTAPPRE1980
 
   def apply_standard_construction_properties(model:,
                                              runner: nil,
-                                             properties: {
-                                                 'outdoors_wall_conductance' => nil,
-                                                 'outdoors_floor_conductance' => nil,
-                                                 'outdoors_roofceiling_conductance' => nil,
-                                                 'ground_wall_conductance' => nil,
-                                                 'ground_floor_conductance' => nil,
-                                                 'ground_roofceiling_conductance' => nil,
-                                                 'outdoors_door_conductance' => nil,
-                                                 'outdoors_fixedwindow_conductance' => nil
-                                             })
-
+                                             ext_wall_cond: nil,
+                                             ext_floor_cond: nil,
+                                             ext_roof_cond: nil,
+                                             ground_wall_cond: nil,
+                                             ground_floor_cond: nil,
+                                             ground_roof_cond: nil,
+                                             door_construction_cond: nil,
+                                             fixed_window_cond: nil,
+                                             glass_door_cond: nil,
+                                             overhead_door_cond: nil,
+                                             skylight_cond: nil,
+                                             glass_door_solar_trans: nil,
+                                             fixed_wind_solar_trans: nil,
+                                             skylight_solar_trans: nil)
+    #this call should be removed for a more general application.
     model.getDefaultConstructionSets.sort.each do |set|
       # Set the SHGC of the default glazing material before making new constructions based on it and changing U-values.
       assign_SHGC_to_windows(model: model, default_construction_set: set)
-      set_construction_set_to_necb!(model: model,
-                                    default_surface_construction_set: set,
-                                    runner: nil,
-                                    properties: properties)
     end
-    # sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
-    model.getPlanarSurfaces.sort.each(&:resetConstruction)
-    # if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
-    BTAP::Resources::Envelope.assign_interior_surface_construction_to_adiabatic_surfaces(model, nil)
+    super(model: model,
+          runner: runner,
+          ext_wall_cond: ext_wall_cond,
+          ext_floor_cond: ext_floor_cond,
+          ext_roof_cond: ext_roof_cond,
+          ground_wall_cond: ground_wall_cond,
+          ground_floor_cond: ground_floor_cond,
+          ground_roof_cond: ground_roof_cond,
+          door_construction_cond: door_construction_cond,
+          fixed_window_cond: fixed_window_cond,
+          glass_door_cond: glass_door_cond,
+          overhead_door_cond: overhead_door_cond,
+          skylight_cond: skylight_cond,
+          glass_door_solar_trans: glass_door_solar_trans,
+          fixed_wind_solar_trans: fixed_wind_solar_trans,
+          skylight_solar_trans: skylight_solar_trans)
   end
 
   def assign_SHGC_to_windows(model:, default_construction_set:)

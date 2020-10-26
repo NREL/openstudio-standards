@@ -4,7 +4,7 @@ require_relative '../../../helpers/minitest_helper'
 
 # This class will perform tests that are Spacetype dependant, Test model will be created
 # to specifically test aspects of the NECB2011 code that are Spacetype dependant. 
-class NECB2011DefaultSpaceTypesTests < Minitest::Test
+class NECB_Default_SpaceTypes_Tests < Minitest::Test
   #Standards
   Templates = ['NECB2011', 'NECB2015', 'BTAPPRE1980']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
 
@@ -49,13 +49,13 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         st.setStandardsSpaceType(space_type_properties['space_type'])
         st.setName("#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}")
         standard.space_type_apply_rendering_color(st)
-        standard.model_add_loads(@model)
-  
+        standard.model_add_loads(@model, 'NECB_Default', 1.0)
+
         #Set all spaces to spacetype
         @model.getSpaces.each do |space|
           space.setSpaceType(st)
         end
-          
+
         #Add Infiltration rates to the space objects themselves. 
         standard.model_apply_infiltration_standard(@model)
           
@@ -84,6 +84,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
             # Do nothing! In this case, we use the duplicate space type name appended with " - occsens"!
           end
         end
+
         st.lights.each {|light| total_lpd << light.powerPerFloorArea.get * occSensLPDfactor ; lpd_sched << light.schedule.get.name}
         assert(total_lpd.size <= 1 , "#{total_lpd.size} light definitions given. Expecting <= 1.")
         
@@ -137,7 +138,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
           shw_target_temperature_schedule = "NA"
         else
           shw__fraction_schedule = water_fixture.flowRateFractionSchedule.get.name
-          shw_peak_flow = water_fixture.waterUseEquipmentDefinition.getPeakFlowRate.value # m3/s
+          shw_peak_flow = water_fixture.waterUseEquipmentDefinition.peakFlowRate # m3/s
           shw_peak_flow_per_area = shw_peak_flow / space_area #m3/s/m2
           # # Watt per person =             m3/s/m3        * 1000W/kW * (specific heat * dT) * m2/person
           shw_watts_per_person = shw_peak_flow_per_area * 1000 * (4.19 * 44.4) * 1000 * area_per_occ
@@ -229,17 +230,17 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         dsoa = st.designSpecificationOutdoorAir.get
         header_output << "outdoorAirMethod,"         
         output << "#{dsoa.outdoorAirMethod },"
-        header_output << "OutdoorAirFlowperFloorArea (#{dsoa.getOutdoorAirFlowperFloorArea.units.print}) ,"
-        output << "#{dsoa.getOutdoorAirFlowperFloorArea.value.round(4)},"
+        header_output << "OutdoorAirFlowperFloorArea (m/s) ,"
+        output << "#{dsoa.outdoorAirFlowperFloorArea.round(4)},"
           
-        header_output << "OutdoorAirFlowperPerson  (#{dsoa.getOutdoorAirFlowperPerson.units.print}) ,"
-        output << "#{dsoa.getOutdoorAirFlowperPerson.value.round(4)},"
+        header_output << "OutdoorAirFlowperPerson  (m^3/s*person) ,"
+        output << "#{dsoa.outdoorAirFlowperPerson.round(4)},"
           
-        header_output << "OutdoorAirFlowRate (#{dsoa.getOutdoorAirFlowRate.units.print}) ,"
-        output << "#{dsoa.getOutdoorAirFlowRate.value.round(4)},"
+        header_output << "OutdoorAirFlowRate (m^3/s) ,"
+        output << "#{dsoa.outdoorAirFlowRate.round(4)},"
           
-        header_output << "OutdoorAirFlowAirChangesperHour (#{dsoa.getOutdoorAirFlowAirChangesperHour.units.print}) ,"
-        output << "#{dsoa.getOutdoorAirFlowAirChangesperHour.value.round(4)},"
+        header_output << "OutdoorAirFlowAirChangesperHour (1/h) ,"
+        output << "#{dsoa.outdoorAirFlowAirChangesperHour.round(4)},"
           
         header_output << "outdoorAirFlowRateFractionSchedule,"
         if dsoa.outdoorAirFlowRateFractionSchedule.empty?

@@ -1,0 +1,52 @@
+{
+  "equipment_eff_limits": {
+    "condensing_boiler_lim": {
+      "data_type": "value",
+      "refs": [
+        "Assumption"
+      ],
+      "value": 0.90,
+      "notes": ""
+    },
+    "condensing_furnace_lim": {
+      "data_type": "value",
+      "refs": [
+        "Assumption"
+      ],
+      "value": 0.86,
+      "notes": ""
+    },
+    "non_condensing_boiler_part_load_curve": {
+      "data_type": "value",
+      "refs": [
+        "Assumption"
+      ],
+      "value": "BOILER-EFFPLR-NECB2011",
+      "notes": "Part load curve referenced when setting custom boiler efficiencies less than the condensing_boiler_lim above."
+    },
+    "condensing_boiler_part_load_curve": {
+      "data_type": "value",
+      "refs": [
+        "Assumption"
+      ],
+      "value": "BOILER-EFFPLR-COND-NECB2011",
+      "notes": "Part load curve referenced when setting custom boiler efficiencies greater than or equal to the condensing_boiler_lim above"
+    },
+    "non_condensing_furnace_part_load_curve": {
+      "data_type": "value",
+      "refs": [
+        "Assumption"
+      ],
+      "value": "FURNACE-EFFPLR-NECB2011",
+      "notes": "Part load curve referenced when setting custom furnace efficiencies less than the condensing_furnace_lim above."
+    },
+    "condensing_furnace_part_load_curve": {
+      "data_type": "value",
+      "refs": [
+        "Assumption"
+      ],
+      "value": "FURNACE-EFFPLR-COND-NECB2011",
+      "notes": "Part load curve referenced when setting custom furnace efficiencies greater than or equal to the condensing_furnace_lim above"
+    }
+  }
+}

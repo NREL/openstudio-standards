@@ -92,7 +92,7 @@ class BTAPPRE1980
     # zone baseboards: hot water or electric, depending on argument baseboard_type
     # baseboard_type choices are "Hot Water" or "Electric"
     # boiler_fueltype choices match OS choices for Boiler component fuel type, i.e.
-    # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
+    # "NaturalGas","Electricity","PropaneGas","FuelOilNo1","FuelOilNo2","Coal","Diesel","Gasoline","OtherFuel1"
     # For BTAPPRE1980 (and BTAP1980TO2010 which is created from BTAPPRE1980) add a constant speed return fan
 
 

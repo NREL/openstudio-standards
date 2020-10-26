@@ -11,24 +11,24 @@ class Standard
 
     # Define the envelope component infiltration rates
     component_infil_rates_cfm_per_ft2 = {
-      'baseline' => {
-        'opaque_door' => 0.40,
-        'loading_dock_door' => 0.40,
-        'swinging_or_revolving_glass_door' => 1.0,
-        'vestibule' => 1.0,
-        'sliding_glass_door' => 0.40,
-        'window' => 0.40,
-        'skylight' => 0.40
-      },
-      'advanced' => {
-        'opaque_door' => 0.20,
-        'loading_dock_door' => 0.20,
-        'swinging_or_revolving_glass_door' => 1.0,
-        'vestibule' => 1.0,
-        'sliding_glass_door' => 0.20,
-        'window' => 0.20,
-        'skylight' => 0.20
-      }
+        'baseline' => {
+            'opaque_door' => 0.40,
+            'loading_dock_door' => 0.40,
+            'swinging_or_revolving_glass_door' => 1.0,
+            'vestibule' => 1.0,
+            'sliding_glass_door' => 0.40,
+            'window' => 0.40,
+            'skylight' => 0.40
+        },
+        'advanced' => {
+            'opaque_door' => 0.20,
+            'loading_dock_door' => 0.20,
+            'swinging_or_revolving_glass_door' => 1.0,
+            'vestibule' => 1.0,
+            'sliding_glass_door' => 0.20,
+            'window' => 0.20,
+            'skylight' => 0.20
+        }
     }
 
     boundary_condition = sub_surface.outsideBoundaryCondition
@@ -183,11 +183,11 @@ class Standard
     # If here, we have a rectangle
     return true
   end
-
   # This method adds a subsurface (a window or a skylight depending on the surface) to the centroid of a surface.  The
   # shape of the subsurface is the same as the surface but is scaled so the area of the subsurface is the defined
   # fraction of the surface (set by area_fraction).  Note that this only works for surfaces that do not fold into
   # themselves (like an 'L' or a 'V').
+
   def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction, model)
     # Get rid of all existing subsurfaces.
     remove_All_Subsurfaces(surface: surface)

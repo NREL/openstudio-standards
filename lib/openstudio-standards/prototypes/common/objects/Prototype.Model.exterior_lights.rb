@@ -225,7 +225,7 @@ class Standard
       name_prefix = 'Drive Through Windows'
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/drive through window of lighting for #{multiplier} drie through windows.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/drive through window of lighting for #{multiplier} drive through windows.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
       ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
       ext_lights_def.setDesignLevel(power)
@@ -259,7 +259,7 @@ class Standard
       name_prefix = 'Base Site Allowance'
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W of non landscape tradable exterior lighting. Wil follow occupancy setback reduction.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W of non landscape tradable exterior lighting. Will follow occupancy setback reduction.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
       ext_lights_def.setName("#{name_prefix} Def (W)")
       ext_lights_def.setDesignLevel(power)

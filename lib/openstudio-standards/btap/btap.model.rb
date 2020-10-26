@@ -180,7 +180,7 @@ class OpenStudio::Model::Model
     #Add baseline
     models << {:name => 'baseline', :model => model}
     #Add copies of model with elimination of a characteristic.
-    models << {:name => 'elim_ext_wall', :model => model.clone(true).to_Model.set_all_ext_wall_conductances_to(conductance)}
+    models << {:name => 'elim_ext_wall', :model => model.clone(true).to_Model}
 =begin
     models << {:name => 'elim_ext_roof', :model => model.clone(true).to_Model.set_all_ext_roof_conductances_to(conductance)}
     models << {:name => 'elim_ground_floor', :model => model.clone(true).to_Model.set_all_ground_floor_conductances_to(conductance)}
@@ -589,10 +589,10 @@ class OpenStudio::Model::Model
   #@param factor [Float]
   def scale_oa_loads(factor)
     self.getDesignSpecificationOutdoorAirs.sort.each do |oa_def|
-      oa_def.setOutdoorAirFlowperPerson(oa_def.getOutdoorAirFlowperPerson * factor) unless oa_def.isOutdoorAirFlowperPersonDefaulted
-      oa_def.setOutdoorAirFlowperFloorArea(oa_def.getOutdoorAirFlowperFloorArea * factor) unless oa_def.isOutdoorAirFlowperFloorAreaDefaulted
-      oa_def.setOutdoorAirFlowRate(oa_def.getOutdoorAirFlowRate * factor) unless oa_def.isOutdoorAirFlowRateDefaulted
-      oa_def.setOutdoorAirFlowAirChangesperHour(oa_def.getOutdoorAirFlowAirChangesperHour * factor) unless oa_def.isOutdoorAirFlowAirChangesperHourDefaulted
+      oa_def.setOutdoorAirFlowperPerson(oa_def.outdoorAirFlowperPerson * factor) unless oa_def.isOutdoorAirFlowperPersonDefaulted
+      oa_def.setOutdoorAirFlowperFloorArea(oa_def.outdoorAirFlowperFloorArea * factor) unless oa_def.isOutdoorAirFlowperFloorAreaDefaulted
+      oa_def.setOutdoorAirFlowRate(oa_def.outdoorAirFlowRate * factor) unless oa_def.isOutdoorAirFlowRateDefaulted
+      oa_def.setOutdoorAirFlowAirChangesperHour(oa_def.outdoorAirFlowAirChangesperHour * factor) unless oa_def.isOutdoorAirFlowAirChangesperHourDefaulted
     end
   end
 

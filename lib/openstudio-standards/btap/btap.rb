@@ -52,7 +52,7 @@ class String
 end
 
 
-class Fixnum
+class Integer
   #This method converts to Boolean.
   #@author phylroy.lopez@nrcan.gc.ca
   def to_bool

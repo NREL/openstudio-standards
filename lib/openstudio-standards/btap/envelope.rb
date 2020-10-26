@@ -38,28 +38,28 @@ module BTAP
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_constructions(model)
-        model.getConstructions().each {|item| item.remove}
+        model.getConstructions().each { |item| item.remove }
       end
 
       #This method removes all default surface constructions from model.
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_default_surface_constructions(model)
-        model.getDefaultSurfaceConstructionss().each {|item| item.remove}
+        model.getDefaultSurfaceConstructionss().each { |item| item.remove }
       end
 
       #This method removes all default subsurface constructions from model.
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_default_subsurface_constructions(model)
-        model.getDefaultSubSurfaceConstructionss().each {|item| item.remove}
+        model.getDefaultSubSurfaceConstructionss().each { |item| item.remove }
       end
 
       #This method removes all default construction sets from model.
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_default_construction_sets(model)
-        model.getDefaultConstructionSets().each {|item| item.remove}
+        model.getDefaultConstructionSets().each { |item| item.remove }
         model.building.get.resetDefaultConstructionSet()
       end
 
@@ -78,7 +78,7 @@ module BTAP
             wall_construction = model.building.get.defaultConstructionSet.get.defaultInteriorSurfaceConstructions.get.wallConstruction.get
             BTAP::Geometry::Surfaces::set_surfaces_construction(all_adiabatic_surfaces, wall_construction)
             names = ""
-            all_adiabatic_surfaces.each {|surface| name = "#{names} , #{surface.name.to_s} "}
+            all_adiabatic_surfaces.each { |surface| name = "#{names} , #{surface.name.to_s} " }
             BTAP::runner_register("Warning", "The following adiabatic surfaces have been assigned the construction #{wall_construction.name} : #{name}", runner)
           end
         else
@@ -92,8 +92,8 @@ module BTAP
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_thermal_mass_definitions(model)
-        model.getInternalMassDefinitions.sort.each {|item| item.remove}
-        model.getInternalMasss.sort.each {|item| item.remove}
+        model.getInternalMassDefinitions.sort.each { |item| item.remove }
+        model.getInternalMasss.sort.each { |item| item.remove }
       end
 
       #This method removes all envelope information from model.
@@ -112,7 +112,7 @@ module BTAP
 
 
       def self.set_all_surfaces_to_default_construction(model)
-        model.getPlanarSurfaces.sort.each {|item| item.resetConstruction}
+        model.getPlanarSurfaces.sort.each { |item| item.resetConstruction }
       end
 
 
@@ -134,7 +134,7 @@ module BTAP
           conductance = material.to_Shade.get.thermalConductance unless material.to_Shade.empty?
           conductance = material.to_Screen.get.thermalConductance unless material.to_Screen.empty?
           conductance = material.to_MasslessOpaqueMaterial.get.thermalConductance unless material.to_MasslessOpaqueMaterial.empty?
-          conductance = 1.0 / material.to_AirGap.get.getThermalResistance.get.value unless material.to_AirGap.empty?
+          conductance = 1.0 / material.to_AirGap.get.thermalResistance unless material.to_AirGap.empty?
           conductance = material.to_Gas.get.getThermalConductivity(temperature_k) unless material.to_Gas.empty?
           conductance = material.to_GasMixture.get.getThermalConductance(temperature_k) unless material.to_GasMixture.empty?
           conductance = material.to_RoofVegetation.get.thermalConductance unless material.to_RoofVegetation.empty?
@@ -194,15 +194,15 @@ module BTAP
           # @param visible_absorptance [Float] range of 0 to 1.0
           # @return [OpenStudio::Model::StandardOpaqueMaterial] material {http://openstudio.nrel.gov/sites/openstudio.nrel.gov/files/nv_data/cpp_documentation_it/model/html/classopenstudio_1_1model_1_1_standard_opaque_material.html}
           def self.create_opaque_material(model,
-              name = "opaque material",
-              thickness = 0.1,
-              conductivity = 0.1,
-              density = 0.1,
-              specific_heat = 100,
-              roughness = "Smooth",
-              thermal_absorptance = 0.9,
-              solar_absorptance = 0.7,
-              visible_absorptance = 0.7)
+                                          name = "opaque material",
+                                          thickness = 0.1,
+                                          conductivity = 0.1,
+                                          density = 0.1,
+                                          specific_heat = 100,
+                                          roughness = "Smooth",
+                                          thermal_absorptance = 0.9,
+                                          solar_absorptance = 0.7,
+                                          visible_absorptance = 0.7)
             # make sure the roughness value is acceptable.
             raise("Roughness Value \"#{roughness}\" is not a part of accepted values such as: #{OpenStudio::Model::StandardOpaqueMaterial::roughnessValues.join(",")}") unless OpenStudio::Model::StandardOpaqueMaterial::roughnessValues.include?(roughness)
             # I was thinking of adding a suffix to the name to make it more descriptive, but this can be confusing. Keeping it here if I need it later.
@@ -342,21 +342,21 @@ module BTAP
           # @return [OpenStudio::Model::StandardGlazing] stdglazing
           def self.create_standard_glazing(
               model,
-                  name = "Standard Glazing Test",
-                  thickness = 0.003,
-                  conductivity = 0.9,
-                  solarTransmittanceatNormalIncidence = 0.84,
-                  frontSideSolarReflectanceatNormalIncidence = 0.075,
-                  backSideSolarReflectanceatNormalIncidence = 0.075,
-                  visibleTransmittance = 0.9,
-                  frontSideVisibleReflectanceatNormalIncidence = 0.081,
-                  backSideVisibleReflectanceatNormalIncidence = 0.081,
-                  infraredTransmittanceatNormalIncidence = 0.0,
-                  frontSideInfraredHemisphericalEmissivity = 0.84,
-                  backSideInfraredHemisphericalEmissivity = 0.84,
-                  opticalDataType = "SpectralAverage",
-                  dirt_correction_factor = 1.0,
-                  is_solar_diffusing = false
+              name = "Standard Glazing Test",
+              thickness = 0.003,
+              conductivity = 0.9,
+              solarTransmittanceatNormalIncidence = 0.84,
+              frontSideSolarReflectanceatNormalIncidence = 0.075,
+              backSideSolarReflectanceatNormalIncidence = 0.075,
+              visibleTransmittance = 0.9,
+              frontSideVisibleReflectanceatNormalIncidence = 0.081,
+              backSideVisibleReflectanceatNormalIncidence = 0.081,
+              infraredTransmittanceatNormalIncidence = 0.0,
+              frontSideInfraredHemisphericalEmissivity = 0.84,
+              backSideInfraredHemisphericalEmissivity = 0.84,
+              opticalDataType = "SpectralAverage",
+              dirt_correction_factor = 1.0,
+              is_solar_diffusing = false
           )
             raise("Roughness Value \"#{roughness}\" is not a part of accepted values: #{OpenStudio::Model::StandardGlazing::opticalDataTypeValues().join(",")}") unless OpenStudio::Model::StandardGlazing::opticalDataTypeValues().include?(opticalDataType)
             stdglazing = OpenStudio::Model::StandardGlazing.new(model)
@@ -370,7 +370,7 @@ module BTAP
             stdglazing.setInfraredTransmittanceatNormalIncidence(infraredTransmittanceatNormalIncidence.to_f)
             stdglazing.setFrontSideInfraredHemisphericalEmissivity(frontSideInfraredHemisphericalEmissivity.to_f)
             stdglazing.setBackSideInfraredHemisphericalEmissivity(backSideInfraredHemisphericalEmissivity.to_f)
-            stdglazing.setConductivity(conductivity.to_f)
+            stdglazing.setThermalConductivity(conductivity.to_f)
             stdglazing.setName(name)
             stdglazing.setOpticalDataType(opticalDataType)
             stdglazing.setDirtCorrectionFactorforSolarandVisibleTransmittance(dirt_correction_factor)
@@ -662,8 +662,8 @@ module BTAP
               layer_comp << {
                   thickness_m: mat_layer.thickness.to_f,
                   conductivity_SI: mat_layer.conductivity.to_f,
-                  conductance_SI: (mat_layer.conductivity.to_f/mat_layer.thickness.to_f),
-                  resistance_SI: (mat_layer.thickness.to_f/mat_layer.conductivity.to_f),
+                  conductance_SI: (mat_layer.conductivity.to_f / mat_layer.thickness.to_f),
+                  resistance_SI: (mat_layer.thickness.to_f / mat_layer.conductivity.to_f),
                   construction_index: layer_index,
                   layer_object: mat_layer
               }
@@ -671,8 +671,8 @@ module BTAP
               mat_layer = layer.to_MasslessOpaqueMaterial.get
               layer_comp << {
                   thickness_m: 0,
-                  conductivity_SI: 1.0/mat_layer.thermalResistance.to_f,
-                  conductance_SI: 1.0/mat_layer.thermalResistance.to_f,
+                  conductivity_SI: 1.0 / mat_layer.thermalResistance.to_f,
+                  conductance_SI: 1.0 / mat_layer.thermalResistance.to_f,
                   resistance_SI: mat_layer.thermalResistance.to_f,
                   construction_index: layer_index,
                   layer_object: mat_layer
@@ -681,8 +681,8 @@ module BTAP
               mat_layer = layer.to_AirGap.get
               layer_comp << {
                   thickness_m: 0,
-                  conductivity_SI: 1.0/mat_layer.thermalResistance.to_f,
-                  conductance_SI: 1.0/mat_layer.thermalResistance.to_f,
+                  conductivity_SI: 1.0 / mat_layer.thermalResistance.to_f,
+                  conductance_SI: 1.0 / mat_layer.thermalResistance.to_f,
                   resistance_SI: mat_layer.thermalResistance.to_f,
                   construction_index: layer_index,
                   layer_object: mat_layer
@@ -691,7 +691,7 @@ module BTAP
           end
           # Sort the above layers by the conductivity of the layers.  The lowest conductivity layers first followed by
           # layers with progressively higher conductivities.
-          sorted_layers = layer_comp.sort{ |a, b| b[:conductivity_SI] <=> a[:conductivity_SI]}
+          sorted_layers = layer_comp.sort { |a, b| b[:conductivity_SI] <=> a[:conductivity_SI] }
           index = 0
           total_conductance = construction.thermalConductance.to_f
           # The following loop steps through the array of layers, sorted form highest conductivity to lowest.  It
@@ -713,11 +713,11 @@ module BTAP
             const_index = sorted_layers[index][:construction_index]
             # Check if modifying the resistance of the currently layer will be enough to reach our total construction
             # conductance goal.  If it will, modify the layer.  If it will not, delete the layer.
-            if sorted_layers[index][:resistance_SI] > ((1.0/total_conductance) - (1.0/req_conductance))
+            if sorted_layers[index][:resistance_SI] > ((1.0 / total_conductance) - (1.0 / req_conductance))
               # If the current layer is a NoMass or AirGap material its thickness is zero so we set the resistance.
               if sorted_layers[index][:thickness_m] == 0
                 # Determine the resistance we want to set the layer to.
-                res_mod = sorted_layers[index][:resistance_SI] - ((1.0/total_conductance) - (1.0/req_conductance))
+                res_mod = sorted_layers[index][:resistance_SI] - ((1.0 / total_conductance) - (1.0 / req_conductance))
                 # Find out if the layer is an AirGap or NoMass and set the resistance for the layer with the right
                 # command systax.
                 mat_type = construction.layers[const_index].iddObjectType.valueName.to_s
@@ -731,7 +731,7 @@ module BTAP
                 # The the current layer is a regular opaque material it has a thickness so we set that to reach the
                 # desired resistance for that layer.
                 # Determine the thickness we want to set the layer.
-                thick_mod = (sorted_layers[index][:resistance_SI] - ((1.0/total_conductance) - (1.0/req_conductance)))*(sorted_layers[index][:conductivity_SI])
+                thick_mod = (sorted_layers[index][:resistance_SI] - ((1.0 / total_conductance) - (1.0 / req_conductance))) * (sorted_layers[index][:conductivity_SI])
                 # Set the thickness of the layer.
                 construction.layers[const_index].to_StandardOpaqueMaterial.get.setThickness(thick_mod)
               end
@@ -790,10 +790,10 @@ module BTAP
         def self.should_modify_layer(mat_resistance:, total_conductance:, req_conductance:)
           # Determine if the amount of resistance you can modify in this layer is greater than the amount of resistance
           # you have to change.
-          if mat_resistance > ((1.0/total_conductance) - (1.0/req_conductance))
+          if mat_resistance > ((1.0 / total_conductance) - (1.0 / req_conductance))
             # If yes, determine what the resistance for this layer should be to meet the required resistance of the
             # entire assembly.  Then return the new resistance value.
-            target_res = mat_resistance - ((1.0/total_conductance) - (1.0/req_conductance))
+            target_res = mat_resistance - ((1.0 / total_conductance) - (1.0 / req_conductance))
             return target_res
           else
             # If no, then return an unambiguous no.
@@ -814,9 +814,9 @@ module BTAP
 
             construction.layers.each do |layer|
               #check to see if it is a simple glazing. If so use the SHGC method.
-              tsol = tsol * layer.to_SimpleGlazing.get.getSolarHeatGainCoefficient().value unless layer.to_SimpleGlazing.empty?
+              tsol = tsol * layer.to_SimpleGlazing.get.solarHeatGainCoefficient unless layer.to_SimpleGlazing.empty?
               #check to see if it is a standard glazing. If so use the solar transmittance method.
-              tsol = tsol * layer.to_StandardGlazing.get.solarTransmittance() unless layer.to_StandardGlazing.empty?
+              tsol = tsol * layer.to_StandardGlazing.get.solarTransmittance unless layer.to_StandardGlazing.empty?
             end
           end
           return tsol
@@ -834,9 +834,9 @@ module BTAP
           if construction.isFenestration
             construction.layers.each do |layer|
               #check to see if it is a simple glazing. If so use the SHGC method.
-              tvis = tvis * layer.to_SimpleGlazing.get.getVisibleTransmittance().get.value unless layer.to_SimpleGlazing.empty?
+              tvis = tvis * layer.to_SimpleGlazing.get.visibleTransmittance.get unless layer.to_SimpleGlazing.empty?
               #check to see if it is a standard glazing. If so use the solar transmittance method.
-              tvis = tvis * layer.to_StandardGlazing.get.visibleTransmittanceatNormalIncidence().get unless layer.to_StandardGlazing.empty?
+              tvis = tvis * layer.to_StandardGlazing.get.visibleTransmittanceatNormalIncidence.get unless layer.to_StandardGlazing.empty?
             end
           end
           return tvis
@@ -921,16 +921,16 @@ module BTAP
         #@return [String] create_construction
         def self.customize_fenestration_construction(
             model,
-                construction,
-                conductance = nil,
-                solarTransmittanceatNormalIncidence = nil,
-                visibleTransmittance = nil,
-                at_temperature_c = 0.0)
+            construction,
+            conductance = nil,
+            solarTransmittanceatNormalIncidence = nil,
+            visibleTransmittance = nil,
+            at_temperature_c = 0.0)
           construction = OpenStudio::Model::getConstructionByName(model, construction.name.to_s).get
           raise ("This is not a fenestration!") unless construction.isFenestration
           #get equivilant values for tsol, tvis, and conductances.
           #TSol in this case is SHGC
-          solarTransmittanceatNormalIncidence = self.get_shgc(model, construction) if solarTransmittanceatNormalIncidence == nil
+          solarTransmittanceatNormalIncidence = self.get_shgc(model, construction) if solarTransmittanceatNormalIncidence.nil?
           visibleTransmittance = self.get_tvis(model, construction) if visibleTransmittance == nil
           conductance = self.get_conductance(construction) if conductance == nil
           frontSideSolarReflectanceatNormalIncidence = 1.0 - solarTransmittanceatNormalIncidence
@@ -1000,14 +1000,6 @@ module BTAP
           return self.create_construction(construction.model, cons_name, new_materials_array)
         end
 
-        def self.create_default_construction(model, rsi)
-
-        end
-
-        def self.create_default_fenestration(model, rsi)
-
-        end
-
 
       end #module Constructions
 
@@ -1034,26 +1026,6 @@ module BTAP
               construction_set = BTAP::Resources::Envelope::ConstructionSets::create_default_surface_constructions(model, "test construction set", walls_cons, floor_cons, roof_cons)
               #Check that the construction was created
               assert(!(construction_set.to_DefaultSurfaceConstructions.empty?))
-            end
-
-            #This method customizes default surface constructions
-            #@author phylroy.lopez@nrcan.gc.ca
-            def test_customize_default_surface_constructions_rsi()
-              model = OpenStudio::Model::Model.new()
-              #Create layers from defaults
-              insulation = BTAP::Resources::Envelope::Materials::Opaque::create_opaque_material(model)
-              opaque = BTAP::Resources::Envelope::Materials::Opaque::create_opaque_material(model)
-              air_gap = BTAP::Resources::Envelope::Materials::Opaque::create_air_gap(model)
-              massless = BTAP::Resources::Envelope::Materials::Opaque::create_massless_opaque_material(model)
-              construction = BTAP::Resources::Envelope::Constructions::create_construction(model, "test construction", [opaque, air_gap, insulation, massless, opaque], insulation)
-              walls_cons = floor_cons = roof_cons = construction
-              construction_set = BTAP::Resources::Envelope::ConstructionSets::create_default_surface_constructions(model, "test construction set", walls_cons, floor_cons, roof_cons)
-              #Check that the construction was created
-              assert(!(construction_set.to_DefaultSurfaceConstructions.empty?))
-              new_set = BTAP::Resources::Envelope::ConstructionSets::customize_default_surface_constructions_rsi(model, "changed_rsi", construction_set, 1.0 / 2.45, 1.0 / 2.55, 1.0 / 2.65)
-              assert_in_delta(1.0 / 2.45, BTAP::Resources::Envelope::Constructions::get_conductance(new_set.wallConstruction.get).to_f, 0.00001)
-              assert_in_delta(1.0 / 2.55, BTAP::Resources::Envelope::Constructions::get_conductance(new_set.floorConstruction.get).to_f, 0.00001)
-              assert_in_delta(1.0 / 2.65, BTAP::Resources::Envelope::Constructions::get_conductance(new_set.roofCeilingConstruction.get).to_f, 0.00001)
             end
 
 
@@ -1153,7 +1125,7 @@ module BTAP
             return false
           end
           #sets all surfaces to use default constructions except adiabatic, where it does a hard assignment of the interior wall construction type. 
-          model.getPlanarSurfaces.sort.each {|item| item.resetConstruction}
+          model.getPlanarSurfaces.sort.each { |item| item.resetConstruction }
           #if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
           BTAP::Resources::Envelope::assign_interior_surface_construction_to_adiabatic_surfaces(model, runner)
           BTAP::runner_register("Info", "set_construction_set_by_file(#{construction_library_file}, #{construction_set_name}) Completed Sucessfully.")
@@ -1161,94 +1133,117 @@ module BTAP
         end
 
 
-        #This method customizes default surface construction and sets RSI
+        #This method customizes default surface construction and sets conductance
         #@author phylroy.lopez@nrcan.gc.ca
         #@param model [OpenStudio::Model::Model]
         #@param name [String]
         #@param default_surface_construction_set <String> 
-        #@param ext_wall_rsi [Float] = nil
-        #@param ext_floor_rsi [Float] = nil
-        #@param ext_roof_rsi [Float] = nil
-        #@param ground_wall_rsi [Float] = nil
-        #@param ground_floor_rsi [Float] = nil
-        #@param ground_roof_rsi [Float] = nil
-        #@param fixed_window_rsi [Float] = nil
+        #@param ext_wall_cond [Float] = nil
+        #@param ext_floor_cond [Float] = nil
+        #@param ext_roof_cond [Float] = nil
+        #@param ground_wall_cond [Float] = nil
+        #@param ground_floor_cond [Float] = nil
+        #@param ground_roof_cond [Float] = nil
+        #@param fixed_window_cond [Float] = nil
         #@param fixed_wind_solar_trans [Float] = nil
         #@param fixed_wind_vis_trans [Float] = nil
-        #@param operable_window_rsi [Float] = nil
+        #@param operable_window_cond [Float] = nil
         #@param operable_wind_solar_trans [Float] = nil
         #@param operable_wind_vis_trans [Float] = nil
-        #@param door_construction_rsi [Float] = nil
-        #@param glass_door_rsi [Float] = nil
+        #@param door_construction_cond [Float] = nil
+        #@param glass_door_cond [Float] = nil
         #@param glass_door_solar_trans [Float] = nil
         #@param glass_door_vis_trans [Float] = nil
-        #@param overhead_door_rsi [Float] = nil
-        #@param skylight_rsi [Float] = nil
+        #@param overhead_door_cond [Float] = nil
+        #@param skylight_cond [Float] = nil
         #@param skylight_solar_trans [Float] = nil
         #@param skylight_vis_trans [Float] = nil,
-        #@param tubular_daylight_dome_rsi [Float] = nil
+        #@param tubular_daylight_dome_cond [Float] = nil
         #@param tubular_daylight_dome_solar_trans [Float] = nil
         #@param tubular_daylight_dome_vis_trans [Float] = nil,
-        #@param tubular_daylight_diffuser_rsi [Float] = nil
+        #@param tubular_daylight_diffuser_cond [Float] = nil
         #@param tubular_daylight_diffuser_solar_trans [Float] = nil
         #@param tubular_daylight_diffuser_vis_trans [Float] = nil
-        def self.customize_default_surface_construction_set_rsi!(model,
-            name,
-            default_surface_construction_set,
-            ext_wall_rsi = nil,
-            ext_floor_rsi = nil,
-            ext_roof_rsi = nil,
-            ground_wall_rsi = nil,
-            ground_floor_rsi = nil,
-            ground_roof_rsi = nil,
-            #subsurfaces
-            fixed_window_rsi = nil,
-            fixed_wind_solar_trans = nil,
-            fixed_wind_vis_trans = nil,
-            operable_window_rsi = nil,
-            operable_wind_solar_trans = nil,
-            operable_wind_vis_trans = nil,
-            door_construction_rsi = nil,
-            glass_door_rsi = nil,
-            glass_door_solar_trans = nil,
-            glass_door_vis_trans = nil,
-            overhead_door_rsi = nil,
-            skylight_rsi = nil,
-            skylight_solar_trans = nil,
-            skylight_vis_trans = nil,
-            tubular_daylight_dome_rsi = nil,
-            tubular_daylight_dome_solar_trans = nil,
-            tubular_daylight_dome_vis_trans = nil,
-            tubular_daylight_diffuser_rsi = nil,
-            tubular_daylight_diffuser_solar_trans = nil,
-            tubular_daylight_diffuser_vis_trans = nil
+        def self.customize_default_surface_construction_set!(model:,
+                                                             name:,
+                                                             default_surface_construction_set:,
+                                                             # ext surfaces
+                                                             ext_wall_cond: nil,
+                                                             ext_floor_cond: nil,
+                                                             ext_roof_cond: nil,
+                                                             # ground surfaces
+                                                             ground_wall_cond: nil,
+                                                             ground_floor_cond: nil,
+                                                             ground_roof_cond: nil,
+                                                             # fixed Windows
+                                                             fixed_window_cond: nil,
+                                                             fixed_wind_solar_trans: nil,
+                                                             fixed_wind_vis_trans: nil,
+                                                             # operable windows
+                                                             operable_wind_solar_trans: nil,
+                                                             operable_window_cond: nil,
+                                                             operable_wind_vis_trans: nil,
+                                                             # glass doors
+                                                             glass_door_cond: nil,
+                                                             glass_door_solar_trans: nil,
+                                                             glass_door_vis_trans: nil,
+                                                             # opaque doors
+                                                             door_construction_cond: nil,
+                                                             overhead_door_cond: nil,
+                                                             # skylights
+                                                             skylight_cond: nil,
+                                                             skylight_solar_trans: nil,
+                                                             skylight_vis_trans: nil,
+                                                             # tubular daylight dome
+                                                             tubular_daylight_dome_cond: nil,
+                                                             tubular_daylight_dome_solar_trans: nil,
+                                                             tubular_daylight_dome_vis_trans: nil,
+                                                             # tubular daylight diffuser
+                                                             tubular_daylight_diffuser_cond: nil,
+                                                             tubular_daylight_diffuser_solar_trans: nil,
+                                                             tubular_daylight_diffuser_vis_trans: nil
         )
+
           #Change name if required.
           default_surface_construction_set.setName(name) unless name.nil?
           ext_surface_set = default_surface_construction_set.defaultExteriorSurfaceConstructions.get
-          new_ext_surface_set = self.customize_default_surface_constructions_rsi(model, name, ext_surface_set, ext_wall_rsi, ext_floor_rsi, ext_roof_rsi)
+          new_ext_surface_set = self.customize_default_surface_constructions_conductance(model, name, ext_surface_set, ext_wall_cond, ext_floor_cond, ext_roof_cond)
           raise ("Could not customized exterior constructionset") unless default_surface_construction_set.setDefaultExteriorSurfaceConstructions(new_ext_surface_set)
 
           ground_surface_set = default_surface_construction_set.defaultGroundContactSurfaceConstructions.get
 
-          new_ground_surface_set = self.customize_default_surface_constructions_rsi(model, name, ground_surface_set, ground_wall_rsi, ground_floor_rsi, ground_roof_rsi)
+          new_ground_surface_set = self.customize_default_surface_constructions_conductance(model, name, ground_surface_set, ground_wall_cond, ground_floor_cond, ground_roof_cond)
           raise ("Could not customized ground constructionset") unless default_surface_construction_set.setDefaultGroundContactSurfaceConstructions(new_ground_surface_set)
 
           ext_subsurface_set = default_surface_construction_set.defaultExteriorSubSurfaceConstructions.get
-          new_ext_subsurface_set = self.customize_default_sub_surface_constructions_rsi(
-              model,
-              name,
-              ext_subsurface_set,
-              fixed_window_rsi, fixed_wind_solar_trans, fixed_wind_vis_trans,
-              operable_window_rsi, operable_wind_solar_trans, operable_wind_vis_trans,
-              door_construction_rsi,
-              glass_door_rsi, glass_door_solar_trans, glass_door_vis_trans,
-              overhead_door_rsi,
-              skylight_rsi, skylight_solar_trans, skylight_vis_trans,
-              tubular_daylight_dome_rsi, tubular_daylight_dome_solar_trans, tubular_daylight_dome_vis_trans,
-              tubular_daylight_diffuser_rsi, tubular_daylight_diffuser_solar_trans, tubular_daylight_diffuser_vis_trans
+
+          new_ext_subsurface_set = self.customize_default_sub_surface_constructions_conductance(
+              model: model,
+              name: name,
+              subsurface_set: ext_subsurface_set,
+              fixed_window_conductance: fixed_window_cond,
+              fixed_wind_vis_trans: fixed_wind_vis_trans,
+              fixed_wind_solar_trans: fixed_wind_solar_trans,
+              operable_window_conductance: operable_window_cond,
+              operable_wind_solar_trans: operable_wind_solar_trans,
+              operable_wind_vis_trans: operable_wind_vis_trans,
+              glass_door_conductance: glass_door_cond,
+              glass_door_solar_trans: glass_door_solar_trans,
+              glass_door_vis_trans: glass_door_vis_trans,
+              skylight_conductance: skylight_cond,
+              skylight_solar_trans: skylight_solar_trans,
+              skylight_vis_trans: skylight_vis_trans,
+              tubular_daylight_dome_conductance: tubular_daylight_dome_cond,
+              tubular_daylight_dome_solar_trans: tubular_daylight_dome_solar_trans,
+              tubular_daylight_dome_vis_trans: tubular_daylight_dome_vis_trans,
+              tubular_daylight_diffuser_conductance: tubular_daylight_diffuser_cond,
+              tubular_daylight_diffuser_solar_trans: tubular_daylight_diffuser_solar_trans,
+              tubular_daylight_diffuser_vis_trans: tubular_daylight_diffuser_vis_trans,
+              door_construction_conductance: door_construction_cond,
+              overhead_door_conductance: overhead_door_cond,
           )
           raise ("Could not customize subsurface constructionset") unless default_surface_construction_set.setDefaultExteriorSubSurfaceConstructions(new_ext_subsurface_set)
+
         end
 
 
@@ -1272,21 +1267,21 @@ module BTAP
         #@param tubular_daylight_diffuser_cost [Float] = nil
         #@param total_building_construction_set_cost [Float] = nil
         def self.customize_default_surface_construction_set_costs(default_surface_construction_set,
-            ext_wall_cost = nil,
-            ext_floor_cost = nil,
-            ext_roof_cost = nil,
-            ground_wall_cost = nil,
-            ground_floor_cost = nil,
-            ground_roof_cost = nil,
-            fixed_window_cost = nil,
-            operable_window_cost = nil,
-            door_construction_cost = nil,
-            glass_door_cost = nil,
-            overhead_door_cost = nil,
-            skylight_cost = nil,
-            tubular_daylight_dome_cost = nil,
-            tubular_daylight_diffuser_cost = nil,
-            total_building_construction_set_cost = nil
+                                                                  ext_wall_cost = nil,
+                                                                  ext_floor_cost = nil,
+                                                                  ext_roof_cost = nil,
+                                                                  ground_wall_cost = nil,
+                                                                  ground_floor_cost = nil,
+                                                                  ground_roof_cost = nil,
+                                                                  fixed_window_cost = nil,
+                                                                  operable_window_cost = nil,
+                                                                  door_construction_cost = nil,
+                                                                  glass_door_cost = nil,
+                                                                  overhead_door_cost = nil,
+                                                                  skylight_cost = nil,
+                                                                  tubular_daylight_dome_cost = nil,
+                                                                  tubular_daylight_diffuser_cost = nil,
+                                                                  total_building_construction_set_cost = nil
         )
 
           constructions_and_cost = [
@@ -1323,70 +1318,6 @@ module BTAP
           BTAP::Resources::Economics::object_cost(building, "Builing Contruction Set Whole Building Capital Cost", total_building_construction_set_cost, "CostPerEach")
         end
 
-        #This will customize default surface construction.
-        #@author phylroy.lopez@nrcan.gc.ca
-        #@param model [OpenStudio::Model::Model]
-        #@param name [String]
-        #@param subsurface_set [Float] = nil
-        #@param fixed_window_rsi [Float] = nil
-        #@param fixed_wind_solar_trans [Float] = nil
-        #@param fixed_wind_vis_trans [Float] = nil,
-        #@param operable_window_rsi [Float] = nil
-        #@param operable_wind_solar_trans [Float] = nil
-        #@param operable_wind_vis_trans [Float] = nil
-        #@param door_construction_rsi [Float] = nil
-        #@param glass_door_rsi [Float] = nil
-        #@param glass_door_solar_trans [Float] = nil
-        #@param glass_door_vis_trans [Float] = nil
-        #@param overhead_door_rsi [Float] = nil
-        #@param skylight_rsi [Float] = nil
-        #@param skylight_solar_trans [Float] = nil
-        #@param skylight_vis_trans [Float] = nil,
-        #@param tubular_daylight_dome_rsi [Float] = nil
-        #@param tubular_daylight_dome_solar_trans [Float] = nil
-        #@param tubular_daylight_dome_vis_trans [Float] = nil
-        #@param tubular_daylight_diffuser_rsi [Float] = nil
-        #@param tubular_daylight_diffuser_solar_trans [Float] = nil
-        #@param tubular_daylight_diffuser_vis_trans [Float] = nil
-        def self.customize_default_sub_surface_constructions_rsi(
-            model,
-                name,
-                subsurface_set,
-                fixed_window_rsi = nil, fixed_wind_solar_trans = nil, fixed_wind_vis_trans = nil,
-                operable_window_rsi = nil, operable_wind_solar_trans = nil, operable_wind_vis_trans = nil,
-                door_construction_rsi = nil,
-                glass_door_rsi = nil, glass_door_solar_trans = nil, glass_door_vis_trans = nil,
-                overhead_door_rsi = nil,
-                skylight_rsi = nil, skylight_solar_trans = nil, skylight_vis_trans = nil,
-                tubular_daylight_dome_rsi = nil, tubular_daylight_dome_solar_trans = nil, tubular_daylight_dome_vis_trans = nil,
-                tubular_daylight_diffuser_rsi = nil, tubular_daylight_diffuser_solar_trans = nil, tubular_daylight_diffuser_vis_trans = nil
-        )
-
-          fixed_window_rsi.nil? ? fixed_window_conductance = nil : fixed_window_conductance = 1.0 / fixed_window_rsi
-          operable_window_rsi.nil? ? operable_window_conductance = nil : operable_window_conductance = 1.0 / operable_window_rsi
-          door_construction_rsi.nil? ? door_construction_conductance = nil : door_construction_conductance = 1.0 / door_construction_rsi
-          glass_door_rsi.nil? ? glass_door_conductance = nil : glass_door_conductance = 1.0 / glass_door_rsi
-          overhead_door_rsi.nil? ? overhead_door_conductance = nil : overhead_door_conductance = 1.0 / overhead_door_rsi
-          skylight_rsi.nil? ? skylight_conductance = nil : skylight_conductance = 1.0 / skylight_rsi
-          tubular_daylight_dome_rsi.nil? ? tubular_daylight_dome_conductance = nil : tubular_daylight_dome_conductance = 1.0 / tubular_daylight_dome_rsi
-          tubular_daylight_diffuser_rsi.nil? ? tubular_daylight_diffuser_conductance = nil : tubular_daylight_diffuser_conductance = 1.0 / tubular_daylight_diffuser_rsi
-
-          self.customize_default_sub_surface_constructions_conductance(
-              model,
-              name,
-              subsurface_set,
-              fixed_window_conductance, fixed_wind_solar_trans, fixed_wind_vis_trans,
-              operable_window_conductance, operable_wind_solar_trans, operable_wind_vis_trans,
-              door_construction_conductance,
-              glass_door_conductance, glass_door_solar_trans, glass_door_vis_trans,
-              overhead_door_conductance,
-              skylight_conductance, skylight_solar_trans, skylight_vis_trans,
-              tubular_daylight_dome_conductance, tubular_daylight_dome_solar_trans, tubular_daylight_dome_vis_trans,
-              tubular_daylight_diffuser_conductance, tubular_daylight_diffuser_solar_trans, tubular_daylight_diffuser_vis_trans
-          )
-
-        end
-
 
         #This will customize default subsurface construction conductances.
         #@author phylroy.lopez@nrcan.gc.ca
@@ -1415,17 +1346,28 @@ module BTAP
         #@param tubular_daylight_diffuser_vis_trans [Float] = nil
         #@return [Object] set
         def self.customize_default_sub_surface_constructions_conductance(
-            model,
-                name,
-                subsurface_set,
-                fixed_window_conductance = nil, fixed_wind_solar_trans = nil, fixed_wind_vis_trans = nil,
-                operable_window_conductance = nil, operable_wind_solar_trans = nil, operable_wind_vis_trans = nil,
-                door_construction_conductance = nil,
-                glass_door_conductance = nil, glass_door_solar_trans = nil, glass_door_vis_trans = nil,
-                overhead_door_conductance = nil,
-                skylight_conductance = nil, skylight_solar_trans = nil, skylight_vis_trans = nil,
-                tubular_daylight_dome_conductance = nil, tubular_daylight_dome_solar_trans = nil, tubular_daylight_dome_vis_trans = nil,
-                tubular_daylight_diffuser_conductance = nil, tubular_daylight_diffuser_solar_trans = nil, tubular_daylight_diffuser_vis_trans = nil
+            model:,
+            name:,
+            subsurface_set:,
+            fixed_window_conductance: nil,
+            fixed_wind_solar_trans: nil,
+            fixed_wind_vis_trans: nil,
+            operable_window_conductance: nil,
+            operable_wind_solar_trans: nil,
+            operable_wind_vis_trans: nil,
+            door_construction_conductance: nil,
+            glass_door_conductance: nil,
+            glass_door_solar_trans: nil,
+            glass_door_vis_trans: nil,
+            overhead_door_conductance: nil,
+            skylight_conductance: nil,
+            skylight_solar_trans: nil,
+            skylight_vis_trans: nil,
+            tubular_daylight_dome_conductance: nil,
+            tubular_daylight_dome_solar_trans: nil,
+            tubular_daylight_dome_vis_trans: nil,
+            tubular_daylight_diffuser_conductance: nil,
+            tubular_daylight_diffuser_solar_trans: nil, tubular_daylight_diffuser_vis_trans: nil
         )
           set = OpenStudio::Model::DefaultSubSurfaceConstructions.new(model)
           set.setName(name)
@@ -1440,22 +1382,6 @@ module BTAP
           return set
         end
 
-        #This will customize default surface construction rsi.
-        #@author phylroy.lopez@nrcan.gc.ca
-        #@param model [OpenStudio::Model::Model]
-        #@param name [String] = nil
-        #@param default_surface_constructions [Float] = nil
-        #@param wall_rsi [Float] = nil
-        #@param floor_rsi [Float] = nil
-        #@param roof_rsi [Float] = nil
-        def self.customize_default_surface_constructions_rsi(model, name, default_surface_constructions, wall_rsi = nil, floor_rsi = nil, roof_rsi = nil)
-
-          wall_rsi.nil? ? wall_conductance = nil : wall_conductance = 1.0 / wall_rsi
-          floor_rsi.nil? ? floor_conductance = nil : floor_conductance = 1.0 / floor_rsi
-          roof_rsi.nil? ? roof_conductance = nil : roof_conductance = 1.0 / roof_rsi
-
-          self.customize_default_surface_constructions_conductance(model, name, default_surface_constructions, wall_conductance, floor_conductance, roof_conductance)
-        end
 
         #This will customize default surface construction conductance.
         #@author phylroy.lopez@nrcan.gc.ca
@@ -1511,14 +1437,14 @@ module BTAP
         #@return [Object] set
         def self.create_subsurface_construction_set(
             model,
-                fixedWindowConstruction,
-                operableWindowConstruction,
-                setDoorConstruction,
-                setGlassDoorConstruction,
-                overheadDoorConstruction,
-                skylightConstruction,
-                tubularDaylightDomeConstruction,
-                tubularDaylightDiffuserConstruction)
+            fixedWindowConstruction,
+            operableWindowConstruction,
+            setDoorConstruction,
+            setGlassDoorConstruction,
+            overheadDoorConstruction,
+            skylightConstruction,
+            tubularDaylightDomeConstruction,
+            tubularDaylightDiffuserConstruction)
           fixedWindowConstruction = BTAP::Common::validate_array(model, fixedWindowConstruction, "Construction").first
           operableWindowConstruction = BTAP::Common::validate_array(model, operableWindowConstruction, "Construction").first
           setDoorConstruction = BTAP::Common::validate_array(model, setDoorConstruction, "Construction").first
@@ -1577,12 +1503,12 @@ module BTAP
         #@return [Object] set
         def self.create_default_construction_set(
             model,
-                name,
-                exterior_construction_set,
-                interior_construction_set,
-                ground_construction_set,
-                subsurface_exterior_construction_set,
-                subsurface_interior_construction_set)
+            name,
+            exterior_construction_set,
+            interior_construction_set,
+            ground_construction_set,
+            subsurface_exterior_construction_set,
+            subsurface_interior_construction_set)
           exterior_construction_set = BTAP::Common::validate_array(model, exterior_construction_set, "DefaultSurfaceConstructions").first
           interior_construction_set = BTAP::Common::validate_array(model, interior_construction_set, "DefaultSurfaceConstructions").first
           ground_construction_set = BTAP::Common::validate_array(model, ground_construction_set, "DefaultSurfaceConstructions").first

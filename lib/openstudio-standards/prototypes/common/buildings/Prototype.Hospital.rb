@@ -6,6 +6,23 @@ module Hospital
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
 
+    # add transformer
+    case template
+    when '90.1-2004', '90.1-2007'
+      transformer_efficiency = 0.979
+    when '90.1-2010', '90.1-2013'
+      transformer_efficiency = 0.987
+    else
+      transformer_efficiency = nil
+    end
+
+    unless transformer_efficiency.nil?
+      model_add_transformer(model,
+                            wired_lighting_frac: 0.022,
+                            transformer_size: 500000,
+                            transformer_efficiency: transformer_efficiency)
+    end
+
     # add extra equipment for kitchen
     add_extra_equip_kitchen(model)
 
@@ -255,16 +272,21 @@ module Hospital
           # Cutoff was determined by correlating apparent minimum guesses
           # to OA rates in prototypes since not well documented in papers.
           zone_oa_per_area = thermal_zone_outdoor_airflow_rate_per_area(zone)
+          airlp = air_terminal.airLoopHVAC.get
           case template
           when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
             if vav_name.include?('PatRoom') || vav_name.include?('OR') || vav_name.include?('ICU') || vav_name.include?('Lab') || vav_name.include?('ER') || vav_name.include?('Kitchen')
               air_terminal.setConstantMinimumAirFlowFraction(1.0)
             end
+          # Minimum damper position for Outpatient prototype
+          # Based on AIA 2001 ventilation requirements
+          # See Section 5.2.2.16 in Thornton et al. 2010
+          # https://www.energycodes.gov/sites/default/files/documents/BECP_Energy_Cost_Savings_STD2010_May2011_v00.pdf
           when '90.1-2004', '90.1-2007'
-            air_terminal.setConstantMinimumAirFlowFraction(1.0) if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
+            air_terminal.setConstantMinimumAirFlowFraction(1.0) unless airlp.name.to_s.include?('VAV_1') || airlp.name.to_s.include?('VAV_2')
           when '90.1-2010', '90.1-2013'
-            air_terminal.setConstantMinimumAirFlowFraction(1.0) if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
-            air_terminal.setConstantMinimumAirFlowFraction(0.5) if vav_name.include? "PatRoom"
+            air_terminal.setConstantMinimumAirFlowFraction(1.0) unless airlp.name.to_s.include?('VAV_1') || airlp.name.to_s.include?('VAV_2')
+            air_terminal.setConstantMinimumAirFlowFraction(0.5) if vav_name.include? 'PatRoom'
           end
         end
       end
@@ -298,6 +320,15 @@ module Hospital
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+
+    return true
+  end
+
+  def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
+    min_damper_position = template == '90.1-2010' || template == '90.1-2013' ? 0.2 : 0.3
+
+    # Set the minimum flow fraction
+    air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)
 
     return true
   end

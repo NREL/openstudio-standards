@@ -6,6 +6,21 @@ module PrimarySchool
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
+    # add transformer
+    transformer_efficiency = nil
+    case template
+    when '90.1-2004', '90.1-2007'
+      transformer_efficiency = 0.969
+    when '90.1-2010', '90.1-2013'
+      transformer_efficiency = 0.982
+    end
+    return true unless !transformer_efficiency.nil?
+
+    model_add_transformer(model,
+                          wired_lighting_frac: 0.0119,
+                          transformer_size: 112500,
+                          transformer_efficiency: transformer_efficiency)
+
     #
     # add extra equipment for kitchen
     add_extra_equip_kitchen(model)
@@ -65,6 +80,15 @@ module PrimarySchool
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+
+    return true
+  end
+
+  def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
+    min_damper_position = template == '90.1-2010' || template == '90.1-2013' ? 0.2 : 0.3
+
+    # Set the minimum flow fraction
+    air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)
 
     return true
   end

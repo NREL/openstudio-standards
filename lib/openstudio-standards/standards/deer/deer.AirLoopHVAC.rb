@@ -1,6 +1,15 @@
 class DEER
   # @!group AirLoopHVAC
 
+  # For LA100 calibration, default to systems being left on
+  # Overwritten to be required for DEER2020 and beyond
+  # @return [Bool] true if required, false if not
+  def air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac)
+    shutoff_required = false
+
+    return shutoff_required
+  end
+
   # Check the economizer type currently specified in the ControllerOutdoorAir object on this air loop
   # is acceptable per the standard.  Based on the MASControl rules, it appears that
   # only NoEconomizer and FixedDryBulb are allowed.

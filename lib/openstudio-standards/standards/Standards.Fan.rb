@@ -22,7 +22,7 @@ module Fan
     # zone exhaust, fan coil, and fan powered terminals.
     # In this case, 0.5 HP is used for the lookup.
     if fan_small_fan?(fan)
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{fan.name}: motor eff = #{(motor_eff * 100).round(2)}%; assumed to represent several < 1 HP motors.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{fan.name}: motor eff = #{(motor_eff * 100).round(2)}%; assumed to represent several less than 1 HP motors.")
     else
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{fan.name}: motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_eff * 100).round(2)}%.")
     end
@@ -75,15 +75,20 @@ module Fan
   #   @units Watts (W)
   def fan_fanpower(fan)
     # Get design supply air flow rate (whether autosized or hard-sized)
-    dsn_air_flow_m3_per_s = 0
     dsn_air_flow_m3_per_s = if fan.to_FanZoneExhaust.empty?
                               if fan.maximumFlowRate.is_initialized
                                 fan.maximumFlowRate.get
-                              else
+                              elsif fan.autosizedMaximumFlowRate.is_initialized
                                 fan.autosizedMaximumFlowRate.get
+                              else
+                                OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "The maximum flow rate for fan '#{fan.name}' was neither specified nor set to Autosize.")
                               end
                             else
-                              fan.maximumFlowRate.get
+                              if fan.maximumFlowRate.is_initialized
+                                fan.maximumFlowRate.get
+                              else
+                                OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "The maximum flow rate for exhaust fan '#{fan.name}' was not specified.")
+                              end
                             end
 
     # Get the total fan efficiency,
@@ -282,14 +287,22 @@ module Fan
     # Exhaust fan
     if fan.to_FanZoneExhaust.is_initialized
       is_small = true
-    # Fan coil unit, unit heater, PTAC, PTHP
+    # Fan coil unit, unit heater, PTAC, PTHP, VRF terminals, WSHP, ERV
     elsif fan.containingZoneHVACComponent.is_initialized
       zone_hvac = fan.containingZoneHVACComponent.get
       if zone_hvac.to_ZoneHVACFourPipeFanCoil.is_initialized
         is_small = true
+      # elsif zone_hvac.to_ZoneHVACUnitHeater.is_initialized
+      #   is_small = true
       elsif zone_hvac.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
         is_small = true
       elsif zone_hvac.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+        is_small = true
+      elsif zone_hvac.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized
+        is_small = true
+      elsif zone_hvac.to_ZoneHVACWaterToAirHeatPump.is_initialized
+        is_small = true
+      elsif zone_hvac.to_ZoneHVACEnergyRecoveryVentilator.is_initialized
         is_small = true
       end
     # Powered VAV terminal

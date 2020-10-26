@@ -118,7 +118,7 @@ class Standard
         #sensible heat ratio can't be pre-assigned as 1 because it should be the value at conditions defined in ASHRAE Standard 127 => 26.7 °C drybulb/19.4 °C wetbulb.
         crac_sensible_heat_ratio = coil_cooling_dx_single_speed.autosizedRatedSensibleHeatRatio.get
       else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.autosizedRatedSensibleHeatRatio', "Failed to get autosized sensible heat ratio")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoilCoolingDXSingleSpeed', 'Failed to get autosized sensible heat ratio')
       end
       cop = crac_minimum_scop/crac_sensible_heat_ratio
       cop = cop.round(2)

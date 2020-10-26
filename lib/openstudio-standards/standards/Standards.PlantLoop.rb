@@ -7,7 +7,7 @@ class Standard
   # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_standard_controls(plant_loop, climate_zone)
     # Supply water temperature reset
-    plant_loop_enable_supply_water_temperature_reset(plant_loop) if plant_loop_supply_water_temperature_reset_required?(plant_loop)
+    # plant_loop_enable_supply_water_temperature_reset(plant_loop) if plant_loop_supply_water_temperature_reset_required?(plant_loop)
   end
 
   # Determine if the plant loop is variable flow.
@@ -169,10 +169,12 @@ class Standard
     plant_loop_enable_supply_water_temperature_reset(plant_loop)
 
     # Boiler properties
-    plant_loop.supplyComponents.each do |sc|
-      if sc.to_BoilerHotWater.is_initialized
-        boiler = sc.to_BoilerHotWater.get
-        boiler.setDesignWaterOutletTemperature(hw_temp_c)
+    if plant_loop.model.version < OpenStudio::VersionString.new('3.0.0')
+      plant_loop.supplyComponents.each do |sc|
+        if sc.to_BoilerHotWater.is_initialized
+          boiler = sc.to_BoilerHotWater.get
+          boiler.setDesignWaterOutletTemperature(hw_temp_c)
+        end
       end
     end
     return true
@@ -221,9 +223,10 @@ class Standard
   # Applies the condenser water temperatures to the plant loop based on Appendix G.
   def plant_loop_apply_prm_baseline_condenser_water_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
+    loop_type = sizing_plant.loopType
+    return true unless loop_type == 'Condenser'
 
-    # Much of the thought in this section
-    # came from @jmarrec
+    # Much of the thought in this section came from @jmarrec
 
     # Determine the design OATwb from the design days.
     # Per https://unmethours.com/question/16698/which-cooling-design-day-is-most-common-for-sizing-rooftop-units/
@@ -232,6 +235,7 @@ class Standard
     plant_loop.model.getDesignDays.sort.each do |dd|
       next unless dd.dayType == 'SummerDesignDay'
       next unless dd.name.get.to_s.include?('WB=>MDB')
+
       if dd.humidityIndicatingType == 'Wetbulb'
         summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
         summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
@@ -240,9 +244,7 @@ class Standard
       end
     end
 
-    # Use the value from the design days or
-    # 78F, the CTI rating condition, if no
-    # design day information is available.
+    # Use the value from the design days or 78F, the CTI rating condition, if no design day information is available.
     design_oat_wb_f = nil
     if summer_oat_wbs_f.size.zero?
       design_oat_wb_f = 78
@@ -250,14 +252,13 @@ class Standard
     else
       # Take worst case condition
       design_oat_wb_f = summer_oat_wbs_f.max
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "The maximum design wet bulb temperature from the Summer Design Day WB=>MDB is #{design_oat_wb_f} F")
     end
 
-    # There is an EnergyPlus model limitation
-    # that the design_oat_wb_f < 80F
-    # for cooling towers
+    # There is an EnergyPlus model limitation that the design_oat_wb_f < 80F for cooling towers
     ep_max_design_oat_wb_f = 80
     if design_oat_wb_f > ep_max_design_oat_wb_f
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, reduced design OATwb from #{design_oat_wb_f} F to E+ model max input of #{ep_max_design_oat_wb_f} F.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, reduced design OATwb from #{design_oat_wb_f.round(1)} F to E+ model max input of #{ep_max_design_oat_wb_f} F.")
       design_oat_wb_f = ep_max_design_oat_wb_f
     end
 
@@ -278,8 +279,7 @@ class Standard
     sizing_plant.setLoopDesignTemperatureDifference(range_k)
 
     # Set Cooling Tower sizing parameters.
-    # Only the variable speed cooling tower
-    # in E+ allows you to set the design temperatures.
+    # Only the variable speed cooling tower in E+ allows you to set the design temperatures.
     #
     # Per the documentation
     # http://bigladdersoftware.com/epx/docs/8-4/input-output-reference/group-condenser-equipment.html#field-design-u-factor-times-area-value
@@ -316,13 +316,24 @@ class Standard
     plant_loop.setMaximumLoopTemperature(max_temp_c)
 
     # Cooling Tower operational controls
-    # G3.1.3.11 - Tower shall be controlled to maintain a 70F
-    # LCnWT where weather permits,
+    # G3.1.3.11 - Tower shall be controlled to maintain a 70F LCnWT where weather permits,
     # floating up to leaving water at design conditions.
     float_down_to_f = 70
     float_down_to_c = OpenStudio.convert(float_down_to_f, 'F', 'C').get
-    cw_t_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(plant_loop.model)
-    cw_t_stpt_manager.setName("CW Temp Follows OATwb w/ #{approach_r} plant_loop.deltaF approach min #{float_down_to_f.round(1)} F to max #{leaving_cw_t_f.round(1)}")
+
+    cw_t_stpt_manager = nil
+    plant_loop.supplyOutletNode.setpointManagers.each do |spm|
+      if spm.to_SetpointManagerFollowOutdoorAirTemperature.is_initialized
+        if spm.name.get.include? 'Setpoint Manager Follow OATwb'
+          cw_t_stpt_manager = spm.to_SetpointManagerFollowOutdoorAirTemperature.get
+        end
+      end
+    end
+    if cw_t_stpt_manager.nil?
+      cw_t_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(plant_loop.model)
+      cw_t_stpt_manager.addToNode(plant_loop.supplyOutletNode)
+    end
+    cw_t_stpt_manager.setName("#{plant_loop.name} Setpoint Manager Follow OATwb with #{approach_r.round(1)}F Approach")
     cw_t_stpt_manager.setReferenceTemperatureType('OutdoorAirWetBulb')
     # At low design OATwb, it is possible to calculate
     # a maximum temperature below the minimum.  In this case,
@@ -334,8 +345,6 @@ class Standard
     cw_t_stpt_manager.setMaximumSetpointTemperature(leaving_cw_t_c)
     cw_t_stpt_manager.setMinimumSetpointTemperature(float_down_to_c)
     cw_t_stpt_manager.setOffsetTemperatureDifference(approach_k)
-    cw_t_stpt_manager.addToNode(plant_loop.supplyOutletNode)
-
     return true
   end
 
@@ -519,7 +528,7 @@ class Standard
         elsif chiller.autosizedReferenceCapacity.is_initialized
           total_cooling_capacity_w += chiller.autosizedReferenceCapacity.get
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{plant_loop.name} capacity of #{chiller.name} is not available, total cooling capacity of plant loop will be incorrect when applying standard.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name} capacity of #{chiller.name} is not available, total cooling capacity of plant loop will be incorrect when applying standard.")
         end
         # DistrictCooling
       elsif sc.to_DistrictCooling.is_initialized
@@ -535,7 +544,7 @@ class Standard
     end
 
     total_cooling_capacity_tons = OpenStudio.convert(total_cooling_capacity_w, 'W', 'ton').get
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{plant_loop.name}, cooling capacity is #{total_cooling_capacity_tons.round} tons of refrigeration.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, cooling capacity is #{total_cooling_capacity_tons.round} tons of refrigeration.")
 
     return total_cooling_capacity_w
   end
@@ -661,7 +670,7 @@ class Standard
     end
     area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{plant_loop.name}, serves #{area_served_ft2.round} ft^2.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, serves #{area_served_ft2.round} ft^2.")
 
     return area_served_m2
   end
@@ -720,11 +729,11 @@ class Standard
 
     # Report out the pumping type
     unless pri_control_type.nil?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{plant_loop.name}, primary pump type is #{pri_control_type}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, primary pump type is #{pri_control_type}.")
     end
 
     unless sec_control_type.nil?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{plant_loop.name}, secondary pump type is #{sec_control_type}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, secondary pump type is #{sec_control_type}.")
     end
 
     # Modify all the primary pumps
@@ -778,7 +787,7 @@ class Standard
 
     # Report out the pumping type
     unless control_type.nil?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{plant_loop.name}, pump type is #{control_type}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, pump type is #{control_type}.")
     end
 
     return true
@@ -791,7 +800,7 @@ class Standard
 
     # Report out the pumping type
     unless control_type.nil?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{plant_loop.name}, pump type is #{control_type}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, pump type is #{control_type}.")
     end
 
     # Modify all primary pumps
@@ -1164,12 +1173,12 @@ class Standard
       if component.to_PumpConstantSpeed.is_initialized
         pump = component.to_PumpConstantSpeed.get
         pump_rated_w_per_gpm = pump_rated_w_per_gpm(pump)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "'#{loop_type}' Loop #{plant_loop.name} - Primary (Supply) Constant Speed Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "'#{loop_type}' Loop #{plant_loop.name} - Primary (Supply) Constant Speed Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
         supply_w_per_gpm += pump_rated_w_per_gpm
       elsif component.to_PumpVariableSpeed.is_initialized
         pump = component.to_PumpVariableSpeed.get
         pump_rated_w_per_gpm = pump_rated_w_per_gpm(pump)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "'#{loop_type}' Loop #{plant_loop.name} - Primary (Supply) VSD Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "'#{loop_type}' Loop #{plant_loop.name} - Primary (Supply) VSD Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
         supply_w_per_gpm += pump_rated_w_per_gpm
       end
     end
@@ -1181,19 +1190,19 @@ class Standard
       if component.to_PumpConstantSpeed.is_initialized
         pump = component.to_PumpConstantSpeed.get
         pump_rated_w_per_gpm = pump_rated_w_per_gpm(pump)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "'#{loop_type}' Loop #{plant_loop.name} - Secondary (Demand) Constant Speed Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "'#{loop_type}' Loop #{plant_loop.name} - Secondary (Demand) Constant Speed Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
         demand_w_per_gpm += pump_rated_w_per_gpm
       elsif component.to_PumpVariableSpeed.is_initialized
         pump = component.to_PumpVariableSpeed.get
         pump_rated_w_per_gpm = pump_rated_w_per_gpm(pump)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "'#{loop_type}' Loop #{plant_loop.name} - Secondary (Demand) VSD Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "'#{loop_type}' Loop #{plant_loop.name} - Secondary (Demand) VSD Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
         demand_w_per_gpm += pump_rated_w_per_gpm
       end
     end
 
     total_rated_w_per_gpm = supply_w_per_gpm + demand_w_per_gpm
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Loop', "'#{loop_type}' Loop #{plant_loop.name} - Total #{total_rated_w_per_gpm} W/GPM - Supply #{supply_w_per_gpm} W/GPM - Demand #{demand_w_per_gpm} W/GPM")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "'#{loop_type}' Loop #{plant_loop.name} - Total #{total_rated_w_per_gpm} W/GPM - Supply #{supply_w_per_gpm} W/GPM - Demand #{demand_w_per_gpm} W/GPM")
 
     return total_rated_w_per_gpm
   end

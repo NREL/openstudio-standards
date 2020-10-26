@@ -340,12 +340,12 @@
           "Main Sales"
         ]
       },
-      {
-        "case_type": "Produce Cases Low",
-        "space_names": [
-          "Main Sales"
-        ]
-      },
+//      {
+//        "case_type": "Produce Cases Low",
+//        "space_names": [
+//          "Main Sales"
+//        ]
+//      },
       {
         "case_type": "Produce Islands",
         "space_names": [

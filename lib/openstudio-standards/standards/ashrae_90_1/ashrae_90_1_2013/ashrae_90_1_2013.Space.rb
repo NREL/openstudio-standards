@@ -70,10 +70,10 @@ class ASHRAE9012013 < ASHRAE901
       req_top_ctrl = false
     end
 
-    # Retail spaces exception (3) to Section 9.4.1.1(e)
-    if space.spaceType.is_initialized	
+    # Exceptions
+    if space.spaceType.is_initialized
       case space.spaceType.get.standardsSpaceType.to_s
-      # Retail standalone
+      # Retail spaces exception (c) to Section 9.4.1.4
       # req_sec_ctrl set to true to create a second reference point
       when 'Core_Retail'
         req_pri_ctrl = false
@@ -82,7 +82,12 @@ class ASHRAE9012013 < ASHRAE901
         req_pri_ctrl = false
         req_sec_ctrl = false
       # Strip mall
-      when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3', 'Strip mall - type 0A', 'Strip mall - type 0B'
+      when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3'
+        req_pri_ctrl = false
+        req_sec_ctrl = false
+      # Residential apartments
+      when 'Apartment', 'Apartment_topfloor_NS', 'Apartment_topfloor_WE'
+        req_top_ctrl = false
         req_pri_ctrl = false
         req_sec_ctrl = false
       end
@@ -115,6 +120,9 @@ class ASHRAE9012013 < ASHRAE901
     # Get the area of the space
     space_area_m2 = space.floorArea
 
+    # get the climate zone
+    climate_zone = model_standards_climate_zone(space.model)
+
     if req_top_ctrl && req_pri_ctrl && req_sec_ctrl
       # Sensor 1 controls toplighted area
       sensor_1_frac = areas['toplighted_area'] / space_area_m2
@@ -138,9 +146,25 @@ class ASHRAE9012013 < ASHRAE901
       # sorted_skylights[0] assigned to sensor_2_window so a second reference point is added for top daylighting
       sensor_2_window = sorted_skylights[0]
     elsif req_top_ctrl && !req_pri_ctrl && !req_sec_ctrl
-      # Sensor 1 controls toplighted area
-      sensor_1_frac = areas['toplighted_area'] / space_area_m2
-      sensor_1_window = sorted_skylights[0]
+      case climate_zone
+        when 'ASHRAE 169-2006-6A',
+             'ASHRAE 169-2006-6B',
+             'ASHRAE 169-2006-7A',
+             'ASHRAE 169-2006-8A',
+             'ASHRAE 169-2013-6A',
+             'ASHRAE 169-2013-6B',
+             'ASHRAE 169-2013-7A',
+             'ASHRAE 169-2013-8A'
+          # Sensor 1 controls toplighted area
+          sensor_1_frac = areas['toplighted_area'] / space_area_m2
+          sensor_1_window = sorted_skylights[0]
+        else
+          # Sensor 1 controls toplighted area
+          sensor_1_frac = areas['toplighted_area'] / space_area_m2
+          sensor_1_window = sorted_skylights[0]
+          sensor_2_frac = sensor_1_frac
+          sensor_2_window = sensor_1_window
+      end
     elsif !req_top_ctrl && req_pri_ctrl && !req_sec_ctrl
       # Sensor 1 controls primary area
       sensor_1_frac = areas['primary_sidelighted_area'] / space_area_m2
@@ -154,9 +178,10 @@ class ASHRAE9012013 < ASHRAE901
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end
 
-  # Baseline infiltration rate
+  # Determine the base infiltration rate at 75 PA.
   #
-  # @return [Double] the baseline infiltration rate, in cfm/ft^2 exterior above grade wall area at 75 Pa
+  # @return [Double] the baseline infiltration rate, in cfm/ft^2
+  # defaults to no infiltration.
   def space_infiltration_rate_75_pa(space)
     basic_infil_rate_cfm_per_ft2 = 1.0
     return basic_infil_rate_cfm_per_ft2

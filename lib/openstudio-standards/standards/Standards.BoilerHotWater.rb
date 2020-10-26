@@ -18,7 +18,7 @@ class Standard
       fuel_type = 'Gas'
     when 'Electricity'
       fuel_type = 'Electric'
-    when 'FuelOil#1', 'FuelOil#2'
+    when 'FuelOilNo1', 'FuelOilNo2'
       fuel_type = 'Oil'
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, a fuel type of #{fuelType} is not yet supported.  Assuming 'Gas.'")
@@ -130,7 +130,7 @@ class Standard
     # Get the boiler properties
     blr_props = model_find_object(standards_data['boilers'], search_criteria, capacity_btu_per_hr)
     unless blr_props
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties with search criteria #{search_criteria}, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end

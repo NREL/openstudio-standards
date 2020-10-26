@@ -3,7 +3,8 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 
     # Add the main service water heating loop, if specified
-    unless prototype_input['main_water_heater_volume'].nil?
+    # for tall and super tall buildings, add main (multiple) and booster swh in model_custom_hvac_tweaks
+    unless prototype_input['main_water_heater_volume'].nil? || (building_type=='TallBuilding' || building_type == 'SuperTallBuilding')
       # Get the thermal zone for the water heater, if specified
       water_heater_zone = nil
       if prototype_input['main_water_heater_space_name']
@@ -169,8 +170,8 @@ class Standard
     end
 
     # Add the booster water heater, if specified
-    unless prototype_input['booster_water_heater_volume'].nil?
-
+    # for tall and super tall buildings, add main (multiple) and booster swh in model_custom_hvac_tweaks
+    unless prototype_input['booster_water_heater_volume'].nil? || (building_type=='TallBuilding' || building_type == 'SuperTallBuilding')
       # Add the booster water loop
       swh_booster_loop = model_add_swh_booster(model,
                                                main_swh_loop,
@@ -187,12 +188,11 @@ class Standard
                                      OpenStudio.convert(prototype_input['booster_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
                                      prototype_input['booster_service_water_flowrate_schedule'],
                                      OpenStudio.convert(prototype_input['booster_water_use_temperature'], 'F', 'C').get)
-
     end
 
     # Add the laundry water heater, if specified
-    unless prototype_input['laundry_water_heater_volume'].nil?
-
+    # for tall and super tall buildings, add laundry swh in model_custom_hvac_tweaks
+    unless prototype_input['laundry_water_heater_volume'].nil? || (building_type=='TallBuilding' || building_type == 'SuperTallBuilding')
       # Add the laundry service water heating loop
       laundry_swh_loop = model_add_swh_loop(model,
                                             'Laundry Service Water Loop',
@@ -213,7 +213,6 @@ class Standard
                              prototype_input['laundry_service_water_flowrate_schedule'],
                              OpenStudio.convert(prototype_input['laundry_water_use_temperature'], 'F', 'C').get,
                              nil)
-
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')
@@ -281,7 +280,7 @@ class Standard
         num_units = space_type_hash[space_type][:num_units].round # First try number of units
         num_units = space_type_hash[space_type][:effective_num_spaces].round if num_units.zero? # Fall back on number of spaces
         peak_flow_rate_gal_per_hr = num_units * peak_flow_rate_gal_per_hr
-        peak_flow_rate_m3_per_s = num_units * OpenStudio.convert(peak_flow_rate_gal_per_hr, 'gal/hr', 'm^3/s').get
+        peak_flow_rate_m3_per_s = OpenStudio.convert(peak_flow_rate_gal_per_hr, 'gal/hr', 'm^3/s').get
         use_name = "#{space_type.name} #{num_units} units"
       else
         # TODO: - add building type or sice specific logic or just assume Gas? (SmallOffice and Warehouse are only non unit prototypes with Electric heating)

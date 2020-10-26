@@ -1,0 +1,2004 @@
+{
+  "motors": [
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 1.0,
+      "nominal_full_load_efficiency": 0.760789,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 1.0,
+      "maximum_capacity": 1.499,
+      "nominal_full_load_efficiency": 0.880652,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 1.5,
+      "maximum_capacity": 1.999,
+      "nominal_full_load_efficiency": 0.886586,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 2.0,
+      "maximum_capacity": 2.999,
+      "nominal_full_load_efficiency": 0.904189,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 3.0,
+      "maximum_capacity": 4.999,
+      "nominal_full_load_efficiency": 0.915123,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 5.0,
+      "maximum_capacity": 7.499,
+      "nominal_full_load_efficiency": 0.92059,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 7.5,
+      "maximum_capacity": 9.999,
+      "nominal_full_load_efficiency": 0.92218,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 10.0,
+      "maximum_capacity": 14.999,
+      "nominal_full_load_efficiency": 0.936818,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 15.0,
+      "maximum_capacity": 19.999,
+      "nominal_full_load_efficiency": 0.927752,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 20.0,
+      "maximum_capacity": 24.999,
+      "nominal_full_load_efficiency": 0.932647,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 25.0,
+      "maximum_capacity": 29.999,
+      "nominal_full_load_efficiency": 0.932647,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 30.0,
+      "maximum_capacity": 39.999,
+      "nominal_full_load_efficiency": 0.939647,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 40.0,
+      "maximum_capacity": 49.999,
+      "nominal_full_load_efficiency": 0.939915,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 50.0,
+      "maximum_capacity": 59.999,
+      "nominal_full_load_efficiency": 0.949541,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 60.0,
+      "maximum_capacity": 74.999,
+      "nominal_full_load_efficiency": 0.943195,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 75.0,
+      "maximum_capacity": 99.999,
+      "nominal_full_load_efficiency": 0.947902,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 100.0,
+      "maximum_capacity": 124.999,
+      "nominal_full_load_efficiency": 0.965062,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 125.0,
+      "maximum_capacity": 149.999,
+      "nominal_full_load_efficiency": 0.965062,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 150.0,
+      "maximum_capacity": 199.999,
+      "nominal_full_load_efficiency": 0.963329,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 200.0,
+      "maximum_capacity": 249.999,
+      "nominal_full_load_efficiency": 0.970956,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 250.0,
+      "maximum_capacity": 299.999,
+      "nominal_full_load_efficiency": 0.970956,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 300.0,
+      "maximum_capacity": 349.999,
+      "nominal_full_load_efficiency": 0.970956,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 350.0,
+      "maximum_capacity": 399.999,
+      "nominal_full_load_efficiency": 0.970956,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 400.0,
+      "maximum_capacity": 449.999,
+      "nominal_full_load_efficiency": 0.970956,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Enclosed",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 450.0,
+      "maximum_capacity": 500.0,
+      "nominal_full_load_efficiency": 0.970956,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 1.0,
+      "nominal_full_load_efficiency": 0.803772,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 1.0,
+      "maximum_capacity": 1.499,
+      "nominal_full_load_efficiency": 0.880652,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 1.5,
+      "maximum_capacity": 1.999,
+      "nominal_full_load_efficiency": 0.886586,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 2.0,
+      "maximum_capacity": 2.999,
+      "nominal_full_load_efficiency": 0.882053,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 3.0,
+      "maximum_capacity": 4.999,
+      "nominal_full_load_efficiency": 0.876991,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 5.0,
+      "maximum_capacity": 7.499,
+      "nominal_full_load_efficiency": 0.901524,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 7.5,
+      "maximum_capacity": 9.999,
+      "nominal_full_load_efficiency": 0.906991,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 10.0,
+      "maximum_capacity": 14.999,
+      "nominal_full_load_efficiency": 0.92218,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 15.0,
+      "maximum_capacity": 19.999,
+      "nominal_full_load_efficiency": 0.927752,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 20.0,
+      "maximum_capacity": 24.999,
+      "nominal_full_load_efficiency": 0.932647,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 25.0,
+      "maximum_capacity": 29.999,
+      "nominal_full_load_efficiency": 0.932647,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 30.0,
+      "maximum_capacity": 39.999,
+      "nominal_full_load_efficiency": 0.939647,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 40.0,
+      "maximum_capacity": 49.999,
+      "nominal_full_load_efficiency": 0.939915,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 50.0,
+      "maximum_capacity": 59.999,
+      "nominal_full_load_efficiency": 0.949541,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 60.0,
+      "maximum_capacity": 74.999,
+      "nominal_full_load_efficiency": 0.943195,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 75.0,
+      "maximum_capacity": 99.999,
+      "nominal_full_load_efficiency": 0.937755,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 100.0,
+      "maximum_capacity": 124.999,
+      "nominal_full_load_efficiency": 0.947902,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 125.0,
+      "maximum_capacity": 149.999,
+      "nominal_full_load_efficiency": 0.947902,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 150.0,
+      "maximum_capacity": 199.999,
+      "nominal_full_load_efficiency": 0.955089,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 200.0,
+      "maximum_capacity": 249.999,
+      "nominal_full_load_efficiency": 0.955089,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 250.0,
+      "maximum_capacity": 299.999,
+      "nominal_full_load_efficiency": 0.963329,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 300.0,
+      "maximum_capacity": 349.999,
+      "nominal_full_load_efficiency": 0.963329,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 350.0,
+      "maximum_capacity": 399.999,
+      "nominal_full_load_efficiency": 0.970956,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 400.0,
+      "maximum_capacity": 449.999,
+      "nominal_full_load_efficiency": 0.973412,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 2.0,
+      "type": "Open",
+      "synchronous_speed": 3600.0,
+      "minimum_capacity": 450.0,
+      "maximum_capacity": 500.0,
+      "nominal_full_load_efficiency": 0.973412,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 1.0,
+      "nominal_full_load_efficiency": 0.904573,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 1.0,
+      "maximum_capacity": 1.499,
+      "nominal_full_load_efficiency": 0.917643,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 1.5,
+      "maximum_capacity": 1.999,
+      "nominal_full_load_efficiency": 0.894978,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 2.0,
+      "maximum_capacity": 2.999,
+      "nominal_full_load_efficiency": 0.941647,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 3.0,
+      "maximum_capacity": 4.999,
+      "nominal_full_load_efficiency": 0.923516,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 5.0,
+      "maximum_capacity": 7.499,
+      "nominal_full_load_efficiency": 0.946101,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 7.5,
+      "maximum_capacity": 9.999,
+      "nominal_full_load_efficiency": 0.941568,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 10.0,
+      "maximum_capacity": 14.999,
+      "nominal_full_load_efficiency": 0.95076,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 15.0,
+      "maximum_capacity": 19.999,
+      "nominal_full_load_efficiency": 0.94945,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 20.0,
+      "maximum_capacity": 24.999,
+      "nominal_full_load_efficiency": 0.956736,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 25.0,
+      "maximum_capacity": 29.999,
+      "nominal_full_load_efficiency": 0.952203,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 30.0,
+      "maximum_capacity": 39.999,
+      "nominal_full_load_efficiency": 0.956004,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 40.0,
+      "maximum_capacity": 49.999,
+      "nominal_full_load_efficiency": 0.954828,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 50.0,
+      "maximum_capacity": 59.999,
+      "nominal_full_load_efficiency": 0.959535,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 60.0,
+      "maximum_capacity": 74.999,
+      "nominal_full_load_efficiency": 0.967776,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 75.0,
+      "maximum_capacity": 99.999,
+      "nominal_full_load_efficiency": 0.968419,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 100.0,
+      "maximum_capacity": 124.999,
+      "nominal_full_load_efficiency": 0.968419,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 125.0,
+      "maximum_capacity": 149.999,
+      "nominal_full_load_efficiency": 0.973939,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 150.0,
+      "maximum_capacity": 199.999,
+      "nominal_full_load_efficiency": 0.970043,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 200.0,
+      "maximum_capacity": 249.999,
+      "nominal_full_load_efficiency": 0.970043,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 250.0,
+      "maximum_capacity": 299.999,
+      "nominal_full_load_efficiency": 0.9725,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 300.0,
+      "maximum_capacity": 349.999,
+      "nominal_full_load_efficiency": 0.9725,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 350.0,
+      "maximum_capacity": 399.999,
+      "nominal_full_load_efficiency": 0.9725,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 400.0,
+      "maximum_capacity": 449.999,
+      "nominal_full_load_efficiency": 0.9725,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 450.0,
+      "maximum_capacity": 500.0,
+      "nominal_full_load_efficiency": 0.974956,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 1.0,
+      "nominal_full_load_efficiency": 0.904573,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 1.0,
+      "maximum_capacity": 1.499,
+      "nominal_full_load_efficiency": 0.917643,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 1.5,
+      "maximum_capacity": 1.999,
+      "nominal_full_load_efficiency": 0.894978,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 2.0,
+      "maximum_capacity": 2.999,
+      "nominal_full_load_efficiency": 0.935507,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 3.0,
+      "maximum_capacity": 4.999,
+      "nominal_full_load_efficiency": 0.923516,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 5.0,
+      "maximum_capacity": 7.499,
+      "nominal_full_load_efficiency": 0.930912,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 7.5,
+      "maximum_capacity": 9.999,
+      "nominal_full_load_efficiency": 0.941568,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 10.0,
+      "maximum_capacity": 14.999,
+      "nominal_full_load_efficiency": 0.958516,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 15.0,
+      "maximum_capacity": 19.999,
+      "nominal_full_load_efficiency": 0.94945,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 20.0,
+      "maximum_capacity": 24.999,
+      "nominal_full_load_efficiency": 0.952437,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 25.0,
+      "maximum_capacity": 29.999,
+      "nominal_full_load_efficiency": 0.958666,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 30.0,
+      "maximum_capacity": 39.999,
+      "nominal_full_load_efficiency": 0.956004,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 40.0,
+      "maximum_capacity": 49.999,
+      "nominal_full_load_efficiency": 0.954828,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 50.0,
+      "maximum_capacity": 59.999,
+      "nominal_full_load_efficiency": 0.959535,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 60.0,
+      "maximum_capacity": 74.999,
+      "nominal_full_load_efficiency": 0.962605,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 75.0,
+      "maximum_capacity": 99.999,
+      "nominal_full_load_efficiency": 0.965962,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 100.0,
+      "maximum_capacity": 124.999,
+      "nominal_full_load_efficiency": 0.968419,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 125.0,
+      "maximum_capacity": 149.999,
+      "nominal_full_load_efficiency": 0.973939,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 150.0,
+      "maximum_capacity": 199.999,
+      "nominal_full_load_efficiency": 0.964873,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 200.0,
+      "maximum_capacity": 249.999,
+      "nominal_full_load_efficiency": 0.967329,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 250.0,
+      "maximum_capacity": 299.999,
+      "nominal_full_load_efficiency": 0.967329,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 300.0,
+      "maximum_capacity": 349.999,
+      "nominal_full_load_efficiency": 0.967329,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 350.0,
+      "maximum_capacity": 399.999,
+      "nominal_full_load_efficiency": 0.967329,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 400.0,
+      "maximum_capacity": 449.999,
+      "nominal_full_load_efficiency": 0.974956,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 4.0,
+      "type": "Open",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 450.0,
+      "maximum_capacity": 500.0,
+      "nominal_full_load_efficiency": 0.974956,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 1.0,
+      "nominal_full_load_efficiency": 0.895775,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 1.0,
+      "maximum_capacity": 1.499,
+      "nominal_full_load_efficiency": 0.976043,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 1.5,
+      "maximum_capacity": 1.999,
+      "nominal_full_load_efficiency": 0.976977,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 2.0,
+      "maximum_capacity": 2.999,
+      "nominal_full_load_efficiency": 0.982444,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 3.0,
+      "maximum_capacity": 4.999,
+      "nominal_full_load_efficiency": 0.937115,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 5.0,
+      "maximum_capacity": 7.499,
+      "nominal_full_load_efficiency": 0.955185,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 7.5,
+      "maximum_capacity": 9.999,
+      "nominal_full_load_efficiency": 0.946119,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 10.0,
+      "maximum_capacity": 14.999,
+      "nominal_full_load_efficiency": 0.932267,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 15.0,
+      "maximum_capacity": 19.999,
+      "nominal_full_load_efficiency": 0.927734,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 20.0,
+      "maximum_capacity": 24.999,
+      "nominal_full_load_efficiency": 0.947402,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 25.0,
+      "maximum_capacity": 29.999,
+      "nominal_full_load_efficiency": 0.940149,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 30.0,
+      "maximum_capacity": 39.999,
+      "nominal_full_load_efficiency": 0.956004,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 40.0,
+      "maximum_capacity": 49.999,
+      "nominal_full_load_efficiency": 0.956004,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 50.0,
+      "maximum_capacity": 59.999,
+      "nominal_full_load_efficiency": 0.964858,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 60.0,
+      "maximum_capacity": 74.999,
+      "nominal_full_load_efficiency": 0.961232,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 75.0,
+      "maximum_capacity": 99.999,
+      "nominal_full_load_efficiency": 0.962605,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 100.0,
+      "maximum_capacity": 124.999,
+      "nominal_full_load_efficiency": 0.962605,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 125.0,
+      "maximum_capacity": 149.999,
+      "nominal_full_load_efficiency": 0.9685,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 150.0,
+      "maximum_capacity": 199.999,
+      "nominal_full_load_efficiency": 0.9685,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 200.0,
+      "maximum_capacity": 249.999,
+      "nominal_full_load_efficiency": 0.9685,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 250.0,
+      "maximum_capacity": 299.999,
+      "nominal_full_load_efficiency": 0.9685,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 300.0,
+      "maximum_capacity": 349.999,
+      "nominal_full_load_efficiency": 0.9685,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 350.0,
+      "maximum_capacity": 399.999,
+      "nominal_full_load_efficiency": 0.970956,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 400.0,
+      "maximum_capacity": 449.999,
+      "nominal_full_load_efficiency": 0.970956,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 450.0,
+      "maximum_capacity": 500.0,
+      "nominal_full_load_efficiency": 0.973412,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 1.0,
+      "nominal_full_load_efficiency": 0.895775,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 1.0,
+      "maximum_capacity": 1.499,
+      "nominal_full_load_efficiency": 0.953907,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 1.5,
+      "maximum_capacity": 1.999,
+      "nominal_full_load_efficiency": 0.957911,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 2.0,
+      "maximum_capacity": 2.999,
+      "nominal_full_load_efficiency": 0.963378,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 3.0,
+      "maximum_capacity": 4.999,
+      "nominal_full_load_efficiency": 0.937115,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 5.0,
+      "maximum_capacity": 7.499,
+      "nominal_full_load_efficiency": 0.938704,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 7.5,
+      "maximum_capacity": 9.999,
+      "nominal_full_load_efficiency": 0.959465,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 10.0,
+      "maximum_capacity": 14.999,
+      "nominal_full_load_efficiency": 0.932267,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 15.0,
+      "maximum_capacity": 19.999,
+      "nominal_full_load_efficiency": 0.941694,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 20.0,
+      "maximum_capacity": 24.999,
+      "nominal_full_load_efficiency": 0.947402,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 25.0,
+      "maximum_capacity": 29.999,
+      "nominal_full_load_efficiency": 0.952203,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 30.0,
+      "maximum_capacity": 39.999,
+      "nominal_full_load_efficiency": 0.956004,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 40.0,
+      "maximum_capacity": 49.999,
+      "nominal_full_load_efficiency": 0.956004,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 50.0,
+      "maximum_capacity": 59.999,
+      "nominal_full_load_efficiency": 0.964858,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 60.0,
+      "maximum_capacity": 74.999,
+      "nominal_full_load_efficiency": 0.961232,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 75.0,
+      "maximum_capacity": 99.999,
+      "nominal_full_load_efficiency": 0.962605,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 100.0,
+      "maximum_capacity": 124.999,
+      "nominal_full_load_efficiency": 0.962605,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 125.0,
+      "maximum_capacity": 149.999,
+      "nominal_full_load_efficiency": 0.960259,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 150.0,
+      "maximum_capacity": 199.999,
+      "nominal_full_load_efficiency": 0.960259,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 200.0,
+      "maximum_capacity": 249.999,
+      "nominal_full_load_efficiency": 0.965786,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 250.0,
+      "maximum_capacity": 299.999,
+      "nominal_full_load_efficiency": 0.965786,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 300.0,
+      "maximum_capacity": 349.999,
+      "nominal_full_load_efficiency": 0.965786,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 350.0,
+      "maximum_capacity": 399.999,
+      "nominal_full_load_efficiency": 0.970956,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 400.0,
+      "maximum_capacity": 449.999,
+      "nominal_full_load_efficiency": 0.978582,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 6.0,
+      "type": "Open",
+      "synchronous_speed": 1200.0,
+      "minimum_capacity": 450.0,
+      "maximum_capacity": 500.0,
+      "nominal_full_load_efficiency": 0.978582,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 1.0,
+      "nominal_full_load_efficiency": 0.768454,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 1.0,
+      "maximum_capacity": 1.499,
+      "nominal_full_load_efficiency": 0.859222,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 1.5,
+      "maximum_capacity": 1.999,
+      "nominal_full_load_efficiency": 0.894251,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 2.0,
+      "maximum_capacity": 2.999,
+      "nominal_full_load_efficiency": 0.909251,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 3.0,
+      "maximum_capacity": 4.999,
+      "nominal_full_load_efficiency": 0.898983,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 5.0,
+      "maximum_capacity": 7.499,
+      "nominal_full_load_efficiency": 0.898309,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 7.5,
+      "maximum_capacity": 9.999,
+      "nominal_full_load_efficiency": 0.92059,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 10.0,
+      "maximum_capacity": 14.999,
+      "nominal_full_load_efficiency": 0.90244,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 15.0,
+      "maximum_capacity": 19.999,
+      "nominal_full_load_efficiency": 0.904048,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 20.0,
+      "maximum_capacity": 24.999,
+      "nominal_full_load_efficiency": 0.908042,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 25.0,
+      "maximum_capacity": 29.999,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 30.0,
+      "maximum_capacity": 39.999,
+      "nominal_full_load_efficiency": 0.912702,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 40.0,
+      "maximum_capacity": 49.999,
+      "nominal_full_load_efficiency": 0.926048,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 50.0,
+      "maximum_capacity": 59.999,
+      "nominal_full_load_efficiency": 0.933803,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 60.0,
+      "maximum_capacity": 74.999,
+      "nominal_full_load_efficiency": 0.938159,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 75.0,
+      "maximum_capacity": 99.999,
+      "nominal_full_load_efficiency": 0.937755,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 100.0,
+      "maximum_capacity": 124.999,
+      "nominal_full_load_efficiency": 0.953072,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 125.0,
+      "maximum_capacity": 149.999,
+      "nominal_full_load_efficiency": 0.9431,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 150.0,
+      "maximum_capacity": 199.999,
+      "nominal_full_load_efficiency": 0.952633,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 200.0,
+      "maximum_capacity": 249.999,
+      "nominal_full_load_efficiency": 0.960259,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 250.0,
+      "maximum_capacity": 299.999,
+      "nominal_full_load_efficiency": 0.965786,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 300.0,
+      "maximum_capacity": 349.999,
+      "nominal_full_load_efficiency": 0.965786,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 350.0,
+      "maximum_capacity": 399.999,
+      "nominal_full_load_efficiency": 0.965786,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 400.0,
+      "maximum_capacity": 449.999,
+      "nominal_full_load_efficiency": 0.965786,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Enclosed",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 450.0,
+      "maximum_capacity": 500.0,
+      "nominal_full_load_efficiency": 0.965786,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 1.0,
+      "nominal_full_load_efficiency": 0.749066,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 1.0,
+      "maximum_capacity": 1.499,
+      "nominal_full_load_efficiency": 0.850011,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 1.5,
+      "maximum_capacity": 1.999,
+      "nominal_full_load_efficiency": 0.912672,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 2.0,
+      "maximum_capacity": 2.999,
+      "nominal_full_load_efficiency": 0.905214,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 3.0,
+      "maximum_capacity": 4.999,
+      "nominal_full_load_efficiency": 0.885413,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 5.0,
+      "maximum_capacity": 7.499,
+      "nominal_full_load_efficiency": 0.903805,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 7.5,
+      "maximum_capacity": 9.999,
+      "nominal_full_load_efficiency": 0.913805,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 10.0,
+      "maximum_capacity": 14.999,
+      "nominal_full_load_efficiency": 0.899533,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 15.0,
+      "maximum_capacity": 19.999,
+      "nominal_full_load_efficiency": 0.908346,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 20.0,
+      "maximum_capacity": 24.999,
+      "nominal_full_load_efficiency": 0.91234,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 25.0,
+      "maximum_capacity": 29.999,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 30.0,
+      "maximum_capacity": 39.999,
+      "nominal_full_load_efficiency": 0.912702,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 40.0,
+      "maximum_capacity": 49.999,
+      "nominal_full_load_efficiency": 0.926048,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 50.0,
+      "maximum_capacity": 59.999,
+      "nominal_full_load_efficiency": 0.938101,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 60.0,
+      "maximum_capacity": 74.999,
+      "nominal_full_load_efficiency": 0.941844,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 75.0,
+      "maximum_capacity": 99.999,
+      "nominal_full_load_efficiency": 0.933684,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 100.0,
+      "maximum_capacity": 124.999,
+      "nominal_full_load_efficiency": 0.94144,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 125.0,
+      "maximum_capacity": 149.999,
+      "nominal_full_load_efficiency": 0.931467,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 150.0,
+      "maximum_capacity": 199.999,
+      "nominal_full_load_efficiency": 0.9431,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 200.0,
+      "maximum_capacity": 249.999,
+      "nominal_full_load_efficiency": 0.948626,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 250.0,
+      "maximum_capacity": 299.999,
+      "nominal_full_load_efficiency": 0.958159,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 300.0,
+      "maximum_capacity": 349.999,
+      "nominal_full_load_efficiency": 0.958159,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 350.0,
+      "maximum_capacity": 399.999,
+      "nominal_full_load_efficiency": 0.965786,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 400.0,
+      "maximum_capacity": 449.999,
+      "nominal_full_load_efficiency": 0.973412,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2045",
+      "number_of_poles": 8.0,
+      "type": "Open",
+      "synchronous_speed": 900.0,
+      "minimum_capacity": 450.0,
+      "maximum_capacity": 500.0,
+      "nominal_full_load_efficiency": 0.973412,
+      "notes": "Forecast for LA100 project"
+    }
+  ]
+}

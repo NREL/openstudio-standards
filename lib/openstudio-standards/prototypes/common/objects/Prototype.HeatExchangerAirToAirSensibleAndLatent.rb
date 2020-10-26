@@ -1,6 +1,13 @@
 class Standard
   # @!group HeatExchangerAirToAirSensibleAndLatent
 
+  # Default fan efficiency assumption for the prm added fan power
+  def heat_exchanger_air_to_air_sensible_and_latent_prototype_default_fan_efficiency
+    default_fan_efficiency = 0.5
+    return default_fan_efficiency
+  end
+
+  # Sets the motor power to account for the extra fan energy from the increase in fan total static pressure
   def heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_nominal_electric_power(heat_exchanger_air_to_air_sensible_and_latent)
     # Get the nominal supply air flow rate
     supply_air_flow_m3_per_s = nil
@@ -43,14 +50,18 @@ class Standard
     # Convert the flow rate to cfm
     supply_air_flow_cfm = OpenStudio.convert(supply_air_flow_m3_per_s, 'm^3/s', 'cfm').get
 
-    # Calculate the motor power for the rotatry wheel per:
+    # Calculate the motor power for the rotary wheel per:
     # Power (W) = (Nominal Supply Air Flow Rate (CFM) * 0.3386) + 49.5
     # power = (supply_air_flow_cfm * 0.3386) + 49.5
 
-    # Calculate the motor power for the rotatry wheel per:
+    # Calculate the motor power for the rotary wheel per:
     # Power (W) = (Minimum Outdoor Air Flow Rate (m^3/s) * 212.5 / 0.5) + (Minimum Outdoor Air Flow Rate (m^3/s) * 162.5 / 0.5) + 50
-    power = (supply_air_flow_m3_per_s * 212.5 / 0.5) + (supply_air_flow_m3_per_s * 0.9 * 162.5 / 0.5) + 50
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.HeatExchangerAirToAirSensibleAndLatent', "For #{heat_exchanger_air_to_air_sensible_and_latent.name}, ERV power is calculated to be #{power.round} W, based on a min OA flow of #{supply_air_flow_cfm.round} cfm.")
+    # This power is largely the added fan power from the extra static pressure drop from the enthalpy wheel.
+    # It is included as motor power so it is only added when the enthalpy wheel is active, rather than a universal increase to the fan total static pressure.
+    # From p.96 of https://www.pnnl.gov/main/publications/external/technical_reports/PNNL-20405.pdf
+    default_fan_efficiency = heat_exchanger_air_to_air_sensible_and_latent_prototype_default_fan_efficiency
+    power = (supply_air_flow_m3_per_s * 212.5 / default_fan_efficiency) + (supply_air_flow_m3_per_s * 0.9 * 162.5 / default_fan_efficiency) + 50
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.HeatExchangerAirToAirSensibleAndLatent', "For #{heat_exchanger_air_to_air_sensible_and_latent.name}, ERV power is calculated to be #{power.round} W, based on a min OA flow of #{supply_air_flow_cfm.round} cfm.  This power represents mostly the added fan energy from the extra static pressure, and is active only when the ERV is operating.")
 
     # Set the power for the HX
     heat_exchanger_air_to_air_sensible_and_latent.setNominalElectricPower(power)

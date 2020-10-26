@@ -62,6 +62,14 @@ class NECB2011
           Units='#{unit}'
 "
           column_name = "#{col}".gsub(/\s+/, "_").downcase
+          # If the column name is "additional_fuel" and the file contains a boiler with a FuelOilNo2 fuel type assume
+          # the column name should be "fueloilno2".
+          if column_name.include? "additional_fuel"
+            model.getPlantLoops.sort.each do |iplantloop|
+              boilers = iplantloop.components.select {|icomponent| icomponent.to_BoilerHotWater.is_initialized}
+              column_name = "fueloilno2" unless boilers.select {|boiler| boiler.to_BoilerHotWater.get.fuelType.to_s == "FuelOilNo2"}.empty?
+            end
+          end
           column_name = column_name + "_#{unit}" if unit != ''
           value = model.sqlFile.get.execAndReturnFirstString(query)
           next if value.empty? || value.get.nil?
@@ -286,7 +294,7 @@ class NECB2011
     building_type = 'Commercial'
     province = provinces_names_map[qaqc[:geography][:state_province_region]]
     neb_fuel_list = ['Electricity', 'Natural Gas', "Oil"]
-    neb_eplus_fuel_map = {'Electricity' => 'Electricity', 'Natural Gas' => 'Gas', 'Oil' => "FuelOil#2"}
+    neb_eplus_fuel_map = {'Electricity' => 'Electricity', 'Natural Gas' => 'Gas', 'Oil' => "FuelOilNo2"}
     qaqc[:economics][:total_neb_cost] = 0.0
     qaqc[:economics][:total_neb_cost_per_m2] = 0.0
     neb_eplus_fuel_map.each do |neb_fuel, ep_fuel|
@@ -652,7 +660,7 @@ class NECB2011
         if !space.waterUseEquipment.empty?
           waterUseEquipment_info={}
           spaceinfo[:waterUseEquipment] << waterUseEquipment_info
-          waterUseEquipment_info[:peak_flow_rate]= space.waterUseEquipment[0].waterUseEquipmentDefinition.getPeakFlowRate.value
+          waterUseEquipment_info[:peak_flow_rate]= space.waterUseEquipment[0].waterUseEquipmentDefinition.peakFlowRate
           waterUseEquipment_info[:peak_flow_rate_per_area] = waterUseEquipment_info[:peak_flow_rate] / space.floorArea
           area_per_occ = space.spaceType.get.people[0].spaceFloorAreaPerPerson
           area_per_occ = validate_optional(area_per_occ, model, -1.0)
@@ -730,7 +738,7 @@ class NECB2011
         vbz = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName='Zone Ventilation Parameters' AND ColumnName='Breathing Zone Outdoor Airflow - Vbz' AND Units='m3/s' AND RowName='#{zone.name.get.to_s.upcase}' ")
         vbz = validate_optional(vbz, model, 0)
         air_loop_info[:total_breathing_zone_outdoor_airflow_vbz] += vbz
-        air_loop_info[:total_floor_area_served] += zone.floorArea
+        air_loop_info[:total_floor_area_served] += zone.floorArea*zone.multiplier.to_f
       end
       air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName='System Ventilation Parameters' AND ColumnName='Area Outdoor Air Rate - Ra' AND Units='m3/s-m2' AND RowName='#{air_loop_info[:name].to_s.upcase}' ")
       air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] = validate_optional(air_loop_info[:area_outdoor_air_rate_m3_per_s_m2], model, -1.0)
@@ -838,8 +846,8 @@ class NECB2011
           air_loop_info[:cooling_coils][:dx_single_speed] << coil
           single_speed = supply_comp.to_CoilCoolingDXSingleSpeed.get
           coil[:name] = single_speed.name.get
-          coil[:cop] = single_speed.getRatedCOP.get
-          coil[:nominal_total_capacity_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
+          coil[:cop] = single_speed.ratedCOP.get
+          coil[:nominal_total_capacity_w] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
           coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w], model, -1.0)
         end
         if supply_comp.to_CoilCoolingDXTwoSpeed.is_initialized
@@ -847,9 +855,9 @@ class NECB2011
           air_loop_info[:cooling_coils][:dx_two_speed] << coil
           two_speed = supply_comp.to_CoilCoolingDXTwoSpeed.get
           coil[:name] = two_speed.name.get
-          coil[:cop_low] = two_speed.getRatedLowSpeedCOP.get
-          coil[:cop_high] = two_speed.getRatedHighSpeedCOP.get
-          coil[:nominal_total_capacity_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
+          coil[:cop_low] = two_speed.ratedLowSpeedCOP.get
+          coil[:cop_high] = two_speed.ratedHighSpeedCOP.get
+          coil[:nominal_total_capacity_w] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
           coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w], model, -1.0)
         end
         if supply_comp.to_CoilCoolingWater.is_initialized
@@ -857,9 +865,9 @@ class NECB2011
           air_loop_info[:cooling_coils][:coil_cooling_water] << coil
           coil_cooling_water = supply_comp.to_CoilCoolingWater.get
           coil[:name] = coil_cooling_water.name.get
-          coil[:nominal_total_capacity_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
+          coil[:nominal_total_capacity_w] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
           coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w], model, -1.0)
-          coil[:nominal_sensible_heat_ratio] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Sensible Heat Ratio' AND RowName='#{coil[:name].upcase}' ")
+          coil[:nominal_sensible_heat_ratio] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Sensible Heat Ratio' AND RowName='#{coil[:name].upcase}' ")
           coil[:nominal_sensible_heat_ratio] = validate_optional(coil[:nominal_sensible_heat_ratio], model, -1.0)
         end
       end
@@ -874,8 +882,8 @@ class NECB2011
       plant_loop_info[:name] = plant_loop.name.get
 
       sizing = plant_loop.sizingPlant
-      plant_loop_info[:design_loop_exit_temperature] = sizing.getDesignLoopExitTemperature.value()
-      plant_loop_info[:loop_design_temperature_difference] = sizing.getLoopDesignTemperatureDifference.value()
+      plant_loop_info[:design_loop_exit_temperature] = sizing.designLoopExitTemperature
+      plant_loop_info[:loop_design_temperature_difference] = sizing.loopDesignTemperatureDifference
 
       #Create Container for plant equipment arrays.
       plant_loop_info[:pumps] = []
@@ -898,7 +906,7 @@ class NECB2011
           pump_info[:water_flow_m3_per_s] = validate_optional(pump_info[:water_flow_m3_per_s], model, -1.0)
           pump_info[:electric_power_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Electric Power' AND RowName='#{pump_info[:name].upcase}' ")
           pump_info[:electric_power_w] = validate_optional(pump_info[:electric_power_w], model, -1.0)
-          pump_info[:motor_efficency] = pump.getMotorEfficiency.value()
+          pump_info[:motor_efficency] = pump.motorEfficiency
         end
 
         #Collect Variable Speed
@@ -914,7 +922,7 @@ class NECB2011
           pump_info[:water_flow_m3_per_s] = validate_optional(pump_info[:water_flow_m3_per_s], model, -1.0)
           pump_info[:electric_power_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Electric Power' AND RowName='#{pump_info[:name].upcase}' ")
           pump_info[:electric_power_w] = validate_optional(pump_info[:electric_power_w], model, -1.0)
-          pump_info[:motor_efficency] = pump.getMotorEfficiency.value()
+          pump_info[:motor_efficency] = pump.motorEfficiency
         end
 
         # Collect HotWaterBoilers

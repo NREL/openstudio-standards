@@ -67,7 +67,7 @@ class Standard
     if !z_heights.empty?
       z = z_heights.min
     else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "For #{building_story.name} could not find the minimum_z_value, which means the story has no spaces assigned or the spaces have no surfaces.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.BuildingStory', "For #{building_story.name} could not find the minimum_z_value, which means the story has no spaces assigned or the spaces have no surfaces.")
     end
 
     return z
