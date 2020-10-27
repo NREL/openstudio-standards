@@ -357,8 +357,9 @@ class Standard
           tot_occ_at_time += occ_frac * num_occ
         end
 
-        # Total fraction for the spaces at each time
-        spaces_occ_frac = tot_occ_at_time / max_occ_in_spaces
+        # Total fraction for the spaces at each time,
+        # rounded to avoid decimal precision issues
+        spaces_occ_frac = (tot_occ_at_time / max_occ_in_spaces).round(3)
 
         # If occupied_percentage_threshold is specified, schedule values are boolean
         # Otherwise use the actual spaces_occ_frac
@@ -537,6 +538,8 @@ class Standard
     values.size.times do |i|
       sch_ruleset.defaultDaySchedule.addValue(times[i],values[i])
     end
+
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Created #{sch_ruleset.name} with #{schedule_ruleset_annual_equivalent_full_load_hrs(sch_ruleset)} annual EFLH.")
 
     return sch_ruleset
   end
