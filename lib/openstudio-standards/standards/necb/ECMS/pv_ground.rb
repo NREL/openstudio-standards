@@ -2,8 +2,12 @@ class ECMS
 
   def apply_pv_ground(model:, pv_ground_type:, pv_ground_total_area_pv_panels_m2:, pv_ground_tilt_angle:, pv_ground_azimuth_angle:, pv_ground_module_description:)
 
-    ##### If pv_type is nil.. do nothing.
+    ##### If any of users' inputs are nil/false do nothing.
     return if pv_ground_type.nil? || pv_ground_type == FALSE
+    return if pv_ground_total_area_pv_panels_m2.nil? || pv_ground_total_area_pv_panels_m2 == FALSE
+    return if pv_ground_tilt_angle.nil? || pv_ground_tilt_angle == FALSE
+    return if pv_ground_azimuth_angle.nil? || pv_ground_azimuth_angle == FALSE
+    return if pv_ground_module_description.nil? || pv_ground_module_description == FALSE
 
     ##### Set default PV panels' tilt angle as the latitude
     if pv_ground_tilt_angle == 'NECB_Default'
