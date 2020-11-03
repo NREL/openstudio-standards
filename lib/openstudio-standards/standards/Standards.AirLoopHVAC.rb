@@ -31,6 +31,15 @@ class Standard
   # @todo nightcycle control
   # @todo night fan shutoff
   def air_loop_hvac_apply_standard_controls(air_loop_hvac, climate_zone)
+    # Unoccupied shutdown
+    # Apply this before ERV because it modifies annual hours of operation which can impact ERV requirements
+    if air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac)
+      occ_threshold = air_loop_hvac_unoccupied_threshold
+      air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = occ_threshold)
+    else
+      air_loop_hvac.setAvailabilitySchedule(air_loop_hvac.model.alwaysOnDiscreteSchedule)
+    end
+
     # Energy Recovery Ventilation
     if air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
       air_loop_hvac_apply_energy_recovery_ventilator(air_loop_hvac, climate_zone)
@@ -121,14 +130,6 @@ class Standard
     # but PRM RM suggests Warmest zone based SAT reset.
     if air_loop_hvac_supply_air_temperature_reset_required?(air_loop_hvac, climate_zone)
       air_loop_hvac_enable_supply_air_temperature_reset_warmest_zone(air_loop_hvac)
-    end
-
-    # Unoccupied shutdown
-    if air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac)
-      occ_threshold = air_loop_hvac_unoccupied_threshold
-      air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = occ_threshold)
-    else
-      air_loop_hvac.setAvailabilitySchedule(air_loop_hvac.model.alwaysOnDiscreteSchedule)
     end
 
     # Motorized OA damper
