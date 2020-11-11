@@ -136,7 +136,8 @@ class Standard
     if air_loop_hvac_motorized_oa_damper_required?(air_loop_hvac, climate_zone)
       # Assume that the availability schedule has already been
       # set to reflect occupancy and use this for the OA damper.
-      air_loop_hvac_add_motorized_oa_damper(air_loop_hvac, 0.15, air_loop_hvac.availabilitySchedule)
+      occ_threshold = air_loop_hvac_unoccupied_threshold
+      air_loop_hvac_add_motorized_oa_damper(air_loop_hvac, occ_threshold, air_loop_hvac.availabilitySchedule)
     else
       air_loop_hvac_remove_motorized_oa_damper(air_loop_hvac)
     end
