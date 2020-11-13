@@ -3,7 +3,8 @@
 To create core speed resources from spreadsheet data
 
 1. construction_lib.osm (For speed engine and constructions measures)
-2. 
+2. SpeedSchedules.osm (For speed engine)
+3. inputs_new.json - the input.json
 
 This is what we should have done instead of the schedules measure, create our own schedules.
 
