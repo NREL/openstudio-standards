@@ -32,7 +32,8 @@ def create_class_array
       'Laboratory',
       'College',
       'TallBuilding',
-      'SuperTallBuilding'
+      'SuperTallBuilding',
+	  'Courthouse'
   ]
 
   templates = {
