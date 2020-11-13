@@ -6,6 +6,8 @@ To create core speed resources from spreadsheet data
 2. SpeedSchedules.osm (For speed engine)
 3. inputs_new.json - the input.json
 
+Run with rake task export_speed:
+https://github.com/PW-Corporate/openstudio-standards/blob/master/Rakefile#L245-L252
 
 
 
