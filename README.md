@@ -1,5 +1,10 @@
 # Purpose
 
+To create core speed resources from spreadsheet data
+
+1. construction_lib.osm (For speed engine and constructions measures)
+2. 
+
 This is what we should have done instead of the schedules measure, create our own schedules.
 
 With this custom setup we can create our own schedules in schedules csv then export that to a SPEEDDataLibrary_schedules.json to be used directly in speed engine.
