@@ -6,9 +6,8 @@ To create core speed resources from spreadsheet data
 2. SpeedSchedules.osm (For speed engine)
 3. inputs_new.json - the input.json
 
-This is what we should have done instead of the schedules measure, create our own schedules.
 
-With this custom setup we can create our own schedules in schedules csv then export that to a SPEEDDataLibrary_schedules.json to be used directly in speed engine.
+
 
 # PW Fork of OpenStudio-Standards
 
