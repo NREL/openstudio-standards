@@ -453,6 +453,10 @@ class NECB2011 < Standard
   #     # <-3.1:  Remove all the windows/skylights
   #     # > 1:  Do nothing
   def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0)
+    fdwr_set = -1.0 if fdwr_set == 'NECB_default' or fdwr_set.nil?
+    srr_set = -1.0 if srr_set == 'NECB_default' or srr_set.nil?
+    fdwr_set = fdwr_set.to_f
+    srr_set = srr_set.to_f
     apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
     apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
     # model_add_daylighting_controls(model) # to be removed after refactor.
