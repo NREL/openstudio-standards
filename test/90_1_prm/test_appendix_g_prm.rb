@@ -686,7 +686,7 @@ class AppendixGPRMTests < Minitest::Test
   # mz_or_sz = MZ or SZ or PTU
   # expected_elec_heat_type = Electric or HeatPump
   def check_heat_type(model, climate_zone, mz_or_sz, expected_elec_heat_type)
-    return false unless !model.getAirLoopHVACs.size.empty?
+    return false unless model.getAirLoopHVACs.size > 0
 
     model.getAirLoopHVACs.each do |air_loop|
       num_zones = air_loop.thermalZones.size
