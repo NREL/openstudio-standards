@@ -15,7 +15,7 @@ class AppendixGPRMTests < Minitest::Test
   @@hvac_building_types = JSON.parse(File.read("#{@@json_dir}/hvac_building_types.json"))
   @@swh_building_types = JSON.parse(File.read("#{@@json_dir}/swh_building_types.json"))
   @@wwr_values = JSON.parse(File.read("#{@@json_dir}/wwr_values.json"))
-  @@hasres_values  = JSON.parse(File.read("#{@@json_dir}/hasres_values.json"))
+  @@hasres_values = JSON.parse(File.read("#{@@json_dir}/hasres_values.json"))
 
   # Generate one of the ASHRAE 90.1 prototype model included in openstudio-standards.
   #
@@ -27,13 +27,13 @@ class AppendixGPRMTests < Minitest::Test
     @lpd_space_types_alt = {}
     @bldg_type_alt = {}
     @bldg_type_alt_now = nil
-    
+
     prototypes_to_generate.each do |id, prototype|
       # mod is an array of method intended to modify the model
       building_type, template, climate_zone, mod = prototype
-  
+
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_") unless mod.length == 0
+      mod_str = mod.flatten.join('_') unless mod.empty?
 
       # Initialize weather file, necessary but not used
       epw_file = 'USA_FL_Miami.Intl.AP.722020_TMY3.epw'
@@ -46,7 +46,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # Define model name and run folder if it doesn't already exist,
       # if it does, remove it and re-create it.
-      model_name = mod.length == 0 ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
+      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
       run_dir = "#{@test_dir}/#{model_name}"
       if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
@@ -69,7 +69,7 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # Store alternate building type into hash
-      if @bldg_type_alt_now != nil
+      if !@bldg_type_alt_now.nil?
         @bldg_type_alt[prototype] = @bldg_type_alt_now
       else
         @bldg_type_alt[prototype] = nil?
@@ -103,7 +103,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = id_prototype_mapping[id]
 
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_") unless mod.length == 0
+      mod_str = mod.flatten.join('_') unless mod.empty?
 
       # Create a deep copy of the proposed model
       model = BTAP::FileIO::deep_copy(proposed_model)
@@ -125,21 +125,21 @@ class AppendixGPRMTests < Minitest::Test
         alt_space_type_was_found = false
         unless @lpd_space_types_alt.nil?
           # Check alternate hash of LPD space types before replacing from JSON list
-          @lpd_space_types_alt.each do |alt_bldg_space_type, new_space_type|
+          @lpd_space_types_alt.each do |alt_bldg_space_type, n_spc_t|
             if bldg_type_space_type == alt_bldg_space_type
               alt_space_type_was_found = true
-              space_type.setStandardsSpaceType(new_space_type)
+              space_type.setStandardsSpaceType(n_spc_t)
               break
             end
           end
-        end  
+        end
         if alt_space_type_was_found == false
-           space_type.setStandardsSpaceType(lpd_space_types[bldg_type_space_type])
+          space_type.setStandardsSpaceType(lpd_space_types[bldg_type_space_type])
         end
       end
 
       # Define run directory and run name, delete existing folder if it exists
-      model_name = mod.length == 0 ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
+      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
       run_dir = "#{@test_dir}/#{model_name}"
       run_dir_baseline = "#{run_dir}-Baseline"
       if Dir.exist?(run_dir_baseline)
@@ -154,17 +154,17 @@ class AppendixGPRMTests < Minitest::Test
 
       # Create baseline model
       model_baseline = @prototype_creator.model_create_prm_stable_baseline_building(model, building_type, climate_zone,
-                                                                                   @@hvac_building_types[hvac_building_type],
-                                                                                   @@wwr_building_types[building_type],
-                                                                                   @@swh_building_types[building_type],
-                                                                                   nil, run_dir_baseline, false, false)
+                                                                                    @@hvac_building_types[hvac_building_type],
+                                                                                    @@wwr_building_types[building_type],
+                                                                                    @@swh_building_types[building_type],
+                                                                                    nil, run_dir_baseline, false, false)
 
       # Check if baseline could be created
       assert(model_baseline, "Baseline model could not be generated for #{building_type}, #{template}, #{climate_zone}.")
 
       # Load newly generated baseline model
       @test_dir = "#{File.dirname(__FILE__)}/output"
-      model_baseline_file_name = mod.length == 0 ? "#{building_type}-#{template}-#{climate_zone}-Baseline/final.osm" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}-Baseline/final.osm"
+      model_baseline_file_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-Baseline/final.osm" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}-Baseline/final.osm"
       model_baseline = OpenStudio::Model::Model.load("#{@test_dir}/#{model_baseline_file_name}")
       model_baseline = model_baseline.get
 
@@ -331,7 +331,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = prototype
 
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_") unless mod.length == 0
+      mod_str = mod.flatten.join('_') unless mod.empty?
 
       # Define name of surfaces used for verification
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
@@ -373,11 +373,10 @@ class AppendixGPRMTests < Minitest::Test
   # @param prototypes_base [Hash] Baseline prototypes
   def check_lpd(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
-
       building_type, template, climate_zone, mod = prototype
 
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_") unless mod.length == 0
+      mod_str = mod.flatten.join('_') unless mod.empty?
 
       # Define name of spaces used for verification
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
@@ -400,19 +399,19 @@ class AppendixGPRMTests < Minitest::Test
   # Check lighting occ sensor
   #
   # @param prototypes_base [Hash] Baseline prototypes
-  def check_light_occ_sensor(prototypes,prototypes_base)
+  def check_light_occ_sensor(prototypes, prototypes_base)
     light_sch = {}
     prototypes.each do |prototype, model_proto|
       building_type, template, climate_zone, mod = prototype
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
       # Define name of spaces used for verification
       space_name = JSON.parse(File.read("#{@@json_dir}/light_occ_sensor.json"))[run_id]
-      
+
       # Get lighting schedule in prototype model
       light_sch_model = {}
       model_proto.getLightss.sort.each do |lgts|
         light_sch_model_lgts = {}
-        
+
         # get default schedule
         day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
         times = day_rule.times()
@@ -421,11 +420,11 @@ class AppendixGPRMTests < Minitest::Test
           light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
         end
         light_sch_model_lgts['default schedule'] = light_sch_model_default_rule
-        
+
         # get daily schedule
         lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
           light_sch_model_week_rule = {}
-          day_rule = week_rule.daySchedule()
+          day_rule = week_rule.daySchedule
           times = day_rule.times()
           times.each do |time|
             light_sch_model_week_rule[time.to_s] = day_rule.getValue(time)
@@ -443,7 +442,7 @@ class AppendixGPRMTests < Minitest::Test
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
       # Define name of spaces used for verification
       space_name = JSON.parse(File.read("#{@@json_dir}/light_occ_sensor.json"))[run_id]
-    
+
       # Get lighting schedule in baseline model
       model_baseline.getSpaceTypes.sort.each do |space_type|
         light_sch_model_base = {}
@@ -459,11 +458,11 @@ class AppendixGPRMTests < Minitest::Test
             light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
           end
           light_sch_model_lgts_base['default schedule'] = light_sch_model_default_rule
-          
+
           # get daily schedule
           lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
             light_sch_model_week_rule_base = {}
-            day_rule = week_rule.daySchedule()
+            day_rule = week_rule.daySchedule
             times = day_rule.times()
             times.each do |time|
               light_sch_model_week_rule_base[time.to_s] = day_rule.getValue(time)
@@ -472,7 +471,7 @@ class AppendixGPRMTests < Minitest::Test
           end
           light_sch_model_base[lgts.name.to_s] = light_sch_model_lgts_base
         end
-      
+
         # Check light schedule against expected light schedule
         light_sch_model_base.each do |key, value|
           value.each do |key1, value1|
@@ -484,7 +483,7 @@ class AppendixGPRMTests < Minitest::Test
                     space_type_var = value3
                   end
                 end
-                assert(((light_sch[run_id][key][key1][key2] - value2*(1.0-space_type_var)).abs < 0.001), "Lighting schedule for the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
+                assert(((light_sch[run_id][key][key1][key2] - value2 * (1.0 - space_type_var)).abs < 0.001), "Lighting schedule for the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
               end
             end
           end
@@ -535,9 +534,9 @@ class AppendixGPRMTests < Minitest::Test
 
     prototypes_base.each do |prototype, model|
       building_type, template, climate_zone, mod = prototype
-      
+
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_") unless mod.length == 0
+      mod_str = mod.flatten.join('_') unless mod.empty?
 
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
 
@@ -555,9 +554,9 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # Back calculate the I_75 (cfm/ft2), expected value is 1 cfm/ft2 in 90.1-PRM-2019
-      # Use input prototype's space envelope area because, even though the baseline model space 
+      # Use input prototype's space envelope area because, even though the baseline model space
       # conditioning can be different, 90.1-2019 Appendix G specified that:
-      # "The baseline building design shall be modeled with the same number of floors and 
+      # "The baseline building design shall be modeled with the same number of floors and
       # identical conditioned floor area as the proposed design."
       # So it is assumed that the baseline space conditioning category shall be the same as the proposed.
       conv_fact = OpenStudio.convert(1, 'm^3/s', 'ft^3/min').to_f / OpenStudio.convert(1, 'm^2', 'ft^2').to_f
@@ -566,96 +565,95 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   # Check hvac baseline system type selections
-  # Expected outcome depends on prototype name and 'mod' variation defined with 
+  # Expected outcome depends on prototype name and 'mod' variation defined with
   #
   # @param prototypes_base [Hash] Baseline prototypes
   def check_hvac_type(prototypes_base)
-
     prototypes_base.each do |prototype, model|
       building_type, template, climate_zone, mod = prototype
-      
+
       # Concatenate modifier functions and arguments
-      mod_str = mod.flatten.join("_") unless mod.length == 0
+      mod_str = mod.flatten.join('_') unless mod.empty?
 
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
       @bldg_type_alt_now = @bldg_type_alt[prototype]
 
       if building_type == 'MidriseApartment' && mod_str == ''
         # Residential model should be ptac or pthp, depending on climate
-        check_if_pkg_terminal(model, climate_zone, "MidriseApartment")
+        check_if_pkg_terminal(model, climate_zone, 'MidriseApartment')
       elsif @bldg_type_alt_now == 'Assembly' && building_type == 'MediumOffice'
         # This is a public assembly < 120 ksf, should be PSZ
-        check_if_psz(model, "Assembly < 120,000 sq ft.")
-        check_heat_type(model, climate_zone,"SZ", "HeatPump")
+        check_if_psz(model, 'Assembly < 120,000 sq ft.')
+        check_heat_type(model, climate_zone, 'SZ', 'HeatPump')
       elsif @bldg_type_alt_now == 'Assembly' && building_type == 'LargeHotel'
         # This is a public assembly > 120 ksf, should be SZ-CV
-        check_if_sz_cv(model, climate_zone, "Assembly < 120,000 sq ft.")
+        check_if_sz_cv(model, climate_zone, 'Assembly < 120,000 sq ft.')
       elsif building_type == 'Warehouse' && mod_str == ''
         # System type should be heating and ventilating
         # check_if_ht_vent(model, "Warehouse")
-        check_heat_type(model, climate_zone,"??????SZ???????", "Electric")
+        check_heat_type(model, climate_zone, '??????SZ???????', 'Electric')
       elsif building_type == 'RetailStripmall' && mod_str == ''
         # System type should be PSZ
-        check_if_psz(model, "RetailStripmall, one story, any area")
+        check_if_psz(model, 'RetailStripmall, one story, any area')
       elsif @bldg_type_alt_now == 'Retail' && building_type == 'PrimarySchool'
         # Single story retail is PSZ, regardless of floor area
-        check_if_psz(model, "retail, one story, floor area > 25 ksf.")
+        check_if_psz(model, 'retail, one story, floor area > 25 ksf.')
       elsif building_type == 'RetailStripmall' && mod_str == 'set_zone_multiplier_3'
         # System type should be PVAV with 10 zones
-        check_if_pvav(model, "retail > 25,000 sq ft, 3 stories")
+        check_if_pvav(model, 'retail > 25,000 sq ft, 3 stories')
       elsif building_type == 'SmallOffice' && mod_str == ''
         # System type should be PSZ
-        check_if_psz(model, "non-res, one story, < 25 ksf")
-        check_heat_type(model, climate_zone,"SZ", "HeatPump")
+        check_if_psz(model, 'non-res, one story, < 25 ksf')
+        check_heat_type(model, climate_zone, 'SZ', 'HeatPump')
       elsif building_type == 'PrimarySchool' && mod_str == ''
         # System type should be PVAV, some zones may be on PSZ systems
-        check_if_pvav(model, "nonres > 25,000 sq ft, < 150 ksf , 1 story")
-        check_heat_type(model, climate_zone,"MZ", "Electric")
+        check_if_pvav(model, 'nonres > 25,000 sq ft, < 150 ksf , 1 story')
+        check_heat_type(model, climate_zone, 'MZ', 'Electric')
       elsif building_type == 'SecondarySchool' && mod_str == ''
         # System type should be VAV/chiller
-        check_if_vav_chiller(model, "nonres > 150 ksf , 1 to 3 stories")
-        check_heat_type(model, climate_zone,"MZ", "Electric")
+        check_if_vav_chiller(model, 'nonres > 150 ksf , 1 to 3 stories')
+        check_heat_type(model, climate_zone, 'MZ', 'Electric')
       elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier_4'
         # nonresidential, 4 to 5 stories, <= 25 ksf --> PVAV
         # System type should be PVAV with 10 zones, area is 22,012 sf
-        check_if_pvav(model, "other nonres > 4 to 5 stories, <= 25 ksf")
+        check_if_pvav(model, 'other nonres > 4 to 5 stories, <= 25 ksf')
       elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier_5'
         # nonresidential, 4 to 5 stories, <= 150 ksf --> PVAV
         # System type should be PVAV with 10 zones, area is 27,515 sf
-        check_if_pvav(model, "other nonres > 4 to 5 stories, <= 150 ksf")
+        check_if_pvav(model, 'other nonres > 4 to 5 stories, <= 150 ksf')
       elsif building_type == 'PrimarySchool' && mod_str == 'set_zone_multiplier_4'
         # nonresidential, 4 to 5 stories, > 150 ksf --> VAV/chiller
         # System type should be PVAV with 10 zones, area is 22,012 sf
-        check_if_vav_chiller(model, "other nonres > 4 to 5 stories, > 150 ksf")
+        check_if_vav_chiller(model, 'other nonres > 4 to 5 stories, > 150 ksf')
       elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier_6'
         # 6+ stories, any floor area --> VAV/chiller
-        # This test has floor area 33,018 sf 
-        check_if_vav_chiller(model, " other nonres > 6 stories")
+        # This test has floor area 33,018 sf
+        check_if_vav_chiller(model, ' other nonres > 6 stories')
       elsif @bldg_type_alt_now == 'Hospital' && building_type == 'SmallOffice'
         # Hospital < 25 ksf is PVAV; different rule than non-res
-        check_if_pvav(model, "hospital, floor area < 25 ksf.")
+        check_if_pvav(model, 'hospital, floor area < 25 ksf.')
       elsif building_type == 'Hospital' && mod_str == ''
         # System type should be VAV/chiller, area is 241 ksf
-        check_if_vav_chiller(model, "hospital > 4 to 5 stories, > 150 ksf")
-        check_heat_type(model, climate_zone,"MZ", "Fuel")
+        check_if_vav_chiller(model, 'hospital > 4 to 5 stories, > 150 ksf')
+        check_heat_type(model, climate_zone, 'MZ', 'Fuel')
       elsif mod_str == 'make_lab_high_distrib_zone_exh' || mod_str == 'make_lab_high_system_exh'
         # All labs on a given floor of the building should be on a separate MZ system
         model.getAirLoopHVACs.each do |air_loop|
-            # identify hours of operation
-            has_lab = false
-            has_nonlab = false 
-            air_loop.thermalZones.each do |thermal_zone|
-              thermal_zone.spaces.each do |space|
-                space_type = space.spaceType.get.standardsSpaceType.get
-                if space_type == 'laboratory'
-                  has_lab = true
-                else
-                  has_nonlab = true
-                end
+          # identify hours of operation
+          has_lab = false
+          has_nonlab = false
+          air_loop.thermalZones.each do |thermal_zone|
+            thermal_zone.spaces.each do |space|
+              space_type = space.spaceType.get.standardsSpaceType.get
+              if space_type == 'laboratory'
+                has_lab = true
+              else
+                has_nonlab = true
               end
             end
-            assert(!(has_lab == true and has_nonlab == true), "System #{air_loop.name} has lab and nonlab spaces and lab exhaust > 15,000 cfm.")
-          end    
+          end
+          assert(!(has_lab == true && has_nonlab == true), "System #{air_loop.name} has lab and nonlab spaces and lab exhaust > 15,000 cfm.")
+        end
       elsif mod_str == 'make_lab_low_distrib_zone_exh'
         # Labs on a given floor of the building should be mixed with other space types on the main MZ system
         model.getAirLoopHVACs.each do |air_loop|
@@ -672,13 +670,13 @@ class AppendixGPRMTests < Minitest::Test
               end
             end
           end
-          assert(!(has_lab == true and has_nonlab == false), "System #{air_loop.name} has only lab spaces and lab exhaust < 15,000 cfm.")
-
+          assert(!(has_lab == true && has_nonlab == false), "System #{air_loop.name} has only lab spaces and lab exhaust < 15,000 cfm.")
         end
+      elsif building_type == 'LargeOffice'
+        # Check that the datacenter basement is assigned to system 11, PSZ-VAV
+        check_if_sz_vav(model)
       end
-
     end
-
   end
 
   # Check whether heat type meets expectations
@@ -688,27 +686,26 @@ class AppendixGPRMTests < Minitest::Test
   # mz_or_sz = MZ or SZ or PTU
   # expected_elec_heat_type = Electric or HeatPump
   def check_heat_type(model, climate_zone, mz_or_sz, expected_elec_heat_type)
-    if model.getAirLoopHVACs.size > 0
-      model.getAirLoopHVACs.each do |air_loop|
-        num_zones = air_loop.thermalZones.size
-        if (num_zones > 1 && mz_or_sz == 'MZ') || (num_zones == 1 && mz_or_sz == 'SZ')
-          # This is a multizone system, do the test
-          heat_type = model.airloop_primary_heat_type(air_loop).to_s
-          if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/
-            # Heat type is electric or heat pump
-            assert(heat_type == expected_elec_heat_type, "Incorrect heat type for #{air_loop.name.get}; expected #{expected_elec_heat_type}")
-          else
-            # Heat type is Fuel
-            assert(heat_type == "Fuel", "Incorrect heat type for #{air_loop.name.get}; expected Fuel")
-          end
+    return false unless !model.getAirLoopHVACs.size.empty?
+
+    model.getAirLoopHVACs.each do |air_loop|
+      num_zones = air_loop.thermalZones.size
+      if (num_zones > 1 && mz_or_sz == 'MZ') || (num_zones == 1 && mz_or_sz == 'SZ')
+        # This is a multizone system, do the test
+        heat_type = model.airloop_primary_heat_type(air_loop).to_s
+        if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/
+          # Heat type is electric or heat pump
+          assert(heat_type == expected_elec_heat_type, "Incorrect heat type for #{air_loop.name.get}; expected #{expected_elec_heat_type}")
+        else
+          # Heat type is Fuel
+          assert(heat_type == 'Fuel', "Incorrect heat type for #{air_loop.name.get}; expected Fuel")
         end
       end
     end
 
     # TODO: Also check zone equipment
-    if mz_or_sz == 'PTU' or mz_or_sz == 'SZ'
-
-    end
+    # if mz_or_sz == 'PTU' || mz_or_sz == 'SZ'
+    # end
   end
 
   # Check if all baseline system types are PSZ
@@ -744,7 +741,7 @@ class AppendixGPRMTests < Minitest::Test
         has_multizone = true
       end
     end
-    assert(has_multizone && num_dx_coils > 0 && has_chiller == false, "Baseline system selection failed; should be PVAV for " + sub_text)
+    assert(has_multizone && num_dx_coils > 0 && has_chiller == false, 'Baseline system selection failed; should be PVAV for ' + sub_text)
   end
 
   # Check if building has baseline VAV/chiller for at least one air loop
@@ -761,7 +758,7 @@ class AppendixGPRMTests < Minitest::Test
         has_multizone = true
       end
     end
-    assert(has_multizone && has_chiller, "Baseline system selection failed; should be VAV/chiller for " + sub_text)
+    assert(has_multizone && has_chiller, 'Baseline system selection failed; should be VAV/chiller for ' + sub_text)
   end
 
   # Check if baseline system type is PTAC or PTHP
@@ -777,6 +774,7 @@ class AppendixGPRMTests < Minitest::Test
       thermal_zone.equipment.each do |equip|
         # Skip HVAC components
         next unless equip.to_HVACComponent.is_initialized
+
         equip = equip.to_HVACComponent.get
         if equip.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
           has_ptac = true
@@ -798,11 +796,10 @@ class AppendixGPRMTests < Minitest::Test
       end
     end
     if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/
-      assert(pass_test , "Baseline system selection failed for climate #{climate_zone}: should be PTHP for " + sub_text)
+      assert(pass_test, "Baseline system selection failed for climate #{climate_zone}: should be PTHP for " + sub_text)
     else
-      assert(pass_test , "Baseline system selection failed for climate #{climate_zone}: should be PTAC for " + sub_text)
+      assert(pass_test, "Baseline system selection failed for climate #{climate_zone}: should be PTAC for " + sub_text)
     end
-
   end
 
   # Check if baseline system type is four pipe fan coil/ constant speed
@@ -817,24 +814,95 @@ class AppendixGPRMTests < Minitest::Test
       thermal_zone.equipment.each do |equip|
         # Skip HVAC components
         next unless equip.to_HVACComponent.is_initialized
+
         equip = equip.to_HVACComponent.get
         is_fpfc = equip.to_ZoneHVACFourPipeFanCoil.is_initialized
+
         if is_fpfc
           # pass test for FPFC if at least one zone equip is FPFC; others may be exhaust fan, or possibly something else
           pass_test = true
-        end  
+        end
         if is_fpfc
           # Also check heat type
           equip = equip.to_ZoneHVACFourPipeFanCoil.get
-          heat_type = model.coil_heat_type(equip.heatingCoil) 
-          if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/ 
+          heat_type = model.coil_heat_type(equip.heatingCoil)
+          if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/
             assert(heat_type == 'Electric', "Baseline system selection failed for climate #{climate_zone}: FPFC should have electric heat for " + sub_text)
           else
             assert(heat_type == 'Fuel', "Baseline system selection failed for climate #{climate_zone}: FPFC should have hot water heat for " + sub_text)
           end
         end
       end
-      assert(pass_test, "Baseline system selection failed: should be FPFC for " + sub_text)  
+      assert(pass_test, 'Baseline system selection failed: should be FPFC for ' + sub_text)
+    end
+  end
+
+  # Check if baseline system type is a single-zone system with variable-air-volume fan
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  def check_if_sz_vav(model)
+    model.getThermalZones.each do |zone|
+      # Get design cooling load of computer rooms
+      zone.spaces.each do |space|
+        if space.spaceType.get.standardsSpaceType.get == 'computer room'
+          zone_load_w = zone.coolingDesignLoad.to_f
+          zone_load_w *= zone.floorArea * zone.multiplier
+          zone_load = OpenStudio.convert(zone_load_w, 'W', 'Btu/hr').get
+          # Check that if inidivudal cooling zone load exceed 600,000 Btu/h a unitary system with SingleZoneVAV serves the zone
+          if zone_load >= 600000
+            # system 11 (PSZ-VAV) is required
+            zone_system_check = false
+            model.getAirLoopHVACUnitarySystems.each do |unit_system|
+              zone_system_check = true if unit_system.controllingZoneorThermostatLocation.get.name.to_s == zone.name.to_s && unit_system.controlType == 'SingleZoneVAV' && unit_system.coolingCoil.get.to_CoilCoolingWater.is_initialized
+            end
+            assert(zone_system_check, "Zone #{zone} should be served by a packaged single zone VAV system (system 11).")
+          end
+        end
+      end
+    end
+  end
+
+  # Check if SAT requirements for system 5 through 8 are implemented
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_sat_ctrl(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, mod = prototype
+
+      # Concatenate modifier functions and arguments
+      mod_str = mod.flatten.join('_') unless mod.empty?
+
+      model_baseline.getAirLoopHVACs.each do |airloop|
+        # Baseline system type identified based on airloop HVAC name
+        if airloop.name.to_s.include?('Sys5') || airloop.name.to_s.include?('Sys6') || airloop.name.to_s.include?('Sys7') || airloop.name.to_s.include?('Sys8')
+          # Get all SPM assigned to supply outlet node of the airloop
+          spms = airloop.supplyOutletNode.setpointManagers
+          spm_check = false
+          spms.each do |spm|
+            if spm.to_SetpointManagerWarmest.is_initialized
+
+              # Get SPM
+              spm_w = spm.to_SetpointManagerWarmest.get
+
+              # Retrieve SAT and SAT reset
+              max = spm_w.maximumSetpointTemperature
+              min = spm_w.minimumSetpointTemperature
+
+              # Calculate difference
+              dt_ip = max - min
+
+              # Convert to dT F
+              dt_si = OpenStudio.convert(dt_ip, 'K', 'R').get
+
+              # Check if requirement is met for SPM
+              spm_check = true if dt_si.round(0) == 5.0
+            end
+          end
+
+          # Check if requirement is met for airloop
+          assert(spm_check)
+        end
+      end
     end
   end
 
@@ -871,7 +939,6 @@ class AppendixGPRMTests < Minitest::Test
   def make_lab_low_distrib_zone_exh(model, arguments)
     convert_spaces_to_laboratory(model, 'PrimarySchoolComputerRoom')
     # Populate hash to allow this space type to persist when protoype space types are replaced later
- 
     # add exhaust fans to lab zones
     add_exhaust_fan_per_lab_zone(model)
 
@@ -892,7 +959,7 @@ class AppendixGPRMTests < Minitest::Test
         oa_area = oa_def.outdoorAirFlowperFloorArea
         oa_def.setOutdoorAirFlowperFloorArea(0.0029)
       end
-    end  
+    end
     return model
   end
 
@@ -929,7 +996,7 @@ class AppendixGPRMTests < Minitest::Test
           zone_area += space.floorArea
         end
       end
-      if lab_is_found == true      
+      if lab_is_found
         # add an exhaust fan
         zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
         zone_exhaust_fan.setName(thermal_zone.name.to_s + ' Exhaust Fan')
@@ -945,7 +1012,6 @@ class AppendixGPRMTests < Minitest::Test
         zone_exhaust_fan.addToThermalZone(thermal_zone)
       end
     end
-
   end
 
   # Change model to different building type
@@ -971,17 +1037,20 @@ class AppendixGPRMTests < Minitest::Test
     mult = arguments[0]
     model.getSpaces.sort.each do |space|
       next if @prototype_creator.space_conditioning_category(space) == 'Unconditioned'
+
       # Loop through all surfaces in this space
       space.surfaces.sort.each do |surface|
         # Skip non-outdoor surfaces
         next unless surface.outsideBoundaryCondition == 'Outdoors'
+
         # Skip non-walls
         next unless surface.surfaceType == 'RoofCeiling'
+
         # Subsurfaces in this surface
         surface.subSurfaces.sort.each do |ss|
           next unless ss.subSurfaceType == 'Skylight'
-          # increase the size of the skylight
 
+          # increase the size of the skylight
           @prototype_creator.sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, mult)
         end
       end
@@ -1004,7 +1073,8 @@ class AppendixGPRMTests < Minitest::Test
       'daylighting_control',
       'light_occ_sensor',
       'infiltration',
-      'hvac_baseline'
+      'hvac_baseline',
+      'sat_ctrl'
     ]
 
     # Get list of unique prototypes
@@ -1018,14 +1088,15 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
 
     # Run tests
-    check_wwr(prototypes_base['wwr']) if (tests.include? 'wwr')
-    check_srr(prototypes_base['srr']) if (tests.include? 'srr')
-    check_daylighting_control(prototypes_base['daylighting_control']) if (tests.include? 'daylighting_control')
-    check_residential_flag(prototypes_base['isresidential']) if (tests.include? 'isresidential')
-    check_envelope(prototypes_base['envelope']) if (tests.include? 'envelope')
-    check_lpd(prototypes_base['lpd']) if (tests.include? 'lpd')
-    check_light_occ_sensor(prototypes['light_occ_sensor'],prototypes_base['light_occ_sensor']) if (tests.include? 'light_occ_sensor')
-    check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if (tests.include? 'infiltration')
-    check_hvac_type(prototypes_base['hvac_baseline']) if (tests.include? 'hvac_baseline')
+    check_wwr(prototypes_base['wwr']) if tests.include? 'wwr'
+    check_srr(prototypes_base['srr']) if tests.include? 'srr'
+    check_daylighting_control(prototypes_base['daylighting_control']) if tests.include? 'daylighting_control'
+    check_residential_flag(prototypes_base['isresidential']) if tests.include? 'isresidential'
+    check_envelope(prototypes_base['envelope']) if tests.include? 'envelope'
+    check_lpd(prototypes_base['lpd']) if tests.include? 'lpd'
+    check_light_occ_sensor(prototypes['light_occ_sensor'], prototypes_base['light_occ_sensor']) if tests.include? 'light_occ_sensor'
+    check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if tests.include? 'infiltration'
+    check_hvac_type(prototypes_base['hvac_baseline']) if tests.include? 'hvac_baseline'
+    check_sat_ctrl(prototypes_base['sat_ctrl']) if tests.include? 'sat_ctrl'
   end
 end
