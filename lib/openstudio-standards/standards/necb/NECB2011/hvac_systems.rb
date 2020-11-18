@@ -2171,7 +2171,7 @@ class NECB2011
     end
     sys_name = "|"
     name_parts.each {|part| sys_name += "#{part}|"}
-    sys_name = sys_name.chop if (name_parts.last.strip.to_i rescue nil)
+    sys_name = sys_name.chop if (Integer(name_parts.last.strip) rescue false)
 
     airloop.setName(sys_name)
   end
