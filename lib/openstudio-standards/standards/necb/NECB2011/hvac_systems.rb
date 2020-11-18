@@ -373,9 +373,8 @@ class NECB2011
     # Assumed to be sensible and latent at all flow
     # This will now get data of the erv from the json file instead of hardcoding it. Defaults to NECB2011 erv we have been using.
     erv_name = 'Rotary-Minimum-Eff-Existing' if erv_name.nil?
-    erv_info = @standards_data['erv'].detect { |item| item['erv_name'] == erv_name }
-
-    raise("Could not find #{erv_name} in #{self.class.name} class' erv.json file or it's parents. The available ervs are #{@standards_data['erv'].map{|item| item['erv_name']}}") if erv_info.nil?
+    erv_info = @standards_data['tables']['erv']['table'].detect { |item| item['erv_name'] == erv_name }
+    raise("Could not find #{erv_name} in #{self.class.name} class' erv.json file or it's parents. The available ervs are #{@standards_data['tables']['erv']['table'].map{|item| item['erv_name']}}") if erv_info.nil?
 
     heat_exchanger_air_to_air_sensible_and_latent.setHeatExchangerType(erv_info['HeatExchangerType'])
     heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(erv_info['SensibleEffectivenessat100HeatingAirFlow'])
