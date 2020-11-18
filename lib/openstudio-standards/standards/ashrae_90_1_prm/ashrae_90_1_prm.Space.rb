@@ -18,7 +18,7 @@ class ASHRAE901PRM < Standard
         space.model.getSpaces.sort.each do |spc|
           # Get the space conditioning type
           space_cond_type = space_conditioning_category(spc)
-          total_exterior_wall_area += spc.exteriorWallArea unless space_cond_type == "Unconditioned"
+          total_exterior_wall_area += spc.exteriorWallArea unless space_cond_type == 'Unconditioned'
         end
         adj_infil_flow_ext_wall_area = tot_infil_m3_per_s / total_exterior_wall_area
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, adj infil = #{adj_infil_flow_ext_wall_area.round(8)} m^3/s*m^2 of above grade wall area.")
@@ -28,7 +28,7 @@ class ASHRAE901PRM < Standard
         space.model.getSpaces.sort.each do |spc|
           # Get the space conditioning type
           space_cond_type = space_conditioning_category(spc)
-          total_floor_area += spc.floorArea unless space_cond_type == "Unconditioned" || space.exteriorArea == 0
+          total_floor_area += spc.floorArea unless space_cond_type == 'Unconditioned' || space.exteriorArea == 0
         end
         adj_infil_flow_area = tot_infil_m3_per_s / total_floor_area
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, adj infil = #{adj_infil_flow_area.round(8)} m^3/s*m^2 of space floor area.")
@@ -57,6 +57,15 @@ class ASHRAE901PRM < Standard
 
     if infil_sch.nil?
       infil_sch = space.model.alwaysOnDiscreteSchedule
+    else
+      # Add specific schedule type object to insure compatibility with the OpenStudio infiltration object
+      infil_sch_limit_type = model_add_schedule_type_limits(space.model,
+                                                            name: 'Infiltration Schedule Type Limits',
+                                                            lower_limit_value: 0.0,
+                                                            upper_limit_value: 1.0,
+                                                            numeric_type: 'Continuous',
+                                                            unit_type: 'Dimensionless')
+      infil_sch.setScheduleTypeLimits(infil_sch_limit_type)
     end
 
     # Remove all pre-existing space infiltration objects
@@ -64,13 +73,13 @@ class ASHRAE901PRM < Standard
     
     # Get the space conditioning type
     space_cond_type = space_conditioning_category(space)
-    if space_cond_type != "Unconditioned"
+    if space_cond_type != 'Unconditioned'
       # Create an infiltration rate object for this space
       infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space.model)
       infiltration.setName("#{space.name} Infiltration")
       case infil_method.to_s
         when 'Flow/ExteriorWallArea'
-          infiltration.setFlowperExteriorWallArea(adj_infil_flow_ext_wall_area.round(13))
+          infiltration.setFlowperExteriorWallArea(adj_infil_flow_ext_wall_area.round(13)) if space.exteriorWallArea > 0
         when 'Flow/Area'
           infiltration.setFlowperSpaceFloorArea(adj_infil_flow_area.round(13)) if space.exteriorArea > 0
       end

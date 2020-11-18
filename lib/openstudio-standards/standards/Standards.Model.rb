@@ -203,10 +203,8 @@ class Standard
         sys_groups = model_prm_stable_baseline_system_groups(model, custom, hvac_building_type)
         # Also get hash of zoneName:boolean to record which zones have district heating, if any
         district_heat_zones = get_district_heating_zones(model)
-        # sys_groups.each {|key, value| puts "#{key} = #{value}" }
-        # district_heat_zones.each {|key, value| puts "#{key} = #{value}" }
       end
-      
+
       # Set the construction properties of all the surfaces in the model
       if /prm/i !~ template
         model_apply_standard_constructions(model, climate_zone)
@@ -227,11 +225,11 @@ class Standard
         model_apply_baseline_swh_loops(model, building_type)
       end
 
-      if /prm/i !~ template
-        # Determine the baseline HVAC system type for each of the groups of zones and add that system type.
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
-        sys_groups.each do |sys_group|
-          # Determine the primary baseline system type
+      # Determine the baseline HVAC system type for each of the groups of zones and add that system type.
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
+      sys_groups.each do |sys_group|
+        # Determine the primary baseline system type
+        if /prm/i !~ template
           system_type = model_prm_baseline_system_type(model,
                                                        climate_zone,
                                                        sys_group['occ'],
@@ -239,56 +237,35 @@ class Standard
                                                        sys_group['area_ft2'],
                                                        sys_group['stories'],
                                                        custom)
-
-          sys_group['zones'].sort.each_slice(5) do |zone_list|
-            zone_names = []
-            zone_list.each do |zone|
-              zone_names << zone.name.get.to_s
-            end
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
-          end
-
-          # Add the system type for these zones
-          model_add_prm_baseline_system(model,
-                                        system_type[0],
-                                        system_type[1],
-                                        system_type[2],
-                                        system_type[3],
-                                        sys_group['zones'])
-        end
-
-      else
-        # Path for standard versions 2016 and later
-        sys_groups.each do |sys_group|
-          # Determine the primary baseline system type
+        else
           system_type = model_prm_stable_baseline_system_type(model,
-                                                      hvac_building_type, 
-                                                      climate_zone,
-                                                      sys_group['occ'],
-                                                      sys_group['fuel'],
-                                                      sys_group['building_area_type_ft2'],
-                                                      sys_group['stories'],
-                                                      sys_group['zones'],
-                                                      district_heat_zones)
-
-          sys_group['zones'].sort.each_slice(5) do |zone_list|
-            zone_names = []
-            zone_list.each do |zone|
-              zone_names << zone.name.get.to_s
-            end
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
-          end
-
-          # Add the system type for these zones
-          model_add_prm_baseline_system(model,
-                                        system_type[0],
-                                        system_type[1],
-                                        system_type[2],
-                                        system_type[3],
-                                        sys_group['zones'])
+                                                              hvac_building_type,
+                                                              climate_zone,
+                                                              sys_group['occ'],
+                                                              sys_group['fuel'],
+                                                              sys_group['building_area_type_ft2'],
+                                                              sys_group['stories'],
+                                                              sys_group['zones'],
+                                                              district_heat_zones)
         end
 
+        sys_group['zones'].sort.each_slice(5) do |zone_list|
+          zone_names = []
+          zone_list.each do |zone|
+            zone_names << zone.name.get.to_s
+          end
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
+        end
+
+        # Add the system type for these zones
+        model_add_prm_baseline_system(model,
+                                      system_type[0],
+                                      system_type[1],
+                                      system_type[2],
+                                      system_type[3],
+                                      sys_group['zones'])
       end
+
       if /prm/i !~ template
         # Set the zone sizing SAT for each zone in the model
         model.getThermalZones.each do |zone|
@@ -838,16 +815,11 @@ class Standard
           break
         end
       end
-      if has_computer_room == true
+      if has_computer_room
         # Collect load for entire zone
-        clg_load_w_per_m2 = zn['zone'].coolingDesignLoad
-        zn['zone'].spaces.each do |space|
-          clg_load_btu_per_ft2 = 0.0
-          clg_load_w_per_m2 = 0.0
-          space_load_w = clg_load_w_per_m2 * space.floorArea * space.multiplier
-          space_load_btu = OpenStudio.convert(space_load_w, 'W', 'Btu/hr').get
-          zone_load += space_load_btu
-        end
+        zone_load_w = zn['zone'].coolingDesignLoad.to_f
+        zone_load_w *= zn['zone'].floorArea * zn['zone'].multiplier
+        zone_load = OpenStudio.convert(zone_load_w, 'W', 'Btu/hr').get
       end
       comp_room_loads[zn['zone'].name.get] = zone_load
       bldg_comp_room_load += zone_load
@@ -1468,7 +1440,7 @@ class Standard
 
   end
 
-  # determine whether heaing type is fuel or electric
+  # Determine whether heating type is fuel or electric
   # @param hvac_building_type [String] Key for lookup of baseline system type
   # @param climate_zone [String] full name of climate zone
   # @return [String] fuel or electric
@@ -1944,9 +1916,55 @@ class Standard
                                        chilled_water_loop,
                                        hot_water_loop: hot_water_loop,
                                        ventilation: true,
-                                       capacity_control_method: 'ConstantVolume')          
-        end  
+                                       capacity_control_method: 'ConstantVolume')
+        end
+      when 'SZ_VAV' # System 11, chilled water, heating type varies by climate zone
+        unless zones.empty?
+          # htg type
+          climate_zone = model_standards_climate_zone(model)
+          case climate_zone
+            when 'ASHRAE 169-2006-0A',
+              'ASHRAE 169-2006-0B',
+              'ASHRAE 169-2006-1A',
+              'ASHRAE 169-2006-1B',
+              'ASHRAE 169-2006-2A',
+              'ASHRAE 169-2006-2B',
+              'ASHRAE 169-2013-0A',
+              'ASHRAE 169-2013-0B',
+              'ASHRAE 169-2013-1A',
+              'ASHRAE 169-2013-1B',
+              'ASHRAE 169-2013-2A',
+              'ASHRAE 169-2013-2B',
+              heating_type = 'Electric'
+              hot_water_loop = nil
+            else
+              hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
+                                 model.getPlantLoopByName('Hot Water Loop').get
+                               else
+                                 hot_water_loop = model_add_hw_loop(model, main_heat_fuel)
+                               end
+              heating_type = 'Water'
+          end
 
+          # clg type
+          chilled_water_loop = if model.getPlantLoopByName('Chilled Water Loop').is_initialized
+                                 model.getPlantLoopByName('Chilled Water Loop').get
+                               else
+                                 chilled_water_loop = model_add_chw_loop(model, chw_pumping_type: 'const_pri')
+                               end
+
+          model_add_psz_vav(model,
+                            zones,
+                            heating_type: heating_type,
+                            cooling_type: 'WaterCooled',
+                            supplemental_heating_type: nil,
+                            hvac_op_sch: nil,
+                            fan_type: 'PSZ_VAV_System_Fan',
+                            oa_damper_sch: nil,
+                            hot_water_loop: hot_water_loop,
+                            chilled_water_loop: chilled_water_loop,
+                            minimum_volume_setpoint: 0.5)
+        end
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "System type #{system_type} is not a valid choice, nothing will be added to the model.")
         return false
