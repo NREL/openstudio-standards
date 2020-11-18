@@ -1668,6 +1668,8 @@ class ECMS
             stage.setPartLoadFractionCorrelationCurve(cool_plf_fplr) if cool_plf_fplr
           end
         end
+        coil.setName("CoilCoolingDXSingleSpeed_advdx") if (cop && coil_type == "SingleSpeed")
+        coil.setName("CoilCoolingDXMultiSpeed_advdx") if (cop && coil_type == "MultiSpeed")
       end
     end
   end
