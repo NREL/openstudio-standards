@@ -1307,8 +1307,8 @@ class Baseline9012013Test2 < Minitest::Test
           ptac = zone_equipment.to_ZoneHVACPackagedTerminalAirConditioner.get
           # check fan
           fan = ptac.supplyAirFan
-          unless fan.to_FanConstantVolume.is_initialized
-            failure_array << "Expected Fan serving Zone Equipment #{ptac.name} to be of type FanConstantVolume"
+          unless fan.to_FanOnOff.is_initialized
+            failure_array << "Expected Fan serving Zone Equipment #{ptac.name} to be of type FanOnOff"
           end
           # check cooling coil
           cooling_coil = ptac.coolingCoil
@@ -1475,8 +1475,8 @@ class Baseline9012013Test2 < Minitest::Test
           pthp = zone_equipment.to_ZoneHVACPackagedTerminalHeatPump.get
           # check fan
           fan = pthp.supplyAirFan
-          unless fan.to_FanConstantVolume.is_initialized
-            failure_array << "Expected Fan serving Zone Equipment #{pthp.name} to be of type FanConstantVolume"
+          unless fan.to_FanOnOff.is_initialized
+            failure_array << "Expected Fan serving Zone Equipment #{pthp.name} to be of type FanOnOff"
           end
           # check cooling coil
           cooling_coil = pthp.coolingCoil
