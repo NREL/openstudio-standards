@@ -1,0 +1,4 @@
+Fuel,Min Capacity (Btu per hr),Max Capacity (Btu per hr),Annual Fuel Utilization Efficiency (AFUE),Thermal Efficiency,Combustion Efficiency
+Electric,0,9999999,,1.0,
+NaturalGas,0,400000.0,0.924,,
+NaturalGas,400000.0,9999999,,0.81,
