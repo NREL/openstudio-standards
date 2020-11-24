@@ -401,7 +401,7 @@
       "bldg_area_max": 999999999.0,
       "min_area_qual": "GE",
       "max_area_qual": "LT",
-      "sys_type_num": 0.0,
+      "sys_type_num": 11.0,
       "system_type": "SZ-VAV",
       "electric_heat_type": "NA"
     },
@@ -416,7 +416,7 @@
       "bldg_area_max": 999999999.0,
       "min_area_qual": "GE",
       "max_area_qual": "LT",
-      "sys_type_num": 0.0,
+      "sys_type_num": 11.0,
       "system_type": "PSZ-AC",
       "electric_heat_type": "HP"
     }
