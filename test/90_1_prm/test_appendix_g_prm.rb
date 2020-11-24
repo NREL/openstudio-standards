@@ -672,9 +672,9 @@ class AppendixGPRMTests < Minitest::Test
           end
           assert(!(has_lab == true && has_nonlab == false), "System #{air_loop.name} has only lab spaces and lab exhaust < 15,000 cfm.")
         end
-      elsif building_type == 'LargeOffice'
+      elsif building_type == 'LargeOffice' || building_type == 'MediumOffice'
         # Check that the datacenter basement is assigned to system 11, PSZ-VAV
-        check_if_sz_vav(model)
+        check_cmp_dtctr_system_type(model)
       end
     end
   end
@@ -710,7 +710,7 @@ class AppendixGPRMTests < Minitest::Test
 
   # Check if all baseline system types are PSZ
   # @param model, sub_text for error messages
-  def check_if_psz(model, sub_text)
+  def check_if_psz(model, sub_text, zone: nil)
     num_zones = 0
     num_dx_coils = 0
     num_dx_coils += model.getCoilCoolingDXSingleSpeeds.size
@@ -718,9 +718,28 @@ class AppendixGPRMTests < Minitest::Test
     num_dx_coils += model.getCoilCoolingDXMultiSpeeds.size
     has_chiller = model.getPlantLoopByName('Chilled Water Loop').is_initialized
     model.getAirLoopHVACs.each do |air_loop|
-      num_zones = air_loop.thermalZones.size
-      # if num zones is greater than 1 for any system, then set as multizone
-      assert(num_zones = 1 && num_dx_coils > 0 && has_chiller == false, "Baseline system selection failed for #{air_loop.name}; should be PSZ for " + sub_text)
+      if zone.nil?
+        num_zones = air_loop.thermalZones.size
+        # if num zones is greater than 1 for any system, then set as multizone
+        assert(num_zones = 1 && num_dx_coils > 0 && has_chiller == false, "Baseline system selection failed for #{air_loop.name}; should be PSZ for " + sub_text)
+      else
+        th_zones = []
+        air_loop.thermalZones.each { |th_zone| th_zones << th_zone.name.to_s }
+        if th_zones.include? zone
+          # If multizone system
+          return false if air_loop.thermalZones.size > 1
+
+          zone_system_check = false
+          model.getAirLoopHVACUnitarySystems.each do |unit_system|
+            # Check if airloop includes a unitary system with constant volume fan single speed DX cooling coil
+            zone_system_check = true if unit_system.controllingZoneorThermostatLocation.get.name.to_s == zone.name.to_s &&
+                                        unit_system.controlType == 'Load' &&
+                                        unit_system.coolingCoil.get.to_CoilCoolingDXSingleSpeed.is_initialized &&
+                                        unit_system.supplyFan.get.to_FanOnOff.is_initialized
+          end
+          return zone_system_check
+        end
+      end
     end
   end
 
@@ -840,7 +859,9 @@ class AppendixGPRMTests < Minitest::Test
   # Check if baseline system type is a single-zone system with variable-air-volume fan
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
-  def check_if_sz_vav(model)
+  def check_cmp_dtctr_system_type(model)
+    zone_load_s = 0
+    # Individual zone load check
     model.getThermalZones.each do |zone|
       # Get design cooling load of computer rooms
       zone.spaces.each do |space|
@@ -848,18 +869,40 @@ class AppendixGPRMTests < Minitest::Test
           zone_load_w = zone.coolingDesignLoad.to_f
           zone_load_w *= zone.floorArea * zone.multiplier
           zone_load = OpenStudio.convert(zone_load_w, 'W', 'Btu/hr').get
-          # Check that if inidivudal cooling zone load exceed 600,000 Btu/h a unitary system with SingleZoneVAV serves the zone
+          zone_load_s += zone_load
           if zone_load >= 600000
-            # system 11 (PSZ-VAV) is required
-            zone_system_check = false
-            model.getAirLoopHVACUnitarySystems.each do |unit_system|
-              zone_system_check = true if unit_system.controllingZoneorThermostatLocation.get.name.to_s == zone.name.to_s && unit_system.controlType == 'SingleZoneVAV' && unit_system.coolingCoil.get.to_CoilCoolingWater.is_initialized
-            end
-            assert(zone_system_check, "Zone #{zone} should be served by a packaged single zone VAV system (system 11).")
+            # System 11 (PSZ-VAV) is required
+            assert(check_if_sz_vav(model, zone), "Zone #{zone.name} should be served by a packaged single zone VAV system (system 11).")
+          elsif zone_load < 600000
+            # System 3 or 4 is required
+            assert(check_if_psz(model, '', zone: zone), "Zone #{zone.name} should be served by a packaged single zone CAV system (system 3 or 4).")
           end
         end
       end
     end
+
+    # Building load check
+    return false unless zone_load_s > 3000000
+
+    model.getThermalZones.each do |zone|
+      zone.spaces.each do |space|
+        if space.spaceType.get.standardsSpaceType.get == 'computer room'
+          # System 11 is required
+          assert(check_if_sz_vav(model, zone), "Zone #{zone.name} should be served by a packaged single zone VAV system (system 11) because building computer rooms peak load exceed 3,000, 000 Btu/h.")
+        end
+      end
+    end
+  end
+
+  def check_if_sz_vav(model, zone)
+    zone_system_check = false
+    model.getAirLoopHVACUnitarySystems.each do |unit_system|
+      # Check if the system is system 11 by checking if the load control type is SingleZoneVAV
+      zone_system_check = true if unit_system.controllingZoneorThermostatLocation.get.name.to_s == zone.name.to_s &&
+                                  unit_system.controlType == 'SingleZoneVAV' &&
+                                  unit_system.coolingCoil.get.to_CoilCoolingWater.is_initialized
+    end
+    return zone_system_check
   end
 
   # Check if SAT requirements for system 5 through 8 are implemented
@@ -874,10 +917,17 @@ class AppendixGPRMTests < Minitest::Test
 
       model_baseline.getAirLoopHVACs.each do |airloop|
         # Baseline system type identified based on airloop HVAC name
-        if airloop.name.to_s.include?('Sys5') || airloop.name.to_s.include?('Sys6') || airloop.name.to_s.include?('Sys7') || airloop.name.to_s.include?('Sys8')
+        if airloop.name.to_s.include?('Sys5') ||
+           airloop.name.to_s.include?('Sys6') ||
+           airloop.name.to_s.include?('Sys7') ||
+           airloop.name.to_s.include?('Sys8')
           # Get all SPM assigned to supply outlet node of the airloop
           spms = airloop.supplyOutletNode.setpointManagers
           spm_check = false
+
+          # Report if multiple setpoint managers have been assigned to the air loop supply outlet node
+          assert(false, 'Multiple setpoint manager have been assigned to the air loop supply outlet node.') unless spms.size == 1
+
           spms.each do |spm|
             if spm.to_SetpointManagerWarmest.is_initialized
 
@@ -924,7 +974,7 @@ class AppendixGPRMTests < Minitest::Test
   # @param model, arguments[]
   def make_lab_high_distrib_zone_exh(model, arguments)
     # Convert all classrooms to laboratory
-    convert_spaces_to_laboratory(model, 'PrimarySchoolClassroom')
+    convert_spaces_from_to(model, ['PrimarySchoolClassroom', 'laboratory'])
 
     # add exhaust fans to lab zones
     add_exhaust_fan_per_lab_zone(model)
@@ -937,7 +987,7 @@ class AppendixGPRMTests < Minitest::Test
   # Add an exhaust fan to each zone
   # @param model, arguments[]
   def make_lab_low_distrib_zone_exh(model, arguments)
-    convert_spaces_to_laboratory(model, 'PrimarySchoolComputerRoom')
+    convert_spaces_from_to(model, ['PrimarySchoolComputerRoom', 'laboratory'])
     # Populate hash to allow this space type to persist when protoype space types are replaced later
     # add exhaust fans to lab zones
     add_exhaust_fan_per_lab_zone(model)
@@ -950,7 +1000,7 @@ class AppendixGPRMTests < Minitest::Test
   # @param model, arguments[]
   def make_lab_high_system_exh(model, arguments)
     # Convert all classrooms to laboratory
-    convert_spaces_to_laboratory(model, 'PrimarySchoolClassroom')
+    convert_spaces_from_to(model, ['PrimarySchoolClassroom', 'laboratory'])
 
     # reset OA make lab space OA exceed 17,000 cfm
     oa_name = 'PrimarySchool Classroom Ventilation'
@@ -964,8 +1014,9 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   # Convert specified space types to laboratory space type
-  # @param model, bldg_space_to_convert is name of existing space type to convert to laboratory
-  def convert_spaces_to_laboratory(model, bldg_space_to_convert)
+  # @param model, from_bldg_space is name of existing space type to convert to laboratory
+  def convert_spaces_from_to(model, arguments)
+    from_bldg_space, to_bldg_space = arguments
     # Convert all spaces of type to convert to laboratory
     model.getSpaceTypes.sort.each do |space_type|
       next if space_type.floorArea == 0
@@ -975,12 +1026,22 @@ class AppendixGPRMTests < Minitest::Test
                              end
       std_bldg_type = space_type.standardsBuildingType.get
       bldg_type_space_type = std_bldg_type + space_type.standardsSpaceType.get
-      if bldg_type_space_type == bldg_space_to_convert
-        space_type.setStandardsSpaceType('laboratory')
+      if bldg_type_space_type == from_bldg_space
+        space_type.setStandardsSpaceType(to_bldg_space)
         # Populate hash to allow this space type to persist when protoype space types are replaced later
-        @lpd_space_types_alt[std_bldg_type + 'laboratory'] = 'laboratory'
+        @lpd_space_types_alt[std_bldg_type + to_bldg_space] = to_bldg_space
       end
     end
+    return model
+  end
+
+  # Change (medium) office space types to computer room
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param arguments [Array] Not used
+  def convert_spaces_to_cmp_rms(model, arguments)
+    convert_spaces_from_to(model, ['OfficeWholeBuilding - Md Office', 'computer room'])
+    return model
   end
 
   # Add exhaust fan object to each lab zone in model
@@ -1056,6 +1117,24 @@ class AppendixGPRMTests < Minitest::Test
       end
     end
 
+    return model
+  end
+
+  # Applies a multipler to increase the design cooling load of datacenters
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param epd_multiplier [Array] EPD multiplier
+  # @returns [OpenStudio::model::Model]
+  def increase_computer_rooms_epd(model, epd_multiplier)
+    model.getThermalZones.each do |zone|
+      zone.spaces.each do |space|
+        if space.spaceType.get.standardsSpaceType.get.to_s.downcase.include?('data center') ||
+           space.spaceType.get.standardsSpaceType.get.to_s.downcase.include?('computer room')
+          elec_eqp = space.spaceType.get.electricEquipment
+          elec_eqp[0].setMultiplier(epd_multiplier[0])
+        end
+      end
+    end
     return model
   end
 
