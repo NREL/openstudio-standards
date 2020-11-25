@@ -5706,6 +5706,9 @@ class Standard
   #   HighTemperature (180F supply) or LowTemperature (120F supply)
   def model_get_or_add_hot_water_loop(model, heat_fuel,
                                       hot_water_loop_type: 'HighTemperature')
+    if heat_fuel.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Hot water loop fuel type is nil.  Cannot add hot water loop.')
+    end
     make_new_hot_water_loop = true
     hot_water_loop = nil
     # retrieve the existing hot water loop or add a new one if not of the correct type
@@ -6252,6 +6255,8 @@ class Standard
     when 'DOAS'
       if air_loop_heating_type == 'Water'
         case main_heat_fuel
+        when nil
+          hot_water_loop = nil
         when 'AirSourceHeatPump'
           hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                            hot_water_loop_type: 'LowTemperature')
@@ -6280,6 +6285,8 @@ class Standard
     when 'DOAS with DCV'
       if air_loop_heating_type == 'Water'
         case main_heat_fuel
+        when nil
+          hot_water_loop = nil
         when 'AirSourceHeatPump'
           hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                            hot_water_loop_type: 'LowTemperature')
@@ -6307,6 +6314,8 @@ class Standard
     when 'DOAS with Economizing'
       if air_loop_heating_type == 'Water'
         case main_heat_fuel
+        when nil
+          hot_water_loop = nil
         when 'AirSourceHeatPump'
           hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                            hot_water_loop_type: 'LowTemperature')
