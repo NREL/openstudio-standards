@@ -389,6 +389,36 @@
       "sys_type_num": 0.0,
       "system_type": "Unconditioned",
       "electric_heat_type": "NA"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "computer room szvav",
+      "flrs_range_group": 1.0,
+      "bldg_flrs_min": 1.0,
+      "bldg_flrs_max": 999.0,
+      "area_range_group": 1.0,
+      "bldg_area_min": 0.0,
+      "bldg_area_max": 999999999.0,
+      "min_area_qual": "GE",
+      "max_area_qual": "LT",
+      "sys_type_num": 11.0,
+      "system_type": "SZ-VAV",
+      "electric_heat_type": "NA"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "computer room psz",
+      "flrs_range_group": 1.0,
+      "bldg_flrs_min": 1.0,
+      "bldg_flrs_max": 999.0,
+      "area_range_group": 1.0,
+      "bldg_area_min": 0.0,
+      "bldg_area_max": 999999999.0,
+      "min_area_qual": "GE",
+      "max_area_qual": "LT",
+      "sys_type_num": 11.0,
+      "system_type": "PSZ-AC",
+      "electric_heat_type": "HP"
     }
   ]
 }
