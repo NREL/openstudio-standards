@@ -2169,7 +2169,7 @@ class NECB2011
         name_parts[i] = "srf>#{sys_rf}"
       end
     end
-    sys_name = "|"
+    sys_name = ""
     name_parts.each {|part| sys_name += "#{part}|"}
     sys_name = sys_name.chop if (Integer(name_parts.last.strip) rescue false)
 
