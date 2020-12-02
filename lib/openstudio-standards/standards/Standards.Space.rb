@@ -1753,6 +1753,286 @@ class Standard
     return load_w
   end
 
+  # Determine the design internal load (W) for
+  # this space without space multipliers.
+  # This include People, Lights, Electric Equipment, and Gas Equipment.  
+  # This version accounts for operating schedules
+  # and fraction lost for equipment
+  # @author Doug Maddox, PNNL
+  # @ param space object
+  # @return [Double] 8760 array of the design internal load, in W, for this space
+  def space_internal_load_annual_array(space)
+    load_w = 0.0
+
+    # For each type of load, first convert schedules to 8760 arrays so coincident load can be determined
+    ppl_values = Array.new(8760, 0)
+    ltg_values = Array.new(8760, 0)
+    load_values = Array.new(8760, 0)
+
+    #ppl_values = []
+    #ltg_values = []
+    #load_values = []
+
+    #(0..8759).each do |ihr|
+    #  ppl_values[ihr] = 0
+    #  ltg_values[ihr] = 0
+    #  load_values[ihr] = 0
+    #end
+
+    # People
+    ppl_total = 0
+    space.people.each do |people|
+      w_per_person = 125 # Initial assumption
+      occ_sch_max = 1
+      act_sch_ruleset = nil
+      act_sch = people.activityLevelSchedule
+      if people.isActivityLevelScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.peopleActivityLevelSchedule.empty?
+            act_sch = space.spaceType.get.defaultScheduleSet.get.peopleActivityLevelSchedule.get
+          end
+        end
+      end
+       if act_sch.is_initialized
+        if act_sch.get.to_ScheduleRuleset.is_initialized
+          act_sch_ruleset = act_sch.get.to_ScheduleRuleset.get
+          act_sch_values = get_8760_values_from_schedule_ruleset(model, act_sch_ruleset)
+          w_per_person = schedule_ruleset_annual_min_max_value(act_sch_ruleset)['max']
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} people activity schedule is not a Schedule:Ruleset.  Assuming #{w_per_person}W/person.")
+        end
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} people activity schedule not found.  Assuming #{w_per_person}W/person.")
+      end
+
+      occ_sch_ruleset = nil
+      occ_sch = people.numberofPeopleSchedule
+      if people.isNumberofPeopleScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.numberofPeopleSchedule.empty?
+            occ_sch = space.spaceType.get.defaultScheduleSet.get.numberofPeopleSchedule.get
+          end
+        end
+      end
+      if occ_sch.is_initialized
+        if occ_sch.get.to_ScheduleRuleset.is_initialized
+          occ_sch_ruleset = occ_sch.get.to_ScheduleRuleset.get
+          occ_sch_values = get_8760_values_from_schedule_ruleset(model, occ_sch_ruleset)
+          occ_sch_max = schedule_ruleset_annual_min_max_value(occ_sch_ruleset)['max']
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} people schedule is not a Schedule:Ruleset.  Assuming #{w_per_person}W/person.")
+        end
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} people schedule not found.  Assuming #{w_per_person}W/person.")
+      end
+
+      num_ppl = people.getNumberOfPeople(space.floorArea)
+      ppl_total += num_ppl
+
+      act_sch_value = w_per_person 
+      occ_sch_value = occ_sch_max 
+      (0..8759).each do |ihr|
+        act_sch_value = act_sch_values[ihr] unless act_sch_ruleset.nil?
+        occ_sch_value = occ_sch_values[ihr] unless occ_sch_ruleset.nil?
+        ppl_values[ihr] += num_ppl * act_sch_value * occ_sch_value
+      end
+
+      load_w += ppl_w
+    end
+
+    # Lights objects
+    space.lights.each do |light|
+      ltg_sch_ruleset = nil
+      ltg_sch = light.schedule
+      ltg_w = light.getLightingPower(space.floorArea, ppl_total)
+
+      if light.isScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.lightingSchedule.empty?
+            ltg_sch = space.spaceType.get.defaultScheduleSet.get.lightingSchedule.get
+          end
+        end
+      end
+      if ltg_sch.is_initialized
+        if ltg_sch.get.to_ScheduleRuleset.is_initialized
+          ltg_sch_ruleset = ltg_sch.get.to_ScheduleRuleset.get
+          ltg_sch_values = get_8760_values_from_schedule_ruleset(model, ltg_sch_ruleset)
+          ltg_sch_max = schedule_ruleset_annual_min_max_value(ltg_sch_ruleset)['max']
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} lighting schedule is not a Schedule:Ruleset.  Assuming #{ltg_w} W.")
+        end
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} lighting schedule not found.  Assuming #{ltg_w} W.")
+      end
+
+      ltg_sch_value = 1.0
+      (0..8759).each do |ihr|
+        ltg_sch_value = ltg_sch_values[ihr] unless ltg_sch_ruleset.nil?
+        ltg_values[ihr] += ltg_w * ltg_sch_value
+      end
+    end
+
+    # Luminaire Objects
+    space.Luminairs.each do |light|
+      ltg_sch_ruleset = nil
+      ltg_sch = light.schedule
+      ltg_w = light.lightingPower(space.floorArea, ppl_total)
+      # not sure if above line is valid, so calculate from parts instead until above can be verified
+      ltg_w = light.getPowerPerFloorArea(space.floorArea) * space.floorArea
+      ltg_w += light.getPowerPerPerson(ppl_total) * ppl_total
+
+      if light.isScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.lightingSchedule.empty?
+            ltg_sch = space.spaceType.get.defaultScheduleSet.get.lightingSchedule.get
+          end
+        end
+      end
+      if ltg_sch.is_initialized
+        if ltg_sch.get.to_ScheduleRuleset.is_initialized
+          ltg_sch_ruleset = ltg_sch.get.to_ScheduleRuleset.get
+          ltg_sch_values = get_8760_values_from_schedule_ruleset(model, ltg_sch_ruleset)
+          ltg_sch_max = schedule_ruleset_annual_min_max_value(ltg_sch_ruleset)['max']
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} lighting schedule is not a Schedule:Ruleset.  Assuming #{ltg_w} W.")
+        end
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} lighting schedule not found.  Assuming #{ltg_w} W.")
+      end
+
+      ltg_sch_value = 1.0
+      (0..8759).each do |ihr|
+        ltg_sch_value = ltg_sch_values[ihr] unless ltg_sch_ruleset.nil?
+        ltg_values[ihr] += ltg_w * ltg_sch_value
+      end
+    end
+
+    # Equipment Loads
+    eq_w = space.electricEquipmentPower
+    space.electricEquipment.each do |equip|
+      eqp_type = 'electric equipment'
+      space_get_equip_annual_array(model, space, equip, load_sch, eqp_type, load_values)
+    end
+    space.gasEquipment.each do |equip|
+      eqp_type = 'gas equipment'
+      space_get_equip_annual_array(model, space, equip, load_sch, eqp_type, load_values)
+    end
+    space.steamEquipment.each do |equip|
+      eqp_type = 'steam equipment'
+      space_get_equip_annual_array(model, space, equip, load_sch, eqp_type, load_values)
+    end
+    space.hotWaterEquipment.each do |equip|
+      eqp_type = 'hot water equipment'
+      space_get_equip_annual_array(model, space, equip, load_sch, eqp_type, load_values)
+    end
+    space.otherEquipment.each do |equip|
+      eqp_type = 'other equipment'
+      space_get_equip_annual_array(model, space, equip, load_sch, eqp_type, load_values)
+    end
+
+    # Add lighting and people to the load values array
+    (0..8759).each do |ihr|
+      load_values[ihr] += ppl_values[ihr] + ltg_values[ihr]
+    end
+
+      return load_values
+  end
+
+  def space_get_equip_annual_array(model, space, equip, load_sch, eqp_type, load_values)
+
+    case eqp_type 
+    when 'electric equipment'
+      load_sch = equip.schedule
+      load_lost = equip.electricEquipmentDefinition.fractionLost              # eqp-type-specific
+      load_w = equip.getDesignLevel(space.floorArea, ppl_total) * (1 - load_lost)
+
+      if equip.isScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.electricEquipmentSchedule.empty?   # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.electricEquipmentSchedule.get  # eqp-type-specific
+          end
+        end
+      end
+    when 'gas equipment'
+      load_sch = equip.schedule
+      load_lost = equip.gasEquipmentDefinition.fractionLost              # eqp-type-specific
+      load_w = equip.getDesignLevel(space.floorArea, ppl_total) * (1 - load_lost)
+
+      if equip.isScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.gasEquipmentSchedule.empty?   # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.gasEquipmentSchedule.get  # eqp-type-specific
+          end
+        end
+      end
+    when 'steam equipment'
+      load_sch = equip.schedule
+      load_lost = equip.steamEquipmentDefinition.fractionLost              # eqp-type-specific
+      load_w = equip.getDesignLevel(space.floorArea, ppl_total) * (1 - load_lost)
+
+      if equip.isScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.steamEquipmentSchedule.empty?   # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.steamEquipmentSchedule.get  # eqp-type-specific
+          end
+        end
+      end
+    when 'hot water equipment'
+      load_sch = equip.schedule
+      load_lost = equip.hotWaterEquipmentDefinition.fractionLost              # eqp-type-specific
+      load_w = equip.getDesignLevel(space.floorArea, ppl_total) * (1 - load_lost)
+
+      if equip.isScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.hotWaterEquipmentSchedule.empty?   # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.hotWaterEquipmentSchedule.get  # eqp-type-specific
+          end
+        end
+      end
+    when 'other equipment'
+      load_sch = equip.schedule
+      load_lost = equip.otherEquipmentDefinition.fractionLost              # eqp-type-specific
+      load_w = equip.getDesignLevel(space.floorArea, ppl_total) * (1 - load_lost)
+
+      if equip.isScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.otherEquipmentSchedule.empty?   # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.otherEquipmentSchedule.get  # eqp-type-specific
+          end
+        end
+      end
+    end
+
+    load_sch_ruleset = nil
+    if load_sch.is_initialized
+      if load_sch.get.to_ScheduleRuleset.is_initialized
+        load_sch_ruleset = load_sch.get.to_ScheduleRuleset.get
+        load_sch_values = get_8760_values_from_schedule_ruleset(model, load_sch_ruleset)
+        load_sch_max = schedule_ruleset_annual_min_max_value(load_sch_ruleset)['max']
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} #{eqp_type} schedule is not a Schedule:Ruleset.  Assuming #{load_w} W.")
+      end
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} #{eqp_type} schedule not found.  Assuming #{load_w} W.")
+    end
+
+    load_sch_value = 1.0
+    (0..8759).each do |ihr|
+      load_sch_value = load_sch_values[ihr] unless load_sch_ruleset.nil?
+      load_values[ihr] += load_w * load_sch_value
+    end
+    return load_values
+  end
+
   # will return a sorted array of array of spaces and connected area (Descending)
   def space_get_adjacent_spaces_with_shared_wall_areas(space, same_floor = true)
     same_floor_spaces = []
