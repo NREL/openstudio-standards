@@ -206,6 +206,17 @@ class Standard
         # sys_groups.each {|key, value| puts "#{key} = #{value}" }
         # district_heat_zones.each {|key, value| puts "#{key} = #{value}" }
 
+        # DEM: Temporary lines to test avail manager scheduled
+        # avail_mgr_sch = OpenStudio::Model::AvailabilityManagerScheduled.new(model)
+        # fan_sched_x = model.getScheduleRulesetByName('Always On Discrete')
+        # fan_sched_x = model.getScheduleConstantByName('Always On Discrete').get
+        # avail_mgr_sch.setSchedule(fan_sched_x)
+        # avail_mgr_sch.setSchedule(model.alwaysOnDiscreteSchedule)
+
+        # model.getAirLoopHVACs.each do |air_loop|
+        #   air_loop.addAvailabilityManager(avail_mgr_sch)
+        # end
+
         # Store occupancy and fan operation schedules for each zone before deleting HVAC objects
         zone_fan_scheds = get_fan_schedule_for_each_zone(model)
       end
@@ -1222,12 +1233,12 @@ class Standard
     # Start with air loops
     model.getAirLoopHVACs.sort.each do |air_loop_hvac|
       fan_schedule_8760 = []
-      avail_sch = air_loop_hvac.availabilitySchedule
-      avail_sch_ruleset = avail_sch.to_ScheduleRuleset.get
-      fan_8760_air_loop = get_8760_values_from_schedule_ruleset(model, avail_sch_ruleset)
+      # avail_sch = air_loop_hvac.availabilitySchedule
+      # avail_sch_ruleset = avail_sch.to_ScheduleRuleset.get
+      # fan_8760_air_loop = get_8760_values_from_schedule_ruleset(model, avail_sch_ruleset)
       # Check for availability managers
-      # In most cases there will only be one availability manager
-      # But we need to be able to handle more than one
+      # Assume only AvailabilityManagerScheduled will control fan schedule
+      # TODO: also check AvailabilityManagerScheduledOn
       avail_mgrs = air_loop_hvac.availabilityManagers
       # if avail_mgrs.is_initialized
       if !avail_mgrs.nil?
@@ -1235,47 +1246,19 @@ class Standard
           # avail_mgr = avail_mgr.get
           # Check each type of AvailabilityManager
           # If the current one matches, get the fan schedule
-          if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
-            avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
-            fan_schedule = ''
-
-            objHash = getObjectHash(avail_mgr)
-            fan_schedule = objHash["Fan Schedule"]
-            stopit = 1
-
-            # File.open('test4doug.txt', 'w') {|f| f.write(avail_mgr.methods)}
-
-
-            # avail_mgr::FanSchedule()
-            # fan_schedule = avail_mgr.fanSchedule.to_fanSchedule.is_initialized
-            # if !fan_schedule.nil?
-            if fan_schedule != ''
-              fan_schedule = avail_mgr.fanSchedule.get
-              if fan_schedule_8760.nil? 
-                # Initialize the 8760 schedule 
-                fan_schedule_8760 = get_8760_values_from_schedule_ruleset(model, schedule_ruleset)
-              else
-                # Read schedule into new array and then merge with the existing array
-                fan_schedule_8760_new = get_8760_values_from_schedule_ruleset(model, schedule_ruleset)
-                for hour in 0..8759
-                  if fan_schedule_8760[hour] > 0 && fan_schedule_8760_new[hour] <= 0
-                    # Change value for this hour to zero if ANY avail manager has it set to zero
-                    fan_schedule_8760[hour] = 0
-                  end
-                end
-              end
-            else
-              # If there are no availability managers, then use the schedule in the supply fan object
-              # unless air_loop_hvac.supplyFan.empty?
-              test = air_loop_hvac.supplyFan.empty?
-              fan_schedule = get_fan_sched_for_airloop(model, air_loop_hvac)
-              # end
-            end
+          if avail_mgr.to_AvailabilityManagerScheduled.is_initialized
+            avail_mgr = avail_mgr.to_AvailabilityManagerScheduled.get
+            fan_schedule = avail_mgr.schedule
+            # fan_sch_translator = ScheduleTranslator.new(model, fan_schedule)
+            # fan_sch_ruleset = fan_sch_translator.translate
+            fan_schedule_8760 = get_8760_values_from_schedule(model, fan_schedule)
           end
         end
-      else
+      end
+      if fan_schedule_8760.empty?
         # If there are no availability managers, then use the schedule in the supply fan object
         test = air_loop_hvac.supplyFan.empty?
+        fan_schedule = get_fan_sched_for_airloop(model, air_loop_hvac)
         if airloop.supplyFan.get.to_FanConstantVolume.is_initialized
           supply_fan = airloop.supplyFan.get.to_FanConstantVolume.get
           fan_schedule = supply_fan.AvailabilitySchedule.get
@@ -1303,20 +1286,6 @@ class Standard
 
   end
 
-  def getObjectHash(obj)
-    fields_array = obj.to_s.split(/\n/)
-    output_hash = {"object type" => fields_array.shift.split(/,/)[0]}
-    right = nil
-    fields_array.each do |ori_field|
-      left, right = ori_field.split(/[,;]/)
-      left = left.strip
-      right.slice!("!-")
-      right = right.strip
-      output_hash[right] = left
-    end
-    return output_hash
-  end
-
   def get_fan_sched_for_airloop(model, air_loop)
     if !air_loop.supplyFan.empty?
       if airloop.supplyFan.get.to_FanConstantVolume.is_initialized
@@ -1325,6 +1294,10 @@ class Standard
       end
       if airloop.supplyFan.get.to_FanSystemModel.is_initialized
         supply_fan = airloop.supplyFan.get.to_FanSystemModel.get
+        fan_schedule = supply_fan.AvailabilitySchedule.get
+      end
+      if airloop.supplyFan.get.to_FanVariableVolume.is_initialized
+        supply_fan = airloop.supplyFan.get.to_FanVariableVolume.get
         fan_schedule = supply_fan.AvailabilitySchedule.get
       end
     else
@@ -1337,41 +1310,62 @@ class Standard
         when 'OS_AirLoopHVAC_UnitaryHeatCool_VAVChangeoverBypass'
           component = component.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.get
           supply_fan = component.supplyFan.get
-          fan_schedule = supply_fan.AvailabilitySchedule.get
+          # fan_schedule = supply_fan.AvailabilitySchedule.get
         when 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir'
           component = component.to_AirLoopHVACUnitaryHeatPumpAirToAir.get
           supply_fan = component.supplyFan.get
-          fan_schedule = supply_fan.AvailabilitySchedule.get
+          # fan_schedule = supply_fan.AvailabilitySchedule.get
         when 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir_MultiSpeed'
           component = component.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get
           supply_fan = component.supplyFan.get
-          fan_schedule = supply_fan.AvailabilitySchedule.get
+          # fan_schedule = supply_fan.AvailabilitySchedule.get
         when 'OS_AirLoopHVAC_UnitarySystem'
           component = component.to_AirLoopHVACUnitarySystem.get
-
           supply_fan = component.supplyFan.get
           # sched_name = supply_fan.availabilitySchedule.name.get.to_s
-          fan_name = supply_fan.name.get.to_s
-          # fan_schedule = supply_fan.availabilitySchedule
+        end
 
-          # fan_sched = supply_fan.availabilitySchedule.get
-          model.getFanOnOffs.each do |fan|
-            if fan.name.to_s.include? fan_name
-              fan_avail_fan_sch = fan.availabilitySchedule
-              fan_8760 = get_8760_values_from_schedule_ruleset(model, fan_avail_fan_sch)
-              ans1 = fan_8760[0]
-              ans8760 = fan_8760[8759]
-              ans = 'it worked!'
-            end
-          end
+        fan_name = supply_fan.name.get.to_s
+        # fan_schedule = supply_fan.availabilitySchedule
 
+        # fan_sched = supply_fan.availabilitySchedule.get
+        model.getFanOnOffs.each do |fan|
+          fan_schedule = fan.availabilitySchedule if fan.name.to_s.include? fan_name
         end
       end
     end
+    fan_8760 = get_8760_values_from_schedule(model, fan_avail_fan_sch)
+    ans1 = fan_8760[0]
+    ans8760 = fan_8760[8759]
+    ans = 'it worked!'
     return fan_schedule
   end
 
-
+  # Convert from schedule object to array of hourly values for entire year
+  # Array will include extra 24 values for leap year
+  # Array will also include extra 24 values at end for holiday day type
+  # @author: Doug Maddox, PNNL
+  # @param: model [Object]
+  # @param: fan_schedule [Object]
+  # @return: [Array<String>] annual hourly values from schedule
+  def get_8760_values_from_schedule(model, fan_schedule)
+    sch_object_type = fan_schedule.iddObjectType.valueName.to_s
+    case sch_object_type
+    when 'OS_Schedule_Ruleset'
+      fan_8760 = get_8760_values_from_schedule_ruleset(model, fan_schedule)
+    when 'OS_Schedule_Constant'
+      fan_schedule_constant = fan_schedule.to_ScheduleConstant.get
+      fan_8760 = get_8760_values_from_schedule_constant(model, fan_schedule_constant)
+    when 'OS_Schedule_Compact'
+      # First convert to ScheduleRuleset
+      sch_translator = ScheduleTranslator.new(model, fan_schedule)
+      fan_schedule_ruleset = sch_translator.convert_schedule_compact_to_schedule_ruleset
+      fan_8760 = get_8760_values_from_schedule_ruleset(model, fan_schedule_ruleset)
+    when 'OS_Schedule_Year'
+      # TODO: add function for ScheduleYear
+      # fan_8760 = get_8760_values_from_schedule_year(model, fan_schedule)
+    end
+  end  
 
   # Store occupant and fan operation schedules for each zone before deleting HVAC objects
   # @return [hash] of hashes of zoneName:['OccSch':OccSchName, 'FanSch':FanSchName]
@@ -6937,3 +6931,12 @@ class Standard
     return lowest_story
   end
 end
+
+
+
+
+
+
+
+
+
