@@ -194,8 +194,9 @@ class NECB2011 < Standard
                                    fixed_wind_solar_trans: nil,
                                    skylight_solar_trans: nil,
                                    fdwr_set: -1.0,
-                                   srr_set: -1.0
-
+                                   srr_set: -1.0,
+                                   nv_type: nil,
+                                   nv_opening_area_m2: nil
   )
 
     model = load_building_type_from_library(building_type: building_type)
@@ -227,7 +228,9 @@ class NECB2011 < Standard
                                 fixed_wind_solar_trans: fixed_wind_solar_trans,
                                 skylight_solar_trans: skylight_solar_trans,
                                 fdwr_set: fdwr_set,
-                                srr_set: srr_set
+                                srr_set: srr_set,
+                                nv_type: nil, # Two options: (1) nil OR FALSE, (2) TRUE
+                                nv_opening_area_m2: nil # e.g. 0.5
 
     )
   end
@@ -275,7 +278,9 @@ class NECB2011 < Standard
                            rotation_degrees: nil,
                            scale_x: nil,
                            scale_y: nil,
-                           scale_z: nil
+                           scale_z: nil,
+                           nv_type: nil,
+                           nv_opening_area_m2: nil
   )
 
     BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees.nil?
@@ -320,7 +325,9 @@ class NECB2011 < Standard
                                    unitary_cop: unitary_cop,
                                    furnace_eff: furnace_eff,
                                    shw_eff: shw_eff,
-                                   daylighting_type: daylighting_type
+                                   daylighting_type: daylighting_type,
+                                   nv_type: nv_type,
+                                   nv_opening_area_m2: nv_opening_area_m2
     )
     return model
   end
@@ -336,7 +343,9 @@ class NECB2011 < Standard
                                      furnace_eff: nil,
                                      unitary_cop: nil,
                                      shw_eff: nil,
-                                     daylighting_type: 'NECB_Default')
+                                     daylighting_type: 'NECB_Default',
+                                     nv_type: nil,
+                                     nv_opening_area_m2: nil)
     # Create ECM object.
     ecm = ECMS.new
 
@@ -378,6 +387,10 @@ class NECB2011 < Standard
     # -------Pump sizing required by some vintages----------------
     # Apply Pump power as required.
     apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
+
+    # -------Natural ventilation----------------
+    # Apply natural ventilation using simplified method.
+    ecm.apply_nv(model: model, nv_type: nv_type, nv_opening_area_m2: nv_opening_area_m2)
   end
 
 
