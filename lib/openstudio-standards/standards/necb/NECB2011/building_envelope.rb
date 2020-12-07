@@ -365,10 +365,10 @@ class NECB2011
         return false
       end
 
+      # hdd required in scope for eval function.
+      hdd = get_necb_hdd18(model)
       # Lambdas are preferred over methods in methods for small utility methods.
       correct_cond = lambda do |conductivity, surface_type|
-        # hdd required in scope for eval function.
-        hdd = get_necb_hdd18(model)
         return conductivity.nil? || conductvity == 0.0 ? eval(model_find_objects(@standards_data['surface_thermal_transmittance'], surface_type)[0]['formula']) : conductivity
       end
 
