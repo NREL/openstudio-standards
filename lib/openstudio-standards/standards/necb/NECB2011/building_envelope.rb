@@ -369,7 +369,7 @@ class NECB2011
       hdd = get_necb_hdd18(model)
       # Lambdas are preferred over methods in methods for small utility methods.
       correct_cond = lambda do |conductivity, surface_type|
-        return conductivity.nil? || conductvity == 0.0 ? eval(model_find_objects(@standards_data['surface_thermal_transmittance'], surface_type)[0]['formula']) : conductivity
+        return conductivity.nil? || conductivity.to_f <= 0.0 || conductivity =="NECB_Default"  ? eval(model_find_objects(@standards_data['surface_thermal_transmittance'], surface_type)[0]['formula']) : conductivity.to_f
       end
 
       BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set!(model: model,
