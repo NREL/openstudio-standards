@@ -138,6 +138,8 @@ class BTAPPRE1980
                               baseboard_type: baseboard_type,
                               hw_loop: hw_loop)
         end
+
+        # Modifying airloop name.
         sys_name_pars = {}
         sys_name_pars["sys_hr"] = "none"
         sys_name_pars["sys_htg"] = heating_coil_type

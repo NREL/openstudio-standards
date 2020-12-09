@@ -147,6 +147,7 @@ class BTAPPRE1980
       add_exhaust_fan(zone: zone, model: model, name: exhaust_fan_name)
     end # zone loop
 
+    # Modifying airloop name
     sys_name_pars = {}
     sys_name_pars["sys_hr"] = "none"
     sys_name_pars["sys_clg"] = "dx"

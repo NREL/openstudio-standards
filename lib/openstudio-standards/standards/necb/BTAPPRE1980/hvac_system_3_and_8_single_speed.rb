@@ -77,6 +77,8 @@ class BTAPPRE1980
                                   zone)
       end
     end
+
+    #Modifying airloop name.
     sys_name_pars = {}
     sys_name_pars["sys_hr"] = "none"
     sys_name_pars["sys_clg"] = "dx"
