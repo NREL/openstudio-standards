@@ -60,6 +60,7 @@ class BTAPPRE1980 < NECB2011
                            erv_package: 'NECB_Default',
                            boiler_eff: nil,
                            furnace_eff: nil,
+                           unitary_cop: nil,
                            shw_eff: nil,
                            ext_wall_cond: nil,
                            ext_floor_cond: nil,
@@ -75,8 +76,12 @@ class BTAPPRE1980 < NECB2011
                            glass_door_solar_trans: nil,
                            fixed_wind_solar_trans: nil,
                            skylight_solar_trans: nil,
-                           fdwr_set: nil,
-                           srr_set: nil
+                           fdwr_set: -1,
+                           srr_set: -1,
+                           rotation_degrees: nil,
+                           scale_x: nil,
+                           scale_y: nil,
+                           scale_z: nil
   )
     # This will allow changes to default fdwr/srr for vintages.. but will not touch the existing models if they were
     # called for with -1.0 in the fdwr_srr method.
@@ -94,6 +99,7 @@ class BTAPPRE1980 < NECB2011
                  erv_package: erv_package,
                  boiler_eff: boiler_eff,
                  furnace_eff: furnace_eff,
+                 unitary_cop: unitary_cop,
                  shw_eff: shw_eff,
                  ext_wall_cond: ext_wall_cond,
                  ext_floor_cond: ext_floor_cond,
@@ -110,12 +116,14 @@ class BTAPPRE1980 < NECB2011
                  fixed_wind_solar_trans: fixed_wind_solar_trans,
                  skylight_solar_trans: skylight_solar_trans,
                  fdwr_set: fdwr_set,
-                 srr_set: srr_set)
-
+                 srr_set: srr_set,
+                 rotation_degrees: rotation_degrees,
+                 scale_x: scale_x,
+                 scale_y: scale_y,
+                 scale_z: scale_z)
   end
 
-  def apply_standard_efficiencies(model:, sizing_run_dir:)
-
+  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default')
     raise('validation of model failed.') unless validate_initial_model(model)
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
@@ -124,8 +132,11 @@ class BTAPPRE1980 < NECB2011
     # Apply the prototype HVAC assumptions
     model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
     # Apply the HVAC efficiency standard
-    model_apply_hvac_efficiency_standard(model, climate_zone)
+    sql_db_vars_map = {}
+    model_apply_hvac_efficiency_standard(model, climate_zone, sql_db_vars_map: sql_db_vars_map)
+    model_enable_demand_controlled_ventilation(model, dcv_type)
     model_apply_existing_building_fan_performance(model: model)
+    return sql_db_vars_map
   end
 
   #occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method
