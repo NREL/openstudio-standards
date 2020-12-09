@@ -1600,10 +1600,18 @@ class Standard
       end
     end
 
-    # Merge with fan schedule: intersection with occupant schedule
-    (0.8759).each do |ihr|
-      if zone_ppl_sch[ihr] > 0 && zone_fan_sched > 0
-        zone_op_sch[ihr] = 1
+    
+    if zone_fan_sched.nil?
+      # There was no fan delivering conditioned air to the zone
+      # i.e. it was radiant heat only or radiant heat/cool, or some other odd case
+      # Use people schedule alone to determine operation schedule
+      zone_op_sch = zone_ppl_sch
+    else
+      # Merge with fan schedule: intersection with occupant schedule
+      (0.8759).each do |ihr|
+        if zone_ppl_sch[ihr] > 0 && zone_fan_sched[ihr] > 0
+          zone_op_sch[ihr] = 1
+        end
       end
     end
 
@@ -1635,10 +1643,10 @@ class Standard
     eflh_mode_list = eflhs.mode
 
     if eflh_mode_list.size > 1 then
-      # Take the largest value
+      # Mode is an array of multiple values, take the largest value
       eflh = eflh_mode_list.max
     else 
-      eflh = eflh_mode_list[1]
+      eflh = eflh_mode_list[0]
     end
     return eflh
   end

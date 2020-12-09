@@ -1784,7 +1784,6 @@ class Standard
     space.people.each do |people|
       w_per_person = 125 # Initial assumption
       occ_sch_max = 1
-      act_sch_ruleset = nil
       act_sch = people.activityLevelSchedule
       if people.isActivityLevelScheduleDefaulted
         # Check default schedule set
@@ -1794,18 +1793,16 @@ class Standard
           end
         end
       end
-       if act_sch.is_initialized
-        if act_sch.get.to_ScheduleRuleset.is_initialized
-          act_sch_ruleset = act_sch.get.to_ScheduleRuleset.get
-          act_sch_values = get_8760_values_from_schedule_ruleset(model, act_sch_ruleset)
-          w_per_person = schedule_ruleset_annual_min_max_value(act_sch_ruleset)['max']
+      if act_sch.is_initialized
+        act_sch_obj = act_sch.get
+        act_sch_values = get_8760_values_from_schedule(model, act_sch_obj)
+        if !act_sch_values.nil?
+          w_per_person = act_sch_values.max
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} people activity schedule is not a Schedule:Ruleset.  Assuming #{w_per_person}W/person.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retrieve people activity schedule for #{space.name}.  Assuming #{w_per_person}W/person.")
         end
-      else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} people activity schedule not found.  Assuming #{w_per_person}W/person.")
       end
-
+        
       occ_sch_ruleset = nil
       occ_sch = people.numberofPeopleSchedule
       if people.isNumberofPeopleScheduleDefaulted
@@ -1817,15 +1814,13 @@ class Standard
         end
       end
       if occ_sch.is_initialized
-        if occ_sch.get.to_ScheduleRuleset.is_initialized
-          occ_sch_ruleset = occ_sch.get.to_ScheduleRuleset.get
-          occ_sch_values = get_8760_values_from_schedule_ruleset(model, occ_sch_ruleset)
-          occ_sch_max = schedule_ruleset_annual_min_max_value(occ_sch_ruleset)['max']
+        occ_sch_obj = occ_sch.get
+        occ_sch_values = get_8760_values_from_schedule(model, occ_sch_obj)
+        if !occ_sch_max.nil?
+          occ_sch_max = occ_sch_values.max
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} people schedule is not a Schedule:Ruleset.  Assuming #{w_per_person}W/person.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retrieve people schedule for #{space.name}.  Assuming #{w_per_person}W/person.")
         end
-      else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} people schedule not found.  Assuming #{w_per_person}W/person.")
       end
 
       num_ppl = people.getNumberOfPeople(space.floorArea)
@@ -1834,8 +1829,8 @@ class Standard
       act_sch_value = w_per_person 
       occ_sch_value = occ_sch_max 
       (0..8759).each do |ihr|
-        act_sch_value = act_sch_values[ihr] unless act_sch_ruleset.nil?
-        occ_sch_value = occ_sch_values[ihr] unless occ_sch_ruleset.nil?
+        act_sch_value = act_sch_values[ihr] unless act_sch_values.nil?
+        occ_sch_value = occ_sch_values[ihr] unless occ_sch_values.nil?
         ppl_values[ihr] += num_ppl * act_sch_value * occ_sch_value
       end
 
@@ -1857,27 +1852,27 @@ class Standard
         end
       end
       if ltg_sch.is_initialized
-        if ltg_sch.get.to_ScheduleRuleset.is_initialized
-          ltg_sch_ruleset = ltg_sch.get.to_ScheduleRuleset.get
-          ltg_sch_values = get_8760_values_from_schedule_ruleset(model, ltg_sch_ruleset)
-          ltg_sch_max = schedule_ruleset_annual_min_max_value(ltg_sch_ruleset)['max']
+        ltg_sch_obj = ltg_sch.get
+        ltg_sch_values = get_8760_values_from_schedule(model, ltg_sch_obj)
+        if !ltg_sch_values.nil?
+          ltg_sch_max = lgt_sch_values.max
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} lighting schedule is not a Schedule:Ruleset.  Assuming #{ltg_w} W.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retreive lighting schedule for #{space.name}.  Assuming #{ltg_w} W.")
         end
-      else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} lighting schedule not found.  Assuming #{ltg_w} W.")
       end
 
-      ltg_sch_value = 1.0
-      (0..8759).each do |ihr|
-        ltg_sch_value = ltg_sch_values[ihr] unless ltg_sch_ruleset.nil?
-        ltg_values[ihr] += ltg_w * ltg_sch_value
+      if !ltg_sch_values.nil?
+        ltg_sch_value = 1.0
+        (0..8759).each do |ihr|
+          ltg_sch_value = ltg_sch_values[ihr] unless ltg_sch_ruleset.nil?
+          ltg_values[ihr] += ltg_w * ltg_sch_value
+        end
       end
     end
 
     # Luminaire Objects
-    space.Luminairs.each do |light|
-      ltg_sch_ruleset = nil
+    space.luminaires.each do |light|
+      ltg_sch_values = nil
       ltg_sch = light.schedule
       ltg_w = light.lightingPower(space.floorArea, ppl_total)
       # not sure if above line is valid, so calculate from parts instead until above can be verified
@@ -1893,21 +1888,21 @@ class Standard
         end
       end
       if ltg_sch.is_initialized
-        if ltg_sch.get.to_ScheduleRuleset.is_initialized
-          ltg_sch_ruleset = ltg_sch.get.to_ScheduleRuleset.get
-          ltg_sch_values = get_8760_values_from_schedule_ruleset(model, ltg_sch_ruleset)
-          ltg_sch_max = schedule_ruleset_annual_min_max_value(ltg_sch_ruleset)['max']
+        ltg_sch_obj = ltg_sch.get
+        ltg_sch_values = get_8760_values_from_schedule(model, ltg_sch_obj)
+        if !ltg_sch_values.nil?
+          ltg_sch_max = ltg_sch_values.max
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} lighting schedule is not a Schedule:Ruleset.  Assuming #{ltg_w} W.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retreive lighting schedule for luminaires for #{space.name}.  Assuming #{ltg_w} W.")
         end
-      else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} lighting schedule not found.  Assuming #{ltg_w} W.")
       end
 
-      ltg_sch_value = 1.0
-      (0..8759).each do |ihr|
-        ltg_sch_value = ltg_sch_values[ihr] unless ltg_sch_ruleset.nil?
-        ltg_values[ihr] += ltg_w * ltg_sch_value
+      if !ltg_sch_values.nil?
+        ltg_sch_value = 1.0
+        (0..8759).each do |ihr|
+          ltg_sch_value = ltg_sch_values[ihr] unless ltg_sch_ruleset.nil?
+          ltg_values[ihr] += ltg_w * ltg_sch_value
+        end
       end
     end
 
@@ -1942,8 +1937,12 @@ class Standard
       return load_values
   end
 
+  # @author: Doug Maddox, PNNL
+  # @param: model [Object]
+  # @param: fan_schedule [Object]
+  # @return: 
   def space_get_equip_annual_array(model, space, equip, load_sch, eqp_type, load_values)
-
+    # Get load schedule and load lost value depending on equipment type
     case eqp_type 
     when 'electric equipment'
       load_sch = equip.schedule
@@ -2014,21 +2013,21 @@ class Standard
 
     load_sch_ruleset = nil
     if load_sch.is_initialized
-      if load_sch.get.to_ScheduleRuleset.is_initialized
-        load_sch_ruleset = load_sch.get.to_ScheduleRuleset.get
-        load_sch_values = get_8760_values_from_schedule_ruleset(model, load_sch_ruleset)
-        load_sch_max = schedule_ruleset_annual_min_max_value(load_sch_ruleset)['max']
+      load_sch_obj = load_sch.get
+      load_sch_values = get_8760_values_from_schedule(model, load_sch_obj)
+      if !load_sch_values.nil?
+        load_sch_max = load_sch_values.max
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} #{eqp_type} schedule is not a Schedule:Ruleset.  Assuming #{load_w} W.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retreive schedule for equipment type #{eqp_type} in space #{space.name}.  Assuming #{load_w} W.")
       end
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} #{eqp_type} schedule not found.  Assuming #{load_w} W.")
     end
 
-    load_sch_value = 1.0
-    (0..8759).each do |ihr|
-      load_sch_value = load_sch_values[ihr] unless load_sch_ruleset.nil?
-      load_values[ihr] += load_w * load_sch_value
+    if !load_sch_values.nil?
+      load_sch_value = 1.0
+      (0..8759).each do |ihr|
+        load_sch_value = load_sch_values[ihr]
+        load_values[ihr] += load_w * load_sch_value
+      end
     end
     return load_values
   end

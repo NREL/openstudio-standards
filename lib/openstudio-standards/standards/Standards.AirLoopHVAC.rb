@@ -3090,6 +3090,7 @@ class Standard
 
 
     # Check if schedule was stored in an additionalProperties field of the air loop
+    puts "DEM: need to make sure fan sched is applied to the fan"
     if air_loop_hvac.hasAdditionalProperties
       if air_loop_hvac.additionalProperties.hasFeature('fan_sched_name')
         fan_sched_name = air_loop_hvac.additionalProperties.getFeatureAsString('fan_sch_name')
