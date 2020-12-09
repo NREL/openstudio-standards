@@ -81,7 +81,8 @@ class BTAPPRE1980 < NECB2011
                            rotation_degrees: nil,
                            scale_x: nil,
                            scale_y: nil,
-                           scale_z: nil
+                           scale_z: nil,
+                           no_air: nil
   )
     # This will allow changes to default fdwr/srr for vintages.. but will not touch the existing models if they were
     # called for with -1.0 in the fdwr_srr method.
@@ -120,7 +121,8 @@ class BTAPPRE1980 < NECB2011
                  rotation_degrees: rotation_degrees,
                  scale_x: scale_x,
                  scale_y: scale_y,
-                 scale_z: scale_z)
+                 scale_z: scale_z,
+                 no_air: no_air)
   end
 
   def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default')

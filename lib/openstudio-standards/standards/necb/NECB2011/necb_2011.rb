@@ -194,7 +194,8 @@ class NECB2011 < Standard
                                    fixed_wind_solar_trans: nil,
                                    skylight_solar_trans: nil,
                                    fdwr_set: -1.0,
-                                   srr_set: -1.0
+                                   srr_set: -1.0,
+                                   no_air: nil
 
   )
 
@@ -227,7 +228,8 @@ class NECB2011 < Standard
                                 fixed_wind_solar_trans: fixed_wind_solar_trans,
                                 skylight_solar_trans: skylight_solar_trans,
                                 fdwr_set: fdwr_set,
-                                srr_set: srr_set
+                                srr_set: srr_set,
+                                no_air: no_air
 
     )
   end
@@ -275,7 +277,8 @@ class NECB2011 < Standard
                            rotation_degrees: nil,
                            scale_x: nil,
                            scale_y: nil,
-                           scale_z: nil
+                           scale_z: nil,
+                           no_air: nil
   )
 
     BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees.nil?
@@ -320,7 +323,8 @@ class NECB2011 < Standard
                                    unitary_cop: unitary_cop,
                                    furnace_eff: furnace_eff,
                                    shw_eff: shw_eff,
-                                   daylighting_type: daylighting_type
+                                   daylighting_type: daylighting_type,
+                                   no_air: no_air
     )
     return model
   end
@@ -336,14 +340,15 @@ class NECB2011 < Standard
                                      furnace_eff: nil,
                                      unitary_cop: nil,
                                      shw_eff: nil,
-                                     daylighting_type: 'NECB_Default')
+                                     daylighting_type: 'NECB_Default',
+                                     no_air: nil)
     # Create ECM object.
     ecm = ECMS.new
 
     # -------- Systems Layout-----------
 
     # Create Default Systems.
-    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
+    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir, no_air: no_air)
 
     # Apply new ECM system. Overwrite standard as required.
     ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self)

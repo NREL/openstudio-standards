@@ -6,21 +6,29 @@ class NECB2011
                                                                             baseboard_type:,
                                                                             hw_loop:,
                                                                             new_auto_zoner: true,
-                                                                            multispeed: false)
-    if multispeed
-      add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
-                                                                                         zones: zones,
-                                                                                         heating_coil_type: heating_coil_type,
-                                                                                         baseboard_type: baseboard_type,
-                                                                                         hw_loop: hw_loop,
-                                                                                         new_auto_zoner: new_auto_zoner)
+                                                                            multispeed: false,
+                                                                            no_air: nil)
+    if no_air.nil?
+      if multispeed
+        add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
+                                                                                          zones: zones,
+                                                                                          heating_coil_type: heating_coil_type,
+                                                                                          baseboard_type: baseboard_type,
+                                                                                          hw_loop: hw_loop,
+                                                                                          new_auto_zoner: new_auto_zoner)
+      else
+        add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                           zones: zones,
+                                                                                           heating_coil_type: heating_coil_type,
+                                                                                           baseboard_type: baseboard_type,
+                                                                                           hw_loop: hw_loop,
+                                                                                           new_auto_zoner: new_auto_zoner)
+      end
     else
-      add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-                                                                                        zones: zones,
-                                                                                        heating_coil_type: heating_coil_type,
-                                                                                        baseboard_type: baseboard_type,
-                                                                                        hw_loop: hw_loop,
-                                                                                        new_auto_zoner: new_auto_zoner)
+      add_no_air_baseboard_heating(model: model,
+                                   zones: zones,
+                                   baseboard_type: baseboard_type,
+                                   hw_loop: hw_loop)
     end
   end
 

@@ -95,7 +95,7 @@ class NECB2011
 
   # Organizes Zones and assigns them to appropriate systems according to NECB 2011-17 systems spacetype rules in Sec 8.
   # requires requires fuel type to be assigned for each system aspect. Defaults to gas hydronic.
-  def apply_systems(model:, primary_heating_fuel:, sizing_run_dir:)
+  def apply_systems(model:, primary_heating_fuel:, sizing_run_dir:, no_air:)
     raise('validation of model failed.') unless validate_initial_model(model)
     # Check to see if model is using another vintage of spacetypes. If so overwrite the @standards for the object with the
     # other spacetype data. This is required for correct system mapping.
@@ -153,27 +153,31 @@ class NECB2011
                                heating_coil_type_sys6: heating_coil_type_sys6,
                                mau_cooling_type: mau_cooling_type,
                                mau_heating_coil_type: mau_heating_coil_type,
-                               mau_type: mau_type
+                               mau_type: mau_type,
+                               no_air: no_air
     )
 
     #Assign a single system 4 for all wet spaces.. and assign the control zone to the one with the largest load.
     auto_system_wet_spaces(baseboard_type: baseboard_type,
                            boiler_fueltype: boiler_fueltype,
                            heating_coil_type_sys4: heating_coil_type_sys4,
-                           model: model)
+                           model: model,
+                           no_air: no_air)
 
 
     #Assign a single system 4 for all storage spaces.. and assign the control zone to the one with the largest load.
     auto_system_storage_spaces(baseboard_type: baseboard_type,
                                boiler_fueltype: boiler_fueltype,
                                heating_coil_type_sys4: heating_coil_type_sys4,
-                               model: model)
+                               model: model,
+                               no_air: no_air)
 
 
     #Assign the wild spaces to a single system 4 system with a control zone with the largest load.
     auto_system_wild_spaces(baseboard_type: baseboard_type,
                             heating_coil_type_sys4: heating_coil_type_sys4,
-                            model: model)
+                            model: model,
+                            no_air: no_air)
     # do the regular assignment for the rest and group where possible.
     auto_system_all_other_spaces(model: model,
                                  baseboard_type: baseboard_type,
@@ -186,7 +190,8 @@ class NECB2011
                                  heating_coil_type_sys6: heating_coil_type_sys6,
                                  mau_cooling_type: mau_cooling_type,
                                  mau_heating_coil_type: mau_heating_coil_type,
-                                 mau_type: mau_type
+                                 mau_type: mau_type,
+                                 no_air: no_air
     )
     model_add_swh(model: model, swh_fueltype: system_fuel_defaults['swh_fueltype'])
     model_apply_sizing_parameters(model)
@@ -866,7 +871,8 @@ class NECB2011
                          mau_heating_coil_type:,
                          mau_type:,
                          model:,
-                         zones:)
+                         zones:,
+                         no_air: nil)
 
     # The goal is to minimize the number of system when possible.
     system_zones_hash = {}
@@ -882,72 +888,121 @@ class NECB2011
         # Do nothing no system assigned to zone. Used for Unconditioned spaces
       when 1
         group_similar_zones_together(zones).each do |zones|
-          mau_air_loop = add_sys1_unitary_ac_baseboard_heating(model: model,
-                                                               zones: zones,
-                                                               mau_type: mau_type,
-                                                               mau_heating_coil_type: mau_heating_coil_type,
-                                                               baseboard_type: baseboard_type,
-                                                               hw_loop: @hw_loop,
-                                                               multispeed: false)
+          if no_air.nil?
+            mau_air_loop = add_sys1_unitary_ac_baseboard_heating(model: model,
+                                                                 zones: zones,
+                                                                 mau_type: mau_type,
+                                                                 mau_heating_coil_type: mau_heating_coil_type,
+                                                                 baseboard_type: baseboard_type,
+                                                                 hw_loop: @hw_loop,
+                                                                 multispeed: false)
+          else
+            add_no_air_baseboard_heating(model: model,
+                                         zones: zones,
+                                         baseboard_type: baseboard_type,
+                                         hw_loop: @hw_loop)
+          end
         end
       when 2
         group_similar_zones_together(zones).each do |zones|
-          add_sys2_FPFC_sys5_TPFC(model: model,
-                                  zones: zones,
-                                  chiller_type: chiller_type,
-                                  mau_cooling_type: mau_cooling_type,
-                                  fan_coil_type: 'FPFC',
-                                  hw_loop: @hw_loop)
+          if no_air.nil?
+            add_sys2_FPFC_sys5_TPFC(model: model,
+                                    zones: zones,
+                                    chiller_type: chiller_type,
+                                    mau_cooling_type: mau_cooling_type,
+                                    fan_coil_type: 'FPFC',
+                                    hw_loop: @hw_loop)
+          else
+            add_no_air_baseboard_heating(model: model,
+                                         zones: zones,
+                                         baseboard_type: baseboard_type,
+                                         hw_loop: @hw_loop)
+          end
         end
       when 3
         group_similar_zones_together(zones).each do |zones|
-          add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
-                                                                                zones: zones,
-                                                                                heating_coil_type: heating_coil_type_sys3,
-                                                                                baseboard_type: baseboard_type,
-                                                                                hw_loop: @hw_loop,
-                                                                                multispeed: false)
+          if no_air.nil?
+            add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
+                                                                                  zones: zones,
+                                                                                  heating_coil_type: heating_coil_type_sys3,
+                                                                                  baseboard_type: baseboard_type,
+                                                                                  hw_loop: @hw_loop,
+                                                                                  multispeed: false)
+          else
+            add_no_air_baseboard_heating(model: model,
+                                         zones: zones,
+                                         baseboard_type: baseboard_type,
+                                         hw_loop: @hw_loop)
+          end
         end
       when 4
         group_similar_zones_together(zones).each do |zones|
-          add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-                                                                       zones: zones,
-                                                                       heating_coil_type: heating_coil_type_sys4,
-                                                                       baseboard_type: baseboard_type,
-                                                                       hw_loop: @hw_loop)
-#          add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
-#                                                                                zones: zones,
-#                                                                                heating_coil_type: heating_coil_type_sys4,
-#                                                                                baseboard_type: baseboard_type,
-#                                                                                hw_loop: @hw_loop,
-#                                                                                multispeed: false)
+          if no_air.nil?
+            add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
+                                                                         zones: zones,
+                                                                         heating_coil_type: heating_coil_type_sys4,
+                                                                         baseboard_type: baseboard_type,
+                                                                         hw_loop: @hw_loop)
+            #          add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
+            #                                                                                zones: zones,
+            #                                                                                heating_coil_type: heating_coil_type_sys4,
+            #                                                                                baseboard_type: baseboard_type,
+            #                                                                                hw_loop: @hw_loop,
+            #                                                                                multispeed: false)
+          else
+            add_no_air_baseboard_heating(model: model,
+                                         zones: zones,
+                                         baseboard_type: baseboard_type,
+                                         hw_loop: @hw_loop)
+          end
         end
       when 5
         group_similar_zones_together(zones).each do |zones|
-          add_sys2_FPFC_sys5_TPFC(model: model,
-                                  zones: zones,
-                                  chiller_type: chiller_type,
-                                  mau_cooling_type: mau_cooling_type,
-                                  fan_coil_type: 'TPFC',
-                                  hw_loop: @hw_loop)
+          if no_air.nil?
+            add_sys2_FPFC_sys5_TPFC(model: model,
+                                    zones: zones,
+                                    chiller_type: chiller_type,
+                                    mau_cooling_type: mau_cooling_type,
+                                    fan_coil_type: 'TPFC',
+                                    hw_loop: @hw_loop)
+          else
+            add_no_air_baseboard_heating(model: model,
+                                         zones: zones,
+                                         baseboard_type: baseboard_type,
+                                         hw_loop: @hw_loop)
+          end
         end
       when 6
-        add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
-                                                                   zones: zones,
-                                                                   heating_coil_type: heating_coil_type_sys6,
-                                                                   baseboard_type: baseboard_type,
-                                                                   chiller_type: chiller_type,
-                                                                   fan_type: fan_type,
-                                                                   hw_loop: @hw_loop)
+        if no_air.nil?
+          add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
+                                                                     zones: zones,
+                                                                     heating_coil_type: heating_coil_type_sys6,
+                                                                     baseboard_type: baseboard_type,
+                                                                     chiller_type: chiller_type,
+                                                                     fan_type: fan_type,
+                                                                     hw_loop: @hw_loop)
+        else
+          add_no_air_baseboard_heating(model: model,
+                                       zones: zones,
+                                       baseboard_type: baseboard_type,
+                                       hw_loop: @hw_loop)
+        end
 
       when 7
         group_similar_zones_together(zones).each do |zones|
-          add_sys2_FPFC_sys5_TPFC(model: model,
-                                  zones: zones,
-                                  chiller_type: chiller_type,
-                                  fan_coil_type: 'FPFC',
-                                  mau_cooling_type: mau_cooling_type,
-                                  hw_loop: @hw_loop)
+          if no_air.nil?
+            add_sys2_FPFC_sys5_TPFC(model: model,
+                                    zones: zones,
+                                    chiller_type: chiller_type,
+                                    fan_coil_type: 'FPFC',
+                                    mau_cooling_type: mau_cooling_type,
+                                    hw_loop: @hw_loop)
+          else
+            add_no_air_baseboard_heating(model: model,
+                                         zones: zones,
+                                         baseboard_type: baseboard_type,
+                                         hw_loop: @hw_loop)
+          end
         end
       end
     end
@@ -965,7 +1020,8 @@ class NECB2011
                                    mau_cooling_type:,
                                    mau_heating_coil_type:,
                                    mau_type:,
-                                   model:
+                                   model:,
+                                   no_air: nil
   )
 
     zones = []
@@ -992,7 +1048,8 @@ class NECB2011
                        mau_heating_coil_type: mau_heating_coil_type,
                        mau_type: mau_type,
                        model: model,
-                       zones: zones)
+                       zones: zones,
+                       no_air: no_air)
   end
 
   # This methos will ensure that all dwelling units are assigned to a system 1 or 3. There is an option to have a shared
@@ -1009,7 +1066,8 @@ class NECB2011
                                  mau_cooling_type:,
                                  mau_heating_coil_type:,
                                  mau_type:,
-                                 model:
+                                 model:,
+                                 no_air: nil
   )
 
     system_zones_hash = {}
@@ -1039,7 +1097,8 @@ class NECB2011
                                                 mau_heating_coil_type: mau_heating_coil_type,
                                                 baseboard_type: baseboard_type,
                                                 hw_loop: @hw_loop,
-                                                multispeed: false)
+                                                multispeed: false,
+                                                no_air: no_air)
         else
           #Create a separate air loop for each unit.
           zones.each do |zone|
@@ -1049,7 +1108,8 @@ class NECB2011
                                                   mau_heating_coil_type: mau_heating_coil_type,
                                                   baseboard_type: baseboard_type,
                                                   hw_loop: @hw_loop,
-                                                  multispeed: false)
+                                                  multispeed: false,
+                                                  no_air: no_air)
 
           end
         end
@@ -1061,7 +1121,8 @@ class NECB2011
                                                                                 heating_coil_type: heating_coil_type_sys3,
                                                                                 baseboard_type: baseboard_type,
                                                                                 hw_loop: @hw_loop,
-                                                                                multispeed: false)
+                                                                                multispeed: false,
+                                                                                no_air: no_air)
         else
           #Create a separate air loop for each unit.
           zones.each do |zone|
@@ -1070,7 +1131,8 @@ class NECB2011
                                                                                   heating_coil_type: heating_coil_type_sys3,
                                                                                   baseboard_type: baseboard_type,
                                                                                   hw_loop: @hw_loop,
-                                                                                  multispeed: false)
+                                                                                  multispeed: false,
+                                                                                  no_air: no_air)
           end
         end
       end
@@ -1081,7 +1143,8 @@ class NECB2011
   def auto_system_wet_spaces(baseboard_type:,
                              boiler_fueltype:,
                              heating_coil_type_sys4:,
-                             model:)
+                             model:,
+                             no_air: nil)
     #Determine what zones are wet zones.
     wet_tz = []
     model.getSpaces.select {|space|
@@ -1091,17 +1154,25 @@ class NECB2011
     wet_tz.uniq!
     #create a system 4 for the wet zones.
     unless wet_tz.empty?
-      add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-                                                                   zones: wet_tz,
-                                                                   heating_coil_type: heating_coil_type_sys4,
-                                                                   baseboard_type: baseboard_type,
-                                                                   hw_loop: @hw_loop)
-#      add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
-#                                                                            zones: wet_tz,
-#                                                                            heating_coil_type: heating_coil_type_sys4,
-#                                                                            baseboard_type: baseboard_type,
-#                                                                            hw_loop: @hw_loop,
-#                                                                            multispeed: false)
+      if no_air.nil?
+        puts "hello"
+        add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
+                                                                     zones: wet_tz,
+                                                                     heating_coil_type: heating_coil_type_sys4,
+                                                                     baseboard_type: baseboard_type,
+                                                                     hw_loop: @hw_loop)
+        #      add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
+        #                                                                            zones: wet_tz,
+        #                                                                            heating_coil_type: heating_coil_type_sys4,
+        #                                                                            baseboard_type: baseboard_type,
+        #                                                                            hw_loop: @hw_loop,
+        #                                                                            multispeed: false)
+      else
+        add_no_air_baseboard_heating(model: model,
+                                     zones: wet_tz,
+                                     baseboard_type: baseboard_type,
+                                     hw_loop: @hw_loop)
+      end
     end
   end
 
@@ -1110,7 +1181,8 @@ class NECB2011
   def auto_system_storage_spaces(baseboard_type:,
                                  boiler_fueltype:,
                                  heating_coil_type_sys4:,
-                                 model:)
+                                 model:,
+                                 no_air: nil)
     #Determine what zones are wet zones.
     tz = []
     model.getSpaces.select {|space|
@@ -1120,17 +1192,24 @@ class NECB2011
     tz.uniq!
     #create a system 4 for the  zones.
     unless tz.empty?
-      add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-                                                                   zones: tz,
-                                                                   heating_coil_type: heating_coil_type_sys4,
-                                                                   baseboard_type: baseboard_type,
-                                                                   hw_loop: @hw_loop)
-#      add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
-#                                                                            zones: tz,
-#                                                                            heating_coil_type: heating_coil_type_sys4,
-#                                                                            baseboard_type: baseboard_type,
-#                                                                            hw_loop: @hw_loop,
-#                                                                            multispeed: true)
+      if no_air.nil?
+        add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
+                                                                     zones: tz,
+                                                                     heating_coil_type: heating_coil_type_sys4,
+                                                                     baseboard_type: baseboard_type,
+                                                                     hw_loop: @hw_loop)
+        #      add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
+        #                                                                            zones: tz,
+        #                                                                            heating_coil_type: heating_coil_type_sys4,
+        #                                                                            baseboard_type: baseboard_type,
+        #                                                                            hw_loop: @hw_loop,
+        #                                                                            multispeed: true)
+      else
+        add_no_air_baseboard_heating(model: model,
+                                     zones: tz,
+                                     baseboard_type: baseboard_type,
+                                     hw_loop: @hw_loop)
+      end
     end
   end
 
@@ -1138,7 +1217,8 @@ class NECB2011
   # All wild spaces will be on a single system 4 ahu with the largests heating load zone being the control zone.
   def auto_system_wild_spaces(baseboard_type:,
                               heating_coil_type_sys4:,
-                              model:
+                              model:,
+                              no_air: nil
   )
 
     zones = []
@@ -1148,18 +1228,26 @@ class NECB2011
     end
     zones.uniq!
     unless zones.empty?
-      #create a system 4 for the wild zones.
-      add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-                                                                   zones: zones,
-                                                                   heating_coil_type: heating_coil_type_sys4,
-                                                                   baseboard_type: baseboard_type,
-                                                                   hw_loop: @hw_loop)
-#      add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
-#                                                                            zones: zones,
-#                                                                            heating_coil_type: heating_coil_type_sys4,
-#                                                                            baseboard_type: baseboard_type,
-#                                                                            hw_loop: @hw_loop,
-#                                                                            multispeed: true)
+      if no_air.nil?
+        #create a system 4 for the wild zones.
+        add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
+                                                                     zones: zones,
+                                                                     heating_coil_type: heating_coil_type_sys4,
+                                                                     baseboard_type: baseboard_type,
+                                                                     hw_loop: @hw_loop)
+        #      add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
+        #                                                                            zones: zones,
+        #                                                                            heating_coil_type: heating_coil_type_sys4,
+        #                                                                            baseboard_type: baseboard_type,
+        #                                                                            hw_loop: @hw_loop,
+        #                                                                            multispeed: true)
+      else
+        add_no_air_baseboard_heating(model: model,
+                                     zones: zones,
+                                     baseboard_type: baseboard_type,
+                                     hw_loop: @hw_loop)
+      end
+
     end
   end
 

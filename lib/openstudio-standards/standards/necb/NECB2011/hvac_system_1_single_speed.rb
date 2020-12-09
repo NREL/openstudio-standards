@@ -6,21 +6,29 @@ class NECB2011
                                             mau_heating_coil_type:,
                                             baseboard_type:,
                                             hw_loop:,
-                                            multispeed: false)
-    if multispeed
-      add_sys1_unitary_ac_baseboard_heating_multi_speed(model: model,
-                                                        zones: zones,
-                                                        mau_type: mau_type,
-                                                        mau_heating_coil_type: mau_heating_coil_type,
-                                                        baseboard_type: baseboard_type,
-                                                        hw_loop: hw_loop)
+                                            multispeed: false,
+                                            no_air: nil)
+    if no_air.nil?
+      if multispeed
+        add_sys1_unitary_ac_baseboard_heating_multi_speed(model: model,
+                                                          zones: zones,
+                                                          mau_type: mau_type,
+                                                          mau_heating_coil_type: mau_heating_coil_type,
+                                                          baseboard_type: baseboard_type,
+                                                          hw_loop: hw_loop)
+      else
+        add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
+                                                           zones: zones,
+                                                           mau_type: mau_type,
+                                                           mau_heating_coil_type: mau_heating_coil_type,
+                                                           baseboard_type: baseboard_type,
+                                                           hw_loop: hw_loop)
+      end
     else
-      add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
-                                                         zones: zones,
-                                                         mau_type: mau_type,
-                                                         mau_heating_coil_type: mau_heating_coil_type,
-                                                         baseboard_type: baseboard_type,
-                                                         hw_loop: hw_loop)
+      add_no_air_baseboard_heating(model: model,
+                                   zones: zones,
+                                   baseboard_type: baseboard_type,
+                                   hw_loop: hw_loop)
     end
   end
 
@@ -174,6 +182,27 @@ class NECB2011
                          sys_name_pars: sys_name_pars)
     end
 
+    return true
+  end
+
+  def add_no_air_baseboard_heating(model:,
+                                   zones:,
+                                   baseboard_type:,
+                                   hw_loop:)
+    zones.each do |zone|
+
+      # add zone baseboards
+      add_zone_baseboards(baseboard_type: baseboard_type,
+                          hw_loop: hw_loop,
+                          model: model,
+                          zone: zone)
+
+      #  # Create a diffuser and attach the zone/diffuser pair to the MAU air loop, if applicable
+      #if mau_type == true
+      #  diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
+      #  mau_air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
+      #end # components for MAU
+    end # of zone loop
     return true
   end
 end
