@@ -369,10 +369,15 @@ class ASHRAE9012010 < ASHRAE901
   def air_loop_hvac_energy_recovery_ventilator_flow_limit(air_loop_hvac, climate_zone, pct_oa)
     # Table 6.5.6.1
     search_criteria = {
-        'template' => template,
-        'climate_zone' => climate_zone
+      'template' => template,
+      'climate_zone' => climate_zone
     }
     energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
+    if energy_recovery_limits.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2010.AirLoopHVAC', "Cannot find energy recovery limits for template '#{template}', climate zone '#{climate_zone}', assuming no energy recovery required.")
+      return nil
+    end
+
     if pct_oa < 0.1
       erv_cfm = nil
     elsif pct_oa >= 0.1 && pct_oa < 0.2

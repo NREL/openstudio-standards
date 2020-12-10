@@ -254,6 +254,7 @@ class NECB2011 < Standard
                            erv_package: 'NECB_Default',
                            boiler_eff: nil,
                            furnace_eff: nil,
+                           unitary_cop: nil,
                            shw_eff: nil,
                            ext_wall_cond: nil,
                            ext_floor_cond: nil,
@@ -316,6 +317,7 @@ class NECB2011 < Standard
                                    ecm_system_name: ecm_system_name,
                                    erv_package: erv_package,
                                    boiler_eff: boiler_eff,
+                                   unitary_cop: unitary_cop,
                                    furnace_eff: furnace_eff,
                                    shw_eff: shw_eff,
                                    daylighting_type: daylighting_type
@@ -332,6 +334,7 @@ class NECB2011 < Standard
                                      erv_package: 'NECB_Default',
                                      boiler_eff: nil,
                                      furnace_eff: nil,
+                                     unitary_cop: nil,
                                      shw_eff: nil,
                                      daylighting_type: 'NECB_Default')
     # Create ECM object.
@@ -352,7 +355,7 @@ class NECB2011 < Standard
     # -------- Performace, Efficiencies, Controls and Sensors ------------
     #
     # Set code standard equipment charecteristics.
-    apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
+    sql_db_vars_map = apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
     # Apply System
     ecm.apply_system_efficiencies_ecm(model: model, ecm_system_name: ecm_system_name)
 
@@ -364,6 +367,8 @@ class NECB2011 < Standard
     ecm.modify_boiler_efficiency(model: model, boiler_eff: boiler_eff)
     # Apply Furnace Efficiency
     ecm.modify_furnace_efficiency(model: model, furnace_eff: furnace_eff)
+    # Apply Unitary efficiency
+    ecm.modify_unitary_cop(model: model,unitary_cop: unitary_cop,sql_db_vars_map: sql_db_vars_map)
     # Apply SHW Efficiency
     ecm.modify_shw_efficiency(model: model, shw_eff: shw_eff)
     # Apply daylight controls.
@@ -448,6 +453,10 @@ class NECB2011 < Standard
   #     # <-3.1:  Remove all the windows/skylights
   #     # > 1:  Do nothing
   def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0)
+    fdwr_set = -1.0 if fdwr_set == 'NECB_default' or fdwr_set.nil?
+    srr_set = -1.0 if srr_set == 'NECB_default' or srr_set.nil?
+    fdwr_set = fdwr_set.to_f
+    srr_set = srr_set.to_f
     apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
     apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
     # model_add_daylighting_controls(model) # to be removed after refactor.
@@ -462,8 +471,57 @@ class NECB2011 < Standard
     # Apply the prototype HVAC assumptions
     model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
     # Apply the HVAC efficiency standard
-    model_apply_hvac_efficiency_standard(model, climate_zone)
+    sql_db_vars_map = {}
+    model_apply_hvac_efficiency_standard(model, climate_zone, sql_db_vars_map: sql_db_vars_map)
     model_enable_demand_controlled_ventilation(model, dcv_type)
+    return sql_db_vars_map
+  end
+
+  # Shut off the system during unoccupied periods.
+  # During these times, systems will cycle on briefly
+  # if temperature drifts below setpoint.  For systems
+  # with fan-powered terminals, the whole system
+  # (not just the terminal fans) will cycle on.
+  # Terminal-only night cycling is not used because the terminals cannot
+  # provide cooling, so terminal-only night cycling leads to excessive
+  # unmet cooling hours during unoccupied periods.
+  # If the system already has a schedule other than
+  # Always-On, no change will be made.  If the system has
+  # an Always-On schedule assigned, a new schedule will be created.
+  # In this case, occupied is defined as the total percent
+  # occupancy for the loop for all zones served.
+  #
+  # @param min_occ_pct [Double] the fractional value below which
+  # the system will be considered unoccupied.
+  # @return [Bool] true if successful, false if not
+  def air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = 0.05)
+    # Set the system to night cycle
+    air_loop_hvac.setNightCycleControlType('CycleOnAny')
+
+    # Check if already using a schedule other than always on
+    avail_sch = air_loop_hvac.availabilitySchedule
+    unless avail_sch == air_loop_hvac.model.alwaysOnDiscreteSchedule
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Availability schedule is already set to #{avail_sch.name}.  Will assume this includes unoccupied shut down; no changes will be made.")
+      return true
+    end
+
+    # Get the airloop occupancy schedule
+    loop_occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: min_occ_pct)
+    flh = schedule_ruleset_annual_equivalent_full_load_hrs(loop_occ_sch)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Annual occupied hours = #{flh.round} hr/yr, assuming a #{min_occ_pct} occupancy threshold.  This schedule will be used as the HVAC operation schedule.")
+
+    # Set HVAC availability schedule to follow occupancy
+    air_loop_hvac.setAvailabilitySchedule(loop_occ_sch)
+    air_loop_hvac.supplyComponents('OS:AirLoopHVAC:UnitaryHeatPump:AirToAir:MultiSpeed'.to_IddObjectType).each do |comp|
+      comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.setAvailabilitySchedule(loop_occ_sch)
+    end
+
+    return true
+  end
+
+  # do not apply zone hvac ventilation control
+  def zone_hvac_component_occupancy_ventilation_control(zone_hvac_component)
+    return false
   end
 
   def apply_loop_pump_power(model:, sizing_run_dir:)

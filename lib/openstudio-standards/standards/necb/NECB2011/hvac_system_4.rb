@@ -86,6 +86,7 @@ class NECB2011
       # Set up DX coil with NECB performance curve characteristics;
 
       clg_coil = self.add_onespeed_DX_coil(model, always_on)
+      clg_coil.setName("CoilCoolingDXSingleSpeed_dx")
 
       # oa_controller
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -141,6 +142,18 @@ class NECB2011
                           model: model,
                           zone: zone)
     end # zone loop
+    sys_name_pars = {}
+    sys_name_pars["sys_hr"] = "none"
+    sys_name_pars["sys_clg"] = "dx"
+    sys_name_pars["sys_htg"] = heating_coil_type
+    sys_name_pars["sys_sf"] = "cv"
+    sys_name_pars["zone_htg"] = baseboard_type
+    sys_name_pars["zone_clg"] = "none"
+    sys_name_pars["sys_rf"] = "none"
+    assign_base_sys_name(air_loop,
+                         sys_abbr: "sys_4",
+                         sys_oa: "mixed",
+                         sys_name_pars: sys_name_pars)
 
     return true
   end

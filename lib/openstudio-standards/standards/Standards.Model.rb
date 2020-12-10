@@ -1471,8 +1471,8 @@ class Standard
   end
 
   # Applies the HVAC parts of the template to all objects in the model using the the template specified in the model.
-  def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true)
-    sql_db_vars_map = {}
+  def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true, sql_db_vars_map: nil)
+    sql_db_vars_map = {} if sql_db_vars_map.nil?
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Started applying HVAC efficiency standards for #{template} template.")
 

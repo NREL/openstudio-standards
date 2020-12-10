@@ -84,6 +84,7 @@ class NECB2011
     # Create MAU
     # TO DO: MAU sizing, characteristics (fan operation schedules, temperature setpoints, outdoor air, etc)
 
+
     if mau_type == true
       mau_air_loop = common_air_loop(model: model, system_data: system_data)
       mau_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
@@ -99,6 +100,7 @@ class NECB2011
 
       # Set up Single Speed DX coil with
       mau_clg_coil = self.add_onespeed_DX_coil(model, always_on)
+      mau_clg_coil.setName("CoilCoolingDXSingleSpeed_dx")
 
       # Set up OA system
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -121,7 +123,6 @@ class NECB2011
       setpoint_mgr = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
       setpoint_mgr.addToNode(mau_air_loop.supplyOutletNode)
     end
-
 
     zones.each do |zone|
       # Zone sizing temperature
@@ -158,6 +159,21 @@ class NECB2011
         mau_air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
       end # components for MAU
     end # of zone loop
+    if mau_type
+      sys_name_pars = {}
+      sys_name_pars["sys_hr"] = "none"
+      sys_name_pars["sys_clg"] = "dx"
+      sys_name_pars["sys_htg"] = mau_heating_coil_type
+      sys_name_pars["sys_sf"] = "cv"
+      sys_name_pars["zone_htg"] = baseboard_type
+      sys_name_pars["zone_clg"] = "ptac"
+      sys_name_pars["sys_rf"] = "none"
+      assign_base_sys_name(mau_air_loop,
+                         sys_abbr: "sys_1",
+                         sys_oa: "doas",
+                         sys_name_pars: sys_name_pars)
+    end
+
     return true
   end
 end

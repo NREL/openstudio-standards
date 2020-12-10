@@ -439,17 +439,22 @@ class ASHRAE9012013 < ASHRAE901
       avail_sch = avail_sch.to_ScheduleRuleset.get
       ann_op_hrs = schedule_ruleset_annual_hours_above_value(avail_sch, 0.0)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: could not determine annual operating hours. Assuming less than 8,000 for ERV determination.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2013.AirLoopHVAC', "For #{air_loop_hvac.name}: could not determine annual operating hours. Assuming less than 8,000 for ERV determination.")
     end
 
     if ann_op_hrs < 8000.0
       # Table 6.5.6.1-1, less than 8000 hrs
       search_criteria = {
-          'template' => template,
-          'climate_zone' => climate_zone,
-          'under_8000_hours' => true
+        'template' => template,
+        'climate_zone' => climate_zone,
+        'under_8000_hours' => true
       }
       energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
+      if energy_recovery_limits.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2013.AirLoopHVAC', "Cannot find energy recovery limits for template '#{template}', climate zone '#{climate_zone}', and under 8000 hours, assuming no energy recovery required.")
+        return nil
+      end
+
       if pct_oa < 0.1
         erv_cfm = nil
       elsif pct_oa >= 0.1 && pct_oa < 0.2
@@ -472,11 +477,15 @@ class ASHRAE9012013 < ASHRAE901
     else
       # Table 6.5.6.1-2, above 8000 hrs
       search_criteria = {
-          'template' => template,
-          'climate_zone' => climate_zone,
-          'under_8000_hours' => false
+        'template' => template,
+        'climate_zone' => climate_zone,
+        'under_8000_hours' => false
       }
       energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
+      if energy_recovery_limits.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2013.AirLoopHVAC', "Cannot find energy recovery limits for template '#{template}', climate zone '#{climate_zone}', and under 8000 hours, assuming no energy recovery required.")
+        return nil
+      end
       if pct_oa < 0.1
         erv_cfm = nil
       elsif pct_oa >= 0.1 && pct_oa < 0.2

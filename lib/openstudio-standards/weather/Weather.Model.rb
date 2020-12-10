@@ -110,7 +110,7 @@ class Standard
 
       # extract to local weather dir
       weather_dir = File.expand_path(File.join(Dir.pwd, 'extracted_files/weather/'))
-      puts "Extracting weather files to #{weather_dir}"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Extracting weather files from OpenStudio CLI to #{weather_dir}")
       FileUtils.mkdir_p(weather_dir)
       File.open("#{weather_dir}/#{weather_file_name}", 'wb') { |f| f << epw_string; f.flush }
       File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.ddy')}", 'wb') { |f| f << ddy_string; f.flush }
@@ -177,7 +177,6 @@ class Standard
       end
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not find .ddy file for: #{ddy_file}.")
-      puts "Could not find .ddy file for: #{ddy_file}."
       success = false
     end
 
@@ -186,12 +185,44 @@ class Standard
 
   def model_add_ground_temperatures(model, building_type, climate_zone)
 
-    # Get ground temperatures from stat file. Stat file is mapped via climate zone.
-    stat_file_path = File.join(File.dirname(__FILE__), "../../../data/weather/#{model_get_climate_zone_weather_file_map[climate_zone].gsub('.epw', '.stat')}")
+    # Define the weather file for each climate zone
+    climate_zone_weather_file_map = model_get_climate_zone_weather_file_map
 
+    # Get the weather file name from the hash
+    weather_file_name = climate_zone_weather_file_map[climate_zone]
+    if weather_file_name.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', "Could not determine the weather file for climate zone: #{climate_zone}, cannot get ground temperatures from stat file.")
+    end
+
+    # Define where the weather files lives
+    weather_dir = nil
+    if __dir__[0] == ':' # Running from OpenStudio CLI
+      # load stat file from embedded files
+      stat_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.stat')}")
+
+      # extract to local weather dir
+      weather_dir = File.expand_path(File.join(Dir.pwd, 'extracted_files/weather/'))
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Extracting stat file from OpenStudio CLI to #{weather_dir}")
+      FileUtils.mkdir_p(weather_dir)
+      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.stat')}", 'wb') { |f| f << stat_string; f.flush }
+    else
+      # loaded gem from system path
+      top_dir = File.expand_path('../../..', File.dirname(__FILE__))
+      weather_dir = File.expand_path("#{top_dir}/data/weather")
+    end
+
+    # Expand the weather directory path
+    unless (Pathname.new weather_dir).absolute?
+      weather_dir = File.expand_path(File.join(File.dirname(__FILE__), weather_dir))
+    end
+
+    # Get the path to the stat file
+    weather_file = File.join(weather_dir, weather_file_name)
+
+    # Add ground temperatures via parsing of STAT file.
     ground_temperatures = []
-
-    if stat_file_path.include? '.stat'
+    stat_file_path = "#{File.join(File.dirname(weather_file), File.basename(weather_file, '.*'))}.stat"
+    if File.exist? stat_file_path
       ground_temperatures = model_get_monthly_ground_temps_from_stat_file(stat_file_path)
       unless ground_temperatures.empty?
         # set the site ground temperature building surface
@@ -310,8 +341,8 @@ module BTAP
       else
         Dir.glob("#{File.dirname(__FILE__)}/../../../**/*.epw").each do |file|
           canadian_file_names << File.basename(file).to_s
-          puts "File.basename = #{File.basename(file)}"
-          puts "File.dirname = #{File.dirname(file)}"
+          # puts "File.basename = #{File.basename(file)}"
+          # puts "File.dirname = #{File.dirname(file)}"
         end
       end
       return canadian_file_names

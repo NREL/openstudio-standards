@@ -158,7 +158,7 @@
     },
     {
       "name": "PTAC_CAV_Fan",
-      "type": "ConstantVolume",
+      "type": "OnOff",
       "pressure_rise": 1.33,
       "fan_efficiency": 0.52,
       "motor_efficiency": 0.8,

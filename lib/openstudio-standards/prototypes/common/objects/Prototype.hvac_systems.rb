@@ -529,7 +529,7 @@ class Standard
     # apply 90.1 sizing temperatures
     if use_90_1_design_sizing
       # use the formulation in 90.1-2010 G3.1.3.11 to set the approach temperature
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Prototype.hvac_systems', "Using the 90.1-2010 G3.1.3.11 approach temperature sizing methodology for condenser loop #{condenser_water_loop}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Prototype.hvac_systems', "Using the 90.1-2010 G3.1.3.11 approach temperature sizing methodology for condenser loop #{condenser_water_loop.name}.")
 
       # first, look in the model design day objects for sizing information
       summer_oat_wbs_f = []
@@ -550,10 +550,30 @@ class Standard
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', 'No valid WB=>MDB Summer Design Days were found in the model.  Attempting to load wet bulb sizing from the .ddy file directly.')
         if model.weatherFile.is_initialized && model.weatherFile.get.path.is_initialized
           weather_file = model.weatherFile.get.path.get.to_s
-          # Attempt to load in the ddy file based on convention that it is in the same directory and has the same basename as the epw file.
-          ddy_file = "#{File.join(File.dirname(weather_file), File.basename(weather_file, '.*'))}.ddy"
-          if File.exist? ddy_file
-            ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file).get
+          # Run differently depending on whether running from embedded filesystem in OpenStudio CLI or not
+          if weather_file[0] == ':' # Running from OpenStudio CLI
+            # Attempt to load in the ddy file based on convention that it is in the same directory and has the same basename as the epw file.
+            ddy_file = weather_file.gsub('.epw', '.ddy')
+            if EmbeddedScripting::hasFile(ddy_file)
+              ddy_string = EmbeddedScripting::getFileAsString(ddy_file)
+              temp_ddy_path = "#{Dir.pwd}/in.ddy"
+              File.open(temp_ddy_path, 'wb') { |f| f << ddy_string; f.flush }
+              ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(temp_ddy_path).get
+              File.delete(temp_ddy_path) if File.exist?(temp_ddy_path)
+            else
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file}")
+            end
+          else
+            # Attempt to load in the ddy file based on convention that it is in the same directory and has the same basename as the epw file.
+            ddy_file = "#{File.join(File.dirname(weather_file), File.basename(weather_file, '.*'))}.ddy"
+            if File.exist? ddy_file
+              ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file).get
+            else
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file}")
+            end
+          end
+
+          unless ddy_model.nil?
             ddy_model.getDesignDays.sort.each do |dd|
               # Save the model wetbulb design conditions Condns WB=>MDB
               if dd.name.get.include? '4% Condns WB=>MDB'
@@ -561,8 +581,6 @@ class Standard
                 summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
               end
             end
-          else
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file}")
           end
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', 'The model does not have a weather file object or path specified in the object. Cannot get .ddy file directory.')
@@ -2443,31 +2461,6 @@ class Standard
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
 
-      # create fan
-      # ConstantVolume: Packaged Rooftop Single Zone Air conditioner
-      # Cycling: Unitary System
-      # CyclingHeatPump: Unitary Heat Pump system
-      if fan_type == 'ConstantVolume'
-        if heating_type == 'Single Speed Heat Pump'
-          fan = create_fan_by_name(model,
-                                 'Packaged_RTU_SZ_AC_CAV_OnOff_Fan',
-                                 fan_name: "#{air_loop.name} Fan")
-        else
-          fan = create_fan_by_name(model,
-                                  'Packaged_RTU_SZ_AC_CAV_Fan',
-                                  fan_name: "#{air_loop.name} Fan")
-        end
-        fan.setAvailabilitySchedule(hvac_op_sch)
-      elsif fan_type == 'Cycling'
-        fan = create_fan_by_name(model,
-                                 'Packaged_RTU_SZ_AC_Cycling_Fan',
-                                 fan_name: "#{air_loop.name} Fan")
-        fan.setAvailabilitySchedule(hvac_op_sch)
-      else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Fan type '#{fan_type}' not recognized, cannot add PSZ-AC.")
-        return []
-      end
-
       # create heating coil
       case heating_type
       when 'NaturalGas', 'Gas'
@@ -2560,7 +2553,11 @@ class Standard
 
       # wrap coils in a unitary system if cycling
       if fan_type == 'Cycling'
-        case heating_type 
+        # Use a Fan:OnOff in the unitary system object
+        fan = create_fan_by_name(model,
+                                 'Packaged_RTU_SZ_AC_Cycling_Fan',
+                                 fan_name: "#{air_loop.name} Fan")
+        case heating_type
         when 'Water To Air Heat Pump'
           # Cycling: Unitary System
           unitary_system = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
@@ -2591,7 +2588,7 @@ class Standard
           unitary_system.setFanPlacement(fan_location)
           unitary_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
           unitary_system.addToNode(air_loop.supplyInletNode)
-        else  
+        else
           # heating_type = NaturalGas, Electricity, Water or nil (no heat)
           unitary_system = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
           unitary_system.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
@@ -2603,12 +2600,16 @@ class Standard
           unitary_system.setFanPlacement(fan_location)
           unitary_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
           unitary_system.addToNode(air_loop.supplyInletNode)
-        
         end
       else
         # ConstantVolume: Packaged Rooftop Single Zone Air conditioner
         # Need unitary system wrapper for heat pumps in order to allow control of supplemental heat
         if heating_type == 'Single Speed Heat Pump'
+          # Use a Fan:OnOff in the unitary system object
+          fan = create_fan_by_name(model,
+                                   'Packaged_RTU_SZ_AC_CAV_OnOff_Fan',
+                                   fan_name: "#{air_loop.name} Fan")
+          fan.setAvailabilitySchedule(hvac_op_sch)
           # CyclingHeatPump: Unitary Heat Pump system
           unitary_system = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
           unitary_system.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
@@ -2623,6 +2624,11 @@ class Standard
           unitary_system.setSupplyAirFanOperatingModeSchedule(hvac_op_sch)
           unitary_system.addToNode(air_loop.supplyInletNode)
         elsif fan_location == 'DrawThrough'
+          # Use a Fan:ConstantVolume placed directly on the air loop
+          fan = create_fan_by_name(model,
+                                   'Packaged_RTU_SZ_AC_CAV_Fan',
+                                   fan_name: "#{air_loop.name} Fan")
+          fan.setAvailabilitySchedule(hvac_op_sch)
           fan.addToNode(air_loop.supplyInletNode) unless fan.nil?
           supplemental_htg_coil.addToNode(air_loop.supplyInletNode) unless supplemental_htg_coil.nil?
           unless htg_coil.nil?
@@ -2636,6 +2642,11 @@ class Standard
             clg_coil.controllerWaterCoil.get.setName("#{clg_coil.name} Controller") if cooling_type == 'Water'
           end
         elsif fan_location == 'BlowThrough'
+          # Use a Fan:ConstantVolume placed directly on the air loop
+          fan = create_fan_by_name(model,
+                                   'Packaged_RTU_SZ_AC_CAV_Fan',
+                                   fan_name: "#{air_loop.name} Fan")
+          fan.setAvailabilitySchedule(hvac_op_sch)
           supplemental_htg_coil.addToNode(air_loop.supplyInletNode) unless supplemental_htg_coil.nil?
           clg_coil.addToNode(air_loop.supplyInletNode) unless clg_coil.nil?
           htg_coil.addToNode(air_loop.supplyInletNode) unless htg_coil.nil?
@@ -3673,7 +3684,7 @@ class Standard
                      cooling_type: 'Two Speed DX AC',
                      heating_type: 'Gas',
                      hot_water_loop: nil,
-                     fan_type: 'ConstantVolume',
+                     fan_type: 'Cycling',
                      ventilation: true)
 
     # default design temperatures used across all air loops
@@ -3706,15 +3717,14 @@ class Standard
         fan = create_fan_by_name(model,
                                  'PTAC_CAV_Fan',
                                  fan_name: "#{zone.name} PTAC Fan")
-        fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
       elsif fan_type == 'Cycling'
         fan = create_fan_by_name(model,
                                  'PTAC_Cycling_Fan',
                                  fan_name: "#{zone.name} PTAC Fan")
-        fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "ptac_fan_type of #{fan_type} is not recognized.")
       end
+      fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
 
       # add heating coil
       case heating_type
@@ -3765,7 +3775,7 @@ class Standard
       ptac_system.setFanPlacement('DrawThrough')
       if fan_type == 'ConstantVolume'
         ptac_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOnDiscreteSchedule)
-      elsif fan_type == 'Cycling'
+      else
         ptac_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
       end
       unless ventilation
@@ -3817,17 +3827,16 @@ class Standard
       if fan_type == 'ConstantVolume'
         fan = create_fan_by_name(model,
                                  'PTAC_CAV_Fan',
-                                 fan_name: "#{zone.name} PTAC Fan")
-        fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
+                                 fan_name: "#{zone.name} PTHP Fan")
       elsif fan_type == 'Cycling'
         fan = create_fan_by_name(model,
                                  'PTAC_Cycling_Fan',
-                                 fan_name: "#{zone.name} PTAC Fan")
-        fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
+                                 fan_name: "#{zone.name} PTHP Fan")
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "PTHP fan_type of #{fan_type} is not recognized.")
         return false
       end
+      fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
 
       # add heating coil
       htg_coil = create_coil_heating_dx_single_speed(model,
@@ -3848,9 +3857,10 @@ class Standard
                                                                             supplemental_htg_coil)
       pthp_system.setName("#{zone.name} PTHP")
       pthp_system.setFanPlacement('DrawThrough')
+      pthp_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
       if fan_type == 'ConstantVolume'
         pthp_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOnDiscreteSchedule)
-      elsif fan_type == 'Cycling'
+      else
         pthp_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
       end
       unless ventilation
@@ -5696,6 +5706,9 @@ class Standard
   #   HighTemperature (180F supply) or LowTemperature (120F supply)
   def model_get_or_add_hot_water_loop(model, heat_fuel,
                                       hot_water_loop_type: 'HighTemperature')
+    if heat_fuel.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Hot water loop fuel type is nil.  Cannot add hot water loop.')
+    end
     make_new_hot_water_loop = true
     hot_water_loop = nil
     # retrieve the existing hot water loop or add a new one if not of the correct type
@@ -5838,13 +5851,13 @@ class Standard
                      cooling_type: 'Single Speed DX AC',
                      heating_type: heating_type,
                      hot_water_loop: hot_water_loop,
-                     fan_type: 'ConstantVolume',
+                     fan_type: 'Cycling',
                      ventilation: zone_equipment_ventilation)
 
     when 'PTHP'
       model_add_pthp(model,
                      zones,
-                     fan_type: 'ConstantVolume',
+                     fan_type: 'Cycling',
                      ventilation: zone_equipment_ventilation)
 
     when 'PSZ-AC'
@@ -6242,6 +6255,8 @@ class Standard
     when 'DOAS'
       if air_loop_heating_type == 'Water'
         case main_heat_fuel
+        when nil
+          hot_water_loop = nil
         when 'AirSourceHeatPump'
           hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                            hot_water_loop_type: 'LowTemperature')
@@ -6270,6 +6285,8 @@ class Standard
     when 'DOAS with DCV'
       if air_loop_heating_type == 'Water'
         case main_heat_fuel
+        when nil
+          hot_water_loop = nil
         when 'AirSourceHeatPump'
           hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                            hot_water_loop_type: 'LowTemperature')
@@ -6297,6 +6314,8 @@ class Standard
     when 'DOAS with Economizing'
       if air_loop_heating_type == 'Water'
         case main_heat_fuel
+        when nil
+          hot_water_loop = nil
         when 'AirSourceHeatPump'
           hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                            hot_water_loop_type: 'LowTemperature')
