@@ -95,7 +95,7 @@ class NECB2011
 
   # Organizes Zones and assigns them to appropriate systems according to NECB 2011-17 systems spacetype rules in Sec 8.
   # requires requires fuel type to be assigned for each system aspect. Defaults to gas hydronic.
-  def apply_systems(model:, primary_heating_fuel:, sizing_run_dir:, no_air:)
+  def apply_systems(model:, primary_heating_fuel:, sizing_run_dir:, no_air: nil)
     raise('validation of model failed.') unless validate_initial_model(model)
     # Check to see if model is using another vintage of spacetypes. If so overwrite the @standards for the object with the
     # other spacetype data. This is required for correct system mapping.
