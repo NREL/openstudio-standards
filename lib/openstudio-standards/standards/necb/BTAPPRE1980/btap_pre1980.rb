@@ -127,6 +127,11 @@ class BTAPPRE1980 < NECB2011
                  scale_x: scale_x,
                  scale_y: scale_y,
                  scale_z: scale_z,
+                 pv_ground_type: pv_ground_type,
+                 pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
+                 pv_ground_tilt_angle: pv_ground_tilt_angle,
+                 pv_ground_azimuth_angle: pv_ground_azimuth_angle,
+                 pv_ground_module_description: pv_ground_module_description,
                  no_air: no_air)
   end
 
