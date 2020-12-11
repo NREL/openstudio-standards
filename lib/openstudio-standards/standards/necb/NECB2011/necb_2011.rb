@@ -196,7 +196,7 @@ class NECB2011 < Standard
                                    fdwr_set: -1.0,
                                    srr_set: -1.0,
                                    nv_type: nil,
-                                   nv_opening_area_m2: nil
+                                   nv_opening_fraction: nil
   )
 
     model = load_building_type_from_library(building_type: building_type)
@@ -230,7 +230,7 @@ class NECB2011 < Standard
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
                                 nv_type: nil, # Two options: (1) nil OR FALSE, (2) TRUE
-                                nv_opening_area_m2: nil # e.g. 0.5
+                                nv_opening_fraction: nil # e.g. 0.5
 
     )
   end
@@ -280,7 +280,7 @@ class NECB2011 < Standard
                            scale_y: nil,
                            scale_z: nil,
                            nv_type: nil,
-                           nv_opening_area_m2: nil
+                           nv_opening_fraction: nil
   )
 
     BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees.nil?
@@ -327,7 +327,7 @@ class NECB2011 < Standard
                                    shw_eff: shw_eff,
                                    daylighting_type: daylighting_type,
                                    nv_type: nv_type,
-                                   nv_opening_area_m2: nv_opening_area_m2
+                                   nv_opening_fraction: nv_opening_fraction
     )
     return model
   end
@@ -345,7 +345,7 @@ class NECB2011 < Standard
                                      shw_eff: nil,
                                      daylighting_type: 'NECB_Default',
                                      nv_type: nil,
-                                     nv_opening_area_m2: nil)
+                                     nv_opening_fraction: nil)
     # Create ECM object.
     ecm = ECMS.new
 
@@ -390,7 +390,7 @@ class NECB2011 < Standard
 
     # -------Natural ventilation----------------
     # Apply natural ventilation using simplified method.
-    ecm.apply_nv(model: model, nv_type: nv_type, nv_opening_area_m2: nv_opening_area_m2)
+    ecm.apply_nv(model: model, nv_type: nv_type, nv_opening_fraction: nv_opening_fraction)
   end
 
 
