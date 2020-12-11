@@ -347,7 +347,7 @@ class NECB2011 < Standard
 
     # -------- Systems Layout-----------
 
-    # Create Default Systems.
+    # Create Default Systems.  Set no_air to anything other than nil to create systems without airloops.
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir, no_air: no_air)
 
     # Apply new ECM system. Overwrite standard as required.
