@@ -126,10 +126,16 @@ class Standard
     end
 
     # SAT reset
-    # TODO Prototype buildings use OAT-based SAT reset,
-    # but PRM RM suggests Warmest zone based SAT reset.
     if air_loop_hvac_supply_air_temperature_reset_required?(air_loop_hvac, climate_zone)
-      air_loop_hvac_enable_supply_air_temperature_reset_warmest_zone(air_loop_hvac)
+      reset_type = air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
+      case reset_type
+        when 'warmest_zone'
+          air_loop_hvac_enable_supply_air_temperature_reset_warmest_zone(air_loop_hvac)
+        when 'oa'
+          air_loop_hvac_enable_supply_air_temperature_reset_outdoor_temperature(air_loop_hvac)
+        else
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "No SAT reset for #{air_loop_hvac.name}.")
+      end
     end
 
     # Motorized OA damper
@@ -2208,13 +2214,12 @@ class Standard
   end
 
   # Enable supply air temperature (SAT) reset based
-  # on outdoor air conditions.  SAT will be kept at the
+  # on outdoor air conditions. SAT will be kept at the
   # current design temperature when outdoor air is above 70F,
   # increased by 5F when outdoor air is below 50F, and reset
   # linearly when outdoor air is between 50F and 70F.
   #
   # @return [Bool] Returns true if successful, false if not.
-
   def air_loop_hvac_enable_supply_air_temperature_reset_outdoor_temperature(air_loop_hvac)
     # for AHU1 in Outpatient, SAT is 52F constant, no reset
     return true if air_loop_hvac.name.get == 'PVAV Outpatient F1'
@@ -2226,7 +2231,7 @@ class Standard
     sat_at_hi_oat_f = OpenStudio.convert(sat_at_hi_oat_c, 'C', 'F').get
     # 5F increase when it's cold outside,
     # and therefore less cooling capacity is likely required.
-    increase_f = 5.0
+    increase_f = air_loop_hvac_enable_supply_air_temperature_reset_delta(air_loop_hvac)
     sat_at_lo_oat_f = sat_at_hi_oat_f + increase_f
     sat_at_lo_oat_c = OpenStudio.convert(sat_at_lo_oat_f, 'F', 'C').get
 
@@ -2247,7 +2252,7 @@ class Standard
 
     # Attach the setpoint manager to the
     # supply outlet node of the system.
-    sat_oa_reset.addToNode(supplyOutletNode)
+    sat_oa_reset.addToNode(air_loop_hvac.supplyOutletNode)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset was enabled.  When OAT is greater than #{hi_oat_f.round}F, SAT is #{sat_at_hi_oat_f.round}F.  When OAT is less than #{lo_oat_f.round}F, SAT is #{sat_at_lo_oat_f.round}F.  It varies linearly in between these points.")
 
