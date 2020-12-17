@@ -404,7 +404,7 @@ class ECMS
       system_data[:ZoneCoolingSizingFactor] = 1.1
       system_data[:ZoneHeatingSizingFactor] = 1.3
       if system_doas_flags[sys_name.to_s]
-        system_data[:name] = "CCASHP Makeup Air Unit"
+        system_data[:name] = sys_name.to_s
         system_data[:AllOutdoorAirinCooling] = true
         system_data[:AllOutdoorAirinHeating] = true
         system_data[:TypeofLoadtoSizeOn] = 'VentilationRequirement'
@@ -416,7 +416,7 @@ class ECMS
         sat_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), system_data[:system_supply_air_temperature])
         setpoint_mgr = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
       else
-        system_data[:name] = "CCASHP System"
+        system_data[:name] = sys_name.to_s
         system_data[:AllOutdoorAirinCooling] = false
         system_data[:AllOutdoorAirinHeating] = false
         system_data[:TypeofLoadtoSizeOn] = 'Sensible'
@@ -445,16 +445,16 @@ class ECMS
       sys_supply_fan.setName("System Supply Fan")
       # Cooling coil
       sys_clg_coil = OpenStudio::Model::CoilCoolingDXVariableSpeed.new(model)
-      sys_clg_coil.setName("CCASHP DX Clg Coil")
+      sys_clg_coil.setName("CoilCoolingDXVariableSpeed_CCASHP")
       sys_clg_coil_speeddata1 = OpenStudio::Model::CoilCoolingDXVariableSpeedSpeedData.new(model)
       sys_clg_coil.addSpeed(sys_clg_coil_speeddata1)
       sys_clg_coil.setNominalSpeedLevel(1)
       # Electric supplemental heating coil
       sys_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-      sys_elec_htg_coil.setName("CCASHP Elec Htg Coil")
+      sys_elec_htg_coil.setName("CoilHeatingElectric")
       # DX heating coil
       sys_dx_htg_coil = OpenStudio::Model::CoilHeatingDXVariableSpeed.new(model)
-      sys_dx_htg_coil.setName("CCASHP DX Htg Coil")
+      sys_dx_htg_coil.setName("CoilHeatingDXVariableSpeed_CCASHP")
       sys_dx_htg_coil_speed1 = OpenStudio::Model::CoilHeatingDXVariableSpeedSpeedData.new(model)
       sys_dx_htg_coil.addSpeed(sys_dx_htg_coil_speed1)
       sys_dx_htg_coil.setNominalSpeedLevel(1)
@@ -508,6 +508,16 @@ class ECMS
         airloop.addBranchForZone(zone, diffuser.to_StraightComponent)
         if baseboard_flag then standard.add_zone_baseboards(baseboard_type: 'Electric', hw_loop: nil, model: model, zone: zone) end
       end
+      update_sys_name(airloop,
+                      sys_abbr: nil,
+                      sys_oa: nil,
+                      sys_hr: nil,
+                      sys_htg: "ccashp",
+                      sys_clg: "ccashp",
+                      sys_sf: nil,
+                      zone_htg: "b-e",
+                      zone_clg: "none",
+                      sys_rf: nil)
       systems << airloop
     end
 
