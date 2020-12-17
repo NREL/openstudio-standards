@@ -147,7 +147,7 @@ class Standard
 
     # create fan
     fan = create_fan_variable_volume(model,
-                                     fan_name:fan_name,
+                                     fan_name: fan_name,
                                      fan_efficiency: fan_efficiency,
                                      pressure_rise: pressure_rise_pa,
                                      motor_efficiency: motor_efficiency,
@@ -162,5 +162,4 @@ class Standard
                                      fan_power_coefficient_5: fan_power_coefficient_5)
     return fan
   end
-
 end

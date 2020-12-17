@@ -1,4 +1,3 @@
-
 # Custom changes for the Outpatient prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -117,7 +116,7 @@ module Outpatient
         end
 
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-        elec_equip.setSchedule(model_add_schedule(model, 'OutPatientHealthCare BLDG_ELEVATORS_Pre2004'))
+      elec_equip.setSchedule(model_add_schedule(model, 'OutPatientHealthCare BLDG_ELEVATORS_Pre2004'))
     end
     return true
   end
@@ -386,9 +385,9 @@ module Outpatient
     model.getSpaces.sort.each do |space|
       space_type_name = space.spaceType.get.standardsSpaceType.get
       search_criteria = {
-          'template' => template,
-          'building_type' => building_type,
-          'space_type' => space_type_name
+        'template' => template,
+        'building_type' => building_type,
+        'space_type' => space_type_name
       }
       data = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
 

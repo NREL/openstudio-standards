@@ -19,5 +19,3 @@ class CBES
     return ventilation_method
   end
 end
-
-

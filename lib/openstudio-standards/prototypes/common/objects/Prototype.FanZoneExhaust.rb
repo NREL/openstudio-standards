@@ -59,5 +59,4 @@ class Standard
     fan.setSystemAvailabilityManagerCouplingMode(system_availability_manager_coupling_mode) unless system_availability_manager_coupling_mode.nil?
     return fan
   end
-
 end

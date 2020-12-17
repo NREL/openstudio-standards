@@ -34,6 +34,7 @@ class Standard
     if STANDARDS_LIST[name].nil?
       raise "ERROR: Did not find a class called '#{name}' to create in #{JSON.pretty_generate(STANDARDS_LIST)}"
     end
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.standard', "Using OpenStudio Standards version #{OpenstudioStandards::VERSION} with template #{name}.")
     return STANDARDS_LIST[name].new
   end

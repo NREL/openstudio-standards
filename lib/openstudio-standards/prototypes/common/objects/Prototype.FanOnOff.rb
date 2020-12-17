@@ -99,10 +99,10 @@ class Standard
                         end_use_subcategory: nil)
     fan = OpenStudio::Model::FanOnOff.new(model)
     PrototypeFan.apply_base_fan_variables(fan,
-                                          fan_name:fan_name,
+                                          fan_name: fan_name,
                                           fan_efficiency: fan_efficiency,
                                           pressure_rise: pressure_rise,
-                                          end_use_subcategory:end_use_subcategory)
+                                          end_use_subcategory: end_use_subcategory)
     fan.setMotorEfficiency(motor_efficiency) unless motor_efficiency.nil?
     fan.setMotorInAirstreamFraction(motor_in_airstream_fraction) unless motor_in_airstream_fraction.nil?
     return fan
@@ -135,5 +135,4 @@ class Standard
                             end_use_subcategory: end_use_subcategory)
     return fan
   end
-
 end

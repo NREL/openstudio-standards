@@ -1,4 +1,3 @@
-
 class Standard
   # @!group CoilCoolingDXSingleSpeed
 
@@ -114,13 +113,13 @@ class Standard
       if coil_cooling_dx_single_speed.ratedSensibleHeatRatio.is_initialized
         crac_sensible_heat_ratio = coil_cooling_dx_single_speed.ratedSensibleHeatRatio.get
       elsif coil_cooling_dx_single_speed.autosizedRatedSensibleHeatRatio.is_initialized
-        #Though actual inlet temperature is very high (thus basically no dehumidification),
-        #sensible heat ratio can't be pre-assigned as 1 because it should be the value at conditions defined in ASHRAE Standard 127 => 26.7 °C drybulb/19.4 °C wetbulb.
+        # Though actual inlet temperature is very high (thus basically no dehumidification),
+        # sensible heat ratio can't be pre-assigned as 1 because it should be the value at conditions defined in ASHRAE Standard 127 => 26.7 degC drybulb/19.4 degC wetbulb.
         crac_sensible_heat_ratio = coil_cooling_dx_single_speed.autosizedRatedSensibleHeatRatio.get
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoilCoolingDXSingleSpeed', 'Failed to get autosized sensible heat ratio')
       end
-      cop = crac_minimum_scop/crac_sensible_heat_ratio
+      cop = crac_minimum_scop / crac_sensible_heat_ratio
       cop = cop.round(2)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{crac_minimum_scop}SCOP #{cop}COP"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SCOP = #{crac_minimum_scop}")

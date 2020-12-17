@@ -32,11 +32,9 @@ class ASHRAE9012010 < ASHRAE901
 
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return [nil, nil, nil] # No OA system
-    end
+    return [nil, nil, nil] unless oa_sys.is_initialized # No OA system
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
     economizer_type = oa_control.getEconomizerControlType
 
@@ -45,8 +43,8 @@ class ASHRAE9012010 < ASHRAE901
       return [nil, nil, nil]
     when 'FixedDryBulb'
       search_criteria = {
-          'template' => template,
-          'climate_zone' => climate_zone
+        'template' => template,
+        'climate_zone' => climate_zone
       }
       econ_limits = model_find_object(standards_data['economizers'], search_criteria)
       drybulb_limit_f = econ_limits['fixed_dry_bulb_high_limit_shutoff_temp']

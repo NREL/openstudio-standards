@@ -85,7 +85,7 @@ class Standard
   end
 
   def create_fan_constant_volume(model,
-                                 fan_name:nil,
+                                 fan_name: nil,
                                  fan_efficiency: nil,
                                  pressure_rise: nil,
                                  motor_efficiency: nil,
@@ -130,5 +130,4 @@ class Standard
                                      end_use_subcategory: end_use_subcategory)
     return fan
   end
-
 end

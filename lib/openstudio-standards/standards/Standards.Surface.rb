@@ -86,14 +86,14 @@ class Standard
       vertical_surface.subSurfaces.sort.each do |vertical_subsurface|
         # Need to fix this so that error show up in right place
         if vertical_subsurface.nil?
-          puts "Surface does not exist"
+          puts 'Surface does not exist'
         else
           vertical_subsurface.remove
         end
       end
       # corner_coords = vertical_surface.vertices
       code_window_area = fdwr*vertical_surface.grossArea
-      code_window_width = code_window_area/window_height_m
+      code_window_width = code_window_area / window_height_m
       min_z = 0
       vertical_surface.vertices.each_with_index do |vertex, index|
         if index == 0
@@ -134,11 +134,12 @@ class Standard
           # Note that this will not include foundation walls.
           next unless surface.surfaceType == 'Wall'
           next unless surface.outsideBoundaryCondition == 'Outdoors'
+
           # Determine if the wall is vertical which I define as being between 89 and 91 degrees from horizontal.
           tilt_radian = surface.tilt
           tilt_degrees = OpenStudio.convert(tilt_radian, 'rad', 'deg').get
           sub_surface_info = []
-          if tilt_degrees <= max_angle and tilt_degrees >= min_angle
+          if tilt_degrees <= max_angle && tilt_degrees >= min_angle
             # If the wall is vertical determine if it is adjacent to a plenum.  If yes include it in the array of
             # plenum walls and add it to the plenum wall area counter (accounting for space multipliers).
             if space_plenum?(space)
@@ -148,43 +149,43 @@ class Standard
               # If not a plenum then include it in the array of non-plenum walls and add it to the non-plenum area
               # counter (accounting for space multipliers).
               exposed_surfaces << surface
-              exp_nonplenum_area += surface.grossArea*space.multiplier
+              exp_nonplenum_area += surface.grossArea * space.multiplier
               surface.subSurfaces.sort.each do |sub_surface|
-                sub_surface_area += sub_surface.grossArea.to_f*space.multiplier
+                sub_surface_area += sub_surface.grossArea.to_f * space.multiplier
                 sub_surface_info << {
-                    "subsurface_name" => sub_surface.nameString,
-                    "subsurface_type" => sub_surface.subSurfaceType,
-                    "gross_area_m2" => sub_surface.grossArea.to_f,
-                    "construction_name" => sub_surface.construction.get.nameString
+                  'subsurface_name' => sub_surface.nameString,
+                  'subsurface_type' => sub_surface.subSurfaceType,
+                  'gross_area_m2' => sub_surface.grossArea.to_f,
+                  'construction_name' => sub_surface.construction.get.nameString
                 }
               end
               unless sub_surface_info.empty?
                 sub_surfaces_info << {
-                    "surface_name" => surface.nameString,
-                    "subsurfaces" => sub_surface_info
+                  'surface_name' => surface.nameString,
+                  'subsurfaces' => sub_surface_info
                 }
               end
             end
             # Regardless of if the wall is adjacent to a plenum or not add it to the exposed wall area adjacent to
             # conditioned spaces (accounting for space multipliers).
-            total_exp_area += surface.grossArea*space.multiplier
+            total_exp_area += surface.grossArea * space.multiplier
           end
         end
       end
     end
     fdwr = 999
     unless exp_nonplenum_area < 0.1
-      fdwr = sub_surface_area/exp_nonplenum_area
+      fdwr = sub_surface_area / exp_nonplenum_area
     end
     # Add everything into a hash and return that hash to whomever called the method.
     exp_surf_info = {
-        "total_exp_wall_area_m2" => total_exp_area,
-        "exp_plenum_wall_area_m2" => exp_plenum_area,
-        "exp_nonplenum_wall_area_m2" => exp_nonplenum_area,
-        "exp_plenum_walls" => plenum_surfaces,
-        "exp_nonplenum_walls" => exposed_surfaces,
-        "fdwr" => fdwr,
-        "sub_surfaces" => sub_surfaces_info
+      'total_exp_wall_area_m2' => total_exp_area,
+      'exp_plenum_wall_area_m2' => exp_plenum_area,
+      'exp_nonplenum_wall_area_m2' => exp_nonplenum_area,
+      'exp_plenum_walls' => plenum_surfaces,
+      'exp_nonplenum_walls' => exposed_surfaces,
+      'fdwr' => fdwr,
+      'sub_surfaces' => sub_surfaces_info
     }
     return exp_surf_info
   end
@@ -209,6 +210,7 @@ class Standard
           # Assume a roof is of type 'RoofCeiling' and has an 'Outdoors' boundary condition.
           next unless surface.surfaceType == 'RoofCeiling'
           next unless surface.outsideBoundaryCondition == 'Outdoors'
+
           # Determine if the roof is adjacent to a plenum.
           sub_surface_info = []
           if space_plenum?(space)
@@ -224,16 +226,16 @@ class Standard
             surface.subSurfaces.sort.each do |sub_surface|
               sub_surface_area += sub_surface.grossArea.to_f*space.multiplier
               sub_surface_info << {
-                  "subsurface_name" => sub_surface.nameString,
-                  "subsurface_type" => sub_surface.subSurfaceType,
-                  "gross_area_m2" => sub_surface.grossArea.to_f,
-                  "construction_name" => sub_surface.construction.get.nameString
+                'subsurface_name' => sub_surface.nameString,
+                'subsurface_type' => sub_surface.subSurfaceType,
+                'gross_area_m2' => sub_surface.grossArea.to_f,
+                'construction_name' => sub_surface.construction.get.nameString
               }
             end
             unless sub_surface_info.empty?
               sub_surfaces_info << {
-                  "surface_name" => surface.nameString,
-                  "subsurfaces" => sub_surface_info
+                'surface_name' => surface.nameString,
+                'subsurfaces' => sub_surface_info
               }
             end
           end
@@ -245,17 +247,17 @@ class Standard
     end
     srr = 999
     unless exp_nonplenum_area < 0.1
-      srr = sub_surface_area/exp_nonplenum_area
+      srr = sub_surface_area / exp_nonplenum_area
     end
     # Put the information into a hash and return it to whomever called this method.
     exp_surf_info = {
-        "total_exp_roof_area_m2" => total_exp_area,
-        "exp_plenum_roof_area_m2" => exp_plenum_area,
-        "exp_nonplenum_roof_area_m2" => exp_nonplenum_area,
-        "exp_plenum_roofs" => plenum_surfaces,
-        "exp_nonplenum_roofs" => exposed_surfaces,
-        "srr" => srr,
-        "sub_surfaces" => sub_surfaces_info
+      'total_exp_roof_area_m2' => total_exp_area,
+      'exp_plenum_roof_area_m2' => exp_plenum_area,
+      'exp_nonplenum_roof_area_m2' => exp_nonplenum_area,
+      'exp_plenum_roofs' => plenum_surfaces,
+      'exp_nonplenum_roofs' => exposed_surfaces,
+      'srr' => srr,
+      'sub_surfaces' => sub_surfaces_info
     }
     return exp_surf_info
   end
@@ -300,6 +302,7 @@ class Standard
       end
       # If no outdoor roofceiling go to the next space.
       next if outdoor_roof == false
+
       z_Origin = space.zOrigin.to_f
       ceiling_centroid = [0, 0, 0]
 
@@ -319,11 +322,11 @@ class Standard
 
       # Put the info into an array containing hashes of spaces with outdoor roofceilings
       spaces_info << {
-          space: space,
-          x: ceiling_centroid[0] + space.xOrigin.to_f,
-          y: ceiling_centroid[1] + space.yOrigin.to_f,
-          z: max_surf.centroid.z.to_f + z_Origin,
-          area_m2: ceiling_centroid[2]
+        space: space,
+        x: ceiling_centroid[0] + space.xOrigin.to_f,
+        y: ceiling_centroid[1] + space.yOrigin.to_f,
+        z: max_surf.centroid.z.to_f + z_Origin,
+        area_m2: ceiling_centroid[2]
       }
       # This is to determine which are the global highest outdoor roofceilings
       if max_height.round(tol) < (max_surf.centroid.z.to_f + z_Origin).round(tol)
@@ -346,9 +349,9 @@ class Standard
     roof_centroid[0] /= roof_centroid[2]
     roof_centroid[1] /= roof_centroid[2]
     roof_cent = {
-        top_spaces: top_spaces,
-        roof_centroid: [roof_centroid[0], roof_centroid[1], max_height],
-        roof_area: roof_centroid[2]
+      top_spaces: top_spaces,
+      roof_centroid: [roof_centroid[0], roof_centroid[1], max_height],
+      roof_area: roof_centroid[2]
     }
     return roof_cent
   end

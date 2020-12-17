@@ -1,4 +1,3 @@
-
 # Custom changes for the PrimarySchool prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -67,7 +66,7 @@ module PrimarySchool
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('Booster')
         water_heater.resetAmbientTemperatureSchedule
-        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen_ZN_1_FLR_1 ZN').get)
       end
     end

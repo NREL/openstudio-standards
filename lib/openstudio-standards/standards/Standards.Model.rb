@@ -150,6 +150,7 @@ class Standard
     model.getPlantLoops.sort.each do |plant_loop|
       # Skip the SWH loops
       next if plant_loop_swh_loop?(plant_loop)
+
       plant_loop_apply_prm_baseline_temperatures(plant_loop)
     end
 
@@ -179,6 +180,7 @@ class Standard
     model.getPlantLoops.sort.each do |plant_loop|
       # Skip the SWH loops
       next if plant_loop_swh_loop?(plant_loop)
+
       plant_loop_apply_prm_number_of_boilers(plant_loop)
       plant_loop_apply_prm_number_of_chillers(plant_loop)
     end
@@ -188,6 +190,7 @@ class Standard
     model.getPlantLoops.sort.each do |plant_loop|
       # Skip the SWH loops
       next if plant_loop_swh_loop?(plant_loop)
+
       plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
     end
 
@@ -201,6 +204,7 @@ class Standard
     model.getPlantLoops.sort.each do |plant_loop|
       # Skip the SWH loops
       next if plant_loop_swh_loop?(plant_loop)
+
       plant_loop_apply_prm_baseline_pump_power(plant_loop)
       plant_loop_apply_prm_baseline_pumping_type(plant_loop)
     end
@@ -738,10 +742,10 @@ class Standard
           # Add a hot water PTAC to each zone
           model_add_ptac(model,
                          zones,
-                         cooling_type: "Single Speed DX AC",
-                         heating_type: "Water",
+                         cooling_type: 'Single Speed DX AC',
+                         heating_type: 'Water',
                          hot_water_loop: hot_water_loop,
-                         fan_type: "ConstantVolume")
+                         fan_type: 'ConstantVolume')
         end
 
       when 'PTHP' # System 2
@@ -786,7 +790,7 @@ class Standard
                            cooling_type: cooling_type,
                            chilled_water_loop: chilled_water_loop,
                            heating_type: heating_type,
-                           supplemental_heating_type: "Gas",
+                           supplemental_heating_type: 'Gas',
                            hot_water_loop: hot_water_loop,
                            fan_location: 'DrawThrough',
                            fan_type: 'ConstantVolume')
@@ -1054,7 +1058,7 @@ class Standard
                                     pri_zones,
                                     system_name: system_name,
                                     chilled_water_loop: chilled_water_loop,
-                                    fan_efficiency:0.62,
+                                    fan_efficiency: 0.62,
                                     fan_motor_efficiency: 0.9,
                                     fan_pressure_rise: 4.0)
           end
@@ -1294,6 +1298,7 @@ class Standard
           full_load_hrs = 0.0
           # Skip lights with no schedule
           next if lights_sch.empty?
+
           lights_sch = lights_sch.get
           if lights_sch.to_ScheduleRuleset.is_initialized
             lights_sch = lights_sch.to_ScheduleRuleset.get
@@ -1404,6 +1409,7 @@ class Standard
           # This can happen if a zone has multiple spaces on multiple stories.
           # Stairwells and atriums are typical scenarios.
           next if zones_already_assigned.include?(zone)
+
           zones_on_story << zone
           zones_already_assigned << zone
         end
@@ -1465,7 +1471,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying multizone vav OA sizing.')
 
     # Multi-zone VAV outdoor air sizing
-    model.getAirLoopHVACs.sort.each {|obj| air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(obj)}
+    model.getAirLoopHVACs.sort.each { |obj| air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(obj) }
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying multizone vav OA sizing.')
   end
@@ -1586,7 +1592,6 @@ class Standard
     return true
   end
 
-
   # Method to search through a hash for the objects that meets the desired search criteria, as passed via a hash.
   # Returns an Array (empty if nothing found) of matching objects.
   #
@@ -1616,11 +1621,13 @@ class Standard
 
     # Compare each of the objects against the search criteria
     raise("This is not a table #{hash_of_objects}") unless hash_of_objects.respond_to?(:each)
+
     hash_of_objects.each do |object|
       meets_all_search_criteria = true
       search_criteria.each do |key, value|
         # Don't check non-existent search criteria
         next unless object.key?(key)
+
         # Stop as soon as one of the search criteria is not met
         # 'Any' is a special key that matches anything
         unless object[key] == value || object[key] == 'Any'
@@ -1630,6 +1637,7 @@ class Standard
       end
       # Skip objects that don't meet all search criteria
       next unless meets_all_search_criteria
+
       # If made it here, object matches all search criteria
       matching_objects << object
     end
@@ -1742,10 +1750,6 @@ class Standard
     return desired_object
   end
 
-
-
-
-
   # Method to search through a hash for the objects that meets the desired search criteria, as passed via a hash.
   # Returns an Array (empty if nothing found) of matching objects.
   #
@@ -1771,7 +1775,7 @@ class Standard
     search_criteria_matching_objects = []
     matching_objects = []
     hash_of_objects= @standards_data[table_name]
-    
+
     #needed for NRCan data structure compatibility. We keep all tables in a 'tables' hash in @standards_data and the table
     # itself is in the 'table' hash index.
     if hash_of_objects.nil?
@@ -1790,6 +1794,7 @@ class Standard
       search_criteria.each do |key, value|
         # Don't check non-existent search criteria
         next unless object.key?(key)
+
         # Stop as soon as one of the search criteria is not met
         # 'Any' is a special key that matches anything
         unless object[key] == value || object[key] == 'Any'
@@ -1799,6 +1804,7 @@ class Standard
       end
       # Skip objects that don't meet all search criteria
       next unless meets_all_search_criteria
+
       # If made it here, object matches all search criteria
       matching_objects << object
     end
@@ -1830,6 +1836,7 @@ class Standard
           next if capacity <= object['minimum_capacity'].to_f
           # Skip objects whose max
           next if capacity > object['maximum_capacity'].to_f
+
           # Found a matching object
           matching_objects << object
         end
@@ -1844,6 +1851,7 @@ class Standard
           next if date <= Date.parse(object['start_date'])
           # Skip objects whose end date is beyond the specified date
           next if date > Date.parse(object['end_date'])
+
           # Found a matching object
           date_matching_objects << object
         end
@@ -2804,8 +2812,8 @@ class Standard
           table.setMaximumValueofX2(data['maximum_independent_variable_2'].to_f)
           table.setInputUnitTypeforX2(data['input_unit_type_x2'])
         end
-        data_points = data.each.select {|key,value| key.include? "data_point"}
-        data_points.each do |key,value|
+        data_points = data.each.select { |key,value| key.include? 'data_point' }
+        data_points.each do |key, value|
           if num_ind_var == 1
             table.addPoint(value.split(',')[0].to_f,value.split(',')[1].to_f)
           elsif num_ind_var == 2
@@ -2814,7 +2822,7 @@ class Standard
         end
         return table
       else
-        OpenStudio::logFree(OpenStudio::Error, "openstudio.Model.Model", "#{curve_name}' has an invalid form: #{data['form']}', cannot create this curve.")
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.Model.Model', "#{curve_name}' has an invalid form: #{data['form']}', cannot create this curve.")
         return nil
     end
   end
@@ -2924,6 +2932,7 @@ class Standard
     fuel_types.each do |fuel_type|
       end_uses.each do |end_use|
         next if end_use == 'Exterior Equipment'
+
         legacy_val = legacy_values["#{end_use}|#{fuel_type}"]
 
         # Combine the exterior lighting and exterior equipment
@@ -2958,10 +2967,9 @@ class Standard
           else
             legacy_results_hash['total_energy_by_end_use'][end_use] = legacy_val # start new counter
           end
-
         end
-      end # Next end use
-    end # Next fuel type
+      end
+    end
 
     return legacy_results_hash
   end
@@ -2983,14 +2991,15 @@ class Standard
       result = 46_320
     elsif building_type == 'MediumOffice' # 53,600 ft^2
       result = 4982
-	elsif building_type == 'LargeOfficeDetailed' # 498,600 ft^2
+    elsif building_type == 'LargeOfficeDetailed' # 498,600 ft^2
       result = 46_320
     elsif building_type == 'MediumOfficeDetailed' # 53,600 ft^2
       result = 4982
     elsif building_type == 'MidriseApartment' # 33,700 ft^2
       result = 3135
     elsif building_type == 'Office'
-      result = nil # TODO: - there shouldn't be a prototype building for this
+      result = nil
+      # TODO: there shouldn't be a prototype building for this
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Measures calling this should choose between SmallOffice, MediumOffice, and LargeOffice')
     elsif building_type == 'Outpatient' # 40.950 ft^2
       result = 3804
@@ -3014,9 +3023,9 @@ class Standard
       result = 4181
     elsif building_type == 'Warehouse' # 49,495 ft^2 (legacy ref shows 52,045, but I wil calc using 49,495)
       result = 4595
-    elsif building_type == 'SmallDataCenterLowITE' or building_type == 'SmallDataCenterHighITE'  # 600 ft^2
+    elsif building_type == 'SmallDataCenterLowITE' || building_type == 'SmallDataCenterHighITE'  # 600 ft^2
       result = 56
-    elsif building_type == 'LargeDataCenterLowITE' or building_type == 'LargeDataCenterHighITE'  # 6000 ft^2
+    elsif building_type == 'LargeDataCenterLowITE' || building_type == 'LargeDataCenterHighITE'  # 6000 ft^2
       result = 557
     elsif building_type == 'Laboratory' # 90000 ft^2
       result = 8361

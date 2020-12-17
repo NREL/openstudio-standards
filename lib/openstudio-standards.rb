@@ -422,7 +422,7 @@ module OpenstudioStandards
   require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanVariableVolume"
 
   # DLM: not sure where this code should go
-  def self.get_run_env()
+  def self.get_run_env
     # blank out bundler and gem path modifications, will be re-setup by new call
     new_env = {}
     new_env['BUNDLER_ORIG_MANPATH'] = nil
@@ -438,26 +438,26 @@ module OpenstudioStandards
     new_env['GEM_HOME'] = nil
 
     # DLM: for now, ignore current bundle in case it has binary dependencies in it
-    #bundle_gemfile = ENV['BUNDLE_GEMFILE']
-    #bundle_path = ENV['BUNDLE_PATH']
-    #if bundle_gemfile.nil? || bundle_path.nil?
-      new_env['BUNDLE_GEMFILE'] = nil
-      new_env['BUNDLE_PATH'] = nil
-      new_env['BUNDLE_WITHOUT'] = nil
-    #else
-    #  new_env['BUNDLE_GEMFILE'] = bundle_gemfile
-    #  new_env['BUNDLE_PATH'] = bundle_path
-    #end
+    # bundle_gemfile = ENV['BUNDLE_GEMFILE']
+    # bundle_path = ENV['BUNDLE_PATH']
+    # if bundle_gemfile.nil? || bundle_path.nil?
+    new_env['BUNDLE_GEMFILE'] = nil
+    new_env['BUNDLE_PATH'] = nil
+    new_env['BUNDLE_WITHOUT'] = nil
+    # else
+    #   new_env['BUNDLE_GEMFILE'] = bundle_gemfile
+    #   new_env['BUNDLE_PATH'] = bundle_path
+    # end
 
     return new_env
   end
 
   def self.run_command(command)
-    stdout_str, stderr_str, status = Open3.capture3(get_run_env(), command)
+    stdout_str, stderr_str, status = Open3.capture3(get_run_env, command)
     if status.success?
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.command', "Successfully ran command: '#{command}'")
-      #puts "stdout: #{stdout_str}"
-      #puts "stderr: #{stderr_str}"
+      # puts "stdout: #{stdout_str}"
+      # puts "stderr: #{stderr_str}"
       return true
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "Error running command: '#{command}'")
@@ -466,9 +466,10 @@ module OpenstudioStandards
 
       # Print the ENV for debugging
       final_env = []
-      env_changes = get_run_env()
+      env_changes = get_run_env
       ENV.each do |env_var, val|
         next if env_changes.key?(env_var) && env_changes[env_var].nil?
+
         final_env << "#{env_var} = #{val}"
       end
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "command's modified ENV: \n #{final_env.join("\n")}")
@@ -476,7 +477,7 @@ module OpenstudioStandards
       # List the gems available to openstudio at this point
       cli_path = OpenStudio.getOpenStudioCLI
       cmd = "\"#{cli_path}\" gem_list"
-      stdout_str_2, stderr_str_2, status_2 = Open3.capture3(get_run_env(), cmd)
+      stdout_str_2, stderr_str_2, status_2 = Open3.capture3(get_run_env, cmd)
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "Gems available to openstudio cli according to (openstudio gem_list): \n #{stdout_str_2}")
 
       return false

@@ -272,8 +272,8 @@ class Standard
 
     # Sensors
     oat_db_c_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'Site Outdoor Air Drybulb Temperature')
-    oat_db_c_sen.setName("OAT")
-    oat_db_c_sen.setKeyName("Environment")
+    oat_db_c_sen.setName('OAT')
+    oat_db_c_sen.setKeyName('Environment')
 
     # Make a program for each unique set of schedules.
     # For most air loops, all zones will have the same
@@ -363,6 +363,7 @@ class Standard
     # Adjust each terminal fan
     air_loop_hvac.demandComponents.each do |dc|
       next if dc.to_AirTerminalSingleDuctParallelPIUReheat.empty?
+
       pfp_term = dc.to_AirTerminalSingleDuctParallelPIUReheat.get
       air_terminal_single_duct_parallel_piu_reheat_apply_prm_baseline_fan_power(pfp_term)
     end
@@ -490,13 +491,13 @@ class Standard
     # Calculate the Allowable Fan System brake horsepower per Table G3.1.2.9
     allowable_fan_bhp = 0
     if fan_pwr_limit_type == 'constant volume'
-      if dsn_air_flow_cfm > 0 
+      if dsn_air_flow_cfm > 0
         allowable_fan_bhp = dsn_air_flow_cfm * 0.00094 + fan_pwr_adjustment_bhp
       else
         allowable_fan_bhp = 0.00094
       end
     elsif fan_pwr_limit_type == 'variable volume'
-      if dsn_air_flow_cfm > 0 
+      if dsn_air_flow_cfm > 0
         allowable_fan_bhp = dsn_air_flow_cfm * 0.0013 + fan_pwr_adjustment_bhp
       else
         allowable_fan_bhp = 0.0013
@@ -516,9 +517,9 @@ class Standard
     cfm_per_ft2 = dsn_air_flow_cfm / floor_area_served_ft2
 
     if allowable_fan_bhp.zero?
-      cfm_per_hp = 0  
+      cfm_per_hp = 0
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "AirLoopHVAC #{air_loop_hvac.name} has zero allowable fan bhp, probably due to zero design air flow cfm'.")
-    else  
+    else
       cfm_per_hp = dsn_air_flow_cfm / allowable_fan_bhp
     end
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: area served = #{floor_area_served_ft2.round} ft^2.")
@@ -551,6 +552,7 @@ class Standard
       elsif comp.to_AirLoopHVACUnitarySystem.is_initialized
         sup_fan = comp.to_AirLoopHVACUnitarySystem.get.supplyFan
         next if sup_fan.empty?
+
         sup_fan = sup_fan.get
         if sup_fan.to_FanConstantVolume.is_initialized
           fans << sup_fan.to_FanConstantVolume.get
@@ -3105,6 +3107,7 @@ class Standard
     air_loop_hvac.thermalZones.each do |zone|
       # Skip zones that have exterior surface area
       next if zone.exteriorSurfaceArea > 0
+
       total_area += zone.floorArea
     end
 
@@ -3122,6 +3125,7 @@ class Standard
     air_loop_hvac.thermalZones.each do |zone|
       # Skip zones that have no exterior surface area
       next if zone.exteriorSurfaceArea.zero?
+
       total_area += zone.floorArea
     end
 

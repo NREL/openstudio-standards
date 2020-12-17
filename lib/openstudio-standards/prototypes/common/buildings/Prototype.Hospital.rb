@@ -1,4 +1,3 @@
-
 # Custom changes for the Hospital prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -162,11 +161,11 @@ module Hospital
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('300gal')
         water_heater.resetAmbientTemperatureSchedule
-        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Basement ZN').get)
       elsif water_heater.name.to_s.include?('6.0gal')
         water_heater.resetAmbientTemperatureSchedule
-        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen_Flr_5 ZN').get)
       end
     end

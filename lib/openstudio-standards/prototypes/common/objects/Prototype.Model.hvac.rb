@@ -1,6 +1,5 @@
 class Standard
   def model_add_hvac(model, building_type, climate_zone, prototype_input, epw_file)
-
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
 
     # Get the list of HVAC systems, as defined for each building in the Prototype.building_name files
@@ -33,17 +32,17 @@ class Standard
         else
           # get num_chillers from prototype_input
           num_chillers = prototype_input['chw_number_chillers']
-          if num_chillers == nil || num_chillers.to_i < 1
+          if num_chillers.nil? || num_chillers.to_i < 1
             num_chillers = 1
           end
           # update num_chillers if specified in @system_to_space_map
-          if system['chw_number_chillers'] !=nil && system['chw_number_chillers'].to_i >0
+          if !system['chw_number_chillers'].nil? && system['chw_number_chillers'].to_i > 0
             num_chillers = system['chw_number_chillers']
           end
 
           # get number_cooling_towers if specified in @system_to_space_map
           number_cooling_towers = 1
-          if system['number_cooling_towers'] !=nil && system['number_cooling_towers'].to_i >0
+          if !system['number_cooling_towers'].nil? && system['number_cooling_towers'].to_i > 0
             number_cooling_towers = system['number_cooling_towers']
           end
 
@@ -159,7 +158,7 @@ class Standard
                            model.getPlantLoopByName('Hot Water Loop').get
                          elsif building_type == 'MediumOffice'
                            nil
-						 elsif building_type == 'MediumOfficeDetailed'
+                         elsif building_type == 'MediumOfficeDetailed'
                            nil
                          else
                            model_add_hw_loop(model,
@@ -196,7 +195,7 @@ class Standard
           chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
         else
           num_chillers = 1
-          if (not system['num_chillers'].nil?) && (system['num_chillers'].to_i > 0)
+          if !system['num_chillers'].nil? && system['num_chillers'].to_i > 0
             num_chillers = system['num_chillers'].to_i
           end
           condenser_water_loop = nil
