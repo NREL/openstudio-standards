@@ -421,4 +421,24 @@ class ASHRAE901PRM < Standard
 
     return true
   end
+
+  def model_apply_prm_baseline_sizing_schedule(model)
+    space_loads = model.getSpaceLoads
+    space_items = model.getSpaceItems
+    space_load_instances = model.getSpaceLoadInstances
+    space_load_definitions = model.getSpaceLoadDefinitions
+
+    space_loads.sort.each do |space_load|
+      load_type = space_load.iddObjectType.valueName.sub('OS_', '').strip.sub('_', '')
+      casting_method_name = "to_#{load_type}"
+      loads = []
+      if space_load.respond_to?(casting_method_name)
+        casted_load = space_load.public_send(casting_method_name).get
+        loads << casted_load
+      else
+        p "Need Debug, casting method not found @JXL"
+      end
+
+    end
+  end
 end

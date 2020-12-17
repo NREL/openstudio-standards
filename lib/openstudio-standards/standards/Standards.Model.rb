@@ -289,7 +289,7 @@ class Standard
         end
 
       end
-      if /prm/i !~ template
+      if /prm/i =~ template
         # Set the zone sizing SAT for each zone in the model
         model.getThermalZones.each do |zone|
           thermal_zone_apply_prm_baseline_supply_temperatures(zone)
@@ -299,6 +299,9 @@ class Standard
         model.getAirLoopHVACs.each do |air_loop|
           air_loop_hvac_apply_prm_sizing_temperatures(air_loop)
         end
+
+        # Set internal load sizing run schedules
+        model_apply_prm_baseline_sizing_schedule(model)
 
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Controls ***')
 
