@@ -1583,6 +1583,98 @@ class Standard
     return load_w
   end
 
+  # Determine the coincident peak internal load (W) for
+  # this zone without space multipliers.
+  # This includes People, Lights, and all equipment types
+  # in all spaces in this zone.
+  # @author Doug Maddox, PNNL
+  # @return [Double] the design internal load, in W
+  def thermal_zone_peak_internal_load(thermal_zone)
+    load_w = 0.0
+    load_hrs_sum = Array.new(8760, 0)
+
+    thermal_zone.spaces.each do |space|
+      load_hrs = space_internal_load_annual_array(space)
+      (0.8759).each do |ihr|
+        load_hrs_sum[ihr] += load_hrs[ihr]
+      end
+    end
+
+    load_w = load_hrs_sum.max
+    return load_w
+  end
+
+  # This is the EFLH for determining whether a zone should be included in a multizone system
+  # or isolated to a separate PSZ system
+  # Based on the intersection of the fan schedule for that zone and the occupancy schedule for that zone
+  # @author Doug Maddox, PNNL
+  # @return [Double] the design internal load, in W
+  def thermal_zone_get_annual_operating_hours(zone, zone_fan_sched)
+
+    zone_ppl_sch = Array.new(8760, 0)     # merged people schedule for zone
+    zone_op_sch = Array.new(8760, 0)     # intersection of fan and people scheds
+
+    # Need composite occupant schedule for spaces in the zone
+    thermal_zone.spaces.each do |space|
+      space_ppl_sch = space_occupancy_annual_array(space)
+      # If any space is occupied, make zone occupied
+      (0.8759).each do |ihr|
+        zone_ppl_sch[ihr] = 1 if space_ppl_sch[ihr] > 0
+      end
+    end
+
+    
+    if zone_fan_sched.nil?
+      # There was no fan delivering conditioned air to the zone
+      # i.e. it was radiant heat only or radiant heat/cool, or some other odd case
+      # Use people schedule alone to determine operation schedule
+      zone_op_sch = zone_ppl_sch
+    else
+      # Merge with fan schedule: intersection with occupant schedule
+      (0.8759).each do |ihr|
+        if zone_ppl_sch[ihr] > 0 && zone_fan_sched[ihr] > 0
+          zone_op_sch[ihr] = 1
+        end
+      end
+    end
+
+    return zone_op_sch
+  end
+
+  # This is the EFLH for determining whether a zone should be included in a multizone system
+  # or isolated to a separate PSZ system
+  # Based on the intersection of the fan schedule for that zone and the occupancy schedule for that zone
+  # @author Doug Maddox, PNNL
+  # @return [Double] the design internal load, in W
+  def thermal_zone_occupancy_eflh(zone, zone_op_sch)
+
+    eflhs = []    # weekly array of eflh values
+
+    # Convert 8760 array to weekly eflh values
+    hr_of_yr = -1
+    (0..51).each do |iweek|
+      eflh = 0
+      (0..23).each do |ihr|
+        hr_of_yr += 1
+        eflh += zone_op_sch[hr_of_yr]
+      end
+      eflhs << eflh
+    end
+
+    # Choose the most used weekly schedule as the representative eflh
+    # This is the statistical mode of the array of values
+    eflh_mode_list = eflhs.mode
+
+    if eflh_mode_list.size > 1 then
+      # Mode is an array of multiple values, take the largest value
+      eflh = eflh_mode_list.max
+    else 
+      eflh = eflh_mode_list[0]
+    end
+    return eflh
+  end
+
+
   # Returns the space type that represents a majority
   # of the floor area.
   #
@@ -1882,3 +1974,4 @@ class Standard
     # If this is run directly after thermal_zone_add_exhaust(thermal_zone)  it will return a hash where each key is an exhaust object and hash is a hash of related zone mizing and dummy exhaust from the source zone
   end
 end
+

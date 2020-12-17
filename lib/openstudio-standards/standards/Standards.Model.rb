@@ -205,6 +205,30 @@ class Standard
         district_heat_zones = get_district_heating_zones(model)
         # sys_groups.each {|key, value| puts "#{key} = #{value}" }
         # district_heat_zones.each {|key, value| puts "#{key} = #{value}" }
+
+        # DEM: Temporary lines to test avail manager scheduled
+        # avail_mgr_sch = OpenStudio::Model::AvailabilityManagerScheduled.new(model)
+        # fan_sched_x = model.getScheduleRulesetByName('Always On Discrete')
+        # fan_sched_x = model.getScheduleConstantByName('Always On Discrete').get
+        # avail_mgr_sch.setSchedule(fan_sched_x)
+        # avail_mgr_sch.setSchedule(model.alwaysOnDiscreteSchedule)
+
+        # DEM: more temporary lines for some testing
+        # model.getAirLoopHVACs.each do |airloop|
+        #   airloop.HVACComponents.each do |hvac_comp|
+        #     istop = 1
+        #     comp_obj = hvac_comp.get
+        #   end
+
+        # end
+
+        # model.getAirLoopHVACs.each do |air_loop|
+        #   air_loop.addAvailabilityManager(avail_mgr_sch)
+        # end
+
+        # Store occupancy and fan operation schedules for each zone before deleting HVAC objects
+        # DEM: this new section is still under testing
+        zone_fan_scheds = get_fan_schedule_for_each_zone(model)
       end
       
       # Set the construction properties of all the surfaces in the model
@@ -286,6 +310,10 @@ class Standard
                                         system_type[2],
                                         system_type[3],
                                         sys_group['zones'])
+
+
+          # DEM: quick test
+
         end
 
       end
@@ -1213,6 +1241,161 @@ class Standard
     return heat_list
   end
 
+  # Store fan operation schedule for each zone before deleting HVAC objects
+  # @author Doug Maddox, PNNL
+  # @param model [object]
+  # @return [hash] of zoneName:fan_schedule_8760
+  def get_fan_schedule_for_each_zone(model)
+
+    fan_sch_names = {}
+
+    # Start with air loops
+    model.getAirLoopHVACs.sort.each do |air_loop_hvac|
+      fan_schedule_8760 = []
+      # Check for availability managers
+      # Assume only AvailabilityManagerScheduled will control fan schedule
+      # TODO: also check AvailabilityManagerScheduledOn
+      avail_mgrs = air_loop_hvac.availabilityManagers
+      # if avail_mgrs.is_initialized
+      if !avail_mgrs.nil?
+        avail_mgrs.each do |avail_mgr|
+          # avail_mgr = avail_mgr.get
+          # Check each type of AvailabilityManager
+          # If the current one matches, get the fan schedule
+          if avail_mgr.to_AvailabilityManagerScheduled.is_initialized
+            avail_mgr = avail_mgr.to_AvailabilityManagerScheduled.get
+            fan_schedule = avail_mgr.schedule
+            # fan_sch_translator = ScheduleTranslator.new(model, fan_schedule)
+            # fan_sch_ruleset = fan_sch_translator.translate
+            fan_schedule_8760 = get_8760_values_from_schedule(model, fan_schedule)
+          end
+        end
+      end
+      if fan_schedule_8760.empty?
+        # If there are no availability managers, then use the schedule in the supply fan object
+        test = air_loop_hvac.supplyFan.empty?
+        fan_object = nil
+        fan_object = get_fan_object_for_airloop(model, air_loop_hvac)
+        if !fan_object.nil?
+          fan_schedule = fan_object.availabilitySchedule
+        else
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Failed to retreive fan object for AirLoop #{air_loop_hvac.name}")
+        end
+        fan_schedule_8760 = get_8760_values_from_schedule(model, fan_schedule)
+      end
+
+      # Assign this schedule to each zone on this air loop
+      air_loop_hvac.thermalZones.each do |zone|
+        fan_sch_names[zone.name.get] = fan_schedule_8760
+      end
+    end
+
+    # Handle Zone equipment
+    model.getThermalZones.sort.each do |zone|
+      if !fan_sch_names.has_key?(zone.name.get)
+        # This zone was not assigned a schedule via air loop
+        # Check for zone equipment fans
+        zone.equipment.each do |zone_equipment|
+          next if zone_equipment.to_FanZoneExhaust.is_initialized
+          # get fan schedule
+          fan_object = zone_hvac_get_fan_object(zone_equipment)
+          if !fan_object.nil?
+            fan_schedule = fan_object.availabilitySchedule
+            fan_schedule_8760 = get_8760_values_from_schedule(model, fan_schedule)
+            fan_sch_names[zone.name.get] = fan_schedule_8760
+            break
+          end
+        end
+      end
+    end
+
+    return fan_sch_names
+  end
+
+  # Get the supply fan object for an air loop
+  # @author Doug Maddox, PNNL
+  # @param model [object]
+  # @param air_loop [object]
+  # @return [object] supply fan of zone equipment component
+  def get_fan_object_for_airloop(model, air_loop)
+    if !air_loop.supplyFan.empty?
+      fan_component = airloop.supplyFan.get
+
+      # if airloop.supplyFan.get.to_FanConstantVolume.is_initialized
+      #   fan_obj = airloop.supplyFan.get.to_FanConstantVolume.get
+      # end
+    else
+      # Check if system has unitary wrapper
+      air_loop.supplyComponents.each do |component|
+        # Get the object type, getting the internal coil
+        # type if inside a unitary system.
+        obj_type = component.iddObjectType.valueName.to_s
+        fan_component = nil
+        case obj_type
+        when 'OS_AirLoopHVAC_UnitaryHeatCool_VAVChangeoverBypass'
+          component = component.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.get
+          fan_component = component.supplyFan.get
+        when 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir'
+          component = component.to_AirLoopHVACUnitaryHeatPumpAirToAir.get
+          fan_component = component.supplyFan.get
+        when 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir_MultiSpeed'
+          component = component.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get
+          fan_component = component.supplyFan.get
+        when 'OS_AirLoopHVAC_UnitarySystem'
+          component = component.to_AirLoopHVACUnitarySystem.get
+          fan_component = component.supplyFan.get
+        end
+
+        if !fan_component.nil?
+          break
+        end
+      end
+    end
+
+    # Get the fan object for this fan
+    fan_obj_type = fan_component.iddObjectType.valueName.to_s
+    case fan_obj_type
+    when 'OS_Fan_OnOff'
+      fan_obj = fan_component.to_FanOnOff.get
+    when 'OS_Fan_ConstantVolume'
+      fan_obj = fan_component.to_FanConstantVolume.get
+    when 'OS_Fan_SystemModel'
+      fan_obj = fan_component.to_FanSystemModel.get
+    when 'OS_Fan_VariableVolume'
+      fan_obj = fan_component.to_FanVariableVolume.get
+    end
+    return fan_obj
+  end
+
+  # Convert from schedule object to array of hourly values for entire year
+  # Array will include extra 24 values for leap year
+  # Array will also include extra 24 values at end for holiday day type
+  # @author: Doug Maddox, PNNL
+  # @param: model [Object]
+  # @param: fan_schedule [Object]
+  # @return: [Array<String>] annual hourly values from schedule
+  def get_8760_values_from_schedule(model, fan_schedule)
+    sch_object_type = fan_schedule.iddObjectType.valueName.to_s
+    fan_8760 = nil
+    case sch_object_type
+    when 'OS_Schedule_Ruleset'
+      fan_8760 = get_8760_values_from_schedule_ruleset(model, fan_schedule)
+    when 'OS_Schedule_Constant'
+      fan_schedule_constant = fan_schedule.to_ScheduleConstant.get
+      fan_8760 = get_8760_values_from_schedule_constant(model, fan_schedule_constant)
+    when 'OS_Schedule_Compact'
+      # First convert to ScheduleRuleset
+      sch_translator = ScheduleTranslator.new(model, fan_schedule)
+      fan_schedule_ruleset = sch_translator.convert_schedule_compact_to_schedule_ruleset
+      fan_8760 = get_8760_values_from_schedule_ruleset(model, fan_schedule_ruleset)
+    when 'OS_Schedule_Year'
+      # TODO: add function for ScheduleYear
+      # fan_8760 = get_8760_values_from_schedule_year(model, fan_schedule)
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Automated baseline measure does not support use of Schedule Year")
+    end
+    return fan_8760
+  end  
+
   # Determines the area of the building above which point
   # the non-dominant area type gets it's own HVAC system type.
   # @return [Double] the minimum area (m^2)
@@ -1737,6 +1920,9 @@ class Standard
                                      fan_efficiency: 0.62,
                                      fan_motor_efficiency: 0.9,
                                      fan_pressure_rise: 4.0)
+            if /prm/i =~ template
+              model_create_multizone_fan_schedule(model, zone_fan_scheds, pri_zones, system_name)
+            end 
           end
           # Add a PSZ_HP for each secondary zone
           unless sec_zones.empty?
@@ -2229,6 +2415,167 @@ class Standard
     end
 
     return { 'primary' => pri_zones, 'secondary' => sec_zones }
+  end
+
+  # For a multizone system, identify any zones to isolate to separate PSZ systems
+  # isolated zones are on the 'secondary' list
+  # This version of the method applies to standard years 2016 and later (stable baseline)
+  # @author Doug Maddox, PNNL
+  # @param model
+  # @param zones [Array<Object>]
+  # @param zone_fan_scheds [Hash] hash of zoneName:8760FanSchedPerZone
+  # @return [Hash] A hash of two arrays of ThermalZones,
+  # where the keys are 'primary' and 'secondary'
+  def model_diff_primary_secondary_zones_stable_baseline(model, zones, zone_fan_scheds)
+
+    zone_op_hrs = {}   # hash of zoneName: 8760 array of operating hours
+    zone_eflh = {}     # hash of zoneName: eflh for zone
+    zone_max_load = {}  # hash of zoneName: coincident max internal load
+    load_limit = 10     # differ by 10 Btu/hr-sf or more
+    eflh_limit = 40     # differ by more than 40 EFLH/week from average of other zones
+    pri_zones = []
+    sec_zones = []
+
+    # Get coincident peak internal load for each zone
+    zones.each do |zone|
+      zone_name = zone.name.get.to_s
+      if zone_fan_scheds.has_key?(zone_name)
+        zone_fan_sched = zone_fan_scheds[zone_name]
+      else
+        zone_fan_sched = nil
+      end
+      zone_op_hrs[zone_name] = thermal_zone_get_annual_operating_hours(zone, zone_fan_sched)
+      zone_eflh[zone_name] = thermal_zone_occupancy_eflh(zone, zone_op_hrs[zone_name])
+      zone_max_load[zone_name] = thermal_zone_peak_internal_load(zone)
+    end
+    
+    # Eliminate all zones for which both max load and EFLH exceed limits
+    zones.each do |zone|
+      zone_name = zone.name.get.to_s
+      max_load_ip = OpenStudio.convert(zone_max_load[zone_name], 'W/m^2', 'Btu/hr*ft^2').get
+      avg_max_load = get_avg_of_other_zones(zone_max_load, zone_name)
+      avg_max_load_ip = OpenStudio.convert(avg_max_load, 'W/m^2', 'Btu/hr*ft^2').get
+      max_load_diff = (max_load_ip - avg_max_load_ip).abs
+      avg_eflh = get_avg_of_other_zones(zone_eflh, zone_name)
+      eflh_diff = (avg_eflh - zone_eflh[zone_name]).abs
+      if max_load_diff >= load_limit && eflh_diff > eflh_limit
+        # Add zone to secondary list, and remove from hashes
+        sec_zones << zone_name
+        zone_eflh.delete(zone_name)
+        zone_max_load.delete(zone_name)
+      end
+    end
+
+    # Eliminate worst zone where EFLH exceeds limit and repeat until all EFLH are below limit
+    num_zones = zone_eflh.size
+    (1..num_zones).each do |izone|
+      max_elfh_diff = 0
+      zones.each do |zone|
+        zone_name = zone.name.get.to_s
+        avg_eflh = get_avg_of_other_zones(zone_eflh, zone_name)
+        eflh_diff = (avg_eflh - zone_eflh[zone_name]).abs
+        if eflh_diff > max_eflh_diff
+          max_eflh_diff = eflh_diff
+          max_zone_name = zone_name
+        end
+      end
+      if max_eflh_diff > eflh_limit
+        # Move the max Zone to the secondary list
+        sec_zones << max_zone_name
+        zone_eflh.delete(max_zone_name)
+        zone_max_load.delete(max_zone_name)
+      else
+        # All zones are now within the limit, exit the iteration
+        break
+      end
+    end
+
+    # Eliminate worst zone where max load exceeds limit and repeat until all pass
+    num_zones = zone_eflh.size
+    (1..num_zones).each do |izone|
+      max_elfh_diff = 0
+      zones.each do |zone|
+        zone_name = zone.name.get.to_s
+        max_load_ip = OpenStudio.convert(zone_max_load[zone_name], 'W/m^2', 'Btu/hr*ft^2').get
+        avg_max_load = get_avg_of_other_zones(zone_max_load, zone_name)
+        avg_max_load_ip = OpenStudio.convert(avg_max_load, 'W/m^2', 'Btu/hr*ft^2').get
+        max_load_diff = (max_load_ip - avg_max_load_ip).abs
+        if max_load_diff >= highest_max_load_diff
+          highest_max_load_diff = max_load_diff
+          highest_zone_name = zone_name
+        end
+      end
+      if highest_max_load_diff > load_limit
+        # Move the max Zone to the secondary list
+        sec_zones << highest_zone_name
+        zone_eflh.delete(highest_zone_name)
+        zone_max_load.delete(highest_zone_name)
+      else
+        # All zones are now within the limit, exit the iteration
+        break
+      end
+    end
+
+    # Place remaining zones in multizone system list
+    zone_eflh.each_key do |key|
+      pri_zones << key
+    end
+
+    return { 'primary' => pri_zones, 'secondary' => sec_zones }
+  end
+
+  # For a multizone system, get average of hash values excluding the reference zone
+  # @author Doug Maddox, PNNL
+  # @param value_hash [Hash<String>] of zoneName:Value
+  # @param ref_zone [String] name of reference zone
+  def get_avg_of_other_zones(value_hash, ref_zone)
+    num_others = value_hash.size - 1
+    value_sum = 0
+    value_hash.each do |key, val|
+      value_sum += val unles key == ref_zone
+    end
+    value_avg = value_sum / num_others
+    return value_avg
+  end
+
+  # For a multizone system, create the fan schedule based on zone occupancy/fan schedules
+  # @author Doug Maddox, PNNL
+  # @param model
+  # @param zone_fan_scheds [Hash] of hash of zoneName:8760FanSchedPerZone
+  # @param pri_zones [Array<String>] names of zones served by the multizone system
+  # @param system_name [String] name of air loop
+  def model_create_multizone_fan_schedule(model, zone_fan_scheds, pri_zones, system_name)
+    # Create fan schedule for multizone system
+    fan_8760 = []
+    # If any zone is on for an hour, then the system fan must be on for that hour
+    pri_zones.each do |zone_name|
+      if fan_8760.size = 0
+        fan_8760 = zone_fan_scheds[zone_name]
+      else
+        (0..fan_8760.size).each do |ihr|
+          if zone_fan_scheds[zone_name][ihr] > 0
+            fan_8760[ihr] = 1
+          end
+        end
+      end
+    end
+
+    # Convert 8760 array to schedule ruleset
+    fan_sch_limits = model.getScheduleTypeLimitsByName('fan schedule limits for prm')
+    if fan_sch_limits.empty?
+      fan_sch_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+      fan_sch_limits.setName('fan schedule limits for prm')
+      fan_sch_limits.setNumericType("DISCRETE")
+      fan_sch_limits.setUnitType("Dimensionless")
+      fan_sch_limits.setLowerLimitValue(0)
+      fan_sch_limits.setUpperLimitValue(1)
+    end
+    sch_name = system_name + ' ' + 'fan schedule'
+    make_ruleset_sched_from_8760(model, values, sch_name, fan_sch_limits)    
+    
+    air_loop = model.getAirLoopHVACByName(system_name)
+    air_loop.additionalProperties.setFeature('fan_sched_name', sch_name)
+
   end
 
   # Group an array of zones into multiple arrays, one for each story in the building.
@@ -6595,3 +6942,12 @@ class Standard
     return lowest_story
   end
 end
+
+
+
+
+
+
+
+
+

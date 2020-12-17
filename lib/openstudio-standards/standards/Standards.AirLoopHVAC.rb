@@ -3088,6 +3088,18 @@ class Standard
     # Set the system to night cycle
     air_loop_hvac.setNightCycleControlType('CycleOnAny')
 
+
+    # Check if schedule was stored in an additionalProperties field of the air loop
+    puts "DEM: need to make sure fan sched is applied to the fan"
+    if air_loop_hvac.hasAdditionalProperties
+      if air_loop_hvac.additionalProperties.hasFeature('fan_sched_name')
+        fan_sched_name = air_loop_hvac.additionalProperties.getFeatureAsString('fan_sch_name')
+        fan_sched = model.getScheduleRulesetByName(fan_sched_name)
+        air_loop_hvac.setAvailabilitySchedule(fan_sched)
+        return true
+      end
+    end
+
     # Check if already using a schedule other than always on
     avail_sch = air_loop_hvac.availabilitySchedule
     unless avail_sch == air_loop_hvac.model.alwaysOnDiscreteSchedule
