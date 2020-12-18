@@ -428,17 +428,64 @@ class ASHRAE901PRM < Standard
     space_load_instances = model.getSpaceLoadInstances
     space_load_definitions = model.getSpaceLoadDefinitions
 
+    loads = []
     space_loads.sort.each do |space_load|
       load_type = space_load.iddObjectType.valueName.sub('OS_', '').strip.sub('_', '')
       casting_method_name = "to_#{load_type}"
-      loads = []
       if space_load.respond_to?(casting_method_name)
         casted_load = space_load.public_send(casting_method_name).get
         loads << casted_load
       else
         p "Need Debug, casting method not found @JXL"
       end
+    end
 
+    load_schedule_name_hash = {
+        "People" => "numberofPeopleSchedule",
+        "Lights" => "schedule",
+        "ElectricEquipment" => "schedule",
+        "GasEquipment" => "schedule",
+        "SpaceInfiltration_DesignFlowRate" => "schedule"
+    }
+
+    loads.each do |load|
+      load_type = load.iddObjectType.valueName.sub('OS_', '').strip
+      load_schedule_name = load_schedule_name_hash[load_type]
+      next unless !load_schedule_name.nil?
+
+      load_schedule = load.public_send(load_schedule_name).get
+      schedule_type = load_schedule.iddObjectType.valueName.sub('OS_', '').strip.sub('_', '')
+      load_schedule = load_schedule.public_send("to_#{schedule_type}").get
+
+      case schedule_type
+      when 'ScheduleRuleset'
+        load_schmax = get_8760_values_from_schedule(model, load_schedule).max
+        load_schmin = get_8760_values_from_schedule(model, load_schedule).min
+
+        if load_type == 'SpaceInfiltration_DesignFlowRate'
+          summer_value = load_schmax
+          winter_value = load_schmax
+        else
+          summer_value = load_schmax
+          winter_value = load_schmin
+        end
+
+        # set cooling design day schedule
+        summer_dd_schedule = OpenStudio::Model::ScheduleDay.new(model)
+        summer_dd_schedule.setName("#{load.name} Summer Design Day")
+        summer_dd_schedule.addValue(OpenStudio::Time.new(1.0), summer_value)
+        load_schedule.setSummerDesignDaySchedule(summer_dd_schedule)
+
+        # set heating design day schedule
+        winter_dd_schedule = OpenStudio::Model::ScheduleDay.new(model)
+        winter_dd_schedule.setName("#{load.name} Winter Design Day")
+        winter_dd_schedule.addValue(OpenStudio::Time.new(1.0), winter_value)
+        load_schedule.setWinterDesignDaySchedule(winter_dd_schedule)
+
+      when 'ScheduleConstant'
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space load #{load.name} has schedule type of Nothing to be done for ScheduleConstant")
+        next
+      end
     end
   end
 end
