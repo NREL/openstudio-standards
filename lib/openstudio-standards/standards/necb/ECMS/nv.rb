@@ -1,6 +1,6 @@
 class ECMS
 
-  def apply_nv(model:, nv_type:, nv_opening_fraction:)
+  def apply_nv(model:, nv_type:, nv_opening_fraction:, nv_Tout_min:, nv_Tout_max:) #TODO: add argument re whether Fanger or adaptive comfort model
 
     ##### If any of users' inputs are nil/false, do nothing.
     return if nv_type.nil? || nv_type == FALSE
@@ -8,21 +8,6 @@ class ECMS
 
     model.getZoneHVACEquipmentLists.sort.each do |zone_hvac_equipment_list|  #TODO: consider zones that do not have hvac?
       # puts zone_hvac_equipment_list
-
-      #TODO to be deleted START
-      # # # set air loop availability controls and night cycle manager, after oa system added
-      # air_loop.setAvailabilitySchedule(hvac_op_sch)
-      # air_loop.setNightCycleControlType('CycleOnAny')
-      # avail_mgr = air_loop.availabilityManager
-      # if avail_mgr.is_initialized
-      #   avail_mgr = avail_mgr.get
-      #   if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
-      #     avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
-      #     avail_mgr.setCyclingRunTime(1800)
-      #   end
-      # end
-      # AvailabilityManagerScheduled ????? use for on/off of HVAC?
-      #TODO to be deleted END
 
       thermal_zone = zone_hvac_equipment_list.thermalZone
       puts "thermal_zone_name_is #{thermal_zone.name.to_s}"
@@ -38,11 +23,47 @@ class ECMS
         puts "outdoor_air_flow_per_person is #{outdoor_air_flow_per_person}"
         puts "outdoor_air_flow_per_floor_area us #{outdoor_air_flow_per_floor_area}"
 
+        ### add AvailabilityManagerHybridVentilation to "prevents simultaneous natural ventilation and HVAC system operation" (Ref: E+ I/O)
+        thermal_zone.airLoopHVACs.sort.each do |air_loop|
+          # puts air_loop
+          avail_mgr_hybr_vent = OpenStudio::Model::AvailabilityManagerHybridVentilation.new(model)
+          avail_mgr_hybr_vent.setMinimumOutdoorTemperature(nv_Tout_min) #Note: since "Ventilation Control Mode" is by default set to "Temperature (i.e. 1)", only min and max Tout are needed. (see E+ I/O)
+          avail_mgr_hybr_vent.setMaximumOutdoorTemperature(nv_Tout_max) #Note: Tout_min is to avoid overcooling, Tout_max is to avoid overheating. (see see E+ I/O)
+          air_loop.addAvailabilityManager(avail_mgr_hybr_vent)
+        end
+
+        ### get setpoint temperature from the osm file   #TODO: use setpoint schedules (NECB-B-Thermostat Setpoint-Heating/Cooling) for min/max Tin instead of hard numbers for min/max Tin (in that case, no matter what values are entered in the fields of min/max Tin)
+        if thermal_zone.thermostat.is_initialized
+          if thermal_zone.thermostat.get.to_ThermostatSetpointDualSetpoint.is_initialized
+            if thermal_zone.thermostat.get.to_ThermostatSetpointDualSetpoint.get.heatingSetpointTemperatureSchedule.is_initialized ||
+                thermal_zone.thermostat.get.to_ThermostatSetpointDualSetpoint.get.coolingSetpointTemperatureSchedule.is_initialized
+              zone_thermostat = thermal_zone.thermostatSetpointDualSetpoint.get
+              zone_clg_thermostat_sch = zone_thermostat.coolingSetpointTemperatureSchedule.get
+              zone_htg_thermostat_sch = zone_thermostat.heatingSetpointTemperatureSchedule.get
+              puts zone_clg_thermostat_sch
+              puts zone_clg_thermostat_sch.name
+              clg_sp_schedule = zone_clg_thermostat_sch.to_ScheduleRuleset.get
+              puts clg_sp_schedule
+              clg_sp_profile = clg_sp_schedule.defaultDaySchedule
+              puts clg_sp_profile
+              puts clg_sp_profile.getString(12).to_s
+
+
+              puts zone_htg_thermostat_sch
+              puts zone_htg_thermostat_sch.name
+              htg_sp_schedule = zone_htg_thermostat_sch.to_ScheduleRuleset.get
+              puts htg_sp_schedule
+              htg_sp_profile = htg_sp_schedule.defaultDaySchedule
+              puts htg_sp_profile
+              puts htg_sp_profile.getString(15).to_s
+            end
+          end
+        end
 
         space.surfaces.sort.each do |surface|
           surface.subSurfaces.sort.each do |subsurface|
             # puts subsurface.name.to_s
-            if subsurface.subSurfaceType == 'FixedWindow' && subsurface.outsideBoundaryCondition == 'Outdoors'  #TODO: change window type to 'OperableWindow'
+            if subsurface.subSurfaceType == 'FixedWindow' && subsurface.outsideBoundaryCondition == 'Outdoors'  #TODO: change window type to 'OperableWindow'; for testing purposed, window type has been set to 'FixedWindow'.
               window_azimuth_deg = OpenStudio::convert(subsurface.azimuth,"rad","deg").get
               window_area = subsurface.netArea
               puts "window name is #{subsurface.name.to_s}"
@@ -50,48 +71,53 @@ class ECMS
               puts "window area is #{window_area}"
               # raise('check azimuth of exterior window')
 
-              if number_of_windows == 0.0
+              if number_of_windows == 0.0   #TODO: calculate number of windows; divide OA/person and OA/FloorArea by it to avoid OA more that required
                 ##### define a constant schedule for operable windows
                 operable_window_schedule = OpenStudio::Model::ScheduleConstant.new(model)
                 operable_window_schedule.setName('operable_window_schedule_constant')
                 operable_window_schedule.setScheduleTypeLimits(BTAP::Resources::Schedules::StandardScheduleTypeLimits::get_on_off(model))
 
-                ##### define EMS sensors: Tin and Tout
-                sensor_Tin = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Mean Air Temperature')
-                sensor_Tin.setName("#{thermal_zone.name.to_s}_sensor_Tin")
-                sensor_Tin.setKeyName(thermal_zone.name.get)
+                # ##### define EMS sensors: Tin and Tout
+                # sensor_Tin = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Mean Air Temperature')
+                # sensor_Tin.setName("#{thermal_zone.name.to_s}_sensor_Tin")
+                # sensor_Tin.setKeyName(thermal_zone.name.get)
+                #
+                # sensor_Tout = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
+                #
+                # ##### define EMS actuators: (1) whether window is open or closed; (2) whether HVAC is on or off.
+                # actuator_window_state = OpenStudio::Model::EnergyManagementSystemActuator.new(operable_window_schedule, 'Schedule:Constant', 'Schedule Value')
+                # actuator_window_state.setName("#{thermal_zone.name.to_s}_actuator_window_state")
+                #
+                #
+                #
+                # ##### define EMS program
+                # nv_avail_sch_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+                # nv_avail_sch_prog.setName('NV_program')
+                # nv_avail_sch_prog_body = <<-EMS
+                # IF #{sensor_Tout.handle} < #{sensor_Tin.handle}
+                #   SET #{actuator_window_state.handle} = 1.0
+                # ELSEIF #{sensor_Tout.handle} > #{sensor_Tin.handle}
+                #   SET #{actuator_window_state.handle} = 0.0
+                # ENDIF
+                # EMS
+                # nv_avail_sch_prog.setBody(nv_avail_sch_prog_body)
+                #
+                # ##### define EMS program calling managers
+                # nv_prog_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+                # nv_prog_mgr.setName('NV_program_calling_manager')
+                # nv_prog_mgr.setCallingPoint('BeginTimestepBeforePredictor')
+                # nv_prog_mgr.addProgram(nv_avail_sch_prog)
 
-                sensor_Tout = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
-
-                ##### define EMS actuators: (1) whether window is open or closed; (2) whether HVAC is on or off.
-                actuator_window_state = OpenStudio::Model::EnergyManagementSystemActuator.new(operable_window_schedule, 'Schedule:Constant', 'Schedule Value')
-                actuator_window_state.setName("#{thermal_zone.name.to_s}_actuator_window_state")
-
-
-
-                ##### define EMS program
-                nv_avail_sch_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-                nv_avail_sch_prog.setName('NV_program')
-                nv_avail_sch_prog_body = <<-EMS
-                IF #{sensor_Tout.handle} < #{sensor_Tin.handle} 
-                  SET #{actuator_window_state.handle} = 1.0
-                ELSEIF #{sensor_Tout.handle} > #{sensor_Tin.handle}
-                  SET #{actuator_window_state.handle} = 0.0
-                ENDIF
-                EMS
-                nv_avail_sch_prog.setBody(nv_avail_sch_prog_body)
-
-                ##### define EMS program calling managers
-                nv_prog_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-                nv_prog_mgr.setName('NV_program_calling_manager')
-                nv_prog_mgr.setCallingPoint('BeginTimestepBeforePredictor')
-                nv_prog_mgr.addProgram(nv_avail_sch_prog)
-
-                #####
+                ##### set air flow rate for natural ventilation
                 zn_vent_design_flow_rate_1 = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(model)
                 zn_vent_design_flow_rate_1.setDesignFlowRateCalculationMethod('Flow/Person')
                 zn_vent_design_flow_rate_1.setFlowRateperPerson(outdoor_air_flow_per_person)
                 zn_vent_design_flow_rate_1.setVentilationType('Natural')
+                zn_vent_design_flow_rate_1.setMinimumIndoorTemperature(22.0) #TODO user input or setpoint? (nv_Tin_min)
+                zn_vent_design_flow_rate_1.setMaximumIndoorTemperature(24.0) #TODO user input or setpoint? (nv_Tin_max)
+                zn_vent_design_flow_rate_1.setMinimumOutdoorTemperature(nv_Tout_min)
+                zn_vent_design_flow_rate_1.setMaximumOutdoorTemperature(nv_Tout_max)
+                zn_vent_design_flow_rate_1.setDeltaTemperature(0.0) #TODO user input? #Note: "This is the temperature difference between the indoor and outdoor air dry-bulb temperatures below which ventilation is shutoff." (Ref: E+ I/O)
                 zone_hvac_equipment_list.addEquipment(zn_vent_design_flow_rate_1)
                 thermal_zone.setCoolingPriority(zn_vent_design_flow_rate_1.to_ModelObject.get, 1)
                 thermal_zone.setHeatingPriority(zn_vent_design_flow_rate_1.to_ModelObject.get, 1)
@@ -101,6 +127,11 @@ class ECMS
                 zn_vent_design_flow_rate_2.setDesignFlowRateCalculationMethod('Flow/Area')
                 zn_vent_design_flow_rate_2.setFlowRateperZoneFloorArea(outdoor_air_flow_per_floor_area)
                 zn_vent_design_flow_rate_2.setVentilationType('Natural')
+                zn_vent_design_flow_rate_2.setMinimumIndoorTemperature(22.0) #TODO user input or setpoint? (nv_Tin_min)
+                zn_vent_design_flow_rate_2.setMaximumIndoorTemperature(24.0) #TODO user input or setpoint? (nv_Tin_max)
+                zn_vent_design_flow_rate_2.setMinimumOutdoorTemperature(nv_Tout_min)
+                zn_vent_design_flow_rate_2.setMaximumOutdoorTemperature(nv_Tout_max)
+                zn_vent_design_flow_rate_2.setDeltaTemperature(0.0) #TODO user input?
                 zone_hvac_equipment_list.addEquipment(zn_vent_design_flow_rate_2)
                 thermal_zone.setCoolingPriority(zn_vent_design_flow_rate_2.to_ModelObject.get, 2)
                 thermal_zone.setHeatingPriority(zn_vent_design_flow_rate_2.to_ModelObject.get, 2)
@@ -110,9 +141,14 @@ class ECMS
                 zn_vent_wind_and_stack = OpenStudio::Model::ZoneVentilationWindandStackOpenArea.new(model)
                 zn_vent_wind_and_stack.setOpeningArea(window_area * nv_opening_fraction)
                 zn_vent_wind_and_stack.setOpeningAreaFractionSchedule(operable_window_schedule)
-                # E+ I/O: "The below input field value is used to calculate the angle between the wind direction and the opening outward normal to determine the opening effectiveness values when the input field Opening Effectiveness = Autocalculate."
-                # E+ I/O: "Effective Angle is the angle in degrees counting from the North clockwise to the opening outward normal."
+                # (Ref: E+ I/O) "The below input field value is used to calculate the angle between the wind direction and the opening outward normal to determine the opening effectiveness values when the input field Opening Effectiveness = Autocalculate."
+                # (Ref: E+ I/O) "Effective Angle is the angle in degrees counting from the North clockwise to the opening outward normal."
                 zn_vent_wind_and_stack.setEffectiveAngle(window_azimuth_deg)
+                zn_vent_wind_and_stack.setMinimumIndoorTemperature(22.0) #TODO user input or setpoint? (nv_Tin_min)
+                zn_vent_wind_and_stack.setMaximumIndoorTemperature(24.0) #TODO user input or setpoint? (nv_Tin_max)
+                zn_vent_wind_and_stack.setMinimumOutdoorTemperature(nv_Tout_min)
+                zn_vent_wind_and_stack.setMaximumOutdoorTemperature(nv_Tout_max)
+                zn_vent_wind_and_stack.setDeltaTemperature(0.0) #TODO user input?
                 zone_hvac_equipment_list.addEquipment(zn_vent_wind_and_stack)
                 thermal_zone.setCoolingPriority(zn_vent_wind_and_stack.to_ModelObject.get, 3)
                 thermal_zone.setHeatingPriority(zn_vent_wind_and_stack.to_ModelObject.get, 3)
