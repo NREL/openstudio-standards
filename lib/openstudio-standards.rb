@@ -483,5 +483,4 @@ module OpenstudioStandards
       return false
     end
   end
-
 end

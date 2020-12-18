@@ -27,10 +27,10 @@ begin
       csv << row_data
     end
   end
-rescue
+rescue StandardError
 end
 
-data_json_hash = CSV.open(csv_file, :headers => true).map { |x| x.to_h }.to_json
+data_json_hash = CSV.open(csv_file, headers: true).map(&:to_h).to_json
 
 File.write("#{File.dirname(__FILE__)}/../btap/csvToJsonUpdate.json", data_json_hash)
 
