@@ -510,7 +510,7 @@ class Standard
     # todo - also merging non adjacent priority rules without getting rid of any rules between the two could create unexpected reults
     prior_rules = []
     sch_ruleset.scheduleRules.each do |rule|
-      if prior_rules.size.empty?
+      if prior_rules.empty?
         prior_rules << rule
         next
       else
