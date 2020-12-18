@@ -11,24 +11,24 @@ class Standard
 
     # Define the envelope component infiltration rates
     component_infil_rates_cfm_per_ft2 = {
-        'baseline' => {
-            'opaque_door' => 0.40,
-            'loading_dock_door' => 0.40,
-            'swinging_or_revolving_glass_door' => 1.0,
-            'vestibule' => 1.0,
-            'sliding_glass_door' => 0.40,
-            'window' => 0.40,
-            'skylight' => 0.40
-        },
-        'advanced' => {
-            'opaque_door' => 0.20,
-            'loading_dock_door' => 0.20,
-            'swinging_or_revolving_glass_door' => 1.0,
-            'vestibule' => 1.0,
-            'sliding_glass_door' => 0.20,
-            'window' => 0.20,
-            'skylight' => 0.20
-        }
+      'baseline' => {
+        'opaque_door' => 0.40,
+        'loading_dock_door' => 0.40,
+        'swinging_or_revolving_glass_door' => 1.0,
+        'vestibule' => 1.0,
+        'sliding_glass_door' => 0.40,
+        'window' => 0.40,
+        'skylight' => 0.40
+      },
+      'advanced' => {
+        'opaque_door' => 0.20,
+        'loading_dock_door' => 0.20,
+        'swinging_or_revolving_glass_door' => 1.0,
+        'vestibule' => 1.0,
+        'sliding_glass_door' => 0.20,
+        'window' => 0.20,
+        'skylight' => 0.20
+      }
     }
 
     boundary_condition = sub_surface.outsideBoundaryCondition
@@ -231,7 +231,7 @@ class Standard
   # 'sub_surface_create_centered_subsurface_from_scaled_surface' method because it can handle concave surfaces.
   # However, it takes longer because it uses BTAP::Geometry::Surfaces.make_convex_surfaces which includes many nested
   # loops that cycle through the verticies in a surface.
-  def sub_surface_create_scaled_subsurfaces_from_surface (surface:, area_fraction:, model:, consturction:)
+  def sub_surface_create_scaled_subsurfaces_from_surface(surface:, area_fraction:, model:, consturction:)
     # Set geometry tolerences:
     geometry_tolerence = 12
     # Get rid of all existing subsurfaces.
@@ -243,7 +243,7 @@ class Standard
     surface.vertices.each do |surf_vert|
       surface.vertices.each do |surf_vert_2|
         unless surf_vert_2.z.to_f.round(geometry_tolerence) == surf_vert.z.to_f.round(geometry_tolerence)
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Currently skylights can only be added to buildings with non-plenum flat roofs.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Currently skylights can only be added to buildings with non-plenum flat roofs.')
         end
       end
     end
@@ -257,7 +257,7 @@ class Standard
 
     # Turn everything back into OpenStudio stuff
     os_surf_points = []
-    os_surf_cents =[]
+    os_surf_cents = []
     for i in 0..(new_surfaces.length - 1)
       os_surf_point = []
       for j in 0..(new_surfaces[i].length - 1)
@@ -295,11 +295,11 @@ class Standard
       # 'skylight').  If there will be more than one subsurface then add a counter at the end.
       new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s
       if new_surfaces.length > 1
-        new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s + '_' + "#{index}"
+        new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s + '_' + index.to_s
       end
-      #Set the skylight type to 'Skylight'
+      # Set the skylight type to 'Skylight'
       new_sub_surface.setSubSurfaceType('Skylight')
-      #Set the skylight construction to whatever was passed (should be the default skylight construction)
+      # Set the skylight construction to whatever was passed (should be the default skylight construction)
       new_sub_surface.setConstruction(consturction)
       new_sub_surface.setName(new_name)
       # There is now only one surface on the subsurface.  Enforce this
@@ -322,8 +322,6 @@ class Standard
   # This removes all of the subsurfaces from a surface.  Is a preparation for replaceing windows or clearing doors
   # before adding windows.
   def remove_All_Subsurfaces(surface:)
-    surface.subSurfaces.sort.each do |sub_surface|
-      sub_surface.remove
-    end
+    surface.subSurfaces.sort.each(&:remove)
   end
 end

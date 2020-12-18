@@ -1,4 +1,3 @@
-
 class Standard
   # @!group CoilHeatingGasMultiStage
 
@@ -49,18 +48,17 @@ class Standard
   #
   # @return [Double] capacity in W to be used for find object
   def coil_heating_gas_multi_stage_find_capacity(coil_heating_gas_multi_stage)
-
     capacity_w = nil
     htg_stages = coil_heating_gas_multi_stage.stages
     if htg_stages.last.nominalCapacity.is_initialized
       capacity_w = htg_stages.last.nominalCapacity.get
-    elsif (htg_stages.size == 1) && (coil_heating_gas_multi_stage.autosizedStage1NominalCapacity.is_initialized)
+    elsif (htg_stages.size == 1) && coil_heating_gas_multi_stage.autosizedStage1NominalCapacity.is_initialized
       capacity_w = coil_heating_gas_multi_stage.autosizedStage1NominalCapacity.get
-    elsif (htg_stages.size == 2) && (coil_heating_gas_multi_stage.autosizedStage2NominalCapacity.is_initialized)
+    elsif (htg_stages.size == 2) && coil_heating_gas_multi_stage.autosizedStage2NominalCapacity.is_initialized
       capacity_w = coil_heating_gas_multi_stage.autosizedStage2NominalCapacity.get
-    elsif (htg_stages.size == 3) && (coil_heating_gas_multi_stage.autosizedStage3NominalCapacity.is_initialized)
+    elsif (htg_stages.size == 3) && coil_heating_gas_multi_stage.autosizedStage3NominalCapacity.is_initialized
       capacity_w = coil_heating_gas_multi_stage.autosizedStage3NominalCapacity.get
-    elsif (htg_stages.size == 4) && (coil_heating_gas_multi_stage.autosizedStage4NominalCapacity.is_initialized)
+    elsif (htg_stages.size == 4) && coil_heating_gas_multi_stage.autosizedStage4NominalCapacity.is_initialized
       capacity_w = coil_heating_gas_multi_stage.autosizedStage4NominalCapacity.get
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_heating_gas_multi_stage.name} capacity is not available, cannot apply efficiency standard.")
@@ -68,5 +66,4 @@ class Standard
       return successfully_set_all_properties
     end
   end
-
 end

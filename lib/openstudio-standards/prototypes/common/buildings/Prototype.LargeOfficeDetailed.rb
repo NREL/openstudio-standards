@@ -42,6 +42,7 @@ module LargeOfficeDetailed
     # replace EvaporativeFluidCoolerSingleSpeed with CoolingTowerTwoSpeed
     model.getPlantLoops.each do |plant_loop|
       next unless plant_loop.name.to_s.include? 'Heat Pump Loop'
+
       sup_wtr_high_temp_f = 65.0
       sup_wtr_low_temp_f = 41.0
       sup_wtr_high_temp_c = OpenStudio.convert(sup_wtr_high_temp_f, 'F', 'C').get

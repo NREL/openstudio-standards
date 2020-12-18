@@ -6,73 +6,73 @@ class Standard
   def model_get_climate_zone_weather_file_map(epw_file = '')
     # Define the weather file for each climate zone
     climate_zone_weather_file_map = {
-        'ASHRAE 169-2006-0A' => 'VNM_SVN_Ho.Chi.Minh-Tan.Son.Nhat.Intl.AP.489000_TMYx.epw',
-        'ASHRAE 169-2006-0B' => 'ARE_DU_Dubai.Intl.AP.411940_TMYx.epw',
-        'ASHRAE 169-2006-1A' => 'USA_FL_Miami.Intl.AP.722020_TMY3.epw',
-        'ASHRAE 169-2006-1B' => 'SAU_RI_Riyadh.AB.404380_TMYx.epw',
-        'ASHRAE 169-2006-2A' => 'USA_TX_Houston-Bush.Intercontinental.AP.722430_TMY3.epw',
-        'ASHRAE 169-2006-2B' => 'USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.epw',
-        'ASHRAE 169-2006-3A' => 'USA_TN_Memphis.Intl.AP.723340_TMY3.epw',
-        'ASHRAE 169-2006-3B' => 'USA_TX_El.Paso.Intl.AP.722700_TMY3.epw',
-        'ASHRAE 169-2006-3C' => 'USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw',
-        'ASHRAE 169-2006-4A' => 'USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw',
-        'ASHRAE 169-2006-4B' => 'USA_NM_Albuquerque.Intl.AP.723650_TMY3.epw',
-        'ASHRAE 169-2006-4C' => 'USA_OR_Salem-McNary.Field.726940_TMY3.epw',
-        'ASHRAE 169-2006-5A' => 'USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw',
-        'ASHRAE 169-2006-5B' => 'USA_ID_Boise.Air.Terminal.726810_TMY3.epw',
-        'ASHRAE 169-2006-5C' => 'CAN_BC_Vancouver.718920_CWEC.epw',
-        'ASHRAE 169-2006-6A' => 'USA_VT_Burlington.Intl.AP.726170_TMY3.epw',
-        'ASHRAE 169-2006-6B' => 'USA_MT_Helena.Rgnl.AP.727720_TMY3.epw',
-        'ASHRAE 169-2006-7A' => 'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
-        'ASHRAE 169-2006-7B' => 'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
-        'ASHRAE 169-2006-8A' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
-        'ASHRAE 169-2006-8B' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
-        'ASHRAE 169-2013-0A' => 'VNM_SVN_Ho.Chi.Minh-Tan.Son.Nhat.Intl.AP.489000_TMYx.epw',
-        'ASHRAE 169-2013-0B' => 'ARE_DU_Dubai.Intl.AP.411940_TMYx.epw',
-        'ASHRAE 169-2013-1A' => 'USA_HI_Honolulu.Intl.AP.911820_TMY3.epw',
-        'ASHRAE 169-2013-1B' => 'IND_DL_New.Delhi-Safdarjung.AP.421820_TMYx.epw',
-        'ASHRAE 169-2013-2A' => 'USA_FL_Tampa-MacDill.AFB.747880_TMY3.epw',
-        'ASHRAE 169-2013-2B' => 'USA_AZ_Tucson-Davis-Monthan.AFB.722745_TMY3.epw',
-        'ASHRAE 169-2013-3A' => 'USA_GA_Atlanta-Hartsfield.Jackson.Intl.AP.722190_TMY3.epw',
-        'ASHRAE 169-2013-3B' => 'USA_TX_El.Paso.Intl.AP.722700_TMY3.epw',
-        'ASHRAE 169-2013-3C' => 'USA_CA_San.Deigo-Brown.Field.Muni.AP.722904_TMY3.epw',
-        'ASHRAE 169-2013-4A' => 'USA_NY_New.York-John.F.Kennedy.Intl.AP.744860_TMY3.epw',
-        'ASHRAE 169-2013-4B' => 'USA_NM_Albuquerque.Intl.Sunport.723650_TMY3.epw',
-        'ASHRAE 169-2013-4C' => 'USA_WA_Seattle-Tacoma.Intl.AP.727930_TMY3.epw',
-        'ASHRAE 169-2013-5A' => 'USA_NY_Buffalo.Niagara.Intl.AP.725280_TMY3.epw',
-        'ASHRAE 169-2013-5B' => 'USA_CO_Denver-Aurora-Buckley.AFB.724695_TMY3.epw',
-        'ASHRAE 169-2013-5C' => 'USA_WA_Port.Angeles-William.R.Fairchild.Intl.AP.727885_TMY3.epw',
-        'ASHRAE 169-2013-6A' => 'USA_MN_Rochester.Intl.AP.726440_TMY3.epw',
-        'ASHRAE 169-2013-6B' => 'USA_MT_Great.Falls.Intl.AP.727750_TMY3.epw',
-        'ASHRAE 169-2013-7A' => 'USA_MN_International.Falls.Intl.AP.727470_TMY3.epw',
-        'ASHRAE 169-2013-7B' => 'USA_MN_International.Falls.Intl.AP.727470_TMY3.epw',
-        'ASHRAE 169-2013-8A' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
-        'ASHRAE 169-2013-8B' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
-        # For measure input
-        'NECB HDD Method' => epw_file.to_s,
-        # For testing
-        'NECB-CNEB-5'  => epw_file.to_s,
-        'NECB-CNEB-6'  => epw_file.to_s,
-        'NECB-CNEB-7a' => epw_file.to_s,
-        'NECB-CNEB-7b' => epw_file.to_s,
-        'NECB-CNEB-8'  => epw_file.to_s,
-        # For DEER
-        'CEC T24-CEC1' => 'ARCATA_725945_CZ2010.epw',
-        'CEC T24-CEC2' => 'SANTA-ROSA_724957_CZ2010.epw',
-        'CEC T24-CEC3' => 'OAKLAND_724930_CZ2010.epw',
-        'CEC T24-CEC4' => 'SAN-JOSE-REID_724946_CZ2010.epw',
-        'CEC T24-CEC5' => 'SANTA-MARIA_723940_CZ2010.epw',
-        'CEC T24-CEC6' => 'TORRANCE_722955_CZ2010.epw',
-        'CEC T24-CEC7' => 'SAN-DIEGO-LINDBERGH_722900_CZ2010.epw',
-        'CEC T24-CEC8' => 'FULLERTON_722976_CZ2010.epw',
-        'CEC T24-CEC9' => 'BURBANK-GLENDALE_722880_CZ2010.epw',
-        'CEC T24-CEC10' => 'RIVERSIDE_722869_CZ2010.epw',
-        'CEC T24-CEC11' => 'RED-BLUFF_725910_CZ2010.epw',
-        'CEC T24-CEC12' => 'SACRAMENTO-EXECUTIVE_724830_CZ2010.epw',
-        'CEC T24-CEC13' => 'FRESNO_723890_CZ2010.epw',
-        'CEC T24-CEC14' => 'PALMDALE_723820_CZ2010.epw',
-        'CEC T24-CEC15' => 'PALM-SPRINGS-INTL_722868_CZ2010.epw',
-        'CEC T24-CEC16' => 'BLUE-CANYON_725845_CZ2010.epw'
+      'ASHRAE 169-2006-0A' => 'VNM_SVN_Ho.Chi.Minh-Tan.Son.Nhat.Intl.AP.489000_TMYx.epw',
+      'ASHRAE 169-2006-0B' => 'ARE_DU_Dubai.Intl.AP.411940_TMYx.epw',
+      'ASHRAE 169-2006-1A' => 'USA_FL_Miami.Intl.AP.722020_TMY3.epw',
+      'ASHRAE 169-2006-1B' => 'SAU_RI_Riyadh.AB.404380_TMYx.epw',
+      'ASHRAE 169-2006-2A' => 'USA_TX_Houston-Bush.Intercontinental.AP.722430_TMY3.epw',
+      'ASHRAE 169-2006-2B' => 'USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.epw',
+      'ASHRAE 169-2006-3A' => 'USA_TN_Memphis.Intl.AP.723340_TMY3.epw',
+      'ASHRAE 169-2006-3B' => 'USA_TX_El.Paso.Intl.AP.722700_TMY3.epw',
+      'ASHRAE 169-2006-3C' => 'USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw',
+      'ASHRAE 169-2006-4A' => 'USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw',
+      'ASHRAE 169-2006-4B' => 'USA_NM_Albuquerque.Intl.AP.723650_TMY3.epw',
+      'ASHRAE 169-2006-4C' => 'USA_OR_Salem-McNary.Field.726940_TMY3.epw',
+      'ASHRAE 169-2006-5A' => 'USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw',
+      'ASHRAE 169-2006-5B' => 'USA_ID_Boise.Air.Terminal.726810_TMY3.epw',
+      'ASHRAE 169-2006-5C' => 'CAN_BC_Vancouver.718920_CWEC.epw',
+      'ASHRAE 169-2006-6A' => 'USA_VT_Burlington.Intl.AP.726170_TMY3.epw',
+      'ASHRAE 169-2006-6B' => 'USA_MT_Helena.Rgnl.AP.727720_TMY3.epw',
+      'ASHRAE 169-2006-7A' => 'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
+      'ASHRAE 169-2006-7B' => 'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
+      'ASHRAE 169-2006-8A' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
+      'ASHRAE 169-2006-8B' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
+      'ASHRAE 169-2013-0A' => 'VNM_SVN_Ho.Chi.Minh-Tan.Son.Nhat.Intl.AP.489000_TMYx.epw',
+      'ASHRAE 169-2013-0B' => 'ARE_DU_Dubai.Intl.AP.411940_TMYx.epw',
+      'ASHRAE 169-2013-1A' => 'USA_HI_Honolulu.Intl.AP.911820_TMY3.epw',
+      'ASHRAE 169-2013-1B' => 'IND_DL_New.Delhi-Safdarjung.AP.421820_TMYx.epw',
+      'ASHRAE 169-2013-2A' => 'USA_FL_Tampa-MacDill.AFB.747880_TMY3.epw',
+      'ASHRAE 169-2013-2B' => 'USA_AZ_Tucson-Davis-Monthan.AFB.722745_TMY3.epw',
+      'ASHRAE 169-2013-3A' => 'USA_GA_Atlanta-Hartsfield.Jackson.Intl.AP.722190_TMY3.epw',
+      'ASHRAE 169-2013-3B' => 'USA_TX_El.Paso.Intl.AP.722700_TMY3.epw',
+      'ASHRAE 169-2013-3C' => 'USA_CA_San.Deigo-Brown.Field.Muni.AP.722904_TMY3.epw',
+      'ASHRAE 169-2013-4A' => 'USA_NY_New.York-John.F.Kennedy.Intl.AP.744860_TMY3.epw',
+      'ASHRAE 169-2013-4B' => 'USA_NM_Albuquerque.Intl.Sunport.723650_TMY3.epw',
+      'ASHRAE 169-2013-4C' => 'USA_WA_Seattle-Tacoma.Intl.AP.727930_TMY3.epw',
+      'ASHRAE 169-2013-5A' => 'USA_NY_Buffalo.Niagara.Intl.AP.725280_TMY3.epw',
+      'ASHRAE 169-2013-5B' => 'USA_CO_Denver-Aurora-Buckley.AFB.724695_TMY3.epw',
+      'ASHRAE 169-2013-5C' => 'USA_WA_Port.Angeles-William.R.Fairchild.Intl.AP.727885_TMY3.epw',
+      'ASHRAE 169-2013-6A' => 'USA_MN_Rochester.Intl.AP.726440_TMY3.epw',
+      'ASHRAE 169-2013-6B' => 'USA_MT_Great.Falls.Intl.AP.727750_TMY3.epw',
+      'ASHRAE 169-2013-7A' => 'USA_MN_International.Falls.Intl.AP.727470_TMY3.epw',
+      'ASHRAE 169-2013-7B' => 'USA_MN_International.Falls.Intl.AP.727470_TMY3.epw',
+      'ASHRAE 169-2013-8A' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
+      'ASHRAE 169-2013-8B' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
+      # For measure input
+      'NECB HDD Method' => epw_file.to_s,
+      # For testing
+      'NECB-CNEB-5' => epw_file.to_s,
+      'NECB-CNEB-6' => epw_file.to_s,
+      'NECB-CNEB-7a' => epw_file.to_s,
+      'NECB-CNEB-7b' => epw_file.to_s,
+      'NECB-CNEB-8' => epw_file.to_s,
+      # For DEER
+      'CEC T24-CEC1' => 'ARCATA_725945_CZ2010.epw',
+      'CEC T24-CEC2' => 'SANTA-ROSA_724957_CZ2010.epw',
+      'CEC T24-CEC3' => 'OAKLAND_724930_CZ2010.epw',
+      'CEC T24-CEC4' => 'SAN-JOSE-REID_724946_CZ2010.epw',
+      'CEC T24-CEC5' => 'SANTA-MARIA_723940_CZ2010.epw',
+      'CEC T24-CEC6' => 'TORRANCE_722955_CZ2010.epw',
+      'CEC T24-CEC7' => 'SAN-DIEGO-LINDBERGH_722900_CZ2010.epw',
+      'CEC T24-CEC8' => 'FULLERTON_722976_CZ2010.epw',
+      'CEC T24-CEC9' => 'BURBANK-GLENDALE_722880_CZ2010.epw',
+      'CEC T24-CEC10' => 'RIVERSIDE_722869_CZ2010.epw',
+      'CEC T24-CEC11' => 'RED-BLUFF_725910_CZ2010.epw',
+      'CEC T24-CEC12' => 'SACRAMENTO-EXECUTIVE_724830_CZ2010.epw',
+      'CEC T24-CEC13' => 'FRESNO_723890_CZ2010.epw',
+      'CEC T24-CEC14' => 'PALMDALE_723820_CZ2010.epw',
+      'CEC T24-CEC15' => 'PALM-SPRINGS-INTL_722868_CZ2010.epw',
+      'CEC T24-CEC16' => 'BLUE-CANYON_725845_CZ2010.epw'
     }
     return climate_zone_weather_file_map
   end
@@ -168,7 +168,7 @@ class Standard
         ddy_list = /(Htg 99.6. Condns DB)|(Clg .4% Condns DB=>MWB)|(Clg 0.4% Condns DB=>MCWB)/
         if d.name.get =~ ddy_list
           model.addObject(d.clone)
-          OpenStudio::logFree(OpenStudio::Info, 'openstudio.weather.Model', "Added #{d.name} design day.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Added #{d.name} design day.")
         end
       end
       # Check to ensure that some design days were added
@@ -184,7 +184,6 @@ class Standard
   end
 
   def model_add_ground_temperatures(model, building_type, climate_zone)
-
     # Define the weather file for each climate zone
     climate_zone_weather_file_map = model_get_climate_zone_weather_file_map
 
@@ -238,7 +237,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', 'Could not find ground temperatures in stat file; will use standards lookup.')
 
     # Look up ground temperatures from templates
-    ground_temp_vals = standards_lookup_table_first(table_name: 'ground_temperatures', search_criteria: {'template' => template, 'climate_zone' => climate_zone, 'building_type' => building_type})
+    ground_temp_vals = standards_lookup_table_first(table_name: 'ground_temperatures', search_criteria: { 'template' => template, 'climate_zone' => climate_zone, 'building_type' => building_type })
     if ground_temp_vals && ground_temp_vals['jan']
       ground_temp = model.getSiteGroundTemperatureBuildingSurface
       ground_temp.setJanuaryGroundTemperature(ground_temp_vals['jan'])
@@ -279,6 +278,7 @@ class Standard
     heating_design_outdoor_temps = []
     getDesignDays.each do |dd|
       next unless dd.dayType == 'WinterDesignDay'
+
       heating_design_outdoor_temps << dd.maximumDryBulbTemperature
     end
 
@@ -327,12 +327,10 @@ end
 module BTAP
   module Environment
     require_relative 'Weather.stat_file'
-
-    # rubocop:disable Style/MutableConstant
     # rubocop:enable Style/MutableConstant
 
     # this method is used to populate user interfaces if needed from the hash above.
-    def self.get_canadian_weather_file_names()
+    def self.get_canadian_weather_file_names
       canadian_file_names = []
       if __dir__[0] == ':' # Running from OpenStudio CLI
         embedded_files_relative('../../../', /.*\.epw/).each do |file|
@@ -368,8 +366,6 @@ module BTAP
       puts "parsed #{counter} weather files."
     end
 
-
-
     # This method will create a climate index file.
     # @author phylroy.lopez@nrcan.gc.ca
     # @param folder [String]
@@ -377,7 +373,6 @@ module BTAP
     def self.create_climate_json_file(folder = "#{File.dirname(__FILE__)}/../../../weather", output_file = 'C:/test/phylroy.csv')
       data_array = []
       File.open(output_file, 'w') do |file|
-
         BTAP::FileIO.get_find_files_from_folder_by_extension(folder, 'epw').sort.each do |wfile|
           wf = BTAP::Environment::WeatherFile.new(wfile)
           data = {}
@@ -408,12 +403,10 @@ module BTAP
           data['cooling_design_info[1]'] = wf.cooling_design_info[1]
           data['extremes_design_info[1]'] = wf.extremes_design_info[1]
           data['db990'] = wf.db990
-
         end
-        File.write(output_file,JSON.pretty_generate(data_array))
+        File.write(output_file, JSON.pretty_generate(data_array))
       end
     end
-
 
     class WeatherFile
       attr_accessor :location_name,
@@ -536,6 +529,7 @@ module BTAP
         else
           @ddy_file = OpenStudio::EnergyPlus.loadAndTranslateIdf(@ddy_filepath).get
         end
+
         @stat_file = EnergyPlus::StatFile.new(@stat_filepath)
 
         # assign variables.

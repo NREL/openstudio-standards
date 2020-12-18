@@ -1,4 +1,3 @@
-
 class Standard
   # @!group WaterHeaterMixed
 
@@ -9,7 +8,7 @@ class Standard
   #
   # @return [Bool] true if successful, false if not
   def water_heater_mixed_apply_efficiency(water_heater_mixed)
-    # TODO remove this once workaround for HPWHs is removed
+    # TODO: remove this once workaround for HPWHs is removed
     if water_heater_mixed.partLoadFactorCurve.is_initialized
       if water_heater_mixed.partLoadFactorCurve.get.name.get.include?('HPWH_COP')
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, the workaround for HPWHs has been applied, efficiency will not be changed.")
@@ -30,14 +29,14 @@ class Standard
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
     # Get the volume of the water heater
-    # TODO add capability to pull autosized water heater volume
+    # TODO: add capability to pull autosized water heater volume
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
     volume_m3 = water_heater_mixed.tankVolume
     if volume_m3.empty?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find volume, standard will not be applied.")
       return false
     else
-    volume_m3 = @instvarbuilding_type == 'MidriseApartment' ? volume_m3.get / 23 : volume_m3.get / water_heater_mixed.component_quantity
+      volume_m3 = @instvarbuilding_type == 'MidriseApartment' ? volume_m3.get / 23 : volume_m3.get / water_heater_mixed.component_quantity
     end
     volume_gal = OpenStudio.convert(volume_m3, 'm^3', 'gal').get
 
@@ -95,14 +94,14 @@ class Standard
         # 0.82 = (ua*67.5+cap*re)/cap
         # Solutions to the system of equations were determined
         # for discrete values of EF and modeled using a regression
-        re = -0.1137 * ef **2 + 0.1997 * ef + 0.731
+        re = -0.1137 * ef**2 + 0.1997 * ef + 0.731
         # Calculate the skin loss coefficient (UA)
         # Input capacity is assumed to be the output capacity
         # divided by a burner efficiency of 80%
         ua_btu_per_hr_per_f = (water_heater_eff - re) * capacity_btu_per_hr / 0.8 / 67.5
       end
       # Two booster water heaters
-    ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
+      ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
     end
 
     # Typically specified this way for large electric water heaters
@@ -149,7 +148,7 @@ class Standard
       # Calculate the max allowable standby loss (SL)
       # Output capacity is assumed to be 10 * Tank volume
       # Input capacity = Output capacity / Et
-	  p_on = capacity_btu_per_hr / et
+      p_on = capacity_btu_per_hr / et
       sl_btu_per_hr = p_on / sl_cap_adj + sl_vol_drt * Math.sqrt(wh_tank_volume) + sl_tank
       # Calculate the skin loss coefficient (UA)
       ua_btu_per_hr_per_f = (sl_btu_per_hr * et) / 70
