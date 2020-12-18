@@ -117,10 +117,10 @@ class Standard
                                   motor_in_airstream_fraction: nil,
                                   end_use_subcategory: nil)
     # check values to use
-    fan_efficiency = fan_efficiency ? fan_efficiency : fan_json['fan_efficiency']
-    pressure_rise = pressure_rise ? pressure_rise : fan_json['pressure_rise']
-    motor_efficiency = motor_efficiency ? motor_efficiency : fan_json['motor_efficiency']
-    motor_in_airstream_fraction = motor_in_airstream_fraction ? motor_in_airstream_fraction : fan_json['motor_in_airstream_fraction']
+    fan_efficiency ||= fan_json['fan_efficiency']
+    pressure_rise ||= fan_json['pressure_rise']
+    motor_efficiency ||= fan_json['motor_efficiency']
+    motor_in_airstream_fraction ||= fan_json['motor_in_airstream_fraction']
 
     # convert values
     pressure_rise = pressure_rise ? OpenStudio.convert(pressure_rise, 'inH_{2}O', 'Pa').get : nil

@@ -219,7 +219,6 @@ class Standard
   #
   # @return [Double] capacity in W to be used for find object
   def coil_cooling_dx_multi_speed_find_capacity(coil_cooling_dx_multi_speed)
-
     capacity_w = nil
     clg_stages = coil_cooling_dx_multi_speed.stages
     if clg_stages.last.grossRatedTotalCoolingCapacity.is_initialized

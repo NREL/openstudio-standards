@@ -92,7 +92,7 @@ class Standard
         end
       end
       # corner_coords = vertical_surface.vertices
-      code_window_area = fdwr*vertical_surface.grossArea
+      code_window_area = fdwr * vertical_surface.grossArea
       code_window_width = code_window_area / window_height_m
       min_z = 0
       vertical_surface.vertices.each_with_index do |vertex, index|
@@ -144,7 +144,7 @@ class Standard
             # plenum walls and add it to the plenum wall area counter (accounting for space multipliers).
             if space_plenum?(space)
               plenum_surfaces << surface
-              exp_plenum_area += surface.grossArea*space.multiplier
+              exp_plenum_area += surface.grossArea * space.multiplier
             else
               # If not a plenum then include it in the array of non-plenum walls and add it to the non-plenum area
               # counter (accounting for space multipliers).
@@ -217,14 +217,14 @@ class Standard
             # If the roof is adjacent to a plenum add it to the plenum roof array and the plenum roof area counter
             # (accounting for space multipliers).
             plenum_surfaces << surface
-            exp_plenum_area += surface.grossArea*space.multiplier
+            exp_plenum_area += surface.grossArea * space.multiplier
           else
             # If the roof is not adjacent to a plenum add it to the non-plenum roof array and the non-plenum roof area
             # counter (accounting for space multipliers).
             exposed_surfaces << surface
-            exp_nonplenum_area += surface.grossArea*space.multiplier
+            exp_nonplenum_area += surface.grossArea * space.multiplier
             surface.subSurfaces.sort.each do |sub_surface|
-              sub_surface_area += sub_surface.grossArea.to_f*space.multiplier
+              sub_surface_area += sub_surface.grossArea.to_f * space.multiplier
               sub_surface_info << {
                 'subsurface_name' => sub_surface.nameString,
                 'subsurface_type' => sub_surface.subSurfaceType,
@@ -241,7 +241,7 @@ class Standard
           end
           # Regardless of if the roof is adjacent to a plenum or not add it to the total roof area counter (accounting
           # for space multipliers).
-          total_exp_area += surface.grossArea*space.multiplier
+          total_exp_area += surface.grossArea * space.multiplier
         end
       end
     end
@@ -310,8 +310,8 @@ class Standard
       # centroid calculation.
       space_surfaces.each do |sp_surface|
         if max_surf.centroid.z.to_f.round(tol) == sp_surface.centroid.z.to_f.round(tol)
-          ceiling_centroid[0] += sp_surface.centroid.x.to_f*sp_surface.grossArea.to_f
-          ceiling_centroid[1] += sp_surface.centroid.y.to_f*sp_surface.grossArea.to_f
+          ceiling_centroid[0] += sp_surface.centroid.x.to_f * sp_surface.grossArea.to_f
+          ceiling_centroid[1] += sp_surface.centroid.y.to_f * sp_surface.grossArea.to_f
           ceiling_centroid[2] += sp_surface.grossArea.to_f
         end
       end
@@ -339,8 +339,8 @@ class Standard
       # calculate the centroid
       if space_info[:z].to_f.round(tol) == max_height.round(tol)
         top_spaces << space_info
-        roof_centroid[0] += space_info[:x]*space_info[:area_m2]
-        roof_centroid[1] += space_info[:y]*space_info[:area_m2]
+        roof_centroid[0] += space_info[:x] * space_info[:area_m2]
+        roof_centroid[1] += space_info[:y] * space_info[:area_m2]
         roof_centroid[2] += space_info[:area_m2]
       end
     end

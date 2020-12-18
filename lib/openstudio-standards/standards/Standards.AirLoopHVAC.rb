@@ -209,7 +209,7 @@ class Standard
 
     # data centers don't require optimum start as generally not occupied
     return opt_start_required if air_loop_hvac.name.to_s.include?('CRAH') ||
-        air_loop_hvac.name.to_s.include?('CRAC')
+                                 air_loop_hvac.name.to_s.include?('CRAC')
 
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
@@ -244,6 +244,7 @@ class Standard
     air_loop_hvac.thermalZones.each do |zone|
       # Skip zones with no thermostat
       next if zone.thermostatSetpointDualSetpoint.empty?
+
       # Get the heating and cooling setpoint schedules
       tstat = zone.thermostatSetpointDualSetpoint.get
       htg_sch = nil
@@ -857,6 +858,7 @@ class Standard
 
     # skip systems without outdoor air
     return economizer_required unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+
     # Determine if the system serves residential spaces
     is_res = false
     if air_loop_hvac_residential_area_served(air_loop_hvac) > 0
@@ -1016,8 +1018,8 @@ class Standard
       return [nil, nil, nil]
     when 'FixedDryBulb'
       search_criteria = {
-          'template' => template,
-          'climate_zone' => climate_zone
+        'template' => template,
+        'climate_zone' => climate_zone
       }
       econ_limits = model_find_object(standards_data['economizers'], search_criteria)
       drybulb_limit_f = econ_limits['fixed_dry_bulb_high_limit_shutoff_temp']

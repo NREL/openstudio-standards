@@ -82,6 +82,7 @@ class Standard
     if space_type.name.get.to_s.downcase.include?('plenum')
       return false
     end
+
     if space_type.standardsSpaceType.is_initialized
       if space_type.standardsSpaceType.get.downcase.include?('plenum')
         return false
@@ -117,6 +118,7 @@ class Standard
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -209,6 +211,7 @@ class Standard
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -287,6 +290,7 @@ class Standard
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -329,6 +333,7 @@ class Standard
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -419,6 +424,7 @@ class Standard
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -493,7 +499,7 @@ class Standard
     # Lights
     if set_lights
 
-      apply_lighting_schedule(space_type, space_type_properties,default_sch_set)
+      apply_lighting_schedule(space_type, space_type_properties, default_sch_set)
 
     end
 
@@ -551,7 +557,6 @@ class Standard
       default_sch_set.setLightingSchedule(model_add_schedule(space_type.model, lighting_sch))
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set lighting schedule to #{lighting_sch}.")
     end
-
   end
 
   # Returns standards data for selected construction

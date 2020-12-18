@@ -247,11 +247,11 @@ class Standard
                            model_add_hw_loop(model, 'NaturalGas')
                          end
         # check inputs
-        doas_type = system['doas_type'] ? system['doas_type'] : 'DOASCV'
-        econo_ctrl_mthd = system['economizer_control_method'] ? system['economizer_control_method'] : 'NoEconomizer'
-        doas_control_strategy = system['doas_control_strategy'] ? system['doas_control_strategy'] : 'NeutralSupplyAir'
-        clg_dsgn_sup_air_temp = system['cooling_design_supply_air_temperature'] ? system['cooling_design_supply_air_temperature'] : 60.0
-        htg_dsgn_sup_air_temp = system['heating_design_supply_air_temperature'] ? system['heating_design_supply_air_temperature'] : 70.0
+        doas_type = system['doas_type'] || 'DOASCV'
+        econo_ctrl_mthd = system['economizer_control_method'] || 'NoEconomizer'
+        doas_control_strategy = system['doas_control_strategy'] || 'NeutralSupplyAir'
+        clg_dsgn_sup_air_temp = system['cooling_design_supply_air_temperature'] || 60.0
+        htg_dsgn_sup_air_temp = system['heating_design_supply_air_temperature'] || 70.0
 
         # for boolean input, this makes sure we get the correct input translation
         if system['include_exhaust_fan'].nil? || true?(system['include_exhaust_fan'])

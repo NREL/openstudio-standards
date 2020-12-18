@@ -322,8 +322,6 @@ class Standard
   # This removes all of the subsurfaces from a surface.  Is a preparation for replaceing windows or clearing doors
   # before adding windows.
   def remove_All_Subsurfaces(surface:)
-    surface.subSurfaces.sort.each do |sub_surface|
-      sub_surface.remove
-    end
+    surface.subSurfaces.sort.each(&:remove)
   end
 end

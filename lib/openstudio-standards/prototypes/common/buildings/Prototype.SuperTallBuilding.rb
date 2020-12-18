@@ -410,11 +410,14 @@ module SuperTallBuilding
           num_hotel_flr = 17
         elsif num_retail_flr + num_office_flr + num_resi_flr + num_hotel_flr < 60
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model',
-                              'The building is not eligible as a supertall building because the total number of floors is less than 60')
+                             'The building is not eligible as a supertall building because the total number of floors is less than 60')
           return false
         end
       else # if no number of floor is given for any function type
-        num_retail_flr, num_office_flr, num_resi_flr, num_hotel_flr = 4, 34, 17, 17
+        num_retail_flr = 4
+        num_office_flr = 34
+        num_resi_flr = 17
+        num_hotel_flr = 17
       end
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'additional_params is not a Hash')
@@ -1061,7 +1064,7 @@ module SuperTallBuilding
     # locate the skylobby story (find the most middle story bottom, add skylobby below it)
     # rank the stories from low to high (not including the elevator machine room, which hasn't assign the nominal Z coordinate)
     all_stories = model.getBuildingStorys
-    all_stories = all_stories.select { |story| !story.nominalZCoordinate.empty? }
+    all_stories = all_stories.reject { |story| story.nominalZCoordinate.empty? }
     all_stories = all_stories.sort { |a, b| a.nominalZCoordinate.get.to_f <=> b.nominalZCoordinate.get.to_f }
     all_stories_names = all_stories.map { |story| story.name.to_s }
 
@@ -1100,7 +1103,7 @@ module SuperTallBuilding
     all_stories_names.drop(mid_story_idx).each do |story_name|
       # reset story name with new floor number
       story = model.getBuildingStoryByName(story_name).get
-      orin_num_flrs = story_name.scan(/\d+/).map { |x| x.to_i }
+      orin_num_flrs = story_name.scan(/\d+/).map(&:to_i)
 
       new_num_flrs = orin_num_flrs.map { |x| x + 1 }
       if new_num_flrs.size == 1

@@ -412,12 +412,12 @@ module TallBuilding
           num_hotel_flr = 9
         elsif num_retail_flr + num_office_flr + num_resi_flr + num_hotel_flr < 20
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model',
-                              'The building is not eligible as a tall building because the total number of floors is less than 20')
+                             'The building is not eligible as a tall building because the total number of floors is less than 20')
           return false
         elsif num_retail_flr + num_office_flr + num_resi_flr + num_hotel_flr >= 75
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model',
-                              "The building has #{num_retail_flr + num_office_flr + num_resi_flr + num_hotel_flr} floors, which should "\
-                                'be classified as super tall building. Please select SuperTall Building as the building type instead.')
+                             "The building has #{num_retail_flr + num_office_flr + num_resi_flr + num_hotel_flr} floors, which should "\
+                               'be classified as super tall building. Please select SuperTall Building as the building type instead.')
           return false
         end
       else # if no number of floor is given for any function type
@@ -1044,5 +1044,4 @@ module TallBuilding
       end
     end
   end
-
 end

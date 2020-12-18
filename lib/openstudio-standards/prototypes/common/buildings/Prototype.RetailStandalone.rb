@@ -61,7 +61,7 @@ module RetailStandalone
       oa_sens.setKeyName('Environment')
 
       model.getFanConstantVolumes.each do |fan|
-        if fan.name.to_s.include? 'Front' and fan.name.to_s.include? 'Entry'
+        if fan.name.to_s.include?('Front') && fan.name.to_s.include?('Entry')
           frt_entry_avail_fan_sch = fan.availabilitySchedule
           frt_entry_fan = OpenStudio::Model::EnergyManagementSystemActuator.new(frt_entry_avail_fan_sch, 'Schedule:Year', 'Schedule Value')
           frt_entry_fan.setName('FrontEntry_Fan')
@@ -69,7 +69,7 @@ module RetailStandalone
       end
 
       model.getCoilHeatingGass.each do |coil|
-        if coil.name.to_s.include? 'Front' and coil.name.to_s.include? 'Entry'
+        if coil.name.to_s.include?('Front') && coil.name.to_s.include?('Entry')
           frt_entry_avail_coil_sch = coil.availabilitySchedule
           frt_entry_coil = OpenStudio::Model::EnergyManagementSystemActuator.new(frt_entry_avail_coil_sch, 'Schedule:Year', 'Schedule Value')
           frt_entry_coil.setName('FrontEntry_Coil')

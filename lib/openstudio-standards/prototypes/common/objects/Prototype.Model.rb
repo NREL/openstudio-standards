@@ -4,6 +4,7 @@ Standard.class_eval do
   def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil)
     building_type = @instvarbuilding_type
     raise 'no building_type!' if @instvarbuilding_type.nil?
+
     model = nil
     # There are no reference models for HighriseApartment and data centers at vintages Pre-1980 and 1980-2004,
     # nor for NECB2011. This is a quick check.
@@ -52,6 +53,7 @@ Standard.class_eval do
     model_set_climate_zone(model, climate_zone)
     # Perform a sizing model_run(model)
     return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
+
     # If there are any multizone systems, reset damper positions
     # to achieve a 60% ventilation effectiveness minimum for the system
     # following the ventilation rate procedure from 62.1
@@ -109,7 +111,7 @@ Standard.class_eval do
 
     # put contents of new_model into model_to_replace
     model_to_replace.addObjects(new_model.toIdfFile.objects)
-    BTAP::runner_register('Info', "Model name is now #{model_to_replace.building.get.name}.", runner)
+    BTAP.runner_register('Info', "Model name is now #{model_to_replace.building.get.name}.", runner)
   end
 
   # Replaces all objects in the current model
@@ -327,8 +329,6 @@ Standard.class_eval do
     wall_adiabatic_construction.setLayers(wall_layers)
 
     return wall_adiabatic_construction
-
-
   end
 
   # Adds code-minimum constructions based on the building type
@@ -474,7 +474,7 @@ Standard.class_eval do
           end
           data = standards_lookup_table_first(table_name: 'space_types', search_criteria: { 'template' => template,
                                                                                             'building_type' => new_lookup_building_type,
-                                                                                            'space_type' => space_type_name } )
+                                                                                            'space_type' => space_type_name })
           exterior_spaces_area += space.floorArea
           story_exterior_residential_area += space.floorArea if data['is_residential'] == 'Yes' # "Yes" is residential, "No" or nil is nonresidential
         end
@@ -731,7 +731,6 @@ Standard.class_eval do
       # length of the wall edge
       edge_vector = OpenStudio::Vector3d.new(wall_edge_p1 - wall_edge_p2)
       return(edge_vector.length)
-
     end
 
     # If no edges intersected, return 0
@@ -769,7 +768,6 @@ Standard.class_eval do
   # @param building_type [String] the type of building
   # @return [Bool] returns true if successful, false if not
   def model_add_internal_mass(model, building_type)
-
     # Assign a material to all internal mass objects
     material = OpenStudio::Model::StandardOpaqueMaterial.new(model)
     material.setName('Std Wood 6inch')
@@ -1447,7 +1445,6 @@ Standard.class_eval do
   #
   # @param model [OpenStudio::Model::Model] the model
   def model_apply_prototype_hvac_efficiency_adjustments(model)
-
     # ERVs
     # Applies the DOE Prototype Building assumption that ERVs use
     # enthalpy wheels and therefore exceed the minimum effectiveness specified by 90.1

@@ -13,7 +13,7 @@ module SmallOffice
 
     # reset defrost time fraction
     # TODO: set this to a reasonable defrost time fraction based on research and implement in Prototype.CoilHeatingDXSingleSpeed
-    model.getCoilHeatingDXSingleSpeeds.each { |coil| coil.resetDefrostTimePeriodFraction }
+    model.getCoilHeatingDXSingleSpeeds.each(&:resetDefrostTimePeriodFraction)
 
     return true
   end

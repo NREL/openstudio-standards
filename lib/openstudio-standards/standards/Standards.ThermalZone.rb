@@ -533,7 +533,7 @@ class Standard
           if rule.applySaturday then prior_rule.setApplySaturday(true) && rules_combined = true end
           if rule.applySunday then prior_rule.setApplySunday(true) && rules_combined = true end
         end
-        if rules_combined then rule.remove else prior_rules << rule end
+        rules_combined ? rule.remove : prior_rules << rule
       end
     end
     # replace unused default profile with lowest priority rule

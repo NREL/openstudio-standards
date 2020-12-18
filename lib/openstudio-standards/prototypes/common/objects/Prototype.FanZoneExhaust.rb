@@ -27,9 +27,9 @@ class Standard
                                         end_use_subcategory: nil)
 
     # check values to use
-    fan_efficiency = fan_efficiency ? fan_efficiency : fan_json['fan_efficiency']
-    pressure_rise = pressure_rise ? pressure_rise : fan_json['pressure_rise']
-    system_availability_manager_coupling_mode = system_availability_manager_coupling_mode ? system_availability_manager_coupling_mode : fan_json['system_availability_manager_coupling_mode']
+    fan_efficiency ||= fan_json['fan_efficiency']
+    pressure_rise ||= fan_json['pressure_rise']
+    system_availability_manager_coupling_mode ||= fan_json['system_availability_manager_coupling_mode']
 
     # convert values
     pressure_rise = pressure_rise ? OpenStudio.convert(pressure_rise, 'inH_{2}O', 'Pa').get : nil

@@ -31,8 +31,7 @@ def create_class_array
                          'Laboratory',
                          'College',
                          'TallBuilding',
-                         'SuperTallBuilding'
-                        ]
+                         'SuperTallBuilding']
 
   templates = {
     'ASHRAE9012004' => '90.1-2004',
@@ -348,7 +347,8 @@ def create_deer_class_array
       'PVVG',
       'SVVE',
       'SVVG',
-      'WLHP'],
+      'WLHP'
+    ],
     'EUn' => [
       'DXEH',
       'DXGF',
@@ -365,7 +365,8 @@ def create_deer_class_array
       'DXGF',
       'DXHP',
       'NCEH',
-      'NCGF'],
+      'NCGF'
+    ],
     'Hsp' => [
       'DXEH',
       'DXGF',
@@ -387,7 +388,8 @@ def create_deer_class_array
       'PVVE',
       'PVVG',
       'SVVE',
-      'SVVG'],
+      'SVVG'
+    ],
     'Htl' => [
       'DXEH',
       'DXGF',

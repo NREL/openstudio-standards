@@ -554,8 +554,8 @@ class Standard
           if weather_file[0] == ':' # Running from OpenStudio CLI
             # Attempt to load in the ddy file based on convention that it is in the same directory and has the same basename as the epw file.
             ddy_file = weather_file.gsub('.epw', '.ddy')
-            if EmbeddedScripting::hasFile(ddy_file)
-              ddy_string = EmbeddedScripting::getFileAsString(ddy_file)
+            if EmbeddedScripting.hasFile(ddy_file)
+              ddy_string = EmbeddedScripting.getFileAsString(ddy_file)
               temp_ddy_path = "#{Dir.pwd}/in.ddy"
               File.open(temp_ddy_path, 'wb') { |f| f << ddy_string; f.flush }
               ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(temp_ddy_path).get
@@ -3364,7 +3364,6 @@ class Standard
 
     # hook the CRAH system to each zone
     thermal_zones.each do |zone|
-
       # Create a diffuser and attach the zone/diffuser pair to the air loop
       diffuser = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{zone.name} VAV terminal")
@@ -3417,7 +3416,7 @@ class Standard
 
     # create a split AC for each group of thermal zones
     air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
-    thermal_zones_name = (thermal_zones.map { |z| z.name }).join(' - ')
+    thermal_zones_name = thermal_zones.map(&:name).join(' - ')
     air_loop.setName("#{thermal_zones_name} SAC")
 
     # hvac operation schedule
@@ -5275,7 +5274,7 @@ class Standard
       if include_outdoor_air
         # get the design specification outdoor air of the largest space in the zone
         # TODO: create a new design specification outdoor air object that sums ventilation rates and schedules if multiple design specification outdoor air objects
-        space_areas = zone.spaces.map { |s| s.floorArea }
+        space_areas = zone.spaces.map(&:floorArea)
         largest_space = zone.spaces.select { |s| s.floorArea == space_areas.max }
         largest_space = largest_space[0]
         design_spec_oa = largest_space.designSpecificationOutdoorAir
@@ -5609,7 +5608,7 @@ class Standard
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "No chillers were found on #{chilled_water_loop.name}; cannot add a non-integrated waterside economizer.")
         heat_exchanger.setControlType('CoolingSetpointOnOff')
       elsif chillers.size > 1
-        chiller = chillers.sort[0]
+        chiller = chillers.min
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "More than one chiller was found on #{chilled_water_loop.name}.  EnergyPlus only allows a single chiller to be interlocked with the HX.  Chiller #{chiller.name} was selected.  Additional chillers will not be locked out during HX operation.")
       else # 1 chiller
         chiller = chillers[0]
