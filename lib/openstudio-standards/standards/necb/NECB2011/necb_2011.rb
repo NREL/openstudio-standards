@@ -198,7 +198,8 @@ class NECB2011 < Standard
                                    nv_type: nil,
                                    nv_opening_fraction: nil,
                                    nv_Tout_min: nil,
-                                   nv_Tout_max: nil
+                                   nv_Tout_max: nil,
+                                   nv_Delta_Tin_Tout: nil
   )
 
     model = load_building_type_from_library(building_type: building_type)
@@ -234,8 +235,9 @@ class NECB2011 < Standard
                                 nv_type: TRUE, # Two options: (1) nil or FALSE, (2) TRUE
                                 nv_opening_fraction: 0.1, # (1) nil or FALSE (2) e.g. 0.5
                                 nv_Tout_min: 20, #18
-                                nv_Tout_max: 100 #24
-    )
+                                nv_Tout_max: 100, #24
+                                nv_Delta_Tin_Tout: 2.0#nil
+                                )
   end
 
   def load_building_type_from_library(building_type:)
@@ -285,7 +287,8 @@ class NECB2011 < Standard
                            nv_type: nil,
                            nv_opening_fraction: nil,
                            nv_Tout_min: nil,
-                           nv_Tout_max: nil
+                           nv_Tout_max: nil,
+                           nv_Delta_Tin_Tout: nil
   )
 
     BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees.nil?
@@ -334,7 +337,8 @@ class NECB2011 < Standard
                                    nv_type: nv_type,
                                    nv_opening_fraction: nv_opening_fraction,
                                    nv_Tout_min: nv_Tout_min,
-                                   nv_Tout_max: nv_Tout_max
+                                   nv_Tout_max: nv_Tout_max,
+                                   nv_Delta_Tin_Tout: nv_Delta_Tin_Tout
     )
     return model
   end
@@ -354,7 +358,8 @@ class NECB2011 < Standard
                                      nv_type: nil,
                                      nv_opening_fraction: nil,
                                      nv_Tout_min: nil,
-                                     nv_Tout_max: nil)
+                                     nv_Tout_max: nil,
+                                     nv_Delta_Tin_Tout:nil)
     # Create ECM object.
     ecm = ECMS.new
 
@@ -403,7 +408,8 @@ class NECB2011 < Standard
                  nv_type: nv_type,
                  nv_opening_fraction: nv_opening_fraction,
                  nv_Tout_min: nv_Tout_min,
-                 nv_Tout_max: nv_Tout_max)
+                 nv_Tout_max: nv_Tout_max,
+                 nv_Delta_Tin_Tout: nv_Delta_Tin_Tout)
   end
 
 
