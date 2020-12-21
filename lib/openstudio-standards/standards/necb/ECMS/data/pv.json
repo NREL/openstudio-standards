@@ -1,0 +1,112 @@
+{
+  "tables": {
+    "pv": {
+      "data_type": "table",
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "pv_module_description": "Solarland 12V SLP100-12U 26.57 x 41.81 x 1.18",
+          "pv_module_type": "Standard",
+          "pv_module_wattage": 100
+        },
+        {
+          "pv_module_description": "Solarland 12V SLP120-12U 26.57 x 48.98 x 1.38",
+          "pv_module_type": "Standard",
+          "pv_module_wattage": 120
+        },
+        {
+          "pv_module_description": "Astronergy CHSM6612M Silver Mono PERC 38.98 x 76.93 x 1.57 ",
+          "pv_module_type": "Standard",
+          "pv_module_wattage": 365
+        },
+        {
+          "pv_module_description": "Canadian Solar MC4 CS3k-320MS Black Mon PERC 39.1 x 65.9 x 1.38",
+          "pv_module_type": "Standard",
+          "pv_module_wattage": 320
+        },
+        {
+          "pv_module_description": "Mission Solar Black Mon PERC 39.33 x 65.53 x 1.58",
+          "pv_module_type": "Standard",
+          "pv_module_wattage": 310
+        },
+        {
+          "pv_module_description": "Canadian Solar CS3k-325MS Black Mon PERC 39.1 x 65.9 x 1.38",
+          "pv_module_type": "Standard",
+          "pv_module_wattage": 325
+        },
+        {
+          "pv_module_description": "Canadian Solar 72 Cell Maxpower 325 38.7 x 76.9 x 1.57",
+          "pv_module_type": "Standard",
+          "pv_module_wattage": 325
+        },
+        {
+          "pv_module_description": "Hanwha 72 Cell Quantum HSQ-340-72P 39.7  x 78.5 x 1.38",
+          "pv_module_type": "Standard",
+          "pv_module_wattage": 340
+        },
+        {
+          "pv_module_description": "Hanwha SF220-30-P225 37  x 65.04 x 1.97",
+          "pv_module_type": "Standard",
+          "pv_module_wattage": 220
+        },
+        {
+          "pv_module_description": "HES-160-36PV 26.6  x 58.3 x 1.38",
+          "pv_module_type": "Standard",
+          "pv_module_wattage": 160
+        },
+        {
+          "pv_module_description": "HES-265-60PV 39  x 64.6 x 1.36",
+          "pv_module_type": "Standard",
+          "pv_module_wattage": 265
+        },
+        {
+          "pv_module_description": "Solarland 12V SLP175S-12 26.57 x 59.06 x 1.38",
+          "pv_module_type": "Premium",
+          "pv_module_wattage": 175
+        },
+        {
+          "pv_module_description": "Heliene Black 60 cell 39.4 x 65.5 x 1.6 ",
+          "pv_module_type": "Premium",
+          "pv_module_wattage": 320
+        },
+        {
+          "pv_module_description": "Panasonic Black Frame HIT 60 cell 41.5 x 62.5 x 1.6 ",
+          "pv_module_type": "Premium",
+          "pv_module_wattage": 325
+        },
+        {
+          "pv_module_description": "LG NeON2 LG-335N1K-V5  Black/Black 40 x 66.4 x 1.57 ",
+          "pv_module_type": "Premium",
+          "pv_module_wattage": 335
+        },
+        {
+          "pv_module_description": "Hanwha Mono 39.4 x 65.7 x 1.26",
+          "pv_module_type": "Premium",
+          "pv_module_wattage": 310
+        },
+        {
+          "pv_module_description": "Heliene 36HD 26.6  x 58.6 x 1.6",
+          "pv_module_type": "Premium",
+          "pv_module_wattage": 160
+        },
+        {
+          "pv_module_description": "Global Solar Energy PowerFlex+ flexible thin film (CIGS) for awnings, BIPV 19.4 x 81.4 x 0.12",
+          "pv_module_type": "ThinFilm",
+          "pv_module_wattage": 100
+        },
+        {
+          "pv_module_description": "Powerfilm, Soltronic Semi-Flex with Sunpower cells, 21 x 44.5 x 0.08",
+          "pv_module_type": "ThinFilm",
+          "pv_module_wattage": 100
+        },
+        {
+          "pv_module_description": "Go Power, GP-Flex - 100E, Flexible with Sunpower cells, 21.3 x 41.7 x 0.1",
+          "pv_module_type": "ThinFilm",
+          "pv_module_wattage": 100
+        }
+      ]
+    }
+  }
+}
