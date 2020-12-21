@@ -10,12 +10,12 @@ module College
     #   SpaceInfiltration "Peak: 0.2016 cfm/sf of above grade exterior wall surface area, adjusted by wind (when fans turn off)
     # Off Peak: 25% of peak infiltration rate (when fans turn on)
     # Additional infiltration through building entrance"
-    infil_schedule = model.getScheduleRulesetByName("College INFIL_SCH_PNNL")
+    infil_schedule = model.getScheduleRulesetByName('College INFIL_SCH_PNNL')
     model.getSpaceTypes.sort.each do |space_type|
       infil_flow_rates = space_type.getSpaceInfiltrationDesignFlowRates
       if infil_flow_rates.empty?
         # create a new infiltration object for the spacetypes without any infiltration defined
-        infil_flow_rate = Openstudio::Model::getSpaceInfiltrationDesignFlowRate.new(model)
+        infil_flow_rate = Openstudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
         infil_flow_rate.setSpaceInfiltrationDesignFlowRate(0.2016)
         infil_flow_rate.setSchedule(infil_schedule)
         infil_flow_rate.setSpaceType(space_type)
@@ -28,7 +28,7 @@ module College
     end
 
     building_entrance_lobby = model.getSpaceByName('CB_ Entrance Lobby_F0')
-    lobby_door_leakage_area = Openstudio::Model::getSpaceInfiltrationEffectiveLeakageArea.new(model)
+    lobby_door_leakage_area = Openstudio::Model::SpaceInfiltrationEffectiveLeakageArea.new(model)
     lobby_door_leakage_area.setEffectiveAirLeakageArea(5.0) # Need modification
     lobby_door_leakage_area.setSpace(building_entrance_lobby)
 

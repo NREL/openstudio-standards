@@ -10,7 +10,7 @@ class Standard
   # @param cop [Double] rated cooling coefficient of performance
   def create_coil_cooling_dx_single_speed(model,
                                           air_loop_node: nil,
-                                          name: "1spd DX Clg Coil",
+                                          name: '1spd DX Clg Coil',
                                           schedule: nil,
                                           type: nil,
                                           cop: nil)
@@ -30,7 +30,7 @@ class Standard
     elsif schedule.class == String
       coil_availability_schedule = model_add_schedule(model, schedule)
 
-      if coil_availability_schedule.nil? && schedule == "alwaysOffDiscreteSchedule"
+      if coil_availability_schedule.nil? && schedule == 'alwaysOffDiscreteSchedule'
         coil_availability_schedule = model.alwaysOffDiscreteSchedule
       elsif coil_availability_schedule.nil?
         coil_availability_schedule = model.alwaysOnDiscreteSchedule

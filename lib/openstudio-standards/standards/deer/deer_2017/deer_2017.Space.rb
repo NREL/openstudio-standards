@@ -134,5 +134,4 @@ class DEER2017 < DEER
 
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end
-
 end

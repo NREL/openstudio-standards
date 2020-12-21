@@ -16,6 +16,7 @@ class Standard
     building_story.spaces.each do |space|
       # Ignore spaces that aren't part of the total floor area
       next unless space.partofTotalFloorArea
+
       multipliers << space.multiplier
     end
 

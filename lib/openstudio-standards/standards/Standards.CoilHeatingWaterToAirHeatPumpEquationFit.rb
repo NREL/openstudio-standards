@@ -171,6 +171,4 @@ class Standard
 
     return sql_db_vars_map
   end
-
-
 end

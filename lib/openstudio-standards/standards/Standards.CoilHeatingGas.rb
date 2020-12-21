@@ -1,4 +1,3 @@
-
 class Standard
   # @!group CoilHeatingGas
 
@@ -8,8 +7,6 @@ class Standard
   def coil_heating_gas_apply_efficiency_and_curves(coil_heating_gas)
     successfully_set_all_properties = true
 
-
     return successfully_set_all_properties
-
   end
 end

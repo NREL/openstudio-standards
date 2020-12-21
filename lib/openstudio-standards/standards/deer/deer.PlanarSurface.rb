@@ -24,10 +24,12 @@ class DEER
   def planar_surface_apply_standard_construction(planar_surface, climate_zone, previous_construction_map = {})
     # Skip surfaces not in a space
     return previous_construction_map if planar_surface.space.empty?
+
     space = planar_surface.space.get
 
     # Skip surfaces that don't have a construction
     return previous_construction_map if planar_surface.construction.empty?
+
     construction = planar_surface.construction.get
 
     # Determine if residential or nonresidential
