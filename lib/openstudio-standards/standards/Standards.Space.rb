@@ -569,6 +569,7 @@ class Standard
     construction_name_to_vt_map = {}
     space.surfaces.sort.each do |surface|
       next unless surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'Wall'
+
       surface.subSurfaces.sort.each do |sub_surface|
         next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && (sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow' || sub_surface.subSurfaceType == 'GlassDoor')
 
@@ -684,6 +685,7 @@ class Standard
     construction_name_to_vt_map = {}
     space.surfaces.sort.each do |surface|
       next unless surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'RoofCeiling'
+
       surface.subSurfaces.sort.each do |sub_surface|
         next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && sub_surface.subSurfaceType == 'Skylight'
 
@@ -821,8 +823,10 @@ class Standard
     ext_fen_area_m2 = 0
     space.surfaces.each do |surface|
       next unless surface.outsideBoundaryCondition == 'Outdoors'
+
       surface.subSurfaces.each do |sub_surface|
         next unless sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow' || sub_surface.subSurfaceType == 'Skylight' || sub_surface.subSurfaceType == 'GlassDoor'
+
         ext_fen_area_m2 += sub_surface.netArea
       end
     end
@@ -1332,6 +1336,7 @@ class Standard
       next unless surface.outsideBoundaryCondition == 'Outdoors'
       # Skip non-walls
       next unless surface.surfaceType == 'Wall'
+
       # This surface
       area_m2 += surface.netArea
       # Subsurfaces in this surface
@@ -1356,6 +1361,7 @@ class Standard
       next unless surface.outsideBoundaryCondition == 'Outdoors'
       # Skip non-walls
       next unless surface.surfaceType == 'Wall' || surface.surfaceType == 'RoofCeiling'
+
       # This surface
       area_m2 += surface.netArea
       # Subsurfaces in this surface
@@ -1430,6 +1436,7 @@ class Standard
       largest_surface = nil
       space.surfaces.each do |surface|
         next unless surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Surface'
+
         if surface.grossArea > largest_floor_area
           largest_floor_area = surface.grossArea
           largest_surface = surface
@@ -1591,6 +1598,7 @@ class Standard
       unless adj_surface.empty?
         space.model.getSpaces.sort.each do |other_space|
           next if other_space == space
+
           other_space.surfaces.each do |surf|
             if surf == adj_surface.get
               spaces << other_space
@@ -1602,8 +1610,10 @@ class Standard
     # If looking for only spaces adjacent on the same floor.
     if same_floor == true
       raise "Cannot get adjacent spaces of space #{space.name} since space not set to BuildingStory" if space.buildingStory.empty?
+
       spaces.each do |other_space|
         raise "One or more adjecent spaces to space #{space.name} is not assigned to a BuildingStory. Ensure all spaces are assigned." if space.buildingStory.empty?
+
         if other_space.buildingStory.get == space.buildingStory.get
           same_floor_spaces << other_space
         end
@@ -1615,6 +1625,7 @@ class Standard
     area_index = []
     array_hash = {}
     return nil if spaces.size.zero?
+
     # iterate through each surface in the space
     space.surfaces.each do |surface|
       # get the adjacent surface in another space.
@@ -1623,6 +1634,7 @@ class Standard
         # go through each of the adjeacent spaces to find the matching  surface/space.
         spaces.each_with_index do |other_space, index|
           next if other_space == space
+
           other_space.surfaces.each do |surf|
             if surf == adj_surface.get
               # initialize array index to zero for first time so += will work.
@@ -1643,7 +1655,7 @@ class Standard
     return get_adjacent_spaces_with_touching_area(same_floor)[0][0]
   end
 
-  # todo - add related related to space_hours_of_operation like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
+  # TODO: - add related related to space_hours_of_operation like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
   # todo - ideally these could take in a date range, array of dates and or days of week. Hold off until need is a bit more defined.
 
   # If the model has an hours of operation schedule set in default schedule set for building that looks valid it will
@@ -1654,7 +1666,6 @@ class Standard
   # @param space [Space] takes space
   # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
   def space_hours_of_operation(space)
-
     default_sch_type = OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')
     hours_of_operation = space.getDefaultSchedule(default_sch_type)
     if !hours_of_operation.is_initialized
@@ -1682,7 +1693,7 @@ class Standard
     unexpected_val = false
     times = hours_of_operation.defaultDaySchedule.times
     values = hours_of_operation.defaultDaySchedule.values
-    times.each_with_index do |time,i|
+    times.each_with_index do |time, i|
       if values[i] == 0 && hoo_start.nil?
         hoo_start = time.totalHours
       elsif values[i] == 1 && hoo_end.nil?
@@ -1723,8 +1734,8 @@ class Standard
     end
     rule_hash[:hoo_hours] = hoo_hours
     days_used = []
-    indices_vector.each_with_index do |profile_index,i|
-      if profile_index == -1 then days_used << i+1 end
+    indices_vector.each_with_index do |profile_index, i|
+      if profile_index == -1 then days_used << i + 1 end
     end
     rule_hash[:days_used] = days_used
     profiles[-1] = rule_hash
@@ -1738,10 +1749,10 @@ class Standard
       unexpected_val = false
       times = rule.daySchedule.times
       values = rule.daySchedule.values
-      times.each_with_index do |time,i|
+      times.each_with_index do |time, i|
         if values[i] == 0 && hoo_start.nil?
           hoo_start = time.totalHours
-        elsif values[i] == 1  && hoo_end.nil?
+        elsif values[i] == 1 && hoo_end.nil?
           hoo_end = time.totalHours
         elsif values[i] != 1 && values[i] != 0
           unexpected_val = true
@@ -1778,37 +1789,34 @@ class Standard
       end
       rule_hash[:hoo_hours] = hoo_hours
       days_used = []
-      indices_vector.each_with_index do |profile_index,i|
-        if profile_index == rule.ruleIndex then days_used << i+1 end
+      indices_vector.each_with_index do |profile_index, i|
+        if profile_index == rule.ruleIndex then days_used << i + 1 end
       end
       rule_hash[:days_used] = days_used
 
-=begin
-      # todo - delete rule details below unless end up needing to use them
-      if rule.startDate.is_initialized
-        date = rule.startDate.get
-        rule_hash[:start_date] = "#{date.monthOfYear.value}/#{date.dayOfMonth}"
-      else
-        rule_hash[:start_date] = nil
-      end
-      if rule.endDate.is_initialized
-        date = rule.endDate.get
-        rule_hash[:end_date] = "#{date.monthOfYear.value}/#{date.dayOfMonth}"
-      else
-        rule_hash[:end_date] = nil
-      end
-      rule_hash[:mon] = rule.applyMonday
-      rule_hash[:tue] = rule.applyTuesday
-      rule_hash[:wed] = rule.applyWednesday
-      rule_hash[:thu] = rule.applyThursday
-      rule_hash[:fri] = rule.applyFriday
-      rule_hash[:sat] = rule.applySaturday
-      rule_hash[:sun] = rule.applySunday
-=end
+      #       # todo - delete rule details below unless end up needing to use them
+      #       if rule.startDate.is_initialized
+      #         date = rule.startDate.get
+      #         rule_hash[:start_date] = "#{date.monthOfYear.value}/#{date.dayOfMonth}"
+      #       else
+      #         rule_hash[:start_date] = nil
+      #       end
+      #       if rule.endDate.is_initialized
+      #         date = rule.endDate.get
+      #         rule_hash[:end_date] = "#{date.monthOfYear.value}/#{date.dayOfMonth}"
+      #       else
+      #         rule_hash[:end_date] = nil
+      #       end
+      #       rule_hash[:mon] = rule.applyMonday
+      #       rule_hash[:tue] = rule.applyTuesday
+      #       rule_hash[:wed] = rule.applyWednesday
+      #       rule_hash[:thu] = rule.applyThursday
+      #       rule_hash[:fri] = rule.applyFriday
+      #       rule_hash[:sat] = rule.applySaturday
+      #       rule_hash[:sun] = rule.applySunday
 
       # update hash
       profiles[rule.ruleIndex] = rule_hash
-
     end
 
     return profiles
@@ -1835,7 +1843,7 @@ class Standard
       end
     end
 
-    # todo - replace this with logic to get combined hours of operation for collection of spaces.
+    # TODO: - replace this with logic to get combined hours of operation for collection of spaces.
     # each hours_of_operation_array is hash with key for each profile.
     # each profile has hash with keys for hoo_start, hoo_end, hoo_hours, days_used
     # my goal is to compare profiles and days used across all profiles to create new entries as necessary
@@ -1845,11 +1853,10 @@ class Standard
 
     # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "Evaluating hours of operation for #{space_names.join(',')}: #{hours_of_operation_array}")
 
-    # todo - what is this getting max of, it isn't longest hours of operation, is it the most profiles?
+    # TODO: - what is this getting max of, it isn't longest hours of operation, is it the most profiles?
     hours_of_operation = hours_of_operation_array.max_by { |i| hours_of_operation_array.count(i) }
 
     return hours_of_operation
-
   end
 
   private

@@ -1,4 +1,3 @@
-
 class Standard
   # @!group FanVariableVolume
 
@@ -184,9 +183,8 @@ class Standard
 
     # Get the air loop this fan is connected to
     air_loop = fan_variable_volume.airLoopHVAC
-    unless air_loop.is_initialized
-      return clg_sys_type
-    end
+    return clg_sys_type unless air_loop.is_initialized
+
     air_loop = air_loop.get
 
     # Check the types of coils on the AirLoopHVAC

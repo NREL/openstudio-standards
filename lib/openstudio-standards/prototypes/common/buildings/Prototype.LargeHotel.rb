@@ -1,4 +1,3 @@
-
 # Custom changes for the LargeHotel prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -35,9 +34,9 @@ module LargeHotel
     end
 
     exhaust_fan_space_types.each do |space_type_name|
-      space_type_data = standards_lookup_table_first(table_name: 'space_types', search_criteria:{'template' => template,
-                                                                                                 'building_type' => building_type,
-                                                                                                 'space_type' => space_type_name})
+      space_type_data = standards_lookup_table_first(table_name: 'space_types', search_criteria: { 'template' => template,
+                                                                                                   'building_type' => building_type,
+                                                                                                   'space_type' => space_type_name })
       if space_type_data.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find space type #{template}-#{building_type}-#{space_type_name}")
         return false
@@ -179,11 +178,11 @@ module LargeHotel
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('300gal')
         water_heater.resetAmbientTemperatureSchedule
-        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Basement ZN').get)
       elsif water_heater.name.to_s.include?('6.0gal')
         water_heater.resetAmbientTemperatureSchedule
-        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen_Flr_6 ZN').get)
       end
     end
@@ -191,7 +190,6 @@ module LargeHotel
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     update_waterheater_ambient_parameters(model)
-
     return true
   end
 

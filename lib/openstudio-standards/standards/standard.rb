@@ -34,6 +34,7 @@ class Standard
     if STANDARDS_LIST[name].nil?
       raise "ERROR: Did not find a class called '#{name}' to create in #{JSON.pretty_generate(STANDARDS_LIST)}"
     end
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.standard', "Using OpenStudio Standards version #{OpenstudioStandards::VERSION} with template #{name}.")
     return STANDARDS_LIST[name].new
   end
@@ -73,7 +74,6 @@ class Standard
     return lookup_name
   end
 
-
   # Loads the openstudio standards dataset for this standard.
   # For standards subclassed from other standards, the lowest-level
   # data will override data supplied at a higher level.
@@ -101,7 +101,7 @@ class Standard
           data.each_pair do |key, objs|
             # Override the template in inherited files to match the instantiated template
             objs.each do |obj|
-              if obj.has_key?('template')
+              if obj.key?('template')
                 obj['template'] = template
               end
             end
@@ -115,13 +115,13 @@ class Standard
         end
       else
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.standard', "Loading JSON files from #{data_dir}")
-        files = Dir.glob("#{data_dir}/data/*.json").select {|e| File.file? e}
+        files = Dir.glob("#{data_dir}/data/*.json").select { |e| File.file? e }
         files.each do |file|
           data = JSON.parse(File.read(file))
           data.each_pair do |key, objs|
             # Override the template in inherited files to match the instantiated template
             objs.each do |obj|
-              if obj.has_key?('template')
+              if obj.key?('template')
                 obj['template'] = template
               end
             end

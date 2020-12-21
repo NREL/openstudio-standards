@@ -1,4 +1,3 @@
-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'openstudio-standards/version'
@@ -22,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'minitest-reporters'
   spec.add_development_dependency 'minitest-parallel_fork'
   spec.add_development_dependency 'ruby-progressbar'
-  if RUBY_VERSION < "2.3"
+  if RUBY_VERSION < '2.3'
     spec.add_development_dependency 'parallel_tests', '<= 2.32.0'
     spec.add_development_dependency 'nokogiri', '<= 1.6.8.1'
     spec.add_development_dependency 'bundler', '~> 1.9'

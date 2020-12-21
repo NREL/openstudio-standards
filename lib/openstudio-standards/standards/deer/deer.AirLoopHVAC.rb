@@ -29,11 +29,9 @@ class DEER
 
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return true # No OA system
-    end
+    return true unless oa_sys.is_initialized # No OA system
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
     economizer_type = oa_control.getEconomizerControlType
 
@@ -56,11 +54,9 @@ class DEER
 
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return [nil, nil, nil] # No OA system
-    end
+    return [nil, nil, nil] unless oa_sys.is_initialized # No OA system
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
     economizer_type = oa_control.getEconomizerControlType
 
@@ -75,7 +71,7 @@ class DEER
       when 'CEC T24-CEC1',
         'CEC T24-CEC3',
         'CEC T24-CEC5'
-      drybulb_limit_f = 70
+        drybulb_limit_f = 70
       when 'CEC T24-CEC6',
         'CEC T24-CEC8',
         'CEC T24-CEC9'
@@ -96,5 +92,4 @@ class DEER
 
     return [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
   end
-
 end

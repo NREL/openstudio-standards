@@ -311,7 +311,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Zone #{zone.name} does not have floor surfaces; cannot add radiant system.")
       return false
     end
-    zone_floor = surfaces.sort_by { |s| s.grossArea }[-1]
+    zone_floor = surfaces.max_by(&:grossArea)
     zone_srf_temp = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Surface Inside Face Temperature')
     zone_srf_temp.setName("#{zone_name}_Srf_Temp")
     zone_srf_temp.setKeyName(zone_floor.name.get)
