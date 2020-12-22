@@ -85,7 +85,7 @@ class Standard
   end
 
   def create_fan_constant_volume(model,
-                                 fan_name:nil,
+                                 fan_name: nil,
                                  fan_efficiency: nil,
                                  pressure_rise: nil,
                                  motor_efficiency: nil,
@@ -111,11 +111,11 @@ class Standard
                                            motor_in_airstream_fraction: nil,
                                            end_use_subcategory: nil)
     # check values to use
-    fan_efficiency = fan_efficiency ? fan_efficiency : fan_json['fan_efficiency']
-    pressure_rise = pressure_rise ? pressure_rise : fan_json['pressure_rise']
-    motor_efficiency = motor_efficiency ? motor_efficiency : fan_json['motor_efficiency']
-    motor_in_airstream_fraction = motor_in_airstream_fraction ? motor_in_airstream_fraction : fan_json['motor_in_airstream_fraction']
-    end_use_subcategory = end_use_subcategory ? end_use_subcategory : fan_json['end_use_subcategory']
+    fan_efficiency ||= fan_json['fan_efficiency']
+    pressure_rise ||= fan_json['pressure_rise']
+    motor_efficiency ||= fan_json['motor_efficiency']
+    motor_in_airstream_fraction ||= fan_json['motor_in_airstream_fraction']
+    end_use_subcategory ||= fan_json['end_use_subcategory']
 
     # convert values
     pressure_rise = pressure_rise ? OpenStudio.convert(pressure_rise, 'inH_{2}O', 'Pa').get : nil
@@ -130,5 +130,4 @@ class Standard
                                      end_use_subcategory: end_use_subcategory)
     return fan
   end
-
 end

@@ -27,7 +27,6 @@ class ASHRAE9012007 < ASHRAE901
                              5.58
                            end
 
-
     return pressure_rise_in_h2o
   end
 end

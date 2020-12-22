@@ -25,6 +25,7 @@ Standard.class_eval do
     if epw_path.empty?
       return false
     end
+
     epw_path = epw_path.get
 
     # close current sql file
@@ -84,7 +85,7 @@ Standard.class_eval do
       epw_name = 'in.epw'
       begin
         FileUtils.copy(epw_path.to_s, "#{run_dir}/#{epw_name}")
-      rescue
+      rescue StandardError
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Due to limitations on Windows file path lengths, this measure won't work unless your project is located in a directory whose filepath is less than 90 characters long, including slashes.")
         return false
       end
@@ -95,7 +96,7 @@ Standard.class_eval do
 
       cli_path = OpenStudio.getOpenStudioCLI
       cmd = "\"#{cli_path}\" run -w \"#{osw_path}\""
-      #cmd = "\"#{cli_path}\" --verbose run -w \"#{osw_path}\""
+      # cmd = "\"#{cli_path}\" --verbose run -w \"#{osw_path}\""
       puts cmd
 
       # Run the sizing run
@@ -155,7 +156,7 @@ Standard.class_eval do
       endstring = File.read(end_file_stringpath)
     end
 
-    if not endstring.include?("EnergyPlus Completed Successfully")
+    if !endstring.include?('EnergyPlus Completed Successfully')
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "The run did not finish and had following errors: #{errs.join('\n')}")
       return false
     end
@@ -182,6 +183,7 @@ Standard.class_eval do
 
     # check that all zones have surfaces.
     raise 'Error: Sizing Run Failed. Thermal Zones with no surfaces exist.' unless model_do_all_zones_have_surfaces?(model)
+
     # Run the sizing run
     success = model_run_simulation_and_log_errors(model, sizing_run_dir)
 

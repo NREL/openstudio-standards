@@ -15,5 +15,4 @@ class OEESC2014 < OEESC
   def load_standards_database(data_directories = [])
     super([__dir__] + data_directories)
   end
-
 end

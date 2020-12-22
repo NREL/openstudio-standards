@@ -1,4 +1,3 @@
-
 class Standard
   # @!group ChillerElectricEIR
 
@@ -75,9 +74,8 @@ class Standard
     # Get the chiller properties
     search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
     capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir)
-    unless capacity_w
-      return nil
-    end
+    return nil unless capacity_w
+
     capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
     chlr_props = model_find_object(standards_data['chillers'], search_criteria, capacity_tons, Date.today)
 

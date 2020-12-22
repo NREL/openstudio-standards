@@ -7,9 +7,9 @@ class ASHRAE9012004 < ASHRAE901
   # uses the least specific climate zone.
   def model_get_climate_zone_set_from_list(model, possible_climate_zone_sets)
     climate_zone_set = if possible_climate_zone_sets.include? 'ClimateZone 3'
-                         possible_climate_zone_sets.sort.last
+                         possible_climate_zone_sets.max
                        else
-                         possible_climate_zone_sets.sort.first
+                         possible_climate_zone_sets.min
                        end
     return climate_zone_set
   end
