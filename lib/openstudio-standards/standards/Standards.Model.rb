@@ -1319,7 +1319,7 @@ class Standard
   # @return [object] supply fan of zone equipment component
   def get_fan_object_for_airloop(model, air_loop)
     if !air_loop.supplyFan.empty?
-      fan_component = airloop.supplyFan.get
+      fan_component = air_loop.supplyFan.get
 
       # if airloop.supplyFan.get.to_FanConstantVolume.is_initialized
       #   fan_obj = airloop.supplyFan.get.to_FanConstantVolume.get

@@ -424,10 +424,6 @@ class ASHRAE901PRM < Standard
 
   def model_apply_prm_baseline_sizing_schedule(model)
     space_loads = model.getSpaceLoads
-    space_items = model.getSpaceItems
-    space_load_instances = model.getSpaceLoadInstances
-    space_load_definitions = model.getSpaceLoadDefinitions
-
     loads = []
     space_loads.sort.each do |space_load|
       load_type = space_load.iddObjectType.valueName.sub('OS_', '').strip.sub('_', '')
@@ -453,6 +449,21 @@ class ASHRAE901PRM < Standard
       load_schedule_name = load_schedule_name_hash[load_type]
       next unless !load_schedule_name.nil?
 
+      # check if the load is in a dwelling space
+      if load.spaceType.is_initialized
+        space_type = load.spaceType.get
+      elsif load.space.is_initialized && load.space.get.spaceType.is_initialized
+        space_type = load.space.get.spaceType.get
+      else
+        space_type = nil
+        puts "No hosting space/spacetype found for load: #{load.name}"
+      end
+      if !space_type.nil? && /apartment/i =~ space_type.standardsSpaceType.to_s
+        load_in_dwelling = true
+      else
+        load_in_dwelling = false
+      end
+
       load_schedule = load.public_send(load_schedule_name).get
       schedule_type = load_schedule.iddObjectType.valueName.sub('OS_', '').strip.sub('_', '')
       load_schedule = load_schedule.public_send("to_#{schedule_type}").get
@@ -461,13 +472,22 @@ class ASHRAE901PRM < Standard
       when 'ScheduleRuleset'
         load_schmax = get_8760_values_from_schedule(model, load_schedule).max
         load_schmin = get_8760_values_from_schedule(model, load_schedule).min
+        load_schmode = get_weekday_values_from_8760(model,
+                                                    Array(get_8760_values_from_schedule(model, load_schedule)),
+                                                    value_includes_holiday = true).mode[0]
 
+        # AppendixG-2019 G3.1.2.2.1
         if load_type == 'SpaceInfiltration_DesignFlowRate'
           summer_value = load_schmax
           winter_value = load_schmax
         else
           summer_value = load_schmax
           winter_value = load_schmin
+        end
+
+        # AppendixG-2019 Exception to G3.1.2.2.1
+        if load_in_dwelling
+          summer_value = load_schmode
         end
 
         # set cooling design day schedule

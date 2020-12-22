@@ -1336,5 +1336,37 @@ class Standard
 
       return sch_rule
   end
-  
+
+  def get_weekday_values_from_8760(model, values, value_includes_holiday = true)
+    start_day = model.getYearDescription.dayofWeekforStartDay
+    start_day_map = {
+        'Sunday' => 0,
+        'Monday' => 1,
+        'Tuesday' => 2,
+        'Wednesday' => 3,
+        'Thursday' => 4,
+        'Friday' => 5,
+        'Saturday' => 6
+    }
+    start_day_num = start_day_map[start_day]
+    weekday_values = []
+    day_of_week = start_day_num
+    num_of_days = values.size / 24
+    if value_includes_holiday
+      num_of_days -= 1
+    end
+
+    for day_i in 1..num_of_days do
+      if day_of_week >= 1 && day_of_week <= 5
+        weekday_values += values.slice!(0, 24)
+      end
+      day_of_week += 1
+      # reset day of week
+      if day_of_week == 7
+        day_of_week = 0
+      end
+    end
+
+    return weekday_values
+  end
 end
