@@ -196,6 +196,7 @@ class NECB2011 < Standard
                                    fdwr_set: -1.0,
                                    srr_set: -1.0,
                                    nv_type: nil,
+                                   nv_comfort_model: nil,
                                    nv_opening_fraction: nil,
                                    nv_Tout_min: nil,
                                    nv_Tout_max: nil,
@@ -233,10 +234,11 @@ class NECB2011 < Standard
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
                                 nv_type: TRUE, # Two options: (1) nil or FALSE, (2) TRUE
-                                nv_opening_fraction: 0.1, # (1) nil or FALSE (2) e.g. 0.5
-                                nv_Tout_min: 20, #18
-                                nv_Tout_max: 100, #24
-                                nv_Delta_Tin_Tout: 2.0#nil
+                                nv_comfort_model: nil, # Three options: (1) nil or FALSE, (2) 'Fanger_Model', (3) 'Adaptive_Model'
+                                nv_opening_fraction: nil, # (1) nil or FALSE (2) e.g. 0.1
+                                nv_Tout_min: nil, #e.g. 20.0
+                                nv_Tout_max: nil, #e.g. 100.0
+                                nv_Delta_Tin_Tout: nil#nil  e.g. 2.0
                                 )
   end
 
@@ -285,6 +287,7 @@ class NECB2011 < Standard
                            scale_y: nil,
                            scale_z: nil,
                            nv_type: nil,
+                           nv_comfort_model: nil,
                            nv_opening_fraction: nil,
                            nv_Tout_min: nil,
                            nv_Tout_max: nil,
@@ -335,6 +338,7 @@ class NECB2011 < Standard
                                    shw_eff: shw_eff,
                                    daylighting_type: daylighting_type,
                                    nv_type: nv_type,
+                                   nv_comfort_model: nv_comfort_model,
                                    nv_opening_fraction: nv_opening_fraction,
                                    nv_Tout_min: nv_Tout_min,
                                    nv_Tout_max: nv_Tout_max,
@@ -356,6 +360,7 @@ class NECB2011 < Standard
                                      shw_eff: nil,
                                      daylighting_type: 'NECB_Default',
                                      nv_type: nil,
+                                     nv_comfort_model: nil,
                                      nv_opening_fraction: nil,
                                      nv_Tout_min: nil,
                                      nv_Tout_max: nil,
@@ -406,6 +411,7 @@ class NECB2011 < Standard
     # Apply natural ventilation using simplified method.
     ecm.apply_nv(model: model,
                  nv_type: nv_type,
+                 nv_comfort_model: nv_comfort_model,
                  nv_opening_fraction: nv_opening_fraction,
                  nv_Tout_min: nv_Tout_min,
                  nv_Tout_max: nv_Tout_max,
