@@ -295,6 +295,24 @@ def exclusion_list
   return exclusion_array
 end
 
+def parse_units(unit)
+  # useless_units = [nil, 'fraction', '%', 'COP_68F', 'COP_47F', '%/gal', 'Btu/hr/Btu/hr', 'Btu/hr/gal', 'BTU/hr/ft', 'W/BTU/h']
+  units_to_skip = [nil, 'fraction', '%', 'EER', '>23m^2', '>84m^2', '<23m^2', '<84m^2']
+  unit_parsed = nil
+  if not units_to_skip.include?(unit)
+    if unit == '%/gal'
+      unit = '1/gal'
+    end
+    unit_parsed = OpenStudio.createUnit(unit)
+    if unit_parsed.empty?
+      unit_parsed = "Not recognized by OpenStudio"
+    else
+      unit_parsed = unit_parsed.get()
+    end
+  end
+  return unit_parsed
+end
+
 # Exports spreadsheet data to data jsons, nested by the standards templates
 #
 # @param spreadsheet_titles
@@ -363,6 +381,10 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
     # Export each tab to a hash, where the key is the sheet name
     # and the value is an array of objects
     standards_data = {}
+    list_of_sheets = []
+    list_of_names = []
+    list_of_units = []
+    list_of_OS_okay_units = []
     workbook.worksheets.each do |worksheet|
       sheet_name = worksheet.sheet_name.snake_case
 
@@ -391,10 +413,16 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
         header = {}
         header["name"] = header_string.gsub(/\(.*\)/, '').strip.snake_case
         header_unit_parens = header_string.scan(/\(.*\)/)[0]
+        list_of_sheets << sheet_name
+        list_of_names << header_string.gsub(/\(.*\)/, '').strip.snake_case
         if header_unit_parens.nil?
           header["units"] = nil
+          list_of_units << nil
+          list_of_OS_okay_units << nil
         else
           header["units"] = header_unit_parens.gsub(/\(|\)/, '').strip
+          list_of_units << header_unit_parens.gsub(/\(|\)/, '').strip
+          list_of_OS_okay_units << parse_units(header_unit_parens.gsub(/\(|\)/, '').strip)
         end
         headers << header
       end
@@ -537,6 +565,11 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
       standards_data[sheet_name] = objs
     end
 
+    # CSV.open("metadata.csv", "wb") {|csv| headers.to_a.each {|elem| csv << elem} }
+    # list_metadata = [list_of_sheets, list_of_names, list_of_units, list_of_OS_okay_units].transpose
+    list_metadata = [list_of_sheets, list_of_names, list_of_units].transpose
+    list_metadata.insert(0, ['Sheet', 'Name', 'Unit']) # [1, 2, 2.5, 3, 4]
+    File.write("data/standards/metadata_units_#{spreadsheet_title}.csv", list_metadata.map(&:to_csv).join)
     # Check for duplicate data in space_types_* sheets
     standards_data.each_pair do |sheet_name, objs|
       skip_duplicate_check = []
