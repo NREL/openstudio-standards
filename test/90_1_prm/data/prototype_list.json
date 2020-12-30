@@ -51,5 +51,9 @@
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["make_lab_high_distrib_zone_exh",[]], ["remove_transformer", []]]],
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["make_lab_low_distrib_zone_exh",[]], ["remove_transformer", []]]],
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["make_lab_high_system_exh",[]], ["remove_transformer", []]]]
-        ]
+        ],
+    "hvac_sizing": [
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
+    ]
 }

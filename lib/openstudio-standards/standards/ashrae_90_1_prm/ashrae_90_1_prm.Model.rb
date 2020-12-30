@@ -503,7 +503,7 @@ class ASHRAE901PRM < Standard
         load_schedule.setWinterDesignDaySchedule(winter_dd_schedule)
 
       when 'ScheduleConstant'
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space load #{load.name} has schedule type of Nothing to be done for ScheduleConstant")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space load #{load.name} has schedule type of ScheduleConstant. Nothing to be done for ScheduleConstant")
         next
       end
     end
