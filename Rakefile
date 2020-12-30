@@ -185,6 +185,11 @@ namespace :data do
   task 'update:manual' do
     export_spreadsheet_to_json(spreadsheet_titles)
   end
+
+  desc 'Export JSONs from OpenStudio_Standards to data library'
+  task 'export:jsons' do
+    export_spreadsheet_to_json(spreadsheets_ashrae, dataset_type: 'data_lib')
+  end
 end
 
 # Tasks to export libraries packaged with
