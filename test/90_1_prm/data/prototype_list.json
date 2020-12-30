@@ -53,7 +53,8 @@
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["make_lab_high_system_exh",[]], ["remove_transformer", []]]]
         ],
     "hvac_sizing": [
-        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", []],
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["convert_spaces_to_laboratory", "OfficeWholeBuilding - Sm Office"]]],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-4A", []],
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ]
 }

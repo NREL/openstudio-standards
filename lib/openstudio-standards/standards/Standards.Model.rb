@@ -197,6 +197,7 @@ class Standard
       # Get the groups of zones that define the baseline HVAC systems for later use.
       # This must be done before removing the HVAC systems because it requires knowledge of proposed HVAC fuels.
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Grouping Zones by Fuel Type and Occupancy Type ***')
+      zone_fan_scheds = nil
       if /prm/i !~ template
         sys_groups = model_prm_baseline_system_groups(model, custom)
       else

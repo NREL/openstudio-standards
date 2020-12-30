@@ -1120,6 +1120,7 @@ class AppendixGPRMTests < Minitest::Test
         @lpd_space_types_alt[std_bldg_type + 'laboratory'] = 'laboratory'
       end
     end
+    return model
   end
 
   # Add exhaust fan object to each lab zone in model
