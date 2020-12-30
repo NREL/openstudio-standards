@@ -93,7 +93,7 @@ class Standard
     space_type_properties = space_type_get_standards_data(space_type)
 
     # Need to add a check, or it'll crash on space_type_properties['occupancy_per_area'].to_f below
-    if space_type_properties.nil?
+    if space_type_properties.nil? || space_type_properties.empty?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} was not found in the standards data.")
       return false
     end
