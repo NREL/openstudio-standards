@@ -239,7 +239,7 @@ class NECB2011 < Standard
                                 skylight_solar_trans: skylight_solar_trans,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
-                                nv_type: TRUE, # Two options: (1) nil or FALSE, (2) TRUE
+                                nv_type: FALSE, # Two options: (1) nil or FALSE, (2) TRUE
                                 nv_comfort_model: nil, # Three options: (1) nil or FALSE, (2) 'Fanger_Model', (3) 'Adaptive_Model'
                                 nv_opening_fraction: nil, #options: (1) nil or FALSE (2) e.g. 0.1
                                 nv_Tout_min: nil, #options: (1) nil or FALSE (2) e.g. 20.0 for Calgary; 15.0 for Vancouver
