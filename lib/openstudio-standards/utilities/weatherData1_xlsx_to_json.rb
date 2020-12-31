@@ -1,40 +1,38 @@
-#converts the WeatherData1.xlsx spreadsheet into a ruby hash using the rubyXL gem
+# converts the WeatherData1.xlsx spreadsheet into a ruby hash using the rubyXL gem
 
 require 'csv'
 require 'json'
 require 'rubyXL'
 
 begin
+  csv_file = "#{File.dirname(__FILE__)}/../btap/csvFile1.csv"
 
-csv_file = "#{File.dirname(__FILE__)}/../btap/csvFile1.csv"
+  input_file = "#{File.dirname(__FILE__)}/../btap/WeatherData1.xlsx"
 
-input_file = "#{File.dirname(__FILE__)}/../btap/WeatherData1.xlsx"
+  CSV.open(csv_file, 'wb') do |csv|
+    workbook = RubyXL::Parser.parse input_file
+    worksheet = workbook[0]
 
-CSV.open(csv_file, "wb") do |csv|
-  workbook = RubyXL::Parser.parse input_file
-  worksheet = workbook[0]
-
-  worksheet.each_with_index do |row, row_idx|
-    row_data = []
-    (0...row.size).each do |col_idx|
-      begin
-        cell = row[col_idx]
-        val = cell.value
-        row_data << val
-      rescue NoMethodError
-        row_data << ""
+    worksheet.each_with_index do |row, row_idx|
+      row_data = []
+      (0...row.size).each do |col_idx|
+        begin
+          cell = row[col_idx]
+          val = cell.value
+          row_data << val
+        rescue NoMethodError
+          row_data << ''
+        end
       end
+      csv << row_data
     end
-    csv << row_data
   end
+rescue StandardError
 end
 
-rescue; 
-end
+data_json_hash = CSV.open(csv_file, headers: true).map(&:to_h).to_json
 
-data_json_hash = CSV.open(csv_file, :headers => true).map { |x| x.to_h }.to_json
-
-File.write("#{File.dirname(__FILE__)}/../btap/csvToJsonUpdate.json",data_json_hash)
+File.write("#{File.dirname(__FILE__)}/../btap/csvToJsonUpdate.json", data_json_hash)
 
 data_hash = JSON.parse(File.read("#{File.dirname(__FILE__)}/../btap/csvToJsonUpdate.json"))
 
@@ -47,7 +45,6 @@ data_hash.each do |info|
   info['elevation'] = info['elevation'].to_i
   info['deltadb'] = info['deltadb'].to_f
   info['mau_type'] = true
-
 end
 
 pretty_output = JSON.pretty_generate(data_hash)

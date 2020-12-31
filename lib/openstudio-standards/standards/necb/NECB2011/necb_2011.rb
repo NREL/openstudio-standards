@@ -200,8 +200,14 @@ class NECB2011 < Standard
                                    nv_opening_fraction: nil,
                                    nv_Tout_min: nil,
                                    nv_Tout_max: nil,
-                                   nv_Delta_Tin_Tout: nil
+                                   nv_Delta_Tin_Tout: nil,
+                                   pv_ground_type: nil,
+                                   pv_ground_total_area_pv_panels_m2: nil,
+                                   pv_ground_tilt_angle: nil,
+                                   pv_ground_azimuth_angle: nil,
+                                   pv_ground_module_description: nil
   )
+
 
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
@@ -238,8 +244,14 @@ class NECB2011 < Standard
                                 nv_opening_fraction: nil, #options: (1) nil or FALSE (2) e.g. 0.1
                                 nv_Tout_min: nil, #options: (1) nil or FALSE (2) e.g. 20.0 for Calgary; 15.0 for Vancouver
                                 nv_Tout_max: nil, #options: (1) nil or FALSE (2) e.g. 100.0
-                                nv_Delta_Tin_Tout: nil #options: (1) nil or FALSE (2) e.g. 2.0
-                                )
+                                nv_Delta_Tin_Tout: nil, #options: (1) nil or FALSE (2) e.g. 2.0
+                                pv_ground_type: pv_ground_type,  # Two options: (1) nil OR FALSE, (2) TRUE
+                                pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # e.g. 50
+                                pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) 'NECB_Default' (i.e. latitude), (2) tilt angle value (e.g. 20)
+                                pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) 'NECB_Default' (i.e. south), (2) azimuth angle value (e.g. 90)
+                                pv_ground_module_description: pv_ground_module_description # Options: (1) 'NECB_Default' (i.e. Standard), (2) other options ('Standard', 'Premium', ThinFilm')
+    )
+
   end
 
   def load_building_type_from_library(building_type:)
@@ -291,7 +303,12 @@ class NECB2011 < Standard
                            nv_opening_fraction: nil,
                            nv_Tout_min: nil,
                            nv_Tout_max: nil,
-                           nv_Delta_Tin_Tout: nil
+                           nv_Delta_Tin_Tout: nil,
+                           pv_ground_type: nil,
+                           pv_ground_total_area_pv_panels_m2: nil ,
+                           pv_ground_tilt_angle: nil,
+                           pv_ground_azimuth_angle: nil,
+                           pv_ground_module_description: nil
   )
 
     BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees.nil?
@@ -342,8 +359,14 @@ class NECB2011 < Standard
                                    nv_opening_fraction: nv_opening_fraction,
                                    nv_Tout_min: nv_Tout_min,
                                    nv_Tout_max: nv_Tout_max,
-                                   nv_Delta_Tin_Tout: nv_Delta_Tin_Tout
+                                   nv_Delta_Tin_Tout: nv_Delta_Tin_Tout,
+                                   pv_ground_type: pv_ground_type,
+                                   pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
+                                   pv_ground_tilt_angle: pv_ground_tilt_angle,
+                                   pv_ground_azimuth_angle: pv_ground_azimuth_angle,
+                                   pv_ground_module_description: pv_ground_module_description
     )
+
     return model
   end
 
@@ -364,7 +387,14 @@ class NECB2011 < Standard
                                      nv_opening_fraction: nil,
                                      nv_Tout_min: nil,
                                      nv_Tout_max: nil,
-                                     nv_Delta_Tin_Tout:nil)
+                                     nv_Delta_Tin_Tout:nil,
+                                     pv_ground_type:,
+                                     pv_ground_total_area_pv_panels_m2:,
+                                     pv_ground_tilt_angle:,
+                                     pv_ground_azimuth_angle:,
+                                     pv_ground_module_description:
+  )
+
     # Create ECM object.
     ecm = ECMS.new
 
@@ -416,6 +446,16 @@ class NECB2011 < Standard
                  nv_Tout_min: nv_Tout_min,
                  nv_Tout_max: nv_Tout_max,
                  nv_Delta_Tin_Tout: nv_Delta_Tin_Tout)
+
+    # -------Ground-mounted PV panels----------------   #Sara
+    # Apply ground-mounted PV panels as required.
+    ecm.apply_pv_ground(model: model,
+                        pv_ground_type: pv_ground_type,
+                        pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
+                        pv_ground_tilt_angle: pv_ground_tilt_angle,
+                        pv_ground_azimuth_angle: pv_ground_azimuth_angle,
+                        pv_ground_module_description: pv_ground_module_description)
+
   end
 
 

@@ -1,4 +1,3 @@
-
 # Custom changes for the SmallHotel prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -93,9 +92,9 @@ module SmallHotel
 
   def update_waterheater_ambient_parameters(model)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
-	  if water_heater.name.to_s.include?('200gal')
+      if water_heater.name.to_s.include?('200gal')
         water_heater.resetAmbientTemperatureSchedule
-        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('LaundryRoomFlr1 ZN').get)
       end
     end
@@ -108,7 +107,6 @@ module SmallHotel
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-
     return true
   end
 end

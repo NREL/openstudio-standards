@@ -32,11 +32,9 @@ class ASHRAE9012010 < ASHRAE901
 
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return [nil, nil, nil] # No OA system
-    end
+    return [nil, nil, nil] unless oa_sys.is_initialized # No OA system
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
     economizer_type = oa_control.getEconomizerControlType
 
@@ -45,8 +43,8 @@ class ASHRAE9012010 < ASHRAE901
       return [nil, nil, nil]
     when 'FixedDryBulb'
       search_criteria = {
-          'template' => template,
-          'climate_zone' => climate_zone
+        'template' => template,
+        'climate_zone' => climate_zone
       }
       econ_limits = model_find_object(standards_data['economizers'], search_criteria)
       drybulb_limit_f = econ_limits['fixed_dry_bulb_high_limit_shutoff_temp']
@@ -312,15 +310,18 @@ class ASHRAE9012010 < ASHRAE901
     end
 
     case climate_zone
-    when 'ASHRAE 169-2006-1A',
+    when 'ASHRAE 169-2006-0A',
+         'ASHRAE 169-2006-1A',
          'ASHRAE 169-2006-2A',
          'ASHRAE 169-2006-3A',
+         'ASHRAE 169-2013-0A',
          'ASHRAE 169-2013-1A',
          'ASHRAE 169-2013-2A',
          'ASHRAE 169-2013-3A'
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset is not required per 6.5.3.4 Exception 1, the system is located in climate zone #{climate_zone}.")
       return is_sat_reset_required
-    when 'ASHRAE 169-2006-1B',
+    when 'ASHRAE 169-2006-0B',
+         'ASHRAE 169-2006-1B',
          'ASHRAE 169-2006-2B',
          'ASHRAE 169-2006-3B',
          'ASHRAE 169-2006-3C',
@@ -336,6 +337,7 @@ class ASHRAE9012010 < ASHRAE901
          'ASHRAE 169-2006-7B',
          'ASHRAE 169-2006-8A',
          'ASHRAE 169-2006-8B',
+         'ASHRAE 169-2013-0B',
          'ASHRAE 169-2013-1B',
          'ASHRAE 169-2013-2B',
          'ASHRAE 169-2013-3B',

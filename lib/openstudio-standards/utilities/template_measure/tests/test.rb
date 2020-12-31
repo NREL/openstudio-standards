@@ -11,73 +11,70 @@ require_relative '../measure.rb'
 require_relative '../resources/BTAPMeasureHelper.rb'
 require 'minitest/autorun'
 
-
 class BTAPModelMeasure_Test < Minitest::Test
   # Brings in helper methods to simplify argument testing of json and standard argument methods.
   include(BTAPMeasureTestHelper)
-  def setup()
-
+  def setup
     @use_json_package = false
     @use_string_double = true
     @measure_interface_detailed = [
 
-        {
-            "name" => "a_string_argument",
-            "type" => "String",
-            "display_name" => "A String Argument (string)",
-            "default_value" => "The Default Value",
-            "is_required" => false
-        },
-        {
-            "name" => "a_double_argument",
-            "type" => "Double",
-            "display_name" => "A Double numeric Argument (double)",
-            "default_value" => 0,
-            "max_double_value" => 100.0,
-            "min_double_value" => 0.0,
-            "is_required" => false
-        },
-        {
-            "name" => "a_string_double_argument",
-            "type" => "StringDouble",
-            "display_name" => "A String Double numeric Argument (double)",
-            "default_value" => 23.0,
-            "max_double_value" => 100.0,
-            "min_double_value" => 0.0,
-            "valid_strings" => ["NA"],
-            "is_required" => false
-        },
-        {
-            "name" => "a_choice_argument",
-            "type" => "Choice",
-            "display_name" => "A Choice String Argument ",
-            "default_value" => "choice_1",
-            "choices" => ["choice_1", "choice_2"],
-            "is_required" => false
-        },
-        {
-            "name" => "a_bool_argument",
-            "type" => "Bool",
-            "display_name" => "A Boolean Argument ",
-            "default_value" => false,
-            "is_required" => true
-        }
+      {
+        'name' => 'a_string_argument',
+        'type' => 'String',
+        'display_name' => 'A String Argument (string)',
+        'default_value' => 'The Default Value',
+        'is_required' => false
+      },
+      {
+        'name' => 'a_double_argument',
+        'type' => 'Double',
+        'display_name' => 'A Double numeric Argument (double)',
+        'default_value' => 0,
+        'max_double_value' => 100.0,
+        'min_double_value' => 0.0,
+        'is_required' => false
+      },
+      {
+        'name' => 'a_string_double_argument',
+        'type' => 'StringDouble',
+        'display_name' => 'A String Double numeric Argument (double)',
+        'default_value' => 23.0,
+        'max_double_value' => 100.0,
+        'min_double_value' => 0.0,
+        'valid_strings' => ['NA'],
+        'is_required' => false
+      },
+      {
+        'name' => 'a_choice_argument',
+        'type' => 'Choice',
+        'display_name' => 'A Choice String Argument ',
+        'default_value' => 'choice_1',
+        'choices' => ['choice_1', 'choice_2'],
+        'is_required' => false
+      },
+      {
+        'name' => 'a_bool_argument',
+        'type' => 'Bool',
+        'display_name' => 'A Boolean Argument ',
+        'default_value' => false,
+        'is_required' => true
+      }
 
     ]
 
     @good_input_arguments = {
-        "a_string_argument" => "MyString",
-        "a_double_argument" => 50.0,
-        "a_string_double_argument" => "50.0",
-        "a_choice_argument" => "choice_1",
-        "a_bool_argument" => true
+      'a_string_argument' => 'MyString',
+      'a_double_argument' => 50.0,
+      'a_string_double_argument' => '50.0',
+      'a_choice_argument' => 'choice_1',
+      'a_bool_argument' => true
     }
-
   end
 
-  def test_sample()
+  def test_sample
     ####### Test Model Creation######
-    #You'll need a seed model to test against. You have a few options.
+    # You'll need a seed model to test against. You have a few options.
     # If you are only testing arguments, you can use an empty model like I am doing here.
     # Option 1: Model CreationCreate Empty Model object and start doing things to it. Here I am creating an empty model
     # and adding surface geometry to the model
@@ -104,18 +101,17 @@ class BTAPModelMeasure_Test < Minitest::Test
     before_measure_model = copy_model(model)
 
     # You can save your file anytime you want here I am saving to the
-    BTAP::FileIO::save_osm(model, File.join(File.dirname(__FILE__), "output", "saved_file.osm"))
+    BTAP::FileIO.save_osm(model, File.join(File.dirname(__FILE__), 'output', 'saved_file.osm'))
 
-    #We can even call the standard methods to apply to the model.
+    # We can even call the standard methods to apply to the model.
     necb2011_standard.model_add_design_days_and_weather_file(model, 'NECB HDD Method', 'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw')
 
     puts BTAP::FileIO.compare_osm_files(before_measure_model, model)
     necb2011_standard.apply_standard_construction_properties(model) # standards candidate
 
-
     # Another simple way is to create an NECB
     # building using the helper method below.
-    #Option #2 NECB method.
+    # Option #2 NECB method.
     #   model = create_necb_protype_model(
     #      "LargeOffice",
     #     'NECB HDD Method',
@@ -134,25 +130,24 @@ class BTAPModelMeasure_Test < Minitest::Test
     # Option #3 Load osm file.
     # model = BTAP::FileIO.load_osm(filepath)
 
-
     input_arguments = nil
 
     if @use_json_package
       input_arguments = {
-          "json_input" => '{ "a_string_argument": "The Default Value",
-                      "a_double_argument": 0.0,
-                      "a_string_double_argument": 23.0,
-                      "a_choice_argument": "choice_1",
-                      "a_bool_argument": false }'
+        'json_input' => '{ "a_string_argument": "The Default Value",
+                    "a_double_argument": 0.0,
+                    "a_string_double_argument": 23.0,
+                    "a_choice_argument": "choice_1",
+                    "a_bool_argument": false }'
       }
 
     else
       # Set up your argument list to test.
       input_arguments = {
-          "a_string_argument" => "MyString",
-          "a_double_argument" => 10.0,
-          "a_string_double_argument" => 75.3,
-          "a_choice_argument" => "choice_1"
+        'a_string_argument' => 'MyString',
+        'a_double_argument' => 10.0,
+        'a_string_double_argument' => 75.3,
+        'a_choice_argument' => 'choice_1'
       }
     end
 

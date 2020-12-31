@@ -67,7 +67,7 @@ class Standard
     # coil controller properties
     # NOTE: These inputs will get overwritten if addToNode or addDemandBranchForComponent is called on the htg_coil object after this
     clg_coil_controller = clg_coil.controllerWaterCoil.get
-    clg_coil_controller.setName("#{clg_coil.name.to_s} Controller")
+    clg_coil_controller.setName("#{clg_coil.name} Controller")
     clg_coil_controller.setAction('Reverse')
     clg_coil_controller.setMinimumActuatedFlow(0.0)
 
