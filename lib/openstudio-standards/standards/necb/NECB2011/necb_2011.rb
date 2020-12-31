@@ -235,10 +235,10 @@ class NECB2011 < Standard
                                 srr_set: srr_set,
                                 nv_type: TRUE, # Two options: (1) nil or FALSE, (2) TRUE
                                 nv_comfort_model: nil, # Three options: (1) nil or FALSE, (2) 'Fanger_Model', (3) 'Adaptive_Model'
-                                nv_opening_fraction: nil, # (1) nil or FALSE (2) e.g. 0.1
-                                nv_Tout_min: nil, #e.g. 20.0
-                                nv_Tout_max: nil, #e.g. 100.0
-                                nv_Delta_Tin_Tout: nil#nil  e.g. 2.0
+                                nv_opening_fraction: nil, #options: (1) nil or FALSE (2) e.g. 0.1
+                                nv_Tout_min: nil, #options: (1) nil or FALSE (2) e.g. 20.0 for Calgary; 15.0 for Vancouver
+                                nv_Tout_max: nil, #options: (1) nil or FALSE (2) e.g. 100.0
+                                nv_Delta_Tin_Tout: nil #options: (1) nil or FALSE (2) e.g. 2.0
                                 )
   end
 
