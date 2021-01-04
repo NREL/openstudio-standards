@@ -9,7 +9,7 @@ class Standard
   # @param efficiency [Double] rated heating efficiency
   def create_coil_heating_electric(model,
                                    air_loop_node: nil,
-                                   name: "Electric Htg Coil",
+                                   name: 'Electric Htg Coil',
                                    schedule: nil,
                                    nominal_capacity: nil,
                                    efficiency: 1.0)

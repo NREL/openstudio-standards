@@ -85,7 +85,7 @@ class Standard
     # coil controller properties
     # NOTE: These inputs will get overwritten if addToNode or addDemandBranchForComponent is called on the htg_coil object after this
     htg_coil_controller = htg_coil.controllerWaterCoil.get
-    htg_coil_controller.setName("#{htg_coil.name.to_s} Controller")
+    htg_coil_controller.setName("#{htg_coil.name} Controller")
     htg_coil_controller.setMinimumActuatedFlow(0.0)
     htg_coil_controller.setControllerConvergenceTolerance(controller_convergence_tolerance) unless controller_convergence_tolerance.nil?
 

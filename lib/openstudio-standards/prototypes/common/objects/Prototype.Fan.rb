@@ -1,4 +1,3 @@
-
 # Prototype fan calculation methods that are the same regardless of fan type.
 # These methods are available to FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
 module PrototypeFan
@@ -176,5 +175,4 @@ module PrototypeFan
                                         end_use_subcategory: end_use_subcategory)
     end
   end
-
 end

@@ -406,7 +406,6 @@ class NRELZNEReady2017 < ASHRAE901
   #
   # @return [Bool] Returns true if required, false if not.
   def air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
-
     if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
       oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir

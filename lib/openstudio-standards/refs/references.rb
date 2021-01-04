@@ -8,8 +8,8 @@
 #   # @ref [References::ASHRAE9012004] section G.3.1, table 3
 #   def some_method()
 #     ...
-module References
 
+module References
   # ASHRAE 90.1-2004
   # @see https://www.techstreet.com/ashrae/standards/ashrae-90-1-2004-i-p?product_id=1199725 Purchase in the ASHRAE Bookstore
   class ASHRAE9012004; end
@@ -114,5 +114,4 @@ module References
   # Carlos Duarte cduarte@berkeley.edu
   # @see https://cbe.berkeley.edu/project/optimizing-radiant-systems-energy-efficiency-comfort/
   class CBERadiantSystems; end
-
 end

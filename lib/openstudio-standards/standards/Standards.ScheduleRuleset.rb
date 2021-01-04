@@ -1,4 +1,3 @@
-
 class Standard
   # @!group ScheduleRuleset
 
@@ -7,7 +6,6 @@ class Standard
   # @param [object] daySchedule
   # @return [Double]
   def day_schedule_equivalent_full_load_hrs(day_sch)
-
     # Determine the full load hours for just one day
     daily_flh = 0
     values = day_sch.values
@@ -281,7 +279,6 @@ class Standard
   # @param [Object] ScheduleRuleset
   # @return [Object] ScheduleRuleset
   def schedule_ruleset_cleanup_profiles(schedule_ruleset)
-
     # set start and end dates
     year_description = schedule_ruleset.model.yearDescription.get
     year = year_description.assumedYear
@@ -289,38 +286,38 @@ class Standard
     year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
 
     indices_vector = schedule_ruleset.getActiveRuleIndices(year_start_date, year_end_date)
-    most_frequent_item = indices_vector.uniq.max_by{ |i| indices_vector.count( i ) }
+    most_frequent_item = indices_vector.uniq.max_by { |i| indices_vector.count(i) }
     rule_vector = schedule_ruleset.scheduleRules
 
     replace_existing_default = false
-    if indices_vector.include? -1 and most_frequent_item != -1
+    if indices_vector.include? -1 && most_frequent_item != -1
       # clean up if default isn't most common (e.g. sunday vs. weekday)
       # if no existing rules cover specific days of week, make new rule from default covering those days of week
-      possible_days_of_week = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+      possible_days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
       used_days_of_week = []
       rule_vector.each do |rule|
-        if rule.applyMonday then used_days_of_week << "Monday" end
-        if rule.applyTuesday then used_days_of_week << "Tuesday" end
-        if rule.applyWednesday then used_days_of_week << "Wednesday" end
-        if rule.applyThursday then used_days_of_week << "Thursday" end
-        if rule.applyFriday then used_days_of_week << "Friday" end
-        if rule.applySaturday then used_days_of_week << "Saturday" end
-        if rule.applySunday then used_days_of_week << "Sunday" end
+        if rule.applyMonday then used_days_of_week << 'Monday' end
+        if rule.applyTuesday then used_days_of_week << 'Tuesday' end
+        if rule.applyWednesday then used_days_of_week << 'Wednesday' end
+        if rule.applyThursday then used_days_of_week << 'Thursday' end
+        if rule.applyFriday then used_days_of_week << 'Friday' end
+        if rule.applySaturday then used_days_of_week << 'Saturday' end
+        if rule.applySunday then used_days_of_week << 'Sunday' end
       end
       if used_days_of_week.uniq.size < possible_days_of_week.size
         replace_existing_default = true
-        schedule_rule_new = OpenStudio::Model::ScheduleRule.new(schedule_ruleset,schedule_ruleset.defaultDaySchedule)
-        if !used_days_of_week.include?("Monday") then schedule_rule_new.setApplyMonday(true) end
-        if !used_days_of_week.include?("Tuesday") then schedule_rule_new.setApplyTuesday(true) end
-        if !used_days_of_week.include?("Wednesday") then schedule_rule_new.setApplyWednesday(true) end
-        if !used_days_of_week.include?("Thursday") then schedule_rule_new.setApplyThursday(true) end
-        if !used_days_of_week.include?("Friday") then schedule_rule_new.setApplyFriday(true) end
-        if !used_days_of_week.include?("Saturday") then schedule_rule_new.setApplySaturday(true) end
-        if !used_days_of_week.include?("Sunday") then schedule_rule_new.setApplySunday(true) end
+        schedule_rule_new = OpenStudio::Model::ScheduleRule.new(schedule_ruleset, schedule_ruleset.defaultDaySchedule)
+        if !used_days_of_week.include?('Monday') then schedule_rule_new.setApplyMonday(true) end
+        if !used_days_of_week.include?('Tuesday') then schedule_rule_new.setApplyTuesday(true) end
+        if !used_days_of_week.include?('Wednesday') then schedule_rule_new.setApplyWednesday(true) end
+        if !used_days_of_week.include?('Thursday') then schedule_rule_new.setApplyThursday(true) end
+        if !used_days_of_week.include?('Friday') then schedule_rule_new.setApplyFriday(true) end
+        if !used_days_of_week.include?('Saturday') then schedule_rule_new.setApplySaturday(true) end
+        if !used_days_of_week.include?('Sunday') then schedule_rule_new.setApplySunday(true) end
       end
     end
 
-    if !indices_vector.include? -1 or replace_existing_default
+    if !indices_vector.include?(-1) || replace_existing_default
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "#{schedule_ruleset.name} does not used the default profile, it will be replaced.")
 
@@ -333,26 +330,27 @@ class Standard
       # if doesn't pass then make highest rule the new default to avoid any problems. School may not pass this test, woudl use last rule
       days_of_week_most_frequent_item = []
       schedule_rule_most_frequent = rule_vector[most_frequent_item]
-      if schedule_rule_most_frequent.applyMonday then days_of_week_most_frequent_item << "Monday" end
-      if schedule_rule_most_frequent.applyTuesday then days_of_week_most_frequent_item << "Tuesday" end
-      if schedule_rule_most_frequent.applyWednesday then days_of_week_most_frequent_item << "Wednesday" end
-      if schedule_rule_most_frequent.applyThursday then days_of_week_most_frequent_item << "Thursday" end
-      if schedule_rule_most_frequent.applyFriday then days_of_week_most_frequent_item << "Friday" end
-      if schedule_rule_most_frequent.applySaturday then days_of_week_most_frequent_item << "Saturday" end
-      if schedule_rule_most_frequent.applySunday then days_of_week_most_frequent_item << "Sunday" end
+      if schedule_rule_most_frequent.applyMonday then days_of_week_most_frequent_item << 'Monday' end
+      if schedule_rule_most_frequent.applyTuesday then days_of_week_most_frequent_item << 'Tuesday' end
+      if schedule_rule_most_frequent.applyWednesday then days_of_week_most_frequent_item << 'Wednesday' end
+      if schedule_rule_most_frequent.applyThursday then days_of_week_most_frequent_item << 'Thursday' end
+      if schedule_rule_most_frequent.applyFriday then days_of_week_most_frequent_item << 'Friday' end
+      if schedule_rule_most_frequent.applySaturday then days_of_week_most_frequent_item << 'Saturday' end
+      if schedule_rule_most_frequent.applySunday then days_of_week_most_frequent_item << 'Sunday' end
 
       # loop through rules
       conflict_found = false
       rule_vector.each do |rule|
         next if rule == schedule_rule_most_frequent
+
         days_of_week_most_frequent_item.each do |day_of_week|
-          if day_of_week == "Monday" and rule.applyMonday then conflict_found == true end
-          if day_of_week == "Tuesday" and rule.applyTuesday then conflict_found == true end
-          if day_of_week == "Wednesday" and rule.applyWednesday then conflict_found == true end
-          if day_of_week == "Thursday" and rule.applyThursday then conflict_found == true end
-          if day_of_week == "Friday" and rule.applyFriday then conflict_found == true end
-          if day_of_week == "Saturday" and rule.applySaturday then conflict_found == true end
-          if day_of_week == "Sunday" and rule.applySunday then conflict_found == true end
+          if (day_of_week == 'Monday') && rule.applyMonday then conflict_found == true end
+          if (day_of_week == 'Tuesday') && rule.applyTuesday then conflict_found == true end
+          if (day_of_week == 'Wednesday') && rule.applyWednesday then conflict_found == true end
+          if (day_of_week == 'Thursday') && rule.applyThursday then conflict_found == true end
+          if (day_of_week == 'Friday') && rule.applyFriday then conflict_found == true end
+          if (day_of_week == 'Saturday') && rule.applySaturday then conflict_found == true end
+          if (day_of_week == 'Sunday') && rule.applySunday then conflict_found == true end
         end
       end
       if conflict_found
@@ -385,8 +383,7 @@ class Standard
   # @param infer_hoo_for_non_assigned_objects [Bool] # attempt to get hoo for objects like swh with and exterior lighting
   # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
   # @return schedule
-  def schedule_apply_parametric_inputs(schedule,ramp_frequency,infer_hoo_for_non_assigned_objects, error_on_out_of_order,parametric_inputs = nil)
-
+  def schedule_apply_parametric_inputs(schedule, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order, parametric_inputs = nil)
     # Check if parametric inputs were supplied and generate them if not
     if parametric_inputs.nil?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{schedule.name}, no parametric inputs were not supplied so they will be generated now.")
@@ -413,12 +410,12 @@ class Standard
 
     # store floor and ceiling value
     val_flr = nil
-    if schedule.hasAdditionalProperties && schedule.additionalProperties.hasFeature("param_sch_floor")
-      val_flr = schedule.additionalProperties.getFeatureAsDouble("param_sch_floor").get
+    if schedule.hasAdditionalProperties && schedule.additionalProperties.hasFeature('param_sch_floor')
+      val_flr = schedule.additionalProperties.getFeatureAsDouble('param_sch_floor').get
     end
     val_clg = nil
-    if schedule.hasAdditionalProperties && schedule.additionalProperties.hasFeature("param_sch_ceiling")
-      val_clg = schedule.additionalProperties.getFeatureAsDouble("param_sch_ceiling").get
+    if schedule.hasAdditionalProperties && schedule.additionalProperties.hasFeature('param_sch_ceiling')
+      val_clg = schedule.additionalProperties.getFeatureAsDouble('param_sch_ceiling').get
     end
 
     # loop through schedule days from highest to lowest priority (with default as lowest priority)
@@ -427,10 +424,10 @@ class Standard
     schedule.scheduleRules.each do |rule|
       # remove any use manually generated non parametric rules or any auto-generated rules from prior application of formulas and hoo
       sch_day = rule.daySchedule
-      if !sch_day.hasAdditionalProperties or !sch_day.additionalProperties.hasFeature("param_day_tag") or sch_day.additionalProperties.getFeatureAsString("param_day_tag").get == "autogen"
+      if !sch_day.hasAdditionalProperties || !sch_day.additionalProperties.hasFeature('param_day_tag') || (sch_day.additionalProperties.getFeatureAsString('param_day_tag').get == 'autogen')
         sch_day.remove # remove day schedule for this rule
         rule.remove # remove the rule
-      elsif !sch_day.additionalProperties.hasFeature("param_day_profile")
+      elsif !sch_day.additionalProperties.hasFeature('param_day_profile')
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "#{schedule.name} doesn't have a parametric formula for #{rule.name} This profile will not be altered.")
         next
       else
@@ -447,8 +444,7 @@ class Standard
     indices_vector = schedule.getActiveRuleIndices(year_start_date, year_end_date)
 
     # process profiles
-    profiles.each do |sch_day,rule|
-
+    profiles.each do |sch_day, rule|
       # for current profile index identify hours of operation index that contains all days
       if rule.nil?
         current_rule_index = -1
@@ -459,13 +455,13 @@ class Standard
       # loop through indices looking of rule in hoo that contains days in the rule
       hoo_target_index = nil
       days_used = []
-      indices_vector.each_with_index do |profile_index,i|
-        if profile_index == current_rule_index then days_used << i+1 end
+      indices_vector.each_with_index do |profile_index, i|
+        if profile_index == current_rule_index then days_used << i + 1 end
       end
       # find days_used in hoo profiles that contains all days used from this profile
       hoo_profile_match_hash = {}
       best_fit_check = {}
-      hours_of_operation.each do |profile_index,value|
+      hours_of_operation.each do |profile_index, value|
         days_for_rule_not_in_hoo_profile = days_used - value[:days_used]
         hoo_profile_match_hash[profile_index] = days_for_rule_not_in_hoo_profile
         best_fit_check[profile_index] = days_for_rule_not_in_hoo_profile.size
@@ -492,18 +488,17 @@ class Standard
         # make list of new rules needed as has or array
         autogen_rules = {}
         days_to_fill = hoo_profile_match_hash[hoo_target_index]
-        hours_of_operation.each do |profile_index,value|
+        hours_of_operation.each do |profile_index, value|
           remainder = days_to_fill - value[:days_used]
           day_for_rule = days_to_fill - remainder
           if remainder.size < days_to_fill.size
-            autogen_rules[profile_index] = {:days_to_fill => day_for_rule, :hoo_start => hoo_start, :hoo_end => hoo_end}
+            autogen_rules[profile_index] = { days_to_fill: day_for_rule, hoo_start: hoo_start, hoo_end: hoo_end }
           end
           days_to_fill = remainder
         end
 
         # loop through new rules to make and process
-        autogen_rules.each do |autogen_rule,hash|
-
+        autogen_rules.each do |autogen_rule, hash|
           # generate new rule
           sch_rule_autogen = OpenStudio::Model::ScheduleRule.new(schedule)
           if current_rule_index
@@ -513,13 +508,13 @@ class Standard
           end
           current_rule_index = target_index
           if rule.nil?
-            sch_rule_autogen.setName("autogen #{schedule.name.to_s} #{target_index}")
+            sch_rule_autogen.setName("autogen #{schedule.name} #{target_index}")
           else
-            sch_rule_autogen.setName("autogen #{rule.name.to_s} #{target_index}")
+            sch_rule_autogen.setName("autogen #{rule.name} #{target_index}")
           end
-          schedule.setScheduleRuleIndex(sch_rule_autogen,target_index) # todo - confirm this is higher priority than the non-auto-generated rule
+          schedule.setScheduleRuleIndex(sch_rule_autogen, target_index) # TODO: - confirm this is higher priority than the non-auto-generated rule
           hash[:days_to_fill].each do |day|
-            date = OpenStudio::Date::fromDayOfYear(day,year)
+            date = OpenStudio::Date.fromDayOfYear(day, year)
             sch_rule_autogen.addSpecificDate(date)
           end
           sch_rule_autogen.setApplySunday(true)
@@ -533,13 +528,13 @@ class Standard
           # match profile from source rule (don't add time/values need a formula to process)
           sch_day_auto_gen = sch_rule_autogen.daySchedule
           sch_day_auto_gen.setName("#{sch_rule_autogen.name}_day_sch")
-          sch_day_auto_gen.additionalProperties.setFeature("param_day_tag","autogen")
-          val = sch_day.additionalProperties.getFeatureAsString("param_day_profile").get
-          sch_day_auto_gen.additionalProperties.setFeature("param_day_profile",val)
-          val = sch_day.additionalProperties.getFeatureAsString("param_day_secondary_logic").get
-          sch_day_auto_gen.additionalProperties.setFeature("param_day_secondary_logic",val)
-          val = sch_day.additionalProperties.getFeatureAsString("param_day_secondary_logic_arg_val").get
-          sch_day_auto_gen.additionalProperties.setFeature("param_day_secondary_logic_arg_val",val)
+          sch_day_auto_gen.additionalProperties.setFeature('param_day_tag', 'autogen')
+          val = sch_day.additionalProperties.getFeatureAsString('param_day_profile').get
+          sch_day_auto_gen.additionalProperties.setFeature('param_day_profile', val)
+          val = sch_day.additionalProperties.getFeatureAsString('param_day_secondary_logic').get
+          sch_day_auto_gen.additionalProperties.setFeature('param_day_secondary_logic', val)
+          val = sch_day.additionalProperties.getFeatureAsString('param_day_secondary_logic_arg_val').get
+          sch_day_auto_gen.additionalProperties.setFeature('param_day_secondary_logic_arg_val', val)
 
           # get hours of operation for this specific profile
           hoo_start = hash[:hoo_start]
@@ -547,19 +542,17 @@ class Standard
 
           # process new rule
           process_hrs_of_operation_hash(sch_day_auto_gen, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
-
         end
 
       end
-
     end
 
-    # todo - create summer and winter design day profiles (make sure scheduleDay objects parametric)
+    # TODO: - create summer and winter design day profiles (make sure scheduleDay objects parametric)
     # todo - should they have their own formula, or should this be hard coded logic by schedule type
 
     # check orig vs. updated aeflh
     final_aeflh = schedule_ruleset_annual_equivalent_full_load_hrs(schedule)
-    percent_change = ((starting_aeflh - final_aeflh)/starting_aeflh) * 100.0
+    percent_change = ((starting_aeflh - final_aeflh) / starting_aeflh) * 100.0
     if percent_change.abs > 0.05
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{schedule.name}, applying parametric schedules made a #{percent_change.round(1)}% change in annual equivalent full load hours. (from #{starting_aeflh.round(2)} to #{final_aeflh.round(2)})")
     end
@@ -605,8 +598,6 @@ class Standard
           schedule_day_set_hours_of_operation(rule.daySchedule, sun_start_time, sun_end_time)
           # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{schedule_ruleset.name}, set Sunday rule operating hours to #{sun_start_time}-#{sun_end_time}.")
         end
-      else
-        # OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "For #{schedule_ruleset.name}, rule does not apply to any day of the week, will not be modified.")
       end
     end
 
@@ -647,12 +638,11 @@ class Standard
   # @return schedule_day
   # @api private
   def process_hrs_of_operation_hash(sch_day, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
-
     # process hoo and floor/ceiling vars to develop formulas without variables
-    formula_string = sch_day.additionalProperties.getFeatureAsString("param_day_profile").get
+    formula_string = sch_day.additionalProperties.getFeatureAsString('param_day_profile').get
     formula_hash = {}
-    formula_string.split("|").each do |time_val_valopt|
-      a1 = time_val_valopt.to_s.split("~")
+    formula_string.split('|').each do |time_val_valopt|
+      a1 = time_val_valopt.to_s.split('~')
       time = a1[0]
       value_array = a1.drop(1)
       formula_hash[time] = value_array
@@ -667,18 +657,16 @@ class Standard
     vac = 24.0 - occ
     range = val_clg - val_flr
 
-
     # apply variables and create updated hash with only numbers
     formula_hash_var_free = {}
-    formula_hash.each do |time,val_in_out|
-
+    formula_hash.each do |time, val_in_out|
       # replace time variables with value
-      time = time.gsub('hoo_start',hoo_start.to_s)
-      time = time.gsub('hoo_end',hoo_end.to_s)
-      time = time.gsub('occ',occ.to_s)
+      time = time.gsub('hoo_start', hoo_start.to_s)
+      time = time.gsub('hoo_end', hoo_end.to_s)
+      time = time.gsub('occ', occ.to_s)
       # can save special variables like lunch or break using this logic
-      time = time.gsub('mid',(hoo_start + occ * 0.5).to_s)
-      time = time.gsub('vac',vac.to_s)
+      time = time.gsub('mid', (hoo_start + occ * 0.5).to_s)
+      time = time.gsub('vac', vac.to_s)
       begin
         time_float = eval(time)
         if time_float.to_i.to_s == time_float.to_s || time_float.to_f.to_s == time_float.to_s # check to see if numeric
@@ -686,7 +674,7 @@ class Standard
         else
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Time formula #{time} for #{sch_day.name} is invalid. It can't be converted to a float.")
         end
-      rescue SyntaxError => se
+      rescue SyntaxError => e
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Time formula #{time} for #{sch_day.name} is invalid. It can't be evaluated.")
       end
 
@@ -694,17 +682,17 @@ class Standard
       val_in_out_float = []
       val_in_out.each do |val|
         # replace variables for values
-        val = val.gsub('val_flr',val_flr.to_s)
-        val = val.gsub('val_clg',val_clg.to_s)
-        val = val.gsub('val_range',range.to_s) # will expect a fractional value and will scale within ceiling and floor
+        val = val.gsub('val_flr', val_flr.to_s)
+        val = val.gsub('val_clg', val_clg.to_s)
+        val = val.gsub('val_range', range.to_s) # will expect a fractional value and will scale within ceiling and floor
         begin
           val_float = eval(val)
-          if val_float.to_i.to_s == val_float.to_s or val_float.to_f.to_s == val_float.to_s # check to see if numeric
+          if val_float.to_i.to_s == val_float.to_s || val_float.to_f.to_s == val_float.to_s # check to see if numeric
             val_float = val_float.to_f
           else
             OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Value formula #{val_float} for #{sch_day.name} is invalid. It can't be converted to a float.")
           end
-        rescue SyntaxError => se
+        rescue SyntaxError => e
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Time formula #{val_float} for #{sch_day.name} is invalid. It can't be evaluated.")
         end
         val_in_out_float << val_float
@@ -712,21 +700,20 @@ class Standard
 
       # update hash
       formula_hash_var_free[time_float] = val_in_out_float
-
     end
 
     # this is old variable used in loop, just combining for now to avoid refactor, may change this later
     time_value_pairs = []
-    formula_hash_var_free.each do |time,val_in_out|
+    formula_hash_var_free.each do |time, val_in_out|
       val_in_out.each do |val|
-        time_value_pairs << [time,val]
+        time_value_pairs << [time, val]
       end
     end
 
     # re-order so first value is lowest, and last is highest (need to adjust so no negative or > 24 values first)
     neg_time_hash = {}
     temp_min_time_hash = {}
-    time_value_pairs.each_with_index do |pair,i|
+    time_value_pairs.each_with_index do |pair, i|
       # if value  24 add it to 24 so it will go on tail end of profile
       # case when value is greater than 24 can be left alone for now, will be addressed
       if pair[0] < 0.0
@@ -744,42 +731,42 @@ class Standard
     last_time = nil
     throw_order_warning = false
     pre_fix_time_value_pairs = time_value_pairs.to_s
-    time_value_pairs.each_with_index do |time_value_pair,i|
+    time_value_pairs.each_with_index do |time_value_pair, i|
       if last_time.nil?
         last_time = time_value_pair[0]
-      elsif time_value_pair[0] < last_time || neg_time_hash.has_key?(i)
+      elsif time_value_pair[0] < last_time || neg_time_hash.key?(i)
 
-        # todo - it doesn't actually stop here now
+        # TODO: - it doesn't actually stop here now
         if error_on_out_of_order
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Pre-interpolated processed hash for #{sch_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Method will stop because Error on Out of Order was set to true.")
         end
 
-        if neg_time_hash.has_key?(i)
+        if neg_time_hash.key?(i)
           orig_current_time = time_value_pair[0]
           updated_time = 0.0
-          last_buffer = "NA"
+          last_buffer = 'NA'
         else
           # pick midpoint and put each time there. e.g. times of (2,7,9,8,11) would be changed to  (2,7,8.5,8.5,11)
           delta = last_time - time_value_pair[0]
 
           # determine much space last item can move
           if i < 2
-            last_buffer = time_value_pairs[i-1][0] # can move down to 0 without any issues
+            last_buffer = time_value_pairs[i - 1][0] # can move down to 0 without any issues
           else
-            last_buffer = time_value_pairs[i-1][0] - time_value_pairs[i-2][0]
+            last_buffer = time_value_pairs[i - 1][0] - time_value_pairs[i - 2][0]
           end
 
           # center if possible but don't exceed available buffer
-          updated_time = time_value_pairs[i-1][0] - [delta / 2.0,last_buffer].min
+          updated_time = time_value_pairs[i - 1][0] - [delta / 2.0, last_buffer].min
         end
 
         # update values in array
         orig_current_time = time_value_pair[0]
-        time_value_pairs[i-1][0] = updated_time
+        time_value_pairs[i - 1][0] = updated_time
         time_value_pairs[i][0] = updated_time
 
         # reporting mostly for diagnostic purposes
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{sch_day.name} profile item #{i} time was #{last_time} and item #{i+1} time was #{orig_current_time}. Last buffer is #{last_buffer}. Changing both times to #{updated_time}.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{sch_day.name} profile item #{i} time was #{last_time} and item #{i + 1} time was #{orig_current_time}. Last buffer is #{last_buffer}. Changing both times to #{updated_time}.")
 
         last_time = updated_time
         throw_order_warning = true
@@ -795,14 +782,13 @@ class Standard
     end
 
     # add interpolated values at ramp_frequency
-    time_value_pairs.each_with_index do |time_value_pair,i|
-
+    time_value_pairs.each_with_index do |time_value_pair, i|
       # store current and next time and value
       current_time = time_value_pair[0]
       current_value = time_value_pair[1]
-      if i+1 < time_value_pairs.size
-        next_time = time_value_pairs[i+1][0]
-        next_value = time_value_pairs[i+1][1]
+      if i + 1 < time_value_pairs.size
+        next_time = time_value_pairs[i + 1][0]
+        next_value = time_value_pairs[i + 1][1]
       else
         # use time and value of first item
         next_time = time_value_pairs[0][0] + 24 # need to adjust values for beginning of array
@@ -811,22 +797,21 @@ class Standard
       step_delta = next_time - current_time
 
       # skip if time between values is 0 or less than ramp frequency
-      next if  step_delta <= ramp_frequency
+      next if step_delta <= ramp_frequency
 
       # skip if next value is same
       next if current_value == next_value
 
       # add interpolated value to array
       interpolated_time = current_time + ramp_frequency
-      interpolated_value = next_value*(interpolated_time - current_time)/step_delta + current_value*(next_time - interpolated_time)/step_delta
-      time_value_pairs.insert(i+1,[interpolated_time,interpolated_value])
-
+      interpolated_value = next_value * (interpolated_time - current_time) / step_delta + current_value * (next_time - interpolated_time) / step_delta
+      time_value_pairs.insert(i + 1, [interpolated_time, interpolated_value])
     end
 
     # remove second instance of time when there are two
     time_values_used = []
     items_to_remove = []
-    time_value_pairs.each_with_index do |time_value_pair,i|
+    time_value_pairs.each_with_index do |time_value_pair, i|
       if time_values_used.include? time_value_pair[0]
         items_to_remove << i
       else
@@ -839,7 +824,7 @@ class Standard
 
     # if time is > 24 shift to front of array and adjust value
     rotate_steps = 0
-    time_value_pairs.reverse.each_with_index do |time_value_pair,i|
+    time_value_pairs.reverse.each_with_index do |time_value_pair, i|
       if time_value_pair[0] > 24
         rotate_steps -= 1
         time_value_pair[0] -= 24
@@ -850,27 +835,24 @@ class Standard
     time_value_pairs.rotate!(rotate_steps)
 
     # add a 24 on the end of array that matches the first value
-    if not time_value_pairs.last[0] == 24.0
-      time_value_pairs << [24.0,time_value_pairs.first[1]]
+    if time_value_pairs.last[0] != 24.0
+      time_value_pairs << [24.0, time_value_pairs.first[1]]
     end
 
     # reset scheduleDay values based on interpolated values
     sch_day.clearValues
     time_value_pairs.each do |time_val|
       hour = time_val.first.floor
-      min = ((time_val.first - hour)*60.0).floor
+      min = ((time_val.first - hour) * 60.0).floor
       os_time = OpenStudio::Time.new(0, hour, min, 0)
       value = time_val.last
-      sch_day.addValue(os_time,value)
+      sch_day.addValue(os_time, value)
     end
-
-    # todo - apply secondary logic
+    # TODO: apply secondary logic
 
     # Tell EnergyPlus to interpolate schedules to timestep so that it doesn't have to be done in this code
     sch_day.setInterpolatetoTimestep(true)
 
     return sch_day
-
   end
-
 end

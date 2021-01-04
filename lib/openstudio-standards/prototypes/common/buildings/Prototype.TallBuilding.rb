@@ -8,10 +8,10 @@ module TallBuilding
     # TODO: make additional parameters mutable by the user
     # the number of floors for each function type is defined in additional_params
     additional_params = {
-        num_of_floor_retail: 2,
-        num_of_floor_office: 18,
-        num_of_floor_residential: 9,
-        num_of_floor_hotel: 9
+      num_of_floor_retail: 2,
+      num_of_floor_office: 18,
+      num_of_floor_residential: 9,
+      num_of_floor_hotel: 9
     }
 
     # add tall building elevators to the elevator machine room
@@ -185,9 +185,9 @@ module TallBuilding
             next if space.name.to_s.downcase.include? 'plenum'
 
             search_criteria = {
-                'template' => template,
-                'building_type' => space.spaceType.get.standardsBuildingType.get,
-                'space_type' => space.spaceType.get.standardsSpaceType.get
+              'template' => template,
+              'building_type' => space.spaceType.get.standardsBuildingType.get,
+              'space_type' => space.spaceType.get.standardsSpaceType.get
             }
             data = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
 
@@ -273,8 +273,12 @@ module TallBuilding
     # Step2: add new infiltration obj, assign with HVAC off schedule, assign the coeff to System Off set.
     # hotel and apartment HVAC are always on, so just do Step1, no Step2
 
-    coeff_a_on, coeff_b_on, coeff_d_on =  -0.03973203, 0.02282265, 0.083767524
-    coeff_a_off, coeff_b_off, coeff_d_off =  0.0, 0.031045705, 0.016210069
+    coeff_a_on = -0.03973203
+    coeff_b_on = 0.02282265
+    coeff_d_on = 0.083767524
+    coeff_a_off = 0.0
+    coeff_b_off = 0.031045705
+    coeff_d_off = 0.016210069
     office_hvac_sch = model_add_schedule(model, 'OfficeLarge HVACOperationSchd')
     office_hvac_off_sch = model_add_schedule(model, 'OfficeLarge HVACOperationOFFSchd')
     retail_hvac_sch = model_add_schedule(model, 'RetailStandalone HVACOperationSchd')
@@ -366,15 +370,18 @@ module TallBuilding
     # TODO: make additional parameters mutable by the user
     # the number of floors for each function type is defined in additional_params
     additional_params = {
-        num_of_floor_retail: 2,
-        num_of_floor_office: 18,
-        num_of_floor_residential: 9,
-        num_of_floor_hotel: 9
+      num_of_floor_retail: 2,
+      num_of_floor_office: 18,
+      num_of_floor_residential: 9,
+      num_of_floor_hotel: 9
     }
 
     # get the number of floors for each function
     if additional_params.nil?
-      num_retail_flr, num_office_flr, num_resi_flr, num_hotel_flr = 2, 18, 9, 9
+      num_retail_flr = 2
+      num_office_flr = 18
+      num_resi_flr = 9
+      num_hotel_flr = 9
     elsif additional_params.is_a?(Hash)
       keys = [:num_of_floor_retail, :num_of_floor_office, :num_of_floor_residential, :num_of_floor_hotel]
       if (additional_params.keys & keys).any? # if any function type is assigned with number of floor
@@ -399,40 +406,46 @@ module TallBuilding
           num_hotel_flr = 0
         end
         if num_retail_flr == 0 && num_office_flr == 0 && num_resi_flr == 0 && num_hotel_flr == 0
-          num_retail_flr, num_office_flr, num_resi_flr, num_hotel_flr = 2, 18, 9, 9
+          num_retail_flr = 2
+          num_office_flr = 18
+          num_resi_flr = 9
+          num_hotel_flr = 9
         elsif num_retail_flr + num_office_flr + num_resi_flr + num_hotel_flr < 20
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model',
-                              'The building is not eligible as a tall building because the total number of floors is less than 20')
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model',
+                             'The building is not eligible as a tall building because the total number of floors is less than 20')
           return false
         elsif num_retail_flr + num_office_flr + num_resi_flr + num_hotel_flr >= 75
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model',
-                              "The building has #{num_retail_flr + num_office_flr + num_resi_flr + num_hotel_flr} floors, which should "\
-                                'be classified as super tall building. Please select SuperTall Building as the building type instead.')
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model',
+                             "The building has #{num_retail_flr + num_office_flr + num_resi_flr + num_hotel_flr} floors, which should "\
+                               'be classified as super tall building. Please select SuperTall Building as the building type instead.')
           return false
         end
       else # if no number of floor is given for any function type
-        num_retail_flr, num_office_flr, num_resi_flr, num_hotel_flr = 2, 18, 9, 9
+        num_retail_flr = 2
+        num_office_flr = 18
+        num_resi_flr = 9
+        num_hotel_flr = 9
       end
     else
-      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'additional_params is not a Hash')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'additional_params is not a Hash')
       return false
     end
 
     # Validate number of floors values, can't be negative
     if num_retail_flr < 0
-      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Number of floors for Retail is negative.')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Number of floors for Retail is negative.')
       return false
     elsif num_office_flr < 0
-      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Number of floors for Office is negative.')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Number of floors for Office is negative.')
       return false
     elsif num_resi_flr < 0
-      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Number of floors for Apartment is negative.')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Number of floors for Apartment is negative.')
       return false
     elsif num_hotel_flr < 0
-      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Number of floors for Hotel is negative.')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Number of floors for Hotel is negative.')
       return false
     elsif num_retail_flr == 0 && num_office_flr == 0 && num_resi_flr == 0 && num_hotel_flr == 0
-      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Number of floors for all function types are all zero.')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Number of floors for all function types are all zero.')
       return false
     end
 
@@ -767,9 +780,9 @@ module TallBuilding
 
     # Relocate the ElevatorMachineRm story
     building_height = num_retail_flr * f_to_f_height_retail + (num_office_flr + num_resi_flr + num_hotel_flr) * f_to_f_height_non_retail
-    top_elevatorMachineRm_story = model.getBuildingStoryByName('ElevatorMachineRm story').get
-    top_elevatorMachineRm_story.setNominalZCoordinate(building_height)
-    top_elevatorMachineRm_story.spaces.each do |space|
+    top_elevator_machine_rm_story = model.getBuildingStoryByName('ElevatorMachineRm story').get
+    top_elevator_machine_rm_story.setNominalZCoordinate(building_height)
+    top_elevator_machine_rm_story.spaces.each do |space|
       space.setZOrigin(building_height)
     end
 
@@ -815,97 +828,97 @@ module TallBuilding
       end
       if story_name.include? 'Office'
         hvac_obj = {
-            "type": 'VAV',
-            "name": story_name + ' VAV WITH REHEAT',
-            "return_plenum": plenum_space,
-            "operation_schedule": 'OfficeLarge HVACOperationSchd',
-            "oa_damper_schedule": 'OfficeLarge MinOA_MotorizedDamper_Sched',
-            "chw_pumping_type": 'const_pri_var_sec',
-            "chiller_cooling_type": 'WaterCooled',
-            "chiller_condenser_type": nil,
-            "chiller_compressor_type": 'Centrifugal',
-            "chw_number_chillers": num_chillers,
-            "number_cooling_towers": num_chillers,
-            "space_names": space_names
+          "type": 'VAV',
+          "name": story_name + ' VAV WITH REHEAT',
+          "return_plenum": plenum_space,
+          "operation_schedule": 'OfficeLarge HVACOperationSchd',
+          "oa_damper_schedule": 'OfficeLarge MinOA_MotorizedDamper_Sched',
+          "chw_pumping_type": 'const_pri_var_sec',
+          "chiller_cooling_type": 'WaterCooled',
+          "chiller_condenser_type": nil,
+          "chiller_compressor_type": 'Centrifugal',
+          "chw_number_chillers": num_chillers,
+          "number_cooling_towers": num_chillers,
+          "space_names": space_names
         }
 
       elsif story_name.include? 'Retail'
         hvac_obj = {
-            "type": 'VAV',
-            "name": story_name + ' VAV WITH REHEAT',
-            "return_plenum": plenum_space,
-            "operation_schedule": 'RetailStandalone HVACOperationSchd',
-            "oa_damper_schedule": 'RetailStandalone MinOA_MotorizedDamper_Sched',
-            "chw_pumping_type": 'const_pri_var_sec',
-            "chiller_cooling_type": 'WaterCooled',
-            "chiller_condenser_type": nil,
-            "chiller_compressor_type": 'Centrifugal',
-            "chw_number_chillers": num_chillers,
-            "number_cooling_towers": num_chillers,
-            "space_names": space_names
+          "type": 'VAV',
+          "name": story_name + ' VAV WITH REHEAT',
+          "return_plenum": plenum_space,
+          "operation_schedule": 'RetailStandalone HVACOperationSchd',
+          "oa_damper_schedule": 'RetailStandalone MinOA_MotorizedDamper_Sched',
+          "chw_pumping_type": 'const_pri_var_sec',
+          "chiller_cooling_type": 'WaterCooled',
+          "chiller_condenser_type": nil,
+          "chiller_compressor_type": 'Centrifugal',
+          "chw_number_chillers": num_chillers,
+          "number_cooling_towers": num_chillers,
+          "space_names": space_names
         }
 
       elsif story_name.include? 'Hotel'
         hvac_obj = {
-            "type": 'DOAS Cold Supply',
-            "name": story_name + ' DOAS',
-            "return_plenum": plenum_space,
-            "operation_schedule": 'HotelLarge HVACOperationSchd',
-            "oa_damper_schedule": 'HotelLarge MinOA_MotorizedDamper_Sched',
-            "chw_pumping_type": 'const_pri_var_sec',
-            "chiller_cooling_type": 'WaterCooled',
-            "chiller_condenser_type": nil,
-            "chiller_compressor_type": 'Centrifugal',
-            "chw_number_chillers": num_chillers,
-            "number_cooling_towers": num_chillers,
-            "economizer_control_method": 'DifferentialDryBulb',
-            "space_names": space_names
+          "type": 'DOAS Cold Supply',
+          "name": story_name + ' DOAS',
+          "return_plenum": plenum_space,
+          "operation_schedule": 'HotelLarge HVACOperationSchd',
+          "oa_damper_schedule": 'HotelLarge MinOA_MotorizedDamper_Sched',
+          "chw_pumping_type": 'const_pri_var_sec',
+          "chiller_cooling_type": 'WaterCooled',
+          "chiller_condenser_type": nil,
+          "chiller_compressor_type": 'Centrifugal',
+          "chw_number_chillers": num_chillers,
+          "number_cooling_towers": num_chillers,
+          "economizer_control_method": 'DifferentialDryBulb',
+          "space_names": space_names
         }
         # get the top floor plenum for hotel common areas' VAV system
         hotel_top_plenum_space = plenum_space if story_name.include? 'top'
 
       elsif story_name.include? 'Resi'
         hvac_obj = {
-            "type": 'DOAS Cold Supply',
-            "name": story_name + ' DOAS',
-            "return_plenum": plenum_space,
-            "operation_schedule": 'Always On',
-            "oa_damper_schedule": 'Always On',
-            "chw_pumping_type": 'const_pri_var_sec',
-            "chiller_cooling_type": 'WaterCooled',
-            "chiller_condenser_type": nil,
-            "chiller_compressor_type": 'Centrifugal',
-            "chw_number_chillers": num_chillers,
-            "number_cooling_towers": num_chillers,
-            "economizer_control_method": 'DifferentialDryBulb',
-            "space_names": space_names
+          "type": 'DOAS Cold Supply',
+          "name": story_name + ' DOAS',
+          "return_plenum": plenum_space,
+          "operation_schedule": 'Always On',
+          "oa_damper_schedule": 'Always On',
+          "chw_pumping_type": 'const_pri_var_sec',
+          "chiller_cooling_type": 'WaterCooled',
+          "chiller_condenser_type": nil,
+          "chiller_compressor_type": 'Centrifugal',
+          "chw_number_chillers": num_chillers,
+          "number_cooling_towers": num_chillers,
+          "economizer_control_method": 'DifferentialDryBulb',
+          "space_names": space_names
         }
 
       elsif story_name.include? 'Basement'
         hvac_obj = {
-            "type": 'CAV',
-            "name": 'CAV_bas',
-            "operation_schedule": 'OfficeLarge HVACOperationSchd',
-            "oa_damper_schedule": 'OfficeLarge MinOA_MotorizedDamper_Sched',
-            "chw_pumping_type": 'const_pri_var_sec',
-            "chiller_cooling_type": 'WaterCooled',
-            "chiller_condenser_type": nil,
-            "chiller_compressor_type": 'Centrifugal',
-            "chw_number_chillers": num_chillers,
-            "number_cooling_towers": num_chillers,
-            "space_names": space_names
+          "type": 'CAV',
+          "name": 'CAV_bas',
+          "operation_schedule": 'OfficeLarge HVACOperationSchd',
+          "oa_damper_schedule": 'OfficeLarge MinOA_MotorizedDamper_Sched',
+          "chw_pumping_type": 'const_pri_var_sec',
+          "chiller_cooling_type": 'WaterCooled',
+          "chiller_condenser_type": nil,
+          "chiller_compressor_type": 'Centrifugal',
+          "chw_number_chillers": num_chillers,
+          "number_cooling_towers": num_chillers,
+          "space_names": space_names
         }
 
       elsif story_name.include? 'ElevatorMachineRm'
         hvac_obj = {
-            "type": 'PSZ-AC',
-            "name": story_name + ' PSZ-AC',
-            "operation_schedule": 'Always On',
-            "oa_damper_schedule": 'Always On',
-            "cooling_type": 'Single Speed DX AC',
-            "heating_type": 'Electricity',
-            "fan_type": 'ConstantVolume',
-            "space_names": space_names
+          "type": 'PSZ-AC',
+          "name": story_name + ' PSZ-AC',
+          "operation_schedule": 'Always On',
+          "oa_damper_schedule": 'Always On',
+          "cooling_type": 'Single Speed DX AC',
+          "heating_type": 'Electricity',
+          "fan_type": 'ConstantVolume',
+          "space_names": space_names
         }
       end
 
@@ -915,18 +928,18 @@ module TallBuilding
     # add VAV system for all hotel common area spaces
     if num_hotel_flr >= 1
       hotel_common_hvac_obj = {
-          "type": 'VAV',
-          "name": 'Hotel Common Areas VAV WITH REHEAT',
-          "return_plenum": hotel_top_plenum_space,
-          "operation_schedule": 'HotelLarge HVACOperationSchd',
-          "oa_damper_schedule": 'HotelLarge MinOA_MotorizedDamper_Sched',
-          "chw_pumping_type": 'const_pri_var_sec',
-          "chiller_cooling_type": 'WaterCooled',
-          "chiller_condenser_type": nil,
-          "chiller_compressor_type": 'Centrifugal',
-          "chw_number_chillers": num_chillers,
-          "number_cooling_towers": num_chillers,
-          "space_names": hotel_common_spaces
+        "type": 'VAV',
+        "name": 'Hotel Common Areas VAV WITH REHEAT',
+        "return_plenum": hotel_top_plenum_space,
+        "operation_schedule": 'HotelLarge HVACOperationSchd',
+        "oa_damper_schedule": 'HotelLarge MinOA_MotorizedDamper_Sched',
+        "chw_pumping_type": 'const_pri_var_sec',
+        "chiller_cooling_type": 'WaterCooled',
+        "chiller_condenser_type": nil,
+        "chiller_compressor_type": 'Centrifugal',
+        "chw_number_chillers": num_chillers,
+        "number_cooling_towers": num_chillers,
+        "space_names": hotel_common_spaces
       }
       new_json.push(hotel_common_hvac_obj)
     end
@@ -1031,5 +1044,4 @@ module TallBuilding
       end
     end
   end
-
 end
