@@ -1205,9 +1205,9 @@ class AppendixGPRMTests < Minitest::Test
     tests = [
         #'wwr',
         #'srr',
-        #'envelope',
+      # 'envelope',
         #'lpd',
-      #'isresidential',
+      'isresidential'
       # 'daylighting_control',
       # 'light_occ_sensor',
       # 'infiltration',

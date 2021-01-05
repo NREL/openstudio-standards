@@ -9,8 +9,11 @@
     "daylighting_control": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
-    "isresidential": [
+    "save_isresidential": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
+    ],
+    "isresidential": [
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
     "envelope": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]

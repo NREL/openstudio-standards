@@ -1753,6 +1753,35 @@ class Standard
     return load_w
   end
 
+  # Create annual array of occupancy for the space: 1 = occupied, 0 = unoccupied
+  # @author Doug Maddox, PNNL
+  # @ param space object
+  # @return [Double] 8760 array of the occupancy flag
+  def space_occupancy_annual_array(model, space)
+    occ_sch_values = nil
+    ppl_values = Array.new(8760, 0)
+
+    # Need to review all people objects in this space
+    space.spaceType.get.people.each do |people|
+      occ_sch = people.numberofPeopleSchedule
+      if occ_sch.is_initialized
+        occ_sch_obj = occ_sch.get
+        occ_sch_values = get_8760_values_from_schedule(model, occ_sch_obj)
+        # Flag = 1 if any schedule shows occupancy for a given hour
+        if !occ_sch_values.nil?
+          (0..8759).each do |ihr|
+            ppl_values[ihr] = 1 if occ_sch_values[ihr] > 0
+          end
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retrieve people schedule for #{space.name}.  Assuming #{w_per_person}W/person.")
+        end
+      end
+
+    end
+
+    return ppl_values
+  end
+
   # Determine the design internal load (W) for
   # this space without space multipliers.
   # This include People, Lights, Electric Equipment, and Gas Equipment.  
@@ -1761,14 +1790,13 @@ class Standard
   # @author Doug Maddox, PNNL
   # @ param space object
   # @return [Double] 8760 array of the design internal load, in W, for this space
-  def space_internal_load_annual_array(space)
-    load_w = 0.0
-
+  def space_internal_load_annual_array(model, space)
     # For each type of load, first convert schedules to 8760 arrays so coincident load can be determined
     ppl_values = Array.new(8760, 0)
     ltg_values = Array.new(8760, 0)
     load_values = Array.new(8760, 0)
 
+    # DEM: lines to delete
     #ppl_values = []
     #ltg_values = []
     #load_values = []
@@ -1781,7 +1809,7 @@ class Standard
 
     # People
     ppl_total = 0
-    space.people.each do |people|
+    space.spaceType.get.people.each do |people|
       w_per_person = 125 # Initial assumption
       occ_sch_max = 1
       act_sch = people.activityLevelSchedule
@@ -1789,7 +1817,7 @@ class Standard
         # Check default schedule set
         unless (space.spaceType.get.defaultScheduleSet.empty?)
           unless space.spaceType.get.defaultScheduleSet.get.peopleActivityLevelSchedule.empty?
-            act_sch = space.spaceType.get.defaultScheduleSet.get.peopleActivityLevelSchedule.get
+            act_sch = space.spaceType.get.defaultScheduleSet.get.peopleActivityLevelSchedule
           end
         end
       end
@@ -1809,7 +1837,7 @@ class Standard
         # Check default schedule set
         unless (space.spaceType.get.defaultScheduleSet.empty?)
           unless space.spaceType.get.defaultScheduleSet.get.numberofPeopleSchedule.empty?
-            occ_sch = space.spaceType.get.defaultScheduleSet.get.numberofPeopleSchedule.get
+            occ_sch = space.spaceType.get.defaultScheduleSet.get.numberofPeopleSchedule
           end
         end
       end
@@ -1833,12 +1861,10 @@ class Standard
         occ_sch_value = occ_sch_values[ihr] unless occ_sch_values.nil?
         ppl_values[ihr] += num_ppl * act_sch_value * occ_sch_value
       end
-
-      load_w += ppl_w
     end
 
     # Lights objects
-    space.lights.each do |light|
+    space.spaceType.get.lights.each do |light|
       ltg_sch_ruleset = nil
       ltg_sch = light.schedule
       ltg_w = light.getLightingPower(space.floorArea, ppl_total)
@@ -1847,7 +1873,7 @@ class Standard
         # Check default schedule set
         unless (space.spaceType.get.defaultScheduleSet.empty?)
           unless space.spaceType.get.defaultScheduleSet.get.lightingSchedule.empty?
-            ltg_sch = space.spaceType.get.defaultScheduleSet.get.lightingSchedule.get
+            ltg_sch = space.spaceType.get.defaultScheduleSet.get.lightingSchedule
           end
         end
       end
@@ -1855,7 +1881,7 @@ class Standard
         ltg_sch_obj = ltg_sch.get
         ltg_sch_values = get_8760_values_from_schedule(model, ltg_sch_obj)
         if !ltg_sch_values.nil?
-          ltg_sch_max = lgt_sch_values.max
+          ltg_sch_max = ltg_sch_values.max
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retreive lighting schedule for #{space.name}.  Assuming #{ltg_w} W.")
         end
@@ -1871,7 +1897,7 @@ class Standard
     end
 
     # Luminaire Objects
-    space.luminaires.each do |light|
+    space.spaceType.get.luminaires.each do |light|
       ltg_sch_values = nil
       ltg_sch = light.schedule
       ltg_w = light.lightingPower(space.floorArea, ppl_total)
@@ -1883,7 +1909,7 @@ class Standard
         # Check default schedule set
         unless (space.spaceType.get.defaultScheduleSet.empty?)
           unless space.spaceType.get.defaultScheduleSet.get.lightingSchedule.empty?
-            ltg_sch = space.spaceType.get.defaultScheduleSet.get.lightingSchedule.get
+            ltg_sch = space.spaceType.get.defaultScheduleSet.get.lightingSchedule
           end
         end
       end
@@ -1908,25 +1934,25 @@ class Standard
 
     # Equipment Loads
     eq_w = space.electricEquipmentPower
-    space.electricEquipment.each do |equip|
+    space.spaceType.get.electricEquipment.each do |equip|
       eqp_type = 'electric equipment'
-      space_get_equip_annual_array(model, space, equip, load_sch, eqp_type, load_values)
+      load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
     end
-    space.gasEquipment.each do |equip|
+    space.spaceType.get.gasEquipment.each do |equip|
       eqp_type = 'gas equipment'
-      space_get_equip_annual_array(model, space, equip, load_sch, eqp_type, load_values)
+      load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
     end
-    space.steamEquipment.each do |equip|
+    space.spaceType.get.steamEquipment.each do |equip|
       eqp_type = 'steam equipment'
-      space_get_equip_annual_array(model, space, equip, load_sch, eqp_type, load_values)
+      load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
     end
-    space.hotWaterEquipment.each do |equip|
+    space.spaceType.get.hotWaterEquipment.each do |equip|
       eqp_type = 'hot water equipment'
-      space_get_equip_annual_array(model, space, equip, load_sch, eqp_type, load_values)
+      load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
     end
-    space.otherEquipment.each do |equip|
+    space.spaceType.get.otherEquipment.each do |equip|
       eqp_type = 'other equipment'
-      space_get_equip_annual_array(model, space, equip, load_sch, eqp_type, load_values)
+      load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
     end
 
     # Add lighting and people to the load values array
@@ -1941,7 +1967,7 @@ class Standard
   # @param: model [Object]
   # @param: fan_schedule [Object]
   # @return: 
-  def space_get_equip_annual_array(model, space, equip, load_sch, eqp_type, load_values)
+  def space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
     # Get load schedule and load lost value depending on equipment type
     case eqp_type 
     when 'electric equipment'
@@ -1953,7 +1979,7 @@ class Standard
         # Check default schedule set
         unless (space.spaceType.get.defaultScheduleSet.empty?)
           unless space.spaceType.get.defaultScheduleSet.get.electricEquipmentSchedule.empty?   # eqp-type-specific
-            load_sch = space.spaceType.get.defaultScheduleSet.get.electricEquipmentSchedule.get  # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.electricEquipmentSchedule  # eqp-type-specific
           end
         end
       end
@@ -1966,7 +1992,7 @@ class Standard
         # Check default schedule set
         unless (space.spaceType.get.defaultScheduleSet.empty?)
           unless space.spaceType.get.defaultScheduleSet.get.gasEquipmentSchedule.empty?   # eqp-type-specific
-            load_sch = space.spaceType.get.defaultScheduleSet.get.gasEquipmentSchedule.get  # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.gasEquipmentSchedule  # eqp-type-specific
           end
         end
       end
@@ -1979,7 +2005,7 @@ class Standard
         # Check default schedule set
         unless (space.spaceType.get.defaultScheduleSet.empty?)
           unless space.spaceType.get.defaultScheduleSet.get.steamEquipmentSchedule.empty?   # eqp-type-specific
-            load_sch = space.spaceType.get.defaultScheduleSet.get.steamEquipmentSchedule.get  # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.steamEquipmentSchedule  # eqp-type-specific
           end
         end
       end
@@ -1992,7 +2018,7 @@ class Standard
         # Check default schedule set
         unless (space.spaceType.get.defaultScheduleSet.empty?)
           unless space.spaceType.get.defaultScheduleSet.get.hotWaterEquipmentSchedule.empty?   # eqp-type-specific
-            load_sch = space.spaceType.get.defaultScheduleSet.get.hotWaterEquipmentSchedule.get  # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.hotWaterEquipmentSchedule  # eqp-type-specific
           end
         end
       end
@@ -2005,7 +2031,7 @@ class Standard
         # Check default schedule set
         unless (space.spaceType.get.defaultScheduleSet.empty?)
           unless space.spaceType.get.defaultScheduleSet.get.otherEquipmentSchedule.empty?   # eqp-type-specific
-            load_sch = space.spaceType.get.defaultScheduleSet.get.otherEquipmentSchedule.get  # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.otherEquipmentSchedule  # eqp-type-specific
           end
         end
       end

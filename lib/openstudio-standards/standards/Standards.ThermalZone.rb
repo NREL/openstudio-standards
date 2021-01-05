@@ -1589,13 +1589,13 @@ class Standard
   # in all spaces in this zone.
   # @author Doug Maddox, PNNL
   # @return [Double] the design internal load, in W
-  def thermal_zone_peak_internal_load(thermal_zone)
+  def thermal_zone_peak_internal_load(model, thermal_zone)
     load_w = 0.0
     load_hrs_sum = Array.new(8760, 0)
 
     thermal_zone.spaces.each do |space|
-      load_hrs = space_internal_load_annual_array(space)
-      (0.8759).each do |ihr|
+      load_hrs = space_internal_load_annual_array(model, space)
+      (0..8759).each do |ihr|
         load_hrs_sum[ihr] += load_hrs[ihr]
       end
     end
@@ -1609,21 +1609,20 @@ class Standard
   # Based on the intersection of the fan schedule for that zone and the occupancy schedule for that zone
   # @author Doug Maddox, PNNL
   # @return [Double] the design internal load, in W
-  def thermal_zone_get_annual_operating_hours(zone, zone_fan_sched)
+  def thermal_zone_get_annual_operating_hours(model, zone, zone_fan_sched)
 
     zone_ppl_sch = Array.new(8760, 0)     # merged people schedule for zone
-    zone_op_sch = Array.new(8760, 0)     # intersection of fan and people scheds
+    zone_op_sch = Array.new(8760, 0)      # intersection of fan and people scheds
 
     # Need composite occupant schedule for spaces in the zone
-    thermal_zone.spaces.each do |space|
-      space_ppl_sch = space_occupancy_annual_array(space)
+    zone.spaces.each do |space|
+      space_ppl_sch = space_occupancy_annual_array(model, space)
       # If any space is occupied, make zone occupied
-      (0.8759).each do |ihr|
+      (0..8759).each do |ihr|
         zone_ppl_sch[ihr] = 1 if space_ppl_sch[ihr] > 0
       end
     end
 
-    
     if zone_fan_sched.nil?
       # There was no fan delivering conditioned air to the zone
       # i.e. it was radiant heat only or radiant heat/cool, or some other odd case
@@ -1631,7 +1630,7 @@ class Standard
       zone_op_sch = zone_ppl_sch
     else
       # Merge with fan schedule: intersection with occupant schedule
-      (0.8759).each do |ihr|
+      (0..8759).each do |ihr|
         if zone_ppl_sch[ihr] > 0 && zone_fan_sched[ihr] > 0
           zone_op_sch[ihr] = 1
         end
