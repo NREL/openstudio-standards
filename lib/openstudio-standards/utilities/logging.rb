@@ -1,14 +1,13 @@
-
 # Open a log for the library
-$OPENSTUDIO_LOG = OpenStudio::StringStreamLogSink.new # rubocop:disable Style/GlobalVars
-$OPENSTUDIO_LOG.setLogLevel(OpenStudio::Debug) # rubocop:disable Style/GlobalVars
+$OPENSTUDIO_LOG = OpenStudio::StringStreamLogSink.new
+$OPENSTUDIO_LOG.setLogLevel(OpenStudio::Debug)
 
 # Log the info, warning, and error messages to a runner.
 # runner @param [Runner] The Measure runner to add the messages to
 # debug @param [Boolean] If true, include the debug messages in the log
 # @return [Runner] The same Measure runner, with messages from the openstudio-standards library added
 def log_messages_to_runner(runner, debug = false)
-  $OPENSTUDIO_LOG.logMessages.each do |msg| # rubocop:disable Style/GlobalVars
+  $OPENSTUDIO_LOG.logMessages.each do |msg|
     # DLM: you can filter on log channel here for now
     if /openstudio.*/ =~ msg.logChannel # /openstudio\.model\..*/
       # Skip certain messages that are irrelevant/misleading
@@ -44,7 +43,7 @@ def log_messages_to_file(file_path, debug = false)
   messages = []
 
   File.open(file_path, 'w') do |file|
-    $OPENSTUDIO_LOG.logMessages.each do |msg| # rubocop:disable Style/GlobalVars
+    $OPENSTUDIO_LOG.logMessages.each do |msg|
       # DLM: you can filter on log channel here for now
       if /openstudio.*/ =~ msg.logChannel # /openstudio\.model\..*/
         # Skip certain messages that are irrelevant/misleading
@@ -87,7 +86,7 @@ end
 def get_logs(log_type = OpenStudio::Error)
   errors = []
 
-  $OPENSTUDIO_LOG.logMessages.each do |msg| # rubocop:disable Style/GlobalVars
+  $OPENSTUDIO_LOG.logMessages.each do |msg|
     if /openstudio.*/ =~ msg.logChannel
       # Skip certain messages that are irrelevant/misleading
       next if msg.logMessage.include?('UseWeatherFile') || # 'UseWeatherFile' is not yet a supported option for YearDescription
@@ -99,6 +98,7 @@ def get_logs(log_type = OpenStudio::Error)
               msg.logMessage.include?('has multiple parents') || # Bogus errors about curves having multiple parents
               msg.logMessage.include?('does not have an Output') || # Warning from EMS translation
               msg.logMessage.include?('Prior to OpenStudio 2.6.2, this field was returning a double, it now returns an Optional double') # Warning about OS API change
+
       # Only fail on the errors
       if msg.logLevel == log_type
         errors << "[#{msg.logChannel}] #{msg.logMessage}"
@@ -110,5 +110,5 @@ def get_logs(log_type = OpenStudio::Error)
 end
 
 def reset_log
-  $OPENSTUDIO_LOG.resetStringStream # rubocop:disable Style/GlobalVars
+  $OPENSTUDIO_LOG.resetStringStream
 end

@@ -4,7 +4,7 @@ class CBES
   # Determine which climate zone to use.
   # Uses the most specific climate zone set.
   def model_get_climate_zone_set_from_list(model, possible_climate_zone_sets)
-    climate_zone_set = possible_climate_zone_sets.sort.last
+    climate_zone_set = possible_climate_zone_sets.max
     return climate_zone_set
   end
 
@@ -19,5 +19,3 @@ class CBES
     return ventilation_method
   end
 end
-
-

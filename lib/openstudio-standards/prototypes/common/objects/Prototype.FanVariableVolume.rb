@@ -130,24 +130,24 @@ class Standard
                                            fan_power_coefficient_4: nil,
                                            fan_power_coefficient_5: nil)
     # check values to use
-    fan_efficiency = fan_efficiency ? fan_efficiency : fan_json['fan_efficiency']
-    pressure_rise = pressure_rise ? pressure_rise : fan_json['pressure_rise']
-    motor_efficiency = motor_efficiency ? motor_efficiency : fan_json['motor_efficiency']
-    motor_in_airstream_fraction = motor_in_airstream_fraction ? motor_in_airstream_fraction : fan_json['motor_in_airstream_fraction']
-    fan_power_minimum_flow_rate_input_method = fan_power_minimum_flow_rate_input_method ? fan_power_minimum_flow_rate_input_method : fan_json['fan_power_minimum_flow_rate_input_method']
-    fan_power_minimum_flow_rate_fraction = fan_power_minimum_flow_rate_fraction ? fan_power_minimum_flow_rate_fraction : fan_json['fan_power_minimum_flow_rate_fraction']
-    fan_power_coefficient_1 = fan_power_coefficient_1 ? fan_power_coefficient_1 : fan_json['fan_power_coefficient_1']
-    fan_power_coefficient_2 = fan_power_coefficient_2 ? fan_power_coefficient_2 : fan_json['fan_power_coefficient_2']
-    fan_power_coefficient_3 = fan_power_coefficient_3 ? fan_power_coefficient_3 : fan_json['fan_power_coefficient_3']
-    fan_power_coefficient_4 = fan_power_coefficient_4 ? fan_power_coefficient_4 : fan_json['fan_power_coefficient_4']
-    fan_power_coefficient_5 = fan_power_coefficient_5 ? fan_power_coefficient_5 : fan_json['fan_power_coefficient_5']
+    fan_efficiency ||= fan_json['fan_efficiency']
+    pressure_rise ||= fan_json['pressure_rise']
+    motor_efficiency ||= fan_json['motor_efficiency']
+    motor_in_airstream_fraction ||= fan_json['motor_in_airstream_fraction']
+    fan_power_minimum_flow_rate_input_method ||= fan_json['fan_power_minimum_flow_rate_input_method']
+    fan_power_minimum_flow_rate_fraction ||= fan_json['fan_power_minimum_flow_rate_fraction']
+    fan_power_coefficient_1 ||= fan_json['fan_power_coefficient_1']
+    fan_power_coefficient_2 ||= fan_json['fan_power_coefficient_2']
+    fan_power_coefficient_3 ||= fan_json['fan_power_coefficient_3']
+    fan_power_coefficient_4 ||= fan_json['fan_power_coefficient_4']
+    fan_power_coefficient_5 ||= fan_json['fan_power_coefficient_5']
 
     # convert values
     pressure_rise_pa = OpenStudio.convert(pressure_rise, 'inH_{2}O', 'Pa').get unless pressure_rise.nil?
 
     # create fan
     fan = create_fan_variable_volume(model,
-                                     fan_name:fan_name,
+                                     fan_name: fan_name,
                                      fan_efficiency: fan_efficiency,
                                      pressure_rise: pressure_rise_pa,
                                      motor_efficiency: motor_efficiency,
@@ -162,5 +162,4 @@ class Standard
                                      fan_power_coefficient_5: fan_power_coefficient_5)
     return fan
   end
-
 end
