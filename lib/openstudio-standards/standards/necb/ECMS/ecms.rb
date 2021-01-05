@@ -41,7 +41,7 @@ class ECMS < NECB2011
     @standards_data['curves'] = standards_data['tables']["curves"]['table']
   end
 
-  def apply_system_ecm(model:, ecm_system_name: nil, template_standard:, runner: nil)
+  def apply_system_ecm(model:, ecm_system_name: nil, template_standard:, runner: nil, primary_heating_fuel: nil)
     # Do nothing if nil or other usual suspects.. covering all bases for now.
     return if ecm_system_name.nil? || ecm_system_name == 'none' || ecm_system_name == 'NECB_Default'
 
@@ -59,19 +59,35 @@ class ECMS < NECB2011
     ecm_std.remove_hw_loops(model)
     ecm_std.remove_chw_loops(model)
     ecm_std.remove_cw_loops(model)
-    ecm_std.send(ecm_add_method_name,
-                 model: model,
-                 system_zones_map: map_system_to_zones,
-                 system_doas_flags: system_doas_flags,
-                 zone_clg_eqpt_type: zone_clg_eqpt_type,
-                 standard: template_standard)
+
+    # Rather than go through every add_ecm class to add the primary_heating_fuel argument I added this statement to
+    # only include it when it is used.  The more efficient (ond probably clearer) way to do this would be to have never
+    # created the air loops in the first place.  I was overruled, so the result is that if a model with no air loops and
+    # just baseboard heaters is desired then the air loops and baseboard heaters are created, then removed (see code
+    # immediately above) then added again in the "add_ecm_remove_airloops_add_zone_baseboards" method.
+    unless (ecm_add_method_name == "add_ecm_remove_airloops_add_zone_baseboards")
+      ecm_std.send(ecm_add_method_name,
+                   model: model,
+                   system_zone_map: map_system_to_zones,
+                   system_doas_flags: system_doas_flags,
+                   zone_clg_eqpt_type: zone_clg_eqpt_type,
+                   standard: template_standard)
+    else
+      ecm_std.send(ecm_add_method_name,
+                   model: model,
+                   system_zones_map: map_system_to_zones,
+                   system_doas_flags: system_doas_flags,
+                   zone_clg_eqpt_type: zone_clg_eqpt_type,
+                   standard: template_standard,
+                   primary_heating_fuel: primary_heating_fuel)
+    end
     #ecm_std.add_ecm_hs09_ccashpsys(model:model,system_zones_map:,system_doas_flags:,zone_clg_eqpt_type: nil,standard:,baseboard_flag: true)
 
   end
 
   def apply_system_efficiencies_ecm(model:, ecm_system_name: nil)
     # Do nothing if nil.
-    return if ecm_system_name.nil? || ecm_system_name == 'none' || ecm_system_name == 'NECB_Default'
+    return if ecm_system_name.nil? || ecm_system_name == 'none' || ecm_system_name == 'NECB_Default' || ecm_system_name == 'remove_airloops_add_zone_baseboards'
     ecm_std = Standard.build("ECMS")
     # Get method name that should be present in the ECM class.
     ecm_apply_eff_method_name = "apply_efficiency_ecm_#{ecm_system_name.downcase}"
