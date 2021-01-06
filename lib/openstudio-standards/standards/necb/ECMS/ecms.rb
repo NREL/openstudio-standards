@@ -60,11 +60,8 @@ class ECMS < NECB2011
     ecm_std.remove_chw_loops(model)
     ecm_std.remove_cw_loops(model)
 
-    # Rather than go through every add_ecm class to add the primary_heating_fuel argument I added this statement to
-    # only include it when it is used.  The more efficient (ond probably clearer) way to do this would be to have never
-    # created the air loops in the first place.  I was overruled, so the result is that if a model with no air loops and
-    # just baseboard heaters is desired then the air loops and baseboard heaters are created, then removed (see code
-    # immediately above) then added again in the "add_ecm_remove_airloops_add_zone_baseboards" method.
+    # Rather than go through every add_ecm class to add 'the primary_heating_fuel' argument I added this statement to
+    # only include it when it is used (for now in the add_ecm_remove_airloops_add_zone_baseboards method).
     unless (ecm_add_method_name == "add_ecm_remove_airloops_add_zone_baseboards")
       ecm_std.send(ecm_add_method_name,
                    model: model,
