@@ -1366,8 +1366,8 @@ class AppendixGPRMTests < Minitest::Test
     check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if (tests.include? 'infiltration')
     check_hvac_type(prototypes_base['hvac_baseline']) if (tests.include? 'hvac_baseline')
     check_sat_ctrl(prototypes_base['sat_ctrl']) if tests.include? 'sat_ctrl'
-    check_number_of_boilers(prototypes_base['hvac_baseline']) if (tests.include? 'hvac_baseline')
-    check_number_of_chillers(prototypes_base['hvac_baseline']) if (tests.include? 'hvac_baseline')
-    check_number_of_cooling_towers(prototypes_base['hvac_baseline']) if (tests.include? 'hvac_baseline')
+    check_number_of_boilers(prototypes_base['number_of_boilers']) if (tests.include? 'number_of_boilers')
+    check_number_of_chillers(prototypes_base['number_of_chillers']) if (tests.include? 'number_of_chillers')
+    check_number_of_cooling_towers(prototypes_base['number_of_cooling_towers']) if (tests.include? 'number_of_cooling_towers')
   end
 end
