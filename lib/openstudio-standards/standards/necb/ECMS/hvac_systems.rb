@@ -1698,7 +1698,7 @@ class ECMS
 
     if primary_heating_fuel == 'DefaultFuel'
       epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-      primary_heating_fuel = standards_data['regional_fuel_use'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
+      primary_heating_fuel = standards_info['regional_fuel_use'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
     end
     # Get fuelset.
     system_fuel_defaults = standards_info['fuel_type_sets'].detect {|fuel_type_set| fuel_type_set['name'] == primary_heating_fuel}
