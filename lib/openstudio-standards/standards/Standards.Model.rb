@@ -353,38 +353,38 @@ class Standard
 
       end
 
+      # Set the baseline number of boilers and chillers
+      model.getPlantLoops.sort.each do |plant_loop|
+        # Skip the SWH loops
+        next if plant_loop_swh_loop?(plant_loop)
+
+        plant_loop_apply_prm_number_of_boilers(plant_loop)
+        plant_loop_apply_prm_number_of_chillers(plant_loop, sizing_run_dir)
+      end
+
+      # Set the baseline number of cooling towers
+      # Must be done after all chillers are added
+      model.getPlantLoops.sort.each do |plant_loop|
+        # Skip the SWH loops
+        next if plant_loop_swh_loop?(plant_loop)
+
+        plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
+      end
+
+      # Run sizing run with the new chillers, boilers, and cooling towers to determine capacities
+      if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
+        return false
+      end
+
       if /prm/i !~ template
-        # Set the baseline number of boilers and chillers
-        model.getPlantLoops.sort.each do |plant_loop|
-          # Skip the SWH loops
-          next if plant_loop_swh_loop?(plant_loop)
-
-          plant_loop_apply_prm_number_of_boilers(plant_loop)
-          plant_loop_apply_prm_number_of_chillers(plant_loop)
-        end
-
-        # Set the baseline number of cooling towers
-        # Must be done after all chillers are added
-        model.getPlantLoops.sort.each do |plant_loop|
-          # Skip the SWH loops
-          next if plant_loop_swh_loop?(plant_loop)
-
-          plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
-        end
-
-        # Run sizing run with the new chillers, boilers, and cooling towers to determine capacities
-        if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
-          return false
-        end
-
         # Set the pumping control strategy and power
         # Must be done after sizing components
         model.getPlantLoops.sort.each do |plant_loop|
-          # Skip the SWH loops
-          next if plant_loop_swh_loop?(plant_loop)
+         # Skip the SWH loops
+         next if plant_loop_swh_loop?(plant_loop)
 
-          plant_loop_apply_prm_baseline_pump_power(plant_loop)
-          plant_loop_apply_prm_baseline_pumping_type(plant_loop)
+         plant_loop_apply_prm_baseline_pump_power(plant_loop)
+         plant_loop_apply_prm_baseline_pumping_type(plant_loop)
         end
 
       end
