@@ -84,7 +84,7 @@ class ECMS < NECB2011
 
   def apply_system_efficiencies_ecm(model:, ecm_system_name: nil)
     # Do nothing if nil.
-    return if ecm_system_name.nil? || ecm_system_name == 'none' || ecm_system_name == 'NECB_Default' || ecm_system_name == 'remove_airloops_add_zone_baseboards'
+    return if ecm_system_name.nil? || ecm_system_name == 'none' || ecm_system_name == 'NECB_Default' || ecm_system_name.to_s.downcase == 'remove_airloops_add_zone_baseboards'
     ecm_std = Standard.build("ECMS")
     # Get method name that should be present in the ECM class.
     ecm_apply_eff_method_name = "apply_efficiency_ecm_#{ecm_system_name.downcase}"
