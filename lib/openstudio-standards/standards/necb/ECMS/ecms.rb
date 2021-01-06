@@ -65,7 +65,7 @@ class ECMS < NECB2011
     unless (ecm_add_method_name == "add_ecm_remove_airloops_add_zone_baseboards")
       ecm_std.send(ecm_add_method_name,
                    model: model,
-                   system_zone_map: map_system_to_zones,
+                   system_zones_map: map_system_to_zones,
                    system_doas_flags: system_doas_flags,
                    zone_clg_eqpt_type: zone_clg_eqpt_type,
                    standard: template_standard)
