@@ -277,6 +277,18 @@
       "notes": null
     },
     {
+      "name": "PSZ_VAV_System_Fan",
+      "type": "VariableVolume",
+      "pressure_rise": 2.5,
+      "fan_efficiency": 0.54,
+      "motor_efficiency": 0.9,
+      "motor_in_airstream_fraction": 1.0,
+      "fan_power_minimum_flow_rate_fraction": 0.25,
+      "fan_power_minimum_flow_rate_input_method": "Fraction",
+      "fan_curve": "Multi zone VAV with static pressure reset",
+      "notes": null
+    },
+    {
       "name": "VAV_default",
       "type": "VariableVolume",
       "pressure_rise": 4.08525614408124,

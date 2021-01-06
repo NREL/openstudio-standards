@@ -151,6 +151,7 @@ module PrototypeFan
                                   motor_in_airstream_fraction: motor_in_airstream_fraction,
                                   end_use_subcategory: end_use_subcategory)
     elsif fan_json['type'] == 'VariableVolume'
+      fan_power_coefficient_1, fan_power_coefficient_2, fan_power_coefficient_3, fan_power_coefficient_4, fan_power_coefficient_5 = lookup_fan_curve_coefficients_from_json(fan_json['fan_curve']) if fan_json['fan_curve']
       create_fan_variable_volume_from_json(model,
                                            fan_json,
                                            fan_name: fan_name,
@@ -177,4 +178,14 @@ module PrototypeFan
     end
   end
 
+  # Lookup fan curve coefficients
+  #
+  # @param fan_curve [String] name of the fan curve
+  # @return [Array] an array of fan curve coefficients
+  def lookup_fan_curve_coefficients_from_json(fan_curve)
+    search_criteria = {}
+    search_criteria['name'] = fan_curve
+    fan_curve = model_find_object(@standards_data['curves'], search_criteria)
+    return [fan_curve['coeff_1'], fan_curve['coeff_2'], fan_curve['coeff_3'], fan_curve['coeff_4'], fan_curve['coeff_5']]
+  end
 end

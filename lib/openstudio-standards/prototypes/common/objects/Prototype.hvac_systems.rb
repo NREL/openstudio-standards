@@ -2653,9 +2653,14 @@ class Standard
                         thermal_zones,
                         system_name: nil,
                         heating_type: nil,
+                        cooling_type: 'AirCooled',
                         supplemental_heating_type: nil,
                         hvac_op_sch: nil,
-                        oa_damper_sch: nil)
+                        fan_type: 'VAV_System_Fan',
+                        oa_damper_sch: nil,
+                        hot_water_loop: nil,
+                        chilled_water_loop: nil,
+                        minimum_volume_setpoint: nil)
 
     # hvac operation schedule
     if hvac_op_sch.nil?
@@ -2710,7 +2715,7 @@ class Standard
       # create fan
       # @type [OpenStudio::Model::FanVariableVolume] fan
       fan = create_fan_by_name(model,
-                               'VAV_System_Fan',
+                               fan_type,
                                fan_name: "#{air_loop.name} Fan",
                                end_use_subcategory: 'VAV System Fans')
       fan.setAvailabilitySchedule(hvac_op_sch)
@@ -2723,6 +2728,11 @@ class Standard
       when 'Electricity', 'Electric'
         htg_coil = create_coil_heating_electric(model,
                                                 name: "#{air_loop.name} Electric Htg Coil")
+      when 'Water'
+        htg_coil = create_coil_heating_water(model,
+                                             hot_water_loop,
+                                             air_loop_node: air_loop.supplyOutletNode,
+                                             name: "#{air_loop.name} Water Htg Coil")
       else
         # Zero-capacity, always-off electric heating coil
         htg_coil = create_coil_heating_electric(model,
@@ -2748,14 +2758,31 @@ class Standard
       end
 
       # create cooling coil
-      clg_coil = OpenStudio::Model::CoilCoolingDXVariableSpeed.new(model)
-      clg_coil.setName("#{air_loop.name} Var spd DX AC Clg Coil")
-      clg_coil.setBasinHeaterCapacity(10.0)
-      clg_coil.setBasinHeaterSetpointTemperature(2.0)
-      # first speed level
-      clg_spd_1 = OpenStudio::Model::CoilCoolingDXVariableSpeedSpeedData.new(model)
-      clg_coil.addSpeed(clg_spd_1)
-      clg_coil.setNominalSpeedLevel(1)
+      case cooling_type
+      when 'AirCooled'
+        clg_coil = OpenStudio::Model::CoilCoolingDXVariableSpeed.new(model)
+        clg_coil.setName("#{air_loop.name} Var spd DX AC Clg Coil")
+        clg_coil.setBasinHeaterCapacity(10.0)
+        clg_coil.setBasinHeaterSetpointTemperature(2.0)
+        # first speed level
+        clg_spd_1 = OpenStudio::Model::CoilCoolingDXVariableSpeedSpeedData.new(model)
+        clg_coil.addSpeed(clg_spd_1)
+        clg_coil.setNominalSpeedLevel(1)
+      when 'WaterCooled'
+        clg_coil = create_coil_cooling_water(model,
+                                             chilled_water_loop,
+                                             name: "#{air_loop.name} Clg Coil")
+      else
+        # same as air-cooled
+        clg_coil = OpenStudio::Model::CoilCoolingDXVariableSpeed.new(model)
+        clg_coil.setName("#{air_loop.name} Var spd DX AC Clg Coil")
+        clg_coil.setBasinHeaterCapacity(10.0)
+        clg_coil.setBasinHeaterSetpointTemperature(2.0)
+        # first speed level
+        clg_spd_1 = OpenStudio::Model::CoilCoolingDXVariableSpeedSpeedData.new(model)
+        clg_coil.addSpeed(clg_spd_1)
+        clg_coil.setNominalSpeedLevel(1)
+      end
 
       # TODO: enable economizer maximum fraction outdoor air schedule input
       # econ_eff_sch = model_add_schedule(model, 'RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
@@ -2767,13 +2794,21 @@ class Standard
       unitary_system.setCoolingCoil(clg_coil)
       unitary_system.setSupplementalHeatingCoil(supplemental_htg_coil)
       unitary_system.setName("#{zone.name} Unitary PSZ-VAV")
-      unitary_system.setString(2, 'SingleZoneVAV') # TODO: add setControlType() method
+      # The following control strategy can lead to "Developer Error: Component sizing incomplete." 
+      # EnergyPlus severe (not fatal) errors if there is no heating design load
+      unitary_system.setControlType('SingleZoneVAV')
+      unitary_system.maximumSupplyAirTemperature()
       unitary_system.setControllingZoneorThermostatLocation(zone)
       unitary_system.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       unitary_system.setFanPlacement('BlowThrough')
       unitary_system.setSupplyAirFlowRateMethodDuringCoolingOperation('SupplyAirFlowRate')
       unitary_system.setSupplyAirFlowRateMethodDuringHeatingOperation('SupplyAirFlowRate')
-      unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('SupplyAirFlowRate')
+      if minimum_volume_setpoint.nil?
+        unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('SupplyAirFlowRate')
+      else
+        unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('FractionOfAutosizedCoolingValue')
+        unitary_system.setFractionofAutosizedDesignCoolingSupplyAirFlowRateWhenNoCoolingorHeatingisRequired(minimum_volume_setpoint)
+      end
       unitary_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOnDiscreteSchedule)
       unitary_system.addToNode(air_loop.supplyInletNode)
 
