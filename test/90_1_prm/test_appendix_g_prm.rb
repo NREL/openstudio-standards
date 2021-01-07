@@ -1038,7 +1038,8 @@ class AppendixGPRMTests < Minitest::Test
         next if n_boilers == 0
 
         # Find area served by this loop
-        area_served_m2 = plant_loop_total_floor_area_served(plant_loop)
+        standard = Standard.build('90.1-PRM-2019')
+        area_served_m2 = standard.plant_loop_total_floor_area_served(plant_loop)
         area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
 
         # check that the number of boilers equals the amount specified by the standard based on the conditioned floor area
@@ -1053,66 +1054,66 @@ class AppendixGPRMTests < Minitest::Test
 
   end
 
-  def plant_loop_total_floor_area_served(plant_loop)
-    sizing_plant = plant_loop.sizingPlant
-    loop_type = sizing_plant.loopType
-
-    # Get all the coils served by this loop
-    coils = []
-    case loop_type
-    when 'Heating'
-      plant_loop.demandComponents.each do |dc|
-        if dc.to_CoilHeatingWater.is_initialized
-          coils << dc.to_CoilHeatingWater.get
-        end
-      end
-    when 'Cooling'
-      plant_loop.demandComponents.each do |dc|
-        if dc.to_CoilCoolingWater.is_initialized
-          coils << dc.to_CoilCoolingWater.get
-        end
-      end
-    else
-      return 0.0
-    end
-
-    # The coil can either be on an airloop (as a main heating coil)
-    # in an HVAC Component (like a unitary system on an airloop),
-    # or in a Zone HVAC Component (like a fan coil).
-    zones_served = []
-    coils.each do |coil|
-      if coil.airLoopHVAC.is_initialized
-        air_loop = coil.airLoopHVAC.get
-        zones_served += air_loop.thermalZones
-      elsif coil.containingHVACComponent.is_initialized
-        containing_comp = coil.containingHVACComponent.get
-        if containing_comp.airLoopHVAC.is_initialized
-          air_loop = containing_comp.airLoopHVAC.get
-          zones_served += air_loop.thermalZones
-        end
-      elsif coil.containingZoneHVACComponent.is_initialized
-        zone_hvac = coil.containingZoneHVACComponent.get
-        if zone_hvac.thermalZone.is_initialized
-          zones_served << zone_hvac.thermalZone.get
-        end
-      end
-    end
-
-    # Add up the area of all zones served.
-    # Make sure to only add unique zones in
-    # case the same zone is served by multiple
-    # coils served by the same loop.  For example,
-    # a HW and Reheat
-    area_served_m2 = 0.0
-    zones_served.uniq.each do |zone|
-      area_served_m2 += zone.floorArea
-    end
-    area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
-
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, serves #{area_served_ft2.round} ft^2.")
-
-    return area_served_m2
-  end
+  # def plant_loop_total_floor_area_served(plant_loop)
+  #   sizing_plant = plant_loop.sizingPlant
+  #   loop_type = sizing_plant.loopType
+  #
+  #   # Get all the coils served by this loop
+  #   coils = []
+  #   case loop_type
+  #   when 'Heating'
+  #     plant_loop.demandComponents.each do |dc|
+  #       if dc.to_CoilHeatingWater.is_initialized
+  #         coils << dc.to_CoilHeatingWater.get
+  #       end
+  #     end
+  #   when 'Cooling'
+  #     plant_loop.demandComponents.each do |dc|
+  #       if dc.to_CoilCoolingWater.is_initialized
+  #         coils << dc.to_CoilCoolingWater.get
+  #       end
+  #     end
+  #   else
+  #     return 0.0
+  #   end
+  #
+  #   # The coil can either be on an airloop (as a main heating coil)
+  #   # in an HVAC Component (like a unitary system on an airloop),
+  #   # or in a Zone HVAC Component (like a fan coil).
+  #   zones_served = []
+  #   coils.each do |coil|
+  #     if coil.airLoopHVAC.is_initialized
+  #       air_loop = coil.airLoopHVAC.get
+  #       zones_served += air_loop.thermalZones
+  #     elsif coil.containingHVACComponent.is_initialized
+  #       containing_comp = coil.containingHVACComponent.get
+  #       if containing_comp.airLoopHVAC.is_initialized
+  #         air_loop = containing_comp.airLoopHVAC.get
+  #         zones_served += air_loop.thermalZones
+  #       end
+  #     elsif coil.containingZoneHVACComponent.is_initialized
+  #       zone_hvac = coil.containingZoneHVACComponent.get
+  #       if zone_hvac.thermalZone.is_initialized
+  #         zones_served << zone_hvac.thermalZone.get
+  #       end
+  #     end
+  #   end
+  #
+  #   # Add up the area of all zones served.
+  #   # Make sure to only add unique zones in
+  #   # case the same zone is served by multiple
+  #   # coils served by the same loop.  For example,
+  #   # a HW and Reheat
+  #   area_served_m2 = 0.0
+  #   zones_served.uniq.each do |zone|
+  #     area_served_m2 += zone.floorArea
+  #   end
+  #   area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
+  #
+  #   OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, serves #{area_served_ft2.round} ft^2.")
+  #
+  #   return area_served_m2
+  # end
 
   def check_number_of_cooling_towers(prototypes_base)
     # Find plant loops with chillers + cooling towers and ensure the meet the requirement laid out by Appendix G 2019
@@ -1333,16 +1334,19 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      'wwr',
-      'srr',
-      'envelope',
-      'lpd',
-      'isresidential',
-      'daylighting_control',
-      'light_occ_sensor',
-      'infiltration',
-      'hvac_baseline',
-      'sat_ctrl'
+      #'wwr',
+      #'srr',
+      #'envelope',
+      #'lpd',
+      #'isresidential',
+      #'daylighting_control',
+      #'light_occ_sensor',
+      #'infiltration',
+      #'hvac_baseline',
+      #'sat_ctrl',
+      'number_of_boilers'
+      #'number_of_chillers',
+      #'number_of_cooling_towers'
     ]
 
     # Get list of unique prototypes
