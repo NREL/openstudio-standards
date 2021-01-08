@@ -1934,7 +1934,7 @@ class Standard
               'ASHRAE 169-2013-1A',
               'ASHRAE 169-2013-1B',
               'ASHRAE 169-2013-2A',
-              'ASHRAE 169-2013-2B',
+              'ASHRAE 169-2013-2B'
               heating_type = 'Electric'
               hot_water_loop = nil
             else
