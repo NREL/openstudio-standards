@@ -27,15 +27,6 @@ class ECMS
         # puts "outdoor_air_flow_per_person is #{outdoor_air_flow_per_person}"
         # puts "outdoor_air_flow_per_floor_area us #{outdoor_air_flow_per_floor_area}"
 
-        ##### Add AvailabilityManagerHybridVentilation to "prevents simultaneous natural ventilation and HVAC system operation" (Ref: E+ I/O)
-        thermal_zone.airLoopHVACs.sort.each do |air_loop|
-          # puts air_loop
-          avail_mgr_hybr_vent = OpenStudio::Model::AvailabilityManagerHybridVentilation.new(model)
-          avail_mgr_hybr_vent.setMinimumOutdoorTemperature(nv_Tout_min) #Note: since "Ventilation Control Mode" is by default set to "Temperature (i.e. 1)", only min and max Tout are needed. (see E+ I/O Ref.)
-          avail_mgr_hybr_vent.setMaximumOutdoorTemperature(nv_Tout_max) #Note: Tout_min is to avoid overcooling, Tout_max is to avoid overheating. (see E+ I/O Ref.)
-          air_loop.addAvailabilityManager(avail_mgr_hybr_vent)
-        end
-
         ##### Get heating/cooling setpoint temperature schedules from the osm file
         # These schedules are used for min/max Tin schedules under the objects of "ZoneVentilation:DesignFlowRate" and "ZoneVentilation:WindandStackOpenArea".
         # Note: as per E+ I/O Ref.: "If the user enters a valid schedule name, the minimum/maximum temperature values specified in this schedule will override the constant value specified in the Minimum/Maximum Indoor Temperature field." under the objects of "ZoneVentilation:DesignFlowRate" and "ZoneVentilation:WindandStackOpenArea".
@@ -80,10 +71,9 @@ class ECMS
             if (subsurface.subSurfaceType == 'OperableWindow' || subsurface.subSurfaceType == 'FixedWindow') && subsurface.outsideBoundaryCondition == 'Outdoors'  #TODO: Question: Should I change window type to only 'OperableWindow'? For testing purposes, I have included the window type of 'FixedWindow' as well.
               window_azimuth_deg = OpenStudio::convert(subsurface.azimuth,"rad","deg").get
               window_area = subsurface.netArea
-              puts "window name is #{subsurface.name.to_s}"
-              puts "window azimuth (deg) is #{window_azimuth_deg}"
-              puts "window area is #{window_area}"
-              # raise('check azimuth of exterior window')
+              # puts "window name is #{subsurface.name.to_s}"
+              # puts "window azimuth (deg) is #{window_azimuth_deg}"
+              # puts "window area is #{window_area}"
 
               ##### Define a constant schedule for operable windows
               operable_window_schedule = OpenStudio::Model::ScheduleConstant.new(model)
@@ -142,9 +132,23 @@ class ECMS
 
       end #thermal_zone.spaces.sort.each do |space|
 
-
     end #model.getZoneHVACEquipmentLists.sort.each do |zone_hvac_equipment_list|
 
+    ##### Add AvailabilityManagerHybridVentilation to "prevents simultaneous natural ventilation and HVAC system operation" (Ref: E+ I/O)
+    model.getAirLoopHVACs.sort.each do |air_loop|
+      # puts air_loop
+      # puts air_loop.name.to_s
+      air_loop.availabilityManagers.sort.each do |avail_mgr|
+        if avail_mgr.to_AvailabilityManagerHybridVentilation.empty?
+          # puts "#{air_loop.name.to_s} is empty"
+          avail_mgr_hybr_vent = OpenStudio::Model::AvailabilityManagerHybridVentilation.new(model)
+          # puts "#{air_loop.name.to_s} avail_mgr name is #{avail_mgr_hybr_vent.name.to_s}"
+          avail_mgr_hybr_vent.setMinimumOutdoorTemperature(nv_Tout_min) #Note: since "Ventilation Control Mode" is by default set to "Temperature (i.e. 1)", only min and max Tout are needed. (see E+ I/O Ref.)
+          avail_mgr_hybr_vent.setMaximumOutdoorTemperature(nv_Tout_max) #Note: Tout_min is to avoid overcooling, Tout_max is to avoid overheating. (see E+ I/O Ref.)
+          air_loop.addAvailabilityManager(avail_mgr_hybr_vent)
+        end
+      end
+    end
 
   end
 

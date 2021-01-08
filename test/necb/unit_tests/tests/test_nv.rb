@@ -20,24 +20,24 @@ class NECB_nv_Tests < Minitest::Test
     #Range of test options.
     @templates = [
         'NECB2011',
-        # 'NECB2015',
-        # 'NECB2017'
+        'NECB2015',
+        'NECB2017'
     ]
     @building_types = [
         'FullServiceRestaurant',
     # 'HighriseApartment',
-    # 'Hospital'#,
+    'Hospital',
     # 'LargeHotel',
-    # 'LargeOffice',
+    # 'LargeOffice', #
     # 'MediumOffice',
     # 'MidriseApartment',
-    # 'Outpatient',
+    # 'Outpatient', #
     # 'PrimarySchool',
     # 'QuickServiceRestaurant',
     # 'RetailStandalone',
     # 'SecondarySchool',
     # 'SmallHotel',
-    # 'Warehouse'
+    # 'Warehouse' #
     ]
     @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
     @primary_heating_fuels = ['DefaultFuel']
