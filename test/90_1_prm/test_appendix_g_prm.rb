@@ -1207,7 +1207,7 @@ class AppendixGPRMTests < Minitest::Test
         #'srr',
       # 'envelope',
         #'lpd',
-      'isresidential'
+        #'isresidential',
       # 'daylighting_control',
       # 'light_occ_sensor',
       # 'infiltration',
