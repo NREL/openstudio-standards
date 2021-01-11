@@ -451,33 +451,37 @@ class AppendixGPRMTests < Minitest::Test
       ]
 
       # cooling delta t
-      case thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureInputMethod
-      when 'SupplyAirTemperatureDifference'
-        assert((thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureDifference - delta_t_r).abs < 0.001, "supply to room cooling temperature difference for #{thermal_zone.name} in the #{building_type}, #{template}, #{climate_zone} model is incorrect. It is #{thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureDifference}, but should be #{delta_t_r}")
-      when 'SupplyAirTemperature'
-        setpoint_c = nil
-        tstat = thermal_zone.thermostatSetpointDualSetpoint
-        if tstat.is_initialized
-          tstat = tstat.get
-          setpoint_sch = tstat.coolingSetpointTemperatureSchedule
-          if setpoint_sch.is_initialized
-            setpoint_sch = setpoint_sch.get
-            schedule_types.each do |schedule_type|
-              full_objtype_name = "OS_Schedule_#{schedule_type}"
-              if full_objtype_name == setpoint_sch.iddObjectType.valueName.to_s
-                setpoint_sch = setpoint_sch.public_send("to_Schedule#{schedule_type}").get
-                # reuse code in Standards.ThermalZone to find tstat max temperature
-                setpoint_c = std.public_send("schedule_#{schedule_type.downcase}_annual_min_max_value", setpoint_sch)['min']
-                break
+      if std.thermal_zone_cooled?(thermal_zone)
+        case thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureInputMethod
+        when 'SupplyAirTemperatureDifference'
+          assert((thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureDifference - delta_t_r).abs < 0.001, "supply to room cooling temperature difference for #{thermal_zone.name} in the #{building_type}, #{template}, #{climate_zone} model is incorrect. It is #{thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureDifference}, but should be #{delta_t_r}")
+        when 'SupplyAirTemperature'
+          setpoint_c = nil
+          tstat = thermal_zone.thermostatSetpointDualSetpoint
+          if tstat.is_initialized
+            tstat = tstat.get
+            setpoint_sch = tstat.coolingSetpointTemperatureSchedule
+            if setpoint_sch.is_initialized
+              setpoint_sch = setpoint_sch.get
+              schedule_types.each do |schedule_type|
+                full_objtype_name = "OS_Schedule_#{schedule_type}"
+                if full_objtype_name == setpoint_sch.iddObjectType.valueName.to_s
+                  setpoint_sch = setpoint_sch.public_send("to_Schedule#{schedule_type}").get
+                  # reuse code in Standards.ThermalZone to find tstat max temperature
+                  setpoint_c = std.public_send("schedule_#{schedule_type.downcase}_annual_min_max_value", setpoint_sch)['min']
+                  break
+                end
               end
             end
           end
+          if setpoint_c.nil?
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "#{thermal_zone.name} does not have a valid cooling supply air temperature setpoint identified .")
+          else
+            assert(((thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperature - setpoint_c).abs - delta_t_r / 9.0 * 5).abs < 0.001, "supply to room cooling temperature difference for #{thermal_zone.name} in the #{building_type} #{template}, #{climate_zone} model is incorrect. It is #{(thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperature - setpoint_c).abs}, but should be #{delta_t_r}.")
+          end
         end
-        if setpoint_c.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "#{thermal_zone.name} does not have a valid cooling supply air temperature setpoint identified .")
-        else
-          assert(((thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperature - setpoint_c).abs - delta_t_r / 9.0 * 5).abs < 0.001, "supply to room cooling temperature difference for #{thermal_zone.name} in the #{building_type} #{template}, #{climate_zone} model is incorrect. It is #{(thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperature - setpoint_c).abs}, but should be #{delta_t_r}.")
-        end
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ThermalZone', "#{thermal_zone.name} is not a cooled zone, skip cooling supply air temperature set point difference test.")
       end
 
       thermal_zone.equipment.each do |eqt|
@@ -487,33 +491,49 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # heating delta t
-      case thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperatureInputMethod
-      when 'SupplyAirTemperatureDifference'
-        assert((thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperatureDifference - delta_t_r).abs < 0.001, "supply to room heating temperature difference for #{thermal_zone.name} in the #{building_type}, #{template}, #{climate_zone} model is incorrect. It is #{thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperatureDifference}, but should be #{delta_t_r}.")
-      when 'SupplyAirTemperature'
-        setpoint_c = nil
-        tstat = thermal_zone.thermostatSetpointDualSetpoint
-        if tstat.is_initialized
-          tstat = tstat.get
-          setpoint_sch = tstat.heatingSetpointTemperatureSchedule
-          if setpoint_sch.is_initialized
-            setpoint_sch = setpoint_sch.get
-            schedule_types.each do |schedule_type|
-              full_objtype_name = "OS_Schedule_#{schedule_type}"
-              if full_objtype_name == setpoint_sch.iddObjectType.valueName.to_s
-                setpoint_sch = setpoint_sch.public_send("to_Schedule#{schedule_type}").get
-                # reuse code in Standards.ThermalZone to find tstat max temperature
-                setpoint_c = std.public_send("schedule_#{schedule_type.downcase}_annual_min_max_value", setpoint_sch)['max']
-                break
+      if std.thermal_zone_heated?(thermal_zone)
+        has_unit_heater = false
+        # 90.1 Appendix G G3.1.2.8.2
+        thermal_zone.equipment.each do |eqt|
+          if eqt.to_ZoneHVACUnitHeater.is_initialized
+            setpoint_c = OpenStudio.convert(105, 'F', 'C').get
+            has_unit_heater = true
+          end
+        end
+        if has_unit_heater
+          assert((thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperature - setpoint_c).abs < 0.001, "heating design supply air temperature for #{thermal_zone.name} in the #{building_type} #{template}, #{climate_zone} model is incorrect. For zones with unit heaters, heating design supply air temperature should be #{setpoint_c} (90.1 Appendix G3.1.2.8.2)")
+        else
+          case thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperatureInputMethod
+          when 'SupplyAirTemperatureDifference'
+            assert((thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperatureDifference - delta_t_r).abs < 0.001, "supply to room heating temperature difference for #{thermal_zone.name} in the #{building_type}, #{template}, #{climate_zone} model is incorrect. It is #{thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperatureDifference}, but should be #{delta_t_r}.")
+          when 'SupplyAirTemperature'
+            setpoint_c = nil
+            tstat = thermal_zone.thermostatSetpointDualSetpoint
+            if tstat.is_initialized
+              tstat = tstat.get
+              setpoint_sch = tstat.heatingSetpointTemperatureSchedule
+              if setpoint_sch.is_initialized
+                setpoint_sch = setpoint_sch.get
+                schedule_types.each do |schedule_type|
+                  full_objtype_name = "OS_Schedule_#{schedule_type}"
+                  if full_objtype_name == setpoint_sch.iddObjectType.valueName.to_s
+                    setpoint_sch = setpoint_sch.public_send("to_Schedule#{schedule_type}").get
+                    # reuse code in Standards.ThermalZone to find tstat max temperature
+                    setpoint_c = std.public_send("schedule_#{schedule_type.downcase}_annual_min_max_value", setpoint_sch)['max']
+                    break
+                  end
+                end
               end
+            end
+            if setpoint_c.nil?
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "#{thermal_zone.name} does not have a valid heating supply air temperature setpoint identified.")
+            else
+              assert(((thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperature - setpoint_c).abs - delta_t_r / 9.0 * 5).abs < 0.001, "supply to room heating temperature difference for #{thermal_zone.name} in the #{building_type} #{template}, #{climate_zone} model is incorrect. It is #{(thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperature - setpoint_c).abs}, but should be #{delta_t_r}.")
             end
           end
         end
-        if setpoint_c.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "#{thermal_zone.name} does not have a valid heating supply air temperature setpoint identified.")
-        else
-          assert(((thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperature - setpoint_c).abs - delta_t_r / 9.0 * 5).abs < 0.001, "{supply to room heating temperature difference for #{thermal_zone.name} in the #{building_type} #{template}, #{climate_zone} model is incorrect. It is #{(thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperature - setpoint_c).abs}, but should be #{delta_t_r}.")
-        end
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ThermalZone', "#{thermal_zone.name} is not a heated zone, skip heating supply air temperature set point difference test.")
       end
 
     end
