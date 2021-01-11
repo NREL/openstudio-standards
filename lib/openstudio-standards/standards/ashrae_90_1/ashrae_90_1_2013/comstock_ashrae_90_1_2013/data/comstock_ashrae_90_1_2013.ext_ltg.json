@@ -2,7 +2,7 @@
   "exterior_lighting": [
     {
       "exterior_lighting_zone_number": 0.0,
-      "exerior_lighting_zone_name": "Undeveloped Areas Parks",
+      "exterior_lighting_zone_name": "Undeveloped Areas Parks",
       "template": "ComStock 90.1-2013",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
@@ -35,7 +35,7 @@
     },
     {
       "exterior_lighting_zone_number": 1.0,
-      "exerior_lighting_zone_name": "Developed Areas Parks",
+      "exterior_lighting_zone_name": "Developed Areas Parks",
       "template": "ComStock 90.1-2013",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
@@ -68,7 +68,7 @@
     },
     {
       "exterior_lighting_zone_number": 2.0,
-      "exerior_lighting_zone_name": "Neighborhood",
+      "exterior_lighting_zone_name": "Neighborhood",
       "template": "ComStock 90.1-2013",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
@@ -101,7 +101,7 @@
     },
     {
       "exterior_lighting_zone_number": 3.0,
-      "exerior_lighting_zone_name": "All Other Areas",
+      "exterior_lighting_zone_name": "All Other Areas",
       "template": "ComStock 90.1-2013",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
@@ -134,7 +134,7 @@
     },
     {
       "exterior_lighting_zone_number": 4.0,
-      "exerior_lighting_zone_name": "High Activity",
+      "exterior_lighting_zone_name": "High Activity",
       "template": "ComStock 90.1-2013",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
