@@ -13,7 +13,7 @@
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
     "isresidential": [
-        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
+        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["remove_transformer", []]]]
     ],
     "envelope": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]

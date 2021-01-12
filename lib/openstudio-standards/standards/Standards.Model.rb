@@ -2475,6 +2475,7 @@ class Standard
       max_eflh_diff = 0
       zones.each do |zone|
         zone_name = zone.name.get.to_s
+        next if !zone_eflh.has_key?(zone_name)
         avg_eflh = get_avg_of_other_zones(zone_eflh, zone_name)
         eflh_diff = (avg_eflh - zone_eflh[zone_name]).abs
         if eflh_diff > max_eflh_diff
@@ -2497,10 +2498,14 @@ class Standard
 
     # Eliminate worst zone where max load exceeds limit and repeat until all pass
     num_zones = zone_eflh.size
+    highest_max_load_diff = -1
+    highest_zone = nil
+    highest_zone_name = ''
     (1..num_zones).each do |izone|
       highest_max_load_diff = 0
       zones.each do |zone|
         zone_name = zone.name.get.to_s
+        next if !zone_max_load.has_key?(zone_name)
         max_load = zone_max_load[zone_name]
         avg_max_load = get_avg_of_other_zones(zone_max_load, zone_name)
         max_load_diff = (max_load - avg_max_load).abs
