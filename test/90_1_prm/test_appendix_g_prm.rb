@@ -410,26 +410,8 @@ class AppendixGPRMTests < Minitest::Test
       check_sizing_values(model_baseline, building_type, template, climate_zone)
 
       # check delta t between supply air temperature set point and room temperature set point are 20 deg (exception of 17 deg for laboratory spaces) (G3.1.2.8.1 and exception)
+      # including checking unit heater supply air temperature set point of 105 deg (G3.1.2.8.2)
       check_sizing_delta_t(model_baseline, building_type, template, climate_zone)
-
-      # check unit heater supply air temperature set point of 105 deg (G3.1.2.8.2)
-      check_sizing_unit_heater_sat(model_baseline, building_type, template, climate_zone)
-
-    end
-  end
-
-  def check_sizing_unit_heater_sat(model, building_type, template, climate_zone)
-    model.getThermalZones.each do |thermal_zone|
-      has_unit_heater = false
-      thermal_zone.equipment.each do |eqt|
-        if eqt.to_ZoneHVACUnitHeater.is_initialized
-          has_unit_heater = true
-          break
-        end
-      end
-      if has_unit_heater
-        assert((thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperature - OpenStudio.convert(105, 'F', 'C').get).abs < 0.001, "Thermal zone #{thermal_zone.name} with unit heater in the #{building_type} #{template}, #{climate_zone} model is incorrect. It should have a supply air temperature set point of (#{OpenStudio.convert(105, 'F', 'C').get}) 105 F, but instead, it is set to be #{thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperature}")
-      end
     end
   end
 
