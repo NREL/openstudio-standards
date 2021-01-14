@@ -266,27 +266,25 @@ class Standard
                                       zone_fan_scheds)
       end
 
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Sizing Settings ***')
+      # Set the zone sizing SAT for each zone in the model
+      model.getThermalZones.each do |zone|
+        thermal_zone_apply_prm_baseline_supply_temperatures(zone) # prm template conditionals added in the methods
+      end
+
+      # Set the system sizing properties based on the zone sizing information
+      model.getAirLoopHVACs.each do |air_loop|
+        air_loop_hvac_apply_prm_sizing_temperatures(air_loop)
+      end
+
       if /prm/i =~ template
-
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Sizing Settings ***')
-
-        # Set the zone sizing SAT for each zone in the model
-        model.getThermalZones.each do |zone|
-          thermal_zone_apply_prm_baseline_supply_temperatures(zone)
-        end
-
-        # Set the system sizing properties based on the zone sizing information
-        model.getAirLoopHVACs.each do |air_loop|
-          air_loop_hvac_apply_prm_sizing_temperatures(air_loop)
-        end
-
         # Set internal load sizing run schedules
         model_apply_prm_baseline_sizing_schedule(model)
-
-        # Set the heating and cooling sizing parameters
-        model_apply_prm_sizing_parameters(model)
-
       end
+
+      # Set the heating and cooling sizing parameters
+      model_apply_prm_sizing_parameters(model)
+
 
       if /prm/i !~ template
 
