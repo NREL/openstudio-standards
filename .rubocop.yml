@@ -10,6 +10,7 @@ AllCops:
     - 'test/**/*'
     - 'lib/openstudio-standards/hvac_sizing/**/*'
     - 'lib/openstudio-standards/btap/**/*'
+    - 'lib/openstudio-standards/standards/necb/**/*'
     - 'lib/openstudio-standards/prototypes/common/do_not_edit_metaclasses.rb'
 
 inherit_from:
@@ -17,5 +18,11 @@ inherit_from:
 
 # =============== OpenStudio Standards Specific ===========
 # Ignore file name convention; choices based on OpenStudio C++ class names
+Metrics/AbcSize:
+  Max: 150
+
+Metrics/BlockLength:
+  Max: 75
+
 Naming/FileName:
   Enabled: false    

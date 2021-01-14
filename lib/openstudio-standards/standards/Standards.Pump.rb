@@ -1,4 +1,3 @@
-
 # A variety of pump calculation methods that are the same regardless of pump type.
 # These methods are available to PumpConstantSpeed, PumpVariableSpeed
 module Pump

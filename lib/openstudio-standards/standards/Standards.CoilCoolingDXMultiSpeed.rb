@@ -33,7 +33,8 @@ class Standard
           elsif htg_coil.to_CoilHeatingGasMultiStage.is_initialized
             heating_type = 'All Other'
           end
-        end # TODO: Add other unitary systems
+          # TODO: Add other unitary systems
+        end
       elsif coil_cooling_dx_multi_speed.containingZoneHVACComponent.is_initialized
         containing_comp = coil_cooling_dx_multi_speed.containingZoneHVACComponent.get
         if containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
@@ -44,7 +45,8 @@ class Standard
           elsif htg_coil.to_CoilHeatingWater.is_initialized || htg_coil.to_CoilHeatingGas.is_initialized || htg_col.to_CoilHeatingGasMultiStage
             heating_type = 'All Other'
           end
-        end # TODO: Add other zone hvac systems
+          # TODO: Add other zone hvac systems
+        end
       end
     end
 
@@ -217,18 +219,17 @@ class Standard
   #
   # @return [Double] capacity in W to be used for find object
   def coil_cooling_dx_multi_speed_find_capacity(coil_cooling_dx_multi_speed)
-
     capacity_w = nil
     clg_stages = coil_cooling_dx_multi_speed.stages
     if clg_stages.last.grossRatedTotalCoolingCapacity.is_initialized
       capacity_w = clg_stages.last.grossRatedTotalCoolingCapacity.get
-    elsif (clg_stages.size == 1) && (coil_cooling_dx_multi_speed.autosizedSpeed1GrossRatedTotalCoolingCapacity.is_initialized)
+    elsif (clg_stages.size == 1) && coil_cooling_dx_multi_speed.autosizedSpeed1GrossRatedTotalCoolingCapacity.is_initialized
       capacity_w = coil_cooling_dx_multi_speed.autosizedSpeed1GrossRatedTotalCoolingCapacity.get
-    elsif (clg_stages.size == 2) && (coil_cooling_dx_multi_speed.autosizedSpeed2GrossRatedTotalCoolingCapacity.is_initialized)
+    elsif (clg_stages.size == 2) && coil_cooling_dx_multi_speed.autosizedSpeed2GrossRatedTotalCoolingCapacity.is_initialized
       capacity_w = coil_cooling_dx_multi_speed.autosizedSpeed2GrossRatedTotalCoolingCapacity.get
-    elsif (clg_stages.size == 3) && (coil_cooling_dx_multi_speed.autosizedSpeed3GrossRatedTotalCoolingCapacity.is_initialized)
+    elsif (clg_stages.size == 3) && coil_cooling_dx_multi_speed.autosizedSpeed3GrossRatedTotalCoolingCapacity.is_initialized
       capacity_w = coil_cooling_dx_multi_speed.autosizedSpeed3GrossRatedTotalCoolingCapacity.get
-    elsif (clg_stages.size == 4) && (coil_cooling_dx_multi_speed.autosizedSpeed4GrossRatedTotalCoolingCapacity.is_initialized)
+    elsif (clg_stages.size == 4) && coil_cooling_dx_multi_speed.autosizedSpeed4GrossRatedTotalCoolingCapacity.is_initialized
       capacity_w = coil_cooling_dx_multi_speed.autosizedSpeed4GrossRatedTotalCoolingCapacity.get
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_cooling_dx_multi_speed.name} capacity is not available, cannot apply efficiency standard.")
@@ -244,7 +245,6 @@ class Standard
   # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
   def coil_cooling_dx_multi_speed_standard_minimum_cop(coil_cooling_dx_multi_speed)
-
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_multi_speed)
     cooling_type = search_criteria['cooling_type']
     heating_type = search_criteria['heating_type']
@@ -300,7 +300,5 @@ class Standard
     end
 
     return cop, new_comp_name
-
   end
-
 end

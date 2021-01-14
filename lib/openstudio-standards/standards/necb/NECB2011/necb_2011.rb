@@ -194,9 +194,14 @@ class NECB2011 < Standard
                                    fixed_wind_solar_trans: nil,
                                    skylight_solar_trans: nil,
                                    fdwr_set: -1.0,
-                                   srr_set: -1.0
-
+                                   srr_set: -1.0,
+                                   pv_ground_type: nil,
+                                   pv_ground_total_area_pv_panels_m2: nil,
+                                   pv_ground_tilt_angle: nil,
+                                   pv_ground_azimuth_angle: nil,
+                                   pv_ground_module_description: nil
   )
+
 
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
@@ -227,9 +232,14 @@ class NECB2011 < Standard
                                 fixed_wind_solar_trans: fixed_wind_solar_trans,
                                 skylight_solar_trans: skylight_solar_trans,
                                 fdwr_set: fdwr_set,
-                                srr_set: srr_set
-
+                                srr_set: srr_set,
+                                pv_ground_type: pv_ground_type,  # Two options: (1) nil OR FALSE, (2) TRUE
+                                pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # e.g. 50
+                                pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) 'NECB_Default' (i.e. latitude), (2) tilt angle value (e.g. 20)
+                                pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) 'NECB_Default' (i.e. south), (2) azimuth angle value (e.g. 90)
+                                pv_ground_module_description: pv_ground_module_description # Options: (1) 'NECB_Default' (i.e. Standard), (2) other options ('Standard', 'Premium', ThinFilm')
     )
+
   end
 
   def load_building_type_from_library(building_type:)
@@ -254,6 +264,7 @@ class NECB2011 < Standard
                            erv_package: 'NECB_Default',
                            boiler_eff: nil,
                            furnace_eff: nil,
+                           unitary_cop: nil,
                            shw_eff: nil,
                            ext_wall_cond: nil,
                            ext_floor_cond: nil,
@@ -274,7 +285,12 @@ class NECB2011 < Standard
                            rotation_degrees: nil,
                            scale_x: nil,
                            scale_y: nil,
-                           scale_z: nil
+                           scale_z: nil,
+                           pv_ground_type: nil,
+                           pv_ground_total_area_pv_panels_m2: nil ,
+                           pv_ground_tilt_angle: nil,
+                           pv_ground_azimuth_angle: nil,
+                           pv_ground_module_description: nil
   )
 
     BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees.nil?
@@ -316,10 +332,17 @@ class NECB2011 < Standard
                                    ecm_system_name: ecm_system_name,
                                    erv_package: erv_package,
                                    boiler_eff: boiler_eff,
+                                   unitary_cop: unitary_cop,
                                    furnace_eff: furnace_eff,
                                    shw_eff: shw_eff,
-                                   daylighting_type: daylighting_type
+                                   daylighting_type: daylighting_type,
+                                   pv_ground_type: pv_ground_type,
+                                   pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
+                                   pv_ground_tilt_angle: pv_ground_tilt_angle,
+                                   pv_ground_azimuth_angle: pv_ground_azimuth_angle,
+                                   pv_ground_module_description: pv_ground_module_description
     )
+
     return model
   end
 
@@ -332,8 +355,16 @@ class NECB2011 < Standard
                                      erv_package: 'NECB_Default',
                                      boiler_eff: nil,
                                      furnace_eff: nil,
+                                     unitary_cop: nil,
                                      shw_eff: nil,
-                                     daylighting_type: 'NECB_Default')
+                                     daylighting_type: 'NECB_Default',
+                                     pv_ground_type:,
+                                     pv_ground_total_area_pv_panels_m2:,
+                                     pv_ground_tilt_angle:,
+                                     pv_ground_azimuth_angle:,
+                                     pv_ground_module_description:
+  )
+
     # Create ECM object.
     ecm = ECMS.new
 
@@ -352,7 +383,7 @@ class NECB2011 < Standard
     # -------- Performace, Efficiencies, Controls and Sensors ------------
     #
     # Set code standard equipment charecteristics.
-    apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
+    sql_db_vars_map = apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
     # Apply System
     ecm.apply_system_efficiencies_ecm(model: model, ecm_system_name: ecm_system_name)
 
@@ -364,6 +395,8 @@ class NECB2011 < Standard
     ecm.modify_boiler_efficiency(model: model, boiler_eff: boiler_eff)
     # Apply Furnace Efficiency
     ecm.modify_furnace_efficiency(model: model, furnace_eff: furnace_eff)
+    # Apply Unitary efficiency
+    ecm.modify_unitary_cop(model: model,unitary_cop: unitary_cop,sql_db_vars_map: sql_db_vars_map)
     # Apply SHW Efficiency
     ecm.modify_shw_efficiency(model: model, shw_eff: shw_eff)
     # Apply daylight controls.
@@ -373,6 +406,15 @@ class NECB2011 < Standard
     # -------Pump sizing required by some vintages----------------
     # Apply Pump power as required.
     apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
+
+    # -------Ground-mounted PV panels----------------   #Sara
+    # Apply ground-mounted PV panels as required.
+    ecm.apply_pv_ground(model: model,
+                        pv_ground_type: pv_ground_type,
+                        pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
+                        pv_ground_tilt_angle: pv_ground_tilt_angle,
+                        pv_ground_azimuth_angle: pv_ground_azimuth_angle,
+                        pv_ground_module_description: pv_ground_module_description)
   end
 
 
@@ -448,6 +490,10 @@ class NECB2011 < Standard
   #     # <-3.1:  Remove all the windows/skylights
   #     # > 1:  Do nothing
   def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0)
+    fdwr_set = -1.0 if fdwr_set == 'NECB_default' or fdwr_set.nil?
+    srr_set = -1.0 if srr_set == 'NECB_default' or srr_set.nil?
+    fdwr_set = fdwr_set.to_f
+    srr_set = srr_set.to_f
     apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
     apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
     # model_add_daylighting_controls(model) # to be removed after refactor.
@@ -462,8 +508,10 @@ class NECB2011 < Standard
     # Apply the prototype HVAC assumptions
     model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
     # Apply the HVAC efficiency standard
-    model_apply_hvac_efficiency_standard(model, climate_zone)
+    sql_db_vars_map = {}
+    model_apply_hvac_efficiency_standard(model, climate_zone, sql_db_vars_map: sql_db_vars_map)
     model_enable_demand_controlled_ventilation(model, dcv_type)
+    return sql_db_vars_map
   end
 
   # Shut off the system during unoccupied periods.

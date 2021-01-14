@@ -156,7 +156,6 @@ class Standard
   #
   # @return [Bool] returns true if successful, false if not
   def zone_hvac_component_apply_standard_controls(zone_hvac_component)
-
     # Vestibule heating control
     if zone_hvac_component_vestibule_heating_control_required?(zone_hvac_component)
       zone_hvac_component_apply_vestibule_heating_control(zone_hvac_component)
@@ -181,7 +180,6 @@ class Standard
   #
   # @return [Bool] returns true if successful, false if not
   def zone_hvac_component_apply_vestibule_heating_control(zone_hvac_component)
-
     # Ensure that the equipment is assigned to a thermal zone
     if zone_hvac_component.thermalZone.empty?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.ZoneHVACComponent', "For #{zone_hvac_component.name}: equipment is not assigned to a thermal zone, cannot apply vestibule heating control.")
@@ -197,8 +195,6 @@ class Standard
                   zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.get
                 elsif zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
                   zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.get
-                else
-                  nil
                 end
 
     # Do nothing for other types of zone HVAC equipment
@@ -258,8 +254,8 @@ class Standard
       oat_db_c_sen = zone_hvac_component.model.getEnergyManagementSystemSensorByName('OATVestibule').get
     else
       oat_db_c_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
-      oat_db_c_sen.setName("OATVestibule")
-      oat_db_c_sen.setKeyName("Environment")
+      oat_db_c_sen.setName('OATVestibule')
+      oat_db_c_sen.setKeyName('Environment')
     end
 
     # Actuators
@@ -287,5 +283,4 @@ class Standard
 
     return true
   end
-
 end

@@ -284,7 +284,6 @@ class Standard
   # @todo - add code in to determine number of entries and canopy area from model geoemtry
   # @todo - come up with better logic for entry widths
   def model_create_exterior_lighting_area_length_count_hash(model, space_type_hash, use_model_for_entries_and_canopies)
-
     # populate building_type_hashes from space_type_hash
     building_type_hashes = {}
     space_type_hash.each do |space_type, hash|
