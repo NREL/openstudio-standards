@@ -426,9 +426,9 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       schedule_types = [
-          'Ruleset',
-          'Constant',
-          'Compact'
+        'Ruleset',
+        'Constant',
+        'Compact'
       ]
 
       # cooling delta t
@@ -516,7 +516,6 @@ class AppendixGPRMTests < Minitest::Test
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ThermalZone', "#{thermal_zone.name} is not a heated zone, skip heating supply air temperature set point difference test.")
       end
-
     end
   end
 
@@ -531,18 +530,18 @@ class AppendixGPRMTests < Minitest::Test
         casted_load = space_load.public_send(casting_method_name).get
         loads << casted_load
       else
-        p "Need Debug, casting method not found @JXL"
+        p 'Need Debug, casting method not found @JXL'
       end
     end
 
     std_prm = ASHRAE901PRM.build('90.1-PRM-2019')
 
     load_schedule_name_hash = {
-        "People" => "numberofPeopleSchedule",
-        "Lights" => "schedule",
-        "ElectricEquipment" => "schedule",
-        "GasEquipment" => "schedule",
-        "SpaceInfiltration_DesignFlowRate" => "schedule"
+      'People' => 'numberofPeopleSchedule',
+      'Lights' => 'schedule',
+      'ElectricEquipment' => 'schedule',
+      'GasEquipment' => 'schedule',
+      'SpaceInfiltration_DesignFlowRate' => 'schedule'
     }
 
     loads.each do |load|
@@ -574,8 +573,8 @@ class AppendixGPRMTests < Minitest::Test
         load_schmax = std_prm.get_8760_values_from_schedule(model, load_schedule).max
         load_schmin = std_prm.get_8760_values_from_schedule(model, load_schedule).min
         load_schmode = std_prm.get_weekday_values_from_8760(model,
-                                                    Array(std_prm.get_8760_values_from_schedule(model, load_schedule)),
-                                                    value_includes_holiday = true).mode[0]
+                                                            Array(std_prm.get_8760_values_from_schedule(model, load_schedule)),
+                                                            value_includes_holiday = true).mode[0]
 
         # AppendixG-2019 G3.1.2.2.1
         if load_type == 'SpaceInfiltration_DesignFlowRate'
@@ -592,10 +591,10 @@ class AppendixGPRMTests < Minitest::Test
         end
 
         summer_dd_schedule = load_schedule.summerDesignDaySchedule
-        assert((summer_dd_schedule.times[0] == OpenStudio::Time.new(1.0) and (summer_dd_schedule.values[0] - summer_value).abs < 0.001), "Baseline cooling sizing schedule for load #{load.name.to_s} in the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
+        assert((summer_dd_schedule.times[0] == OpenStudio::Time.new(1.0) && (summer_dd_schedule.values[0] - summer_value).abs < 0.001), "Baseline cooling sizing schedule for load #{load.name} in the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
 
         winter_dd_schedule = load_schedule.winterDesignDaySchedule
-        assert((winter_dd_schedule.times[0] == OpenStudio::Time.new(1.0) and (winter_dd_schedule.values[0] - winter_value).abs < 0.001), "Baseline heating sizing schedule for load #{load.name.to_s} in the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
+        assert((winter_dd_schedule.times[0] == OpenStudio::Time.new(1.0) && (winter_dd_schedule.values[0] - winter_value).abs < 0.001), "Baseline heating sizing schedule for load #{load.name} in the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
 
       when 'ScheduleConstant'
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space load #{load.name} has schedule type of ScheduleConstant. Nothing to be done for ScheduleConstant")

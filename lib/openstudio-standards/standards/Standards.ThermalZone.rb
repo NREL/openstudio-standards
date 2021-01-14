@@ -1376,14 +1376,17 @@ class Standard
   # @todo Exception: 17F delta-T for labs
   def thermal_zone_prm_baseline_heating_design_supply_temperature(thermal_zone)
 
-    # 90.1 Appendix G G3.1.2.8.2
-    thermal_zone.equipment.each do |eqt|
-      if eqt.to_ZoneHVACUnitHeater.is_initialized
-        return OpenStudio.convert(105, 'F', 'C').get
+    if /prm/i =~ template # avoid affecting previous PRM tests
+      # 90.1 Appendix G G3.1.2.8.2
+      thermal_zone.equipment.each do |eqt|
+        if eqt.to_ZoneHVACUnitHeater.is_initialized
+          return OpenStudio.convert(105, 'F', 'C').get
+        end
       end
     end
 
     setpoint_c = nil
+
     # Setpoint schedule
     tstat = thermal_zone.thermostatSetpointDualSetpoint
     if tstat.is_initialized
@@ -1425,11 +1428,13 @@ class Standard
 
     # Add 20F delta-T
     delta_t_r = 20
-    # For labs, add 17 delta-T; otherwise, add 20 delta-T
-    thermal_zone.spaces.each do |space|
-      space_std_type = space.spaceType.get.standardsSpaceType.get
-      if space_std_type == 'laboratory'
-        delta_t_r = 17
+    if /prm/i =~ template # avoid affecting previous PRM tests
+      # For labs, add 17 delta-T; otherwise, add 20 delta-T
+      thermal_zone.spaces.each do |space|
+        space_std_type = space.spaceType.get.standardsSpaceType.get
+        if space_std_type == 'laboratory'
+          delta_t_r = 17
+        end
       end
     end
 
@@ -1490,11 +1495,13 @@ class Standard
 
     # Subtract 20F delta-T
     delta_t_r = 20
-    # For labs, substract 17 delta-T; otherwise, substract 20 delta-T
-    thermal_zone.spaces.each do |space|
-      space_std_type = space.spaceType.get.standardsSpaceType.get
-      if space_std_type == 'laboratory'
-        delta_t_r = 17
+    if /prm/i =~ template # avoid affecting previous PRM tests
+      # For labs, substract 17 delta-T; otherwise, substract 20 delta-T
+      thermal_zone.spaces.each do |space|
+        space_std_type = space.spaceType.get.standardsSpaceType.get
+        if space_std_type == 'laboratory'
+          delta_t_r = 17
+        end
       end
     end
 
