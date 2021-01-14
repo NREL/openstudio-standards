@@ -17,19 +17,19 @@ class NECB2011
 
     if fdwr_set.to_f > 1.0
       return
-    elsif fdwr_set.to_f >= 0.0 and fdwr_set <= 1.0
+    elsif fdwr_set.to_f >= 0.0 and fdwr_set.to_f <= 1.0
       apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f)
       return
-    elsif fdwr_set.to_f >= -1.1 and fdwr_set <= -0.9
+    elsif fdwr_set.to_f >= -1.1 and fdwr_set.to_f <= -0.9
       fdwr_lim = (max_fwdr(hdd)).round(3)
       apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_lim.to_f)
       return
-    elsif fdwr_set.to_f >= -2.1 and fdwr_set <= -1.9
+    elsif fdwr_set.to_f >= -2.1 and fdwr_set.to_f <= -1.9
       return
-    elsif fdwr_set.to_f >= -3.1 and fdwr_set <= -2.9
+    elsif fdwr_set.to_f >= -3.1 and fdwr_set.to_f <= -2.9
       fdwr_lim = (max_fwdr(hdd) * 100.0).round(1)
       return apply_limit_fdwr(model: model, fdwr_lim: fdwr_lim.to_f)
-    elsif fdwr_set < -3.1
+    elsif fdwr_set.to_f < -3.1
       apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f)
       return
     end
@@ -187,20 +187,20 @@ class NECB2011
 
     if srr_set.to_f > 1.0
       return
-    elsif srr_set.to_f >= 0.0 && srr_set <= 1.0
+    elsif srr_set.to_f >= 0.0 && srr_set.to_f <= 1.0
       apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f)
       return
-    elsif srr_set.to_f >= -1.1 && srr_set <= -0.9
+    elsif srr_set.to_f >= -1.1 && srr_set.to_f <= -0.9
       # Get the maximum NECB srr
       srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value')
       apply_max_srr_nrcan(model: model, srr_lim: srr_lim.to_f)
       return
-    elsif srr_set.to_f >= -2.1 && srr_set <= -1.9
+    elsif srr_set.to_f >= -2.1 && srr_set.to_f <= -1.9
       return
-    elsif srr_set.to_f >= -3.1 && srr_set <= -2.9
+    elsif srr_set.to_f >= -3.1 && srr_set.to_f <= -2.9
       # Continue with the rest of this method, use old method which reduces existing skylight size (if necessary) to
       # meet maximum srr limit
-    elsif srr_set < -3.1
+    elsif srr_set.to_f < -3.1
       apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f)
       return
     else
