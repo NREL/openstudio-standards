@@ -1606,7 +1606,7 @@ class ECMS
   # string or a hash. When it's a string it's used to find a hash in the json table 'unitary_cop_ecm'. When it's a hash it holds
   # the parameters needed to update the cop and/or the performance curves of the unitary coil.
   def modify_unitary_cop(model:, unitary_cop:,sql_db_vars_map:)
-    return if unitary_cop.nil?
+    return if (unitary_cop.nil? || (unitary_cop.to_s == "NECB_Default"))
     coils = model.getCoilCoolingDXSingleSpeeds + model.getCoilCoolingDXMultiSpeeds
     unitary_cop_copy = unitary_cop.dup
     coils.sort.each do |coil|
