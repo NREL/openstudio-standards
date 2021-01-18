@@ -24,8 +24,6 @@ SimpleCov.start do
 end
 =end
 
-puts "DEM: minitest helper"
-
 $LOAD_PATH.unshift File.expand_path('../../../lib', __FILE__)
 require 'minitest/autorun'
 if ENV['CI'] == 'true'

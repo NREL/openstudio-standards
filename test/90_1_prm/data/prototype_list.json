@@ -9,11 +9,8 @@
     "daylighting_control": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
-    "save_isresidential": [
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
-    ],
     "isresidential": [
-        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["remove_transformer", []]]]
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
     "envelope": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
@@ -22,7 +19,7 @@
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []],
         ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
-	  "light_occ_sensor": [
+    "light_occ_sensor": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""],
         ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", ""]
     ],
@@ -63,14 +60,14 @@
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []]]]
     ],
     "hvac_sizing": [
-        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", []],
-        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", [["remove_transformer", []]]],
+        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["remove_transformer", []]]],
         ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", []],
-        ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", [["remove_transformer", []]]],
         ["RetailStripmall", "90.1-2013", "ASHRAE 169-2013-2A", []],
         ["RetailStandalone", "90.1-2010", "ASHRAE 169-2013-2A", []],
         ["Warehouse", "90.1-2013", "ASHRAE 169-2013-2A", []],
-        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", []],
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["remove_transformer", []]]],
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-4A", []],
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["convert_spaces_from_to", ["OfficeWholeBuilding - Sm Office", "laboratory"]]]]
     ]

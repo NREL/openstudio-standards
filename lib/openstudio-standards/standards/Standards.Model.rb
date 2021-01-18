@@ -2443,15 +2443,30 @@ class Standard
   # where the keys are 'primary' and 'secondary'
   def model_diff_primary_secondary_zones_stable_baseline(model, zones, zone_fan_scheds)
 
+    pri_zones = []
+    sec_zones = []
+    pri_zone_names = []
+    sec_zone_names = []
+
+    # If there is only one zone, then set that as primary
+    if zones.size == 1
+      zones.each do |zone|
+        pri_zones << zone
+        pri_zone_names << zone.name.get.to_s
+      end
+      # Report out the primary vs. secondary zones
+      unless sec_zone_names.empty?
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
+      end
+
+      return { 'primary' => pri_zones, 'secondary' => sec_zones }
+    end
+
     zone_op_hrs = {}   # hash of zoneName: 8760 array of operating hours
     zone_eflh = {}     # hash of zoneName: eflh for zone
     zone_max_load = {}  # hash of zoneName: coincident max internal load
     load_limit = 10     # differ by 10 Btu/hr-sf or more
     eflh_limit = 40     # differ by more than 40 EFLH/week from average of other zones
-    pri_zones = []
-    sec_zones = []
-    pri_zone_names = []
-    sec_zone_names = []
 
     # Get coincident peak internal load for each zone
     zones.each do |zone|
@@ -2575,7 +2590,11 @@ class Standard
     value_hash.each do |key, val|
       value_sum += val unless key == ref_zone
     end
-    value_avg = value_sum / num_others
+    if num_others == 0
+      value_avg = value_hash[ref_zone]
+    else
+      value_avg = value_sum / num_others
+    end
     return value_avg
   end
 

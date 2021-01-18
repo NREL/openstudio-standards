@@ -1796,17 +1796,6 @@ class Standard
     ltg_values = Array.new(8760, 0)
     load_values = Array.new(8760, 0)
 
-    # DEM: lines to delete
-    #ppl_values = []
-    #ltg_values = []
-    #load_values = []
-
-    #(0..8759).each do |ihr|
-    #  ppl_values[ihr] = 0
-    #  ltg_values[ihr] = 0
-    #  load_values[ihr] = 0
-    #end
-
     # People
     ppl_total = 0
     space.spaceType.get.people.each do |people|
