@@ -2604,43 +2604,29 @@ class Standard
       else
         # ConstantVolume: Packaged Rooftop Single Zone Air conditioner
         # Need unitary system wrapper for heat pumps in order to allow control of supplemental heat
-        if heating_type == 'Single Speed Heat Pump'
+        if heating_type == 'Single Speed Heat Pump' || fan_location == 'DrawThrough'
           # Use a Fan:OnOff in the unitary system object
           fan = create_fan_by_name(model,
                                    'Packaged_RTU_SZ_AC_CAV_OnOff_Fan',
                                    fan_name: "#{air_loop.name} Fan")
           fan.setAvailabilitySchedule(hvac_op_sch)
-          # CyclingHeatPump: Unitary Heat Pump system
+          # CyclingHeatPump: Unitary Heat Pump system or PSZ-AC
           unitary_system = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
           unitary_system.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
           unitary_system.setSupplyFan(fan) unless fan.nil?
           unitary_system.setHeatingCoil(htg_coil) unless htg_coil.nil?
           unitary_system.setCoolingCoil(clg_coil) unless clg_coil.nil?
-          unitary_system.setSupplementalHeatingCoil(supplemental_htg_coil) unless supplemental_htg_coil.nil?
-          unitary_system.setName("#{air_loop.name} Unitary HP")
+          if heating_type == 'Single Speed Heat Pump'
+            unitary_system.setSupplementalHeatingCoil(supplemental_htg_coil) unless supplemental_htg_coil.nil?
+            unitary_system.setName("#{air_loop.name} Unitary HP")
+            unitary_system.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio.convert(40.0, 'F', 'C').get)
+          else
+            unitary_system.setName("#{air_loop.name} Unitary AC")
+          end
           unitary_system.setControllingZoneorThermostatLocation(zone)
-          unitary_system.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio.convert(40.0, 'F', 'C').get)
           unitary_system.setFanPlacement(fan_location)
           unitary_system.setSupplyAirFanOperatingModeSchedule(hvac_op_sch)
           unitary_system.addToNode(air_loop.supplyInletNode)
-        elsif fan_location == 'DrawThrough'
-          # Use a Fan:ConstantVolume placed directly on the air loop
-          fan = create_fan_by_name(model,
-                                   'Packaged_RTU_SZ_AC_CAV_Fan',
-                                   fan_name: "#{air_loop.name} Fan")
-          fan.setAvailabilitySchedule(hvac_op_sch)
-          fan.addToNode(air_loop.supplyInletNode) unless fan.nil?
-          supplemental_htg_coil.addToNode(air_loop.supplyInletNode) unless supplemental_htg_coil.nil?
-          unless htg_coil.nil?
-            htg_coil.addToNode(air_loop.supplyInletNode)
-            # if water coil, rename controller b/c it is recreated when added to node
-            htg_coil.controllerWaterCoil.get.setName("#{htg_coil.name} Controller") if heating_type == 'Water'
-          end
-          unless clg_coil.nil?
-            clg_coil.addToNode(air_loop.supplyInletNode)
-            # if water coil, rename controller b/c it is recreated when added to node
-            clg_coil.controllerWaterCoil.get.setName("#{clg_coil.name} Controller") if cooling_type == 'Water'
-          end
         elsif fan_location == 'BlowThrough'
           # Use a Fan:ConstantVolume placed directly on the air loop
           fan = create_fan_by_name(model,
