@@ -579,14 +579,6 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   def space_type_light_sch_change(model)
-    # set schedule type limits for lighting
-    light_sch_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-    light_sch_limits.setName('light schedule limits for prm')
-    light_sch_limits.setNumericType("Continuous")
-    light_sch_limits.setUnitType("Dimensionless")
-    light_sch_limits.setLowerLimitValue(0)
-    light_sch_limits.setUpperLimitValue(5)
-
     # set schedule for lighting
     dayschedule_name_check = []
     model.getSpaceTypes.sort.each do |space_type|
@@ -605,8 +597,11 @@ class Standard
               old_value = day_rule.getValue(time)
               day_rule.removeValue(time)
               new_value = old_value / (1.0 - space_type_properties['occup_sensor_savings'].to_f)
-              day_rule.addValue(time,new_value)
-              day_rule.setScheduleTypeLimits(light_sch_limits)
+              if new_value > 1
+                day_rule.addValue(time,1.0)
+              else
+                day_rule.addValue(time,new_value)
+              end
             end
           end
         end
@@ -621,8 +616,11 @@ class Standard
             old_value = day_rule.getValue(time)
             day_rule.removeValue(time)
             new_value = old_value / (1.0 - space_type_properties['occup_sensor_savings'].to_f)
-            day_rule.addValue(time,new_value)
-            day_rule.setScheduleTypeLimits(light_sch_limits)
+            if new_value > 1
+              day_rule.addValue(time,1.0)
+            else
+              day_rule.addValue(time,new_value)
+            end
           end
         end
       end
