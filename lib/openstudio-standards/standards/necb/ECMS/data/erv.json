@@ -85,7 +85,7 @@
           "RateofDefrostTimeFractionIncrease": 1.44
         },
         {
-          "erv_name": "Rotary-All",
+          "erv_name": "Rotary-Existing",
           "HeatExchangerType": "Rotary",
           "application": "Existing-ERVS",
           "SensibleEffectivenessat100HeatingAirFlow": 0.75,
