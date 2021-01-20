@@ -3088,7 +3088,7 @@ class Standard
     # Set the system to night cycle
     air_loop_hvac.setNightCycleControlType('CycleOnAny')
 
-
+    model = air_loop_hvac.model
     # Check if schedule was stored in an additionalProperties field of the air loop
     if air_loop_hvac.hasAdditionalProperties
       if air_loop_hvac.additionalProperties.hasFeature('fan_sched_name')

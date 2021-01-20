@@ -285,15 +285,11 @@ class Standard
       # Set the heating and cooling sizing parameters
       model_apply_prm_sizing_parameters(model)
 
-
-      if /prm/i !~ template
-
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Controls ***')
 
-        # SAT reset, economizers
-        model.getAirLoopHVACs.sort.each do |air_loop|
-          air_loop_hvac_apply_prm_baseline_controls(air_loop, climate_zone)
-        end
+      # SAT reset, economizers
+      model.getAirLoopHVACs.sort.each do |air_loop|
+        air_loop_hvac_apply_prm_baseline_controls(air_loop, climate_zone)
       end
 
       if /prm/i !~ template

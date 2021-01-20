@@ -1153,6 +1153,7 @@ class AppendixGPRMTests < Minitest::Test
 
               # Check if requirement is met for SPM
               spm_check = true if dt_si.round(0) == 5.0
+              puts dt_si
             end
           end
 
@@ -1351,17 +1352,17 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      'wwr',
-      'srr',
-      'envelope',
-      'lpd',
-      'isresidential',
-      'daylighting_control',
-      'light_occ_sensor',
-      'infiltration',
-      'hvac_baseline',
+      # 'wwr',
+      # 'srr',
+      # 'envelope',
+      # 'lpd',
+      # 'isresidential',
+      # 'daylighting_control',
+      # 'light_occ_sensor',
+      # 'infiltration',
+      # 'hvac_baseline',
       'sat_ctrl',
-      'hvac_sizing'
+      # 'hvac_sizing'
     ]
 
     # Get list of unique prototypes
