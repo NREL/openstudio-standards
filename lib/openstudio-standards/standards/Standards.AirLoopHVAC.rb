@@ -3092,7 +3092,7 @@ class Standard
     # Check if schedule was stored in an additionalProperties field of the air loop
     if air_loop_hvac.hasAdditionalProperties
       if air_loop_hvac.additionalProperties.hasFeature('fan_sched_name')
-        fan_sched_name = air_loop_hvac.additionalProperties.getFeatureAsString('fan_sch_name')
+        fan_sched_name = air_loop_hvac.additionalProperties.getFeatureAsString('fan_sched_name').get
         fan_sched = model.getScheduleRulesetByName(fan_sched_name).get
         air_loop_hvac.setAvailabilitySchedule(fan_sched)
         return true
