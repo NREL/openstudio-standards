@@ -2597,14 +2597,20 @@ class Standard
         end
       else
         unitary_system.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
-        if heating_type == 'Single Speed Heat Pump' || fan_location == 'BlowThrough'
-          unitary_system.setSupplementalHeatingCoil(supplemental_htg_coil) unless supplemental_htg_coil.nil?
+        unitary_system.setSupplementalHeatingCoil(supplemental_htg_coil) unless supplemental_htg_coil.nil?
+        if heating_type == 'Single Speed Heat Pump'
           unitary_system.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio.convert(40.0, 'F', 'C').get)
-          if heating_type == 'Single Speed Heat Pump'
-            unitary_system.setName("#{air_loop.name} Unitary HP")
-          else
-            unitary_system.setName("#{air_loop.name} Unitary AC")
+          unitary_system.setName("#{air_loop.name} Unitary HP")
+        elsif fan_location == 'DrawThrough'
+          unless htg_coil.nil?
+            # if water coil, rename controller b/c it is recreated when added to node
+            htg_coil.controllerWaterCoil.get.setName("#{htg_coil.name} Controller") if heating_type == 'Water'
           end
+          unless clg_coil.nil?
+            # if water coil, rename controller b/c it is recreated when added to node
+            clg_coil.controllerWaterCoil.get.setName("#{clg_coil.name} Controller") if cooling_type == 'Water'
+          end
+          unitary_system.setName("#{air_loop.name} Unitary AC")
         else
           unitary_system.setName("#{air_loop.name} Unitary AC")
         end
