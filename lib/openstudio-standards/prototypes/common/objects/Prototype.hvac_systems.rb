@@ -749,6 +749,7 @@ class Standard
       when 'FluidCoolerTwoSpeed'
         cooling_equipment = OpenStudio::Model::FluidCoolerTwoSpeed.new(model)
         cooling_equipment.setName("#{heat_pump_water_loop.name} FluidCoolerTwoSpeed")
+        fluid_cooler_apply_minimum_power_per_flow(cooling_equipment)
         heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
         cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} Fluid Cooler Scheduled Dual Setpoint")
       when 'EvaporativeFluidCooler', 'EvaporativeFluidCoolerSingleSpeed'

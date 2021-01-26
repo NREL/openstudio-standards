@@ -36,7 +36,7 @@ class Standard
     search_criteria['template'] = template
 
     # Closed cooling towers are fluidcooler objects.
-    search_criteria['equipment_type'] = 'Closed Cooling Tower'
+    search_criteria['equipment_type'] = 'Dry Cooler'
 
     # TODO: Standards replace this with a mechanism to store this
     # data in the fluid cooler object itself.
