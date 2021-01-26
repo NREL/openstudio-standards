@@ -324,6 +324,7 @@ module OpenstudioStandards
   require_relative "#{proto}/common/buildings/Prototype.College"
   require_relative "#{proto}/common/buildings/Prototype.TallBuilding"
   require_relative "#{proto}/common/buildings/Prototype.SuperTallBuilding"
+  require_relative "#{proto}/common/buildings/Prototype.Courthouse"
 
   # NECB Building Types
   require_relative "#{proto}/common/prototype_metaprogramming.rb"
