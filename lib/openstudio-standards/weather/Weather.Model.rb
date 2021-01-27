@@ -327,7 +327,6 @@ end
 module BTAP
   module Environment
     require_relative 'Weather.stat_file'
-    # rubocop:enable Style/MutableConstant
 
     # this method is used to populate user interfaces if needed from the hash above.
     def self.get_canadian_weather_file_names

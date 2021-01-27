@@ -2575,50 +2575,49 @@ class Standard
       unitary_system.setSupplyFan(fan) unless fan.nil?
       unitary_system.setHeatingCoil(htg_coil) unless htg_coil.nil?
       unitary_system.setCoolingCoil(clg_coil) unless clg_coil.nil?
+      unitary_system.setControllingZoneorThermostatLocation(zone)
+      unitary_system.setFanPlacement(fan_location)
+      unitary_system.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
+      unitary_system.addToNode(air_loop.supplyInletNode)
       if fan_type == 'Cycling'
-        unitary_system.setControllingZoneorThermostatLocation(zone)
         unitary_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
-        if heating_type == 'Water To Air Heat Pump' || heating_type == 'Single Speed Heat Pump'
+        case heating_type
+        when 'Water To Air Heat Pump'
           unitary_system.setSupplementalHeatingCoil(supplemental_htg_coil) unless supplemental_htg_coil.nil?
-        end
-        if heating_type == 'Water To Air Heat Pump'
           unitary_system.setName("#{zone.name} Unitary HP")
           unitary_system.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
           unitary_system.setSupplyAirFlowRateMethodDuringCoolingOperation('SupplyAirFlowRate')
           unitary_system.setSupplyAirFlowRateMethodDuringHeatingOperation('SupplyAirFlowRate')
           unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('SupplyAirFlowRate')
-        elsif heating_type == 'Single Speed Heat Pump'
-          unitary_system.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
+        when 'Single Speed Heat Pump'
+          unitary_system.setSupplementalHeatingCoil(supplemental_htg_coil) unless supplemental_htg_coil.nil?
           unitary_system.setName("#{air_loop.name} Unitary HP")
           unitary_system.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio.convert(40.0, 'F', 'C').get)
         else
-          unitary_system.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
           unitary_system.setName("#{air_loop.name} Unitary System")
         end
       else
-        unitary_system.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
-        unitary_system.setSupplementalHeatingCoil(supplemental_htg_coil) unless supplemental_htg_coil.nil?
-        if heating_type == 'Single Speed Heat Pump'
+        unitary_system.setSupplyAirFanOperatingModeSchedule(hvac_op_sch)
+        unitary_system.setName("#{air_loop.name} Unitary AC")
+        case heating_type
+        when 'Single Speed Heat Pump'
+          unitary_system.setSupplementalHeatingCoil(supplemental_htg_coil) unless supplemental_htg_coil.nil?
           unitary_system.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio.convert(40.0, 'F', 'C').get)
           unitary_system.setName("#{air_loop.name} Unitary HP")
-        elsif fan_location == 'DrawThrough'
+        when 'Water'
+          unitary_system.setSupplementalHeatingCoil(supplemental_htg_coil) unless supplemental_htg_coil.nil?
           unless htg_coil.nil?
             # if water coil, rename controller b/c it is recreated when added to node
-            htg_coil.controllerWaterCoil.get.setName("#{htg_coil.name} Controller") if heating_type == 'Water'
+            htg_coil.controllerWaterCoil.get.setName("#{htg_coil.name} Controller") if fan_location == 'DrawThrough'
           end
           unless clg_coil.nil?
             # if water coil, rename controller b/c it is recreated when added to node
-            clg_coil.controllerWaterCoil.get.setName("#{clg_coil.name} Controller") if cooling_type == 'Water'
+            clg_coil.controllerWaterCoil.get.setName("#{clg_coil.name} Controller") if fan_location == 'DrawThrough'
           end
-          unitary_system.setName("#{air_loop.name} Unitary AC")
         else
-          unitary_system.setName("#{air_loop.name} Unitary AC")
+          unitary_system.setName("#{air_loop.name} Unitary System")
         end
-        unitary_system.setControllingZoneorThermostatLocation(zone)
-        unitary_system.setSupplyAirFanOperatingModeSchedule(hvac_op_sch)
       end
-      unitary_system.setFanPlacement(fan_location)
-      unitary_system.addToNode(air_loop.supplyInletNode)
 
       # add the OA system
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
