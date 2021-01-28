@@ -5820,6 +5820,15 @@ class Standard
                             zone_equipment_ventilation: true,
                             fan_coil_capacity_control_method: 'CyclingFan')
 
+    # enforce defaults if fields are nil
+    hot_water_loop_type = 'HighTemperature' if hot_water_loop_type.nil?
+    chilled_water_loop_cooling_type = 'WaterCooled' if chilled_water_loop_cooling_type.nil?
+    heat_pump_loop_cooling_type = 'EvaporativeFluidCooler' if heat_pump_loop_cooling_type.nil?
+    air_loop_heating_type = 'Water' if air_loop_heating_type.nil?
+    air_loop_cooling_type = 'Water' if air_loop_cooling_type.nil?
+    zone_equipment_ventilation = true if zone_equipment_ventilation.nil?
+    fan_coil_capacity_control_method = 'CyclingFan' if fan_coil_capacity_control_method.nil?
+
     # don't do anything if there are no zones
     return true if zones.empty?
 
