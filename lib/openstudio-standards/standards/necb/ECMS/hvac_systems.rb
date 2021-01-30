@@ -1726,4 +1726,41 @@ class ECMS
       end
     end
   end
+
+  # ============================================================================================================================
+  # Apply chiller efficiency  #TODO: see 'modify_boiler_efficiency' and 'reset_boiler_efficiency'
+  def modify_chiller_efficiency(model:, chiller_cop:)
+    # return if chiller_cop.nil?
+    # If chiller_cop is a string rather than a hash then assume it is the name of a chiller efficiency package and look
+    # for a package with that name in chiller_set.json.
+    if chiller_cop.is_a?(String)
+      eff_packages = @standards_data['tables']['chiller_eff_ecm']['table']
+      eff_package = eff_packages.select{|eff_pack_info| eff_pack_info["name"] == chiller_cop}
+      if eff_package.empty?
+        raise "Cannot not find #{chiller_cop} in the ECMS chiller_set.json file.  Please check that the name is correctly spelled in the ECMS class chiller_set.json and in the code calling (directly or through another method) the ECMS class modify_chiller_efficiency method."
+      elsif eff_package.size > 1
+        raise "More than one chiller efficiency package with the name #{chiller_cop} was found.  Please check the ECMS class chiller_set.json file and make sure that each chiller efficiency package has a unique name."
+      else
+        ecm_name = chiller_cop
+        chiller_set = {
+            "name" => ecm_name,
+            "capacity_w" => eff_package[0]['capacity_w'],
+            "cop_w_by_w" => eff_package[0]['cop_w_by_w'],
+            "cooling_capacity_function_of_temperature_curve" => eff_package[0]['cooling_capacity_function_of_temperature_curve'],
+            "electric_input_to_cooling_output_ratio_function_of_temperature_curve" => eff_package[0]['electric_input_to_cooling_output_ratio_function_of_temperature_curve'],
+            "electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve" => eff_package[0]['electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve']
+        }
+      end
+    end
+    puts chiller_set
+    model.getChillerElectricEIRs.sort.each do |mod_chiller|
+      # puts mod_chiller
+      # reset_chiller_efficiency(model: model, component: mod_chiller.to_ChillerElectricEIR.get, cop: chiller_cop)
+    end
+  end
+
+  def reset_chiller_efficiency(model:, component:, cop:)
+
+  end
+
 end

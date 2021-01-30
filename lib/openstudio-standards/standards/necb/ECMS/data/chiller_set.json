@@ -1,0 +1,29 @@
+{
+  "tables": {
+    "chiller_eff_ecm": {
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "name": "NECB_Default",
+          "capacity_w": null,
+          "cop_w_by_w": null,
+          "cooling_capacity_function_of_temperature_curve": null,
+          "electric_input_to_cooling_output_ratio_function_of_temperature_curve": null,
+          "electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve": null,
+          "notes": "Do nothing."
+        },
+        {
+          "name": "ElectricEIRChiller Carrier 19XR 742kW/5.42COP/VSD",
+          "capacity_w": 742000,
+          "cop_w_by_w": 5.42,
+          "cooling_capacity_function_of_temperature_curve": "ElectricEIRChiller Carrier 19XR 742kW/5.42COP/VSD CAPFT",
+          "electric_input_to_cooling_output_ratio_function_of_temperature_curve": "ElectricEIRChiller Carrier 19XR 742kW/5.42COP/VSD EIRFT",
+          "electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve": "ElectricEIRChiller Carrier 19XR 742kW/5.42COP/VSD EIRFPLR",
+          "notes": "From EnergyPlus Chillers.idf file under the DataSets folder."
+        }
+      ]
+    }
+  }
+}

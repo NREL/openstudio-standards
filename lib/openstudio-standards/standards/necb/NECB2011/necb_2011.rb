@@ -199,7 +199,8 @@ class NECB2011 < Standard
                                    pv_ground_total_area_pv_panels_m2: nil,
                                    pv_ground_tilt_angle: nil,
                                    pv_ground_azimuth_angle: nil,
-                                   pv_ground_module_description: nil
+                                   pv_ground_module_description: nil,
+                                   chiller_cop: nil
   )
 
 
@@ -237,7 +238,8 @@ class NECB2011 < Standard
                                 pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # e.g. 50
                                 pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) 'NECB_Default' (i.e. latitude), (2) tilt angle value (e.g. 20)
                                 pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) 'NECB_Default' (i.e. south), (2) azimuth angle value (e.g. 90)
-                                pv_ground_module_description: pv_ground_module_description # Options: (1) 'NECB_Default' (i.e. Standard), (2) other options ('Standard', 'Premium', ThinFilm')
+                                pv_ground_module_description: pv_ground_module_description, # Options: (1) 'NECB_Default' (i.e. Standard), (2) other options ('Standard', 'Premium', ThinFilm')
+                                chiller_cop: chiller_cop #"ElectricEIRChiller Carrier 19XR 742kW/5.42COP/VSD" #chiller_cop
     )
 
   end
@@ -290,7 +292,8 @@ class NECB2011 < Standard
                            pv_ground_total_area_pv_panels_m2: nil ,
                            pv_ground_tilt_angle: nil,
                            pv_ground_azimuth_angle: nil,
-                           pv_ground_module_description: nil
+                           pv_ground_module_description: nil,
+                           chiller_cop: nil
   )
 
     BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees.nil?
@@ -340,7 +343,8 @@ class NECB2011 < Standard
                                    pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
                                    pv_ground_tilt_angle: pv_ground_tilt_angle,
                                    pv_ground_azimuth_angle: pv_ground_azimuth_angle,
-                                   pv_ground_module_description: pv_ground_module_description
+                                   pv_ground_module_description: pv_ground_module_description,
+                                   chiller_cop: chiller_cop
     )
 
     return model
@@ -362,7 +366,8 @@ class NECB2011 < Standard
                                      pv_ground_total_area_pv_panels_m2:,
                                      pv_ground_tilt_angle:,
                                      pv_ground_azimuth_angle:,
-                                     pv_ground_module_description:
+                                     pv_ground_module_description:,
+                                     chiller_cop:
   )
 
     # Create ECM object.
@@ -401,13 +406,14 @@ class NECB2011 < Standard
     ecm.modify_shw_efficiency(model: model, shw_eff: shw_eff)
     # Apply daylight controls.
     model_add_daylighting_controls(model) if daylighting_type == 'add_daylighting_controls'
-
+    # Apply Chiller efficiency
+    ecm.modify_chiller_efficiency(model: model, chiller_cop: chiller_cop)
 
     # -------Pump sizing required by some vintages----------------
     # Apply Pump power as required.
     apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
 
-    # -------Ground-mounted PV panels----------------   #Sara
+    # -------Ground-mounted PV panels----------------
     # Apply ground-mounted PV panels as required.
     ecm.apply_pv_ground(model: model,
                         pv_ground_type: pv_ground_type,
