@@ -276,7 +276,7 @@ class TestAddHVACSystems < Minitest::Test
       {model_test_name: 'PSZAC_district_elec', system_type: 'PSZ-AC', main_heat_fuel: 'DistrictHeating', cool_fuel: 'Electricity', unmet_hrs_htg: 450.0},
       {model_test_name: 'PSZAC_district_district', system_type: 'PSZ-AC', main_heat_fuel: 'DistrictHeating', cool_fuel: 'DistrictCooling', unmet_hrs_htg: 450.0},
       {model_test_name: 'PSZAC_no_heat_elec', system_type: 'PSZ-AC', main_heat_fuel: nil, cool_fuel: 'Electricity', unmet_hrs_htg: 6000.0},
-      {model_test_name: 'PSZAC_no_heat_district', system_type: 'PSZ-AC', main_heat_fuel: nil, cool_fuel: 'DistrictCooling', unmet_hrs_htg: 450.0},
+      {model_test_name: 'PSZAC_no_heat_district', system_type: 'PSZ-AC', main_heat_fuel: nil, cool_fuel: 'DistrictCooling', unmet_hrs_htg: 6000.0},
       # TODO: add PSZ-AC and baseboard pairings
       {system_type: 'PSZ-HP', main_heat_fuel: ['Electricity'], cool_fuel: ['Electricity']}
     ]
@@ -285,7 +285,7 @@ class TestAddHVACSystems < Minitest::Test
 
   def test_add_hvac_systems_vrf
     hvac_systems = [
-      {system_type: 'VRF', main_heat_fuel: 'Electricity', cool_fuel: 'Electricity'},
+      {system_type: 'VRF', main_heat_fuel: 'Electricity', cool_fuel: 'Electricity', unmet_hrs_htg: 900.0},
     ]
     group_hvac_test(hvac_systems)
   end
@@ -340,7 +340,7 @@ class TestAddHVACSystems < Minitest::Test
       {model_test_name: 'VAV_Gas_Reheat_gas_gas', system_type: 'VAV Gas Reheat', main_heat_fuel: 'NaturalGas', zone_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity', unmet_hrs_htg: 1500.0},
       {model_test_name: 'VAV_Gas_Reheat_ashp', system_type: 'VAV Gas Reheat', main_heat_fuel: 'AirSourceHeatPump', zone_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity', unmet_hrs_htg: 1500.0},
       {model_test_name: 'VAV_Gas_Reheat_district', system_type: 'VAV Gas Reheat', main_heat_fuel: 'DistrictHeating', zone_heat_fuel: 'NaturalGas', cool_fuel: 'DistrictCooling', unmet_hrs_htg: 1500.0},
-      {model_test_name: 'VAV_No_Reheat', system_type: 'VAV No Reheat', main_heat_fuel: 'NaturalGas', zone_heat_fuel: nil, cool_fuel: 'Electricity', zones: 'cooled_zones', unmet_hrs_htg: 3500.0}
+      {model_test_name: 'VAV_No_Reheat', system_type: 'VAV No Reheat', main_heat_fuel: 'NaturalGas', zone_heat_fuel: nil, cool_fuel: 'Electricity', zones: 'cooled_zones', unmet_hrs_htg: 3750.0}
       # TODO: unmet hours are likely related to the different ventilation rate procedure/zone sum sizing criteria
     ]
     group_hvac_test(hvac_systems)
