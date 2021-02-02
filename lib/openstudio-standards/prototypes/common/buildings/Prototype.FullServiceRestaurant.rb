@@ -1,4 +1,3 @@
-
 # Custom changes for the FullServiceRestaurant prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -48,14 +47,17 @@ module FullServiceRestaurant
 
     # Adjust daylight sensors in each space
     model.getSpaces.each do |space|
-      if adjustments[0].keys.include? (template)
-        if adjustments[0][template].keys.include? (space.name.to_s)
+      if adjustments[0].keys.include?(template)
+        if adjustments[0][template].keys.include?(space.name.to_s)
           adj = adjustments[0][template][space.name.to_s]
           next if space.thermalZone.empty?
+
           zone = space.thermalZone.get
           next if space.spaceType.empty?
+
           spc_type = space.spaceType.get
           next if spc_type.standardsSpaceType.empty?
+
           stds_spc_type = spc_type.standardsSpaceType.get
           # Adjust the primary sensor
           if adj['sensor_1_frac'] && zone.primaryDaylightingControl.is_initialized
@@ -93,7 +95,7 @@ module FullServiceRestaurant
 
     return true
   end
-  
+
   # add hvac
 
   def add_door_infiltration(climate_zone, model)
@@ -156,12 +158,12 @@ module FullServiceRestaurant
             infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown VESTIBULE_DOOR_INFIL_SCH'))
         end
       end
-      infiltration_diningdoor.setDesignFlowRate(infiltration_per_zone_diningdoor)
-      infiltration_diningdoor.setSpace(dining_space)
-      infiltration_attic.setDesignFlowRate(infiltration_per_zone_attic)
-      infiltration_attic.setSchedule(model_add_schedule(model, 'Always On'))
-      infiltration_attic.setSpace(attic_space)
     end
+    infiltration_diningdoor.setDesignFlowRate(infiltration_per_zone_diningdoor)
+    infiltration_diningdoor.setSpace(dining_space)
+    infiltration_attic.setDesignFlowRate(infiltration_per_zone_attic)
+    infiltration_attic.setSchedule(model_add_schedule(model, 'Always On'))
+    infiltration_attic.setSpace(attic_space)
   end
 
   def model_update_exhaust_fan_efficiency(model)
@@ -314,7 +316,7 @@ module FullServiceRestaurant
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('Booster')
         water_heater.resetAmbientTemperatureSchedule
-        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen ZN').get)
       end
     end
@@ -327,7 +329,6 @@ module FullServiceRestaurant
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-
     return true
   end
 end

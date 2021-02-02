@@ -4,11 +4,12 @@ Standard.class_eval do
   def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil)
     building_type = @instvarbuilding_type
     raise 'no building_type!' if @instvarbuilding_type.nil?
+
     model = nil
     # There are no reference models for HighriseApartment and data centers at vintages Pre-1980 and 1980-2004,
     # nor for NECB2011. This is a quick check.
     case @instvarbuilding_type
-    when 'HighriseApartment','SmallDataCenterLowITE','SmallDataCenterHighITE','LargeDataCenterLowITE','LargeDataCenterHighITE','Laboratory','TallBuilding','SuperTallBuilding'
+    when 'HighriseApartment', 'SmallDataCenterLowITE', 'SmallDataCenterHighITE', 'LargeDataCenterLowITE', 'LargeDataCenterHighITE', 'Laboratory', 'TallBuilding', 'SuperTallBuilding'
       if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
         OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at   are not available, the measure is disabled for this specific type.")
         return false
@@ -17,8 +18,6 @@ Standard.class_eval do
       # delete this case statement once the College model is complete
       OpenStudio.logFree(OpenStudio::Error, 'Not available', 'While this release includes data for colleges, this only an early draft and should not be used for anything other that early testing or work to improve the college prototype.')
       return false
-    else
-      # do nothing
     end
     # optionally  determine the climate zone from the epw and stat files.
     if climate_zone == 'NECB HDD Method'
@@ -54,6 +53,7 @@ Standard.class_eval do
     model_set_climate_zone(model, climate_zone)
     # Perform a sizing model_run(model)
     return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
+
     # If there are any multizone systems, reset damper positions
     # to achieve a 60% ventilation effectiveness minimum for the system
     # following the ventilation rate procedure from 62.1
@@ -111,7 +111,7 @@ Standard.class_eval do
 
     # put contents of new_model into model_to_replace
     model_to_replace.addObjects(new_model.toIdfFile.objects)
-    BTAP::runner_register("Info", "Model name is now #{model_to_replace.building.get.name}.", runner)
+    BTAP.runner_register('Info', "Model name is now #{model_to_replace.building.get.name}.", runner)
   end
 
   # Replaces all objects in the current model
@@ -124,7 +124,7 @@ Standard.class_eval do
     # Take the existing model and remove all the objects
     # (this is cheesy), but need to keep the same memory block
     handles = OpenStudio::UUIDVector.new
-    model.objects.each {|objects| handles << objects.handle}
+    model.objects.each { |objects| handles << objects.handle }
     model.removeObjects(handles)
     model = nil
     if File.dirname(__FILE__)[0] == ':'
@@ -182,6 +182,7 @@ Standard.class_eval do
     if all_space_types_have_standard_space_types
       return space_type_map
     end
+
     return nil
   end
 
@@ -210,6 +211,7 @@ Standard.class_eval do
       space_names.each do |space_name|
         space = model.getSpaceByName(space_name)
         next if space.empty?
+
         space = space.get
         space.setBuildingStory(stub_building_story)
       end
@@ -293,8 +295,6 @@ Standard.class_eval do
     floor_adiabatic_construction.setLayers(floor_layers)
 
     return floor_adiabatic_construction
-
-
   end
 
   # Checks to see if the an adiabatic wall construction has been constructed in an OpenStudio model.
@@ -329,8 +329,6 @@ Standard.class_eval do
     wall_adiabatic_construction.setLayers(wall_layers)
 
     return wall_adiabatic_construction
-
-
   end
 
   # Adds code-minimum constructions based on the building type
@@ -460,6 +458,7 @@ Standard.class_eval do
     if new_lookup_building_type == 'SmallHotel' && template != 'NECB2011'
       model.getBuildingStorys.sort.each do |story|
         next if story.name.get == 'AtticStory'
+
         # puts "story = #{story.name}"
         is_residential = 'No' # default for building story level
         exterior_spaces_area = 0
@@ -468,13 +467,14 @@ Standard.class_eval do
         # calculate the propotion of residential area in exterior spaces, see if this story is residential or not
         story.spaces.each do |space|
           next if space.exteriorWallArea.zero?
+
           space_type = space.spaceType.get
           if space_type.standardsSpaceType.is_initialized
             space_type_name = space_type.standardsSpaceType.get
           end
-          data = standards_lookup_table_first(table_name: 'space_types', search_criteria: {'template' => template,
-                                                                                           'building_type' => new_lookup_building_type,
-                                                                                           'space_type' => space_type_name})
+          data = standards_lookup_table_first(table_name: 'space_types', search_criteria: { 'template' => template,
+                                                                                            'building_type' => new_lookup_building_type,
+                                                                                            'space_type' => space_type_name })
           exterior_spaces_area += space.floorArea
           story_exterior_residential_area += space.floorArea if data['is_residential'] == 'Yes' # "Yes" is residential, "No" or nil is nonresidential
         end
@@ -495,6 +495,7 @@ Standard.class_eval do
     # loop through ceiling surfaces and assign the plenum acoustical tile construction if the adjacent surface is a plenum floor
     model.getSurfaces.each do |surface|
       next unless surface.surfaceType == 'RoofCeiling' && surface.outsideBoundaryCondition == 'Surface'
+
       adj_surface = surface.adjacentSurface.get
       adj_space = adj_surface.space.get
       if adj_space.spaceType.is_initialized && adj_space.spaceType.get.standardsSpaceType.is_initialized
@@ -526,7 +527,6 @@ Standard.class_eval do
   # @param building_type [string] the type of building
   # @return [void]
   def model_set_below_grade_wall_constructions(model, building_type, climate_zone)
-
     # Find ground contact wall building category
     construction_set_data = model_get_construction_set(building_type)
     building_type_category = construction_set_data['exterior_wall_building_category']
@@ -546,7 +546,6 @@ Standard.class_eval do
 
     # iterate through spaces and set any necessary CFactorUndergroundWallConstructions
     model.getSpaces.each do |space|
-
       # Get height of the first below grade wall in this space. Will return nil if none are found.
       below_grade_wall_height = model_get_space_below_grade_wall_height(space)
       next if below_grade_wall_height.nil?
@@ -579,7 +578,6 @@ Standard.class_eval do
   # @param space [OpenStudio::Model::Space] space to determine below grade wall height
   # @return [Numeric, nil]
   def model_get_space_below_grade_wall_height(space)
-
     # find height of first below-grade wall adjacent to the ground
     space.surfaces.each do |surface|
       next unless surface.surfaceType == 'Wall'
@@ -605,20 +603,19 @@ Standard.class_eval do
   # @param building_type [string] the type of building
   # @param climate_zone [string] climate zone as described for prototype models. F-Factor is based on this parameter
   def model_set_floor_constructions(model, building_type, climate_zone)
-
-    #Find ground contact wall building category
+    # Find ground contact wall building category
     construction_set_data = model_get_construction_set(building_type)
     building_type_category = construction_set_data['ground_contact_floor_building_category']
 
     # Find Floor F factor
     floor_construction_properties = model_get_construction_properties(model, 'GroundContactFloor', 'Unheated', building_type_category, climate_zone)
 
-    #If no construction properties are found at all, return and allow code to use default constructions
+    # If no construction properties are found at all, return and allow code to use default constructions
     return if floor_construction_properties.nil?
 
     f_factor_ip = floor_construction_properties['assembly_maximum_f_factor']
 
-    #If no f-factor is found in construction properties, return and allow code to use defaults
+    # If no f-factor is found in construction properties, return and allow code to use defaults
     return if f_factor_ip.nil?
 
     f_factor_si = f_factor_ip * OpenStudio.convert(1.0, 'Btu/ft*h*R', 'W/m*K').get
@@ -659,7 +656,6 @@ Standard.class_eval do
   # @param space[OpenStudio::Model::Space]
   # @return [Numeric, Numeric]
   def model_get_f_floor_geometry(space)
-
     perimeter = 0
 
     floors = []
@@ -673,8 +669,8 @@ Standard.class_eval do
 
     # Raise a warning for any space with more than 1 ground contact floor surface.
     if floors.length > 1
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space: #{space.name.to_s} has more than one ground contact floor. FFactorGroundFloorConstruction constructions in this space may be incorrect")
-    elsif floors.empty? #If this space has no ground contact floors, return 0
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space: #{space.name} has more than one ground contact floor. FFactorGroundFloorConstruction constructions in this space may be incorrect")
+    elsif floors.empty? # If this space has no ground contact floors, return 0
       return 0, 0
     end
 
@@ -682,10 +678,8 @@ Standard.class_eval do
 
     # cycle through surfaces in space
     space.surfaces.each do |surface|
-
       # find perimeter of floor by finding intersecting outdoor walls and measuring the intersection
       if surface.surfaceType == 'Wall' && surface.outsideBoundaryCondition == 'Outdoors'
-
         perimeter += model_calculate_wall_and_floor_intersection(surface, floor)
       end
     end
@@ -706,7 +700,6 @@ Standard.class_eval do
   # @param floor[OpenStudio::Model::Surface] floor occupying same space as wall. Edges checked for interesections with wall
   # @return [Numeric] returns the intersection/overlap length of the wall and floor of interest
   def model_calculate_wall_and_floor_intersection(wall, floor)
-
     # Used for determining if two points are 'equal' if within this length
     tolerance = 0.0001
 
@@ -719,7 +712,6 @@ Standard.class_eval do
 
     # Iterate through wall edges
     wall_edge_array.each do |wall_edge|
-
       wall_edge_p1 = wall_edge[0]
       wall_edge_p2 = wall_edge[1]
 
@@ -737,14 +729,12 @@ Standard.class_eval do
 
       # If the edge is parallel with the floor and in the same x-y plane as the floor, assume an intersection the
       # length of the wall edge
-      edge_vector = OpenStudio::Vector3d.new(wall_edge_p1-wall_edge_p2)
+      edge_vector = OpenStudio::Vector3d.new(wall_edge_p1 - wall_edge_p2)
       return(edge_vector.length)
-
     end
 
     # If no edges intersected, return 0
     return 0
-
   end
 
   # Returns an array of OpenStudio::Point3D pairs of an OpenStudio::Model::Surface's edges. Used to calculate surface
@@ -752,7 +742,6 @@ Standard.class_eval do
   # @param surface[OpenStudio::Model::Surface] - surface whose edges are being returned
   # @return [Array<Array(OpenStudio::Point3D, OpenStudio::Point3D)>] - array of pair of points describing the line segment of an edge
   def model_get_surface_edges(surface)
-
     vertices = surface.vertices
     n_vertices = vertices.length
 
@@ -764,7 +753,7 @@ Standard.class_eval do
     for edge_counter in 0..n_vertices - 1
 
       # If not the last vertex in surface
-      if edge_counter < n_vertices-1
+      if edge_counter < n_vertices - 1
         edge_array << [vertices[edge_counter], vertices[edge_counter + 1]]
       else # Make index adjustments for final index in vertices array
         edge_array << [vertices[edge_counter], vertices[0]]
@@ -779,7 +768,6 @@ Standard.class_eval do
   # @param building_type [String] the type of building
   # @return [Bool] returns true if successful, false if not
   def model_add_internal_mass(model, building_type)
-
     # Assign a material to all internal mass objects
     material = OpenStudio::Model::StandardOpaqueMaterial.new(model)
     material.setName('Std Wood 6inch')
@@ -808,8 +796,8 @@ Standard.class_eval do
 
     # add internal mass
     # not required for NECB2011
-    unless (template == 'NECB2011') ||
-           (building_type.include?('DataCenter')) ||
+    unless template == 'NECB2011' ||
+           building_type.include?('DataCenter') ||
            ((building_type == 'SmallHotel') &&
             (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019' || template == 'NREL ZNE Ready 2017'))
       internal_mass_def = OpenStudio::Model::InternalMassDefinition.new(model)
@@ -819,6 +807,7 @@ Standard.class_eval do
         # only add internal mass objects to conditioned spaces
         next unless space_cooled?(space)
         next unless space_heated?(space)
+
         internal_mass = OpenStudio::Model::InternalMass.new(internal_mass_def)
         internal_mass.setName("#{space.name} Mass")
         internal_mass.setSpace(space)
@@ -860,13 +849,13 @@ Standard.class_eval do
       end
       space.setThermalZone(zone)
 
-    # Skip thermostat for spaces with no space type
-    next if space.spaceType.empty?
+      # Skip thermostat for spaces with no space type
+      next if space.spaceType.empty?
 
-    # Add a thermostat
-    space_type_name = space.spaceType.get.name.get
-    thermostat_name = space_type_name + ' Thermostat'
-    thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
+      # Add a thermostat
+      space_type_name = space.spaceType.get.name.get
+      thermostat_name = space_type_name + ' Thermostat'
+      thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
       if thermostat.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
       else
@@ -877,7 +866,7 @@ Standard.class_eval do
           ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
           ideal_loads.addToThermalZone(zone)
         end
-     end
+      end
     end
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
  end
@@ -927,6 +916,7 @@ Standard.class_eval do
         thermal_zone.spaces.each do |space|
           next unless space.spaceType.is_initialized
           next unless space.partofTotalFloorArea
+
           space_type = space.spaceType.get
           next unless space_type.standardsBuildingType.is_initialized
           next unless space_type.standardsSpaceType.is_initialized
@@ -1017,6 +1007,7 @@ Standard.class_eval do
 
             # add exhaust
             next if zones_applied.include?(largest_target_zone) # would only hit this if zone has two space types each requesting makeup air
+
             zone_exhaust_hash = thermal_zone_add_exhaust(largest_target_zone, exhaust_makeup_inputs)
             zones_applied << largest_target_zone
             zone_exhaust_fans.merge!(zone_exhaust_hash)
@@ -1118,18 +1109,20 @@ Standard.class_eval do
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Occupancy Sensors')
 
     space_type_reduction_map = {
-        'SecondarySchool' => {'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22},
-        'PrimarySchool' => {'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22}
+      'SecondarySchool' => { 'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22 },
+      'PrimarySchool' => { 'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22 }
     }
 
     # Loop through all the space types and reduce lighting operation schedule fractions as-specified
     model.getSpaceTypes.sort.each do |space_type|
       # Skip space types with no standards building type
       next if space_type.standardsBuildingType.empty?
+
       stds_bldg_type = space_type.standardsBuildingType.get
 
       # Skip space types with no standards space type
       next if space_type.standardsSpaceType.empty?
+
       stds_spc_type = space_type.standardsSpaceType.get
 
       # Skip building types and space types that aren't listed in the hash
@@ -1148,6 +1141,7 @@ Standard.class_eval do
       space_type.lights.each do |light|
         # Skip lights that don't have a schedule
         next if light.schedule.empty?
+
         lights_sch = light.schedule.get
         lights_schs[lights_sch.name.to_s] = lights_sch
         lights_sch_names << lights_sch.name.to_s
@@ -1173,13 +1167,14 @@ Standard.class_eval do
         new_lights_sch.scheduleRules.each do |sch_rule|
           model_multiply_schedule(model, sch_rule.daySchedule, red_multiplier, 0.25)
         end
-      end # end of lights_sch_names.uniq.each do
+      end
 
       # Loop through all lights instances, replacing old lights
       # schedules with the reduced schedules.
       space_type.lights.each do |light|
         # Skip lights that don't have a schedule
         next if light.schedule.empty?
+
         old_lights_sch_name = light.schedule.get.name.to_s
         if reduced_lights_schs[old_lights_sch_name]
           light.setSchedule(reduced_lights_schs[old_lights_sch_name])
@@ -1338,10 +1333,8 @@ Standard.class_eval do
   end
 
   # Set up daylight savings
-  #
   def model_add_daylight_savings(model)
-
-    start_date  = '2nd Sunday in March'
+    start_date = '2nd Sunday in March'
     end_date = '1st Sunday in November'
 
     runperiodctrl_daylgtsaving = model.getRunPeriodControlDaylightSavingTime
@@ -1365,7 +1358,7 @@ Standard.class_eval do
     thanksgiving.setName('Thanksgiving')
     thanksgiving.setSpecialDayType('Holiday')
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Added holidays: New Years, Thanksgiving.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', 'Added holidays: New Years, Thanksgiving.')
   end
 
   # Changes the infiltration coefficients for the prototype vintages.
@@ -1393,7 +1386,7 @@ Standard.class_eval do
         return
       when 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
         case building_type
-          when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'MediumOfficeDetailed','LargeOfficeDetailed', 'Outpatient', 'PrimarySchool'
+          when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'MediumOfficeDetailed', 'LargeOfficeDetailed', 'Outpatient', 'PrimarySchool'
             clg = 1.0
             htg = 1.0
         end
@@ -1420,29 +1413,29 @@ Standard.class_eval do
     # Fans
     # Pressure Rise
 
-    model.getFanConstantVolumes.sort.each {|obj| fan_constant_volume_apply_prototype_fan_pressure_rise(obj)}
-    model.getFanVariableVolumes.sort.each {|obj| fan_variable_volume_apply_prototype_fan_pressure_rise(obj)}
-    model.getFanOnOffs.sort.each {|obj| fan_on_off_apply_prototype_fan_pressure_rise(obj)}
-    model.getFanZoneExhausts.sort.each {|obj| fan_zone_exhaust_apply_prototype_fan_pressure_rise(obj)}
+    model.getFanConstantVolumes.sort.each { |obj| fan_constant_volume_apply_prototype_fan_pressure_rise(obj) }
+    model.getFanVariableVolumes.sort.each { |obj| fan_variable_volume_apply_prototype_fan_pressure_rise(obj) }
+    model.getFanOnOffs.sort.each { |obj| fan_on_off_apply_prototype_fan_pressure_rise(obj) }
+    model.getFanZoneExhausts.sort.each { |obj| fan_zone_exhaust_apply_prototype_fan_pressure_rise(obj) }
 
     # Motor Efficiency
-    model.getFanConstantVolumes.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
-    model.getFanVariableVolumes.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
-    model.getFanOnOffs.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
-    model.getFanZoneExhausts.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
+    model.getFanConstantVolumes.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
+    model.getFanVariableVolumes.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
+    model.getFanOnOffs.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
+    model.getFanZoneExhausts.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
 
     # Gas Heating Coil
-    model.getCoilHeatingGass.sort.each {|obj| coil_heating_gas_apply_prototype_efficiency(obj)}
+    model.getCoilHeatingGass.sort.each { |obj| coil_heating_gas_apply_prototype_efficiency(obj) }
 
     ##### Add Economizers
     apply_economizers(climate_zone, model)
 
     # TODO: What is the logic behind hard-sizing
     # hot water coil convergence tolerances?
-    model.getControllerWaterCoils.sort.each {|obj| controller_water_coil_set_convergence_limits(obj)}
+    model.getControllerWaterCoils.sort.each { |obj| controller_water_coil_set_convergence_limits(obj) }
 
     # adjust defrost curve limits for coil heating dx single speed
-    model.getCoilHeatingDXSingleSpeeds.sort.each {|obj| coil_heating_dx_single_speed_apply_defrost_eir_curve_limits(obj)}
+    model.getCoilHeatingDXSingleSpeeds.sort.each { |obj| coil_heating_dx_single_speed_apply_defrost_eir_curve_limits(obj) }
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying prototype HVAC assumptions.')
   end
@@ -1452,12 +1445,10 @@ Standard.class_eval do
   #
   # @param model [OpenStudio::Model::Model] the model
   def model_apply_prototype_hvac_efficiency_adjustments(model)
-
     # ERVs
     # Applies the DOE Prototype Building assumption that ERVs use
     # enthalpy wheels and therefore exceed the minimum effectiveness specified by 90.1
-    model.getHeatExchangerAirToAirSensibleAndLatents.each {|obj| heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency(obj)}
-
+    model.getHeatExchangerAirToAirSensibleAndLatents.each { |obj| heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency(obj) }
     return true
   end
 
@@ -1807,12 +1798,12 @@ Standard.class_eval do
 
   # Return the dominant standards building type
   def model_get_standards_building_type(model)
-
     # determine areas of each building type
     building_type_areas = {}
     model.getSpaces.each do |space|
       # ignore space if not part of total area
       next unless space.partofTotalFloorArea
+
       if space.spaceType.is_initialized
         space_type = space.spaceType.get
         if space_type.standardsBuildingType.is_initialized
@@ -1830,7 +1821,7 @@ Standard.class_eval do
     building_type = building_type_areas.key(building_type_areas.values.max)
 
     if building_type.nil?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Model has no dominant standards building type.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', 'Model has no dominant standards building type.')
     else
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "#{building_type} is the dominant standards building type.")
     end
@@ -1860,8 +1851,8 @@ Standard.class_eval do
     end
 
     # Group the zones by occupancy type
-    type_to_area = Hash.new {0.0}
-    zones_grouped_by_occ = zones.group_by {|z| z['occ']}
+    type_to_area = Hash.new { 0.0 }
+    zones_grouped_by_occ = zones.group_by { |z| z['occ'] }
 
     # Determine the dominant occupancy type by area
     zones_grouped_by_occ.each do |occ_type, zns|
@@ -1869,7 +1860,7 @@ Standard.class_eval do
         type_to_area[occ_type] += zn['area']
       end
     end
-    dom_occ = type_to_area.sort_by {|k, v| v}.reverse[0][0]
+    dom_occ = type_to_area.sort_by { |k, v| v }.reverse[0][0]
 
     # Get the dominant occupancy type group
     dom_occ_group = zones_grouped_by_occ[dom_occ]
@@ -1957,8 +1948,8 @@ Standard.class_eval do
     end
 
     # Group the zones by building type
-    type_to_area = Hash.new {0.0}
-    zones_grouped_by_bldg_type = zones.group_by {|z| z['bldg_type']}
+    type_to_area = Hash.new { 0.0 }
+    zones_grouped_by_bldg_type = zones.group_by { |z| z['bldg_type'] }
 
     # Determine the dominant building type by area
     zones_grouped_by_bldg_type.each do |bldg_type, zns|
@@ -1966,7 +1957,7 @@ Standard.class_eval do
         type_to_area[bldg_type] += zn['area']
       end
     end
-    dom_bldg_type = type_to_area.sort_by {|k, v| v}.reverse[0][0]
+    dom_bldg_type = type_to_area.sort_by { |k, v| v }.reverse[0][0]
 
     # Get the dominant building type group
     dom_bldg_type_group = zones_grouped_by_bldg_type[dom_bldg_type]
@@ -2168,5 +2159,4 @@ Standard.class_eval do
       end
     end
   end
-
 end

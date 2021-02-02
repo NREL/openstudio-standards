@@ -1,4 +1,3 @@
-
 # Custom changes for the SecondarySchool prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -103,7 +102,7 @@ module SecondarySchool
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('Booster')
         water_heater.resetAmbientTemperatureSchedule
-        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen_ZN_1_FLR_1 ZN').get)
       end
     end
@@ -651,14 +650,17 @@ module SecondarySchool
 
     # Adjust daylight sensors in each space
     model.getSpaces.each do |space|
-      if adjustments[0].keys.include? (template)
-        if adjustments[0][template].keys.include? (space.name.to_s + " ZN")
-          adj = adjustments[0][template][space.name.to_s + " ZN"]
+      if adjustments[0].keys.include?(template)
+        if adjustments[0][template].keys.include?(space.name.to_s + ' ZN')
+          adj = adjustments[0][template][space.name.to_s + ' ZN']
           next if space.thermalZone.empty?
+
           zone = space.thermalZone.get
           next if space.spaceType.empty?
+
           spc_type = space.spaceType.get
           next if spc_type.standardsSpaceType.empty?
+
           stds_spc_type = spc_type.standardsSpaceType.get
           # Adjust the primary sensor
           if adj['sensor_1_frac'] && zone.primaryDaylightingControl.is_initialized
@@ -698,7 +700,6 @@ module SecondarySchool
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-
     return true
   end
 
@@ -709,5 +710,13 @@ module SecondarySchool
     air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)
 
     return true
+  end
+
+  # Type of SAT reset for this building type
+  #
+  # @param air_loop_hvac [OpenStudio::model::AirLoopHVAC] Airloop
+  # @return [String] Returns type of SAT reset
+  def air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
+    return 'oa'
   end
 end

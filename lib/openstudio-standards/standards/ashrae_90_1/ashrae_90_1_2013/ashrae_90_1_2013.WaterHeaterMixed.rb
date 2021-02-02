@@ -21,7 +21,7 @@ class ASHRAE9012013 < ASHRAE901
          'Hospital', # Hospital
          'Outpatient' # Health-care clinic
       new_fuel = 'NaturalGas'
-    when 'SmallOffice', 'MediumOffice', 'LargeOffice', 'SmallOfficeDetailed', 'MediumOfficeDetailed', 'LargeOfficeDetailed',# Office
+    when 'SmallOffice', 'MediumOffice', 'LargeOffice', 'SmallOfficeDetailed', 'MediumOfficeDetailed', 'LargeOfficeDetailed', # Office
          'RetailStandalone', 'RetailStripmall', # Retail
          'Warehouse' # Warehouse
       new_fuel = 'Electricity'

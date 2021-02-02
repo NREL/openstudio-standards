@@ -1,4 +1,3 @@
-
 # Custom changes for the MidriseApartment prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -133,21 +132,19 @@ module MidriseApartment
             infiltration_g_corridor_door.setSchedule(model_add_schedule(model, 'ApartmentMidRise INFIL_Door_Opening_SCH_2010_2013'))
         end
 
-      # Door infiltration in model not impacted by wind or temperature
-      infiltration_g_corridor_door.setConstantTermCoefficient(1.0)
-      infiltration_g_corridor_door.setTemperatureTermCoefficient(0.0)
-      infiltration_g_corridor_door.setVelocityTermCoefficient(0.0)
-      infiltration_g_corridor_door.setVelocitySquaredTermCoefficient(0.0)
+        # Door infiltration in model not impacted by wind or temperature
+        infiltration_g_corridor_door.setConstantTermCoefficient(1.0)
+        infiltration_g_corridor_door.setTemperatureTermCoefficient(0.0)
+        infiltration_g_corridor_door.setVelocityTermCoefficient(0.0)
+        infiltration_g_corridor_door.setVelocitySquaredTermCoefficient(0.0)
     end
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-
     return true
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-
     return true
   end
 end

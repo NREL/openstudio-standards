@@ -1,4 +1,3 @@
-
 # Custom changes for the RetailStripmall prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -79,12 +78,10 @@ module RetailStripmall
   # add hvac
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-
     return true
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-
     return true
   end
 end

@@ -1,4 +1,3 @@
-
 # Custom changes for the Hospital prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -162,11 +161,11 @@ module Hospital
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('300gal')
         water_heater.resetAmbientTemperatureSchedule
-        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Basement ZN').get)
       elsif water_heater.name.to_s.include?('6.0gal')
         water_heater.resetAmbientTemperatureSchedule
-        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen_Flr_5 ZN').get)
       end
     end
@@ -179,7 +178,6 @@ module Hospital
   end
 
   # add swh
-
   def reset_kitchen_oa(model)
     space_kitchen = model.getSpaceByName('Kitchen_Flr_5').get
     ventilation = space_kitchen.designSpecificationOutdoorAir.get
@@ -320,7 +318,6 @@ module Hospital
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-
     return true
   end
 
@@ -331,5 +328,13 @@ module Hospital
     air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)
 
     return true
+  end
+
+  # Type of SAT reset for this building type
+  #
+  # @param air_loop_hvac [OpenStudio::model::AirLoopHVAC] Airloop
+  # @return [String] Returns type of SAT reset
+  def air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
+    return 'oa'
   end
 end

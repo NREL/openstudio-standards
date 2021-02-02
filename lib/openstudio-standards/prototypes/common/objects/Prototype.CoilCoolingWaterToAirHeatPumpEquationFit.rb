@@ -11,7 +11,7 @@ class Standard
   def create_coil_cooling_water_to_air_heat_pump_equation_fit(model,
                                                               plant_loop,
                                                               air_loop_node: nil,
-                                                              name: "Water-to-Air HP Clg Coil",
+                                                              name: 'Water-to-Air HP Clg Coil',
                                                               type: nil,
                                                               cop: 3.4)
 

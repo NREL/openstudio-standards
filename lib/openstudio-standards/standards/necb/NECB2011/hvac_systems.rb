@@ -373,9 +373,8 @@ class NECB2011
     # Assumed to be sensible and latent at all flow
     # This will now get data of the erv from the json file instead of hardcoding it. Defaults to NECB2011 erv we have been using.
     erv_name = 'Rotary-Minimum-Eff-Existing' if erv_name.nil?
-    erv_info = @standards_data['erv'].detect { |item| item['erv_name'] == erv_name }
-
-    raise("Could not find #{erv_name} in #{self.class.name} class' erv.json file or it's parents. The available ervs are #{@standards_data['erv'].map{|item| item['erv_name']}}") if erv_info.nil?
+    erv_info = @standards_data['tables']['erv']['table'].detect { |item| item['erv_name'] == erv_name }
+    raise("Could not find #{erv_name} in #{self.class.name} class' erv.json file or it's parents. The available ervs are #{@standards_data['tables']['erv']['table'].map{|item| item['erv_name']}}") if erv_info.nil?
 
     heat_exchanger_air_to_air_sensible_and_latent.setHeatExchangerType(erv_info['HeatExchangerType'])
     heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(erv_info['SensibleEffectivenessat100HeatingAirFlow'])
@@ -391,6 +390,8 @@ class NECB2011
     heat_exchanger_air_to_air_sensible_and_latent.setEconomizerLockout(erv_info['EconomizerLockout'])
     heat_exchanger_air_to_air_sensible_and_latent.setThresholdTemperature(erv_info['ThresholdTemperature'])
     heat_exchanger_air_to_air_sensible_and_latent.setInitialDefrostTimeFraction(erv_info['InitialDefrostTimeFraction'])
+    update_sys_name(heat_exchanger_air_to_air_sensible_and_latent.airLoopHVAC.get,sys_hr: "erv")
+
     return true
   end
 
@@ -939,7 +940,7 @@ class NECB2011
     # Make the COOL-CAP-FT curve
     cool_cap_ft = model_add_curve(model, ac_props['cool_cap_ft'])
     if cool_cap_ft
-      clg_stages.each do |stage|
+      clg_stages.sort.each do |stage|
         stage.setTotalCoolingCapacityFunctionofTemperatureCurve(cool_cap_ft)
       end
     else
@@ -951,7 +952,7 @@ class NECB2011
     # Make the COOL-CAP-FFLOW curve
     cool_cap_fflow = model_add_curve(model, ac_props['cool_cap_fflow'])
     if cool_cap_fflow
-      clg_stages.each do |stage|
+      clg_stages.sort.each do |stage|
         stage.setTotalCoolingCapacityFunctionofFlowFractionCurve(cool_cap_fflow)
       end
     else
@@ -963,7 +964,7 @@ class NECB2011
     # Make the COOL-EIR-FT curve
     cool_eir_ft = model_add_curve(model, ac_props['cool_eir_ft'])
     if cool_eir_ft
-      clg_stages.each do |stage|
+      clg_stages.sort.each do |stage|
         stage.setEnergyInputRatioFunctionofTemperatureCurve(cool_eir_ft)
       end
     else
@@ -975,7 +976,7 @@ class NECB2011
     # Make the COOL-EIR-FFLOW curve
     cool_eir_fflow = model_add_curve(model, ac_props['cool_eir_fflow'])
     if cool_eir_fflow
-      clg_stages.each do |stage|
+      clg_stages.sort.each do |stage|
         stage.setEnergyInputRatioFunctionofFlowFractionCurve(cool_eir_fflow)
       end
     else
@@ -987,7 +988,7 @@ class NECB2011
     # Make the COOL-PLF-FPLR curve
     cool_plf_fplr = model_add_curve(model, ac_props['cool_plf_fplr'])
     if cool_plf_fplr
-      clg_stages.each do |stage|
+      clg_stages.sort.each do |stage|
         stage.setPartLoadFractionCorrelationCurve(cool_plf_fplr)
       end
     else
@@ -999,7 +1000,7 @@ class NECB2011
     # Set the COP values
     cop, new_comp_name = coil_cooling_dx_multi_speed_standard_minimum_cop(coil_cooling_dx_multi_speed)
     unless cop.nil?
-      clg_stages.each do |istage|
+      clg_stages.sort.each do |istage|
         istage.setGrossRatedCoolingCOP(cop)
       end
     end
@@ -1077,7 +1078,7 @@ class NECB2011
     # get multi speed heat pump and air loop
     multi_speed_heat_pump = nil
     multi_speed_heat_pumps = model.getAirLoopHVACUnitaryHeatPumpAirToAirMultiSpeeds
-    multi_speed_heat_pumps.each do |iheat_pump|
+    multi_speed_heat_pumps.sort.each do |iheat_pump|
       htg_coil = iheat_pump.heatingCoil
       if htg_coil.name.to_s.strip == coil_heating_gas_multi_stage.name.to_s.strip
         multi_speed_heat_pump = iheat_pump
@@ -1239,7 +1240,7 @@ class NECB2011
 
     # Set the efficiency values
     unless thermal_eff.nil?
-      htg_stages.each do |stage|
+      htg_stages.sort.each do |stage|
         stage.setGasBurnerEfficiency(thermal_eff)
       end
     end
@@ -2042,5 +2043,136 @@ class NECB2011
     return clg_availability_sch, htg_availability_sch
   end
 
+  # Method to set the base system name based on the following syntax:
+  # |sys_abbr|sys_oa|sh>?|sc>?|ssf>?|zh>?|zc>?|srf>?|
+  # "sys_abbr" designates the NECB system type ("sys_1, sys_2, ... sys_6")
+  # "sys_oa": "mixed" or "doas"
+  # "sys_name_pars" is a hash for the remaining system name parts for heat recovery,
+  # heating, cooling, supply fan, zone heating, zone cooling, and return fan
+  def assign_base_sys_name(airloop,sys_abbr:,sys_oa:,sys_name_pars:)
+    sys_name = "#{sys_abbr}|#{sys_oa}|"
 
+    sys_name_pars.each do |key,value|
+      case key.downcase
+      when "sys_hr"
+        case value.downcase
+        when "none"
+          sys_name += "shr>none"
+        end
+
+      when "sys_htg"
+        case value.downcase
+        when "none"
+          sys_name += "sh>none"
+        when "electric"
+          sys_name += "sh>c-e"
+        when "hot water"
+          sys_name += "sh>c-hw"
+        when "gas"
+          sys_name += "sh>c-g"
+        when "dx"
+          sys_name += "sh>ashp"
+        end
+
+      when "sys_clg"
+        case value.downcase
+        when "none"
+          sys_name += "sc>none"
+        when "chilled water"
+          sys_name += "sc>c-chw"
+        when "dx"
+          sys_name += "sc>dx"
+          sys_name += "sc>ashp" if sys_name_pars["sys_htg"] == "dx"
+        end
+
+      when "sys_sf"
+        case value.downcase
+        when "none"
+          sys_name += "ssf>none"
+        when "cv"
+          sys_name += "ssf>cv"
+        when "vv"
+          sys_name += "ssf>vv"
+        end
+
+      when "zone_htg"
+        case value.downcase
+        when "none"
+          sys_name += "zh>none"
+        when "electric"
+          sys_name += "zh>b-e"
+        when "hot water"
+          sys_name += "zh>b-hw"
+        when "tpfc"
+          sys_name += "zh>fpfc"
+        when "fpfc"
+          sys_name += "zh>tpfc"
+        end
+
+      when "zone_clg"
+        case value.downcase
+        when "none"
+          sys_name += "zc>none"
+        when "tpfc"
+          sys_name += "zc>tpfc"
+        when "fpfc"
+          sys_name += "zc>fpfc"
+        when "ptac"
+          sys_name += "zc>ptac"
+        end
+
+      when "sys_rf"
+        case value.downcase
+        when "none"
+          sys_name += "srf>none"
+        when "cv"
+          sys_name += "srf>cv"
+        when "vv"
+          sys_name += "srf>vv"
+        end
+      end
+      sys_name += "|"
+    end
+
+    airloop.setName(sys_name)
+  end
+
+  # Method to update the base system name based on the inputs provided.
+  # Only the parts of the name with string inputs are updated
+  def update_sys_name(airloop,
+                      sys_abbr: nil,
+                      sys_oa: nil,
+                      sys_hr: nil,
+                      sys_htg: nil,
+                      sys_clg: nil,
+                      sys_sf: nil,
+                      zone_htg: nil,
+                      zone_clg: nil,
+                      sys_rf: nil)
+    name_parts = airloop.name.to_s.split("|").select {|part| !part.empty?}
+    if sys_abbr.is_a? String then name_parts[0] = sys_abbr end
+    if sys_oa.is_a? String then name_parts[1] = sys_oa end
+    for i in 0..name_parts.size-1
+      if (name_parts[i].include? "shr>") && (sys_hr.is_a? String)
+        name_parts[i] = "shr>#{sys_hr}"
+      elsif (name_parts[i].include? "sh>") && (sys_htg.is_a? String)
+        name_parts[i] = "sh>#{sys_htg}"
+      elsif (name_parts[i].include? "sc>") && (sys_clg.is_a? String)
+        name_parts[i] = "sc>#{sys_clg}"
+      elsif (name_parts[i].include? "ssf") && (sys_sf.is_a? String)
+        name_parts[i] = "ssf>#{sys_sf}"
+      elsif (name_parts[i].include? "zh>") && (zone_htg.is_a? String)
+        name_parts[i] = "zh>#{zone_htg}"
+      elsif (name_parts[i].include? "zc>") && (zone_clg.is_a? String)
+        name_parts[i] = "zc>#{zone_clg}"
+      elsif (name_parts[i].include? "srf>") && (sys_rf.is_a? String)
+        name_parts[i] = "srf>#{sys_rf}"
+      end
+    end
+    sys_name = ""
+    name_parts.each {|part| sys_name += "#{part}|"}
+    sys_name = sys_name.chop if (Integer(name_parts.last.strip) rescue false)
+
+    airloop.setName(sys_name)
+  end
 end

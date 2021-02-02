@@ -1,4 +1,3 @@
-
 # Custom changes for the MediumOffice prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -53,6 +52,7 @@ module MediumOffice
     # @todo remove once infil_sch in Standards.Space pulls from default building infiltration schedule
     model.getSpaces.each do |space|
       next unless space.name.get.to_s.include? 'Plenum'
+
       # add infiltration if DOE Ref vintage
       if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
         # Create an infiltration rate object for this space
@@ -363,14 +363,17 @@ module MediumOffice
 
     # Adjust daylight sensors in each space
     model.getSpaces.each do |space|
-      if adjustments[0].keys.include? (template)
-        if adjustments[0][template].keys.include? (space.name.to_s)
+      if adjustments[0].keys.include? template
+        if adjustments[0][template].keys.include? space.name.to_s
           adj = adjustments[0][template][space.name.to_s]
           next if space.thermalZone.empty?
+
           zone = space.thermalZone.get
           next if space.spaceType.empty?
+
           spc_type = space.spaceType.get
           next if spc_type.standardsSpaceType.empty?
+
           stds_spc_type = spc_type.standardsSpaceType.get
           # Adjust the primary sensor
           if adj['sensor_1_frac'] && zone.primaryDaylightingControl.is_initialized
@@ -424,12 +427,10 @@ module MediumOffice
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-
     return true
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-
     return true
   end
 
@@ -440,5 +441,13 @@ module MediumOffice
     air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)
 
     return true
+  end
+
+  # Type of SAT reset for this building type
+  #
+  # @param air_loop_hvac [OpenStudio::model::AirLoopHVAC] Airloop
+  # @return [String] Returns type of SAT reset
+  def air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
+    return 'oa'
   end
 end

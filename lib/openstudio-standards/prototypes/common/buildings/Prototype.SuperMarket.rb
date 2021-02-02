@@ -1,4 +1,3 @@
-
 # Custom changes for the SuperMarket prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -94,7 +93,6 @@ module SuperMarket
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-
     return true
   end
 end

@@ -601,7 +601,7 @@ class Standard
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name} capacity of DistrictHeating #{dist_htg.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
         end
       end
-    end # End loop on plant_loop.supplyComponents
+    end
 
     total_heating_capacity_kbtu_per_hr = OpenStudio.convert(total_heating_capacity_w, 'W', 'kBtu/hr').get
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, heating capacity is #{total_heating_capacity_kbtu_per_hr.round} kBtu/hr.")
@@ -1303,7 +1303,8 @@ class Standard
             primary_fuels << component.heaterFuelType
             # And in this case we'll reuse this object
             combination_system = false
-          end # @Todo: not sure about whether it should be an elsif or not
+          end
+          # @TODO: not sure about whether it should be an elsif or not
           # Check the plant loop connection on the source side
           if component.secondaryPlantLoop.is_initialized
             source_plant_loop = component.secondaryPlantLoop.get
@@ -1325,7 +1326,8 @@ class Standard
             primary_fuels << component.heaterFuelType
             # And in this case we'll reuse this object
             combination_system = false
-          end # @Todo: not sure about whether it should be an elsif or not
+          end
+          # @TODO: not sure about whether it should be an elsif or not
           # Check the plant loop connection on the source side
           if component.secondaryPlantLoop.is_initialized
             source_plant_loop = component.secondaryPlantLoop.get
@@ -1363,22 +1365,22 @@ class Standard
     # end
 
     return fuels.uniq.sort, combination_system, storage_capacity, total_heating_capacity
-  end # end classify_swh_system_type
+  end
 
   # This method calculates the capacity of a plant loop by multiplying the temp difference across the loop, the maximum flow rate,
   # the fluid density, and the fluid heat capacity (currently only works with water).  This may be a little more approximate than the
   # heating and cooling capacity methods described above however is not limited to certain types of equipment and can be used for
   # condensing plant loops too.
-  def plant_loop_capacity_W_by_maxflow_and_deltaT_forwater (plant_loop)
+  def plant_loop_capacity_W_by_maxflow_and_deltaT_forwater(plant_loop)
     plantloop_maxflowrate = nil
-    if plant_loop.fluidType != "Water"
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "The fluid used in the plant loop named #{plant_loop.name.to_s} is not water.  The current version of this method only calculates the capacity of plant loops that use water.")
+    if plant_loop.fluidType != 'Water'
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "The fluid used in the plant loop named #{plant_loop.name} is not water.  The current version of this method only calculates the capacity of plant loops that use water.")
     end
     plantloop_maxflowrate = plant_loop_find_maximum_loop_flow_rate(plant_loop)
     plantloop_dt = plant_loop.sizingPlant.loopDesignTemperatureDifference.to_f
     # Plant loop capacity = temperature difference across plant loop * maximum plant loop flow rate * density of water (1000 kg/m^3) * see next line
     # Heat capacity of water (4180 J/(kg*K))
-    plantloop_capacity = plantloop_dt*plantloop_maxflowrate*1000*4180
+    plantloop_capacity = plantloop_dt * plantloop_maxflowrate * 1000.0 * 4180.0
     return plantloop_capacity
   end
 end
