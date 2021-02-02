@@ -396,6 +396,11 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  #
+  # testing method for PRM 2019 baseline HVAC sizing, specific testing objectives are commented inline
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  #
   def check_hvac_sizing(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
       building_type, template, climate_zone, mod = prototype
@@ -414,6 +419,14 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  #
+  # this checks the PRM baseline sizing requirement of supply air temperature delta T
+  #
+  # @param model [OpenStudio::Model::model] openstudio model object
+  # @param building_type [String]  building type
+  # @param template [String] template name
+  # @param climate_zone [<Type>] climate zone name
+  #
   def check_sizing_delta_t(model, building_type, template, climate_zone)
     std = Standard.build('90.1-PRM-2019')
     model.getThermalZones.each do |thermal_zone|
@@ -519,7 +532,14 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  #
   # this check uses very similar code to the one that implements this requirement
+  #
+  # @param model [OpenStudio::model::Model] openstudio model object
+  # @param building_type [String]  building type
+  # @param template [String] template name
+  # @param climate_zone [<Type>] climate zone name
+  #
   def check_sizing_values(model, building_type, template, climate_zone)
     space_loads = model.getSpaceLoads
     loads = []
@@ -1352,17 +1372,17 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      # 'wwr',
-      # 'srr',
-      # 'envelope',
-      # 'lpd',
-      # 'isresidential',
-      # 'daylighting_control',
-      # 'light_occ_sensor',
-      # 'infiltration',
-      # 'hvac_baseline',
+      'wwr',
+      'srr',
+      'envelope',
+      'lpd',
+      'isresidential',
+      'daylighting_control',
+      'light_occ_sensor',
+      'infiltration',
+      'hvac_baseline',
       'sat_ctrl',
-      # 'hvac_sizing'
+      'hvac_sizing'
     ]
 
     # Get list of unique prototypes

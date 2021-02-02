@@ -1755,7 +1755,7 @@ class Standard
 
   # Create annual array of occupancy for the space: 1 = occupied, 0 = unoccupied
   # @author Doug Maddox, PNNL
-  # @ param space object
+  # @param space object
   # @return [Double] 8760 array of the occupancy flag
   def space_occupancy_annual_array(model, space)
     occ_sch_values = nil
@@ -1788,7 +1788,7 @@ class Standard
   # This version accounts for operating schedules
   # and fraction lost for equipment
   # @author Doug Maddox, PNNL
-  # @ param space object
+  # @param space object
   # @return [Double] 8760 array of the design internal load, in W, for this space
   def space_internal_load_annual_array(model, space)
     # For each type of load, first convert schedules to 8760 arrays so coincident load can be determined
@@ -1952,10 +1952,18 @@ class Standard
       return load_values
   end
 
-  # @author: Doug Maddox, PNNL
-  # @param: model [Object]
-  # @param: fan_schedule [Object]
-  # @return: 
+  # TODO: Doug add YARD
+  # <Description>
+  #
+  # @param model [<Type>] <description>
+  # @param space [<Type>] <description>
+  # @param equip [<Type>] <description>
+  # @param eqp_type [<Type>] <description>
+  # @param ppl_total [<Type>] <description>
+  # @param load_values [<Type>] <description>
+  #
+  # @return [<Type>] <description>
+  #
   def space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
     # Get load schedule and load lost value depending on equipment type
     case eqp_type 

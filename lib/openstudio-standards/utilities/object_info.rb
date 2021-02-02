@@ -1,7 +1,10 @@
+#
 # Get hash of object field names and values
-# author: Xuechen (Jerry) Lei
-# param: obj [object]
-# return: [Hash<String>] FieldName:Value
+# @author: Xuechen (Jerry) Lei, PNNL
+# @param  obj [object]
+#
+# @return [Hash<String>] FieldName:Value
+#
 def getObjectHash(obj)
   fields_array = obj.to_s.split(/\n/)
   output_hash = {"object type" => fields_array.shift.split(/,/)[0]}

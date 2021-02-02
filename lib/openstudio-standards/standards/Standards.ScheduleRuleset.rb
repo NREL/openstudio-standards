@@ -613,6 +613,15 @@ class Standard
     return true
   end
 
+  #
+  # Return Array of weekday values from Array of all day values
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param values [Array] hourly time-series values of all days 
+  # @param value_includes_holiday [Bool] whether the input values include a day of holiday at the end of the array
+  #
+  # @return [Array] hourly time-series values in weekdays
+  #
   def get_weekday_values_from_8760(model, values, value_includes_holiday = true)
     start_day = model.getYearDescription.dayofWeekforStartDay
     start_day_map = {

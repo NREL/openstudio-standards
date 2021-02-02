@@ -235,7 +235,6 @@ class Standard
                                                        sys_group['area_ft2'],
                                                        sys_group['stories'],
                                                        custom)
-
         else
           system_type = model_prm_stable_baseline_system_type(model,
                                                               hvac_building_type,
@@ -285,7 +284,7 @@ class Standard
       # Set the heating and cooling sizing parameters
       model_apply_prm_sizing_parameters(model)
 
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Controls ***')
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Controls ***')
 
       # SAT reset, economizers
       model.getAirLoopHVACs.sort.each do |air_loop|
@@ -1267,10 +1266,6 @@ class Standard
   def get_fan_object_for_airloop(model, air_loop)
     if !air_loop.supplyFan.empty?
       fan_component = air_loop.supplyFan.get
-
-      # if airloop.supplyFan.get.to_FanConstantVolume.is_initialized
-      #   fan_obj = airloop.supplyFan.get.to_FanConstantVolume.get
-      # end
     else
       # Check if system has unitary wrapper
       air_loop.supplyComponents.each do |component|
@@ -7005,12 +7000,3 @@ class Standard
     return lowest_story
   end
 end
-
-
-
-
-
-
-
-
-
