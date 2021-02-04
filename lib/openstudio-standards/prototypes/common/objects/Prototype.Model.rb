@@ -2096,7 +2096,7 @@ Standard.class_eval do
         # This exception exist through 90.1-2019, for hospitals
         # see Section 6.5.1 exception 4
         if @instvarbuilding_type == 'Hospital' &&
-          (template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019')
+           (template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019')
           economizer_required = false
         end
       elsif @instvarbuilding_type == 'LargeOffice' &&

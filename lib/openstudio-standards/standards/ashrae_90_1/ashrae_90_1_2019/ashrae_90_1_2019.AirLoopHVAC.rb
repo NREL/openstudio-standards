@@ -46,8 +46,8 @@ class ASHRAE9012019 < ASHRAE901
       return [nil, nil, nil]
     when 'FixedDryBulb'
       search_criteria = {
-          'template' => template,
-          'climate_zone' => climate_zone
+        'template' => template,
+        'climate_zone' => climate_zone
       }
       econ_limits = model_find_object(standards_data['economizers'], search_criteria)
       drybulb_limit_f = econ_limits['fixed_dry_bulb_high_limit_shutoff_temp']

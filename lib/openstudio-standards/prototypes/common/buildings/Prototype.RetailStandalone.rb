@@ -113,53 +113,35 @@ module RetailStandalone
         'ASHRAE 169-2013-6B',
         'ASHRAE 169-2013-7A',
         'ASHRAE 169-2013-8A'
-        [
-                    { '90.1-2010' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
-                                                          'sensor_1_xyz' => [9.144, 24.698, 0],
-                                                                                                                },
-                                      },
-                      '90.1-2013' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
-                                                          'sensor_1_xyz' => [9.144, 24.698, 0],
-                                                                                                                },
-                                      },
-                      '90.1-2016' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
-                                                          'sensor_1_xyz' => [9.144, 24.698, 0],
-                                                                                                                },
-                                      },
-                      '90.1-2019' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
-                                                          'sensor_1_xyz' => [9.144, 24.698, 0],
-                                                                                                                },
-                                      },
-                                        }
-                  ]
-      else
-        [
-                    { '90.1-2010' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
-                                                          'sensor_2_frac' => 0.25,
-                                                          'sensor_1_xyz' => [14.2, 14.2, 0],
-                                                          'sensor_2_xyz' => [3.4, 14.2, 0],
-                                                                                                                },
-                                      },
-                      '90.1-2013' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
-                                                          'sensor_2_frac' => 0.25,
-                                                          'sensor_1_xyz' => [14.2, 14.2, 0],
-                                                          'sensor_2_xyz' => [3.4, 14.2, 0],
-                                                                                                                },
-                                      },
-                      '90.1-2016' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
-                                                          'sensor_2_frac' => 0.25,
-                                                          'sensor_1_xyz' => [14.2, 14.2, 0],
-                                                          'sensor_2_xyz' => [3.4, 14.2, 0],
-                                                                                                                },
-                                      },
-                      '90.1-2019' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
-                                                          'sensor_2_frac' => 0.25,
-                                                          'sensor_1_xyz' => [14.2, 14.2, 0],
-                                                          'sensor_2_xyz' => [3.4, 14.2, 0],
-                                                                                                                },
-                                      },
-                                        }
-                  ]
+      [
+        { '90.1-2010' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
+                                              'sensor_1_xyz' => [9.144, 24.698, 0] } },
+          '90.1-2013' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
+                                              'sensor_1_xyz' => [9.144, 24.698, 0] } },
+          '90.1-2016' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
+                                              'sensor_1_xyz' => [9.144, 24.698, 0] } },
+          '90.1-2019' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
+                                              'sensor_1_xyz' => [9.144, 24.698, 0] } } }
+      ]
+    else
+      [
+        { '90.1-2010' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
+                                              'sensor_2_frac' => 0.25,
+                                              'sensor_1_xyz' => [14.2, 14.2, 0],
+                                              'sensor_2_xyz' => [3.4, 14.2, 0] } },
+          '90.1-2013' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
+                                              'sensor_2_frac' => 0.25,
+                                              'sensor_1_xyz' => [14.2, 14.2, 0],
+                                              'sensor_2_xyz' => [3.4, 14.2, 0] } },
+          '90.1-2016' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
+                                              'sensor_2_frac' => 0.25,
+                                              'sensor_1_xyz' => [14.2, 14.2, 0],
+                                              'sensor_2_xyz' => [3.4, 14.2, 0] } },
+          '90.1-2019' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
+                                              'sensor_2_frac' => 0.25,
+                                              'sensor_1_xyz' => [14.2, 14.2, 0],
+                                              'sensor_2_xyz' => [3.4, 14.2, 0] } } }
+      ]
         end
 
     # Adjust daylight sensors in each space

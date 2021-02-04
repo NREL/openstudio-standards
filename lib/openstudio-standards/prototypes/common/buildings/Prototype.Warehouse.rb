@@ -47,8 +47,7 @@ module Warehouse
                            'Zone1 Office' => { 'sensor_1_frac' => 0.29,
                                                'sensor_2_frac' => 0.1,
                                                'sensor_1_xyz' => [3.2675, 4.5718, 0.762],
-                                               'sensor_2_xyz' => [20.4216, 4.5718, 0.762] } }, 
-                                              }
+                                               'sensor_2_xyz' => [20.4216, 4.5718, 0.762] } } }
       ]
     else
       [
@@ -95,8 +94,7 @@ module Warehouse
                            'Zone2 Fine Storage' => { 'sensor_1_frac' => 0.25,
                                                      'sensor_2_frac' => 0.25,
                                                      'sensor_1_xyz' => [27.8892, 24.9936, 0.762],
-                                                     'sensor_2_xyz' => [3.81, 24.9936, 0.762] } },
-                                                  }
+                                                     'sensor_2_xyz' => [3.81, 24.9936, 0.762] } } }
       ]
 end
 
