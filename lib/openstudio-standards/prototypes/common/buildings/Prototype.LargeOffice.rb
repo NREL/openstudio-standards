@@ -297,7 +297,7 @@ module LargeOffice
                                                    'sensor_1_xyz' => [1.6764, 24.384, 34.29],
                                                    'sensor_2_xyz' => [3.3528, 24.384, 34.29] } } }
     ]
-    
+
     # Adjust daylight sensors in each space
     model.getSpaces.each do |space|
       if adjustments[0].keys.include? template
