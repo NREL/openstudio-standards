@@ -45,9 +45,8 @@ class NECB_nv_Tests < Minitest::Test
 
     nv_comfort_model = 'Fanger_Model' #Three options: (1) nil or FALSE, (2) 'Fanger_Model', (3) 'Adaptive_Model'
     nv_opening_fraction = 0.1 #options: (1) nil or FALSE (2) e.g. 0.1
-    nv_Tout_min = 20.0 #options: (1) nil or FALSE (2) e.g. 20.0 for Calgary; 15.0 for Vancouver
-    nv_Tout_max = 100.0 #options: (1) nil or FALSE (2) e.g. 100.0
-    nv_Delta_Tin_Tout = 2.0 #options: (1) nil or FALSE (2) e.g. 2.0
+    nv_Tout_min = 13.0 #options: (1) nil or FALSE (2) e.g. 13.0 as per Michel Tardif's inputs from a school project in QC
+    nv_Delta_Tin_Tout = 1.0 #options: (1) nil or FALSE (2) e.g. 1.0 as per Michel Tardif's inputs from a school project in QC
 
     # Test results storage array.
     @test_results_array = []
@@ -113,7 +112,6 @@ class NECB_nv_Tests < Minitest::Test
                                                       nv_comfort_model: nv_comfort_model,
                                                       nv_opening_fraction: nv_opening_fraction,
                                                       nv_Tout_min: nv_Tout_min,
-                                                      nv_Tout_max: nv_Tout_max,
                                                       nv_Delta_Tin_Tout:nv_Delta_Tin_Tout,
                                                       pv_ground_type: nil,
                                                       pv_ground_total_area_pv_panels_m2: nil,
