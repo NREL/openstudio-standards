@@ -1,14 +1,15 @@
 class ECMS
 
-  def apply_nv(model:, nv_type:, nv_comfort_model:, nv_opening_fraction:, nv_Tout_min:, nv_Tout_max:, nv_Delta_Tin_Tout:)
+  def apply_nv(model:, nv_type:, nv_comfort_model:, nv_opening_fraction:, nv_Tout_min:, nv_Delta_Tin_Tout:)
 
     ##### If any of users' inputs are nil/false, do nothing.
     return if nv_type.nil? || nv_type == FALSE
     return if nv_comfort_model.nil? || nv_comfort_model == FALSE
     return if nv_opening_fraction.nil? || nv_opening_fraction == FALSE
     return if nv_Tout_min.nil? || nv_Tout_min == FALSE
-    return if nv_Tout_max.nil? || nv_Tout_max == FALSE
     return if nv_Delta_Tin_Tout.nil? || nv_Delta_Tin_Tout == FALSE
+
+    setpoint_adjustment_for_nv = 2.0  #This is to adjust heating and cooling setpoint temperature as min and max indoor temperature to have NV
 
     model.getZoneHVACEquipmentLists.sort.each do |zone_hvac_equipment_list|
       # puts zone_hvac_equipment_list
@@ -38,13 +39,44 @@ class ECMS
               zone_clg_thermostat_sch = zone_thermostat.coolingSetpointTemperatureSchedule.get
               zone_htg_thermostat_sch = zone_thermostat.heatingSetpointTemperatureSchedule.get
 
+              ##### Create schedule for max Tin to have NV on the basis of cooling setpoint temperature for default day
               zone_clg_thermostat_sch_name = zone_clg_thermostat_sch.name
               zone_clg_sp_schedule = zone_clg_thermostat_sch.to_ScheduleRuleset.get
-              zone_clg_sp_profile = zone_clg_sp_schedule.defaultDaySchedule
+              puts zone_clg_sp_schedule.name
 
+              max_Tin_schedule = zone_clg_sp_schedule.clone(model).to_ScheduleRuleset.get
+              max_Tin_schedule.setName('natural_ventilation_max_Tin_schedule')
+              ## default days/weekdays
+              max_Tin_schedule_defaultDay = max_Tin_schedule.defaultDaySchedule
+              max_Tin_schedule_defaultDay.setName('natural_ventilation_max_Tin_schedule_defaultDay')
+              max_Tin_schedule_defaultDay_times = max_Tin_schedule_defaultDay.times
+              max_Tin_schedule_defaultDay_values = max_Tin_schedule_defaultDay.values
+              max_Tin_schedule_defaultDay_values_adjusted = max_Tin_schedule_defaultDay_values.map { |i| i + setpoint_adjustment_for_nv }
+              i = 0.0
+              max_Tin_schedule_defaultDay_times.each do |time|
+                max_Tin_schedule_defaultDay.addValue(time, max_Tin_schedule_defaultDay_values_adjusted[i])
+                i += 1.0
+              end
+
+              ##### Create schedule for min Tin to have NV on the basis of cooling setpoint temperature for default day
               zone_htg_thermostat_sch_name = zone_htg_thermostat_sch.name
               zone_htg_sp_schedule = zone_htg_thermostat_sch.to_ScheduleRuleset.get
-              zone_htg_sp_profile = zone_htg_sp_schedule.defaultDaySchedule
+              puts zone_htg_sp_schedule.name
+              min_Tin_schedule = zone_htg_sp_schedule.clone(model).to_ScheduleRuleset.get
+              min_Tin_schedule.setName('natural_ventilation_min_Tin_schedule')
+              ## default days/weekdays
+              min_Tin_schedule_defaultDay = min_Tin_schedule.defaultDaySchedule
+              min_Tin_schedule_defaultDay.setName('natural_ventilation_min_Tin_schedule_defaultDay')
+              min_Tin_schedule_defaultDay_times = min_Tin_schedule_defaultDay.times
+              min_Tin_schedule_defaultDay_values = min_Tin_schedule_defaultDay.values
+              min_Tin_schedule_defaultDay_values_adjusted = min_Tin_schedule_defaultDay_values.map { |i| i - setpoint_adjustment_for_nv }
+              i = 0.0
+              min_Tin_schedule_defaultDay_times.each do |time|
+                min_Tin_schedule_defaultDay.addValue(time, min_Tin_schedule_defaultDay_values_adjusted[i])
+                i += 1.0
+              end
+
+
             end
           end
         end
@@ -87,10 +119,9 @@ class ECMS
                 zn_vent_design_flow_rate_1.setDesignFlowRateCalculationMethod('Flow/Person')
                 zn_vent_design_flow_rate_1.setFlowRateperPerson(oa_per_person_normalized_by_number_of_windows)
                 zn_vent_design_flow_rate_1.setVentilationType('Natural')
-                zn_vent_design_flow_rate_1.setMinimumIndoorTemperatureSchedule(zone_htg_sp_schedule)
-                zn_vent_design_flow_rate_1.setMaximumIndoorTemperatureSchedule(zone_clg_sp_schedule)
+                zn_vent_design_flow_rate_1.setMinimumIndoorTemperatureSchedule(min_Tin_schedule)
+                zn_vent_design_flow_rate_1.setMaximumIndoorTemperatureSchedule(max_Tin_schedule)
                 zn_vent_design_flow_rate_1.setMinimumOutdoorTemperature(nv_Tout_min)
-                zn_vent_design_flow_rate_1.setMaximumOutdoorTemperature(nv_Tout_max)
                 zn_vent_design_flow_rate_1.setDeltaTemperature(nv_Delta_Tin_Tout) #E+ I/O Ref.: "This is the temperature difference between the indoor and outdoor air dry-bulb temperatures below which ventilation is shutoff."
                 zone_hvac_equipment_list.addEquipment(zn_vent_design_flow_rate_1)
 
@@ -99,10 +130,9 @@ class ECMS
                 zn_vent_design_flow_rate_2.setDesignFlowRateCalculationMethod('Flow/Area')
                 zn_vent_design_flow_rate_2.setFlowRateperZoneFloorArea(oa_per_floor_area_normalized_by_number_of_windows)
                 zn_vent_design_flow_rate_2.setVentilationType('Natural')
-                zn_vent_design_flow_rate_2.setMinimumIndoorTemperatureSchedule(zone_htg_sp_schedule)
-                zn_vent_design_flow_rate_2.setMaximumIndoorTemperatureSchedule(zone_clg_sp_schedule)
+                zn_vent_design_flow_rate_2.setMinimumIndoorTemperatureSchedule(min_Tin_schedule)
+                zn_vent_design_flow_rate_2.setMaximumIndoorTemperatureSchedule(max_Tin_schedule)
                 zn_vent_design_flow_rate_2.setMinimumOutdoorTemperature(nv_Tout_min)
-                zn_vent_design_flow_rate_2.setMaximumOutdoorTemperature(nv_Tout_max)
                 zn_vent_design_flow_rate_2.setDeltaTemperature(nv_Delta_Tin_Tout)
                 zone_hvac_equipment_list.addEquipment(zn_vent_design_flow_rate_2)
 
@@ -114,14 +144,13 @@ class ECMS
                 # (Ref: E+ I/O) The Effective Angle value "is used to calculate the angle between the wind direction and the opening outward normal to determine the opening effectiveness values when the input field Opening Effectiveness = Autocalculate."
                 # (Ref: E+ I/O) "Effective Angle is the angle in degrees counting from the North clockwise to the opening outward normal."
                 zn_vent_wind_and_stack.setEffectiveAngle(window_azimuth_deg)
-                zn_vent_wind_and_stack.setMinimumIndoorTemperatureSchedule(zone_htg_sp_schedule)
-                zn_vent_wind_and_stack.setMaximumIndoorTemperatureSchedule(zone_clg_sp_schedule)
+                zn_vent_wind_and_stack.setMinimumIndoorTemperatureSchedule(min_Tin_schedule)
+                zn_vent_wind_and_stack.setMaximumIndoorTemperatureSchedule(max_Tin_schedule)
                 zn_vent_wind_and_stack.setMinimumOutdoorTemperature(nv_Tout_min)
-                zn_vent_wind_and_stack.setMaximumOutdoorTemperature(nv_Tout_max)
                 zn_vent_wind_and_stack.setDeltaTemperature(nv_Delta_Tin_Tout)
                 zone_hvac_equipment_list.addEquipment(zn_vent_wind_and_stack)
 
-              # elsif nv_comfort_model == 'Adaptive_Model'  #TODO: to include adaptive thermal comfort model (ASHRAE 55)
+              # elsif nv_comfort_model == 'Adaptive_Model'  #TODO: QUESTION: do we want to include adaptive thermal comfort model (ASHRAE 55)?
 
               end #nv_comfort_model == 'Fanger_Model'
 
@@ -143,8 +172,7 @@ class ECMS
           # puts "#{air_loop.name.to_s} is empty"
           avail_mgr_hybr_vent = OpenStudio::Model::AvailabilityManagerHybridVentilation.new(model)
           # puts "#{air_loop.name.to_s} avail_mgr name is #{avail_mgr_hybr_vent.name.to_s}"
-          avail_mgr_hybr_vent.setMinimumOutdoorTemperature(nv_Tout_min) #Note: since "Ventilation Control Mode" is by default set to "Temperature (i.e. 1)", only min and max Tout are needed. (see E+ I/O Ref.)
-          avail_mgr_hybr_vent.setMaximumOutdoorTemperature(nv_Tout_max) #Note: Tout_min is to avoid overcooling, Tout_max is to avoid overheating. (see E+ I/O Ref.)
+          avail_mgr_hybr_vent.setMinimumOutdoorTemperature(nv_Tout_min) #Note: since "Ventilation Control Mode" is by default set to "Temperature (i.e. 1)", only min and max Tout are needed. (see E+ I/O Ref.)  #Note: Tout_min is to avoid overcooling (see E+ I/O Ref).
           air_loop.addAvailabilityManager(avail_mgr_hybr_vent)
         end
       end
