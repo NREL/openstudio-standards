@@ -9,21 +9,21 @@ The workflow of this measure is as follows:
     (currently the measure includes just Fanger model)
     * nv_opening_fraction: what is the opening fraction of windows (this value is used to calculate the opening area of windows for NV)
     * nv_Tout_min: As per E+ I/O Reference, "minimum outdoor temperature is the outdoor temperature (in Celsius) below which ventilation is shut off. This lower temperature limit is intended to avoid overcooling a space, which could result in a heating load."
-    * nv_Tout_max: As per E+ I/O Reference, "maximum outdoor temperature is the outdoor temperature (in Celsius) above which ventilation is shut off. This upper temperature limit is intended to avoid overheating a space, which could result in a cooling load."
     * nv_Delta_Tin_Tout: As per E+ I/O Reference, "Delta temperature is the temperature difference (in Celsius) between the indoor and outdoor air dry-bulb temperatures below which ventilation is shutoff."
 * Loop through **ZoneHVACEquipmentLists**.
     * Get which thermal zone is served by each of the "ZoneHVACEquipmentLists" objects.
     * Get heating/cooling setpoint temperature schedules for the thermal zone from the osm file. 
+    * Create an adjustment of heating/cooling setpoint temperature schedules. 
     (Note that these schedules are used in the "ZoneVentilation:DesignFlowRate" and "ZoneVentilation:WindandStackOpenArea" objects)
     * Loop through spaces in the thermal zone.
     * Gather outdoor air flow rate per person and per floor area of the space from the osm file.
     (Note that these values are used in the "ZoneVentilation:DesignFlowRate" objects)
     * Find how many external windows each space has.
     * Loop through external windows of the space.
-    * Add **ZoneVentilation:DesignFlowRate** objects to each space if has at least external window. 
+    * Add **ZoneVentilation:DesignFlowRate** objects to each space if has at least one external window. 
         * The number of "ZoneVentilation:DesignFlowRate" is twice the number of external windows the space has. 
         This is because for each external window, two "ZoneVentilation:DesignFlowRate" objects are added: (1) for air flow rate per person, and (2) for air flow rate per floor area. 
-    * Add one **ZoneVentilation:WindandStackOpenArea** objects to each space if has at least external window. 
+    * Add one **ZoneVentilation:WindandStackOpenArea** objects to each space if has at least one external window. 
         * The number of "ZoneVentilation:WindandStackOpenArea" equals the number of external windows the space has.
     * Add "ZoneVentilation:DesignFlowRate" and "ZoneVentilation:WindandStackOpenArea" objects to the "ZoneHVAC:EquipmentList" object of the thermal zone.
 * Loop through **AirLoopHVACs**.
@@ -38,12 +38,13 @@ Hence, this measure excludes stack-driven NV.
 * It uses a built-in object called **AvailabilityManager:HybridVentilation** in EnergyPlus to avoid simultaneous NV and HVAC system operation.
     * Note that **Ventilation Control Mode Schedule Name** was set by default.
     Hence, the integer value in the schedule is set to 1 (i.e. temperature control).
-    * Note that users' input for nv_Tout_min and nv_Tout_max are used for the fields of "Minimum Outdoor Temperature" and "Maximum Outdoor Temperature", respectively.
+    * Note that users' input for nv_Tout_min is used for the fields of "Minimum Outdoor Temperature".
         * As per E+ I/O Reference, "Minimum Outdoor Temperature is the outdoor temperature (in Celsius) below which hybrid ventilation is shut off when the ventilation control mode = 1 (Temperature). This lower temperature limit is intended to avoid overcooling a space, which could result in a heating load."
+    * Note that the "Maximum Outdoor Temperature" has been set to 30C. (there is no temperature schedule unlike the ZoneVentilation:DesignFlowRate and ZoneVentilation:WindandStackOpenArea objects)    
         * As per E+ I/O Reference, "Maximum Outdoor Temperature is the outdoor temperature (in Celsius) above which hybrid ventilation is shut off when the ventilation control mode = 1 (Temperature). This upper temperature limit is intended to avoid overheating a space, which could result in a cooling load."
 * It considers the Fanger thermal comfort model (rather than the ASHRAE 55's adaptive thermal comfort model). 
-In other words, this measure sets min/max indoor air temperature as fixed values (as per heating/cooling setpoint temperature) regardless of outdoor conditions.
-* It uses heating/cooling setpoint schedules as the min/max indoor air temperature for controlling NV. 
+In other words, this measure sets min/max indoor air temperature as fixed values (on the basis of heating/cooling setpoint temperature) regardless of outdoor conditions.
+* It uses heating/cooling setpoint schedules +/- 2C as the min/max indoor air temperature for controlling NV. 
     * Note that min/max indoor air temperature are the fields defined under the objects of **ZoneVentilation:DesignFlowRate** and **ZoneVentilation:WindandStackOpenArea**. 
     * As per E+ I/O Reference, "Minimum indoor temperature is the indoor temperature (in Celsius) below which ventilation is shutoff. This lower temperature limit is intended to avoid overcooling a space and thus result in a heating load."
     * As per E+ I/O Reference, "Maximum indoor temperature is the indoor temperature (in Celsius) above which ventilation is shutoff. This upper temperature limit is intended to avoid overheating a space and thus result in a cooling load."
@@ -55,7 +56,7 @@ In other words, this measure sets min/max indoor air temperature as fixed values
 * It uses same opening fraction for all windows of spaces. So, depending on a window area, the opening area of the window is calculated.  
 
 ## Testing Plan
-* Tests were run to ensure cooling loads reduce depending on the inputs for min/max outdoor air temperature, Delta T between indoor and outdoor, and windows opening fraction.
+* Tests were run to ensure cooling loads reduce depending on the inputs for min outdoor air temperature, Delta T between indoor and outdoor, and windows opening fraction.
 * Timestep-based results for NECB2011 Full Service Restaurant in Vancouver were checked to see if NV and HVAC were not working simultaneously, and if NV was working properly regarding using setpoints for NV.
 The timestep-based results' excel file has been attached to the task (see https://github.com/canmet-energy/btap_tasks/issues/310).
 * A unit test and expected results file were developed.

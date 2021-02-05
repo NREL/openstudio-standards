@@ -122,6 +122,7 @@ class ECMS
                 zn_vent_design_flow_rate_1.setMinimumIndoorTemperatureSchedule(min_Tin_schedule)
                 zn_vent_design_flow_rate_1.setMaximumIndoorTemperatureSchedule(max_Tin_schedule)
                 zn_vent_design_flow_rate_1.setMinimumOutdoorTemperature(nv_Tout_min)
+                zn_vent_design_flow_rate_1.setMaximumOutdoorTemperatureSchedule(max_Tin_schedule)
                 zn_vent_design_flow_rate_1.setDeltaTemperature(nv_Delta_Tin_Tout) #E+ I/O Ref.: "This is the temperature difference between the indoor and outdoor air dry-bulb temperatures below which ventilation is shutoff."
                 zone_hvac_equipment_list.addEquipment(zn_vent_design_flow_rate_1)
 
@@ -133,6 +134,7 @@ class ECMS
                 zn_vent_design_flow_rate_2.setMinimumIndoorTemperatureSchedule(min_Tin_schedule)
                 zn_vent_design_flow_rate_2.setMaximumIndoorTemperatureSchedule(max_Tin_schedule)
                 zn_vent_design_flow_rate_2.setMinimumOutdoorTemperature(nv_Tout_min)
+                zn_vent_design_flow_rate_2.setMaximumOutdoorTemperatureSchedule(max_Tin_schedule)
                 zn_vent_design_flow_rate_2.setDeltaTemperature(nv_Delta_Tin_Tout)
                 zone_hvac_equipment_list.addEquipment(zn_vent_design_flow_rate_2)
 
@@ -147,6 +149,7 @@ class ECMS
                 zn_vent_wind_and_stack.setMinimumIndoorTemperatureSchedule(min_Tin_schedule)
                 zn_vent_wind_and_stack.setMaximumIndoorTemperatureSchedule(max_Tin_schedule)
                 zn_vent_wind_and_stack.setMinimumOutdoorTemperature(nv_Tout_min)
+                zn_vent_wind_and_stack.setMaximumOutdoorTemperatureSchedule(max_Tin_schedule)
                 zn_vent_wind_and_stack.setDeltaTemperature(nv_Delta_Tin_Tout)
                 zone_hvac_equipment_list.addEquipment(zn_vent_wind_and_stack)
 
@@ -173,6 +176,7 @@ class ECMS
           avail_mgr_hybr_vent = OpenStudio::Model::AvailabilityManagerHybridVentilation.new(model)
           # puts "#{air_loop.name.to_s} avail_mgr name is #{avail_mgr_hybr_vent.name.to_s}"
           avail_mgr_hybr_vent.setMinimumOutdoorTemperature(nv_Tout_min) #Note: since "Ventilation Control Mode" is by default set to "Temperature (i.e. 1)", only min and max Tout are needed. (see E+ I/O Ref.)  #Note: Tout_min is to avoid overcooling (see E+ I/O Ref).
+          avail_mgr_hybr_vent.setMaximumOutdoorTemperature(30.0) # TODO: Question: the AvailabilityManagerHybridVentilation obj does not have sch field for Tout, so I set its max manually to 30C. Does it make sense?
           air_loop.addAvailabilityManager(avail_mgr_hybr_vent)
         end
       end

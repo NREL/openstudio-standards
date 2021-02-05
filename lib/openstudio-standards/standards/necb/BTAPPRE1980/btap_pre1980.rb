@@ -91,7 +91,6 @@ class BTAPPRE1980 < NECB2011
                            nv_comfort_model: nil,
                            nv_opening_fraction: nil,
                            nv_Tout_min: nil,
-                           nv_Tout_max: nil,
                            nv_Delta_Tin_Tout: nil
 
   )
