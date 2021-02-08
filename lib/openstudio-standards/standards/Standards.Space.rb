@@ -1952,17 +1952,19 @@ class Standard
       return load_values
   end
 
-  # TODO: Doug add YARD
-  # <Description>
+  # Returns an 8760 array of load values for a specific type of load in a space.
+  # This is useful for the Appendix G test for multizone systems
+  # to determine whether specific zones should be isolated to PSZ based on 
+  # space loads that differ significantly from other zones on the multizone system
   #
-  # @param model [<Type>] <description>
-  # @param space [<Type>] <description>
-  # @param equip [<Type>] <description>
-  # @param eqp_type [<Type>] <description>
-  # @param ppl_total [<Type>] <description>
-  # @param load_values [<Type>] <description>
+  # @param model [OpenStudio::Model::Model] the model
+  # @param space [OpenStudio::Model::Space] the space
+  # @param equip [object] This can be any type of equipment object in the space
+  # @param eqp_type [String] string description of the type of equipment object
+  # @param ppl_total [Numeric] total number of people in the space
+  # @param load_values [Array] 8760 array of load values for the equipment type
   #
-  # @return [<Type>] <description>
+  # @return [Array] load values array
   #
   def space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
     # Get load schedule and load lost value depending on equipment type
