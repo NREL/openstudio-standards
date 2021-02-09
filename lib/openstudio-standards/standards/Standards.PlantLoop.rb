@@ -963,6 +963,7 @@ class Standard
     per_chiller_sizing_factor = (1.0 / num_chillers).round(2)
     # This is unused
     per_chiller_cap_tons = cap_tons / num_chillers
+    per_chiller_cap_w = cap_w / num_chillers
 
     # Set the sizing factor and the chiller type: could do it on the first chiller before cloning it, but renaming warrants looping on chillers anyways
 
@@ -1026,6 +1027,7 @@ class Standard
     final_chillers.each_with_index do |final_chiller, i|
       final_chiller.setName("#{template} #{chiller_cooling_type} #{chiller_compressor_type} Chiller #{i + 1} of #{final_chillers.size}")
       final_chiller.setSizingFactor(per_chiller_sizing_factor)
+      final_chiller.setReferenceCapacity(per_chiller_cap_w)
       final_chiller.setCondenserType(chiller_cooling_type)
     end
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, there are #{final_chillers.size} #{chiller_cooling_type} #{chiller_compressor_type} chillers.")

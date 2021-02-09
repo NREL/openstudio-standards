@@ -1344,7 +1344,7 @@ class AppendixGPRMTests < Minitest::Test
       #'infiltration',
       #'hvac_baseline',
       #'sat_ctrl',
-      'number_of_boilers'
+      'number_of_boilers',
       #'number_of_chillers',
       #'number_of_cooling_towers'
     ]
