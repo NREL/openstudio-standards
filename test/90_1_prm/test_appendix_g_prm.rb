@@ -710,7 +710,9 @@ class AppendixGPRMTests < Minitest::Test
                     space_type_var = value3
                   end
                 end
-                assert(((light_sch[run_id][key][key1][key2] - value2 * (1.0 - space_type_var)).abs < 0.001), "Lighting schedule for the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
+                if value2 < 0
+                  assert(((light_sch[run_id][key][key1][key2] - value2 * (1.0 - space_type_var)).abs < 0.001), "Lighting schedule for the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
+                end
               end
             end
           end
