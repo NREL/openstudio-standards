@@ -82,6 +82,49 @@ class Standard
     return true
   end
 
+  # Get the supply fan object for a zone equipment component
+  # @author Doug Maddox, PNNL
+  # @param zone_hvac_component [object]
+  # @return [object] supply fan of zone equipment component
+  def zone_hvac_get_fan_object(zone_hvac_component)
+    zone_hvac = nil
+    # Check for any zone equipment type that has a supply fan
+    # except EnergyRecoveryVentilator, which is not a primary conditioning system
+    zone_hvac = if zone_hvac_component.to_ZoneHVACFourPipeFanCoil.is_initialized
+                  zone_hvac_component.to_ZoneHVACFourPipeFanCoil.get
+                elsif zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+                  zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.get
+                elsif zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+                  zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.get
+                elsif zone_hvac_component.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized
+                  zone_hvac_component.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.get
+                elsif zone_hvac_component.to_ZoneHVACUnitHeater.is_initialized
+                  zone_hvac_component.to_ZoneHVACUnitHeater.get
+                elsif zone_hvac_component.to_ZoneHVACUnitVentilator.is_initialized
+                  zone_hvac_component.to_ZoneHVACUnitVentilator.get
+                elsif zone_hvac_component.to_ZoneHVACWaterToAirHeatPump.is_initialized
+                  zone_hvac_component.to_ZoneHVACWaterToAirHeatPump.get
+                end
+
+    # Get the fan
+    if !zone_hvac.nil?
+      fan_obj = if zone_hvac.supplyAirFan.to_FanConstantVolume.is_initialized
+              zone_hvac.supplyAirFan.to_FanConstantVolume.get
+            elsif zone_hvac.supplyAirFan.to_FanVariableVolume.is_initialized
+              zone_hvac.supplyAirFan.to_FanVariableVolume.get
+            elsif zone_hvac.supplyAirFan.to_FanOnOff.is_initialized
+              zone_hvac.supplyAirFan.to_FanOnOff.get
+            elsif zone_hvac.supplyAirFan.to_FanSystemModel.is_initialized
+              zone_hvac.supplyAirFan.to_FanSystemModel.get
+            else
+              nil
+            end
+      return fan_obj
+    else
+      return nil
+    end
+  end
+
   # Apply all standard required controls to the zone equipment
   #
   # @return [Bool] returns true if successful, false if not

@@ -396,6 +396,233 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  #
+  # testing method for PRM 2019 baseline HVAC sizing, specific testing objectives are commented inline
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  #
+  def check_hvac_sizing(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, mod = prototype
+
+      # check sizing parameters (G3.1.2.2)
+      sizing_parameters = model_baseline.getSizingParameters
+      assert((sizing_parameters.coolingSizingFactor - 1.15).abs < 0.001, "Baseline cooling sizing parameters for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The cooling sizing parameter is #{sizing_parameters.coolingSizingFactor} but should be 1.15")
+      assert((sizing_parameters.heatingSizingFactor - 1.25).abs < 0.001, "Baseline cooling sizing parameters for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The heating sizing parameter is #{sizing_parameters.heatingSizingFactor} but should be 1.25")
+
+      # check sizing schedules for loads are correct (min/max) (G3.1.2.2.1 and exception)
+      check_sizing_values(model_baseline, building_type, template, climate_zone)
+
+      # check delta t between supply air temperature set point and room temperature set point are 20 deg (exception of 17 deg for laboratory spaces) (G3.1.2.8.1 and exception)
+      # including checking unit heater supply air temperature set point of 105 deg (G3.1.2.8.2)
+      check_sizing_delta_t(model_baseline, building_type, template, climate_zone)
+    end
+  end
+
+  #
+  # this checks the PRM baseline sizing requirement of supply air temperature delta T
+  #
+  # @param model [OpenStudio::Model::model] openstudio model object
+  # @param building_type [String]  building type
+  # @param template [String] template name
+  # @param climate_zone [<Type>] climate zone name
+  #
+  def check_sizing_delta_t(model, building_type, template, climate_zone)
+    std = Standard.build('90.1-PRM-2019')
+    model.getThermalZones.each do |thermal_zone|
+      delta_t_r = 20
+      thermal_zone.spaces.each do |space|
+        space_std_type = space.spaceType.get.standardsSpaceType.get
+        if space_std_type == 'laboratory'
+          delta_t_r = 17
+        end
+      end
+
+      schedule_types = [
+        'Ruleset',
+        'Constant',
+        'Compact'
+      ]
+
+      # cooling delta t
+      if std.thermal_zone_cooled?(thermal_zone)
+        case thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureInputMethod
+        when 'SupplyAirTemperatureDifference'
+          assert((thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureDifference - delta_t_r).abs < 0.001, "supply to room cooling temperature difference for #{thermal_zone.name} in the #{building_type}, #{template}, #{climate_zone} model is incorrect. It is #{thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureDifference}, but should be #{delta_t_r}")
+        when 'SupplyAirTemperature'
+          setpoint_c = nil
+          tstat = thermal_zone.thermostatSetpointDualSetpoint
+          if tstat.is_initialized
+            tstat = tstat.get
+            setpoint_sch = tstat.coolingSetpointTemperatureSchedule
+            if setpoint_sch.is_initialized
+              setpoint_sch = setpoint_sch.get
+              schedule_types.each do |schedule_type|
+                full_objtype_name = "OS_Schedule_#{schedule_type}"
+                if full_objtype_name == setpoint_sch.iddObjectType.valueName.to_s
+                  setpoint_sch = setpoint_sch.public_send("to_Schedule#{schedule_type}").get
+                  # reuse code in Standards.ThermalZone to find tstat max temperature
+                  setpoint_c = std.public_send("schedule_#{schedule_type.downcase}_annual_min_max_value", setpoint_sch)['min']
+                  break
+                end
+              end
+            end
+          end
+          if setpoint_c.nil?
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "#{thermal_zone.name} does not have a valid cooling supply air temperature setpoint identified .")
+          else
+            assert(((thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperature - setpoint_c).abs - delta_t_r / 9.0 * 5).abs < 0.001, "supply to room cooling temperature difference for #{thermal_zone.name} in the #{building_type} #{template}, #{climate_zone} model is incorrect. It is #{(thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperature - setpoint_c).abs}, but should be #{delta_t_r}.")
+          end
+        end
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ThermalZone', "#{thermal_zone.name} is not a cooled zone, skip cooling supply air temperature set point difference test.")
+      end
+
+      thermal_zone.equipment.each do |eqt|
+        if eqt.to_ZoneHVACUnitHeater.is_initialized
+          next # skip checking the heating delta t if the zone has a unit heater.
+        end
+      end
+
+      # heating delta t
+      if std.thermal_zone_heated?(thermal_zone)
+        has_unit_heater = false
+        # 90.1 Appendix G G3.1.2.8.2
+        thermal_zone.equipment.each do |eqt|
+          if eqt.to_ZoneHVACUnitHeater.is_initialized
+            setpoint_c = OpenStudio.convert(105, 'F', 'C').get
+            has_unit_heater = true
+          end
+        end
+        if has_unit_heater
+          assert((thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperature - setpoint_c).abs < 0.001, "heating design supply air temperature for #{thermal_zone.name} in the #{building_type} #{template}, #{climate_zone} model is incorrect. For zones with unit heaters, heating design supply air temperature should be #{setpoint_c} (90.1 Appendix G3.1.2.8.2)")
+        else
+          case thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperatureInputMethod
+          when 'SupplyAirTemperatureDifference'
+            assert((thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperatureDifference - delta_t_r).abs < 0.001, "supply to room heating temperature difference for #{thermal_zone.name} in the #{building_type}, #{template}, #{climate_zone} model is incorrect. It is #{thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperatureDifference}, but should be #{delta_t_r}.")
+          when 'SupplyAirTemperature'
+            setpoint_c = nil
+            tstat = thermal_zone.thermostatSetpointDualSetpoint
+            if tstat.is_initialized
+              tstat = tstat.get
+              setpoint_sch = tstat.heatingSetpointTemperatureSchedule
+              if setpoint_sch.is_initialized
+                setpoint_sch = setpoint_sch.get
+                schedule_types.each do |schedule_type|
+                  full_objtype_name = "OS_Schedule_#{schedule_type}"
+                  if full_objtype_name == setpoint_sch.iddObjectType.valueName.to_s
+                    setpoint_sch = setpoint_sch.public_send("to_Schedule#{schedule_type}").get
+                    # reuse code in Standards.ThermalZone to find tstat max temperature
+                    setpoint_c = std.public_send("schedule_#{schedule_type.downcase}_annual_min_max_value", setpoint_sch)['max']
+                    break
+                  end
+                end
+              end
+            end
+            if setpoint_c.nil?
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "#{thermal_zone.name} does not have a valid heating supply air temperature setpoint identified.")
+            else
+              assert(((thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperature - setpoint_c).abs - delta_t_r / 9.0 * 5).abs < 0.001, "supply to room heating temperature difference for #{thermal_zone.name} in the #{building_type} #{template}, #{climate_zone} model is incorrect. It is #{(thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperature - setpoint_c).abs}, but should be #{delta_t_r}.")
+            end
+          end
+        end
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ThermalZone', "#{thermal_zone.name} is not a heated zone, skip heating supply air temperature set point difference test.")
+      end
+    end
+  end
+
+  #
+  # this check uses very similar code to the one that implements this requirement
+  #
+  # @param model [OpenStudio::model::Model] openstudio model object
+  # @param building_type [String]  building type
+  # @param template [String] template name
+  # @param climate_zone [<Type>] climate zone name
+  #
+  def check_sizing_values(model, building_type, template, climate_zone)
+    space_loads = model.getSpaceLoads
+    loads = []
+    space_loads.sort.each do |space_load|
+      load_type = space_load.iddObjectType.valueName.sub('OS_', '').strip.sub('_', '')
+      casting_method_name = "to_#{load_type}"
+      if space_load.respond_to?(casting_method_name)
+        casted_load = space_load.public_send(casting_method_name).get
+        loads << casted_load
+      else
+        p 'Need Debug, casting method not found @JXL'
+      end
+    end
+
+    std_prm = ASHRAE901PRM.build('90.1-PRM-2019')
+
+    load_schedule_name_hash = {
+      'People' => 'numberofPeopleSchedule',
+      'Lights' => 'schedule',
+      'ElectricEquipment' => 'schedule',
+      'GasEquipment' => 'schedule',
+      'SpaceInfiltration_DesignFlowRate' => 'schedule'
+    }
+
+    loads.each do |load|
+      load_type = load.iddObjectType.valueName.sub('OS_', '').strip
+      load_schedule_name = load_schedule_name_hash[load_type]
+      next unless !load_schedule_name.nil?
+
+      # check if the load is in a dwelling space
+      if load.spaceType.is_initialized
+        space_type = load.spaceType.get
+      elsif load.space.is_initialized && load.space.get.spaceType.is_initialized
+        space_type = load.space.get.spaceType.get
+      else
+        space_type = nil
+        puts "No hosting space/spacetype found for load: #{load.name}"
+      end
+      if !space_type.nil? && /apartment/i =~ space_type.standardsSpaceType.to_s
+        load_in_dwelling = true
+      else
+        load_in_dwelling = false
+      end
+
+      load_schedule = load.public_send(load_schedule_name).get
+      schedule_type = load_schedule.iddObjectType.valueName.sub('OS_', '').strip.sub('_', '')
+      load_schedule = load_schedule.public_send("to_#{schedule_type}").get
+
+      case schedule_type
+      when 'ScheduleRuleset'
+        load_schmax = std_prm.get_8760_values_from_schedule(model, load_schedule).max
+        load_schmin = std_prm.get_8760_values_from_schedule(model, load_schedule).min
+        load_schmode = std_prm.get_weekday_values_from_8760(model,
+                                                            Array(std_prm.get_8760_values_from_schedule(model, load_schedule)),
+                                                            value_includes_holiday = true).mode[0]
+
+        # AppendixG-2019 G3.1.2.2.1
+        if load_type == 'SpaceInfiltration_DesignFlowRate'
+          summer_value = load_schmax
+          winter_value = load_schmax
+        else
+          summer_value = load_schmax
+          winter_value = load_schmin
+        end
+
+        # AppendixG-2019 Exception to G3.1.2.2.1
+        if load_in_dwelling
+          summer_value = load_schmode
+        end
+
+        summer_dd_schedule = load_schedule.summerDesignDaySchedule
+        assert((summer_dd_schedule.times[0] == OpenStudio::Time.new(1.0) && (summer_dd_schedule.values[0] - summer_value).abs < 0.001), "Baseline cooling sizing schedule for load #{load.name} in the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
+
+        winter_dd_schedule = load_schedule.winterDesignDaySchedule
+        assert((winter_dd_schedule.times[0] == OpenStudio::Time.new(1.0) && (winter_dd_schedule.values[0] - winter_value).abs < 0.001), "Baseline heating sizing schedule for load #{load.name} in the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
+
+      when 'ScheduleConstant'
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space load #{load.name} has schedule type of ScheduleConstant. Nothing to be done for ScheduleConstant")
+        next
+      end
+    end
+  end
+
   # Check lighting occ sensor
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -483,7 +710,9 @@ class AppendixGPRMTests < Minitest::Test
                     space_type_var = value3
                   end
                 end
-                assert(((light_sch[run_id][key][key1][key2] - value2 * (1.0 - space_type_var)).abs < 0.001), "Lighting schedule for the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
+                if value2 < 0
+                  assert(((light_sch[run_id][key][key1][key2] - value2 * (1.0 - space_type_var)).abs < 0.001), "Lighting schedule for the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
+                end
               end
             end
           end
@@ -946,6 +1175,7 @@ class AppendixGPRMTests < Minitest::Test
 
               # Check if requirement is met for SPM
               spm_check = true if dt_si.round(0) == 5.0
+              puts dt_si
             end
           end
 
@@ -1153,7 +1383,8 @@ class AppendixGPRMTests < Minitest::Test
       'light_occ_sensor',
       'infiltration',
       'hvac_baseline',
-      'sat_ctrl'
+      'sat_ctrl',
+      'hvac_sizing'
     ]
 
     # Get list of unique prototypes
@@ -1177,5 +1408,6 @@ class AppendixGPRMTests < Minitest::Test
     check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if tests.include? 'infiltration'
     check_hvac_type(prototypes_base['hvac_baseline']) if tests.include? 'hvac_baseline'
     check_sat_ctrl(prototypes_base['sat_ctrl']) if tests.include? 'sat_ctrl'
+    check_hvac_sizing(prototypes_base['hvac_sizing']) if tests.include? 'hvac_sizing'
   end
 end

@@ -22,7 +22,10 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/utilities/simulation'
   require_relative 'openstudio-standards/utilities/hash'
   require_relative 'openstudio-standards/utilities/sqlfile'
-
+  require_relative 'openstudio-standards/utilities/schedule_translator'
+  require_relative 'openstudio-standards/utilities/array'
+  require_relative 'openstudio-standards/utilities/object_info'
+  
   stds = 'openstudio-standards/standards'
   proto = 'openstudio-standards/prototypes'
 
