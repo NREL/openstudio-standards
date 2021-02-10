@@ -1376,13 +1376,9 @@ class Standard
   # @todo Exception: 17F delta-T for labs
   def thermal_zone_prm_baseline_heating_design_supply_temperature(thermal_zone)
 
-    if /prm/i =~ template # avoid affecting previous PRM tests
-      # 90.1 Appendix G G3.1.2.8.2
-      thermal_zone.equipment.each do |eqt|
-        if eqt.to_ZoneHVACUnitHeater.is_initialized
-          return OpenStudio.convert(105, 'F', 'C').get
-        end
-      end
+    unit_heater_sup_temp = thermal_zone_prm_unitheater_design_supply_temperature(thermal_zone)
+    unless unit_heater_sup_temp.nil?
+      return unit_heater_sup_temp
     end
 
     setpoint_c = nil
@@ -1428,14 +1424,10 @@ class Standard
 
     # Add 20F delta-T
     delta_t_r = 20
-    if /prm/i =~ template # avoid affecting previous PRM tests
-      # For labs, add 17 delta-T; otherwise, add 20 delta-T
-      thermal_zone.spaces.each do |space|
-        space_std_type = space.spaceType.get.standardsSpaceType.get
-        if space_std_type == 'laboratory'
-          delta_t_r = 17
-        end
-      end
+
+    new_delta_t = thermal_zone_prm_lab_delta_t(thermal_zone)
+    unless new_delta_t.nil?
+      delta_t_r = new_delta_t
     end
 
     delta_t_k = OpenStudio.convert(delta_t_r, 'R', 'K').get
@@ -1978,5 +1970,15 @@ class Standard
     # are there associated zone mixing or dummy exhaust objects that need to change when this changes?
     # How are these ojects identifed?
     # If this is run directly after thermal_zone_add_exhaust(thermal_zone)  it will return a hash where each key is an exhaust object and hash is a hash of related zone mizing and dummy exhaust from the source zone
+  end
+
+  # Specify supply air temperature setpoint for unit heaters based on 90.1 Appendix G G3.1.2.8.2 (implementation in PRM subclass)
+  def thermal_zone_prm_unitheater_design_supply_temperature(thermal_zone)
+    return nil
+  end
+
+  # Specify supply to room delta for laboratory spaces based on 90.1 Appendix G Exception to G3.1.2.8.1 (implementation in PRM subclass)
+  def thermal_zone_prm_lab_delta_t(thermal_zone)
+    return nil
   end
 end

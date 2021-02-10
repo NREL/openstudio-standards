@@ -513,4 +513,34 @@ class ASHRAE901PRM < Standard
       end
     end
   end
+
+  # Specify supply air temperature setpoint for unit heaters based on 90.1 Appendix G G3.1.2.8.2
+  #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone Object
+  #
+  # @return [Double] for zone with unit heaters, return design supply temperature; otherwise, return nil
+  def thermal_zone_prm_unitheater_design_supply_temperature(thermal_zone)
+    thermal_zone.equipment.each do |eqt|
+      if eqt.to_ZoneHVACUnitHeater.is_initialized
+        return OpenStudio.convert(105, 'F', 'C').get
+      end
+    end
+    return nil
+  end
+  
+  # Specify supply to room delta for laboratory spaces based on 90.1 Appendix G Exception to G3.1.2.8.1
+  #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone Object
+  #
+  # @return [Double] for zone with laboratory space, return 17; otherwise, return nil
+  def thermal_zone_prm_lab_delta_t(thermal_zone)
+    # For labs, add 17 delta-T; otherwise, add 20 delta-T
+    thermal_zone.spaces.each do |space|
+      space_std_type = space.spaceType.get.standardsSpaceType.get
+      if space_std_type == 'laboratory'
+        return 17
+      end
+    end
+    return nil
+  end
 end
