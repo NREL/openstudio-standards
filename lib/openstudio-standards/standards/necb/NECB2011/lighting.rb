@@ -1,9 +1,17 @@
 class NECB2011
 
   def apply_standard_lights(set_lights: true,
-                            space_type:, space_type_properties:,
-                            lights_type: 'NECB_Default',
-                            lights_scale: 1.0)
+                            space_type:,
+                            space_type_properties:,
+                            lights_type:,
+                            lights_scale:)
+
+    if lights_type.nil? || lights_type == 'none'
+      lights_type = 'NECB_Default'
+    end
+    if lights_scale.nil? || lights_scale == 'none' || lights_scale == 'NECB_Default'
+      lights_scale = 1.0
+    end
 
     lights_have_info = false
     lighting_per_area = space_type_properties['lighting_per_area'].to_f
