@@ -3,11 +3,29 @@ class ECMS
   def apply_pv_ground(model:, pv_ground_type:, pv_ground_total_area_pv_panels_m2:, pv_ground_tilt_angle:, pv_ground_azimuth_angle:, pv_ground_module_description:)
 
     ##### If any of users' inputs are nil/false do nothing.
-    return if pv_ground_type.nil? || pv_ground_type == FALSE
-    return if pv_ground_total_area_pv_panels_m2.nil? || pv_ground_total_area_pv_panels_m2 == FALSE
-    return if pv_ground_tilt_angle.nil? || pv_ground_tilt_angle == FALSE
-    return if pv_ground_azimuth_angle.nil? || pv_ground_azimuth_angle == FALSE
-    return if pv_ground_module_description.nil? || pv_ground_module_description == FALSE
+    return if pv_ground_type.nil? || pv_ground_type == false || pv_ground_type == 'none' || pv_ground_type == 'NECB_Default'
+    return if pv_ground_total_area_pv_panels_m2 == nil? || pv_ground_total_area_pv_panels_m2 == false || pv_ground_total_area_pv_panels_m2 == 'none'
+    return if pv_ground_tilt_angle == nil? || pv_ground_tilt_angle == false || pv_ground_tilt_angle == 'none'
+    return if pv_ground_azimuth_angle == nil? || pv_ground_azimuth_angle == false || pv_ground_azimuth_angle == 'none'
+    return if pv_ground_module_description == nil? || pv_ground_module_description == false || pv_ground_module_description == 'none'
+
+    ##### Calculate footprint of the building model (this is used as default value for pv_ground_total_area_pv_panels_m2)
+    building_footprint_m2 = 0.0
+    model.getSpaces.sort.each do |space|
+      space.surfaces.sort.each do |surface|
+        if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground'
+          floor_vertices = surface.vertices
+          if floor_vertices[0].z == 0.0
+            building_footprint_m2 = building_footprint_m2 + surface.netArea
+          end
+        end
+      end
+    end
+
+    ##### Set default PV panels' total area as 0.0
+    if pv_ground_total_area_pv_panels_m2 == 'NECB_Default'
+      pv_ground_total_area_pv_panels_m2 = building_footprint_m2
+    end
 
     ##### Set default PV panels' tilt angle as the latitude
     if pv_ground_tilt_angle == 'NECB_Default'

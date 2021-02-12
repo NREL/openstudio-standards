@@ -233,11 +233,11 @@ class NECB2011 < Standard
                                 skylight_solar_trans: skylight_solar_trans,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
-                                pv_ground_type: pv_ground_type,  # Two options: (1) nil OR FALSE, (2) TRUE
-                                pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # e.g. 50
-                                pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) 'NECB_Default' (i.e. latitude), (2) tilt angle value (e.g. 20)
-                                pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) 'NECB_Default' (i.e. south), (2) azimuth angle value (e.g. 90)
-                                pv_ground_module_description: pv_ground_module_description # Options: (1) 'NECB_Default' (i.e. Standard), (2) other options ('Standard', 'Premium', ThinFilm')
+                                pv_ground_type: pv_ground_type,  # Two options: (1) nil/none/false/'NECB_Default', (2) true
+                                pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. building footprint), (3) area value (e.g. 50)
+                                pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. latitude), (3) tilt angle value (e.g. 20)
+                                pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. south), (3) azimuth angle value (e.g. 90)
+                                pv_ground_module_description: pv_ground_module_description # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. Standard), (3) other options ('Standard', 'Premium', ThinFilm')
     )
 
   end
