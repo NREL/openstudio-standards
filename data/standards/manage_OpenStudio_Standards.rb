@@ -329,9 +329,9 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
                               'OEESC 2014',
                               'ICC IECC 2015',
                               'ECBC 2017',
-                              '189.1-2009',
-                              '90.1-2016',
-                              '90.1-2019']
+                              '189.1-2009']#,
+                              #'90.1-2016',
+                              #'90.1-2019']
   else
     standards_dir = File.expand_path("#{__dir__}/../../lib/openstudio-standards/standards")
     skip_list = exclusion_list['os_stds']
