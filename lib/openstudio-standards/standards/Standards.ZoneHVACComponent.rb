@@ -92,6 +92,9 @@ class Standard
   def zone_hvac_component_occupancy_ventilation_control(zone_hvac_component)
     ventilation = false
     # Zone HVAC operating schedule if providing ventilation
+    # Zone HVAC components return an OptionalSchedule object for supplyAirFanOperatingModeSchedule
+    # except for ZoneHVACTerminalUnitVariableRefrigerantFlow which returns a Schedule
+    existing_sch = nil
     if zone_hvac_component.to_ZoneHVACFourPipeFanCoil.is_initialized
       zone_hvac_component = zone_hvac_component.to_ZoneHVACFourPipeFanCoil.get
       if zone_hvac_component.maximumOutdoorAirFlowRate.is_initialized
@@ -99,6 +102,8 @@ class Standard
         ventilation = true if oa_rate > 0.0
       end
       ventilation = true if zone_hvac_component.isMaximumOutdoorAirFlowRateAutosized
+      fan_op_sch = zone_hvac_component.supplyAirFanOperatingModeSchedule
+      existing_sch = fan_op_sch.get if fan_op_sch.is_initialized
     elsif zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
       zone_hvac_component = zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.get
       if zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.is_initialized
@@ -106,6 +111,8 @@ class Standard
         ventilation = true if oa_rate > 0.0
       end
       ventilation = true if zone_hvac_component.isOutdoorAirFlowRateWhenNoCoolingorHeatingisNeededAutosized
+      fan_op_sch = zone_hvac_component.supplyAirFanOperatingModeSchedule
+      existing_sch = fan_op_sch.get if fan_op_sch.is_initialized
     elsif zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
       zone_hvac_component = zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.get
       if zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.is_initialized
@@ -113,6 +120,8 @@ class Standard
         ventilation = true if oa_rate > 0.0
       end
       ventilation = true if zone_hvac_component.isOutdoorAirFlowRateWhenNoCoolingorHeatingisNeededAutosized
+      fan_op_sch = zone_hvac_component.supplyAirFanOperatingModeSchedule
+      existing_sch = fan_op_sch.get if fan_op_sch.is_initialized
     elsif zone_hvac_component.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized
       zone_hvac_component = zone_hvac_component.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.get
       if zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.is_initialized
@@ -120,6 +129,7 @@ class Standard
         ventilation = true if oa_rate > 0.0
       end
       ventilation = true if zone_hvac_component.isOutdoorAirFlowRateWhenNoCoolingorHeatingisNeededAutosized
+      existing_sch = zone_hvac_component.supplyAirFanOperatingModeSchedule
     elsif zone_hvac_component.to_ZoneHVACWaterToAirHeatPump.is_initialized
       zone_hvac_component = zone_hvac_component.to_ZoneHVACWaterToAirHeatPump.get
       if zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.is_initialized
@@ -127,14 +137,14 @@ class Standard
         ventilation = true if oa_rate > 0.0
       end
       ventilation = true if zone_hvac_component.isOutdoorAirFlowRateWhenNoCoolingorHeatingisNeededAutosized
+      fan_op_sch = zone_hvac_component.supplyAirFanOperatingModeSchedule
+      existing_sch = fan_op_sch.get if fan_op_sch.is_initialized
     end
     return false unless ventilation
 
     # if supply air fan operating schedule is always off,
     # override to provide ventilation during occupied hours
-    existing_sch = zone_hvac_component.supplyAirFanOperatingModeSchedule
-    if existing_sch.is_initialized
-      existing_sch = existing_sch.get
+    unless existing_sch.nil?
       if existing_sch.name.is_initialized
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ZoneHVACComponent', "#{zone_hvac_component.name} has ventilation, and schedule is set to always on; keeping always on schedule.")
         return false if existing_sch.name.get.to_s.downcase.include? 'always on discrete'

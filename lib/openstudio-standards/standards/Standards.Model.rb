@@ -1556,6 +1556,7 @@ class Standard
     model.getCoilHeatingGasMultiStages.each { |obj| coil_heating_gas_multi_stage_apply_efficiency_and_curves(obj) }
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Finished applying HVAC efficiency standards for #{template} template.")
+    return true
   end
 
   # Applies daylighting controls to each space in the model per the standard.
