@@ -150,7 +150,7 @@ module FullServiceRestaurant
                'ASHRAE 169-2013-2B',
                'ASHRAE 169-2013-3A',
                'ASHRAE 169-2013-3B',
-               'ASHRAE 169-2013-3C',
+               'ASHRAE 169-2013-3C'
             infiltration_per_zone_diningdoor = 0.614474994
             infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown DOOR_INFIL_SCH'))
           else
