@@ -1730,7 +1730,7 @@ class ECMS
   # ============================================================================================================================
   # Apply chiller efficiency  #TODO: see 'modify_boiler_efficiency' and 'reset_boiler_efficiency'
   def modify_chiller_efficiency(model:, chiller_cop:)
-    # return if chiller_cop.nil?
+    return if chiller_cop.nil?
     # If chiller_cop is a string rather than a hash then assume it is the name of a chiller efficiency package and look
     # for a package with that name in chiller_set.json.
     if chiller_cop.is_a?(String)
@@ -1746,24 +1746,63 @@ class ECMS
             "name" => ecm_name,
             "capacity_w" => chiller_packages[0]['capacity_w'],
             "cop_w_by_w" => chiller_packages[0]['cop_w_by_w'],
+            "ref_leaving_chilled_water_temp_c" => chiller_packages[0]['ref_leaving_chilled_water_temp_c'],
+            "ref_entering_condenser_fluid_temp_c" => chiller_packages[0]['ref_entering_condenser_fluid_temp_c'],
+            "ref_chilled_water_flow_rate_m3_s" => chiller_packages[0]['ref_chilled_water_flow_rate_m3_s'],
+            "ref_condenser_fluid_flow_rate_m3_s" => chiller_packages[0]['ref_condenser_fluid_flow_rate_m3_s'],
             "cooling_capacity_function_of_temperature_curve" => chiller_packages[0]['cooling_capacity_function_of_temperature_curve'],
             "electric_input_to_cooling_output_ratio_function_of_temperature_curve" => chiller_packages[0]['electric_input_to_cooling_output_ratio_function_of_temperature_curve'],
-            "electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve" => chiller_packages[0]['electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve']
+            "electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve" => chiller_packages[0]['electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve'],
+            "min_part_load_ratio" => chiller_packages[0]['min_part_load_ratio'],
+            "max_part_load_ratio" => chiller_packages[0]['max_part_load_ratio'],
+            "opt_part_load_ratio" => chiller_packages[0]['opt_part_load_ratio'],
+            "min_unloading_ratio" => chiller_packages[0]['min_unloading_ratio'],
+            "condenser_type" => chiller_packages[0]['condenser_type'],
+            "fraction_of_compressor_electric_consumption_rejected_by_condenser" => chiller_packages[0]['fraction_of_compressor_electric_consumption_rejected_by_condenser'],
+            "leaving_chilled_water_lower_temperature_limit_c" => chiller_packages[0]['leaving_chilled_water_lower_temperature_limit_c'],
+            "chiller_flow_mode" => chiller_packages[0]['chiller_flow_mode'],
+            "design_heat_recovery_water_flow_rate_m3_s" => chiller_packages[0]['design_heat_recovery_water_flow_rate_m3_s'],
         }
       end
     end
     puts chiller_set
     model.getChillerElectricEIRs.sort.each do |mod_chiller|
-      # puts mod_chiller
       reset_chiller_efficiency(model: model, component: mod_chiller.to_ChillerElectricEIR.get, cop: chiller_set)
-      # puts mod_chiller
-      # raise('check_mod_chiller')
     end
+
+    ##### Change fan power of single-speed Cooling towers from 'Hard Sized' to Autosized (Otherwise, E+ gives the fatal error 'Autosizing of cooling tower UA failed for tower')
+    model.getCoolingTowerSingleSpeeds.sort.each do |cooling_tower_single_speed|
+      cooling_tower_single_speed.autosizeFanPoweratDesignAirFlowRate()
+    end
+
   end
 
   def reset_chiller_efficiency(model:, component:, cop:)
+    component.setName(cop['name'])
     component.setReferenceCapacity(cop['capacity_w'])
     component.setReferenceCOP(cop['cop_w_by_w'])
+    component.setReferenceLeavingChilledWaterTemperature(cop['ref_leaving_chilled_water_temp_c'])
+    component.setReferenceEnteringCondenserFluidTemperature(cop['ref_entering_condenser_fluid_temp_c'])
+    component.setReferenceChilledWaterFlowRate(cop['ref_chilled_water_flow_rate_m3_s'])
+    component.setReferenceCondenserFluidFlowRate(cop['ref_condenser_fluid_flow_rate_m3_s'])
+    component.setMinimumPartLoadRatio(cop['min_part_load_ratio'])
+    component.setMaximumPartLoadRatio(cop['max_part_load_ratio'])
+    component.setOptimumPartLoadRatio(cop['opt_part_load_ratio'])
+    component.setMinimumUnloadingRatio(cop['min_unloading_ratio'])
+    component.setCondenserType(cop['condenser_type'])
+    component.setFractionofCompressorElectricConsumptionRejectedbyCondenser(cop['fraction_of_compressor_electric_consumption_rejected_by_condenser'])
+    component.setLeavingChilledWaterLowerTemperatureLimit(cop['leaving_chilled_water_lower_temperature_limit_c'])
+    component.setChillerFlowMode(cop['chiller_flow_mode'])
+    component.setDesignHeatRecoveryWaterFlowRate(cop['design_heat_recovery_water_flow_rate_m3_s'])
+
+    # set other fields of this object to nothing #TODO: Question: could not do this for the 'Condenser Heat Recovery Relative Capacity Fraction' field as there is no 'reset' for this field
+    component.resetCondenserFanPowerRatio()
+    component.resetSizingFactor()
+    component.resetBasinHeaterCapacity()
+    component.resetBasinHeaterSetpointTemperature()
+    component.resetBasinHeaterSchedule
+    component.resetHeatRecoveryInletHighTemperatureLimitSchedule
+    component.resetHeatRecoveryLeavingTemperatureSetpointNode
 
     #####
     cooling_capacity_function_of_temperature_curve_name = cop['cooling_capacity_function_of_temperature_curve'].to_s
