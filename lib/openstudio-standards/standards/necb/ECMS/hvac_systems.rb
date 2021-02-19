@@ -1767,7 +1767,13 @@ class ECMS
     end
     puts chiller_set
     model.getChillerElectricEIRs.sort.each do |mod_chiller|
-      reset_chiller_efficiency(model: model, component: mod_chiller.to_ChillerElectricEIR.get, cop: chiller_set)
+      ref_capacity = mod_chiller.referenceCapacity
+      ref_capacity = ref_capacity.to_f
+      puts ref_capacity
+      puts ref_capacity.class
+      if ref_capacity > 0.0011 #Note: No need to replace any chillers with capacity = 0.001 as per Kamel Haddad's comment
+        reset_chiller_efficiency(model: model, component: mod_chiller.to_ChillerElectricEIR.get, cop: chiller_set)
+      end
     end
 
     ##### Change fan power of single-speed Cooling towers from 'Hard Sized' to Autosized (Otherwise, E+ gives the fatal error 'Autosizing of cooling tower UA failed for tower')
