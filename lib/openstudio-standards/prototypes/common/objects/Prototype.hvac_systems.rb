@@ -2566,6 +2566,18 @@ class Standard
         return false
       end
 
+      # fan location
+      if fan_location.nil?
+        fan_location = 'DrawThrough'
+      end
+      case fan_location
+      when 'DrawThrough', 'BlowThrough'
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "Setting fan location for #{fan.name} to #{fan_location}.")
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Invalid fan_location #{fan_location} for fan #{fan.name}.")
+        return false
+      end
+
       # construct unitary system object
       unitary_system = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
       unitary_system.setSupplyFan(fan) unless fan.nil?
