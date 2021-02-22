@@ -2,12 +2,34 @@ class ECMS
 
   def apply_pv_ground(model:, pv_ground_type:, pv_ground_total_area_pv_panels_m2:, pv_ground_tilt_angle:, pv_ground_azimuth_angle:, pv_ground_module_description:)
 
+    ##### Remove leading or trailing whitespace in case users add them in inputs
+    if pv_ground_total_area_pv_panels_m2.instance_of?(String)
+      pv_ground_total_area_pv_panels_m2 = pv_ground_total_area_pv_panels_m2.strip
+    end
+    if pv_ground_tilt_angle.instance_of?(String)
+      pv_ground_tilt_angle = pv_ground_tilt_angle.strip
+    end
+    if pv_ground_azimuth_angle.instance_of?(String)
+      pv_ground_azimuth_angle = pv_ground_azimuth_angle.strip
+    end
+
     ##### If any of users' inputs are nil/false do nothing.
     return if pv_ground_type.nil? || pv_ground_type == false || pv_ground_type == 'none' || pv_ground_type == 'NECB_Default'
     return if pv_ground_total_area_pv_panels_m2 == nil? || pv_ground_total_area_pv_panels_m2 == false || pv_ground_total_area_pv_panels_m2 == 'none'
     return if pv_ground_tilt_angle == nil? || pv_ground_tilt_angle == false || pv_ground_tilt_angle == 'none'
     return if pv_ground_azimuth_angle == nil? || pv_ground_azimuth_angle == false || pv_ground_azimuth_angle == 'none'
     return if pv_ground_module_description == nil? || pv_ground_module_description == false || pv_ground_module_description == 'none'
+
+    ##### Convert a string to a float (except for pv_ground_type and pv_ground_module_description)
+    if pv_ground_total_area_pv_panels_m2.instance_of?(String) && pv_ground_total_area_pv_panels_m2 != 'NECB_Default'
+      pv_ground_total_area_pv_panels_m2 = pv_ground_total_area_pv_panels_m2.to_f
+    end
+    if pv_ground_tilt_angle.instance_of?(String) && pv_ground_tilt_angle != 'NECB_Default'
+      pv_ground_tilt_angle = pv_ground_tilt_angle.to_f
+    end
+    if pv_ground_azimuth_angle.instance_of?(String) && pv_ground_azimuth_angle != 'NECB_Default'
+      pv_ground_azimuth_angle = pv_ground_azimuth_angle.to_f
+    end
 
     ##### Calculate footprint of the building model (this is used as default value for pv_ground_total_area_pv_panels_m2)
     building_footprint_m2 = 0.0
