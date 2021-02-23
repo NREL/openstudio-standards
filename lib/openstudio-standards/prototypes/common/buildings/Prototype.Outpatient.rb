@@ -344,7 +344,7 @@ module Outpatient
       model.getAirTerminalSingleDuctVAVReheats.sort.each do |air_terminal|
         air_terminal_name = air_terminal.name.get
         if air_terminal_name.include?('Floor 1 Operating Room 1') || air_terminal_name.include?('Floor 1 Operating Room 2')
-          air_terminal.setZoneMinimumAirFlowMethod('Scheduled')
+          air_terminal.setZoneMinimumAirFlowInputMethod('Scheduled')
           air_terminal.setMinimumAirFlowFractionSchedule(model_add_schedule(model, 'OutPatientHealthCare OR_MinSA_Sched'))
         end
       end

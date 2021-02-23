@@ -302,7 +302,7 @@ heat_rejection,equipment_type,
 heat_rejection,fan_type,
 heat_rejection,start_date,
 heat_rejection,end_date,
-heat_rejection,minimum_performance,gal/min*hp
+heat_rejection,minimum_performance,gpm/hp
 heat_rejection,notes,
 water_source_heat_pumps,template,
 water_source_heat_pumps,minimum_capacity,Btu/hr
