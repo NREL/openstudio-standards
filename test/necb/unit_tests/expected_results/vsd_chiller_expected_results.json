@@ -1,0 +1,18 @@
+[
+  {
+    "template": "NECB2011",
+    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "building_type": "LargeOffice",
+    "primary_heating_fuel": "DefaultFuel",
+    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD - capacity": 2233000.0,
+    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD - COP": 9.54,
+    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD - CAPFT_curve": "ElectricEIRChiller York YT 2233kW/9.54COP/VSD CAPFT",
+    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD - EIRFT_curve": "ElectricEIRChiller York YT 2233kW/9.54COP/VSD EIRFT",
+    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD - EITFPLR_curve": "ElectricEIRChiller York YT 2233kW/9.54COP/VSD EIRFPLR",
+    "Secondary Chiller WaterCooled Scroll 0tons 0.8kW/ton - capacity": 0.0010000000474974513,
+    "Secondary Chiller WaterCooled Scroll 0tons 0.8kW/ton - COP": 4.50320102432778,
+    "Secondary Chiller WaterCooled Scroll 0tons 0.8kW/ton - CAPFT_curve": "WaterCooled_Scroll_CAPFT_NECB2011",
+    "Secondary Chiller WaterCooled Scroll 0tons 0.8kW/ton - EIRFT_curve": "WaterCooled_Scroll_EIRFT_NECB2011",
+    "Secondary Chiller WaterCooled Scroll 0tons 0.8kW/ton - EITFPLR_curve": "WaterCooled_Scroll_EIRFPLR_NECB2011"
+  }
+]

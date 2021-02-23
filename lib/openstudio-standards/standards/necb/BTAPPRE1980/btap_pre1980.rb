@@ -86,7 +86,8 @@ class BTAPPRE1980 < NECB2011
                            pv_ground_total_area_pv_panels_m2: nil ,
                            pv_ground_tilt_angle: nil,
                            pv_ground_azimuth_angle: nil,
-                           pv_ground_module_description: nil
+                           pv_ground_module_description: nil,
+                           chiller_capacity_cop: nil
   )
     # This will allow changes to default fdwr/srr for vintages.. but will not touch the existing models if they were
     # called for with -1.0 in the fdwr_srr method.

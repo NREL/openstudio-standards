@@ -114,6 +114,28 @@
           "chiller_flow_mode": "ConstantFlow",
           "design_heat_recovery_water_flow_rate_m3_s": 0.0,
           "notes": "Manufacturer:Carrier, CompressorType:Centrifugal, CondenserType:Water (Ref: E+/DataSets/Chillers.idf)"
+        },
+        {
+          "name": "ElectricEIRChiller Trane CVHF 2317kW/6.33COP/VSD",
+          "capacity_w": 2317400,
+          "cop_w_by_w": 6.33,
+          "ref_leaving_chilled_water_temp_c": 5.56,
+          "ref_entering_condenser_fluid_temp_c": 29.44,
+          "ref_chilled_water_flow_rate_m3_s": 0.09085,
+          "ref_condenser_fluid_flow_rate_m3_s": 0.11356,
+          "cooling_capacity_function_of_temperature_curve": "ElectricEIRChiller Trane CVHF 2317kW/6.33COP/VSD CAPFT",
+          "electric_input_to_cooling_output_ratio_function_of_temperature_curve": "ElectricEIRChiller Trane CVHF 2317kW/6.33COP/VSD EIRFT",
+          "electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve": "ElectricEIRChiller Trane CVHF 2317kW/6.33COP/VSD EIRFPLR",
+          "min_part_load_ratio": 0.10,
+          "max_part_load_ratio": 1.04,
+          "opt_part_load_ratio": 1.0,
+          "min_unloading_ratio": 0.10,
+          "condenser_type": "WaterCooled",
+          "fraction_of_compressor_electric_consumption_rejected_by_condenser": 1.0,
+          "leaving_chilled_water_lower_temperature_limit_c": 2.0,
+          "chiller_flow_mode": "ConstantFlow",
+          "design_heat_recovery_water_flow_rate_m3_s": 0.0,
+          "notes": "Manufacturer:Trane, CompressorType:Centrifugal, CondenserType:Water (Ref: E+/DataSets/Chillers.idf)"
         }
       ]
     }
