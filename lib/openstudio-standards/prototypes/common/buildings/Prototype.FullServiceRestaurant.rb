@@ -158,12 +158,12 @@ module FullServiceRestaurant
             infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown VESTIBULE_DOOR_INFIL_SCH'))
         end
       end
+      infiltration_diningdoor.setDesignFlowRate(infiltration_per_zone_diningdoor)
+      infiltration_diningdoor.setSpace(dining_space)
+      infiltration_attic.setDesignFlowRate(infiltration_per_zone_attic)
+      infiltration_attic.setSchedule(model_add_schedule(model, 'Always On'))
+      infiltration_attic.setSpace(attic_space)
     end
-    infiltration_diningdoor.setDesignFlowRate(infiltration_per_zone_diningdoor)
-    infiltration_diningdoor.setSpace(dining_space)
-    infiltration_attic.setDesignFlowRate(infiltration_per_zone_attic)
-    infiltration_attic.setSchedule(model_add_schedule(model, 'Always On'))
-    infiltration_attic.setSpace(attic_space)
   end
 
   def model_update_exhaust_fan_efficiency(model)
