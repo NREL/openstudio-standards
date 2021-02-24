@@ -111,7 +111,8 @@ module QuickServiceRestaurant
         infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood DOOR_INFIL_SCH'))
       elsif template == '90.1-2007'
         case climate_zone
-          when 'ASHRAE 169-2006-1A',
+          when 'ASHRAE 169-2006-0A',
+               'ASHRAE 169-2006-1A',
                'ASHRAE 169-2006-2A',
                'ASHRAE 169-2006-2B',
                'ASHRAE 169-2006-3A',
@@ -120,6 +121,7 @@ module QuickServiceRestaurant
                'ASHRAE 169-2006-4A',
                'ASHRAE 169-2006-4B',
                'ASHRAE 169-2006-4C',
+               'ASHRAE 169-2013-0A',
                'ASHRAE 169-2013-1A',
                'ASHRAE 169-2013-2A',
                'ASHRAE 169-2013-2B',
@@ -137,12 +139,14 @@ module QuickServiceRestaurant
         end
       elsif template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
         case climate_zone
-          when 'ASHRAE 169-2006-1A',
+          when 'ASHRAE 169-2006-0A',
+               'ASHRAE 169-2006-1A',
                'ASHRAE 169-2006-2A',
                'ASHRAE 169-2006-2B',
                'ASHRAE 169-2006-3A',
                'ASHRAE 169-2006-3B',
                'ASHRAE 169-2006-3C',
+               'ASHRAE 169-2013-0A',
                'ASHRAE 169-2013-1A',
                'ASHRAE 169-2013-2A',
                'ASHRAE 169-2013-2B',
@@ -237,9 +241,11 @@ module QuickServiceRestaurant
       case template
         when '90.1-2004', '90.1-2007', '90.1-2010'
           case climate_zone
-          when 'ASHRAE 169-2006-1B',
+          when 'ASHRAE 169-2006-0B',
+               'ASHRAE 169-2006-1B',
                'ASHRAE 169-2006-2B',
                'ASHRAE 169-2006-3B',
+               'ASHRAE 169-2013-0B',
                'ASHRAE 169-2013-1B',
                'ASHRAE 169-2013-2B',
                'ASHRAE 169-2013-3B'

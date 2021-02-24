@@ -129,9 +129,11 @@ module Outpatient
       case template
         when '90.1-2004', '90.1-2007', '90.1-2010'
           case climate_zone
-            when 'ASHRAE 169-2006-1B',
+            when 'ASHRAE 169-2006-0B',
+                 'ASHRAE 169-2006-1B',
                  'ASHRAE 169-2006-2B',
                  'ASHRAE 169-2006-3B',
+                 'ASHRAE 169-2013-0B',
                  'ASHRAE 169-2013-1B',
                  'ASHRAE 169-2013-2B',
                  'ASHRAE 169-2013-3B'
@@ -194,9 +196,11 @@ module Outpatient
             infiltration_vestibule_door.setSchedule(model_add_schedule(model, 'OutPatientHealthCare INFIL_Door_Opening_SCH_0.144'))
           when '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
             case climate_zone
-              when 'ASHRAE 169-2006-1A',
+              when 'ASHRAE 169-2006-0A',
+                   'ASHRAE 169-2006-1A',
                    'ASHRAE 169-2006-2A',
                    'ASHRAE 169-2006-2B',
+                   'ASHRAE 169-2013-0A',
                    'ASHRAE 169-2013-1A',
                    'ASHRAE 169-2013-2A',
                    'ASHRAE 169-2013-2B'

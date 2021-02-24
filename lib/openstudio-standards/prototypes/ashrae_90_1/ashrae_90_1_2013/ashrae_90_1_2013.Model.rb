@@ -16,10 +16,12 @@ class ASHRAE9012013 < ASHRAE901
   # 'DifferentialDryBulbAndEnthalpy'
   def model_economizer_type(model, climate_zone)
     economizer_type = case climate_zone
-                      when 'ASHRAE 169-2006-1A',
+                      when 'ASHRAE 169-2006-0A',
+                          'ASHRAE 169-2006-1A',
                           'ASHRAE 169-2006-2A',
                           'ASHRAE 169-2006-3A',
                           'ASHRAE 169-2006-4A',
+                          'ASHRAE 169-2013-0A',
                           'ASHRAE 169-2013-1A',
                           'ASHRAE 169-2013-2A',
                           'ASHRAE 169-2013-3A',
