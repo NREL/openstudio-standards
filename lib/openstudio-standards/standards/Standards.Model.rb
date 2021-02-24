@@ -4745,7 +4745,7 @@ class Standard
       occ_gap_hash = {}
       prev_time = 0
       prev_val = nil
-      times.sort.each_with_index do |time, i|
+      times.each_with_index do |time, i|
         next if time.totalHours == 0.0 # should not see this
         next if values[i] == prev_val # check if two 0 until time next to each other
 
