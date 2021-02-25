@@ -821,7 +821,7 @@
       "building_type": "LargeHotel",
       "hvac_system": null,
       "geometry_osm": "ASHRAELargeHotel.osm",
-      "hvac_json": "ASHRAELarge20162019Hotel.json",
+      "hvac_json": "ASHRAE20162019LargeHotel.json",
       "chw_pumping_type": "const_pri_var_sec",
       "chw_number_chillers": null,
       "chiller_cooling_type": "AirCooled",
