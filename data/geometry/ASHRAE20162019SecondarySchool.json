@@ -1,0 +1,205 @@
+[
+  {
+    "type": "VAV",
+    "name": "VAV_POD_1",
+    "operation_schedule": "SchoolSecondary HVACOperationSchd",
+    "oa_damper_schedule": "SchoolSecondary MinOA_MotorizedDamper_Sched",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
+    "space_names": [
+      "Corner_Class_1_Pod_1_ZN_1_FLR_1",
+      "Corner_Class_1_Pod_1_ZN_1_FLR_2",
+      "Mult_Class_1_Pod_1_ZN_1_FLR_1",
+      "Mult_Class_1_Pod_1_ZN_1_FLR_2",
+      "Corridor_Pod_1_ZN_1_FLR_1",
+      "Corridor_Pod_1_ZN_1_FLR_2",
+      "Corner_Class_2_Pod_1_ZN_1_FLR_1",
+      "Corner_Class_2_Pod_1_ZN_1_FLR_2",
+      "Mult_Class_2_Pod_1_ZN_1_FLR_1",
+      "Mult_Class_2_Pod_1_ZN_1_FLR_2"
+    ]
+  },
+  {
+    "type": "VAV",
+    "name": "VAV_POD_2",
+    "operation_schedule": "SchoolSecondary HVACOperationSchd",
+    "oa_damper_schedule": "SchoolSecondary MinOA_MotorizedDamper_Sched",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
+    "space_names": [
+      "Corner_Class_1_Pod_2_ZN_1_FLR_1",
+      "Corner_Class_1_Pod_2_ZN_1_FLR_2",
+      "Mult_Class_1_Pod_2_ZN_1_FLR_1",
+      "Mult_Class_1_Pod_2_ZN_1_FLR_2",
+      "Corridor_Pod_2_ZN_1_FLR_1",
+      "Corridor_Pod_2_ZN_1_FLR_2",
+      "Corner_Class_2_Pod_2_ZN_1_FLR_1",
+      "Corner_Class_2_Pod_2_ZN_1_FLR_2",
+      "Mult_Class_2_Pod_2_ZN_1_FLR_1",
+      "Mult_Class_2_Pod_2_ZN_1_FLR_2"
+    ]
+  },
+  {
+    "type": "VAV",
+    "name": "VAV_POD_3",
+    "operation_schedule": "SchoolSecondary HVACOperationSchd",
+    "oa_damper_schedule": "SchoolSecondary MinOA_MotorizedDamper_Sched",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
+    "space_names": [
+      "Corner_Class_1_Pod_3_ZN_1_FLR_1",
+      "Corner_Class_1_Pod_3_ZN_1_FLR_2",
+      "Mult_Class_1_Pod_3_ZN_1_FLR_1",
+      "Mult_Class_1_Pod_3_ZN_1_FLR_2",
+      "Corridor_Pod_3_ZN_1_FLR_1",
+      "Corridor_Pod_3_ZN_1_FLR_2",
+      "Corner_Class_2_Pod_3_ZN_1_FLR_1",
+      "Corner_Class_2_Pod_3_ZN_1_FLR_2",
+      "Mult_Class_2_Pod_3_ZN_1_FLR_1",
+      "Mult_Class_2_Pod_3_ZN_1_FLR_2"
+    ]
+  },
+  {
+    "type": "VAV",
+    "name": "VAV_OTHER",
+    "operation_schedule": "SchoolSecondary HVACOperationSchd",
+    "oa_damper_schedule": "SchoolSecondary MinOA_MotorizedDamper_Sched",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
+    "space_names": [
+      "Main_Corridor_ZN_1_FLR_1",
+      "Main_Corridor_ZN_1_FLR_2",
+      "Lobby_ZN_1_FLR_1",
+      "Lobby_ZN_1_FLR_2",
+      "Bathrooms_ZN_1_FLR_1",
+      "Bathrooms_ZN_1_FLR_2",
+      "Offices_ZN_1_FLR_1",
+      "Offices_ZN_1_FLR_2",
+      "LIBRARY_MEDIA_CENTER_ZN_1_FLR_2",
+      "Mech_ZN_1_FLR_1",
+      "Mech_ZN_1_FLR_2"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC_1-5",
+    "operation_schedule": "SchoolSecondary HVACOperationSchd",
+    "oa_damper_schedule": "SchoolSecondary MinOA_MotorizedDamper_Sched",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Two Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": null,
+    "space_names": [
+      "Gym_ZN_1_FLR_1"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC_2-6",
+    "operation_schedule": "SchoolSecondary HVACOperationSchd",
+    "oa_damper_schedule": "SchoolSecondary MinOA_MotorizedDamper_Sched",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Two Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": null,
+    "space_names": [
+      "Aux_Gym_ZN_1_FLR_1"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC_3-7",
+    "operation_schedule": "SchoolSecondary HVACOperationSchd",
+    "oa_damper_schedule": "SchoolSecondary MinOA_MotorizedDamper_Sched",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Two Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": null,
+    "space_names": [
+      "Auditorium_ZN_1_FLR_1"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC_4-8",
+    "operation_schedule": "SchoolSecondary HVACOperationSchd",
+    "oa_damper_schedule": "SchoolSecondary MinOA_MotorizedDamper_Sched",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Two Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": null,
+    "space_names": [
+      "Kitchen_ZN_1_FLR_1"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC_5-9",
+    "operation_schedule": "SchoolSecondary HVACOperationSchd",
+    "oa_damper_schedule": "SchoolSecondary MinOA_MotorizedDamper_Sched",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Two Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": null,
+    "space_names": [
+      "Cafeteria_ZN_1_FLR_1"
+    ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "Kitchen Exhaust Fan",
+    "flow_rate": 2.5485161932800002,
+    "operation_schedule": "SchoolSecondary Kitchen_Exhaust_SCH",
+    "flow_fraction_schedule": "SchoolSecondary Kitchen_Exhaust_SCH_DCV",
+    "balanced_exhaust_fraction_schedule": "SchoolSecondary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
+    "space_names": [
+      "Kitchen_ZN_1_FLR_1"
+    ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "Bathrooms_ZN_1_FLR_1",
+    "flow_rate": 0.28316846592000006,
+    "operation_schedule": "SchoolSecondary Hours_of_operation",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
+    "space_names": [
+      "Bathrooms_ZN_1_FLR_1"
+    ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "Bathrooms_ZN_1_FLR_2",
+    "flow_rate": 0.28316846592000006,
+    "operation_schedule": "SchoolSecondary Hours_of_operation",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
+    "space_names": [
+      "Bathrooms_ZN_1_FLR_2"
+    ]
+  },
+  {
+    "type": "Refrigeration_system",
+    "compressor_type": "Low Temp",
+    "cases": [{
+      "case_type": "Case Secondary School",
+      "space_names": ["Kitchen_ZN_1_FLR_1"]}],
+    "walkins": [{
+      "walkin_type": "Walk-In Secondary School",
+      "space_names": ["Kitchen_ZN_1_FLR_1"],
+      "number_of_walkins": 1 }],
+    "name": "RefrSystem - Secondary School",
+    "space_names": ["Kitchen_ZN_1_FLR_1"]}
+]

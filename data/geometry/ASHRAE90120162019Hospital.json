@@ -1,0 +1,199 @@
+[
+  {
+    "type": "VAV",
+    "name": "VAV_1",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "min_sys_airflow_ratio": 0.3,
+    "vav_sizing_option": "Coincident",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
+    "space_names": [
+      "Basement",
+      "Office1_Mult4_Flr_1",
+      "Lobby_Records_Flr_1",
+      "Corridor_Flr_1",
+      "ER_NurseStn_Lobby_Flr_1",
+      "ICU_NurseStn_Lobby_Flr_2",
+      "Corridor_Flr_2",
+      "OR_NurseStn_Lobby_Flr_2"
+    ]
+  },
+  {
+    "type": "VAV",
+    "name": "VAV_ER",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "min_sys_airflow_ratio": 1.0,
+    "vav_sizing_option": "NonCoincident",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
+    "space_names": [
+      "ER_Exam1_Mult4_Flr_1",
+      "ER_Trauma1_Flr_1",
+      "ER_Exam3_Mult4_Flr_1",
+      "ER_Trauma2_Flr_1",
+      "ER_Triage_Mult4_Flr_1"
+    ]
+  },
+  {
+    "type": "VAV",
+    "name": "VAV_OR",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "min_sys_airflow_ratio": 1.0,
+    "vav_sizing_option": "NonCoincident",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
+    "space_names": [
+      "OR1_Flr_2",
+      "OR2_Mult5_Flr_2",
+      "OR3_Flr_2",
+      "OR4_Flr_2"
+    ]
+  },
+  {
+    "type": "VAV",
+    "name": "VAV_ICU",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "min_sys_airflow_ratio": 1.0,
+    "vav_sizing_option": "NonCoincident",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
+    "space_names": [
+      "IC_PatRoom1_Mult5_Flr_2",
+      "IC_PatRoom2_Flr_2",
+      "IC_PatRoom3_Mult6_Flr_2",
+      "ICU_Flr_2"
+    ]
+  },
+  {
+    "type": "VAV",
+    "name": "VAV_PATRMS",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "min_sys_airflow_ratio": 0.5,
+    "vav_sizing_option": "NonCoincident",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
+    "space_names": [
+      "PatRoom1_Mult10_Flr_3",
+      "PatRoom2_Flr_3",
+      "PatRoom3_Mult10_Flr_3",
+      "PatRoom4_Flr_3",
+      "PatRoom5_Mult10_Flr_3",
+      "PatRoom6_Flr_3",
+      "PatRoom7_Mult10_Flr_3",
+      "PatRoom8_Flr_3",
+      "PatRoom1_Mult10_Flr_4",
+      "PatRoom2_Flr_4",
+      "PatRoom3_Mult10_Flr_4",
+      "PatRoom4_Flr_4",
+      "PatRoom5_Mult10_Flr_4",
+      "PatRoom6_Flr_4",
+      "PatRoom7_Mult10_Flr_4",
+      "PatRoom8_Flr_4"
+    ]
+  },
+  {
+    "type": "VAV",
+    "name": "VAV_2",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "min_sys_airflow_ratio": 0.3,
+    "vav_sizing_option": "Coincident",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
+    "space_names": [
+      "PhysTherapy_Flr_3",
+      "NurseStn_Lobby_Flr_3",
+      "Corridor_SE_Flr_3",
+      "Corridor_NW_Flr_3",
+      "Radiology_Flr_4",
+      "NurseStn_Lobby_Flr_4",
+      "Corridor_SE_Flr_4",
+      "Corridor_NW_Flr_4",
+      "Dining_Flr_5",
+      "NurseStn_Lobby_Flr_5",
+      "Office1_Flr_5",
+      "Office2_Mult5_Flr_5",
+      "Office3_Flr_5",
+      "Office4_Mult6_Flr_5",
+      "Corridor_Flr_5"
+    ]
+  },
+  {
+    "type": "VAV",
+    "name": "VAV_LABS",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "min_sys_airflow_ratio": 1.0,
+    "vav_sizing_option": "NonCoincident",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
+    "space_names": [
+      "Lab_Flr_3",
+      "Lab_Flr_4"
+    ]
+  },
+  {
+    "type": "CAV",
+    "name": "CAV_KITCHEN",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
+    "space_names": [
+      "Kitchen_Flr_5"
+    ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "Kitchen_Flr_5 Exhaust Fan",
+    "flow_rate": 3.3980215910400005,
+    "operation_schedule": "Hospital Kitchen_Exhaust_SCH",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": "Hospital Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
+    "space_names": [
+      "Kitchen_Flr_5"
+    ]
+  },
+  {
+    "type": "Refrigeration_system",
+    "compressor_type": "Low Temp",
+    "cases": [{
+      "case_type": "Case Hospital",
+      "space_names": ["Kitchen_Flr_5"]}],
+    "walkins": [{
+      "walkin_type": "Walk-In Hospital",
+      "space_names": ["Kitchen_Flr_5"],
+      "number_of_walkins": 1 }],
+    "name": "RefrSystem - Hospital",
+    "space_names": ["Kitchen_Flr_5"]}
+]
+
