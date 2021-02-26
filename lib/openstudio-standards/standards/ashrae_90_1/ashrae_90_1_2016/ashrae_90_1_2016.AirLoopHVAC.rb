@@ -183,12 +183,6 @@ class ASHRAE9012016 < ASHRAE901
       return multizone_opt_required
     end
 
-    # Not required for systems that require an ERV
-    if air_loop_hvac_energy_recovery?(air_loop_hvac)
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: multizone vav optimization is not required because the system has Energy Recovery.")
-      return multizone_opt_required
-    end
-
     # Get the OA intake
     controller_oa = nil
     controller_mv = nil
