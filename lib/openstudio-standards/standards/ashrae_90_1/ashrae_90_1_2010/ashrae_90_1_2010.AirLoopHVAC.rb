@@ -156,6 +156,7 @@ class ASHRAE9012010 < ASHRAE901
 
   # Determine if multizone vav optimization is required.
   #
+  # @code_sections [90.1-2010_6.5.3.3]
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for
