@@ -215,6 +215,7 @@ class NECB2011 < Standard
                                 ecm_system_name: ecm_system_name,
                                 erv_package: erv_package,
                                 boiler_eff: boiler_eff,
+                                unitary_cop: nil,
                                 furnace_eff: furnace_eff,
                                 shw_eff: shw_eff,
                                 ext_wall_cond: ext_wall_cond,
