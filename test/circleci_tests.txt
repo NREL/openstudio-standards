@@ -87,6 +87,7 @@ necb/unit_tests/tests/test_led_lighting.rb
 necb/unit_tests/tests/test_dcv.rb
 necb/unit_tests/tests/test_pv_ground.rb
 necb/unit_tests/tests/test_nv.rb
+necb/unit_tests/tests/test_ecm_erv.rb
 
 necb/system_tests/tests/test_necb_hvac_system_2_natural_gas_scroll_hydronic_fpfc.rb
 necb/system_tests/tests/test_necb_hvac_system_2_natural_gas_scroll_dx_fpfc.rb

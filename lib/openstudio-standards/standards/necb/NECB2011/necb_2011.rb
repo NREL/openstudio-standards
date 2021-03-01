@@ -238,16 +238,16 @@ class NECB2011 < Standard
                                 skylight_solar_trans: skylight_solar_trans,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
-                                nv_type: FALSE, # Two options: (1) nil or FALSE, (2) TRUE
+                                nv_type: false, # Two options: (1) nil or FALSE, (2) TRUE
                                 nv_comfort_model: 'Fanger_Model', # Three options: (1) nil or FALSE, (2) 'Fanger_Model', (3) 'Adaptive_Model'
                                 nv_opening_fraction: 0.1, #options: (1) nil or FALSE (2) e.g. 0.1
                                 nv_Tout_min: 13.0, #options: (1) nil or FALSE (2) e.g. 13.0 based on inputs from Michel Tardif re a real school in QC
                                 nv_Delta_Tin_Tout: 1.0, #options: (1) nil or FALSE (2) e.g. 1.0 based on inputs from Michel Tardif re a real school in QC
-                                pv_ground_type: pv_ground_type,  # Two options: (1) nil OR FALSE, (2) TRUE
-                                pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # e.g. 50
-                                pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) 'NECB_Default' (i.e. latitude), (2) tilt angle value (e.g. 20)
-                                pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) 'NECB_Default' (i.e. south), (2) azimuth angle value (e.g. 90)
-                                pv_ground_module_description: pv_ground_module_description # Options: (1) 'NECB_Default' (i.e. Standard), (2) other options ('Standard', 'Premium', ThinFilm')
+                                pv_ground_type: pv_ground_type,  # Two options: (1) nil/none/false/'NECB_Default', (2) true
+                                pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. building footprint), (3) area value (e.g. 50)
+                                pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. latitude), (3) tilt angle value (e.g. 20)
+                                pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. south), (3) azimuth angle value (e.g. 90)
+                                pv_ground_module_description: pv_ground_module_description # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. Standard), (3) other options ('Standard', 'Premium', ThinFilm')
     )
 
   end
@@ -399,7 +399,7 @@ class NECB2011 < Standard
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
 
     # Apply new ECM system. Overwrite standard as required.
-    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self)
+    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self, primary_heating_fuel: primary_heating_fuel)
 
     # Apply ERV equipment as required.
     ecm.apply_erv_ecm(model: model, erv_package: erv_package)
