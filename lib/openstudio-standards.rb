@@ -410,6 +410,22 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.hvac_systems"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.AirTerminalSingleDuctVAVReheat"
+  # 90.1-2016
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.FanConstantVolume"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.FanOnOff"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.FanVariableVolume"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Model"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Model.elevators"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.hvac_systems"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.AirTerminalSingleDuctVAVReheat"
+  # 90.1-2019
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.FanConstantVolume"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.FanOnOff"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.FanVariableVolume"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Model"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Model.elevators"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.hvac_systems"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.AirTerminalSingleDuctVAVReheat"
   # DOE Ref 1980-2004
   require_relative "#{proto}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.AirTerminalSingleDuctVAVReheat"
   require_relative "#{proto}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.Model.elevators"

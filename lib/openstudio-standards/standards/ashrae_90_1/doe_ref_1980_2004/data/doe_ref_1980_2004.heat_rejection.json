@@ -20,6 +20,15 @@
     },
     {
       "template": "DOE Ref 1980-2004",
+      "equipment_type": "Dry Cooler",
+      "fan_type": "Propeller or Axial",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance": 4.0,
+      "notes": "NOTE: Not required by code. Value provided by 90.1 Mechanical Subcommittee"
+    },
+    {
+      "template": "DOE Ref 1980-2004",
       "equipment_type": "Open Cooling Tower",
       "fan_type": "Centrifugal",
       "start_date": "1919-09-09T00:00:00+00:00",

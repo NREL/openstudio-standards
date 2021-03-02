@@ -16,11 +16,15 @@ module RetailStripmall
       infiltration_schedule = model_add_schedule(model, 'RetailStripmall INFIL_Door_Opening_SCH')
     when '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
       case climate_zone
-      when 'ASHRAE 169-2006-1A',
+      when 'ASHRAE 169-2006-0A',
+           'ASHRAE 169-2006-1A',
+           'ASHRAE 169-2006-0B',
            'ASHRAE 169-2006-1B',
            'ASHRAE 169-2006-2A',
            'ASHRAE 169-2006-2B',
+           'ASHRAE 169-2013-0A',
            'ASHRAE 169-2013-1A',
+           'ASHRAE 169-2013-0B',
            'ASHRAE 169-2013-1B',
            'ASHRAE 169-2013-2A',
            'ASHRAE 169-2013-2B'
