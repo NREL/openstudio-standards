@@ -32,50 +32,7 @@ module HighriseApartment
                           excluded_interiorequip_key: 'T Corridor_Elevators_Equip',
                           excluded_interiorequip_meter: excluded_interiorequip_variable)
 
-    # modify evaporative fluid cooler to two speeds for < 5hp fans
-    modify_evaporative_fluid_cooler(model)
-
     return true
-  end
-
-  # ASHRAE 90.1 2016 Addendum CA/CQ: change highrise apartment heat rejection fan (< 5hp) from single speed to two speed evaporative fluid cooler
-  # TODO: this is temporary fix, it should be applied to all heat rejection devices smaller than 5hp.
-  def modify_evaporative_fluid_cooler(model)
-    case template
-    when '90.1-2016', '90.1-2019'
-      single_speed_coolers = model.getEvaporativeFluidCoolerSingleSpeeds
-      spmngs = model.getSetpointManagerScheduledDualSetpoints
-      single_speed_coolers.each do |single_speed_cooler|
-        next unless single_speed_cooler.loop.is_initialized # skip fluid coolers not connected to a loop
-
-        belong_loop = single_speed_cooler.loop.get.to_PlantLoop.get
-        loop_sp_node = belong_loop.loopTemperatureSetpointNode
-
-        # create new cooler
-        two_speed_cooler = OpenStudio::Model::EvaporativeFluidCoolerTwoSpeed.new(model)
-        two_speed_cooler.setName("#{belong_loop.name} EvaporativeFluidCoolerTwoSpeed")
-        two_speed_cooler.setDesignSprayWaterFlowRate(0.002208)
-        two_speed_cooler.setPerformanceInputMethod('UFactorTimesAreaAndDesignWaterFlowRate')
-
-        # find setpointmanager
-        two_speed_cooler_stpt_manager = nil
-        spmngs.each do |spmng|
-          if spmng.setpointNode.get == loop_sp_node
-            two_speed_cooler_stpt_manager = spmng
-            break
-          end
-        end
-
-        # remove old cooler
-        single_speed_cooler.removeFromLoop
-        single_speed_cooler.remove
-        # add new cooler
-        belong_loop.addSupplyBranchForComponent(two_speed_cooler)
-        two_speed_cooler_stpt_manager.setName("#{belong_loop.name} Fluid Cooler Scheduled Dual Setpoint")
-        two_speed_cooler_stpt_manager.addToNode(two_speed_cooler.outletModelObject.get.to_Node.get)
-        belong_loop.setLoopTemperatureSetpointNode(two_speed_cooler_stpt_manager.setpointNode.get)
-      end
-    end
   end
 
   # add hvac
