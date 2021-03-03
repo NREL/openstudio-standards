@@ -176,47 +176,48 @@ class NECB2011 < Standard
   end
 
 
-  # This method is a wrapper to create the 16 archetypes easily. # 41 args
-  def model_create_prototype_model(template:, #not used and should be removed.
+  # This method is a wrapper to create the 16 archetypes easily. # 37 args
+  def model_create_prototype_model(template:,
+                                   building_type:,
+                                   epw_file:,
+                                   debug: false,
                                    sizing_run_dir: Dir.pwd,
-                                   building_type: 'FullServiceRestaurant',
-                                   epw_file:'CAN_QC_Montreal-Trudeau.Intl.AP.716270_CWEC2016.epw',
                                    primary_heating_fuel: 'DefaultFuel',
                                    dcv_type: 'NECB_Default',
                                    lights_type: 'NECB_Default',
-                                   lights_scale: 'NECB_Default',
+                                   lights_scale: 1.0,
                                    daylighting_type: 'NECB_Default',
                                    ecm_system_name: 'NECB_Default',
                                    erv_package: 'NECB_Default',
-                                   boiler_eff: 'NECB_Default',
-                                   unitary_cop: 'NECB_Default',
-                                   furnace_eff: 'NECB_Default',
-                                   shw_eff: 'NECB_Default',
-                                   ext_wall_cond: 'NECB_Default',
-                                   ext_floor_cond: 'NECB_Default',
-                                   ext_roof_cond: 'NECB_Default',
-                                   ground_wall_cond: 'NECB_Default',
-                                   ground_floor_cond: 'NECB_Default',
-                                   ground_roof_cond: 'NECB_Default',
-                                   door_construction_cond: 'NECB_Default',
-                                   fixed_window_cond: 'NECB_Default',
-                                   glass_door_cond: 'NECB_Default',
-                                   overhead_door_cond: 'NECB_Default',
-                                   skylight_cond: 'NECB_Default',
-                                   glass_door_solar_trans: 'NECB_Default',
-                                   fixed_wind_solar_trans: 'NECB_Default',
-                                   skylight_solar_trans: 'NECB_Default',
-                                   rotation_degrees: 'NECB_Default',
-                                   fdwr_set: 'NECB_Default',
-                                   srr_set: 'NECB_Default',
-                                   scale_x: 'NECB_Default',
-                                   scale_y: 'NECB_Default',
-                                   scale_z: 'NECB_Default',
-                                   pv_ground_type: 'NECB_Default',
-                                   pv_ground_total_area_pv_panels_m2: 'NECB_Default',
-                                   pv_ground_tilt_angle: 'NECB_Default',
-                                   pv_ground_azimuth_angle: 'NECB_Default',
-                                   pv_ground_module_description: 'NECB_Default'
+                                   boiler_eff: nil,
+                                   unitary_cop: nil,
+                                   furnace_eff: nil,
+                                   shw_eff: nil,
+                                   ext_wall_cond: nil,
+                                   ext_floor_cond: nil,
+                                   ext_roof_cond: nil,
+                                   ground_wall_cond: nil,
+                                   ground_floor_cond: nil,
+                                   ground_roof_cond: nil,
+                                   door_construction_cond: nil,
+                                   fixed_window_cond: nil,
+                                   glass_door_cond: nil,
+                                   overhead_door_cond: nil,
+                                   skylight_cond: nil,
+                                   glass_door_solar_trans: nil,
+                                   fixed_wind_solar_trans: nil,
+                                   skylight_solar_trans: nil,
+                                   rotation_degrees: nil,
+                                   fdwr_set: -1.0,
+                                   srr_set: -1.0,
+                                   scale_x: nil,
+                                   scale_y: nil,
+                                   scale_z: nil,
+                                   pv_ground_type: nil,
+                                   pv_ground_total_area_pv_panels_m2: nil,
+                                   pv_ground_tilt_angle: nil,
+                                   pv_ground_azimuth_angle: nil,
+                                   pv_ground_module_description: nil
   )
 
 
@@ -316,7 +317,7 @@ class NECB2011 < Standard
   )
 
 
-    rotation_degrees = convert_arg_to_f(variable: rotation_degrees,default: 0.0)
+    #rotation_degrees = convert_arg_to_f(variable: rotation_degrees,default: 0.0)
     scale_x = convert_arg_to_f(variable: scale_x,default: 1.0)
     scale_y = convert_arg_to_f(variable: scale_y,default: 1.0)
     scale_z = convert_arg_to_f(variable: scale_z,default: 1.0)
@@ -325,7 +326,7 @@ class NECB2011 < Standard
     srr_set = convert_arg_to_f(variable: srr_set,default: -1)
 
 
-    BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees == 0.0
+    #BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees == 0.0
     BTAP::Geometry::scale_model(model, scale_x, scale_y, scale_z)
 
 
