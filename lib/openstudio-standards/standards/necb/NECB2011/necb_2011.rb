@@ -315,19 +315,18 @@ class NECB2011 < Standard
                            pv_ground_azimuth_angle: nil,
                            pv_ground_module_description: nil
   )
-
-
-    #rotation_degrees = convert_arg_to_f(variable: rotation_degrees,default: 0.0)
+    rotation_degrees = convert_arg_to_f(variable: rotation_degrees,default: 0.0)
+    BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees == 0.0
     scale_x = convert_arg_to_f(variable: scale_x,default: 1.0)
     scale_y = convert_arg_to_f(variable: scale_y,default: 1.0)
     scale_z = convert_arg_to_f(variable: scale_z,default: 1.0)
+    if scale_x != 1.0 || scale_y != 1.0 || scale_z != 1.0
+      BTAP::Geometry::scale_model(model, scale_x, scale_x, scale_x)
+    end
+
 
     fdwr_set = convert_arg_to_f(variable: fdwr_set,default: -1)
     srr_set = convert_arg_to_f(variable: srr_set,default: -1)
-
-
-    #BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees == 0.0
-    BTAP::Geometry::scale_model(model, scale_x, scale_y, scale_z)
 
 
     apply_weather_data(model: model, epw_file: epw_file)
