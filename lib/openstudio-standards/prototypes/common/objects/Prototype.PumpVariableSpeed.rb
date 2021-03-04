@@ -18,12 +18,12 @@ class Standard
         # Get rated pump power
         if pump.autosizedRatedPowerConsumption.is_initialized
             pump_rated_power_w = pump.autosizedRatedPowerConsumption.get
-          elsif pump.ratedPowerConsumption.is_initialized
+        elsif pump.ratedPowerConsumption.is_initialized
             pump_rated_power_w = pump.ratedPowerConsumption.get
-          else
+        else
             OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find rated pump power consumption, cannot determine w per gpm correctly.")
             return false
-          end
+        end
 
         # Get nominal nameplate HP
         pump_nominal_hp = pump_rated_power_w * pump.motorEfficiency / 745.7

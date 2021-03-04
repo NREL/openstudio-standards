@@ -15,11 +15,15 @@ class ASHRAE9012004 < ASHRAE901
       # are typically sized to handle a ~10% pressure
       # increase and ~10% flow increase.
       design_sizing_factor = 1.25
-
-      if pump_nominal_hp * design_sizing_factor > threshold
-        return 'VSD DP Reset'
-      else
+      
+      if plant_loop_type == 'Heating'
         return 'Riding Curve'
+      else
+        if pump_nominal_hp * design_sizing_factor > threshold
+            return 'VSD No Reset'
+        else
+            return 'Riding Curve'
+        end
       end
     end
   end
