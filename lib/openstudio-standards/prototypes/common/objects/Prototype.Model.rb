@@ -1408,17 +1408,13 @@ Standard.class_eval do
   def model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying prototype HVAC assumptions.')
 
-    ##### Apply equipment efficiencies
-
-    # Fans
-    # Pressure Rise
-
+    # Fan pressure rise
     model.getFanConstantVolumes.sort.each { |obj| fan_constant_volume_apply_prototype_fan_pressure_rise(obj) }
     model.getFanVariableVolumes.sort.each { |obj| fan_variable_volume_apply_prototype_fan_pressure_rise(obj) }
     model.getFanOnOffs.sort.each { |obj| fan_on_off_apply_prototype_fan_pressure_rise(obj) }
     model.getFanZoneExhausts.sort.each { |obj| fan_zone_exhaust_apply_prototype_fan_pressure_rise(obj) }
 
-    # Motor Efficiency
+    # Fan motor efficiency
     model.getFanConstantVolumes.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
     model.getFanVariableVolumes.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
     model.getFanOnOffs.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
@@ -1427,15 +1423,18 @@ Standard.class_eval do
     # Gas Heating Coil
     model.getCoilHeatingGass.sort.each { |obj| coil_heating_gas_apply_prototype_efficiency(obj) }
 
-    ##### Add Economizers
+    # Add Economizers
     apply_economizers(climate_zone, model)
 
     # TODO: What is the logic behind hard-sizing
     # hot water coil convergence tolerances?
     model.getControllerWaterCoils.sort.each { |obj| controller_water_coil_set_convergence_limits(obj) }
 
-    # adjust defrost curve limits for coil heating dx single speed
+    # Adjust defrost curve limits for coil heating dx single speed
     model.getCoilHeatingDXSingleSpeeds.sort.each { |obj| coil_heating_dx_single_speed_apply_defrost_eir_curve_limits(obj) }
+
+    # Pump part load performances
+    model.getPumpVariableSpeeds.sort.each { |obj| pump_variable_speed_control_type(obj) }
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying prototype HVAC assumptions.')
   end
