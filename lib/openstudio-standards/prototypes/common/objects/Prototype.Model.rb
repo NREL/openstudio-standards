@@ -51,6 +51,10 @@ Standard.class_eval do
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model.getBuilding.setStandardsBuildingType(building_type)
     model_set_climate_zone(model, climate_zone)
+    # TODO: replace template conditional with method overriding
+    if template == '90.1-2016' || template == '90.1-2019'
+      model_add_lights_shutoff(model)
+    end
     # Perform a sizing model_run(model)
     return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
 
@@ -2157,6 +2161,83 @@ Standard.class_eval do
         end
 
       end
+    end
+  end
+
+  # Implement occupancy based lighting level threshold (0.02 W/sqft). This is only for ASHRAE 90.1 2016 onwards.
+  #
+  # @code_sections [90.1-2016_9.4.1.1.h/i]
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] OpenStudio Model
+  # 
+  def model_add_lights_shutoff(model)
+    zones = model.getThermalZones
+    num_zones = 0
+    zones.each do |zone|
+      spaces = zone.spaces
+      if spaces.length != 1
+        puts 'warning, there are more than one spaces in the zone, need to confirm the implementation'
+      end
+      space = spaces[0]
+      space_lights = space.lights
+      if space_lights.empty?
+        space_lights = space.spaceType.get.lights
+      end
+      space_people = space.people
+      if space_people.empty?
+        space_people = space.spaceType.get.people
+      end
+
+      if space_lights.empty? || space_people.empty?
+        puts 'no lights / people, need check @JXL'
+        next
+      end
+
+      if space_lights.length > 1
+        puts 'warning: more than one light, need investigation @JXL'
+      end
+
+      #TODO: add logic for multi-lights: find the largest light, use if for lighting control while turning off other lights
+      light = space_lights[0]
+
+      # Add EMS objects
+      zone_name = zone.name.to_s
+
+      light_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Lights Electric Power')
+      light_sensor.setKeyName(zone_name)
+      light_sensor.setName("#{zone_name}_LSr".gsub(/[\s-]/, ''))
+      light_sensor_name = light_sensor.name.to_s
+
+      occ_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone People Occupant Count') # TODO: need confirm, this is different from EPSTD. EPSTD uses 'People Occupant Count', which requires a different key
+      occ_sensor.setKeyName(zone_name)
+      occ_sensor.setName("#{zone_name}_Occ_Sensor".gsub(/[\s-]/, ''))
+      occ_sensor_name = occ_sensor.name.to_s
+
+      floor_area = OpenStudio::Model::EnergyManagementSystemInternalVariable.new(model, 'Zone Floor Area')
+      floor_area.setInternalDataIndexKeyName(zone_name)
+      floor_area.setName("#{zone_name}_Area".gsub(/[\s-]/, ''))
+      floor_area_name = floor_area.name.to_s
+
+      light_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(light, 'Lights', 'Electric Power Level')
+      light_actuator.setName("#{zone_name}_Light_Actuator".gsub(/[\s-]/, ''))
+      light_actuator_name = light_actuator.name.to_s
+
+      light_ems_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+      light_ems_prog.setName("SET_#{zone_name}_Light_EMS_Program".gsub(/[\s-]/, ''))
+      light_ems_prog_body = <<-EMS
+      SET #{light_sensor_name}_IP=0.093*#{light_sensor_name}/#{floor_area_name},
+      IF (#{occ_sensor_name} <= 0) && (#{light_sensor_name}_IP >= 0.02),
+      SET #{light_actuator_name} = 0.02*#{floor_area_name}/0.09290304,
+      ELSE,
+      SET #{light_actuator_name} = NULL,
+      ENDIF
+      EMS
+      light_ems_prog.setBody(light_ems_prog_body)
+
+      light_ems_prog_manager = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+      light_ems_prog_manager.setName("SET_#{zone_name}_Light_EMS_Program_Manager")
+      light_ems_prog_manager.setCallingPoint('AfterPredictorAfterHVACManagers')
+      light_ems_prog_manager.addProgram(light_ems_prog)
     end
   end
 end
