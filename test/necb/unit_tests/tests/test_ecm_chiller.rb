@@ -42,7 +42,7 @@ class NECB_VSDchiller_Tests < Minitest::Test
     @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
     @primary_heating_fuels = ['DefaultFuel']
     
-    @chiller_capacity_cops = ['ElectricEIRChiller York YT 2233kW/9.54COP/VSD']
+    @chiller_types = ['VSD']
 
     # Test results storage array.
     @test_results_array = []
@@ -51,7 +51,7 @@ class NECB_VSDchiller_Tests < Minitest::Test
       @epw_files.sort.each do |epw_file|
         @building_types.sort.each do |building_type|
           @primary_heating_fuels.sort.each do |primary_heating_fuel|
-            @chiller_capacity_cops.sort.each do |chiller_capacity_cop|
+            @chiller_types.sort.each do |chiller_type|
 
               result = {}
               result['template'] = template
@@ -108,7 +108,7 @@ class NECB_VSDchiller_Tests < Minitest::Test
                                                       pv_ground_tilt_angle: nil,
                                                       pv_ground_azimuth_angle: nil,
                                                       pv_ground_module_description: nil,
-                                                      chiller_capacity_cop: chiller_capacity_cop
+                                                      chiller_type: chiller_type
               )
               # # comment out for regular tests
               # BTAP::FileIO.save_osm(model, File.join(@output_folder,"#{template}-#{building_type}-vsd_chiller-#{true}.osm"))

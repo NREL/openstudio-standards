@@ -1729,52 +1729,76 @@ class ECMS
 
   # ============================================================================================================================
   # Apply chiller efficiency
-  def modify_chiller_efficiency(model:, chiller_capacity_cop:)
-    return if chiller_capacity_cop.nil? || chiller_capacity_cop == false || chiller_capacity_cop == 'none' || chiller_capacity_cop == 'NECB_Default'
-    # If chiller_capacity_cop is a string rather than a hash then assume it is the name of a chiller efficiency package and look
-    # for a package with that name in chiller_set.json.
-    if chiller_capacity_cop.is_a?(String)
-      chiller_packages = @standards_data['tables']['chiller_eff_ecm']['table']
-      chiller_packages = chiller_packages.select{|eff_pack_info| eff_pack_info["name"] == chiller_capacity_cop}
-      if chiller_packages.empty?
-        raise "Cannot not find #{chiller_capacity_cop} in the ECMS chiller_set.json file.  Please check that the name is correctly spelled in the ECMS class chiller_set.json and in the code calling (directly or through another method) the ECMS class modify_chiller_efficiency method."
-      elsif chiller_packages.size > 1
-        raise "More than one chiller efficiency package with the name #{chiller_capacity_cop} was found.  Please check the ECMS class chiller_set.json file and make sure that each chiller efficiency package has a unique name."
-      else
-        ecm_name = chiller_capacity_cop
-        chiller_set = {
-            "name" => ecm_name,
-            "capacity_w" => chiller_packages[0]['capacity_w'],
-            "cop_w_by_w" => chiller_packages[0]['cop_w_by_w'],
-            "ref_leaving_chilled_water_temp_c" => chiller_packages[0]['ref_leaving_chilled_water_temp_c'],
-            "ref_entering_condenser_fluid_temp_c" => chiller_packages[0]['ref_entering_condenser_fluid_temp_c'],
-            "ref_chilled_water_flow_rate_m3_s" => chiller_packages[0]['ref_chilled_water_flow_rate_m3_s'],
-            "ref_condenser_fluid_flow_rate_m3_s" => chiller_packages[0]['ref_condenser_fluid_flow_rate_m3_s'],
-            "cooling_capacity_function_of_temperature_curve" => chiller_packages[0]['cooling_capacity_function_of_temperature_curve'],
-            "electric_input_to_cooling_output_ratio_function_of_temperature_curve" => chiller_packages[0]['electric_input_to_cooling_output_ratio_function_of_temperature_curve'],
-            "electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve" => chiller_packages[0]['electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve'],
-            "min_part_load_ratio" => chiller_packages[0]['min_part_load_ratio'],
-            "max_part_load_ratio" => chiller_packages[0]['max_part_load_ratio'],
-            "opt_part_load_ratio" => chiller_packages[0]['opt_part_load_ratio'],
-            "min_unloading_ratio" => chiller_packages[0]['min_unloading_ratio'],
-            "condenser_type" => chiller_packages[0]['condenser_type'],
-            "fraction_of_compressor_electric_consumption_rejected_by_condenser" => chiller_packages[0]['fraction_of_compressor_electric_consumption_rejected_by_condenser'],
-            "leaving_chilled_water_lower_temperature_limit_c" => chiller_packages[0]['leaving_chilled_water_lower_temperature_limit_c'],
-            "chiller_flow_mode" => chiller_packages[0]['chiller_flow_mode'],
-            "design_heat_recovery_water_flow_rate_m3_s" => chiller_packages[0]['design_heat_recovery_water_flow_rate_m3_s'],
-        }
-      end
-    end
-    puts chiller_set
+  def modify_chiller_efficiency(model:, chiller_type:)
+    return if chiller_type.nil? || chiller_type == false || chiller_type == 'none' || chiller_type == 'NECB_Default'
+
     model.getChillerElectricEIRs.sort.each do |mod_chiller|
-      ref_capacity = mod_chiller.referenceCapacity
-      ref_capacity = ref_capacity.to_f
-      puts ref_capacity
-      puts ref_capacity.class
-      if ref_capacity > 0.0011 #Note: No need to replace any chillers with capacity = 0.001 W as per Kamel Haddad's comment
+      ref_capacity_w = mod_chiller.referenceCapacity
+      ref_capacity_w = ref_capacity_w.to_f
+      ref_capacity_kw = ref_capacity_w/1000.0
+
+      if ref_capacity_kw <= 471.0
+        chiller_capacity_cop = 'ElectricEIRChiller McQuay WSC 471kW/5.89COP/Vanes'
+      elsif ref_capacity_kw > 471.0 && ref_capacity_kw <= 742.0
+        chiller_capacity_cop = 'ElectricEIRChiller Carrier 19XR 742kW/5.42COP/VSD'
+      elsif ref_capacity_kw > 742.0 && ref_capacity_kw <= 897.0
+        chiller_capacity_cop = 'ElectricEIRChiller Carrier 19XR 897kW/7.23COP/VSD'
+      elsif ref_capacity_kw > 897.0 && ref_capacity_kw <= 1143.0
+          chiller_capacity_cop = 'ElectricEIRChiller Carrier 19XR 1143kW/6.57COP/VSD'
+      elsif ref_capacity_kw > 1143.0
+          chiller_capacity_cop = 'ElectricEIRChiller Carrier 19XR 2391kW/6.44COP/VSD' #TODO: add this chiller #'ElectricEIRChiller York YT 2233kW/9.54COP/VSD' #'ElectricEIRChiller Carrier 19XR 2391kW/6.77COP/Vanes'
+      end
+
+      if chiller_capacity_cop.is_a?(String) #look for a package with the chiller_capacity_cop name in chiller_set.json
+        chiller_packages = @standards_data['tables']['chiller_eff_ecm']['table']
+        chiller_packages = chiller_packages.select{|eff_pack_info| eff_pack_info["name"] == chiller_capacity_cop}
+        if chiller_packages.empty?
+          raise "Cannot not find #{chiller_capacity_cop} in the ECMS chiller_set.json file.  Please check that the name is correctly spelled in the ECMS class chiller_set.json and in the code calling (directly or through another method) the ECMS class modify_chiller_efficiency method."
+        elsif chiller_packages.size > 1
+          raise "More than one chiller efficiency package with the name #{chiller_capacity_cop} was found.  Please check the ECMS class chiller_set.json file and make sure that each chiller efficiency package has a unique name."
+        else
+          ecm_name = chiller_capacity_cop
+          chiller_set = {
+              "name" => ecm_name,
+              "capacity_w" => chiller_packages[0]['capacity_w'],
+              "cop_w_by_w" => chiller_packages[0]['cop_w_by_w'],
+              "ref_leaving_chilled_water_temp_c" => chiller_packages[0]['ref_leaving_chilled_water_temp_c'],
+              "ref_entering_condenser_fluid_temp_c" => chiller_packages[0]['ref_entering_condenser_fluid_temp_c'],
+              "ref_chilled_water_flow_rate_m3_s" => chiller_packages[0]['ref_chilled_water_flow_rate_m3_s'],
+              "ref_condenser_fluid_flow_rate_m3_s" => chiller_packages[0]['ref_condenser_fluid_flow_rate_m3_s'],
+              "capft_curve" => chiller_packages[0]['capft_curve'],
+              "eirft_curve" => chiller_packages[0]['eirft_curve'],
+              "eirfplr_curve" => chiller_packages[0]['eirfplr_curve'],
+              "min_part_load_ratio" => chiller_packages[0]['min_part_load_ratio'],
+              "max_part_load_ratio" => chiller_packages[0]['max_part_load_ratio'],
+              "opt_part_load_ratio" => chiller_packages[0]['opt_part_load_ratio'],
+              "min_unloading_ratio" => chiller_packages[0]['min_unloading_ratio'],
+              "condenser_type" => chiller_packages[0]['condenser_type'],
+              "fraction_of_compressor_electric_consumption_rejected_by_condenser" => chiller_packages[0]['fraction_of_compressor_electric_consumption_rejected_by_condenser'],
+              "leaving_chilled_water_lower_temperature_limit_c" => chiller_packages[0]['leaving_chilled_water_lower_temperature_limit_c'],
+              "chiller_flow_mode" => chiller_packages[0]['chiller_flow_mode'],
+              "design_heat_recovery_water_flow_rate_m3_s" => chiller_packages[0]['design_heat_recovery_water_flow_rate_m3_s'],
+          }
+        end
+      end
+      puts chiller_set
+
+      if ref_capacity_w > 0.0011 #Note: No need to replace any chillers with capacity = 0.001 W as per Kamel Haddad's comment
         reset_chiller_efficiency(model: model, component: mod_chiller.to_ChillerElectricEIR.get, cop: chiller_set)
       end
+
     end
+
+    ##TODO: to be deleted
+    # model.getChillerElectricEIRs.sort.each do |mod_chiller|
+    #   ref_capacity = mod_chiller.referenceCapacity
+    #   ref_capacity = ref_capacity.to_f
+    #   puts ref_capacity
+    #   puts ref_capacity.class
+    #   if ref_capacity > 0.0011 #Note: No need to replace any chillers with capacity = 0.001 W as per Kamel Haddad's comment
+    #     reset_chiller_efficiency(model: model, component: mod_chiller.to_ChillerElectricEIR.get, cop: chiller_set)
+    #   end
+    # end
 
     ##### Change fan power of single-speed Cooling towers from 'Hard Sized' to Autosized (Otherwise, E+ gives the fatal error 'Autosizing of cooling tower UA failed for tower')
     model.getCoolingTowerSingleSpeeds.sort.each do |cooling_tower_single_speed|
@@ -1784,8 +1808,8 @@ class ECMS
   end
 
   def reset_chiller_efficiency(model:, component:, cop:)
+    # Note that all parameters (except for the capacity) of an existing chiller are replaced with the ones of the VSD chiller, as per Kamel Haddad's comment.
     component.setName(cop['name'])
-    component.setReferenceCapacity(cop['capacity_w'])
     component.setReferenceCOP(cop['cop_w_by_w'])
     component.setReferenceLeavingChilledWaterTemperature(cop['ref_leaving_chilled_water_temp_c'])
     component.setReferenceEnteringCondenserFluidTemperature(cop['ref_entering_condenser_fluid_temp_c'])
@@ -1810,40 +1834,40 @@ class ECMS
     component.resetHeatRecoveryInletHighTemperatureLimitSchedule
     component.resetHeatRecoveryLeavingTemperatureSetpointNode
 
-    ##### Replace CAPFT curve
-    cooling_capacity_function_of_temperature_curve_name = cop['cooling_capacity_function_of_temperature_curve'].to_s
-    existing_curve = @standards_data['curves'].select { |curve| curve['name'] == cooling_capacity_function_of_temperature_curve_name }
-    raise "No chiller with the name #{cooling_capacity_function_of_temperature_curve_name} could be found in the ECMS class curves.json file.  Please check both the ECMS class chiller_set.json and curves.json files to ensure the curve is entered and referenced correctly." if existing_curve.empty?
-    cooling_capacity_function_of_temperature_curve_data = (@standards_data['curves'].select { |curve| curve['name'] == cooling_capacity_function_of_temperature_curve_name })[0]
-    cooling_capacity_function_of_temperature_curve = model_add_curve(model, cooling_capacity_function_of_temperature_curve_name)
-    if cooling_capacity_function_of_temperature_curve
-      component.setCoolingCapacityFunctionOfTemperature(cooling_capacity_function_of_temperature_curve)
+    ##### Replace cooling_capacity_function_of_temperature (CAPFT) curve
+    capft_curve_name = cop['capft_curve'].to_s
+    existing_curve = @standards_data['curves'].select { |curve| curve['name'] == capft_curve_name }
+    raise "No chiller with the name #{capft_curve_name} could be found in the ECMS class curves.json file.  Please check both the ECMS class chiller_set.json and curves.json files to ensure the curve is entered and referenced correctly." if existing_curve.empty?
+    capft_curve_data = (@standards_data['curves'].select { |curve| curve['name'] == capft_curve_name })[0]
+    capft_curve = model_add_curve(model, capft_curve_name)
+    if capft_curve
+      component.setCoolingCapacityFunctionOfTemperature(capft_curve)
     else
-      raise "There was a problem setting the CoolingCapacityFunctionOfTemperature curve named #{cooling_capacity_function_of_temperature_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json and chiller_set.json files."
+      raise "There was a problem setting the CoolingCapacityFunctionOfTemperature curve named #{capft_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json and chiller_set.json files."
     end
 
-    ##### Replace EIRFT curve
-    electric_input_to_cooling_output_ratio_function_of_temperature_curve_name = cop['electric_input_to_cooling_output_ratio_function_of_temperature_curve'].to_s
-    existing_curve = @standards_data['curves'].select { |curve| curve['name'] == electric_input_to_cooling_output_ratio_function_of_temperature_curve_name }
-    raise "No chiller with the name #{electric_input_to_cooling_output_ratio_function_of_temperature_curve_name} could be found in the ECMS class curves.json file.  Please check both the ECMS class chiller_set.json and curves.json files to ensure the curve is entered and referenced correctly." if existing_curve.empty?
-    electric_input_to_cooling_output_ratio_function_of_temperature_curve_data = (@standards_data['curves'].select { |curve| curve['name'] == electric_input_to_cooling_output_ratio_function_of_temperature_curve_name })[0]
-    electric_input_to_cooling_output_ratio_function_of_temperature_curve = model_add_curve(model, electric_input_to_cooling_output_ratio_function_of_temperature_curve_name)
-    if electric_input_to_cooling_output_ratio_function_of_temperature_curve
-      component.setElectricInputToCoolingOutputRatioFunctionOfTemperature(electric_input_to_cooling_output_ratio_function_of_temperature_curve)
+    ##### Replace electric_input_to_cooling_output_ratio_function_of_temperature (EIRFT) curve
+    eirft_curve_name = cop['eirft_curve'].to_s
+    existing_curve = @standards_data['curves'].select { |curve| curve['name'] == eirft_curve_name }
+    raise "No chiller with the name #{eirft_curve_name} could be found in the ECMS class curves.json file.  Please check both the ECMS class chiller_set.json and curves.json files to ensure the curve is entered and referenced correctly." if existing_curve.empty?
+    eirft_curve_data = (@standards_data['curves'].select { |curve| curve['name'] == eirft_curve_name })[0]
+    eirft_curve = model_add_curve(model, eirft_curve_name)
+    if eirft_curve
+      component.setElectricInputToCoolingOutputRatioFunctionOfTemperature(eirft_curve)
     else
-      raise "There was a problem setting the ElectricInputToCoolingOutputRatioFunctionOfTemperature curve named #{CoolingCapacityFunctionOfTemperature_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json and chiller_set.json files."
+      raise "There was a problem setting the ElectricInputToCoolingOutputRatioFunctionOfTemperature curve named #{eirft_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json and chiller_set.json files."
     end
 
-    ##### Replace EIRFPLR curve
-    electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve_name = cop['electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve'].to_s
-    existing_curve = @standards_data['curves'].select { |curve| curve['name'] == electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve_name }
-    raise "No chiller with the name #{electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve_name} could be found in the ECMS class curves.json file.  Please check both the ECMS class chiller_set.json and curves.json files to ensure the curve is entered and referenced correctly." if existing_curve.empty?
-    cooling_capacity_function_of_temperature_curve_data = (@standards_data['curves'].select { |curve| curve['name'] == electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve_name })[0]
-    electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve = model_add_curve(model, electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve_name)
-    if electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve
-      component.setElectricInputToCoolingOutputRatioFunctionOfPLR(electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve)
+    ##### Replace electric_input_to_cooling_output_ratio_function_of_part_load_ratio (EIRFPLR) curve
+    eirfplr_curve_name = cop['eirfplr_curve'].to_s
+    existing_curve = @standards_data['curves'].select { |curve| curve['name'] == eirfplr_curve_name }
+    raise "No chiller with the name #{eirfplr_curve_name} could be found in the ECMS class curves.json file.  Please check both the ECMS class chiller_set.json and curves.json files to ensure the curve is entered and referenced correctly." if existing_curve.empty?
+    eirfplr_curve_data = (@standards_data['curves'].select { |curve| curve['name'] == eirfplr_curve_name })[0]
+    eirfplr_curve = model_add_curve(model, eirfplr_curve_name)
+    if eirfplr_curve
+      component.setElectricInputToCoolingOutputRatioFunctionOfPLR(eirfplr_curve)
     else
-      raise "There was a problem setting the ElectricInputToCoolingOutputRatioFunctionOfPLR curve named #{electric_input_to_cooling_output_ratio_function_of_part_load_ratio_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json and chiller_set.json files."
+      raise "There was a problem setting the ElectricInputToCoolingOutputRatioFunctionOfPLR curve named #{eirfplr_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json and chiller_set.json files."
     end
 
   end
