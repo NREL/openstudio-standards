@@ -21,7 +21,8 @@ class ASHRAE9012019 < ASHRAE901
       # Get nameplate hp threshold:
       # The thresholds below represent the nameplate
       # hp one level lower than the threshold in the
-      # code.
+      # code. Motor size from table in section 10 are
+      # used as reference.
       case plant_loop_type
         when 'Heating'
           case climate_zone

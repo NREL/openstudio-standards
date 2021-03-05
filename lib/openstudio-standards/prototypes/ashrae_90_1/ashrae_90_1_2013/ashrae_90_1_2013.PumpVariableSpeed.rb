@@ -20,7 +20,7 @@ class ASHRAE9012013 < ASHRAE901
         return 'Riding Curve'
       else
         if pump_nominal_hp * design_sizing_factor > threshold
-            return 'VSD No Reset'
+            return 'VSD DP Reset' # Requirement only applies to CHW pumps
         else
             return 'Riding Curve'
         end

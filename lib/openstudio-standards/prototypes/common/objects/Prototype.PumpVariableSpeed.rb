@@ -32,7 +32,7 @@ class Standard
         control_type = pump_variable_speed_get_control_type(pump, plant_loop_type, pump_nominal_hp)
 
         # Set pump part load performance curve coefficients
-        pump_variable_speed_set_control_type(pump, control_type)
+        pump_variable_speed_set_control_type(pump, control_type) unless !control_type
 
         return true
     end
@@ -42,9 +42,9 @@ class Standard
     # @param pump [OpenStudio::Model::PumpVariableSpeed] OpenStudio pump object
     # @param plant_loop_type [String] Type of plant loop
     # @param pump_nominal_hp [Float] Pump nominal horsepower
-    # @return [String] Pump part load control type
+    # @return [Boolean] Returns false (default behavior)
     def pump_variable_speed_get_control_type(pump, plant_loop_type, pump_nominal_hp)
 
-        return 'Constant Flow'
+        return false
     end
 end

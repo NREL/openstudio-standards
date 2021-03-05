@@ -16,14 +16,13 @@ class ASHRAE9012007 < ASHRAE901
       # increase and ~10% flow increase.
       design_sizing_factor = 1.25
 
-      if plant_loop_type == 'Heating'
-        return 'Riding Curve'
+      # Get pump head in Pa
+      pump_head_pa = pump.ratedPumpHead
+
+      if pump_nominal_hp * design_sizing_factor > threshold && pump_head_pa > 300_000 # 100 ft. of head
+          return 'VSD No Reset'
       else
-        if pump_nominal_hp * design_sizing_factor > threshold
-            return 'VSD No Reset'
-        else
-            return 'Riding Curve'
-        end
+          return 'Riding Curve'
       end
     end
   end
