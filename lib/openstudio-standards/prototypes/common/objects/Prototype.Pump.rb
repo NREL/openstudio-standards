@@ -1,4 +1,3 @@
 module PrototypePump
-    # @!group Pump
-
+  # @!group Pump
 end
