@@ -45,6 +45,7 @@ Standard.class_eval do
     model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
     model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
+    model_guestroom_vacancy_controls(model, building_type)
     model_add_daylight_savings(model)
     model_add_ground_temperatures(model, @instvarbuilding_type, climate_zone)
     model_apply_sizing_parameters(model, @instvarbuilding_type)
@@ -1091,6 +1092,138 @@ Standard.class_eval do
     end
 
     return zone_exhaust_fans
+  end
+
+  # Add guestroom vacancy controls
+  #
+  # @code_sections [90.1-2016_6.4.3.3.5]
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [String] Building type
+  # @return [Boolean] Returns true if successful, false otherwise
+  def model_guestroom_vacancy_controls(model, building_type)
+    # Guestrooms are currently only included in the small and large hotel prototypes
+    return true unless (building_type == 'LargeHotel') || (building_type == 'SmallHotel')
+
+    # Guestrooms controls only required for 90.1-2016 and onward
+    return true unless (template == '90.1-2016') || (template == '90.1-2019')
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Guestroom Vacancy Controls')
+
+    # Define guestroom vacancy maps
+    # List of all spaces that represent vacant rooms
+    guestroom_vacancy_map = {
+      'LargeHotel' => [
+        'Room_3_Mult19_Flr_3'
+      ],
+      'SmallHotel' => [
+        'GuestRoom101',
+        'GuestRoom102',
+        'GuestRoom201',
+        'GuestRoom215_218',
+        'GuestRoom301',
+        'GuestRoom302_305',
+        'GuestRoom313',
+        'GuestRoom319',
+        'GuestRoom324',
+        'GuestRoom402_405',
+        'GuestRoom406_408',
+        'GuestRoom413',
+        'GuestRoom414'
+      ]
+    }
+
+    # Iterate through spaces and apply for guestroom vacancy controls
+    thermostat_schedules = {}
+    thermostat_schedules['Heating'] = []
+    thermostat_schedules['Cooling'] = []
+    model.getSpaces.sort.each do |space|
+      # Get space name
+      space_name = space.name
+
+      # Get space type
+      space_type = space.spaceType.get
+
+      # Skip space types with no standards building type
+      next if space_type.standardsBuildingType.empty?
+
+      stds_bldg_type = space_type.standardsBuildingType.get
+
+      # Skip space types with no standards space type
+      next if space_type.standardsSpaceType.empty?
+
+      stds_spc_type = space_type.standardsSpaceType.get
+
+      # Skip building types and space types that aren't listed in the guestroom vacancy maps
+      next unless guestroom_vacancy_map.key?(stds_bldg_type)
+      next unless guestroom_vacancy_map[stds_bldg_type].include?(space_name.to_s)
+
+      # Get thermal zone and thermostat schedules associated with space
+      thermal_zone = space.thermalZone.get
+      if thermal_zone.thermostatSetpointDualSetpoint.is_initialized
+        thermostat = thermal_zone.thermostatSetpointDualSetpoint.get
+        if thermostat.heatingSetpointTemperatureSchedule.is_initialized && thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
+          thermostat_schedules['Heating'] << thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
+        end
+        if thermostat.coolingSetpointTemperatureSchedule.is_initialized && thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
+          thermostat_schedules['Cooling'] << thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
+        end
+      end
+
+      # Get zone equipment fan
+      # Currently prototypes with guestrooms use PTAC and 4PFC
+      # TODO: Implement additional system type (zonal and air loop-based)
+      thermal_zone.equipment.sort.each do |zone_equipment|
+        if zone_equipment.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+          equipment = zone_equipment.to_ZoneHVACPackagedTerminalAirConditioner.get
+        elsif zone_equipment.to_ZoneHVACFourPipeFanCoil.is_initialized
+          equipment = zone_equipment.to_ZoneHVACFourPipeFanCoil.get
+        else
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "#{thermal_zone} is not served by either a packaged terminal air-conditioner or four pipe fan coil, vacancy fan schedule has not been adjusted")
+          next
+        end
+
+        # Change fan operation schedule
+        fan = if equipment.supplyAirFan.to_FanConstantVolume.is_initialized
+                equipment.supplyAirFan.to_FanConstantVolume.get
+              elsif equipment.supplyAirFan.to_FanVariableVolume.is_initialized
+                equipment.supplyAirFan.to_FanVariableVolume.get
+              elsif equipment.supplyAirFan.to_FanOnOff.is_initialized
+                equipment.supplyAirFan.to_FanOnOff.get
+        end
+        fan.setAvailabilitySchedule(model_add_schedule(model, 'GuestroomVacantFanSchedule'))
+      end
+
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished Adding Guestroom Vacancy Controls')
+    end
+
+    # Adjust thermostat schedules:
+    # Increase set-up/back to comply with code requirements
+    thermostat_schedules.keys.each do |sch_type|
+      thermostat_schedules[sch_type].uniq.each do |sch|
+        # Skip non-ruleset schedules
+        next if sch.to_ScheduleRuleset.empty?
+
+        # Get schedule modifier
+        case template
+          when '90.1-2016', '90.1-2019'
+            case sch_type
+              when 'Heating'
+                sch_mult = 15.556 / 18.889 # Set thermostat to 15.556
+              when 'Cooling'
+                sch_mult = 26.667 / 23.333 # Set thermostat to 26.667
+              else
+                sch_mult = 1 # No adjustments
+            end
+          else
+            shc_mult = 1 # No adjustments
+        end
+
+        # Modify schedules
+        model_multiply_schedule(model, sch.defaultDaySchedule, sch_mult, 0)
+        model_multiply_schedule(model, sch.summerDesignDaySchedule, sch_mult, 0)
+        model_multiply_schedule(model, sch.winterDesignDaySchedule, sch_mult, 0)
+      end
+    end
   end
 
   # Adds occupancy sensors to certain space types per
