@@ -196,7 +196,6 @@ class NECB2011 < Standard
                                    fdwr_set: -1.0,
                                    srr_set: -1.0,
                                    nv_type: nil,
-                                   nv_comfort_model: nil,
                                    nv_opening_fraction: nil,
                                    nv_Tout_min: nil,
                                    nv_Delta_Tin_Tout: nil,
@@ -238,12 +237,11 @@ class NECB2011 < Standard
                                 skylight_solar_trans: skylight_solar_trans,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
-                                nv_type: false, # Two options: (1) nil or FALSE, (2) TRUE
-                                nv_comfort_model: 'Fanger_Model', # Three options: (1) nil or FALSE, (2) 'Fanger_Model', (3) 'Adaptive_Model'
-                                nv_opening_fraction: 0.1, #options: (1) nil or FALSE (2) e.g. 0.1
-                                nv_Tout_min: 13.0, #options: (1) nil or FALSE (2) e.g. 13.0 based on inputs from Michel Tardif re a real school in QC
-                                nv_Delta_Tin_Tout: 1.0, #options: (1) nil or FALSE (2) e.g. 1.0 based on inputs from Michel Tardif re a real school in QC
-                                pv_ground_type: pv_ground_type,  # Two options: (1) nil/none/false/'NECB_Default', (2) true
+                                nv_type: 'NECB_Default', # Two options: (1) nil/none/false/'NECB_Default', (2) true
+                                nv_opening_fraction: nv_opening_fraction, #options: (1) nil/none/false (2) 'NECB_Default' (i.e. 0.1)
+                                nv_Tout_min: nv_Tout_min, #options: (1) nil/none/false(2) 'NECB_Default' (i.e. 13.0 based on inputs from Michel Tardif re a real school in QC)
+                                nv_Delta_Tin_Tout: nv_Delta_Tin_Tout, #options: (1) nil/none/false (2) 'NECB_Default' (i.e. 1.0 based on inputs from Michel Tardif re a real school in QC)
+                                pv_ground_type: 'NECB_Default',  # Two options: (1) nil/none/false/'NECB_Default', (2) true
                                 pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. building footprint), (3) area value (e.g. 50)
                                 pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. latitude), (3) tilt angle value (e.g. 20)
                                 pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. south), (3) azimuth angle value (e.g. 90)
@@ -297,7 +295,6 @@ class NECB2011 < Standard
                            scale_y: nil,
                            scale_z: nil,
                            nv_type: nil,
-                           nv_comfort_model: nil,
                            nv_opening_fraction: nil,
                            nv_Tout_min: nil,
                            nv_Delta_Tin_Tout: nil,
@@ -352,7 +349,6 @@ class NECB2011 < Standard
                                    shw_eff: shw_eff,
                                    daylighting_type: daylighting_type,
                                    nv_type: nv_type,
-                                   nv_comfort_model: nv_comfort_model,
                                    nv_opening_fraction: nv_opening_fraction,
                                    nv_Tout_min: nv_Tout_min,
                                    nv_Delta_Tin_Tout: nv_Delta_Tin_Tout,
@@ -379,7 +375,6 @@ class NECB2011 < Standard
                                      shw_eff: nil,
                                      daylighting_type: 'NECB_Default',
                                      nv_type: nil,
-                                     nv_comfort_model: nil,
                                      nv_opening_fraction: nil,
                                      nv_Tout_min: nil,
                                      nv_Delta_Tin_Tout:nil,
@@ -436,7 +431,6 @@ class NECB2011 < Standard
     # Apply natural ventilation using simplified method.
     ecm.apply_nv(model: model,
                  nv_type: nv_type,
-                 nv_comfort_model: nv_comfort_model,
                  nv_opening_fraction: nv_opening_fraction,
                  nv_Tout_min: nv_Tout_min,
                  nv_Delta_Tin_Tout: nv_Delta_Tin_Tout)

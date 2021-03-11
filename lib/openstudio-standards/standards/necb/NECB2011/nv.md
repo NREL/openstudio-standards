@@ -5,8 +5,6 @@ This measure adds natural ventilation (NV) to a building model.
 The workflow of this measure is as follows:
 * Ask for users' inputs for below arguments:
     * nv_type: whether to add NV to a building model or not
-    * nv_comfort_model: which thermal comfort model (Fanger or ASHRAE 55's adaptive model) to consider
-    (currently the measure includes just Fanger model)
     * nv_opening_fraction: what is the opening fraction of windows (this value is used to calculate the opening area of windows for NV)
     * nv_Tout_min: As per E+ I/O Reference, "minimum outdoor temperature is the outdoor temperature (in Celsius) below which ventilation is shut off. This lower temperature limit is intended to avoid overcooling a space, which could result in a heating load."
     * nv_Delta_Tin_Tout: As per E+ I/O Reference, "Delta temperature is the temperature difference (in Celsius) between the indoor and outdoor air dry-bulb temperatures below which ventilation is shutoff."

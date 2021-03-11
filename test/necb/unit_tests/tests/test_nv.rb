@@ -41,12 +41,11 @@ class NECB_nv_Tests < Minitest::Test
     ]
     @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
     @primary_heating_fuels = ['DefaultFuel']
-    @nv_types = [true]  #Two options: (1) nil or false, (2) true
+    @nv_types = [true]
 
-    nv_comfort_model = 'Fanger_Model' #Three options: (1) nil or FALSE, (2) 'Fanger_Model', (3) 'Adaptive_Model'
-    nv_opening_fraction = 0.1 #options: (1) nil or FALSE (2) e.g. 0.1
-    nv_Tout_min = 13.0 #options: (1) nil or FALSE (2) e.g. 13.0 as per Michel Tardif's inputs from a school project in QC
-    nv_Delta_Tin_Tout = 1.0 #options: (1) nil or FALSE (2) e.g. 1.0 as per Michel Tardif's inputs from a school project in QC
+    nv_opening_fraction = 'NECB_Default'
+    nv_Tout_min = 'NECB_Default'
+    nv_Delta_Tin_Tout = 'NECB_Default'
 
     # Test results storage array.
     @test_results_array = []
@@ -109,7 +108,6 @@ class NECB_nv_Tests < Minitest::Test
                                                       shw_eff: nil,
                                                       daylighting_type: 'NECB_Default',
                                                       nv_type: nv_type,
-                                                      nv_comfort_model: nv_comfort_model,
                                                       nv_opening_fraction: nv_opening_fraction,
                                                       nv_Tout_min: nv_Tout_min,
                                                       nv_Delta_Tin_Tout:nv_Delta_Tin_Tout,
