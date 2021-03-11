@@ -1018,7 +1018,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_hour_schedule": "Large Office Bldg Business Hours"
     },
     {
       "template": "90.1-2016",

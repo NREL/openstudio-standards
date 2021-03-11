@@ -52,9 +52,9 @@ Standard.class_eval do
     model.getBuilding.setStandardsBuildingType(building_type)
     model_set_climate_zone(model, climate_zone)
     # TODO: replace template conditional with method overriding
-    if template == '90.1-2016' || template == '90.1-2019'
-      model_add_lights_shutoff(model)
-    end
+    # if template == '90.1-2016' || template == '90.1-2019'
+    #   model_add_lights_shutoff(model)
+    # end
     # Perform a sizing model_run(model)
     return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
 
@@ -2173,6 +2173,17 @@ Standard.class_eval do
   def model_add_lights_shutoff(model)
     zones = model.getThermalZones
     num_zones = 0
+
+    business_sch_name = prototype_input['business_hour_schedule']
+    # Add business schedule
+    model_add_schedule(model, business_sch_name)
+
+    # Add EMS object for business schedule variable
+    business_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
+    business_sensor.setKeyName(business_sch_name)
+    business_sensor.setName("Business_Sensor")
+    business_sensor_name = business_sensor.name.to_s
+
     zones.each do |zone|
       spaces = zone.spaces
       if spaces.length != 1
@@ -2200,7 +2211,6 @@ Standard.class_eval do
       #TODO: add logic for multi-lights: find the largest light, use if for lighting control while turning off other lights
       light = space_lights[0]
 
-      # Add EMS objects
       zone_name = zone.name.to_s
 
       light_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Lights Electric Power')
@@ -2208,10 +2218,11 @@ Standard.class_eval do
       light_sensor.setName("#{zone_name}_LSr".gsub(/[\s-]/, ''))
       light_sensor_name = light_sensor.name.to_s
 
-      occ_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone People Occupant Count') # TODO: need confirm, this is different from EPSTD. EPSTD uses 'People Occupant Count', which requires a different key
-      occ_sensor.setKeyName(zone_name)
-      occ_sensor.setName("#{zone_name}_Occ_Sensor".gsub(/[\s-]/, ''))
-      occ_sensor_name = occ_sensor.name.to_s
+      # advised to stop using zone level occupancy but a building level business schedule to control the light dimming.
+      # occ_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone People Occupant Count') # TODO: need confirm, this is different from EPSTD. EPSTD uses 'People Occupant Count', which requires a different key
+      # occ_sensor.setKeyName(zone_name)
+      # occ_sensor.setName("#{zone_name}_Occ_Sensor".gsub(/[\s-]/, ''))
+      # occ_sensor_name = occ_sensor.name.to_s
 
       floor_area = OpenStudio::Model::EnergyManagementSystemInternalVariable.new(model, 'Zone Floor Area')
       floor_area.setInternalDataIndexKeyName(zone_name)
@@ -2226,7 +2237,7 @@ Standard.class_eval do
       light_ems_prog.setName("SET_#{zone_name}_Light_EMS_Program".gsub(/[\s-]/, ''))
       light_ems_prog_body = <<-EMS
       SET #{light_sensor_name}_IP=0.093*#{light_sensor_name}/#{floor_area_name},
-      IF (#{occ_sensor_name} <= 0) && (#{light_sensor_name}_IP >= 0.02),
+      IF (#{business_sensor_name} <= 0) && (#{light_sensor_name}_IP >= 0.02),
       SET #{light_actuator_name} = 0.02*#{floor_area_name}/0.09290304,
       ELSE,
       SET #{light_actuator_name} = NULL,
