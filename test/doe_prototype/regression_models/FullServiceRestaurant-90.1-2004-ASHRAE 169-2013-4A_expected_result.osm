@@ -5696,14 +5696,6 @@ OS:ZoneMixing,
   ,                                       !- Minimum Outdoor Temperature Schedule Name
   ;                                       !- Maximum Outdoor Temperature Schedule Name
 
-OS:ScheduleTypeLimits,
-  {298e275c-f978-44c9-ae11-a56f0455aa20}, !- Handle
-  Fractional 1,                           !- Name
-  0,                                      !- Lower Limit Value
-  1,                                      !- Upper Limit Value
-  Continuous,                             !- Numeric Type
-  ;                                       !- Unit Type
-
 OS:Schedule:Ruleset,
   {c32f46f5-73f1-4d33-85e6-e3a11580d58f}, !- Handle
   RestaurantSitDown Hours_of_operation,   !- Name
@@ -6430,7 +6422,7 @@ OS:WaterUse:Equipment,
 OS:Schedule:Ruleset,
   {b519e64a-324f-46fc-85e2-452deb2211be}, !- Handle
   RestaurantSitDown BLDG_SWH_SCH,         !- Name
-  {298e275c-f978-44c9-ae11-a56f0455aa20}, !- Schedule Type Limits Name
+  {11dad195-2d76-4696-95fc-488684a52fbe}, !- Schedule Type Limits Name
   {1ea80374-6bde-4dcb-8b31-d472e6988179}, !- Default Day Schedule Name
   {3e282891-1889-4d47-b0ce-85246f3768f9}, !- Summer Design Day Schedule Name
   {da826129-4f1f-4ae1-acad-94710de3bd09}; !- Winter Design Day Schedule Name
@@ -6438,7 +6430,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Day,
   {1ea80374-6bde-4dcb-8b31-d472e6988179}, !- Handle
   RestaurantSitDown BLDG_SWH_SCH Default, !- Name
-  {298e275c-f978-44c9-ae11-a56f0455aa20}, !- Schedule Type Limits Name
+  {11dad195-2d76-4696-95fc-488684a52fbe}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   1,                                      !- Hour 1
   0,                                      !- Minute 1
@@ -6480,7 +6472,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {3e282891-1889-4d47-b0ce-85246f3768f9}, !- Handle
   RestaurantSitDown BLDG_SWH_SCH Summer Design Day, !- Name
-  {298e275c-f978-44c9-ae11-a56f0455aa20}, !- Schedule Type Limits Name
+  {11dad195-2d76-4696-95fc-488684a52fbe}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   1,                                      !- Hour 1
   0,                                      !- Minute 1
@@ -6559,7 +6551,7 @@ OS:Schedule:Rule,
 OS:Schedule:Day,
   {3f6a06e3-f036-412a-bf49-75344c6384a1}, !- Handle
   RestaurantSitDown BLDG_SWH_SCH SmrDsn|Wkdy Day, !- Name
-  {298e275c-f978-44c9-ae11-a56f0455aa20}, !- Schedule Type Limits Name
+  {11dad195-2d76-4696-95fc-488684a52fbe}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   1,                                      !- Hour 1
   0,                                      !- Minute 1
@@ -6619,7 +6611,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {da826129-4f1f-4ae1-acad-94710de3bd09}, !- Handle
   RestaurantSitDown BLDG_SWH_SCH Winter Design Day, !- Name
-  {298e275c-f978-44c9-ae11-a56f0455aa20}, !- Schedule Type Limits Name
+  {11dad195-2d76-4696-95fc-488684a52fbe}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   1,                                      !- Hour 1
   0,                                      !- Minute 1
@@ -6689,7 +6681,7 @@ OS:Schedule:Rule,
 OS:Schedule:Day,
   {7fd5018e-42a2-44cb-b670-000090afbc9e}, !- Handle
   RestaurantSitDown BLDG_SWH_SCH WntrDsn|Sat Day, !- Name
-  {298e275c-f978-44c9-ae11-a56f0455aa20}, !- Schedule Type Limits Name
+  {11dad195-2d76-4696-95fc-488684a52fbe}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   1,                                      !- Hour 1
   0,                                      !- Minute 1
@@ -7578,7 +7570,7 @@ OS:Exterior:Lights:Definition,
 OS:Schedule:Ruleset,
   {60d3be09-c504-4d95-8811-af62cea9de5e}, !- Handle
   RestaurantSitDown Exterior_Lgt_ALWAYS_ON, !- Name
-  {298e275c-f978-44c9-ae11-a56f0455aa20}, !- Schedule Type Limits Name
+  {11dad195-2d76-4696-95fc-488684a52fbe}, !- Schedule Type Limits Name
   {f673dd68-eb3b-48fb-b019-4360bd1fcefe}, !- Default Day Schedule Name
   {f289e92e-fb25-4cce-9927-4be7b75bd8c1}, !- Summer Design Day Schedule Name
   {39ff37c2-300c-46c7-ab5d-ecd356789ef9}; !- Winter Design Day Schedule Name
@@ -7586,7 +7578,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Day,
   {f673dd68-eb3b-48fb-b019-4360bd1fcefe}, !- Handle
   RestaurantSitDown Exterior_Lgt_ALWAYS_ON Default, !- Name
-  {298e275c-f978-44c9-ae11-a56f0455aa20}, !- Schedule Type Limits Name
+  {11dad195-2d76-4696-95fc-488684a52fbe}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1
   0,                                      !- Minute 1
@@ -7595,7 +7587,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {39ff37c2-300c-46c7-ab5d-ecd356789ef9}, !- Handle
   RestaurantSitDown Exterior_Lgt_ALWAYS_ON Winter Design Day, !- Name
-  {298e275c-f978-44c9-ae11-a56f0455aa20}, !- Schedule Type Limits Name
+  {11dad195-2d76-4696-95fc-488684a52fbe}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1
   0,                                      !- Minute 1
@@ -7604,7 +7596,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {f289e92e-fb25-4cce-9927-4be7b75bd8c1}, !- Handle
   RestaurantSitDown Exterior_Lgt_ALWAYS_ON Summer Design Day, !- Name
-  {298e275c-f978-44c9-ae11-a56f0455aa20}, !- Schedule Type Limits Name
+  {11dad195-2d76-4696-95fc-488684a52fbe}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1
   0,                                      !- Minute 1
