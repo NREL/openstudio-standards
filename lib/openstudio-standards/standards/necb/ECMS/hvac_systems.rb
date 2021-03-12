@@ -1743,10 +1743,14 @@ class ECMS
         chiller_capacity_cop = 'ElectricEIRChiller Carrier 19XR 742kW/5.42COP/VSD'
       elsif ref_capacity_kw > 742.0 && ref_capacity_kw <= 897.0
         chiller_capacity_cop = 'ElectricEIRChiller Carrier 19XR 897kW/7.23COP/VSD'
-      elsif ref_capacity_kw > 897.0 && ref_capacity_kw <= 1143.0
-          chiller_capacity_cop = 'ElectricEIRChiller Carrier 19XR 1143kW/6.57COP/VSD'
-      elsif ref_capacity_kw > 1143.0
-          chiller_capacity_cop = 'ElectricEIRChiller Carrier 19XR 2391kW/6.44COP/VSD' #TODO: add this chiller #'ElectricEIRChiller York YT 2233kW/9.54COP/VSD' #'ElectricEIRChiller Carrier 19XR 2391kW/6.77COP/Vanes'
+      elsif ref_capacity_kw > 897.0 && ref_capacity_kw <= 1090.0
+        chiller_capacity_cop = 'ElectricEIRChiller York YT 1090kW/7.57COP/VSD'
+      elsif ref_capacity_kw > 1090.0 && ref_capacity_kw <= 1350.0
+        chiller_capacity_cop = 'ElectricEIRChiller Carrier 19XR 1350kW/7.90COP/VSD'
+      elsif ref_capacity_kw > 1350.0 && ref_capacity_kw <= 1723.0
+        chiller_capacity_cop = 'ElectricEIRChiller Carrier 19XR 1723kW/8.32COP/VSD'
+      elsif ref_capacity_kw > 1723.0
+        chiller_capacity_cop = 'ElectricEIRChiller York YT 2233kW/9.54COP/VSD_2'
       end
 
       if chiller_capacity_cop.is_a?(String) #look for a package with the chiller_capacity_cop name in chiller_set.json

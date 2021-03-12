@@ -1,18 +1,34 @@
 [
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "DefaultFuel",
-    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD - capacity": 2233000.0,
-    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD - COP": 9.54,
-    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD - CAPFT_curve": "ElectricEIRChiller York YT 2233kW/9.54COP/VSD CAPFT",
-    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD - EIRFT_curve": "ElectricEIRChiller York YT 2233kW/9.54COP/VSD EIRFT",
-    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD - EITFPLR_curve": "ElectricEIRChiller York YT 2233kW/9.54COP/VSD EIRFPLR",
+    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD_2 - capacity": 2024895.0,
+    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD_2 - COP": 9.54,
+    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD_2 - CAPFT_curve": "ElectricEIRChiller York YT 2233kW/9.54COP/VSD CAPFT_2",
+    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD_2 - EIRFT_curve": "ElectricEIRChiller York YT 2233kW/9.54COP/VSD EIRFT_2",
+    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD_2 - EITFPLR_curve": "ElectricEIRChiller York YT 2233kW/9.54COP/VSD EIRFPLR_2",
     "Secondary Chiller WaterCooled Scroll 0tons 0.8kW/ton - capacity": 0.0010000000474974513,
     "Secondary Chiller WaterCooled Scroll 0tons 0.8kW/ton - COP": 4.50320102432778,
     "Secondary Chiller WaterCooled Scroll 0tons 0.8kW/ton - CAPFT_curve": "WaterCooled_Scroll_CAPFT_NECB2011",
     "Secondary Chiller WaterCooled Scroll 0tons 0.8kW/ton - EIRFT_curve": "WaterCooled_Scroll_EIRFT_NECB2011",
     "Secondary Chiller WaterCooled Scroll 0tons 0.8kW/ton - EITFPLR_curve": "WaterCooled_Scroll_EIRFPLR_NECB2011"
+  },
+  {
+    "template": "NECB2011",
+    "epw_file": "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw",
+    "building_type": "LargeOffice",
+    "primary_heating_fuel": "DefaultFuel",
+    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD - capacity": 1084180.125,
+    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD - COP": 7.57,
+    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD - CAPFT_curve": "ElectricEIRChiller York YT 1090kW/7.57COP/VSD CAPFT",
+    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD - EIRFT_curve": "ElectricEIRChiller York YT 1090kW/7.57COP/VSD EIRFT",
+    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD - EITFPLR_curve": "ElectricEIRChiller York YT 1090kW/7.57COP/VSD EIRFPLR",
+    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD 1 - capacity": 1084180.125,
+    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD 1 - COP": 7.57,
+    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD 1 - CAPFT_curve": "ElectricEIRChiller York YT 1090kW/7.57COP/VSD CAPFT",
+    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD 1 - EIRFT_curve": "ElectricEIRChiller York YT 1090kW/7.57COP/VSD EIRFT",
+    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD 1 - EITFPLR_curve": "ElectricEIRChiller York YT 1090kW/7.57COP/VSD EIRFPLR"
   }
 ]

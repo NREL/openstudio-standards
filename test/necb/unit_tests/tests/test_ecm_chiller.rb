@@ -39,7 +39,10 @@ class NECB_VSDchiller_Tests < Minitest::Test
     # 'SmallHotel',
     # 'Warehouse'
     ]
-    @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
+    @epw_files = [
+        'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw',
+        'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw'
+    ]
     @primary_heating_fuels = ['DefaultFuel']
     
     @chiller_types = ['VSD']
