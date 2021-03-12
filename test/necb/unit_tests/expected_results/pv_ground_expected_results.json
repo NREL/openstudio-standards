@@ -5,7 +5,7 @@
     "building_type": "FullServiceRestaurant",
     "primary_heating_fuel": "DefaultFuel",
     "pv_ground_type": true,
-    "Generator PVWatts 1 - dc_system_capacity": "8611.12833336778",
+    "Generator PVWatts 1 - dc_system_capacity": "88032.1359886609",
     "Generator PVWatts 1 - module_type": "Standard",
     "Generator PVWatts 1 - array_type": "OneAxis",
     "Generator PVWatts 1 - tilt_angle": "51.193",
