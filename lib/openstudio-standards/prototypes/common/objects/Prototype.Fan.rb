@@ -9,6 +9,9 @@ module PrototypeFan
   #
   # @return [Bool] true if successful, false if not
   def prototype_fan_apply_prototype_fan_efficiency(fan)
+    # Do not modify dummy exhaust fans
+    return true unless !fan.name.to_s.downcase.include? 'dummy'
+
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
     if fan.maximumFlowRate.is_initialized
