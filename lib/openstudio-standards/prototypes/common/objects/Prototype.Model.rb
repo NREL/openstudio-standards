@@ -2166,8 +2166,17 @@ Standard.class_eval do
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Boolean] true if transfer air is required, false otherwise
   def transfer_air_required?(model)
-
     return false
+  end
+
+  # List transfer air target and source zones, and air flow (cfm)
+  #
+  # code_sections [90.1-2019_6.5.7.1], [90.1-2016_6.5.7.1]
+  # @return [Hash] target zones (key) and source zones (value) and air flow (value)
+  def transfer_air_target_and_source_zones(model)
+    transfer_air_target_and_source_zones_hash = {}
+
+    return transfer_air_target_and_source_zones_hash
   end
 
   # Add transfer to prototype for spaces that require it
@@ -2175,12 +2184,12 @@ Standard.class_eval do
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Boolean] true if successful, false otherwise
   def model_add_transfer_air(model)
-    
     # Do not add transfer air if not required
     return true unless transfer_air_required?(model)
 
     # Get target and source zones
     target_and_source_zones = transfer_air_target_and_source_zones(model)
+    return true unless !target_and_source_zones.empty?
 
     model.getFanZoneExhausts.sort.each do |exhaust_fan|
       # Target zone (zone with exhaust fan)
@@ -2188,7 +2197,7 @@ Standard.class_eval do
 
       # Get zone name of an exhaust fan
       exhaust_fan_zone_name = target_zone.name.to_s
-      
+
       # Go to next exhaust fan if this zone isn't using transfer air
       next unless target_and_source_zones.keys.include? exhaust_fan_zone_name
 
@@ -2204,8 +2213,8 @@ Standard.class_eval do
       transfer_air_source_zone_exhaust_fan.setFanEfficiency(1.0)
       transfer_air_source_zone_exhaust_fan.setPressureRise(0.0)
       transfer_air_source_zone_exhaust_fan.addToThermalZone(source_zone)
-      
-      # Set exhaust fan balanced air flow schedule to only consider the transfer air to be balanced air flow 
+
+      # Set exhaust fan balanced air flow schedule to only consider the transfer air to be balanced air flow
       balanced_air_flow_schedule = exhaust_fan.availabilitySchedule.get.clone(model).to_ScheduleRuleset.get
       balanced_air_flow_schedule.setName("#{exhaust_fan_zone_name} Exhaust Fan Balanced Air Flow Schedule")
       model_multiply_schedule(model, balanced_air_flow_schedule.defaultDaySchedule, transfer_air_flow_m3s / exhaust_fan.maximumFlowRate.get, 0)
