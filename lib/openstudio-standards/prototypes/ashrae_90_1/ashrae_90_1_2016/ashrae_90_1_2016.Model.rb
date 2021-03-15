@@ -32,4 +32,25 @@ class ASHRAE9012016 < ASHRAE901
                       end
     return economizer_type
   end
+
+  # Metal coiling door code minimum infiltration rate at 75 Pa
+  #
+  # @code_sections [90.1-2019_5.4.3.2]
+  # @param [String] Climate zone
+  # @return [Float] Minimum infiltration rate for metal coiling doors
+  def door_infil_flow_rate_metal_coiling_cfm_ft2(climate_zone)
+    case climate_zone
+      when 'ASHRAE 169-2006-7A',
+           'ASHRAE 169-2006-7B',
+           'ASHRAE 169-2006-8A',
+           'ASHRAE 169-2006-8B',
+           'ASHRAE 169-2013-7A',
+           'ASHRAE 169-2013-7B',
+           'ASHRAE 169-2013-8A',
+           'ASHRAE 169-2013-8B'
+        return 0.4
+      else
+        return 1.0
+    end
+  end
 end

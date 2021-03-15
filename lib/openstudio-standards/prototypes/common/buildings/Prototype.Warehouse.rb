@@ -214,4 +214,32 @@ end
     end
     return true
   end
+
+  # Get building door information to update infiltration
+  #
+  # return [Hash] Door infiltration information
+  def get_building_door_info
+    get_building_door_info = {
+      'Metal coiling' => {
+        'number_of_doors' => 2.95,
+        'door_area_ft2' => 80.0, # 8'-0" by 10'-0"
+        'schedule' => 'Warehouse Bulk Infil Schedule',
+        'space' => 'Zone3 Bulk Storage'
+      },
+      'Rollup' => {
+        'number_of_doors' => 8.85,
+        'door_area_ft2' => 80.0, # 8'-0" by 10'-0"
+        'schedule' => 'Warehouse Bulk Infil Schedule',
+        'space' => 'Zone3 Bulk Storage'
+      },
+      'Open' => {
+        'number_of_doors' => 3.2,
+        'door_area_ft2' => 80.0, # 8'-0" by 10'-0"
+        'schedule' => 'Warehouse Bulk Infil Schedule',
+        'space' => 'Zone3 Bulk Storage'
+      }
+    }
+
+    return get_building_door_info
+  end
 end
