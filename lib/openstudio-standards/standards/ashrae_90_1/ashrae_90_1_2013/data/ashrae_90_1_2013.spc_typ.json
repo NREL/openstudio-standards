@@ -973,7 +973,7 @@
       "occupancy_activity_schedule": null,
       "is_residential": null,
       "infiltration_per_exterior_area": null,
-      "infiltration_per_exterior_wall_area": 0.2016,
+      "infiltration_per_exterior_wall_area": null,
       "infiltration_air_changes": null,
       "infiltration_schedule": "College INFIL_SCH_PNNL",
       "infiltration_schedule_perimeter": null,
