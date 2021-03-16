@@ -26,7 +26,7 @@ class Standard
     zone_name = zone.name.to_s.gsub(/[ +-.]/, '_')
     zone_timestep = model.getTimestep.numberOfTimestepsPerHour
 
-    if model.version < OpenStudio::VersionString.new('3.2.0')
+    if model.version < OpenStudio::VersionString.new('3.1.1')
       coil_cooling_radiant = radiant_loop.coolingCoil.to_CoilCoolingLowTempRadiantVarFlow.get
       coil_heating_radiant = radiant_loop.heatingCoil.to_CoilHeatingLowTempRadiantVarFlow.get
     else
