@@ -2204,11 +2204,14 @@ Standard.class_eval do
         next
       end
 
-      if space_lights.length > 1
-        puts 'warning: more than one light, need investigation @JXL'
-      end
+      # if space_lights.length > 1
+      #   puts 'warning: more than one light, need investigation @JXL'
+      # end
 
       zone_name = zone.name.to_s
+      if zone_name =~ /data\s*center/i
+        next # skip data centers
+      end
 
       light_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Lights Electric Power')
       light_sensor.setKeyName(zone_name)
