@@ -52,9 +52,9 @@ Standard.class_eval do
     model.getBuilding.setStandardsBuildingType(building_type)
     model_set_climate_zone(model, climate_zone)
     # TODO: replace template conditional with method overriding
-    # if template == '90.1-2016' || template == '90.1-2019'
-    #   model_add_lights_shutoff(model)
-    # end
+    if template == '90.1-2016' || template == '90.1-2019'
+      model_add_lights_shutoff(model)
+    end
     # Perform a sizing model_run(model)
     return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
 
@@ -2174,14 +2174,14 @@ Standard.class_eval do
     zones = model.getThermalZones
     num_zones = 0
 
-    business_sch_name = prototype_input['business_hour_schedule']
+    business_sch_name = prototype_input['business_schedule']
     # Add business schedule
     model_add_schedule(model, business_sch_name)
 
     # Add EMS object for business schedule variable
     business_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
     business_sensor.setKeyName(business_sch_name)
-    business_sensor.setName("Business_Sensor")
+    business_sensor.setName('Business_Sensor')
     business_sensor_name = business_sensor.name.to_s
 
     zones.each do |zone|
@@ -2199,17 +2199,14 @@ Standard.class_eval do
         space_people = space.spaceType.get.people
       end
 
-      if space_lights.empty? || space_people.empty?
-        puts 'no lights / people, need check @JXL'
+      if space_lights.empty? # || space_people.empty?
+        puts 'no lights, skip @JXL'
         next
       end
 
       if space_lights.length > 1
         puts 'warning: more than one light, need investigation @JXL'
       end
-
-      #TODO: add logic for multi-lights: find the largest light, use if for lighting control while turning off other lights
-      light = space_lights[0]
 
       zone_name = zone.name.to_s
 
@@ -2229,18 +2226,42 @@ Standard.class_eval do
       floor_area.setName("#{zone_name}_Area".gsub(/[\s-]/, ''))
       floor_area_name = floor_area.name.to_s
 
-      light_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(light, 'Lights', 'Electric Power Level')
-      light_actuator.setName("#{zone_name}_Light_Actuator".gsub(/[\s-]/, ''))
-      light_actuator_name = light_actuator.name.to_s
+      # accounts for multiple lights (also work for single light)
+      big_light = space_lights[0]
+      space_lights.each do |light_x|
+        big_light_power = big_light.definition.to_LightsDefinition.get.wattsperSpaceFloorArea.to_f
+        light_x_power = light_x.definition.to_LightsDefinition.get.wattsperSpaceFloorArea.to_f
+        if light_x_power > big_light_power
+          big_light = light_x
+        end
+      end
+
+      add_lights_prog_0 = ""
+      add_lights_prog_null = ""
+      light_id = 0
+      space_lights.each do |light_x|
+        light_id += 1
+        light_x_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(light_x, 'Lights', 'Electric Power Level')
+        light_x_actuator.setName("#{zone_name}_Light#{light_id.to_s}_Actuator".gsub(/[\s-]/, ''))
+        light_x_actuator_name = light_x_actuator.name.to_s
+        add_lights_prog_null += "\n      SET #{light_x_actuator_name} = NULL,"
+        if light_x == big_light
+          add_lights_prog_0 += "\n      SET #{light_x_actuator_name} = 0.02*#{floor_area_name}/0.09290304,"
+          next
+        end
+        add_lights_prog_0 += "\n      SET #{light_x_actuator_name} = 0,"
+      end
+
+      # light_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(light, 'Lights', 'Electric Power Level')
+      # light_actuator.setName("#{zone_name}_Light_Actuator".gsub(/[\s-]/, ''))
+      # light_actuator_name = light_actuator.name.to_s
 
       light_ems_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
       light_ems_prog.setName("SET_#{zone_name}_Light_EMS_Program".gsub(/[\s-]/, ''))
       light_ems_prog_body = <<-EMS
       SET #{light_sensor_name}_IP=0.093*#{light_sensor_name}/#{floor_area_name},
-      IF (#{business_sensor_name} <= 0) && (#{light_sensor_name}_IP >= 0.02),
-      SET #{light_actuator_name} = 0.02*#{floor_area_name}/0.09290304,
-      ELSE,
-      SET #{light_actuator_name} = NULL,
+      IF (#{business_sensor_name} <= 0) && (#{light_sensor_name}_IP >= 0.02),#{add_lights_prog_0}
+      ELSE,#{add_lights_prog_null}
       ENDIF
       EMS
       light_ems_prog.setBody(light_ems_prog_body)
