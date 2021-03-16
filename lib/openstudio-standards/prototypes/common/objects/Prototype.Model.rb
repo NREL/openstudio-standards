@@ -2165,7 +2165,7 @@ Standard.class_eval do
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Boolean] true if transfer air is required, false otherwise
-  def model_transfer_air_required??(model)
+  def model_transfer_air_required?(model)
     return false
   end
 
@@ -2185,7 +2185,7 @@ Standard.class_eval do
   # @return [Boolean] true if successful, false otherwise
   def model_add_transfer_air(model)
     # Do not add transfer air if not required
-    return true unless model_transfer_air_required??(model)
+    return true unless model_transfer_air_required?(model)
 
     # Get target and source zones
     target_and_source_zones = model_transfer_air_target_and_source_zones(model)
