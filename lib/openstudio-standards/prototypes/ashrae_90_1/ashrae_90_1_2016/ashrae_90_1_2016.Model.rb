@@ -38,7 +38,7 @@ class ASHRAE9012016 < ASHRAE901
   # @code_sections [90.1-2019_5.4.3.2]
   # @param [String] Climate zone
   # @return [Float] Minimum infiltration rate for metal coiling doors
-  def door_infil_flow_rate_metal_coiling_cfm_ft2(climate_zone)
+  def model_door_infil_flow_rate_metal_coiling_cfm_ft2(climate_zone)
     case climate_zone
       when 'ASHRAE 169-2006-7A',
            'ASHRAE 169-2006-7B',

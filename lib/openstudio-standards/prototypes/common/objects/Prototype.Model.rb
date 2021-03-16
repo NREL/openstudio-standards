@@ -2172,7 +2172,7 @@ Standard.class_eval do
   #
   # @param [String] Climate zone
   # @return [Float] Minimum infiltration rate for metal coiling doors
-  def door_infil_flow_rate_metal_coiling_cfm_ft2(climate_zone)
+  def model_door_infil_flow_rate_metal_coiling_cfm_ft2(climate_zone)
     case climate_zone
       when 'ASHRAE 169-2006-7A',
            'ASHRAE 169-2006-7B',
@@ -2188,7 +2188,7 @@ Standard.class_eval do
   #
   # @param [String] Climate zone
   # @return [Float] Minimum infiltration rate for metal coiling doors
-  def door_infil_flow_rate_rollup_cfm_ft2(climate_zone)
+  def model_door_infil_flow_rate_rollup_cfm_ft2(climate_zone)
     return 0.4
   end
 
@@ -2196,7 +2196,7 @@ Standard.class_eval do
   #
   # @param [String] Climate zone
   # @return [Float] Open door infiltration rate
-  def door_infil_flow_rate_open_cfm_ft2(climate_zone)
+  def model_door_infil_flow_rate_open_cfm_ft2(climate_zone)
     return 9.7875
   end
 
@@ -2214,11 +2214,11 @@ Standard.class_eval do
       # Get infiltration flow rate at 75 Pa
       case door_type
         when 'Metal coiling'
-          door_infil_flow_rate_cfm_per_ft2 = door_infil_flow_rate_metal_coiling_cfm_ft2(climate_zone)
+          door_infil_flow_rate_cfm_per_ft2 = model_door_infil_flow_rate_metal_coiling_cfm_ft2(climate_zone)
         when 'Rollup'
-          door_infil_flow_rate_cfm_per_ft2 = door_infil_flow_rate_rollup_cfm_ft2(climate_zone)
+          door_infil_flow_rate_cfm_per_ft2 = model_door_infil_flow_rate_rollup_cfm_ft2(climate_zone)
         when 'Open'
-          door_infil_flow_rate_cfm_per_ft2 = door_infil_flow_rate_open_cfm_ft2(climate_zone)
+          door_infil_flow_rate_cfm_per_ft2 = model_door_infil_flow_rate_open_cfm_ft2(climate_zone)
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "The #{door_type.downcase} type of door is not currently supported.")
           next
