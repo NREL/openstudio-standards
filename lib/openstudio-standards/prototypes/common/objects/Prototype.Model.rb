@@ -45,7 +45,7 @@ Standard.class_eval do
     model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
     model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
-    model_guestroom_vacancy_controls(model, building_type)
+    model_add_guestroom_vacancy_controls(model, building_type)
     model_add_daylight_savings(model)
     model_add_ground_temperatures(model, @instvarbuilding_type, climate_zone)
     model_apply_sizing_parameters(model, @instvarbuilding_type)
@@ -1100,7 +1100,7 @@ Standard.class_eval do
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param building_type [String] Building type
   # @return [Boolean] Returns true if successful, false otherwise
-  def model_guestroom_vacancy_controls(model, building_type)
+  def model_add_guestroom_vacancy_controls(model, building_type)
     # Guestrooms are currently only included in the small and large hotel prototypes
     return true unless (building_type == 'LargeHotel') || (building_type == 'SmallHotel')
 
