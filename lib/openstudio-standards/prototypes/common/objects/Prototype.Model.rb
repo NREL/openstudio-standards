@@ -2162,7 +2162,7 @@ Standard.class_eval do
   # Get building door information to update infiltration
   #
   # return [Hash] Door infiltration information
-  def get_building_door_info
+  def get_building_door_info(model)
     get_building_door_info = {}
 
     return get_building_door_info
@@ -2207,7 +2207,7 @@ Standard.class_eval do
   # @return [Boolean] Returns true if successful, false otherwise or not applicable
   def model_add_door_infiltration(model, climate_zone)
     # Get door parameters for the building model
-    bldg_door_types = get_building_door_info
+    bldg_door_types = get_building_door_info(model)
     return false if bldg_door_types.empty?
 
     bldg_door_types.each do |door_type, door_info|
@@ -2238,7 +2238,7 @@ Standard.class_eval do
       # Create door infiltration object
       door_infil_obj = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
       door_infil_obj.setName("#{door_info['number_of_doors']} #{door_info['door_area_ft2']} ft2 #{door_type.downcase} Door Infiltration")
-      door_infil_obj.setSchedule(model.getScheduleRulesetByName(door_info['schedule']).get)
+      door_infil_obj.setSchedule(door_info['schedule'])
       door_infil_obj.setDesignFlowRate(adj_door_infil_m3_per_s)
       door_infil_obj.setSpace(model.getSpaceByName(door_info['space']).get)
       door_infil_obj.setConstantTermCoefficient(0.0)
