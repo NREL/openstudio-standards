@@ -2189,7 +2189,7 @@ Standard.class_eval do
 
     # Get target and source zones
     target_and_source_zones = model_transfer_air_target_and_source_zones(model)
-    return true unless !target_and_source_zones.empty?
+    return true if target_and_source_zones.empty?
 
     model.getFanZoneExhausts.sort.each do |exhaust_fan|
       # Target zone (zone with exhaust fan)
