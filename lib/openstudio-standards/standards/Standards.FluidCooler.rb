@@ -14,8 +14,9 @@ class Standard
   # rate will not (and should not)
   # exactly equal the minimum tower performance.
   #
+  # @param equipment_type [String] heat rejection equipment type enumeration used for query (options: 'Closed Cooling Tower', 'Dry Cooler', 'Open Cooling Tower')
   # @return [Bool] true if successful, false if not
-  def fluid_cooler_apply_minimum_power_per_flow(fluid_cooler)
+  def fluid_cooler_apply_minimum_power_per_flow(fluid_cooler, equipment_type = 'Closed Cooling Tower')
     # Get the design water flow rate
     if fluid_cooler.designWaterFlowRate.is_initialized
       design_water_flow_m3_per_s = fluid_cooler.designWaterFlowRate.get
@@ -36,7 +37,7 @@ class Standard
     search_criteria['template'] = template
 
     # Closed cooling towers are fluidcooler objects.
-    search_criteria['equipment_type'] = 'Dry Cooler'
+    search_criteria['equipment_type'] = equipment_type
 
     # TODO: Standards replace this with a mechanism to store this
     # data in the fluid cooler object itself.
