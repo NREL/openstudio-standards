@@ -6,7 +6,7 @@ class Standard
   # Sets the fan pressure rise based on the Prototype buildings inputs
   def fan_zone_exhaust_apply_prototype_fan_pressure_rise(fan_zone_exhaust)
     # Do not modify dummy exhaust fans
-    return true unless !fan_zone_exhaust.name.to_s.downcase.include? 'dummy'
+    return true if fan_zone_exhaust.name.to_s.downcase.include? 'dummy'
 
     # All exhaust fans are assumed to have a pressure rise of
     # 0.5 in w.c. in the prototype building models.

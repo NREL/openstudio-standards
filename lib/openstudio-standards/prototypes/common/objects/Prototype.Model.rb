@@ -2165,7 +2165,7 @@ Standard.class_eval do
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Boolean] true if transfer air is required, false otherwise
-  def transfer_air_required?(model)
+  def model_transfer_air_required??(model)
     return false
   end
 
@@ -2173,10 +2173,10 @@ Standard.class_eval do
   #
   # code_sections [90.1-2019_6.5.7.1], [90.1-2016_6.5.7.1]
   # @return [Hash] target zones (key) and source zones (value) and air flow (value)
-  def transfer_air_target_and_source_zones(model)
-    transfer_air_target_and_source_zones_hash = {}
+  def model_transfer_air_target_and_source_zones(model)
+    model_transfer_air_target_and_source_zones_hash = {}
 
-    return transfer_air_target_and_source_zones_hash
+    return model_transfer_air_target_and_source_zones_hash
   end
 
   # Add transfer to prototype for spaces that require it
@@ -2185,10 +2185,10 @@ Standard.class_eval do
   # @return [Boolean] true if successful, false otherwise
   def model_add_transfer_air(model)
     # Do not add transfer air if not required
-    return true unless transfer_air_required?(model)
+    return true unless model_transfer_air_required??(model)
 
     # Get target and source zones
-    target_and_source_zones = transfer_air_target_and_source_zones(model)
+    target_and_source_zones = model_transfer_air_target_and_source_zones(model)
     return true unless !target_and_source_zones.empty?
 
     model.getFanZoneExhausts.sort.each do |exhaust_fan|

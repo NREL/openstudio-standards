@@ -38,7 +38,7 @@ class ASHRAE9012010 < ASHRAE901
   # @code_sections [90.1-2010_6.5.7.1.2]
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Boolean] true if transfer air is required, false otherwise
-  def transfer_air_required?(model)
+  def model_transfer_air_required??(model)
     # TODO: It actually is for kitchen but not implemented yet
     return false
   end

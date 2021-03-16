@@ -724,11 +724,11 @@ module SecondarySchool
   #
   # code_sections [90.1-2019_6.5.7.1], [90.1-2016_6.5.7.1]
   # @return [Hash] target zones (key) and source zones (value) and air flow (value)
-  def transfer_air_target_and_source_zones(model)
-    transfer_air_target_and_source_zones_hash = {
+  def model_transfer_air_target_and_source_zones(model)
+    model_transfer_air_target_and_source_zones_hash = {
       'Bathrooms_ZN_1_FLR_1 ZN' => ['Main_Corridor_ZN_1_FLR_1 ZN', 600.0],
       'Bathrooms_ZN_1_FLR_2 ZN' => ['Main_Corridor_ZN_1_FLR_2 ZN', 600.0]
     }
-    return transfer_air_target_and_source_zones_hash
+    return model_transfer_air_target_and_source_zones_hash
   end
 end
