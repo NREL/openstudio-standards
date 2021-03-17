@@ -133,7 +133,7 @@ class Standard
         heat_pump_loop = nil
         if system['heating_type'] == 'Water To Air Heat Pump'
           # @code_sections [90.1-2016_6.5.5.2.1] 
-          # Per ASHRAE 90.1 2013 Addendum CA/CQ: change highrise apartment heat rejection fan (< 5hp) from single speed to two speed evaporative fluid cooler
+          # change highrise apartment heat rejection fan (< 5hp) from single speed to two speed evaporative fluid cooler
           # TODO: this is temporary fix, it should be applied to all heat rejection devices smaller than 5hp.
           if system['heat_pump_loop_cooling_type'].nil?
             hp_loop_cooling_type = 'EvaporativeFluidCooler'
