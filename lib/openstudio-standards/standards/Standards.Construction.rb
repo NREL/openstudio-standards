@@ -160,7 +160,12 @@ class Standard
 
     # Determine the R-value of the air films, if requested
     film_coeff_r_value_si = 0.0
-    film_coeff_r_value_si += film_coefficients_r_value(intended_surface_type, target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
+    # In EnergyPlus, the U-factor input of the WindowMaterial:SimpleGlazingSystem 
+    # object includes the film coefficients (see IDD description, and I/O reference 
+    # guide) so the target_includes_int_film_coefficients and target_includes_ext_film_coefficients
+    # variable values are changed to their opposite so if the target value includes a film
+    # the target value is unchanged
+    film_coeff_r_value_si += film_coefficients_r_value(intended_surface_type, !target_includes_int_film_coefficients, !target_includes_ext_film_coefficients)
     film_coeff_u_value_si = 1.0 / film_coeff_r_value_si
     film_coeff_u_value_ip = OpenStudio.convert(film_coeff_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
     film_coeff_r_value_ip = 1.0 / film_coeff_u_value_ip
