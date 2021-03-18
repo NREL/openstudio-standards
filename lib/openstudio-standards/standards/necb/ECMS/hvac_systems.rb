@@ -1626,6 +1626,7 @@ class ECMS
         end
         coil.setName(coil_name)
         cop_package = model_find_object(@standards_data['tables']['unitary_cop_ecm'], search_criteria, capacity_w)
+
         raise "Cannot not find #{unitary_cop_ecm} in the ECMS unitary_acs.json file.  Please check that the name is correctly spelled in the ECMS class unitary_acs.json file and in the code calling (directly or through another method) the ECMS class modify_unitary_eff method." if cop_package.empty?
         ecm_name = unitary_cop_copy
         unitary_cop = {
@@ -1735,74 +1736,47 @@ class ECMS
     model.getChillerElectricEIRs.sort.each do |mod_chiller|
       ref_capacity_w = mod_chiller.referenceCapacity
       ref_capacity_w = ref_capacity_w.to_f
-      ref_capacity_kw = ref_capacity_w/1000.0
 
-      if ref_capacity_kw <= 471.0
-        chiller_capacity_cop = 'ElectricEIRChiller McQuay WSC 471kW/5.89COP/Vanes'
-      elsif ref_capacity_kw > 471.0 && ref_capacity_kw <= 742.0
-        chiller_capacity_cop = 'ElectricEIRChiller Carrier 19XR 742kW/5.42COP/VSD'
-      elsif ref_capacity_kw > 742.0 && ref_capacity_kw <= 897.0
-        chiller_capacity_cop = 'ElectricEIRChiller Carrier 19XR 897kW/7.23COP/VSD'
-      elsif ref_capacity_kw > 897.0 && ref_capacity_kw <= 1090.0
-        chiller_capacity_cop = 'ElectricEIRChiller York YT 1090kW/7.57COP/VSD'
-      elsif ref_capacity_kw > 1090.0 && ref_capacity_kw <= 1350.0
-        chiller_capacity_cop = 'ElectricEIRChiller Carrier 19XR 1350kW/7.90COP/VSD'
-      elsif ref_capacity_kw > 1350.0 && ref_capacity_kw <= 1723.0
-        chiller_capacity_cop = 'ElectricEIRChiller Carrier 19XR 1723kW/8.32COP/VSD'
-      elsif ref_capacity_kw > 1723.0
-        chiller_capacity_cop = 'ElectricEIRChiller York YT 2233kW/9.54COP/VSD_2'
-      end
+      if chiller_type.is_a?(String) #look for a package with the chiller_capacity_cop name in chiller_set.json
 
-      if chiller_capacity_cop.is_a?(String) #look for a package with the chiller_capacity_cop name in chiller_set.json
-        chiller_packages = @standards_data['tables']['chiller_eff_ecm']['table']
-        chiller_packages = chiller_packages.select{|eff_pack_info| eff_pack_info["name"] == chiller_capacity_cop}
-        if chiller_packages.empty?
-          raise "Cannot not find #{chiller_capacity_cop} in the ECMS chiller_set.json file.  Please check that the name is correctly spelled in the ECMS class chiller_set.json and in the code calling (directly or through another method) the ECMS class modify_chiller_efficiency method."
-        elsif chiller_packages.size > 1
-          raise "More than one chiller efficiency package with the name #{chiller_capacity_cop} was found.  Please check the ECMS class chiller_set.json file and make sure that each chiller efficiency package has a unique name."
-        else
-          ecm_name = chiller_capacity_cop
-          chiller_set = {
-              "name" => ecm_name,
-              "capacity_w" => chiller_packages[0]['capacity_w'],
-              "cop_w_by_w" => chiller_packages[0]['cop_w_by_w'],
-              "ref_leaving_chilled_water_temp_c" => chiller_packages[0]['ref_leaving_chilled_water_temp_c'],
-              "ref_entering_condenser_fluid_temp_c" => chiller_packages[0]['ref_entering_condenser_fluid_temp_c'],
-              "ref_chilled_water_flow_rate_m3_s" => chiller_packages[0]['ref_chilled_water_flow_rate_m3_s'],
-              "ref_condenser_fluid_flow_rate_m3_s" => chiller_packages[0]['ref_condenser_fluid_flow_rate_m3_s'],
-              "capft_curve" => chiller_packages[0]['capft_curve'],
-              "eirft_curve" => chiller_packages[0]['eirft_curve'],
-              "eirfplr_curve" => chiller_packages[0]['eirfplr_curve'],
-              "min_part_load_ratio" => chiller_packages[0]['min_part_load_ratio'],
-              "max_part_load_ratio" => chiller_packages[0]['max_part_load_ratio'],
-              "opt_part_load_ratio" => chiller_packages[0]['opt_part_load_ratio'],
-              "min_unloading_ratio" => chiller_packages[0]['min_unloading_ratio'],
-              "condenser_type" => chiller_packages[0]['condenser_type'],
-              "fraction_of_compressor_electric_consumption_rejected_by_condenser" => chiller_packages[0]['fraction_of_compressor_electric_consumption_rejected_by_condenser'],
-              "leaving_chilled_water_lower_temperature_limit_c" => chiller_packages[0]['leaving_chilled_water_lower_temperature_limit_c'],
-              "chiller_flow_mode" => chiller_packages[0]['chiller_flow_mode'],
-              "design_heat_recovery_water_flow_rate_m3_s" => chiller_packages[0]['design_heat_recovery_water_flow_rate_m3_s'],
-          }
-        end
+        ##### Find the chiller that has the required capacity
+        search_criteria = {}
+        search_criteria['name'] = chiller_type
+        capacity_w = ref_capacity_w
+        chiller_packages = model_find_object(@standards_data['tables']['chiller_eff_ecm'], search_criteria, capacity_w)
+        chiller_name = chiller_packages['notes']
+        ecm_name = chiller_name
+        chiller_set = {
+            "notes" => ecm_name,
+            "capacity_w" => chiller_packages['capacity_w'],
+            "cop_w_by_w" => chiller_packages['cop_w_by_w'],
+            "ref_leaving_chilled_water_temp_c" => chiller_packages['ref_leaving_chilled_water_temp_c'],
+            "ref_entering_condenser_fluid_temp_c" => chiller_packages['ref_entering_condenser_fluid_temp_c'],
+            "ref_chilled_water_flow_rate_m3_s" => chiller_packages['ref_chilled_water_flow_rate_m3_s'],
+            "ref_condenser_fluid_flow_rate_m3_s" => chiller_packages['ref_condenser_fluid_flow_rate_m3_s'],
+            "capft_curve" => chiller_packages['capft_curve'],
+            "eirft_curve" => chiller_packages['eirft_curve'],
+            "eirfplr_curve" => chiller_packages['eirfplr_curve'],
+            "min_part_load_ratio" => chiller_packages['min_part_load_ratio'],
+            "max_part_load_ratio" => chiller_packages['max_part_load_ratio'],
+            "opt_part_load_ratio" => chiller_packages['opt_part_load_ratio'],
+            "min_unloading_ratio" => chiller_packages['min_unloading_ratio'],
+            "condenser_type" => chiller_packages['condenser_type'],
+            "fraction_of_compressor_electric_consumption_rejected_by_condenser" => chiller_packages['fraction_of_compressor_electric_consumption_rejected_by_condenser'],
+            "leaving_chilled_water_lower_temperature_limit_c" => chiller_packages['leaving_chilled_water_lower_temperature_limit_c'],
+            "chiller_flow_mode" => chiller_packages['chiller_flow_mode'],
+            "design_heat_recovery_water_flow_rate_m3_s" => chiller_packages['design_heat_recovery_water_flow_rate_m3_s'],
+        }
+        # end
       end
       puts chiller_set
+      # raise "check_chiller_set"
 
       if ref_capacity_w > 0.0011 #Note: No need to replace any chillers with capacity = 0.001 W as per Kamel Haddad's comment
         reset_chiller_efficiency(model: model, component: mod_chiller.to_ChillerElectricEIR.get, cop: chiller_set)
       end
 
     end
-
-    ##TODO: to be deleted
-    # model.getChillerElectricEIRs.sort.each do |mod_chiller|
-    #   ref_capacity = mod_chiller.referenceCapacity
-    #   ref_capacity = ref_capacity.to_f
-    #   puts ref_capacity
-    #   puts ref_capacity.class
-    #   if ref_capacity > 0.0011 #Note: No need to replace any chillers with capacity = 0.001 W as per Kamel Haddad's comment
-    #     reset_chiller_efficiency(model: model, component: mod_chiller.to_ChillerElectricEIR.get, cop: chiller_set)
-    #   end
-    # end
 
     ##### Change fan power of single-speed Cooling towers from 'Hard Sized' to Autosized (Otherwise, E+ gives the fatal error 'Autosizing of cooling tower UA failed for tower')
     model.getCoolingTowerSingleSpeeds.sort.each do |cooling_tower_single_speed|
@@ -1813,7 +1787,7 @@ class ECMS
 
   def reset_chiller_efficiency(model:, component:, cop:)
     # Note that all parameters (except for the capacity) of an existing chiller are replaced with the ones of the VSD chiller, as per Kamel Haddad's comment.
-    component.setName(cop['name'])
+    component.setName(cop['notes'])
     component.setReferenceCOP(cop['cop_w_by_w'])
     component.setReferenceLeavingChilledWaterTemperature(cop['ref_leaving_chilled_water_temp_c'])
     component.setReferenceEnteringCondenserFluidTemperature(cop['ref_entering_condenser_fluid_temp_c'])
@@ -1829,7 +1803,7 @@ class ECMS
     component.setChillerFlowMode(cop['chiller_flow_mode'])
     component.setDesignHeatRecoveryWaterFlowRate(cop['design_heat_recovery_water_flow_rate_m3_s'])
 
-    # set other fields of this object to nothing #TODO: Question: could not do this for the 'Condenser Heat Recovery Relative Capacity Fraction' field as there is no 'reset' for this field
+    # set other fields of this object to nothing #Note that this could not be done for the 'Condenser Heat Recovery Relative Capacity Fraction' field as there is no 'reset' for this field.
     component.resetCondenserFanPowerRatio()
     component.resetSizingFactor()
     component.resetBasinHeaterCapacity()
