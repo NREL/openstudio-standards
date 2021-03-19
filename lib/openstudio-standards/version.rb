@@ -13,7 +13,5 @@ module OpenstudioStandards
     end
     return 'git-not-found-on-this-system'
   end
-  #this should be updated to 0.2.12 when merging to 3.1.0
-  #VERSION = '0.2.12.rc4'.freeze
-  VERSION = '0.2.11'.freeze
+  VERSION = '0.2.12'.freeze
 end
