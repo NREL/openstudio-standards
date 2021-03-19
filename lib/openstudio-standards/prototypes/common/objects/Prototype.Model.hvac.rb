@@ -285,8 +285,12 @@ class Standard
       when 'DC' # Data Center in Large Office building
         # Retrieve the existing hot water loop or add a new one if necessary.
         hot_water_loop = model_get_or_add_hot_water_loop(model, 'NaturalGas')
-        # Retrieve the existing heat pump loop or add a new one if necessary.
-        heat_pump_loop = model_get_or_add_heat_pump_loop(model, 'NaturalGas', 'Electricity', heat_pump_loop_cooling_type: 'CoolingTowerTwoSpeed')
+
+        # Set heat pump loop cooling type to CoolingTowerTwoSpeed if not specified in system hash
+        heat_pump_loop_cooling_type = system['heat_pump_loop_cooling_type'].nil? ? 'CoolingTowerTwoSpeed' : system['heat_pump_loop_cooling_type']
+
+        heat_pump_loop = model_get_or_add_heat_pump_loop(model, 'NaturalGas', 'Electricity',
+                                                         heat_pump_loop_cooling_type: heat_pump_loop_cooling_type)
         model_add_data_center_hvac(model,
                                    thermal_zones,
                                    hot_water_loop,
