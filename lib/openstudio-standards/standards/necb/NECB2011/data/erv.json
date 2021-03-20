@@ -7,7 +7,7 @@
       ],
       "table": [
         {
-          "erv_name": "Rotary-Minimum-Eff-Existing",
+          "erv_name": "NECB_Default",
           "application": "Existing-ERVS",
           "HeatExchangerType": "Rotary",
           "SensibleEffectivenessat100HeatingAirFlow": 0.5,

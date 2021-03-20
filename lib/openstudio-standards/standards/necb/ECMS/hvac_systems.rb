@@ -1606,7 +1606,7 @@ class ECMS
   # string or a hash. When it's a string it's used to find a hash in the json table 'unitary_cop_ecm'. When it's a hash it holds
   # the parameters needed to update the cop and/or the performance curves of the unitary coil.
   def modify_unitary_cop(model:, unitary_cop:,sql_db_vars_map:)
-    return if unitary_cop.nil?
+    return if (unitary_cop.nil? || (unitary_cop.to_s == "NECB_Default"))
     coils = model.getCoilCoolingDXSingleSpeeds + model.getCoilCoolingDXMultiSpeeds
     unitary_cop_copy = unitary_cop.dup
     coils.sort.each do |coil|
@@ -1680,6 +1680,49 @@ class ECMS
         end
         coil.setName("CoilCoolingDXSingleSpeed_dx-adv") if (cop && coil_type == "SingleSpeed")
         coil.setName("CoilCoolingDXMultiSpeed_dx-adv") if (cop && coil_type == "MultiSpeed")
+      end
+    end
+  end
+
+  # ============================================================================================================================
+  # Despite the name, this method does not actually remove any air loops.  All air loops, hot water loops, cooling and
+  # any existing baseboard heaters should already be gone.  The name is an artifact of the way ECM methods are named and
+  # used.  With everything gone, this method adds a hot water loop (if required) and baseboard heating back in to all
+  # zones requiring heating.  Originally, code was included in the 'apply_systems' method which would prevent the air
+  # loops and other stuff from being created if someone did not want them.  But others felt that that was not a clear
+  # way of doing things and did not feel the performance penalty of creating objects, then removing them, then creating
+  # them again was significant.
+  def add_ecm_remove_airloops_add_zone_baseboards(model:,system_zones_map:, system_doas_flags: nil, zone_clg_eqpt_type: nil, standard:, primary_heating_fuel:)
+    # Set the primary fuel set to default to to specific fuel type.
+    standards_info = standard.standards_data
+
+    if primary_heating_fuel == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      primary_heating_fuel = standards_info['regional_fuel_use'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
+    end
+    # Get fuelset.
+    system_fuel_defaults = standards_info['fuel_type_sets'].detect {|fuel_type_set| fuel_type_set['name'] == primary_heating_fuel}
+    raise("fuel_type_sets named #{primary_heating_fuel} not found in fuel_type_sets table.") if system_fuel_defaults.nil?
+
+
+    # Assign fuel sources.
+    boiler_fueltype = system_fuel_defaults['boiler_fueltype']
+    baseboard_type = system_fuel_defaults['baseboard_type']
+    mau_heating_coil_type = "none"
+
+    # Create the hot water loop if necessary.
+    hw_loop = standard.create_hw_loop_if_required(baseboard_type,
+                                          boiler_fueltype,
+                                          mau_heating_coil_type,
+                                          model)
+
+    # Add baseboard heaters to each heated zone.
+    system_zones_map.sort.each do |sname,zones|
+      zones.each do |zone|
+        standard.add_zone_baseboards(baseboard_type: baseboard_type,
+                                     hw_loop: hw_loop,
+                                     model: model,
+                                     zone: zone)
       end
     end
   end
