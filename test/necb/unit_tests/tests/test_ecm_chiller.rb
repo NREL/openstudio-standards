@@ -118,14 +118,31 @@ class NECB_VSDchiller_Tests < Minitest::Test
               # puts File.join(@output_folder,"#{template}-#{building_type}-vsd_chiller-#{true}.osm")
 
               model.getChillerElectricEIRs.sort.each do |mod_chiller|
-                result["#{mod_chiller.name.to_s} - capacity"] = mod_chiller.referenceCapacity.to_f
-                result["#{mod_chiller.name.to_s} - COP"] = mod_chiller.referenceCOP
-                result["#{mod_chiller.name.to_s} - CAPFT_curve"] = mod_chiller.coolingCapacityFunctionOfTemperature.name.to_s
-                result["#{mod_chiller.name.to_s} - EIRFT_curve"] = mod_chiller.electricInputToCoolingOutputRatioFunctionOfTemperature.name.to_s
-                result["#{mod_chiller.name.to_s} - EITFPLR_curve"] = mod_chiller.electricInputToCoolingOutputRatioFunctionOfPLR.name.to_s
+
+                ref_capacity_w = mod_chiller.referenceCapacity
+                ref_capacity_w = ref_capacity_w.to_f
+
+                ##### Look for a chiller set in chiller_set.json (with a capacity close to that of the existing chiller)
+                chiller_set, chiller_min_cap, chiller_max_cap = ecm.find_chiller_set(chiller_type: chiller_type, ref_capacity_w: ref_capacity_w)
+
+                if ref_capacity_w > 0.0011
+                  # Replace capacity of existing chiller with mid of min and max capacity of 'chiller_set' to avoid hard coding for chiller's capacity (as per Kamel Haddad's comment)
+                  chiller_mid_cap = 0.5 * (chiller_max_cap + chiller_min_cap)
+                  mod_chiller.setReferenceCapacity(chiller_mid_cap)
+
+                  # Gather info
+                  result["#{mod_chiller.name.to_s} - capacity"] = mod_chiller.referenceCapacity.to_f
+                  result["#{mod_chiller.name.to_s} - COP"] = mod_chiller.referenceCOP
+                  result["#{mod_chiller.name.to_s} - CAPFT_curve"] = mod_chiller.coolingCapacityFunctionOfTemperature.name.to_s
+                  result["#{mod_chiller.name.to_s} - EIRFT_curve"] = mod_chiller.electricInputToCoolingOutputRatioFunctionOfTemperature.name.to_s
+                  result["#{mod_chiller.name.to_s} - EITFPLR_curve"] = mod_chiller.electricInputToCoolingOutputRatioFunctionOfPLR.name.to_s
+
+                end
+
+
               end
 
-              puts JSON.pretty_generate(result)
+              # puts JSON.pretty_generate(result)
 
               ##### then store results into the array that contains all the scenario results.
               @test_results_array << result
