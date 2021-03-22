@@ -275,10 +275,80 @@ def download_google_spreadsheets(spreadsheet_titles)
       download_xlsx_spreadsheet(client, file, "#{File.dirname(__FILE__)}/#{file.title}.xlsx")
     end
   end
-
 end
 
-def export_spreadsheet_to_json(spreadsheet_titles)
+def exclusion_list
+  file_path = "#{__dir__}/exclude_list.csv"
+  csv_file = CSV.read(file_path, headers:true)
+  csv_data = csv_file.map {|row| row.to_hash}
+  exclusion_array = { "os_stds" => { "worksheets" => [], "columns" => [] },
+                      "data_lib" => { "worksheets" => [], "columns" => [] } }
+  csv_file.each do |row|
+    if row['columns'] == 'all'
+      exclusion_array['os_stds']['worksheets'] << row['worksheet'] if row['exclude_from_os_stds'] == 'TRUE'
+      exclusion_array['data_lib']['worksheets'] << row['worksheet'] if row['exclude_from_data_lib'] == 'TRUE'
+    else
+      exclusion_array['os_stds']['columns'] << row['columns'] if row['exclude_from_os_stds'] == 'TRUE'
+      exclusion_array['data_lib']['columns'] << row['columns'] if row['exclude_from_data_lib'] == 'TRUE'
+    end
+  end
+  return exclusion_array
+end
+
+def parse_units(unit)
+  # useless_units = [nil, 'fraction', '%', 'COP_68F', 'COP_47F', '%/gal', 'Btu/hr/Btu/hr', 'Btu/hr/gal', 'BTU/hr/ft', 'W/BTU/h']
+  units_to_skip = [nil, 'fraction', '%', 'EER', '>23m^2', '>84m^2', '<23m^2', '<84m^2']
+  unit_parsed = nil
+  if not units_to_skip.include?(unit)
+    if unit == '%/gal'
+      unit = '1/gal'
+    end
+    unit_parsed = OpenStudio.createUnit(unit)
+    if unit_parsed.empty?
+      unit_parsed = "Not recognized by OpenStudio"
+    else
+      unit_parsed = unit_parsed.get()
+    end
+  end
+  return unit_parsed
+end
+
+# Exports spreadsheet data to data jsons, nested by the standards templates
+#
+# @param spreadsheet_titles
+# @param dataset_type [String] valid choices are 'os_stds' or 'data_lib'
+#   'os_stds' updates json files in openstudio standards, while 'data_lib' exports 90.1 jsons for the data library
+def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
+  if dataset_type == 'data_lib'
+    standards_dir = File.expand_path("#{__dir__}/../../data/standards/export")
+    skip_list = exclusion_list['data_lib']
+    skip_list['templates'] = ['DOE Ref Pre-1980',
+                              'DOE Ref 1980-2004',
+                              'NREL ZNE Ready 2017',
+                              'ZE AEDG Multifamily',
+                              'OEESC 2014',
+                              'ICC IECC 2015',
+                              'ECBC 2017',
+                              '189.1-2009',
+                              '90.1-2016',
+                              '90.1-2019']
+  else
+    standards_dir = File.expand_path("#{__dir__}/../../lib/openstudio-standards/standards")
+    skip_list = exclusion_list['os_stds']
+    skip_list['templates'] = []
+  end
+  worksheets_to_skip = skip_list['worksheets']
+  cols_to_skip = skip_list['columns']
+  templates_to_skip = skip_list['templates']
+
+  # List of columns that are boolean
+  # (rubyXL returns 0 or 1, will translate to true/false)
+  bool_cols = []
+  bool_cols << 'hx'
+  bool_cols << 'data_center'
+  bool_cols << 'under_8000_hours'
+  bool_cols << 'u_value_includes_interior_film_coefficient'
+  bool_cols << 'u_value_includes_exterior_film_coefficient'
 
   warnings = []
   duplicate_data = []
@@ -294,46 +364,10 @@ def export_spreadsheet_to_json(spreadsheet_titles)
 
     puts "Parsing #{xlsx_path}"
 
-    # List of worksheets to skip
-    worksheets_to_skip = []
-    worksheets_to_skip << 'templates'
-    worksheets_to_skip << 'standards'
-    worksheets_to_skip << 'ventilation'
-    worksheets_to_skip << 'occupancy'
-    worksheets_to_skip << 'interior_lighting'
-    worksheets_to_skip << 'lookups'
-    worksheets_to_skip << 'sheetmap'
-    worksheets_to_skip << 'deer_lighting_fractions'
-    worksheets_to_skip << 'window_types_and_weights'
-
-    # List of columns to skip
-    cols_to_skip = []
-    cols_to_skip << 'lookup'
-    cols_to_skip << 'lookupcolumn'
-    cols_to_skip << 'vlookupcolumn'
-    cols_to_skip << 'osm_lighting_per_person'
-    cols_to_skip << 'osm_lighting_per_area'
-    cols_to_skip << 'lighting_per_length'
-    cols_to_skip << 'exhaust_per_unit'
-    cols_to_skip << 'exhaust_fan_power_per_area'
-    cols_to_skip << 'occupancy_standard'
-    cols_to_skip << 'occupancy_primary_space_type'
-    cols_to_skip << 'occupancy_secondary_space_type'
-
-    # List of columns that are boolean
-    # (rubyXL returns 0 or 1, will translate to true/false)
-    bool_cols = []
-    bool_cols << 'hx'
-    bool_cols << 'data_center'
-    bool_cols << 'under_8000_hours'
-    bool_cols << 'u_value_includes_interior_film_coefficient'
-    bool_cols << 'u_value_includes_exterior_film_coefficient'
-
     # Open workbook
     workbook = RubyXL::Parser.parse(xlsx_path)
 
     # Find all the template directories that match the search criteria embedded in the spreadsheet title
-    standards_dir = File.expand_path("#{__dir__}/../../lib/openstudio-standards/standards")
     dirs = spreadsheet_title.gsub('OpenStudio_Standards-', '').gsub(/\(\w*\)/, '').split('-')
     new_dirs = []
     dirs.each { |d| d == 'ALL' ? new_dirs << '*' : new_dirs << "*#{d}*" }
@@ -347,6 +381,10 @@ def export_spreadsheet_to_json(spreadsheet_titles)
     # Export each tab to a hash, where the key is the sheet name
     # and the value is an array of objects
     standards_data = {}
+    list_of_sheets = []
+    list_of_names = []
+    list_of_units = []
+    list_of_OS_okay_units = []
     workbook.worksheets.each do |worksheet|
       sheet_name = worksheet.sheet_name.snake_case
 
@@ -375,10 +413,16 @@ def export_spreadsheet_to_json(spreadsheet_titles)
         header = {}
         header["name"] = header_string.gsub(/\(.*\)/, '').strip.snake_case
         header_unit_parens = header_string.scan(/\(.*\)/)[0]
+        list_of_sheets << sheet_name
+        list_of_names << header_string.gsub(/\(.*\)/, '').strip.snake_case
         if header_unit_parens.nil?
           header["units"] = nil
+          list_of_units << nil
+          list_of_OS_okay_units << nil
         else
           header["units"] = header_unit_parens.gsub(/\(|\)/, '').strip
+          list_of_units << header_unit_parens.gsub(/\(|\)/, '').strip
+          list_of_OS_okay_units << parse_units(header_unit_parens.gsub(/\(|\)/, '').strip)
         end
         headers << header
       end
@@ -521,6 +565,11 @@ def export_spreadsheet_to_json(spreadsheet_titles)
       standards_data[sheet_name] = objs
     end
 
+    # CSV.open("metadata.csv", "wb") {|csv| headers.to_a.each {|elem| csv << elem} }
+    # list_metadata = [list_of_sheets, list_of_names, list_of_units, list_of_OS_okay_units].transpose
+    list_metadata = [list_of_sheets, list_of_names, list_of_units].transpose
+    list_metadata.insert(0, ['Sheet', 'Name', 'Unit']) # [1, 2, 2.5, 3, 4]
+    File.write("data/standards/metadata_units_#{spreadsheet_title}.csv", list_metadata.map(&:to_csv).join)
     # Check for duplicate data in space_types_* sheets
     standards_data.each_pair do |sheet_name, objs|
       skip_duplicate_check = []
@@ -596,6 +645,7 @@ def export_spreadsheet_to_json(spreadsheet_titles)
         # Write out a file for each template with the objects for that template.
         templates_to_objects.each_pair do |template, objs|
           next if template == 'Any'
+          next if templates_to_skip.include?(template)
           template_dir_name = standard_directory_name_from_template(template)
           # Sort the objects
           sorted_objs = {sheet_name => objs}.sort_by_key_updated(true) {|x, y| x.to_s <=> y.to_s}
