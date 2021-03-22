@@ -32,6 +32,7 @@ def compare_osm_files(model_true, model_compare, look_for_renamed_objects = fals
     'OS:ZoneHVAC:EquipmentList', # Names appear to be created non-deteministically
     'OS:AvailabilityManagerAssignmentList', # Names appear to be created non-deteministically
     'OS:Schedule:Rule', # Names appear to be created non-deteministically
+    'OS:ScheduleTypeLimits', # Names appear to be created non-deteministically
     'OS:Rendering:Color', # Rendering colors don't matter
     'OS:Output:Meter', # Output meter objects may be different and don't affect results
     'OS:ProgramControl', # Deprecated object no longer translated to EnergyPlus

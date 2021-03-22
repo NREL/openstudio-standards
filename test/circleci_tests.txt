@@ -1,3 +1,5 @@
+os_stds_methods/test_add_hvac_systems.rb
+
 90_1_prm/test_create_performance_rating_method_baseline_building.rb
 90_1_prm/test_create_performance_rating_method_baseline_bldg_2.rb
 90_1_prm/test_create_performance_rating_method_baseline_bldg_3
@@ -39,6 +41,8 @@ doe_prototype/test_supermarket.rb
 doe_prototype/test_supertall_building.rb
 doe_prototype/test_tall_building.rb
 doe_prototype/test_warehouse.rb
+doe_prototype/test_performance.rb
+doe_prototype/test_regression.rb
 
 doe_prototype/test_add_c_factor_wall.rb
 doe_prototype/test_add_elevators.rb
@@ -49,10 +53,7 @@ doe_prototype/test_add_refrigeration.rb
 doe_prototype/test_add_swh.rb
 doe_prototype/test_effective_num_stories.rb
 doe_prototype/test_space_type_hash.rb
-doe_prototype/test_add_hvac_systems.rb
 doe_prototype/test_swh.rb
-doe_prototype/test_performance.rb
-doe_prototype/test_regression.rb
 doe_prototype/test_sim_control.rb
 doe_prototype/test_daylighting_ctrl.rb
 

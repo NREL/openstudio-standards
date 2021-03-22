@@ -25,8 +25,14 @@ class Standard
 
     zone_name = zone.name.to_s.gsub(/[ +-.]/, '_')
     zone_timestep = model.getTimestep.numberOfTimestepsPerHour
-    coil_cooling_radiant = radiant_loop.coolingCoil.to_CoilCoolingLowTempRadiantVarFlow.get
-    coil_heating_radiant = radiant_loop.heatingCoil.to_CoilHeatingLowTempRadiantVarFlow.get
+
+    if model.version < OpenStudio::VersionString.new('3.1.1')
+      coil_cooling_radiant = radiant_loop.coolingCoil.to_CoilCoolingLowTempRadiantVarFlow.get
+      coil_heating_radiant = radiant_loop.heatingCoil.to_CoilHeatingLowTempRadiantVarFlow.get
+    else
+      coil_cooling_radiant = radiant_loop.coolingCoil.get.to_CoilCoolingLowTempRadiantVarFlow.get
+      coil_heating_radiant = radiant_loop.heatingCoil.get.to_CoilHeatingLowTempRadiantVarFlow.get
+    end
 
     #####
     # List of schedule objects used to hold calculation results
