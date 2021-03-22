@@ -65,7 +65,7 @@ class ASHRAE9012010 < ASHRAE901
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.ashrae_90_1_2010', "The prototype model doesn't meet the requirement from Section 5.5.4.5 in ASHRAE Standard 90.1-2010.")
         end
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.ashrae_90_1_2010', "The prototype model doesn't meet the requirement from Section 5.5.4.5 in ASHRAE Standard 90.1-2010, its standard building type shall be specified.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.ashrae_90_1_2010', "The prototype model doesn't meet the requirement from Section 5.5.4.5 in ASHRAE Standard 90.1-2010, its standards building type shall be specified.")
       end
     end
 

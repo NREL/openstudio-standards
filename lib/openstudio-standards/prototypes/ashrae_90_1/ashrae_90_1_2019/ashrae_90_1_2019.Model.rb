@@ -100,6 +100,8 @@ class ASHRAE9012019 < ASHRAE901
     a_e = model_get_window_area_info_for_orientation(model, 'E', wwr: wwr)
     a_t = a_w + a_e + model_get_window_area_info_for_orientation(model, 'N', wwr: wwr) + model_get_window_area_info_for_orientation(model, 'S', wwr: wwr)
 
+    return true if a_t == 0.0
+
     # For prototypes SHGC_c assumed to be the building's weighted average SHGC
     shgc_c = shgc_a / a_t
     shgc_c = shgc_c.round(2)
