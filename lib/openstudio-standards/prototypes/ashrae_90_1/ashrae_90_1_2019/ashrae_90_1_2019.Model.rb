@@ -41,13 +41,17 @@ class ASHRAE9012019 < ASHRAE901
   def model_fenestration_orientation(model, climate_zone)
     # Building rotation to meet the same code requirement for
     # 90.1-2010 are kept
-    case model.getBuilding.standardsBuildingType.get
-      when 'Hospital'
-        # Rotate the building counter-clockwise
-        model_set_building_north_axis(model, 270.0)
-      when 'SmallHotel'
-        # Rotate the building clockwise
-        model_set_building_north_axis(model, 180)
+    if model.getBuilding.standardsBuildingType.is_initialized
+      building_type = model.getBuilding.standardsBuildingType.get
+
+      case building_type
+        when 'Hospital'
+          # Rotate the building counter-clockwise
+          model_set_building_north_axis(model, 270.0)
+        when 'SmallHotel'
+          # Rotate the building clockwise
+          model_set_building_north_axis(model, 180)
+      end
     end
 
     wwr = false
