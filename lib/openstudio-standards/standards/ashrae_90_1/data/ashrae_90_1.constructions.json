@@ -1328,7 +1328,7 @@
     {
       "name": "U 0.25 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1338,27 +1338,7 @@
     {
       "name": "U 0.26 SHGC 0.4 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.26 SHGC 0.4 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.26 SHGC 0.4 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.26 SHGC 0.4 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.26 SHGC 0.4 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1386,6 +1366,16 @@
       ]
     },
     {
+      "name": "U 0.27 SHGC 0.4 Simple Glazing Window",
+      "intended_surface_type": null,
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 0.27 SHGC 0.4 Simple Glazing"
+      ]
+    },
+    {
       "name": "U 0.28 SHGC 0.39 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
@@ -1398,7 +1388,7 @@
     {
       "name": "U 0.28 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1446,27 +1436,7 @@
     {
       "name": "U 0.29 SHGC 0.4 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.29 SHGC 0.4 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.29 SHGC 0.4 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.29 SHGC 0.4 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.29 SHGC 0.4 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1494,19 +1464,9 @@
       ]
     },
     {
-      "name": "U 0.29 SHGC 0.45 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.29 SHGC 0.45 Simple Glazing"
-      ]
-    },
-    {
       "name": "U 0.3 SHGC 0.4 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "intended_surface_type": null,
+      "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1538,7 +1498,7 @@
     {
       "name": "U 0.31 SHGC 0.36 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1548,7 +1508,7 @@
     {
       "name": "U 0.31 SHGC 0.38 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1566,16 +1526,6 @@
       ]
     },
     {
-      "name": "U 0.32 SHGC 0.22 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.32 SHGC 0.22 Simple Glazing"
-      ]
-    },
-    {
       "name": "U 0.32 SHGC 0.36 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
@@ -1588,7 +1538,7 @@
     {
       "name": "U 0.32 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1610,7 +1560,7 @@
     {
       "name": "U 0.33 SHGC 0.25 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1633,16 +1583,6 @@
       "name": "U 0.33 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.33 SHGC 0.45 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.33 SHGC 0.45 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1676,27 +1616,7 @@
     {
       "name": "U 0.34 SHGC 0.38 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.34 SHGC 0.38 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.34 SHGC 0.38 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.34 SHGC 0.38 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.34 SHGC 0.38 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1782,6 +1702,16 @@
       ]
     },
     {
+      "name": "U 0.35 SHGC 0.38 Simple Glazing Window",
+      "intended_surface_type": null,
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 0.35 SHGC 0.38 Simple Glazing"
+      ]
+    },
+    {
       "name": "U 0.36 SHGC 0.35 Dbl LoE Spec Sel Tint 6mm/6mm Air",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
@@ -1796,17 +1726,7 @@
     {
       "name": "U 0.36 SHGC 0.36 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.36 SHGC 0.36 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.36 SHGC 0.36 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1817,16 +1737,6 @@
       "name": "U 0.36 SHGC 0.36 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.36 SHGC 0.36 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.36 SHGC 0.36 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1846,6 +1756,16 @@
     {
       "name": "U 0.36 SHGC 0.38 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": "Weighted",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 0.36 SHGC 0.38 Simple Glazing"
+      ]
+    },
+    {
+      "name": "U 0.36 SHGC 0.38 Simple Glazing Window",
+      "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
       "skylight_framing": null,
@@ -1854,39 +1774,9 @@
       ]
     },
     {
-      "name": "U 0.36 SHGC 0.38 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Weighted",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.36 SHGC 0.38 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.36 SHGC 0.38 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.36 SHGC 0.38 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.36 SHGC 0.38 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.36 SHGC 0.38 Simple Glazing"
-      ]
-    },
-    {
       "name": "U 0.36 SHGC 0.4 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "intended_surface_type": null,
+      "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1906,27 +1796,7 @@
     {
       "name": "U 0.36 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.36 SHGC 0.45 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.36 SHGC 0.45 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.36 SHGC 0.45 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.36 SHGC 0.45 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1936,11 +1806,21 @@
     {
       "name": "U 0.37 SHGC 0.25 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
         "U 0.37 SHGC 0.25 Simple Glazing"
+      ]
+    },
+    {
+      "name": "U 0.37 SHGC 0.36 Simple Glazing Window",
+      "intended_surface_type": null,
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 0.37 SHGC 0.36 Simple Glazing"
       ]
     },
     {
@@ -1951,6 +1831,16 @@
       "skylight_framing": null,
       "materials": [
         "U 0.37 SHGC 0.36 Simple Glazing"
+      ]
+    },
+    {
+      "name": "U 0.37 SHGC 0.38 Simple Glazing Window",
+      "intended_surface_type": null,
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 0.37 SHGC 0.38 Simple Glazing"
       ]
     },
     {
@@ -2008,16 +1898,6 @@
       ]
     },
     {
-      "name": "U 0.38 SHGC 0.36 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.38 SHGC 0.36 Simple Glazing"
-      ]
-    },
-    {
       "name": "U 0.38 SHGC 0.37 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
@@ -2038,29 +1918,9 @@
       ]
     },
     {
-      "name": "U 0.38 SHGC 0.38 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.38 SHGC 0.38 Simple Glazing"
-      ]
-    },
-    {
       "name": "U 0.38 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.38 SHGC 0.45 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.38 SHGC 0.45 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2085,26 +1945,6 @@
       "skylight_framing": null,
       "materials": [
         "Theoretical Glass 297"
-      ]
-    },
-    {
-      "name": "U 0.39 SHGC 0.45 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.39 SHGC 0.45 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.39 SHGC 0.45 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.39 SHGC 0.45 Simple Glazing"
       ]
     },
     {
@@ -2154,7 +1994,7 @@
     {
       "name": "U 0.42 SHGC 0.25 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2165,26 +2005,6 @@
       "name": "U 0.42 SHGC 0.25 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.42 SHGC 0.25 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.42 SHGC 0.25 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.42 SHGC 0.25 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.42 SHGC 0.25 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2241,6 +2061,16 @@
       "name": "U 0.43 SHGC 0.25 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 0.43 SHGC 0.25 Simple Glazing"
+      ]
+    },
+    {
+      "name": "U 0.43 SHGC 0.25 Simple Glazing Window",
+      "intended_surface_type": null,
+      "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2308,26 +2138,6 @@
     {
       "name": "U 0.45 SHGC 0.25 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.45 SHGC 0.25 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.45 SHGC 0.25 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.45 SHGC 0.25 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.45 SHGC 0.25 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
@@ -2370,7 +2180,7 @@
     {
       "name": "U 0.45 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2397,6 +2207,16 @@
         "GREY 6MM",
         "AIR 13MM",
         "CLEAR 6MM"
+      ]
+    },
+    {
+      "name": "U 0.47 SHGC 0.25 Simple Glazing Window",
+      "intended_surface_type": null,
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 0.47 SHGC 0.25 Simple Glazing"
       ]
     },
     {
@@ -2514,27 +2334,7 @@
     {
       "name": "U 0.5 SHGC 0.19 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.5 SHGC 0.19 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.5 SHGC 0.19 Simple Glazing Skylight",
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": "Plastic with Curb",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.5 SHGC 0.19 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.5 SHGC 0.19 Simple Glazing Skylight",
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": "Without Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2552,49 +2352,9 @@
       ]
     },
     {
-      "name": "U 0.5 SHGC 0.22 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.5 SHGC 0.22 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.5 SHGC 0.22 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.5 SHGC 0.22 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.5 SHGC 0.23 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.5 SHGC 0.23 Simple Glazing"
-      ]
-    },
-    {
       "name": "U 0.5 SHGC 0.23 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.5 SHGC 0.23 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.5 SHGC 0.23 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2604,7 +2364,7 @@
     {
       "name": "U 0.5 SHGC 0.25 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2614,7 +2374,7 @@
     {
       "name": "U 0.5 SHGC 0.27 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2624,7 +2384,7 @@
     {
       "name": "U 0.5 SHGC 0.34 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Plastic with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2634,17 +2394,7 @@
     {
       "name": "U 0.5 SHGC 0.36 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Plastic with Curb",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.5 SHGC 0.36 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.5 SHGC 0.36 Simple Glazing Skylight",
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2654,7 +2404,7 @@
     {
       "name": "U 0.5 SHGC 0.39 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2682,49 +2432,9 @@
       ]
     },
     {
-      "name": "U 0.5 SHGC 0.45 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.5 SHGC 0.45 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.5 SHGC 0.45 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.5 SHGC 0.45 Simple Glazing"
-      ]
-    },
-    {
       "name": "U 0.5 SHGC 0.55 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Without Curb",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.5 SHGC 0.55 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.5 SHGC 0.55 Simple Glazing Skylight",
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": "Plastic with Curb",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.5 SHGC 0.55 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.5 SHGC 0.55 Simple Glazing Skylight",
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2744,7 +2454,7 @@
     {
       "name": "U 0.5 SHGC 0.65 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Plastic with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2782,6 +2492,26 @@
       ]
     },
     {
+      "name": "U 0.51 SHGC 0.22 Simple Glazing Window",
+      "intended_surface_type": null,
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 0.51 SHGC 0.22 Simple Glazing"
+      ]
+    },
+    {
+      "name": "U 0.51 SHGC 0.23 Simple Glazing Window",
+      "intended_surface_type": null,
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 0.51 SHGC 0.23 Simple Glazing"
+      ]
+    },
+    {
       "name": "U 0.51 SHGC 0.23 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
@@ -2794,27 +2524,7 @@
     {
       "name": "U 0.51 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.51 SHGC 0.45 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.51 SHGC 0.45 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.51 SHGC 0.45 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.51 SHGC 0.45 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2906,6 +2616,16 @@
       ]
     },
     {
+      "name": "U 0.53 SHGC 0.25 Simple Glazing Window",
+      "intended_surface_type": null,
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 0.53 SHGC 0.25 Simple Glazing"
+      ]
+    },
+    {
       "name": "U 0.54 SHGC 0.13 Dbl Ref-A-L Clr 6mm/13mm Air",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
@@ -2937,16 +2657,6 @@
       "skylight_framing": null,
       "materials": [
         "U 0.54 SHGC 0.23 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.54 SHGC 0.25 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.54 SHGC 0.25 Simple Glazing"
       ]
     },
     {
@@ -3018,27 +2728,7 @@
     {
       "name": "U 0.55 SHGC 0.55 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Plastic with Curb",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.55 SHGC 0.55 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.55 SHGC 0.55 Simple Glazing Skylight",
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.55 SHGC 0.55 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.55 SHGC 0.55 Simple Glazing Skylight",
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": "Without Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3048,7 +2738,7 @@
     {
       "name": "U 0.55 SHGC 0.64 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3095,16 +2785,6 @@
       "name": "U 0.57 SHGC 0.25 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.57 SHGC 0.25 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.57 SHGC 0.25 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3264,16 +2944,6 @@
     {
       "name": "U 0.62 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.62 SHGC 0.45 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.62 SHGC 0.45 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
@@ -3296,7 +2966,7 @@
     {
       "name": "U 0.63 SHGC 0.33 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3306,7 +2976,7 @@
     {
       "name": "U 0.63 SHGC 0.34 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3316,7 +2986,7 @@
     {
       "name": "U 0.63 SHGC 0.36 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3326,7 +2996,7 @@
     {
       "name": "U 0.63 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3378,17 +3048,7 @@
     {
       "name": "U 0.65 SHGC 0.55 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.65 SHGC 0.55 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.65 SHGC 0.55 Simple Glazing Skylight",
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": "Without Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3398,7 +3058,7 @@
     {
       "name": "U 0.65 SHGC 0.68 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Without Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3408,7 +3068,7 @@
     {
       "name": "U 0.65 SHGC 0.77 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Plastic with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3428,7 +3088,7 @@
     {
       "name": "U 0.68 SHGC 0.23 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3438,7 +3098,7 @@
     {
       "name": "U 0.68 SHGC 0.25 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3448,7 +3108,7 @@
     {
       "name": "U 0.68 SHGC 0.36 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3458,7 +3118,7 @@
     {
       "name": "U 0.68 SHGC 0.38 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3468,7 +3128,7 @@
     {
       "name": "U 0.68 SHGC 0.4 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3478,7 +3138,7 @@
     {
       "name": "U 0.68 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3618,16 +3278,6 @@
       ]
     },
     {
-      "name": "U 0.73 SHGC 0.45 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.73 SHGC 0.45 Simple Glazing"
-      ]
-    },
-    {
       "name": "U 0.74 SHGC 0.55 Simple Glazing Skylight",
       "intended_surface_type": null,
       "standards_construction_type": null,
@@ -3670,7 +3320,7 @@
     {
       "name": "U 0.75 SHGC 0.39 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Plastic with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3680,7 +3330,7 @@
     {
       "name": "U 0.75 SHGC 0.49 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3690,17 +3340,7 @@
     {
       "name": "U 0.75 SHGC 0.55 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Plastic with Curb",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.75 SHGC 0.55 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.75 SHGC 0.55 Simple Glazing Skylight",
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3720,7 +3360,7 @@
     {
       "name": "U 0.75 SHGC 0.64 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Without Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3730,7 +3370,7 @@
     {
       "name": "U 0.75 SHGC 0.68 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Without Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3750,7 +3390,7 @@
     {
       "name": "U 0.77 SHGC 0.23 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3760,7 +3400,7 @@
     {
       "name": "U 0.77 SHGC 0.25 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3770,7 +3410,7 @@
     {
       "name": "U 0.77 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3788,39 +3428,9 @@
       ]
     },
     {
-      "name": "U 0.83 SHGC 0.2 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.83 SHGC 0.2 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.83 SHGC 0.21 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.83 SHGC 0.21 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.83 SHGC 0.22 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.83 SHGC 0.22 Simple Glazing"
-      ]
-    },
-    {
       "name": "U 0.83 SHGC 0.25 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3830,7 +3440,7 @@
     {
       "name": "U 0.83 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3840,7 +3450,7 @@
     {
       "name": "U 0.85 SHGC 0.19 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Plastic with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3850,7 +3460,7 @@
     {
       "name": "U 0.85 SHGC 0.27 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Plastic with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3860,7 +3470,7 @@
     {
       "name": "U 0.85 SHGC 0.39 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Without Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3870,17 +3480,7 @@
     {
       "name": "U 0.85 SHGC 0.55 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 0.85 SHGC 0.55 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 0.85 SHGC 0.55 Simple Glazing Skylight",
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": "Without Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3910,7 +3510,7 @@
     {
       "name": "U 0.87 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -3980,7 +3580,7 @@
     {
       "name": "U 0.93 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -4000,7 +3600,7 @@
     {
       "name": "U 0.98 SHGC 0.27 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Plastic with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -4010,7 +3610,7 @@
     {
       "name": "U 0.98 SHGC 0.36 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Without Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -4040,7 +3640,7 @@
     {
       "name": "U 0.98 SHGC 0.55 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -4070,7 +3670,7 @@
     {
       "name": "U 1.1 SHGC 0.25 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -4080,7 +3680,7 @@
     {
       "name": "U 1.1 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -4110,27 +3710,7 @@
     {
       "name": "U 1.15 SHGC 0.55 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Without Curb",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 1.15 SHGC 0.55 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 1.15 SHGC 0.55 Simple Glazing Skylight",
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": "Plastic with Curb",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 1.15 SHGC 0.55 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 1.15 SHGC 0.55 Simple Glazing Skylight",
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -4261,26 +3841,6 @@
       "name": "U 1.2 SHGC 0.45 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Weighted",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 1.2 SHGC 0.45 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 1.2 SHGC 0.45 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 1.2 SHGC 0.45 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 1.2 SHGC 0.45 Simple Glazing Window",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -4430,27 +3990,7 @@
     {
       "name": "U 1.7 SHGC 0.55 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Without Curb",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 1.7 SHGC 0.55 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 1.7 SHGC 0.55 Simple Glazing Skylight",
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "U 1.7 SHGC 0.55 Simple Glazing"
-      ]
-    },
-    {
-      "name": "U 1.7 SHGC 0.55 Simple Glazing Skylight",
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": "Plastic with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -4480,7 +4020,7 @@
     {
       "name": "U 1.8 SHGC 0.49 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -4490,7 +4030,7 @@
     {
       "name": "U 1.8 SHGC 0.55 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Plastic with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -4510,7 +4050,7 @@
     {
       "name": "U 1.8 SHGC 0.64 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Without Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -4520,7 +4060,7 @@
     {
       "name": "U 1.8 SHGC 0.77 Simple Glazing Skylight",
       "intended_surface_type": "Skylight",
-      "standards_construction_type": "Glass with Curb",
+      "standards_construction_type": "Weighted",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
