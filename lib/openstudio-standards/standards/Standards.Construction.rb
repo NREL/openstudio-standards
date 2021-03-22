@@ -160,8 +160,8 @@ class Standard
 
     # Determine the R-value of the air films, if requested
     film_coeff_r_value_si = 0.0
-    # In EnergyPlus, the U-factor input of the WindowMaterial:SimpleGlazingSystem 
-    # object includes the film coefficients (see IDD description, and I/O reference 
+    # In EnergyPlus, the U-factor input of the WindowMaterial:SimpleGlazingSystem
+    # object includes the film coefficients (see IDD description, and I/O reference
     # guide) so the target_includes_int_film_coefficients and target_includes_ext_film_coefficients
     # variable values are changed to their opposite so if the target value includes a film
     # the target value is unchanged

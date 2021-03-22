@@ -40,6 +40,7 @@ Standard.class_eval do
     model_add_design_days_and_weather_file(model, climate_zone, epw_file)
     model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
     model_add_constructions(model, @instvarbuilding_type, climate_zone)
+    model_fenestration_orientation(model, climate_zone)
     model_custom_hvac_tweaks(building_type, climate_zone, @prototype_input, model)
     model_add_internal_mass(model, @instvarbuilding_type)
     model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
@@ -2158,5 +2159,78 @@ Standard.class_eval do
 
       end
     end
+  end
+
+  # Set the model's north axis (degrees from true North)
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param north_axis [Float] Degrees from true North
+  # @return [Boolean] Returns true if successful, false otherwise
+  def model_set_building_north_axis(model, north_axis)
+    return false if north_axis.nil?
+
+    building = model.getBuilding
+    building.setNorthAxis(north_axis)
+
+    return true
+  end
+
+  # Calculate a model's window or WWR for a specific orientation
+  # Disregard space conditioning (assume all spaces are conditioned)
+  # which is true for most of not all prototypes
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model objetc
+  # @param orientation [String] Orientation: "N", "E", "S", "W"
+  # @return [Boolean] Returns true if successful, false otherwise
+  def model_get_window_area_info_for_orientation(model, orientation, wwr: true)
+    return false unless ['N', 'E', 'S', 'W'].include? orientation
+
+    window_area = 0
+    wall_area = 0
+
+    model.getSpaces.each do |space|
+      # Get zone multiplier
+      multiplier = space.thermalZone.get.multiplier
+
+      space.surfaces.each do |surface|
+        next if surface.surfaceType != 'Wall'
+        next if surface.outsideBoundaryCondition != 'Outdoors'
+
+        case orientation
+          when 'N'
+            next unless surface_cardinal_direction(surface) == 'N'
+          when 'E'
+            next unless surface_cardinal_direction(surface) == 'E'
+          when 'S'
+            next unless surface_cardinal_direction(surface) == 'S'
+          when 'W'
+            next unless surface_cardinal_direction(surface) == 'W'
+        end
+
+        # Get wall and window area
+        wall_area += surface.grossArea * multiplier
+        surface.subSurfaces.each do |subsurface|
+          subsurface_type = subsurface.subSurfaceType.to_s.downcase
+          # Do not count doors
+          next unless (subsurface_type.include? 'window') || (subsurface_type.include? 'glass')
+
+          window_area += subsurface.grossArea * subsurface.multiplier * multiplier
+        end
+      end
+    end
+
+    if wwr
+      return window_area / wall_area
+    else
+      window_area
+    end
+  end
+
+  # Adjust model to comply with fenestration orientation
+  #
+  # @param [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Boolean] Returns true if successful, false otherwise
+  def model_fenestration_orientation(model, climate_zone)
+    return true
   end
 end
