@@ -2231,8 +2231,8 @@ Standard.class_eval do
       conv_fact = OpenStudio.convert(1, 'm^3/s', 'ft^3/min').to_f
 
       # Adjust the infiltration rate to the average pressure for the prototype buildings.
-      # adj_door_infil_cfm = door_infil_cfm
-      adj_door_infil_cfm = adjust_infiltration_to_prototype_building_conditions(door_infil_cfm)
+      adj_door_infil_cfm = door_infil_cfm
+      #adj_door_infil_cfm = adjust_infiltration_to_prototype_building_conditions(door_infil_cfm)
       adj_door_infil_m3_per_s = adj_door_infil_cfm / conv_fact
 
       # Create door infiltration object
