@@ -213,4 +213,15 @@ module LargeHotel
   def air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
     return 'oa'
   end
+
+  # List transfer air target and source zones, and airflow (cfm)
+  #
+  # code_sections [90.1-2019_6.5.7.1], [90.1-2016_6.5.7.1]
+  # @return [Hash] target zones (key) and source zones (value) and air flow (value)
+  def model_transfer_air_target_and_source_zones(model)
+    model_transfer_air_target_and_source_zones_hash = {
+      'Laundry_Flr_1 ZN' => ['Lobby_Flr_1 ZN', 500.0]
+    }
+    return model_transfer_air_target_and_source_zones_hash
+  end
 end
