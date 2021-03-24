@@ -323,7 +323,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
       e_t = water_heater.heaterThermalEfficiency.get
       off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
       on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
-      assert(off_cycle_loss_coeff_to_amb == 3, 'Retail Standalone (90.1-2013) - Off cycle loss coefficient to ambient')
+      assert(off_cycle_loss_coeff_to_amb == 4, 'Retail Standalone (90.1-2013) - Off cycle loss coefficient to ambient')
       assert(e_t < 0.820 * 1.005 && e_t > 0.820 * 0.995, 'Retail Standalone (90.1-2013) - Thermal Efficiency')
       assert(off_par_fuel_cons < 1860 * 1.005 && off_par_fuel_cons > 1860 * 0.995, 'Retail Standalone (90.1-2013) - Off cycle parasitic fuel consumption')
       assert(on_par_fuel_cons < 1860 * 1.005 && on_par_fuel_cons > 1860 * 0.995, 'Retail Standalone (90.1-2013) - On cycle parasitic fuel consumption')
