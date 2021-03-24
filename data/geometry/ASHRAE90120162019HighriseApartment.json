@@ -1,0 +1,1042 @@
+[
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "G SW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "G NW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "G NE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "G N1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "G N2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "G S1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "G S2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F2 SW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F2 NW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F2 SE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F2 NE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F2 N1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F2 N2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F2 S1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F2 S2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F3 SW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F3 NW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F3 SE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F3 NE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F3 N1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F3 N2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F3 S1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F3 S2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F4 SW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F4 NW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F4 SE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F4 NE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F4 N1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F4 N2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F4 S1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F4 S2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "M SW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "M NW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "M SE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "M NE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "M N1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "M N2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "M S1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "M S2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F6 SW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F6 NW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F6 SE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F6 NE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F6 N1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F6 N2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F6 S1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F6 S2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F7 SW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F7 NW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F7 SE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F7 NE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F7 N1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F7 N2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F7 S1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F7 S2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F8 SW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F8 NW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F8 SE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F8 NE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F8 N1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F8 N2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F8 S1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F8 S2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F9 SW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F9 NW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F9 SE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F9 NE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F9 N1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F9 N2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F9 S1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "F9 S2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "T SW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "T NW Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "T SE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "T NE Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "T N1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "T N2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "T S1 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "T S2 Apartment"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "Always On",
+    "oa_damper_schedule": "Always On",
+    "fan_type": "Cycling",
+    "cooling_type": "Water To Air Heat Pump",
+    "heating_type": "Water To Air Heat Pump",
+    "heat_pump_loop_cooling_type": "EvaporativeFluidCoolerTwoSpeed",
+    "supplemental_heating_type": "Electric",
+    "space_names": [
+      "Office"
+    ]
+  }
+]

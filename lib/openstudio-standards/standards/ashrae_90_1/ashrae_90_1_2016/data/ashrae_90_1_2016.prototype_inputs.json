@@ -311,7 +311,7 @@
       "building_type": "HighriseApartment",
       "hvac_system": null,
       "geometry_osm": "ASHRAEHighriseApartment.osm",
-      "hvac_json": "ASHRAEHighriseApartment.json",
+      "hvac_json": "ASHRAE90120162019HighriseApartment.json",
       "chw_pumping_type": null,
       "chw_number_chillers": null,
       "chiller_cooling_type": null,
