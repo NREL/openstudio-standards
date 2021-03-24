@@ -126,6 +126,9 @@ module LargeHotel
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
+    # Guestroom vacancy controls
+    model_add_guestroom_vacancy_controls(model, 'LargeHotel')
+
     return true
   end
 

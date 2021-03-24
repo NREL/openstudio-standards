@@ -1661,7 +1661,7 @@ OS:Connection,
 OS:Space,
   {d81b1c84-0be2-437e-b28a-9c633814a0e1}, !- Handle
   Room_3_Mult19_Flr_3,                    !- Name
-  {f63b3ee9-d4bd-40e0-8983-b4594bb37464}, !- Space Type Name
+  {0e58dbf0-8037-11eb-9439-0242ac130002}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -6195,6 +6195,16 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
   GuestRoom2;                             !- Standards Space Type
+  
+OS:SpaceType,
+  {0e58dbf0-8037-11eb-9439-0242ac130002}, !- Handle
+  LargeHotel GuestRoom8,                  !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {bd7bd0ee-6bc9-4453-a45f-4450f4b9aa3c}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  LargeHotel,                             !- Standards Building Type
+  GuestRoom8;                             !- Standards Space Type
 
 OS:Rendering:Color,
   {bd7bd0ee-6bc9-4453-a45f-4450f4b9aa3c}, !- Handle
