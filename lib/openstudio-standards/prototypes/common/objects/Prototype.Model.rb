@@ -1102,8 +1102,15 @@ Standard.class_eval do
   # @todo genericize and move this method to Standards.Space
   def model_add_occupancy_sensors(model, building_type, climate_zone)
     # Only add occupancy sensors for 90.1-2010
+    # Currently deactivated for all 90.1 versions 
+    # of the prototype because occupancy sensor is
+    # currently modeled using different schedules
+    # hence this code double counts savings from 
+    # sensors.
+    # TODO: Move occupancy sensor modeling from
+    # schedule to code.
     case template
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         return true
     end
 
