@@ -43,6 +43,9 @@ class Standard
   # @param pump_nominal_hp [Float] Pump nominal horsepower
   # @return [String] Pump part load control type
   def pump_variable_speed_get_control_type(pump, plant_loop_type, pump_nominal_hp)
+    # Get plant loop
+    plant_loop = pump.plantLoop.get
+
     # Default assumptions are based on ASHRAE 90.1-2010 Appendix G (G3.1.3.5 and G3.1.3.10)
     case plant_loop_type
       when 'Heating'
