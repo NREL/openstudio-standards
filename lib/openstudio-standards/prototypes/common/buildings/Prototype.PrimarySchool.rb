@@ -3,15 +3,19 @@
 # building types.
 module PrimarySchool
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific HVAC adjustments')
 
     # add transformer
-    transformer_efficiency = nil
+    # efficiency based on a 113 kVA transformer
     case template
     when '90.1-2004', '90.1-2007'
       transformer_efficiency = 0.969
-    when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
+    when '90.1-2010', '90.1-2013'
       transformer_efficiency = 0.982
+    when '90.1-2016', '90.1-2019'
+      transformer_efficiency = 0.987
+    else
+      transformer_efficiency = nil
     end
     return true unless !transformer_efficiency.nil?
 
