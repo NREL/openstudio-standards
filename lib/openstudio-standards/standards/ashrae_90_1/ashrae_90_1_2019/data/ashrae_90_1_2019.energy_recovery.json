@@ -3,6 +3,19 @@
     {
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2006-0A",
+      "under_8000_hours": false,
+      "10_to_20_percent_oa": 2500.0,
+      "20_to_30_percent_oa": 2000.0,
+      "30_to_40_percent_oa": 1000.0,
+      "40_to_50_percent_oa": 500.0,
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
+    },
+    {
+      "template": "90.1-2019",
+      "climate_zone": "ASHRAE 169-2006-0A",
       "under_8000_hours": true,
       "10_to_20_percent_oa": 26000.0,
       "20_to_30_percent_oa": 16000.0,
@@ -11,20 +24,33 @@
       "50_to_60_percent_oa": 3500.0,
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2006-0B",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 2500.0,
-      "20_to_30_percent_oa": 2000.0,
-      "30_to_40_percent_oa": 1000.0,
-      "40_to_50_percent_oa": 500.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": null,
+      "20_to_30_percent_oa": 19500.0,
+      "30_to_40_percent_oa": 9000.0,
+      "40_to_50_percent_oa": 5000.0,
+      "50_to_60_percent_oa": 4000.0,
+      "60_to_70_percent_oa": 3000.0,
+      "70_to_80_percent_oa": 1500.0,
+      "greater_than_80_percent_oa": 120.0
+    },
+    {
+      "template": "90.1-2019",
+      "climate_zone": "ASHRAE 169-2006-0B",
+      "under_8000_hours": true,
+      "10_to_20_percent_oa": null,
+      "20_to_30_percent_oa": null,
+      "30_to_40_percent_oa": null,
+      "40_to_50_percent_oa": null,
+      "50_to_60_percent_oa": 26000.0,
+      "60_to_70_percent_oa": 12000.0,
+      "70_to_80_percent_oa": 5000.0,
+      "greater_than_80_percent_oa": 4000.0
     },
     {
       "template": "90.1-2019",
@@ -34,10 +60,10 @@
       "20_to_30_percent_oa": 2000.0,
       "30_to_40_percent_oa": 1000.0,
       "40_to_50_percent_oa": 500.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
@@ -50,7 +76,7 @@
       "50_to_60_percent_oa": 3500.0,
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -63,7 +89,7 @@
       "50_to_60_percent_oa": 4000.0,
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -86,10 +112,10 @@
       "20_to_30_percent_oa": 2000.0,
       "30_to_40_percent_oa": 1000.0,
       "40_to_50_percent_oa": 500.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
@@ -102,7 +128,7 @@
       "50_to_60_percent_oa": 3500.0,
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -115,7 +141,7 @@
       "50_to_60_percent_oa": 4000.0,
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -138,10 +164,10 @@
       "20_to_30_percent_oa": 2000.0,
       "30_to_40_percent_oa": 1000.0,
       "40_to_50_percent_oa": 500.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
@@ -154,7 +180,7 @@
       "50_to_60_percent_oa": 3500.0,
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -167,7 +193,7 @@
       "50_to_60_percent_oa": 4000.0,
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -212,14 +238,14 @@
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2006-4A",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -232,7 +258,7 @@
       "50_to_60_percent_oa": 3500.0,
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -242,10 +268,10 @@
       "20_to_30_percent_oa": 2000.0,
       "30_to_40_percent_oa": 1000.0,
       "40_to_50_percent_oa": 500.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
@@ -271,7 +297,7 @@
       "50_to_60_percent_oa": 4000.0,
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -290,14 +316,14 @@
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2006-5A",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -310,7 +336,7 @@
       "50_to_60_percent_oa": 3500.0,
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -320,10 +346,10 @@
       "20_to_30_percent_oa": 2000.0,
       "30_to_40_percent_oa": 1000.0,
       "40_to_50_percent_oa": 500.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
@@ -349,7 +375,7 @@
       "50_to_60_percent_oa": 4000.0,
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -368,14 +394,14 @@
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2006-6A",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -388,20 +414,20 @@
       "50_to_60_percent_oa": 3500.0,
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2006-6B",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -420,14 +446,14 @@
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2006-7A",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -437,23 +463,23 @@
       "20_to_30_percent_oa": 4000.0,
       "30_to_40_percent_oa": 2500.0,
       "40_to_50_percent_oa": 1000.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2006-7B",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -463,23 +489,23 @@
       "20_to_30_percent_oa": 4000.0,
       "30_to_40_percent_oa": 2500.0,
       "40_to_50_percent_oa": 1000.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2006-8A",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -489,23 +515,23 @@
       "20_to_30_percent_oa": 4000.0,
       "30_to_40_percent_oa": 2500.0,
       "40_to_50_percent_oa": 1000.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2006-8B",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -515,23 +541,36 @@
       "20_to_30_percent_oa": 4000.0,
       "30_to_40_percent_oa": 2500.0,
       "40_to_50_percent_oa": 1000.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
+    },
+    {
+      "template": "90.1-2019",
+      "climate_zone": "ASHRAE 169-2013-0A",
+      "under_8000_hours": false,
+      "10_to_20_percent_oa": 2500.0,
+      "20_to_30_percent_oa": 2000.0,
+      "30_to_40_percent_oa": 1000.0,
+      "40_to_50_percent_oa": 500.0,
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2013-0A",
       "under_8000_hours": true,
-      "10_to_20_percent_oa": null,
-      "20_to_30_percent_oa": null,
-      "30_to_40_percent_oa": null,
-      "40_to_50_percent_oa": null,
-      "50_to_60_percent_oa": 26000.0,
-      "60_to_70_percent_oa": 12000.0,
-      "70_to_80_percent_oa": 5000.0,
-      "greater_than_80_percent_oa": 4000.0
+      "10_to_20_percent_oa": 26000.0,
+      "20_to_30_percent_oa": 16000.0,
+      "30_to_40_percent_oa": 5500.0,
+      "40_to_50_percent_oa": 4500.0,
+      "50_to_60_percent_oa": 3500.0,
+      "60_to_70_percent_oa": 2000.0,
+      "70_to_80_percent_oa": 1000.0,
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -544,7 +583,20 @@
       "50_to_60_percent_oa": 4000.0,
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
+    },
+    {
+      "template": "90.1-2019",
+      "climate_zone": "ASHRAE 169-2013-0B",
+      "under_8000_hours": true,
+      "10_to_20_percent_oa": null,
+      "20_to_30_percent_oa": null,
+      "30_to_40_percent_oa": null,
+      "40_to_50_percent_oa": null,
+      "50_to_60_percent_oa": 26000.0,
+      "60_to_70_percent_oa": 12000.0,
+      "70_to_80_percent_oa": 5000.0,
+      "greater_than_80_percent_oa": 4000.0
     },
     {
       "template": "90.1-2019",
@@ -554,10 +606,10 @@
       "20_to_30_percent_oa": 2000.0,
       "30_to_40_percent_oa": 1000.0,
       "40_to_50_percent_oa": 500.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
@@ -570,7 +622,7 @@
       "50_to_60_percent_oa": 3500.0,
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -583,7 +635,7 @@
       "50_to_60_percent_oa": 4000.0,
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -606,10 +658,10 @@
       "20_to_30_percent_oa": 2000.0,
       "30_to_40_percent_oa": 1000.0,
       "40_to_50_percent_oa": 500.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
@@ -622,7 +674,7 @@
       "50_to_60_percent_oa": 3500.0,
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -635,7 +687,7 @@
       "50_to_60_percent_oa": 4000.0,
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -658,10 +710,10 @@
       "20_to_30_percent_oa": 2000.0,
       "30_to_40_percent_oa": 1000.0,
       "40_to_50_percent_oa": 500.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
@@ -674,7 +726,7 @@
       "50_to_60_percent_oa": 3500.0,
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -687,7 +739,7 @@
       "50_to_60_percent_oa": 4000.0,
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -732,14 +784,14 @@
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2013-4A",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -752,7 +804,7 @@
       "50_to_60_percent_oa": 3500.0,
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -762,10 +814,10 @@
       "20_to_30_percent_oa": 2000.0,
       "30_to_40_percent_oa": 1000.0,
       "40_to_50_percent_oa": 500.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
@@ -791,7 +843,7 @@
       "50_to_60_percent_oa": 4000.0,
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -810,14 +862,14 @@
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2013-5A",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -830,7 +882,7 @@
       "50_to_60_percent_oa": 3500.0,
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -840,10 +892,10 @@
       "20_to_30_percent_oa": 2000.0,
       "30_to_40_percent_oa": 1000.0,
       "40_to_50_percent_oa": 500.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
@@ -869,7 +921,7 @@
       "50_to_60_percent_oa": 4000.0,
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
@@ -888,14 +940,14 @@
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2013-6A",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -908,20 +960,20 @@
       "50_to_60_percent_oa": 3500.0,
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
-      "greater_than_80_percent_oa": 0.0
+      "greater_than_80_percent_oa": 120.0
     },
     {
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2013-6B",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -940,14 +992,14 @@
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2013-7A",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -957,23 +1009,23 @@
       "20_to_30_percent_oa": 4000.0,
       "30_to_40_percent_oa": 2500.0,
       "40_to_50_percent_oa": 1000.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2013-7B",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -983,23 +1035,23 @@
       "20_to_30_percent_oa": 4000.0,
       "30_to_40_percent_oa": 2500.0,
       "40_to_50_percent_oa": 1000.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2013-8A",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -1009,23 +1061,23 @@
       "20_to_30_percent_oa": 4000.0,
       "30_to_40_percent_oa": 2500.0,
       "40_to_50_percent_oa": 1000.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     },
     {
       "template": "90.1-2019",
       "climate_zone": "ASHRAE 169-2013-8B",
       "under_8000_hours": false,
-      "10_to_20_percent_oa": 0.0,
-      "20_to_30_percent_oa": 0.0,
-      "30_to_40_percent_oa": 0.0,
-      "40_to_50_percent_oa": 0.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "10_to_20_percent_oa": 200.0,
+      "20_to_30_percent_oa": 130.0,
+      "30_to_40_percent_oa": 100.0,
+      "40_to_50_percent_oa": 80.0,
+      "50_to_60_percent_oa": 70.0,
+      "60_to_70_percent_oa": 60.0,
+      "70_to_80_percent_oa": 50.0,
+      "greater_than_80_percent_oa": 40.0
     },
     {
       "template": "90.1-2019",
@@ -1035,10 +1087,10 @@
       "20_to_30_percent_oa": 4000.0,
       "30_to_40_percent_oa": 2500.0,
       "40_to_50_percent_oa": 1000.0,
-      "50_to_60_percent_oa": 0.0,
-      "60_to_70_percent_oa": 0.0,
-      "70_to_80_percent_oa": 0.0,
-      "greater_than_80_percent_oa": 0.0
+      "50_to_60_percent_oa": 140.0,
+      "60_to_70_percent_oa": 120.0,
+      "70_to_80_percent_oa": 100.0,
+      "greater_than_80_percent_oa": 80.0
     }
   ]
 }

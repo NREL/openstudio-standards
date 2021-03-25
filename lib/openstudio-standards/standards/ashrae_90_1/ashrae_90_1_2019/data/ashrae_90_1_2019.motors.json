@@ -217,7 +217,7 @@
       "synchronous_speed": 1800.0,
       "minimum_capacity": 250.0,
       "maximum_capacity": 299.999,
-      "nominal_full_load_efficiency": 0.95,
+      "nominal_full_load_efficiency": 0.962,
       "notes": null
     },
     {
@@ -227,7 +227,7 @@
       "synchronous_speed": 1800.0,
       "minimum_capacity": 300.0,
       "maximum_capacity": 349.999,
-      "nominal_full_load_efficiency": 0.954,
+      "nominal_full_load_efficiency": 0.962,
       "notes": null
     },
     {
@@ -237,7 +237,7 @@
       "synchronous_speed": 1800.0,
       "minimum_capacity": 350.0,
       "maximum_capacity": 399.999,
-      "nominal_full_load_efficiency": 0.954,
+      "nominal_full_load_efficiency": 0.962,
       "notes": null
     },
     {
@@ -247,7 +247,7 @@
       "synchronous_speed": 1800.0,
       "minimum_capacity": 400.0,
       "maximum_capacity": 449.999,
-      "nominal_full_load_efficiency": 0.954,
+      "nominal_full_load_efficiency": 0.962,
       "notes": null
     },
     {
@@ -257,7 +257,7 @@
       "synchronous_speed": 1800.0,
       "minimum_capacity": 450.0,
       "maximum_capacity": 499.999,
-      "nominal_full_load_efficiency": 0.954,
+      "nominal_full_load_efficiency": 0.962,
       "notes": null
     },
     {
@@ -267,7 +267,7 @@
       "synchronous_speed": 1800.0,
       "minimum_capacity": 500.0,
       "maximum_capacity": 9999.0,
-      "nominal_full_load_efficiency": 0.954,
+      "nominal_full_load_efficiency": 0.962,
       "notes": null
     }
   ]
