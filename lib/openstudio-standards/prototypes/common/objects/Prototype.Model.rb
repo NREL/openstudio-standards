@@ -1220,8 +1220,6 @@ Standard.class_eval do
 
         # Modify schedules
         model_multiply_schedule(model, sch.defaultDaySchedule, sch_mult, 0)
-        model_multiply_schedule(model, sch.summerDesignDaySchedule, sch_mult, 0)
-        model_multiply_schedule(model, sch.winterDesignDaySchedule, sch_mult, 0)
       end
     end
   end
