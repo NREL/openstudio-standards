@@ -33,6 +33,45 @@ class ASHRAE9012010 < ASHRAE901
     return economizer_type
   end
 
+  # Adjust model to comply with fenestration orientation requirements
+  #
+  # @code_sections [90.1-2010_5.5.4.5]
+  # @param [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Boolean] Returns true if successful, false otherwise
+  def model_fenestration_orientation(model, climate_zone)
+    wwr = false
+
+    win_area_w = model_get_window_area_info_for_orientation(model, 'W', wwr: wwr)
+    win_area_e = model_get_window_area_info_for_orientation(model, 'E', wwr: wwr)
+    win_area_s = model_get_window_area_info_for_orientation(model, 'S', wwr: wwr)
+
+    # Make prototype specific adjustment to meet the code requirement
+    if !((win_area_s > win_area_w) && (win_area_s > win_area_e))
+      if model.getBuilding.standardsBuildingType.is_initialized
+        building_type = model.getBuilding.standardsBuildingType.get
+
+        case building_type
+          # TODO: Implementatation for other building types not meeting the requirement
+          # The offices, schools, warehouse (exempted), large hotel, outpatient,
+          # retails, apartments should meet the requirement according to Section
+          # 5.2.1.7 in Thornton et al. 2011
+          when 'Hospital'
+            # Rotate the building counter-clockwise
+            model_set_building_north_axis(model, 270.0)
+          when 'SmallHotel'
+            # Rotate the building clockwise
+            model_set_building_north_axis(model, 180.0)
+          else
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.ashrae_90_1_2010', "The prototype model doesn't meet the requirement from Section 5.5.4.5 in ASHRAE Standard 90.1-2010.")
+        end
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.ashrae_90_1_2010', "The prototype model doesn't meet the requirement from Section 5.5.4.5 in ASHRAE Standard 90.1-2010, its standards building type shall be specified.")
+      end
+    end
+
+    return true
+  end
+
   # Is transfer air required?
   #
   # @code_sections [90.1-2010_6.5.7.1.2]

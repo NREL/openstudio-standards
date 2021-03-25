@@ -83,6 +83,9 @@ module PrimarySchool
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 0.0)
+
     return true
   end
 
