@@ -1551,7 +1551,7 @@
       "orientation": null,
       "minimum_percent_of_surface": null,
       "maximum_percent_of_surface": null,
-      "assembly_maximum_u_value": 0.5,
+      "assembly_maximum_u_value": 0.37,
       "u_value_includes_interior_film_coefficient": true,
       "u_value_includes_exterior_film_coefficient": true,
       "assembly_maximum_f_factor": null,
@@ -2898,7 +2898,7 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
-      "notes": null
+      "notes": "Exceptions 1. and 2. from Section 5.5.3.6 is not captured in this table"
     },
     {
       "template": "90.1-2019",
@@ -2918,7 +2918,7 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
-      "notes": null
+      "notes": "Exceptions 1. and 2. from Section 5.5.3.6 is not captured in this table"
     },
     {
       "template": "90.1-2019",
@@ -2958,7 +2958,7 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
-      "notes": null
+      "notes": "Exceptions 1. and 2. from Section 5.5.3.6 is not captured in this table"
     },
     {
       "template": "90.1-2019",
@@ -2978,7 +2978,7 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
-      "notes": null
+      "notes": "Exceptions 1. and 2. from Section 5.5.3.6 is not captured in this table"
     },
     {
       "template": "90.1-2019",
@@ -14998,7 +14998,7 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
-      "notes": null
+      "notes": "Exceptions 1. and 2. from Section 5.5.3.6 is not captured in this table"
     },
     {
       "template": "90.1-2019",
@@ -15058,7 +15058,7 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
-      "notes": null
+      "notes": "Exceptions 1. and 2. from Section 5.5.3.6 is not captured in this table"
     },
     {
       "template": "90.1-2019",
@@ -19718,7 +19718,7 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
-      "notes": null
+      "notes": "Exceptions 1. and 2. from Section 5.5.3.6 is not captured in this table"
     },
     {
       "template": "90.1-2019",
@@ -19778,7 +19778,7 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
-      "notes": null
+      "notes": "Exceptions 1. and 2. from Section 5.5.3.6 is not captured in this table"
     },
     {
       "template": "90.1-2019",

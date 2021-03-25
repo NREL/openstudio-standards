@@ -48,6 +48,9 @@ module SmallHotel
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
+    # Guestroom vacancy controls
+    model_add_guestroom_vacancy_controls(model, 'SmallHotel')
+
     return true
   end
 

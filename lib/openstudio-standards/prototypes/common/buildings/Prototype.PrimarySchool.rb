@@ -3,15 +3,19 @@
 # building types.
 module PrimarySchool
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific HVAC adjustments')
 
     # add transformer
-    transformer_efficiency = nil
+    # efficiency based on a 113 kVA transformer
     case template
     when '90.1-2004', '90.1-2007'
       transformer_efficiency = 0.969
-    when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
+    when '90.1-2010', '90.1-2013'
       transformer_efficiency = 0.982
+    when '90.1-2016', '90.1-2019'
+      transformer_efficiency = 0.987
+    else
+      transformer_efficiency = nil
     end
     return true unless !transformer_efficiency.nil?
 
@@ -100,5 +104,16 @@ module PrimarySchool
   # @return [String] Returns type of SAT reset
   def air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
     return 'oa'
+  end
+
+  # List transfer air target and source zones, and air flow (cfm)
+  #
+  # code_sections [90.1-2019_6.5.7.1], [90.1-2016_6.5.7.1]
+  # @return [Hash] target zones (key) and source zones (value) and air flow (value)
+  def model_transfer_air_target_and_source_zones(model)
+    model_transfer_air_target_and_source_zones_hash = {
+      'Bath_ZN_1_FLR_1 ZN' => ['Library_Media_Center_ZN_1_FLR_1 ZN', 600.0]
+    }
+    return model_transfer_air_target_and_source_zones_hash
   end
 end

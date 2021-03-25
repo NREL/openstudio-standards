@@ -163,6 +163,7 @@ class ASHRAE9012019 < ASHRAE901
 
   # Determine if multizone vav optimization is required.
   #
+  # @code_sections [90.1-2019_6.5.3.3]
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for
@@ -180,12 +181,6 @@ class ASHRAE9012019 < ASHRAE901
     end
     if num_fan_powered_terminals > 0
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, multizone vav optimization is not required because the system has #{num_fan_powered_terminals} fan-powered terminals.")
-      return multizone_opt_required
-    end
-
-    # Not required for systems that require an ERV
-    if air_loop_hvac_energy_recovery?(air_loop_hvac)
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: multizone vav optimization is not required because the system has Energy Recovery.")
       return multizone_opt_required
     end
 

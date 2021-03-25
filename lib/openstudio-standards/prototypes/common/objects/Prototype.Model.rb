@@ -42,6 +42,7 @@ Standard.class_eval do
     model_add_constructions(model, @instvarbuilding_type, climate_zone)
     model_fenestration_orientation(model, climate_zone)
     model_custom_hvac_tweaks(building_type, climate_zone, @prototype_input, model)
+    model_add_transfer_air(model)
     model_add_internal_mass(model, @instvarbuilding_type)
     model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
     model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
@@ -1094,6 +1095,136 @@ Standard.class_eval do
     return zone_exhaust_fans
   end
 
+  # Add guestroom vacancy controls
+  #
+  # @code_sections [90.1-2016_6.4.3.3.5]
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [String] Building type
+  # @return [Boolean] Returns true if successful, false otherwise
+  def model_add_guestroom_vacancy_controls(model, building_type)
+    # Guestrooms are currently only included in the small and large hotel prototypes
+    return true unless (building_type == 'LargeHotel') || (building_type == 'SmallHotel')
+
+    # Guestrooms controls only required for 90.1-2016 and onward
+    return true unless (template == '90.1-2016') || (template == '90.1-2019')
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Guestroom Vacancy Controls')
+
+    # Define guestroom vacancy maps
+    # List of all spaces that represent vacant rooms
+    guestroom_vacancy_map = {
+      'LargeHotel' => [
+        'Room_3_Mult19_Flr_3'
+      ],
+      'SmallHotel' => [
+        'GuestRoom101',
+        'GuestRoom102',
+        'GuestRoom201',
+        'GuestRoom215_218',
+        'GuestRoom301',
+        'GuestRoom302_305',
+        'GuestRoom313',
+        'GuestRoom319',
+        'GuestRoom324',
+        'GuestRoom402_405',
+        'GuestRoom406_408',
+        'GuestRoom413',
+        'GuestRoom414'
+      ]
+    }
+
+    # Iterate through spaces and apply for guestroom vacancy controls
+    thermostat_schedules = {}
+    thermostat_schedules['Heating'] = []
+    thermostat_schedules['Cooling'] = []
+    model.getSpaces.sort.each do |space|
+      # Get space name
+      space_name = space.name
+
+      # Get space type
+      space_type = space.spaceType.get
+
+      # Skip space types with no standards building type
+      next if space_type.standardsBuildingType.empty?
+
+      stds_bldg_type = space_type.standardsBuildingType.get
+
+      # Skip space types with no standards space type
+      next if space_type.standardsSpaceType.empty?
+
+      stds_spc_type = space_type.standardsSpaceType.get
+
+      # Skip building types and space types that aren't listed in the guestroom vacancy maps
+      next unless guestroom_vacancy_map.key?(stds_bldg_type)
+      next unless guestroom_vacancy_map[stds_bldg_type].include?(space_name.to_s)
+
+      # Get thermal zone and thermostat schedules associated with space
+      thermal_zone = space.thermalZone.get
+      if thermal_zone.thermostatSetpointDualSetpoint.is_initialized
+        thermostat = thermal_zone.thermostatSetpointDualSetpoint.get
+        if thermostat.heatingSetpointTemperatureSchedule.is_initialized && thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
+          thermostat_schedules['Heating'] << thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
+        end
+        if thermostat.coolingSetpointTemperatureSchedule.is_initialized && thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
+          thermostat_schedules['Cooling'] << thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
+        end
+      end
+
+      # Get zone equipment fan
+      # Currently prototypes with guestrooms use PTAC and 4PFC
+      # TODO: Implement additional system type (zonal and air loop-based)
+      thermal_zone.equipment.sort.each do |zone_equipment|
+        if zone_equipment.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+          equipment = zone_equipment.to_ZoneHVACPackagedTerminalAirConditioner.get
+        elsif zone_equipment.to_ZoneHVACFourPipeFanCoil.is_initialized
+          equipment = zone_equipment.to_ZoneHVACFourPipeFanCoil.get
+        else
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "#{thermal_zone} is not served by either a packaged terminal air-conditioner or four pipe fan coil, vacancy fan schedule has not been adjusted")
+          next
+        end
+
+        # Change fan operation schedule
+        fan = if equipment.supplyAirFan.to_FanConstantVolume.is_initialized
+                equipment.supplyAirFan.to_FanConstantVolume.get
+              elsif equipment.supplyAirFan.to_FanVariableVolume.is_initialized
+                equipment.supplyAirFan.to_FanVariableVolume.get
+              elsif equipment.supplyAirFan.to_FanOnOff.is_initialized
+                equipment.supplyAirFan.to_FanOnOff.get
+        end
+        fan.setAvailabilitySchedule(model_add_schedule(model, 'GuestroomVacantFanSchedule'))
+      end
+
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished Adding Guestroom Vacancy Controls')
+    end
+
+    # Adjust thermostat schedules:
+    # Increase set-up/back to comply with code requirements
+    thermostat_schedules.keys.each do |sch_type|
+      thermostat_schedules[sch_type].uniq.each do |sch|
+        # Skip non-ruleset schedules
+        next if sch.to_ScheduleRuleset.empty?
+
+        # Get schedule modifier
+        case template
+          when '90.1-2016', '90.1-2019'
+            case sch_type
+              when 'Heating'
+                sch_mult = 15.556 / 18.889 # Set thermostat to 15.556
+              when 'Cooling'
+                sch_mult = 26.667 / 23.333 # Set thermostat to 26.667
+              else
+                sch_mult = 1 # No adjustments
+            end
+          else
+            shc_mult = 1 # No adjustments
+        end
+
+        # Modify schedules
+        model_multiply_schedule(model, sch.defaultDaySchedule, sch_mult, 0)
+      end
+    end
+  end
+
   # Adds occupancy sensors to certain space types per
   # the PNNL documentation.
   #
@@ -1102,8 +1233,15 @@ Standard.class_eval do
   # @todo genericize and move this method to Standards.Space
   def model_add_occupancy_sensors(model, building_type, climate_zone)
     # Only add occupancy sensors for 90.1-2010
+    # Currently deactivated for all 90.1 versions 
+    # of the prototype because occupancy sensor is
+    # currently modeled using different schedules
+    # hence this code double counts savings from 
+    # sensors.
+    # TODO: Move occupancy sensor modeling from
+    # schedule to code.
     case template
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         return true
     end
 
@@ -1409,17 +1547,13 @@ Standard.class_eval do
   def model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying prototype HVAC assumptions.')
 
-    ##### Apply equipment efficiencies
-
-    # Fans
-    # Pressure Rise
-
+    # Fan pressure rise
     model.getFanConstantVolumes.sort.each { |obj| fan_constant_volume_apply_prototype_fan_pressure_rise(obj) }
     model.getFanVariableVolumes.sort.each { |obj| fan_variable_volume_apply_prototype_fan_pressure_rise(obj) }
     model.getFanOnOffs.sort.each { |obj| fan_on_off_apply_prototype_fan_pressure_rise(obj) }
     model.getFanZoneExhausts.sort.each { |obj| fan_zone_exhaust_apply_prototype_fan_pressure_rise(obj) }
 
-    # Motor Efficiency
+    # Fan motor efficiency
     model.getFanConstantVolumes.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
     model.getFanVariableVolumes.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
     model.getFanOnOffs.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
@@ -1428,15 +1562,18 @@ Standard.class_eval do
     # Gas Heating Coil
     model.getCoilHeatingGass.sort.each { |obj| coil_heating_gas_apply_prototype_efficiency(obj) }
 
-    ##### Add Economizers
+    # Add Economizers
     apply_economizers(climate_zone, model)
 
     # TODO: What is the logic behind hard-sizing
     # hot water coil convergence tolerances?
     model.getControllerWaterCoils.sort.each { |obj| controller_water_coil_set_convergence_limits(obj) }
 
-    # adjust defrost curve limits for coil heating dx single speed
+    # Adjust defrost curve limits for coil heating dx single speed
     model.getCoilHeatingDXSingleSpeeds.sort.each { |obj| coil_heating_dx_single_speed_apply_defrost_eir_curve_limits(obj) }
+
+    # Pump part load performances
+    model.getPumpVariableSpeeds.sort.each { |obj| pump_variable_speed_control_type(obj) }
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying prototype HVAC assumptions.')
   end
@@ -2231,6 +2368,82 @@ Standard.class_eval do
   # @param [OpenStudio::Model::Model] OpenStudio model object
   # @return [Boolean] Returns true if successful, false otherwise
   def model_fenestration_orientation(model, climate_zone)
+    return true
+  end
+
+  # Is transfer air required?
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Boolean] true if transfer air is required, false otherwise
+  def model_transfer_air_required?(model)
+    return false
+  end
+
+  # List transfer air target and source zones, and air flow (cfm)
+  #
+  # code_sections [90.1-2019_6.5.7.1], [90.1-2016_6.5.7.1]
+  # @return [Hash] target zones (key) and source zones (value) and air flow (value)
+  def model_transfer_air_target_and_source_zones(model)
+    model_transfer_air_target_and_source_zones_hash = {}
+
+    return model_transfer_air_target_and_source_zones_hash
+  end
+
+  # Add transfer to prototype for spaces that require it
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Boolean] true if successful, false otherwise
+  def model_add_transfer_air(model)
+    # Do not add transfer air if not required
+    return true unless model_transfer_air_required?(model)
+
+    # Get target and source zones
+    target_and_source_zones = model_transfer_air_target_and_source_zones(model)
+    return true if target_and_source_zones.empty?
+
+    model.getFanZoneExhausts.sort.each do |exhaust_fan|
+      # Target zone (zone with exhaust fan)
+      target_zone = exhaust_fan.thermalZone.get
+
+      # Get zone name of an exhaust fan
+      exhaust_fan_zone_name = target_zone.name.to_s
+
+      # Go to next exhaust fan if this zone isn't using transfer air
+      next unless target_and_source_zones.keys.include? exhaust_fan_zone_name
+
+      # Add dummy exhaust fan in source zone
+      source_zone_name, transfer_air_flow_cfm = target_and_source_zones[exhaust_fan_zone_name]
+      source_zone = model.getThermalZoneByName(source_zone_name).get
+      transfer_air_source_zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
+      transfer_air_source_zone_exhaust_fan.setName(source_zone.name.to_s + ' Dummy Transfer Air (Source) Fan')
+      transfer_air_source_zone_exhaust_fan.setAvailabilitySchedule(exhaust_fan.availabilitySchedule.get)
+      # Convert transfer air flow to m3/s
+      transfer_air_flow_m3s = OpenStudio.convert(transfer_air_flow_cfm, 'cfm', 'm^3/s').get
+      transfer_air_source_zone_exhaust_fan.setMaximumFlowRate(transfer_air_flow_m3s)
+      transfer_air_source_zone_exhaust_fan.setFanEfficiency(1.0)
+      transfer_air_source_zone_exhaust_fan.setPressureRise(0.0)
+      transfer_air_source_zone_exhaust_fan.addToThermalZone(source_zone)
+
+      # Set exhaust fan balanced air flow schedule to only consider the transfer air to be balanced air flow
+      balanced_air_flow_schedule = exhaust_fan.availabilitySchedule.get.clone(model).to_ScheduleRuleset.get
+      balanced_air_flow_schedule.setName("#{exhaust_fan_zone_name} Exhaust Fan Balanced Air Flow Schedule")
+      model_multiply_schedule(model, balanced_air_flow_schedule.defaultDaySchedule, transfer_air_flow_m3s / exhaust_fan.maximumFlowRate.get, 0)
+      balanced_air_flow_schedule.scheduleRules.each do |sch_rule|
+        model_multiply_schedule(model, sch_rule.daySchedule, transfer_air_flow_m3s / exhaust_fan.maximumFlowRate.get, 0)
+      end
+      transfer_air_source_zone_exhaust_fan.setBalancedExhaustFractionSchedule(balanced_air_flow_schedule)
+
+      # Modify design specification OA to take into account transfer air for sizing only
+      # OA is zero'd out for other days
+      target_zone.spaces.sort.each do |space|
+        target_zone_ventilation = space.designSpecificationOutdoorAir.get
+        target_zone_ventilation.setOutdoorAirFlowperPerson(0)
+        target_zone_ventilation.setOutdoorAirFlowperFloorArea(0)
+        target_zone_ventilation.setOutdoorAirFlowRate(exhaust_fan.maximumFlowRate.get - transfer_air_flow_m3s)
+        target_zone_ventilation.setOutdoorAirFlowRateFractionSchedule(model_add_schedule(model, 'DesignDaysOnly'))
+      end
+    end
+
     return true
   end
 end

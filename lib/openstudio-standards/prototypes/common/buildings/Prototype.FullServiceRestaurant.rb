@@ -190,6 +190,9 @@ module FullServiceRestaurant
 
   def add_zone_mixing(model)
     # add zone_mixing between kitchen and dining
+    # TODO: remove zone mixing objects,
+    # transfer air is the should be the same for
+    # all stds, exhaust flow varies
     space_kitchen = model.getSpaceByName('Kitchen').get
     zone_kitchen = space_kitchen.thermalZone.get
     space_dining = model.getSpaceByName('Dining').get
