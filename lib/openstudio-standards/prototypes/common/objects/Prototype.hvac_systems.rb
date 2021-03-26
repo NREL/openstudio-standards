@@ -746,11 +746,20 @@ class Standard
         cooling_equipment.setName("#{heat_pump_water_loop.name} FluidCoolerSingleSpeed")
         heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
         cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} Fluid Cooler Scheduled Dual Setpoint")
+        # Remove hard coded default values
+        cooling_equipment.setPerformanceInputMethod('UFactorTimesAreaAndDesignWaterFlowRate')
+        cooling_equipment.autosizeDesignWaterFlowRate
+        cooling_equipment.autosizeDesignAirFlowRate
       when 'FluidCoolerTwoSpeed'
         cooling_equipment = OpenStudio::Model::FluidCoolerTwoSpeed.new(model)
         cooling_equipment.setName("#{heat_pump_water_loop.name} FluidCoolerTwoSpeed")
         heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
         cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} Fluid Cooler Scheduled Dual Setpoint")
+        # Remove hard coded default values
+        cooling_equipment.setPerformanceInputMethod('UFactorTimesAreaAndDesignWaterFlowRate')
+        cooling_equipment.autosizeDesignWaterFlowRate
+        cooling_equipment.autosizeHighFanSpeedAirFlowRate
+        cooling_equipment.autosizeLowFanSpeedAirFlowRate
       when 'EvaporativeFluidCooler', 'EvaporativeFluidCoolerSingleSpeed'
         cooling_equipment = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(model)
         cooling_equipment.setName("#{heat_pump_water_loop.name} EvaporativeFluidCoolerSingleSpeed")
