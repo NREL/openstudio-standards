@@ -163,10 +163,6 @@ class ASHRAE9012019 < ASHRAE901
            'ASHRAE 169-2013-7B',
            'ASHRAE 169-2013-8A',
            'ASHRAE 169-2013-8B'
-        return 0.4
-      else
-        return 1.0
-    end
         criteria = 5
       else
         return false
