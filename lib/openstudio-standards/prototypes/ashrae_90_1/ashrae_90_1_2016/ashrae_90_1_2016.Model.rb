@@ -233,7 +233,6 @@ class ASHRAE9012016 < ASHRAE901
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Boolean] true if transfer air is required, false otherwise
   def model_transfer_air_required?(model)
-
     return true
   end
 
@@ -319,13 +318,13 @@ class ASHRAE9012016 < ASHRAE901
         end
       end
 
-      add_lights_prog_0 = ""
-      add_lights_prog_null = ""
+      add_lights_prog_0 = ''
+      add_lights_prog_null = ''
       light_id = 0
       space_lights.each do |light_x|
         light_id += 1
         light_x_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(light_x, 'Lights', 'Electric Power Level')
-        light_x_actuator.setName("#{zone_name}_Light#{light_id.to_s}_Actuator".gsub(/[\s-]/, ''))
+        light_x_actuator.setName("#{zone_name}_Light#{light_id}_Actuator".gsub(/[\s-]/, ''))
         light_x_actuator_name = light_x_actuator.name.to_s
         add_lights_prog_null += "\n      SET #{light_x_actuator_name} = NULL,"
         if light_x == big_light

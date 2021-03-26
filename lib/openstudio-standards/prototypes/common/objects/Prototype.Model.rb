@@ -1235,10 +1235,10 @@ Standard.class_eval do
   # @todo genericize and move this method to Standards.Space
   def model_add_occupancy_sensors(model, building_type, climate_zone)
     # Only add occupancy sensors for 90.1-2010
-    # Currently deactivated for all 90.1 versions 
+    # Currently deactivated for all 90.1 versions
     # of the prototype because occupancy sensor is
     # currently modeled using different schedules
-    # hence this code double counts savings from 
+    # hence this code double counts savings from
     # sensors.
     # TODO: Move occupancy sensor modeling from
     # schedule to code.
@@ -2303,7 +2303,7 @@ Standard.class_eval do
   # @code_sections [90.1-2016_9.4.1.1.h/i]
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::Model::Model] OpenStudio Model
-  # 
+  #
   def model_add_lights_shutoff(model)
     return false
   end

@@ -4,7 +4,7 @@
 module HighriseApartment
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific HVAC adjustments')
-    
+
     # add elevator and lights&fans for the ground floor corridor
     add_extra_equip_corridor(model)
     # add extra infiltration for ground floor corridor
