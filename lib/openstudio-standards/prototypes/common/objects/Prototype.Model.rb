@@ -35,6 +35,7 @@ Standard.class_eval do
     model_add_loads(model)
     model_apply_infiltration_standard(model)
     model_modify_infiltration_coefficients(model, @instvarbuilding_type, climate_zone)
+    model_add_door_infiltration(model, climate_zone)
     model_modify_surface_convection_algorithm(model)
     model_create_thermal_zones(model, @space_multiplier_map)
     model_add_design_days_and_weather_file(model, climate_zone, epw_file)
@@ -53,6 +54,7 @@ Standard.class_eval do
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model.getBuilding.setStandardsBuildingType(building_type)
     model_set_climate_zone(model, climate_zone)
+    model_add_lights_shutoff(model)
     # Perform a sizing model_run(model)
     return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
 
@@ -1405,8 +1407,6 @@ Standard.class_eval do
     return true
   end
 
-  # add exterior lights
-
   # Changes the infiltration coefficients for the prototype vintages.
   #
   # @param (see #add_constructions)
@@ -2296,6 +2296,106 @@ Standard.class_eval do
 
       end
     end
+  end
+
+  # Implement occupancy based lighting level threshold (0.02 W/sqft). This is only for ASHRAE 90.1 2016 onwards.
+  #
+  # @code_sections [90.1-2016_9.4.1.1.h/i]
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] OpenStudio Model
+  # 
+  def model_add_lights_shutoff(model)
+    return false
+  end
+
+  # Get building door information to update infiltration
+  #
+  # return [Hash] Door infiltration information
+  def get_building_door_info(model)
+    get_building_door_info = {}
+
+    return get_building_door_info
+  end
+
+  # Metal coiling door code minimum infiltration rate at 75 Pa
+  #
+  # @param [String] Climate zone
+  # @return [Float] Minimum infiltration rate for metal coiling doors
+  def model_door_infil_flow_rate_metal_coiling_cfm_ft2(climate_zone)
+    case climate_zone
+      when 'ASHRAE 169-2006-7A',
+           'ASHRAE 169-2006-7B',
+           'ASHRAE 169-2006-8A',
+           'ASHRAE 169-2006-8B'
+        return 0.4
+      else
+        return 4.4
+    end
+  end
+
+  # Metal rollup door code minimum infiltration rate at 75 Pa
+  #
+  # @param [String] Climate zone
+  # @return [Float] Minimum infiltration rate for metal coiling doors
+  def model_door_infil_flow_rate_rollup_cfm_ft2(climate_zone)
+    return 0.4
+  end
+
+  # Open door infiltration rate at 75 Pa
+  #
+  # @param [String] Climate zone
+  # @return [Float] Open door infiltration rate
+  def model_door_infil_flow_rate_open_cfm_ft2(climate_zone)
+    return 9.7875
+  end
+
+  # Add door infiltration
+  #
+  # @param [OpenStudio:Model::Model] OpenStudio model object
+  # @climate_zone [String] Climate zone
+  # @return [Boolean] Returns true if successful, false otherwise or not applicable
+  def model_add_door_infiltration(model, climate_zone)
+    # Get door parameters for the building model
+    bldg_door_types = get_building_door_info(model)
+    return false if bldg_door_types.empty?
+
+    bldg_door_types.each do |door_type, door_info|
+      # Get infiltration flow rate at 75 Pa
+      case door_type
+        when 'Metal coiling'
+          door_infil_flow_rate_cfm_per_ft2 = model_door_infil_flow_rate_metal_coiling_cfm_ft2(climate_zone)
+        when 'Rollup'
+          door_infil_flow_rate_cfm_per_ft2 = model_door_infil_flow_rate_rollup_cfm_ft2(climate_zone)
+        when 'Open'
+          door_infil_flow_rate_cfm_per_ft2 = model_door_infil_flow_rate_open_cfm_ft2(climate_zone)
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "The #{door_type.downcase} type of door is not currently supported.")
+          next
+      end
+
+      # Calculate door infiltration
+      door_infil_cfm = door_info['number_of_doors'] * door_info['door_area_ft2'] * door_infil_flow_rate_cfm_per_ft2
+
+      # Conversion factor
+      conv_fact = OpenStudio.convert(1, 'm^3/s', 'ft^3/min').to_f
+
+      # Adjust the infiltration rate to the average pressure for the prototype buildings.
+      adj_door_infil_cfm = adjust_infiltration_to_prototype_building_conditions(door_infil_cfm)
+      adj_door_infil_m3_per_s = adj_door_infil_cfm / conv_fact
+
+      # Create door infiltration object
+      door_infil_obj = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+      door_infil_obj.setName("#{door_info['number_of_doors']} #{door_info['door_area_ft2']} ft2 #{door_type.downcase} Door Infiltration")
+      door_infil_obj.setSchedule(door_info['schedule'])
+      door_infil_obj.setDesignFlowRate(adj_door_infil_m3_per_s)
+      door_infil_obj.setSpace(model.getSpaceByName(door_info['space']).get)
+      door_infil_obj.setConstantTermCoefficient(0.0)
+      door_infil_obj.setTemperatureTermCoefficient 0.0
+      door_infil_obj.setVelocityTermCoefficient(0.224)
+      door_infil_obj.setVelocitySquaredTermCoefficient(0.0)
+    end
+
+    return true
   end
 
   # Set the model's north axis (degrees from true North)

@@ -100,7 +100,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -202,7 +203,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -226,8 +228,8 @@
       "pszac_oa_damper_schedule_2": null,
       "pszac_operation_schedule_3": null,
       "pszac_oa_damper_schedule_3": null,
-      "occ_sensing_exterior_lighting_power": 2297.0,
-      "occ_sensing_exterior_lighting_schedule": "RestaurantSitDown Exterior_lighting_schedule_b_2016",
+      "occ_sensing_exterior_lighting_power": 1459.5,
+      "occ_sensing_exterior_lighting_schedule": "RestaurantSitDown Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 154.01,
       "nondimming_exterior_lighting_schedule": "RestaurantSitDown Exterior_lighting_schedule_a",
       "building_area_method_lpd": 1.01,
@@ -304,7 +306,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "RestaurantSitDown_BUSINESS_SCH"
     },
     {
       "template": "90.1-2019",
@@ -330,7 +333,7 @@
       "pszac_oa_damper_schedule_3": null,
       "occ_sensing_exterior_lighting_power": null,
       "occ_sensing_exterior_lighting_schedule": null,
-      "nondimming_exterior_lighting_power": 10720.0,
+      "nondimming_exterior_lighting_power": 7500.913,
       "nondimming_exterior_lighting_schedule": "ApartmentHighRise Exterior_Lgt_ALWAYS_ON",
       "building_area_method_lpd": 0.51,
       "exterior_fuel_equipment1_power": null,
@@ -406,7 +409,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -432,7 +436,7 @@
       "pszac_oa_damper_schedule_3": null,
       "occ_sensing_exterior_lighting_power": null,
       "occ_sensing_exterior_lighting_schedule": null,
-      "nondimming_exterior_lighting_power": 13506.0,
+      "nondimming_exterior_lighting_power": 9851.744,
       "nondimming_exterior_lighting_schedule": "Hospital Exterior_Lgt_ALWAYS_ON",
       "building_area_method_lpd": 1.05,
       "exterior_fuel_equipment1_power": 162962.637,
@@ -508,7 +512,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -610,7 +615,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -712,7 +718,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -814,7 +821,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -840,7 +848,7 @@
       "pszac_oa_damper_schedule_3": null,
       "occ_sensing_exterior_lighting_power": null,
       "occ_sensing_exterior_lighting_schedule": null,
-      "nondimming_exterior_lighting_power": 15666.0,
+      "nondimming_exterior_lighting_power": 11638.23,
       "nondimming_exterior_lighting_schedule": "Always On",
       "building_area_method_lpd": 0.87,
       "exterior_fuel_equipment1_power": 122221.978021978,
@@ -916,7 +924,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -940,8 +949,8 @@
       "pszac_oa_damper_schedule_2": null,
       "pszac_operation_schedule_3": null,
       "pszac_oa_damper_schedule_3": null,
-      "occ_sensing_exterior_lighting_power": 43301.5,
-      "occ_sensing_exterior_lighting_schedule": "OfficeLarge Exterior_lighting_schedule_b_2016",
+      "occ_sensing_exterior_lighting_power": 26977.1,
+      "occ_sensing_exterior_lighting_schedule": "OfficeLarge Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 12979.2,
       "nondimming_exterior_lighting_schedule": "OfficeLarge Exterior_lighting_schedule_a",
       "building_area_method_lpd": 0.82,
@@ -1018,7 +1027,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "OfficeLarge_BUSINESS_SCH"
     },
     {
       "template": "90.1-2019",
@@ -1120,7 +1130,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -1222,7 +1233,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -1246,8 +1258,8 @@
       "pszac_oa_damper_schedule_2": null,
       "pszac_operation_schedule_3": null,
       "pszac_oa_damper_schedule_3": null,
-      "occ_sensing_exterior_lighting_power": 7402.3,
-      "occ_sensing_exterior_lighting_schedule": "OfficeMedium Exterior_lighting_schedule_b_2016",
+      "occ_sensing_exterior_lighting_power": 4717.264,
+      "occ_sensing_exterior_lighting_schedule": "OfficeMedium Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 519.2,
       "nondimming_exterior_lighting_schedule": "OfficeMedium Exterior_lighting_schedule_a",
       "building_area_method_lpd": 0.82,
@@ -1324,7 +1336,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "OfficeMedium_BUSINESS_SCH"
     },
     {
       "template": "90.1-2019",
@@ -1426,7 +1439,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -1452,7 +1466,7 @@
       "pszac_oa_damper_schedule_3": null,
       "occ_sensing_exterior_lighting_power": null,
       "occ_sensing_exterior_lighting_schedule": null,
-      "nondimming_exterior_lighting_power": 2508.0,
+      "nondimming_exterior_lighting_power": 1651.025,
       "nondimming_exterior_lighting_schedule": "ApartmentMidRise Exterior_Lgt_ALWAYS_ON",
       "building_area_method_lpd": 0.51,
       "exterior_fuel_equipment1_power": null,
@@ -1528,7 +1542,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -1552,8 +1567,8 @@
       "pszac_oa_damper_schedule_2": null,
       "pszac_operation_schedule_3": null,
       "pszac_oa_damper_schedule_3": null,
-      "occ_sensing_exterior_lighting_power": 8297.7,
-      "occ_sensing_exterior_lighting_schedule": "OutPatientHealthCare Exterior_lighting_schedule_b_2016",
+      "occ_sensing_exterior_lighting_power": 5548.2,
+      "occ_sensing_exterior_lighting_schedule": "OutPatientHealthCare Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 173.8,
       "nondimming_exterior_lighting_schedule": "OutPatientHealthCare Exterior_lighting_schedule_a",
       "building_area_method_lpd": 0.9,
@@ -1630,7 +1645,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -1654,8 +1670,8 @@
       "pszac_oa_damper_schedule_2": null,
       "pszac_operation_schedule_3": null,
       "pszac_oa_damper_schedule_3": null,
-      "occ_sensing_exterior_lighting_power": 3231.4,
-      "occ_sensing_exterior_lighting_schedule": "SchoolPrimary Exterior_lighting_schedule_b_2016",
+      "occ_sensing_exterior_lighting_power": 2233.154,
+      "occ_sensing_exterior_lighting_schedule": "SchoolPrimary Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 150.48,
       "nondimming_exterior_lighting_schedule": "SchoolPrimary Exterior_lighting_schedule_a",
       "building_area_method_lpd": 0.87,
@@ -1732,7 +1748,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "SchoolPrimary_BUSINESS_SCH"
     },
     {
       "template": "90.1-2019",
@@ -1756,8 +1773,8 @@
       "pszac_oa_damper_schedule_2": null,
       "pszac_operation_schedule_3": null,
       "pszac_oa_damper_schedule_3": null,
-      "occ_sensing_exterior_lighting_power": 1034.1,
-      "occ_sensing_exterior_lighting_schedule": "RestaurantFastFood Exterior_lighting_schedule_b_2016",
+      "occ_sensing_exterior_lighting_power": 649.5,
+      "occ_sensing_exterior_lighting_schedule": "RestaurantFastFood Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 122.81,
       "nondimming_exterior_lighting_schedule": "RestaurantFastFood Exterior_lighting_schedule_a",
       "building_area_method_lpd": 0.9,
@@ -1834,7 +1851,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "RestaurantFastFood_BUSINESS_SCH"
     },
     {
       "template": "90.1-2019",
@@ -1858,8 +1876,8 @@
       "pszac_oa_damper_schedule_2": null,
       "pszac_operation_schedule_3": null,
       "pszac_oa_damper_schedule_3": null,
-      "occ_sensing_exterior_lighting_power": 4328.0,
-      "occ_sensing_exterior_lighting_schedule": "RetailStandalone Exterior_lighting_schedule_b_2016",
+      "occ_sensing_exterior_lighting_power": 3054.3,
+      "occ_sensing_exterior_lighting_schedule": "RetailStandalone Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 316.0,
       "nondimming_exterior_lighting_schedule": "RetailStandalone Exterior_lighting_schedule_a",
       "building_area_method_lpd": 1.26,
@@ -1936,7 +1954,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "RetailStandalone_BUSINESS_SCH"
     },
     {
       "template": "90.1-2019",
@@ -1960,8 +1979,8 @@
       "pszac_oa_damper_schedule_2": "RetailStripmall Type2_MinOA_MotorizedDamper_SCH",
       "pszac_operation_schedule_3": "RetailStripmall Type3_FAN_SCH",
       "pszac_oa_damper_schedule_3": "RetailStripmall Type3_MinOA_MotorizedDamper_SCH",
-      "occ_sensing_exterior_lighting_power": 6630.02328062282,
-      "occ_sensing_exterior_lighting_schedule": "RetailStripmall Exterior_lighting_schedule_b_2016",
+      "occ_sensing_exterior_lighting_power": 4639.005,
+      "occ_sensing_exterior_lighting_schedule": "RetailStripmall Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 418.4,
       "nondimming_exterior_lighting_schedule": "RetailStripmall Exterior_lighting_schedule_a",
       "building_area_method_lpd": 1.26,
@@ -2038,7 +2057,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "RetailStripmall_BUSINESS_SCH"
     },
     {
       "template": "90.1-2019",
@@ -2062,8 +2082,8 @@
       "pszac_oa_damper_schedule_2": null,
       "pszac_operation_schedule_3": null,
       "pszac_oa_damper_schedule_3": null,
-      "occ_sensing_exterior_lighting_power": 8552.0,
-      "occ_sensing_exterior_lighting_schedule": "SchoolSecondary Exterior_lighting_schedule_b_2016",
+      "occ_sensing_exterior_lighting_power": 5960.35,
+      "occ_sensing_exterior_lighting_schedule": "SchoolSecondary Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 441.8,
       "nondimming_exterior_lighting_schedule": "SchoolSecondary Exterior_lighting_schedule_a",
       "building_area_method_lpd": 0.87,
@@ -2140,7 +2160,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "SchoolSecondary_BUSINESS_SCH"
     },
     {
       "template": "90.1-2019",
@@ -2242,7 +2263,8 @@
       "crac_cooling_type": "Single Speed DX AC",
       "crac_fan_type": "ConstantVolume",
       "crac_operation_schedule": "DataCenter HVACOperationSchd",
-      "crac_oa_damper_schedule": "DataCenter MinOA_MotorizedDamper_Sched"
+      "crac_oa_damper_schedule": "DataCenter MinOA_MotorizedDamper_Sched",
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -2344,7 +2366,8 @@
       "crac_cooling_type": "Single Speed DX AC",
       "crac_fan_type": "ConstantVolume",
       "crac_operation_schedule": "DataCenter HVACOperationSchd",
-      "crac_oa_damper_schedule": "DataCenter MinOA_MotorizedDamper_Sched"
+      "crac_oa_damper_schedule": "DataCenter MinOA_MotorizedDamper_Sched",
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -2370,7 +2393,7 @@
       "pszac_oa_damper_schedule_3": null,
       "occ_sensing_exterior_lighting_power": null,
       "occ_sensing_exterior_lighting_schedule": null,
-      "nondimming_exterior_lighting_power": 4188.0,
+      "nondimming_exterior_lighting_power": 2818.65,
       "nondimming_exterior_lighting_schedule": "HotelSmall Exterior_Lgt_ALWAYS_ON",
       "building_area_method_lpd": 0.87,
       "exterior_fuel_equipment1_power": null,
@@ -2446,7 +2469,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -2470,8 +2494,8 @@
       "pszac_oa_damper_schedule_2": null,
       "pszac_operation_schedule_3": null,
       "pszac_oa_damper_schedule_3": null,
-      "occ_sensing_exterior_lighting_power": 861.3,
-      "occ_sensing_exterior_lighting_schedule": "OfficeSmall Exterior_lighting_schedule_b_2016",
+      "occ_sensing_exterior_lighting_power": 560.6344,
+      "occ_sensing_exterior_lighting_schedule": "OfficeSmall Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 50.7,
       "nondimming_exterior_lighting_schedule": "OfficeSmall Exterior_lighting_schedule_a",
       "building_area_method_lpd": 0.82,
@@ -2548,7 +2572,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "OfficeSmall_BUSINESS_SCH"
     },
     {
       "template": "90.1-2019",
@@ -2650,7 +2675,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -2752,7 +2778,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -2854,7 +2881,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -2956,7 +2984,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2019",
@@ -2980,8 +3009,8 @@
       "pszac_oa_damper_schedule_2": null,
       "pszac_operation_schedule_3": null,
       "pszac_oa_damper_schedule_3": null,
-      "occ_sensing_exterior_lighting_power": 6197.4,
-      "occ_sensing_exterior_lighting_schedule": "Warehouse Exterior_lighting_schedule_b_2016",
+      "occ_sensing_exterior_lighting_power": 4957.4,
+      "occ_sensing_exterior_lighting_schedule": "Warehouse Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 113.8,
       "nondimming_exterior_lighting_schedule": "Warehouse Exterior_lighting_schedule_a",
       "building_area_method_lpd": 0.66,
@@ -3058,7 +3087,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "Warehouse_BUSINESS_SCH"
     }
   ]
 }
