@@ -571,7 +571,7 @@
       "orientation": null,
       "minimum_percent_of_surface": null,
       "maximum_percent_of_surface": null,
-      "assembly_maximum_u_value": 1151.0,
+      "assembly_maximum_u_value": 0.151,
       "u_value_includes_interior_film_coefficient": true,
       "u_value_includes_exterior_film_coefficient": true,
       "assembly_maximum_f_factor": null,
