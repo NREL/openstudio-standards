@@ -1742,6 +1742,7 @@ class ECMS
 
       ##### No need to replace any chillers with capacity = 0.001 W as per Kamel Haddad's comment
       if ref_capacity_w > 0.0011
+        #TODO change chiller name to something like 'AdvChiller' as an indicator of VSD chiller
         reset_chiller_efficiency(model: model, component: mod_chiller.to_ChillerElectricEIR.get, cop: chiller_set)
       end
     end
