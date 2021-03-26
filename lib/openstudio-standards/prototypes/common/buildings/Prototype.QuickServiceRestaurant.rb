@@ -296,6 +296,9 @@ module QuickServiceRestaurant
 
   def add_zone_mixing(model)
     # add zone_mixing between kitchen and dining
+    # TODO: remove zone mixing objects,
+    # transfer air is the should be the same for
+    # all stds, exhaust flow varies
     space_kitchen = model.getSpaceByName('Kitchen').get
     zone_kitchen = space_kitchen.thermalZone.get
     space_dining = model.getSpaceByName('Dining').get
@@ -319,6 +322,9 @@ module QuickServiceRestaurant
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 0.0)
+
     return true
   end
 end

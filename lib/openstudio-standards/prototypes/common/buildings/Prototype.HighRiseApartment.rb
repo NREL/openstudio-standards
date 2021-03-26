@@ -3,18 +3,24 @@
 # building types.
 module HighriseApartment
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific HVAC adjustments')
+    
     # add elevator and lights&fans for the ground floor corridor
     add_extra_equip_corridor(model)
     # add extra infiltration for ground floor corridor
     add_door_infiltration(climate_zone, model)
 
     # add transformer
-    transformer_efficiency = nil
+    # efficiency based on a 75 kVA transformer
     case template
     when '90.1-2004', '90.1-2007'
       transformer_efficiency = 0.966
-    when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
+    when '90.1-2010', '90.1-2013'
       transformer_efficiency = 0.98
+    when '90.1-2016', '90.1-2019'
+      transformer_efficiency = 0.986
+    else
+      transformer_efficiency = nil
     end
     return true unless !transformer_efficiency.nil?
 
@@ -116,6 +122,9 @@ module HighriseApartment
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 0.0)
+
     return true
   end
 end
