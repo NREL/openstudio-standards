@@ -54,6 +54,7 @@ Standard.class_eval do
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model.getBuilding.setStandardsBuildingType(building_type)
     model_set_climate_zone(model, climate_zone)
+    model_add_lights_shutoff(model)
     # Perform a sizing model_run(model)
     return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
 
@@ -2295,6 +2296,16 @@ Standard.class_eval do
 
       end
     end
+  end
+
+  # Implement occupancy based lighting level threshold (0.02 W/sqft). This is only for ASHRAE 90.1 2016 onwards.
+  #
+  # @code_sections [90.1-2016_9.4.1.1.h/i]
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] OpenStudio Model
+  # 
+  def model_add_lights_shutoff(model)
+    return false
   end
 
   # Get building door information to update infiltration

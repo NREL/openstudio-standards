@@ -100,7 +100,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -202,7 +203,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -304,7 +306,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "RestaurantSitDown_BUSINESS_SCH"
     },
     {
       "template": "90.1-2016",
@@ -406,7 +409,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -508,7 +512,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -610,7 +615,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -712,7 +718,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -814,7 +821,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -916,7 +924,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -1018,7 +1027,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "OfficeLarge_BUSINESS_SCH"
     },
     {
       "template": "90.1-2016",
@@ -1120,7 +1130,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -1222,7 +1233,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -1324,7 +1336,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "OfficeMedium_BUSINESS_SCH"
     },
     {
       "template": "90.1-2016",
@@ -1426,7 +1439,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -1528,7 +1542,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -1630,7 +1645,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -1732,7 +1748,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "SchoolPrimary_BUSINESS_SCH"
     },
     {
       "template": "90.1-2016",
@@ -1834,7 +1851,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "RestaurantFastFood_BUSINESS_SCH"
     },
     {
       "template": "90.1-2016",
@@ -1936,7 +1954,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "RetailStandalone_BUSINESS_SCH"
     },
     {
       "template": "90.1-2016",
@@ -2038,7 +2057,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "RetailStripmall_BUSINESS_SCH"
     },
     {
       "template": "90.1-2016",
@@ -2140,7 +2160,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "SchoolSecondary_BUSINESS_SCH"
     },
     {
       "template": "90.1-2016",
@@ -2242,7 +2263,8 @@
       "crac_cooling_type": "Single Speed DX AC",
       "crac_fan_type": "ConstantVolume",
       "crac_operation_schedule": "DataCenter HVACOperationSchd",
-      "crac_oa_damper_schedule": "DataCenter MinOA_MotorizedDamper_Sched"
+      "crac_oa_damper_schedule": "DataCenter MinOA_MotorizedDamper_Sched",
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -2344,7 +2366,8 @@
       "crac_cooling_type": "Single Speed DX AC",
       "crac_fan_type": "ConstantVolume",
       "crac_operation_schedule": "DataCenter HVACOperationSchd",
-      "crac_oa_damper_schedule": "DataCenter MinOA_MotorizedDamper_Sched"
+      "crac_oa_damper_schedule": "DataCenter MinOA_MotorizedDamper_Sched",
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -2446,7 +2469,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -2548,7 +2572,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "OfficeSmall_BUSINESS_SCH"
     },
     {
       "template": "90.1-2016",
@@ -2650,7 +2675,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -2752,7 +2778,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -2854,7 +2881,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -2956,7 +2984,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "90.1-2016",
@@ -3058,7 +3087,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": "Warehouse_BUSINESS_SCH"
     }
   ]
 }
