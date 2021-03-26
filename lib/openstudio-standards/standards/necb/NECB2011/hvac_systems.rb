@@ -295,6 +295,7 @@ class NECB2011
     end
 
     # Create an ERV
+
     erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(air_loop_hvac.model)
     erv.setName("#{air_loop_hvac.name} ERV")
     erv.setSensibleEffectivenessat100HeatingAirFlow(0.5)
@@ -372,7 +373,7 @@ class NECB2011
   def heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(heat_exchanger_air_to_air_sensible_and_latent, erv_name = nil)
     # Assumed to be sensible and latent at all flow
     # This will now get data of the erv from the json file instead of hardcoding it. Defaults to NECB2011 erv we have been using.
-    erv_name = 'Rotary-Minimum-Eff-Existing' if erv_name.nil?
+    erv_name = 'NECB_Default' if erv_name.nil?
     erv_info = @standards_data['tables']['erv']['table'].detect { |item| item['erv_name'] == erv_name }
     raise("Could not find #{erv_name} in #{self.class.name} class' erv.json file or it's parents. The available ervs are #{@standards_data['tables']['erv']['table'].map{|item| item['erv_name']}}") if erv_info.nil?
 

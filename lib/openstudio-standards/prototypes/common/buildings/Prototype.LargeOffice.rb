@@ -69,8 +69,6 @@ module LargeOffice
       end
     end
 
-    # TODO: replace CoolingTowerTwoSpeed with a FluidCoolerTwoSpeed once the simulation failures are resolved
-
     # set infiltration schedule for plenums
     # @todo remove once infil_sch in Standards.Space pulls from default building infiltration schedule
     model.getSpaces.each do |space|

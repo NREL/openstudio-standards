@@ -43,7 +43,7 @@ class NECB_PVground_Tests < Minitest::Test
     @primary_heating_fuels = ['DefaultFuel']
     @pv_ground_types = [true]  #true, false
 
-    pv_ground_total_area_pv_panels_m2 = 50
+    pv_ground_total_area_pv_panels_m2 = 'NECB_Default'
     pv_ground_tilt_angle = 'NECB_Default'
     pv_ground_azimuth_angle = 'NECB_Default'
     pv_ground_module_description = 'NECB_Default'
