@@ -39,6 +39,8 @@ def create_class_array
     'ASHRAE9012007' => '90.1-2007',
     'ASHRAE9012010' => '90.1-2010',
     'ASHRAE9012013' => '90.1-2013',
+    'ASHRAE9012016' => '90.1-2016',
+    'ASHRAE9012019' => '90.1-2019',
     'DOERef1980to2004' => 'DOE Ref 1980-2004',
     'DOERefPre1980' => 'DOE Ref Pre-1980',
     'NRELZNEReady2017' => 'NREL ZNE Ready 2017'
