@@ -474,7 +474,7 @@ class Standard
         end
       elsif comp.to_AirLoopHVACUnitarySystem.is_initialized
         fan = comp.to_AirLoopHVACUnitarySystem.get.supplyFan.get
-        if fan.to_FanConstantVolume.is_initialized || comp.to_FanOnOff.is_initialized
+        if fan.to_FanConstantVolume.is_initialized || fan.to_FanOnOff.is_initialized
           fan_pwr_limit_type = 'constant volume'
         elsif fan.to_FanVariableVolume.is_initialized
           fan_pwr_limit_type = 'variable volume'
