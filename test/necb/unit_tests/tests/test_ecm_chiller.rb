@@ -41,14 +41,14 @@ class NECB_VSDchiller_Tests < Minitest::Test
     ]
     @epw_files = [
         'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw',
-    # 'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw'
+        # 'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw'
     ]
     @primary_heating_fuels = ['DefaultFuel']
 
     @chiller_types = ['VSD']
 
     @chiller_caps = [
-        471000.0,
+        471200.0,
         742000.0,
         896700.0,
         1090100.0,
@@ -132,7 +132,7 @@ class NECB_VSDchiller_Tests < Minitest::Test
                   ref_capacity_w = mod_chiller.referenceCapacity
                   ref_capacity_w = ref_capacity_w.to_f
                   if ref_capacity_w > 0.0011
-                    chiller_cap_dummy = chiller_cap - 10000.0
+                    chiller_cap_dummy = chiller_cap - 100000.0
                     chiller_set, chiller_min_cap, chiller_max_cap = ecm.find_chiller_set(chiller_type: chiller_type, ref_capacity_w: chiller_cap_dummy)
                     if chiller_cap < @chiller_caps[@chiller_caps.length()-1]
                       chiller_mid_cap = 0.5 * (chiller_min_cap + chiller_max_cap)
@@ -161,20 +161,17 @@ class NECB_VSDchiller_Tests < Minitest::Test
                 # BTAP::FileIO.save_osm(model, File.join(@output_folder,"#{template}-#{building_type}-vsd_chiller-#{true}.osm"))
                 # puts File.join(@output_folder,"#{template}-#{building_type}-vsd_chiller-#{true}.osm")
 
+                ##### Gather info of VSD chillers in the model
                 model.getChillerElectricEIRs.sort.each do |mod_chiller|
-
                   ref_capacity_w = mod_chiller.referenceCapacity
                   ref_capacity_w = ref_capacity_w.to_f
-
                   if ref_capacity_w > 0.0011
-                    # Gather info of VSD chillers in the model
                     result["#{mod_chiller.name.to_s} - capacity"] = mod_chiller.referenceCapacity.to_f
                     result["#{mod_chiller.name.to_s} - COP"] = mod_chiller.referenceCOP
                     result["#{mod_chiller.name.to_s} - CAPFT_curve"] = mod_chiller.coolingCapacityFunctionOfTemperature.name.to_s
                     result["#{mod_chiller.name.to_s} - EIRFT_curve"] = mod_chiller.electricInputToCoolingOutputRatioFunctionOfTemperature.name.to_s
                     result["#{mod_chiller.name.to_s} - EITFPLR_curve"] = mod_chiller.electricInputToCoolingOutputRatioFunctionOfPLR.name.to_s
                   end
-
                 end
 
                 # puts JSON.pretty_generate(result)

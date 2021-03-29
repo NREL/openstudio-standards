@@ -1729,7 +1729,7 @@ class ECMS
   end
 
   # ============================================================================================================================
-  # Apply chiller efficiency
+  # Apply advanced chiller measure
   def modify_chiller_efficiency(model:, chiller_type:)
     return if chiller_type.nil? || chiller_type == false || chiller_type == 'none' || chiller_type == 'NECB_Default'
 
@@ -1742,7 +1742,6 @@ class ECMS
 
       ##### No need to replace any chillers with capacity = 0.001 W as per Kamel Haddad's comment
       if ref_capacity_w > 0.0011
-        #TODO change chiller name to something like 'AdvChiller' as an indicator of VSD chiller
         reset_chiller_efficiency(model: model, component: mod_chiller.to_ChillerElectricEIR.get, cop: chiller_set)
       end
     end
@@ -1794,7 +1793,7 @@ class ECMS
 
   def reset_chiller_efficiency(model:, component:, cop:)
     # Note that all parameters (except for the capacity) of an existing chiller are replaced with the ones of the VSD chiller, as per Kamel Haddad's comment.
-    component.setName(cop['notes'])
+    component.setName('VSDCentrifugalWaterChiller')
     component.setReferenceCOP(cop['cop_w_by_w'])
     component.setReferenceLeavingChilledWaterTemperature(cop['ref_leaving_chilled_water_temp_c'])
     component.setReferenceEnteringCondenserFluidTemperature(cop['ref_entering_condenser_fluid_temp_c'])

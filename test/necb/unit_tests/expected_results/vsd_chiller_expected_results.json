@@ -4,26 +4,76 @@
     "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "DefaultFuel",
-    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD_2 - capacity": 500861504.0,
-    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD_2 - COP": 9.54,
-    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD_2 - CAPFT_curve": "ElectricEIRChiller York YT 2233kW/9.54COP/VSD CAPFT_2",
-    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD_2 - EIRFT_curve": "ElectricEIRChiller York YT 2233kW/9.54COP/VSD EIRFT_2",
-    "ElectricEIRChiller York YT 2233kW/9.54COP/VSD_2 - EITFPLR_curve": "ElectricEIRChiller York YT 2233kW/9.54COP/VSD EIRFPLR_2"
+    "VSDCentrifugalWaterChiller - capacity": 235600.0,
+    "VSDCentrifugalWaterChiller - COP": 5.89,
+    "VSDCentrifugalWaterChiller - CAPFT_curve": "ElectricEIRChiller McQuay WSC 471kW/5.89COP/Vanes CAPFT",
+    "VSDCentrifugalWaterChiller - EIRFT_curve": "ElectricEIRChiller McQuay WSC 471kW/5.89COP/Vanes EIRFT",
+    "VSDCentrifugalWaterChiller - EITFPLR_curve": "ElectricEIRChiller McQuay WSC 471kW/5.89COP/Vanes EIRFPLR"
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "DefaultFuel",
-    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD - capacity": 993500.0,
-    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD - COP": 7.57,
-    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD - CAPFT_curve": "ElectricEIRChiller York YT 1090kW/7.57COP/VSD CAPFT",
-    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD - EIRFT_curve": "ElectricEIRChiller York YT 1090kW/7.57COP/VSD EIRFT",
-    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD - EITFPLR_curve": "ElectricEIRChiller York YT 1090kW/7.57COP/VSD EIRFPLR",
-    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD 1 - capacity": 993500.0,
-    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD 1 - COP": 7.57,
-    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD 1 - CAPFT_curve": "ElectricEIRChiller York YT 1090kW/7.57COP/VSD CAPFT",
-    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD 1 - EIRFT_curve": "ElectricEIRChiller York YT 1090kW/7.57COP/VSD EIRFT",
-    "ElectricEIRChiller York YT 1090kW/7.57COP/VSD 1 - EITFPLR_curve": "ElectricEIRChiller York YT 1090kW/7.57COP/VSD EIRFPLR"
+    "VSDCentrifugalWaterChiller - capacity": 606600.0,
+    "VSDCentrifugalWaterChiller - COP": 5.42,
+    "VSDCentrifugalWaterChiller - CAPFT_curve": "ElectricEIRChiller Carrier 19XR 742kW/5.42COP/VSD CAPFT",
+    "VSDCentrifugalWaterChiller - EIRFT_curve": "ElectricEIRChiller Carrier 19XR 742kW/5.42COP/VSD EIRFT",
+    "VSDCentrifugalWaterChiller - EITFPLR_curve": "ElectricEIRChiller Carrier 19XR 742kW/5.42COP/VSD EIRFPLR"
+  },
+  {
+    "template": "NECB2011",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "building_type": "LargeOffice",
+    "primary_heating_fuel": "DefaultFuel",
+    "VSDCentrifugalWaterChiller - capacity": 819350.0,
+    "VSDCentrifugalWaterChiller - COP": 7.23,
+    "VSDCentrifugalWaterChiller - CAPFT_curve": "ElectricEIRChiller Carrier 19XR 897kW/7.23COP/VSD CAPFT",
+    "VSDCentrifugalWaterChiller - EIRFT_curve": "ElectricEIRChiller Carrier 19XR 897kW/7.23COP/VSD EIRFT",
+    "VSDCentrifugalWaterChiller - EITFPLR_curve": "ElectricEIRChiller Carrier 19XR 897kW/7.23COP/VSD EIRFPLR"
+  },
+  {
+    "template": "NECB2011",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "building_type": "LargeOffice",
+    "primary_heating_fuel": "DefaultFuel",
+    "VSDCentrifugalWaterChiller - capacity": 993400.0,
+    "VSDCentrifugalWaterChiller - COP": 7.57,
+    "VSDCentrifugalWaterChiller - CAPFT_curve": "ElectricEIRChiller York YT 1090kW/7.57COP/VSD CAPFT",
+    "VSDCentrifugalWaterChiller - EIRFT_curve": "ElectricEIRChiller York YT 1090kW/7.57COP/VSD EIRFT",
+    "VSDCentrifugalWaterChiller - EITFPLR_curve": "ElectricEIRChiller York YT 1090kW/7.57COP/VSD EIRFPLR"
+  },
+  {
+    "template": "NECB2011",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "building_type": "LargeOffice",
+    "primary_heating_fuel": "DefaultFuel",
+    "VSDCentrifugalWaterChiller - capacity": 1220250.0,
+    "VSDCentrifugalWaterChiller - COP": 7.9,
+    "VSDCentrifugalWaterChiller - CAPFT_curve": "ElectricEIRChiller Carrier 19XR 1350kW/7.90COP/VSD CAPFT",
+    "VSDCentrifugalWaterChiller - EIRFT_curve": "ElectricEIRChiller Carrier 19XR 1350kW/7.90COP/VSD EIRFT",
+    "VSDCentrifugalWaterChiller - EITFPLR_curve": "ElectricEIRChiller Carrier 19XR 1350kW/7.90COP/VSD EIRFPLR"
+  },
+  {
+    "template": "NECB2011",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "building_type": "LargeOffice",
+    "primary_heating_fuel": "DefaultFuel",
+    "VSDCentrifugalWaterChiller - capacity": 1536750.0,
+    "VSDCentrifugalWaterChiller - COP": 8.32,
+    "VSDCentrifugalWaterChiller - CAPFT_curve": "ElectricEIRChiller Carrier 19XR 1723kW/8.32COP/VSD CAPFT",
+    "VSDCentrifugalWaterChiller - EIRFT_curve": "ElectricEIRChiller Carrier 19XR 1723kW/8.32COP/VSD EIRFT",
+    "VSDCentrifugalWaterChiller - EITFPLR_curve": "ElectricEIRChiller Carrier 19XR 1723kW/8.32COP/VSD EIRFPLR"
+  },
+  {
+    "template": "NECB2011",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "building_type": "LargeOffice",
+    "primary_heating_fuel": "DefaultFuel",
+    "VSDCentrifugalWaterChiller - capacity": 1773100.0,
+    "VSDCentrifugalWaterChiller - COP": 9.54,
+    "VSDCentrifugalWaterChiller - CAPFT_curve": "ElectricEIRChiller York YT 2233kW/9.54COP/VSD CAPFT_2",
+    "VSDCentrifugalWaterChiller - EIRFT_curve": "ElectricEIRChiller York YT 2233kW/9.54COP/VSD EIRFT_2",
+    "VSDCentrifugalWaterChiller - EITFPLR_curve": "ElectricEIRChiller York YT 2233kW/9.54COP/VSD EIRFPLR_2"
   }
 ]
