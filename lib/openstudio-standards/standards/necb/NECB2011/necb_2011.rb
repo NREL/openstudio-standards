@@ -210,6 +210,10 @@ class NECB2011 < Standard
                                    rotation_degrees: nil,
                                    fdwr_set: -1.0,
                                    srr_set: -1.0,
+                                   nv_type: nil,
+                                   nv_opening_fraction: nil,
+                                   nv_Tout_min: nil,
+                                   nv_Delta_Tin_Tout: nil,
                                    scale_x: nil,
                                    scale_y: nil,
                                    scale_z: nil,
@@ -254,6 +258,11 @@ class NECB2011 < Standard
                                 rotation_degrees: rotation_degrees,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
+                                nv_type: 'NECB_Default', # Two options: (1) nil/none/false/'NECB_Default', (2) true
+                                nv_opening_fraction: nv_opening_fraction, #options: (1) nil/none/false (2) 'NECB_Default' (i.e. 0.1)
+                                nv_Tout_min: nv_Tout_min, #options: (1) nil/none/false(2) 'NECB_Default' (i.e. 13.0 based on inputs from Michel Tardif re a real school in QC)
+                                nv_Delta_Tin_Tout: nv_Delta_Tin_Tout, #options: (1) nil/none/false (2) 'NECB_Default' (i.e. 1.0 based on inputs from Michel Tardif re a real school in QC)
+                                pv_ground_type: 'NECB_Default',  # Two options: (1) nil/none/false/'NECB_Default', (2) true
                                 scale_x: scale_x,
                                 scale_y: scale_y,
                                 scale_z: scale_z,
@@ -312,6 +321,10 @@ class NECB2011 < Standard
                            scale_x: nil,
                            scale_y: nil,
                            scale_z: nil,
+                           nv_type: nil,
+                           nv_opening_fraction: nil,
+                           nv_Tout_min: nil,
+                           nv_Delta_Tin_Tout: nil,
                            pv_ground_type: nil,
                            pv_ground_total_area_pv_panels_m2: nil ,
                            pv_ground_tilt_angle: nil,
@@ -319,6 +332,19 @@ class NECB2011 < Standard
                            pv_ground_module_description: nil,
                            chiller_type: nil
   )
+    #clean model..
+    model = remove_all_HVAC(model)
+    model.getThermalZones.sort.each {|zone| zone.setUseIdealAirLoads(true)}
+    model.getZoneHVACPackagedTerminalAirConditioners.each(&:remove)
+    model.getCoilCoolingDXSingleSpeeds.each(&:remove)
+    model.getZoneHVACBaseboardConvectiveWaters.each(&:remove)
+    model.getAirLoopHVACZoneMixers.each(&:remove)
+    model.getAirLoopHVACZoneSplitters.each(&:remove)
+    model.getAirTerminalSingleDuctConstantVolumeNoReheats.each(&:remove)
+    model.getWaterUseEquipmentDefinitions.each(&:remove)
+    model.getWaterUseEquipments.each(&:remove)
+    model.getWaterUseConnectionss.each(&:remove)
+
     rotation_degrees = convert_arg_to_f(variable: rotation_degrees,default: 0.0)
     BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees == 0.0
     scale_x = convert_arg_to_f(variable: scale_x,default: 1.0)
@@ -368,6 +394,10 @@ class NECB2011 < Standard
                                    furnace_eff: furnace_eff,
                                    shw_eff: shw_eff,
                                    daylighting_type: daylighting_type,
+                                   nv_type: nv_type,
+                                   nv_opening_fraction: nv_opening_fraction,
+                                   nv_Tout_min: nv_Tout_min,
+                                   nv_Delta_Tin_Tout: nv_Delta_Tin_Tout,
                                    pv_ground_type: pv_ground_type,
                                    pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
                                    pv_ground_tilt_angle: pv_ground_tilt_angle,
@@ -391,6 +421,10 @@ class NECB2011 < Standard
                                      unitary_cop: nil,
                                      shw_eff: nil,
                                      daylighting_type: 'NECB_Default',
+                                     nv_type: nil,
+                                     nv_opening_fraction: nil,
+                                     nv_Tout_min: nil,
+                                     nv_Delta_Tin_Tout:nil,
                                      pv_ground_type:,
                                      pv_ground_total_area_pv_panels_m2:,
                                      pv_ground_tilt_angle:,
@@ -442,6 +476,14 @@ class NECB2011 < Standard
     # Apply Pump power as required.
     apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
 
+    # -------Natural ventilation----------------
+    # Apply natural ventilation using simplified method.
+    ecm.apply_nv(model: model,
+                 nv_type: nv_type,
+                 nv_opening_fraction: nv_opening_fraction,
+                 nv_Tout_min: nv_Tout_min,
+                 nv_Delta_Tin_Tout: nv_Delta_Tin_Tout)
+
     # -------Ground-mounted PV panels----------------
     # Apply ground-mounted PV panels as required.
     ecm.apply_pv_ground(model: model,
@@ -450,6 +492,7 @@ class NECB2011 < Standard
                         pv_ground_tilt_angle: pv_ground_tilt_angle,
                         pv_ground_azimuth_angle: pv_ground_azimuth_angle,
                         pv_ground_module_description: pv_ground_module_description)
+
   end
 
 

@@ -1542,11 +1542,10 @@ class Standard
     model.getCoolingTowerVariableSpeeds.sort.each { |obj| cooling_tower_variable_speed_apply_efficiency_and_curves(obj) }
 
     # Fluid Coolers
-    # TODO: enable when evaportive fluid cooler methods and data are available
-    # model.getFluidCoolerSingleSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj) }
-    # model.getFluidCoolerTwoSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj) }
-    # model.getEvaporativeFluidCoolerSingleSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj) }
-    # model.getEvaporativeFluidCoolerTwoSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj) }
+    model.getFluidCoolerSingleSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj, equipment_type: 'Dry Cooler') }
+    model.getFluidCoolerTwoSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj, equipment_type: 'Dry Cooler') }
+    model.getEvaporativeFluidCoolerSingleSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj, equipment_type: 'Closed Cooling Tower') }
+    model.getEvaporativeFluidCoolerTwoSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj, equipment_type: 'Closed Cooling Tower') }
 
     # ERVs
     model.getHeatExchangerAirToAirSensibleAndLatents.each { |obj| heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(obj) }
@@ -1556,6 +1555,7 @@ class Standard
     model.getCoilHeatingGasMultiStages.each { |obj| coil_heating_gas_multi_stage_apply_efficiency_and_curves(obj) }
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Finished applying HVAC efficiency standards for #{template} template.")
+    return true
   end
 
   # Applies daylighting controls to each space in the model per the standard.
@@ -4679,7 +4679,7 @@ class Standard
     non_res_spaces = []
     res_people_design = 0
     non_res_people_design = 0
-    model.getSpaces.each do |space|
+    model.getSpaces.sort.each do |space|
       if space_residential?(space)
         res_spaces << space
         res_people_design += space.numberOfPeople * space.multiplier
@@ -4721,7 +4721,7 @@ class Standard
     hours_of_operation.scheduleRules.each do |rule|
       profiles << rule.daySchedule
     end
-    profiles.each do |profile|
+    profiles.sort.each do |profile|
       times = profile.times
       values = profile.values
       next if times.size <= 3 # length of 1-3 should produce valid hours_of_operation profiles
@@ -4843,7 +4843,7 @@ class Standard
 
     # loop through thermal zones (trace hours of operation back to spaces in thermal zone)
     thermal_zone_hash = {} # key is zone and hash is hours of operation
-    model.getThermalZones.each do |zone|
+    model.getThermalZones.sort.each do |zone|
       # identify hours of operation
       hours_of_operation = spaces_hours_of_operation(zone.spaces)
       thermal_zone_hash[zone] = hours_of_operation
@@ -4863,10 +4863,10 @@ class Standard
 
     # loop through air loops (trace hours of operation back through spaces served by air loops)
     air_loop_hash = {} # key is zone and hash is hours of operation
-    model.getAirLoopHVACs.each do |air_loop|
+    model.getAirLoopHVACs.sort.each do |air_loop|
       # identify hours of operation
       air_loop_spaces = []
-      air_loop.thermalZones.each do |zone|
+      air_loop.thermalZones.sort.each do |zone|
         air_loop_spaces += zone.spaces
         air_loop_spaces += zone.spaces
       end
@@ -4877,11 +4877,11 @@ class Standard
         gather_inputs_parametric_schedules(schedule, air_loop, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only)
       end
       avail_mgrs = air_loop.availabilityManagers
-      avail_mgrs.each do |avail_mgr|
+      avail_mgrs.sort.each do |avail_mgr|
         # TODO: - I'm finding availability mangers, but not any resources for them, even if I use OpenStudio::Model.getRecursiveChildren(avail_mgr)
         resources = avail_mgr.resources
         resources = OpenStudio::Model.getRecursiveResources(avail_mgr)
-        resources.each do |resource|
+        resources.sort.each do |resource|
           if resource.to_ScheduleRuleset.is_initialized
             schedule = resource.to_ScheduleRuleset.get
             gather_inputs_parametric_schedules(schedule, avail_mgr, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only)
@@ -4892,7 +4892,7 @@ class Standard
 
     # look through all model HVAC components find scheduleRuleset objects, resources, that use them and zone or air loop for hours of operation
     hvac_components = model.getHVACComponents
-    hvac_components.each do |component|
+    hvac_components.sort.each do |component|
       # identify zone, or air loop it refers to, some may refer to plant loop, OA or other component
       thermal_zone = nil
       air_loop = nil
@@ -4907,7 +4907,7 @@ class Standard
       if component.plantLoop.is_initialized
         plant_loop = component.plantLoop.get
       end
-      component.resources.each do |resource|
+      component.resources.sort.each do |resource|
         if resource.to_ThermalZone.is_initialized
           thermal_zone = resource.to_ThermalZone.get
         elsif resource.to_ScheduleRuleset.is_initialized
@@ -4920,8 +4920,8 @@ class Standard
       next if thermal_zone.nil? && air_loop.nil?
 
       children = OpenStudio::Model.getRecursiveChildren(component)
-      children.each do |child|
-        child.resources.each do |sub_resource|
+      children.sort.each do |child|
+        child.resources.sort.each do |sub_resource|
           if sub_resource.to_ScheduleRuleset.is_initialized
             schedules << sub_resource.to_ScheduleRuleset.get
           end
@@ -4929,7 +4929,7 @@ class Standard
       end
 
       # process schedules found for this component
-      schedules.each do |schedule|
+      schedules.sort.each do |schedule|
         hours_of_operation = nil
         if !thermal_zone.nil?
           hours_of_operation = thermal_zone_hash[thermal_zone]
@@ -4951,7 +4951,7 @@ class Standard
 
     # water use equipment (flow rate fraction)
     # todo - address common schedules used across multiple instances
-    model.getWaterUseEquipments.each do |water_use_equipment|
+    model.getWaterUseEquipments.sort.each do |water_use_equipment|
       if water_use_equipment.flowRateFractionSchedule.is_initialized && water_use_equipment.flowRateFractionSchedule.get.to_ScheduleRuleset.is_initialized
         schedule = water_use_equipment.flowRateFractionSchedule.get.to_ScheduleRuleset.get
         next if parametric_inputs.key?(schedule)

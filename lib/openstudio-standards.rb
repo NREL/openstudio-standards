@@ -72,6 +72,7 @@ module OpenstudioStandards
   require_relative "#{stds}/necb/ECMS/ecms.rb"
   require_relative "#{stds}/necb/ECMS/erv.rb"
   require_relative "#{stds}/necb/ECMS/hvac_systems.rb"
+  require_relative "#{stds}/necb/ECMS/nv.rb"
   require_relative "#{stds}/necb/ECMS/pv_ground.rb"
 
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1"
@@ -324,6 +325,7 @@ module OpenstudioStandards
   require_relative "#{proto}/common/buildings/Prototype.College"
   require_relative "#{proto}/common/buildings/Prototype.TallBuilding"
   require_relative "#{proto}/common/buildings/Prototype.SuperTallBuilding"
+  require_relative "#{proto}/common/buildings/Prototype.Courthouse"
 
   # NECB Building Types
   require_relative "#{proto}/common/prototype_metaprogramming.rb"

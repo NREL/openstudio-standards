@@ -20,6 +20,15 @@
     },
     {
       "template": "ZE AEDG Multifamily",
+      "equipment_type": "Dry Cooler",
+      "fan_type": "Propeller or Axial",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance": 4.5,
+      "notes": "From 90.1-2019 Table 6.8.1.7"
+    },
+    {
+      "template": "ZE AEDG Multifamily",
       "equipment_type": "Open Cooling Tower",
       "fan_type": "Centrifugal",
       "start_date": "1919-09-09T00:00:00+00:00",

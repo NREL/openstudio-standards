@@ -71,6 +71,7 @@
     "load": 484.423246742185,
     "main_data_center": null,
     "flow_fraction_schedule": null,
+	"heat_pump_loop_cooling_type":  "FluidCoolerTwoSpeed",
     "space_names": [
       "DataCenter_basement_ZN_6"
     ]
@@ -80,6 +81,7 @@
     "load": 215.299220774304,
     "main_data_center": null,
     "flow_fraction_schedule": null,
+	"heat_pump_loop_cooling_type":  "FluidCoolerTwoSpeed",
     "space_names": [
       "DataCenter_bot_ZN_6"
     ]
@@ -89,6 +91,7 @@
     "load": 215.299220774304,
     "main_data_center": null,
     "flow_fraction_schedule": null,
+	"heat_pump_loop_cooling_type":  "FluidCoolerTwoSpeed",
     "space_names": [
       "DataCenter_mid_ZN_6"
     ]
@@ -98,6 +101,7 @@
     "load": 215.299220774304,
     "main_data_center": null,
     "flow_fraction_schedule": null,
+	"heat_pump_loop_cooling_type":  "FluidCoolerTwoSpeed",
     "space_names": [
       "DataCenter_top_ZN_6"
     ]
