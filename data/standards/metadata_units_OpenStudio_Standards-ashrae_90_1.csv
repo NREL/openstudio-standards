@@ -99,6 +99,7 @@ prototype_inputs,crac_cooling_type,
 prototype_inputs,crac_fan_type,
 prototype_inputs,crac_operation_schedule,
 prototype_inputs,crac_oa_damper_schedule,
+prototype_inputs,business_schedule,
 climate_zones,name,
 climate_zones,standard,
 climate_zones,representative_city,
@@ -302,7 +303,7 @@ heat_rejection,equipment_type,
 heat_rejection,fan_type,
 heat_rejection,start_date,
 heat_rejection,end_date,
-heat_rejection,minimum_performance,gal/min*hp
+heat_rejection,minimum_performance,gpm/hp
 heat_rejection,notes,
 water_source_heat_pumps,template,
 water_source_heat_pumps,minimum_capacity,Btu/hr

@@ -26,8 +26,8 @@ nrel_building_types = [
 
 ]
 
-templates = ['90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'NECB2011']
-new_templates = ['ASHRAE9012004', 'ASHRAE9012007', 'ASHRAE9012010', 'ASHRAE9012013', 'DOERefPre1980', 'DOERef1980to2004', 'NECB2011']
+templates = ['90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'NECB2011']
+new_templates = ['ASHRAE9012004', 'ASHRAE9012007', 'ASHRAE9012010', 'ASHRAE9012013', 'ASHRAE9012016', 'ASHRAE9012019', 'DOERefPre1980', 'DOERef1980to2004', 'NECB2011']
 
 array = []
 Dir.glob('/home/osdev/openstudio-standards/openstudio-standards/data/geometry/archetypes//**/*.json').each do |filename|

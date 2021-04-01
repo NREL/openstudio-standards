@@ -1461,6 +1461,15 @@ class NECB2011
     return true
   end
 
+  # Determine and set type of part load control type for heating and chilled
+  # water variable speed pumps
+  #
+  # @param pump [OpenStudio::Model::PumpVariableSpeed] OpenStudio pump object
+  # @return [Boolean] Returns true if applicable, false otherwise
+  def pump_variable_speed_control_type(pump)
+    return false
+  end
+
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.

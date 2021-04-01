@@ -1,21 +1,20 @@
-
 # Custom changes for the Courthouse prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
 module Courthouse
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
-	
+
     model.getSpaces.each do |space|
       if space.name.get.to_s == 'ELEVATOR_LOBBY_FLR_1'
         model_add_elevator(model,
-                     space,
-                     prototype_input['number_of_elevators'],
-                     prototype_input['elevator_type'],
-                     prototype_input['elevator_schedule'],
-                     prototype_input['elevator_fan_schedule'],
-                     prototype_input['elevator_fan_schedule'],
-                     building_type)
+                           space,
+                           prototype_input['number_of_elevators'],
+                           prototype_input['elevator_type'],
+                           prototype_input['elevator_schedule'],
+                           prototype_input['elevator_fan_schedule'],
+                           prototype_input['elevator_fan_schedule'],
+                           building_type)
       end
     end
 
@@ -24,7 +23,7 @@ module Courthouse
     # add extra infiltration for entry door
     add_door_infiltration(climate_zone, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Added door infiltration')
-  
+
     return true
   end # add hvac
 
@@ -37,8 +36,8 @@ module Courthouse
       infiltration_per_zone_entrydoor = 0
       if template == '90.1-2004'
         infiltration_per_zone_entrydoor = 3.242751
-        infiltration_entrydoor.setSchedule(model_add_schedule(model,'Courthouse INFIL_Door_Opening_SCH'))
-      elsif template == '90.1-2007' || template == '90.1-2010'|| template == '90.1-2013'
+        infiltration_entrydoor.setSchedule(model_add_schedule(model, 'Courthouse INFIL_Door_Opening_SCH'))
+      elsif template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013'
         case climate_zone
         when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2B'
           infiltration_per_zone_entrydoor = 3.242751
@@ -51,7 +50,7 @@ module Courthouse
       infiltration_entrydoor.setDesignFlowRate(infiltration_per_zone_entrydoor)
       infiltration_entrydoor.setSpace(entry_space)
     end
-  end  
+  end
 
   def update_waterheater_loss_coefficient(model)
     case template
@@ -68,7 +67,8 @@ module Courthouse
 
     return true
   end
-    def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
     return true
-  end
+end
 end

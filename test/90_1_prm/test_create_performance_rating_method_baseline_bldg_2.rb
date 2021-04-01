@@ -155,7 +155,7 @@ class Baseline9012013Test2 < Minitest::Test
     
     lpd_test_hash = {}
     lpd_test_hash["L1-ES_apt"] = {"LPD" => 1.34,"Space_Type" => "Apartment"}
-    lpd_test_hash["L1-E_corr"] = {"LPD" => 0.792,"Space_Type" => "Corridor"}
+    lpd_test_hash["L1-E_corr"] = {"LPD" => 0.66,"Space_Type" => "Corridor"}
     lpd_test_hash["L1-W_ret"] = {"LPD" => 1.11,"Space_Type" => "Office"} # Apartment offices have 1.11 W/f^2 extra task lighting according to the DOE prototype buildings
     
       lpd_test_hash.keys.each do |space_name|

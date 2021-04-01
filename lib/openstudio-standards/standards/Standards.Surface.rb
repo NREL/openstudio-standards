@@ -355,4 +355,46 @@ class Standard
     }
     return roof_cent
   end
+
+  # Calculate a surface's absolute azimuth
+  # source: https://github.com/NREL/openstudio-extension-gem/blob/e354355054b83ffc26e3b69befa20d6baf5ef242/lib/openstudio/extension/core/os_lib_geometry.rb#L913
+  #
+  # @param surface [OpenStudio::Model:Surface] OpenStudio Surface object
+  # @return [Float] Surface absolute azimuth
+  def surface_absolute_azimuth(surface)
+    # Get associated space
+    space = surface.space.get
+
+    # Get model object
+    model = surface.model
+
+    # Calculate azimuth
+    surface_azimuth_rel_space = OpenStudio.convert(surface.azimuth, 'rad', 'deg').get
+    space_dir_rel_N = space.directionofRelativeNorth
+    building_dir_rel_N = model.getBuilding.northAxis
+    surface_abs_azimuth = surface_azimuth_rel_space + space_dir_rel_N + building_dir_rel_N
+    surface_abs_azimuth -= 360.0 until surface_abs_azimuth < 360.0
+
+    return surface_abs_azimuth
+  end
+
+  # Determine a surface absolute cardinal direction
+  #
+  # @param surface [OpenStudio::Model::Surface] OpenStudio Surface object
+  # @return [String] Surface absolute cardinal
+  def surface_cardinal_direction(surface)
+    # Get the surface's absolute azimuth
+    surface_abs_azimuth = surface_absolute_azimuth(surface)
+
+    # Determine the surface's cardinal direction
+    if (surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45) || (surface_abs_azimuth > 315 && surface_abs_azimuth <= 360)
+      return 'N'
+    elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135
+      return 'E'
+    elsif surface_abs_azimuth > 135 && surface_abs_azimuth <= 225
+      return 'S'
+    elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315
+      return 'W'
+    end
+  end
 end

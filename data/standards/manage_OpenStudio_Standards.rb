@@ -329,9 +329,7 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
                               'OEESC 2014',
                               'ICC IECC 2015',
                               'ECBC 2017',
-                              '189.1-2009',
-                              '90.1-2016',
-                              '90.1-2019']
+                              '189.1-2009']
   else
     standards_dir = File.expand_path("#{__dir__}/../../lib/openstudio-standards/standards")
     skip_list = exclusion_list['os_stds']
@@ -565,11 +563,13 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
       standards_data[sheet_name] = objs
     end
 
+
+    filename_out = spreadsheet_title.gsub(/[()]/, '')
     # CSV.open("metadata.csv", "wb") {|csv| headers.to_a.each {|elem| csv << elem} }
     # list_metadata = [list_of_sheets, list_of_names, list_of_units, list_of_OS_okay_units].transpose
     list_metadata = [list_of_sheets, list_of_names, list_of_units].transpose
     list_metadata.insert(0, ['Sheet', 'Name', 'Unit']) # [1, 2, 2.5, 3, 4]
-    File.write("data/standards/metadata_units_#{spreadsheet_title}.csv", list_metadata.map(&:to_csv).join)
+    File.write("data/standards/metadata_units_#{filename_out}.csv", list_metadata.map(&:to_csv).join)
     # Check for duplicate data in space_types_* sheets
     standards_data.each_pair do |sheet_name, objs|
       skip_duplicate_check = []
