@@ -270,7 +270,7 @@ class NECB2011 < Standard
                                 pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. latitude), (3) tilt angle value (e.g. 20)
                                 pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. south), (3) azimuth angle value (e.g. 90)
                                 pv_ground_module_description: pv_ground_module_description, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. Standard), (3) other options ('Standard', 'Premium', ThinFilm')
-                                chiller_type: nil # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) e.g. 'VSD'
+                                chiller_type: 'NECB_Default' # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) e.g. 'VSD'
 
     )
 
@@ -429,7 +429,7 @@ class NECB2011 < Standard
                                      pv_ground_tilt_angle:,
                                      pv_ground_azimuth_angle:,
                                      pv_ground_module_description:,
-                                     chiller_type:
+                                     chiller_type: 'NECB_Default'
   )
 
     # Create ECM object.
