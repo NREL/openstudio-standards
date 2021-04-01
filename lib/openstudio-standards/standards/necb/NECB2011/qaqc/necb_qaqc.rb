@@ -251,7 +251,7 @@ class NECB2011
     qaqc[:building][:standards_number_of_above_ground_stories] = nil
     qaqc[:building][:standards_number_of_above_ground_stories] = model.building.get.standardsNumberOfAboveGroundStories.get unless model.building.get.standardsNumberOfAboveGroundStories().empty?
     qaqc[:building][:standards_number_of_living_units] = nil
-    qaqc[:building][:standards_number_of_living_units] = model.building.get.standardsNumberOfLivingUnits ().get unless model.building.get.standardsNumberOfLivingUnits().empty?
+    qaqc[:building][:standards_number_of_living_units] = model.building.get.standardsNumberOfLivingUnits().get unless model.building.get.standardsNumberOfLivingUnits().empty?
     qaqc[:building][:nominal_floor_to_ceiling_height] = nil
     qaqc[:building][:nominal_floor_to_ceiling_height] = model.building.get.nominalFloortoCeilingHeight.get unless model.building.get.nominalFloortoCeilingHeight().empty?
     qaqc[:building][:nominal_floor_to_floor_height] = nil

@@ -261,11 +261,10 @@ class NECB2011 < Standard
                                 nv_opening_fraction: nv_opening_fraction, #options: (1) nil/none/false (2) 'NECB_Default' (i.e. 0.1)
                                 nv_Tout_min: nv_Tout_min, #options: (1) nil/none/false(2) 'NECB_Default' (i.e. 13.0 based on inputs from Michel Tardif re a real school in QC)
                                 nv_Delta_Tin_Tout: nv_Delta_Tin_Tout, #options: (1) nil/none/false (2) 'NECB_Default' (i.e. 1.0 based on inputs from Michel Tardif re a real school in QC)
-                                pv_ground_type: 'NECB_Default',  # Two options: (1) nil/none/false/'NECB_Default', (2) true
                                 scale_x: scale_x,
                                 scale_y: scale_y,
                                 scale_z: scale_z,
-                                pv_ground_type: pv_ground_type,  # Two options: (1) nil/none/false/'NECB_Default', (2) true
+                                pv_ground_type: 'NECB_Default',  # Two options: (1) nil/none/false/'NECB_Default', (2) true
                                 pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. building footprint), (3) area value (e.g. 50)
                                 pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. latitude), (3) tilt angle value (e.g. 20)
                                 pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. south), (3) azimuth angle value (e.g. 90)
@@ -328,6 +327,19 @@ class NECB2011 < Standard
                            pv_ground_azimuth_angle: nil,
                            pv_ground_module_description: nil
   )
+    #clean model..
+    model = remove_all_HVAC(model)
+    model.getThermalZones.sort.each {|zone| zone.setUseIdealAirLoads(true)}
+    model.getZoneHVACPackagedTerminalAirConditioners.each(&:remove)
+    model.getCoilCoolingDXSingleSpeeds.each(&:remove)
+    model.getZoneHVACBaseboardConvectiveWaters.each(&:remove)
+    model.getAirLoopHVACZoneMixers.each(&:remove)
+    model.getAirLoopHVACZoneSplitters.each(&:remove)
+    model.getAirTerminalSingleDuctConstantVolumeNoReheats.each(&:remove)
+    model.getWaterUseEquipmentDefinitions.each(&:remove)
+    model.getWaterUseEquipments.each(&:remove)
+    model.getWaterUseConnectionss.each(&:remove)
+
     rotation_degrees = convert_arg_to_f(variable: rotation_degrees,default: 0.0)
     BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees == 0.0
     scale_x = convert_arg_to_f(variable: scale_x,default: 1.0)
