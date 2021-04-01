@@ -48,6 +48,9 @@ module SmallHotel
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
+    # Guestroom vacancy controls
+    model_add_guestroom_vacancy_controls(model, 'SmallHotel')
+
     return true
   end
 
@@ -64,7 +67,7 @@ module SmallHotel
     elec_equip.setName('Elevator Coreflr1 Elevator Lights/Fans Equipment')
     elec_equip.setSpace(elevator_coreflr1)
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         # add elevator lift motor (not found in small hotel)
         elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
         elec_equip_def2.setName('Elevator CoreFlr1 Electric Equipment Definition2')
@@ -80,7 +83,7 @@ module SmallHotel
         case template
         when '90.1-2004', '90.1-2007'
           elec_equip.setSchedule(model_add_schedule(model, 'HotelSmall ELEV_LIGHT_FAN_SCH_24_7'))
-        when '90.1-2010', '90.1-2013'
+        when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
           elec_equip.setSchedule(model_add_schedule(model, 'HotelSmall ELEV_LIGHT_FAN_SCH_ADD_DF'))
         end
 
@@ -107,6 +110,9 @@ module SmallHotel
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 90.0)
+
     return true
   end
 end

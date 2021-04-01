@@ -27,7 +27,8 @@ class Standard
   #
   # @param name [String] the name of the Standard to build.
   #   valid choices are: DOE Pre-1980, DOE 1980-2004, 90.1-2004,
-  #   90.1-2007, 90.1-2010, 90.1-2013, NREL ZNE Ready 2017, NECB2011
+  #   90.1-2007, 90.1-2010, 90.1-2013, 90.1-2016, 90.1-2019,
+  #   NREL ZNE Ready 2017, NECB2011
   # @example Create a new Standard object by name
   #   standard = Standard.build('NECB2011')
   def self.build(name)

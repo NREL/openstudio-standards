@@ -3,13 +3,19 @@
 # building types.
 module LargeOffice
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific HVAC adjustments')
+
     # add transformer
-    transformer_efficiency = nil
+    # efficiency based on a 500 kVA transformer
     case template
     when '90.1-2004', '90.1-2007'
       transformer_efficiency = 0.979
     when '90.1-2010', '90.1-2013'
       transformer_efficiency = 0.987
+    when '90.1-2016', '90.1-2019'
+      transformer_efficiency = 0.991
+    else
+      transformer_efficiency = nil
     end
     return true unless !transformer_efficiency.nil?
 
@@ -197,6 +203,102 @@ module LargeOffice
                          'Perimeter_top_ZN_4' => { 'sensor_1_frac' => 0.3857,
                                                    'sensor_2_frac' => 0.1385,
                                                    'sensor_1_xyz' => [1.6764, 24.384, 34.29],
+                                                   'sensor_2_xyz' => [3.3528, 24.384, 34.29] } },
+        '90.1-2016' => { 'Perimeter_bot_ZN_1' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [36.576, 1.6764, 0.762],
+                                                   'sensor_2_xyz' => [36.576, 3.3528, 0.762] },
+                         'Perimeter_bot_ZN_2' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [71.4308, 24.384, 0.762],
+                                                   'sensor_2_xyz' => [69.7544, 24.384, 0.762] },
+                         'Perimeter_bot_ZN_3' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [36.576, 47.0617, 0.762],
+                                                   'sensor_2_xyz' => [36.576, 45.3847, 0.762] },
+                         'Perimeter_bot_ZN_4' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [1.6764, 24.384, 0.762],
+                                                   'sensor_2_xyz' => [3.3528, 24.384, 0.762] },
+                         'Perimeter_mid_ZN_1' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [36.576, 1.6764, 17.526],
+                                                   'sensor_2_xyz' => [36.576, 3.3528, 17.526] },
+                         'Perimeter_mid_ZN_2' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [71.4308, 24.384, 17.526],
+                                                   'sensor_2_xyz' => [69.7544, 24.384, 17.526] },
+                         'Perimeter_mid_ZN_3' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [36.576, 47.0617, 17.526],
+                                                   'sensor_2_xyz' => [36.576, 45.3847, 17.526] },
+                         'Perimeter_mid_ZN_4' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [1.6764, 24.384, 17.526],
+                                                   'sensor_2_xyz' => [3.3528, 24.384, 17.526] },
+                         'Perimeter_top_ZN_1' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [36.576, 1.6764, 34.29],
+                                                   'sensor_2_xyz' => [36.576, 3.3528, 34.29] },
+                         'Perimeter_top_ZN_2' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [71.4308, 24.384, 34.29],
+                                                   'sensor_2_xyz' => [69.7544, 24.384, 34.29] },
+                         'Perimeter_top_ZN_3' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [36.576, 47.0617, 34.29],
+                                                   'sensor_2_xyz' => [36.576, 45.3847, 34.29] },
+                         'Perimeter_top_ZN_4' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [1.6764, 24.384, 34.29],
+                                                   'sensor_2_xyz' => [3.3528, 24.384, 34.29] } },
+        '90.1-2019' => { 'Perimeter_bot_ZN_1' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [36.576, 1.6764, 0.762],
+                                                   'sensor_2_xyz' => [36.576, 3.3528, 0.762] },
+                         'Perimeter_bot_ZN_2' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [71.4308, 24.384, 0.762],
+                                                   'sensor_2_xyz' => [69.7544, 24.384, 0.762] },
+                         'Perimeter_bot_ZN_3' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [36.576, 47.0617, 0.762],
+                                                   'sensor_2_xyz' => [36.576, 45.3847, 0.762] },
+                         'Perimeter_bot_ZN_4' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [1.6764, 24.384, 0.762],
+                                                   'sensor_2_xyz' => [3.3528, 24.384, 0.762] },
+                         'Perimeter_mid_ZN_1' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [36.576, 1.6764, 17.526],
+                                                   'sensor_2_xyz' => [36.576, 3.3528, 17.526] },
+                         'Perimeter_mid_ZN_2' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [71.4308, 24.384, 17.526],
+                                                   'sensor_2_xyz' => [69.7544, 24.384, 17.526] },
+                         'Perimeter_mid_ZN_3' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [36.576, 47.0617, 17.526],
+                                                   'sensor_2_xyz' => [36.576, 45.3847, 17.526] },
+                         'Perimeter_mid_ZN_4' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [1.6764, 24.384, 17.526],
+                                                   'sensor_2_xyz' => [3.3528, 24.384, 17.526] },
+                         'Perimeter_top_ZN_1' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [36.576, 1.6764, 34.29],
+                                                   'sensor_2_xyz' => [36.576, 3.3528, 34.29] },
+                         'Perimeter_top_ZN_2' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [71.4308, 24.384, 34.29],
+                                                   'sensor_2_xyz' => [69.7544, 24.384, 34.29] },
+                         'Perimeter_top_ZN_3' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [36.576, 47.0617, 34.29],
+                                                   'sensor_2_xyz' => [36.576, 45.3847, 34.29] },
+                         'Perimeter_top_ZN_4' => { 'sensor_1_frac' => 0.3857,
+                                                   'sensor_2_frac' => 0.1385,
+                                                   'sensor_1_xyz' => [1.6764, 24.384, 34.29],
                                                    'sensor_2_xyz' => [3.3528, 24.384, 34.29] } } }
     ]
 
@@ -270,11 +372,14 @@ module LargeOffice
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 0.0)
+
     return true
   end
 
   def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
-    min_damper_position = template == '90.1-2010' || template == '90.1-2013' ? 0.2 : 0.3
+    min_damper_position = template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019' ? 0.2 : 0.3
 
     # Set the minimum flow fraction
     air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)

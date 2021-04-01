@@ -34,6 +34,14 @@ module FullServiceRestaurant
         '90.1-2013' => { 'Dining' => { 'sensor_1_frac' => 0.25,
                                        'sensor_2_frac' => 0.25,
                                        'sensor_1_xyz' => [2.6548, 2.6548, 0.762],
+                                       'sensor_2_xyz' => [19.9539, 2.6548, 0.762] } },
+        '90.1-2016' => { 'Dining' => { 'sensor_1_frac' => 0.25,
+                                       'sensor_2_frac' => 0.25,
+                                       'sensor_1_xyz' => [2.6548, 2.6548, 0.762],
+                                       'sensor_2_xyz' => [19.9539, 2.6548, 0.762] } },
+        '90.1-2019' => { 'Dining' => { 'sensor_1_frac' => 0.25,
+                                       'sensor_2_frac' => 0.25,
+                                       'sensor_1_xyz' => [2.6548, 2.6548, 0.762],
                                        'sensor_2_xyz' => [19.9539, 2.6548, 0.762] } } }
     ]
 
@@ -92,75 +100,79 @@ module FullServiceRestaurant
 
   def add_door_infiltration(climate_zone, model)
     # add extra infiltration for dining room door and attic (there is no attic in 'DOE Ref Pre-1980')
-    return nil if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980' || template == 'NECB2011'
-
-    dining_space = model.getSpaceByName('Dining').get
-    attic_space = model.getSpaceByName('Attic').get
-    infiltration_diningdoor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
-    infiltration_attic = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
-    infiltration_diningdoor.setName('Dining door Infiltration')
-    infiltration_per_zone_diningdoor = 0
-    infiltration_per_zone_attic = 0.2378
-    if template == '90.1-2004'
-      infiltration_per_zone_diningdoor = 0.614474994
-      infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown DOOR_INFIL_SCH'))
-    elsif template == '90.1-2007'
-      case climate_zone
-        when 'ASHRAE 169-2006-1A',
-             'ASHRAE 169-2006-2A',
-             'ASHRAE 169-2006-2B',
-             'ASHRAE 169-2006-3A',
-             'ASHRAE 169-2006-3B',
-             'ASHRAE 169-2006-3C',
-             'ASHRAE 169-2006-4A',
-             'ASHRAE 169-2006-4B',
-             'ASHRAE 169-2006-4C',
-             'ASHRAE 169-2013-1A',
-             'ASHRAE 169-2013-2A',
-             'ASHRAE 169-2013-2B',
-             'ASHRAE 169-2013-3A',
-             'ASHRAE 169-2013-3B',
-             'ASHRAE 169-2013-3C',
-             'ASHRAE 169-2013-4A',
-             'ASHRAE 169-2013-4B',
-             'ASHRAE 169-2013-4C'
-          infiltration_per_zone_diningdoor = 0.614474994
-          infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown DOOR_INFIL_SCH'))
-        else
-          infiltration_per_zone_diningdoor = 0.389828222
-          infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown VESTIBULE_DOOR_INFIL_SCH'))
+    unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980' || template == 'NECB2011'
+      dining_space = model.getSpaceByName('Dining').get
+      attic_space = model.getSpaceByName('Attic').get
+      infiltration_diningdoor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+      infiltration_attic = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+      infiltration_diningdoor.setName('Dining door Infiltration')
+      infiltration_per_zone_diningdoor = 0
+      infiltration_per_zone_attic = 0.2378
+      if template == '90.1-2004'
+        infiltration_per_zone_diningdoor = 0.614474994
+        infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown DOOR_INFIL_SCH'))
+      elsif template == '90.1-2007'
+        case climate_zone
+          when 'ASHRAE 169-2006-0A',
+               'ASHRAE 169-2006-1A',
+               'ASHRAE 169-2006-2A',
+               'ASHRAE 169-2006-2B',
+               'ASHRAE 169-2006-3A',
+               'ASHRAE 169-2006-3B',
+               'ASHRAE 169-2006-3C',
+               'ASHRAE 169-2006-4A',
+               'ASHRAE 169-2006-4B',
+               'ASHRAE 169-2006-4C',
+               'ASHRAE 169-2013-0A',
+               'ASHRAE 169-2013-1A',
+               'ASHRAE 169-2013-2A',
+               'ASHRAE 169-2013-2B',
+               'ASHRAE 169-2013-3A',
+               'ASHRAE 169-2013-3B',
+               'ASHRAE 169-2013-3C',
+               'ASHRAE 169-2013-4A',
+               'ASHRAE 169-2013-4B',
+               'ASHRAE 169-2013-4C'
+            infiltration_per_zone_diningdoor = 0.614474994
+            infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown DOOR_INFIL_SCH'))
+          else
+            infiltration_per_zone_diningdoor = 0.389828222
+            infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown VESTIBULE_DOOR_INFIL_SCH'))
+        end
+      elsif template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
+        case climate_zone
+          when 'ASHRAE 169-2006-0A',
+               'ASHRAE 169-2006-1A',
+               'ASHRAE 169-2006-2A',
+               'ASHRAE 169-2006-2B',
+               'ASHRAE 169-2006-3A',
+               'ASHRAE 169-2006-3B',
+               'ASHRAE 169-2006-3C',
+               'ASHRAE 169-2013-0A',
+               'ASHRAE 169-2013-1A',
+               'ASHRAE 169-2013-2A',
+               'ASHRAE 169-2013-2B',
+               'ASHRAE 169-2013-3A',
+               'ASHRAE 169-2013-3B',
+               'ASHRAE 169-2013-3C'
+            infiltration_per_zone_diningdoor = 0.614474994
+            infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown DOOR_INFIL_SCH'))
+          else
+            infiltration_per_zone_diningdoor = 0.389828222
+            infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown VESTIBULE_DOOR_INFIL_SCH'))
+        end
       end
-    elsif template == '90.1-2010' || template == '90.1-2013'
-      case climate_zone
-        when 'ASHRAE 169-2006-1A',
-             'ASHRAE 169-2006-2A',
-             'ASHRAE 169-2006-2B',
-             'ASHRAE 169-2006-3A',
-             'ASHRAE 169-2006-3B',
-             'ASHRAE 169-2006-3C',
-             'ASHRAE 169-2013-1A',
-             'ASHRAE 169-2013-2A',
-             'ASHRAE 169-2013-2B',
-             'ASHRAE 169-2013-3A',
-             'ASHRAE 169-2013-3B',
-             'ASHRAE 169-2013-3C',
-          infiltration_per_zone_diningdoor = 0.614474994
-          infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown DOOR_INFIL_SCH'))
-        else
-          infiltration_per_zone_diningdoor = 0.389828222
-          infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown VESTIBULE_DOOR_INFIL_SCH'))
-      end
+      infiltration_diningdoor.setDesignFlowRate(infiltration_per_zone_diningdoor)
+      infiltration_diningdoor.setSpace(dining_space)
+      infiltration_attic.setDesignFlowRate(infiltration_per_zone_attic)
+      infiltration_attic.setSchedule(model_add_schedule(model, 'Always On'))
+      infiltration_attic.setSpace(attic_space)
     end
-    infiltration_diningdoor.setDesignFlowRate(infiltration_per_zone_diningdoor)
-    infiltration_diningdoor.setSpace(dining_space)
-    infiltration_attic.setDesignFlowRate(infiltration_per_zone_attic)
-    infiltration_attic.setSchedule(model_add_schedule(model, 'Always On'))
-    infiltration_attic.setSpace(attic_space)
   end
 
   def model_update_exhaust_fan_efficiency(model)
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         model.getFanZoneExhausts.sort.each do |exhaust_fan|
           fan_name = exhaust_fan.name.to_s
           if fan_name.include? 'Dining'
@@ -178,6 +190,9 @@ module FullServiceRestaurant
 
   def add_zone_mixing(model)
     # add zone_mixing between kitchen and dining
+    # TODO: remove zone mixing objects,
+    # transfer air is the should be the same for
+    # all stds, exhaust flow varies
     space_kitchen = model.getSpaceByName('Kitchen').get
     zone_kitchen = space_kitchen.thermalZone.get
     space_dining = model.getSpaceByName('Dining').get
@@ -187,7 +202,7 @@ module FullServiceRestaurant
     case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         zone_mixing_kitchen.setDesignFlowRate(1.828)
-      when '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         zone_mixing_kitchen.setDesignFlowRate(1.33143208)
       when '90.1-2004'
         zone_mixing_kitchen.setDesignFlowRate(2.64397817)
@@ -206,14 +221,14 @@ module FullServiceRestaurant
     elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
     elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         elec_equip_def1.setFractionLatent(0)
         elec_equip_def1.setFractionRadiant(0.25)
         elec_equip_def1.setFractionLost(0)
         elec_equip_def2.setFractionLatent(0)
         elec_equip_def2.setFractionRadiant(0.25)
         elec_equip_def2.setFractionLost(0)
-        if template == '90.1-2013'
+        if template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
           elec_equip_def1.setDesignLevel(457.5)
           elec_equip_def2.setDesignLevel(570)
         else
@@ -244,7 +259,7 @@ module FullServiceRestaurant
 
   def update_sizing_zone(model)
     case template
-      when '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         zone_sizing = model.getSpaceByName('Dining').get.thermalZone.get.sizingZone
         zone_sizing.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
         zone_sizing.setCoolingMinimumAirFlowperZoneFloorArea(0.003581176)
@@ -269,9 +284,11 @@ module FullServiceRestaurant
       case template
         when '90.1-2004', '90.1-2007', '90.1-2010'
           case climate_zone
-          when 'ASHRAE 169-2006-1B',
+          when 'ASHRAE 169-2006-0B',
+               'ASHRAE 169-2006-1B',
                'ASHRAE 169-2006-2B',
                'ASHRAE 169-2006-3B',
+               'ASHRAE 169-2013-0B',
                'ASHRAE 169-2013-1B',
                'ASHRAE 169-2013-2B',
                'ASHRAE 169-2013-3B'
@@ -295,7 +312,7 @@ module FullServiceRestaurant
     ventilation.setOutdoorAirFlowperPerson(0)
     ventilation.setOutdoorAirFlowperFloorArea(0)
     case template
-      when '90.1-2010', '90.1-2013'
+      when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         ventilation.setOutdoorAirFlowRate(1.21708392)
       when '90.1-2007'
         ventilation.setOutdoorAirFlowRate(1.50025792)
@@ -321,6 +338,9 @@ module FullServiceRestaurant
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 0.0)
+
     return true
   end
 end

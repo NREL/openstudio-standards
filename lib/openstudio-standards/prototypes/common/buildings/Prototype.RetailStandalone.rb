@@ -10,7 +10,7 @@ module RetailStandalone
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
-    # Add the door infiltration for template 2004,2007,2010,2013
+    # Add the door infiltration for template 2004,2007,2010,2013,2016,2019
     case template
     when '90.1-2004'
       entry_space = model.getSpaceByName('Front_Entry').get
@@ -22,16 +22,20 @@ module RetailStandalone
       infiltration_entry.setSpace(entry_space)
 
       # temporal solution for CZ dependent door infiltration rate.  In fact other standards need similar change as well
-    when '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
       entry_space = model.getSpaceByName('Front_Entry').get
       infiltration_entry = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
       infiltration_entry.setName('Entry door Infiltration')
       case climate_zone
-      when 'ASHRAE 169-2006-1A',
+      when 'ASHRAE 169-2006-0A',
+          'ASHRAE 169-2006-1A',
+          'ASHRAE 169-2006-0B',
           'ASHRAE 169-2006-1B',
           'ASHRAE 169-2006-2A',
           'ASHRAE 169-2006-2B',
+          'ASHRAE 169-2013-0A',
           'ASHRAE 169-2013-1A',
+          'ASHRAE 169-2013-0B',
           'ASHRAE 169-2013-1B',
           'ASHRAE 169-2013-2A',
           'ASHRAE 169-2013-2B'
@@ -54,7 +58,7 @@ module RetailStandalone
     end
 
     case template
-    when '90.1-2013'
+    when '90.1-2013', '90.1-2016', '90.1-2019'
       # Add EMS for controlling the system serving the front entry zone
       oa_sens = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
       oa_sens.setName('OAT_F')
@@ -105,32 +109,44 @@ module RetailStandalone
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting daylight sensor positions and fractions')
 
     adjustments = case climate_zone
-                  when 'ASHRAE 169-2006-6A',
-                      'ASHRAE 169-2006-6B',
-                      'ASHRAE 169-2006-7A',
-                      'ASHRAE 169-2006-8A',
-                      'ASHRAE 169-2013-6A',
-                      'ASHRAE 169-2013-6B',
-                      'ASHRAE 169-2013-7A',
-                      'ASHRAE 169-2013-8A'
-                    [
-                      { '90.1-2010' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
-                                                            'sensor_1_xyz' => [9.144, 24.698, 0] } },
-                        '90.1-2013' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
-                                                            'sensor_1_xyz' => [9.144, 24.698, 0] } } }
-                    ]
-                  else
-                    [
-                      { '90.1-2010' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
-                                                            'sensor_2_frac' => 0.25,
-                                                            'sensor_1_xyz' => [14.2, 14.2, 0],
-                                                            'sensor_2_xyz' => [3.4, 14.2, 0] } },
-                        '90.1-2013' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
-                                                            'sensor_2_frac' => 0.25,
-                                                            'sensor_1_xyz' => [14.2, 14.2, 0],
-                                                            'sensor_2_xyz' => [3.4, 14.2, 0] } } }
-                    ]
-                  end
+    when 'ASHRAE 169-2006-6A',
+        'ASHRAE 169-2006-6B',
+        'ASHRAE 169-2006-7A',
+        'ASHRAE 169-2006-8A',
+        'ASHRAE 169-2013-6A',
+        'ASHRAE 169-2013-6B',
+        'ASHRAE 169-2013-7A',
+        'ASHRAE 169-2013-8A'
+      [
+        { '90.1-2010' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
+                                              'sensor_1_xyz' => [9.144, 24.698, 0] } },
+          '90.1-2013' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
+                                              'sensor_1_xyz' => [9.144, 24.698, 0] } },
+          '90.1-2016' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
+                                              'sensor_1_xyz' => [9.144, 24.698, 0] } },
+          '90.1-2019' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
+                                              'sensor_1_xyz' => [9.144, 24.698, 0] } } }
+      ]
+    else
+      [
+        { '90.1-2010' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
+                                              'sensor_2_frac' => 0.25,
+                                              'sensor_1_xyz' => [14.2, 14.2, 0],
+                                              'sensor_2_xyz' => [3.4, 14.2, 0] } },
+          '90.1-2013' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
+                                              'sensor_2_frac' => 0.25,
+                                              'sensor_1_xyz' => [14.2, 14.2, 0],
+                                              'sensor_2_xyz' => [3.4, 14.2, 0] } },
+          '90.1-2016' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
+                                              'sensor_2_frac' => 0.25,
+                                              'sensor_1_xyz' => [14.2, 14.2, 0],
+                                              'sensor_2_xyz' => [3.4, 14.2, 0] } },
+          '90.1-2019' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
+                                              'sensor_2_frac' => 0.25,
+                                              'sensor_1_xyz' => [14.2, 14.2, 0],
+                                              'sensor_2_xyz' => [3.4, 14.2, 0] } } }
+      ]
+        end
 
     # Adjust daylight sensors in each space
     model.getSpaces.each do |space|
@@ -191,9 +207,12 @@ module RetailStandalone
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 0.0)
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting geometry input')
     case template
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
       case climate_zone
       when 'ASHRAE 169-2006-6A',
           'ASHRAE 169-2006-6B',
