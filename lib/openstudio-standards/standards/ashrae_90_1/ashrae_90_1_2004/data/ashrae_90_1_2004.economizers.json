@@ -2,6 +2,22 @@
   "economizers": [
     {
       "template": "90.1-2004",
+      "climate_zone": "ASHRAE 169-2006-0A",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 65.0,
+      "notes": "90.1-2004 Table 6.5.1"
+    },
+    {
+      "template": "90.1-2004",
+      "climate_zone": "ASHRAE 169-2006-0B",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
+      "notes": "90.1-2004 Table 6.5.1"
+    },
+    {
+      "template": "90.1-2004",
       "climate_zone": "ASHRAE 169-2006-1A",
       "data_center": false,
       "capacity_limit": null,
@@ -301,6 +317,22 @@
       "climate_zone": "ASHRAE 169-2006-8B",
       "data_center": true,
       "capacity_limit": 135000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
+      "notes": "90.1-2004 Table 6.5.1"
+    },
+    {
+      "template": "90.1-2004",
+      "climate_zone": "ASHRAE 169-2013-0A",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 65.0,
+      "notes": "90.1-2004 Table 6.5.1"
+    },
+    {
+      "template": "90.1-2004",
+      "climate_zone": "ASHRAE 169-2013-0B",
+      "data_center": false,
+      "capacity_limit": null,
       "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "90.1-2004 Table 6.5.1"
     },

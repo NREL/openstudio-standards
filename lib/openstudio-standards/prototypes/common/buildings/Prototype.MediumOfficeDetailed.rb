@@ -39,7 +39,7 @@ module MediumOfficeDetailed
       if template == '90.1-2004'
         infiltration_per_zone_entrydoor = 1.04300287
         infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeMedium INFIL_Door_Opening_SCH'))
-      elsif template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013'
+      elsif template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
         case climate_zone
         when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2B'
           infiltration_per_zone_entrydoor = 1.04300287
@@ -110,7 +110,7 @@ module MediumOfficeDetailed
 
   def update_waterheater_loss_coefficient(model)
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019', 'NECB2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(7.561562668)
           water_heater.setOnCycleLossCoefficienttoAmbientTemperature(7.561562668)
@@ -125,11 +125,14 @@ module MediumOfficeDetailed
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 0.0)
+
     return true
   end
 
   def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
-    min_damper_position = template == '90.1-2010' || template == '90.1-2013' ? 0.2 : 0.3
+    min_damper_position = template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019' ? 0.2 : 0.3
 
     # Set the minimum flow fraction
     air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)

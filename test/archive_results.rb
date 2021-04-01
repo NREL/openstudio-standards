@@ -5,7 +5,7 @@ output_dir = "#{Dir.pwd}/output"
 # list the building types, vintages and climate zones that will be archived.
 building_types = ['RetailStandalone', 'RetailStripmall', 'FullServiceRestaurant', 'QuickServiceRestaurant', 'LargeHotel',
                  'SmallHotel', 'HighriseApartment', 'MidriseApartment', 'Outpatient']
-vintages = ['DOE Ref 1980-2004', 'DOE Ref Pre-1980', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
+vintages = ['DOE Ref 1980-2004', 'DOE Ref Pre-1980', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019']
 climate_zones = ['ASHRAE 169-2013-1A', 'ASHRAE 169-2013-2A','ASHRAE 169-2013-2B',
                  'ASHRAE 169-2013-3A', 'ASHRAE 169-2013-3B', 'ASHRAE 169-2013-3C', 'ASHRAE 169-2013-4A',
                  'ASHRAE 169-2013-4B', 'ASHRAE 169-2013-4C', 'ASHRAE 169-2013-5A', 'ASHRAE 169-2013-5B',

@@ -28,7 +28,7 @@ module SmallOfficeDetailed
       if template == '90.1-2004'
         infiltration_per_zone_entrydoor = 0.129785425
         infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeSmall INFIL_Door_Opening_SCH'))
-      elsif template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013'
+      elsif template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
         case climate_zone
         when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2B'
           infiltration_per_zone_entrydoor = 0.129785425
@@ -121,7 +121,7 @@ module SmallOfficeDetailed
 
   def update_waterheater_loss_coefficient(model)
     case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019', 'NECB2011'
       model.getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.205980747)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.205980747)
@@ -136,6 +136,9 @@ module SmallOfficeDetailed
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 0.0)
+
     return true
   end
 end
