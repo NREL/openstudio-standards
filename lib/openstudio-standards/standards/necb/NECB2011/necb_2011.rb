@@ -331,32 +331,10 @@ class NECB2011 < Standard
                            pv_ground_module_description: nil,
                            chiller_type: nil
   )
-    #clean model..
-    model = remove_all_HVAC(model)
-    model.getThermalZones.sort.each {|zone| zone.setUseIdealAirLoads(true)}
-    model.getZoneHVACPackagedTerminalAirConditioners.each(&:remove)
-    model.getCoilCoolingDXSingleSpeeds.each(&:remove)
-    model.getZoneHVACBaseboardConvectiveWaters.each(&:remove)
-    model.getAirLoopHVACZoneMixers.each(&:remove)
-    model.getAirLoopHVACZoneSplitters.each(&:remove)
-    model.getAirTerminalSingleDuctConstantVolumeNoReheats.each(&:remove)
-    model.getWaterUseEquipmentDefinitions.each(&:remove)
-    model.getWaterUseEquipments.each(&:remove)
-    model.getWaterUseConnectionss.each(&:remove)
 
-    rotation_degrees = convert_arg_to_f(variable: rotation_degrees,default: 0.0)
-    BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees == 0.0
-    scale_x = convert_arg_to_f(variable: scale_x,default: 1.0)
-    scale_y = convert_arg_to_f(variable: scale_y,default: 1.0)
-    scale_z = convert_arg_to_f(variable: scale_z,default: 1.0)
-    if scale_x != 1.0 || scale_y != 1.0 || scale_z != 1.0
-      BTAP::Geometry::scale_model(model, scale_x, scale_x, scale_x)
-    end
-
-
+    clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set,default: -1)
     srr_set = convert_arg_to_f(variable: srr_set,default: -1)
-
 
     apply_weather_data(model: model, epw_file: epw_file)
     apply_loads(model: model, lights_type: lights_type, lights_scale: lights_scale)
@@ -408,6 +386,33 @@ class NECB2011 < Standard
     return model
   end
 
+  # This method cleans the model of any existing HVAC systems and applies any desired ratation or scaling to the model.
+  def clean_and_scale_model(model:, rotation_degrees: nil, scale_x: nil, scale_y: nil, scale_z: nil)
+    #clean model..
+    model = remove_all_HVAC(model)
+    model.getThermalZones.sort.each {|zone| zone.setUseIdealAirLoads(true)}
+    model.getZoneHVACPackagedTerminalAirConditioners.each(&:remove)
+    model.getCoilCoolingDXSingleSpeeds.each(&:remove)
+    model.getZoneHVACBaseboardConvectiveWaters.each(&:remove)
+    model.getAirLoopHVACZoneMixers.each(&:remove)
+    model.getAirLoopHVACZoneSplitters.each(&:remove)
+    model.getAirTerminalSingleDuctConstantVolumeNoReheats.each(&:remove)
+    model.getWaterUseEquipmentDefinitions.each(&:remove)
+    model.getWaterUseEquipments.each(&:remove)
+    model.getWaterUseConnectionss.each(&:remove)
+
+    # Rotate to model if requested
+    rotation_degrees = convert_arg_to_f(variable: rotation_degrees,default: 0.0)
+    BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees == 0.0
+
+    # Scale model if requested
+    scale_x = convert_arg_to_f(variable: scale_x,default: 1.0)
+    scale_y = convert_arg_to_f(variable: scale_y,default: 1.0)
+    scale_z = convert_arg_to_f(variable: scale_z,default: 1.0)
+    if scale_x != 1.0 || scale_y != 1.0 || scale_z != 1.0
+      BTAP::Geometry::scale_model(model, scale_x, scale_x, scale_x)
+    end
+  end
 
   def apply_systems_and_efficiencies(model:,
                                      primary_heating_fuel:,
