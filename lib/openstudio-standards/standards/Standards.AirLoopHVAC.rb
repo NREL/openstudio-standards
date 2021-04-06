@@ -1112,12 +1112,66 @@ class Standard
 
   # Determine if the airloop includes hydronic cooling coils
   #
-  # @return [Bool] returns true if hydronic coolings coils are included on the airloop
+  # @return [Bool] returns true if hydronic cooling coils are included on the airloop
   def air_loop_hvac_include_hydronic_cooling_coil?(air_loop_hvac)
     air_loop_hvac.supplyComponents.each do |comp|
       return true if comp.to_CoilCoolingWater.is_initialized
     end
     return false
+  end
+
+  # Determine if the airloop includes cooling coils
+  #
+  # @return [Bool] returns true if cooling coils are included on the airloop
+  def air_loop_hvac_include_cooling_coil?(air_loop_hvac)
+    air_loop_hvac.supplyComponents.each do |comp|
+      return true if comp.to_CoilCoolingWater.is_initialized
+      return true if comp.to_CoilCoolingWater.is_initialized
+      return true if comp.to_CoilCoolingCooledBeam.is_initialized
+      return true if comp.to_CoilCoolingDXMultiSpeed.is_initialized
+      return true if comp.to_CoilCoolingDXSingleSpeed.is_initialized
+      return true if comp.to_CoilCoolingDXTwoSpeed.is_initialized
+      return true if comp.to_CoilCoolingDXTwoStageWithHumidityControlMode.is_initialized
+      return true if comp.to_CoilCoolingDXVariableRefrigerantFlow.is_initialized
+      return true if comp.to_CoilCoolingDXVariableSpeed.is_initialized
+      return true if comp.to_CoilCoolingFourPipeBeam.is_initialized
+      return true if comp.to_CoilCoolingLowTempRadiantConstFlow.is_initialized
+      return true if comp.to_CoilCoolingLowTempRadiantVarFlow.is_initialized
+      return true if comp.to_CoilCoolingWater.is_initialized
+      return true if comp.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
+      return true if comp.to_CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit.is_initialized
+    end
+    return false
+  end
+
+  # Determine if the airloop includes evaporative coolers
+  #
+  # @return [Bool] returns true if evaporative coolers are included on the airloop
+  def air_loop_hvac_include_evaporative_cooler?(air_loop_hvac)
+    air_loop_hvac.supplyComponents.each do |comp|
+      return true if comp.to_EvaporativeCoolerDirectResearchSpecial.is_initialized
+      return true if comp.to_EvaporativeCoolerIndirectResearchSpecial.is_initialized
+    end
+    return false
+  end
+
+  # Determine if the airloop includes an air-economizer
+  #
+  # @return [Bool] returns true if the airloop has an air-economizer
+  def air_loop_hvac_include_economizer?(air_loop_hvac)
+    return false unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+
+    # Get OA system
+    air_loop_hvac_oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+
+    # Get OA controller
+    air_loop_hvac_oa_controller = air_loop_hvac_oa_system.getControllerOutdoorAir
+
+    # Get economizer type
+    economizer_type = air_loop_hvac_oa_controller.getEconomizerControlType.to_s
+    return false if economizer_type == 'NoEconomizer'
+
+    return true
   end
 
   # Determine if the airloop includes WSHP cooling coils

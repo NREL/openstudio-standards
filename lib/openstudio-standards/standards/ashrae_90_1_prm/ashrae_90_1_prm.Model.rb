@@ -246,7 +246,7 @@ class ASHRAE901PRM < Standard
 
         infil_coeffs = old_infil_coeffs
       end
-  
+
       # Infiltration at the space type level
       if infil_coeffs == [nil, nil, nil, nil] && space.spaceType.is_initialized
         space_type = space.spaceType.get
@@ -286,7 +286,7 @@ class ASHRAE901PRM < Standard
         infil_obj = space.spaceInfiltrationDesignFlowRates[0]
         unless infil_obj.designFlowRate.is_initialized
           if infil_obj.flowperSpaceFloorArea.is_initialized
-            bldg_air_leakage_rate += infil_obj.flowperSpaceFloorArea.get * space.floorArea       
+            bldg_air_leakage_rate += infil_obj.flowperSpaceFloorArea.get * space.floorArea
           elsif infil_obj.flowperExteriorSurfaceArea.is_initialized
             bldg_air_leakage_rate += infil_obj.flowperExteriorSurfaceArea.get * space.exteriorArea
           elsif infil_obj.flowperExteriorWallArea.is_initialized
@@ -304,7 +304,7 @@ class ASHRAE901PRM < Standard
           infil_obj = space_type.spaceInfiltrationDesignFlowRates[0]
           unless infil_obj.designFlowRate.is_initialized
             if infil_obj.flowperSpaceFloorArea.is_initialized
-              bldg_air_leakage_rate += infil_obj.flowperSpaceFloorArea.get * space.floorArea      
+              bldg_air_leakage_rate += infil_obj.flowperSpaceFloorArea.get * space.floorArea
             elsif infil_obj.flowperExteriorSurfaceArea.is_initialized
               bldg_air_leakage_rate += infil_obj.flowperExteriorSurfaceArea.get * space.exteriorArea
             elsif infil_obj.flowperExteriorWallArea.is_initialized
@@ -353,7 +353,7 @@ class ASHRAE901PRM < Standard
   def model_apply_prm_baseline_skylight_to_roof_ratio(model)
     # Loop through all spaces in the model, and
     # per the 90.1-2019 PRM User Manual, only
-    # account for exterior roofs for enclosed 
+    # account for exterior roofs for enclosed
     # spaces. Include space multipliers.
     roof_m2 = 0.001 # Avoids divide by zero errors later
     sky_m2 = 0
@@ -514,6 +514,40 @@ class ASHRAE901PRM < Standard
     end
   end
 
+  # Identifies non mechanically cooled ("nmc") systems, if applicable
+  #
+  # TODO: Zone-level evaporative cooler is not currently supported by
+  #       by OpenStudio, will need to be added to the method when
+  #       supported.
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @return zone_nmc_sys_type [Hash] Zone to nmc system type mapping
+  def model_identify_non_mechanically_cooled_systems(model)
+    # Iterate through zones to find out if they are served by nmc systems
+    model.getThermalZones.sort.each do |zone|
+      # Check if airloop has economizer and either:
+      # - No cooling coil and/or,
+      # - An evaporative cooling coil
+      air_loop = zone.airLoopHVAC
+
+      unless air_loop.empty?
+        # Iterate through all the airloops assigned to a zone
+        zone.airLoopHVACs.each do |airloop|
+          air_loop = air_loop.get
+          if (!air_loop_hvac_include_cooling_coil?(air_loop) &&
+            air_loop_hvac_include_evaporative_cooler?(air_loop)) ||
+             (!air_loop_hvac_include_cooling_coil?(air_loop) &&
+               air_loop_hvac_include_economizer?(air_loop))
+            air_loop.additionalProperties.setFeature('non_mechanically_cooled', true)
+            air_loop.thermalZones.each do |thermal_zone|
+              thermal_zone.additionalProperties.setFeature('non_mechanically_cooled', true)
+            end
+          end
+        end
+      end
+    end
+  end
+
   # Specify supply air temperature setpoint for unit heaters based on 90.1 Appendix G G3.1.2.8.2
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone Object
@@ -527,7 +561,7 @@ class ASHRAE901PRM < Standard
     end
     return nil
   end
-  
+
   # Specify supply to room delta for laboratory spaces based on 90.1 Appendix G Exception to G3.1.2.8.1
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone Object
@@ -542,5 +576,37 @@ class ASHRAE901PRM < Standard
       end
     end
     return nil
+  end
+
+  # Provides baseline system allowable base BHP
+  #
+  # @param system_type [String] Baseline system type abbreviation
+  # @return allowable_base_system_fan_bhp [Float] Allowable base baseline system fan BHP
+  def allowable_base_system_brake_horsepower(system_type, non_mechanically_cooled_flag)
+    allowable_base_system_fan_bhp = 0.0
+    case system_type
+    when 'PTAC', 'PTHP'
+      allowable_base_system_fan_bhp = 0.0003
+    when 'PSZ_HP', 'PSZ_AC' # 3, 4
+      allowable_base_system_fan_bhp = 0.00094
+    when
+    'PVAV_Reheat', 'PVAV_PFP_Boxes', # 5, 6
+      'VAV_Reheat', 'VAV_PFP_Boxes', # 7, 8
+      'SZ_VAV' # 11
+      allowable_base_system_fan_bhp = 0.0013
+    when 'Gas_Furnace', 'Electric_Furnace' # 9, 10
+      if non_mechanically_cooled_flag
+        allowable_base_system_fan_bhp = 0.000054
+      else
+        allowable_base_system_fan_bhp = 0.0003
+      end
+    when
+    'SZ_CAV' # 12, 13
+      allowable_base_system_fan_bhp = 0.00094
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.AirLoopHVAC', "Air loop #{air_loop_hvac.name} is not associated with a baseline system.")
+    end
+
+    return allowable_base_system_fan_bhp
   end
 end
