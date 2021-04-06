@@ -221,7 +221,8 @@ class NECB2011 < Standard
                                    pv_ground_total_area_pv_panels_m2: nil,
                                    pv_ground_tilt_angle: nil,
                                    pv_ground_azimuth_angle: nil,
-                                   pv_ground_module_description: nil
+                                   pv_ground_module_description: nil,
+                                   chiller_type: nil
   )
 
 
@@ -268,7 +269,9 @@ class NECB2011 < Standard
                                 pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. building footprint), (3) area value (e.g. 50)
                                 pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. latitude), (3) tilt angle value (e.g. 20)
                                 pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. south), (3) azimuth angle value (e.g. 90)
-                                pv_ground_module_description: pv_ground_module_description # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. Standard), (3) other options ('Standard', 'Premium', ThinFilm')
+                                pv_ground_module_description: pv_ground_module_description, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. Standard), (3) other options ('Standard', 'Premium', ThinFilm')
+                                chiller_type: 'NECB_Default' # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) e.g. 'VSD'
+
     )
 
   end
@@ -325,7 +328,8 @@ class NECB2011 < Standard
                            pv_ground_total_area_pv_panels_m2: nil ,
                            pv_ground_tilt_angle: nil,
                            pv_ground_azimuth_angle: nil,
-                           pv_ground_module_description: nil
+                           pv_ground_module_description: nil,
+                           chiller_type: nil
   )
 
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
@@ -375,7 +379,8 @@ class NECB2011 < Standard
                                    pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
                                    pv_ground_tilt_angle: pv_ground_tilt_angle,
                                    pv_ground_azimuth_angle: pv_ground_azimuth_angle,
-                                   pv_ground_module_description: pv_ground_module_description
+                                   pv_ground_module_description: pv_ground_module_description,
+                                   chiller_type: chiller_type
     )
 
     return model
@@ -428,7 +433,8 @@ class NECB2011 < Standard
                                      pv_ground_total_area_pv_panels_m2:,
                                      pv_ground_tilt_angle:,
                                      pv_ground_azimuth_angle:,
-                                     pv_ground_module_description:
+                                     pv_ground_module_description:,
+                                     chiller_type: 'NECB_Default'
   )
 
     # Create ECM object.
@@ -467,7 +473,8 @@ class NECB2011 < Standard
     ecm.modify_shw_efficiency(model: model, shw_eff: shw_eff)
     # Apply daylight controls.
     model_add_daylighting_controls(model) if daylighting_type == 'add_daylighting_controls'
-
+    # Apply Chiller efficiency
+    ecm.modify_chiller_efficiency(model: model, chiller_type: chiller_type)
 
     # -------Pump sizing required by some vintages----------------
     # Apply Pump power as required.
@@ -481,7 +488,7 @@ class NECB2011 < Standard
                  nv_Tout_min: nv_Tout_min,
                  nv_Delta_Tin_Tout: nv_Delta_Tin_Tout)
 
-    # -------Ground-mounted PV panels----------------   #Sara
+    # -------Ground-mounted PV panels----------------
     # Apply ground-mounted PV panels as required.
     ecm.apply_pv_ground(model: model,
                         pv_ground_type: pv_ground_type,
