@@ -46,91 +46,23 @@ class BTAPPRE1980 < NECB2011
     return @standards_data
   end
 
-  # Created this method so that additional methods can be addded for bulding the prototype model in later
-  # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
-  def model_apply_standard(model:,
-                           epw_file:,
-                           sizing_run_dir: Dir.pwd,
-                           primary_heating_fuel: 'DefaultFuel',
-                           dcv_type: 'NECB_Default',
-                           lights_type: 'NECB_Default',
-                           lights_scale: 1.0,
-                           daylighting_type: 'NECB_Default',
-                           ecm_system_name: 'NECB_Default',
-                           erv_package: 'NECB_Default',
-                           boiler_eff: nil,
-                           furnace_eff: nil,
-                           unitary_cop: nil,
-                           shw_eff: nil,
-                           ext_wall_cond: nil,
-                           ext_floor_cond: nil,
-                           ext_roof_cond: nil,
-                           ground_wall_cond: nil,
-                           ground_floor_cond: nil,
-                           ground_roof_cond: nil,
-                           door_construction_cond: nil,
-                           fixed_window_cond: nil,
-                           glass_door_cond: nil,
-                           overhead_door_cond: nil,
-                           skylight_cond: nil,
-                           glass_door_solar_trans: nil,
-                           fixed_wind_solar_trans: nil,
-                           skylight_solar_trans: nil,
-                           fdwr_set: -1,
-                           srr_set: -1,
-                           rotation_degrees: nil,
-                           scale_x: nil,
-                           scale_y: nil,
-                           scale_z: nil,
-                           pv_ground_type: 'NECB_Default',
-                           pv_ground_total_area_pv_panels_m2: nil ,
-                           pv_ground_tilt_angle: nil,
-                           pv_ground_azimuth_angle: nil,
-                           pv_ground_module_description: nil,
-                           nv_type: 'NECB_Default',
-                           nv_opening_fraction: nil,
-                           nv_Tout_min: nil,
-                           nv_Delta_Tin_Tout: nil
-
-  )
-    # This will allow changes to default fdwr/srr for vintages.. but will not touch the existing models if they were
-    # called for with -1.0 in the fdwr_srr method.
-    fdwr_set = -2 if fdwr_set.nil? || fdwr_set == -1.0
-    srr_set = -2 if srr_set.nil? || srr_set == -1.0
-    return super(model: model,
-                 epw_file: epw_file,
-                 sizing_run_dir: sizing_run_dir,
-                 primary_heating_fuel: primary_heating_fuel,
-                 dcv_type: dcv_type,
-                 lights_type: lights_type,
-                 lights_scale: lights_scale,
-                 daylighting_type: daylighting_type,
-                 ecm_system_name: ecm_system_name,
-                 erv_package: erv_package,
-                 boiler_eff: boiler_eff,
-                 furnace_eff: furnace_eff,
-                 unitary_cop: unitary_cop,
-                 shw_eff: shw_eff,
-                 ext_wall_cond: ext_wall_cond,
-                 ext_floor_cond: ext_floor_cond,
-                 ext_roof_cond: ext_roof_cond,
-                 ground_wall_cond: ground_wall_cond,
-                 ground_floor_cond: ground_floor_cond,
-                 ground_roof_cond: ground_roof_cond,
-                 door_construction_cond: door_construction_cond,
-                 fixed_window_cond: fixed_window_cond,
-                 glass_door_cond: glass_door_cond,
-                 overhead_door_cond: overhead_door_cond,
-                 skylight_cond: skylight_cond,
-                 glass_door_solar_trans: glass_door_solar_trans,
-                 fixed_wind_solar_trans: fixed_wind_solar_trans,
-                 skylight_solar_trans: skylight_solar_trans,
-                 fdwr_set: fdwr_set,
-                 srr_set: srr_set,
-                 rotation_degrees: rotation_degrees,
-                 scale_x: scale_x,
-                 scale_y: scale_y,
-                 scale_z: scale_z)
+  # Thermal zones need to be set to determine conditioned spaces when applying fdwr and srr limits.
+  #     # fdwr_set/srr_set settings:
+  #     # 0-1:  Remove all windows/skylights and add windows/skylights to match this fdwr/srr
+  #     # -1:  Remove all windows/skylights and add windows/skylights to match max fdwr/srr from NECB
+  #     # -2:  Do not apply any fdwr/srr changes, leave windows/skylights alone (also works for fdwr/srr > 1)
+  #     # -3:  Use old method which reduces existing window/skylight size (if necessary) to meet maximum NECB fdwr/srr
+  #     # limit
+  #     # <-3.1:  Remove all the windows/skylights
+  #     # > 1:  Do nothing
+  def apply_fdwr_srr_daylighting(model:, fdwr_set: -2.0, srr_set: -2.0)
+    fdwr_set = -2.0 if (fdwr_set == 'NECB_default') || (fdwr_set.nil?) || (fdwr_set.to_f.round(0) == -1.0)
+    srr_set = -2.0 if (srr_set == 'NECB_default') || srr_set.nil? || (srr_set.to_f.round(0) == -1.0)
+    fdwr_set = fdwr_set.to_f
+    srr_set = srr_set.to_f
+    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
+    apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
+    # model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
   def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default')
