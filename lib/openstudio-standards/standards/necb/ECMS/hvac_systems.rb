@@ -1793,7 +1793,7 @@ class ECMS
 
   def reset_chiller_efficiency(model:, component:, cop:)
     # Note that all parameters (except for the capacity) of an existing chiller are replaced with the ones of the VSD chiller, as per Kamel Haddad's comment.
-    component.setName('VSDCentrifugalWaterChiller')
+    component.setName('ChillerElectricEIR_VSDCentrifugalWaterChiller')
     component.setReferenceCOP(cop['cop_w_by_w'])
     component.setReferenceLeavingChilledWaterTemperature(cop['ref_leaving_chilled_water_temp_c'])
     component.setReferenceEnteringCondenserFluidTemperature(cop['ref_entering_condenser_fluid_temp_c'])
