@@ -258,14 +258,14 @@ class NECB2011 < Standard
                                 rotation_degrees: rotation_degrees,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
-                                nv_type: 'NECB_Default', # Two options: (1) nil/none/false/'NECB_Default', (2) true
+                                nv_type: 'NECB_Default', # Two options: (1) nil/none/false/'NECB_Default', (2) 'add_nv'
                                 nv_opening_fraction: nv_opening_fraction, #options: (1) nil/none/false (2) 'NECB_Default' (i.e. 0.1)
                                 nv_Tout_min: nv_Tout_min, #options: (1) nil/none/false(2) 'NECB_Default' (i.e. 13.0 based on inputs from Michel Tardif re a real school in QC)
                                 nv_Delta_Tin_Tout: nv_Delta_Tin_Tout, #options: (1) nil/none/false (2) 'NECB_Default' (i.e. 1.0 based on inputs from Michel Tardif re a real school in QC)
                                 scale_x: scale_x,
                                 scale_y: scale_y,
                                 scale_z: scale_z,
-                                pv_ground_type: 'NECB_Default',  # Two options: (1) nil/none/false/'NECB_Default', (2) true
+                                pv_ground_type: 'NECB_Default',  # Two options: (1) nil/none/false/'NECB_Default', (2) 'add_pv_ground'
                                 pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. building footprint), (3) area value (e.g. 50)
                                 pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. latitude), (3) tilt angle value (e.g. 20)
                                 pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. south), (3) azimuth angle value (e.g. 90)
@@ -486,7 +486,7 @@ class NECB2011 < Standard
                  nv_type: nv_type,
                  nv_opening_fraction: nv_opening_fraction,
                  nv_Tout_min: nv_Tout_min,
-                 nv_Delta_Tin_Tout: nv_Delta_Tin_Tout)
+                 nv_Delta_Tin_Tout: nv_Delta_Tin_Tout) if nv_type == 'add_nv'
 
     # -------Ground-mounted PV panels----------------
     # Apply ground-mounted PV panels as required.
@@ -495,7 +495,7 @@ class NECB2011 < Standard
                         pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
                         pv_ground_tilt_angle: pv_ground_tilt_angle,
                         pv_ground_azimuth_angle: pv_ground_azimuth_angle,
-                        pv_ground_module_description: pv_ground_module_description)
+                        pv_ground_module_description: pv_ground_module_description) if pv_ground_type == 'add_pv_ground'
 
   end
 
