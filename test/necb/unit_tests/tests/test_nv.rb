@@ -41,7 +41,7 @@ class NECB_nv_Tests < Minitest::Test
     ]
     @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
     @primary_heating_fuels = ['DefaultFuel']
-    @nv_types = [true]
+    @nv_types = ['add_nv']
 
     nv_opening_fraction = 'NECB_Default'
     nv_Tout_min = 'NECB_Default'
