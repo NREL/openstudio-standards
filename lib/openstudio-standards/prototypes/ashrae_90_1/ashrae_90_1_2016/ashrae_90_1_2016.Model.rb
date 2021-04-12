@@ -298,7 +298,13 @@ class ASHRAE9012016 < ASHRAE901
       zone_name = zone.name.to_s
       next if zone_name =~ /data\s*center/i # skip data centers
 
-      light_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Lights Electric Power')
+      # EnergyPlus v9.4 name change for EMS actuators
+      # https://github.com/NREL/OpenStudio/pull/4104
+      if model.version < OpenStudio::VersionString.new('3.1.0')
+        light_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Lights Electric Power')
+      else
+        light_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Lights Electricity Rate')
+      end
       light_sensor.setKeyName(zone_name)
       light_sensor.setName("#{zone_name}_LSr".gsub(/[\s-]/, ''))
       light_sensor_name = light_sensor.name.to_s
@@ -323,7 +329,13 @@ class ASHRAE9012016 < ASHRAE901
       light_id = 0
       space_lights.each do |light_x|
         light_id += 1
-        light_x_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(light_x, 'Lights', 'Electric Power Level')
+        # EnergyPlus v9.4 name change for EMS actuators
+        # https://github.com/NREL/OpenStudio/pull/4104
+        if model.version < OpenStudio::VersionString.new('3.1.0')
+          light_x_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(light_x, 'Lights', 'Electric Power Level')
+        else
+          light_x_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(light_x, 'Lights', 'Electricity Rate')
+        end
         light_x_actuator.setName("#{zone_name}_Light#{light_id}_Actuator".gsub(/[\s-]/, ''))
         light_x_actuator_name = light_x_actuator.name.to_s
         add_lights_prog_null += "\n      SET #{light_x_actuator_name} = NULL,"
