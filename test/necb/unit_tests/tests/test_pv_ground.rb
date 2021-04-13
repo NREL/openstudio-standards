@@ -41,8 +41,8 @@ class NECB_PVground_Tests < Minitest::Test
     ]
     @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
     @primary_heating_fuels = ['DefaultFuel']
-    @pv_ground_types = ['add_pv_ground']
 
+    @pv_ground_types = ['add_pv_ground']
     pv_ground_total_area_pv_panels_m2 = 'NECB_Default'
     pv_ground_tilt_angle = 'NECB_Default'
     pv_ground_azimuth_angle = 'NECB_Default'
