@@ -4,7 +4,7 @@ require 'json'
 require_relative 'speed_constructions'
 
 # Standards to export
-templates = ['90.1-2007', '90.1-2010', '90.1-2013']
+templates = ['90.1-2007', '90.1-2010', '90.1-2013','90.1-2016']
 
 # Surface types to export
 intended_surface_types = ['ExteriorRoof', 'ExteriorWall', 'GroundContactFloor', 'ExteriorWindow']
