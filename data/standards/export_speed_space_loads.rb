@@ -2,9 +2,10 @@ require 'openstudio'
 require 'openstudio-standards'
 require 'csv'
 require 'json'
+require 'pry-nav'
 
 # Standards to export
-templates = ['90.1-2007', '90.1-2010', '90.1-2013']
+templates = ['90.1-2007', '90.1-2010', '90.1-2013','90.1-2016']
 
 # Store the results
 inputs = {}
@@ -17,6 +18,7 @@ speed_space_types = CSV.table(csv_path, header_converters: nil).map { |row| row.
 # Export space loads for each standard to JSON
 templates.each do |template|
   # Make a standard
+
   std = Standard.build(template)
 
   # Loop through space types
@@ -30,6 +32,8 @@ templates.each do |template|
     space_type_speed = spd_st['space_type_speed']
 
     # Populate the template layer
+    #binding.pry
+    
     if inputs[template_speed].nil?
       inputs[template_speed] = {}
     end
@@ -45,6 +49,9 @@ templates.each do |template|
       'building_type' => spd_st['building_type'],
       'space_type' => spd_st['space_type']
     }
+    puts search_criteria
+    ### this is taking data from OpenStudio_Standards_space_types.json which is in IP??? Check
+    ### Can we just convert to si?
     data = std.model_find_object(std.standards_data['space_types'], search_criteria)
     if data.nil?
       puts "ERROR Could not find space type data for #{search_criteria}"
@@ -58,7 +65,7 @@ templates.each do |template|
     if spd_st['lighting_per_area'] == 'x'
       st_props['Lighting_Power_Density'] = {}
       lpd = data['lighting_per_area'].to_f
-
+      #binding.pry
       # Default
       st_props['Lighting_Power_Density']['Default'] = lpd.round(2)
 
