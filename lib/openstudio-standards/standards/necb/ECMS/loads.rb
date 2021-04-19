@@ -47,11 +47,11 @@ class ECMS
     if scale == 0.0
       model.getSpaceInfiltrationDesignFlowRates.sort.each {|item| item.remove}
     else
-      model.getSpaceInfiltrationDesignFlowRates.sort.each do |infiltration_load| #Sara
-        infiltration_load.setDesignFlowRate(infiltration_load.designFlowRate.get * scale) unless infiltration_load.designFlowRate.empty? #Sara
-        infiltration_load.setFlowperSpaceFloorArea(infiltration_load.flowperSpaceFloorArea.get * scale) unless infiltration_load.flowperSpaceFloorArea.empty? #Sara
-        infiltration_load.setFlowperExteriorSurfaceArea(infiltration_load.flowperExteriorSurfaceArea.get * scale) unless infiltration_load.flowperExteriorSurfaceArea.empty? #Sara
-        infiltration_load.setAirChangesperHour(infiltration_load.airChangesperHour.get * scale) unless infiltration_load.airChangesperHour.empty? #Sara
+      model.getSpaceInfiltrationDesignFlowRates.sort.each do |infiltration_load|
+        infiltration_load.setDesignFlowRate(infiltration_load.designFlowRate.get * scale) unless infiltration_load.designFlowRate.empty?
+        infiltration_load.setFlowperSpaceFloorArea(infiltration_load.flowperSpaceFloorArea.get * scale) unless infiltration_load.flowperSpaceFloorArea.empty?
+        infiltration_load.setFlowperExteriorSurfaceArea(infiltration_load.flowperExteriorSurfaceArea.get * scale) unless infiltration_load.flowperExteriorSurfaceArea.empty?
+        infiltration_load.setAirChangesperHour(infiltration_load.airChangesperHour.get * scale) unless infiltration_load.airChangesperHour.empty?
       end
     end
   end
