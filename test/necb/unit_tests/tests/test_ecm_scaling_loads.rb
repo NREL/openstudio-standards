@@ -165,7 +165,7 @@ class NECB_scaling_loads_Tests < Minitest::Test
       end
     end
 
-    puts @test_results_array
+    # puts @test_results_array
 
     # Save test results to file.
     File.open(@test_results_file, 'w') { |f| f.write(JSON.pretty_generate(@test_results_array)) }
