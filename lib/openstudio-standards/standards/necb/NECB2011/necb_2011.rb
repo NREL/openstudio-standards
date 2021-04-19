@@ -540,6 +540,7 @@ class NECB2011 < Standard
     model.getBuilding.setStandardsTemplate(self.class.name)
     set_occ_sensor_spacetypes(model, @space_type_map)
     model_add_loads(model, lights_type, lights_scale)
+    model_apply_infiltration_standard(model) # moved it to here as it removes impact of "scale_infiltration_loads" if we keep it under the apply_envelope method
     ecm.scale_occupancy_loads(model: model, scale: occupancy_loads_scale)
     ecm.scale_electrical_loads(model: model, scale: electrical_loads_scale)
     ecm.scale_oa_loads(model: model, scale: oa_scale)
@@ -572,7 +573,7 @@ class NECB2011 < Standard
                      fixed_wind_solar_trans: nil,
                      skylight_solar_trans: nil)
     raise('validation of model failed.') unless validate_initial_model(model)
-    model_apply_infiltration_standard(model)
+    # model_apply_infiltration_standard(model)
     model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model.getOutsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model_add_constructions(model)
