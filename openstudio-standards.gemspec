@@ -25,9 +25,13 @@ Gem::Specification.new do |spec|
     spec.add_development_dependency 'parallel_tests', '<= 2.32.0'
     spec.add_development_dependency 'nokogiri', '<= 1.6.8.1'
     spec.add_development_dependency 'bundler', '~> 1.9'
-  else
+  elsif RUBY_VERSION < '2.7'
     spec.add_development_dependency 'parallel_tests', '~> 3.0.0'
     spec.add_development_dependency 'nokogiri', '<= 1.8.2'
+    spec.add_development_dependency 'bundler', '~> 2.1'
+  else
+    spec.add_development_dependency 'parallel_tests', '~> 3.0.0'
+    spec.add_development_dependency 'nokogiri', '<= 1.10.10'
     spec.add_development_dependency 'bundler', '~> 2.1'
   end
   spec.add_development_dependency 'rake', '~> 12.3.1'
