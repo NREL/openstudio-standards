@@ -354,8 +354,7 @@ class NECB2011 < Standard
                 lights_scale: lights_scale,
                 occupancy_loads_scale: occupancy_loads_scale,
                 electrical_loads_scale: electrical_loads_scale,
-                oa_scale: oa_scale,
-                infiltration_scale: infiltration_scale
+                oa_scale: oa_scale
     )
     apply_envelope(model: model,
                    ext_wall_cond: ext_wall_cond,
@@ -371,7 +370,8 @@ class NECB2011 < Standard
                    skylight_cond: skylight_cond,
                    glass_door_solar_trans: glass_door_solar_trans,
                    fixed_wind_solar_trans: fixed_wind_solar_trans,
-                   skylight_solar_trans: skylight_solar_trans)
+                   skylight_solar_trans: skylight_solar_trans,
+                   infiltration_scale: infiltration_scale)
     apply_fdwr_srr_daylighting(model: model,
                                fdwr_set: fdwr_set,
                                srr_set: srr_set)
@@ -525,8 +525,7 @@ class NECB2011 < Standard
                    validate: true,
                    occupancy_loads_scale: nil,
                    electrical_loads_scale: nil,
-                   oa_scale: nil,
-                   infiltration_scale: nil
+                   oa_scale: nil
   )
     # Create ECM object.
     ecm = ECMS.new
@@ -539,11 +538,9 @@ class NECB2011 < Standard
     model.getBuilding.setStandardsTemplate(self.class.name)
     set_occ_sensor_spacetypes(model, @space_type_map)
     model_add_loads(model, lights_type, lights_scale)
-    model_apply_infiltration_standard(model) # moved it to here as it removes impact of "scale_infiltration_loads" if we keep it under the apply_envelope method
     ecm.scale_occupancy_loads(model: model, scale: occupancy_loads_scale)
     ecm.scale_electrical_loads(model: model, scale: electrical_loads_scale)
     ecm.scale_oa_loads(model: model, scale: oa_scale)
-    ecm.scale_infiltration_loads(model: model, scale: infiltration_scale)
   end
 
   def apply_weather_data(model:, epw_file:)
@@ -570,9 +567,12 @@ class NECB2011 < Standard
                      skylight_cond: nil,
                      glass_door_solar_trans: nil,
                      fixed_wind_solar_trans: nil,
-                     skylight_solar_trans: nil)
+                     skylight_solar_trans: nil,
+                     infiltration_scale: nil)
     raise('validation of model failed.') unless validate_initial_model(model)
-    # model_apply_infiltration_standard(model)
+    model_apply_infiltration_standard(model)
+    ecm = ECMS.new
+    ecm.scale_infiltration_loads(model: model, scale: infiltration_scale)
     model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model.getOutsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model_add_constructions(model)

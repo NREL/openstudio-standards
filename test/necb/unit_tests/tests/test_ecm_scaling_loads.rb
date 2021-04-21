@@ -79,8 +79,7 @@ class NECB_scaling_loads_Tests < Minitest::Test
                                    lights_scale: 1.0,
                                    occupancy_loads_scale: loads_scale,
                                    electrical_loads_scale: loads_scale,
-                                   oa_scale: loads_scale,
-                                   infiltration_scale: loads_scale)
+                                   oa_scale: loads_scale)
               standard.apply_envelope(model: model,
                                       ext_wall_cond: nil,
                                       ext_floor_cond: nil,
@@ -95,7 +94,8 @@ class NECB_scaling_loads_Tests < Minitest::Test
                                       skylight_cond: nil,
                                       glass_door_solar_trans: nil,
                                       fixed_wind_solar_trans: nil,
-                                      skylight_solar_trans: nil)
+                                      skylight_solar_trans: nil,
+                                      infiltration_scale: loads_scale)
               standard.apply_fdwr_srr_daylighting(model: model,
                                                   fdwr_set: -1.0,
                                                   srr_set: -1.0)
