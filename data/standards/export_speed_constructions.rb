@@ -177,9 +177,10 @@ templates.each do |template|
             upgrade = SpeedConstructions.model_add_construction(std, model, upgraded_props['construction'], upgraded_props, climate_zone)
             # Get the modified R-value
             upgrade_r_value_ip = 1.0 / upgraded_props['assembly_maximum_u_value'].to_f
+            upgrade_r_value_si = OpenStudio.convert(upgrade_r_value_ip,"ft^2*h*R/Btu","m^2*K/W").get
             # Add to the options
             type_data['Options'] << upgrade.name.get.to_s
-            r_val_data['Options'] << upgrade_r_value_ip.round(0)
+            r_val_data['Options'] << "#{upgrade_r_value_ip.round(0)} || #{upgrade_r_value_si.round(0)}"
           end
 
           # Store the outputs
