@@ -73,29 +73,31 @@ class NECB_nv_Tests < Minitest::Test
 
               # this runs the steps in the model.
               standard.apply_weather_data(model: model, epw_file: epw_file)
-              standard.apply_loads(model: model, lights_type: 'NECB_Default', lights_scale: 1.0)
+              standard.apply_loads(model: model,
+                                   lights_type: 'NECB_Default',
+                                   lights_scale: 1.0)
               standard.apply_envelope(model: model,
-                             ext_wall_cond: nil,
-                             ext_floor_cond: nil,
-                             ext_roof_cond: nil,
-                             ground_wall_cond: nil,
-                             ground_floor_cond: nil,
-                             ground_roof_cond: nil,
-                             door_construction_cond: nil,
-                             fixed_window_cond: nil,
-                             glass_door_cond: nil,
-                             overhead_door_cond: nil,
-                             skylight_cond: nil,
-                             glass_door_solar_trans: nil,
-                             fixed_wind_solar_trans: nil,
-                             skylight_solar_trans: nil)
+                                      ext_wall_cond: nil,
+                                      ext_floor_cond: nil,
+                                      ext_roof_cond: nil,
+                                      ground_wall_cond: nil,
+                                      ground_floor_cond: nil,
+                                      ground_roof_cond: nil,
+                                      door_construction_cond: nil,
+                                      fixed_window_cond: nil,
+                                      glass_door_cond: nil,
+                                      overhead_door_cond: nil,
+                                      skylight_cond: nil,
+                                      glass_door_solar_trans: nil,
+                                      fixed_wind_solar_trans: nil,
+                                      skylight_solar_trans: nil)
               standard.apply_fdwr_srr_daylighting(model: model,
-                                         fdwr_set: -1.0,
-                                         srr_set: -1.0)
+                                                  fdwr_set: -1.0,
+                                                  srr_set: -1.0)
               standard.apply_auto_zoning(model: model,
-                                sizing_run_dir: Dir.pwd,
-                                lights_type: 'NECB_Default',
-                                lights_scale: 1.0)
+                                         sizing_run_dir: Dir.pwd,
+                                         lights_type: 'NECB_Default',
+                                         lights_scale: 1.0)
               standard.apply_systems_and_efficiencies(model: model,
                                                       primary_heating_fuel: primary_heating_fuel,
                                                       sizing_run_dir: Dir.pwd,

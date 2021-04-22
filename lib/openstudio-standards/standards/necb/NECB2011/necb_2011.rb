@@ -222,7 +222,11 @@ class NECB2011 < Standard
                                    pv_ground_tilt_angle: nil,
                                    pv_ground_azimuth_angle: nil,
                                    pv_ground_module_description: nil,
-                                   chiller_type: nil
+                                   chiller_type: nil ,
+                                   occupancy_loads_scale: nil,
+                                   electrical_loads_scale: nil,
+                                   oa_scale: nil,
+                                   infiltration_scale: nil
   )
 
 
@@ -270,8 +274,11 @@ class NECB2011 < Standard
                                 pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. latitude), (3) tilt angle value (e.g. 20)
                                 pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. south), (3) azimuth angle value (e.g. 90)
                                 pv_ground_module_description: pv_ground_module_description, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. Standard), (3) other options ('Standard', 'Premium', ThinFilm')
+                                occupancy_loads_scale: occupancy_loads_scale,
+                                electrical_loads_scale: electrical_loads_scale,
+                                oa_scale: oa_scale,
+                                infiltration_scale: infiltration_scale,
                                 chiller_type: chiller_type # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) e.g. 'VSD'
-
     )
 
   end
@@ -329,7 +336,12 @@ class NECB2011 < Standard
                            pv_ground_tilt_angle: nil,
                            pv_ground_azimuth_angle: nil,
                            pv_ground_module_description: nil,
-                           chiller_type: nil
+                           chiller_type: nil,
+                           occupancy_loads_scale: nil,
+                           electrical_loads_scale: nil,
+                           oa_scale: nil,
+                           infiltration_scale: nil
+
   )
 
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
@@ -337,7 +349,13 @@ class NECB2011 < Standard
     srr_set = convert_arg_to_f(variable: srr_set,default: -1)
 
     apply_weather_data(model: model, epw_file: epw_file)
-    apply_loads(model: model, lights_type: lights_type, lights_scale: lights_scale)
+    apply_loads(model: model,
+                lights_type: lights_type,
+                lights_scale: lights_scale,
+                occupancy_loads_scale: occupancy_loads_scale,
+                electrical_loads_scale: electrical_loads_scale,
+                oa_scale: oa_scale
+    )
     apply_envelope(model: model,
                    ext_wall_cond: ext_wall_cond,
                    ext_floor_cond: ext_floor_cond,
@@ -352,7 +370,8 @@ class NECB2011 < Standard
                    skylight_cond: skylight_cond,
                    glass_door_solar_trans: glass_door_solar_trans,
                    fixed_wind_solar_trans: fixed_wind_solar_trans,
-                   skylight_solar_trans: skylight_solar_trans)
+                   skylight_solar_trans: skylight_solar_trans,
+                   infiltration_scale: infiltration_scale)
     apply_fdwr_srr_daylighting(model: model,
                                fdwr_set: fdwr_set,
                                srr_set: srr_set)
@@ -500,7 +519,16 @@ class NECB2011 < Standard
   end
 
 
-  def apply_loads(model:, lights_type: 'NECB_Default', lights_scale: 1.0, validate: true)
+  def apply_loads( model:,
+                   lights_type: 'NECB_Default',
+                   lights_scale: 1.0,
+                   validate: true,
+                   occupancy_loads_scale: nil,
+                   electrical_loads_scale: nil,
+                   oa_scale: nil
+  )
+    # Create ECM object.
+    ecm = ECMS.new
     lights_scale = convert_arg_to_f(variable: lights_scale,default: 1.0)
     if validate
       raise('validation of model failed.') unless validate_initial_model(model)
@@ -510,6 +538,9 @@ class NECB2011 < Standard
     model.getBuilding.setStandardsTemplate(self.class.name)
     set_occ_sensor_spacetypes(model, @space_type_map)
     model_add_loads(model, lights_type, lights_scale)
+    ecm.scale_occupancy_loads(model: model, scale: occupancy_loads_scale)
+    ecm.scale_electrical_loads(model: model, scale: electrical_loads_scale)
+    ecm.scale_oa_loads(model: model, scale: oa_scale)
   end
 
   def apply_weather_data(model:, epw_file:)
@@ -536,9 +567,12 @@ class NECB2011 < Standard
                      skylight_cond: nil,
                      glass_door_solar_trans: nil,
                      fixed_wind_solar_trans: nil,
-                     skylight_solar_trans: nil)
+                     skylight_solar_trans: nil,
+                     infiltration_scale: nil)
     raise('validation of model failed.') unless validate_initial_model(model)
     model_apply_infiltration_standard(model)
+    ecm = ECMS.new
+    ecm.scale_infiltration_loads(model: model, scale: infiltration_scale)
     model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model.getOutsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model_add_constructions(model)
