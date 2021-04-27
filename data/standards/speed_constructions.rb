@@ -254,13 +254,13 @@ module SpeedConstructions
       if construction_props['intended_surface_type'] == 'ExteriorWindow'
         construction_name = "#{speed_const_type} #{speed_climate_zone}" # Leave ExteriorWindow out of the name
         if target_vt
-          construction_name = "#{construction_name} - U-#{target_u_value_ip.to_f.round(2)} SHGC-#{target_shgc.round(2)} VT-#{target_vt.round(2)} || U-#{target_u_value_si.to_f.round(2)} SHGC-#{target_shgc.round(2)} VT-#{target_vt.round(2)}"
+          construction_name = "#{construction_name} - U-#{target_u_value_ip.to_f.round(2)} SHGC-#{target_shgc.round(2)} VT-#{target_vt.round(2)} || USI-#{target_u_value_si.to_f.round(2)} SHGC-#{target_shgc.round(2)} VT-#{target_vt.round(2)}"
         else
-          construction_name = "#{construction_name} - U-#{target_u_value_ip.to_f.round(2)} SHGC-#{target_shgc.round(2)} || U-#{target_u_value_si.to_f.round(2)} SHGC-#{target_shgc.round(2)}"
+          construction_name = "#{construction_name} - U-#{target_u_value_ip.to_f.round(2)} SHGC-#{target_shgc.round(2)} || USI-#{target_u_value_si.to_f.round(2)} SHGC-#{target_shgc.round(2)}"
         end
       elsif target_u_value_ip
         
-        construction_name = "#{construction_name} - R-#{target_r_value_ip.round(0)} || R-#{target_r_value_si.round(0)}"
+        construction_name = "#{construction_name} - R-#{target_r_value_ip.round(0)} || RSI-#{target_r_value_si.round(0)}"
       end
     end
 
