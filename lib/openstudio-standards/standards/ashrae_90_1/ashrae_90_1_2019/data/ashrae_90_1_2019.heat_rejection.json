@@ -25,7 +25,7 @@
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 4.5,
-      "notes": "From 90.1-2019 Table 6.8.1.7"
+      "notes": "From 90.1-2019 Table 6.8.1.7. Juan Gonzalez Added 01/11/2021 to account for fluid coolers in data center water loop heat pump condenser loops"
     },
     {
       "template": "90.1-2019",

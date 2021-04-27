@@ -100,7 +100,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -202,7 +203,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -304,7 +306,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -406,7 +409,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -508,7 +512,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -610,7 +615,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -712,7 +718,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -814,7 +821,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -916,7 +924,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -1018,7 +1027,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -1120,7 +1130,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -1222,7 +1233,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -1324,7 +1336,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -1426,7 +1439,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -1528,7 +1542,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -1630,7 +1645,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -1732,7 +1748,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -1834,7 +1851,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -1936,7 +1954,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -2038,7 +2057,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -2140,7 +2160,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     }
   ]
 }
