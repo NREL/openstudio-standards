@@ -44,8 +44,8 @@ class NECB_nv_Tests < Minitest::Test
     @nv_types = ['add_nv']
 
     nv_opening_fraction = 'NECB_Default'
-    nv_Tout_min = 'NECB_Default'
-    nv_Delta_Tin_Tout = 'NECB_Default'
+    nv_temp_out_min = 'NECB_Default'
+    nv_delta_temp_in_out = 'NECB_Default'
 
     # Test results storage array.
     @test_results_array = []
@@ -111,8 +111,8 @@ class NECB_nv_Tests < Minitest::Test
                                                       daylighting_type: 'NECB_Default',
                                                       nv_type: nv_type,
                                                       nv_opening_fraction: nv_opening_fraction,
-                                                      nv_Tout_min: nv_Tout_min,
-                                                      nv_Delta_Tin_Tout:nv_Delta_Tin_Tout,
+                                                      nv_temp_out_min: nv_temp_out_min,
+                                                      nv_delta_temp_in_out:nv_delta_temp_in_out,
                                                       pv_ground_type: nil,
                                                       pv_ground_total_area_pv_panels_m2: nil,
                                                       pv_ground_tilt_angle: nil,

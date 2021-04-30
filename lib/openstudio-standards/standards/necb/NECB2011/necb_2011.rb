@@ -212,8 +212,8 @@ class NECB2011 < Standard
                                    srr_set: -1.0,
                                    nv_type: nil,
                                    nv_opening_fraction: nil,
-                                   nv_Tout_min: nil,
-                                   nv_Delta_Tin_Tout: nil,
+                                   nv_temp_out_min: nil,
+                                   nv_delta_temp_in_out: nil,
                                    scale_x: nil,
                                    scale_y: nil,
                                    scale_z: nil,
@@ -264,8 +264,8 @@ class NECB2011 < Standard
                                 srr_set: srr_set,
                                 nv_type: nv_type, # Two options: (1) nil/none/false/'NECB_Default', (2) 'add_nv'
                                 nv_opening_fraction: nv_opening_fraction, #options: (1) nil/none/false (2) 'NECB_Default' (i.e. 0.1)
-                                nv_Tout_min: nv_Tout_min, #options: (1) nil/none/false(2) 'NECB_Default' (i.e. 13.0 based on inputs from Michel Tardif re a real school in QC)
-                                nv_Delta_Tin_Tout: nv_Delta_Tin_Tout, #options: (1) nil/none/false (2) 'NECB_Default' (i.e. 1.0 based on inputs from Michel Tardif re a real school in QC)
+                                nv_temp_out_min: nv_temp_out_min, #options: (1) nil/none/false(2) 'NECB_Default' (i.e. 13.0 based on inputs from Michel Tardif re a real school in QC)
+                                nv_delta_temp_in_out: nv_delta_temp_in_out, #options: (1) nil/none/false (2) 'NECB_Default' (i.e. 1.0 based on inputs from Michel Tardif re a real school in QC)
                                 scale_x: scale_x,
                                 scale_y: scale_y,
                                 scale_z: scale_z,
@@ -329,8 +329,8 @@ class NECB2011 < Standard
                            scale_z: nil,
                            nv_type: nil,
                            nv_opening_fraction: nil,
-                           nv_Tout_min: nil,
-                           nv_Delta_Tin_Tout: nil,
+                           nv_temp_out_min: nil,
+                           nv_delta_temp_in_out: nil,
                            pv_ground_type: nil,
                            pv_ground_total_area_pv_panels_m2: nil ,
                            pv_ground_tilt_angle: nil,
@@ -392,8 +392,8 @@ class NECB2011 < Standard
                                    daylighting_type: daylighting_type,
                                    nv_type: nv_type,
                                    nv_opening_fraction: nv_opening_fraction,
-                                   nv_Tout_min: nv_Tout_min,
-                                   nv_Delta_Tin_Tout: nv_Delta_Tin_Tout,
+                                   nv_temp_out_min: nv_temp_out_min,
+                                   nv_delta_temp_in_out: nv_delta_temp_in_out,
                                    pv_ground_type: pv_ground_type,
                                    pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
                                    pv_ground_tilt_angle: pv_ground_tilt_angle,
@@ -446,8 +446,8 @@ class NECB2011 < Standard
                                      daylighting_type: 'NECB_Default',
                                      nv_type: nil,
                                      nv_opening_fraction: nil,
-                                     nv_Tout_min: nil,
-                                     nv_Delta_Tin_Tout:nil,
+                                     nv_temp_out_min: nil,
+                                     nv_delta_temp_in_out:nil,
                                      pv_ground_type:,
                                      pv_ground_total_area_pv_panels_m2:,
                                      pv_ground_tilt_angle:,
@@ -504,8 +504,8 @@ class NECB2011 < Standard
     ecm.apply_nv(model: model,
                  nv_type: nv_type,
                  nv_opening_fraction: nv_opening_fraction,
-                 nv_Tout_min: nv_Tout_min,
-                 nv_Delta_Tin_Tout: nv_Delta_Tin_Tout) if nv_type == 'add_nv'
+                 nv_temp_out_min: nv_temp_out_min,
+                 nv_delta_temp_in_out: nv_delta_temp_in_out) if nv_type == 'add_nv'
 
     # -------Ground-mounted PV panels----------------
     # Apply ground-mounted PV panels as required.
