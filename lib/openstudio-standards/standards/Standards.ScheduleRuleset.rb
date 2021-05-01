@@ -1071,7 +1071,7 @@ class Standard
       end
       day_sch_name = "#{sch_name} Day #{iday_sch}"
       day_sch_values = day_sched['hr_values']
-      sch_rule = add_one_ruleset_sch_rule(model, sch_ruleset, day_sch_values, start_date, end_date, day_sch_name, day_names)
+      sch_rule = add_one_ruleset_sch_rule(model, sch_ruleset, start_date, end_date, day_sch_values, day_sch_name, day_names)
   
       sch_rules << sch_rule
   
@@ -1090,7 +1090,7 @@ class Standard
   # @param sch_name [String] name of ScheduleDay object
   # @param day_names [Array<String>] list of days of week for which this day type is applicable
   # @return [Object] ScheduleDay object
-  def add_one_ruleset_sch_rule(model, sch_ruleset, values, start_date, end_date, sch_name, day_names)
+  def add_one_ruleset_sch_rule(model, sch_ruleset, start_date, end_date, values, sch_name, day_names)
     # sch_rule is a sub-component of the ScheduleRuleset
     sch_rule = OpenStudio::Model::ScheduleRule.new(sch_ruleset)
     # Set the dates when the rule applies

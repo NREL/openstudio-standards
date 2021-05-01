@@ -1794,6 +1794,7 @@ class Standard
           pri_sec_zone_lists = model_differentiate_primary_secondary_thermal_zones(model, story_group, zone_fan_scheds)
           pri_zones = pri_sec_zone_lists['primary']
           sec_zones = pri_sec_zone_lists['secondary']
+          zone_op_hrs = pri_sec_zone_lists['zone_op_hrs']
 
           # Add a PVAV with Reheat for the primary zones
           stories = []
@@ -1812,7 +1813,7 @@ class Standard
                            hot_water_loop: hot_water_loop,
                            chilled_water_loop: chilled_water_loop,
                            electric_reheat: electric_reheat)
-            model_create_multizone_fan_schedule(model, zone_fan_scheds, pri_zones, system_name)
+            model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
           end
 
           # Add a PSZ_AC for each secondary zone
@@ -1846,6 +1847,7 @@ class Standard
           pri_sec_zone_lists = model_differentiate_primary_secondary_thermal_zones(model, story_group, zone_fan_scheds)
           pri_zones = pri_sec_zone_lists['primary']
           sec_zones = pri_sec_zone_lists['secondary']
+          zone_op_hrs = pri_sec_zone_lists['zone_op_hrs']
 
           # Add an VAV for the primary zones
           stories = []
@@ -1863,7 +1865,7 @@ class Standard
                                      fan_efficiency: 0.62,
                                      fan_motor_efficiency: 0.9,
                                      fan_pressure_rise: 4.0)
-            model_create_multizone_fan_schedule(model, zone_fan_scheds, pri_zones, system_name)
+            model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
           end
           # Add a PSZ_HP for each secondary zone
           unless sec_zones.empty?
@@ -1925,6 +1927,7 @@ class Standard
           pri_sec_zone_lists = model_differentiate_primary_secondary_thermal_zones(model, story_group, zone_fan_scheds)
           pri_zones = pri_sec_zone_lists['primary']
           sec_zones = pri_sec_zone_lists['secondary']
+          zone_op_hrs = pri_sec_zone_lists['zone_op_hrs']
 
           # Add a VAV for the primary zones
           stories = []
@@ -1946,7 +1949,7 @@ class Standard
                                  fan_efficiency: 0.62,
                                  fan_motor_efficiency: 0.9,
                                  fan_pressure_rise: 4.0)
-            model_create_multizone_fan_schedule(model, zone_fan_scheds, pri_zones, system_name)
+            model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
           end
 
           # Add a PSZ_AC for each secondary zone
@@ -1993,6 +1996,7 @@ class Standard
           pri_sec_zone_lists = model_differentiate_primary_secondary_thermal_zones(model, story_group, zone_fan_scheds)
           pri_zones = pri_sec_zone_lists['primary']
           sec_zones = pri_sec_zone_lists['secondary']
+          zone_op_hrs = pri_sec_zone_lists['zone_op_hrs']
 
           # Add an VAV for the primary zones
           stories = []
@@ -2011,7 +2015,7 @@ class Standard
                                     fan_motor_efficiency: 0.9,
                                     fan_pressure_rise: 4.0)
 
-            model_create_multizone_fan_schedule(model, zone_fan_scheds, pri_zones, system_name)
+            model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
           end
           # Add a PSZ_HP for each secondary zone
           unless sec_zones.empty?
@@ -2420,7 +2424,8 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
     end
 
-    return { 'primary' => pri_zones, 'secondary' => sec_zones }
+    zone_op_hrs = []
+    return { 'primary' => pri_zones, 'secondary' => sec_zones , 'zone_op_hrs' => zone_op_hrs}
   end
 
   # For a multizone system, identify any zones to isolate to separate PSZ systems
@@ -2444,13 +2449,14 @@ class Standard
       zones.each do |zone|
         pri_zones << zone
         pri_zone_names << zone.name.get.to_s
+        zone_op_hrs[zone.name.get.to_s] = thermal_zone_get_annual_operating_hours(model, zone, zone_fan_sched)
       end
       # Report out the primary vs. secondary zones
       unless sec_zone_names.empty?
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
       end
 
-      return { 'primary' => pri_zones, 'secondary' => sec_zones }
+      return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs}
     end
 
     zone_op_hrs = {}   # hash of zoneName: 8760 array of operating hours
@@ -2593,7 +2599,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
     end
 
-    return { 'primary' => pri_zones, 'secondary' => sec_zones }
+    return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs }
   end
 
   # For a multizone system, get straight average of hash values excluding the reference zone
@@ -2641,7 +2647,7 @@ class Standard
   # @param zone_fan_scheds [Hash] of hash of zoneName:8760FanSchedPerZone
   # @param pri_zones [Array<String>] names of zones served by the multizone system
   # @param system_name [String] name of air loop
-  def model_create_multizone_fan_schedule(model, zone_fan_scheds, pri_zones, system_name)
+  def model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
 
     # Exit if not stable baseline
     return if /prm/i !~ template
@@ -2652,10 +2658,10 @@ class Standard
     pri_zones.each do |zone|
       zone_name = zone.name.get.to_s
       if fan_8760.size == 0
-        fan_8760 = zone_fan_scheds[zone_name]
+        fan_8760 = zone_op_hrs[zone_name]
       else
         (0..fan_8760.size-1).each do |ihr|
-          if zone_fan_scheds[zone_name][ihr] > 0
+          if zone_op_hrs[zone_name][ihr] > 0
             fan_8760[ihr] = 1
           end
         end

@@ -1613,11 +1613,11 @@ class Standard
     return load_w
   end
 
-  # This is the EFLH for determining whether a zone should be included in a multizone system
-  # or isolated to a separate PSZ system
+  # This is the operating hours for calulating EFLH which is used for determining whether a zone 
+  # should be included in a multizone system or isolated to a separate PSZ system
   # Based on the intersection of the fan schedule for that zone and the occupancy schedule for that zone
   # @author Doug Maddox, PNNL
-  # @return [Double] the design internal load, in W
+  # @return [Array] 8760 array with 1 = operating, 0 = not operating
   def thermal_zone_get_annual_operating_hours(model, zone, zone_fan_sched)
 
     zone_ppl_sch = Array.new(8760, 0)     # merged people schedule for zone

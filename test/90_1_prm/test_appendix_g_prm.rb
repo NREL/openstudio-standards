@@ -1186,6 +1186,90 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # Check if split of zones to PSZ from multizone baselines is working correctly
+
+  def check_psz_split_from_mz(prototypes_base)
+
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+
+      # Concatenate modifier functions and arguments
+      mod_str = mod.flatten.join('_') unless mod.empty?
+
+      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
+      @bldg_type_alt_now = @bldg_type_alt[prototype]
+
+      if building_type == 'MediumOffice' && mod_str == 'remove_transformer_change_zone_epd_Perimeter_bot_ZN_1 ZN_70'
+        # This mod should isolate Perimeter_bot_ZN_1 ZN to PSZ
+        # Fan schedule for the PSZ should be same as the MZ system fan schedule (92 hrs/wk)
+        # MZ system will have the zone Core_bottom ZN on it
+        # Review all air loops and check zones and fan schedules 
+        num_zones_target = 0
+        num_zones_mz = 0
+        fan_hrs_per_week_target = 0
+        fan_hrs_per_week_mz = 0
+        model.getAirLoopHVACs.each do |air_loop|
+          air_loop.thermalZones.each do |zone|
+            zone_name = zone.name.get
+            if zone.name.get == 'Perimeter_bot_ZN_1 ZN'
+              # Get fan hours and num zones
+              num_zones_target = air_loop.thermalZones.size
+              fan_hrs_per_week_target = get_fan_hours_per_week(model, air_loop)
+            elsif zone.name.get == 'Core_bottom ZN'
+              num_zones_mz = air_loop.thermalZones.size
+              fan_hrs_per_week_mz = get_fan_hours_per_week(model, air_loop)
+            end
+          end
+        end
+
+        assert((num_zones_target == 1 && num_zones_mz > 1), "Split PSZ from MZ system fails for high internal gain zone.")
+
+      elsif building_type == 'MediumOffice' && mod_str == 'remove_transformer_change_to_long_occ_sch_Perimeter_bot_ZN_1 ZN'
+        # This mod should isolate Perimeter_bot_ZN_1 ZN to PSZ
+        # Fan schedule for the PSZ should be 24/7, while fan schedule for MZ system should be 92 hrs/wk
+        num_zones_target = 0
+        num_zones_mz = 0
+        fan_hrs_per_week_target = 0
+        fan_hrs_per_week_mz = 0
+        model.getAirLoopHVACs.each do |air_loop|
+          air_loop.thermalZones.each do |zone|
+            if zone.name.get == 'Perimeter_bot_ZN_1 ZN'
+              # Get fan hours and num zones
+              num_zones_target = air_loop.thermalZones.size
+              fan_hrs_per_week_target = get_fan_hours_per_week(model, air_loop)
+            elsif zone.name.get == 'Core_bottom ZN'
+              num_zones_mz = air_loop.thermalZones.size
+              fan_hrs_per_week_mz = get_fan_hours_per_week(model, air_loop)
+            end
+          end
+        end
+
+        assert((num_zones_target == 1 && num_zones_mz > 1), "Split PSZ from MZ system fails for high internal gain zone. Target zone fan hrs/wk = #{fan_hrs_per_week_target}; MZ fan hrs/wk = #{fan_hrs_per_week_mz}")
+      end
+
+    end
+  end
+
+  def get_fan_hours_per_week(model, air_loop)
+
+    fan_schedule = air_loop.availabilitySchedule
+    fan_hours_8760 = @prototype_creator.get_8760_values_from_schedule(model, fan_schedule)
+    fan_hours_52 = []
+
+    hr_of_yr = -1
+    (0..51).each do |iweek|
+      week_sum = 0
+      (0..167).each do |hr_of_wk|
+        hr_of_yr += 1
+        week_sum += fan_hours_8760[hr_of_yr]
+      end
+      fan_hours_52 << week_sum
+    end
+    max_fan_hours = fan_hours_52.max
+    return max_fan_hours
+  end
+
+
   # Set ZoneMultiplier to passed value for all zones
   # @param model, arguments[]
   def set_zone_multiplier(model, arguments)
@@ -1485,17 +1569,18 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      #'wwr',
-      #'srr',
-      #'envelope',
-      #'lpd',
-      #'isresidential',
-      #'daylighting_control',
-      #'light_occ_sensor',
-      #'infiltration',
-      'hvac_baseline'
-      #'sat_ctrl',
-      #'hvac_sizing'
+      'wwr',
+      'srr',
+      'envelope',
+      'lpd',
+      'isresidential',
+      'daylighting_control',
+      'light_occ_sensor',
+      'infiltration',
+      'hvac_baseline',
+      'hvac_psz_split_from_mz',
+      'sat_ctrl',
+      'hvac_sizing'
     ]
 
     # Get list of unique prototypes
@@ -1520,5 +1605,6 @@ class AppendixGPRMTests < Minitest::Test
     check_hvac_type(prototypes_base['hvac_baseline']) if tests.include? 'hvac_baseline'
     check_sat_ctrl(prototypes_base['sat_ctrl']) if tests.include? 'sat_ctrl'
     check_hvac_sizing(prototypes_base['hvac_sizing']) if tests.include? 'hvac_sizing'
+    check_psz_split_from_mz(prototypes_base['hvac_psz_split_from_mz']) if tests.include? 'hvac_psz_split_from_mz'
   end
 end

@@ -2008,24 +2008,6 @@ class Standard
     load_values = space_get_loads_for_all_equips(model, space, equips, eqp_type, ppl_total, load_values, return_noncoincident_value)
 
 
-    #space.spaceType.get.gasEquipment.each do |equip|
-    #  eqp_type = 'gas equipment'
-    #  load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values, return_noncoincident_value)
-    #end
-    #space.spaceType.get.steamEquipment.each do |equip|
-    #  eqp_type = 'steam equipment'
-    #  load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values, return_noncoincident_value)
-    #end
-    #space.spaceType.get.hotWaterEquipment.each do |equip|
-    #  eqp_type = 'hot water equipment'
-    #  load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values, return_noncoincident_value)
-    #end
-    #space.spaceType.get.otherEquipment.each do |equip|
-    #  eqp_type = 'other equipment'
-    #  load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values, return_noncoincident_value)
-    #end
-
-    # puts "DEM: #{space.name}, plugs, #{load_values[0]}, ppl, #{ppl_values.max}, lights, #{ltg_values.max}"
     # Add lighting and people to the load values array
     if return_noncoincident_value
       noncoincident_peak_load = load_values[0] + ppl_values.max + ltg_values.max
