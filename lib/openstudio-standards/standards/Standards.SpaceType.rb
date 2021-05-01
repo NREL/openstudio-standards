@@ -586,6 +586,7 @@ class Standard
       space_type_properties = interior_lighting_get_prm_data(space_type)
       space_type.lights.sort.each do |lgts|
         # modify day schedule
+        sptypname = space_type.name.get.to_s
         lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
           day_rule = week_rule.daySchedule()
           day_rule_name = day_rule.name.to_s

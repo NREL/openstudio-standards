@@ -1582,7 +1582,7 @@ class Standard
     return load_w
   end
 
-  # Determine the coincident peak internal load (W) for
+  # Determine the peak internal load (W) for
   # this zone without space multipliers.
   # This includes People, Lights, and all equipment types
   # in all spaces in this zone.
@@ -1592,14 +1592,24 @@ class Standard
     load_w = 0.0
     load_hrs_sum = Array.new(8760, 0)
 
-    thermal_zone.spaces.each do |space|
-      load_hrs = space_internal_load_annual_array(model, space)
-      (0..8759).each do |ihr|
-        load_hrs_sum[ihr] += load_hrs[ihr]
+    use_noncoincident_value = true
+
+    if !use_noncoincident_value
+      # Get array of coincident internal gain
+      thermal_zone.spaces.each do |space|
+        load_hrs = space_internal_load_annual_array(model, space, use_noncoincident_value)
+        (0..8759).each do |ihr|
+          load_hrs_sum[ihr] += load_hrs[ihr]
+        end
+      end
+      load_w = load_hrs_sum.max
+    else
+      # Get the non-coincident sum of peak internal gains
+      thermal_zone.spaces.each do |space|
+        load_w += space_internal_load_annual_array(model, space, use_noncoincident_value)
       end
     end
 
-    load_w = load_hrs_sum.max
     return load_w
   end
 
@@ -1652,9 +1662,11 @@ class Standard
     hr_of_yr = -1
     (0..51).each do |iweek|
       eflh = 0
-      (0..23).each do |ihr|
-        hr_of_yr += 1
-        eflh += zone_op_sch[hr_of_yr]
+      (0..6).each do |iday|
+        (0..23).each do |ihr|
+          hr_of_yr += 1
+          eflh += zone_op_sch[hr_of_yr]
+        end
       end
       eflhs << eflh
     end

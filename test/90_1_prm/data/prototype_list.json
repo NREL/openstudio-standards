@@ -28,7 +28,7 @@
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []],
         ["Warehouse", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
-    "hvac_baseline": [
+    "hvac_baseline_save": [
         ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", []],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["change_bldg_type",["Assembly"]], ["remove_transformer", []]]],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-4A", [["change_bldg_type",["Assembly"]], ["remove_transformer", []]]],
@@ -55,6 +55,12 @@
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []],["increase_computer_rooms_epd", [5]]]],
         ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []], ["convert_spaces_to_cmp_rms", []]]],
         ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []], ["convert_spaces_to_cmp_rms", []], ["increase_computer_rooms_epd", [20]]]]
+    ],
+    "hvac_split_psz_from_mz": [
+        ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []],["change_zone_epd", ["Perimeter_bot_ZN_1 ZN",70]]]]
+    ],
+    "hvac_baseline": [
+        ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []],["change_to_long_occ_sch", ["Perimeter_bot_ZN_1 ZN"]]]]
     ],
     "sat_ctrl": [
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []]]]

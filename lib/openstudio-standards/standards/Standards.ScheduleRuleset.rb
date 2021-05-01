@@ -655,265 +655,6 @@ class Standard
     return weekday_values
   end
 
-  private
-
-  # Set the hours of operation (0 or 1) for a ScheduleDay.
-  # Clears out existing time/value pairs and sets to supplied values.
-  #
-  # @author Andrew Parker
-  # @param schedule_day [OpenStudio::Model::ScheduleDay] The day schedule to set.
-  # @param start_time [OpenStudio::Time] Start time.
-  # @param end_time [OpenStudio::Time] End time.  If greater than 24:00, hours of operation will wrap over midnight.
-
-  # @return [Void]
-  # @api private
-  def schedule_day_set_hours_of_operation(schedule_day, start_time, end_time)
-    schedule_day.clearValues
-    twenty_four_hours = OpenStudio::Time.new(0, 24, 0, 0)
-    if end_time < twenty_four_hours
-      # Operating hours don't wrap over midnight
-      schedule_day.addValue(start_time, 0) # 0 until start time
-      schedule_day.addValue(end_time, 1) # 1 from start time until end time
-      schedule_day.addValue(twenty_four_hours, 0) # 0 after end time
-    else
-      # Operating hours start on previous day
-      schedule_day.addValue(end_time - twenty_four_hours, 1) # 1 for hours started on the previous day
-      schedule_day.addValue(start_time, 0) # 0 from end of previous days hours until start of today's
-      schedule_day.addValue(twenty_four_hours, 1) # 1 from start of today's hours until midnight
-    end
-  end
-
-  # process individual schedule profiles
-  #
-  # @author David Goldwasser
-  # @return schedule_day
-  # @api private
-  def process_hrs_of_operation_hash(sch_day, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
-
-    # process hoo and floor/ceiling vars to develop formulas without variables
-    formula_string = sch_day.additionalProperties.getFeatureAsString("param_day_profile").get
-    formula_hash = {}
-    formula_string.split("|").each do |time_val_valopt|
-      a1 = time_val_valopt.to_s.split("~")
-      time = a1[0]
-      value_array = a1.drop(1)
-      formula_hash[time] = value_array
-    end
-
-    # setup additional variables
-    if hoo_end >= hoo_start
-      occ = hoo_end - hoo_start
-    else
-      occ = 24.0 + hoo_end - hoo_start
-    end
-    vac = 24.0 - occ
-    range = val_clg - val_flr
-
-
-    # apply variables and create updated hash with only numbers
-    formula_hash_var_free = {}
-    formula_hash.each do |time,val_in_out|
-
-      # replace time variables with value
-      time = time.gsub('hoo_start',hoo_start.to_s)
-      time = time.gsub('hoo_end',hoo_end.to_s)
-      time = time.gsub('occ',occ.to_s)
-      # can save special variables like lunch or break using this logic
-      time = time.gsub('mid',(hoo_start + occ * 0.5).to_s)
-      time = time.gsub('vac',vac.to_s)
-      begin
-        time_float = eval(time)
-        if time_float.to_i.to_s == time_float.to_s || time_float.to_f.to_s == time_float.to_s # check to see if numeric
-          time_float = time_float.to_f
-        else
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Time formula #{time} for #{sch_day.name} is invalid. It can't be converted to a float.")
-        end
-      rescue SyntaxError => se
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Time formula #{time} for #{sch_day.name} is invalid. It can't be evaluated.")
-      end
-
-      # replace variables in array of values
-      val_in_out_float = []
-      val_in_out.each do |val|
-        # replace variables for values
-        val = val.gsub('val_flr',val_flr.to_s)
-        val = val.gsub('val_clg',val_clg.to_s)
-        val = val.gsub('val_range',range.to_s) # will expect a fractional value and will scale within ceiling and floor
-        begin
-          val_float = eval(val)
-          if val_float.to_i.to_s == val_float.to_s or val_float.to_f.to_s == val_float.to_s # check to see if numeric
-            val_float = val_float.to_f
-          else
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Value formula #{val_float} for #{sch_day.name} is invalid. It can't be converted to a float.")
-          end
-        rescue SyntaxError => se
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Time formula #{val_float} for #{sch_day.name} is invalid. It can't be evaluated.")
-        end
-        val_in_out_float << val_float
-      end
-
-      # update hash
-      formula_hash_var_free[time_float] = val_in_out_float
-
-    end
-
-    # this is old variable used in loop, just combining for now to avoid refactor, may change this later
-    time_value_pairs = []
-    formula_hash_var_free.each do |time,val_in_out|
-      val_in_out.each do |val|
-        time_value_pairs << [time,val]
-      end
-    end
-
-    # re-order so first value is lowest, and last is highest (need to adjust so no negative or > 24 values first)
-    neg_time_hash = {}
-    temp_min_time_hash = {}
-    time_value_pairs.each_with_index do |pair,i|
-      # if value  24 add it to 24 so it will go on tail end of profile
-      # case when value is greater than 24 can be left alone for now, will be addressed
-      if pair[0] < 0.0
-        neg_time_hash[i] = pair[0]
-        time = pair[0] + 24.0
-        time_value_pairs[i][0] = time
-      else
-        time = pair[0]
-      end
-      temp_min_time_hash[i] = pair[0]
-    end
-    time_value_pairs.rotate!(temp_min_time_hash.key(temp_min_time_hash.values.min))
-
-    # validate order, issue warning and correct if out of order
-    last_time = nil
-    throw_order_warning = false
-    pre_fix_time_value_pairs = time_value_pairs.to_s
-    time_value_pairs.each_with_index do |time_value_pair,i|
-      if last_time.nil?
-        last_time = time_value_pair[0]
-      elsif time_value_pair[0] < last_time || neg_time_hash.has_key?(i)
-
-        # todo - it doesn't actually stop here now
-        if error_on_out_of_order
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Pre-interpolated processed hash for #{sch_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Method will stop because Error on Out of Order was set to true.")
-        end
-
-        if neg_time_hash.has_key?(i)
-          orig_current_time = time_value_pair[0]
-          updated_time = 0.0
-          last_buffer = "NA"
-        else
-          # pick midpoint and put each time there. e.g. times of (2,7,9,8,11) would be changed to  (2,7,8.5,8.5,11)
-          delta = last_time - time_value_pair[0]
-
-          # determine much space last item can move
-          if i < 2
-            last_buffer = time_value_pairs[i-1][0] # can move down to 0 without any issues
-          else
-            last_buffer = time_value_pairs[i-1][0] - time_value_pairs[i-2][0]
-          end
-
-          # center if possible but don't exceed available buffer
-          updated_time = time_value_pairs[i-1][0] - [delta / 2.0,last_buffer].min
-        end
-
-        # update values in array
-        orig_current_time = time_value_pair[0]
-        time_value_pairs[i-1][0] = updated_time
-        time_value_pairs[i][0] = updated_time
-
-        # reporting mostly for diagnostic purposes
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{sch_day.name} profile item #{i} time was #{last_time} and item #{i+1} time was #{orig_current_time}. Last buffer is #{last_buffer}. Changing both times to #{updated_time}.")
-
-        last_time = updated_time
-        throw_order_warning = true
-
-      else
-        last_time = time_value_pair[0]
-      end
-    end
-
-    # issue warning if order was changed
-    if throw_order_warning
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "Pre-interpolated processed hash for #{sch_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Time values were adjusted as shown to crate a valid profile: #{time_value_pairs}")
-    end
-
-    # add interpolated values at ramp_frequency
-    time_value_pairs.each_with_index do |time_value_pair,i|
-
-      # store current and next time and value
-      current_time = time_value_pair[0]
-      current_value = time_value_pair[1]
-      if i+1 < time_value_pairs.size
-        next_time = time_value_pairs[i+1][0]
-        next_value = time_value_pairs[i+1][1]
-      else
-        # use time and value of first item
-        next_time = time_value_pairs[0][0] + 24 # need to adjust values for beginning of array
-        next_value = time_value_pairs[0][1]
-      end
-      step_delta = next_time - current_time
-
-      # skip if time between values is 0 or less than ramp frequency
-      next if  step_delta <= ramp_frequency
-
-      # skip if next value is same
-      next if current_value == next_value
-
-      # add interpolated value to array
-      interpolated_time = current_time + ramp_frequency
-      interpolated_value = next_value*(interpolated_time - current_time)/step_delta + current_value*(next_time - interpolated_time)/step_delta
-      time_value_pairs.insert(i+1,[interpolated_time,interpolated_value])
-
-    end
-
-    # remove second instance of time when there are two
-    time_values_used = []
-    items_to_remove = []
-    time_value_pairs.each_with_index do |time_value_pair,i|
-      if time_values_used.include? time_value_pair[0]
-        items_to_remove << i
-      else
-        time_values_used << time_value_pair[0]
-      end
-    end
-    items_to_remove.reverse.each do |i|
-      time_value_pairs.delete_at(i)
-    end
-
-    # if time is > 24 shift to front of array and adjust value
-    rotate_steps = 0
-    time_value_pairs.reverse.each_with_index do |time_value_pair,i|
-      if time_value_pair[0] > 24
-        rotate_steps -= 1
-        time_value_pair[0] -= 24
-      else
-        next
-      end
-    end
-    time_value_pairs.rotate!(rotate_steps)
-
-    # add a 24 on the end of array that matches the first value
-    if not time_value_pairs.last[0] == 24.0
-      time_value_pairs << [24.0,time_value_pairs.first[1]]
-    end
-
-    # reset scheduleDay values based on interpolated values
-    sch_day.clearValues
-    time_value_pairs.each do |time_val|
-      hour = time_val.first.floor
-      min = ((time_val.first - hour)*60.0).floor
-      os_time = OpenStudio::Time.new(0, hour, min, 0)
-      value = time_val.last
-      sch_day.addValue(os_time,value)
-    end
-
-    # todo - apply secondary logic
-
-    # Tell EnergyPlus to interpolate schedules to timestep so that it doesn't have to be done in this code
-    sch_day.setInterpolatetoTimestep(true)
-
-    return sch_day
-
-  end
 
   # Create a sequential array of values from a ScheduleReset object
   # Will actually include 24 extra values if model year is a leap year
@@ -1215,7 +956,7 @@ class Standard
     hr_of_yr = -1
     max_eflh = 0
     ihr_max = -1
-    (0..365).each do |iday|
+    (0..364).each do |iday|
       eflh = 0
       ihr_start = hr_of_yr + 1
       (0..23).each do |ihr|
@@ -1247,6 +988,7 @@ class Standard
     end
     sch_ruleset.setSummerDesignDaySchedule(day_sch)
   
+    return sch_ruleset
   end
   
   # Create a ScheduleRules object from an hourly array of values for a week
@@ -1378,4 +1120,264 @@ class Standard
 
       return sch_rule
   end
+end
+
+private
+
+# Set the hours of operation (0 or 1) for a ScheduleDay.
+# Clears out existing time/value pairs and sets to supplied values.
+#
+# @author Andrew Parker
+# @param schedule_day [OpenStudio::Model::ScheduleDay] The day schedule to set.
+# @param start_time [OpenStudio::Time] Start time.
+# @param end_time [OpenStudio::Time] End time.  If greater than 24:00, hours of operation will wrap over midnight.
+
+# @return [Void]
+# @api private
+def schedule_day_set_hours_of_operation(schedule_day, start_time, end_time)
+  schedule_day.clearValues
+  twenty_four_hours = OpenStudio::Time.new(0, 24, 0, 0)
+  if end_time < twenty_four_hours
+    # Operating hours don't wrap over midnight
+    schedule_day.addValue(start_time, 0) # 0 until start time
+    schedule_day.addValue(end_time, 1) # 1 from start time until end time
+    schedule_day.addValue(twenty_four_hours, 0) # 0 after end time
+  else
+    # Operating hours start on previous day
+    schedule_day.addValue(end_time - twenty_four_hours, 1) # 1 for hours started on the previous day
+    schedule_day.addValue(start_time, 0) # 0 from end of previous days hours until start of today's
+    schedule_day.addValue(twenty_four_hours, 1) # 1 from start of today's hours until midnight
+  end
+end
+
+# process individual schedule profiles
+#
+# @author David Goldwasser
+# @return schedule_day
+# @api private
+def process_hrs_of_operation_hash(sch_day, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
+
+  # process hoo and floor/ceiling vars to develop formulas without variables
+  formula_string = sch_day.additionalProperties.getFeatureAsString("param_day_profile").get
+  formula_hash = {}
+  formula_string.split("|").each do |time_val_valopt|
+    a1 = time_val_valopt.to_s.split("~")
+    time = a1[0]
+    value_array = a1.drop(1)
+    formula_hash[time] = value_array
+  end
+
+  # setup additional variables
+  if hoo_end >= hoo_start
+    occ = hoo_end - hoo_start
+  else
+    occ = 24.0 + hoo_end - hoo_start
+  end
+  vac = 24.0 - occ
+  range = val_clg - val_flr
+
+
+  # apply variables and create updated hash with only numbers
+  formula_hash_var_free = {}
+  formula_hash.each do |time,val_in_out|
+
+    # replace time variables with value
+    time = time.gsub('hoo_start',hoo_start.to_s)
+    time = time.gsub('hoo_end',hoo_end.to_s)
+    time = time.gsub('occ',occ.to_s)
+    # can save special variables like lunch or break using this logic
+    time = time.gsub('mid',(hoo_start + occ * 0.5).to_s)
+    time = time.gsub('vac',vac.to_s)
+    begin
+      time_float = eval(time)
+      if time_float.to_i.to_s == time_float.to_s || time_float.to_f.to_s == time_float.to_s # check to see if numeric
+        time_float = time_float.to_f
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Time formula #{time} for #{sch_day.name} is invalid. It can't be converted to a float.")
+      end
+    rescue SyntaxError => se
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Time formula #{time} for #{sch_day.name} is invalid. It can't be evaluated.")
+    end
+
+    # replace variables in array of values
+    val_in_out_float = []
+    val_in_out.each do |val|
+      # replace variables for values
+      val = val.gsub('val_flr',val_flr.to_s)
+      val = val.gsub('val_clg',val_clg.to_s)
+      val = val.gsub('val_range',range.to_s) # will expect a fractional value and will scale within ceiling and floor
+      begin
+        val_float = eval(val)
+        if val_float.to_i.to_s == val_float.to_s or val_float.to_f.to_s == val_float.to_s # check to see if numeric
+          val_float = val_float.to_f
+        else
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Value formula #{val_float} for #{sch_day.name} is invalid. It can't be converted to a float.")
+        end
+      rescue SyntaxError => se
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Time formula #{val_float} for #{sch_day.name} is invalid. It can't be evaluated.")
+      end
+      val_in_out_float << val_float
+    end
+
+    # update hash
+    formula_hash_var_free[time_float] = val_in_out_float
+
+  end
+
+  # this is old variable used in loop, just combining for now to avoid refactor, may change this later
+  time_value_pairs = []
+  formula_hash_var_free.each do |time,val_in_out|
+    val_in_out.each do |val|
+      time_value_pairs << [time,val]
+    end
+  end
+
+  # re-order so first value is lowest, and last is highest (need to adjust so no negative or > 24 values first)
+  neg_time_hash = {}
+  temp_min_time_hash = {}
+  time_value_pairs.each_with_index do |pair,i|
+    # if value  24 add it to 24 so it will go on tail end of profile
+    # case when value is greater than 24 can be left alone for now, will be addressed
+    if pair[0] < 0.0
+      neg_time_hash[i] = pair[0]
+      time = pair[0] + 24.0
+      time_value_pairs[i][0] = time
+    else
+      time = pair[0]
+    end
+    temp_min_time_hash[i] = pair[0]
+  end
+  time_value_pairs.rotate!(temp_min_time_hash.key(temp_min_time_hash.values.min))
+
+  # validate order, issue warning and correct if out of order
+  last_time = nil
+  throw_order_warning = false
+  pre_fix_time_value_pairs = time_value_pairs.to_s
+  time_value_pairs.each_with_index do |time_value_pair,i|
+    if last_time.nil?
+      last_time = time_value_pair[0]
+    elsif time_value_pair[0] < last_time || neg_time_hash.has_key?(i)
+
+      # todo - it doesn't actually stop here now
+      if error_on_out_of_order
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Pre-interpolated processed hash for #{sch_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Method will stop because Error on Out of Order was set to true.")
+      end
+
+      if neg_time_hash.has_key?(i)
+        orig_current_time = time_value_pair[0]
+        updated_time = 0.0
+        last_buffer = "NA"
+      else
+        # pick midpoint and put each time there. e.g. times of (2,7,9,8,11) would be changed to  (2,7,8.5,8.5,11)
+        delta = last_time - time_value_pair[0]
+
+        # determine much space last item can move
+        if i < 2
+          last_buffer = time_value_pairs[i-1][0] # can move down to 0 without any issues
+        else
+          last_buffer = time_value_pairs[i-1][0] - time_value_pairs[i-2][0]
+        end
+
+        # center if possible but don't exceed available buffer
+        updated_time = time_value_pairs[i-1][0] - [delta / 2.0,last_buffer].min
+      end
+
+      # update values in array
+      orig_current_time = time_value_pair[0]
+      time_value_pairs[i-1][0] = updated_time
+      time_value_pairs[i][0] = updated_time
+
+      # reporting mostly for diagnostic purposes
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{sch_day.name} profile item #{i} time was #{last_time} and item #{i+1} time was #{orig_current_time}. Last buffer is #{last_buffer}. Changing both times to #{updated_time}.")
+
+      last_time = updated_time
+      throw_order_warning = true
+
+    else
+      last_time = time_value_pair[0]
+    end
+  end
+
+  # issue warning if order was changed
+  if throw_order_warning
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "Pre-interpolated processed hash for #{sch_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Time values were adjusted as shown to crate a valid profile: #{time_value_pairs}")
+  end
+
+  # add interpolated values at ramp_frequency
+  time_value_pairs.each_with_index do |time_value_pair,i|
+
+    # store current and next time and value
+    current_time = time_value_pair[0]
+    current_value = time_value_pair[1]
+    if i+1 < time_value_pairs.size
+      next_time = time_value_pairs[i+1][0]
+      next_value = time_value_pairs[i+1][1]
+    else
+      # use time and value of first item
+      next_time = time_value_pairs[0][0] + 24 # need to adjust values for beginning of array
+      next_value = time_value_pairs[0][1]
+    end
+    step_delta = next_time - current_time
+
+    # skip if time between values is 0 or less than ramp frequency
+    next if  step_delta <= ramp_frequency
+
+    # skip if next value is same
+    next if current_value == next_value
+
+    # add interpolated value to array
+    interpolated_time = current_time + ramp_frequency
+    interpolated_value = next_value*(interpolated_time - current_time)/step_delta + current_value*(next_time - interpolated_time)/step_delta
+    time_value_pairs.insert(i+1,[interpolated_time,interpolated_value])
+
+  end
+
+  # remove second instance of time when there are two
+  time_values_used = []
+  items_to_remove = []
+  time_value_pairs.each_with_index do |time_value_pair,i|
+    if time_values_used.include? time_value_pair[0]
+      items_to_remove << i
+    else
+      time_values_used << time_value_pair[0]
+    end
+  end
+  items_to_remove.reverse.each do |i|
+    time_value_pairs.delete_at(i)
+  end
+
+  # if time is > 24 shift to front of array and adjust value
+  rotate_steps = 0
+  time_value_pairs.reverse.each_with_index do |time_value_pair,i|
+    if time_value_pair[0] > 24
+      rotate_steps -= 1
+      time_value_pair[0] -= 24
+    else
+      next
+    end
+  end
+  time_value_pairs.rotate!(rotate_steps)
+
+  # add a 24 on the end of array that matches the first value
+  if not time_value_pairs.last[0] == 24.0
+    time_value_pairs << [24.0,time_value_pairs.first[1]]
+  end
+
+  # reset scheduleDay values based on interpolated values
+  sch_day.clearValues
+  time_value_pairs.each do |time_val|
+    hour = time_val.first.floor
+    min = ((time_val.first - hour)*60.0).floor
+    os_time = OpenStudio::Time.new(0, hour, min, 0)
+    value = time_val.last
+    sch_day.addValue(os_time,value)
+  end
+
+  # todo - apply secondary logic
+
+  # Tell EnergyPlus to interpolate schedules to timestep so that it doesn't have to be done in this code
+  sch_day.setInterpolatetoTimestep(true)
+
+  return sch_day
+
 end

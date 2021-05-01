@@ -1368,23 +1368,134 @@ class AppendixGPRMTests < Minitest::Test
     return model
   end
 
+  # 
+
+  # Change equipment power density of a specific zone in a model to a specific value
+  # @author Doug Maddox, PNNL
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param params [Array] zone_name, new equipment power density
+  # @return [OpenStudio::model::Model]
+    def change_zone_epd(model, params)
+    zone_name = params[0]
+    new_epd = params[1]
+
+    model.getThermalZones.each do |zone|
+      if zone.name.get == zone_name
+        zone.spaces.each do |space|
+          elec_eqp = space.spaceType.get.electricEquipment
+          elec_sch = space.spaceType.get.defaultScheduleSet.get.electricEquipmentSchedule.get
+          elec_name = "special_plug_load"
+
+          # elec_eqp[0].electricEquipmentDefinition.setWattsperSpaceFloorArea(new_epd)
+          eqp_before = elec_eqp[0].getDesignLevel(space.floorArea,0)
+          # elec_eqp[0].electricEquipmentDefinition.setWattsperSpaceFloorArea(new_epd)
+          elecdef = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+          elecdef.setWattsperSpaceFloorArea(new_epd)
+          elecdef.setName(elec_name + "-def" )
+          elec = OpenStudio::Model::ElectricEquipment.new(elecdef)
+          elec.setSpace(space)
+          elec.setName(elec_name)
+          elec.setMultiplier(1)
+          elec.setSchedule(elec_sch)
+          eqp_after = elec_eqp[0].getDesignLevel(space.floorArea,0)
+          istop = 1
+        end
+      end
+    end
+    return model
+
+  end
+
+  # Add people object to a specific zone with a long occupancy schedule
+  # for testing 40 EFLH check of zones that differ for multizone systems
+  # @author Doug Maddox, PNNL
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param params [Array] zone_name, new equipment power density
+  # @return [OpenStudio::model::Model]
+  def change_to_long_occ_sch(model, params)
+
+    zone_name = params[0]
+    # Create new long schedule for occupancy for each space in the zone
+    # and assign to the spaces
+    act_sch = nil
+    ppl_sch_type_limits = nil
+    model.getThermalZones.each do |zone|
+      if zone.name.get == zone_name
+        zone.spaces.each do |space|
+          # Get existing activity schedule to use for new schedule
+          space.spaceType.get.people.each do |people|
+            act_sch = people.activityLevelSchedule
+            if act_sch.is_initialized
+              if act_sch.get.to_ScheduleRuleset.is_initialized
+                act_sch = act_sch.get.to_ScheduleRuleset.get
+              end
+            end
+            # Get existing schedule type limits to use for new schedule
+            occ_sch = people.numberofPeopleSchedule
+            if people.isNumberofPeopleScheduleDefaulted
+              # Check default schedule set
+              unless (space.spaceType.get.defaultScheduleSet.empty?)
+                unless space.spaceType.get.defaultScheduleSet.get.numberofPeopleSchedule.empty?
+                  occ_sch = space.spaceType.get.defaultScheduleSet.get.numberofPeopleSchedule
+                end
+              end
+            end
+            ppl_sch_type_limits = occ_sch.get.scheduleTypeLimits.get
+          end
+
+          # Create new schedule always occupied
+          ppl_values = Array.new(8760, 1)
+          ppl_sch_name = space.name.get + "ppl_sch_long"
+          ppl_long_sch = @prototype_creator.make_ruleset_sched_from_8760(model, ppl_values, ppl_sch_name, ppl_sch_type_limits)
+
+          # Create new people object and apply to the space
+          peopledef = OpenStudio::Model::PeopleDefinition.new(model)
+          peopledef.setName(space.name.get + "ppl-long-def" )
+          peopledef.setNumberofPeople(10)
+          peopledef.setFractionRadiant(0.3000)
+          people = OpenStudio::Model::People.new(peopledef)
+          people.setName(space.name.get + "ppl-long")
+          people.setMultiplier(1)
+          people.setActivityLevelSchedule(act_sch)
+          people.setNumberofPeopleSchedule(ppl_long_sch)
+          people.setSpace(space)
+
+        end
+      end
+    end
+
+    # Also need to set the fan of the system serving that zone to run 24/7
+
+    model.getAirLoopHVACs.each do |air_loop|
+      air_loop.thermalZones.each do |zone|
+        if zone.name.get == zone_name
+          air_loop.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
+        end
+      end
+    end
+
+    return model
+
+  end
+
+
   # Run test suite for the ASHRAE 90.1 appendix G Performance
   # Rating Method (PRM) baseline automation implementation
   # in openstudio-standards.
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      'wwr',
-      'srr',
-      'envelope',
-      'lpd',
-      'isresidential',
-      'daylighting_control',
-      'light_occ_sensor',
-      'infiltration',
-      'hvac_baseline',
-      'sat_ctrl',
-      'hvac_sizing'
+      #'wwr',
+      #'srr',
+      #'envelope',
+      #'lpd',
+      #'isresidential',
+      #'daylighting_control',
+      #'light_occ_sensor',
+      #'infiltration',
+      'hvac_baseline'
+      #'sat_ctrl',
+      #'hvac_sizing'
     ]
 
     # Get list of unique prototypes
