@@ -1753,6 +1753,310 @@ class Standard
     return load_w
   end
 
+  # Create annual array of occupancy for the space: 1 = occupied, 0 = unoccupied
+  # @author Doug Maddox, PNNL
+  # @param space object
+  # @return [Double] 8760 array of the occupancy flag
+  def space_occupancy_annual_array(model, space)
+    occ_sch_values = nil
+    ppl_values = Array.new(8760, 0)
+
+    # Need to review all people objects in this space
+    space.spaceType.get.people.each do |people|
+      occ_sch = people.numberofPeopleSchedule
+      if occ_sch.is_initialized
+        occ_sch_obj = occ_sch.get
+        occ_sch_values = get_8760_values_from_schedule(model, occ_sch_obj)
+        # Flag = 1 if any schedule shows occupancy for a given hour
+        if !occ_sch_values.nil?
+          (0..8759).each do |ihr|
+            ppl_values[ihr] = 1 if occ_sch_values[ihr] > 0
+          end
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retrieve people schedule for #{space.name}.  Assuming #{w_per_person}W/person.")
+        end
+      end
+
+    end
+
+    return ppl_values
+  end
+
+  # Determine the design internal load (W) for
+  # this space without space multipliers.
+  # This include People, Lights, Electric Equipment, and Gas Equipment.  
+  # This version accounts for operating schedules
+  # and fraction lost for equipment
+  # @author Doug Maddox, PNNL
+  # @param space object
+  # @return [Double] 8760 array of the design internal load, in W, for this space
+  def space_internal_load_annual_array(model, space)
+    # For each type of load, first convert schedules to 8760 arrays so coincident load can be determined
+    ppl_values = Array.new(8760, 0)
+    ltg_values = Array.new(8760, 0)
+    load_values = Array.new(8760, 0)
+
+    # People
+    ppl_total = 0
+    space.spaceType.get.people.each do |people|
+      w_per_person = 125 # Initial assumption
+      occ_sch_max = 1
+      act_sch = people.activityLevelSchedule
+      if people.isActivityLevelScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.peopleActivityLevelSchedule.empty?
+            act_sch = space.spaceType.get.defaultScheduleSet.get.peopleActivityLevelSchedule
+          end
+        end
+      end
+      if act_sch.is_initialized
+        act_sch_obj = act_sch.get
+        act_sch_values = get_8760_values_from_schedule(model, act_sch_obj)
+        if !act_sch_values.nil?
+          w_per_person = act_sch_values.max
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retrieve people activity schedule for #{space.name}.  Assuming #{w_per_person}W/person.")
+        end
+      end
+        
+      occ_sch_ruleset = nil
+      occ_sch = people.numberofPeopleSchedule
+      if people.isNumberofPeopleScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.numberofPeopleSchedule.empty?
+            occ_sch = space.spaceType.get.defaultScheduleSet.get.numberofPeopleSchedule
+          end
+        end
+      end
+      if occ_sch.is_initialized
+        occ_sch_obj = occ_sch.get
+        occ_sch_values = get_8760_values_from_schedule(model, occ_sch_obj)
+        if !occ_sch_max.nil?
+          occ_sch_max = occ_sch_values.max
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retrieve people schedule for #{space.name}.  Assuming #{w_per_person}W/person.")
+        end
+      end
+
+      num_ppl = people.getNumberOfPeople(space.floorArea)
+      ppl_total += num_ppl
+
+      act_sch_value = w_per_person 
+      occ_sch_value = occ_sch_max 
+      (0..8759).each do |ihr|
+        act_sch_value = act_sch_values[ihr] unless act_sch_values.nil?
+        occ_sch_value = occ_sch_values[ihr] unless occ_sch_values.nil?
+        ppl_values[ihr] += num_ppl * act_sch_value * occ_sch_value
+      end
+    end
+
+    # Lights objects
+    space.spaceType.get.lights.each do |light|
+      ltg_sch_ruleset = nil
+      ltg_sch = light.schedule
+      ltg_w = light.getLightingPower(space.floorArea, ppl_total)
+
+      if light.isScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.lightingSchedule.empty?
+            ltg_sch = space.spaceType.get.defaultScheduleSet.get.lightingSchedule
+          end
+        end
+      end
+      if ltg_sch.is_initialized
+        ltg_sch_obj = ltg_sch.get
+        ltg_sch_values = get_8760_values_from_schedule(model, ltg_sch_obj)
+        if !ltg_sch_values.nil?
+          ltg_sch_max = ltg_sch_values.max
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retreive lighting schedule for #{space.name}.  Assuming #{ltg_w} W.")
+        end
+      end
+
+      if !ltg_sch_values.nil?
+        ltg_sch_value = 1.0
+        (0..8759).each do |ihr|
+          ltg_sch_value = ltg_sch_values[ihr] unless ltg_sch_ruleset.nil?
+          ltg_values[ihr] += ltg_w * ltg_sch_value
+        end
+      end
+    end
+
+    # Luminaire Objects
+    space.spaceType.get.luminaires.each do |light|
+      ltg_sch_values = nil
+      ltg_sch = light.schedule
+      ltg_w = light.lightingPower(space.floorArea, ppl_total)
+      # not sure if above line is valid, so calculate from parts instead until above can be verified
+      ltg_w = light.getPowerPerFloorArea(space.floorArea) * space.floorArea
+      ltg_w += light.getPowerPerPerson(ppl_total) * ppl_total
+
+      if light.isScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.lightingSchedule.empty?
+            ltg_sch = space.spaceType.get.defaultScheduleSet.get.lightingSchedule
+          end
+        end
+      end
+      if ltg_sch.is_initialized
+        ltg_sch_obj = ltg_sch.get
+        ltg_sch_values = get_8760_values_from_schedule(model, ltg_sch_obj)
+        if !ltg_sch_values.nil?
+          ltg_sch_max = ltg_sch_values.max
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retreive lighting schedule for luminaires for #{space.name}.  Assuming #{ltg_w} W.")
+        end
+      end
+
+      if !ltg_sch_values.nil?
+        ltg_sch_value = 1.0
+        (0..8759).each do |ihr|
+          ltg_sch_value = ltg_sch_values[ihr] unless ltg_sch_ruleset.nil?
+          ltg_values[ihr] += ltg_w * ltg_sch_value
+        end
+      end
+    end
+
+    # Equipment Loads
+    eq_w = space.electricEquipmentPower
+    space.spaceType.get.electricEquipment.each do |equip|
+      eqp_type = 'electric equipment'
+      load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
+    end
+    space.spaceType.get.gasEquipment.each do |equip|
+      eqp_type = 'gas equipment'
+      load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
+    end
+    space.spaceType.get.steamEquipment.each do |equip|
+      eqp_type = 'steam equipment'
+      load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
+    end
+    space.spaceType.get.hotWaterEquipment.each do |equip|
+      eqp_type = 'hot water equipment'
+      load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
+    end
+    space.spaceType.get.otherEquipment.each do |equip|
+      eqp_type = 'other equipment'
+      load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
+    end
+
+    # Add lighting and people to the load values array
+    (0..8759).each do |ihr|
+      load_values[ihr] += ppl_values[ihr] + ltg_values[ihr]
+    end
+
+      return load_values
+  end
+
+  # Returns an 8760 array of load values for a specific type of load in a space.
+  # This is useful for the Appendix G test for multizone systems
+  # to determine whether specific zones should be isolated to PSZ based on 
+  # space loads that differ significantly from other zones on the multizone system
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @param space [OpenStudio::Model::Space] the space
+  # @param equip [object] This can be any type of equipment object in the space
+  # @param eqp_type [String] string description of the type of equipment object
+  # @param ppl_total [Numeric] total number of people in the space
+  # @param load_values [Array] 8760 array of load values for the equipment type
+  #
+  # @return [Array] load values array
+  #
+  def space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
+    # Get load schedule and load lost value depending on equipment type
+    case eqp_type 
+    when 'electric equipment'
+      load_sch = equip.schedule
+      load_lost = equip.electricEquipmentDefinition.fractionLost              # eqp-type-specific
+      load_w = equip.getDesignLevel(space.floorArea, ppl_total) * (1 - load_lost)
+
+      if equip.isScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.electricEquipmentSchedule.empty?   # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.electricEquipmentSchedule  # eqp-type-specific
+          end
+        end
+      end
+    when 'gas equipment'
+      load_sch = equip.schedule
+      load_lost = equip.gasEquipmentDefinition.fractionLost              # eqp-type-specific
+      load_w = equip.getDesignLevel(space.floorArea, ppl_total) * (1 - load_lost)
+
+      if equip.isScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.gasEquipmentSchedule.empty?   # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.gasEquipmentSchedule  # eqp-type-specific
+          end
+        end
+      end
+    when 'steam equipment'
+      load_sch = equip.schedule
+      load_lost = equip.steamEquipmentDefinition.fractionLost              # eqp-type-specific
+      load_w = equip.getDesignLevel(space.floorArea, ppl_total) * (1 - load_lost)
+
+      if equip.isScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.steamEquipmentSchedule.empty?   # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.steamEquipmentSchedule  # eqp-type-specific
+          end
+        end
+      end
+    when 'hot water equipment'
+      load_sch = equip.schedule
+      load_lost = equip.hotWaterEquipmentDefinition.fractionLost              # eqp-type-specific
+      load_w = equip.getDesignLevel(space.floorArea, ppl_total) * (1 - load_lost)
+
+      if equip.isScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.hotWaterEquipmentSchedule.empty?   # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.hotWaterEquipmentSchedule  # eqp-type-specific
+          end
+        end
+      end
+    when 'other equipment'
+      load_sch = equip.schedule
+      load_lost = equip.otherEquipmentDefinition.fractionLost              # eqp-type-specific
+      load_w = equip.getDesignLevel(space.floorArea, ppl_total) * (1 - load_lost)
+
+      if equip.isScheduleDefaulted
+        # Check default schedule set
+        unless (space.spaceType.get.defaultScheduleSet.empty?)
+          unless space.spaceType.get.defaultScheduleSet.get.otherEquipmentSchedule.empty?   # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.otherEquipmentSchedule  # eqp-type-specific
+          end
+        end
+      end
+    end
+
+    load_sch_ruleset = nil
+    if load_sch.is_initialized
+      load_sch_obj = load_sch.get
+      load_sch_values = get_8760_values_from_schedule(model, load_sch_obj)
+      if !load_sch_values.nil?
+        load_sch_max = load_sch_values.max
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retreive schedule for equipment type #{eqp_type} in space #{space.name}.  Assuming #{load_w} W.")
+      end
+    end
+
+    if !load_sch_values.nil?
+      load_sch_value = 1.0
+      (0..8759).each do |ihr|
+        load_sch_value = load_sch_values[ihr]
+        load_values[ihr] += load_w * load_sch_value
+      end
+    end
+    return load_values
+  end
+
   # will return a sorted array of array of spaces and connected area (Descending)
   def space_get_adjacent_spaces_with_shared_wall_areas(space, same_floor = true)
     same_floor_spaces = []

@@ -421,4 +421,126 @@ class ASHRAE901PRM < Standard
 
     return true
   end
+
+  #
+  # Add design day schedule objects for space loads, for PRM 2019 baseline models
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  #
+  def model_apply_prm_baseline_sizing_schedule(model)
+    space_loads = model.getSpaceLoads
+    loads = []
+    space_loads.sort.each do |space_load|
+      load_type = space_load.iddObjectType.valueName.sub('OS_', '').strip.sub('_', '')
+      casting_method_name = "to_#{load_type}"
+      if space_load.respond_to?(casting_method_name)
+        casted_load = space_load.public_send(casting_method_name).get
+        loads << casted_load
+      else
+        p "Need Debug, casting method not found @JXL"
+      end
+    end
+
+    load_schedule_name_hash = {
+        "People" => "numberofPeopleSchedule",
+        "Lights" => "schedule",
+        "ElectricEquipment" => "schedule",
+        "GasEquipment" => "schedule",
+        "SpaceInfiltration_DesignFlowRate" => "schedule"
+    }
+
+    loads.each do |load|
+      load_type = load.iddObjectType.valueName.sub('OS_', '').strip
+      load_schedule_name = load_schedule_name_hash[load_type]
+      next unless !load_schedule_name.nil?
+
+      # check if the load is in a dwelling space
+      if load.spaceType.is_initialized
+        space_type = load.spaceType.get
+      elsif load.space.is_initialized && load.space.get.spaceType.is_initialized
+        space_type = load.space.get.spaceType.get
+      else
+        space_type = nil
+        puts "No hosting space/spacetype found for load: #{load.name}"
+      end
+      if !space_type.nil? && /apartment/i =~ space_type.standardsSpaceType.to_s
+        load_in_dwelling = true
+      else
+        load_in_dwelling = false
+      end
+
+      load_schedule = load.public_send(load_schedule_name).get
+      schedule_type = load_schedule.iddObjectType.valueName.sub('OS_', '').strip.sub('_', '')
+      load_schedule = load_schedule.public_send("to_#{schedule_type}").get
+
+      case schedule_type
+      when 'ScheduleRuleset'
+        load_schmax = get_8760_values_from_schedule(model, load_schedule).max
+        load_schmin = get_8760_values_from_schedule(model, load_schedule).min
+        load_schmode = get_weekday_values_from_8760(model,
+                                                    Array(get_8760_values_from_schedule(model, load_schedule)),
+                                                    value_includes_holiday = true).mode[0]
+
+        # AppendixG-2019 G3.1.2.2.1
+        if load_type == 'SpaceInfiltration_DesignFlowRate'
+          summer_value = load_schmax
+          winter_value = load_schmax
+        else
+          summer_value = load_schmax
+          winter_value = load_schmin
+        end
+
+        # AppendixG-2019 Exception to G3.1.2.2.1
+        if load_in_dwelling
+          summer_value = load_schmode
+        end
+
+        # set cooling design day schedule
+        summer_dd_schedule = OpenStudio::Model::ScheduleDay.new(model)
+        summer_dd_schedule.setName("#{load.name} Summer Design Day")
+        summer_dd_schedule.addValue(OpenStudio::Time.new(1.0), summer_value)
+        load_schedule.setSummerDesignDaySchedule(summer_dd_schedule)
+
+        # set heating design day schedule
+        winter_dd_schedule = OpenStudio::Model::ScheduleDay.new(model)
+        winter_dd_schedule.setName("#{load.name} Winter Design Day")
+        winter_dd_schedule.addValue(OpenStudio::Time.new(1.0), winter_value)
+        load_schedule.setWinterDesignDaySchedule(winter_dd_schedule)
+
+      when 'ScheduleConstant'
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space load #{load.name} has schedule type of ScheduleConstant. Nothing to be done for ScheduleConstant")
+        next
+      end
+    end
+  end
+
+  # Specify supply air temperature setpoint for unit heaters based on 90.1 Appendix G G3.1.2.8.2
+  #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone Object
+  #
+  # @return [Double] for zone with unit heaters, return design supply temperature; otherwise, return nil
+  def thermal_zone_prm_unitheater_design_supply_temperature(thermal_zone)
+    thermal_zone.equipment.each do |eqt|
+      if eqt.to_ZoneHVACUnitHeater.is_initialized
+        return OpenStudio.convert(105, 'F', 'C').get
+      end
+    end
+    return nil
+  end
+  
+  # Specify supply to room delta for laboratory spaces based on 90.1 Appendix G Exception to G3.1.2.8.1
+  #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone Object
+  #
+  # @return [Double] for zone with laboratory space, return 17; otherwise, return nil
+  def thermal_zone_prm_lab_delta_t(thermal_zone)
+    # For labs, add 17 delta-T; otherwise, add 20 delta-T
+    thermal_zone.spaces.each do |space|
+      space_std_type = space.spaceType.get.standardsSpaceType.get
+      if space_std_type == 'laboratory'
+        return 17
+      end
+    end
+    return nil
+  end
 end
