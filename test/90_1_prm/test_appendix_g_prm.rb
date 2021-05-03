@@ -1186,7 +1186,220 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # Check if split of zones to PSZ from multizone baselines is working correctly
+
+  def check_psz_split_from_mz(prototypes_base)
+
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+
+      # Concatenate modifier functions and arguments
+      mod_str = mod.flatten.join('_') unless mod.empty?
+
+      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
+      @bldg_type_alt_now = @bldg_type_alt[prototype]
+
+      if building_type == 'MediumOffice' && mod_str == 'remove_transformer_change_zone_epd_Perimeter_bot_ZN_1 ZN_70'
+        # This mod should isolate Perimeter_bot_ZN_1 ZN to PSZ
+        # Fan schedule for the PSZ should be same as the MZ system fan schedule (92 hrs/wk)
+        # MZ system will have the zone Core_bottom ZN on it
+        # Review all air loops and check zones and fan schedules 
+        num_zones_target = 0
+        num_zones_mz = 0
+        fan_hrs_per_week_target = 0
+        fan_hrs_per_week_mz = 0
+        model.getAirLoopHVACs.each do |air_loop|
+          air_loop.thermalZones.each do |zone|
+            zone_name = zone.name.get
+            if zone.name.get == 'Perimeter_bot_ZN_1 ZN'
+              # Get fan hours and num zones
+              num_zones_target = air_loop.thermalZones.size
+              fan_hrs_per_week_target = get_fan_hours_per_week(model, air_loop)
+            elsif zone.name.get == 'Core_bottom ZN'
+              num_zones_mz = air_loop.thermalZones.size
+              fan_hrs_per_week_mz = get_fan_hours_per_week(model, air_loop)
+            end
+          end
+        end
+
+        assert((num_zones_target == 1 && num_zones_mz > 1 && (fan_hrs_per_week_target - fan_hrs_per_week_mz).abs < 5), "Split PSZ from MZ system fails for high internal gain zone.")
+      elsif building_type == 'MediumOffice' && mod_str == 'remove_transformer_change_to_long_occ_sch_Perimeter_bot_ZN_1 ZN'
+        # This mod should isolate Perimeter_bot_ZN_1 ZN to PSZ
+        # Fan schedule for the PSZ should be 24/7, while fan schedule for MZ system should be 92 hrs/wk
+        num_zones_target = 0
+        num_zones_mz = 0
+        fan_hrs_per_week_target = 0
+        fan_hrs_per_week_mz = 0
+        model.getAirLoopHVACs.each do |air_loop|
+          air_loop.thermalZones.each do |zone|
+            if zone.name.get == 'Perimeter_bot_ZN_1 ZN'
+              # Get fan hours and num zones
+              num_zones_target = air_loop.thermalZones.size
+              fan_hrs_per_week_target = get_fan_hours_per_week(model, air_loop)
+            elsif zone.name.get == 'Core_bottom ZN'
+              num_zones_mz = air_loop.thermalZones.size
+              fan_hrs_per_week_mz = get_fan_hours_per_week(model, air_loop)
+            end
+          end
+        end
+
+        assert((num_zones_target == 1 && num_zones_mz > 1 && fan_hrs_per_week_target > fan_hrs_per_week_mz), "Split PSZ from MZ system fails for high internal gain zone. Target zone fan hrs/wk = #{fan_hrs_per_week_target}; MZ fan hrs/wk = #{fan_hrs_per_week_mz}")
+      end
+
+    end
+  end
+
+  def get_fan_hours_per_week(model, air_loop)
+
+    fan_schedule = air_loop.availabilitySchedule
+    fan_hours_8760 = @prototype_creator.get_8760_values_from_schedule(model, fan_schedule)
+    fan_hours_52 = []
+
+    hr_of_yr = -1
+    (0..51).each do |iweek|
+      week_sum = 0
+      (0..167).each do |hr_of_wk|
+        hr_of_yr += 1
+        week_sum += fan_hours_8760[hr_of_yr]
+      end
+      fan_hours_52 << week_sum
+    end
+    max_fan_hours = fan_hours_52.max
+    return max_fan_hours
+  end
+
+
+  # Check if number of chillers is correct
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_number_of_chillers(prototypes_base)
+    # Find plant loops with chillers and ensure the meet the requirement laid out by G3.1.3.7 of Appendix G 2019
+    #
+    # Electric chillers shall be used in the baseline building design regardless of the cooling
+    # energy source, e.g. direct-fired absorption or absorption from purchased steam. The
+    # baseline building design’s chiller plant shall be modeled with chillers having the number
+    # and type as indicated in Table G3.1.3.7 as a function of building peak cooling load.
+    #
+    # Building Peak Cooling Load Number and Type of Chillers
+    # <=300 tons: 1 water-cooled screw chiller
+    # >300 tons, <600 tons:  2 water-cooled screw chillers sized equally
+    # >=600 tons:  2 water-cooled centrifugal chillers minimum with chillers added so that no chiller is larger than 800 tons, all sized equally
+
+    prototypes_base.each do |prototype, model|
+
+      model.getPlantLoops.each do |plant_loop|
+
+        n_chillers = plant_loop.supplyComponents(OpenStudio::Model::ChillerElectricEIR::iddObjectType()).length
+
+        # Skip plant loops with no chillers
+        next if n_chillers == 0
+
+        # Check for Autosized chillers. Chillers should have had their capacity set already. Faile
+        plant_loop.supplyComponents.each do |sc|
+          # ChillerElectricEIR
+          if sc.to_ChillerElectricEIR.is_initialized
+            chiller = sc.to_ChillerElectricEIR.get
+
+            # Check to make sure chiller is not autosized
+            assert(!chiller.isReferenceCapacityAutosized,
+                   "Chiller named #{chiller.name.to_s} is autosized. The 90.1 PRM model should not have any autosized chillers
+                        as this causes issues when finding a chilled plant loop's capacity. Check if the cooling plant sizing run failed.")
+          end
+        end
+
+        # Initialize Standard class
+        standard = Standard.build('90.1-PRM-2019')
+        cap_w = standard.plant_loop_total_cooling_capacity(plant_loop)
+        cap_tons = OpenStudio.convert(cap_w, 'W', 'ton').get
+
+        if cap_tons <= 300
+          n_expected_chillers = 1
+        elsif cap_tons > 300 && cap_tons < 600
+          n_expected_chillers = 2
+        else
+          # Max capacity of a single chiller
+          max_cap_ton = 800.0
+          n_expected_chillers = (cap_tons / max_cap_ton).floor + 1
+          # Must be at least 2 chillers
+          n_expected_chillers += 1 if n_expected_chillers == 1
+        end
+
+        assert(n_chillers == n_expected_chillers,
+               msg = "Baseline system failed. Number of chillers equaled #{n_chillers} when it should be #{n_expected_chillers}.
+                    Please review section G3.1.3.7 of Appendix G for guidance.")
+      end
+    end
+
+
+  end
+
+
+  # Check if number of boilers is correct
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_number_of_boilers(prototypes_base)
+
+    # Find plant loops with boilers and ensure the meet the requirement laid out by G3.1.3.2 of Appendix G 2019
+    #
+    # G3.1.3.2 Type and Number of Boilers (Systems 1, 5, 7, 11, and 12)
+    # The boiler plant shall be natural draft, except as noted in Section G3.1.1.1. The baseline
+    # building design boiler plant shall be modeled as having a single boiler if the baseline
+    # building design plant serves a conditioned floor area of 15,000 ft2 or less, and as having
+    # two equally sized boilers for plants serving more than 15,000 ft2.
+
+    prototypes_base.each do |prototype, model|
+
+      model.getPlantLoops.each do |plant_loop|
+
+        n_boilers = plant_loop.supplyComponents(OpenStudio::Model::BoilerHotWater::iddObjectType()).length
+
+        # Skip plant loops with no boilers
+        next if n_boilers == 0
+
+        # Find area served by this loop
+        standard = Standard.build('90.1-PRM-2019')
+        area_served_m2 = standard.plant_loop_total_floor_area_served(plant_loop)
+        area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
+
+        # check that the number of boilers equals the amount specified by the standard based on the conditioned floor area
+        n_expected_boilers = area_served_ft2 < 15000 ? 1 : 2
+
+        assert(n_boilers == n_expected_boilers,
+               msg = "Baseline system failed. Number of boilers equaled #{n_boilers} when it should be #{n_expected_boilers}.
+                    Please review section G3.1.3.2 of Appendix G for guidance.")
+      end
+    end
+
+
+  end
+
+
+  # Check if number of towers is correct
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_number_of_cooling_towers(prototypes_base)
+    # Find plant loops with chillers + cooling towers and ensure the meet the requirement laid out by Appendix G 2019
+    #
+    # 3.7.3 Cooling Towers;
+    # Only one tower in baseline, regardless of number of chillers
+    prototypes_base.each do |prototype, model|
+
+      n_chillers = model.getChillerElectricEIRs.size
+
+      n_cooling_towers = model.getCoolingTowerSingleSpeeds.size
+      n_cooling_towers += model.getCoolingTowerTwoSpeeds.size
+      n_cooling_towers += model.getCoolingTowerVariableSpeeds.size
+
+      if n_cooling_towers > 0
+        assert(n_cooling_towers == 1,
+             msg = "Baseline system failed for Appendix G 2019 requirements. Number of cooling towers > 1.
+                      The number of chillers equaled #{n_chillers} and the number of cooling towers equaled #{n_cooling_towers}.")
+      end
+    end
+  end
+
   # Set ZoneMultiplier to passed value for all zones
+
   # @param model, arguments[]
   def set_zone_multiplier(model, arguments)
     mult = arguments[0]
@@ -1368,23 +1581,138 @@ class AppendixGPRMTests < Minitest::Test
     return model
   end
 
+  # 
+
+  # Change equipment power density of a specific zone in a model to a specific value
+  # @author Doug Maddox, PNNL
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param params [Array] zone_name, new equipment power density
+  # @return [OpenStudio::model::Model]
+  def change_zone_epd(model, params)
+    zone_name = params[0]
+    new_epd = params[1]
+
+    model.getThermalZones.each do |zone|
+      if zone.name.get == zone_name
+        zone.spaces.each do |space|
+          elec_eqp = space.spaceType.get.electricEquipment
+          elec_sch = space.spaceType.get.defaultScheduleSet.get.electricEquipmentSchedule.get
+          elec_name = "special_plug_load"
+
+          # elec_eqp[0].electricEquipmentDefinition.setWattsperSpaceFloorArea(new_epd)
+          eqp_before = elec_eqp[0].getDesignLevel(space.floorArea,0)
+          # elec_eqp[0].electricEquipmentDefinition.setWattsperSpaceFloorArea(new_epd)
+          elecdef = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+          elecdef.setWattsperSpaceFloorArea(new_epd)
+          elecdef.setName(elec_name + "-def" )
+          elec = OpenStudio::Model::ElectricEquipment.new(elecdef)
+          elec.setSpace(space)
+          elec.setName(elec_name)
+          elec.setMultiplier(1)
+          elec.setSchedule(elec_sch)
+          eqp_after = elec_eqp[0].getDesignLevel(space.floorArea,0)
+          istop = 1
+        end
+      end
+    end
+    return model
+
+  end
+
+  # Add people object to a specific zone with a long occupancy schedule
+  # for testing 40 EFLH check of zones that differ for multizone systems
+  # @author Doug Maddox, PNNL
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param params [Array] zone_name, new equipment power density
+  # @return [OpenStudio::model::Model]
+  def change_to_long_occ_sch(model, params)
+
+    zone_name = params[0]
+    # Create new long schedule for occupancy for each space in the zone
+    # and assign to the spaces
+    act_sch = nil
+    ppl_sch_type_limits = nil
+    model.getThermalZones.each do |zone|
+      if zone.name.get == zone_name
+        zone.spaces.each do |space|
+          # Get existing activity schedule to use for new schedule
+          space.spaceType.get.people.each do |people|
+            act_sch = people.activityLevelSchedule
+            if act_sch.is_initialized
+              if act_sch.get.to_ScheduleRuleset.is_initialized
+                act_sch = act_sch.get.to_ScheduleRuleset.get
+              end
+            end
+            # Get existing schedule type limits to use for new schedule
+            occ_sch = people.numberofPeopleSchedule
+            if people.isNumberofPeopleScheduleDefaulted
+              # Check default schedule set
+              unless (space.spaceType.get.defaultScheduleSet.empty?)
+                unless space.spaceType.get.defaultScheduleSet.get.numberofPeopleSchedule.empty?
+                  occ_sch = space.spaceType.get.defaultScheduleSet.get.numberofPeopleSchedule
+                end
+              end
+            end
+            ppl_sch_type_limits = occ_sch.get.scheduleTypeLimits.get
+          end
+
+          # Create new schedule always occupied
+          ppl_values = Array.new(8760, 1)
+          ppl_sch_name = space.name.get + "ppl_sch_long"
+          ppl_long_sch = @prototype_creator.make_ruleset_sched_from_8760(model, ppl_values, ppl_sch_name, ppl_sch_type_limits)
+
+          # Create new people object and apply to the space
+          peopledef = OpenStudio::Model::PeopleDefinition.new(model)
+          peopledef.setName(space.name.get + "ppl-long-def" )
+          peopledef.setNumberofPeople(10)
+          peopledef.setFractionRadiant(0.3000)
+          people = OpenStudio::Model::People.new(peopledef)
+          people.setName(space.name.get + "ppl-long")
+          people.setMultiplier(1)
+          people.setActivityLevelSchedule(act_sch)
+          people.setNumberofPeopleSchedule(ppl_long_sch)
+          people.setSpace(space)
+
+        end
+      end
+    end
+
+    # Also need to set the fan of the system serving that zone to run 24/7
+
+    model.getAirLoopHVACs.each do |air_loop|
+      air_loop.thermalZones.each do |zone|
+        if zone.name.get == zone_name
+          air_loop.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
+        end
+      end
+    end
+
+    return model
+
+  end
+
+
   # Run test suite for the ASHRAE 90.1 appendix G Performance
   # Rating Method (PRM) baseline automation implementation
   # in openstudio-standards.
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      'wwr',
-      'srr',
-      'envelope',
-      'lpd',
-      'isresidential',
-      'daylighting_control',
-      'light_occ_sensor',
-      'infiltration',
-      'hvac_baseline',
-      'sat_ctrl',
-      'hvac_sizing'
+      #'wwr',
+      #'srr',
+      #'envelope',
+      #'lpd',
+      #'isresidential',
+      #'daylighting_control',
+      #'light_occ_sensor',
+      #'infiltration',
+      #'hvac_baseline',
+      'hvac_psz_split_from_mz',
+      #'sat_ctrl',
+      #'number_of_boilers',
+      #'number_of_chillers',
+      #'number_of_cooling_towers',
+      #'hvac_sizing'
     ]
 
     # Get list of unique prototypes
@@ -1398,16 +1726,20 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
 
     # Run tests
-    check_wwr(prototypes_base['wwr']) if tests.include? 'wwr'
-    check_srr(prototypes_base['srr']) if tests.include? 'srr'
-    check_daylighting_control(prototypes_base['daylighting_control']) if tests.include? 'daylighting_control'
-    check_residential_flag(prototypes_base['isresidential']) if tests.include? 'isresidential'
-    check_envelope(prototypes_base['envelope']) if tests.include? 'envelope'
-    check_lpd(prototypes_base['lpd']) if tests.include? 'lpd'
-    check_light_occ_sensor(prototypes['light_occ_sensor'], prototypes_base['light_occ_sensor']) if tests.include? 'light_occ_sensor'
-    check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if tests.include? 'infiltration'
-    check_hvac_type(prototypes_base['hvac_baseline']) if tests.include? 'hvac_baseline'
+    check_wwr(prototypes_base['wwr']) if (tests.include? 'wwr')
+    check_srr(prototypes_base['srr']) if (tests.include? 'srr')
+    check_daylighting_control(prototypes_base['daylighting_control']) if (tests.include? 'daylighting_control')
+    check_residential_flag(prototypes_base['isresidential']) if (tests.include? 'isresidential')
+    check_envelope(prototypes_base['envelope']) if (tests.include? 'envelope')
+    check_lpd(prototypes_base['lpd']) if (tests.include? 'lpd')
+    check_light_occ_sensor(prototypes['light_occ_sensor'],prototypes_base['light_occ_sensor']) if (tests.include? 'light_occ_sensor')
+    check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if (tests.include? 'infiltration')
+    check_hvac_type(prototypes_base['hvac_baseline']) if (tests.include? 'hvac_baseline')
     check_sat_ctrl(prototypes_base['sat_ctrl']) if tests.include? 'sat_ctrl'
+    check_number_of_boilers(prototypes_base['number_of_boilers']) if (tests.include? 'number_of_boilers')
+    check_number_of_chillers(prototypes_base['number_of_chillers']) if (tests.include? 'number_of_chillers')
+    check_number_of_cooling_towers(prototypes_base['number_of_cooling_towers']) if (tests.include? 'number_of_cooling_towers')
     check_hvac_sizing(prototypes_base['hvac_sizing']) if tests.include? 'hvac_sizing'
+    check_psz_split_from_mz(prototypes_base['hvac_psz_split_from_mz']) if tests.include? 'hvac_psz_split_from_mz'
   end
 end

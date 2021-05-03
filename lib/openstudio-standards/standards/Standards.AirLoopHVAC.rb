@@ -3144,6 +3144,7 @@ class Standard
 
     model = air_loop_hvac.model
     # Check if schedule was stored in an additionalProperties field of the air loop
+    air_loop_name = air_loop_hvac.name
     if air_loop_hvac.hasAdditionalProperties
       if air_loop_hvac.additionalProperties.hasFeature('fan_sched_name')
         fan_sched_name = air_loop_hvac.additionalProperties.getFeatureAsString('fan_sched_name').get
