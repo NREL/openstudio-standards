@@ -1794,6 +1794,7 @@ class Standard
           pri_sec_zone_lists = model_differentiate_primary_secondary_thermal_zones(model, story_group, zone_fan_scheds)
           pri_zones = pri_sec_zone_lists['primary']
           sec_zones = pri_sec_zone_lists['secondary']
+          zone_op_hrs = pri_sec_zone_lists['zone_op_hrs']
 
           # Add a PVAV with Reheat for the primary zones
           stories = []
@@ -1812,7 +1813,7 @@ class Standard
                            hot_water_loop: hot_water_loop,
                            chilled_water_loop: chilled_water_loop,
                            electric_reheat: electric_reheat)
-            model_create_multizone_fan_schedule(model, zone_fan_scheds, pri_zones, system_name)
+            model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
           end
 
           # Add a PSZ_AC for each secondary zone
@@ -1846,6 +1847,7 @@ class Standard
           pri_sec_zone_lists = model_differentiate_primary_secondary_thermal_zones(model, story_group, zone_fan_scheds)
           pri_zones = pri_sec_zone_lists['primary']
           sec_zones = pri_sec_zone_lists['secondary']
+          zone_op_hrs = pri_sec_zone_lists['zone_op_hrs']
 
           # Add an VAV for the primary zones
           stories = []
@@ -1863,7 +1865,7 @@ class Standard
                                      fan_efficiency: 0.62,
                                      fan_motor_efficiency: 0.9,
                                      fan_pressure_rise: 4.0)
-            model_create_multizone_fan_schedule(model, zone_fan_scheds, pri_zones, system_name)
+            model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
           end
           # Add a PSZ_HP for each secondary zone
           unless sec_zones.empty?
@@ -1925,6 +1927,7 @@ class Standard
           pri_sec_zone_lists = model_differentiate_primary_secondary_thermal_zones(model, story_group, zone_fan_scheds)
           pri_zones = pri_sec_zone_lists['primary']
           sec_zones = pri_sec_zone_lists['secondary']
+          zone_op_hrs = pri_sec_zone_lists['zone_op_hrs']
 
           # Add a VAV for the primary zones
           stories = []
@@ -1946,7 +1949,7 @@ class Standard
                                  fan_efficiency: 0.62,
                                  fan_motor_efficiency: 0.9,
                                  fan_pressure_rise: 4.0)
-            model_create_multizone_fan_schedule(model, zone_fan_scheds, pri_zones, system_name)
+            model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
           end
 
           # Add a PSZ_AC for each secondary zone
@@ -1993,6 +1996,7 @@ class Standard
           pri_sec_zone_lists = model_differentiate_primary_secondary_thermal_zones(model, story_group, zone_fan_scheds)
           pri_zones = pri_sec_zone_lists['primary']
           sec_zones = pri_sec_zone_lists['secondary']
+          zone_op_hrs = pri_sec_zone_lists['zone_op_hrs']
 
           # Add an VAV for the primary zones
           stories = []
@@ -2011,7 +2015,7 @@ class Standard
                                     fan_motor_efficiency: 0.9,
                                     fan_pressure_rise: 4.0)
 
-            model_create_multizone_fan_schedule(model, zone_fan_scheds, pri_zones, system_name)
+            model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
           end
           # Add a PSZ_HP for each secondary zone
           unless sec_zones.empty?
@@ -2420,7 +2424,8 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
     end
 
-    return { 'primary' => pri_zones, 'secondary' => sec_zones }
+    zone_op_hrs = []
+    return { 'primary' => pri_zones, 'secondary' => sec_zones , 'zone_op_hrs' => zone_op_hrs}
   end
 
   # For a multizone system, identify any zones to isolate to separate PSZ systems
@@ -2444,13 +2449,14 @@ class Standard
       zones.each do |zone|
         pri_zones << zone
         pri_zone_names << zone.name.get.to_s
+        zone_op_hrs[zone.name.get.to_s] = thermal_zone_get_annual_operating_hours(model, zone, zone_fan_sched)
       end
       # Report out the primary vs. secondary zones
       unless sec_zone_names.empty?
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
       end
 
-      return { 'primary' => pri_zones, 'secondary' => sec_zones }
+      return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs}
     end
 
     zone_op_hrs = {}   # hash of zoneName: 8760 array of operating hours
@@ -2458,6 +2464,7 @@ class Standard
     zone_max_load = {}  # hash of zoneName: coincident max internal load
     load_limit = 10     # differ by 10 Btu/hr-sf or more
     eflh_limit = 40     # differ by more than 40 EFLH/week from average of other zones
+    zone_area = {}    # hash of zoneName:area
 
     # Get coincident peak internal load for each zone
     zones.each do |zone|
@@ -2472,18 +2479,24 @@ class Standard
       zone_max_load_w = thermal_zone_peak_internal_load(model, zone)
       zone_max_load_w_m2 = zone_max_load_w/zone.floorArea
       zone_max_load[zone_name] = OpenStudio.convert(zone_max_load_w_m2, 'W/m^2', 'Btu/hr*ft^2').get
+      zone_area[zone_name] = zone.floorArea
     end
     
     # Eliminate all zones for which both max load and EFLH exceed limits
     zones.each do |zone|
       zone_name = zone.name.get.to_s
       max_load = zone_max_load[zone_name]
-      avg_max_load = get_avg_of_other_zones(zone_max_load, zone_name)
+      avg_max_load = get_wtd_avg_of_other_zones(zone_max_load, zone_area, zone_name)
       max_load_diff = (max_load - avg_max_load).abs
       avg_eflh = get_avg_of_other_zones(zone_eflh, zone_name)
       eflh_diff = (avg_eflh - zone_eflh[zone_name]).abs
+
       if max_load_diff >= load_limit && eflh_diff > eflh_limit
         # Add zone to secondary list, and remove from hashes
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Zone moved to PSZ due to load AND eflh: #{zone_name}; load limit = #{load_limit}, eflh_limit = #{eflh_limit}")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "load diff = #{max_load_diff}, this zone load = #{max_load}, avg zone load = #{avg_max_load}")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "eflh diff = #{eflh_diff}, this zone load = #{zone_eflh[zone_name]}, avg zone eflh = #{avg_eflh}")
+
         sec_zones << zone
         sec_zone_names << zone_name
         zone_eflh.delete(zone_name)
@@ -2494,9 +2507,15 @@ class Standard
     # Eliminate worst zone where EFLH exceeds limit
     # Repeat until all zones are within limit
     num_zones = zone_eflh.size
+    avg_eflh_save = 0
+    max_zone_name = ''
+    max_eflh_diff = 0
+    max_zone = nil
     (1..num_zones).each do |izone|
+      # This loop is to iterate to eliminate one zone at a time
       max_eflh_diff = 0
       zones.each do |zone|
+        # This loop finds the worst remaining zone to eliminate if above threshold
         zone_name = zone.name.get.to_s
         next if !zone_eflh.has_key?(zone_name)
         avg_eflh = get_avg_of_other_zones(zone_eflh, zone_name)
@@ -2505,10 +2524,13 @@ class Standard
           max_eflh_diff = eflh_diff
           max_zone_name = zone_name
           max_zone = zone
+          avg_eflh_save = avg_eflh
         end
       end
       if max_eflh_diff > eflh_limit
         # Move the max Zone to the secondary list
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Zone moved to PSZ due to eflh: #{max_zone_name}; limit = #{eflh_limit}")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "eflh diff = #{max_eflh_diff}, this zone load = #{zone_eflh[max_zone_name]}, avg zone eflh = #{avg_eflh_save}")
         sec_zones << max_zone
         sec_zone_names << max_zone_name
         zone_eflh.delete(max_zone_name)
@@ -2524,22 +2546,31 @@ class Standard
     highest_max_load_diff = -1
     highest_zone = nil
     highest_zone_name = ''
+    highest_max_load = 0
+    avg_max_load_save = 0
+    
     (1..num_zones).each do |izone|
+      # This loop is to iterate to eliminate one zone at a time
       highest_max_load_diff = 0
       zones.each do |zone|
+        # This loop finds the worst remaining zone to eliminate if above threshold
         zone_name = zone.name.get.to_s
         next if !zone_max_load.has_key?(zone_name)
         max_load = zone_max_load[zone_name]
-        avg_max_load = get_avg_of_other_zones(zone_max_load, zone_name)
+        avg_max_load = get_wtd_avg_of_other_zones(zone_max_load, zone_area, zone_name)
         max_load_diff = (max_load - avg_max_load).abs
         if max_load_diff >= highest_max_load_diff
           highest_max_load_diff = max_load_diff
           highest_zone_name = zone_name
           highest_zone = zone
+          highest_max_load = max_load
+          avg_max_load_save = avg_max_load
         end
       end
       if highest_max_load_diff > load_limit
         # Move the max Zone to the secondary list
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Zone moved to PSZ due to load: #{highest_zone_name}; load limit = #{load_limit}")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "load diff = #{highest_max_load_diff}, this zone load = #{highest_max_load}, avg zone load = #{avg_max_load_save}")
         sec_zones << highest_zone
         sec_zone_names << highest_zone_name
         zone_eflh.delete(highest_zone_name)
@@ -2568,10 +2599,10 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
     end
 
-    return { 'primary' => pri_zones, 'secondary' => sec_zones }
+    return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs }
   end
 
-  # For a multizone system, get average of hash values excluding the reference zone
+  # For a multizone system, get straight average of hash values excluding the reference zone
   # @author Doug Maddox, PNNL
   # @param value_hash [Hash<String>] of zoneName:Value
   # @param ref_zone [String] name of reference zone
@@ -2589,13 +2620,34 @@ class Standard
     return value_avg
   end
 
+  # For a multizone system, get area weighted average of hash values excluding the reference zone
+  # @author Doug Maddox, PNNL
+  # @param value_hash [Hash<String>] of zoneName:Value
+  # @param area_hash [Hash<String>] of zoneName:Area
+  # @param ref_zone [String] name of reference zone
+  def get_wtd_avg_of_other_zones(value_hash, area_hash, ref_zone)
+    num_others = value_hash.size - 1
+    value_sum = 0
+    area_sum = 0
+    value_hash.each do |key, val|
+      value_sum += val * area_hash[key] unless key == ref_zone
+      area_sum += area_hash[key] unless key == ref_zone
+    end
+    if num_others == 0
+      value_avg = value_hash[ref_zone]
+    else
+      value_avg = value_sum / area_sum
+    end
+    return value_avg
+  end
+
   # For a multizone system, create the fan schedule based on zone occupancy/fan schedules
   # @author Doug Maddox, PNNL
   # @param model
   # @param zone_fan_scheds [Hash] of hash of zoneName:8760FanSchedPerZone
   # @param pri_zones [Array<String>] names of zones served by the multizone system
   # @param system_name [String] name of air loop
-  def model_create_multizone_fan_schedule(model, zone_fan_scheds, pri_zones, system_name)
+  def model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
 
     # Exit if not stable baseline
     return if /prm/i !~ template
@@ -2606,10 +2658,10 @@ class Standard
     pri_zones.each do |zone|
       zone_name = zone.name.get.to_s
       if fan_8760.size == 0
-        fan_8760 = zone_fan_scheds[zone_name]
+        fan_8760 = zone_op_hrs[zone_name]
       else
         (0..fan_8760.size-1).each do |ihr|
-          if zone_fan_scheds[zone_name][ihr] > 0
+          if zone_op_hrs[zone_name][ihr] > 0
             fan_8760[ihr] = 1
           end
         end

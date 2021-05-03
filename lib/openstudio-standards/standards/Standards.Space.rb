@@ -1762,7 +1762,27 @@ class Standard
     ppl_values = Array.new(8760, 0)
 
     # Need to review all people objects in this space
-    space.spaceType.get.people.each do |people|
+    space_name = space.name.get
+    space_type_name = space.spaceType.get.name.get
+    people_objs = []
+    model.getPeoples.sort.each do |people|
+      parent_obj = people.parent.get.iddObjectType.valueName.to_s
+      if parent_obj == "OS_Space"
+        # This object is associated with a single space
+        # Check if it is the current space
+        if space_name == people.space.get.name.get
+          people_objs << people
+        end
+      elsif parent_obj == "OS_SpaceType"
+        # This object is associated with a space type
+        # Check if it is the current space type
+        if space_type_name == people.spaceType.get.name.get
+          people_objs << people
+        end
+      end
+    end
+
+    people_objs.each do |people|
       occ_sch = people.numberofPeopleSchedule
       if occ_sch.is_initialized
         occ_sch_obj = occ_sch.get
@@ -1782,23 +1802,47 @@ class Standard
     return ppl_values
   end
 
-  # Determine the design internal load (W) for
+  # Determine the design internal gain (W) for
   # this space without space multipliers.
-  # This include People, Lights, Electric Equipment, and Gas Equipment.  
+  # This includes People, Lights, Electric Equipment, and Gas Equipment.  
   # This version accounts for operating schedules
   # and fraction lost for equipment
   # @author Doug Maddox, PNNL
   # @param space object
+  # @param return_noncoincident_value [boolean] if true, return value is noncoincident peak; if false, return is array off coincident load 
   # @return [Double] 8760 array of the design internal load, in W, for this space
-  def space_internal_load_annual_array(model, space)
+  def space_internal_load_annual_array(model, space, return_noncoincident_value)
     # For each type of load, first convert schedules to 8760 arrays so coincident load can be determined
     ppl_values = Array.new(8760, 0)
     ltg_values = Array.new(8760, 0)
     load_values = Array.new(8760, 0)
+    noncoincident_peak_load = 0
+    space_name = space.name.get
+    space_type_name = space.spaceType.get.name.get
 
     # People
+    # Make list of people objects for this space
+    # Including those associated with space directly and those associated with space type
     ppl_total = 0
-    space.spaceType.get.people.each do |people|
+    people_objs = []
+    model.getPeoples.sort.each do |people|
+      parent_obj = people.parent.get.iddObjectType.valueName.to_s
+      if parent_obj == "OS_Space"
+        # This object is associated with a single space
+        # Check if it is the current space
+        if space_name == people.space.get.name.get
+          people_objs << people
+        end
+      elsif parent_obj == "OS_SpaceType"
+        # This object is associated with a space type
+        # Check if it is the current space type
+        if space_type_name == people.spaceType.get.name.get
+          people_objs << people
+        end
+      end
+    end
+
+    people_objs.each do |people|
       w_per_person = 125 # Initial assumption
       occ_sch_max = 1
       act_sch = people.activityLevelSchedule
@@ -1852,8 +1896,29 @@ class Standard
       end
     end
 
-    # Lights objects
-    space.spaceType.get.lights.each do |light|
+    # Make list of lights objects for this space
+    # Including those associated with space directly and those associated with space type
+    # Note: in EnergyPlus, Lights are associated with zone or zonelist
+    # In OS, they are associated with space or space type
+    light_objs = []
+    model.getLightss.sort.each do |light|
+      parent_obj = light.parent.get.iddObjectType.valueName.to_s
+      if parent_obj == "OS_Space"
+        # This object is associated with a single space
+        # Check if it is the current space
+        if space_name == light.space.get.name.get
+          light_objs << light
+        end
+      elsif parent_obj == "OS_SpaceType"
+        # This object is associated with a space type
+        # Check if it is the current space type
+        if space_type_name == light.spaceType.get.name.get
+          light_objs << light
+        end
+      end
+    end
+
+    light_objs.each do |light|
       ltg_sch_ruleset = nil
       ltg_sch = light.schedule
       ltg_w = light.getLightingPower(space.floorArea, ppl_total)
@@ -1922,34 +1987,79 @@ class Standard
     end
 
     # Equipment Loads
-    eq_w = space.electricEquipmentPower
-    space.spaceType.get.electricEquipment.each do |equip|
-      eqp_type = 'electric equipment'
-      load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
-    end
-    space.spaceType.get.gasEquipment.each do |equip|
-      eqp_type = 'gas equipment'
-      load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
-    end
-    space.spaceType.get.steamEquipment.each do |equip|
-      eqp_type = 'steam equipment'
-      load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
-    end
-    space.spaceType.get.hotWaterEquipment.each do |equip|
-      eqp_type = 'hot water equipment'
-      load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
-    end
-    space.spaceType.get.otherEquipment.each do |equip|
-      eqp_type = 'other equipment'
-      load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
-    end
+    eqp_type = 'electric equipment'
+    equips = model.getElectricEquipments
+    load_values = space_get_loads_for_all_equips(model, space, equips, eqp_type, ppl_total, load_values, return_noncoincident_value)
+
+    eqp_type = 'gas equipment'
+    equips = model.getGasEquipments
+    load_values = space_get_loads_for_all_equips(model, space, equips, eqp_type, ppl_total, load_values, return_noncoincident_value)
+
+    eqp_type = 'steam equipment'
+    equips = model.getSteamEquipments
+    load_values = space_get_loads_for_all_equips(model, space, equips, eqp_type, ppl_total, load_values, return_noncoincident_value)
+
+    eqp_type = 'hot water equipment'
+    equips = model.getHotWaterEquipments
+    load_values = space_get_loads_for_all_equips(model, space, equips, eqp_type, ppl_total, load_values, return_noncoincident_value)
+
+    eqp_type = 'other equipment'
+    equips = model.getOtherEquipments
+    load_values = space_get_loads_for_all_equips(model, space, equips, eqp_type, ppl_total, load_values, return_noncoincident_value)
+
 
     # Add lighting and people to the load values array
-    (0..8759).each do |ihr|
-      load_values[ihr] += ppl_values[ihr] + ltg_values[ihr]
-    end
-
+    if return_noncoincident_value
+      noncoincident_peak_load = load_values[0] + ppl_values.max + ltg_values.max
+      return noncoincident_peak_load
+    else
+      (0..8759).each do |ihr|
+        load_values[ihr] += ppl_values[ihr] + ltg_values[ihr]
+      end
       return load_values
+    end
+  end
+
+  # 
+
+  # Loops through a set of equipment objects of one type
+  # For each applicable equipment object, call method to get annual gain values
+  # This is useful for the Appendix G test for multizone systems
+  # to determine whether specific zones should be isolated to PSZ based on 
+  # space loads that differ significantly from other zones on the multizone system
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @param space [OpenStudio::Model::Space] the space
+  # @param equips [object] This is an array of equipment objects in the model
+  # @param eqp_type [String] string description of the type of equipment object
+  # @param ppl_total [Numeric] total number of people in the space
+  # @param load_values [Array] 8760 array of load values for the equipment type
+  # @param return_noncoincident_value [boolean] return a single peak value if true; return 8760 gain profile if false
+  #
+  # @return [Array] load values array; if return_noncoincident_value is true, array has only one value
+  #
+  def space_get_loads_for_all_equips(model, space, equips, eqp_type, ppl_total, load_values, return_noncoincident_value)
+
+    space_name = space.name.get
+    space_type_name = space.spaceType.get.name.get
+    equips.sort.each do |equip|
+      parent_obj = equip.parent.get.iddObjectType.valueName.to_s
+      if parent_obj == "OS_Space"
+        # This object is associated with a single space
+        # Check if it is the current space
+        if space_name == equip.space.get.name.get
+          euip_name = equip.name.get
+          load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values, return_noncoincident_value)
+        end
+      elsif parent_obj == "OS_SpaceType"
+        # This object is associated with a space type
+        # Check if it is the current space type
+        if space_type_name == equip.spaceType.get.name.get
+          load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values, return_noncoincident_value)
+        end
+      end
+    end
+    return load_values
   end
 
   # Returns an 8760 array of load values for a specific type of load in a space.
@@ -1963,10 +2073,11 @@ class Standard
   # @param eqp_type [String] string description of the type of equipment object
   # @param ppl_total [Numeric] total number of people in the space
   # @param load_values [Array] 8760 array of load values for the equipment type
+  # @param return_noncoincident_value [boolean] return a single peak value if true; return 8760 gain profile if false
   #
-  # @return [Array] load values array
+  # @return [Array] load values array; if return_noncoincident_value is true, array has only one value
   #
-  def space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values)
+  def space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values, return_noncoincident_value)
     # Get load schedule and load lost value depending on equipment type
     case eqp_type 
     when 'electric equipment'
@@ -2047,11 +2158,15 @@ class Standard
       end
     end
 
-    if !load_sch_values.nil?
-      load_sch_value = 1.0
-      (0..8759).each do |ihr|
-        load_sch_value = load_sch_values[ihr]
-        load_values[ihr] += load_w * load_sch_value
+    if return_noncoincident_value
+      load_values[0] += load_w * load_sch_values.max
+    else
+      if !load_sch_values.nil?
+        load_sch_value = 1.0
+        (0..8759).each do |ihr|
+          load_sch_value = load_sch_values[ihr]
+          load_values[ihr] += load_w * load_sch_value
+        end
       end
     end
     return load_values

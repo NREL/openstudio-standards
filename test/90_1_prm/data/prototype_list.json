@@ -56,6 +56,10 @@
         ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []], ["convert_spaces_to_cmp_rms", []]]],
         ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []], ["convert_spaces_to_cmp_rms", []], ["increase_computer_rooms_epd", [20]]]]
     ],
+    "hvac_psz_split_from_mz": [
+        ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []],["change_zone_epd", ["Perimeter_bot_ZN_1 ZN",70]]]],
+        ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []],["change_to_long_occ_sch", ["Perimeter_bot_ZN_1 ZN"]]]]
+    ],
     "sat_ctrl": [
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []]]]
     ],
