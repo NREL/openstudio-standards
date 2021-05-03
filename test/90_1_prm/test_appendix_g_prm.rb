@@ -1222,7 +1222,7 @@ class AppendixGPRMTests < Minitest::Test
           end
         end
 
-        assert((num_zones_target == 1 && num_zones_mz > 1), "Split PSZ from MZ system fails for high internal gain zone.")
+        assert((num_zones_target == 1 && num_zones_mz > 1 && fan_hrs_per_week_target == fan_hrs_per_week_mz), "Split PSZ from MZ system fails for high internal gain zone.")
 
       elsif building_type == 'MediumOffice' && mod_str == 'remove_transformer_change_to_long_occ_sch_Perimeter_bot_ZN_1 ZN'
         # This mod should isolate Perimeter_bot_ZN_1 ZN to PSZ
@@ -1244,7 +1244,7 @@ class AppendixGPRMTests < Minitest::Test
           end
         end
 
-        assert((num_zones_target == 1 && num_zones_mz > 1), "Split PSZ from MZ system fails for high internal gain zone. Target zone fan hrs/wk = #{fan_hrs_per_week_target}; MZ fan hrs/wk = #{fan_hrs_per_week_mz}")
+        assert((num_zones_target == 1 && num_zones_mz > 1 && fan_hrs_per_week_target > fan_hrs_per_week_mz), "Split PSZ from MZ system fails for high internal gain zone. Target zone fan hrs/wk = #{fan_hrs_per_week_target}; MZ fan hrs/wk = #{fan_hrs_per_week_mz}")
       end
 
     end
@@ -1270,7 +1270,140 @@ class AppendixGPRMTests < Minitest::Test
   end
 
 
+  # Check if number of chillers is correct
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_number_of_chillers(prototypes_base)
+    # Find plant loops with chillers and ensure the meet the requirement laid out by G3.1.3.7 of Appendix G 2019
+    #
+    # Electric chillers shall be used in the baseline building design regardless of the cooling
+    # energy source, e.g. direct-fired absorption or absorption from purchased steam. The
+    # baseline building design’s chiller plant shall be modeled with chillers having the number
+    # and type as indicated in Table G3.1.3.7 as a function of building peak cooling load.
+    #
+    # Building Peak Cooling Load Number and Type of Chillers
+    # <=300 tons: 1 water-cooled screw chiller
+    # >300 tons, <600 tons:  2 water-cooled screw chillers sized equally
+    # >=600 tons:  2 water-cooled centrifugal chillers minimum with chillers added so that no chiller is larger than 800 tons, all sized equally
+
+    prototypes_base.each do |prototype, model|
+
+      model.getPlantLoops.each do |plant_loop|
+
+        n_chillers = plant_loop.supplyComponents(OpenStudio::Model::ChillerElectricEIR::iddObjectType()).length
+
+        # Skip plant loops with no chillers
+        next if n_chillers == 0
+
+        # Check for Autosized chillers. Chillers should have had their capacity set already. Faile
+        plant_loop.supplyComponents.each do |sc|
+          # ChillerElectricEIR
+          if sc.to_ChillerElectricEIR.is_initialized
+            chiller = sc.to_ChillerElectricEIR.get
+
+            # Check to make sure chiller is not autosized
+            assert(!chiller.isReferenceCapacityAutosized,
+                   "Chiller named #{chiller.name.to_s} is autosized. The 90.1 PRM model should not have any autosized chillers
+                        as this causes issues when finding a chilled plant loop's capacity. Check if the cooling plant sizing run failed.")
+          end
+        end
+
+        # Initialize Standard class
+        standard = Standard.build('90.1-PRM-2019')
+        cap_w = standard.plant_loop_total_cooling_capacity(plant_loop)
+        cap_tons = OpenStudio.convert(cap_w, 'W', 'ton').get
+
+        if cap_tons <= 300
+          n_expected_chillers = 1
+        elsif cap_tons > 300 && cap_tons < 600
+          n_expected_chillers = 2
+        else
+          # Max capacity of a single chiller
+          max_cap_ton = 800.0
+          n_expected_chillers = (cap_tons / max_cap_ton).floor + 1
+          # Must be at least 2 chillers
+          n_expected_chillers += 1 if n_expected_chillers == 1
+        end
+
+        assert(n_chillers == n_expected_chillers,
+               msg = "Baseline system failed. Number of chillers equaled #{n_chillers} when it should be #{n_expected_chillers}.
+                    Please review section G3.1.3.7 of Appendix G for guidance.")
+      end
+    end
+
+
+  end
+
+
+  # Check if number of boilers is correct
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_number_of_boilers(prototypes_base)
+
+    # Find plant loops with boilers and ensure the meet the requirement laid out by G3.1.3.2 of Appendix G 2019
+    #
+    # G3.1.3.2 Type and Number of Boilers (Systems 1, 5, 7, 11, and 12)
+    # The boiler plant shall be natural draft, except as noted in Section G3.1.1.1. The baseline
+    # building design boiler plant shall be modeled as having a single boiler if the baseline
+    # building design plant serves a conditioned floor area of 15,000 ft2 or less, and as having
+    # two equally sized boilers for plants serving more than 15,000 ft2.
+
+    prototypes_base.each do |prototype, model|
+
+      model.getPlantLoops.each do |plant_loop|
+
+        n_boilers = plant_loop.supplyComponents(OpenStudio::Model::BoilerHotWater::iddObjectType()).length
+
+        # Skip plant loops with no boilers
+        next if n_boilers == 0
+
+        # Find area served by this loop
+        standard = Standard.build('90.1-PRM-2019')
+        area_served_m2 = standard.plant_loop_total_floor_area_served(plant_loop)
+        area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
+
+        # check that the number of boilers equals the amount specified by the standard based on the conditioned floor area
+        n_expected_boilers = area_served_ft2 < 15000 ? 1 : 2
+
+        assert(n_boilers == n_expected_boilers,
+               msg = "Baseline system failed. Number of boilers equaled #{n_boilers} when it should be #{n_expected_boilers}.
+                    Please review section G3.1.3.2 of Appendix G for guidance.")
+      end
+    end
+
+
+  end
+
+
+  # Check if number of towers is correct
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_number_of_cooling_towers(prototypes_base)
+    # Find plant loops with chillers + cooling towers and ensure the meet the requirement laid out by Appendix G 2019
+    #
+    # 3.7.3 Cooling Towers;
+    # Only one tower in baseline, regardless of number of chillers
+
+    prototypes_base.each do |prototype, model|
+
+      n_chillers = model.getChillerElectricEIRs.size
+
+      n_cooling_towers = model.getCoolingTowerSingleSpeeds.size
+      n_cooling_towers += model.getCoolingTowerTwoSpeeds.size
+      n_cooling_towers += model.getCoolingTowerVariableSpeeds.size
+
+      if n_cooling_towers > 0
+        assert(n_cooling_towers == 1,
+             msg = "Baseline system failed for Appendix G 2019 requirements. Number of cooling towers > 1.
+                      The number of chillers equaled #{n_chillers} and the number of cooling towers equaled #{n_cooling_towers}.")
+      end
+    end
+
+
+  end
+
   # Set ZoneMultiplier to passed value for all zones
+
   # @param model, arguments[]
   def set_zone_multiplier(model, arguments)
     mult = arguments[0]
@@ -1580,6 +1713,9 @@ class AppendixGPRMTests < Minitest::Test
       'hvac_baseline',
       'hvac_psz_split_from_mz',
       'sat_ctrl',
+      'number_of_boilers',
+      'number_of_chillers',
+      'number_of_cooling_towers',
       'hvac_sizing'
     ]
 
@@ -1594,16 +1730,19 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
 
     # Run tests
-    check_wwr(prototypes_base['wwr']) if tests.include? 'wwr'
-    check_srr(prototypes_base['srr']) if tests.include? 'srr'
-    check_daylighting_control(prototypes_base['daylighting_control']) if tests.include? 'daylighting_control'
-    check_residential_flag(prototypes_base['isresidential']) if tests.include? 'isresidential'
-    check_envelope(prototypes_base['envelope']) if tests.include? 'envelope'
-    check_lpd(prototypes_base['lpd']) if tests.include? 'lpd'
-    check_light_occ_sensor(prototypes['light_occ_sensor'], prototypes_base['light_occ_sensor']) if tests.include? 'light_occ_sensor'
-    check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if tests.include? 'infiltration'
-    check_hvac_type(prototypes_base['hvac_baseline']) if tests.include? 'hvac_baseline'
+    check_wwr(prototypes_base['wwr']) if (tests.include? 'wwr')
+    check_srr(prototypes_base['srr']) if (tests.include? 'srr')
+    check_daylighting_control(prototypes_base['daylighting_control']) if (tests.include? 'daylighting_control')
+    check_residential_flag(prototypes_base['isresidential']) if (tests.include? 'isresidential')
+    check_envelope(prototypes_base['envelope']) if (tests.include? 'envelope')
+    check_lpd(prototypes_base['lpd']) if (tests.include? 'lpd')
+    check_light_occ_sensor(prototypes['light_occ_sensor'],prototypes_base['light_occ_sensor']) if (tests.include? 'light_occ_sensor')
+    check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if (tests.include? 'infiltration')
+    check_hvac_type(prototypes_base['hvac_baseline']) if (tests.include? 'hvac_baseline')
     check_sat_ctrl(prototypes_base['sat_ctrl']) if tests.include? 'sat_ctrl'
+    check_number_of_boilers(prototypes_base['number_of_boilers']) if (tests.include? 'number_of_boilers')
+    check_number_of_chillers(prototypes_base['number_of_chillers']) if (tests.include? 'number_of_chillers')
+    check_number_of_cooling_towers(prototypes_base['number_of_cooling_towers']) if (tests.include? 'number_of_cooling_towers')
     check_hvac_sizing(prototypes_base['hvac_sizing']) if tests.include? 'hvac_sizing'
     check_psz_split_from_mz(prototypes_base['hvac_psz_split_from_mz']) if tests.include? 'hvac_psz_split_from_mz'
   end

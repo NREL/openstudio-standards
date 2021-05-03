@@ -319,7 +319,7 @@ class Standard
       chiller_sizing_factor = (1.0 / num_chillers).round(2)
       num_chillers.times do |i|
         chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
-        chiller.setName("#{template} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller #{i}")
+        chiller.setName("#{template} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller #{i}".split.join(" "))
         chilled_water_loop.addSupplyBranchForComponent(chiller)
         chiller.setReferenceLeavingChilledWaterTemperature(dsgn_sup_wtr_temp_c)
         chiller.setLeavingChilledWaterLowerTemperatureLimit(OpenStudio.convert(36.0, 'F', 'C').get)
