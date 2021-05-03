@@ -28,7 +28,7 @@
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []],
         ["Warehouse", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
-    "hvac_baseline": [
+    "hvac_baseline_save": [
         ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", []],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["change_bldg_type",["Assembly"]], ["remove_transformer", []]]],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-4A", [["change_bldg_type",["Assembly"]], ["remove_transformer", []]]],
@@ -55,7 +55,10 @@
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []],["increase_computer_rooms_epd", [5]]]],
         ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []], ["convert_spaces_to_cmp_rms", []]]],
         ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []], ["convert_spaces_to_cmp_rms", []], ["increase_computer_rooms_epd", [20]]]]
-        ],
+    ],
+    "hvac_baseline": [
+        ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-4A", [["change_bldg_type",["Assembly"]], ["remove_transformer", []]]]
+    ],
     "sat_ctrl": [
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []]]]
     ],
@@ -69,7 +72,7 @@
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["set_zone_multiplier",[20]], ["remove_transformer", []]]]
     ],
     "number_of_boilers": [
-        ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-4A", [["change_bldg_type",["Assembly"]], ["remove_transformer", []]]],
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-4A", [["remove_transformer", []]]],
         ["QuickServiceRestaurant", "90.1-2013", "ASHRAE 169-2013-4A", [["set_zone_multiplier",[4]]]]
     ],
     "number_of_cooling_towers": [
