@@ -3,6 +3,7 @@ class ECMS
   # Occupancy
   def scale_occupancy_loads(model: , scale: 'NECB_Default' )
     return model if scale == 'NECB_Default' or scale.nil?
+    scale = scale.to_f
     if scale == 0.0
       model.getPeoples.sort.each {|people| people.remove}
       model.getPeopleDefinitions.sort.each {|people| people.remove}
@@ -16,6 +17,7 @@ class ECMS
   # Electrical
   def scale_electrical_loads(model:, scale: 'NECB_Default')
     return model if scale == 'NECB_Default' or scale.nil?
+    scale = scale.to_f
     if scale == 0.0
       model.getElectricEquipments.sort.each {|item| item.remove}
       model.getElectricEquipmentDefinitions.sort.each {|item| item.remove}
@@ -29,6 +31,7 @@ class ECMS
   # Outdoor Air
   def scale_oa_loads(model: , scale:'NECB_Default')
     return model if scale == 'NECB_Default' or scale.nil?
+    scale = scale.to_f
     if scale == 0.0
       model.getDesignSpecificationOutdoorAirs.sort.each {|item| item.remove}
     else
