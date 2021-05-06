@@ -47,6 +47,7 @@ class ECMS
   # Infiltration
   def scale_infiltration_loads(model: , scale: 'NECB_Default')
     return model if scale == 'NECB_Default' or scale.nil?
+    scale = scale.to_f
     if scale == 0.0
       model.getSpaceInfiltrationDesignFlowRates.sort.each {|item| item.remove}
     else
