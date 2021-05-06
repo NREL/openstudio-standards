@@ -252,7 +252,9 @@ class ECMS
 
   # =============================================================================================================================
   # Add an outdoor VRF unit
-  def add_outdoor_vrf_unit(model:,ecm_name: nil,condenser_type: "AirCooled")
+  def add_outdoor_vrf_unit(model:,
+                           ecm_name: nil,
+                           condenser_type: "AirCooled")
     outdoor_vrf_unit = OpenStudio::Model::AirConditionerVariableRefrigerantFlow.new(model)
     outdoor_vrf_unit.setName("VRF Outdoor Unit")
     outdoor_vrf_unit.setHeatPumpWasteHeatRecovery(true)
@@ -296,7 +298,9 @@ class ECMS
 
   # =============================================================================================================================
   # Add indoor VRF units and update horizontal and vertical pipe runs for outdoor VRF unit
-  def add_indoor_vrf_units(model:,system_zones_map:,outdoor_vrf_unit:)
+  def add_indoor_vrf_units(model:,
+                           system_zones_map:,
+                           outdoor_vrf_unit:)
     always_on = model.alwaysOnDiscreteSchedule
     always_off = model.alwaysOffDiscreteSchedule
     system_zones_map.sort.each do |sname,zones|
@@ -340,15 +344,25 @@ class ECMS
   # =============================================================================================================================
   # Add a dedicated outside air loop with cold-climate heat pump with electric backup
   # Add cold-climate zonal terminal VRF units
-  def add_ecm_hs08_vrfzonal(model:,system_zones_map:,system_doas_flags:,zone_clg_eqpt_type:, standard:)
+  def add_ecm_hs08_vrfzonal(model:,
+                            system_zones_map:,
+                            system_doas_flags:,
+                            zone_clg_eqpt_type:,
+                            standard:)
     # Update system doas flags
     system_doas_flags.keys.each {|sname| system_doas_flags[sname] = true}
     # Add doas with cold-climate air-source heat pump and electric backup
-    add_ecm_hs09_ccashpsys(model: model,system_zones_map: system_zones_map,system_doas_flags: system_doas_flags,standard: standard,baseboard_flag: false)
+    add_ecm_hs09_ccashpsys(model: model,
+                           system_zones_map: system_zones_map,
+                           system_doas_flags: system_doas_flags,
+                           standard: standard,
+                           zone_eqpt_flag: false)
     # Add outdoor VRF unit
     outdoor_vrf_unit = add_outdoor_vrf_unit(model: model,ecm_name: "hs08_vrfzonal")
     # Add indoor VRF terminal units
-    add_indoor_vrf_units(model: model,system_zones_map: system_zones_map,outdoor_vrf_unit: outdoor_vrf_unit)
+    add_indoor_vrf_units(model: model,
+                         system_zones_map: system_zones_map,
+                         outdoor_vrf_unit: outdoor_vrf_unit)
   end
 
   # =============================================================================================================================
@@ -377,147 +391,301 @@ class ECMS
   end
 
   # =============================================================================================================================
+  # create air loop
+  def create_airloop(model,sys_oa_type)
+    airloop = OpenStudio::Model::AirLoopHVAC.new(model)
+    airloop.sizingSystem.setPreheatDesignTemperature(7.0)
+    airloop.sizingSystem.setPreheatDesignHumidityRatio(0.008)
+    airloop.sizingSystem.setPrecoolDesignTemperature(13.0)
+    airloop.sizingSystem.setPrecoolDesignHumidityRatio(0.008)
+    airloop.sizingSystem.setSizingOption('NonCoincident')
+    airloop.sizingSystem.setCoolingDesignAirFlowMethod('DesignDay')
+    airloop.sizingSystem.setCoolingDesignAirFlowRate(0.0)
+    airloop.sizingSystem.setHeatingDesignAirFlowMethod('DesignDay')
+    airloop.sizingSystem.setHeatingDesignAirFlowRate(0.0)
+    airloop.sizingSystem.setSystemOutdoorAirMethod('ZoneSum')
+    airloop.sizingSystem.setCentralCoolingDesignSupplyAirHumidityRatio(0.0085)
+    airloop.sizingSystem.setCentralHeatingDesignSupplyAirHumidityRatio(0.0080)
+    airloop.sizingSystem.setMinimumSystemAirFlowRatio(1.0)
+    case sys_oa_type.downcase
+    when "doas"
+      airloop.sizingSystem.setAllOutdoorAirinCooling(true)
+      airloop.sizingSystem.setAllOutdoorAirinHeating(true)
+      airloop.sizingSystem.setTypeofLoadtoSizeOn('VentilationRequirement')
+      airloop.sizingSystem.setCentralCoolingDesignSupplyAirTemperature(19.9)
+      airloop.sizingSystem.setCentralHeatingDesignSupplyAirTemperature(20.0)
+    when "mixed"
+      airloop.sizingSystem.setAllOutdoorAirinCooling(false)
+      airloop.sizingSystem.setAllOutdoorAirinHeating(false)
+      airloop.sizingSystem.setTypeofLoadtoSizeOn('Sensible')
+      airloop.sizingSystem.setCentralCoolingDesignSupplyAirTemperature(13.0)
+      airloop.sizingSystem.setCentralHeatingDesignSupplyAirTemperature(43.0)
+    end
+
+    return airloop
+  end
+
+  # =============================================================================================================================
+  # create air system setpoint manager
+  def create_air_sys_spm(model,spm_type,zones)
+    spm = nil
+    case spm_type.downcase
+    when "scheduled"
+      sat = 20.0
+      sat_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+      sat_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), sat)
+      spm = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
+    when "single_zone_reheat"
+      spm = OpenStudio::Model::SetpointManagerSingleZoneReheat.new(model)
+      spm.setControlZone(zones[0])
+      spm.setMinimumSupplyAirTemperature(13.0)
+      spm.setMaximumSupplyAirTemperature(43.0)
+    when "warmest"
+      spm = OpenStudio::Model::SetpointManagerWarmest.new(model)
+      spm.setMinimumSetpointTemperature(13.0)
+      spm.setMaximumSetpointTemperature(43.0)
+    end
+
+    return spm
+  end
+
+  # =============================================================================================================================
+  # create air system fan
+  def create_air_sys_fan(model,fan_type)
+    fan = nil
+    case fan_type.downcase
+    when "constant_volume"
+      fan = OpenStudio::Model::FanConstantVolume.new(model)
+      fan.setName("FanConstantVolume")
+    when "variable_volume"
+      fan = OpenStudio::Model::FanVariableVolume.new(model)
+      fan.setName("FanVariableVolume")
+    end
+
+    return fan
+  end
+
+  # =============================================================================================================================
+  # create air system cooling equipment
+  def create_air_sys_clg_eqpt(model,clg_eqpt_type)
+    clg_eqpt = nil
+    case clg_eqpt_type.downcase
+    when "ccashp"
+      clg_eqpt = OpenStudio::Model::CoilCoolingDXVariableSpeed.new(model)
+      clg_eqpt.setName("CoilCoolingDXVariableSpeed_CCASHP")
+      clg_eqpt_speed1 = OpenStudio::Model::CoilCoolingDXVariableSpeedSpeedData.new(model)
+      clg_eqpt.addSpeed(clg_eqpt_speed1)
+      clg_eqpt.setNominalSpeedLevel(1)
+    end
+
+    return clg_eqpt
+  end
+
+  # =============================================================================================================================
+  # create air system heating equipment
+  def create_air_sys_htg_eqpt(model,htg_eqpt_type)
+    always_on = model.alwaysOnDiscreteSchedule
+    htg_eqpt = nil
+    case htg_eqpt_type.downcase
+    when "coil_electric"
+      htg_eqpt = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+      htg_eqpt.setName("CoilHeatingElectric")
+    when "ccashp"
+      htg_eqpt = OpenStudio::Model::CoilHeatingDXVariableSpeed.new(model)
+      htg_eqpt.setName("CoilHeatingDXVariableSpeed_CCASHP")
+      htg_eqpt_speed1 = OpenStudio::Model::CoilHeatingDXVariableSpeedSpeedData.new(model)
+      htg_eqpt.addSpeed(htg_eqpt_speed1)
+      htg_eqpt.setNominalSpeedLevel(1)
+      htg_eqpt.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(-25.0)
+      htg_eqpt.setDefrostStrategy("ReverseCycle")
+      #sys_htg_coil.setDefrostStrategy("Resistive")
+      #sys_htg_coil.setResistiveDefrostHeaterCapacity(0.001)
+      htg_eqpt.setDefrostControl("OnDemand")
+      htg_eqpt.setCrankcaseHeaterCapacity(0.001)
+    end
+
+    return htg_eqpt
+  end
+
+  # =============================================================================================================================
+  # add air system
+  def add_air_system(model:,
+                   standard:,
+                   zones:,
+                   sys_abbr:,
+                   sys_oa:,
+                   sys_hr:,
+                   sys_htg:,
+                   sys_supp_htg:,
+                   sys_clg:,
+                   sys_sf:,
+                   sys_rf:,
+                   sys_spm:)
+
+    airloop = create_airloop(model,sys_oa)
+    spm = create_air_sys_spm(model,sys_spm,zones)
+    supply_fan = create_air_sys_fan(model,sys_sf)
+    supply_fan.setName("Supply Fan") if supply_fan
+    return_fan = create_air_sys_fan(model,sys_rf)
+    return_fan.setName("Return Fan") if return_fan
+    htg_eqpt = create_air_sys_htg_eqpt(model,sys_htg)
+    supp_htg_eqpt = create_air_sys_htg_eqpt(model,sys_supp_htg)
+    clg_eqpt = create_air_sys_clg_eqpt(model,sys_clg)
+
+    clg_eqpt.addToNode(airloop.supplyOutletNode) if clg_eqpt
+    htg_eqpt.addToNode(airloop.supplyOutletNode) if htg_eqpt
+    supp_htg_eqpt.addToNode(airloop.supplyOutletNode) if supp_htg_eqpt
+    supply_fan.addToNode(airloop.supplyOutletNode) if supply_fan
+    spm.addToNode(airloop.supplyOutletNode) if spm
+
+    # OA controller
+    oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
+    oa_controller.autosizeMinimumOutdoorAirFlowRate
+    oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
+    oa_system.addToNode(airloop.supplyInletNode)
+
+    # Set airloop name
+    sys_name_pars = {}
+    sys_name_pars["sys_hr"] = "none"
+    sys_name_pars["sys_clg"] = "ccashp"
+    sys_name_pars["sys_htg"] = "ccashp"
+    sys_name_pars["sys_sf"] = "cv" if sys_sf == "constant_volume"
+    sys_name_pars["sys_sf"] = "vv" if sys_sf == "variable_volume"
+    sys_name_pars["zone_htg"] = "none"
+    sys_name_pars["zone_clg"] = "none"
+    sys_name_pars["sys_rf"] = "none"
+    sys_name_pars["sys_rf"] = "cv" if sys_rf == "constant_volume"
+    sys_name_pars["sys_rf"] = "vv" if sys_rf == "variable_volume"
+    assign_base_sys_name(airloop,sys_abbr: sys_abbr,sys_oa: sys_oa,sys_name_pars: sys_name_pars)
+
+    return airloop,return_fan
+  end
+
+  # =============================================================================================================================
+  # create zone diffuser
+  def create_zone_diffuser(model,zone_diff_type,zone)
+    always_on = model.alwaysOnDiscreteSchedule
+    diffuser = nil
+    case zone_diff_type.downcase
+    when "single_duct_uncontrolled"
+      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
+    when "single_duct_vav_reheat"
+      reheat_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+      diffuser = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, always_on, reheat_coil)
+      diffuser.setFixedMinimumAirFlowRate(0.002 * zone.floorArea )
+      diffuser.setMaximumReheatAirTemperature(43.0)
+      diffuser.setDamperHeatingAction('Normal')
+    end
+
+    return diffuser
+  end
+
+  # =============================================================================================================================
+  # add zonal heating and cooling equipment
+  def add_zone_eqpt(model:,
+                     standard:,
+                     airloop:,
+                     zones:,
+                     zone_diff:,
+                     zone_htg:,
+                     zone_clg:)
+
+    always_on = model.alwaysOnDiscreteSchedule
+    zones.sort.each do |zone|
+      zone.sizingZone.setZoneCoolingDesignSupplyAirTemperature(13.0)
+      zone.sizingZone.setZoneHeatingDesignSupplyAirTemperature(43.0)
+      zone.sizingZone.setZoneCoolingSizingFactor(1.1)
+      zone.sizingZone.setZoneHeatingSizingFactor(1.3)
+      # zone cooling
+      case zone_clg.downcase
+      when "ptac"
+        standard.add_ptac_dx_cooling(model,zone,true)
+      end
+      # diffuser
+      diffuser = create_zone_diffuser(model,zone_diff,zone)
+      airloop.removeBranchForZone(zone)
+      airloop.addBranchForZone(zone, diffuser.to_StraightComponent)
+      # zone heating
+      case zone_htg.downcase
+      when "baseboard_electric"
+        standard.add_zone_baseboards(baseboard_type: 'Electric', hw_loop: nil, model: model, zone: zone)
+      end
+    end
+    sys_name_zone_htg = "b-e" if zone_htg == "baseboard_electric"
+    update_sys_name(airloop,zone_htg: sys_name_zone_htg,zone_clg: zone_clg)
+  end
+
+  # =============================================================================================================================
   # Add air loops with cold-climate heat pump with electric backup coil.
   # Add zone electric baseboards
-  def add_ecm_hs09_ccashpsys(model:,system_zones_map:,system_doas_flags:,zone_clg_eqpt_type: nil,standard:,baseboard_flag: true)
-    always_on = model.alwaysOnDiscreteSchedule
-    always_off = model.alwaysOffDiscreteSchedule
+  def add_ecm_hs09_ccashpsys(model:,
+                             system_zones_map:,
+                             system_doas_flags:,
+                             standard:,
+                             zone_eqpt_flag: true)
+
     systems = []
     system_zones_map.sort.each do |sys_name,zones|
-      system_data = {}
-      system_data[:PreheatDesignTemperature] = 7.0
-      system_data[:PreheatDesignHumidityRatio] = 0.008
-      system_data[:PrecoolDesignTemperature] = 13.0
-      system_data[:PrecoolDesignHumidityRatio] = 0.008
-      system_data[:SizingOption] = 'NonCoincident'
-      system_data[:CoolingDesignAirFlowMethod] = 'DesignDay'
-      system_data[:CoolingDesignAirFlowRate] = 0.0
-      system_data[:HeatingDesignAirFlowMethod] = 'DesignDay'
-      system_data[:HeatingDesignAirFlowRate] = 0.0
-      system_data[:SystemOutdoorAirMethod] = 'ZoneSum'
-      system_data[:CentralCoolingDesignSupplyAirHumidityRatio] = 0.0085
-      system_data[:CentralHeatingDesignSupplyAirHumidityRatio] = 0.0080
-      system_data[:MinimumSystemAirFlowRatio] = 1.0
-      system_data[:system_supply_air_temperature] = 20.0
-      system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
-      system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
-      system_data[:ZoneCoolingSizingFactor] = 1.1
-      system_data[:ZoneHeatingSizingFactor] = 1.3
-      if system_doas_flags[sys_name.to_s]
-        system_data[:name] = sys_name.to_s
-        system_data[:AllOutdoorAirinCooling] = true
-        system_data[:AllOutdoorAirinHeating] = true
-        system_data[:TypeofLoadtoSizeOn] = 'VentilationRequirement'
-        system_data[:CentralCoolingDesignSupplyAirTemperature] = 19.9
-        system_data[:CentralHeatingDesignSupplyAirTemperature] = 20.0
-        sat_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-        sat_sch.setName('Makeup-Air Unit Supply Air Temp')
-        sat_sch.defaultDaySchedule.setName('Makeup Air Unit Supply Air Temp Default')
-        sat_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), system_data[:system_supply_air_temperature])
-        setpoint_mgr = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
-      else
-        system_data[:name] = sys_name.to_s
-        system_data[:AllOutdoorAirinCooling] = false
-        system_data[:AllOutdoorAirinHeating] = false
-        system_data[:TypeofLoadtoSizeOn] = 'Sensible'
-        system_data[:CentralCoolingDesignSupplyAirTemperature] = 13.0
-        system_data[:CentralHeatingDesignSupplyAirTemperature] = 43.0
-        if zones.size == 1
-          setpoint_mgr = OpenStudio::Model::SetpointManagerSingleZoneReheat.new(model)
-          setpoint_mgr.setControlZone(zones[0])
-          setpoint_mgr.setMinimumSupplyAirTemperature(13.0)
-          setpoint_mgr.setMaximumSupplyAirTemperature(43.0)
+      sys_abbr = sys_name.to_s.split("|")[0]
+      sys_oa = "mixed"
+      sys_oa = "doas" if system_doas_flags[sys_name.to_s]
+      sys_hr = "none"
+      sys_htg = "ccashp"
+      sys_supp_htg = "coil_electric"
+      sys_clg = "ccashp"
+      if zones.size == 1
+        sys_spm = "single_zone_reheat"
+        sys_spm = "scheduled" if system_doas_flags[sys_name.to_s]
+        sys_sf = "constant_volume"
+        sys_rf = "none"
+        zone_diff = "single_duct_uncontrolled"
+      elsif zones.size > 1
+        if system_doas_flags[sys_name.to_s]
+          sys_spm = "scheduled"
+          sys_sf = "constant_volume"
+          sys_rf = "none"
+          zone_diff = "single_duct_uncontrolled"
         else
-          setpoint_mgr = OpenStudio::Model::SetpointManagerWarmest.new(model)
-          setpoint_mgr.setMinimumSetpointTemperature(13.0)
-          setpoint_mgr.setMaximumSetpointTemperature(43.0)
+          sys_spm = "warmest"
+          sys_sf = "variable_volume"
+          sys_rf = "variable_volume"
+          zone_diff = "single_duct_vav_reheat"
         end
       end
-      airloop = standard.common_air_loop(model: model, system_data: system_data)
-      # Fan
-      if system_doas_flags[sys_name.to_s] || zones.size == 1
-        sys_supply_fan = OpenStudio::Model::FanConstantVolume.new(model)
-      else
-        sys_supply_fan = OpenStudio::Model::FanVariableVolume.new(model)
-        sys_return_fan = OpenStudio::Model::FanVariableVolume.new(model)
-        sys_return_fan.setName("System Return Fan")
-      end
-      sys_supply_fan.setName("System Supply Fan")
-      # Cooling coil
-      sys_clg_coil = OpenStudio::Model::CoilCoolingDXVariableSpeed.new(model)
-      sys_clg_coil.setName("CoilCoolingDXVariableSpeed_CCASHP")
-      sys_clg_coil_speeddata1 = OpenStudio::Model::CoilCoolingDXVariableSpeedSpeedData.new(model)
-      sys_clg_coil.addSpeed(sys_clg_coil_speeddata1)
-      sys_clg_coil.setNominalSpeedLevel(1)
-      # Electric supplemental heating coil
-      sys_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-      sys_elec_htg_coil.setName("CoilHeatingElectric")
-      # DX heating coil
-      sys_dx_htg_coil = OpenStudio::Model::CoilHeatingDXVariableSpeed.new(model)
-      sys_dx_htg_coil.setName("CoilHeatingDXVariableSpeed_CCASHP")
-      sys_dx_htg_coil_speed1 = OpenStudio::Model::CoilHeatingDXVariableSpeedSpeedData.new(model)
-      sys_dx_htg_coil.addSpeed(sys_dx_htg_coil_speed1)
-      sys_dx_htg_coil.setNominalSpeedLevel(1)
-      sys_dx_htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(-25.0)
-      sys_dx_htg_coil.setDefrostStrategy("ReverseCycle")
-      #sys_dx_htg_coil.setDefrostStrategy("Resistive")
-      #sys_dx_htg_coil.setResistiveDefrostHeaterCapacity(0.001)
-      sys_dx_htg_coil.setDefrostControl("OnDemand")
-      sys_dx_htg_coil.setCrankcaseHeaterCapacity(0.001)
-      search_criteria = coil_dx_find_search_criteria(sys_dx_htg_coil)
+      airloop, return_fan = add_air_system(model: model,
+                               standard: standard,
+                               zones: zones,
+                               sys_abbr: sys_abbr,
+                               sys_oa: sys_oa,
+                               sys_hr: sys_hr,
+                               sys_htg: sys_htg,
+                               sys_supp_htg: sys_supp_htg,
+                               sys_clg: sys_clg,
+                               sys_sf: sys_sf,
+                               sys_rf: sys_rf,
+                               sys_spm: sys_spm)
+      htg_dx_coils = model.getCoilHeatingDXVariableSpeeds
+      search_criteria = coil_dx_find_search_criteria(htg_dx_coils[0])
       props =  model_find_object(standards_data['tables']["heat_pumps_heating_ecm_hs09_ccashpsys"]['table'], search_criteria, 1.0, Date.today)
       heat_defrost_eir_ft = model_add_curve(model, props['heat_defrost_eir_ft'])
       # This defrost curve has to be assigned here before sizing
       if heat_defrost_eir_ft
-        sys_dx_htg_coil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft)
+        htg_dx_coils.sort.each {|dxcoil| dxcoil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft)}
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{sys_dx_htg_coil.name}, cannot find heat_defrost_eir_ft curve, will not be set.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{htg_dx_coils[0].name}, cannot find heat_defrost_eir_ft curve, will not be set.")
       end
-      sys_clg_coil.addToNode(airloop.supplyOutletNode)
-      sys_dx_htg_coil.addToNode(airloop.supplyOutletNode)
-      sys_elec_htg_coil.addToNode(airloop.supplyOutletNode)
-      sys_supply_fan.addToNode(airloop.supplyOutletNode)
-      setpoint_mgr.addToNode(airloop.supplyOutletNode)
-      # OA controller
-      oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
-      oa_controller.autosizeMinimumOutdoorAirFlowRate
-      oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
-      oa_system.addToNode(airloop.supplyInletNode)
-      zones.each do |zone|
-        zone.sizingZone.setZoneCoolingDesignSupplyAirTemperature(13.0)
-        zone.sizingZone.setZoneHeatingDesignSupplyAirTemperature(43.0)
-        zone.sizingZone.setZoneCoolingSizingFactor(1.1)
-        zone.sizingZone.setZoneHeatingSizingFactor(1.3)
-        if zone_clg_eqpt_type
-          case zone_clg_eqpt_type[zone.name.to_s]
-          when "ZoneHVACPackagedTerminalAirConditioner"
-            standard.add_ptac_dx_cooling(model,zone,true)
-          end
-        end
-        if system_doas_flags[sys_name.to_s] || zones.size == 1
-          diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
-        else
-          reheat_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-          diffuser = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, always_on, reheat_coil)
-          sys_return_fan.addToNode(airloop.returnAirNode.get)
-          diffuser.setFixedMinimumAirFlowRate(0.002 * zone.floorArea )
-          diffuser.setMaximumReheatAirTemperature(43.0)
-          diffuser.setDamperHeatingAction('Normal')
-        end
-        airloop.removeBranchForZone(zone)
-        airloop.addBranchForZone(zone, diffuser.to_StraightComponent)
-        if baseboard_flag then standard.add_zone_baseboards(baseboard_type: 'Electric', hw_loop: nil, model: model, zone: zone) end
+      if zone_eqpt_flag
+        zone_clg = "none"
+        zone_clg = "ptac" if sys_oa == "doas"
+        add_zone_eqpt(model: model,
+                      standard: standard,
+                      airloop: airloop,
+                      zones: zones,
+                      zone_diff: zone_diff,
+                      zone_htg: "baseboard_electric",
+                      zone_clg: zone_clg)
       end
-      update_sys_name(airloop,
-                      sys_abbr: nil,
-                      sys_oa: nil,
-                      sys_hr: nil,
-                      sys_htg: "ccashp",
-                      sys_clg: "ccashp",
-                      sys_sf: nil,
-                      zone_htg: "b-e",
-                      zone_clg: "none",
-                      sys_rf: nil)
+      return_fan.addToNode(airloop.returnAirNode.get) if return_fan
       systems << airloop
     end
 
@@ -529,13 +697,13 @@ class ECMS
   def apply_efficiency_ecm_hs09_ccashpsys(model:,ecm_name:)
     # fraction of electric backup heating coil capacity assigned to dx heating coil
     fr_backup_coil_cap_as_dx_coil_cap = 0.5
-    model.getAirLoopHVACs.each do |isys|
+    model.getAirLoopHVACs.sort.each do |isys|
       clg_dx_coil = nil
       htg_dx_coil = nil
       backup_coil = nil
       fans = []
       # Find the components on the air loop
-      isys.supplyComponents.each do |icomp|
+      isys.supplyComponents.sort.each do |icomp|
         if icomp.to_CoilCoolingDXVariableSpeed.is_initialized
           clg_dx_coil = icomp.to_CoilCoolingDXVariableSpeed.get
         elsif icomp.to_CoilHeatingDXVariableSpeed.is_initialized
@@ -999,7 +1167,9 @@ class ECMS
 
   # =============================================================================================================================
   # Find minimum efficiency for "CoilCoolingDXVariableSpeed" object
-  def coil_cooling_dx_variable_speed_standard_minimum_cop(coil_cooling_dx_variable_speed, rename = false,ecm_name)
+  def coil_cooling_dx_variable_speed_standard_minimum_cop(coil_cooling_dx_variable_speed,
+                                                          rename = false,
+                                                          ecm_name)
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_variable_speed)
     cooling_type = search_criteria['cooling_type']
     heating_type = search_criteria['heating_type']
@@ -1074,7 +1244,9 @@ class ECMS
 
   # =============================================================================================================================
   # Find minimum efficiency for "CoilHeatingDXVariableSingleSpeed" object
-  def coil_heating_dx_variable_speed_standard_minimum_cop(coil_heating_dx_variable_speed, rename = false,ecm_name)
+  def coil_heating_dx_variable_speed_standard_minimum_cop(coil_heating_dx_variable_speed,
+                                                          rename = false,
+                                                          ecm_name)
     search_criteria = coil_dx_find_search_criteria(coil_heating_dx_variable_speed)
     cooling_type = search_criteria['cooling_type']
     heating_type = search_criteria['heating_type']
@@ -1137,7 +1309,9 @@ class ECMS
 
   # =============================================================================================================================
   # Find minimum cooling efficiency for "AirConditionerVariableRefrigerantFlow" object
-  def airconditioner_variablerefrigerantflow_cooling_standard_minimum_cop(airconditioner_variablerefrigerantflow, rename = false, ecm_name)
+  def airconditioner_variablerefrigerantflow_cooling_standard_minimum_cop(airconditioner_variablerefrigerantflow,
+                                                                          rename = false,
+                                                                          ecm_name)
     search_criteria = coil_dx_find_search_criteria(airconditioner_variablerefrigerantflow)
     cooling_type = search_criteria['cooling_type']
     heating_type = search_criteria['heating_type']
@@ -1200,7 +1374,9 @@ class ECMS
 
   # =============================================================================================================================
   # Find minimum heating efficiency for "AirConditionerVariableRefrigerantFlow" object
-  def airconditioner_variablerefrigerantflow_heating_standard_minimum_cop(airconditioner_variablerefrigerantflow, rename = false, ecm_name)
+  def airconditioner_variablerefrigerantflow_heating_standard_minimum_cop(airconditioner_variablerefrigerantflow,
+                                                                          rename = false,
+                                                                          ecm_name)
     search_criteria = coil_dx_find_search_criteria(airconditioner_variablerefrigerantflow)
     cooling_type = search_criteria['cooling_type']
     heating_type = search_criteria['heating_type']
@@ -1791,6 +1967,7 @@ class ECMS
     return chiller_set, chiller_min_cap, chiller_max_cap
   end
 
+  # ============================================================================================================================
   def reset_chiller_efficiency(model:, component:, cop:)
     # Note that all parameters (except for the capacity) of an existing chiller are replaced with the ones of the VSD chiller, as per Kamel Haddad's comment.
     component.setName('ChillerElectricEIR_VSDCentrifugalWaterChiller')

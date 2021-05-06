@@ -67,7 +67,6 @@ class ECMS < NECB2011
                    model: model,
                    system_zones_map: map_system_to_zones,
                    system_doas_flags: system_doas_flags,
-                   zone_clg_eqpt_type: zone_clg_eqpt_type,
                    standard: template_standard)
     else
       ecm_std.send(ecm_add_method_name,
