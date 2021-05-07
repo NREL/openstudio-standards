@@ -2948,7 +2948,7 @@ class Standard
   #     OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
   #     return false
   #   end
-  def model_find_objects(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil)
+  def model_find_objects(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil)
 
     matching_objects = []
     if hash_of_objects.is_a?(Hash) && hash_of_objects.key?('table')
@@ -2995,6 +2995,27 @@ class Standard
         capacity *= 0.99
         # Skip objects whose minimum capacity is below or maximum capacity above the specified capacity
         matching_objects = matching_objects.reject { |object| capacity.to_f <= object['minimum_capacity'].to_f || capacity.to_f > object['maximum_capacity'].to_f }
+      else
+        matching_objects = matching_capacity_objects
+      end
+    end
+
+    # If fan_motor_bhp was specified, narrow down the matching objects
+    unless fan_motor_bhp.nil?
+      # Skip objects that don't have fields for minimum_capacity and maximum_capacity
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_capacity') || !object.key?('maximum_capacity') }
+
+      # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
+      matching_objects = matching_objects.reject { |object| object['minimum_capacity'].nil? || object['maximum_capacity'].nil? }
+
+      # Skip objects whose the minimum capacity is below or maximum capacity above the specified fan_motor_bhp
+      matching_capacity_objects = matching_objects.reject { |object| fan_motor_bhp.to_f < object['minimum_capacity'].to_f || fan_motor_bhp.to_f > object['maximum_capacity'].to_f }
+
+      # If no object was found, round the fan_motor_bhp down in case the number fell between the limits in the json file.
+      if matching_capacity_objects.size.zero?
+        fan_motor_bhp *= 0.99
+        # Skip objects whose minimum capacity is below or maximum capacity above the specified fan_motor_bhp
+        matching_objects = matching_objects.reject { |object| fan_motor_bhp.to_f <= object['minimum_capacity'].to_f || fan_motor_bhp.to_f > object['maximum_capacity'].to_f }
       else
         matching_objects = matching_capacity_objects
       end
@@ -3065,9 +3086,9 @@ class Standard
   #   'type' => 'Enclosed',
   #   }
   #   motor_properties = self.model.find_object(motors, search_criteria, capacity: 2.5)
-  def model_find_object(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil)
+  def model_find_object(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil)
 
-    matching_objects = model_find_objects(hash_of_objects, search_criteria, capacity, date, area, num_floors)
+    matching_objects = model_find_objects(hash_of_objects, search_criteria, capacity, date, area, num_floors, fan_motor_bhp)
 
     # Check the number of matching objects found
     if matching_objects.size.zero?
