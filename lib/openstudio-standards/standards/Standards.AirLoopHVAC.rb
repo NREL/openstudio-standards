@@ -1112,12 +1112,66 @@ class Standard
 
   # Determine if the airloop includes hydronic cooling coils
   #
-  # @return [Bool] returns true if hydronic coolings coils are included on the airloop
+  # @return [Bool] returns true if hydronic cooling coils are included on the airloop
   def air_loop_hvac_include_hydronic_cooling_coil?(air_loop_hvac)
     air_loop_hvac.supplyComponents.each do |comp|
       return true if comp.to_CoilCoolingWater.is_initialized
     end
     return false
+  end
+
+  # Determine if the airloop includes cooling coils
+  #
+  # @return [Bool] returns true if cooling coils are included on the airloop
+  def air_loop_hvac_include_cooling_coil?(air_loop_hvac)
+    air_loop_hvac.supplyComponents.each do |comp|
+      return true if comp.to_CoilCoolingWater.is_initialized
+      return true if comp.to_CoilCoolingWater.is_initialized
+      return true if comp.to_CoilCoolingCooledBeam.is_initialized
+      return true if comp.to_CoilCoolingDXMultiSpeed.is_initialized
+      return true if comp.to_CoilCoolingDXSingleSpeed.is_initialized
+      return true if comp.to_CoilCoolingDXTwoSpeed.is_initialized
+      return true if comp.to_CoilCoolingDXTwoStageWithHumidityControlMode.is_initialized
+      return true if comp.to_CoilCoolingDXVariableRefrigerantFlow.is_initialized
+      return true if comp.to_CoilCoolingDXVariableSpeed.is_initialized
+      return true if comp.to_CoilCoolingFourPipeBeam.is_initialized
+      return true if comp.to_CoilCoolingLowTempRadiantConstFlow.is_initialized
+      return true if comp.to_CoilCoolingLowTempRadiantVarFlow.is_initialized
+      return true if comp.to_CoilCoolingWater.is_initialized
+      return true if comp.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
+      return true if comp.to_CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit.is_initialized
+    end
+    return false
+  end
+
+  # Determine if the airloop includes evaporative coolers
+  #
+  # @return [Bool] returns true if evaporative coolers are included on the airloop
+  def air_loop_hvac_include_evaporative_cooler?(air_loop_hvac)
+    air_loop_hvac.supplyComponents.each do |comp|
+      return true if comp.to_EvaporativeCoolerDirectResearchSpecial.is_initialized
+      return true if comp.to_EvaporativeCoolerIndirectResearchSpecial.is_initialized
+    end
+    return false
+  end
+
+  # Determine if the airloop includes an air-economizer
+  #
+  # @return [Bool] returns true if the airloop has an air-economizer
+  def air_loop_hvac_include_economizer?(air_loop_hvac)
+    return false unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+
+    # Get OA system
+    air_loop_hvac_oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+
+    # Get OA controller
+    air_loop_hvac_oa_controller = air_loop_hvac_oa_system.getControllerOutdoorAir
+
+    # Get economizer type
+    economizer_type = air_loop_hvac_oa_controller.getEconomizerControlType.to_s
+    return false if economizer_type == 'NoEconomizer'
+
+    return true
   end
 
   # Determine if the airloop includes WSHP cooling coils
@@ -3447,4 +3501,117 @@ class Standard
 
     return dx_clg
   end
+
+  # Get return fan power for airloop
+  #
+  # @param model [OpenStudio::model::AirLoopHVAC] AirLoopHVAC object
+  # @return [Float] Fan power
+  def air_loop_hvac_get_return_fan_power(air_loop)
+    return_fan_power = 0
+
+    if air_loop.returnFan.is_initialized
+      # Get return fan
+      fan = air_loop.returnFan.get
+
+      # Get fan object
+      if fan.to_FanConstantVolume.is_initialized
+        fan = fan.to_FanConstantVolume.get
+      elsif fan.to_FanVariableVolume.is_initialized
+        fan = fan.to_FanVariableVolume.get
+      elsif fan.to_FanOnOff.is_initialized
+        fan = fan.to_FanOnOff.get
+      end
+
+      # Get fan power
+      return_fan_power += fan_fanpower(fan)
+    end
+
+    return return_fan_power
+  end
+
+  # Get supply fan power for airloop
+  #
+  # @param model [OpenStudio::model::AirLoopHVAC] AirLoopHVAC object
+  # @return [Float] Fan power
+  def air_loop_hvac_get_supply_fan_power(air_loop)
+    supply_fan_power = 0
+
+    # Get fan
+    fan = air_loop_hvac_get_supply_fan(air_loop)
+
+    if !fan.nil?
+      # Get fan power
+      supply_fan_power += fan_fanpower(fan)
+    end
+
+    return supply_fan_power
+  end
+
+  # Get supply fan for airloop
+  #
+  # @param model [OpenStudio::model::AirLoopHVAC] AirLoopHVAC object
+  # @return fan
+  def air_loop_hvac_get_supply_fan(air_loop)
+    fan = nil
+    if air_loop.supplyFan.is_initialized
+      # Get return fan
+      fan = air_loop.supplyFan.get
+
+      # Get fan object
+      if fan.to_FanConstantVolume.is_initialized
+        fan = fan.to_FanConstantVolume.get
+      elsif fan.to_FanVariableVolume.is_initialized
+        fan = fan.to_FanVariableVolume.get
+      elsif fan.to_FanOnOff.is_initialized
+        fan = fan.to_FanOnOff.get
+      end
+
+    else
+      air_loop.supplyComponents.each do |comp|
+        if comp.to_AirLoopHVACUnitarySystem.is_initialized
+          fan = comp.to_AirLoopHVACUnitarySystem.get.supplyFan
+          next if fan.empty?
+
+          # Get fan object
+          fan = fan.get
+          if fan.to_FanConstantVolume.is_initialized
+            fan = fan.to_FanConstantVolume.get
+          elsif fan.to_FanVariableVolume.is_initialized
+            fan = fan.to_FanVariableVolume.get
+          elsif fan.to_FanOnOff.is_initialized
+            fan = fan.to_FanOnOff.get
+          end
+        end
+      end
+    end
+    return fan
+  end
+
+  # Get relief fan power for airloop
+  #
+  # @param model [OpenStudio::model::AirLoopHVAC] AirLoopHVAC object
+  # @return [Float] Fan power
+  def air_loop_hvac_get_relief_fan_power(air_loop)
+    relief_fan_power = 0
+
+    if air_loop.reliefFan.is_initialized
+      # Get return fan
+      fan = air_loop.reliefFan.get
+
+      # Get fan object
+      if fan.to_FanConstantVolume.is_initialized
+        fan = fan.to_FanConstantVolume.get
+      elsif fan.to_FanVariableVolume.is_initialized
+        fan = fan.to_FanVariableVolume.get
+      elsif fan.to_FanOnOff.is_initialized
+        fan = fan.to_FanOnOff.get
+      end
+
+      # Get fan power
+      relief_fan_power += fan_fanpower(fan)
+    end
+
+    return relief_fan_power
+  end
+
 end

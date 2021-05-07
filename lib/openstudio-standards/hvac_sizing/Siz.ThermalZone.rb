@@ -182,6 +182,79 @@ class OpenStudio::Model::ThermalZone
   
   end
   
+  def designAirFlowRate
+
+    result = OpenStudio::OptionalDouble.new
+
+    name = self.name.get.upcase
+
+    sql = self.model.sqlFile
+    
+    if sql.is_initialized
+      sql = sql.get
+      
+      table_name = 'Zone Sizing Information'
+
+      # Get zone row name
+      query = "SELECT RowName
+              FROM tabulardatawithstrings
+              WHERE ReportName='Initialization Summary' 
+              AND ReportForString='Entire Facility' 
+              AND TableName='#{table_name}'
+              AND ColumnName='Zone Name'
+              AND Value='#{name}'"
+
+      val = sql.execAndReturnVectorOfString(query).get
+
+      if !val.empty?
+        clg_id = val[0]
+        htg_id = val[1]
+        htg_des_air_flow_rate = 0
+        clg_des_air_flow_rate = 0
+        
+        # Get zone cooling design flow rate
+        query = "SELECT Value 
+                FROM tabulardatawithstrings
+                WHERE ReportName='Initialization Summary' 
+                AND ReportForString='Entire Facility' 
+                AND TableName='#{table_name}'
+                AND ColumnName='User Des Air Flow Rate {m3/s}'
+                AND RowName='#{clg_id}'"
+        val = sql.execAndReturnFirstDouble(query)
+        if val.is_initialized  
+          clg_des_air_flow_rate = val
+        else
+          OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "Data not found for query: #{query}")
+        end
+
+        # Get zone heating design flow rate
+        query = "SELECT Value 
+                FROM tabulardatawithstrings
+                WHERE ReportName='Initialization Summary' 
+                AND ReportForString='Entire Facility' 
+                AND TableName='#{table_name}'
+                AND ColumnName='User Des Air Flow Rate {m3/s}'
+                AND RowName='#{htg_id}'"
+        val = sql.execAndReturnFirstDouble(query)
+        if val.is_initialized  
+          htg_des_air_flow_rate = val
+        else
+          OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "Data not found for query: #{query}")
+        end
+
+        # Use maximum of the two as actual design flow rate
+        result = OpenStudio::OptionalDouble.new([clg_des_air_flow_rate.to_f, htg_des_air_flow_rate.to_f].max)
+      else
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "Data not found for query: #{query}")
+      end
+
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has no sql file containing results, cannot lookup data.')
+    end
+
+    return result
+  end
+
   # returns the calculated heating design load as an optional double
   def heatingDesignLoad
   
