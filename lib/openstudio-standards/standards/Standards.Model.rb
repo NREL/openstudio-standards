@@ -2474,12 +2474,19 @@ class Standard
     sec_zones = []
     pri_zone_names = []
     sec_zone_names = []
+    zone_op_hrs = {}   # hash of zoneName: 8760 array of operating hours
 
     # If there is only one zone, then set that as primary
     if zones.size == 1
       zones.each do |zone|
         pri_zones << zone
         pri_zone_names << zone.name.get.to_s
+        zone_name = zone.name.get.to_s
+        if zone_fan_scheds.has_key?(zone_name)
+          zone_fan_sched = zone_fan_scheds[zone_name]
+        else
+          zone_fan_sched = nil
+        end
         zone_op_hrs[zone.name.get.to_s] = thermal_zone_get_annual_operating_hours(model, zone, zone_fan_sched)
       end
       # Report out the primary vs. secondary zones
@@ -2490,7 +2497,6 @@ class Standard
       return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs}
     end
 
-    zone_op_hrs = {}   # hash of zoneName: 8760 array of operating hours
     zone_eflh = {}     # hash of zoneName: eflh for zone
     zone_max_load = {}  # hash of zoneName: coincident max internal load
     load_limit = 10     # differ by 10 Btu/hr-sf or more

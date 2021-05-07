@@ -1698,21 +1698,21 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      #'wwr',
-      #'srr',
-      #'envelope',
-      #'lpd',
-      #'isresidential',
-      #'daylighting_control',
-      #'light_occ_sensor',
-      #'infiltration',
-      #'hvac_baseline',
+      'wwr',
+      'srr',
+      'envelope',
+      'lpd',
+      'isresidential',
+      'daylighting_control',
+      'light_occ_sensor',
+      'infiltration',
+      'hvac_baseline',
       'hvac_psz_split_from_mz',
-      #'sat_ctrl',
-      #'number_of_boilers',
-      #'number_of_chillers',
-      #'number_of_cooling_towers',
-      #'hvac_sizing'
+      'sat_ctrl',
+      'number_of_boilers',
+      'number_of_chillers',
+      'number_of_cooling_towers',
+      'hvac_sizing'
     ]
 
     # Get list of unique prototypes
