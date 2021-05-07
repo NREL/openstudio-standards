@@ -144,10 +144,10 @@ class NECB2011
   end
 
 
-  def set_lighting_per_area(space_type: space_type,
-                            definition: definition,
-                            lighting_per_area: lighting_per_area,
-                            lights_scale: lights_scale)
+  def set_lighting_per_area(space_type:,
+                            definition:,
+                            lighting_per_area:,
+                            lights_scale:)
     occ_sens_lpd_frac = 1.0
     # NECB2011 space types that require a reduction in the LPD to account for
     # the requirement of an occupancy sensor (8.4.4.6(3) and 4.2.2.2(2))

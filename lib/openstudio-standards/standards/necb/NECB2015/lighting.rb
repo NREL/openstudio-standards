@@ -1,8 +1,8 @@
 class NECB2015
-  def set_lighting_per_area(space_type: space_type,
-                            definition: definition,
-                            lighting_per_area: lighting_per_area,
-                            lights_scale: lights_scale)
+  def set_lighting_per_area(space_type:,
+                            definition:,
+                            lighting_per_area:,
+                            lights_scale:)
     definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f * lights_scale, 'W/ft^2', 'W/m^2').get)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set LPD to #{lighting_per_area} W/ft^2.")
   end
