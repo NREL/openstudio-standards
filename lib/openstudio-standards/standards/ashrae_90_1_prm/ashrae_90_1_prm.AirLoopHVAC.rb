@@ -35,6 +35,9 @@ class ASHRAE901PRM < Standard
 
     allowable_fan_bhp = 0.0
     allowable_power_w = 0.0
+    supply_fan_power_fraction = 0
+    return_fan_power_fraction = 0
+    relief_fan_power_fraction = 0
     if system_type == 'PSZ_AC' ||
        system_type == 'PSZ_HP' ||
        system_type == 'PVAV_Reheat'
@@ -49,9 +52,6 @@ class ASHRAE901PRM < Standard
 
       # Divide the allowable power evenly between the fans
       # on this air loop.
-      supply_fan_power_fraction = 0
-      return_fan_power_fraction = 0
-      relief_fan_power_fraction = 0
       air_loop_total_zone_design_airflow = 0
       air_loop_hvac.thermalZones.sort.each do |zone|
         zone_air_flow = zone.designAirFlowRate.to_f

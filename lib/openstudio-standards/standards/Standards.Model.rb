@@ -214,17 +214,19 @@ class Standard
       model_identify_non_mechanically_cooled_systems(model)
 
       # Get supply, return, relief fan power for each air loop
-      model.getAirLoopHVACs.sort.each do |air_loop|
-        supply_fan_w = air_loop_hvac_get_supply_fan_power(air_loop)
-        return_fan_w = air_loop_hvac_get_return_fan_power(air_loop)
-        relief_fan_w = air_loop_hvac_get_relief_fan_power(air_loop)
+      if model_get_fan_power_breakdown()
+        model.getAirLoopHVACs.sort.each do |air_loop|
+          supply_fan_w = air_loop_hvac_get_supply_fan_power(air_loop)
+          return_fan_w = air_loop_hvac_get_return_fan_power(air_loop)
+          relief_fan_w = air_loop_hvac_get_relief_fan_power(air_loop)
 
-        # Save fan power at the zone to determining
-        # baseline fan power
-        air_loop.thermalZones.sort.each do |zone|
-          zone.additionalProperties.setFeature('supply_fan_w', supply_fan_w.to_f)
-          zone.additionalProperties.setFeature('return_fan_w', return_fan_w.to_f)
-          zone.additionalProperties.setFeature('relief_fan_w', relief_fan_w.to_f)
+          # Save fan power at the zone to determining
+          # baseline fan power
+          air_loop.thermalZones.sort.each do |zone|
+            zone.additionalProperties.setFeature('supply_fan_w', supply_fan_w.to_f)
+            zone.additionalProperties.setFeature('return_fan_w', return_fan_w.to_f)
+            zone.additionalProperties.setFeature('relief_fan_w', relief_fan_w.to_f)
+          end
         end
       end
 
@@ -7094,4 +7096,12 @@ class Standard
     return true
   end
 
+  # Indicate if fan power breakdown (supply, return, and relief)
+  # are needed
+  #
+  # @return [Boolean] true if necessary, false otherwise
+  def model_get_fan_power_breakdown()
+
+    return false
+  end
 end

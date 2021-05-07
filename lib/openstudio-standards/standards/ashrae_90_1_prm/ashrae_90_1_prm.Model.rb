@@ -609,4 +609,13 @@ class ASHRAE901PRM < Standard
 
     return allowable_base_system_fan_bhp
   end
+
+  # Indicate if fan power breakdown (supply, return, and relief)
+  # are needed
+  #
+  # @return [Boolean] true if necessary, false otherwise
+  def model_get_fan_power_breakdown()
+
+    return true
+  end
 end
