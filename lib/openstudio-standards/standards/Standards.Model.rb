@@ -214,10 +214,19 @@ class Standard
       model_identify_non_mechanically_cooled_systems(model)
 
       # Get supply, return, relief fan power for each air loop
-      # and assign it at the zone level
-      model_get_supply_fan_power(model)
-      model_get_return_fan_power(model)
-      model_get_relief_fan_power(model)
+      model.getAirLoopHVACs.sort.each do |air_loop|
+        supply_fan_w = air_loop_hvac_get_supply_fan_power(air_loop)
+        return_fan_w = air_loop_hvac_get_return_fan_power(air_loop)
+        relief_fan_w = air_loop_hvac_get_relief_fan_power(air_loop)
+
+        # Save fan power at the zone to determining
+        # baseline fan power
+        air_loop.thermalZones.sort.each do |zone|
+          zone.additionalProperties.setFeature('supply_fan_w', supply_fan_w.to_f)
+          zone.additionalProperties.setFeature('return_fan_w', return_fan_w.to_f)
+          zone.additionalProperties.setFeature('relief_fan_w', relief_fan_w.to_f)
+        end
+      end
 
       # Remove all HVAC from model, excluding service water heating
       model_remove_prm_hvac(model)
@@ -328,12 +337,11 @@ class Standard
 
           plant_loop_apply_prm_baseline_temperatures(plant_loop)
         end
+      end
 
-        # Run sizing run with the HVAC equipment
-        if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
-          return false
-        end
-
+      # Run sizing run with the HVAC equipment
+      if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
+        return false
       end
 
       if /prm/i !~ template
@@ -7086,10 +7094,4 @@ class Standard
     return true
   end
 
-  def model_get_return_fan_power(model)
-    model.airLoopHVACs.each do |air_loop|
-      oa_sys = air_loop.airLoopHVACOutdoorAirSystem.get
-      oa_sys.
-    end
-  end
 end

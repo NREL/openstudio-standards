@@ -3501,4 +3501,117 @@ class Standard
 
     return dx_clg
   end
+
+  # Get return fan power for airloop
+  #
+  # @param model [OpenStudio::model::AirLoopHVAC] AirLoopHVAC object
+  # @return [Float] Fan power
+  def air_loop_hvac_get_return_fan_power(air_loop)
+    return_fan_power = 0
+
+    if air_loop.returnFan.is_initialized
+      # Get return fan
+      fan = air_loop.returnFan.get
+
+      # Get fan object
+      if fan.to_FanConstantVolume.is_initialized
+        fan = fan.to_FanConstantVolume.get
+      elsif fan.to_FanVariableVolume.is_initialized
+        fan = fan.to_FanVariableVolume.get
+      elsif fan.to_FanOnOff.is_initialized
+        fan = fan.to_FanOnOff.get
+      end
+
+      # Get fan power
+      return_fan_power += fan_fanpower(fan)
+    end
+
+    return return_fan_power
+  end
+
+  # Get supply fan power for airloop
+  #
+  # @param model [OpenStudio::model::AirLoopHVAC] AirLoopHVAC object
+  # @return [Float] Fan power
+  def air_loop_hvac_get_supply_fan_power(air_loop)
+    supply_fan_power = 0
+
+    # Get fan
+    fan = air_loop_hvac_get_supply_fan(air_loop)
+
+    if !fan.nil?
+      # Get fan power
+      supply_fan_power += fan_fanpower(fan)
+    end
+
+    return supply_fan_power
+  end
+
+  # Get supply fan for airloop
+  #
+  # @param model [OpenStudio::model::AirLoopHVAC] AirLoopHVAC object
+  # @return fan
+  def air_loop_hvac_get_supply_fan(air_loop)
+    fan = nil
+    if air_loop.supplyFan.is_initialized
+      # Get return fan
+      fan = air_loop.supplyFan.get
+
+      # Get fan object
+      if fan.to_FanConstantVolume.is_initialized
+        fan = fan.to_FanConstantVolume.get
+      elsif fan.to_FanVariableVolume.is_initialized
+        fan = fan.to_FanVariableVolume.get
+      elsif fan.to_FanOnOff.is_initialized
+        fan = fan.to_FanOnOff.get
+      end
+
+    else
+      air_loop.supplyComponents.each do |comp|
+        if comp.to_AirLoopHVACUnitarySystem.is_initialized
+          fan = comp.to_AirLoopHVACUnitarySystem.get.supplyFan
+          next if fan.empty?
+
+          # Get fan object
+          fan = fan.get
+          if fan.to_FanConstantVolume.is_initialized
+            fan = fan.to_FanConstantVolume.get
+          elsif fan.to_FanVariableVolume.is_initialized
+            fan = fan.to_FanVariableVolume.get
+          elsif fan.to_FanOnOff.is_initialized
+            fan = fan.to_FanOnOff.get
+          end
+        end
+      end
+    end
+    return fan
+  end
+
+  # Get relief fan power for airloop
+  #
+  # @param model [OpenStudio::model::AirLoopHVAC] AirLoopHVAC object
+  # @return [Float] Fan power
+  def air_loop_hvac_get_relief_fan_power(air_loop)
+    relief_fan_power = 0
+
+    if air_loop.reliefFan.is_initialized
+      # Get return fan
+      fan = air_loop.reliefFan.get
+
+      # Get fan object
+      if fan.to_FanConstantVolume.is_initialized
+        fan = fan.to_FanConstantVolume.get
+      elsif fan.to_FanVariableVolume.is_initialized
+        fan = fan.to_FanVariableVolume.get
+      elsif fan.to_FanOnOff.is_initialized
+        fan = fan.to_FanOnOff.get
+      end
+
+      # Get fan power
+      relief_fan_power += fan_fanpower(fan)
+    end
+
+    return relief_fan_power
+  end
+
 end

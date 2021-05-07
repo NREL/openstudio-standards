@@ -12,7 +12,7 @@ class ASHRAE901PRM < Standard
       else
         fan_efficacy_w_per_cfm = 0.3
       end
-      else OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.ZoneHVACComponent', 'Zone HVAC system fan power lookup missing.')
+    else OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.ZoneHVACComponent', 'Zone HVAC system fan power lookup missing.')
     end
     return fan_efficacy_w_per_cfm
   end
@@ -54,7 +54,7 @@ class ASHRAE901PRM < Standard
     # Get non-mechanically cooled flag
     if zone_hvac.thermalZone.get.additionalProperties.hasFeature('non_mechanically_cooled')
       nmc_flag = zone_hvac.thermalZone.additionalProperties.hasFeature('non_mechanically_cooled')
-      else nmc_flag = false
+    else nmc_flag = false
     end
 
     # Determine the W/cfm
@@ -101,6 +101,5 @@ class ASHRAE901PRM < Standard
 
     return true
   end
-
 
 end
