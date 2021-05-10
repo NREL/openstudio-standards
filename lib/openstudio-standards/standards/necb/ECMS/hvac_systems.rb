@@ -668,14 +668,18 @@ class ECMS
       fan = create_air_sys_fan(model,zone_fan_type)
       case zone_htg_eqpt_type
       when "pthp"
-        zone_eqpt = create_zone_container_eqpt(model: model,
+        zone_cont_eqpt = create_zone_container_eqpt(model: model,
                                             zone_cont_eqpt_type: "pthp",
                                             zone_htg_eqpt: htg_eqpt,
                                             zone_supp_htg_eqpt: supp_htg_eqpt,
                                             zone_clg_eqpt: clg_eqpt,
                                             zone_fan: fan)
       end
-      zone_eqpt.addToThermalZone(zone)
+      if zone_cont_eqpt
+        zone_eqpt.addToThermalZone(zone)
+      elsif htg_eqpt
+        htg_eqpt.addToThermalZone(zone)
+      end
     end
     sys_name_zone_htg_eqpt_type = zone_htg_eqpt_type
     sys_name_zone_htg_eqpt_type = "b-e" if zone_htg_eqpt_type == "baseboard_electric"
@@ -756,7 +760,10 @@ class ECMS
                     zones: zones,
                     zone_diffuser_type: zone_diffuser_type,
                     zone_htg_eqpt_type: zone_htg_eqpt_type,
-                    zone_clg_eqpt_type: zone_clg_eqpt_type)
+                    zone_supp_htg_eqpt_type: "none",
+                    zone_clg_eqpt_type: zone_clg_eqpt_type,
+                    zone_fan_type: "none")
+
       return_fan.addToNode(airloop.returnAirNode.get) if return_fan
       systems << airloop
     end
