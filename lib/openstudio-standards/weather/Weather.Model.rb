@@ -476,6 +476,27 @@ module BTAP
       ALBEDO = 32 # not used
       LIQUID_PRECIPITATION_DEPTH = 33
       LIQUID_PRECIPITATION_QUANTITY = 34
+      CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR = 100 # pws Sara
+      CALCULATED_PARTIAL_PRESSURE_OF_WATER_VAPOR = 101 # pw Sara
+      CALCULATED_TOTAL_MIXTURE_PRESSURE = 102 # p Sara
+      CALCULATED_HUMIDITY_RATIO = 103 # w Sara
+      CALCULATED_HUMIDITY_RATIO_AVG_DAILY = 104 # w Sara
+
+      # coefficients for the calculation of pws (saturation pressure of water vapour in the absence of air at the given dry-bulb temperature (kPa))#Sara
+      C1 = -5.6745359E+03
+      C2 = 6.3925247E+00
+      C3 = -9.6778430E-03
+      C4 = 6.2215701E-07
+      C5 = 2.0747825E-09
+      C6 = -9.4840240E-13
+      C7 = 4.1635019E+00
+      C8 = -5.8002206E+03
+      C9 = 1.3914993E+00
+      C10 = -4.8640239E-02
+      C11 = 4.1764768E-05
+      C12 = -1.4452093E-08
+      C13 = 6.5459673E+00
+
 
       # This method initializes and returns self.
       # @author phylroy.lopez@nrcan.gc.ca
@@ -666,6 +687,7 @@ module BTAP
           @filearray.push(line.split(','))
         end
         file.close
+        # puts @filearray #Sara
       end
 
       # This method will sets column to a value.
@@ -804,6 +826,91 @@ module BTAP
         FileUtils.cp(@ddy_filepath, "#{File.dirname(filename)}/#{File.basename(filename, '.epw')}.ddy")
         FileUtils.cp(@stat_filepath, "#{File.dirname(filename)}/#{File.basename(filename, '.epw')}.stat")
       end
+
+      def get_dbt #Sara
+        scan if @filearray.nil?
+        returncolumnvalues(DRY_BULB_TEMPERATURE)
+        puts @filearray
+        return self
+      end
+      def returncolumnvalues(column)   #Sara
+        @filearray.each do |line|
+          unless line.first =~ /\D(.*)/
+            line[column] = line[column]
+          end
+        end
+      end
+
+      def calculate_humidity_ratio #Sara
+        column_h = HOUR
+        column_dbt = DRY_BULB_TEMPERATURE
+        column_rh = RELATIVE_HUMIDITY
+        column_pda = ATMOSPHERIC_STATION_PRESSURE
+        column_pws = CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR
+        column_pw = CALCULATED_PARTIAL_PRESSURE_OF_WATER_VAPOR
+        column_p = CALCULATED_TOTAL_MIXTURE_PRESSURE
+        column_w = CALCULATED_HUMIDITY_RATIO
+        column_w_avg_daily = CALCULATED_HUMIDITY_RATIO_AVG_DAILY
+        sum_w = 0.0
+        w_base = 0.010 # REFERENCE: White, L. (2019). Setting the Heating/Cooling Performance Criteria for the PHIUS 2018 Passive Building Standard. In ASHRAE Topical Conference Proceedings (pp. 399-409). American Society of Heating, Refrigeration and Air Conditioning Engineers, Inc..
+        ddd = 0.0 #dehimudifation degree-days
+
+        scan if @filearray.nil?
+        @filearray.each do |line|
+          unless line.first =~ /\D(.*)/
+            # Step 1: calculate pws #TODO: describe
+            if line[column_dbt].to_f <= 0.0
+              line[column_pws] = C1/(line[column_dbt].to_f + 273.15) +
+                                 C2 +
+                                 C3 * (line[column_dbt].to_f + 273.15) +
+                                 C4 * (line[column_dbt].to_f + 273.15)**2 +
+                                 C5 * (line[column_dbt].to_f + 273.15)**3 +
+                                 C6 * (line[column_dbt].to_f + 273.15)**4 +
+                                 C7 * Math.log((line[column_dbt].to_f + 273.15), Math.exp(1)) #2.718281828459
+              line[column_pws] = (Math.exp(1))**(line[column_pws].to_f)
+            else #if line[column_1].to_f > 0.0
+              line[column_pws] = C8/(line[column_dbt].to_f + 273.15) +
+                                 C9 +
+                                 C10 * (line[column_dbt].to_f + 273.15)  +
+                                 C11 * (line[column_dbt].to_f + 273.15)**2 +
+                                 C12 * (line[column_dbt].to_f + 273.15)**3 +
+                                 C13 * Math.log((line[column_dbt].to_f + 273.15), Math.exp(1))
+              line[column_pws] = (Math.exp(1))**(line[column_pws].to_f)
+            end
+
+            #Step 2: calculate pw #TODO: describe
+            line[column_pw] = line[column_pws].to_f * line[column_rh].to_f / 100.0
+
+            # Step 3: calculate p #TODO: describe
+            line[column_p] = line[column_pw].to_f + line[column_pda].to_f
+
+            # Step 4: calculate w #TODO: describe
+            line[column_w] = 0.621945 * line[column_pw].to_f / (line[column_p].to_f - line[column_pw].to_f)
+
+            #-----------------------------------------------------------------------------------------------------------
+            # daily average of w
+            if line[column_h].to_f < 24.0
+              sum_w += line[column_w].to_f
+              line[column_w_avg_daily] = 0.0
+            elsif line[column_h].to_f == 24.0
+              line[column_w_avg_daily] = sum_w / 24.0
+              if line[column_w_avg_daily].to_f > w_base
+                line[column_w_avg_daily] = line[column_w_avg_daily].to_f - w_base
+              else
+                line[column_w_avg_daily] = 0.0
+              end
+              sum_w = 0.0
+            end
+
+            ddd += line[column_w_avg_daily]
+
+          end
+        end
+        # puts @filearray
+        # puts "ddd is #{ddd}"
+        return ddd
+      end
+
     end # Environment
   end
 end
