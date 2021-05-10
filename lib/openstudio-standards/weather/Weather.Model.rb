@@ -827,13 +827,14 @@ module BTAP
         FileUtils.cp(@stat_filepath, "#{File.dirname(filename)}/#{File.basename(filename, '.epw')}.stat")
       end
 
-      def get_dbt #Sara
+
+      def get_dbt #Sara #TODO; delete if not used
         scan if @filearray.nil?
         returncolumnvalues(DRY_BULB_TEMPERATURE)
-        puts @filearray
+        # puts @filearray
         return self
       end
-      def returncolumnvalues(column)   #Sara
+      def returncolumnvalues(column)   #Sara #TODO; delete if not used
         @filearray.each do |line|
           unless line.first =~ /\D(.*)/
             line[column] = line[column]
@@ -841,6 +842,22 @@ module BTAP
         end
       end
 
+      # Calculate annual global horizontal irradiance (GHI) # Sara TODO: Question: check if IGA in PHIUS is the same as GHI
+      def get_annual_ghi # Global Horizontal Irradiance (GHI)  #Sara
+        sum_hourly_ghi = 0.0
+        scan if @filearray.nil?
+        @filearray.each do |line|
+          unless line.first =~ /\D(.*)/
+            ghi_hourly = line[GLOBAL_HORIZONTAL_RADIATION].to_f
+            sum_hourly_ghi += ghi_hourly
+          end
+        end
+        annual_ghi_kwh_per_m_sq = sum_hourly_ghi / 1000.0
+        return annual_ghi_kwh_per_m_sq
+      end
+
+
+      # Calculate dehumidification degree days (DDD) (lb/lb days) # Sara TODO: Question: check if works correctly based on calculation in csv
       def calculate_humidity_ratio #Sara
         column_h = HOUR
         column_dbt = DRY_BULB_TEMPERATURE
@@ -904,12 +921,12 @@ module BTAP
 
             ddd += line[column_w_avg_daily]
 
-          end
-        end
+          end #unless line.first =~ /\D(.*)/
+        end #@filearray.each do |line|
         # puts @filearray
         # puts "ddd is #{ddd}"
         return ddd
-      end
+      end #def calculate_humidity_ratio
 
     end # Environment
   end
