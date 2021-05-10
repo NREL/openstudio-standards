@@ -2083,6 +2083,8 @@ class NECB2011
           sys_name += "sh>ashp"
         when "ccashp"
           sys_name += "sh>ccashp"
+        when "ashp"
+          sys_name += "sh>ashp"
         end
 
       when "sys_clg"
@@ -2099,6 +2101,8 @@ class NECB2011
           end
         when "ccashp"
           sys_name += "sc>ccashp"
+        when "ashp"
+          sys_name += "sc>ashp"
         end
 
       when "sys_sf"
@@ -2123,6 +2127,8 @@ class NECB2011
           sys_name += "zh>fpfc"
         when "fpfc"
           sys_name += "zh>tpfc"
+        when "pthp"
+          sys_name += "zh>pthp"
         end
 
       when "zone_clg"
@@ -2135,6 +2141,8 @@ class NECB2011
           sys_name += "zc>fpfc"
         when "ptac"
           sys_name += "zc>ptac"
+        when "pthp"
+          sys_name += "zc>pthp"
         end
 
       when "sys_rf"

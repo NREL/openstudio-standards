@@ -347,16 +347,15 @@ class ECMS
   def add_ecm_hs08_vrfzonal(model:,
                             system_zones_map:,
                             system_doas_flags:,
-                            zone_clg_eqpt_type:,
                             standard:)
     # Update system doas flags
     system_doas_flags.keys.each {|sname| system_doas_flags[sname] = true}
-    # Add doas with cold-climate air-source heat pump and electric backup
+    # Add doas with cold-climate air-source heat pump
     add_ecm_hs09_ccashpsys(model: model,
                            system_zones_map: system_zones_map,
                            system_doas_flags: system_doas_flags,
                            standard: standard,
-                           zone_eqpt_flag: false)
+                           add_zone_eqpt: false)
     # Add outdoor VRF unit
     outdoor_vrf_unit = add_outdoor_vrf_unit(model: model,ecm_name: "hs08_vrfzonal")
     # Add indoor VRF terminal units
@@ -392,7 +391,7 @@ class ECMS
 
   # =============================================================================================================================
   # create air loop
-  def create_airloop(model,sys_oa_type)
+  def create_airloop(model,sys_vent_type)
     airloop = OpenStudio::Model::AirLoopHVAC.new(model)
     airloop.sizingSystem.setPreheatDesignTemperature(7.0)
     airloop.sizingSystem.setPreheatDesignHumidityRatio(0.008)
@@ -407,7 +406,7 @@ class ECMS
     airloop.sizingSystem.setCentralCoolingDesignSupplyAirHumidityRatio(0.0085)
     airloop.sizingSystem.setCentralHeatingDesignSupplyAirHumidityRatio(0.0080)
     airloop.sizingSystem.setMinimumSystemAirFlowRatio(1.0)
-    case sys_oa_type.downcase
+    case sys_vent_type.downcase
     when "doas"
       airloop.sizingSystem.setAllOutdoorAirinCooling(true)
       airloop.sizingSystem.setAllOutdoorAirinHeating(true)
@@ -427,9 +426,9 @@ class ECMS
 
   # =============================================================================================================================
   # create air system setpoint manager
-  def create_air_sys_spm(model,spm_type,zones)
+  def create_air_sys_spm(model,setpoint_mgr_type,zones)
     spm = nil
-    case spm_type.downcase
+    case setpoint_mgr_type.downcase
     when "scheduled"
       sat = 20.0
       sat_sch = OpenStudio::Model::ScheduleRuleset.new(model)
@@ -460,6 +459,8 @@ class ECMS
     when "variable_volume"
       fan = OpenStudio::Model::FanVariableVolume.new(model)
       fan.setName("FanVariableVolume")
+    when "on_off"
+      fan = OpenStudio::Model::FanOnOff.new(model)
     end
 
     return fan
@@ -470,6 +471,9 @@ class ECMS
   def create_air_sys_clg_eqpt(model,clg_eqpt_type)
     clg_eqpt = nil
     case clg_eqpt_type.downcase
+    when "ashp"
+      clg_eqpt = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
+      clg_eqpt.setName("CoilCoolingDxSingleSpeed_ASHP")
     when "ccashp"
       clg_eqpt = OpenStudio::Model::CoilCoolingDXVariableSpeed.new(model)
       clg_eqpt.setName("CoilCoolingDXVariableSpeed_CCASHP")
@@ -490,6 +494,9 @@ class ECMS
     when "coil_electric"
       htg_eqpt = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
       htg_eqpt.setName("CoilHeatingElectric")
+    when "ashp"
+      htg_eqpt = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)
+      htg_eqpt.setName("CoilHeatingDXSingleSpeed_ASHP")
     when "ccashp"
       htg_eqpt = OpenStudio::Model::CoilHeatingDXVariableSpeed.new(model)
       htg_eqpt.setName("CoilHeatingDXVariableSpeed_CCASHP")
@@ -498,8 +505,6 @@ class ECMS
       htg_eqpt.setNominalSpeedLevel(1)
       htg_eqpt.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(-25.0)
       htg_eqpt.setDefrostStrategy("ReverseCycle")
-      #sys_htg_coil.setDefrostStrategy("Resistive")
-      #sys_htg_coil.setResistiveDefrostHeaterCapacity(0.001)
       htg_eqpt.setDefrostControl("OnDemand")
       htg_eqpt.setCrankcaseHeaterCapacity(0.001)
     end
@@ -508,35 +513,35 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # add air system
+  # add air system with all its components
   def add_air_system(model:,
                    standard:,
                    zones:,
                    sys_abbr:,
-                   sys_oa:,
-                   sys_hr:,
-                   sys_htg:,
-                   sys_supp_htg:,
-                   sys_clg:,
-                   sys_sf:,
-                   sys_rf:,
-                   sys_spm:)
+                   sys_vent_type:,
+                   sys_heat_rec_type:,
+                   sys_htg_eqpt_type:,
+                   sys_supp_htg_eqpt_type:,
+                   sys_clg_eqpt_type:,
+                   sys_supp_fan_type:,
+                   sys_ret_fan_type:,
+                   sys_setpoint_mgr_type:)
 
-    airloop = create_airloop(model,sys_oa)
-    spm = create_air_sys_spm(model,sys_spm,zones)
-    supply_fan = create_air_sys_fan(model,sys_sf)
+    airloop = create_airloop(model,sys_vent_type)
+    setpoint_mgr = create_air_sys_spm(model,sys_setpoint_mgr_type,zones)
+    supply_fan = create_air_sys_fan(model,sys_supp_fan_type)
     supply_fan.setName("Supply Fan") if supply_fan
-    return_fan = create_air_sys_fan(model,sys_rf)
+    return_fan = create_air_sys_fan(model,sys_ret_fan_type)
     return_fan.setName("Return Fan") if return_fan
-    htg_eqpt = create_air_sys_htg_eqpt(model,sys_htg)
-    supp_htg_eqpt = create_air_sys_htg_eqpt(model,sys_supp_htg)
-    clg_eqpt = create_air_sys_clg_eqpt(model,sys_clg)
+    htg_eqpt = create_air_sys_htg_eqpt(model,sys_htg_eqpt_type)
+    supp_htg_eqpt = create_air_sys_htg_eqpt(model,sys_supp_htg_eqpt_type)
+    clg_eqpt = create_air_sys_clg_eqpt(model,sys_clg_eqpt_type)
 
     clg_eqpt.addToNode(airloop.supplyOutletNode) if clg_eqpt
     htg_eqpt.addToNode(airloop.supplyOutletNode) if htg_eqpt
     supp_htg_eqpt.addToNode(airloop.supplyOutletNode) if supp_htg_eqpt
     supply_fan.addToNode(airloop.supplyOutletNode) if supply_fan
-    spm.addToNode(airloop.supplyOutletNode) if spm
+    setpoint_mgr.addToNode(airloop.supplyOutletNode) if setpoint_mgr
 
     # OA controller
     oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -547,32 +552,32 @@ class ECMS
     # Set airloop name
     sys_name_pars = {}
     sys_name_pars["sys_hr"] = "none"
-    sys_name_pars["sys_clg"] = "ccashp"
-    sys_name_pars["sys_htg"] = "ccashp"
-    sys_name_pars["sys_sf"] = "cv" if sys_sf == "constant_volume"
-    sys_name_pars["sys_sf"] = "vv" if sys_sf == "variable_volume"
+    sys_name_pars["sys_clg"] = sys_clg_eqpt_type
+    sys_name_pars["sys_htg"] = sys_htg_eqpt_type
+    sys_name_pars["sys_sf"] = "cv" if sys_supp_fan_type == "constant_volume"
+    sys_name_pars["sys_sf"] = "vv" if sys_supp_fan_type == "variable_volume"
     sys_name_pars["zone_htg"] = "none"
     sys_name_pars["zone_clg"] = "none"
     sys_name_pars["sys_rf"] = "none"
-    sys_name_pars["sys_rf"] = "cv" if sys_rf == "constant_volume"
-    sys_name_pars["sys_rf"] = "vv" if sys_rf == "variable_volume"
-    assign_base_sys_name(airloop,sys_abbr: sys_abbr,sys_oa: sys_oa,sys_name_pars: sys_name_pars)
+    sys_name_pars["sys_rf"] = "cv" if sys_ret_fan_type == "constant_volume"
+    sys_name_pars["sys_rf"] = "vv" if sys_ret_fan_type == "variable_volume"
+    assign_base_sys_name(airloop,sys_abbr: sys_abbr,sys_oa: sys_vent_type,sys_name_pars: sys_name_pars)
 
     return airloop,return_fan
   end
 
   # =============================================================================================================================
   # create zone diffuser
-  def create_zone_diffuser(model,zone_diff_type,zone)
+  def create_zone_diffuser(model,zone_diffuser_type,zone)
     always_on = model.alwaysOnDiscreteSchedule
     diffuser = nil
-    case zone_diff_type.downcase
+    case zone_diffuser_type.downcase
     when "single_duct_uncontrolled"
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
     when "single_duct_vav_reheat"
       reheat_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
       diffuser = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, always_on, reheat_coil)
-      diffuser.setFixedMinimumAirFlowRate(0.002 * zone.floorArea )
+      #diffuser.setFixedMinimumAirFlowRate(0.002 * zone.floorArea )
       diffuser.setMaximumReheatAirTemperature(43.0)
       diffuser.setDamperHeatingAction('Normal')
     end
@@ -581,14 +586,72 @@ class ECMS
   end
 
   # =============================================================================================================================
+  # create zonal heating equipment
+  def create_zone_htg_eqpt(model,zone_htg_eqpt_type)
+    htg_eqpt = nil
+    case zone_htg_eqpt_type
+    when "baseboard_electric"
+      htg_eqpt = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
+    when "coil_electric"
+      htg_eqpt = OpenStudio::Model::CoilHeatingElectric.new(model)
+    when "pthp"
+      htg_eqpt = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)
+    end
+
+    return htg_eqpt
+  end
+
+  # =============================================================================================================================
+  # create zonal cooling equipment
+  def create_zone_clg_eqpt(model,zone_clg_eqpt_type)
+    clg_eqpt = nil
+    case zone_clg_eqpt_type
+    when "pthp"
+      clg_eqpt = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
+    end
+
+    return clg_eqpt
+  end
+
+  # =============================================================================================================================
+  # create zpne container eqpt
+  def create_zone_container_eqpt(model:,
+                              zone_cont_eqpt_type:,
+                              zone_htg_eqpt:,
+                              zone_supp_htg_eqpt:,
+                              zone_clg_eqpt:,
+                              zone_fan:,
+                              zone_vent_off: false)
+
+    always_on = model.alwaysOnDiscreteSchedule
+    always_ff = model.alwaysOffDiscreteSchedule
+    zone_eqpt = nil
+    case zone_cont_eqpt_type
+    when "pthp"
+      zone_eqpt = OpenStudio::Model::ZoneHVACPackagedTerminalHeatPump.new(model,always_on,zone_fan,zone_htg_eqpt,zone_clg_eqpt,zone_supp_htg_eqpt)
+      if zone_vent_off
+        zone_ashp_unit.setOutdoorAirFlowRateDuringCoolingOperation(0.0)
+        zone_ashp_unit.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
+        zone_ashp_unit.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
+        zone_ashp_unit.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(0.0)
+        zone_ashp_unit.setSupplyAirFanOperatingModeSchedule(always_off)
+      end
+    end
+
+    return zone_eqpt
+  end
+
+  # =============================================================================================================================
   # add zonal heating and cooling equipment
   def add_zone_eqpt(model:,
-                     standard:,
-                     airloop:,
-                     zones:,
-                     zone_diff:,
-                     zone_htg:,
-                     zone_clg:)
+                    standard:,
+                    airloop:,
+                    zones:,
+                    zone_diffuser_type:,
+                    zone_htg_eqpt_type:,
+                    zone_supp_htg_eqpt_type:,
+                    zone_clg_eqpt_type:,
+                    zone_fan_type:)
 
     always_on = model.alwaysOnDiscreteSchedule
     zones.sort.each do |zone|
@@ -596,74 +659,82 @@ class ECMS
       zone.sizingZone.setZoneHeatingDesignSupplyAirTemperature(43.0)
       zone.sizingZone.setZoneCoolingSizingFactor(1.1)
       zone.sizingZone.setZoneHeatingSizingFactor(1.3)
-      # zone cooling
-      case zone_clg.downcase
-      when "ptac"
-        standard.add_ptac_dx_cooling(model,zone,true)
-      end
-      # diffuser
-      diffuser = create_zone_diffuser(model,zone_diff,zone)
+      diffuser = create_zone_diffuser(model,zone_diffuser_type,zone)
       airloop.removeBranchForZone(zone)
       airloop.addBranchForZone(zone, diffuser.to_StraightComponent)
-      # zone heating
-      case zone_htg.downcase
-      when "baseboard_electric"
-        standard.add_zone_baseboards(baseboard_type: 'Electric', hw_loop: nil, model: model, zone: zone)
+      clg_eqpt = create_zone_clg_eqpt(model,zone_clg_eqpt_type)
+      htg_eqpt = create_zone_htg_eqpt(model,zone_htg_eqpt_type)
+      supp_htg_eqpt = create_zone_htg_eqpt(model,zone_supp_htg_eqpt_type)
+      fan = create_air_sys_fan(model,zone_fan_type)
+      case zone_htg_eqpt_type
+      when "pthp"
+        zone_eqpt = create_zone_container_eqpt(model: model,
+                                            zone_cont_eqpt_type: "pthp",
+                                            zone_htg_eqpt: htg_eqpt,
+                                            zone_supp_htg_eqpt: supp_htg_eqpt,
+                                            zone_clg_eqpt: clg_eqpt,
+                                            zone_fan: fan)
       end
+      zone_eqpt.addToThermalZone(zone)
     end
-    sys_name_zone_htg = "b-e" if zone_htg == "baseboard_electric"
-    update_sys_name(airloop,zone_htg: sys_name_zone_htg,zone_clg: zone_clg)
+    sys_name_zone_htg_eqpt_type = zone_htg_eqpt_type
+    sys_name_zone_htg_eqpt_type = "b-e" if zone_htg_eqpt_type == "baseboard_electric"
+    update_sys_name(airloop,zone_htg: sys_name_zone_htg_eqpt_type,zone_clg: zone_clg_eqpt_type)
   end
 
   # =============================================================================================================================
-  # Add air loops with cold-climate heat pump with electric backup coil.
-  # Add zone electric baseboards
+  # Add equipment for ecm "hs09_ccashpsys":
+  #   -Constant-volume reheat system for single zone systems
+  #   -VAV system with reheat for non DOAS multi-zone systems
+  #   -Cold-climate air-source heat pump for heating and cooling with electric backup
+  #   -Electric baseboards
   def add_ecm_hs09_ccashpsys(model:,
-                             system_zones_map:,
-                             system_doas_flags:,
+                             system_zones_map:,    # hash of ailoop names as keys and array of zones as values
+                             system_doas_flags:,   # hash of system names as keys and flag for DOAS as values
                              standard:,
-                             zone_eqpt_flag: true)
+                             add_zone_eqpt: true)  # flag to add or not add zone equipment
 
     systems = []
     system_zones_map.sort.each do |sys_name,zones|
       sys_abbr = sys_name.to_s.split("|")[0]
-      sys_oa = "mixed"
-      sys_oa = "doas" if system_doas_flags[sys_name.to_s]
-      sys_hr = "none"
-      sys_htg = "ccashp"
-      sys_supp_htg = "coil_electric"
-      sys_clg = "ccashp"
+      sys_vent_type = "mixed"
+      sys_vent_type = "doas" if system_doas_flags[sys_name.to_s]
+      sys_heat_rec_type = "none"
+      sys_htg_eqpt_type = "ccashp"
+      sys_supp_htg_eqpt_type = "coil_electric"
+      sys_clg_eqpt_type = "ccashp"
       if zones.size == 1
-        sys_spm = "single_zone_reheat"
-        sys_spm = "scheduled" if system_doas_flags[sys_name.to_s]
-        sys_sf = "constant_volume"
-        sys_rf = "none"
-        zone_diff = "single_duct_uncontrolled"
+        sys_setpoint_mgr_type = "single_zone_reheat"
+        sys_setpoint_mgr_type = "scheduled" if system_doas_flags[sys_name.to_s]
+        sys_supp_fan_type = "constant_volume"
+        sys_ret_fan_type = "none"
+        zone_diffuser_type = "single_duct_uncontrolled"
       elsif zones.size > 1
         if system_doas_flags[sys_name.to_s]
-          sys_spm = "scheduled"
-          sys_sf = "constant_volume"
-          sys_rf = "none"
-          zone_diff = "single_duct_uncontrolled"
+          sys_setpoint_mgr_type = "scheduled"
+          sys_supp_fan_type = "constant_volume"
+          sys_ret_fan_type = "none"
+          zone_diffuser_type = "single_duct_uncontrolled"
         else
-          sys_spm = "warmest"
-          sys_sf = "variable_volume"
-          sys_rf = "variable_volume"
-          zone_diff = "single_duct_vav_reheat"
+          sys_setpoint_mgr_type = "warmest"
+          sys_supp_fan_type = "variable_volume"
+          sys_ret_fan_type = "variable_volume"
+          zone_diffuser_type = "single_duct_vav_reheat"
         end
       end
+      # add air loop and its equipment
       airloop, return_fan = add_air_system(model: model,
                                standard: standard,
                                zones: zones,
                                sys_abbr: sys_abbr,
-                               sys_oa: sys_oa,
-                               sys_hr: sys_hr,
-                               sys_htg: sys_htg,
-                               sys_supp_htg: sys_supp_htg,
-                               sys_clg: sys_clg,
-                               sys_sf: sys_sf,
-                               sys_rf: sys_rf,
-                               sys_spm: sys_spm)
+                               sys_vent_type: sys_vent_type,
+                               sys_heat_rec_type: sys_heat_rec_type,
+                               sys_htg_eqpt_type: sys_htg_eqpt_type,
+                               sys_supp_htg_eqpt_type: sys_supp_htg_eqpt_type,
+                               sys_clg_eqpt_type: sys_clg_eqpt_type,
+                               sys_supp_fan_type: sys_supp_fan_type,
+                               sys_ret_fan_type: sys_ret_fan_type,
+                               sys_setpoint_mgr_type: sys_setpoint_mgr_type)
       htg_dx_coils = model.getCoilHeatingDXVariableSpeeds
       search_criteria = coil_dx_find_search_criteria(htg_dx_coils[0])
       props =  model_find_object(standards_data['tables']["heat_pumps_heating_ecm_hs09_ccashpsys"]['table'], search_criteria, 1.0, Date.today)
@@ -674,17 +745,18 @@ class ECMS
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{htg_dx_coils[0].name}, cannot find heat_defrost_eir_ft curve, will not be set.")
       end
-      if zone_eqpt_flag
-        zone_clg = "none"
-        zone_clg = "ptac" if sys_oa == "doas"
-        add_zone_eqpt(model: model,
-                      standard: standard,
-                      airloop: airloop,
-                      zones: zones,
-                      zone_diff: zone_diff,
-                      zone_htg: "baseboard_electric",
-                      zone_clg: zone_clg)
-      end
+      # add zone equipment and diffuser
+      zone_htg_eqpt_type = "none"
+      zone_htg_eqpt_type = "baseboard_electric" if add_zone_eqpt
+      zone_clg_eqpt_type = "none"
+      zone_clg_eqpt_type = "ptac" if (sys_vent_type == "doas" && add_zone_eqpt)
+      add_zone_eqpt(model: model,
+                    standard: standard,
+                    airloop: airloop,
+                    zones: zones,
+                    zone_diffuser_type: zone_diffuser_type,
+                    zone_htg_eqpt_type: zone_htg_eqpt_type,
+                    zone_clg_eqpt_type: zone_clg_eqpt_type)
       return_fan.addToNode(airloop.returnAirNode.get) if return_fan
       systems << airloop
     end
@@ -734,6 +806,68 @@ class ECMS
     # Assign performance curves and COPs
     model.getCoilCoolingDXVariableSpeeds.sort.each {|coil| coil_cooling_dx_variable_speed_apply_efficiency_and_curves(coil,ecm_name)}
     model.getCoilHeatingDXVariableSpeeds.sort.each {|coil| coil_heating_dx_variable_speed_apply_efficiency_and_curves(coil,ecm_name)}
+  end
+
+  # =============================================================================================================================
+  # Add equipment for ECM "hs11_advpthp"
+  #   -Constant volume DOAS with air-source heat pump for heating and cooling and electric backup
+  #   -Packaged-Terminal air-source heat pumps with electric backup
+  def add_ecm_hs11_advpthp(model:,
+                           system_zones_map:,
+                           system_doas_flags:,
+                           standard:)
+
+    # Update system doas flags to true
+    system_doas_flags.keys.each {|sname| system_doas_flags[sname] = true}
+    # add doas air system
+    systems = []
+    system_zones_map.sort.each do |sys_name,zones|
+      sys_abbr = "sys"
+      sys_vent_type = "doas"
+      sys_heat_rec_type = "none"
+      sys_htg_eqpt_type = "ashp"
+      sys_supp_htg_eqpt_type = "coil_electric"
+      sys_clg_eqpt_type = "ashp"
+      sys_setpoint_mgr_type = "scheduled"
+      sys_supp_fan_type = "constant_volume"
+      sys_ret_fan_type = "none"
+      zone_diffuser_type = "single_duct_uncontrolled"
+      # add air loop and its equipment
+      airloop, return_fan = add_air_system(model: model,
+                                           standard: standard,
+                                           zones: zones,
+                                           sys_abbr: sys_abbr,
+                                           sys_vent_type: sys_vent_type,
+                                           sys_heat_rec_type: sys_heat_rec_type,
+                                           sys_htg_eqpt_type: sys_htg_eqpt_type,
+                                           sys_supp_htg_eqpt_type: sys_supp_htg_eqpt_type,
+                                           sys_clg_eqpt_type: sys_clg_eqpt_type,
+                                           sys_supp_fan_type: sys_supp_fan_type,
+                                           sys_ret_fan_type: sys_ret_fan_type,
+                                           sys_setpoint_mgr_type: sys_setpoint_mgr_type)
+      # add zone equipment and diffuser
+      zone_htg_eqpt_type = "pthp"
+      zone_clg_eqpt_type = "pthp"
+      zone_supp_htg_eqpt_type = "coil_electric"
+      zone_fan_type = "on_off"
+      add_zone_eqpt(model: model,
+                    standard: standard,
+                    airloop: airloop,
+                    zones: zones,
+                    zone_diffuser_type: zone_diffuser_type,
+                    zone_htg_eqpt_type: zone_htg_eqpt_type,
+                    zone_supp_htg_eqpt_type: zone_supp_htg_eqpt_type,
+                    zone_clg_eqpt_type: zone_clg_eqpt_type,
+                    zone_fan_type: zone_fan_type)
+      return_fan.addToNode(airloop.returnAirNode.get) if return_fan
+      systems << airloop
+    end
+
+    return systems
+  end
+
+  def apply_efficiency_ecm_hs11_advpthp(model:,ecm_name:)
+
   end
 
   # =============================================================================================================================
