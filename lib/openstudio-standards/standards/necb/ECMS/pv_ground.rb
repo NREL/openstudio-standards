@@ -32,20 +32,25 @@ class ECMS
     end
 
     ##### Calculate footprint of the building model (this is used as default value for pv_ground_total_area_pv_panels_m2)
-    building_footprint_m2_array = []
-    lowest_floor = 10000000000.0 #dummy number as initialization to find the lowest floor among spaces #TODO: Question:it it fine that it has been assumed that the floor of all lowest spaces are at the same level?
-    model.getSpaces.sort.each do |space|
-      space.surfaces.sort.select{ |surface| (surface.surfaceType == 'Floor') &&  (surface.outsideBoundaryCondition != 'Surface') &&  (surface.outsideBoundaryCondition != 'Adiabatic')}.each do |surface|
-        floor_vertices = surface.vertices
-        floor_z = floor_vertices[0].z.round(1)
-        if floor_z <= lowest_floor
-          lowest_floor = floor_z
-          building_footprint_m2_array << surface.netArea
+    def calculate_building_footprint(model:)
+      building_footprint_m2_array = []
+      lowest_floor = 10000000000.0 #dummy number as initialization to find the lowest floor among spaces #TODO: Question:it it fine that it has been assumed that the floor of all lowest spaces are at the same level?
+      model.getSpaces.sort.each do |space|
+        space.surfaces.sort.select{ |surface| (surface.surfaceType == 'Floor') &&  (surface.outsideBoundaryCondition != 'Surface') &&  (surface.outsideBoundaryCondition != 'Adiabatic')}.each do |surface|
+          floor_vertices = surface.vertices
+          floor_z = floor_vertices[0].z.round(1)
+          if floor_z <= lowest_floor
+            lowest_floor = floor_z
+            building_footprint_m2_array << surface.netArea
+          end
         end
       end
+      building_footprint_m2 = building_footprint_m2_array.sum
+      return building_footprint_m2
     end
-    building_footprint_m2 = building_footprint_m2_array.sum
-    puts "building_footprint_m2 is #{building_footprint_m2}"
+    building_footprint_m2 = calculate_building_footprint(model: model)
+    # puts "building_footprint_m2 is #{building_footprint_m2}"
+
 
     ##### Set default PV panels' total area as the building footprint
     if pv_ground_total_area_pv_panels_m2 == 'NECB_Default'
