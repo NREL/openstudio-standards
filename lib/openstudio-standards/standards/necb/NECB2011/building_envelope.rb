@@ -370,7 +370,11 @@ class NECB2011
         # hdd required in scope for eval function.
         hdd = get_necb_hdd18(model)
         return conductivity.nil? || conductivity.to_f <= 0.0 || conductivity =="NECB_Default"  ? eval(model_find_objects(@standards_data['surface_thermal_transmittance'], surface_type)[0]['formula']) : conductivity.to_f
+      end
 
+      # Converts trans and vis to nil if requesting default.. or casts the string to a float.
+      correct_vis_trans = lambda do |value|
+        return value.nil? || value.to_f <= 0.0 || value =="NECB_Default"  ? nil : value.to_f
       end
 
       BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set!(model: model,
@@ -386,31 +390,32 @@ class NECB2011
                                                                                               ground_roof_cond: correct_cond.call(ground_roof_cond, {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling'}),
                                                                                               # fixed Windows
                                                                                               fixed_window_cond: correct_cond.call(fixed_window_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
-                                                                                              fixed_wind_solar_trans: fixed_wind_solar_trans,
-                                                                                              fixed_wind_vis_trans: fixed_wind_vis_trans,
+                                                                                              fixed_wind_solar_trans: correct_vis_trans.call(fixed_wind_solar_trans),
+                                                                                              fixed_wind_vis_trans: correct_vis_trans.call(fixed_wind_vis_trans),
                                                                                               # operable windows
-                                                                                              operable_wind_solar_trans: operable_wind_solar_trans,
+                                                                                              operable_wind_solar_trans: correct_vis_trans.call(operable_wind_solar_trans),
                                                                                               operable_window_cond: correct_cond.call(fixed_window_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
-                                                                                              operable_wind_vis_trans: operable_wind_vis_trans,
+                                                                                              operable_wind_vis_trans: correct_vis_trans.call(operable_wind_vis_trans),
                                                                                               # glass doors
                                                                                               glass_door_cond: correct_cond.call(glass_door_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
-                                                                                              glass_door_solar_trans: glass_door_solar_trans,
-                                                                                              glass_door_vis_trans: glass_door_vis_trans,
+                                                                                              glass_door_solar_trans: correct_vis_trans.call(glass_door_solar_trans),
+                                                                                              glass_door_vis_trans: correct_vis_trans.call(glass_door_vis_trans),
                                                                                               # opaque doors
                                                                                               door_construction_cond: correct_cond.call(door_construction_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Door'}),
                                                                                               overhead_door_cond: correct_cond.call(overhead_door_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Door'}),
                                                                                               # skylights
                                                                                               skylight_cond: correct_cond.call(skylight_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
-                                                                                              skylight_solar_trans: skylight_solar_trans,
-                                                                                              skylight_vis_trans: skylight_vis_trans,
+                                                                                              skylight_solar_trans: correct_vis_trans.call(skylight_solar_trans),
+                                                                                              skylight_vis_trans: correct_vis_trans.call(skylight_vis_trans),
                                                                                               # tubular daylight dome
                                                                                               tubular_daylight_dome_cond: correct_cond.call(skylight_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
-                                                                                              tubular_daylight_dome_solar_trans: tubular_daylight_dome_solar_trans,
-                                                                                              tubular_daylight_dome_vis_trans: tubular_daylight_dome_vis_trans,
+                                                                                              tubular_daylight_dome_solar_trans: correct_vis_trans.call(tubular_daylight_dome_solar_trans),
+                                                                                              tubular_daylight_dome_vis_trans: correct_vis_trans.call(tubular_daylight_dome_vis_trans),
                                                                                               # tubular daylight diffuser
                                                                                               tubular_daylight_diffuser_cond: correct_cond.call(skylight_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
-                                                                                              tubular_daylight_diffuser_solar_trans: tubular_daylight_diffuser_solar_trans,
-                                                                                              tubular_daylight_diffuser_vis_trans: tubular_daylight_diffuser_vis_trans)
+                                                                                              tubular_daylight_diffuser_solar_trans: correct_vis_trans.call(tubular_daylight_diffuser_solar_trans),
+                                                                                              tubular_daylight_diffuser_vis_trans: correct_vis_trans.call(tubular_daylight_diffuser_vis_trans)
+      )
 
 
     end

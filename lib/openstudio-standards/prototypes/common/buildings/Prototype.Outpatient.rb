@@ -129,9 +129,11 @@ module Outpatient
       case template
         when '90.1-2004', '90.1-2007', '90.1-2010'
           case climate_zone
-            when 'ASHRAE 169-2006-1B',
+            when 'ASHRAE 169-2006-0B',
+                 'ASHRAE 169-2006-1B',
                  'ASHRAE 169-2006-2B',
                  'ASHRAE 169-2006-3B',
+                 'ASHRAE 169-2013-0B',
                  'ASHRAE 169-2013-1B',
                  'ASHRAE 169-2013-2B',
                  'ASHRAE 169-2013-3B'
@@ -194,9 +196,11 @@ module Outpatient
             infiltration_vestibule_door.setSchedule(model_add_schedule(model, 'OutPatientHealthCare INFIL_Door_Opening_SCH_0.144'))
           when '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
             case climate_zone
-              when 'ASHRAE 169-2006-1A',
+              when 'ASHRAE 169-2006-0A',
+                   'ASHRAE 169-2006-1A',
                    'ASHRAE 169-2006-2A',
                    'ASHRAE 169-2006-2B',
+                   'ASHRAE 169-2013-0A',
                    'ASHRAE 169-2013-1A',
                    'ASHRAE 169-2013-2A',
                    'ASHRAE 169-2013-2B'
@@ -344,7 +348,7 @@ module Outpatient
       model.getAirTerminalSingleDuctVAVReheats.sort.each do |air_terminal|
         air_terminal_name = air_terminal.name.get
         if air_terminal_name.include?('Floor 1 Operating Room 1') || air_terminal_name.include?('Floor 1 Operating Room 2')
-          air_terminal.setZoneMinimumAirFlowMethod('Scheduled')
+          air_terminal.setZoneMinimumAirFlowInputMethod('Scheduled')
           air_terminal.setMinimumAirFlowFractionSchedule(model_add_schedule(model, 'OutPatientHealthCare OR_MinSA_Sched'))
         end
       end
@@ -423,6 +427,9 @@ module Outpatient
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 0.0)
+
     return true
   end
 

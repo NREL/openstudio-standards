@@ -8,6 +8,19 @@ class NECB2011 < Standard
   attr_accessor :space_type_map
   attr_accessor :space_multiplier_map
 
+  # This is a helper method to convert arguments that may support 'NECB_Default, and nils to convert to float'
+  def convert_arg_to_f(variable:,default:)
+    if variable.instance_of?(Numeric)
+      return variable
+    elsif variable.nil? or variable == 'NECB_Default'
+      return default
+    elsif variable.instance_of?(String)
+      variable = variable.strip
+      return variable.to_f
+    end
+  end
+
+
   def get_standards_table(table_name:)
     if @standards_data["tables"][table_name].nil?
       message = "Could not find table #{table_name} in database."
@@ -163,7 +176,7 @@ class NECB2011 < Standard
   end
 
 
-  # This method is a wrapper to create the 16 archetypes easily.
+  # This method is a wrapper to create the 16 archetypes easily. # 37 args
   def model_create_prototype_model(template:,
                                    building_type:,
                                    epw_file:,
@@ -177,6 +190,7 @@ class NECB2011 < Standard
                                    ecm_system_name: 'NECB_Default',
                                    erv_package: 'NECB_Default',
                                    boiler_eff: nil,
+                                   unitary_cop: nil,
                                    furnace_eff: nil,
                                    shw_eff: nil,
                                    ext_wall_cond: nil,
@@ -193,8 +207,16 @@ class NECB2011 < Standard
                                    glass_door_solar_trans: nil,
                                    fixed_wind_solar_trans: nil,
                                    skylight_solar_trans: nil,
+                                   rotation_degrees: nil,
                                    fdwr_set: -1.0,
                                    srr_set: -1.0,
+                                   nv_type: nil,
+                                   nv_opening_fraction: nil,
+                                   nv_Tout_min: nil,
+                                   nv_Delta_Tin_Tout: nil,
+                                   scale_x: nil,
+                                   scale_y: nil,
+                                   scale_z: nil,
                                    pv_ground_type: nil,
                                    pv_ground_total_area_pv_panels_m2: nil,
                                    pv_ground_tilt_angle: nil,
@@ -215,6 +237,7 @@ class NECB2011 < Standard
                                 ecm_system_name: ecm_system_name,
                                 erv_package: erv_package,
                                 boiler_eff: boiler_eff,
+                                unitary_cop: unitary_cop,
                                 furnace_eff: furnace_eff,
                                 shw_eff: shw_eff,
                                 ext_wall_cond: ext_wall_cond,
@@ -231,13 +254,21 @@ class NECB2011 < Standard
                                 glass_door_solar_trans: glass_door_solar_trans,
                                 fixed_wind_solar_trans: fixed_wind_solar_trans,
                                 skylight_solar_trans: skylight_solar_trans,
+                                rotation_degrees: rotation_degrees,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
-                                pv_ground_type: pv_ground_type,  # Two options: (1) nil OR FALSE, (2) TRUE
-                                pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # e.g. 50
-                                pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) 'NECB_Default' (i.e. latitude), (2) tilt angle value (e.g. 20)
-                                pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) 'NECB_Default' (i.e. south), (2) azimuth angle value (e.g. 90)
-                                pv_ground_module_description: pv_ground_module_description # Options: (1) 'NECB_Default' (i.e. Standard), (2) other options ('Standard', 'Premium', ThinFilm')
+                                nv_type: 'NECB_Default', # Two options: (1) nil/none/false/'NECB_Default', (2) true
+                                nv_opening_fraction: nv_opening_fraction, #options: (1) nil/none/false (2) 'NECB_Default' (i.e. 0.1)
+                                nv_Tout_min: nv_Tout_min, #options: (1) nil/none/false(2) 'NECB_Default' (i.e. 13.0 based on inputs from Michel Tardif re a real school in QC)
+                                nv_Delta_Tin_Tout: nv_Delta_Tin_Tout, #options: (1) nil/none/false (2) 'NECB_Default' (i.e. 1.0 based on inputs from Michel Tardif re a real school in QC)
+                                scale_x: scale_x,
+                                scale_y: scale_y,
+                                scale_z: scale_z,
+                                pv_ground_type: 'NECB_Default',  # Two options: (1) nil/none/false/'NECB_Default', (2) true
+                                pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. building footprint), (3) area value (e.g. 50)
+                                pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. latitude), (3) tilt angle value (e.g. 20)
+                                pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. south), (3) azimuth angle value (e.g. 90)
+                                pv_ground_module_description: pv_ground_module_description # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. Standard), (3) other options ('Standard', 'Premium', ThinFilm')
     )
 
   end
@@ -258,7 +289,7 @@ class NECB2011 < Standard
                            primary_heating_fuel: 'DefaultFuel',
                            dcv_type: 'NECB_Default',
                            lights_type: 'NECB_Default',
-                           lights_scale: 1.0,
+                           lights_scale: 'NECB_Default',
                            daylighting_type: 'NECB_Default',
                            ecm_system_name: 'NECB_Default',
                            erv_package: 'NECB_Default',
@@ -280,26 +311,48 @@ class NECB2011 < Standard
                            glass_door_solar_trans: nil,
                            fixed_wind_solar_trans: nil,
                            skylight_solar_trans: nil,
-                           fdwr_set: -1,
-                           srr_set: -1,
+                           fdwr_set: nil,
+                           srr_set: nil,
                            rotation_degrees: nil,
                            scale_x: nil,
                            scale_y: nil,
                            scale_z: nil,
+                           nv_type: nil,
+                           nv_opening_fraction: nil,
+                           nv_Tout_min: nil,
+                           nv_Delta_Tin_Tout: nil,
                            pv_ground_type: nil,
                            pv_ground_total_area_pv_panels_m2: nil ,
                            pv_ground_tilt_angle: nil,
                            pv_ground_azimuth_angle: nil,
                            pv_ground_module_description: nil
   )
+    #clean model..
+    model = remove_all_HVAC(model)
+    model.getThermalZones.sort.each {|zone| zone.setUseIdealAirLoads(true)}
+    model.getZoneHVACPackagedTerminalAirConditioners.each(&:remove)
+    model.getCoilCoolingDXSingleSpeeds.each(&:remove)
+    model.getZoneHVACBaseboardConvectiveWaters.each(&:remove)
+    model.getAirLoopHVACZoneMixers.each(&:remove)
+    model.getAirLoopHVACZoneSplitters.each(&:remove)
+    model.getAirTerminalSingleDuctConstantVolumeNoReheats.each(&:remove)
+    model.getWaterUseEquipmentDefinitions.each(&:remove)
+    model.getWaterUseEquipments.each(&:remove)
+    model.getWaterUseConnectionss.each(&:remove)
 
-    BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees.nil?
-    unless scale_x.nil? && scale_y.nil? && scale_z.nil?
-      scale_x = 1 if scale_x.nil?
-      scale_y = 1 if scale_y.nil?
-      scale_z = 1 if scale_y.nil?
-      BTAP::Geometry::scale_model(model, scale_x, scale_y, scale_z)
+    rotation_degrees = convert_arg_to_f(variable: rotation_degrees,default: 0.0)
+    BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees == 0.0
+    scale_x = convert_arg_to_f(variable: scale_x,default: 1.0)
+    scale_y = convert_arg_to_f(variable: scale_y,default: 1.0)
+    scale_z = convert_arg_to_f(variable: scale_z,default: 1.0)
+    if scale_x != 1.0 || scale_y != 1.0 || scale_z != 1.0
+      BTAP::Geometry::scale_model(model, scale_x, scale_x, scale_x)
     end
+
+
+    fdwr_set = convert_arg_to_f(variable: fdwr_set,default: -1)
+    srr_set = convert_arg_to_f(variable: srr_set,default: -1)
+
 
     apply_weather_data(model: model, epw_file: epw_file)
     apply_loads(model: model, lights_type: lights_type, lights_scale: lights_scale)
@@ -336,6 +389,10 @@ class NECB2011 < Standard
                                    furnace_eff: furnace_eff,
                                    shw_eff: shw_eff,
                                    daylighting_type: daylighting_type,
+                                   nv_type: nv_type,
+                                   nv_opening_fraction: nv_opening_fraction,
+                                   nv_Tout_min: nv_Tout_min,
+                                   nv_Delta_Tin_Tout: nv_Delta_Tin_Tout,
                                    pv_ground_type: pv_ground_type,
                                    pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
                                    pv_ground_tilt_angle: pv_ground_tilt_angle,
@@ -358,6 +415,10 @@ class NECB2011 < Standard
                                      unitary_cop: nil,
                                      shw_eff: nil,
                                      daylighting_type: 'NECB_Default',
+                                     nv_type: nil,
+                                     nv_opening_fraction: nil,
+                                     nv_Tout_min: nil,
+                                     nv_Delta_Tin_Tout:nil,
                                      pv_ground_type:,
                                      pv_ground_total_area_pv_panels_m2:,
                                      pv_ground_tilt_angle:,
@@ -374,7 +435,7 @@ class NECB2011 < Standard
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
 
     # Apply new ECM system. Overwrite standard as required.
-    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self)
+    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self, primary_heating_fuel: primary_heating_fuel)
 
     # Apply ERV equipment as required.
     ecm.apply_erv_ecm(model: model, erv_package: erv_package)
@@ -407,6 +468,14 @@ class NECB2011 < Standard
     # Apply Pump power as required.
     apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
 
+    # -------Natural ventilation----------------
+    # Apply natural ventilation using simplified method.
+    ecm.apply_nv(model: model,
+                 nv_type: nv_type,
+                 nv_opening_fraction: nv_opening_fraction,
+                 nv_Tout_min: nv_Tout_min,
+                 nv_Delta_Tin_Tout: nv_Delta_Tin_Tout)
+
     # -------Ground-mounted PV panels----------------   #Sara
     # Apply ground-mounted PV panels as required.
     ecm.apply_pv_ground(model: model,
@@ -415,10 +484,12 @@ class NECB2011 < Standard
                         pv_ground_tilt_angle: pv_ground_tilt_angle,
                         pv_ground_azimuth_angle: pv_ground_azimuth_angle,
                         pv_ground_module_description: pv_ground_module_description)
+
   end
 
 
   def apply_loads(model:, lights_type: 'NECB_Default', lights_scale: 1.0, validate: true)
+    lights_scale = convert_arg_to_f(variable: lights_scale,default: 1.0)
     if validate
       raise('validation of model failed.') unless validate_initial_model(model)
       raise('validation of spacetypes failed.') unless validate_and_upate_space_types(model)

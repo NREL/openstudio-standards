@@ -15,12 +15,16 @@ class ASHRAE9012004 < ASHRAE901
 
     # Determine the minimum capacity that requires an economizer
     case climate_zone
-    when 'ASHRAE 169-2006-1A',
+    when 'ASHRAE 169-2006-0A',
+         'ASHRAE 169-2006-1A',
+         'ASHRAE 169-2006-0B',
          'ASHRAE 169-2006-1B',
          'ASHRAE 169-2006-2A',
          'ASHRAE 169-2006-3A',
          'ASHRAE 169-2006-4A',
+         'ASHRAE 169-2013-0A',
          'ASHRAE 169-2013-1A',
+         'ASHRAE 169-2013-0B',
          'ASHRAE 169-2013-1B',
          'ASHRAE 169-2013-2A',
          'ASHRAE 169-2013-3A',
@@ -112,14 +116,18 @@ class ASHRAE9012004 < ASHRAE901
   # @return [Array<Double>] [minimum_oa_flow_cfm, maximum_stories]
   def air_loop_hvac_motorized_oa_damper_limits(air_loop_hvac, climate_zone)
     case climate_zone
-    when 'ASHRAE 169-2006-1A',
+    when 'ASHRAE 169-2006-0A',
+         'ASHRAE 169-2006-1A',
+         'ASHRAE 169-2006-0B',
          'ASHRAE 169-2006-1B',
          'ASHRAE 169-2006-2A',
          'ASHRAE 169-2006-2B',
          'ASHRAE 169-2006-3A',
          'ASHRAE 169-2006-3B',
          'ASHRAE 169-2006-3C',
+         'ASHRAE 169-2013-0A',
          'ASHRAE 169-2013-1A',
+         'ASHRAE 169-2013-0B',
          'ASHRAE 169-2013-1B',
          'ASHRAE 169-2013-2A',
          'ASHRAE 169-2013-2B',

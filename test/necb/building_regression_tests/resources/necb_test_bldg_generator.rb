@@ -63,7 +63,8 @@ class GeneratorNECBRegressionTests
         "SecondarySchool",
         "SmallHotel",
         "SmallOffice",
-        "Warehouse"
+        "Warehouse",
+        "LowriseApartment"
 
     ]
     @primary_heating_fuels =

@@ -251,7 +251,7 @@ class NECB2011
     qaqc[:building][:standards_number_of_above_ground_stories] = nil
     qaqc[:building][:standards_number_of_above_ground_stories] = model.building.get.standardsNumberOfAboveGroundStories.get unless model.building.get.standardsNumberOfAboveGroundStories().empty?
     qaqc[:building][:standards_number_of_living_units] = nil
-    qaqc[:building][:standards_number_of_living_units] = model.building.get.standardsNumberOfLivingUnits ().get unless model.building.get.standardsNumberOfLivingUnits().empty?
+    qaqc[:building][:standards_number_of_living_units] = model.building.get.standardsNumberOfLivingUnits().get unless model.building.get.standardsNumberOfLivingUnits().empty?
     qaqc[:building][:nominal_floor_to_ceiling_height] = nil
     qaqc[:building][:nominal_floor_to_ceiling_height] = model.building.get.nominalFloortoCeilingHeight.get unless model.building.get.nominalFloortoCeilingHeight().empty?
     qaqc[:building][:nominal_floor_to_floor_height] = nil
@@ -299,7 +299,7 @@ class NECB2011
     qaqc[:economics][:total_neb_cost_per_m2] = 0.0
     neb_eplus_fuel_map.each do |neb_fuel, ep_fuel|
       row = look_up_csv_data(neb_prices_csv_file_name, {0 => building_type, 1 => province, 2 => neb_fuel})
-      neb_fuel_cost = row['2018']
+      neb_fuel_cost = row['2020']
       fuel_consumption_gj = 0.0
       if neb_fuel == 'Electricity' || neb_fuel == 'Natural Gas'
         if model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM tabulardatawithstrings WHERE ReportName='EnergyMeters' AND ReportForString='Entire Facility' AND
