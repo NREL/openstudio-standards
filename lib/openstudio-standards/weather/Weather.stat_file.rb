@@ -46,6 +46,10 @@ module EnergyPlus
     attr_accessor :typical_winter_dry_week
     attr_accessor :typical_autumn_week
     attr_accessor :typical_spring_week
+    attr_accessor :beam_solar_irradiance_info  #Sara
+    attr_accessor :diffuse_solar_irradiance_info  #Sara
+    attr_accessor :solar_irradiance_on_heating_design_day #Sara
+    attr_accessor :solar_irradiance_on_cooling_design_day #Sara
 
     def initialize(path)
       @path = Pathname.new(path)
@@ -74,6 +78,10 @@ module EnergyPlus
       @typical_autumn_week = []
       @typical_spring_week = []
       @data = []
+      @beam_solar_irradiance_info = [] #Sara
+      @diffuse_solar_irradiance_info = [] #Sara
+      @solar_irradiance_on_heating_design_day = [] #Sara
+      @solar_irradiance_on_cooling_design_day = [] #Sara
       init
     end
 
@@ -97,6 +105,10 @@ module EnergyPlus
       line << "#{@climate_zone} ,"
       line << "#{@standard} ,"
       line << "#{@valid} ,"
+      line << "#{@beam_solar_irradiance_info} ," #Sara
+      line << "#{@diffuse_solar_irradiance_info} ," #Sara
+      line << "#{@solar_irradiance_on_heating_design_day} ," #Sara
+      line << "#{@solar_irradiance_on_cooling_design_day} ," #Sara
     end
 
     def valid?
@@ -419,6 +431,60 @@ module EnergyPlus
         @extreme_cold_week = Date.parse((match_data[1].split(':')[0]).to_s)
       end
 
+      ##### Monthly Beam Solar Irradiance Wh/m2 (noon on 21st of month) #Sara-------------------------------------------------------------------------
+      regex = /\s*ib\s*\(beam\)(\s*\d+.*)/
+      match_data = text.match(regex)
+      if match_data.nil?
+        puts "Can't find monthly beam solar irradiance information"
+      else
+        # first remove all whitespace from the start and end of the string; then, divide string into substrings based on a delimiter, returning an array of substrings
+        beam_solar_irradiance_info_raw = match_data[1].strip.split(/\s+/)
+
+        # have to be 12 data points
+        if beam_solar_irradiance_info_raw.size != 12
+          puts "Can't find monthly beam solar irradiance info, found #{beam_solar_irradiance_info_raw.size}"
+        end
+
+        # insert as numbers
+        beam_solar_irradiance_info_raw.each do |value|
+          @beam_solar_irradiance_info << value.to_f
+        end
+        # puts @beam_solar_irradiance_info
+      end
+
+      ##### Monthly Diffuse Solar Irradiance Wh/m2 (noon on 21st of month) #Sara-------------------------------------------------------------------------
+      regex = /\s*id\s*\(diffuse\)(\s*\d+.*)/
+      match_data = text.match(regex)
+      if match_data.nil?
+        puts "Can't find monthly diffuse solar irradiance information"
+      else
+        # first remove all whitespace from the start and end of the string; then, divide string into substrings based on a delimiter, returning an array of substrings
+        diffuse_solar_irradiance_info_raw = match_data[1].strip.split(/\s+/)
+
+        # have to be 12 data points
+        if diffuse_solar_irradiance_info_raw.size != 12
+          puts "Can't find monthly diffuse solar irradiance info, found #{diffuse_solar_irradiance_info_raw.size}"
+        end
+
+        # insert as numbers
+        diffuse_solar_irradiance_info_raw.each do |value|
+          @diffuse_solar_irradiance_info << value.to_f
+        end
+        # puts @diffuse_solar_irradiance_info
+      end
+      ##### Solar Irradiance Wh/m2 on heating design day #Sara-------------------------------------------------------------------------
+      coldest_month = @heating_design_info[0]
+      # puts "coldest_month_is #{coldest_month}"
+      @solar_irradiance_on_heating_design_day = @beam_solar_irradiance_info[coldest_month.to_f-1.0] + @diffuse_solar_irradiance_info[coldest_month.to_f-1.0]
+      # puts "solar_irradiance_on_heating_design_day is #{@solar_irradiance_on_heating_design_day}"
+
+      ##### Solar Irradiance Wh/m2 on cooling design day #Sara-------------------------------------------------------------------------
+      hottest_month = @cooling_design_info[0]
+      # puts "hottest_month is #{hottest_month}"
+      @solar_irradiance_on_cooling_design_day = @beam_solar_irradiance_info[hottest_month.to_f-1.0] + @diffuse_solar_irradiance_info[hottest_month.to_f-1.0]
+      # puts "solar_irradiance_on_cooling_design_day is #{@solar_irradiance_on_cooling_design_day}"
+
+      #####-------------------------------------------------------------------------------------------------------------
       # now we are valid
       @valid = true
     end
