@@ -439,7 +439,11 @@ module BTAP
                     :epw_filepath,
                     :ddy_filepath,
                     :stat_filepath,
-                    :db990
+                    :db990,
+                    :beam_solar_irradiance_info, #Sara
+                    :diffuse_solar_irradiance_info, #Sara
+                    :solar_irradiance_on_heating_design_day, #Sara
+                    :solar_irradiance_on_cooling_design_day #Sara
 
       YEAR = 0
       MONTH = 1
@@ -584,6 +588,10 @@ module BTAP
         @typical_autumn_week = @stat_file.typical_autumn_week
         @typical_spring_week = @stat_file.typical_spring_week
         @db990 = @heating_design_info[2]
+        @beam_solar_irradiance_info = @stat_file.beam_solar_irradiance_info #Sara
+        @diffuse_solar_irradiance_info = @stat_file.diffuse_solar_irradiance_info  #Sara
+        @solar_irradiance_on_heating_design_day = @stat_file.solar_irradiance_on_heating_design_day #Sara
+        @solar_irradiance_on_cooling_design_day = @stat_file.solar_irradiance_on_cooling_design_day #Sara
         return self
       end
 
@@ -687,7 +695,6 @@ module BTAP
           @filearray.push(line.split(','))
         end
         file.close
-        # puts @filearray #Sara
       end
 
       # This method will sets column to a value.
