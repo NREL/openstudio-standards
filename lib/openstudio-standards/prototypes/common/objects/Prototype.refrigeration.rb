@@ -122,13 +122,13 @@ class Standard
     if props['restocking_schedule']
       if props['restocking_schedule'].downcase == 'always off'
         # restocking_sch = model.alwaysOffDiscreteSchedule
-        ref_case.resetRefrigeratedCaseRestockingSchedule()
+        ref_case.resetRefrigeratedCaseRestockingSchedule
       else
         restocking_sch = model_add_schedule(model, props['restocking_schedule'])
         ref_case.setRefrigeratedCaseRestockingSchedule(restocking_sch)
       end
     else
-      ref_case.resetRefrigeratedCaseRestockingSchedule()
+      ref_case.resetRefrigeratedCaseRestockingSchedule
     end
 
     if props['case_category']
@@ -315,20 +315,20 @@ class Standard
     if props['restocking_schedule']
       if props['restocking_schedule'].downcase == 'always off'
         # restocking_sch = model.alwaysOffDiscreteSchedule
-        ref_walkin.resetRestockingSchedule()
+        ref_walkin.resetRestockingSchedule
       else
         restocking_sch = model_add_schedule(model, props['restocking_schedule'])
         ref_walkin.setRestockingSchedule(restocking_sch)
       end
     else
-      ref_walkin.resetRestockingSchedule()
+      ref_walkin.resetRestockingSchedule
     end
 
     ref_walkin.setLightingSchedule(model_add_schedule(model, lightingschedule))
     ref_walkin.setZoneBoundaryStockingDoorOpeningScheduleFacingZone(model_add_schedule(model, 'door_wi_sched'))
 
     ref_walkin_addprops = ref_walkin.additionalProperties
-    ref_walkin_addprops.setFeature("motor_category", props['motor_category'] )
+    ref_walkin_addprops.setFeature('motor_category', props['motor_category'])
 
     # Add doorway protection
     if props['doorway_protection_type']
@@ -382,9 +382,11 @@ class Standard
     model.getThermalZones.each do |zone|
       space_type = thermal_zone_majority_space_type(zone)
       next if space_type.empty?
+
       space_type = space_type.get
       next if space_type.standardsSpaceType.empty?
       next if space_type.standardsBuildingType.empty?
+
       stds_spc_type = space_type.standardsSpaceType.get
       stds_bldg_type = space_type.standardsBuildingType.get
       case "#{stds_bldg_type} #{stds_spc_type}"
@@ -446,9 +448,11 @@ class Standard
     model.getThermalZones.each do |zone|
       space_type = thermal_zone_majority_space_type(zone)
       next if space_type.empty?
+
       space_type = space_type.get
       next if space_type.standardsSpaceType.empty?
       next if space_type.standardsBuildingType.empty?
+
       stds_spc_type = space_type.standardsSpaceType.get
       stds_bldg_type = space_type.standardsBuildingType.get
       case "#{stds_bldg_type} #{stds_spc_type}"
@@ -866,6 +870,7 @@ class Standard
       zone = model_get_zones_from_spaces_on_system(model, case_)[0]
       ref_case = model_add_refrigeration_case(model, zone, case_['case_type'], size_category)
       return false if ref_case.nil?
+
       ########################################
       # Defrost schedule
       defrost_sch = OpenStudio::Model::ScheduleRuleset.new(model)
@@ -903,6 +908,7 @@ class Standard
         zone = model_get_zones_from_spaces_on_system(model, walkin)[0]
         ref_walkin = model_add_refrigeration_walkin(model, zone, size_category, walkin['walkin_type'])
         return false if ref_walkin.nil?
+
         ########################################
         # Defrost schedule
         defrost_sch = OpenStudio::Model::ScheduleRuleset.new(model)

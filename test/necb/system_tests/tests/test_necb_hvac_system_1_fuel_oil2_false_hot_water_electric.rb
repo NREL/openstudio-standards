@@ -24,7 +24,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # Hopefully this makes is easier to debug the HVAC stuff!
 
 
-class NECB_HVAC_System_1_Test < MiniTest::Test
+class NECB_HVAC_System_1_Test_FO2_F_HW_E < MiniTest::Test
 
 
   #System #1 ToDo
@@ -41,7 +41,7 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
     mau_type = false
     mau_heating_coil_type = 'Hot Water'
     baseboard_type = 'Electric'
-    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_system_1"
+    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_hvac_system_1_fuel_oil2_false_hot_water_electric"
 
 
     FileUtils::mkdir_p(output_folder)

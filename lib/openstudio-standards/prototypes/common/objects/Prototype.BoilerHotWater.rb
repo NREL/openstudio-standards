@@ -36,7 +36,7 @@ class Standard
     boiler = OpenStudio::Model::BoilerHotWater.new(model)
     if name.nil?
       if !hot_water_loop.nil?
-        boiler.setName("#{hot_water_loop.name.to_s} Boiler")
+        boiler.setName("#{hot_water_loop.name} Boiler")
       else
         boiler.setName('Boiler')
       end

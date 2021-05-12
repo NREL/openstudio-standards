@@ -25,8 +25,14 @@ class Standard
 
     zone_name = zone.name.to_s.gsub(/[ +-.]/, '_')
     zone_timestep = model.getTimestep.numberOfTimestepsPerHour
-    coil_cooling_radiant = radiant_loop.coolingCoil.to_CoilCoolingLowTempRadiantVarFlow.get
-    coil_heating_radiant = radiant_loop.heatingCoil.to_CoilHeatingLowTempRadiantVarFlow.get
+
+    if model.version < OpenStudio::VersionString.new('3.1.1')
+      coil_cooling_radiant = radiant_loop.coolingCoil.to_CoilCoolingLowTempRadiantVarFlow.get
+      coil_heating_radiant = radiant_loop.heatingCoil.to_CoilHeatingLowTempRadiantVarFlow.get
+    else
+      coil_cooling_radiant = radiant_loop.coolingCoil.get.to_CoilCoolingLowTempRadiantVarFlow.get
+      coil_heating_radiant = radiant_loop.heatingCoil.get.to_CoilHeatingLowTempRadiantVarFlow.get
+    end
 
     #####
     # List of schedule objects used to hold calculation results
@@ -311,7 +317,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Zone #{zone.name} does not have floor surfaces; cannot add radiant system.")
       return false
     end
-    zone_floor = surfaces.sort_by { |s| s.grossArea }[-1]
+    zone_floor = surfaces.max_by(&:grossArea)
     zone_srf_temp = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Surface Inside Face Temperature')
     zone_srf_temp.setName("#{zone_name}_Srf_Temp")
     zone_srf_temp.setKeyName(zone_floor.name.get)

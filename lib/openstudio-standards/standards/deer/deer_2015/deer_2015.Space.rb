@@ -20,7 +20,7 @@ class DEER2015 < DEER
   # @param space [OpenStudio::Model::Space] the space in question
   # @param areas [Hash] a hash of daylighted areas
   # @return [Array<Bool>] req_top_ctrl, req_pri_ctrl, req_sec_ctrl
-  def space_daylighting_control_required?(space, areas, climate_zone)
+  def space_daylighting_control_required?(space, areas)
     req_top_ctrl = true
     req_pri_ctrl = true
     req_sec_ctrl = true
@@ -88,8 +88,7 @@ class DEER2015 < DEER
                                               sorted_skylights,
                                               req_top_ctrl,
                                               req_pri_ctrl,
-                                              req_sec_ctrl,
-                                              climate_zone)
+                                              req_sec_ctrl)
     sensor_1_frac = 0.0
     sensor_2_frac = 0.0
     sensor_1_window = nil
@@ -135,5 +134,4 @@ class DEER2015 < DEER
 
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end
-
 end

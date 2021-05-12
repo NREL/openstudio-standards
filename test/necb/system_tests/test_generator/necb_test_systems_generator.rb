@@ -28,7 +28,7 @@ class GeneratorNECBRegressionTests
   def reset_folder(dirname)
     if File.directory?(dirname)
       puts "Removing directory : [#{dirname}]"
-      FileUtils.rm_r(dirname)
+      FileUtils.rm_rf(dirname)
     end
     FileUtils.mkdir_p(dirname)
   end

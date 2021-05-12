@@ -26,7 +26,8 @@ class Standard
                                else
                                  'All Other'
                                end
-        end # TODO: Add other unitary systems
+        end
+        # TODO: Add other unitary systems
       end
     end
 

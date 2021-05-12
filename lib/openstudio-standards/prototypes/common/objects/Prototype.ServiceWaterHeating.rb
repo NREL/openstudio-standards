@@ -178,12 +178,12 @@ class Standard
     water_heater_vol_gal = OpenStudio.convert(water_heater_volume, 'm^3', 'gal').get
 
     # Temperature schedule type limits
-    temp_sch_type_limits =  model_add_schedule_type_limits(model,
-                                                           name: 'Temperature Schedule Type Limits',
-                                                           lower_limit_value: 0.0,
-                                                           upper_limit_value: 100.0,
-                                                           numeric_type: 'Continuous',
-                                                           unit_type: 'Temperature')
+    temp_sch_type_limits = model_add_schedule_type_limits(model,
+                                                          name: 'Temperature Schedule Type Limits',
+                                                          lower_limit_value: 0.0,
+                                                          upper_limit_value: 100.0,
+                                                          numeric_type: 'Continuous',
+                                                          unit_type: 'Temperature')
 
     if swh_temp_sch.nil?
       # Service water heating loop controls
@@ -203,7 +203,7 @@ class Standard
 
     # Assign a quantity to the water heater if it represents multiple water heaters
     if number_water_heaters > 1
-      water_heater.setName("#{number_water_heaters}X #{(water_heater_vol_gal/number_water_heaters).round}gal #{water_heater_fuel} Water Heater - #{(water_heater_capacity_kbtu_per_hr/number_water_heaters).round}kBtu/hr")
+      water_heater.setName("#{number_water_heaters}X #{(water_heater_vol_gal / number_water_heaters).round}gal #{water_heater_fuel} Water Heater - #{(water_heater_capacity_kbtu_per_hr / number_water_heaters).round}kBtu/hr")
       water_heater.set_component_quantity(number_water_heaters)
     else
       water_heater.setName("#{water_heater_vol_gal.round}gal #{water_heater_fuel} Water Heater - #{water_heater_capacity_kbtu_per_hr.round}kBtu/hr")
@@ -216,10 +216,10 @@ class Standard
     if water_heater_thermal_zone.nil?
       # Assume the water heater is indoors at 70F or 72F
       case template
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-	      indoor_temp = 71.6
+        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
+          indoor_temp = 71.6
         else
-	      indoor_temp = 70
+          indoor_temp = 70.0
         end
       default_water_heater_ambient_temp_sch = model_add_constant_schedule_ruleset(model,
                                                                                   OpenStudio.convert(indoor_temp, 'F', 'C').get,
@@ -355,8 +355,8 @@ class Standard
       # set sensor heights
       if hpwh_vol_gal <= 50.0
         hpwh.setDeadBandTemperatureDifference(0.5)
-        h_UE = (1 - (3.5 / 12.0)) * tank_height # in the 4th node of the tank (counting from top)
-        h_LE = (1 - (10.5 / 12.0)) * tank_height # in the 11th node of the tank (counting from top)
+        h_ue = (1 - (3.5 / 12.0)) * tank_height # in the 4th node of the tank (counting from top)
+        h_le = (1 - (10.5 / 12.0)) * tank_height # in the 11th node of the tank (counting from top)
         h_condtop = (1 - (5.5 / 12.0)) * tank_height # in the 6th node of the tank (counting from top)
         h_condbot = (1 - (10.99 / 12.0)) * tank_height # in the 11th node of the tank
         h_hpctrl = (1 - (2.5 / 12.0)) * tank_height # in the 3rd node of the tank
@@ -365,8 +365,8 @@ class Standard
         hpwh.setControlSensor2HeightInStratifiedTank(h_hpctrl)
       else
         hpwh.setDeadBandTemperatureDifference(3.89)
-        h_UE = (1 - (3.5 / 12.0)) * tank_height # in the 3rd node of the tank (counting from top)
-        h_LE = (1 - (9.5 / 12.0)) * tank_height # in the 10th node of the tank (counting from top)
+        h_ue = (1 - (3.5 / 12.0)) * tank_height # in the 3rd node of the tank (counting from top)
+        h_le = (1 - (9.5 / 12.0)) * tank_height # in the 10th node of the tank (counting from top)
         h_condtop = (1 - (5.5 / 12.0)) * tank_height # in the 6th node of the tank (counting from top)
         h_condbot = 0.01 # bottom node
         h_hpctrl_up = (1 - (2.5 / 12.0)) * tank_height # in the 3rd node of the tank
@@ -478,10 +478,10 @@ class Standard
       hpwh_top_element_sp = OpenStudio::Model::ScheduleConstant.new(model)
       hpwh_top_element_sp.setName("#{hpwh.name} TopElementSetpoint")
       tank.setHeater1Capacity(electric_backup_capacity)
-      tank.setHeater1Height(h_UE)
+      tank.setHeater1Height(h_ue)
       tank.setHeater1SetpointTemperatureSchedule(hpwh_top_element_sp) # Overwritten later by EMS
       tank.setHeater2Capacity(electric_backup_capacity)
-      tank.setHeater2Height(h_LE)
+      tank.setHeater2Height(h_le)
       tank.setHeater2SetpointTemperatureSchedule(hpwh_bottom_element_sp)
       tank.setUniformSkinLossCoefficientperUnitAreatoAmbientTemperature(u_tank)
       tank.setNumberofNodes(12)
@@ -607,12 +607,12 @@ class Standard
     booster_service_water_loop.setName('Service Water Loop')
 
     # Temperature schedule type limits
-    temp_sch_type_limits =  model_add_schedule_type_limits(model,
-                                                           name: "Temperature Schedule Type Limits",
-                                                           lower_limit_value: 0.0,
-                                                           upper_limit_value: 100.0,
-                                                           numeric_type: "Continuous",
-                                                           unit_type: "Temperature")
+    temp_sch_type_limits = model_add_schedule_type_limits(model,
+                                                          name: 'Temperature Schedule Type Limits',
+                                                          lower_limit_value: 0.0,
+                                                          upper_limit_value: 100.0,
+                                                          numeric_type: 'Continuous',
+                                                          unit_type: 'Temperature')
 
     # Service water heating loop controls
     swh_temp_c = booster_water_temperature
@@ -659,10 +659,10 @@ class Standard
     if booster_water_heater_thermal_zone.nil?
       # Assume the water heater is indoors at 70F or 72F
       case template
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-	      indoor_temp = 71.6
+        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
+          indoor_temp = 71.6
         else
-	      indoor_temp = 70.0
+          indoor_temp = 70.0
         end
       default_water_heater_ambient_temp_sch = model_add_constant_schedule_ruleset(model,
                                                                                   OpenStudio.convert(indoor_temp, 'F', 'C').get,
@@ -761,7 +761,7 @@ class Standard
 
     # Program Calling Manager
     mains_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-    mains_mgr.setName("Mains_Water_Prg_Mgr")
+    mains_mgr.setName('Mains_Water_Prg_Mgr')
     mains_mgr.setCallingPoint('BeginTimestepBeforePredictor')
     mains_mgr.addProgram(mains_prg)
 
@@ -897,9 +897,9 @@ class Standard
 
     # find the specific space_type properties from standard.json
     search_criteria = {
-        'template' => template,
-        'building_type' => building_type,
-        'space_type' => stds_spc_type
+      'template' => template,
+      'building_type' => building_type,
+      'space_type' => stds_spc_type
     }
     data = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
     if data.nil?
@@ -910,7 +910,7 @@ class Standard
 
     # If there is no service hot water load.. Don't bother adding anything.
     if data['service_water_heating_peak_flow_per_area'].to_f == 0.0 &&
-        data['service_water_heating_peak_flow_rate'].to_f == 0.0
+       data['service_water_heating_peak_flow_rate'].to_f == 0.0
       return nil
     end
 
@@ -963,6 +963,10 @@ class Standard
 
   # Determine whether or not water fixtures are attached to spaces
   def model_attach_water_fixtures_to_spaces?(model)
+    # TODO: For hotels and apartments, add the water fixture at the space level
+    # if building_type!=nil && ((building_type.downcase.include?"hotel") || (building_type.downcase.include?"apartment"))
+    #   return true
+    # end
     return false
   end
 
@@ -1036,101 +1040,101 @@ class Standard
                                             number_of_stories: 1,
                                             air_temp_surrounding_piping: 21.1111)
 
-      # Estimate pipe length
-      if circulating
-        # For circulating systems, get pipe length based on the size of the building.
-        # Formula from A.3.1 PrototypeModelEnhancements_2014_0.pdf
-        floor_area_ft2 = OpenStudio.convert(floor_area_served, 'm^2', 'ft^2').get
-        pipe_length_ft = 2.0 * (Math.sqrt(floor_area_ft2 / number_of_stories) + (10.0 * (number_of_stories - 1.0)))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Pipe length #{pipe_length_ft.round}ft = 2.0 * ( (#{floor_area_ft2.round}ft2 / #{number_of_stories} stories)^0.5 + (10.0ft * (#{number_of_stories} stories - 1.0) ) )")
-      else
-        # For non-circulating systems, assume water heater is close to point of use
-        pipe_length_ft = 20.0
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Pipe length #{pipe_length_ft.round}ft. For non-circulating systems, assume water heater is close to point of use.")
+    # Estimate pipe length
+    if circulating
+      # For circulating systems, get pipe length based on the size of the building.
+      # Formula from A.3.1 PrototypeModelEnhancements_2014_0.pdf
+      floor_area_ft2 = OpenStudio.convert(floor_area_served, 'm^2', 'ft^2').get
+      pipe_length_ft = 2.0 * (Math.sqrt(floor_area_ft2 / number_of_stories) + (10.0 * (number_of_stories - 1.0)))
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Pipe length #{pipe_length_ft.round}ft = 2.0 * ( (#{floor_area_ft2.round}ft2 / #{number_of_stories} stories)^0.5 + (10.0ft * (#{number_of_stories} stories - 1.0) ) )")
+    else
+      # For non-circulating systems, assume water heater is close to point of use
+      pipe_length_ft = 20.0
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Pipe length #{pipe_length_ft.round}ft. For non-circulating systems, assume water heater is close to point of use.")
+    end
+
+    # For systems whose water heater object represents multiple pieces
+    # of equipment, multiply the piping length by the number of pieces of equipment.
+    swh_loop.supplyComponents('OS_WaterHeater_Mixed'.to_IddObjectType).each do |sc|
+      next unless sc.to_WaterHeaterMixed.is_initialized
+
+      water_heater = sc.to_WaterHeaterMixed.get
+      comp_qty = water_heater.component_quantity
+      if comp_qty > 1
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Piping length has been multiplied by #{comp_qty}X because #{water_heater.name} represents #{comp_qty} pieces of equipment.")
+        pipe_length_ft *= comp_qty
+        break
       end
+    end
 
-      # For systems whose water heater object represents multiple pieces
-      # of equipment, multiply the piping length by the number of pieces of equipment.
-      swh_loop.supplyComponents('OS_WaterHeater_Mixed'.to_IddObjectType).each do |sc|
-        next unless sc.to_WaterHeaterMixed.is_initialized
-        water_heater = sc.to_WaterHeaterMixed.get
-        comp_qty = water_heater.component_quantity
-        if comp_qty > 1
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Piping length has been multiplied by #{comp_qty}X because #{water_heater.name} represents #{comp_qty} pieces of equipment.")
-          pipe_length_ft *= comp_qty
-          break
-        end
-      end
+    # Service water heating piping heat loss scheduled air temperature
+    swh_piping_air_temp_c = air_temp_surrounding_piping
+    swh_piping_air_temp_f = OpenStudio.convert(swh_piping_air_temp_c, 'C', 'F').get
+    swh_piping_air_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                                  swh_piping_air_temp_c,
+                                                                  name = "#{swh_loop.name} Piping Air Temp - #{swh_piping_air_temp_f.round}F")
 
-      # Service water heating piping heat loss scheduled air temperature
-      swh_piping_air_temp_c = air_temp_surrounding_piping
-      swh_piping_air_temp_f = OpenStudio.convert(swh_piping_air_temp_c, 'C', 'F').get
-      swh_piping_air_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                                    swh_piping_air_temp_c,
-                                                                    name = "#{swh_loop.name} Piping Air Temp - #{swh_piping_air_temp_f.round}F")
+    # Service water heating piping heat loss scheduled air velocity
+    swh_piping_air_velocity_m_per_s = 0.3
+    swh_piping_air_velocity_mph = OpenStudio.convert(swh_piping_air_velocity_m_per_s, 'm/s', 'mile/hr').get
+    swh_piping_air_velocity_sch = model_add_constant_schedule_ruleset(model,
+                                                                      swh_piping_air_velocity_m_per_s,
+                                                                      name = "#{swh_loop.name} Piping Air Velocity - #{swh_piping_air_velocity_mph.round(2)}mph")
 
-      # Service water heating piping heat loss scheduled air velocity
-      swh_piping_air_velocity_m_per_s = 0.3
-      swh_piping_air_velocity_mph = OpenStudio.convert(swh_piping_air_velocity_m_per_s, 'm/s', 'mile/hr').get
-      swh_piping_air_velocity_sch = model_add_constant_schedule_ruleset(model,
-                                                                        swh_piping_air_velocity_m_per_s,
-                                                                        name = "#{swh_loop.name} Piping Air Velocity - #{swh_piping_air_velocity_mph.round(2)}mph")
+    # Material for 3/4in type L (heavy duty) copper pipe
+    copper_pipe = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+    copper_pipe.setName('Copper pipe 0.75in type L')
+    copper_pipe.setRoughness('Smooth')
+    copper_pipe.setThickness(OpenStudio.convert(0.045, 'in', 'm').get)
+    copper_pipe.setThermalConductivity(386.0)
+    copper_pipe.setDensity(OpenStudio.convert(556, 'lb/ft^3', 'kg/m^3').get)
+    copper_pipe.setSpecificHeat(OpenStudio.convert(0.092, 'Btu/lb*R', 'J/kg*K').get)
+    copper_pipe.setThermalAbsorptance(0.9) # TODO: find reference for property
+    copper_pipe.setSolarAbsorptance(0.7) # TODO: find reference for property
+    copper_pipe.setVisibleAbsorptance(0.7) # TODO: find reference for property
 
-      # Material for 3/4in type L (heavy duty) copper pipe
-      copper_pipe = OpenStudio::Model::StandardOpaqueMaterial.new(model)
-      copper_pipe.setName("Copper pipe 0.75in type L")
-      copper_pipe.setRoughness('Smooth')
-      copper_pipe.setThickness(OpenStudio.convert(0.045, 'in', 'm').get)
-      copper_pipe.setThermalConductivity(386.0)
-      copper_pipe.setDensity(OpenStudio.convert(556, 'lb/ft^3', 'kg/m^3').get)
-      copper_pipe.setSpecificHeat(OpenStudio.convert(0.092, 'Btu/lb*R', 'J/kg*K').get)
-      copper_pipe.setThermalAbsorptance(0.9) # TODO: find reference for property
-      copper_pipe.setSolarAbsorptance(0.7) # TODO: find reference for property
-      copper_pipe.setVisibleAbsorptance(0.7) # TODO: find reference for property
+    # Construction for pipe
+    pipe_construction = OpenStudio::Model::Construction.new(model)
 
-      # Construction for pipe
-      pipe_construction = OpenStudio::Model::Construction.new(model)
+    # Add insulation material to insulated pipe
+    if pipe_insulation_thickness > 0
+      # Material for fiberglass insulation
+      # R-value from Owens-Corning 1/2in fiberglass pipe insulation
+      # https://www.grainger.com/product/OWENS-CORNING-1-2-Thick-40PP22
+      # but modified until simulated heat loss = 17.7 Btu/hr/ft of pipe with 140F water and 70F air
+      pipe_insulation_thickness_in = OpenStudio.convert(pipe_insulation_thickness, 'm', 'in').get
+      insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+      insulation.setName("Fiberglass batt #{pipe_insulation_thickness_in.round(2)}in")
+      insulation.setRoughness('Smooth')
+      insulation.setThickness(OpenStudio.convert(pipe_insulation_thickness_in, 'in', 'm').get)
+      insulation.setThermalConductivity(OpenStudio.convert(0.46, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
+      insulation.setDensity(OpenStudio.convert(0.7, 'lb/ft^3', 'kg/m^3').get)
+      insulation.setSpecificHeat(OpenStudio.convert(0.2, 'Btu/lb*R', 'J/kg*K').get)
+      insulation.setThermalAbsorptance(0.9) # Irrelevant for Pipe:Indoor; no radiation model is used
+      insulation.setSolarAbsorptance(0.7) # Irrelevant for Pipe:Indoor; no radiation model is used
+      insulation.setVisibleAbsorptance(0.7) # Irrelevant for Pipe:Indoor; no radiation model is used
 
-      # Add insulation material to insulated pipe
-      if pipe_insulation_thickness > 0
-        # Material for fiberglass insulation
-        # R-value from Owens-Corning 1/2in fiberglass pipe insulation
-        # https://www.grainger.com/product/OWENS-CORNING-1-2-Thick-40PP22
-        # but modified until simulated heat loss = 17.7 Btu/hr/ft of pipe with 140F water and 70F air
-        pipe_insulation_thickness_in = OpenStudio.convert(pipe_insulation_thickness, 'm', 'in').get
-        insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model)
-        insulation.setName("Fiberglass batt #{pipe_insulation_thickness_in.round(2)}in")
-        insulation.setRoughness('Smooth')
-        insulation.setThickness(OpenStudio.convert(pipe_insulation_thickness_in, 'in', 'm').get)
-        insulation.setThermalConductivity(OpenStudio.convert(0.46, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
-        insulation.setDensity(OpenStudio.convert(0.7, 'lb/ft^3', 'kg/m^3').get)
-        insulation.setSpecificHeat(OpenStudio.convert(0.2, 'Btu/lb*R', 'J/kg*K').get)
-        insulation.setThermalAbsorptance(0.9) # Irrelevant for Pipe:Indoor; no radiation model is used
-        insulation.setSolarAbsorptance(0.7) # Irrelevant for Pipe:Indoor; no radiation model is used
-        insulation.setVisibleAbsorptance(0.7) # Irrelevant for Pipe:Indoor; no radiation model is used
+      pipe_construction.setName("Copper pipe 0.75in type L with #{pipe_insulation_thickness_in.round(2)}in fiberglass batt")
+      pipe_construction.setLayers([insulation, copper_pipe])
+    else
+      pipe_construction.setName('Uninsulated copper pipe 0.75in type L')
+      pipe_construction.setLayers([copper_pipe])
+    end
 
-        pipe_construction.setName("Copper pipe 0.75in type L with #{pipe_insulation_thickness_in.round(2)}in fiberglass batt")
-        pipe_construction.setLayers([insulation, copper_pipe])
-      else
-        pipe_construction.setName("Uninsulated copper pipe 0.75in type L")
-        pipe_construction.setLayers([copper_pipe])
-      end
+    heat_loss_pipe = OpenStudio::Model::PipeIndoor.new(model)
+    heat_loss_pipe.setName("#{swh_loop.name} Pipe #{pipe_length_ft}ft")
+    heat_loss_pipe.setEnvironmentType('Schedule')
+    # heat_loss_pipe.setAmbientTemperatureSchedule(swh_piping_air_temp_sch) # TODO: schedule type registry error for this setter
+    heat_loss_pipe.setPointer(7, swh_piping_air_temp_sch.handle)
+    # heat_loss_pipe.setAmbientAirVelocitySchedule(model.alwaysOffDiscreteSchedule) # TODO: schedule type registry error for this setter
+    heat_loss_pipe.setPointer(8, swh_piping_air_velocity_sch.handle)
+    heat_loss_pipe.setConstruction(pipe_construction)
+    heat_loss_pipe.setPipeInsideDiameter(OpenStudio.convert(0.785, 'in', 'm').get)
+    heat_loss_pipe.setPipeLength(OpenStudio.convert(pipe_length_ft, 'ft', 'm').get)
 
-      heat_loss_pipe = OpenStudio::Model::PipeIndoor.new(model)
-      heat_loss_pipe.setName("#{swh_loop.name} Pipe #{pipe_length_ft}ft")
-      heat_loss_pipe.setEnvironmentType('Schedule')
-      # heat_loss_pipe.setAmbientTemperatureSchedule(swh_piping_air_temp_sch) # TODO: schedule type registry error for this setter
-      heat_loss_pipe.setPointer(7, swh_piping_air_temp_sch.handle)
-      # heat_loss_pipe.setAmbientAirVelocitySchedule(model.alwaysOffDiscreteSchedule) # TODO: schedule type registry error for this setter
-      heat_loss_pipe.setPointer(8, swh_piping_air_velocity_sch.handle)
-      heat_loss_pipe.setConstruction(pipe_construction)
-      heat_loss_pipe.setPipeInsideDiameter(OpenStudio.convert(0.785, 'in', 'm').get)
-      heat_loss_pipe.setPipeLength(OpenStudio.convert(pipe_length_ft, 'ft', 'm').get)
+    heat_loss_pipe.addToNode(swh_loop.demandInletNode)
 
-      heat_loss_pipe.addToNode(swh_loop.demandInletNode)
-
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{pipe_length_ft.round}ft of #{pipe_construction.name} losing heat to #{swh_piping_air_temp_f.round}F air to #{swh_loop.name}.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{pipe_length_ft.round}ft of #{pipe_construction.name} losing heat to #{swh_piping_air_temp_f.round}F air to #{swh_loop.name}.")
     return true
   end
-
 end

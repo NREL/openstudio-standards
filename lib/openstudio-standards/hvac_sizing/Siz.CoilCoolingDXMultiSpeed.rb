@@ -88,56 +88,56 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
   # returns the autosized rated total cooling capacity for stage 1 as an optional double
   def autosizedSpeed1GrossRatedTotalCoolingCapacity
 
-    return self.model.getAutosizedValue(self,'Speed 1 Design Size Rated Total Cooling Capacity', 'W')
+    return self.model.getAutosizedValue(self,'Design Size Speed 1 Gross Rated Total Cooling Capacity', 'W')
     
   end
   
   # returns the autosized rated total cooling capacity for stage 2 as an optional double
   def autosizedSpeed2GrossRatedTotalCoolingCapacity
 
-    return self.model.getAutosizedValue(self,'Speed 2 Design Size Rated Total Cooling Capacity', 'W')
+    return self.model.getAutosizedValue(self,'Design Size Speed 2 Gross Rated Total Cooling Capacity', 'W')
     
   end
   
   # returns the autosized rated total cooling capacity for stage 3 as an optional double
   def autosizedSpeed3GrossRatedTotalCoolingCapacity
 
-    return self.model.getAutosizedValue(self,'Speed 3 Design Size Rated Total Cooling Capacity', 'W')
+    return self.model.getAutosizedValue(self,'Design Size Speed 3 Gross Rated Total Cooling Capacity', 'W')
     
   end
   
   # returns the autosized rated total cooling capacity for stage 4 as an optional double
   def autosizedSpeed4GrossRatedTotalCoolingCapacity
 
-    return self.model.getAutosizedValue(self,'Speed 4 Design Size Rated Total Cooling Capacity', 'W')
+    return self.model.getAutosizedValue(self,'Design Size Speed 4 Gross Rated Total Cooling Capacity', 'W')
     
   end
 
   # returns the autosized rated sensible heat ratio for stage 1 as an optional double
   def autosizedSpeed1RatedSensibleHeatRatio
 
-    return self.model.getAutosizedValue(self,'Speed 1 Design Size Rated Sensible Heat Ratio', '')
+    return self.model.getAutosizedValue(self,'Design Size Speed 1 Rated Sensible Heat Ratio', '')
     
   end
   
   # returns the autosized rated sensible heat ratio for stage 2 as an optional double
   def autosizedSpeed2RatedSensibleHeatRatio
 
-    return self.model.getAutosizedValue(self,'Speed 2 Design Size Rated Sensible Heat Ratio', '')
+    return self.model.getAutosizedValue(self,'Design Size Speed 2 Rated Sensible Heat Ratio', '')
     
   end
   
   # returns the autosized rated sensible heat ratio for stage 3 as an optional double
   def autosizedSpeed3RatedSensibleHeatRatio
 
-    return self.model.getAutosizedValue(self,'Speed 3 Design Size Rated Sensible Heat Ratio', '')
+    return self.model.getAutosizedValue(self,'Design Size Speed 3 Rated Sensible Heat Ratio', '')
     
   end
   
   # returns the autosized rated sensible heat ratio for stage 4 as an optional double
   def autosizedSpeed4RatedSensibleHeatRatio
 
-    return self.model.getAutosizedValue(self,'Speed 4 Design Size Rated Sensible Heat Ratio', '')
+    return self.model.getAutosizedValue(self,'Design Size Speed 4 Rated Sensible Heat Ratio', '')
     
   end
   

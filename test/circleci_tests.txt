@@ -1,3 +1,5 @@
+os_stds_methods/test_add_hvac_systems.rb
+
 90_1_prm/test_create_performance_rating_method_baseline_building.rb
 90_1_prm/test_create_performance_rating_method_baseline_bldg_2.rb
 90_1_prm/test_create_performance_rating_method_baseline_bldg_3
@@ -13,25 +15,35 @@
 90_1_general/test_find_target_eui.rb
 90_1_general/test_find_target_eui_by_end_use.rb
 
-doe_prototype/test_primary_school.rb
-doe_prototype/test_warehouse.rb
-doe_prototype/test_secondary_school.rb
-doe_prototype/test_medium_office.rb
-doe_prototype/test_medium_detailed.rb
-doe_prototype/test_mid_rise_apartment.rb
+doe_prototype/test_full_service_restaurant.rb
+doe_prototype/test_high_rise_apartment.rb
+doe_prototype/test_hospital.rb
+doe_prototype/test_laboratory.rb
+doe_prototype/test_large_data_center_highITE.rb
+doe_prototype/test_large_data_center_lowITE.rb
 doe_prototype/test_large_hotel.rb
 doe_prototype/test_large_office.rb
 doe_prototype/test_large_office_detailed.rb
-doe_prototype/test_quick_service_restaurant.rb
-doe_prototype/test_strip_mall.rb
+doe_prototype/test_medium_office.rb
+doe_prototype/test_medium_detailed.rb
+doe_prototype/test_mid_rise_apartment.rb
 doe_prototype/test_outpatient.rb
-doe_prototype/test_full_service_restaurant.rb
+doe_prototype/test_primary_school.rb
+doe_prototype/test_quick_service_restaurant.rb
 doe_prototype/test_retail_standalone.rb
+doe_prototype/test_secondary_school.rb
+doe_prototype/test_small_data_center_highITE.rb
+doe_prototype/test_small_data_center_lowITE.rb
 doe_prototype/test_small_hotel.rb
 doe_prototype/test_small_office.rb
 doe_prototype/test_small_office_detailed.rb
-doe_prototype/test_high_rise_apartment.rb
+doe_prototype/test_strip_mall.rb
 doe_prototype/test_supermarket.rb
+doe_prototype/test_supertall_building.rb
+doe_prototype/test_tall_building.rb
+doe_prototype/test_warehouse.rb
+doe_prototype/test_performance.rb
+doe_prototype/test_regression.rb
 
 doe_prototype/test_add_c_factor_wall.rb
 doe_prototype/test_add_elevators.rb
@@ -42,10 +54,7 @@ doe_prototype/test_add_refrigeration.rb
 doe_prototype/test_add_swh.rb
 doe_prototype/test_effective_num_stories.rb
 doe_prototype/test_space_type_hash.rb
-doe_prototype/test_add_hvac_systems.rb
 doe_prototype/test_swh.rb
-doe_prototype/test_performance.rb
-doe_prototype/test_regression.rb
 doe_prototype/test_sim_control.rb
 doe_prototype/test_daylighting_ctrl.rb
 
@@ -75,6 +84,12 @@ necb/unit_tests/tests/test_necb_total_and_tz_ceiling_centroid.rb
 necb/unit_tests/tests/test_necb_chiller_rules.rb
 necb/unit_tests/tests/test_necb_constructions_fdwr.rb
 necb/unit_tests/tests/test_necb_boiler_rules.rb
+necb/unit_tests/tests/test_daylighting_sensor_control.rb
+necb/unit_tests/tests/test_led_lighting.rb
+necb/unit_tests/tests/test_dcv.rb
+necb/unit_tests/tests/test_pv_ground.rb
+necb/unit_tests/tests/test_nv.rb
+necb/unit_tests/tests/test_ecm_erv.rb
 
 necb/system_tests/tests/test_necb_hvac_system_2_natural_gas_scroll_hydronic_fpfc.rb
 necb/system_tests/tests/test_necb_hvac_system_2_natural_gas_scroll_dx_fpfc.rb

@@ -1,4 +1,3 @@
-
 class Standard
   # @!group AirTerminalSingleDuctVAVReheat
 
@@ -64,6 +63,10 @@ class Standard
   # Electricity, or HotWater.
   def air_terminal_single_duct_vav_reheat_reheat_type(air_terminal_single_duct_vav_reheat)
     type = nil
+
+    if air_terminal_single_duct_vav_reheat.to_AirTerminalSingleDuctVAVNoReheat.is_initialized
+      return nil
+    end
 
     # Get the reheat coil
     rht_coil = air_terminal_single_duct_vav_reheat.reheatCoil
