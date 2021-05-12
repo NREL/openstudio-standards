@@ -475,13 +475,17 @@ module EnergyPlus
       ##### Solar Irradiance Wh/m2 on heating design day #Sara-------------------------------------------------------------------------
       coldest_month = @heating_design_info[0]
       # puts "coldest_month_is #{coldest_month}"
-      @solar_irradiance_on_heating_design_day = @beam_solar_irradiance_info[coldest_month.to_f-1.0] + @diffuse_solar_irradiance_info[coldest_month.to_f-1.0]
+      unless @beam_solar_irradiance_info[coldest_month.to_f - 1.0].nil? && @diffuse_solar_irradiance_info[coldest_month.to_f - 1.0].nil?
+        @solar_irradiance_on_heating_design_day = @beam_solar_irradiance_info[coldest_month.to_f - 1.0] + @diffuse_solar_irradiance_info[coldest_month.to_f - 1.0]
+      end
       # puts "solar_irradiance_on_heating_design_day is #{@solar_irradiance_on_heating_design_day}"
 
       ##### Solar Irradiance Wh/m2 on cooling design day #Sara-------------------------------------------------------------------------
       hottest_month = @cooling_design_info[0]
       # puts "hottest_month is #{hottest_month}"
-      @solar_irradiance_on_cooling_design_day = @beam_solar_irradiance_info[hottest_month.to_f-1.0] + @diffuse_solar_irradiance_info[hottest_month.to_f-1.0]
+      unless @beam_solar_irradiance_info[hottest_month.to_f - 1.0].nil? && @diffuse_solar_irradiance_info[hottest_month.to_f - 1.0].nil?
+        @solar_irradiance_on_cooling_design_day = @beam_solar_irradiance_info[hottest_month.to_f - 1.0] + @diffuse_solar_irradiance_info[hottest_month.to_f - 1.0]
+      end
       # puts "solar_irradiance_on_cooling_design_day is #{@solar_irradiance_on_cooling_design_day}"
 
       #####-------------------------------------------------------------------------------------------------------------
