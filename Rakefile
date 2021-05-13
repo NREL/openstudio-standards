@@ -155,8 +155,6 @@ namespace :data do
     'OpenStudio_Standards-ashrae_90_1(space_types)',
     'OpenStudio_Standards-ashrae_90_1_prm',
     'OpenStudio_Standards-ashrae_90_1_prm(space_types)'
-    'OpenStudio_Standards-ashrae_90_1',
-    'OpenStudio_Standards-ashrae_90_1(space_types)'
   ]
 
   spreadsheets_deer = [
