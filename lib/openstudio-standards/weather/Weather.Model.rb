@@ -440,10 +440,10 @@ module BTAP
                     :ddy_filepath,
                     :stat_filepath,
                     :db990,
-                    :beam_solar_irradiance_info, #Sara
-                    :diffuse_solar_irradiance_info, #Sara
-                    :solar_irradiance_on_heating_design_day, #Sara
-                    :solar_irradiance_on_cooling_design_day #Sara
+                    :beam_solar_irradiance_info,
+                    :diffuse_solar_irradiance_info,
+                    :solar_irradiance_on_heating_design_day,
+                    :solar_irradiance_on_cooling_design_day
 
       YEAR = 0
       MONTH = 1
@@ -480,13 +480,14 @@ module BTAP
       ALBEDO = 32 # not used
       LIQUID_PRECIPITATION_DEPTH = 33
       LIQUID_PRECIPITATION_QUANTITY = 34
-      CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR = 100 # pws Sara
-      CALCULATED_PARTIAL_PRESSURE_OF_WATER_VAPOR = 101 # pw Sara
-      CALCULATED_TOTAL_MIXTURE_PRESSURE = 102 # p Sara
-      CALCULATED_HUMIDITY_RATIO = 103 # w Sara
-      CALCULATED_HUMIDITY_RATIO_AVG_DAILY = 104 # w Sara
+      CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR = 100 # pws
+      CALCULATED_PARTIAL_PRESSURE_OF_WATER_VAPOR = 101 # pw
+      CALCULATED_TOTAL_MIXTURE_PRESSURE = 102 # p
+      CALCULATED_HUMIDITY_RATIO = 103 # w
+      CALCULATED_HUMIDITY_RATIO_AVG_DAILY = 104 # w averaged daily
+      CALCULATED_HUMIDITY_RATIO_AVG_DAILY_DIFF_BASE = 105 # difference of w_averaged_daily from base if w_averaged_daily > base
 
-      # coefficients for the calculation of pws (saturation pressure of water vapour in the absence of air at the given dry-bulb temperature (kPa))#Sara
+      # coefficients for the calculation of pws (saturation pressure of water vapour in the absence of air at the given dry-bulb temperature (kPa))
       C1 = -5.6745359E+03
       C2 = 6.3925247E+00
       C3 = -9.6778430E-03
@@ -588,10 +589,10 @@ module BTAP
         @typical_autumn_week = @stat_file.typical_autumn_week
         @typical_spring_week = @stat_file.typical_spring_week
         @db990 = @heating_design_info[2]
-        @beam_solar_irradiance_info = @stat_file.beam_solar_irradiance_info #Sara
-        @diffuse_solar_irradiance_info = @stat_file.diffuse_solar_irradiance_info  #Sara
-        @solar_irradiance_on_heating_design_day = @stat_file.solar_irradiance_on_heating_design_day #Sara
-        @solar_irradiance_on_cooling_design_day = @stat_file.solar_irradiance_on_cooling_design_day #Sara
+        @beam_solar_irradiance_info = @stat_file.beam_solar_irradiance_info
+        @diffuse_solar_irradiance_info = @stat_file.diffuse_solar_irradiance_info
+        @solar_irradiance_on_heating_design_day = @stat_file.solar_irradiance_on_heating_design_day
+        @solar_irradiance_on_cooling_design_day = @stat_file.solar_irradiance_on_cooling_design_day
         return self
       end
 
@@ -835,22 +836,24 @@ module BTAP
       end
 
 
-      def get_dbt #Sara #TODO; delete if not used
-        scan if @filearray.nil?
-        returncolumnvalues(DRY_BULB_TEMPERATURE)
-        # puts @filearray
-        return self
-      end
-      def returncolumnvalues(column)   #Sara #TODO; delete if not used
-        @filearray.each do |line|
-          unless line.first =~ /\D(.*)/
-            line[column] = line[column]
-          end
-        end
-      end
+      # def get_dbt #Sara #TODO; delete if not used
+      #   scan if @filearray.nil?
+      #   returncolumnvalues(DRY_BULB_TEMPERATURE)
+      #   # puts @filearray
+      #   return self
+      # end
+      # def returncolumnvalues(column)   #Sara #TODO; delete if not used
+      #   @filearray.each do |line|
+      #     unless line.first =~ /\D(.*)/
+      #       line[column] = line[column]
+      #     end
+      #   end
+      # end
 
-      # Calculate annual global horizontal irradiance (GHI) # Sara TODO: Question: check if IGA in PHIUS is the same as GHI
-      def get_annual_ghi # Global Horizontal Irradiance (GHI)  #Sara
+      # TODO: Question: should expected results file for test_necb_weather be updated to include these info for each city?
+      # This method calculates annual global horizontal irradiance (GHI) TODO: Question: check if IGA in PHIUS is the same as GHI
+      # @author sara.gilani@canada.ca
+      def get_annual_ghi
         sum_hourly_ghi = 0.0
         scan if @filearray.nil?
         @filearray.each do |line|
@@ -864,8 +867,9 @@ module BTAP
       end
 
 
-      # Calculate dehumidification degree days (DDD) (lb/lb days) # Sara TODO: Question: check if works correctly based on calculation in csv
-      def calculate_humidity_ratio #Sara
+      # This method calculates dehumidification degree days (DDD)
+      # @author sara.gilani@canada.ca
+      def calculate_humidity_ratio
         column_h = HOUR
         column_dbt = DRY_BULB_TEMPERATURE
         column_rh = RELATIVE_HUMIDITY
@@ -875,8 +879,9 @@ module BTAP
         column_p = CALCULATED_TOTAL_MIXTURE_PRESSURE
         column_w = CALCULATED_HUMIDITY_RATIO
         column_w_avg_daily = CALCULATED_HUMIDITY_RATIO_AVG_DAILY
+        column_w_avg_daily_diff_base = CALCULATED_HUMIDITY_RATIO_AVG_DAILY_DIFF_BASE
         sum_w = 0.0
-        w_base = 0.010 # REFERENCE: White, L. (2019). Setting the Heating/Cooling Performance Criteria for the PHIUS 2018 Passive Building Standard. In ASHRAE Topical Conference Proceedings (pp. 399-409). American Society of Heating, Refrigeration and Air Conditioning Engineers, Inc..
+        w_base = 0.010 # Note: this is base for the calculation of 'dehumidification degree days' (REF: White, L. (2019). Setting the Heating/Cooling Performance Criteria for the PHIUS 2018 Passive Building Standard. In ASHRAE Topical Conference Proceedings, pp. 399-409)
         ddd = 0.0 #dehimudifation degree-days
 
         scan if @filearray.nil?
@@ -884,7 +889,7 @@ module BTAP
           unless line.first =~ /\D(.*)/
             # Step 1: calculate pws #TODO: describe
             if line[column_dbt].to_f <= 0.0
-              line[column_pws] = C1/(line[column_dbt].to_f + 273.15) +
+              line[column_pws] = C1 / (line[column_dbt].to_f + 273.15) +
                                  C2 +
                                  C3 * (line[column_dbt].to_f + 273.15) +
                                  C4 * (line[column_dbt].to_f + 273.15)**2 +
@@ -893,9 +898,9 @@ module BTAP
                                  C7 * Math.log((line[column_dbt].to_f + 273.15), Math.exp(1)) #2.718281828459
               line[column_pws] = (Math.exp(1))**(line[column_pws].to_f)
             else #if line[column_1].to_f > 0.0
-              line[column_pws] = C8/(line[column_dbt].to_f + 273.15) +
+              line[column_pws] = C8 / (line[column_dbt].to_f + 273.15) +
                                  C9 +
-                                 C10 * (line[column_dbt].to_f + 273.15)  +
+                                 C10 * (line[column_dbt].to_f + 273.15) +
                                  C11 * (line[column_dbt].to_f + 273.15)**2 +
                                  C12 * (line[column_dbt].to_f + 273.15)**3 +
                                  C13 * Math.log((line[column_dbt].to_f + 273.15), Math.exp(1))
@@ -917,16 +922,16 @@ module BTAP
               sum_w += line[column_w].to_f
               line[column_w_avg_daily] = 0.0
             elsif line[column_h].to_f == 24.0
-              line[column_w_avg_daily] = sum_w / 24.0
+              line[column_w_avg_daily] = (sum_w + line[column_w].to_f) / 24.0
               if line[column_w_avg_daily].to_f > w_base
-                line[column_w_avg_daily] = line[column_w_avg_daily].to_f - w_base
+                line[column_w_avg_daily_diff_base] = line[column_w_avg_daily].to_f - w_base
               else
-                line[column_w_avg_daily] = 0.0
+                line[column_w_avg_daily_diff_base] = 0.0
               end
               sum_w = 0.0
             end
 
-            ddd += line[column_w_avg_daily]
+            ddd += line[column_w_avg_daily_diff_base].to_f
 
           end #unless line.first =~ /\D(.*)/
         end #@filearray.each do |line|

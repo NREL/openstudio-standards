@@ -46,10 +46,10 @@ module EnergyPlus
     attr_accessor :typical_winter_dry_week
     attr_accessor :typical_autumn_week
     attr_accessor :typical_spring_week
-    attr_accessor :beam_solar_irradiance_info  #Sara
-    attr_accessor :diffuse_solar_irradiance_info  #Sara
-    attr_accessor :solar_irradiance_on_heating_design_day #Sara
-    attr_accessor :solar_irradiance_on_cooling_design_day #Sara
+    attr_accessor :beam_solar_irradiance_info
+    attr_accessor :diffuse_solar_irradiance_info
+    attr_accessor :solar_irradiance_on_heating_design_day
+    attr_accessor :solar_irradiance_on_cooling_design_day
 
     def initialize(path)
       @path = Pathname.new(path)
@@ -78,10 +78,10 @@ module EnergyPlus
       @typical_autumn_week = []
       @typical_spring_week = []
       @data = []
-      @beam_solar_irradiance_info = [] #Sara
-      @diffuse_solar_irradiance_info = [] #Sara
-      @solar_irradiance_on_heating_design_day = [] #Sara
-      @solar_irradiance_on_cooling_design_day = [] #Sara
+      @beam_solar_irradiance_info = []
+      @diffuse_solar_irradiance_info = []
+      @solar_irradiance_on_heating_design_day = []
+      @solar_irradiance_on_cooling_design_day = []
       init
     end
 
@@ -105,10 +105,10 @@ module EnergyPlus
       line << "#{@climate_zone} ,"
       line << "#{@standard} ,"
       line << "#{@valid} ,"
-      line << "#{@beam_solar_irradiance_info} ," #Sara
-      line << "#{@diffuse_solar_irradiance_info} ," #Sara
-      line << "#{@solar_irradiance_on_heating_design_day} ," #Sara
-      line << "#{@solar_irradiance_on_cooling_design_day} ," #Sara
+      line << "#{@beam_solar_irradiance_info} ,"
+      line << "#{@diffuse_solar_irradiance_info} ,"
+      line << "#{@solar_irradiance_on_heating_design_day} ,"
+      line << "#{@solar_irradiance_on_cooling_design_day} ,"
     end
 
     def valid?
@@ -431,7 +431,8 @@ module EnergyPlus
         @extreme_cold_week = Date.parse((match_data[1].split(':')[0]).to_s)
       end
 
-      ##### Monthly Beam Solar Irradiance Wh/m2 (noon on 21st of month) #Sara-------------------------------------------------------------------------
+      ##### Monthly Beam Solar Irradiance Wh/m2 (noon on 21st of month) -------------------------------------------------------------------------
+      # @author sara.gilani@canada.ca
       regex = /\s*ib\s*\(beam\)(\s*\d+.*)/
       match_data = text.match(regex)
       if match_data.nil?
@@ -452,7 +453,8 @@ module EnergyPlus
         # puts @beam_solar_irradiance_info
       end
 
-      ##### Monthly Diffuse Solar Irradiance Wh/m2 (noon on 21st of month) #Sara-------------------------------------------------------------------------
+      ##### Monthly Diffuse Solar Irradiance Wh/m2 (noon on 21st of month) -------------------------------------------------------------------------
+      # @author sara.gilani@canada.ca
       regex = /\s*id\s*\(diffuse\)(\s*\d+.*)/
       match_data = text.match(regex)
       if match_data.nil?
@@ -472,15 +474,20 @@ module EnergyPlus
         end
         # puts @diffuse_solar_irradiance_info
       end
-      ##### Solar Irradiance Wh/m2 on heating design day #Sara-------------------------------------------------------------------------
+      ##### Solar Irradiance Wh/m2 on heating design day -------------------------------------------------------------------------
+      # @author sara.gilani@canada.ca
+      # TODO: Question: is heating design condition always on 21 of the relevant month?
       coldest_month = @heating_design_info[0]
       # puts "coldest_month_is #{coldest_month}"
       unless @beam_solar_irradiance_info[coldest_month.to_f - 1.0].nil? && @diffuse_solar_irradiance_info[coldest_month.to_f - 1.0].nil?
         @solar_irradiance_on_heating_design_day = @beam_solar_irradiance_info[coldest_month.to_f - 1.0] + @diffuse_solar_irradiance_info[coldest_month.to_f - 1.0]
+        # Note: 'The sum of the diffuse and direct solar radiation is called global solar radiation.' REFERNCE: https://www.energy.gov/eere/solar/solar-radiation-basics (Accessed May 13, 2021)
       end
       # puts "solar_irradiance_on_heating_design_day is #{@solar_irradiance_on_heating_design_day}"
 
-      ##### Solar Irradiance Wh/m2 on cooling design day #Sara-------------------------------------------------------------------------
+      ##### Solar Irradiance Wh/m2 on cooling design day -------------------------------------------------------------------------
+      # @author sara.gilani@canada.ca
+      # TODO: Question: is cooling design condition always on 21 of the relevant month?
       hottest_month = @cooling_design_info[0]
       # puts "hottest_month is #{hottest_month}"
       unless @beam_solar_irradiance_info[hottest_month.to_f - 1.0].nil? && @diffuse_solar_irradiance_info[hottest_month.to_f - 1.0].nil?
