@@ -835,24 +835,9 @@ module BTAP
         FileUtils.cp(@stat_filepath, "#{File.dirname(filename)}/#{File.basename(filename, '.epw')}.stat")
       end
 
-
-      # def get_dbt #Sara #TODO; delete if not used
-      #   scan if @filearray.nil?
-      #   returncolumnvalues(DRY_BULB_TEMPERATURE)
-      #   # puts @filearray
-      #   return self
-      # end
-      # def returncolumnvalues(column)   #Sara #TODO; delete if not used
-      #   @filearray.each do |line|
-      #     unless line.first =~ /\D(.*)/
-      #       line[column] = line[column]
-      #     end
-      #   end
-      # end
-
-      # TODO: Question: should expected results file for test_necb_weather be updated to include these info for each city?
-      # This method calculates annual global horizontal irradiance (GHI) TODO: Question: check if IGA in PHIUS is the same as GHI
+      # This method calculates annual global horizontal irradiance (GHI) TODO: Question: is IGA (annual global irradiance) in PHIUS is the same as GHI?
       # @author sara.gilani@canada.ca
+      # TODO: Question: should expected results file for test_necb_weather be updated to include these info for each city?
       def get_annual_ghi
         sum_hourly_ghi = 0.0
         scan if @filearray.nil?
@@ -882,12 +867,12 @@ module BTAP
         column_w_avg_daily_diff_base = CALCULATED_HUMIDITY_RATIO_AVG_DAILY_DIFF_BASE
         sum_w = 0.0
         w_base = 0.010 # Note: this is base for the calculation of 'dehumidification degree days' (REF: White, L. (2019). Setting the Heating/Cooling Performance Criteria for the PHIUS 2018 Passive Building Standard. In ASHRAE Topical Conference Proceedings, pp. 399-409)
-        ddd = 0.0 #dehimudifation degree-days
+        ddd = 0.0 # dehimudifation degree-days
 
         scan if @filearray.nil?
         @filearray.each do |line|
           unless line.first =~ /\D(.*)/
-            # Step 1: calculate pws #TODO: describe
+            # Step 1: calculate pws (SATURATION_PRESSURE_OF_WATER_VAPOR)
             if line[column_dbt].to_f <= 0.0
               line[column_pws] = C1 / (line[column_dbt].to_f + 273.15) +
                                  C2 +
@@ -895,9 +880,9 @@ module BTAP
                                  C4 * (line[column_dbt].to_f + 273.15)**2 +
                                  C5 * (line[column_dbt].to_f + 273.15)**3 +
                                  C6 * (line[column_dbt].to_f + 273.15)**4 +
-                                 C7 * Math.log((line[column_dbt].to_f + 273.15), Math.exp(1)) #2.718281828459
+                                 C7 * Math.log((line[column_dbt].to_f + 273.15), Math.exp(1)) # 2.718281828459
               line[column_pws] = (Math.exp(1))**(line[column_pws].to_f)
-            else #if line[column_1].to_f > 0.0
+            else # if line[column_1].to_f > 0.0
               line[column_pws] = C8 / (line[column_dbt].to_f + 273.15) +
                                  C9 +
                                  C10 * (line[column_dbt].to_f + 273.15) +
@@ -907,13 +892,13 @@ module BTAP
               line[column_pws] = (Math.exp(1))**(line[column_pws].to_f)
             end
 
-            #Step 2: calculate pw #TODO: describe
+            #Step 2: calculate pw (PARTIAL_PRESSURE_OF_WATER_VAPOR)
             line[column_pw] = line[column_pws].to_f * line[column_rh].to_f / 100.0
 
-            # Step 3: calculate p #TODO: describe
+            # Step 3: calculate p (TOTAL_MIXTURE_PRESSURE)
             line[column_p] = line[column_pw].to_f + line[column_pda].to_f
 
-            # Step 4: calculate w #TODO: describe
+            # Step 4: calculate w (HUMIDITY_RATIO)
             line[column_w] = 0.621945 * line[column_pw].to_f / (line[column_p].to_f - line[column_pw].to_f)
 
             #-----------------------------------------------------------------------------------------------------------
@@ -936,7 +921,6 @@ module BTAP
           end #unless line.first =~ /\D(.*)/
         end #@filearray.each do |line|
         # puts @filearray
-        # puts "ddd is #{ddd}"
         return ddd
       end #def calculate_humidity_ratio
 
