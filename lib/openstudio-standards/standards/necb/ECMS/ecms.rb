@@ -66,8 +66,7 @@ class ECMS < NECB2011
       ecm_std.send(ecm_add_method_name,
                    model: model,
                    system_zones_map: map_system_to_zones,
-                   system_doas_flags: system_doas_flags,
-                   standard: template_standard)
+                   system_doas_flags: system_doas_flags)
     else
       ecm_std.send(ecm_add_method_name,
                    model: model,
@@ -91,7 +90,7 @@ class ECMS < NECB2011
     raise("the method #{ecm_apply_eff_method_name} does not exist in the ECM class. Please verify that this should be called.") unless ecm_std.respond_to?(ecm_apply_eff_method_name)
 
     # apply system eff method.
-    ecm_std.send(ecm_apply_eff_method_name, model: model, ecm_name: ecm_system_name)
+    ecm_std.send(ecm_apply_eff_method_name, model)
   end
 
 
