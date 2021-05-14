@@ -827,9 +827,9 @@ module BTAP
         FileUtils.cp(@stat_filepath, "#{File.dirname(filename)}/#{File.basename(filename, '.epw')}.stat")
       end
 
-      # This method calculates annual global horizontal irradiance (GHI) TODO: Question: is IGA (annual global irradiance) in PHIUS is the same as GHI?
+      # This method calculates annual global horizontal irradiance (GHI)
       # @author sara.gilani@canada.ca
-      # TODO: Question: should expected results file for test_necb_weather be updated to include these info for each city?
+      # TODO: Question: is IGA (annual global irradiance) of PHIUS the same as GHI?
       def get_annual_ghi
         sum_hourly_ghi = 0.0
         scan if @filearray.nil?
@@ -843,9 +843,10 @@ module BTAP
         return annual_ghi_kwh_per_m_sq
       end
 
-      # This method calculates annual global horizontal irradiance on heating design day
+      # This method calculates global horizontal irradiance on heating design day
       # @author sara.gilani@canada.ca
       # TODO: Question: is heating design condition always on 21 of the relevant month?
+      # TODO: Question: is GLOBAL_HORIZONTAL_RADIATION the variable be used for IGHL (global irradiance at heating design condition) of PHIUS?
       def get_ghi_on_heating_design_day
         column_month = MONTH
         column_day = DAY
@@ -865,9 +866,10 @@ module BTAP
         return ghi_on_heating_design_day_w_per_m_sq
       end
 
-      # This method calculates annual global horizontal irradiance on cooling design day
+      # This method calculates global horizontal irradiance on cooling design day
       # @author sara.gilani@canada.ca
       # TODO: Question: is cooling design condition always on 21 of the relevant month?
+      # TODO: Question: is GLOBAL_HORIZONTAL_RADIATION the variable be used for IGCL (global irradiance at cooling design condition) of PHIUS?
       def get_ghi_on_cooling_design_day
         column_month = MONTH
         column_day = DAY
@@ -889,6 +891,7 @@ module BTAP
 
       # This method calculates dehumidification degree days (DDD)
       # @author sara.gilani@canada.ca
+      # Reference: ASHRAE Handbook Online - Fundamentals > CHAPTER 1. PSYCHROMETRICS
       def calculate_humidity_ratio
         column_h = HOUR
         column_dbt = DRY_BULB_TEMPERATURE
@@ -907,7 +910,7 @@ module BTAP
         scan if @filearray.nil?
         @filearray.each do |line|
           unless line.first =~ /\D(.*)/
-            # Step 1: calculate pws (SATURATION_PRESSURE_OF_WATER_VAPOR)
+            # Step 1: calculate pws (SATURATION_PRESSURE_OF_WATER_VAPOR), [Pascal]
             if line[column_dbt].to_f <= 0.0
               line[column_pws] = C1 / (line[column_dbt].to_f + 273.15) +
                                  C2 +
@@ -927,10 +930,11 @@ module BTAP
               line[column_pws] = (Math.exp(1))**(line[column_pws].to_f)
             end
 
-            #Step 2: calculate pw (PARTIAL_PRESSURE_OF_WATER_VAPOR)
+            # Step 2: calculate pw (PARTIAL_PRESSURE_OF_WATER_VAPOR), [Pascal]
+            # Relative Humidity (RH) = 100 * pw / pws
             line[column_pw] = line[column_pws].to_f * line[column_rh].to_f / 100.0
 
-            # Step 3: calculate p (TOTAL_MIXTURE_PRESSURE)
+            # Step 3: calculate p (TOTAL_MIXTURE_PRESSURE), [Pascal]
             line[column_p] = line[column_pw].to_f + line[column_pda].to_f
 
             # Step 4: calculate w (HUMIDITY_RATIO)
@@ -953,11 +957,11 @@ module BTAP
 
             ddd += line[column_w_avg_daily_diff_base].to_f
 
-          end #unless line.first =~ /\D(.*)/
-        end #@filearray.each do |line|
+          end # unless line.first =~ /\D(.*)/
+        end # @filearray.each do |line|
         # puts @filearray
         return ddd
-      end #def calculate_humidity_ratio
+      end # def calculate_humidity_ratio
 
     end # Environment
   end
