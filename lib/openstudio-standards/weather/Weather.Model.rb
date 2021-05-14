@@ -439,11 +439,7 @@ module BTAP
                     :epw_filepath,
                     :ddy_filepath,
                     :stat_filepath,
-                    :db990,
-                    :beam_solar_irradiance_info,
-                    :diffuse_solar_irradiance_info,
-                    :solar_irradiance_on_heating_design_day,
-                    :solar_irradiance_on_cooling_design_day
+                    :db990
 
       YEAR = 0
       MONTH = 1
@@ -589,10 +585,6 @@ module BTAP
         @typical_autumn_week = @stat_file.typical_autumn_week
         @typical_spring_week = @stat_file.typical_spring_week
         @db990 = @heating_design_info[2]
-        @beam_solar_irradiance_info = @stat_file.beam_solar_irradiance_info
-        @diffuse_solar_irradiance_info = @stat_file.diffuse_solar_irradiance_info
-        @solar_irradiance_on_heating_design_day = @stat_file.solar_irradiance_on_heating_design_day
-        @solar_irradiance_on_cooling_design_day = @stat_file.solar_irradiance_on_cooling_design_day
         return self
       end
 
@@ -851,6 +843,49 @@ module BTAP
         return annual_ghi_kwh_per_m_sq
       end
 
+      # This method calculates annual global horizontal irradiance on heating design day
+      # @author sara.gilani@canada.ca
+      # TODO: Question: is heating design condition always on 21 of the relevant month?
+      def get_ghi_on_heating_design_day
+        column_month = MONTH
+        column_day = DAY
+        coldest_month = @heating_design_info[0].to_f
+        sum_hourly_ghi_on_heating_design_day = 0.0
+        number_of_hours_with_sunshine = 0.0
+        scan if @filearray.nil?
+        @filearray.each do |line|
+          unless line.first =~ /\D(.*)/
+            if line[column_month].to_f == coldest_month && line[column_day].to_f == 21 && line[GLOBAL_HORIZONTAL_RADIATION].to_f > 0.0
+              sum_hourly_ghi_on_heating_design_day += line[GLOBAL_HORIZONTAL_RADIATION].to_f
+              number_of_hours_with_sunshine += 1.0
+            end
+          end
+        end
+        ghi_on_heating_design_day_w_per_m_sq = sum_hourly_ghi_on_heating_design_day / number_of_hours_with_sunshine
+        return ghi_on_heating_design_day_w_per_m_sq
+      end
+
+      # This method calculates annual global horizontal irradiance on cooling design day
+      # @author sara.gilani@canada.ca
+      # TODO: Question: is cooling design condition always on 21 of the relevant month?
+      def get_ghi_on_cooling_design_day
+        column_month = MONTH
+        column_day = DAY
+        hottest_month = @cooling_design_info[0].to_f
+        sum_hourly_ghi_on_cooling_design_day = 0.0
+        number_of_hours_with_sunshine = 0.0
+        scan if @filearray.nil?
+        @filearray.each do |line|
+          unless line.first =~ /\D(.*)/
+            if line[column_month].to_f == hottest_month && line[column_day].to_f == 21 && line[GLOBAL_HORIZONTAL_RADIATION].to_f > 0.0
+              sum_hourly_ghi_on_cooling_design_day += line[GLOBAL_HORIZONTAL_RADIATION].to_f
+              number_of_hours_with_sunshine += 1.0
+            end
+          end
+        end
+        ghi_on_cooling_design_day_w_per_m_sq = sum_hourly_ghi_on_cooling_design_day / number_of_hours_with_sunshine
+        return ghi_on_cooling_design_day_w_per_m_sq
+      end
 
       # This method calculates dehumidification degree days (DDD)
       # @author sara.gilani@canada.ca
@@ -902,7 +937,7 @@ module BTAP
             line[column_w] = 0.621945 * line[column_pw].to_f / (line[column_p].to_f - line[column_pw].to_f)
 
             #-----------------------------------------------------------------------------------------------------------
-            # daily average of w
+            # calculate daily average of w AND its difference from base
             if line[column_h].to_f < 24.0
               sum_w += line[column_w].to_f
               line[column_w_avg_daily] = 0.0
