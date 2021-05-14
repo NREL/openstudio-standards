@@ -7179,8 +7179,9 @@ class Standard
   #
   # @return [Boolean] true if necessary, false otherwise
   def model_get_fan_power_breakdown()
-
     return false
+  end
+
   # Default SAT reset type
   #
   # @param air_loop_hvac [OpenStudio::model::AirLoopHVAC] Airloop
