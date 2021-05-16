@@ -402,6 +402,8 @@ class Standard
     end
 
     return ua
+  end
+
   # Calculate a surface's absolute azimuth
   # source: https://github.com/NREL/openstudio-extension-gem/blob/e354355054b83ffc26e3b69befa20d6baf5ef242/lib/openstudio/extension/core/os_lib_geometry.rb#L913
   #
