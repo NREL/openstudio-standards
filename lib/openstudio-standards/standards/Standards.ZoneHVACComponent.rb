@@ -122,6 +122,8 @@ class Standard
     else
       return nil
     end
+  end
+
   # Default occupancy fraction threshold for determining if the spaces served by the zone hvac are occupied
   def zone_hvac_unoccupied_threshold
     return 0.15
