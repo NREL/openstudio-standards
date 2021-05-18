@@ -1493,7 +1493,7 @@ class Standard
         end
         # VAV reheat terminal
         air_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
-        if model.version < OpenStudio::VersionString.new('3.1.0')
+        if model.version < OpenStudio::VersionString.new('3.0.1')
           air_terminal.setZoneMinimumAirFlowMethod('Constant')
         else
           air_terminal.setZoneMinimumAirFlowInputMethod('Constant')
@@ -1501,7 +1501,7 @@ class Standard
         air_terminal.setControlForOutdoorAir(true) if demand_control_ventilation
       else # 'DOASVAV'
         air_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
-        if model.version < OpenStudio::VersionString.new('3.1.0')
+        if model.version < OpenStudio::VersionString.new('3.0.1')
           air_terminal.setZoneMinimumAirFlowMethod('Constant')
         else
           air_terminal.setZoneMinimumAirFlowInputMethod('Constant')
@@ -1744,7 +1744,7 @@ class Standard
         # create vav terminal
         terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
         terminal.setName("#{zone.name} VAV Terminal")
-        if model.version < OpenStudio::VersionString.new('3.1.0')
+        if model.version < OpenStudio::VersionString.new('3.0.1')
           terminal.setZoneMinimumAirFlowMethod('Constant')
         else
           terminal.setZoneMinimumAirFlowInputMethod('Constant')
@@ -1765,7 +1765,7 @@ class Standard
         # create vav terminal
         terminal = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
         terminal.setName("#{zone.name} VAV Terminal")
-        if model.version < OpenStudio::VersionString.new('3.1.0')
+        if model.version < OpenStudio::VersionString.new('3.0.1')
           terminal.setZoneMinimumAirFlowMethod('Constant')
         else
           terminal.setZoneMinimumAirFlowInputMethod('Constant')
@@ -2083,7 +2083,7 @@ class Standard
       # create VAV terminal
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
       terminal.setName("#{zone.name} VAV Terminal")
-      if model.version < OpenStudio::VersionString.new('3.1.0')
+      if model.version < OpenStudio::VersionString.new('3.0.1')
         terminal.setZoneMinimumAirFlowMethod('Constant')
       else
         terminal.setZoneMinimumAirFlowInputMethod('Constant')
@@ -2386,7 +2386,7 @@ class Standard
       # VAV terminal
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
       terminal.setName("#{zone.name} VAV Terminal")
-      if model.version < OpenStudio::VersionString.new('3.1.0')
+      if model.version < OpenStudio::VersionString.new('3.0.1')
         terminal.setZoneMinimumAirFlowMethod('Constant')
       else
         terminal.setZoneMinimumAirFlowInputMethod('Constant')
@@ -3219,7 +3219,7 @@ class Standard
       # Create a diffuser and attach the zone/diffuser pair to the air loop
       diffuser = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{air_loop.name} Diffuser")
-      if model.version < OpenStudio::VersionString.new('3.1.0')
+      if model.version < OpenStudio::VersionString.new('3.0.1')
         diffuser.setZoneMinimumAirFlowMethod('Constant')
       else
         diffuser.setZoneMinimumAirFlowInputMethod('Constant')
@@ -3359,7 +3359,7 @@ class Standard
       # Create a diffuser and attach the zone/diffuser pair to the air loop
       diffuser = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{zone.name} VAV terminal")
-      if model.version < OpenStudio::VersionString.new('3.1.0')
+      if model.version < OpenStudio::VersionString.new('3.0.1')
         diffuser.setZoneMinimumAirFlowMethod('Constant')
       else
         diffuser.setZoneMinimumAirFlowInputMethod('Constant')

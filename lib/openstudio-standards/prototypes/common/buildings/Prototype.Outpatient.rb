@@ -348,7 +348,7 @@ module Outpatient
       model.getAirTerminalSingleDuctVAVReheats.sort.each do |air_terminal|
         air_terminal_name = air_terminal.name.get
         if air_terminal_name.include?('Floor 1 Operating Room 1') || air_terminal_name.include?('Floor 1 Operating Room 2')
-          if model.version < OpenStudio::VersionString.new('3.1.0')
+          if model.version < OpenStudio::VersionString.new('3.0.1')
             air_terminal.setZoneMinimumAirFlowMethod('Scheduled')
           else
             air_terminal.setZoneMinimumAirFlowInputMethod('Scheduled')
