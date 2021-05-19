@@ -1085,7 +1085,7 @@ class Standard
       clg_sch = nil
       if equip.to_ZoneHVACLowTempRadiantConstFlow.is_initialized
         equip = equip.to_ZoneHVACLowTempRadiantConstFlow.get
-        clg_coil = equip.heatingCoil
+        clg_coil = equip.coolingCoil
         if clg_coil.to_CoilCoolingLowTempRadiantConstFlow.is_initialized
           clg_coil = clg_coil.to_CoilCoolingLowTempRadiantConstFlow.get
           if clg_coil.coolingLowControlTemperatureSchedule.is_initialized
