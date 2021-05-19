@@ -318,15 +318,8 @@ class ECMS
         zone_vrf_unit.setRatedTotalHeatingCapacitySizingRatio(1.3)
         zone_vrf_unit.addToThermalZone(izone)
         outdoor_vrf_unit.addTerminal(zone_vrf_unit)
-        # VRF terminal unit does not have a backup coil, use a unit heater as backup coil
-        zone_unitheater_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on) # OS does not support an OnOff fan for unit heaters
-        zone_unitheater_fan.setName("#{izone.name} Unit Heater Fan")
-        zone_unitheater_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-        zone_unitheater_htg_coil.setName("#{izone.name} Unit Heater Htg Coil")
-        zone_unit_heater = OpenStudio::Model::ZoneHVACUnitHeater.new(model,always_on,zone_unitheater_fan,zone_unitheater_htg_coil)
-        zone_unit_heater.setName("#{izone.name} Unit Heater")
-        zone_unit_heater.setFanControlType("OnOff")
-        zone_unit_heater.addToThermalZone(izone)
+        # add electric baseboards
+        add_zone_baseboards(baseboard_type: 'Electric', hw_loop: nil, model: model, zone: izone)
       end
     end
     # Now we can find and apply maximum horizontal and vertical distances between outdoor vrf unit and zones with vrf terminal units
