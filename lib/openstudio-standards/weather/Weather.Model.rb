@@ -483,7 +483,7 @@ module BTAP
       CALCULATED_HUMIDITY_RATIO_AVG_DAILY = 104 # w averaged daily
       CALCULATED_HUMIDITY_RATIO_AVG_DAILY_DIFF_BASE = 105 # difference of w_averaged_daily from base if w_averaged_daily > base
 
-      # coefficients for the calculation of pws (saturation pressure of water vapour in the absence of air at the given dry-bulb temperature (kPa))
+      # coefficients for the calculation of pws (Reference: ASHRAE Handbook - Fundamentals > CHAPTER 1. PSYCHROMETRICS)
       C1 = -5.6745359E+03
       C2 = 6.3925247E+00
       C3 = -9.6778430E-03
@@ -829,7 +829,7 @@ module BTAP
 
       # This method calculates annual global horizontal irradiance (GHI)
       # @author sara.gilani@canada.ca
-      # TODO: Question: is IGA (annual global irradiance) of PHIUS the same as GHI?
+      # This value has been used as 'Irradiance, Global, Annual' (IGA) (kWh/m2.yr) for PHIUS performance targets calculation.
       def get_annual_ghi
         sum_hourly_ghi = 0.0
         scan if @filearray.nil?
@@ -845,9 +845,9 @@ module BTAP
 
       # This method calculates global horizontal irradiance on heating design day
       # @author sara.gilani@canada.ca
-      # TODO: Question: is heating design condition always on 21 of the relevant month?
-      # TODO: Question: is GLOBAL_HORIZONTAL_RADIATION the variable be used for IGHL (global irradiance at heating design condition) of PHIUS?
+      # This value has been used as 'Irradiance, Global, at the heating design condition' (IGHL) for PHIUS performance targets calculation.
       def get_ghi_on_heating_design_day
+        heating_design_day_number, cooling_design_day_number = get_heating_design_day_number
         column_month = MONTH
         column_day = DAY
         coldest_month = @heating_design_info[0].to_f
@@ -856,7 +856,7 @@ module BTAP
         scan if @filearray.nil?
         @filearray.each do |line|
           unless line.first =~ /\D(.*)/
-            if line[column_month].to_f == coldest_month && line[column_day].to_f == 21 && line[GLOBAL_HORIZONTAL_RADIATION].to_f > 0.0
+            if line[column_month].to_f == coldest_month && line[column_day].to_f == heating_design_day_number.to_f && line[GLOBAL_HORIZONTAL_RADIATION].to_f > 0.0
               sum_hourly_ghi_on_heating_design_day += line[GLOBAL_HORIZONTAL_RADIATION].to_f
               number_of_hours_with_sunshine += 1.0
             end
@@ -868,9 +868,9 @@ module BTAP
 
       # This method calculates global horizontal irradiance on cooling design day
       # @author sara.gilani@canada.ca
-      # TODO: Question: is cooling design condition always on 21 of the relevant month?
-      # TODO: Question: is GLOBAL_HORIZONTAL_RADIATION the variable be used for IGCL (global irradiance at cooling design condition) of PHIUS?
+      # This value has been used as 'Irradiance, Global, at the cooling design condition' (IGHL) for PHIUS performance targets calculation.
       def get_ghi_on_cooling_design_day
+        heating_design_day_number, cooling_design_day_number = get_heating_design_day_number
         column_month = MONTH
         column_day = DAY
         hottest_month = @cooling_design_info[0].to_f
@@ -879,7 +879,7 @@ module BTAP
         scan if @filearray.nil?
         @filearray.each do |line|
           unless line.first =~ /\D(.*)/
-            if line[column_month].to_f == hottest_month && line[column_day].to_f == 21 && line[GLOBAL_HORIZONTAL_RADIATION].to_f > 0.0
+            if line[column_month].to_f == hottest_month && line[column_day].to_f == cooling_design_day_number.to_f && line[GLOBAL_HORIZONTAL_RADIATION].to_f > 0.0
               sum_hourly_ghi_on_cooling_design_day += line[GLOBAL_HORIZONTAL_RADIATION].to_f
               number_of_hours_with_sunshine += 1.0
             end
@@ -889,9 +889,44 @@ module BTAP
         return ghi_on_cooling_design_day_w_per_m_sq
       end
 
+      # This method finds which day of the coldest/hottest month is the heating/cooling design day
+      # @author sara.gilani@canada.ca
+      def get_heating_design_day_number
+        heating_design_day_number = nil
+        cooling_design_day_number = nil
+        # which day of the coldest month is the heating design day
+        @ddy_file.getObjectsByType('OS:SizingPeriod:DesignDay'.to_IddObjectType).each do |d|
+          if d.name.to_s.include?('Htg 99.6% Condns DB')
+            idf_object = d.idfObject
+            idf_object.dataFields.each do |data_field|
+              design_day_field = idf_object.fieldComment(data_field, true)
+              if design_day_field.to_s.include?('Day of Month')
+                heating_design_day_number = idf_object.getString(data_field)
+                heating_design_day_number = heating_design_day_number.to_s
+                # puts "heating_design_day_number is #{heating_design_day_number}"
+              end
+            end
+          end
+
+          # which day of the hottest month is the cooling design day
+          if d.name.to_s.include?('Clg .4% Condns DB=>MWB')
+            idf_object = d.idfObject
+            idf_object.dataFields.each do |data_field|
+              design_day_field = idf_object.fieldComment(data_field, true)
+              if design_day_field.to_s.include?('Day of Month')
+                cooling_design_day_number = idf_object.getString(data_field)
+                cooling_design_day_number = cooling_design_day_number.to_s
+                # puts "cooling_design_day_number is #{cooling_design_day_number}"
+              end
+            end
+          end
+        end
+        return heating_design_day_number, cooling_design_day_number
+      end #def get_heating_design_day_number
+
       # This method calculates dehumidification degree days (DDD)
       # @author sara.gilani@canada.ca
-      # Reference: ASHRAE Handbook Online - Fundamentals > CHAPTER 1. PSYCHROMETRICS
+      # Reference: ASHRAE Handbook - Fundamentals > CHAPTER 1. PSYCHROMETRICS
       def calculate_humidity_ratio
         column_h = HOUR
         column_dbt = DRY_BULB_TEMPERATURE
