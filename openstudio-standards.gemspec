@@ -1,4 +1,3 @@
-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'openstudio-standards/version'
@@ -22,13 +21,17 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'minitest-reporters'
   spec.add_development_dependency 'minitest-parallel_fork'
   spec.add_development_dependency 'ruby-progressbar'
-  if RUBY_VERSION < "2.3"
+  if RUBY_VERSION < '2.3'
     spec.add_development_dependency 'parallel_tests', '<= 2.32.0'
     spec.add_development_dependency 'nokogiri', '<= 1.6.8.1'
     spec.add_development_dependency 'bundler', '~> 1.9'
-  else
+  elsif RUBY_VERSION < '2.7'
     spec.add_development_dependency 'parallel_tests', '~> 3.0.0'
     spec.add_development_dependency 'nokogiri', '<= 1.8.2'
+    spec.add_development_dependency 'bundler', '~> 2.1'
+  else
+    spec.add_development_dependency 'parallel_tests', '~> 3.0.0'
+    spec.add_development_dependency 'nokogiri', '<= 1.11.5'
     spec.add_development_dependency 'bundler', '~> 2.1'
   end
   spec.add_development_dependency 'rake', '~> 12.3.1'
@@ -36,7 +39,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop', '0.68.1'
   spec.add_development_dependency 'rubocop-checkstyle_formatter', '~> 0.1.1'
   spec.add_development_dependency 'minitest-ci', '<= 5.10.3'
-  spec.add_development_dependency 'rubyXL', '3.3.33' # install rubyXL gem to export excel files to json
+  spec.add_development_dependency 'rubyXL', '3.4.17' # install rubyXL gem to export excel files to json
   spec.add_development_dependency 'activesupport', '4.2.5' # pairs with google-api-client, > 5.0.0 does not work
   spec.add_development_dependency 'public_suffix', '3.0.3' # fixing version of google-api-client dependency
   spec.add_development_dependency 'faraday', '0.15.4' # fixing version of google-api-client dependency
