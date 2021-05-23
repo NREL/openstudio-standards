@@ -18,7 +18,7 @@ class NECB2011
     # hot water or electric reheat for each story of the building
     # Arguments:
     # "boiler_fueltype" choices match OS choices for boiler fuel type:
-    # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
+    # "NaturalGas","Electricity","PropaneGas","FuelOilNo1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
     # "heating_coil_type": "Electric" or "Hot Water"
     # "baseboard_type": "Electric" and "Hot Water"
     # "chiller_type": "Scroll";"Centrifugal";""Screw";"Reciprocating"
@@ -133,6 +133,18 @@ class NECB2011
                               baseboard_type: baseboard_type,
                               hw_loop: hw_loop)
         end
+        sys_name_pars = {}
+        sys_name_pars["sys_hr"] = "none"
+        sys_name_pars["sys_htg"] = heating_coil_type
+        sys_name_pars["sys_clg"] = "Chilled Water"
+        sys_name_pars["sys_sf"] = "vv"
+        sys_name_pars["zone_htg"] = baseboard_type
+        sys_name_pars["zone_clg"] = "none"
+        sys_name_pars["sys_rf"] = "vv"
+        assign_base_sys_name(air_loop,
+                             sys_abbr: "sys_6",
+                             sys_oa: "mixed",
+                             sys_name_pars: sys_name_pars)
       end
     end # next story
 
@@ -161,7 +173,7 @@ class NECB2011
     # hot water or electric reheat for each story of the building
     # Arguments:
     # "boiler_fueltype" choices match OS choices for boiler fuel type:
-    # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
+    # "NaturalGas","Electricity","PropaneGas","FuelOilNo1","FuelOilNo2","Coal","Diesel","Gasoline","OtherFuel1"
     # "heating_coil_type": "Electric" or "Hot Water"
     # "baseboard_type": "Electric" and "Hot Water"
     # "chiller_type": "Scroll";"Centrifugal";""Screw";"Reciprocating"

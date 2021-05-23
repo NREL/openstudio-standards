@@ -1,4 +1,3 @@
-
 class Standard
   # @!group SpaceType
 
@@ -6,7 +5,6 @@ class Standard
   #
   # @return [hash] hash of internal loads for different load types
   def space_type_get_standards_data(space_type)
-
     standards_building_type = if space_type.standardsBuildingType.is_initialized
                                 space_type.standardsBuildingType.get
                               end
@@ -84,6 +82,7 @@ class Standard
     if space_type.name.get.to_s.downcase.include?('plenum')
       return false
     end
+
     if space_type.standardsSpaceType.is_initialized
       if space_type.standardsSpaceType.get.downcase.include?('plenum')
         return false
@@ -94,7 +93,7 @@ class Standard
     space_type_properties = space_type_get_standards_data(space_type)
 
     # Need to add a check, or it'll crash on space_type_properties['occupancy_per_area'].to_f below
-    if space_type_properties.nil?
+    if space_type_properties.nil? || space_type_properties.empty?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} was not found in the standards data.")
       return false
     end
@@ -119,6 +118,7 @@ class Standard
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -211,6 +211,7 @@ class Standard
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -289,6 +290,7 @@ class Standard
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -331,6 +333,7 @@ class Standard
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -421,6 +424,7 @@ class Standard
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -495,48 +499,39 @@ class Standard
     # Lights
     if set_lights
 
-      apply_lighting_schedule(space_type, space_type_properties,default_sch_set)
+      apply_lighting_schedule(space_type, space_type_properties, default_sch_set)
 
     end
 
-
-
     # Electric Equipment
     if set_electric_equipment
-
       elec_equip_sch = space_type_properties['electric_equipment_schedule']
       unless elec_equip_sch.nil?
         default_sch_set.setElectricEquipmentSchedule(model_add_schedule(space_type.model, elec_equip_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set electric equipment schedule to #{elec_equip_sch}.")
       end
-
     end
 
     # Gas Equipment
     if set_gas_equipment
-
       gas_equip_sch = space_type_properties['gas_equipment_schedule']
       unless gas_equip_sch.nil?
         default_sch_set.setGasEquipmentSchedule(model_add_schedule(space_type.model, gas_equip_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set gas equipment schedule to #{gas_equip_sch}.")
       end
-
     end
 
     # Infiltration
     if set_infiltration
-
       infiltration_sch = space_type_properties['infiltration_schedule']
       unless infiltration_sch.nil?
         default_sch_set.setInfiltrationSchedule(model_add_schedule(space_type.model, infiltration_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration schedule to #{infiltration_sch}.")
       end
-
     end
 
     # Thermostat
     if make_thermostat
-
       thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(space_type.model)
       thermostat.setName("#{space_type.name} Thermostat")
 
@@ -551,20 +546,17 @@ class Standard
         thermostat.setCoolingSetpointTemperatureSchedule(model_add_schedule(space_type.model, cooling_setpoint_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set cooling setpoint schedule to #{cooling_setpoint_sch}.")
       end
-
     end
 
     return true
   end
 
-  def apply_lighting_schedule(space_type, space_type_properties,default_sch_set)
-
+  def apply_lighting_schedule(space_type, space_type_properties, default_sch_set)
     lighting_sch = space_type_properties['lighting_schedule']
     unless lighting_sch.nil?
       default_sch_set.setLightingSchedule(model_add_schedule(space_type.model, lighting_sch))
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set lighting schedule to #{lighting_sch}.")
     end
-
   end
 
   # Returns standards data for selected construction

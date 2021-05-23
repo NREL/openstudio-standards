@@ -2176,6 +2176,26 @@ module BTAP
     end
 
 
+    def self.rotate_building(model: , degrees: nil)
+
+      # report as not applicable if effective relative rotation is 0
+      if degrees == 0 || degrees.nil?
+        puts ('The requested rotation was 0 or nil degrees. The model was not rotated.')
+        return
+      end
+
+      # check the relative_building_rotation for reasonableness
+      degrees -= 360.0 * (degrees / 360.0).truncate if (degrees > 360) || (degrees < -360)
+
+      # reporting initial condition of model
+      building = model.getBuilding
+      # rotate the building
+      final_building_angle = building.setNorthAxis(building.northAxis + degrees)
+    end
+
+
+
+
     module BuildingStoreys
 
       #This method will delete any exisiting stories and then try to assign stories based on 
@@ -2716,6 +2736,33 @@ module BTAP
         return average_conductance
       end
 
+      #determine average conductance on set of surfaces or subsurfaces.
+      def self.get_weighted_average_surface_shgc(surfaces)
+        total_area = 0.0
+        temp = 0.0
+        surfaces.each do |surface|
+          temp = temp + BTAP::Geometry::Surfaces::get_surface_net_area(surface) * BTAP::Geometry::Surfaces::get_surface_construction_shgc(surface)
+          total_area = total_area + BTAP::Geometry::Surfaces::get_surface_net_area(surface)
+        end
+        ave_shgc = "NA"
+        ave_shgc = temp / total_area unless total_area == 0.0
+        return ave_shgc
+      end
+
+      #determine average conductance on set of surfaces or subsurfaces.
+      def self.get_weighted_average_surface_tvis(surfaces)
+        total_area = 0.0
+        temp = 0.0
+        surfaces.each do |surface|
+          temp = temp + BTAP::Geometry::Surfaces::get_surface_net_area(surface) * BTAP::Geometry::Surfaces::get_surface_construction_tvis(surface)
+          total_area = total_area + BTAP::Geometry::Surfaces::get_surface_net_area(surface)
+        end
+        ave_tvis = "NA"
+        ave_tvis = temp / total_area unless total_area == 0.0
+        return ave_tvis
+      end
+
+
       #get total exterior surface area of building.
       def self.get_total_ext_wall_area(model)
         outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces(), "Outdoors")
@@ -2791,6 +2838,23 @@ module BTAP
         #create a new construction with the requested RSI value based on the current construction.
         return BTAP::Resources::Envelope::Constructions::get_conductance(construction)
       end
+
+      #This method gets the shgc for a surface
+      def self.get_surface_construction_shgc(surface)
+        #a bit of acrobatics to get the construction object from the ConstrustionBase object's name.
+        construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get
+        #create a new construction with the requested RSI value based on the current construction.
+        return BTAP::Resources::Envelope::Constructions::get_shgc(surface.model,construction)
+      end
+
+      #This method gets the tvis for the surface
+      def self.get_surface_construction_tvis(surface)
+        #a bit of acrobatics to get the construction object from the ConstrustionBase object's name.
+        construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get
+        #create a new construction with the requested RSI value based on the current construction.
+        return BTAP::Resources::Envelope::Constructions::get_tvis(model,construction)
+      end
+
 
       def self.get_surface_net_area(surface)
         return surface.netArea()
@@ -3012,7 +3076,10 @@ module BTAP
             # Go through each line segment
             for j in 1..(surf_verts.length - 1)
               # Is the line segment to the left of the current (index i) line segment?  If no, then ignore it and go to the next one.
-              if surf_verts[j][:x] < surf_verts[i][:x] and surf_verts[j - 1][:x] < surf_verts[i - 1][:x]
+              # I revised this to check if the start or end of the current (index i) line segment is to the left of the
+              # line segment being checked.
+              #if surf_verts[j][:x] < surf_verts[i][:x] and surf_verts[j - 1][:x] < surf_verts[i - 1][:x]
+              if surf_verts[j][:x] < surf_verts[i][:x] || surf_verts[j - 1][:x] < surf_verts[i - 1][:x]
                 # Is the line segment pointing down?  If no, then ignore it and go to the next line segment.
                 if surf_verts[j][:y] < surf_verts[j - 1][:y]
                   # Do the y coordinates of the line segment overlap with the current (index i) line segment?  If no

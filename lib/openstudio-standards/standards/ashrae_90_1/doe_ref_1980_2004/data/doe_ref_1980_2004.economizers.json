@@ -5,6 +5,7 @@
       "climate_zone": "ASHRAE 169-2006-1A",
       "data_center": false,
       "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 65.0,
       "notes": "Same as 90.1-2004"
     },
     {
@@ -12,6 +13,7 @@
       "climate_zone": "ASHRAE 169-2006-1B",
       "data_center": false,
       "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
@@ -19,13 +21,15 @@
       "climate_zone": "ASHRAE 169-2006-2A",
       "data_center": false,
       "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 65.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2006-2B",
       "data_center": false,
-      "capacity_limit": 35000,
+      "capacity_limit": 35000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
@@ -33,20 +37,23 @@
       "climate_zone": "ASHRAE 169-2006-3A",
       "data_center": false,
       "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 65.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2006-3B",
       "data_center": false,
-      "capacity_limit": 65000,
+      "capacity_limit": 65000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2006-3C",
       "data_center": false,
-      "capacity_limit": 65000,
+      "capacity_limit": 65000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
@@ -54,83 +61,95 @@
       "climate_zone": "ASHRAE 169-2006-4A",
       "data_center": false,
       "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 65.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2006-4B",
       "data_center": false,
-      "capacity_limit": 65000,
+      "capacity_limit": 65000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2006-4C",
       "data_center": false,
-      "capacity_limit": 65000,
+      "capacity_limit": 65000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2006-5A",
       "data_center": false,
-      "capacity_limit": 35000,
+      "capacity_limit": 35000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 70.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2006-5B",
       "data_center": false,
-      "capacity_limit": 65000,
+      "capacity_limit": 65000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2006-5C",
       "data_center": false,
-      "capacity_limit": 65000,
+      "capacity_limit": 65000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2006-6A",
       "data_center": false,
-      "capacity_limit": 35000,
+      "capacity_limit": 35000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 70.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2006-6B",
       "data_center": false,
-      "capacity_limit": 65000,
+      "capacity_limit": 65000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2006-7A",
       "data_center": false,
-      "capacity_limit": 35000,
+      "capacity_limit": 35000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 70.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2006-7B",
       "data_center": false,
-      "capacity_limit": 35000,
+      "capacity_limit": 35000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2006-8A",
       "data_center": false,
-      "capacity_limit": 35000,
+      "capacity_limit": 35000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2006-8B",
       "data_center": false,
-      "capacity_limit": 35000,
+      "capacity_limit": 35000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
@@ -138,6 +157,7 @@
       "climate_zone": "ASHRAE 169-2013-1A",
       "data_center": false,
       "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 65.0,
       "notes": "Same as 90.1-2004"
     },
     {
@@ -145,6 +165,7 @@
       "climate_zone": "ASHRAE 169-2013-1B",
       "data_center": false,
       "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
@@ -152,13 +173,15 @@
       "climate_zone": "ASHRAE 169-2013-2A",
       "data_center": false,
       "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 65.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2013-2B",
       "data_center": false,
-      "capacity_limit": 35000,
+      "capacity_limit": 35000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
@@ -166,20 +189,23 @@
       "climate_zone": "ASHRAE 169-2013-3A",
       "data_center": false,
       "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 65.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2013-3B",
       "data_center": false,
-      "capacity_limit": 65000,
+      "capacity_limit": 65000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2013-3C",
       "data_center": false,
-      "capacity_limit": 65000,
+      "capacity_limit": 65000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
@@ -187,83 +213,95 @@
       "climate_zone": "ASHRAE 169-2013-4A",
       "data_center": false,
       "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 65.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2013-4B",
       "data_center": false,
-      "capacity_limit": 65000,
+      "capacity_limit": 65000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2013-4C",
       "data_center": false,
-      "capacity_limit": 65000,
+      "capacity_limit": 65000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2013-5A",
       "data_center": false,
-      "capacity_limit": 35000,
+      "capacity_limit": 35000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 70.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2013-5B",
       "data_center": false,
-      "capacity_limit": 65000,
+      "capacity_limit": 65000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2013-5C",
       "data_center": false,
-      "capacity_limit": 65000,
+      "capacity_limit": 65000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2013-6A",
       "data_center": false,
-      "capacity_limit": 35000,
+      "capacity_limit": 35000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 70.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2013-6B",
       "data_center": false,
-      "capacity_limit": 65000,
+      "capacity_limit": 65000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2013-7A",
       "data_center": false,
-      "capacity_limit": 35000,
+      "capacity_limit": 35000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 70.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2013-7B",
       "data_center": false,
-      "capacity_limit": 35000,
+      "capacity_limit": 35000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2013-8A",
       "data_center": false,
-      "capacity_limit": 35000,
+      "capacity_limit": 35000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
       "climate_zone": "ASHRAE 169-2013-8B",
       "data_center": false,
-      "capacity_limit": 35000,
+      "capacity_limit": 35000.0,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
       "notes": "Same as 90.1-2004"
     }
   ]

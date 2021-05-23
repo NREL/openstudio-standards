@@ -3,7 +3,8 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 
     # Add the main service water heating loop, if specified
-    unless prototype_input['main_water_heater_volume'].nil?
+    # for tall and super tall buildings, add main (multiple) and booster swh in model_custom_hvac_tweaks
+    unless prototype_input['main_water_heater_volume'].nil? || (building_type == 'TallBuilding' || building_type == 'SuperTallBuilding')
       # Get the thermal zone for the water heater, if specified
       water_heater_zone = nil
       if prototype_input['main_water_heater_space_name']
@@ -128,9 +129,9 @@ class Standard
         # Loop through spaces types and add service hot water if specified
         space_type_map.sort.each do |space_type_name, space_names|
           search_criteria = {
-              'template' => template,
-              'building_type' => model_get_lookup_name(building_type),
-              'space_type' => space_type_name
+            'template' => template,
+            'building_type' => model_get_lookup_name(building_type),
+            'space_type' => space_type_name
           }
           data = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
 
@@ -153,9 +154,9 @@ class Standard
                                end
 
             water_fixture = model_add_swh_end_uses_by_space(model,
-                                            main_swh_loop,
-                                            space,
-                                            space_multiplier)
+                                                            main_swh_loop,
+                                                            space,
+                                                            space_multiplier)
             unless water_fixture.nil?
               water_fixtures << water_fixture
             end
@@ -169,8 +170,8 @@ class Standard
     end
 
     # Add the booster water heater, if specified
-    unless prototype_input['booster_water_heater_volume'].nil?
-
+    # for tall and super tall buildings, add main (multiple) and booster swh in model_custom_hvac_tweaks
+    unless prototype_input['booster_water_heater_volume'].nil? || (building_type == 'TallBuilding' || building_type == 'SuperTallBuilding')
       # Add the booster water loop
       swh_booster_loop = model_add_swh_booster(model,
                                                main_swh_loop,
@@ -187,12 +188,11 @@ class Standard
                                      OpenStudio.convert(prototype_input['booster_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
                                      prototype_input['booster_service_water_flowrate_schedule'],
                                      OpenStudio.convert(prototype_input['booster_water_use_temperature'], 'F', 'C').get)
-
     end
 
     # Add the laundry water heater, if specified
-    unless prototype_input['laundry_water_heater_volume'].nil?
-
+    # for tall and super tall buildings, add laundry swh in model_custom_hvac_tweaks
+    unless prototype_input['laundry_water_heater_volume'].nil? || (building_type == 'TallBuilding' || building_type == 'SuperTallBuilding')
       # Add the laundry service water heating loop
       laundry_swh_loop = model_add_swh_loop(model,
                                             'Laundry Service Water Loop',
@@ -213,7 +213,6 @@ class Standard
                              prototype_input['laundry_service_water_flowrate_schedule'],
                              OpenStudio.convert(prototype_input['laundry_water_use_temperature'], 'F', 'C').get,
                              nil)
-
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')
@@ -246,6 +245,7 @@ class Standard
     model.getSpaceTypes.sort.each do |space_type|
       next unless space_type.standardsBuildingType.is_initialized
       next unless space_type_hash.key?(space_type) # this is used for space types without any floor area
+
       stds_bldg_type = space_type.standardsBuildingType.get
 
       # lookup space_type_properties
@@ -289,7 +289,7 @@ class Standard
         num_units = 1
         peak_flow_rate_gal_per_hr = peak_flow_rate_gal_per_hr_per_ft2 * floor_area_ft2
         peak_flow_rate_m3_per_s = OpenStudio.convert(peak_flow_rate_gal_per_hr, 'gal/hr', 'm^3/s').get
-        use_name = "#{space_type.name}"
+        use_name = space_type.name.to_s
       end
 
       # Split flow rate between main and booster uses if specified
@@ -301,11 +301,11 @@ class Standard
         # Add booster water heater equipment and connections
         booster_water_use_equip = model_add_swh_end_uses(model,
                                                          "Booster #{use_name}",
-                                                         loop=nil,
+                                                         loop = nil,
                                                          booster_peak_flow_rate_m3_per_s,
                                                          flow_rate_fraction_schedule.name.get,
                                                          booster_water_temperature_c,
-                                                         space_name=nil,
+                                                         space_name = nil,
                                                          frac_sensible: service_water_fraction_sensible,
                                                          frac_latent: service_water_fraction_latent)
       end
@@ -313,11 +313,11 @@ class Standard
       # Add water use equipment and connections
       water_use_equip = model_add_swh_end_uses(model,
                                                use_name,
-                                               swh_loop=nil,
+                                               swh_loop = nil,
                                                peak_flow_rate_m3_per_s,
                                                flow_rate_fraction_schedule.name.get,
                                                service_water_temperature_c,
-                                               space_name=nil,
+                                               space_name = nil,
                                                frac_sensible: service_water_fraction_sensible,
                                                frac_latent: service_water_fraction_latent)
 
@@ -352,19 +352,19 @@ class Standard
 
         # Add service water loop with water heater
         swh_loop = model_add_swh_loop(model,
-                                      system_name="#{space_type.name} Service Water Loop",
-                                      water_heater_thermal_zone=nil,
+                                      system_name = "#{space_type.name} Service Water Loop",
+                                      water_heater_thermal_zone = nil,
                                       service_water_temperature_c,
-                                      service_water_pump_head=0.01,
-                                      service_water_pump_motor_efficiency=1.0,
+                                      service_water_pump_head = 0.01,
+                                      service_water_pump_motor_efficiency = 1.0,
                                       water_heater_capacity_w,
                                       water_heater_volume_m3,
                                       water_heater_fuel,
-                                      parasitic_fuel_consumption_rate_w=0,
-                                      add_pipe_losses=true,
-                                      floor_area_served=OpenStudio.convert(950, 'ft^2', 'm^2').get,
-                                      number_of_stories=1,
-                                      pipe_insulation_thickness=OpenStudio.convert(pipe_insul_in, 'in', 'm').get,
+                                      parasitic_fuel_consumption_rate_w = 0,
+                                      add_pipe_losses = true,
+                                      floor_area_served = OpenStudio.convert(950, 'ft^2', 'm^2').get,
+                                      number_of_stories = 1,
+                                      pipe_insulation_thickness = OpenStudio.convert(pipe_insul_in, 'in', 'm').get,
                                       num_water_heaters)
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "In model_add_typical, num_water_heaters = #{num_water_heaters}")
         # Add loop to list
@@ -391,11 +391,11 @@ class Standard
           swh_booster_loop = model_add_swh_booster(model,
                                                    swh_loop,
                                                    booster_water_heater_sizing[:water_heater_capacity],
-                                                   water_heater_volume_m3=OpenStudio.convert(6, 'gal', 'm^3').get,
-                                                   water_heater_fuel='Electricity',
+                                                   water_heater_volume_m3 = OpenStudio.convert(6, 'gal', 'm^3').get,
+                                                   water_heater_fuel = 'Electricity',
                                                    booster_water_temperature_c,
-                                                   parasitic_fuel_consumption_rate_w=0.0,
-                                                   booster_water_heater_thermal_zone=nil)
+                                                   parasitic_fuel_consumption_rate_w = 0.0,
+                                                   booster_water_heater_thermal_zone = nil)
 
           # Rename the service water booster loop
           swh_booster_loop.setName("#{space_type.name} Service Water Booster Loop")
@@ -480,18 +480,18 @@ class Standard
       # Add a shared service water heating loop with water heater
       shared_swh_loop = model_add_swh_loop(model,
                                            "#{stds_bldg_type} Shared Service Water Loop",
-                                           water_heater_thermal_zone=nil,
+                                           water_heater_thermal_zone = nil,
                                            water_heater_temp_c,
                                            service_water_pump_head_pa,
                                            service_water_pump_motor_efficiency,
                                            water_heater_capacity_w,
                                            water_heater_volume_m3,
                                            water_heater_fuel,
-                                           parasitic_fuel_consumption_rate_w=0,
-                                           add_pipe_losses=true,
-                                           floor_area_served=bldg_type_floor_area_m2,
-                                           number_of_stories=num_stories,
-                                           pipe_insulation_thickness=OpenStudio.convert(pipe_insul_in, 'in', 'm').get)
+                                           parasitic_fuel_consumption_rate_w = 0,
+                                           add_pipe_losses = true,
+                                           floor_area_served = bldg_type_floor_area_m2,
+                                           number_of_stories = num_stories,
+                                           pipe_insulation_thickness = OpenStudio.convert(pipe_insul_in, 'in', 'm').get)
 
       # Attach all water use equipment to the shared loop
       water_use_equipment_array.sort.each do |water_use_equip|
@@ -533,6 +533,7 @@ class Standard
     water_use_equipment_array.sort.each do |water_use_equip|
       water_use_equip_sch = water_use_equip.flowRateFractionSchedule
       next if water_use_equip_sch.empty?
+
       water_use_equip_sch = water_use_equip_sch.get
       if water_use_equip_sch.to_ScheduleRuleset.is_initialized
         water_use_equip_sch = water_use_equip_sch.to_ScheduleRuleset.get

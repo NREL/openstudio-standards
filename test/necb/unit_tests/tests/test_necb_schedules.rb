@@ -4,9 +4,9 @@ require_relative '../../../helpers/minitest_helper'
 
 # This class will perform tests that are Spacetype dependant, Test model will be created
 # to specifically test aspects of the NECB2011 code that are Spacetype dependant. 
-class NECB2011ScheduleTests < Minitest::Test
+class NECB_Schedules_Tests < Minitest::Test
   #Standards
-  Templates = ['NECB2011', 'NECB2015']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
+  Templates = ['NECB2011', 'NECB2015', 'BTAPPRE1980']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
 
   def setup()
     @file_folder = __dir__
@@ -46,7 +46,7 @@ class NECB2011ScheduleTests < Minitest::Test
         st.setStandardsSpaceType(space_type_properties['space_type'])
         st.setName("#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}")
         standard.space_type_apply_rendering_color(st)
-        standard.model_add_loads(@model)
+        standard.model_add_loads(@model, 'NECB_Default', 1.0)
   
         #Set all spaces to spacetype
         @model.getSpaces.each do |space|

@@ -5,9 +5,9 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # This class will perform tests to ensure that the centroid of the highest ceiling is being found and that the overall
 # centroid of ceilings of spaces in a thermal zone in story is properly found.  It uses the Ceilingtest.osm which is
 # a modified version of the initial HighriseApartement.osm geometry file.
-class NECBCeilingCentroidTest < Minitest::Test
+class NECB_Ceiling_Centroid_Test < Minitest::Test
   #Standards
-  Templates = ['NECB2011', 'NECB2015', 'NECB2017']
+  Templates = ['NECB2011', 'NECB2015', 'NECB2017', 'BTAPPRE1980']
   Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw']
 
   def setup()

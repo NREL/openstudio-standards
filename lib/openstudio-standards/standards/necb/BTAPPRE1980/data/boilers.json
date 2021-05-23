@@ -1,0 +1,123 @@
+{
+  "tables": {
+    "boilers": {
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          
+          "fluid_type": "Hot Water",
+          "fuel_type": "Gas",
+          "condensing": null,
+          "condensing_control": null,
+          "minimum_capacity": "-",
+          "maximum_capacity": 299999.0,
+          "start_date": "9/9/1919",
+          "end_date": "2999-09-09T00:00:00+00:00",
+          "minimum_annual_fuel_utilization_efficiency": null,
+          "minimum_thermal_efficiency": 0.80,
+          "minimum_combustion_efficiency": null,
+          "efffplr": "BOILER-EFFFPLR-NECB2011",
+          "notes": "From MNECB Supplement 5.4.7.4.4"
+        },
+        {
+          
+          "fluid_type": "Hot Water",
+          "fuel_type": "Gas",
+          "condensing": null,
+          "condensing_control": null,
+          "minimum_capacity": 300000.0,
+          "maximum_capacity": 2499999.0,
+          "start_date": "9/9/1919",
+          "end_date": "2999-09-09T00:00:00+00:00",
+          "minimum_annual_fuel_utilization_efficiency": null,
+          "minimum_thermal_efficiency": 0.80,
+          "minimum_combustion_efficiency": null,
+          "efffplr": "BOILER-EFFFPLR-NECB2011",
+          "notes": "From MNECB Supplement 5.4.7.4.4"
+        },
+        {
+          
+          "fluid_type": "Hot Water",
+          "fuel_type": "Gas",
+          "condensing": null,
+          "condensing_control": null,
+          "minimum_capacity": 2500000.0,
+          "maximum_capacity": "9.999999999E9",
+          "start_date": "9/9/1919",
+          "end_date": "2999-09-09T00:00:00+00:00",
+          "minimum_annual_fuel_utilization_efficiency": null,
+          "minimum_thermal_efficiency": 0.80,
+          "minimum_combustion_efficiency": null,
+          "efffplr": "BOILER-EFFFPLR-NECB2011",
+          "notes": "From MNECB Supplement 5.4.7.4.4"
+        },
+        {
+          
+          "fluid_type": "Hot Water",
+          "fuel_type": "Electric",
+          "condensing": null,
+          "condensing_control": null,
+          "minimum_capacity": 0.0,
+          "maximum_capacity": "9.999999999E9",
+          "start_date": "9/9/1919",
+          "end_date": "2999-09-09T00:00:00+00:00",
+          "minimum_annual_fuel_utilization_efficiency": null,
+          "minimum_thermal_efficiency": 1.0,
+          "minimum_combustion_efficiency": null,
+          "efffplr": "BOILER-EFFFPLR-NECB2011",
+          "notes": "From NECB 2011"
+        },
+        {
+          
+          "fluid_type": "Hot Water",
+          "fuel_type": "Oil",
+          "condensing": null,
+          "condensing_control": null,
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 299999.0,
+          "start_date": "9/9/1919",
+          "end_date": "2999-09-09T00:00:00+00:00",
+          "minimum_annual_fuel_utilization_efficiency": null,
+          "minimum_thermal_efficiency": 0.8,
+          "minimum_combustion_efficiency": null,
+          "efffplr": "BOILER-EFFFPLR-NECB2011",
+          "notes": "From MNECB Supplement 5.4.7.4.4"
+        },
+        {
+          
+          "fluid_type": "Hot Water",
+          "fuel_type": "Oil",
+          "condensing": null,
+          "condensing_control": null,
+          "minimum_capacity": 300000.0,
+          "maximum_capacity": 2499999.0,
+          "start_date": "9/9/1919",
+          "end_date": "2999-09-09T00:00:00+00:00",
+          "minimum_annual_fuel_utilization_efficiency": null,
+          "minimum_thermal_efficiency": 0.80,
+          "minimum_combustion_efficiency": null,
+          "efffplr": "BOILER-EFFFPLR-NECB2011",
+          "notes": "From NECB 2011"
+        },
+        {
+          
+          "fluid_type": "Hot Water",
+          "fuel_type": "Oil",
+          "condensing": null,
+          "condensing_control": null,
+          "minimum_capacity": 2500000.0,
+          "maximum_capacity": "9.999999999E9",
+          "start_date": "9/9/1919",
+          "end_date": "2999-09-09T00:00:00+00:00",
+          "minimum_annual_fuel_utilization_efficiency": null,
+          "minimum_thermal_efficiency": 0.80,
+          "minimum_combustion_efficiency": null,
+          "efffplr": "BOILER-EFFFPLR-NECB2011",
+          "notes": "From NECB 2011"
+        }
+      ]
+    }
+  }
+}

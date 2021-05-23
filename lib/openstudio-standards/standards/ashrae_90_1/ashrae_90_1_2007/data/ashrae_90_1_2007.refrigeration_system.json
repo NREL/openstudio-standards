@@ -20,7 +20,7 @@
       "template": "90.1-2007",
       "building_type": "FullServiceRestaurant",
       "size_category": "Any",
-      "system_type": "Medium temperature",
+      "system_type": "Medium Temperature",
       "refrigerant": "R404a",
       "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
     },
@@ -36,7 +36,7 @@
       "template": "90.1-2007",
       "building_type": "Hospital",
       "size_category": "Any",
-      "system_type": "Medium temperature",
+      "system_type": "Medium Temperature",
       "refrigerant": "R404a",
       "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
     },
@@ -52,7 +52,7 @@
       "template": "90.1-2007",
       "building_type": "LargeHotel",
       "size_category": "Any",
-      "system_type": "Medium temperature",
+      "system_type": "Medium Temperature",
       "refrigerant": "R404a",
       "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
     },
@@ -68,7 +68,7 @@
       "template": "90.1-2007",
       "building_type": "PrimarySchool",
       "size_category": "Any",
-      "system_type": "Medium temperature",
+      "system_type": "Medium Temperature",
       "refrigerant": "R404a",
       "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
     },
@@ -84,7 +84,7 @@
       "template": "90.1-2007",
       "building_type": "QuickServiceRestaurant",
       "size_category": "Any",
-      "system_type": "Medium temperature",
+      "system_type": "Medium Temperature",
       "refrigerant": "R404a",
       "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
     },
@@ -100,7 +100,7 @@
       "template": "90.1-2007",
       "building_type": "SecondarySchool",
       "size_category": "Any",
-      "system_type": "Medium temperature",
+      "system_type": "Medium Temperature",
       "refrigerant": "R404a",
       "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
     },

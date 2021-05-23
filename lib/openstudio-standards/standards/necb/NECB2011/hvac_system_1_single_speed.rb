@@ -6,7 +6,30 @@ class NECB2011
                                             mau_heating_coil_type:,
                                             baseboard_type:,
                                             hw_loop:,
-                                            multi_speed: false)
+                                            multispeed: false)
+    if multispeed
+      add_sys1_unitary_ac_baseboard_heating_multi_speed(model: model,
+                                                        zones: zones,
+                                                        mau_type: mau_type,
+                                                        mau_heating_coil_type: mau_heating_coil_type,
+                                                        baseboard_type: baseboard_type,
+                                                        hw_loop: hw_loop)
+    else
+      add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
+                                                         zones: zones,
+                                                         mau_type: mau_type,
+                                                         mau_heating_coil_type: mau_heating_coil_type,
+                                                         baseboard_type: baseboard_type,
+                                                         hw_loop: hw_loop)
+    end
+  end
+
+  def add_sys1_unitary_ac_baseboard_heating_single_speed(model:,
+                                            zones:,
+                                            mau_type:,
+                                            mau_heating_coil_type:,
+                                            baseboard_type:,
+                                            hw_loop:)
 
     # Keep all data and assumptions for both systems on the top here for easy reference.
     system_data = Hash.new
@@ -50,7 +73,7 @@ class NECB2011
     # MAU heating coil: hot water coil or electric, depending on argument mau_heating_coil_type
     # mau_heating_coil_type choices are "Hot Water", "Electric"
     # boiler_fueltype choices match OS choices for Boiler component fuel type, i.e.
-    # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
+    # "NaturalGas","Electricity","PropaneGas","FuelOilNo1","FuelOilNo2","Coal","Diesel","Gasoline","OtherFuel1"
 
     # Some system parameters are set after system is set up; by applying method 'apply_hvac_efficiency_standard'
 
@@ -60,6 +83,7 @@ class NECB2011
 
     # Create MAU
     # TO DO: MAU sizing, characteristics (fan operation schedules, temperature setpoints, outdoor air, etc)
+
 
     if mau_type == true
       mau_air_loop = common_air_loop(model: model, system_data: system_data)
@@ -76,6 +100,7 @@ class NECB2011
 
       # Set up Single Speed DX coil with
       mau_clg_coil = self.add_onespeed_DX_coil(model, always_on)
+      mau_clg_coil.setName("CoilCoolingDXSingleSpeed_dx")
 
       # Set up OA system
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -98,7 +123,6 @@ class NECB2011
       setpoint_mgr = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
       setpoint_mgr.addToNode(mau_air_loop.supplyOutletNode)
     end
-
 
     zones.each do |zone|
       # Zone sizing temperature
@@ -135,6 +159,21 @@ class NECB2011
         mau_air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
       end # components for MAU
     end # of zone loop
+    if mau_type
+      sys_name_pars = {}
+      sys_name_pars["sys_hr"] = "none"
+      sys_name_pars["sys_clg"] = "dx"
+      sys_name_pars["sys_htg"] = mau_heating_coil_type
+      sys_name_pars["sys_sf"] = "cv"
+      sys_name_pars["zone_htg"] = baseboard_type
+      sys_name_pars["zone_clg"] = "ptac"
+      sys_name_pars["sys_rf"] = "none"
+      assign_base_sys_name(mau_air_loop,
+                         sys_abbr: "sys_1",
+                         sys_oa: "doas",
+                         sys_name_pars: sys_name_pars)
+    end
+
     return true
   end
 end

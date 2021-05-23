@@ -62,6 +62,14 @@ class NECB2011
           Units='#{unit}'
 "
           column_name = "#{col}".gsub(/\s+/, "_").downcase
+          # If the column name is "additional_fuel" and the file contains a boiler with a FuelOilNo2 fuel type assume
+          # the column name should be "fueloilno2".
+          if column_name.include? "additional_fuel"
+            model.getPlantLoops.sort.each do |iplantloop|
+              boilers = iplantloop.components.select {|icomponent| icomponent.to_BoilerHotWater.is_initialized}
+              column_name = "fueloilno2" unless boilers.select {|boiler| boiler.to_BoilerHotWater.get.fuelType.to_s == "FuelOilNo2"}.empty?
+            end
+          end
           column_name = column_name + "_#{unit}" if unit != ''
           value = model.sqlFile.get.execAndReturnFirstString(query)
           next if value.empty? || value.get.nil?
@@ -226,7 +234,6 @@ class NECB2011
     qaqc[:os_standards_version] = OpenstudioStandards::VERSION
     qaqc[:openstudio_version] = os_version.strip
     qaqc[:energyplus_version] = eplus_version.strip
-    qaqc[:date] = Time.now
     # Store Building data.
     qaqc[:building] = {}
     qaqc[:building][:name] = model.building.get.name.get
@@ -244,7 +251,7 @@ class NECB2011
     qaqc[:building][:standards_number_of_above_ground_stories] = nil
     qaqc[:building][:standards_number_of_above_ground_stories] = model.building.get.standardsNumberOfAboveGroundStories.get unless model.building.get.standardsNumberOfAboveGroundStories().empty?
     qaqc[:building][:standards_number_of_living_units] = nil
-    qaqc[:building][:standards_number_of_living_units] = model.building.get.standardsNumberOfLivingUnits ().get unless model.building.get.standardsNumberOfLivingUnits().empty?
+    qaqc[:building][:standards_number_of_living_units] = model.building.get.standardsNumberOfLivingUnits().get unless model.building.get.standardsNumberOfLivingUnits().empty?
     qaqc[:building][:nominal_floor_to_ceiling_height] = nil
     qaqc[:building][:nominal_floor_to_ceiling_height] = model.building.get.nominalFloortoCeilingHeight.get unless model.building.get.nominalFloortoCeilingHeight().empty?
     qaqc[:building][:nominal_floor_to_floor_height] = nil
@@ -256,7 +263,7 @@ class NECB2011
     qaqc[:geography] ={}
     qaqc[:geography][:hdd] = get_necb_hdd18(model)
     qaqc[:geography][:cdd] = BTAP::Environment::WeatherFile.new(model.getWeatherFile.path.get.to_s).cdd18
-    qaqc[:geography][:climate_zone] = BTAP::Compliance::NECB2011::get_climate_zone_name(qaqc[:geography][:hdd])
+    qaqc[:geography][:climate_zone] = NECB2011.new().get_climate_zone_name(qaqc[:geography][:hdd])
     qaqc[:geography][:city] = model.getWeatherFile.city
     qaqc[:geography][:state_province_region] = model.getWeatherFile.stateProvinceRegion
     qaqc[:geography][:country] = model.getWeatherFile.country
@@ -287,12 +294,12 @@ class NECB2011
     building_type = 'Commercial'
     province = provinces_names_map[qaqc[:geography][:state_province_region]]
     neb_fuel_list = ['Electricity', 'Natural Gas', "Oil"]
-    neb_eplus_fuel_map = {'Electricity' => 'Electricity', 'Natural Gas' => 'Gas', 'Oil' => "FuelOil#2"}
+    neb_eplus_fuel_map = {'Electricity' => 'Electricity', 'Natural Gas' => 'Gas', 'Oil' => "FuelOilNo2"}
     qaqc[:economics][:total_neb_cost] = 0.0
     qaqc[:economics][:total_neb_cost_per_m2] = 0.0
     neb_eplus_fuel_map.each do |neb_fuel, ep_fuel|
       row = look_up_csv_data(neb_prices_csv_file_name, {0 => building_type, 1 => province, 2 => neb_fuel})
-      neb_fuel_cost = row['2018']
+      neb_fuel_cost = row['2020']
       fuel_consumption_gj = 0.0
       if neb_fuel == 'Electricity' || neb_fuel == 'Natural Gas'
         if model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM tabulardatawithstrings WHERE ReportName='EnergyMeters' AND ReportForString='Entire Facility' AND
@@ -731,7 +738,7 @@ class NECB2011
         vbz = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName='Zone Ventilation Parameters' AND ColumnName='Breathing Zone Outdoor Airflow - Vbz' AND Units='m3/s' AND RowName='#{zone.name.get.to_s.upcase}' ")
         vbz = validate_optional(vbz, model, 0)
         air_loop_info[:total_breathing_zone_outdoor_airflow_vbz] += vbz
-        air_loop_info[:total_floor_area_served] += zone.floorArea
+        air_loop_info[:total_floor_area_served] += zone.floorArea*zone.multiplier.to_f
       end
       air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName='System Ventilation Parameters' AND ColumnName='Area Outdoor Air Rate - Ra' AND Units='m3/s-m2' AND RowName='#{air_loop_info[:name].to_s.upcase}' ")
       air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] = validate_optional(air_loop_info[:area_outdoor_air_rate_m3_per_s_m2], model, -1.0)
@@ -1250,7 +1257,7 @@ class NECB2011
     # puts JSON.pretty_generate @qaqc_data
     # Exterior Opaque
     necb_section_name = get_qaqc_table(table_name: "exterior_opaque_compliance")['refs'].join(",")
-    climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    climate_index = NECB2011.new().get_climate_zone_index(qaqc[:geography][:hdd])
     puts "HDD #{qaqc[:geography][:hdd]}"
     tolerance = 3
     # puts "\n\n"
@@ -1302,7 +1309,7 @@ class NECB2011
   def necb_exterior_fenestration_compliance(qaqc)
     #Exterior Fenestration
     necb_section_name = get_qaqc_table(table_name: "exterior_fenestration_compliance")['refs'].join(",")
-    climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    climate_index = NECB2011.new().get_climate_zone_index(qaqc[:geography][:hdd])
     tolerance = 3
     # puts "\n\n"
     # puts "climate_index: #{climate_index}"
@@ -1359,7 +1366,7 @@ class NECB2011
   def necb_exterior_ground_surfaces_compliance(qaqc)
     #Exterior Ground surfaces
     necb_section_name = get_qaqc_table(table_name: "exterior_ground_surfaces_compliance")['refs'].join(",")
-    climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    climate_index = NECB2011.new().get_climate_zone_index(qaqc[:geography][:hdd])
     tolerance = 3
     # puts "\n\n"
     # puts "climate_index: #{climate_index}"

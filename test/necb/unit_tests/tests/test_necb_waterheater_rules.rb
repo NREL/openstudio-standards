@@ -2,7 +2,7 @@ require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
 
 
-class NECB_SHW_Tests < MiniTest::Test
+class NECB_SHW_Additional_Tests < MiniTest::Test
   # set to true to run the standards in the test.
   PERFORM_STANDARDS = true
   # set to true to run the simulations.
@@ -69,7 +69,8 @@ class NECB_SHW_Tests < MiniTest::Test
                                                                                                 zones: model.getThermalZones,
                                                                                                 heating_coil_type: heating_coil_type,
                                                                                                 baseboard_type: baseboard_type,
-                                                                                                hw_loop: hw_loop)
+                                                                                                hw_loop: hw_loop,
+                                                                                                new_auto_zoner: false)
     # run the standards
     result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
     # Save the model
@@ -143,7 +144,8 @@ class NECB_SHW_Tests < MiniTest::Test
                                                                                                     zones: model.getThermalZones,
                                                                                                     heating_coil_type: heating_coil_type,
                                                                                                     baseboard_type: baseboard_type,
-                                                                                                    hw_loop: hw_loop)
+                                                                                                    hw_loop: hw_loop,
+                                                                                                    new_auto_zoner: false)
         # set volume and capacity of water tank
         shw_units = model.getWaterHeaterMixeds
         shw_units[0].setHeaterMaximumCapacity(1000.0*icap)

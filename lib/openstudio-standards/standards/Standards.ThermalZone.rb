@@ -1,9 +1,8 @@
-
 class Standard
   # @!group ThermalZone
 
   # Calculates the zone outdoor airflow requirement (Voz)
-  # based on the inputs in the DesignSpecification:OutdoorAir obects
+  # based on the inputs in the DesignSpecification:OutdoorAir objects
   # in all spaces in the zone.
   #
   # @return [Double] the zone outdoor air flow rate
@@ -37,6 +36,7 @@ class Standard
 
       dsn_oa = space.designSpecificationOutdoorAir
       next if dsn_oa.empty?
+
       dsn_oa = dsn_oa.get
 
       # compute outdoor air rates in case we need them
@@ -102,8 +102,11 @@ class Standard
     # all design OA to per-area
     # unless the "Outdoor Air Method" is "Maximum"
     thermal_zone.spaces.each do |space|
+      # Find the design OA, which may be assigned at either the
+      # SpaceType or directly at the Space
       dsn_oa = space.designSpecificationOutdoorAir
       next if dsn_oa.empty?
+
       dsn_oa = dsn_oa.get
       next if dsn_oa.outdoorAirMethod == 'Maximum'
 
@@ -122,12 +125,35 @@ class Standard
       # Convert total to per-area
       tot_oa_per_area = tot_oa / floor_area
 
+      # Check if there is another design OA object that has already
+      # been converted from per-person to per-area that matches.
+      # If so, reuse that instead of creating a duplicate.
+      new_dsn_oa_name = "#{dsn_oa.name} to per-area"
+      if thermal_zone.model.getDesignSpecificationOutdoorAirByName(new_dsn_oa_name).is_initialized
+        new_dsn_oa = thermal_zone.model.getDesignSpecificationOutdoorAirByName(new_dsn_oa_name).get
+      else
+        new_dsn_oa = OpenStudio::Model::DesignSpecificationOutdoorAir.new(thermal_zone.model)
+        new_dsn_oa.setName(new_dsn_oa_name)
+      end
+
+      # Assign this new design OA to the space
+      space.setDesignSpecificationOutdoorAir(new_dsn_oa)
+
+      # Set the method
+      new_dsn_oa.setOutdoorAirMethod('Sum')
       # Set the per-area requirement
-      dsn_oa.setOutdoorAirFlowperFloorArea(tot_oa_per_area)
+      new_dsn_oa.setOutdoorAirFlowperFloorArea(tot_oa_per_area)
       # Zero-out the per-person, ACH, and flow requirements
-      dsn_oa.setOutdoorAirFlowperPerson(0.0)
-      dsn_oa.setOutdoorAirFlowAirChangesperHour(0.0)
-      dsn_oa.setOutdoorAirFlowRate(0.0)
+      new_dsn_oa.setOutdoorAirFlowperPerson(0.0)
+      new_dsn_oa.setOutdoorAirFlowAirChangesperHour(0.0)
+      new_dsn_oa.setOutdoorAirFlowRate(0.0)
+      # Copy the orignal OA schedule, if any
+      if dsn_oa.outdoorAirFlowRateFractionSchedule.is_initialized
+        oa_sch = dsn_oa.outdoorAirFlowRateFractionSchedule.get
+        new_dsn_oa.setOutdoorAirFlowRateFractionSchedule(oa_sch)
+      end
+
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}: Converted total ventilation requirements to per-area value.")
     end
 
     return true
@@ -200,10 +226,9 @@ class Standard
   # The goal is a dynamic threshold that calibrates each day.
   # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
   # @todo Speed up this method.  Bottleneck is ScheduleRule.getDaySchedules
-  def spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil, threshold_calc_method: "value")
-
+  def spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil, threshold_calc_method: 'value')
     annual_normalized_tol = nil
-    if threshold_calc_method == "normalized_annual_range"
+    if threshold_calc_method == 'normalized_annual_range'
       # run this method without threshold to get annual min and max
       temp_merged = spaces_get_occupancy_schedule(spaces)
       tem_min_max = schedule_ruleset_annual_min_max_value(temp_merged)
@@ -223,6 +248,7 @@ class Standard
             num_ppl_sch = num_ppl_sch.get
             num_ppl_sch = num_ppl_sch.to_ScheduleRuleset
             next if num_ppl_sch.empty? # Skip non-ruleset schedules
+
             num_ppl_sch = num_ppl_sch.get
             num_ppl = people.getNumberOfPeople(space.floorArea)
             if occ_schedules_num_occ[num_ppl_sch].nil?
@@ -241,6 +267,7 @@ class Standard
           num_ppl_sch = num_ppl_sch.get
           num_ppl_sch = num_ppl_sch.to_ScheduleRuleset
           next if num_ppl_sch.empty? # Skip non-ruleset schedules
+
           num_ppl_sch = num_ppl_sch.get
           num_ppl = people.getNumberOfPeople(space.floorArea)
           if occ_schedules_num_occ[num_ppl_sch].nil?
@@ -276,6 +303,7 @@ class Standard
       day_schedules.uniq.each do |day_sch|
         # Skip schedules that have been stored previously
         next unless day_schedule_times[day_sch].nil?
+
         # Store times
         times = []
         day_sch.times.each do |time|
@@ -295,13 +323,13 @@ class Standard
       # Get the unique time indices and corresponding day schedules
       day_sch_num_occ = {}
       occ_schedules_num_occ.each do |occ_sch, num_occ|
-        daily_sch = occ_schedules_day_schedules[occ_sch][i-1]
+        daily_sch = occ_schedules_day_schedules[occ_sch][i - 1]
         times_on_this_day += day_schedule_times[daily_sch]
         day_sch_num_occ[daily_sch] = num_occ
       end
 
       daily_normalized_tol = nil
-      if threshold_calc_method == "normalized_daily_range"
+      if threshold_calc_method == 'normalized_daily_range'
         # pre-process day to get daily min and max
         daily_spaces_occ_frac = []
         times_on_this_day.uniq.sort.each do |time|
@@ -332,19 +360,20 @@ class Standard
           tot_occ_at_time += occ_frac * num_occ
         end
 
-        # Total fraction for the spaces at each time
-        spaces_occ_frac = tot_occ_at_time / max_occ_in_spaces
+        # Total fraction for the spaces at each time,
+        # rounded to avoid decimal precision issues
+        spaces_occ_frac = (tot_occ_at_time / max_occ_in_spaces).round(3)
 
         # If occupied_percentage_threshold is specified, schedule values are boolean
         # Otherwise use the actual spaces_occ_frac
         if occupied_percentage_threshold.nil?
           occ_status = spaces_occ_frac
-        elsif threshold_calc_method == "normalized_annual_range"
+        elsif threshold_calc_method == 'normalized_annual_range'
           occ_status = 0 # unoccupied
           if spaces_occ_frac >= annual_normalized_tol
             occ_status = 1
           end
-        elsif threshold_calc_method == "normalized_daily_range"
+        elsif threshold_calc_method == 'normalized_daily_range'
           occ_status = 0 # unoccupied
           if spaces_occ_frac > daily_normalized_tol
             occ_status = 1
@@ -370,6 +399,7 @@ class Standard
       simple_daily_occs = []
       daily_values.each_with_index do |value, j|
         next if value == daily_values[j + 1]
+
         simple_daily_times << daily_times[j]
         simple_daily_os_times << daily_os_times[j]
         simple_daily_values << daily_values[j]
@@ -390,11 +420,11 @@ class Standard
     sch_ruleset.setName(sch_name.to_s)
     # add properties to schedule
     props = sch_ruleset.additionalProperties
-    props.setFeature("max_occ_in_spaces",max_occ_in_spaces)
-    props.setFeature("number_of_spaces_included",spaces.size)
+    props.setFeature('max_occ_in_spaces', max_occ_in_spaces)
+    props.setFeature('number_of_spaces_included', spaces.size)
     # nothing uses this but can make user be aware if this may be out of sync with current state of occupancy profiles
-    props.setFeature("date_parent_object_last_edited",Time.now.getgm.to_s)
-    props.setFeature("date_parent_object_created",Time.now.getgm.to_s)
+    props.setFeature('date_parent_object_last_edited', Time.now.getgm.to_s)
+    props.setFeature('date_parent_object_created', Time.now.getgm.to_s)
 
     # Default - All Occupied
     day_sch = sch_ruleset.defaultDaySchedule
@@ -423,6 +453,7 @@ class Standard
         # currently under inspection
         day = daily_data['day_of_week']
         next unless day == weekday
+
         date = daily_data['date']
         times = daily_data['times']
         values = daily_data['values']
@@ -445,6 +476,7 @@ class Standard
         daily_os_times.each_with_index do |time, t|
           value = values[t]
           next if value == values[t + 1] # Don't add breaks if same value
+
           day_sch.addValue(time, value)
         end
 
@@ -478,7 +510,7 @@ class Standard
     # todo - also merging non adjacent priority rules without getting rid of any rules between the two could create unexpected reults
     prior_rules = []
     sch_ruleset.scheduleRules.each do |rule|
-      if prior_rules.size == 0
+      if prior_rules.empty?
         prior_rules << rule
         next
       else
@@ -486,7 +518,7 @@ class Standard
         prior_rules.each do |prior_rule|
           # see if they are similar
           next if rules_combined
-          # todo - update to combine adjacent date ranges vs. just matching date ranges
+          # TODO: update to combine adjacent date ranges vs. just matching date ranges
           next if prior_rule.startDate.get != rule.startDate.get
           next if prior_rule.endDate.get != rule.endDate.get
           next if prior_rule.daySchedule.times.to_a != rule.daySchedule.times.to_a
@@ -501,7 +533,7 @@ class Standard
           if rule.applySaturday then prior_rule.setApplySaturday(true) && rules_combined = true end
           if rule.applySunday then prior_rule.setApplySunday(true) && rules_combined = true end
         end
-        if rules_combined then rule.remove else prior_rules << rule end
+        rules_combined ? rule.remove : prior_rules << rule
       end
     end
     # replace unused default profile with lowest priority rule
@@ -510,8 +542,10 @@ class Standard
     prior_rules.last.remove
     sch_ruleset.defaultDaySchedule.clearValues
     values.size.times do |i|
-      sch_ruleset.defaultDaySchedule.addValue(times[i],values[i])
+      sch_ruleset.defaultDaySchedule.addValue(times[i], values[i])
     end
+
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Created #{sch_ruleset.name} with #{schedule_ruleset_annual_equivalent_full_load_hrs(sch_ruleset)} annual EFLH.")
 
     return sch_ruleset
   end
@@ -531,6 +565,7 @@ class Standard
     thermal_zone.spaces.each do |space|
       # Ignore space if not part of total area
       next unless space.partofTotalFloorArea
+
       if space_residential?(space)
         res_area_m2 += space.floorArea
       else
@@ -562,15 +597,15 @@ class Standard
 
     # Get an array of the heating fuels
     # used by the zone.  Possible values are
-    # Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2,
+    # Electricity, NaturalGas, PropaneGas, FuelOilNo1, FuelOilNo2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
     htg_fuels = thermal_zone.heating_fuels
 
     if htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('PropaneGas') ||
-       htg_fuels.include?('FuelOil#1') ||
-       htg_fuels.include?('FuelOil#2') ||
+       htg_fuels.include?('FuelOilNo1') ||
+       htg_fuels.include?('FuelOilNo2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
        htg_fuels.include?('Gasoline') ||
@@ -602,8 +637,8 @@ class Standard
     htg_fuels = thermal_zone.heating_fuels
     if htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('PropaneGas') ||
-       htg_fuels.include?('FuelOil#1') ||
-       htg_fuels.include?('FuelOil#2') ||
+       htg_fuels.include?('FuelOilNo1') ||
+       htg_fuels.include?('FuelOilNo2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
        htg_fuels.include?('Gasoline') ||
@@ -664,7 +699,7 @@ class Standard
 
     # Get an array of the heating fuels
     # used by the zone.  Possible values are
-    # Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2,
+    # Electricity, NaturalGas, PropaneGas, FuelOilNo1, FuelOilNo2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
     htg_fuels = thermal_zone.heating_fuels
@@ -673,8 +708,8 @@ class Standard
     fossil = false
     if htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('PropaneGas') ||
-       htg_fuels.include?('FuelOil#1') ||
-       htg_fuels.include?('FuelOil#2') ||
+       htg_fuels.include?('FuelOilNo1') ||
+       htg_fuels.include?('FuelOilNo2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
        htg_fuels.include?('Gasoline')
@@ -721,6 +756,7 @@ class Standard
     spaces.each do |space|
       # If space is not part of floor area, we don't add it
       next unless space.partofTotalFloorArea
+
       area_m2 += space.floorArea
     end
 
@@ -748,6 +784,7 @@ class Standard
     thermal_zone.equipment.each do |equip|
       # Skip HVAC components
       next unless equip.to_HVACComponent.is_initialized
+
       equip = equip.to_HVACComponent.get
       if equip.airLoopHVAC.is_initialized
         has_air_loop = true
@@ -933,6 +970,7 @@ class Standard
       end
       # Move on if no heating schedule was found
       next if htg_sch.nil?
+
       # Get the setpoint from the schedule
       if htg_sch.to_ScheduleRuleset.is_initialized
         htg_sch = htg_sch.to_ScheduleRuleset.get
@@ -1047,7 +1085,7 @@ class Standard
       clg_sch = nil
       if equip.to_ZoneHVACLowTempRadiantConstFlow.is_initialized
         equip = equip.to_ZoneHVACLowTempRadiantConstFlow.get
-        clg_coil = equip.heatingCoil
+        clg_coil = equip.coolingCoil
         if clg_coil.to_CoilCoolingLowTempRadiantConstFlow.is_initialized
           clg_coil = clg_coil.to_CoilCoolingLowTempRadiantConstFlow.get
           if clg_coil.coolingLowControlTemperatureSchedule.is_initialized
@@ -1056,7 +1094,7 @@ class Standard
         end
       elsif equip.to_ZoneHVACLowTempRadiantVarFlow.is_initialized
         equip = equip.to_ZoneHVACLowTempRadiantVarFlow.get
-        clg_coil = equip.heatingCoil
+        clg_coil = equip.coolingCoil
         if clg_coil.to_CoilCoolingLowTempRadiantVarFlow.is_initialized
           clg_coil = clg_coil.to_CoilCoolingLowTempRadiantVarFlow.get
           if clg_coil.coolingControlTemperatureSchedule.is_initialized
@@ -1066,6 +1104,7 @@ class Standard
       end
       # Move on if no cooling schedule was found
       next if clg_sch.nil?
+
       # Get the setpoint from the schedule
       if clg_sch.to_ScheduleRuleset.is_initialized
         clg_sch = clg_sch.to_ScheduleRuleset.get
@@ -1524,12 +1563,12 @@ class Standard
   #
   # @return [String] the building type
   def thermal_zone_building_type(thermal_zone)
-
     # determine areas of each building type
     building_type_areas = {}
     thermal_zone.spaces.each do |space|
       # ignore space if not part of total area
       next unless space.partofTotalFloorArea
+
       if space.spaceType.is_initialized
         space_type = space.spaceType.get
         if space_type.standardsBuildingType.is_initialized
@@ -1547,7 +1586,7 @@ class Standard
     building_type = building_type_areas.key(building_type_areas.values.max)
 
     if building_type.nil?
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.ThermalZone", "Thermal zone #{thermal_zone.name} does not have standards building type.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ThermalZone', "Thermal zone #{thermal_zone.name} does not have standards building type.")
     end
 
     return building_type
@@ -1625,6 +1664,14 @@ class Standard
     end
 
     # If here, DCV is required
+    if min_area_m2 && min_area_m2_per_occ
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: DCV is required since the occupant density of #{occ_per_1000_ft2.round} people/1000 ft2 is above minimum occupant density of #{min_occ_per_1000_ft2.round} people/1000 ft2 and the area of #{area_served_ft2.round} ft2 is above the minimum size of #{min_area_ft2.round} ft2.")
+    elsif min_area_m2
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: DCV is required since the area of #{area_served_ft2.round} ft2 is above the minimum size of #{min_area_ft2.round} ft2.")
+    elsif min_area_m2_per_occ
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: DCV is required since the occupant density of #{occ_per_1000_ft2.round} people/1000 ft2 is above minimum occupant density of #{min_occ_per_1000_ft2.round} people/1000 ft2.")
+    end
+
     dcv_required = true
 
     return dcv_required
@@ -1658,12 +1705,14 @@ class Standard
     thermal_zone.spaces.each do |space|
       next unless space.spaceType.is_initialized
       next unless space.partofTotalFloorArea
+
       space_type = space.spaceType.get
       if space_type_hash.key?(space_type)
         space_type_hash[space_type] += space.floorArea # excluding space.multiplier since used to calc loads in zone
       else
         next unless space_type.standardsBuildingType.is_initialized
         next unless space_type.standardsSpaceType.is_initialized
+
         space_type_hash[space_type] = space.floorArea # excluding space.multiplier since used to calc loads in zone
       end
     end
@@ -1683,6 +1732,7 @@ class Standard
       space_type_properties = space_type_get_standards_data(space_type)
       exhaust_per_area = space_type_properties['exhaust_per_area']
       next if exhaust_per_area.nil?
+
       maximum_flow_rate_ip = exhaust_per_area * floor_area_ip
       maximum_flow_rate_si = OpenStudio.convert(maximum_flow_rate_ip, 'cfm', 'm^3/s').get
       if space_type_properties['exhaust_availability_schedule'].nil?
@@ -1693,7 +1743,7 @@ class Standard
         exhaust_schedule = model_add_schedule(thermal_zone.model, sch_name)
         flow_sch_name = space_type_properties['exhaust_flow_fraction_schedule']
         exhaust_flow_schedule = model_add_schedule(thermal_zone.model, flow_sch_name)
-          unless exhaust_schedule
+        unless exhaust_schedule
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "Could not find an exhaust schedule called #{sch_name}, exhaust fans will run continuously.")
           exhaust_schedule = thermal_zone.model.alwaysOnDiscreteSchedule
         end
@@ -1769,6 +1819,7 @@ class Standard
         # skip if space is in current thermal zone.
         next unless space.thermalZone.is_initialized
         next if k.thermalZone.get == thermal_zone
+
         adjacent_zones << k.thermalZone.get
       end
     end

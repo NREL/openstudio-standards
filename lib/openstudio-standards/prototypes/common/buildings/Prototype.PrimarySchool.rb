@@ -1,10 +1,28 @@
-
 # Custom changes for the PrimarySchool prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
 module PrimarySchool
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific HVAC adjustments')
+
+    # add transformer
+    # efficiency based on a 113 kVA transformer
+    case template
+    when '90.1-2004', '90.1-2007'
+      transformer_efficiency = 0.969
+    when '90.1-2010', '90.1-2013'
+      transformer_efficiency = 0.982
+    when '90.1-2016', '90.1-2019'
+      transformer_efficiency = 0.987
+    else
+      transformer_efficiency = nil
+    end
+    return true unless !transformer_efficiency.nil?
+
+    model_add_transformer(model,
+                          wired_lighting_frac: 0.0119,
+                          transformer_size: 112500,
+                          transformer_efficiency: transformer_efficiency)
 
     #
     # add extra equipment for kitchen
@@ -22,14 +40,14 @@ module PrimarySchool
     elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
     elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         elec_equip_def1.setFractionLatent(0)
         elec_equip_def1.setFractionRadiant(0.25)
         elec_equip_def1.setFractionLost(0)
         elec_equip_def2.setFractionLatent(0)
         elec_equip_def2.setFractionRadiant(0.25)
         elec_equip_def2.setFractionLost(0)
-        if template == '90.1-2013'
+        if template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
           elec_equip_def1.setDesignLevel(915)
           elec_equip_def2.setDesignLevel(570)
         else
@@ -52,7 +70,7 @@ module PrimarySchool
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('Booster')
         water_heater.resetAmbientTemperatureSchedule
-        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen_ZN_1_FLR_1 ZN').get)
       end
     end
@@ -65,16 +83,37 @@ module PrimarySchool
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 0.0)
 
     return true
   end
 
   def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
-    min_damper_position = template == '90.1-2010' || template == '90.1-2013' ? 0.2 : 0.3
+    min_damper_position = template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019' ? 0.2 : 0.3
 
     # Set the minimum flow fraction
     air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)
 
     return true
+  end
+
+  # Type of SAT reset for this building type
+  #
+  # @param air_loop_hvac [OpenStudio::model::AirLoopHVAC] Airloop
+  # @return [String] Returns type of SAT reset
+  def air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
+    return 'oa'
+  end
+
+  # List transfer air target and source zones, and air flow (cfm)
+  #
+  # code_sections [90.1-2019_6.5.7.1], [90.1-2016_6.5.7.1]
+  # @return [Hash] target zones (key) and source zones (value) and air flow (value)
+  def model_transfer_air_target_and_source_zones(model)
+    model_transfer_air_target_and_source_zones_hash = {
+      'Bath_ZN_1_FLR_1 ZN' => ['Library_Media_Center_ZN_1_FLR_1 ZN', 600.0]
+    }
+    return model_transfer_air_target_and_source_zones_hash
   end
 end

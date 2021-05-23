@@ -1,4 +1,3 @@
-
 # Custom changes for the SmallHotel prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -49,6 +48,9 @@ module SmallHotel
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
+    # Guestroom vacancy controls
+    model_add_guestroom_vacancy_controls(model, 'SmallHotel')
+
     return true
   end
 
@@ -65,8 +67,26 @@ module SmallHotel
     elec_equip.setName('Elevator Coreflr1 Elevator Lights/Fans Equipment')
     elec_equip.setSpace(elevator_coreflr1)
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-        elec_equip.setSchedule(model_add_schedule(model, 'HotelSmall ELEV_LIGHT_FAN_SCH_ADD_DF'))
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
+        # add elevator lift motor (not found in small hotel)
+        elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+        elec_equip_def2.setName('Elevator CoreFlr1 Electric Equipment Definition2')
+        elec_equip_def2.setFractionLatent(0)
+        elec_equip_def2.setFractionRadiant(0.5)
+        elec_equip_def2.setFractionLost(0.0)
+        elec_equip_def2.setDesignLevel(32110)
+        elec_equip2 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def2)
+        elec_equip2.setName('Elevator Coreflr1 Elevator Equipment')
+        elec_equip2.setSpace(elevator_coreflr1)
+        elec_equip2.setSchedule(model_add_schedule(model, 'HotelSmall BLDG_ELEVATORS'))
+
+        case template
+        when '90.1-2004', '90.1-2007'
+          elec_equip.setSchedule(model_add_schedule(model, 'HotelSmall ELEV_LIGHT_FAN_SCH_24_7'))
+        when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
+          elec_equip.setSchedule(model_add_schedule(model, 'HotelSmall ELEV_LIGHT_FAN_SCH_ADD_DF'))
+        end
+
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         elec_equip.setSchedule(model_add_schedule(model, 'HotelSmall ELEV_LIGHT_FAN_SCH_ADD_DF'))
     end
@@ -75,9 +95,9 @@ module SmallHotel
 
   def update_waterheater_ambient_parameters(model)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
-	  if water_heater.name.to_s.include?('200gal')
+      if water_heater.name.to_s.include?('200gal')
         water_heater.resetAmbientTemperatureSchedule
-        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('LaundryRoomFlr1 ZN').get)
       end
     end
@@ -90,6 +110,8 @@ module SmallHotel
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 90.0)
 
     return true
   end

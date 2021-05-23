@@ -82,7 +82,7 @@ class ASHRAE9012013 < ASHRAE901
         req_pri_ctrl = false
         req_sec_ctrl = false
       # Strip mall
-      when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3', 'Strip mall - type 0A', 'Strip mall - type 0B'
+      when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3'
         req_pri_ctrl = false
         req_sec_ctrl = false
       # Residential apartments
@@ -120,6 +120,9 @@ class ASHRAE9012013 < ASHRAE901
     # Get the area of the space
     space_area_m2 = space.floorArea
 
+    # get the climate zone
+    climate_zone = model_standards_climate_zone(space.model)
+
     if req_top_ctrl && req_pri_ctrl && req_sec_ctrl
       # Sensor 1 controls toplighted area
       sensor_1_frac = areas['toplighted_area'] / space_area_m2
@@ -143,9 +146,25 @@ class ASHRAE9012013 < ASHRAE901
       # sorted_skylights[0] assigned to sensor_2_window so a second reference point is added for top daylighting
       sensor_2_window = sorted_skylights[0]
     elsif req_top_ctrl && !req_pri_ctrl && !req_sec_ctrl
-      # Sensor 1 controls toplighted area
-      sensor_1_frac = areas['toplighted_area'] / space_area_m2
-      sensor_1_window = sorted_skylights[0]
+      case climate_zone
+        when 'ASHRAE 169-2006-6A',
+             'ASHRAE 169-2006-6B',
+             'ASHRAE 169-2006-7A',
+             'ASHRAE 169-2006-8A',
+             'ASHRAE 169-2013-6A',
+             'ASHRAE 169-2013-6B',
+             'ASHRAE 169-2013-7A',
+             'ASHRAE 169-2013-8A'
+          # Sensor 1 controls toplighted area
+          sensor_1_frac = areas['toplighted_area'] / space_area_m2
+          sensor_1_window = sorted_skylights[0]
+        else
+          # Sensor 1 controls toplighted area
+          sensor_1_frac = areas['toplighted_area'] / space_area_m2
+          sensor_1_window = sorted_skylights[0]
+          sensor_2_frac = sensor_1_frac
+          sensor_2_window = sensor_1_window
+      end
     elsif !req_top_ctrl && req_pri_ctrl && !req_sec_ctrl
       # Sensor 1 controls primary area
       sensor_1_frac = areas['primary_sidelighted_area'] / space_area_m2

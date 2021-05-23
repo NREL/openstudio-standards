@@ -1,0 +1,109 @@
+[
+  {
+    "type": "VAV",
+    "name": "VAV_bot WITH REHEAT",
+    "return_plenum": "GroundFloor_Plenum",
+    "operation_schedule": "OfficeLarge HVACOperationSchd",
+    "oa_damper_schedule": "OfficeLarge MinOA_MotorizedDamper_Sched",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
+    "space_names": [
+      "Perimeter_bot_ZN_1",
+      "Perimeter_bot_ZN_2",
+      "Perimeter_bot_ZN_3",
+      "Perimeter_bot_ZN_4",
+      "Core_bottom"
+    ]
+  },
+  {
+    "type": "VAV",
+    "name": "VAV_mid WITH REHEAT",
+    "return_plenum": "MidFloor_Plenum",
+    "operation_schedule": "OfficeLarge HVACOperationSchd",
+    "oa_damper_schedule": "OfficeLarge MinOA_MotorizedDamper_Sched",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
+    "space_names": [
+      "Perimeter_mid_ZN_1",
+      "Perimeter_mid_ZN_2",
+      "Perimeter_mid_ZN_3",
+      "Perimeter_mid_ZN_4",
+      "Core_mid"
+    ]
+  },
+  {
+    "type": "VAV",
+    "name": "VAV_top WITH REHEAT",
+    "return_plenum": "TopFloor_Plenum",
+    "operation_schedule": "OfficeLarge HVACOperationSchd",
+    "oa_damper_schedule": "OfficeLarge MinOA_MotorizedDamper_Sched",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
+    "space_names": [
+      "Perimeter_top_ZN_1",
+      "Perimeter_top_ZN_2",
+      "Perimeter_top_ZN_3",
+      "Perimeter_top_ZN_4",
+      "Core_top"
+    ]
+  },
+  {
+    "type": "CAV",
+    "name": "CAV_bas",
+    "operation_schedule": "OfficeLarge HVACOperationSchd",
+    "oa_damper_schedule": "OfficeLarge MinOA_MotorizedDamper_Sched",
+    "chilled_water_design_supply_water_temperature_delta": 15.0,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
+    "space_names": [
+      "Basement"
+    ]
+  },
+  {
+    "type": "DC",
+    "load": 484.423246742185,
+    "main_data_center": null,
+    "flow_fraction_schedule": null,
+    "space_names": [
+      "DataCenter_basement_ZN_6"
+    ]
+  },
+  {
+    "type": "DC",
+    "load": 215.299220774304,
+    "main_data_center": null,
+    "flow_fraction_schedule": null,
+    "space_names": [
+      "DataCenter_bot_ZN_6"
+    ]
+  },
+  {
+    "type": "DC",
+    "load": 215.299220774304,
+    "main_data_center": null,
+    "flow_fraction_schedule": null,
+    "space_names": [
+      "DataCenter_mid_ZN_6"
+    ]
+  },
+  {
+    "type": "DC",
+    "load": 215.299220774304,
+    "main_data_center": null,
+    "flow_fraction_schedule": null,
+    "space_names": [
+      "DataCenter_top_ZN_6"
+    ]
+  }
+]

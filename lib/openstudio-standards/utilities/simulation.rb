@@ -25,6 +25,7 @@ Standard.class_eval do
     if epw_path.empty?
       return false
     end
+
     epw_path = epw_path.get
 
     # close current sql file
@@ -84,7 +85,7 @@ Standard.class_eval do
       epw_name = 'in.epw'
       begin
         FileUtils.copy(epw_path.to_s, "#{run_dir}/#{epw_name}")
-      rescue
+      rescue StandardError
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Due to limitations on Windows file path lengths, this measure won't work unless your project is located in a directory whose filepath is less than 90 characters long, including slashes.")
         return false
       end
@@ -95,7 +96,7 @@ Standard.class_eval do
 
       cli_path = OpenStudio.getOpenStudioCLI
       cmd = "\"#{cli_path}\" run -w \"#{osw_path}\""
-      #cmd = "\"#{cli_path}\" --verbose run -w \"#{osw_path}\""
+      # cmd = "\"#{cli_path}\" --verbose run -w \"#{osw_path}\""
       puts cmd
 
       # Run the sizing run
@@ -139,7 +140,7 @@ Standard.class_eval do
       end
     end
 
-    # Report severe errors in the run
+    # Report severe or fatal errors in the run
     error_query = "SELECT ErrorMessage
         FROM Errors
         WHERE ErrorType in(1,2)"
@@ -148,26 +149,16 @@ Standard.class_eval do
       errs = errs.get
     end
 
-    # Check that the run completed
-    completed_query = 'SELECT Completed FROM Simulations'
-    completed = model.sqlFile.get.execAndReturnFirstDouble(completed_query)
-    if completed.is_initialized
-      completed = completed.get
-      if completed.zero?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "The run did not finish and had following errors: #{errs.join('\n')}")
-        return false
-      end
+    # Check that the run completed successfully
+    end_file_stringpath = "#{run_dir}/run/eplusout.end"
+    end_file_path = OpenStudio::Path.new(end_file_stringpath)
+    if OpenStudio.exists(end_file_path)
+      endstring = File.read(end_file_stringpath)
     end
 
-    # Check that the run completed with no severe errors
-    completed_successfully_query = 'SELECT CompletedSuccessfully FROM Simulations'
-    completed_successfully = model.sqlFile.get.execAndReturnFirstDouble(completed_successfully_query)
-    if completed_successfully.is_initialized
-      completed_successfully = completed_successfully.get
-      if completed_successfully.zero?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "The run failed with the following severe or fatal errors: #{errs.join('\n')}")
-        return false
-      end
+    if !endstring.include?('EnergyPlus Completed Successfully')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "The run did not finish and had following errors: #{errs.join('\n')}")
+      return false
     end
 
     # Log any severe errors that did not cause simulation to fail
@@ -185,9 +176,14 @@ Standard.class_eval do
     sim_control = model.getSimulationControl
     sim_control.setRunSimulationforSizingPeriods(true)
     sim_control.setRunSimulationforWeatherFileRunPeriods(false)
+    if model.version >= OpenStudio::VersionString.new('3.0.0')
+      sim_control.setDoHVACSizingSimulationforSizingPeriods(true)
+      sim_control.setMaximumNumberofHVACSizingSimulationPasses(1)
+    end
 
     # check that all zones have surfaces.
     raise 'Error: Sizing Run Failed. Thermal Zones with no surfaces exist.' unless model_do_all_zones_have_surfaces?(model)
+
     # Run the sizing run
     success = model_run_simulation_and_log_errors(model, sizing_run_dir)
 

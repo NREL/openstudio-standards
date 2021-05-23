@@ -12,10 +12,10 @@
           "dependent_variable": "FIRRatio",
           "independent_variable_1": "QRatio",
           "independent_variable_2": null,
-          "coeff_1": 0.2901,
-          "coeff_2": 2.6664,
-          "coeff_3": -3.764,
-          "coeff_4": 1.82,
+          "coeff_1": 0.3831,
+          "coeff_2": 2.0567,
+          "coeff_3": -2.6469,
+          "coeff_4": 1.2148,
           "coeff_5": null,
           "coeff_6": null,
           "coeff_7": null,
@@ -28,7 +28,32 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-A (2) for non-condensing boiler.  Converted EIR curve to PLF via curve fit."
+        },
+        {
+          "name": "BOILER-EFFFPLR-COND-NECB2011",
+          "category": "Boiler",
+          "form": "Cubic",
+          "dependent_variable": "FIRRatio",
+          "independent_variable_1": "QRatio",
+          "independent_variable_2": null,
+          "coeff_1": 1.0186,
+          "coeff_2": 0.2426,
+          "coeff_3": -0.5059,
+          "coeff_4": 0.2465,
+          "coeff_5": null,
+          "coeff_6": null,
+          "coeff_7": null,
+          "coeff_8": null,
+          "coeff_9": null,
+          "coeff_10": null,
+          "minimum_independent_variable_1": 0.0,
+          "maximum_independent_variable_1": 1.0,
+          "minimum_independent_variable_2": null,
+          "maximum_independent_variable_2": null,
+          "minimum_dependent_variable_output": null,
+          "maximum_dependent_variable_output": null,
+          "notes": "From NECB 2011 Table 8.4.4.21.-A (2) for condensing boilers.  Converted EIR curve to PLF via curve fit."
         },
         {
           "name": "DXCOOL-NECB2011-REF-CAPFFLOW",
@@ -37,8 +62,8 @@
           "dependent_variable": "QRatio",
           "independent_variable_1": "FlowRatio",
           "independent_variable_2": null,
-          "coeff_1": 1.0,
-          "coeff_2": 0.0,
+          "coeff_1": 0.8,
+          "coeff_2": 0.2,
           "coeff_3": 0.0,
           "coeff_4": null,
           "coeff_5": null,
@@ -47,13 +72,13 @@
           "coeff_8": null,
           "coeff_9": null,
           "coeff_10": null,
-          "minimum_independent_variable_1": 0.0,
-          "maximum_independent_variable_1": 1.0,
+          "minimum_independent_variable_1": 0.5,
+          "maximum_independent_variable_1": 1.5,
           "minimum_independent_variable_2": null,
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "Not supplied by NECB 2011 but required for EnergyPlus.  Used default curve coefficients from OpenStudio 2.8.1 DX Single Speed Cooling Coil."
         },
         {
           "name": "DXCOOL-NECB2011-REF-CAPFT",
@@ -78,7 +103,7 @@
           "maximum_independent_variable_2": 46.0,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-B (2).  Converted coefficients for deg. F to deg. C."
         },
         {
           "name": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
@@ -87,9 +112,9 @@
           "dependent_variable": "EIRRatio",
           "independent_variable_1": "FlowRatio",
           "independent_variable_2": null,
-          "coeff_1": 1.0,
-          "coeff_2": 0.0,
-          "coeff_3": 0.0,
+          "coeff_1": 1.1552,
+          "coeff_2": -0.1808,
+          "coeff_3": 0.0256,
           "coeff_4": null,
           "coeff_5": null,
           "coeff_6": null,
@@ -97,13 +122,13 @@
           "coeff_8": null,
           "coeff_9": null,
           "coeff_10": null,
-          "minimum_independent_variable_1": 0.0,
-          "maximum_independent_variable_1": 1.0,
+          "minimum_independent_variable_1": 0.5,
+          "maximum_independent_variable_1": 1.5,
           "minimum_independent_variable_2": null,
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "Not supplied by NECB 2011 but required for EnergyPlus.  Used default curve coefficients from OpenStudio 2.8.1 DX Single Speed Cooling Coil."
         },
         {
           "name": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -112,12 +137,12 @@
           "dependent_variable": "EIRRatio",
           "independent_variable_1": "Twb",
           "independent_variable_2": "Toadb",
-          "coeff_1": 0.116936,
-          "coeff_2": 0.0284933,
-          "coeff_3": -0.0004112,
-          "coeff_4": 0.0214108,
-          "coeff_5": 0.00016103,
-          "coeff_6": -0.0006791,
+          "coeff_1": 0.1141714,
+          "coeff_2": 0.02818224,
+          "coeff_3": -0.0004199,
+          "coeff_4": 0.02141082,
+          "coeff_5": 0.000161028,
+          "coeff_6": -0.000679104,
           "coeff_7": null,
           "coeff_8": null,
           "coeff_9": null,
@@ -128,7 +153,7 @@
           "maximum_independent_variable_2": 46.0,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-B (6).  Converted coefficients for deg. F to deg. C."
         },
         {
           "name": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
@@ -153,7 +178,7 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB, curve modified to take into account how PLF is used in E+, and PLF ranges (> 0.7)"
+          "notes": "From NECB 2011 Table 8.4.4.21.-B (4), curve modified to take into account how PLF is used in E+, and PLF ranges (> 0.7)"
         },
         {
           "name": "DXHEAT-NECB2011-REF-CAPFFLOW",
@@ -178,7 +203,7 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "Not supplied by NECB 2011 but required for EnergyPlus.  Used default curve coefficients from OpenStudio 2.8.1 DX Single Speed Heating Coil."
         },
         {
           "name": "DXHEAT-NECB2011-REF-CAPFT",
@@ -187,10 +212,10 @@
           "dependent_variable": "QRatio",
           "independent_variable_1": "Toadb",
           "independent_variable_2": null,
-          "coeff_1": 0.729,
-          "coeff_2": 0.0319,
-          "coeff_3": 0.000136,
-          "coeff_4": -8.75e-06,
+          "coeff_1": 0.729009,
+          "coeff_2": 0.0319275,
+          "coeff_3": 0.000136404,
+          "coeff_4": -8.748e-06,
           "coeff_5": null,
           "coeff_6": null,
           "coeff_7": null,
@@ -203,7 +228,7 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-E (2).  Converted coefficients for deg. F to deg. C."
         },
         {
           "name": "DXHEAT-NECB2011-REF-EIRFFLOW",
@@ -228,7 +253,7 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "Not supplied by NECB 2011 but required for EnergyPlus.  Used default curve coefficients from OpenStudio 2.8.1 DX Single Speed Heating Coil."
         },
         {
           "name": "DXHEAT-NECB2011-REF-EIRFT",
@@ -253,7 +278,7 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-E (6).  Converted coefficients for deg. F to deg. C."
         },
         {
           "name": "DXHEAT-NECB2011-REF-PLFFPLR",
@@ -278,7 +303,7 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-E (4).  Converted EIR curve to PLF via curve fit."
         },
         {
           "name": "FURNACE-EFFPLR-NECB2011",
@@ -287,10 +312,10 @@
           "dependent_variable": "FIRRatio",
           "independent_variable_1": "QRatio",
           "independent_variable_2": null,
-          "coeff_1": 0.7277,
-          "coeff_2": 1.0667,
-          "coeff_3": -1.5174,
-          "coeff_4": 0.7282,
+          "coeff_1": 0.722,
+          "coeff_2": 0.8211,
+          "coeff_3": -1.0396,
+          "coeff_4": 0.5,
           "coeff_5": null,
           "coeff_6": null,
           "coeff_7": null,
@@ -303,7 +328,32 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-A (4) for atmospheric furnace.  Converted EIR curve to PLF via curve fit."
+        },
+        {
+          "name": "FURNACE-EFFPLR-COND-NECB2011",
+          "category": "Gas Heating Coil",
+          "form": "Cubic",
+          "dependent_variable": "FIRRatio",
+          "independent_variable_1": "QRatio",
+          "independent_variable_2": null,
+          "coeff_1": 1.0186,
+          "coeff_2": 0.2426,
+          "coeff_3": -0.5059,
+          "coeff_4": 0.2465,
+          "coeff_5": null,
+          "coeff_6": null,
+          "coeff_7": null,
+          "coeff_8": null,
+          "coeff_9": null,
+          "coeff_10": null,
+          "minimum_independent_variable_1": 0.0,
+          "maximum_independent_variable_1": 1.0,
+          "minimum_independent_variable_2": null,
+          "maximum_independent_variable_2": null,
+          "minimum_dependent_variable_output": null,
+          "maximum_dependent_variable_output": null,
+          "notes": "From NECB 2011 Table 8.4.4.21.-A (4) for condensing furnaces.  Converted EIR curve to PLF via curve fit."
         },
         {
           "name": "SWH-EFFFPLR-NECB2011",
@@ -328,7 +378,7 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-G (2).  Converted EIR curve to PLF via curve fit.  Note this is treating the Water Heater as a boiler not a tank."
         },
         {
           "name": "VarVolFan-AFBIFanCurve-NECB2011-FPLR",
@@ -353,7 +403,7 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.17. for airfoil or backward inclined riding fan curve.  Converted from quadratic F/Fr vs. P/Pr curve to cubic P/Pr vs. F/Fr curve."
         },
         {
           "name": "VarVolFan-AFBIInletVanes-NECB2011-FPLR",
@@ -378,7 +428,7 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.17. for airfoil or backward inclined with inlet vanes.  Converted from quadratic F/Fr vs. P/Pr curve to cubic P/Pr vs. F/Fr curve."
         },
         {
           "name": "VarVolFan-FCInletVanes-NECB2011-FPLR",
@@ -403,7 +453,7 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.17. for forward curved with inlet vanes.  Converted from quadratic F/Fr vs. P/Pr curve to cubic P/Pr vs. F/Fr curve."
         },
         {
           "name": "VarVolFan-VSD-NECB2011-FPLR",
@@ -428,7 +478,7 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.17. for variable speed drive.  Converted from quadratic F/Fr vs. P/Pr curve to cubic P/Pr vs. F/Fr curve."
         },
         {
           "name": "WaterCooled_Centrifugal_CAPFT_NECB2011",
@@ -453,7 +503,7 @@
           "maximum_independent_variable_2": 35.0,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-C (2) for water cooled centrifugal chiller.  Converted coefficients for deg. F to deg. C."
         },
         {
           "name": "WaterCooled_Centrifugal_EIRFPLR_NECB2011",
@@ -478,7 +528,7 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-C (4) for water cooled centrifugal chiller"
         },
         {
           "name": "WaterCooled_Centrifugal_EIRFT_NECB2011",
@@ -503,7 +553,7 @@
           "maximum_independent_variable_2": 35.0,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-C (6) for water cooled centrifugal chiller.  Converted coefficients for deg. F to deg. C."
         },
         {
           "name": "WaterCooled_Reciprocating_CAPFT_NECB2011",
@@ -528,7 +578,7 @@
           "maximum_independent_variable_2": 35.0,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-C (2) for water cooled reciprocating chiller.  Converted coefficients for deg. F to deg. C."
         },
         {
           "name": "WaterCooled_Reciprocating_EIRFPLR_NECB2011",
@@ -553,7 +603,7 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-C (4) for water cooled reciprocating chiller"
         },
         {
           "name": "WaterCooled_Reciprocating_EIRFT_NECB2011",
@@ -578,7 +628,7 @@
           "maximum_independent_variable_2": 35.0,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-C (6) for water cooled reciprocating chiller.  Converted coefficients for deg. F to deg. C."
         },
         {
           "name": "WaterCooled_Screw_CAPFT_NECB2011",
@@ -603,7 +653,7 @@
           "maximum_independent_variable_2": 35.0,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-C (2) for water cooled screw chiller.  Converted coefficients for deg. F to deg. C."
         },
         {
           "name": "WaterCooled_Screw_EIRFPLR_NECB2011",
@@ -628,7 +678,7 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-C (4) for water cooled screw chiller."
         },
         {
           "name": "WaterCooled_Screw_EIRFT_NECB2011",
@@ -653,7 +703,7 @@
           "maximum_independent_variable_2": 35.0,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-C (6) for water cooled screw chiller.  Converted coefficients for deg. F to deg. C."
         },
         {
           "name": "WaterCooled_Scroll_CAPFT_NECB2011",
@@ -678,7 +728,7 @@
           "maximum_independent_variable_2": 35.0,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-C (2) for water cooled scroll chiller.  Converted coefficients for deg. F to deg. C."
         },
         {
           "name": "WaterCooled_Scroll_EIRFPLR_NECB2011",
@@ -703,7 +753,7 @@
           "maximum_independent_variable_2": null,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-C (4) for water cooled scroll chiller."
         },
         {
           "name": "WaterCooled_Scroll_EIRFT_NECB2011",
@@ -728,7 +778,7 @@
           "maximum_independent_variable_2": 35.0,
           "minimum_dependent_variable_output": null,
           "maximum_dependent_variable_output": null,
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2011 Table 8.4.4.21.-C (6) for water cooled scroll chiller.  Converted coefficients for deg. F to deg. C."
         }
       ]
     }

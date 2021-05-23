@@ -4,8 +4,10 @@ require 'fileutils'
 require 'parallel'
 require 'open3'
 
+ProcessorsUsed = (Parallel.processor_count - 1).floor
 
-ProcessorsUsed = (Parallel.processor_count * 1 / 2).floor
+
+
 
 class String
   # colorization
@@ -39,16 +41,17 @@ class String
 end
 
 
-def write_results(result, test_file)
-  test_file_output = File.join(@test_output_folder, "#{File.basename(test_file)}_test_output.json")
+def write_results(result, test_file, test_name)
+  test_file_output = File.join(@test_output_folder, "#{File.basename(test_file)}_#{test_name}_test_output.json")
   File.delete(test_file_output) if File.exist?(test_file_output)
   test_result = false
   if result[2].success?
-    puts "PASSED: #{test_file}".green
+    puts "PASSED: #{test_name} IN FILE #{test_file.gsub(/.*\/test\//, 'test/')}".green
     return true
   else
     #store output for failed run.
-    output = {"test" => test_file,
+    output = {"test_file" => test_file,
+              "test_name" => test_name,
               "test_result" => test_result,
               "output" => {
                   "status" => result[2],
@@ -60,14 +63,15 @@ def write_results(result, test_file)
 
     #puts test_file_output
     File.open(test_file_output, 'w') {|f| f.write(JSON.pretty_generate(output))}
-    puts "FAILED: #{test_file_output}".red
+    puts "FAILED: #{test_name} IN FILE #{test_file.gsub(/.*\/test\//, 'test/')}".red
     return false
   end
 end
 
 class ParallelTests
 
-  def run(file_list, test_output_folder)
+  def run(file_list, test_output_folder, processors = nil)
+    processors = ProcessorsUsed if processors.nil?
     did_all_tests_pass = true
     @test_output_folder = test_output_folder
     @full_file_list = nil
@@ -77,33 +81,75 @@ class ParallelTests
     # load test files from file.
     @full_file_list = file_list.shuffle
 
-    puts "Running #{@full_file_list.size} tests suites in parallel using #{ProcessorsUsed} of available cpus."
+    # Parallelize all individual tests within the files
+    # Since some files contain programatically generated tests
+    # we can't simply search the text for def test_foo
+    # but instead must load the file and inspect the objects.
+    # However, to keep minitest/autorun from actually running
+    # the tests at this time, we need to temporarily disable it.
+    test_files_and_test_names = []
+    test_files_already_checked = []
+    @full_file_list.each do |test_file|
+
+      # Disable minitest/autorun
+      eval('module Minitest @@installed_at_exit = true end')
+
+      # Load the test file
+      require test_file
+
+      # Find the test method names
+      ObjectSpace.each_object(Class) do |klass|
+        next if test_files_already_checked.include?(klass.name) # Skip files already checked
+        next if klass.name.to_s == 'RunAllTests' # Don't want this to run recursively
+        klass.ancestors.each do |ancestor|
+          next unless ancestor.name == 'Minitest::Test'
+          next if klass.to_s.include?('Minitest') # Skip classes from the Minitest library itself
+          test_files_already_checked << klass.name
+          # puts "*** Test file is: #{klass}"
+          # puts "  ancestor is: #{ancestor.name}"
+          klass.runnable_methods.each do |test_name|
+            # puts "  #{test_name}"
+            test_files_and_test_names << [test_file, test_name]
+          end
+        end
+      end
+
+      # Re-enable minitest/autorun
+      eval('module Minitest @@installed_at_exit = false end')
+    end
+
+    puts "Running #{test_files_and_test_names.size} tests from #{@full_file_list.size} tests suites in parallel using #{processors} of #{Parallel.processor_count} available cpus."
     puts "To increase or decrease the ProcessorsUsed, please edit the test/test_run_all_locally.rb file."
     timings_json = Hash.new()
-    Parallel.each(@full_file_list, in_threads: (ProcessorsUsed), progress: "Progress :") do |test_file|
+    Parallel.each(test_files_and_test_names, in_threads: (processors),progress: "Progress :") do |test_file_test_name|
+      test_file = test_file_test_name[0]
       file_name = test_file.gsub(/^.+(openstudio-standards\/test\/)/, '')
+      test_name = test_file_test_name[1]
       timings_json[file_name.to_s] = {}
       timings_json[file_name.to_s]['start'] = Time.now.to_i
-      did_all_tests_pass = false unless write_results(Open3.capture3('bundle', 'exec', "ruby '#{test_file}'"), test_file)
+      did_all_tests_pass = false unless write_results(Open3.capture3('bundle', 'exec', "ruby '#{test_file}' -n '#{test_name}'"), test_file, test_name)
       timings_json[file_name.to_s]['end'] = Time.now.to_i
       timings_json[file_name.to_s]['total'] = timings_json[file_name.to_s]['end'] - timings_json[file_name.to_s]['start']
     end
+
     #Sometimes the runs fail.
     #Load failed JSON files from folder local_test_output
     unless did_all_tests_pass
       did_all_tests_pass = true
       failed_runs = []
-      files = Dir.glob("#{File.dirname(__FILE__)}/local_test_output/*.json").select {|e| File.file? e}
+      files = Dir.glob("#{@test_output_folder}/*.json").select {|e| File.file? e}
       files.each do |file|
         data = JSON.parse(File.read(file))
-        failed_runs << data["test"]
+        failed_runs << [data["test_file"], data['test_name']]
       end
-      puts "These files failed in the initial simulation. This may have been due to computer performance issues. Rerunning failed tests.."
-      Parallel.each(failed_runs, in_threads: (ProcessorsUsed), progress: "Progress :") do |test_file|
+      puts "Some tests failed the first time. This may have been due to computer performance issues. Rerunning failed tests..."
+      Parallel.each(failed_runs, in_threads: (processors), progress: "Progress :") do |test_file_test_name|
+        test_file = test_file_test_name[0]
         file_name = test_file.gsub(/^.+(openstudio-standards\/test\/)/, '')
+        test_name = test_file_test_name[1]
         timings_json[file_name.to_s] = {}
         timings_json[file_name.to_s]['start'] = Time.now.to_i
-        did_all_tests_pass = false unless write_results(Open3.capture3('bundle', 'exec', "ruby '#{test_file}'"), test_file)
+        did_all_tests_pass = false unless write_results(Open3.capture3('bundle', 'exec', "ruby '#{test_file}' -n '#{test_name}'"), test_file, test_name)
         timings_json[file_name.to_s]['end'] = Time.now.to_i
         timings_json[file_name.to_s]['total'] = timings_json[file_name.to_s]['end'] - timings_json[file_name.to_s]['start']
       end

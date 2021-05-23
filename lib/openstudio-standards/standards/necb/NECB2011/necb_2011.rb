@@ -8,6 +8,19 @@ class NECB2011 < Standard
   attr_accessor :space_type_map
   attr_accessor :space_multiplier_map
 
+  # This is a helper method to convert arguments that may support 'NECB_Default, and nils to convert to float'
+  def convert_arg_to_f(variable:,default:)
+    if variable.instance_of?(Numeric)
+      return variable
+    elsif variable.nil? or variable == 'NECB_Default'
+      return default
+    elsif variable.instance_of?(String)
+      variable = variable.strip
+      return variable.to_f
+    end
+  end
+
+
   def get_standards_table(table_name:)
     if @standards_data["tables"][table_name].nil?
       message = "Could not find table #{table_name} in database."
@@ -40,7 +53,7 @@ class NECB2011 < Standard
     else
       path = "#{File.dirname(__FILE__)}/../common/"
       raise ('Could not find common folder') unless Dir.exist?(path)
-      files = Dir.glob("#{path}/*.json").select {|e| File.file? e}
+      files = Dir.glob("#{path}/*.json").select { |e| File.file? e }
       files.each do |file|
         data = JSON.parse(File.read(file))
         if not data["tables"].nil?
@@ -62,7 +75,7 @@ class NECB2011 < Standard
         end
       end
     else
-      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select { |e| File.file? e }
       files.each do |file|
         data = JSON.parse(File.read(file))
         if not data["tables"].nil?
@@ -117,7 +130,7 @@ class NECB2011 < Standard
   end
 
   def get_all_spacetype_names
-    return @standards_data['space_types'].map {|space_types| [space_types['building_type'], space_types['space_type']]}
+    return @standards_data['space_types'].map { |space_types| [space_types['building_type'], space_types['space_type']] }
   end
 
   # Enter in [latitude, longitude] for each loc and this method will return the distance.
@@ -129,22 +142,14 @@ class NECB2011 < Standard
     dlat_rad = (loc2[0] - loc1[0]) * rad_per_deg # Delta, converted to rad
     dlon_rad = (loc2[1] - loc1[1]) * rad_per_deg
 
-    lat1_rad, lon1_rad = loc1.map {|i| i * rad_per_deg}
-    lat2_rad, lon2_rad = loc2.map {|i| i * rad_per_deg}
+    lat1_rad, lon1_rad = loc1.map { |i| i * rad_per_deg }
+    lat2_rad, lon2_rad = loc2.map { |i| i * rad_per_deg }
 
     a = Math.sin(dlat_rad / 2) ** 2 + Math.cos(lat1_rad) * Math.cos(lat2_rad) * Math.sin(dlon_rad / 2) ** 2
     c = 2 * Math::atan2(Math::sqrt(a), Math::sqrt(1 - a))
     rm * c # Delta in meters
   end
 
-  # this method returns the default system fuel types by epw_file.
-  def get_canadian_system_defaults_by_weatherfile_name(model)
-    #get models weather object to get the province. Then use that to look up the province.
-    epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-    fuel_sources = @standards_data['regional_fuel_use'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
-    raise("Could not find fuel sources for weather file, make sure it is a Canadian weather file.") if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
-    return fuel_sources
-  end
 
   def get_necb_hdd18(model)
     max_distance_tolerance = 500000
@@ -171,33 +176,108 @@ class NECB2011 < Standard
   end
 
 
-  # This method is a wrapper to create the 16 archetypes easily.
+  # This method is a wrapper to create the 16 archetypes easily. # 37 args
   def model_create_prototype_model(template:,
                                    building_type:,
                                    epw_file:,
                                    debug: false,
                                    sizing_run_dir: Dir.pwd,
-                                   x_scale: 1.0,
-                                   y_scale: 1.0,
-                                   z_scale: 1.0,
-                                   fdwr_set: 1.1,
-                                   srr_set: 1.1,
-                                   new_auto_zoner: false
-
+                                   primary_heating_fuel: 'DefaultFuel',
+                                   dcv_type: 'NECB_Default',
+                                   lights_type: 'NECB_Default',
+                                   lights_scale: 1.0,
+                                   daylighting_type: 'NECB_Default',
+                                   ecm_system_name: 'NECB_Default',
+                                   erv_package: 'NECB_Default',
+                                   boiler_eff: nil,
+                                   unitary_cop: nil,
+                                   furnace_eff: nil,
+                                   shw_eff: nil,
+                                   ext_wall_cond: nil,
+                                   ext_floor_cond: nil,
+                                   ext_roof_cond: nil,
+                                   ground_wall_cond: nil,
+                                   ground_floor_cond: nil,
+                                   ground_roof_cond: nil,
+                                   door_construction_cond: nil,
+                                   fixed_window_cond: nil,
+                                   glass_door_cond: nil,
+                                   overhead_door_cond: nil,
+                                   skylight_cond: nil,
+                                   glass_door_solar_trans: nil,
+                                   fixed_wind_solar_trans: nil,
+                                   skylight_solar_trans: nil,
+                                   rotation_degrees: nil,
+                                   fdwr_set: -1.0,
+                                   srr_set: -1.0,
+                                   nv_type: nil,
+                                   nv_opening_fraction: nil,
+                                   nv_Tout_min: nil,
+                                   nv_Delta_Tin_Tout: nil,
+                                   scale_x: nil,
+                                   scale_y: nil,
+                                   scale_z: nil,
+                                   pv_ground_type: nil,
+                                   pv_ground_total_area_pv_panels_m2: nil,
+                                   pv_ground_tilt_angle: nil,
+                                   pv_ground_azimuth_angle: nil,
+                                   pv_ground_module_description: nil
   )
-    osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
-    model = BTAP::FileIO::load_osm(osm_model_path)
-    model.getBuilding.setName("#{File.basename(osm_model_path, '.osm')}-#{epw_file} created: #{Time.new}")
 
+
+    model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 epw_file: epw_file,
-                                x_scale: x_scale,
-                                y_scale: y_scale,
-                                z_scale: z_scale,
                                 sizing_run_dir: sizing_run_dir,
+                                primary_heating_fuel: primary_heating_fuel,
+                                dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
+                                lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
+                                lights_scale: lights_scale,
+                                daylighting_type: daylighting_type, # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
+                                ecm_system_name: ecm_system_name,
+                                erv_package: erv_package,
+                                boiler_eff: boiler_eff,
+                                unitary_cop: unitary_cop,
+                                furnace_eff: furnace_eff,
+                                shw_eff: shw_eff,
+                                ext_wall_cond: ext_wall_cond,
+                                ext_floor_cond: ext_floor_cond,
+                                ext_roof_cond: ext_roof_cond,
+                                ground_wall_cond: ground_wall_cond,
+                                ground_floor_cond: ground_floor_cond,
+                                ground_roof_cond: ground_roof_cond,
+                                door_construction_cond: door_construction_cond,
+                                fixed_window_cond: fixed_window_cond,
+                                glass_door_cond: glass_door_cond,
+                                overhead_door_cond: overhead_door_cond,
+                                skylight_cond: skylight_cond,
+                                glass_door_solar_trans: glass_door_solar_trans,
+                                fixed_wind_solar_trans: fixed_wind_solar_trans,
+                                skylight_solar_trans: skylight_solar_trans,
+                                rotation_degrees: rotation_degrees,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
-                                new_auto_zoner: new_auto_zoner)
+                                nv_type: 'NECB_Default', # Two options: (1) nil/none/false/'NECB_Default', (2) true
+                                nv_opening_fraction: nv_opening_fraction, #options: (1) nil/none/false (2) 'NECB_Default' (i.e. 0.1)
+                                nv_Tout_min: nv_Tout_min, #options: (1) nil/none/false(2) 'NECB_Default' (i.e. 13.0 based on inputs from Michel Tardif re a real school in QC)
+                                nv_Delta_Tin_Tout: nv_Delta_Tin_Tout, #options: (1) nil/none/false (2) 'NECB_Default' (i.e. 1.0 based on inputs from Michel Tardif re a real school in QC)
+                                scale_x: scale_x,
+                                scale_y: scale_y,
+                                scale_z: scale_z,
+                                pv_ground_type: 'NECB_Default',  # Two options: (1) nil/none/false/'NECB_Default', (2) true
+                                pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. building footprint), (3) area value (e.g. 50)
+                                pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. latitude), (3) tilt angle value (e.g. 20)
+                                pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. south), (3) azimuth angle value (e.g. 90)
+                                pv_ground_module_description: pv_ground_module_description # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. Standard), (3) other options ('Standard', 'Premium', ThinFilm')
+    )
+
+  end
+
+  def load_building_type_from_library(building_type:)
+    osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
+    model = BTAP::FileIO::load_osm(osm_model_path)
+    model.getBuilding.setName(building_type)
+    return model
   end
 
 
@@ -205,146 +285,367 @@ class NECB2011 < Standard
   # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
   def model_apply_standard(model:,
                            epw_file:,
-                           debug: false,
                            sizing_run_dir: Dir.pwd,
-                           x_scale: 1.0,
-                           y_scale: 1.0,
-                           z_scale: 1.0,
-                           fdwr_set: 1.1,
-                           srr_set: 1.1,
-                           new_auto_zoner: false
-
+                           primary_heating_fuel: 'DefaultFuel',
+                           dcv_type: 'NECB_Default',
+                           lights_type: 'NECB_Default',
+                           lights_scale: 'NECB_Default',
+                           daylighting_type: 'NECB_Default',
+                           ecm_system_name: 'NECB_Default',
+                           erv_package: 'NECB_Default',
+                           boiler_eff: nil,
+                           furnace_eff: nil,
+                           unitary_cop: nil,
+                           shw_eff: nil,
+                           ext_wall_cond: nil,
+                           ext_floor_cond: nil,
+                           ext_roof_cond: nil,
+                           ground_wall_cond: nil,
+                           ground_floor_cond: nil,
+                           ground_roof_cond: nil,
+                           door_construction_cond: nil,
+                           fixed_window_cond: nil,
+                           glass_door_cond: nil,
+                           overhead_door_cond: nil,
+                           skylight_cond: nil,
+                           glass_door_solar_trans: nil,
+                           fixed_wind_solar_trans: nil,
+                           skylight_solar_trans: nil,
+                           fdwr_set: nil,
+                           srr_set: nil,
+                           rotation_degrees: nil,
+                           scale_x: nil,
+                           scale_y: nil,
+                           scale_z: nil,
+                           nv_type: nil,
+                           nv_opening_fraction: nil,
+                           nv_Tout_min: nil,
+                           nv_Delta_Tin_Tout: nil,
+                           pv_ground_type: nil,
+                           pv_ground_total_area_pv_panels_m2: nil ,
+                           pv_ground_tilt_angle: nil,
+                           pv_ground_azimuth_angle: nil,
+                           pv_ground_module_description: nil
   )
-    building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
-    model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
-    climate_zone = 'NECB HDD Method'
+    #clean model..
+    model = remove_all_HVAC(model)
+    model.getThermalZones.sort.each {|zone| zone.setUseIdealAirLoads(true)}
+    model.getZoneHVACPackagedTerminalAirConditioners.each(&:remove)
+    model.getCoilCoolingDXSingleSpeeds.each(&:remove)
+    model.getZoneHVACBaseboardConvectiveWaters.each(&:remove)
+    model.getAirLoopHVACZoneMixers.each(&:remove)
+    model.getAirLoopHVACZoneSplitters.each(&:remove)
+    model.getAirTerminalSingleDuctConstantVolumeNoReheats.each(&:remove)
+    model.getWaterUseEquipmentDefinitions.each(&:remove)
+    model.getWaterUseEquipments.each(&:remove)
+    model.getWaterUseConnectionss.each(&:remove)
 
-    # prototype generation.I'm current
-    scale_model_geometry(model, x_scale, y_scale, z_scale) if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
-    #validate that model has information required.
-    #puts 'Old SPace types'
-    # model.getSpaceTypes.each do |spacetype|
-    #   puts spacetype.name
-    # end
-
-    return false unless validate_initial_model(model)
-
-    #Ensure that the space types names match the space types names in the code.
-    return false unless validate_space_types(model)
-
-    #puts Old SPace types
-    # puts 'new spacetypes'
-    # model.getSpaceTypes.each do |spacetype|
-    #   puts spacetype.name
-    # end
-
-    #Get rid of any existing Thermostats. We will only use the code schedules.
-    model.getThermostatSetpointDualSetpoints(&:remove)
-
-    #Set simulation start day to be consistent.
-    model.getYearDescription.setDayofWeekforStartDay('Sunday')
-
-    #Set climate data.
-    model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
-    model_add_ground_temperatures(model, nil, climate_zone) # prototype candidate
-
-    #Add Occ sensor schedule adjustments where needed.
-    set_occ_sensor_spacetypes(model, @space_type_map)
-
-    #Set Loads/Schedules
-    model_add_loads(model)
-
-
-    #Add Infiltration
-    model_apply_infiltration_standard(model)
-
-    #Modify_surface_convection_algorithm
-    model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
-    model.getOutsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
-
-    #Add default constructions
-    model_add_constructions(model)
-    apply_standard_construction_properties(model)
-
-    #Set up thermal zones for initial sizing run.
-    model_create_thermal_zones(model, @space_multiplier_map)
-
-    # Set FDWR and SSR.  Do this after the thermal zones are set because the methods need to know what walls and roofs
-    # are adjacent to conditioned spaces.
-    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
-    apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
-
-    #Do a sizing run for HVAC now that all the loads have been defined.
-    if model_run_sizing_run(model, "#{sizing_run_dir}/SR0") == false
-      raise("sizing run 0 failed!")
+    rotation_degrees = convert_arg_to_f(variable: rotation_degrees,default: 0.0)
+    BTAP::Geometry::rotate_building(model: model,degrees: rotation_degrees) unless rotation_degrees == 0.0
+    scale_x = convert_arg_to_f(variable: scale_x,default: 1.0)
+    scale_y = convert_arg_to_f(variable: scale_y,default: 1.0)
+    scale_z = convert_arg_to_f(variable: scale_z,default: 1.0)
+    if scale_x != 1.0 || scale_y != 1.0 || scale_z != 1.0
+      BTAP::Geometry::scale_model(model, scale_x, scale_x, scale_x)
     end
 
-    # Create Reference HVAC Systems.
-    if new_auto_zoner
-      auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
-      system_fuel_defaults = get_canadian_system_defaults_by_weatherfile_name(model)
-      auto_system(model: model,
-                  boiler_fueltype: system_fuel_defaults['boiler_fueltype'],
-                  baseboard_type: system_fuel_defaults['baseboard_type'],
-                  mau_type: system_fuel_defaults['mau_type'],
-                  mau_heating_coil_type: system_fuel_defaults['mau_heating_coil_type'],
-                  mau_cooling_type: system_fuel_defaults['mau_cooling_type'],
-                  chiller_type: system_fuel_defaults['chiller_type'],
-                  heating_coil_type_sys3: system_fuel_defaults['heating_coil_type_sys3'],
-                  heating_coil_type_sys4: system_fuel_defaults['heating_coil_type_sys4'],
-                  heating_coil_type_sys6: system_fuel_defaults['heating_coil_type_sys6']
-      )
-      random = Random.new(1234)
-      model.getThermalZones.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item,random))}
-      model.getSpaceTypes.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
-    else
-      model_add_hvac(model: model) # standards for NECB Prototype for NREL candidate
-    end
-    model_add_swh(model)
-    model_apply_sizing_parameters(model)
 
-    # set a larger tolerance for unmet hours from default 0.2 to 1.0C
-    model.getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
-    model.getOutputControlReportingTolerances.setToleranceforTimeCoolingSetpointNotMet(1.0)
+    fdwr_set = convert_arg_to_f(variable: fdwr_set,default: -1)
+    srr_set = convert_arg_to_f(variable: srr_set,default: -1)
 
-    #Do a second sizing run for the plant and loops.
-    if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
-      raise("sizing run 1 failed! check #{sizing_run_dir}")
-    end
 
-    # This is needed for NECB2011 as a workaround for sizing the reheat boxes
-    model.getAirTerminalSingleDuctVAVReheats.each {|iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj)}
-    # Apply the prototype HVAC assumptions
-    # which include sizing the fan pressure rises based
-    # on the flow rate of the system.
-    model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
+    apply_weather_data(model: model, epw_file: epw_file)
+    apply_loads(model: model, lights_type: lights_type, lights_scale: lights_scale)
+    apply_envelope(model: model,
+                   ext_wall_cond: ext_wall_cond,
+                   ext_floor_cond: ext_floor_cond,
+                   ext_roof_cond: ext_roof_cond,
+                   ground_wall_cond: ground_wall_cond,
+                   ground_floor_cond: ground_floor_cond,
+                   ground_roof_cond: ground_roof_cond,
+                   door_construction_cond: door_construction_cond,
+                   fixed_window_cond: fixed_window_cond,
+                   glass_door_cond: glass_door_cond,
+                   overhead_door_cond: overhead_door_cond,
+                   skylight_cond: skylight_cond,
+                   glass_door_solar_trans: glass_door_solar_trans,
+                   fixed_wind_solar_trans: fixed_wind_solar_trans,
+                   skylight_solar_trans: skylight_solar_trans)
+    apply_fdwr_srr_daylighting(model: model,
+                               fdwr_set: fdwr_set,
+                               srr_set: srr_set)
+    apply_auto_zoning(model: model,
+                      sizing_run_dir: sizing_run_dir,
+                      lights_type: lights_type,
+                      lights_scale: lights_scale)
+    apply_systems_and_efficiencies(model: model,
+                                   primary_heating_fuel: primary_heating_fuel,
+                                   sizing_run_dir: sizing_run_dir,
+                                   dcv_type: dcv_type,
+                                   ecm_system_name: ecm_system_name,
+                                   erv_package: erv_package,
+                                   boiler_eff: boiler_eff,
+                                   unitary_cop: unitary_cop,
+                                   furnace_eff: furnace_eff,
+                                   shw_eff: shw_eff,
+                                   daylighting_type: daylighting_type,
+                                   nv_type: nv_type,
+                                   nv_opening_fraction: nv_opening_fraction,
+                                   nv_Tout_min: nv_Tout_min,
+                                   nv_Delta_Tin_Tout: nv_Delta_Tin_Tout,
+                                   pv_ground_type: pv_ground_type,
+                                   pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
+                                   pv_ground_tilt_angle: pv_ground_tilt_angle,
+                                   pv_ground_azimuth_angle: pv_ground_azimuth_angle,
+                                   pv_ground_module_description: pv_ground_module_description
+    )
 
-    # Apply the HVAC efficiency standard
-    model_apply_hvac_efficiency_standard(model, climate_zone)
-    # Fix EMS references.
-    # Temporary workaround for OS issue #2598
-    model_temp_fix_ems_references(model)
-    # Add daylighting controls per standard
-    # only four zones in large hotel have daylighting controls
-    # todo: YXC to merge to the main function
-    model_add_daylighting_controls(model) # to be removed after refactor.
-    # Add output variables for debugging
-    model_request_timeseries_outputs(model) if debug
-    # Remove duplicate materials and constructions (currently commented out).
-    # Commented out because it consumes a significant portion of the btap run time (30% - 50%).  The line below should
-    # be uncommented when the flie clarity it affords is desired.
-    # model = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
-
-    #set space_type colors
-    # model.getSpaceTypes.sort.each { |space_type| space_type.setRenderingColor(standard.set_random_rendering_color(space_type)) }
     return model
   end
+
+
+  def apply_systems_and_efficiencies(model:,
+                                     primary_heating_fuel:,
+                                     sizing_run_dir:,
+                                     dcv_type: 'NECB_Default',
+                                     ecm_system_name: 'NECB_Default',
+                                     erv_package: 'NECB_Default',
+                                     boiler_eff: nil,
+                                     furnace_eff: nil,
+                                     unitary_cop: nil,
+                                     shw_eff: nil,
+                                     daylighting_type: 'NECB_Default',
+                                     nv_type: nil,
+                                     nv_opening_fraction: nil,
+                                     nv_Tout_min: nil,
+                                     nv_Delta_Tin_Tout:nil,
+                                     pv_ground_type:,
+                                     pv_ground_total_area_pv_panels_m2:,
+                                     pv_ground_tilt_angle:,
+                                     pv_ground_azimuth_angle:,
+                                     pv_ground_module_description:
+  )
+
+    # Create ECM object.
+    ecm = ECMS.new
+
+    # -------- Systems Layout-----------
+
+    # Create Default Systems.
+    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
+
+    # Apply new ECM system. Overwrite standard as required.
+    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self, primary_heating_fuel: primary_heating_fuel)
+
+    # Apply ERV equipment as required.
+    ecm.apply_erv_ecm(model: model, erv_package: erv_package)
+
+
+    # -------- Performace, Efficiencies, Controls and Sensors ------------
+    #
+    # Set code standard equipment charecteristics.
+    sql_db_vars_map = apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
+    # Apply System
+    ecm.apply_system_efficiencies_ecm(model: model, ecm_system_name: ecm_system_name)
+
+    # Apply ECM ERV charecteristics as required. Part 2 of above ECM.
+    ecm.apply_erv_ecm_efficiency(model: model, erv_package: erv_package)
+    # Apply DCV as required
+    model_enable_demand_controlled_ventilation(model, dcv_type)
+    # Apply Boiler Efficiency
+    ecm.modify_boiler_efficiency(model: model, boiler_eff: boiler_eff)
+    # Apply Furnace Efficiency
+    ecm.modify_furnace_efficiency(model: model, furnace_eff: furnace_eff)
+    # Apply Unitary efficiency
+    ecm.modify_unitary_cop(model: model,unitary_cop: unitary_cop,sql_db_vars_map: sql_db_vars_map)
+    # Apply SHW Efficiency
+    ecm.modify_shw_efficiency(model: model, shw_eff: shw_eff)
+    # Apply daylight controls.
+    model_add_daylighting_controls(model) if daylighting_type == 'add_daylighting_controls'
+
+
+    # -------Pump sizing required by some vintages----------------
+    # Apply Pump power as required.
+    apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
+
+    # -------Natural ventilation----------------
+    # Apply natural ventilation using simplified method.
+    ecm.apply_nv(model: model,
+                 nv_type: nv_type,
+                 nv_opening_fraction: nv_opening_fraction,
+                 nv_Tout_min: nv_Tout_min,
+                 nv_Delta_Tin_Tout: nv_Delta_Tin_Tout)
+
+    # -------Ground-mounted PV panels----------------   #Sara
+    # Apply ground-mounted PV panels as required.
+    ecm.apply_pv_ground(model: model,
+                        pv_ground_type: pv_ground_type,
+                        pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
+                        pv_ground_tilt_angle: pv_ground_tilt_angle,
+                        pv_ground_azimuth_angle: pv_ground_azimuth_angle,
+                        pv_ground_module_description: pv_ground_module_description)
+
+  end
+
+
+  def apply_loads(model:, lights_type: 'NECB_Default', lights_scale: 1.0, validate: true)
+    lights_scale = convert_arg_to_f(variable: lights_scale,default: 1.0)
+    if validate
+      raise('validation of model failed.') unless validate_initial_model(model)
+      raise('validation of spacetypes failed.') unless validate_and_upate_space_types(model)
+    end
+    #this sets/stores the template version loads that the model uses.
+    model.getBuilding.setStandardsTemplate(self.class.name)
+    set_occ_sensor_spacetypes(model, @space_type_map)
+    model_add_loads(model, lights_type, lights_scale)
+  end
+
+  def apply_weather_data(model:, epw_file:)
+    climate_zone = 'NECB HDD Method'
+    # Fix EMS references. Temporary workaround for OS issue #2598
+    model_temp_fix_ems_references(model)
+    model.getThermostatSetpointDualSetpoints(&:remove)
+    model.getYearDescription.setDayofWeekforStartDay('Sunday')
+    model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
+    model_add_ground_temperatures(model, nil, climate_zone)
+  end
+
+  def apply_envelope(model:,
+                     ext_wall_cond: nil,
+                     ext_floor_cond: nil,
+                     ext_roof_cond: nil,
+                     ground_wall_cond: nil,
+                     ground_floor_cond: nil,
+                     ground_roof_cond: nil,
+                     door_construction_cond: nil,
+                     fixed_window_cond: nil,
+                     glass_door_cond: nil,
+                     overhead_door_cond: nil,
+                     skylight_cond: nil,
+                     glass_door_solar_trans: nil,
+                     fixed_wind_solar_trans: nil,
+                     skylight_solar_trans: nil)
+    raise('validation of model failed.') unless validate_initial_model(model)
+    model_apply_infiltration_standard(model)
+    model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
+    model.getOutsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
+    model_add_constructions(model)
+    apply_standard_construction_properties(model: model,
+                                           ext_wall_cond: ext_wall_cond,
+                                           ext_floor_cond: ext_floor_cond,
+                                           ext_roof_cond: ext_roof_cond,
+                                           ground_wall_cond: ground_wall_cond,
+                                           ground_floor_cond: ground_floor_cond,
+                                           ground_roof_cond: ground_roof_cond,
+                                           door_construction_cond: door_construction_cond,
+                                           fixed_window_cond: fixed_window_cond,
+                                           glass_door_cond: glass_door_cond,
+                                           overhead_door_cond: overhead_door_cond,
+                                           skylight_cond: skylight_cond,
+                                           glass_door_solar_trans: glass_door_solar_trans,
+                                           fixed_wind_solar_trans: fixed_wind_solar_trans,
+                                           skylight_solar_trans: skylight_solar_trans)
+
+
+    model_create_thermal_zones(model, @space_multiplier_map)
+
+  end
+
+  # Thermal zones need to be set to determine conditioned spaces when applying fdwr and srr limits.
+  #     # fdwr_set/srr_set settings:
+  #     # 0-1:  Remove all windows/skylights and add windows/skylights to match this fdwr/srr
+  #     # -1:  Remove all windows/skylights and add windows/skylights to match max fdwr/srr from NECB
+  #     # -2:  Do not apply any fdwr/srr changes, leave windows/skylights alone (also works for fdwr/srr > 1)
+  #     # -3:  Use old method which reduces existing window/skylight size (if necessary) to meet maximum NECB fdwr/srr
+  #     # limit
+  #     # <-3.1:  Remove all the windows/skylights
+  #     # > 1:  Do nothing
+  def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0)
+    fdwr_set = -1.0 if fdwr_set == 'NECB_default' or fdwr_set.nil?
+    srr_set = -1.0 if srr_set == 'NECB_default' or srr_set.nil?
+    fdwr_set = fdwr_set.to_f
+    srr_set = srr_set.to_f
+    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
+    apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
+    # model_add_daylighting_controls(model) # to be removed after refactor.
+  end
+
+  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default')
+    raise('validation of model failed.') unless validate_initial_model(model)
+    climate_zone = 'NECB HDD Method'
+    raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
+    # This is needed for NECB2011 as a workaround for sizing the reheat boxes
+    model.getAirTerminalSingleDuctVAVReheats.each { |iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj) }
+    # Apply the prototype HVAC assumptions
+    model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
+    # Apply the HVAC efficiency standard
+    sql_db_vars_map = {}
+    model_apply_hvac_efficiency_standard(model, climate_zone, sql_db_vars_map: sql_db_vars_map)
+    model_enable_demand_controlled_ventilation(model, dcv_type)
+    return sql_db_vars_map
+  end
+
+  # Shut off the system during unoccupied periods.
+  # During these times, systems will cycle on briefly
+  # if temperature drifts below setpoint.  For systems
+  # with fan-powered terminals, the whole system
+  # (not just the terminal fans) will cycle on.
+  # Terminal-only night cycling is not used because the terminals cannot
+  # provide cooling, so terminal-only night cycling leads to excessive
+  # unmet cooling hours during unoccupied periods.
+  # If the system already has a schedule other than
+  # Always-On, no change will be made.  If the system has
+  # an Always-On schedule assigned, a new schedule will be created.
+  # In this case, occupied is defined as the total percent
+  # occupancy for the loop for all zones served.
+  #
+  # @param min_occ_pct [Double] the fractional value below which
+  # the system will be considered unoccupied.
+  # @return [Bool] true if successful, false if not
+  def air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = 0.05)
+    # Set the system to night cycle
+    air_loop_hvac.setNightCycleControlType('CycleOnAny')
+
+    # Check if already using a schedule other than always on
+    avail_sch = air_loop_hvac.availabilitySchedule
+    unless avail_sch == air_loop_hvac.model.alwaysOnDiscreteSchedule
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Availability schedule is already set to #{avail_sch.name}.  Will assume this includes unoccupied shut down; no changes will be made.")
+      return true
+    end
+
+    # Get the airloop occupancy schedule
+    loop_occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: min_occ_pct)
+    flh = schedule_ruleset_annual_equivalent_full_load_hrs(loop_occ_sch)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Annual occupied hours = #{flh.round} hr/yr, assuming a #{min_occ_pct} occupancy threshold.  This schedule will be used as the HVAC operation schedule.")
+
+    # Set HVAC availability schedule to follow occupancy
+    air_loop_hvac.setAvailabilitySchedule(loop_occ_sch)
+    air_loop_hvac.supplyComponents('OS:AirLoopHVAC:UnitaryHeatPump:AirToAir:MultiSpeed'.to_IddObjectType).each do |comp|
+      comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.setAvailabilitySchedule(loop_occ_sch)
+    end
+
+    return true
+  end
+
+  # do not apply zone hvac ventilation control
+  def zone_hvac_component_occupancy_ventilation_control(zone_hvac_component)
+    return false
+  end
+
+  def apply_loop_pump_power(model:, sizing_run_dir:)
+    # Remove duplicate materials and constructions
+    # Note For NECB2015 This is the 2nd time this method is bieng run.
+    # First time it ran in the super() within model_apply_standard() method
+    # model = return BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
+    return model
+  end
+
 
   #this method will determine the vintage of NECB spacetypes the model contains. It will return nil if it can't
   # determine it.
   def determine_spacetype_vintage(model)
     #this code is the list of available vintages
-    space_type_vintage_list = ['NECB2011', 'NECB2015', 'NECB2017']
+    space_type_vintage_list = ['NECB2011', 'NECB2015', 'NECB2017', 'BTAPPRE1980', 'BTAP1980TO2010']
     #this reorders the list to do the current class first.
     space_type_vintage_list.insert(0, space_type_vintage_list.delete(self.class.name))
     #Set the space_type
@@ -356,7 +657,7 @@ class NECB2011 < Standard
     #Now iterate though each vintage
     space_type_vintage_list.each do |template|
       #Create the standard object and get a list of all the spacetypes available for that vintage.
-      standard_space_type_list = Standard.build(template).get_all_spacetype_names.map {|spacetype| [spacetype[0].to_s + '-' + spacetype[1].to_s]}
+      standard_space_type_list = Standard.build(template).get_all_spacetype_names.map { |spacetype| [spacetype[0].to_s + '-' + spacetype[1].to_s] }
       # set array to contain unknown spacetypes.
       unknown_spacetypes = []
       # iterate though all space types that the model is using
@@ -373,7 +674,7 @@ class NECB2011 < Standard
   end
 
   # This method will validate that the space types in the model are indeed the correct NECB spacetypes names.
-  def validate_space_types(model)
+  def validate_and_upate_space_types(model)
     space_type_vintage = determine_spacetype_vintage(model)
     if space_type_vintage.nil?
       message = "These some of the spacetypes in the model are not part of any necb standard.\n  Please ensure all spacetype in model are correct."
@@ -393,7 +694,7 @@ class NECB2011 < Standard
       bt_target_vintage_string = "#{self.class.name}_building_type"
       space_type_upgrade_map = @standards_data['space_type_upgrade_map']
       model.getSpaceTypes.sort.each do |st|
-        space_type_map = space_type_upgrade_map.detect {|row| (row[st_model_vintage_string] == st.standardsSpaceType.get.to_s) && (row[bt_model_vintage_string] == st.standardsBuildingType.get.to_s)}
+        space_type_map = space_type_upgrade_map.detect { |row| (row[st_model_vintage_string] == st.standardsSpaceType.get.to_s) && (row[bt_model_vintage_string] == st.standardsBuildingType.get.to_s) }
         st.setStandardsBuildingType(space_type_map[bt_target_vintage_string].to_s.strip)
         raise('could not set buildingtype') unless st.setStandardsBuildingType(space_type_map[bt_target_vintage_string].to_s.strip)
         raise('could not set this') unless st.setStandardsSpaceType(space_type_map[st_target_vintage_string].to_s.strip)
@@ -404,121 +705,6 @@ class NECB2011 < Standard
     end
   end
 
-  def set_wildcard_schedules_to_dominant_building_schedule(model, runner = nil)
-    new_sched_ruleset = OpenStudio::Model::DefaultScheduleSet.new(model) # initialize
-    BTAP.runner_register('Info', 'set_wildcard_schedules_to_dominant_building_schedule', runner)
-    # Set wildcard schedules based on dominant schedule type in building.
-    dominant_sched_type = determine_dominant_necb_schedule_type(model)
-    # puts "dominant_sched_type = #{dominant_sched_type}"
-    # find schedule set that corresponds to dominant schedule type
-    model.getDefaultScheduleSets.sort.each do |sched_ruleset|
-      # just check people schedule
-      # TO DO: should make this smarter: check all schedules
-      people_sched = sched_ruleset.numberofPeopleSchedule
-      people_sched_name = people_sched.get.name.to_s unless people_sched.empty?
-
-      search_string = "NECB-#{dominant_sched_type}"
-
-      if people_sched.empty? == false
-        if people_sched_name.include? search_string
-          new_sched_ruleset = sched_ruleset
-        end
-      end
-    end
-
-    # replace the default schedule set for the space type with * to schedule ruleset with dominant schedule type
-
-    model.getSpaces.sort.each do |space|
-      # check to see if space space type has a "*" wildcard schedule.
-      spacetype_name = space.spaceType.get.name.to_s unless space.spaceType.empty?
-      if determine_necb_schedule_type(space).to_s == '*'.to_s
-        new_sched = spacetype_name.to_s
-        optional_spacetype = model.getSpaceTypeByName(new_sched)
-        if optional_spacetype.empty?
-          BTAP.runner_register('Error', "Cannot find NECB spacetype #{new_sched}", runner)
-        else
-          BTAP.runner_register('Info', "Setting wildcard spacetype #{spacetype_name} default schedule set to #{new_sched_ruleset.name}", runner)
-          optional_spacetype.get.setDefaultScheduleSet(new_sched_ruleset) # this works!
-        end
-      end
-    end # end of do |space|
-
-    return true
-  end
-
-  # This model determines the dominant NECB schedule type
-  # @param model [OpenStudio::model::Model] A model object
-  # return s.each [String]
-  def determine_dominant_necb_schedule_type(model)
-    # lookup necb space type properties
-    space_type_properties = @standards_data['space_types']
-
-    # Here is a hash to keep track of the m2 running total of spacetypes for each
-    # sched type.
-    # 2018-04-11:  Not sure if this is still used but the list was expanded to incorporate additional existing or potential
-    # future schedules.
-    s = Hash[
-        'A', 0,
-        'B', 0,
-        'C', 0,
-        'D', 0,
-        'E', 0,
-        'F', 0,
-        'G', 0,
-        'H', 0,
-        'I', 0,
-        'J', 0,
-        'K', 0,
-        'L', 0,
-        'M', 0,
-        'N', 0,
-        'O', 0,
-        'P', 0,
-        'Q', 0
-    ]
-    # iterate through spaces in building.
-    wildcard_spaces = 0
-    model.getSpaces.sort.each do |space|
-      found_space_type = false
-      # iterate through the NECB spacetype property table
-      space_type_properties.each do |spacetype|
-        unless space.spaceType.empty?
-          if space.spaceType.get.standardsSpaceType.empty? || space.spaceType.get.standardsBuildingType.empty?
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Space #{space.name} does not have a standardSpaceType defined")
-            found_space_type = false
-          elsif space.spaceType.get.standardsSpaceType.get == spacetype['space_type'] && space.spaceType.get.standardsBuildingType.get == spacetype['building_type']
-            if spacetype['necb_schedule_type'] == '*'
-              wildcard_spaces = +1
-            else
-              s[spacetype['necb_schedule_type']] = s[spacetype['necb_schedule_type']] + space.floorArea if (spacetype['necb_schedule_type'] != '*') && (spacetype['necb_schedule_type'] != '- undefined -')
-            end
-            # puts "Found #{space.spaceType.get.name} schedule #{spacetype[2]} match with floor area of #{space.floorArea()}"
-            found_space_type = true
-          elsif spacetype['necb_schedule_type'] != '*'
-            # found wildcard..will not count to total.
-            found_space_type = true
-          end
-        end
-      end
-      raise "Did not find #{space.spaceType.get.name} in NECB space types." if found_space_type == false
-    end
-    # finds max value and returns NECB schedule letter.
-    raise('Only wildcard spaces in model. You need to define the actual spaces. ') if wildcard_spaces == model.getSpaces.size
-    dominant_schedule = s.each {|k, v| return k.to_s if v == s.values.max}
-    return dominant_schedule
-  end
-
-  # This method determines the spacetype schedule type. This will re
-  # @author phylroy.lopez@nrcan.gc.ca
-  # @param space [String]
-  # @return [String]:["A","B","C","D","E","F","G","H","I"] spacetype
-  def determine_necb_schedule_type(space)
-    spacetype_data = @standards_data['space_types']
-    raise "Spacetype not defined for space #{space.get.name}) if space.spaceType.empty?" if space.spaceType.empty?
-    raise "Undefined standardsSpaceType or StandardsBuildingType for space #{space.spaceType.get.name}) if space.spaceType.empty?" if space.spaceType.get.standardsSpaceType.empty? | space.spaceType.get.standardsBuildingType.empty?
-    space_type_properties = spacetype_data.detect {|st| (st['space_type'] == space.spaceType.get.standardsSpaceType.get) && (st['building_type'] == space.spaceType.get.standardsBuildingType.get)}
-    return space_type_properties['necb_schedule_type'].strip
-  end
 
   # Determine whether or not water fixtures are attached to spaces
   def model_attach_water_fixtures_to_spaces?(model)
@@ -542,7 +728,7 @@ class NECB2011 < Standard
     exterior_wall_and_roof_and_subsurface_area = space_exterior_wall_and_roof_and_subsurface_area(space) # To do
     # Don't create an object if there is no exterior wall area
     if exterior_wall_and_roof_and_subsurface_area <= 0.0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{space.name}, no exterior wall area was found, no infiltration will be added.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, no exterior wall area was found, no infiltration will be added.")
       return true
     end
     # Calculate the total infiltration, assuming
@@ -649,6 +835,879 @@ class NECB2011 < Standard
     @standards_data['tables'].each do |table|
       @standards_data[table[0]] = table[1]['table']
     end
+  end
+
+  #This model gets the climate zone column index from tables 3.2.2.x
+  #@author phylroy.lopez@nrcan.gc.ca
+  #@param hdd [Float]
+  #@return [Fixnum] climate zone 4-8
+  def get_climate_zone_index(hdd)
+    #check for climate zone index from NECB 3.2.2.X
+    case hdd
+    when 0..2999 then
+      return 0 #climate zone 4
+    when 3000..3999 then
+      return 1 #climate zone 5
+    when 4000..4999 then
+      return 2 #climate zone 6
+    when 5000..5999 then
+      return 3 #climate zone 7a
+    when 6000..6999 then
+      return 4 #climate zone 7b
+    when 7000..1000000 then
+      return 5 #climate zone 8
+    end
+  end
+
+  #This model gets the climate zone name and returns the climate zone string.
+  #@author phylroy.lopez@nrcan.gc.ca
+  #@param hdd [Float]
+  #@return [Fixnum] climate zone 4-8
+  def get_climate_zone_name(hdd)
+    case self.get_climate_zone_index(hdd)
+    when 0 then
+      return "4"
+    when 1 then
+      return "5" #climate zone 5
+    when 2 then
+      return "6" #climate zone 6
+    when 3 then
+      return "7a" #climate zone 7a
+    when 4 then
+      return "7b" #climate zone 7b
+    when 5 then
+      return "8" #climate zone 8
+    end
+  end
+
+
+  def model_add_daylighting_controls(model)
+
+    ##### Ask user's inputs for daylighting controls illuminance setpoint and number of stepped control steps.
+    ##### Note that the minimum number of stepped control steps is two steps as per NECB2011.
+    def daylighting_controls_settings(illuminance_setpoint: 500.0,
+                                      number_of_stepped_control_steps: 2)
+      return illuminance_setpoint, number_of_stepped_control_steps
+    end
+
+    ##### Find spaces with exterior fenestration including fixed window, operable window, and skylight.
+    daylight_spaces = []
+    model.getSpaces.sort.each do |space|
+      space.surfaces.sort.each do |surface|
+        surface.subSurfaces.sort.each do |subsurface|
+          if subsurface.outsideBoundaryCondition == "Outdoors" &&
+              (subsurface.subSurfaceType == "FixedWindow" ||
+                  subsurface.subSurfaceType == "OperableWindow" ||
+                  subsurface.subSurfaceType == "Skylight")
+            daylight_spaces << space
+          end #subsurface.outsideBoundaryCondition == "Outdoors" && (subsurface.subSurfaceType == "FixedWindow" || "OperableWindow")
+        end #surface.subSurfaces.each do |subsurface|
+      end #space.surfaces.each do |surface|
+    end #model.getSpaces.sort.each do |space|
+
+    ##### Remove duplicate spaces from the "daylight_spaces" array, as a daylighted space may have various fenestration types.
+    daylight_spaces = daylight_spaces.uniq
+    # puts daylight_spaces
+
+    ##### Create hashes for "Primary Sidelighted Areas", "Sidelighting Effective Aperture", "Daylighted Area Under Skylights",
+    ##### and "Skylight Effective Aperture" for the whole model.
+    ##### Each of these hashes will be used later in this function (i.e. model_add_daylighting_controls)
+    ##### to provide a dictionary of daylighted space names and the associated value (i.e. daylighted area or effective aperture).
+    primary_sidelighted_area_hash = {}
+    sidelighting_effective_aperture_hash = {}
+    daylighted_area_under_skylights_hash = {}
+    skylight_effective_aperture_hash = {}
+
+    ##### Calculate "Primary Sidelighted Areas" AND "Sidelighting Effective Aperture" as per NECB2011. #TODO: consider removing overlapped sidelighted area
+    daylight_spaces.sort.each do |daylight_space|
+      # puts daylight_space.name.to_s
+      primary_sidelighted_area = 0.0
+      area_weighted_vt_handle = 0.0
+      area_weighted_vt = 0.0
+      window_area_sum = 0.0
+
+      ##### Calculate floor area of the daylight_space and get floor vertices of the daylight_space (to be used for the calculation of daylight_space depth)
+      floor_surface = nil
+      floor_area = 0.0
+      floor_vertices = []
+      daylight_space.surfaces.sort.each do |surface|
+        if surface.surfaceType == "Floor"
+          floor_surface = surface
+          floor_area += surface.netArea
+          floor_vertices << surface.vertices
+        end
+      end
+
+      ##### Loop through the surfaces of each daylight_space to calculate primary_sidelighted_area and
+      ##### area-weighted visible transmittance and window_area_sum which are used to calculate sidelighting_effective_aperture
+      primary_sidelighted_area, area_weighted_vt_handle, window_area_sum =
+          get_parameters_sidelighting(daylight_space: daylight_space,
+                                      floor_surface: floor_surface,
+                                      floor_vertices: floor_vertices,
+                                      floor_area: floor_area,
+                                      primary_sidelighted_area: primary_sidelighted_area,
+                                      area_weighted_vt_handle: area_weighted_vt_handle,
+                                      window_area_sum: window_area_sum)
+
+      primary_sidelighted_area_hash[daylight_space.name.to_s] = primary_sidelighted_area
+
+      ##### Calculate area-weighted VT of glazing (this is used to calculate sidelighting effective aperture; see NECB2011: 4.2.2.10.).
+      area_weighted_vt = area_weighted_vt_handle / window_area_sum
+      sidelighting_effective_aperture_hash[daylight_space.name.to_s] = window_area_sum * area_weighted_vt / primary_sidelighted_area
+
+    end #daylight_spaces.each do |daylight_space|
+
+
+    ##### Calculate "Daylighted Area Under Skylights" AND "Skylight Effective Aperture"
+    daylight_spaces.sort.each do |daylight_space|
+      # puts daylight_space.name.to_s
+      skylight_area = 0.0
+      skylight_area_weighted_vt_handle = 0.0
+      skylight_area_weighted_vt = 0.0
+      skylight_area_sum = 0.0
+      daylighted_under_skylight_area = 0.0
+
+      ##### Loop through the surfaces of each daylight_space to calculate daylighted_area_under_skylights and skylight_effective_aperture for each daylight_space
+      daylighted_under_skylight_area, skylight_area_weighted_vt_handle, skylight_area_sum =
+          get_parameters_skylight(daylight_space: daylight_space,
+                                  skylight_area_weighted_vt_handle: skylight_area_weighted_vt_handle,
+                                  skylight_area_sum: skylight_area_sum,
+                                  daylighted_under_skylight_area: daylighted_under_skylight_area)
+
+      daylighted_area_under_skylights_hash[daylight_space.name.to_s] = daylighted_under_skylight_area
+
+      ##### Calculate skylight_effective_aperture as per NECB2011: 4.2.2.7.
+      ##### Note that it was assumed that the skylight is flush with the ceiling. Therefore, area-weighted average well factor (WF) was set to 0.9 in the below Equation.
+      skylight_area_weighted_vt = skylight_area_weighted_vt_handle / skylight_area_sum
+      skylight_effective_aperture_hash[daylight_space.name.to_s] = 0.85 * skylight_area_sum * skylight_area_weighted_vt * 0.9 / daylighted_under_skylight_area
+
+    end #daylight_spaces.each do |daylight_space|
+
+    # puts primary_sidelighted_area_hash
+    # puts sidelighting_effective_aperture_hash
+    # puts daylighted_area_under_skylights_hash
+    # puts skylight_effective_aperture_hash
+
+    ##### Find office spaces >= 25m2 among daylight_spaces
+    offices_larger_25m2 = []
+    daylight_spaces.sort.each do |daylight_space|
+
+      ## The following steps are for in case an office has multiple floors at various heights
+      ## 1. Calculate number of floors of each daylight_space
+      ## 2. Find the lowest z among all floors of each daylight_space
+      ## 3. Find lowest floors of each daylight_space (these floors are at the same level)
+      ## 4. Calculate 'daylight_space_area' as sum of area of all the lowest floors of each daylight_space, and gather the vertices of all the lowest floors of each daylight_space
+
+      ## 1. Calculate number of floors of daylight_space
+      floor_vertices = []
+      number_floor = 0
+      daylight_space.surfaces.sort.each do |surface|
+        if surface.surfaceType == 'Floor'
+          floor_vertices << surface.vertices
+          number_floor += 1
+        end
+      end
+
+      ## 2. Loop through all floors of daylight_space, and find the lowest z among all floors of daylight_space
+      lowest_floor_z = []
+      highest_floor_z = []
+      for i in 0..number_floor - 1
+        if i == 0
+          lowest_floor_z = floor_vertices[i][0].z
+          highest_floor_z = floor_vertices[i][0].z
+        else
+          if lowest_floor_z > floor_vertices[i][0].z
+            lowest_floor_z = floor_vertices[i][0].z
+          else
+            lowest_floor_z = lowest_floor_z
+          end
+          if highest_floor_z < floor_vertices[i][0].z
+            highest_floor_z = floor_vertices[i][0].z
+          else
+            highest_floor_z = highest_floor_z
+          end
+        end
+      end
+
+      ## 3 and 4. Loop through all floors of daylight_space, and calculate the sum of area of all the lowest floors of daylight_space,
+      ## and gather the vertices of all the lowest floors of daylight_space
+      daylight_space_area = 0
+      lowest_floors_vertices = []
+      floor_vertices = []
+      daylight_space.surfaces.sort.each do |surface|
+        if surface.surfaceType == 'Floor'
+          floor_vertices = surface.vertices
+          if floor_vertices[0].z == lowest_floor_z
+            lowest_floors_vertices << floor_vertices
+            daylight_space_area = daylight_space_area + surface.netArea
+          end
+        end
+      end
+
+      if daylight_space.spaceType.get.standardsSpaceType.get.to_s == "Office - enclosed" && daylight_space_area >= 25.0
+        offices_larger_25m2 << daylight_space.name.to_s
+      end
+    end
+
+    ##### find daylight_spaces which do not need daylight sensor controls based on the primary_sidelighted_area as per NECB2011: 4.2.2.8.
+    ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their primary_sidelighted_area <= 100m2), as per NECB2011: 4.2.2.2.
+    daylight_spaces_exception = []
+    primary_sidelighted_area_hash.sort.each do |key_daylight_space_name, value_primary_sidelighted_area|
+      if value_primary_sidelighted_area <= 100.0 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
+        daylight_spaces_exception << key_daylight_space_name
+      end
+    end
+
+    ##### find daylight_spaces which do not need daylight sensor controls based on the sidelighting_effective_aperture as per NECB2011: 4.2.2.8.
+    ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their sidelighting_effective_aperture <= 10%), as per NECB2011: 4.2.2.2.
+    sidelighting_effective_aperture_hash.sort.each do |key_daylight_space_name, value_sidelighting_effective_aperture|
+      if value_sidelighting_effective_aperture <= 0.1 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
+        daylight_spaces_exception << key_daylight_space_name
+      end
+    end
+
+    ##### find daylight_spaces which do not need daylight sensor controls based on the daylighted_area_under_skylights as per NECB2011: 4.2.2.4.
+    ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their daylighted_area_under_skylights <= 400m2), as per NECB2011: 4.2.2.2.
+    daylighted_area_under_skylights_hash.sort.each do |key_daylight_space_name, value_daylighted_area_under_skylights|
+      if value_daylighted_area_under_skylights <= 400.0 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
+        daylight_spaces_exception << key_daylight_space_name
+      end
+    end
+
+    ##### find daylight_spaces which do not need daylight sensor controls based on the skylight_effective_aperture criterion as per NECB2011: 4.2.2.4.
+    ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their skylight_effective_aperture <= 0.6%), as per NECB2011: 4.2.2.2.
+    skylight_effective_aperture_hash.sort.each do |key_daylight_space_name, value_skylight_effective_aperture|
+      if value_skylight_effective_aperture <= 0.006 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
+        daylight_spaces_exception << key_daylight_space_name
+      end
+    end
+    # puts daylight_spaces_exception
+
+    ##### Loop through the daylight_spaces and exclude the daylight_spaces that do not meet the criteria (see above) as per NECB2011: 4.2.2.4. and 4.2.2.8.
+    daylight_spaces_exception.sort.each do |daylight_space_exception|
+      daylight_spaces.sort.each do |daylight_space|
+        if daylight_space.name.to_s == daylight_space_exception
+          daylight_spaces.delete(daylight_space)
+        end
+      end
+    end
+    # puts daylight_spaces
+
+    ##### Create one daylighting sensor and put it at the center of each daylight_space if the space area < 250m2;
+    ##### otherwise, create two daylight sensors, divide the space into two parts and put each of the daylight sensors at the center of each part of the space.
+    daylight_spaces.sort.each do |daylight_space|
+      # puts daylight_space.name.to_s
+      ##### 1. Calculate number of floors of each daylight_space
+      ##### 2. Find the lowest z among all floors of each daylight_space
+      ##### 3. Find lowest floors of each daylight_space (these floors are at the same level)
+      ##### 4. Calculate 'daylight_space_area' as sum of area of all the lowest floors of each daylight_space, and gather the vertices of all the lowest floors of each daylight_space
+      ##### 5. Find min and max of x and y among vertices of all the lowest floors of each daylight_space
+
+      ##### Calculate number of floors of daylight_space
+      floor_vertices = []
+      number_floor = 0
+      daylight_space.surfaces.sort.each do |surface|
+        if surface.surfaceType == 'Floor'
+          floor_vertices << surface.vertices
+          number_floor += 1
+        end
+      end
+
+      ##### Loop through all floors of daylight_space, and find the lowest z among all floors of daylight_space
+      lowest_floor_z = []
+      highest_floor_z = []
+      for i in 0..number_floor - 1
+        if i == 0
+          lowest_floor_z = floor_vertices[i][0].z
+          highest_floor_z = floor_vertices[i][0].z
+        else
+          if lowest_floor_z > floor_vertices[i][0].z
+            lowest_floor_z = floor_vertices[i][0].z
+          else
+            lowest_floor_z = lowest_floor_z
+          end
+          if highest_floor_z < floor_vertices[i][0].z
+            highest_floor_z = floor_vertices[i][0].z
+          else
+            highest_floor_z = highest_floor_z
+          end
+        end
+      end
+      # puts lowest_floor_z
+
+      ##### Loop through all floors of daylight_space, and calculate the sum of area of all the lowest floors of daylight_space,
+      ##### and gather the vertices of all the lowest floors of daylight_space
+      daylight_space_area = 0
+      lowest_floors_vertices = []
+      floor_vertices = []
+      daylight_space.surfaces.sort.each do |surface|
+        if surface.surfaceType == 'Floor'
+          floor_vertices = surface.vertices
+          if floor_vertices[0].z == lowest_floor_z
+            lowest_floors_vertices << floor_vertices
+            daylight_space_area = daylight_space_area + surface.netArea
+          end
+        end
+      end
+      # puts daylight_space.name.to_s
+      # puts number_floor
+      # puts lowest_floors_vertices
+      # puts daylight_space_area
+
+      ##### Loop through all lowest floors of daylight_space and find the min and max of x and y among their vertices
+      xmin = lowest_floors_vertices[0][0].x
+      ymin = lowest_floors_vertices[0][0].y
+      xmax = lowest_floors_vertices[0][0].x
+      ymax = lowest_floors_vertices[0][0].y
+      zmin = lowest_floor_z
+      for i in 0..lowest_floors_vertices.count - 1 #this loops through each of the lowers floors of daylight_space
+        for j in 0..lowest_floors_vertices[i].count - 1 #this loops through each of vertices of each of the lowers floors of daylight_space
+
+          if xmin > lowest_floors_vertices[i][j].x
+            xmin = lowest_floors_vertices[i][j].x
+          end
+          if ymin > lowest_floors_vertices[i][j].y
+            ymin = lowest_floors_vertices[i][j].y
+          end
+          if xmax < lowest_floors_vertices[i][j].x
+            xmax = lowest_floors_vertices[i][j].x
+          end
+          if ymax < lowest_floors_vertices[i][j].y
+            ymax = lowest_floors_vertices[i][j].y
+          end
+        end
+      end
+      # puts daylight_space.name.to_s
+      # puts xmin
+      # puts xmax
+      # puts ymin
+      # puts ymax
+
+      ##### Get the thermal zone of daylight_space (this is used later to assign daylighting sensor)
+      zone = daylight_space.thermalZone
+      if !zone.empty?
+        zone = daylight_space.thermalZone.get
+        ##### Get the floor of the daylight_space
+        floors = []
+        daylight_space.surfaces.sort.each do |surface|
+          if surface.surfaceType == "Floor"
+            floors << surface
+          end
+        end
+
+        ##### Get user's input for daylighting controls illuminance setpoint and number of stepped control steps
+        illuminance_setpoint, number_of_stepped_control_steps = daylighting_controls_settings(illuminance_setpoint: 500.0, number_of_stepped_control_steps: 2)
+
+        ##### Create daylighting sensor control
+        ##### NOTE: NECB2011 has some requirements on the number of sensors in spaces based on the area of the spaces.
+        ##### However, EnergyPlus/OpenStudio allows to put maximum two built-in sensors in each thermal zone rather than in each space.
+        ##### Since a thermal zone may include several spaces which are not next to each other on the same floor, or
+        ##### a thermal zone may include spaces on different floors, a simplified method has been used to create a daylighting sensor.
+        ##### So, in each thermal zone, only one daylighting sensor has been created even if the area of that thermal zone requires more than one daylighting sensor.
+        ##### Also, it has been assumed that a thermal zone includes spaces which are next to each other and are on the same floor.
+        ##### Furthermore, the one daylighting sensor in each thermal zone (where the thermal zone needs daylighting sensor),
+        ##### the sensor has been put at the intersection of the minimum and maximum x and y of the lowest floor of that thermal zones.
+        sensor = OpenStudio::Model::DaylightingControl.new(daylight_space.model)
+        sensor.setName("#{daylight_space.name.to_s} daylighting control")
+        sensor.setSpace(daylight_space)
+        sensor.setIlluminanceSetpoint(illuminance_setpoint)
+        sensor.setLightingControlType('Stepped')
+        sensor.setNumberofSteppedControlSteps(number_of_stepped_control_steps)
+        x_pos = (xmin + xmax) / 2.0
+        y_pos = (ymin + ymax) / 2.0
+        z_pos = zmin + 0.8 #put it 0.8 meter above the floor
+        sensor_vertex = OpenStudio::Point3d.new(x_pos, y_pos, z_pos)
+        sensor.setPosition(sensor_vertex)
+        zone.setPrimaryDaylightingControl(sensor)
+        zone.setFractionofZoneControlledbyPrimaryDaylightingControl(1.0)
+
+      end #if !zone.empty?
+    end #daylight_spaces.each do |daylight_space|
+  end
+
+  #def model_add_daylighting_controls(model)
+
+
+  def model_enable_demand_controlled_ventilation(model, dcv_type = 'No_DCV') # Note: Values for dcv_type are: 'Occupancy_based_DCV', 'CO2_based_DCV', 'No_DCV', 'NECB_Default'
+    if dcv_type != 'NECB_Default'
+      if dcv_type == 'Occupancy_based_DCV' || dcv_type == 'CO2_based_DCV'
+        #TODO: IMPORTANT: (upon other BTAP tasks) Set a value for the "Outdoor Air Flow per Person" field of the "OS:DesignSpecification:OutdoorAir" object
+        # Note: The "Outdoor Air Flow per Person" field is required for occupancy-based DCV.
+        # Note: The "Outdoor Air Flow per Person" values should be based on ASHRAE 62.1: Article 6.2.2.1.
+        # Note: The "Outdoor Air Flow per Person" should be entered for "ventilation_per_person" in "lib/openstudio-standards/standards/necb/NECB2011/data/space_types.json"
+
+        ##### Define ScheduleTypeLimits for Any_Number_ppm
+        ##### TODO: (upon other BTAP tasks) This function can be added to btap/schedules.rb > module StandardScheduleTypeLimits
+        def self.get_any_number_ppm(model)
+          name = 'Any_Number_ppm'
+          any_number_ppm_schedule_type_limits = model.getScheduleTypeLimitsByName(name)
+          if any_number_ppm_schedule_type_limits.empty?
+            any_number_ppm_schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            any_number_ppm_schedule_type_limits.setName(name)
+            any_number_ppm_schedule_type_limits.setNumericType('CONTINUOUS')
+            any_number_ppm_schedule_type_limits.setUnitType('Dimensionless')
+            any_number_ppm_schedule_type_limits.setLowerLimitValue(400.0)
+            any_number_ppm_schedule_type_limits.setUpperLimitValue(1000.0)
+            return any_number_ppm_schedule_type_limits
+          else
+            return any_number_ppm_schedule_type_limits.get
+          end
+        end
+
+        ##### Define indoor CO2 availability schedule (required for CO2-based DCV)
+        ##### Reference: see page B.13 of PNNL (2017), "Impacts of Commercial Building Controls on Energy Savings and Peak Load Reduction", available a: https://www.energy.gov/eere/buildings/downloads/impacts-commercial-building-controls-energy-savings-and-peak-load-reduction
+        ##### Note: the defined schedule here is redundant as the schedule says it is always on AND
+        ##### the "ZoneControl:ContaminantController" object says that "If this field is left blank, the schedule has a value of 1 for all time periods".
+        indoor_co2_availability_schedule = OpenStudio::Model::ScheduleCompact.new(model)
+        indoor_co2_availability_schedule.setName('indoor_co2_availability_schedule')
+        indoor_co2_availability_schedule.setScheduleTypeLimits(BTAP::Resources::Schedules::StandardScheduleTypeLimits::get_fraction(model))
+        indoor_co2_availability_schedule.to_ScheduleCompact.get
+        # indoor_co2_availability_schedule.setString(1,"indoor_co2_availability_schedule")
+        indoor_co2_availability_schedule.setString(3, "Through: 12/31")
+        indoor_co2_availability_schedule.setString(4, "For: Weekdays SummerDesignDay")
+        indoor_co2_availability_schedule.setString(5, "Until: 07:00")
+        indoor_co2_availability_schedule.setString(6, "0.0")
+        indoor_co2_availability_schedule.setString(7, "Until: 22:00")
+        indoor_co2_availability_schedule.setString(8, "1.0")
+        indoor_co2_availability_schedule.setString(9, "Until: 24:00")
+        indoor_co2_availability_schedule.setString(10, "0.0")
+        indoor_co2_availability_schedule.setString(11, "For: Saturday WinterDesignDay")
+        indoor_co2_availability_schedule.setString(12, "Until: 07:00")
+        indoor_co2_availability_schedule.setString(13, "0.0")
+        indoor_co2_availability_schedule.setString(14, "Until: 18:00")
+        indoor_co2_availability_schedule.setString(15, "1.0")
+        indoor_co2_availability_schedule.setString(16, "Until: 24:00")
+        indoor_co2_availability_schedule.setString(17, "0.0")
+        indoor_co2_availability_schedule.setString(18, "For: AllOtherDays")
+        indoor_co2_availability_schedule.setString(19, "Until: 24:00")
+        indoor_co2_availability_schedule.setString(20, "0.0")
+
+        ##### Define indoor CO2 setpoint schedule (required for CO2-based DCV)
+        ##### Reference: see page B.13 of PNNL (2017), "Impacts of Commercial Building Controls on Energy Savings and Peak Load Reduction", available a: https://www.energy.gov/eere/buildings/downloads/impacts-commercial-building-controls-energy-savings-and-peak-load-reduction
+        indoor_co2_setpoint_schedule = OpenStudio::Model::ScheduleCompact.new(model)
+        indoor_co2_setpoint_schedule.setName('indoor_co2_setpoint_schedule')
+        indoor_co2_setpoint_schedule.setScheduleTypeLimits(get_any_number_ppm(model))
+        indoor_co2_setpoint_schedule.to_ScheduleCompact.get
+        indoor_co2_setpoint_schedule.setString(3, "Through: 12/31")
+        indoor_co2_setpoint_schedule.setString(4, "For: AllDays")
+        indoor_co2_setpoint_schedule.setString(5, "Until: 24:00")
+        indoor_co2_setpoint_schedule.setString(6, "1000.0")
+        # indoor_co2_setpoint_schedule.setToConstantValue(1000.0) #1000 ppm
+
+
+        ##### Define outdoor CO2 schedule (required for CO2-based DCV
+        ##### Reference: see page B.13 of PNNL (2017), "Impacts of Commercial Building Controls on Energy Savings and Peak Load Reduction", available a: https://www.energy.gov/eere/buildings/downloads/impacts-commercial-building-controls-energy-savings-and-peak-load-reduction
+        outdoor_co2_schedule = OpenStudio::Model::ScheduleCompact.new(model)
+        outdoor_co2_schedule.setName('outdoor_co2_schedule')
+        outdoor_co2_schedule.setScheduleTypeLimits(get_any_number_ppm(model))
+        outdoor_co2_schedule.to_ScheduleCompact.get
+        outdoor_co2_schedule.setString(3, "Through: 12/31")
+        outdoor_co2_schedule.setString(4, "For: AllDays")
+        outdoor_co2_schedule.setString(5, "Until: 24:00")
+        outdoor_co2_schedule.setString(6, "400.0")
+        # outdoor_co2_schedule.setToConstantValue(400.0) #400 ppm
+
+        ##### Define ZoneAirContaminantBalance (required for CO2-based DCV)
+        zone_air_contaminant_balance = model.getZoneAirContaminantBalance()
+        zone_air_contaminant_balance.setCarbonDioxideConcentration(true)
+        zone_air_contaminant_balance.setOutdoorCarbonDioxideSchedule(outdoor_co2_schedule)
+
+        ##### Set CO2 controller in each space (required for CO2-based DCV)
+        model.getSpaces.sort.each do |space|
+          # puts space.name.to_s
+          zone = space.thermalZone
+          if !zone.empty?
+            zone = space.thermalZone.get
+          end
+          zone_control_co2 = OpenStudio::Model::ZoneControlContaminantController.new(zone.model)
+          zone_control_co2.setName("#{space.name.to_s} Zone Control Contaminant Controller")
+          zone_control_co2.setCarbonDioxideControlAvailabilitySchedule(indoor_co2_availability_schedule)
+          zone_control_co2.setCarbonDioxideSetpointSchedule(indoor_co2_setpoint_schedule)
+          zone.setZoneControlContaminantController(zone_control_co2)
+        end
+
+      end #if dcv_type == "Occupancy_based_DCV" || dcv_type == "CO2_based_DCV"
+
+      ##### Loop through AirLoopHVACs
+      model.getAirLoopHVACs.sort.each do |air_loop|
+        ##### Loop through AirLoopHVAC's supply nodes to:
+        ##### (1) Find its AirLoopHVAC:OutdoorAirSystem using the supply node;
+        ##### (2) Find Controller:OutdoorAir using AirLoopHVAC:OutdoorAirSystem;
+        ##### (3) Get "Controller Mechanical Ventilation" from Controller:OutdoorAir.
+        air_loop.supplyComponents.sort.each do |supply_component|
+          ##### Find AirLoopHVAC:OutdoorAirSystem of AirLoopHVAC using the supply node.
+          hvac_component = supply_component.to_AirLoopHVACOutdoorAirSystem
+
+          if !hvac_component.empty?
+            ##### Find Controller:OutdoorAir using AirLoopHVAC:OutdoorAirSystem.
+            hvac_component = hvac_component.get
+            controller_oa = hvac_component.getControllerOutdoorAir
+
+            ##### Get "Controller Mechanical Ventilation" from Controller:OutdoorAir.
+            controller_mv = controller_oa.controllerMechanicalVentilation
+
+            ##### Set "Demand Controlled Ventilation" to "Yes" or "No" in Controller:MechanicalVentilation depending on dcv_type.
+            if (dcv_type == 'CO2_based_DCV') || (dcv_type == 'Occupancy_based_DCV') #Occupancy
+              controller_mv.setDemandControlledVentilation(true)
+              ##### Set the "System Outdoor Air Method" field based on dcv_type in the Controller:MechanicalVentilation object
+              if dcv_type == 'CO2_based_DCV'
+                controller_mv.setSystemOutdoorAirMethod('IndoorAirQualityProcedure')
+              else #dcv_type == 'Occupancy_based_DCV'
+                controller_mv.setSystemOutdoorAirMethod('ZoneSum')
+              end
+            elsif dcv_type == 'No_DCV'
+              controller_mv.setDemandControlledVentilation(false)
+            end
+            # puts controller_mv
+
+          end #if !hvac_component.empty?
+
+        end #air_loop.supplyComponents.each do |supply_component|
+      end #model.getAirLoopHVACs.each do |air_loop|
+    end #if dcv_type != 'NECB_Default'
+  end
+
+  #def model_enable_demand_controlled_ventilation
+
+
+  def set_lighting_per_area_led_lighting(space_type:, definition:, lighting_per_area_led_lighting:, lights_scale:)
+    # puts "#{space_type.name.to_s} - 'space_height' - #{space_height.to_s}"
+    occ_sens_lpd_frac = 1.0
+    # NECB2011 space types that require a reduction in the LPD to account for
+    # the requirement of an occupancy sensor (8.4.4.6(3) and 4.2.2.2(2))
+    reduce_lpd_spaces = ['Classroom/lecture/training', 'Conf./meet./multi-purpose', 'Lounge/recreation',
+                         'Conf./meet./multi-purpose', 'Washroom-sch-A', 'Washroom-sch-B', 'Washroom-sch-C', 'Washroom-sch-D',
+                         'Washroom-sch-E', 'Washroom-sch-F', 'Washroom-sch-G', 'Washroom-sch-H', 'Washroom-sch-I',
+                         'Dress./fitt. - performance arts', 'Locker room', 'Locker room-sch-A', 'Locker room-sch-B',
+                         'Locker room-sch-C', 'Locker room-sch-D', 'Locker room-sch-E', 'Locker room-sch-F', 'Locker room-sch-G',
+                         'Locker room-sch-H', 'Locker room-sch-I', 'Retail - dressing/fitting']
+    if reduce_lpd_spaces.include?(space_type.standardsSpaceType.get)
+      # Note that "Storage area", "Storage area - refrigerated", "Hospital - medical supply" and "Office - enclosed"
+      # LPD should only be reduced if their space areas are less than specific area values.
+      # This is checked in a space loop after this function in the calling routine.
+      occ_sens_lpd_frac = 0.9
+    end
+
+    # ##### Since Atrium's LPD for LED lighting depends on atrium's height, the height of the atrium (if applicable) should be found.
+    standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil
+    if standards_space_type.include? 'Atrium' #TODO: Note that since none of the archetypes has Atrium, this was tested for 'Dining'. #Atrium
+      puts "#{standards_space_type} - has atrium" #space_type.name.to_s
+      # Get the max height for the spacetype.
+      max_space_height_for_spacetype = get_max_space_height_for_space_type(space_type: space_type)
+      if max_space_height_for_spacetype < 12.0 #TODO: Note that since none of the archetypes has Atrium, this was tested for 'Dining' with the threshold of 5.0 m for space_height.
+        # TODO: Regarding the below equations, identify which version of ASHRAE 90.1 was used in NECB2015.
+        atrium_lpd_eq_smaller_12_intercept = 0
+        atrium_lpd_eq_smaller_12_slope = 1.06
+        atrium_lpd_eq_larger_12_intercept = 4.3
+        atrium_lpd_eq_larger_12_slope = 1.06
+        lighting_per_area_led_lighting_atrium = (atrium_lpd_eq_smaller_12_intercept + atrium_lpd_eq_smaller_12_slope * 12.0) * 0.092903 # W/ft2 TODO: Note that for NECB2011, a constant LPD is used for atrium based on NECB2015's equations. NECB2011's threshold for height is 13.0 m.
+      elsif max_space_height_for_spacetype >= 12.0 && max_space_height_for_spacetype < 13.0
+        lighting_per_area_led_lighting_atrium = (atrium_lpd_eq_larger_12_intercept + atrium_lpd_eq_larger_12_slope * 12.5) * 0.092903 # W/ft2
+      else #i.e. space_height >= 13.0
+        lighting_per_area_led_lighting_atrium = (atrium_lpd_eq_larger_12_intercept + atrium_lpd_eq_larger_12_slope * 13.0) * 0.092903 # W/ft2
+      end
+      puts "#{standards_space_type} - has lighting_per_area_led_lighting_atrium - #{lighting_per_area_led_lighting_atrium}"
+      lighting_per_area_led_lighting = lighting_per_area_led_lighting_atrium
+    end
+    lighting_per_area_led_lighting = lighting_per_area_led_lighting * lights_scale
+    definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area_led_lighting.to_f * occ_sens_lpd_frac, 'W/ft^2', 'W/m^2').get)
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set LPD to #{lighting_per_area_led_lighting} W/ft^2.")
+  end
+
+  # Adds the loads and associated schedules for each space type
+  # as defined in the OpenStudio_Standards_space_types.json file.
+  # This includes lights, plug loads, occupants, ventilation rate requirements,
+  # infiltration, gas equipment (for kitchens, etc.) and typical schedules for each.
+  # Some loads are governed by the standard, others are typical values
+  # pulled from sources such as the DOE Reference and DOE Prototype Buildings.
+  #
+  # @return [Bool] returns true if successful, false if not
+  def model_add_loads(model, lights_type, lights_scale)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
+
+    # Loop through all the space types currently in the model,
+    # which are placeholders, and give them appropriate loads and schedules
+    model.getSpaceTypes.sort.each do |space_type|
+      # Rendering color
+      space_type_apply_rendering_color(space_type)
+
+      # Loads
+      space_type_apply_internal_loads(space_type: space_type, lights_type: lights_type, lights_scale: lights_scale)
+
+      # Schedules
+      space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true, true)
+    end
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')
+
+    return true
+  end
+
+  ##### This method is needed to the space_type_apply_internal_loads space needed for the calculation of atriums' LPD when LED lighting is used in atriums. ***END***
+  def get_max_space_height_for_space_type(space_type:)
+    # initialize return value to zero.
+    max_space_height_for_space_type = 0.0
+    # Interate through all spaces in model.. not just ones that have space type defined.. Is this right sara?
+    space_type.spaces.sort.each do |space|
+      # Get only the wall type surfaces and iterate throught them.
+      space.surfaces.sort.select(&:surfaceType == 'Wall').each do |wall_surface|
+        # Find the vertex with the max z value.
+        vertex_with_max_height = wall_surface.vertices.max_by(&:z)
+        # replace max if this surface has something bigger.
+        max_space_height_for_space_type = vertex_with_max_height.z if vertex_with_max_height.z > max_space_height_for_space_type
+      end
+    end
+    return max_space_height_for_space_type
+  end
+
+  ##### The below method is for the 'model_add_daylighting_controls' method
+  def get_parameters_sidelighting(daylight_space:, floor_surface:, floor_vertices:, floor_area:, primary_sidelighted_area:, area_weighted_vt_handle:, window_area_sum:)
+
+    daylight_space.surfaces.sort.each do |surface|
+
+      ##### Get the vertices of each exterior wall of the daylight_space on the floor
+      ##### (these vertices will be used to calculate daylight_space depth in relation to the exterior wall, and
+      ##### the distance of the window to vertical walls on each side of the window)
+      if surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType == "Wall"
+        wall_vertices_x_on_floor = []
+        wall_vertices_y_on_floor = []
+        surface_z_min = [surface.vertices[0].z, surface.vertices[1].z, surface.vertices[2].z, surface.vertices[3].z].min
+        surface.vertices.each do |vertex|
+          # puts vertex.z
+          if vertex.z == surface_z_min && surface_z_min == floor_vertices[0][0].z
+            wall_vertices_x_on_floor << vertex.x
+            wall_vertices_y_on_floor << vertex.y
+          end
+        end
+      end
+
+      if surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType == "Wall" && surface_z_min == floor_vertices[0][0].z
+
+        ##### Calculate the daylight_space depth in relation to the considered exterior wall.
+        ##### To calculate daylight_space depth, first get the floor vertices which are on the opposite side of the considered exterior wall.
+        floor_vertices_x_wall_opposite = []
+        floor_vertices_y_wall_opposite = []
+        floor_vertices[0].each do |floor_vertex|
+          if (floor_vertex.x != wall_vertices_x_on_floor[0] && floor_vertex.y != wall_vertices_y_on_floor[0]) || (floor_vertex.x != wall_vertices_x_on_floor[1] && floor_vertex.y != wall_vertices_y_on_floor[1])
+            floor_vertices_x_wall_opposite << floor_vertex.x
+            floor_vertices_y_wall_opposite << floor_vertex.y
+          end
+        end
+
+        ##### To calculate daylight_space depth, second calculate floor length on both sides: (1) exterior wall side, (2) on the opposite side of the exterior wall
+        floor_width_wall_side = Math.sqrt((wall_vertices_x_on_floor[0] - wall_vertices_x_on_floor[1]) ** 2 + (wall_vertices_y_on_floor[0] - wall_vertices_y_on_floor[1]) ** 2)
+        floor_width_wall_opposite = Math.sqrt((floor_vertices_x_wall_opposite[0] - floor_vertices_x_wall_opposite[1]) ** 2 + (floor_vertices_y_wall_opposite[0] - floor_vertices_y_wall_opposite[1]) ** 2)
+
+        ##### Now, daylight_space depth can be calculated using the floor area and two lengths of the floor (note that these two lengths are in parallel to each other).
+        daylight_space_depth = 2 * floor_area / (floor_width_wall_side + floor_width_wall_opposite)
+
+        ##### Loop through the windows (including fixed and operable ones) to get window specification (width, height, area, visible transmittance (VT)), and area-weighted VT
+        surface.subSurfaces.sort.each do |subsurface|
+          # puts subsurface.name.to_s
+          if subsurface.subSurfaceType == "FixedWindow" || subsurface.subSurfaceType == "OperableWindow"
+            window_vt = subsurface.visibleTransmittance
+            window_vt = window_vt.get
+            window_area = subsurface.netArea
+            window_area_sum += window_area
+            area_weighted_vt_handle += window_area * window_vt
+            window_vertices = subsurface.vertices
+            if window_vertices[0].z.round(2) == window_vertices[1].z.round(2)
+              window_width = Math.sqrt((window_vertices[0].x - window_vertices[1].x) ** 2.0 + (window_vertices[0].y - window_vertices[1].y) ** 2.0)
+            else
+              window_width = Math.sqrt((window_vertices[1].x - window_vertices[2].x) ** 2.0 + (window_vertices[1].y - window_vertices[2].y) ** 2.0)
+            end
+            window_head_height = [window_vertices[0].z, window_vertices[1].z, window_vertices[2].z, window_vertices[3].z].max.round(2)
+            primary_sidelighted_area_depth = [window_head_height, daylight_space_depth].min #as per NECB2011: 4.2.2.9.
+
+            ##### Calculate the  distance of the window to vertical walls on each side of the window (this is used to determine the sidelighted area's width).
+            window_vertices_on_floor = []
+            window_vertices.each do |vertex|
+              window_vertices_on_floor << floor_surface.plane.project(vertex)
+            end
+            window_wall_distance_side1 = [Math.sqrt((wall_vertices_x_on_floor[0] - window_vertices_on_floor[0].x) ** 2.0 + (wall_vertices_y_on_floor[0] - window_vertices_on_floor[0].y) ** 2.0),
+                                          Math.sqrt((wall_vertices_x_on_floor[0] - window_vertices_on_floor[2].x) ** 2.0 + (wall_vertices_y_on_floor[0] - window_vertices_on_floor[2].y) ** 2.0),
+                                          0.6].min # 0.6 m as per NECB2011: 4.2.2.9.
+            window_wall_distance_side2 = [Math.sqrt((wall_vertices_x_on_floor[1] - window_vertices_on_floor[0].x) ** 2.0 + (wall_vertices_y_on_floor[1] - window_vertices_on_floor[0].y) ** 2.0),
+                                          Math.sqrt((wall_vertices_x_on_floor[1] - window_vertices_on_floor[2].x) ** 2.0 + (wall_vertices_y_on_floor[1] - window_vertices_on_floor[2].y) ** 2.0),
+                                          0.6].min # 0.6 m as per NECB2011: 4.2.2.9.
+            primary_sidelighted_area_width = window_wall_distance_side1 + window_width + window_wall_distance_side2
+            primary_sidelighted_area = primary_sidelighted_area + primary_sidelighted_area_depth * primary_sidelighted_area_width
+          end #if subsurface.subSurfaceType == "FixedWindow" || subsurface.subSurfaceType == "OperableWindow"
+        end #surface.subSurfaces.each do |subsurface|
+      end #if surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType == "Wall" && surface_z_min == floor_vertices[0][0].z
+    end #daylight_space.surfaces.each do |surface|
+
+    return primary_sidelighted_area, area_weighted_vt_handle, window_area_sum
+  end
+
+  ##### The below method is for the 'model_add_daylighting_controls' method
+  def get_parameters_skylight(daylight_space:, skylight_area_weighted_vt_handle:, skylight_area_sum:, daylighted_under_skylight_area:)
+
+    daylight_space.surfaces.sort.each do |surface|
+      ##### Get roof vertices
+      if surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType == "RoofCeiling"
+        roof_vertices = surface.vertices
+      end
+
+      ##### Loop through each subsurafce to calculate daylighted_area_under_skylights and skylight_effective_aperture for each daylight_space
+      surface.subSurfaces.sort.each do |subsurface|
+        if subsurface.subSurfaceType == "Skylight"
+          skylight_vt = subsurface.visibleTransmittance
+          skylight_vt = skylight_vt.get
+          skylight_area = subsurface.netArea
+          skylight_area_sum += skylight_area
+          skylight_area_weighted_vt_handle += skylight_area * skylight_vt
+
+          ##### Get skylight vertices
+          skylight_vertices = subsurface.vertices
+
+          ##### Calculate skylight width and height
+          skylight_width = Math.sqrt((skylight_vertices[0].x - skylight_vertices[1].x) ** 2.0 + (skylight_vertices[0].y - skylight_vertices[1].y) ** 2.0)
+          skylight_length = Math.sqrt((skylight_vertices[0].x - skylight_vertices[3].x) ** 2.0 + (skylight_vertices[0].y - skylight_vertices[3].y) ** 2.0)
+
+          ##### Get ceiling height assuming the skylight is flush with the ceiling
+          ceiling_height = skylight_vertices[0].z
+
+          ##### Calculate roof lengths
+          ##### (Note: used OpenStudio BCL measure called "assign_ashrae_9012010_daylighting_controls" with some changes/correcctions)
+          roof_length_0 = Math.sqrt((roof_vertices[0].x - roof_vertices[1].x) ** 2.0 + (roof_vertices[0].y - roof_vertices[1].y) ** 2.0)
+          roof_length_1 = Math.sqrt((roof_vertices[1].x - roof_vertices[2].x) ** 2.0 + (roof_vertices[1].y - roof_vertices[2].y) ** 2.0)
+          roof_length_2 = Math.sqrt((roof_vertices[2].x - roof_vertices[3].x) ** 2.0 + (roof_vertices[2].y - roof_vertices[3].y) ** 2.0)
+          roof_length_3 = Math.sqrt((roof_vertices[3].x - roof_vertices[0].x) ** 2.0 + (roof_vertices[3].y - roof_vertices[0].y) ** 2.0)
+
+          ##### Find the skylight point that is the closest one to roof_vertex_0
+          ##### (Note: used OpenStudio BCL measure called "assign_ashrae_9012010_daylighting_controls" with some changes/correcctions)
+          roof_vertex_0_skylight_vertex_0 = Math.sqrt((roof_vertices[0].x - skylight_vertices[0].x) ** 2.0 + (roof_vertices[0].y - skylight_vertices[0].y) ** 2.0)
+          roof_vertex_0_skylight_vertex_1 = Math.sqrt((roof_vertices[0].x - skylight_vertices[1].x) ** 2.0 + (roof_vertices[0].y - skylight_vertices[1].y) ** 2.0)
+          roof_vertex_0_skylight_vertex_2 = Math.sqrt((roof_vertices[0].x - skylight_vertices[2].x) ** 2.0 + (roof_vertices[0].y - skylight_vertices[2].y) ** 2.0)
+          roof_vertex_0_skylight_vertex_3 = Math.sqrt((roof_vertices[0].x - skylight_vertices[3].x) ** 2.0 + (roof_vertices[0].y - skylight_vertices[3].y) ** 2.0)
+          roof_vertex_0_closest_distance = [roof_vertex_0_skylight_vertex_0, roof_vertex_0_skylight_vertex_1, roof_vertex_0_skylight_vertex_2, roof_vertex_0_skylight_vertex_3].min
+          if roof_vertex_0_closest_distance == roof_vertex_0_skylight_vertex_0
+            roof_vertex_0_closest_point = skylight_vertices[0]
+          elsif roof_vertex_0_closest_distance == roof_vertex_0_skylight_vertex_1
+            roof_vertex_0_closest_point = skylight_vertices[1]
+          elsif roof_vertex_0_closest_distance == roof_vertex_0_skylight_vertex_2
+            roof_vertex_0_closest_point = skylight_vertices[2]
+          elsif roof_vertex_0_closest_distance == roof_vertex_0_skylight_vertex_3
+            roof_vertex_0_closest_point = skylight_vertices[3]
+          end
+
+          ##### Find the skylight point that is the closest one to roof_vertex_2
+          ##### (Note: used OpenStudio BCL measure called "assign_ashrae_9012010_daylighting_controls" with some changes/correcctions)
+          roof_vertex_2_skylight_vertex_0 = Math.sqrt((roof_vertices[2].x - skylight_vertices[0].x) ** 2.0 + (roof_vertices[2].y - skylight_vertices[0].y) ** 2.0)
+          roof_vertex_2_skylight_vertex_1 = Math.sqrt((roof_vertices[2].x - skylight_vertices[1].x) ** 2.0 + (roof_vertices[2].y - skylight_vertices[1].y) ** 2.0)
+          roof_vertex_2_skylight_vertex_2 = Math.sqrt((roof_vertices[2].x - skylight_vertices[2].x) ** 2.0 + (roof_vertices[2].y - skylight_vertices[2].y) ** 2.0)
+          roof_vertex_2_skylight_vertex_3 = Math.sqrt((roof_vertices[2].x - skylight_vertices[3].x) ** 2.0 + (roof_vertices[2].y - skylight_vertices[3].y) ** 2.0)
+          roof_vertex_2_closest_distance = [roof_vertex_2_skylight_vertex_0, roof_vertex_2_skylight_vertex_1, roof_vertex_2_skylight_vertex_2, roof_vertex_2_skylight_vertex_3].min
+          if roof_vertex_2_closest_distance == roof_vertex_2_skylight_vertex_0
+            roof_vertex_2_closest_point = skylight_vertices[0]
+          elsif roof_vertex_2_closest_distance == roof_vertex_2_skylight_vertex_1
+            roof_vertex_2_closest_point = skylight_vertices[1]
+          elsif roof_vertex_2_closest_distance == roof_vertex_2_skylight_vertex_2
+            roof_vertex_2_closest_point = skylight_vertices[2]
+          elsif roof_vertex_2_closest_distance == roof_vertex_2_skylight_vertex_3
+            roof_vertex_2_closest_point = skylight_vertices[3]
+          end
+
+          ##### Calculate the vertical distance from the closest skylight points (projection onto the roof) to the wall (projection onto the roof) for roof_vertex_0 and roof_vertex_2
+          ##### (Note: used OpenStudio BCL measure called "assign_ashrae_9012010_daylighting_controls" with some changes/correcctions)
+          ##### For the calculation of each vertical distance: (1) first the area of the triangle is calculated knowing the cooridantes of its three corners;
+          ##### (2) the vertical distance (i.e. triangle height) is calculated knowing the triangle area and the associated roof length.
+          rv_0_triangle_0_area = 0.5 * (((roof_vertex_0_closest_point.x - roof_vertices[1].x) * (roof_vertex_0_closest_point.y - roof_vertices[0].y)) -
+              ((roof_vertex_0_closest_point.x - roof_vertices[0].x) * (roof_vertex_0_closest_point.y - roof_vertices[1].y))).abs
+          rv_0_distance_0 = (2.0 * rv_0_triangle_0_area) / roof_length_0
+          rv_0_triangle_3_area = 0.5 * (((roof_vertex_0_closest_point.x - roof_vertices[3].x) * (roof_vertex_0_closest_point.y - roof_vertices[0].y)) -
+              ((roof_vertex_0_closest_point.x - roof_vertices[0].x) * (roof_vertex_0_closest_point.y - roof_vertices[3].y))).abs
+          rv_0_distance_3 = (2.0 * rv_0_triangle_3_area) / roof_length_3
+
+          rv_2_triangle_1_area = 0.5 * (((roof_vertex_2_closest_point.x - roof_vertices[1].x) * (roof_vertex_2_closest_point.y - roof_vertices[2].y)) -
+              ((roof_vertex_2_closest_point.x - roof_vertices[2].x) * (roof_vertex_2_closest_point.y - roof_vertices[1].y))).abs
+          rv_2_distance_1 = (2.0 * rv_2_triangle_1_area) / roof_length_1
+          rv_2_triangle_2_area = 0.5 * (((roof_vertex_2_closest_point.x - roof_vertices[3].x) * (roof_vertex_2_closest_point.y - roof_vertices[2].y)) -
+              ((roof_vertex_2_closest_point.x - roof_vertices[2].x) * (roof_vertex_2_closest_point.y - roof_vertices[3].y))).abs
+          rv_2_distance_2 = (2.0 * rv_2_triangle_2_area) / roof_length_2
+
+          ##### Set the vertical distances from the closest skylight points (projection onto the roof) to the wall (projection onto the roof) for roof_vertex_0 and roof_vertex_2
+          distance_1 = rv_0_distance_0
+          distance_2 = rv_0_distance_3
+          distance_3 = rv_2_distance_1
+          distance_4 = rv_2_distance_2
+
+          ##### Calculate the width and length of the daylighted area under the skylight as per NECB2011: 4.2.2.5.
+          ##### Note: In the below loops, if any exterior walls has window(s), the width and length of the daylighted area under the skylight are re-calculated as per NECB2011: 4.2.2.5.
+          daylighted_under_skylight_width = skylight_width + [0.7 * ceiling_height, distance_1].min + [0.7 * ceiling_height, distance_4].min
+          daylighted_under_skylight_length = skylight_length + [0.7 * ceiling_height, distance_2].min + [0.7 * ceiling_height, distance_3].min
+
+          ##### As noted above, the width and length of the daylighted area under the skylight are re-calculated (as per NECB2011: 4.2.2.5.), if any exterior walls has window(s).
+          ##### To this end, the window_head_height should be calculated, as below:
+          daylight_space.surfaces.sort.each do |surface|
+            if surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType == "Wall"
+              wall_vertices_on_floor_x = []
+              wall_vertices_on_floor_y = []
+              wall_vertices = surface.vertices
+              if wall_vertices[0].z == wall_vertices[1].z
+                wall_vertices_on_floor_x << wall_vertices[0].x
+                wall_vertices_on_floor_x << wall_vertices[1].x
+                wall_vertices_on_floor_y << wall_vertices[0].y
+                wall_vertices_on_floor_y << wall_vertices[1].y
+              elsif wall_vertices[0].z == wall_vertices[3].z
+                wall_vertices_on_floor_x << wall_vertices[0].x
+                wall_vertices_on_floor_x << wall_vertices[3].x
+                wall_vertices_on_floor_y << wall_vertices[0].y
+                wall_vertices_on_floor_y << wall_vertices[3].y
+              end
+              window_vertices = subsurface.vertices
+              window_head_height = [window_vertices[0].z, window_vertices[1].z, window_vertices[2].z, window_vertices[3].z].max.round(2)
+
+              ##### Calculate the exterior wall length (on the floor)
+              exterior_wall_length = Math.sqrt((wall_vertices_on_floor_x[0] - wall_vertices_on_floor_x[1]) ** 2.0 + (wall_vertices_on_floor_y[0] - wall_vertices_on_floor_y[1]) ** 2.0)
+
+              ##### Calculate the vertical distance of skylight_vertices[0] projection onto the roof/floor to the exterior wall
+              skylight_vertex_0_triangle_area = 0.5 * (((wall_vertices_on_floor_x[0] - wall_vertices_on_floor_x[1]) * (wall_vertices_on_floor_y[0] - skylight_vertices[0].y)) -
+                  ((wall_vertices_on_floor_x[0] - skylight_vertices[0].x) * (wall_vertices_on_floor_y[0] - wall_vertices_on_floor_y[1]))).abs
+              skylight_vertex_0_distance = (2.0 * skylight_vertex_0_triangle_area) / exterior_wall_length
+
+              ##### Calculate the vertical distance of skylight_vertices[1] projection onto the roof/floor to the exterior wall
+              skylight_vertex_1_triangle_area = 0.5 * (((wall_vertices_on_floor_x[0] - wall_vertices_on_floor_x[1]) * (wall_vertices_on_floor_y[0] - skylight_vertices[1].y)) -
+                  ((wall_vertices_on_floor_x[0] - skylight_vertices[1].x) * (wall_vertices_on_floor_y[0] - wall_vertices_on_floor_y[1]))).abs
+              skylight_vertex_1_distance = (2.0 * skylight_vertex_1_triangle_area) / exterior_wall_length
+
+              ##### Calculate the vertical distance of skylight_vertices[3] projection onto the roof/floor to the exterior wall
+              skylight_vertex_3_triangle_area = 0.5 * (((wall_vertices_on_floor_x[0] - wall_vertices_on_floor_x[1]) * (wall_vertices_on_floor_y[0] - skylight_vertices[3].y)) -
+                  ((wall_vertices_on_floor_x[0] - skylight_vertices[3].x) * (wall_vertices_on_floor_y[0] - wall_vertices_on_floor_y[1]))).abs
+              skylight_vertex_3_distance = (2.0 * skylight_vertex_3_triangle_area) / exterior_wall_length
+
+              ##### Loop through the subsurfaces that has exterior windows to re-calculate the width and length of the daylighted area under the skylight
+              surface.subSurfaces.sort.each do |subsurface|
+                if subsurface.subSurfaceType == "FixedWindow" || subsurface.subSurfaceType == "OperableWindow"
+
+                  if skylight_vertex_0_distance == skylight_vertex_1_distance #skylight_01 is in parellel to the exterior wall
+                    if skylight_vertex_0_distance.round(2) == distance_2.round(2)
+                      daylighted_under_skylight_length = skylight_length + [0.7 * ceiling_height, distance_2, distance_2 - window_head_height].min + [0.7 * ceiling_height, distance_3].min
+                    elsif skylight_vertex_0_distance.round(2) == distance_3.round(2)
+                      daylighted_under_skylight_length = skylight_length + [0.7 * ceiling_height, distance_2].min + [0.7 * ceiling_height, distance_3, distance_3 - window_head_height].min
+                    end
+                  elsif skylight_vertex_0_distance == skylight_vertex_3_distance #skylight_03 is in parellel to the exterior wall
+                    if skylight_vertex_0_distance.round(2) == distance_1.round(2)
+                      daylighted_under_skylight_width = skylight_width + [0.7 * ceiling_height, distance_1, distance_1 - window_head_height].min + [0.7 * ceiling_height, distance_4].min
+                    elsif skylight_vertex_0_distance.round(2) == distance_4.round(2)
+                      daylighted_under_skylight_width = skylight_width + [0.7 * ceiling_height, distance_1].min + [0.7 * ceiling_height, distance_4, distance_4 - window_head_height].min
+                    end
+                  end #if skylight_vertex_0_distance == skylight_vertex_1_distance
+
+                  daylighted_under_skylight_area += daylighted_under_skylight_length * daylighted_under_skylight_width
+
+                end #if subsurface.subSurfaceType == "FixedWindow" || subsurface.subSurfaceType == "OperableWindow"
+              end #surface.subSurfaces.each do |subsurface|
+            end #if surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType == "Wall"
+          end #daylight_space.surfaces.each do |surface|
+
+        end #if subsurface.subSurfaceType == "Skylight"
+      end #surface.subSurfaces.each do |subsurface|
+    end #daylight_space.surfaces.each do |surface|
+
+    return daylighted_under_skylight_area, skylight_area_weighted_vt_handle, skylight_area_sum
   end
 
 end

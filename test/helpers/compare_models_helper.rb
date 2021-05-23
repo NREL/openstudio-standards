@@ -24,6 +24,7 @@ def compare_osm_files(model_true, model_compare, look_for_renamed_objects = fals
     'OS:EnergyManagementSystem:Sensor', # Names are UIDs
     'OS:EnergyManagementSystem:Program', # Names are UIDs
     'OS:EnergyManagementSystem:Actuator', # Names are UIDs
+    'OS:EnergyManagementSystem:OutputVariable', # getString() returns UIDs instead of variable name
     'OS:Connection', # Names are UIDs
     'OS:PortList', # Names are UIDs
     'OS:Building', # Name includes timestamp of creation
@@ -31,6 +32,7 @@ def compare_osm_files(model_true, model_compare, look_for_renamed_objects = fals
     'OS:ZoneHVAC:EquipmentList', # Names appear to be created non-deteministically
     'OS:AvailabilityManagerAssignmentList', # Names appear to be created non-deteministically
     'OS:Schedule:Rule', # Names appear to be created non-deteministically
+    'OS:ScheduleTypeLimits', # Names appear to be created non-deteministically
     'OS:Rendering:Color', # Rendering colors don't matter
     'OS:Output:Meter', # Output meter objects may be different and don't affect results
     'OS:ProgramControl', # Deprecated object no longer translated to EnergyPlus
@@ -219,6 +221,11 @@ def compare_objects_field_by_field(true_object, compare_object, alias_hash = Has
     next if field_name.include?('Sensible Fraction Schedule Name')
     next if field_name.include?('Latent Fraction Schedule Name')
     next if field_name.include?('Water Use Equipment Name')
+
+    # Don't compare field added in OS 3.2 release (temporary)
+    # checking this field in older versions will require different regression models by version
+    next if field_name.include?('Drain Water Heat Exchanger Type')
+    next if field_name.include?('Drain Water Heat Exchanger Destination')
 
     # Don't compare the names of schedule type limits
     # because they appear to be created non-deteministically

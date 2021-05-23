@@ -2,7 +2,7 @@ require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
 
 
-class HVACEfficienciesTest < MiniTest::Test
+class NECB_Airloop_Sizing_Parameters_Tests < MiniTest::Test
   # set to true to run the standards in the test.
   PERFORM_STANDARDS = true
   # set to true to run the simulations.
@@ -135,7 +135,8 @@ begin
       zones: model.getThermalZones,
       heating_coil_type: heating_coil_type,
       baseboard_type: baseboard_type,
-      hw_loop: hw_loop)
+      hw_loop: hw_loop,
+      new_auto_zoner: false)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards

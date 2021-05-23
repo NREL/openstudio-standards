@@ -1,5 +1,4 @@
 Standard.class_eval do
-
   # Gets the sql file for the model, erroring if not found
   # @todo candidate for C++
   def model_sql_file(model)
@@ -26,6 +25,7 @@ Standard.class_eval do
     sql.availableEnvPeriods.each do |env_pd|
       env_type = sql.environmentType(env_pd)
       next unless env_type.is_initialized
+
       if env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod')
         ann_env_pd = env_pd
       end
@@ -362,7 +362,6 @@ Standard.class_eval do
 
   # Gets the annual occupied unmet hours from the sql file
   def model_annual_occupied_unmet_hours(model)
-
     heating_setpoint_unmet = model_annual_occupied_unmet_heating_hours(model)
     cooling_setpoint_unmet = model_annual_occupied_unmet_cooling_hours(model)
 
@@ -487,7 +486,7 @@ Standard.class_eval do
     fuel_types = ['Electricity', 'Natural Gas', 'Additional Fuel', 'District Cooling', 'District Heating', 'Water']
 
     # List of all end uses
-    end_uses = ['Heating', 'Cooling', 'Interior Lighting', 'Exterior Lighting', 'Interior Equipment', 'Exterior Equipment', 'Fans', 'Pumps', 'Heat Rejection','Humidification', 'Heat Recovery', 'Water Systems', 'Refrigeration', 'Generators']
+    end_uses = ['Heating', 'Cooling', 'Interior Lighting', 'Exterior Lighting', 'Interior Equipment', 'Exterior Equipment', 'Fans', 'Pumps', 'Heat Rejection', 'Humidification', 'Heat Recovery', 'Water Systems', 'Refrigeration', 'Generators']
 
     # Get the value for each end use/ fuel type combination
     end_uses.each do |end_use|
@@ -498,17 +497,17 @@ Standard.class_eval do
 
     return energy_values
   end
-  
+
   def model_dd_results_by_end_use_and_fuel_type(model)
     energy_values = {}
 
     # List of all fuel types, based on Table 5.1 of EnergyPlus' Input Output Reference manual
-    fuel_types = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOil#1', 'FuelOil#2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling',
-    'DistrictHeating', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
+    fuel_types = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOilNo1', 'FuelOilNo2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling',
+                  'DistrictHeating', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
 
     # List of all end uses, based on Table 5.3 of EnergyPlus' Input Output Reference manual
-    end_uses = ['InteriorLights', 'ExteriorLights', 'InteriorEquipment', 'ExteriorEquipment', 'Fans', 'Pumps', 'Heating', 'Cooling', 'HeatRejection', 'Humidifier', 
-    'HeatRecovery', 'DHW', 'Cogeneration', 'Refrigeration', 'WaterSystems']
+    end_uses = ['InteriorLights', 'ExteriorLights', 'InteriorEquipment', 'ExteriorEquipment', 'Fans', 'Pumps', 'Heating', 'Cooling', 'HeatRejection', 'Humidifier',
+                'HeatRecovery', 'DHW', 'Cogeneration', 'Refrigeration', 'WaterSystems']
 
     # Get the value for each end use/ fuel type combination
     end_uses.each do |end_use|
@@ -522,7 +521,6 @@ Standard.class_eval do
 
   # Gets annual eui by fuel and end use from the sql file
   def model_annual_eui_kbtu_per_ft2_by_fuel_and_enduse(model, fuel_type, end_use)
-
     energy_gj = model_annual_energy_by_fuel_and_enduse(model, fuel_type, end_use)
     energy_kbtu = OpenStudio.convert(energy_gj, 'GJ', 'kBtu').get
 

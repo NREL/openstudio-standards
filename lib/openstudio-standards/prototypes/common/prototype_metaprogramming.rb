@@ -4,39 +4,43 @@
 require 'json'
 
 def create_class_array
-  prototype_buildings = [
-      'FullServiceRestaurant',
-      'Hospital',
-      'HighriseApartment',
-      'LargeHotel',
-      'LargeOffice',
-      'MediumOffice',
-      'MidriseApartment',
-      'Outpatient',
-      'PrimarySchool',
-      'QuickServiceRestaurant',
-      'RetailStandalone',
-      'SecondarySchool',
-      'SmallHotel',
-      'SmallOffice',
-      'RetailStripmall',
-      'Warehouse',
-      'SuperMarket',
-      'SmallDataCenterLowITE',
-      'SmallDataCenterHighITE',
-      'LargeDataCenterLowITE',
-      'LargeDataCenterHighITE',
-      'SmallOfficeDetailed',
-      'MediumOfficeDetailed',
-      'LargeOfficeDetailed',
-      'Laboratory'
-  ]
+  prototype_buildings = ['FullServiceRestaurant',
+                         'Hospital',
+                         'HighriseApartment',
+                         'LargeHotel',
+                         'LargeOffice',
+                         'MediumOffice',
+                         'MidriseApartment',
+                         'Outpatient',
+                         'PrimarySchool',
+                         'QuickServiceRestaurant',
+                         'RetailStandalone',
+                         'SecondarySchool',
+                         'SmallHotel',
+                         'SmallOffice',
+                         'RetailStripmall',
+                         'Warehouse',
+                         'SuperMarket',
+                         'SmallDataCenterLowITE',
+                         'SmallDataCenterHighITE',
+                         'LargeDataCenterLowITE',
+                         'LargeDataCenterHighITE',
+                         'SmallOfficeDetailed',
+                         'MediumOfficeDetailed',
+                         'LargeOfficeDetailed',
+                         'Laboratory',
+                         'College',
+                         'CourtHouse',
+                         'TallBuilding',
+                         'SuperTallBuilding']
 
   templates = {
     'ASHRAE9012004' => '90.1-2004',
     'ASHRAE9012007' => '90.1-2007',
     'ASHRAE9012010' => '90.1-2010',
     'ASHRAE9012013' => '90.1-2013',
+    'ASHRAE9012016' => '90.1-2016',
+    'ASHRAE9012019' => '90.1-2019',
     'DOERef1980to2004' => 'DOE Ref 1980-2004',
     'DOERefPre1980' => 'DOE Ref Pre-1980',
     'NRELZNEReady2017' => 'NREL ZNE Ready 2017'
@@ -266,227 +270,248 @@ end
     end
   end
 
-
   return class_array
 end
 
 def create_deer_class_array
   prototype_buildings = [
-      'Asm',
-      'ECC',
-      'EPr',
-      'ERC',
-      'ESe',
-      'EUn',
-      'Gro',
-      'Hsp',
-      'Nrs',
-      'Htl',
-      'Mtl',
-      'MBT',
-      'MLI',
-      'OfL',
-      'OfS',
-      'RFF',
-      'RSD',
-      'Rt3',
-      'RtL',
-      'RtS',
-      'SCn',
-      'SUn',
-      'WRf',
-      'GHs',
-      'DMo',
-      'MFm',
-      'SFm'
+    'Asm',
+    'ECC',
+    'EPr',
+    'ERC',
+    'ESe',
+    'EUn',
+    'Gro',
+    'Hsp',
+    'Nrs',
+    'Htl',
+    'Mtl',
+    'MBT',
+    'MLI',
+    'OfL',
+    'OfS',
+    'RFF',
+    'RSD',
+    'Rt3',
+    'RtL',
+    'RtS',
+    'SCn',
+    'SUn',
+    'WRf',
+    'GHs',
+    'DMo',
+    'MFm',
+    'SFm'
   ]
 
   # Only a subset of building type and HVAC type combinations are valid
   building_to_hvac_systems = {
-      'Asm' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'ECC' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG',
-          'WLHP'],
-      'EPr' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'WLHP'],
-      'ERC' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'ESe' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG',
-          'WLHP'],
-      'EUn' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG'],
-      'Gro' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'Hsp' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG'],
-      'Nrs' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'FPFC',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG'],
-      'Htl' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG',
-          'WLHP'],
-      'Mtl' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'MBT' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG',
-          'WLHP'],
-      'MFm' => [
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'MLI' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'OfL' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG',
-          'WLHP'],
-      'OfS' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG',
-          'WLHP'],
-      'RFF' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'RSD' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'Rt3' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG',
-          'WLHP'],
-      'RtL' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'RtS' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'SCn' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'SUn' => ['Unc'],
-      'WRf' => ['DXGF']
+    'Asm' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'ECC' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG',
+      'WLHP'
+    ],
+    'EPr' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'WLHP'
+    ],
+    'ERC' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'ESe' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG',
+      'WLHP'
+    ],
+    'EUn' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG'
+    ],
+    'Gro' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'Hsp' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG'
+    ],
+    'Nrs' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'FPFC',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG'
+    ],
+    'Htl' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG',
+      'WLHP'
+    ],
+    'Mtl' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'MBT' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG',
+      'WLHP'
+    ],
+    'MFm' => [
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'MLI' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'OfL' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG',
+      'WLHP'
+    ],
+    'OfS' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG',
+      'WLHP'
+    ],
+    'RFF' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'RSD' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'Rt3' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG',
+      'WLHP'
+    ],
+    'RtL' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'RtS' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'SCn' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'SUn' => ['Unc'],
+    'WRf' => ['DXGF']
   }
-  
+
   templates = {
     'DEERPRE1975' => 'DEER Pre-1975',
     'DEER1985' => 'DEER 1985',
@@ -516,8 +541,9 @@ end
     # Example class DEER1985AsmDXGF
     prototype_buildings.each do |building_type|
       next if building_to_hvac_systems[building_type].nil?
+
       building_to_hvac_systems[building_type].each do |hvac_system|
-      class_array << "
+        class_array << "
   # This class represents a prototypical #{template} #{building_type} #{hvac_system}.
   class #{template}#{building_type}#{hvac_system} < #{template}
   @@building_type = \"#{building_type}\"
@@ -645,9 +671,9 @@ end
 
 def create_cbes_class_array
   prototype_buildings = [
-      'MediumOffice',
-      'RetailStandalone',
-      'SmallOffice'
+    'MediumOffice',
+    'RetailStandalone',
+    'SmallOffice'
   ]
 
   templates = {
@@ -675,7 +701,7 @@ end
     # Create Building Specific classes for each building.
     # Example class CBESPre1978_MediumOffice
     prototype_buildings.each do |building_type|
-        class_array << "
+      class_array << "
   # This class represents a prototypical #{template} #{building_type}.
   class #{template}#{building_type} < #{template}
   @@building_type = \"#{building_type}\"
@@ -824,7 +850,7 @@ end
 
 def save_meta_classes_to_file
   filepath = "#{File.dirname(__FILE__)}/do_not_edit_metaclasses.rb"
-  File.open(filepath, 'w') {|f| create_class_array.each {|item| f << item}}
+  File.open(filepath, 'w') { |f| create_class_array.each { |item| f << item } }
 end
 
 def remove_meta_class_file

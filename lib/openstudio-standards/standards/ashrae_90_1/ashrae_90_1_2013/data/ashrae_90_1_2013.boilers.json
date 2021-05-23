@@ -10,7 +10,7 @@
       "maximum_capacity": 299999,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_annual_fuel_utilization_efficiency": 0.8,
+      "minimum_annual_fuel_utilization_efficiency": 0.82,
       "minimum_thermal_efficiency": null,
       "minimum_combustion_efficiency": null,
       "efffplr": "Boiler with No Minimum Turndown",

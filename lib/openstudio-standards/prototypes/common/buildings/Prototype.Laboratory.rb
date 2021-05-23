@@ -1,10 +1,8 @@
-
-# Custom changes for the QuickServiceRestaurant prototype.
+# Custom changes for the Laboratory prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
 module Laboratory
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
-
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     reset_fume_hood_oa(model)
@@ -12,14 +10,12 @@ module Laboratory
     set_oa_control_for_lab_terminals(model)
 
     # TODO
-=begin
-    # Add exhaust fan to fume hood zone
-    search_criteria = ...
-    fume_hood_space = model_find_object(standards_data['Space Types'], search_criteria)
-    fume_hood_zone_volume = fume_hood_space.getVolume...
-    flow_rate_fume_hood = fume_hood_zone_volume * fume_hood_space['Ventilation_Air_Changes...']
-    model_add_exhaust_fan(model, thermal_zones, flow_rate=flow_rate_fume_hood,  flow_fraction_schedule_name='Lab_FumeHood_Sch')
-=end
+    # # Add exhaust fan to fume hood zone
+    # search_criteria = ...
+    # fume_hood_space = model_find_object(standards_data['Space Types'], search_criteria)
+    # fume_hood_zone_volume = fume_hood_space.getVolume...
+    # flow_rate_fume_hood = fume_hood_zone_volume * fume_hood_space['Ventilation_Air_Changes...']
+    # model_add_exhaust_fan(model, thermal_zones, flow_rate=flow_rate_fume_hood,  flow_fraction_schedule_name='Lab_FumeHood_Sch')
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
@@ -30,9 +26,10 @@ module Laboratory
   # So add "Proportional Control Minimum Outdoor Air Flow Rate Schedule"
   # at the mean time, modify "Outdoor Air Method" to "ProportionalControlBasedOnDesignOARate" in Controller:MechanicalVentilation of the DOAS
   def reset_fume_hood_oa(model)
-    fume_hood_spaces = Array.new
+    fume_hood_spaces = []
     model.getSpaces.each do |space|
       next unless space.name.get.to_s.include? 'fumehood'
+
       ventilation = space.designSpecificationOutdoorAir.get
       ventilation.setOutdoorAirFlowRateFractionSchedule(model_add_schedule(model, 'Lab_FumeHood_Sch'))
     end

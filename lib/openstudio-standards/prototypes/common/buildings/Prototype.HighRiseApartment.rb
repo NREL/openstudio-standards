@@ -1,13 +1,42 @@
-
 # Custom changes for the HighriseApartment prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
 module HighriseApartment
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific HVAC adjustments')
+
     # add elevator and lights&fans for the ground floor corridor
     add_extra_equip_corridor(model)
     # add extra infiltration for ground floor corridor
     add_door_infiltration(climate_zone, model)
+
+    # add transformer
+    # efficiency based on a 75 kVA transformer
+    case template
+    when '90.1-2004', '90.1-2007'
+      transformer_efficiency = 0.966
+    when '90.1-2010', '90.1-2013'
+      transformer_efficiency = 0.98
+    when '90.1-2016', '90.1-2019'
+      transformer_efficiency = 0.986
+    else
+      transformer_efficiency = nil
+    end
+    return true unless !transformer_efficiency.nil?
+
+    # Change to output variable name in E+ 9.4 (OS 3.1.0)
+    excluded_interiorequip_variable = if model.version < OpenStudio::VersionString.new('3.1.0')
+                                        'Electric Equipment Electric Energy'
+                                      else
+                                        'Electric Equipment Electricity Energy'
+                                      end
+
+    model_add_transformer(model,
+                          wired_lighting_frac: 0.0015,
+                          transformer_size: 75000,
+                          transformer_efficiency: transformer_efficiency,
+                          excluded_interiorequip_key: 'T Corridor_Elevators_Equip',
+                          excluded_interiorequip_meter: excluded_interiorequip_variable)
 
     return true
   end
@@ -29,7 +58,7 @@ module HighriseApartment
     elec_equip_def2.setFractionLost(0.95)
     elec_equip_def1.setDesignLevel(20_370)
     case template
-      when '90.1-2013'
+      when '90.1-2013', '90.1-2016', '90.1-2019'
         elec_equip_def2.setDesignLevel(63)
       when '90.1-2010'
         elec_equip_def2.setDesignLevel(105.9)
@@ -47,7 +76,7 @@ module HighriseApartment
     case template
       when '90.1-2004', '90.1-2007'
         elec_equip2.setSchedule(model_add_schedule(model, 'ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7'))
-      when '90.1-2010', '90.1-2013'
+      when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         elec_equip2.setSchedule(model_add_schedule(model, 'ApartmentMidRise ELEV_LIGHT_FAN_SCH_ADD_DF'))
     end
   end
@@ -62,11 +91,13 @@ module HighriseApartment
       when '90.1-2004'
         infiltration_g_corridor_door.setDesignFlowRate(1.523916863)
         infiltration_g_corridor_door.setSchedule(model_add_schedule(model, 'ApartmentHighRise INFIL_Door_Opening_SCH_0.144'))
-      when '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         case climate_zone
-          when 'ASHRAE 169-2006-1A',
+          when 'ASHRAE 169-2006-0A',
+               'ASHRAE 169-2006-1A',
                'ASHRAE 169-2006-2A',
                'ASHRAE 169-2006-2B',
+               'ASHRAE 169-2013-0A',
                'ASHRAE 169-2013-1A',
                'ASHRAE 169-2013-2A',
                'ASHRAE 169-2013-2B'
@@ -87,11 +118,12 @@ module HighriseApartment
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-
     return true
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 0.0)
 
     return true
   end

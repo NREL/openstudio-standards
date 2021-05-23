@@ -82,15 +82,97 @@ class Standard
     return true
   end
 
+  # Default occupancy fraction threshold for determining if the spaces served by the zone hvac are occupied
+  def zone_hvac_unoccupied_threshold
+    return 0.15
+  end
+
+  # If the supply air fan operating mode schedule is always off (to follow load),
+  # and the zone requires ventilation, override it to follow the zone occupancy schedule
+  def zone_hvac_component_occupancy_ventilation_control(zone_hvac_component)
+    ventilation = false
+    # Zone HVAC operating schedule if providing ventilation
+    # Zone HVAC components return an OptionalSchedule object for supplyAirFanOperatingModeSchedule
+    # except for ZoneHVACTerminalUnitVariableRefrigerantFlow which returns a Schedule
+    existing_sch = nil
+    if zone_hvac_component.to_ZoneHVACFourPipeFanCoil.is_initialized
+      zone_hvac_component = zone_hvac_component.to_ZoneHVACFourPipeFanCoil.get
+      if zone_hvac_component.maximumOutdoorAirFlowRate.is_initialized
+        oa_rate = zone_hvac_component.maximumOutdoorAirFlowRate.get
+        ventilation = true if oa_rate > 0.0
+      end
+      ventilation = true if zone_hvac_component.isMaximumOutdoorAirFlowRateAutosized
+      fan_op_sch = zone_hvac_component.supplyAirFanOperatingModeSchedule
+      existing_sch = fan_op_sch.get if fan_op_sch.is_initialized
+    elsif zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+      zone_hvac_component = zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.get
+      if zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.is_initialized
+        oa_rate = zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.get
+        ventilation = true if oa_rate > 0.0
+      end
+      ventilation = true if zone_hvac_component.isOutdoorAirFlowRateWhenNoCoolingorHeatingisNeededAutosized
+      fan_op_sch = zone_hvac_component.supplyAirFanOperatingModeSchedule
+      existing_sch = fan_op_sch.get if fan_op_sch.is_initialized
+    elsif zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+      zone_hvac_component = zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.get
+      if zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.is_initialized
+        oa_rate = zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.get
+        ventilation = true if oa_rate > 0.0
+      end
+      ventilation = true if zone_hvac_component.isOutdoorAirFlowRateWhenNoCoolingorHeatingisNeededAutosized
+      fan_op_sch = zone_hvac_component.supplyAirFanOperatingModeSchedule
+      existing_sch = fan_op_sch.get if fan_op_sch.is_initialized
+    elsif zone_hvac_component.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized
+      zone_hvac_component = zone_hvac_component.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.get
+      if zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.is_initialized
+        oa_rate = zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.get
+        ventilation = true if oa_rate > 0.0
+      end
+      ventilation = true if zone_hvac_component.isOutdoorAirFlowRateWhenNoCoolingorHeatingisNeededAutosized
+      existing_sch = zone_hvac_component.supplyAirFanOperatingModeSchedule
+    elsif zone_hvac_component.to_ZoneHVACWaterToAirHeatPump.is_initialized
+      zone_hvac_component = zone_hvac_component.to_ZoneHVACWaterToAirHeatPump.get
+      if zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.is_initialized
+        oa_rate = zone_hvac_component.outdoorAirFlowRateWhenNoCoolingorHeatingisNeeded.get
+        ventilation = true if oa_rate > 0.0
+      end
+      ventilation = true if zone_hvac_component.isOutdoorAirFlowRateWhenNoCoolingorHeatingisNeededAutosized
+      fan_op_sch = zone_hvac_component.supplyAirFanOperatingModeSchedule
+      existing_sch = fan_op_sch.get if fan_op_sch.is_initialized
+    end
+    return false unless ventilation
+
+    # if supply air fan operating schedule is always off,
+    # override to provide ventilation during occupied hours
+    unless existing_sch.nil?
+      if existing_sch.name.is_initialized
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ZoneHVACComponent', "#{zone_hvac_component.name} has ventilation, and schedule is set to always on; keeping always on schedule.")
+        return false if existing_sch.name.get.to_s.downcase.include? 'always on discrete'
+      end
+    end
+
+    thermal_zone = zone_hvac_component.thermalZone.get
+    occ_threshold = zone_hvac_unoccupied_threshold
+    occ_sch = thermal_zones_get_occupancy_schedule([thermal_zone],
+                                                   sch_name: "#{zone_hvac_component.name} Occ Sch",
+                                                   occupied_percentage_threshold: occ_threshold)
+    zone_hvac_component.setSupplyAirFanOperatingModeSchedule(occ_sch)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ZoneHVACComponent', "#{zone_hvac_component.name} has ventilation.  Setting fan operating mode schedule to align with zone occupancy schedule.")
+
+    return true
+  end
+
   # Apply all standard required controls to the zone equipment
   #
   # @return [Bool] returns true if successful, false if not
   def zone_hvac_component_apply_standard_controls(zone_hvac_component)
-
     # Vestibule heating control
     if zone_hvac_component_vestibule_heating_control_required?(zone_hvac_component)
       zone_hvac_component_apply_vestibule_heating_control(zone_hvac_component)
     end
+
+    # zone ventilation occupancy control for systems with ventilation
+    zone_hvac_component_occupancy_ventilation_control(zone_hvac_component)
 
     return true
   end
@@ -108,7 +190,6 @@ class Standard
   #
   # @return [Bool] returns true if successful, false if not
   def zone_hvac_component_apply_vestibule_heating_control(zone_hvac_component)
-
     # Ensure that the equipment is assigned to a thermal zone
     if zone_hvac_component.thermalZone.empty?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.ZoneHVACComponent', "For #{zone_hvac_component.name}: equipment is not assigned to a thermal zone, cannot apply vestibule heating control.")
@@ -124,8 +205,6 @@ class Standard
                   zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.get
                 elsif zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
                   zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.get
-                else
-                  nil
                 end
 
     # Do nothing for other types of zone HVAC equipment
@@ -185,8 +264,8 @@ class Standard
       oat_db_c_sen = zone_hvac_component.model.getEnergyManagementSystemSensorByName('OATVestibule').get
     else
       oat_db_c_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
-      oat_db_c_sen.setName("OATVestibule")
-      oat_db_c_sen.setKeyName("Environment")
+      oat_db_c_sen.setName('OATVestibule')
+      oat_db_c_sen.setKeyName('Environment')
     end
 
     # Actuators
@@ -214,5 +293,4 @@ class Standard
 
     return true
   end
-
 end

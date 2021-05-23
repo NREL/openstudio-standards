@@ -6,7 +6,7 @@
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
@@ -15,16 +15,16 @@
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
       "building_type": "FullServiceRestaurant",
-      "building_area_per_spot": 100,
+      "building_area_per_spot": 100.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
@@ -33,7 +33,7 @@
       "units_per_spot": 0.45,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
@@ -42,12 +42,12 @@
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": 0.83,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
       "building_type": "LargeDataCenterHighITE",
-      "building_area_per_spot": 0,
+      "building_area_per_spot": 0.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
@@ -56,7 +56,7 @@
     },
     {
       "building_type": "LargeDataCenterLowITE",
-      "building_area_per_spot": 0,
+      "building_area_per_spot": 0.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
@@ -66,46 +66,46 @@
     {
       "building_type": "LargeHotel",
       "building_area_per_spot": null,
-      "units_per_spot": 1,
+      "units_per_spot": 1.0,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
       "building_type": "LargeOffice",
-      "building_area_per_spot": 620,
+      "building_area_per_spot": 620.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
       "building_type": "LargeOfficeDetailed",
-      "building_area_per_spot": 620,
+      "building_area_per_spot": 620.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
       "building_type": "MediumOffice",
-      "building_area_per_spot": 250,
+      "building_area_per_spot": 250.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
       "building_type": "MediumOfficeDetailed",
-      "building_area_per_spot": 250,
+      "building_area_per_spot": 250.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
@@ -114,16 +114,16 @@
       "units_per_spot": 0.45,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
       "building_type": "Outpatient",
-      "building_area_per_spot": 200,
+      "building_area_per_spot": 200.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
@@ -141,25 +141,25 @@
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": null
     },
     {
       "building_type": "PrimarySchool",
       "building_area_per_spot": null,
       "units_per_spot": null,
-      "students_per_spot": 17,
+      "students_per_spot": 17.0,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
       "building_type": "QuickServiceRestaurant",
-      "building_area_per_spot": 100,
+      "building_area_per_spot": 100.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
@@ -168,21 +168,21 @@
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
       "building_type": "SecondarySchool",
       "building_area_per_spot": null,
       "units_per_spot": null,
-      "students_per_spot": 8,
+      "students_per_spot": 8.0,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
       "building_type": "SmallDataCenterHighITE",
-      "building_area_per_spot": 0,
+      "building_area_per_spot": 0.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
@@ -191,7 +191,7 @@
     },
     {
       "building_type": "SmallDataCenterLowITE",
-      "building_area_per_spot": 0,
+      "building_area_per_spot": 0.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
@@ -201,37 +201,37 @@
     {
       "building_type": "SmallHotel",
       "building_area_per_spot": null,
-      "units_per_spot": 1,
+      "units_per_spot": 1.0,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
       "building_type": "SmallOffice",
-      "building_area_per_spot": 250,
+      "building_area_per_spot": 250.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
       "building_type": "SmallOfficeDetailed",
-      "building_area_per_spot": 250,
+      "building_area_per_spot": 250.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
       "building_type": "StripMall",
-      "building_area_per_spot": 215,
+      "building_area_per_spot": 215.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
@@ -240,16 +240,16 @@
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "From NREL Reference Building (45002 ft^2 building/63810 ft^2 parking area at 405 per spot 157 spots)"
     },
     {
       "building_type": "Warehouse",
-      "building_area_per_spot": 1000,
+      "building_area_per_spot": 1000.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
-      "parking_area_per_spot": 405,
+      "parking_area_per_spot": 405.0,
       "notes": "Based on Table 4.17 Illuminated Parking Area from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     }
   ]

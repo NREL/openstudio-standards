@@ -31,7 +31,7 @@ class Standard
     if insulation_layer_name.nil? && target_u_value_ip == 0.0
       # Do nothing if the construction already doesn't have an insulation layer
     elsif insulation_layer_name.nil?
-      insulation_layer_name = self.find_and_set_insulaton_layer(construction).name
+      insulation_layer_name = find_and_set_insulaton_layer(construction).name
     end
 
     # Remove the insulation layer if the specified U-value is zero.
@@ -39,6 +39,7 @@ class Standard
       layer_index = 0
       construction.layers.each do |layer|
         break if layer.name.get == insulation_layer_name
+
         layer_index += 1
       end
       construction.eraseLayer(layer_index)
@@ -71,6 +72,7 @@ class Standard
     construction.layers.each do |layer|
       next if layer.to_OpaqueMaterial.empty?
       next if layer.name.get == insulation_layer_name
+
       other_layer_r_value_si += layer.to_OpaqueMaterial.get.thermalResistance
     end
 
@@ -90,6 +92,7 @@ class Standard
     # Set the R-value of the insulation layer
     construction.layers.each do |layer|
       next unless layer.name.get == insulation_layer_name
+
       if layer.to_StandardOpaqueMaterial.is_initialized
         layer = layer.to_StandardOpaqueMaterial.get
         layer.setThickness(ins_r_value_si * layer.conductivity)
@@ -132,20 +135,20 @@ class Standard
   # @return [Bool] returns true if successful, false if not
   def construction_set_glazing_u_value(construction, target_u_value_ip, intended_surface_type = 'ExteriorWall', target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting U-Value for #{construction.name}.")
-    
+
     # Skip layer-by-layer fenestration constructions
     unless construction_simple_glazing?(construction)
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Can only set the u-value of simple glazing. #{construction.name} is not simple glazing.")
       return false
     end
-    
+
     glass_layer = construction.layers.first.to_SimpleGlazing.get
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---glass_layer = #{glass_layer.name} u_factor_si = #{glass_layer.uFactor.round(2)}.")
-    
+
     # Convert the target U-value to SI
     target_u_value_ip = target_u_value_ip.to_f
     target_r_value_ip = 1.0 / target_u_value_ip
-    
+
     target_u_value_si = OpenStudio.convert(target_u_value_ip, 'Btu/ft^2*hr*R', 'W/m^2*K').get
     target_r_value_si = 1.0 / target_u_value_si
 
@@ -157,16 +160,21 @@ class Standard
 
     # Determine the R-value of the air films, if requested
     film_coeff_r_value_si = 0.0
-    film_coeff_r_value_si += film_coefficients_r_value(intended_surface_type, target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
+    # In EnergyPlus, the U-factor input of the WindowMaterial:SimpleGlazingSystem
+    # object includes the film coefficients (see IDD description, and I/O reference
+    # guide) so the target_includes_int_film_coefficients and target_includes_ext_film_coefficients
+    # variable values are changed to their opposite so if the target value includes a film
+    # the target value is unchanged
+    film_coeff_r_value_si += film_coefficients_r_value(intended_surface_type, !target_includes_int_film_coefficients, !target_includes_ext_film_coefficients)
     film_coeff_u_value_si = 1.0 / film_coeff_r_value_si
     film_coeff_u_value_ip = OpenStudio.convert(film_coeff_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
     film_coeff_r_value_ip = 1.0 / film_coeff_u_value_ip
-    
+
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---film_coeff_r_value_si = #{film_coeff_r_value_si.round(2)} for #{construction.name}.")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---film_coeff_u_value_si = #{film_coeff_u_value_si.round(2)} for #{construction.name}.")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---film_coeff_u_value_ip = #{film_coeff_u_value_ip.round(2)} for #{construction.name}.")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---film_coeff_r_value_ip = #{film_coeff_r_value_ip.round(2)} for #{construction.name}.")
-    
+
     # Determine the difference between the desired R-value
     # and the R-value of the and air films.
     # This is the desired R-value of the insulation.
@@ -176,12 +184,12 @@ class Standard
       return false
     end
     ins_u_value_si = 1.0 / ins_r_value_si
-    
+
     if ins_u_value_si > 7.0
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)}; setting U-value to EnergyPlus limit of 7.0 W/m^2*K (1.23 Btu/ft^2*hr*R).")
       ins_u_value_si = 7.0
     end
-    
+
     ins_u_value_ip = OpenStudio.convert(ins_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
     ins_r_value_ip = 1.0 / ins_u_value_ip
 
@@ -189,7 +197,7 @@ class Standard
     glass_layer = construction.layers.first.to_SimpleGlazing.get
     glass_layer.setUFactor(ins_u_value_si)
     glass_layer.setName("#{glass_layer.name} U-#{ins_u_value_ip.round(2)}")
-    
+
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_r_value_ip = #{ins_r_value_ip.round(2)} for #{construction.name}.")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_u_value_ip = #{ins_u_value_ip.round(2)} for #{construction.name}.")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_u_value_si = #{ins_u_value_si.round(2)} for #{construction.name}.")
@@ -439,22 +447,22 @@ class Standard
   end
 
   def find_and_set_insulation_layer(construction)
-    #skip if already has an insulation layer set.
+    # skip if already has an insulation layer set.
     if construction.insulation.empty?
-      #find insulation layer
+      # find insulation layer
       min_conductance = 100.0
-      #loop through Layers
+      # loop through Layers
       construction.layers.each do |layer|
-        #try casting the layer to an OpaqueMaterial.
+        # try casting the layer to an OpaqueMaterial.
         material = nil
         material = layer.to_OpaqueMaterial.get unless layer.to_OpaqueMaterial.empty?
         material = layer.to_FenestrationMaterial.get unless layer.to_FenestrationMaterial.empty?
-        #check if the cast was successful, then find the insulation layer.
-        unless nil == material
+        # check if the cast was successful, then find the insulation layer.
+        unless material.nil?
 
-          if BTAP::Resources::Envelope::Materials::get_conductance(material) < min_conductance
-            #Keep track of the highest thermal resistance value.
-            min_conductance = BTAP::Resources::Envelope::Materials::get_conductance(material)
+          if BTAP::Resources::Envelope::Materials.get_conductance(material) < min_conductance
+            # Keep track of the highest thermal resistance value.
+            min_conductance = BTAP::Resources::Envelope::Materials.get_conductance(material)
             return_material = material
             unless material.to_OpaqueMaterial.empty?
               construction.setInsulation(material)
@@ -462,9 +470,9 @@ class Standard
           end
         end
       end
-      if construction.insulation.empty? and construction.isOpaque
-        raise ()
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "This construction has no insulation layer specified. Construction #{construction.name.get.to_s} insulation layer could not be set!. This occurs when a insulation layer is duplicated in the construction.")
+      if construction.insulation.empty? && construction.isOpaque
+        raise
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "This construction has no insulation layer specified. Construction #{construction.name.get} insulation layer could not be set!. This occurs when a insulation layer is duplicated in the construction.")
       end
     else
       return construction.insulation.get
@@ -473,20 +481,20 @@ class Standard
 
   def change_construction_properties_in_model(model, values, is_percentage = false)
     puts JSON.pretty_generate(values)
-    #copy orginal model for reporting.
+    # copy orginal model for reporting.
     before_measure_model = BTAP::FileIO.deep_copy(model)
-    #report change as Info
-    info = ""
-    outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces(), "Outdoors")
-    outdoor_subsurfaces = BTAP::Geometry::Surfaces::get_subsurfaces_from_surfaces(outdoor_surfaces)
-    ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces(), "Ground")
-    ext_windows = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(outdoor_subsurfaces, ["FixedWindow", "OperableWindow"])
-    ext_skylights = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(outdoor_subsurfaces, ["Skylight", "TubularDaylightDiffuser", "TubularDaylightDome"])
-    ext_doors = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(outdoor_subsurfaces, ["Door"])
-    ext_glass_doors = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(outdoor_subsurfaces, ["GlassDoor"])
-    ext_overhead_doors = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(outdoor_subsurfaces, ["OverheadDoor"])
+    # report change as Info
+    info = ''
+    outdoor_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(model.getSurfaces, 'Outdoors')
+    outdoor_subsurfaces = BTAP::Geometry::Surfaces.get_subsurfaces_from_surfaces(outdoor_surfaces)
+    ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(model.getSurfaces, 'Ground')
+    ext_windows = BTAP::Geometry::Surfaces.filter_subsurfaces_by_types(outdoor_subsurfaces, ['FixedWindow', 'OperableWindow'])
+    ext_skylights = BTAP::Geometry::Surfaces.filter_subsurfaces_by_types(outdoor_subsurfaces, ['Skylight', 'TubularDaylightDiffuser', 'TubularDaylightDome'])
+    ext_doors = BTAP::Geometry::Surfaces.filter_subsurfaces_by_types(outdoor_subsurfaces, ['Door'])
+    ext_glass_doors = BTAP::Geometry::Surfaces.filter_subsurfaces_by_types(outdoor_subsurfaces, ['GlassDoor'])
+    ext_overhead_doors = BTAP::Geometry::Surfaces.filter_subsurfaces_by_types(outdoor_subsurfaces, ['OverheadDoor'])
 
-    #Ext and Ground Surfaces
+    # Ext and Ground Surfaces
     (outdoor_surfaces + ground_surfaces).sort.each do |surface|
       ecm_cond_name = "#{surface.outsideBoundaryCondition.downcase}_#{surface.surfaceType.downcase}_conductance"
       apply_changes_to_surface_construction(model,
@@ -495,15 +503,15 @@ class Standard
                                             nil,
                                             nil,
                                             is_percentage)
-      #report change as Info
+      # report change as Info
       surface_conductance = BTAP::Geometry::Surfaces.get_surface_construction_conductance(surface)
-      before_measure_surface_conductance = BTAP::Geometry::Surfaces.get_surface_construction_conductance(OpenStudio::Model::getSurfaceByName(before_measure_model, surface.name.to_s).get)
+      before_measure_surface_conductance = BTAP::Geometry::Surfaces.get_surface_construction_conductance(OpenStudio::Model.getSurfaceByName(before_measure_model, surface.name.to_s).get)
       if before_measure_surface_conductance.round(3) != surface_conductance.round(3)
-        info << "#{surface.outsideBoundaryCondition.downcase}_#{surface.surfaceType.downcase}_conductance for #{surface.name.to_s} changed from #{before_measure_surface_conductance.round(3)} to #{surface_conductance.round(3)}."
+        info << "#{surface.outsideBoundaryCondition.downcase}_#{surface.surfaceType.downcase}_conductance for #{surface.name} changed from #{before_measure_surface_conductance.round(3)} to #{surface_conductance.round(3)}."
       end
     end
-    #Subsurfaces
-    (ext_doors + ext_overhead_doors + ext_windows + ext_glass_doors +ext_skylights).sort.each do |surface|
+    # Subsurfaces
+    (ext_doors + ext_overhead_doors + ext_windows + ext_glass_doors + ext_skylights).sort.each do |surface|
       ecm_cond_name = "#{surface.outsideBoundaryCondition.downcase}_#{surface.subSurfaceType.downcase}_conductance"
       ecm_shgc_name = "#{surface.outsideBoundaryCondition.downcase}_#{surface.subSurfaceType.downcase}_shgc"
       ecm_tvis_name = "#{surface.outsideBoundaryCondition.downcase}_#{surface.subSurfaceType.downcase}_tvis"
@@ -513,12 +521,11 @@ class Standard
                                             values[ecm_shgc_name],
                                             values[ecm_tvis_name])
 
-
       surface_conductance = BTAP::Geometry::Surfaces.get_surface_construction_conductance(surface)
-      before_surface = OpenStudio::Model::getSubSurfaceByName(before_measure_model, surface.name.to_s).get
+      before_surface = OpenStudio::Model.getSubSurfaceByName(before_measure_model, surface.name.to_s).get
       before_measure_surface_conductance = BTAP::Geometry::Surfaces.get_surface_construction_conductance(before_surface)
       if before_measure_surface_conductance.round(3) != surface_conductance.round(3)
-        info << "#{surface.outsideBoundaryCondition.downcase}_#{surface.subSurfaceType.downcase}_conductance for #{surface.name.to_s} changed from #{before_measure_surface_conductance.round(3)} to #{surface_conductance.round(3)}."
+        info << "#{surface.outsideBoundaryCondition.downcase}_#{surface.subSurfaceType.downcase}_conductance for #{surface.name} changed from #{before_measure_surface_conductance.round(3)} to #{surface_conductance.round(3)}."
       end
     end
     info << JSON.pretty_generate(BTAP::FileIO.compare_osm_files(before_measure_model, model))
@@ -527,9 +534,10 @@ class Standard
 
   def apply_changes_to_surface_construction(model, surface, conductance = nil, shgc = nil, tvis = nil, is_percentage = false)
     # If user has no changes...do nothing and return true.
-    return true if conductance.nil? and shgc.nil? and tvis.nil?
-    standard = Standard.new()
-    construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get
+    return true if conductance.nil? && shgc.nil? && tvis.nil?
+
+    standard = Standard.new
+    construction = OpenStudio::Model.getConstructionByName(surface.model, surface.construction.get.name.to_s).get
 
     # set initial targets
     target_u_value_si = conductance
@@ -540,84 +548,85 @@ class Standard
       target_u_value_si = target_u_value_si / 100.0 * BTAP::Resources::Envelope::Constructions.get_conductance(construction) unless conductance.nil?
       if standard.construction_simple_glazing?(construction)
         target_shgc = target_shgc / 100.0 * construction.layers.first.to_SimpleGlazing.get.solarHeatGainCoefficient unless target_shgc.nil?
-        target_tvis = target_tvis / 100.0  * construction.layers.first.to_SimpleGlazing.get.setVisibleTransmittance unless target_tvis.nil?
+        target_tvis = target_tvis / 100.0 * construction.layers.first.to_SimpleGlazing.get.setVisibleTransmittance unless target_tvis.nil?
       end
     end
 
-    new_construction_name_suffix = ":{"
+    new_construction_name_suffix = ':{'
     new_construction_name_suffix << " \"cond\"=>#{target_u_value_si.round(3)}" unless target_u_value_si.nil?
     new_construction_name_suffix << " \"shgc\"=>#{target_shgc.round(3)}" unless target_shgc.nil?
     new_construction_name_suffix << " \"tvis\"=>#{target_tvis.round(3)}" unless target_tvis.nil?
-    new_construction_name_suffix << "}"
+    new_construction_name_suffix << '}'
 
-
-    new_construction_name = "#{surface.construction.get.name.to_s}-#{new_construction_name_suffix}"
-    new_construction = OpenStudio::Model::getConstructionByName(surface.model, new_construction_name)
-
+    new_construction_name = "#{surface.construction.get.name}-#{new_construction_name_suffix}"
+    new_construction = OpenStudio::Model.getConstructionByName(surface.model, new_construction_name)
 
     if new_construction.empty?
-      #create new construction.
-      #create a copy
+      # create new construction.
+      # create a copy
       target_u_value_ip = OpenStudio.convert(target_u_value_si.to_f, 'W/m^2*K', 'Btu/ft^2*hr*R').get unless target_u_value_si.nil?
-      new_construction = self.construction_deep_copy(model, construction)
+      new_construction = construction_deep_copy(model, construction)
       case surface.outsideBoundaryCondition
         when 'Outdoors'
           if standard.construction_simple_glazing?(new_construction)
-            standard.construction_set_glazing_u_value(new_construction,
-                                                      target_u_value_ip.to_f,
-                                                      nil,
-                                                      false,
-                                                      false
-            ) unless conductance.nil?
-            standard.construction_set_glazing_shgc(new_construction,
-                                                   shgc
-            ) unless shgc.nil?
-            construction_set_glazing_tvis(new_construction,
-                                          tvis
-            ) unless tvis.nil?
-
+            unless conductance.nil?
+              standard.construction_set_glazing_u_value(new_construction,
+                                                        target_u_value_ip.to_f,
+                                                        nil,
+                                                        false,
+                                                        false)
+            end
+            unless shgc.nil?
+              standard.construction_set_glazing_shgc(new_construction,
+                                                     shgc)
+            end
+            unless tvis.nil?
+              construction_set_glazing_tvis(new_construction,
+                                            tvis)
+            end
 
           else
-            standard.construction_set_u_value(new_construction,
-                                              target_u_value_ip.to_f,
-                                              find_and_set_insulation_layer(
-                                                  new_construction).name.get,
-                                              intended_surface_type = nil,
-                                              false,
-                                              false
-            ) unless conductance.nil?
+            unless conductance.nil?
+              standard.construction_set_u_value(new_construction,
+                                                target_u_value_ip.to_f,
+                                                find_and_set_insulation_layer(
+                                                  new_construction
+                                                ).name.get,
+                                                intended_surface_type = nil,
+                                                false,
+                                                false)
+            end
           end
         when 'Ground'
           case surface.surfaceType
             when 'Wall'
-              standard.construction_set_u_value(new_construction,
-                                                target_u_value_ip.to_f,
-                                                find_and_set_insulation_layer(
-                                                    new_construction).name.get,
-                                                intended_surface_type = nil,
-                                                false,
-                                                false
-              ) unless conductance.nil?
-=begin
-              standard.construction_set_underground_wall_c_factor(new_construction,
-                                                                  target_u_value_ip.to_f,
-                                                                  find_and_set_insulaton_layer(model,
-                                                                  new_construction).name.get)
-=end
+              unless conductance.nil?
+                standard.construction_set_u_value(new_construction,
+                                                  target_u_value_ip.to_f,
+                                                  find_and_set_insulation_layer(
+                                                    new_construction
+                                                  ).name.get,
+                                                  intended_surface_type = nil,
+                                                  false,
+                                                  false)
+              end
+            #               standard.construction_set_underground_wall_c_factor(new_construction,
+            #                                                                   target_u_value_ip.to_f,
+            #                                                                   find_and_set_insulaton_layer(model,
+            #                                                                   new_construction).name.get)
             when 'RoofCeiling', 'Floor'
-              standard.construction_set_u_value(new_construction,
-                                                target_u_value_ip.to_f,
-                                                find_and_set_insulation_layer(new_construction).name.get,
-                                                intended_surface_type = nil,
-                                                false,
-                                                false
-              ) unless conductance.nil?
-=begin
-              standard.construction_set_slab_f_factor(new_construction,
-                                                      target_u_value_ip.to_f,
-                                                      find_and_set_insulaton_layer(model,
-                                                      new_construction).name.get)
-=end
+              unless conductance.nil?
+                standard.construction_set_u_value(new_construction,
+                                                  target_u_value_ip.to_f,
+                                                  find_and_set_insulation_layer(new_construction).name.get,
+                                                  intended_surface_type = nil,
+                                                  false,
+                                                  false)
+              end
+            #               standard.construction_set_slab_f_factor(new_construction,
+            #                                                       target_u_value_ip.to_f,
+            #                                                       find_and_set_insulaton_layer(model,
+            #                                                       new_construction).name.get)
           end
       end
       new_construction.setName(new_construction_name)
@@ -627,24 +636,23 @@ class Standard
     surface.setConstruction(new_construction)
   end
 
-  #This will create a deep copy of the construction
-  #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-  #@param model [OpenStudio::Model::Model]
-  #@param construction <String>
-  #@return [String] new_construction
+  # This will create a deep copy of the construction
+  # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
+  # @param model [OpenStudio::Model::Model]
+  # @param construction <String>
+  # @return [String] new_construction
   def construction_deep_copy(model, construction)
-    construction = BTAP::Common::validate_array(model, construction, "Construction").first
+    construction = BTAP::Common.validate_array(model, construction, 'Construction').first
     new_construction = construction.clone.to_Construction.get
-    #interating through layers."
-    (0..new_construction.layers.length-1).each do |layernumber|
-      #cloning material"
+    # interating through layers."
+    (0..new_construction.layers.length - 1).each do |layernumber|
+      # cloning material"
       cloned_layer = new_construction.getLayer(layernumber).clone.to_Material.get
-      #"setting material to new construction."
+      # "setting material to new construction."
       new_construction.setLayer(layernumber, cloned_layer)
     end
     return new_construction
   end
-
 
   # Sets the T-vis of a simple glazing construction to a specified value
   # by modifying the thickness of the insulation layer.
@@ -658,7 +666,7 @@ class Standard
     end
 
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting TVis for #{construction.name} to #{target_tvis}")
-    standard = Standard.new()
+    standard = Standard.new
     # Skip layer-by-layer fenestration constructions
     unless standard.construction_simple_glazing?(construction)
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Can only set the Tvis of simple glazing. #{construction.name} is not simple glazing.")
@@ -674,6 +682,4 @@ class Standard
     construction.setName("#{construction.name} TVis #{target_tvis.round(2)}")
     return true
   end
-
-
 end

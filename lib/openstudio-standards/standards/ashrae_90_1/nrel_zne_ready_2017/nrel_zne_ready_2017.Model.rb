@@ -5,7 +5,7 @@ class NRELZNEReady2017 < ASHRAE901
   def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true)
     sql_db_vars_map = {}
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards for nrel_zne_ready_2017 template.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.nrel_zne_ready_2017.Model', "Started applying HVAC efficiency standards for #{template} template.")
 
     # Air Loop Controls
     if apply_controls.nil? || apply_controls == true
@@ -13,6 +13,9 @@ class NRELZNEReady2017 < ASHRAE901
     end
 
     # Plant Loop Controls
+    if apply_controls.nil? || apply_controls == true
+      model.getPlantLoops.sort.each { |obj| plant_loop_apply_standard_controls(obj, climate_zone) }
+    end
 
     # Zone HVAC Controls
     model.getZoneHVACComponents.sort.each { |obj| zone_hvac_component_apply_standard_controls(obj) }
@@ -64,10 +67,10 @@ class NRELZNEReady2017 < ASHRAE901
     model.getCoolingTowerVariableSpeeds.sort.each { |obj| cooling_tower_variable_speed_apply_efficiency_and_curves(obj) }
 
     # Fluid Coolers
-    model.getFluidCoolerSingleSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj) }
-    model.getFluidCoolerTwoSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj) }
-    model.getEvaporativeFluidCoolerSingleSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj) }
-    model.getEvaporativeFluidCoolerTwoSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj) }
+    model.getFluidCoolerSingleSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj, equipment_type: 'Dry Cooler') }
+    model.getFluidCoolerTwoSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj, equipment_type: 'Dry Cooler') }
+    model.getEvaporativeFluidCoolerSingleSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj, equipment_type: 'Closed Cooling Tower') }
+    model.getEvaporativeFluidCoolerTwoSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj, equipment_type: 'Closed Cooling Tower') }
 
     # ERVs
     model.getHeatExchangerAirToAirSensibleAndLatents.each { |obj| heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(obj) }
@@ -75,6 +78,6 @@ class NRELZNEReady2017 < ASHRAE901
     # Gas Heaters
     model.getCoilHeatingGass.sort.each { |obj| coil_heating_gas_apply_efficiency_and_curves(obj) }
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards for nrel_zne_ready_2017 template.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.nrel_zne_ready_2017.Model', "Finished applying HVAC efficiency standards for #{template} template.")
   end
 end

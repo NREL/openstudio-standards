@@ -15,15 +15,6 @@ class NECB2015 < NECB2011
   def load_standards_database_new()
     #load NECB2011 data.
     super()
-    #replace template to 2015 for all tables.
-    #puts JSON.pretty_generate( @standards_data['tables'] )
-    @standards_data['tables'].each do |key,value|
-      value['table'].each do |row|
-        ["lighting_standard", "ventilation_standard", "template"].each do |item|
-          row[item].gsub!('NECB2011', 'NECB2015') unless row[item].nil?
-        end
-      end
-    end
 
     if __dir__[0] == ':' # Running from OpenStudio CLI
       embedded_files_relative('data/', /.*\.json/).each do |file|
@@ -55,29 +46,12 @@ class NECB2015 < NECB2011
     return @standards_data
   end
 
-  # Created this method so that additional methods can be addded for bulding the prototype model in later
-  # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
-  def model_apply_standard(model:,
-                           epw_file:,
-                           debug: false,
-                           sizing_run_dir: Dir.pwd,
-                           x_scale: 1.0,
-                           y_scale: 1.0,
-                           z_scale: 1.0,
-                           fdwr_set: 1.1,
-                           srr_set: 1.1,
-                           new_auto_zoner: false)
+  #occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method
+  def set_occ_sensor_spacetypes(model, space_type_map)
+    return true
+  end
 
-    #Run everything like parent NECB2011 'model_apply_standard' method.
-    model = super(model: model,
-                  epw_file: epw_file,
-                  debug: debug,
-                  sizing_run_dir: sizing_run_dir,
-                  x_scale: x_scale,
-                  y_scale: y_scale,
-                  z_scale: z_scale,
-                  fdwr_set: fdwr_set,
-                  srr_set: srr_set)
+  def apply_loop_pump_power(model:, sizing_run_dir:)
     # NECB2015 Custom code
     # Do another sizing run to take into account adjustments to equipment efficiency etc. on capacities. This was done primarily
     # because the cooling tower loop capacity is affected by the chiller COP.  If the chiller COP is not properly set then
@@ -88,16 +62,38 @@ class NECB2015 < NECB2011
     end
     # Apply maxmimum loop pump power normalized by peak demand by served spaces as per NECB2015 5.2.6.3.(1)
     apply_maximum_loop_pump_power(model)
-
-    # Remove duplicate materials and constructions
-    # Note For NECB2015 This is the 2nd time this method is bieng run.
-    # First time it ran in the super() within model_apply_standard() method
-    model  = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
+    #model = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
     return model
   end
 
-  #occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method
-  def set_occ_sensor_spacetypes(model, space_type_map)
-    return true
+
+
+  def set_lighting_per_area_led_lighting(space_type:, definition:, lighting_per_area_led_lighting:, lights_scale:)
+    # puts "#{space_type.name.to_s} - 'space_height' - #{space_height.to_s}"
+    #TODO: Note that 'occ_sens_lpd_frac' in this function has been removed for NECB2015 and 2017.
+    # ##### Since Atrium's LPD for LED lighting depends on atrium's height, the height of the atrium (if applicable) should be found.
+    standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil #Sara
+    if standards_space_type.include? 'Atrium' #TODO: Note that since none of the archetypes has Atrium, this was tested for 'Dining'. #Atrium
+      puts "#{standards_space_type} - has atrium"  #space_type.name.to_s
+      # puts space_height
+      if get_max_space_height_for_space_type(space_type: space_type) < 12.0
+        # TODO: Regarding the below equations, identify which version of ASHRAE 90.1 was used in NECB2015.
+        atrium_lpd_eq_smaller_12_intercept = 0
+        atrium_lpd_eq_smaller_12_slope = 1.06
+        atrium_lpd_eq_larger_12_intercept = 4.3
+        atrium_lpd_eq_larger_12_slope = 1.06
+        lighting_per_area_led_lighting_atrium = (atrium_lpd_eq_smaller_12_intercept + atrium_lpd_eq_smaller_12_slope* space_height) * 0.092903 # W/ft2
+      else #i.e. space_height >= 12.0
+        lighting_per_area_led_lighting_atrium = (atrium_lpd_eq_larger_12_intercept + atrium_lpd_eq_larger_12_slope * space_height) * 0.092903 # W/ft2
+      end
+      puts "#{standards_space_type} - has lighting_per_area_led_lighting_atrium - #{lighting_per_area_led_lighting_atrium}"
+      lighting_per_area_led_lighting = lighting_per_area_led_lighting_atrium
+    end
+    lighting_per_area_led_lighting = lighting_per_area_led_lighting * lights_scale
+
+    definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area_led_lighting.to_f, 'W/ft^2', 'W/m^2').get)
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set LPD to #{lighting_per_area_led_lighting} W/ft^2.")
   end
+
 end

@@ -4,9 +4,9 @@ require_relative '../../../helpers/minitest_helper'
 
 # This class will perform tests that are Spacetype dependant, Test model will be created
 # to specifically test aspects of the NECB2011 code that are Spacetype dependant. 
-class NECB2011DefaultSpaceTypesTests < Minitest::Test
+class NECB_Default_SpaceTypes_Tests < Minitest::Test
   #Standards
-  Templates = ['NECB2011', 'NECB2015']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
+  Templates = ['NECB2011', 'NECB2015', 'BTAPPRE1980']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
 
 
   def setup()
@@ -49,13 +49,13 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         st.setStandardsSpaceType(space_type_properties['space_type'])
         st.setName("#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}")
         standard.space_type_apply_rendering_color(st)
-        standard.model_add_loads(@model)
-  
+        standard.model_add_loads(@model, 'NECB_Default', 1.0)
+
         #Set all spaces to spacetype
         @model.getSpaces.each do |space|
           space.setSpaceType(st)
         end
-          
+
         #Add Infiltration rates to the space objects themselves. 
         standard.model_apply_infiltration_standard(@model)
           
@@ -84,6 +84,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
             # Do nothing! In this case, we use the duplicate space type name appended with " - occsens"!
           end
         end
+
         st.lights.each {|light| total_lpd << light.powerPerFloorArea.get * occSensLPDfactor ; lpd_sched << light.schedule.get.name}
         assert(total_lpd.size <= 1 , "#{total_lpd.size} light definitions given. Expecting <= 1.")
         

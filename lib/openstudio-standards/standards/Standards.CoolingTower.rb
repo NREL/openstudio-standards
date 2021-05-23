@@ -1,4 +1,3 @@
-
 # A variety of cooling tower methods that are the same regardless of type.
 # These methods are available to CoolingTowerSingleSpeed, CoolingTowerTwoSpeed, and CoolingTowerVariableSpeed
 module CoolingTower
@@ -101,7 +100,7 @@ module CoolingTower
 
     motor_properties = model_find_object(motors, search_criteria, fan_motor_nameplate_hp)
     if motor_properties.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{motor_hp} hp.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{fan_motor_nameplate_hp} hp.")
       return false
     end
 

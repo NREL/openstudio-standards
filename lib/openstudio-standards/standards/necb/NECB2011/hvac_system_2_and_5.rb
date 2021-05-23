@@ -47,7 +47,7 @@ class NECB2011
     # -a make up air-unit to provide ventilation to each zone;
     # -a heating loop, cooling loop and condenser loop to serve four pipe fan coil units
     # Arguments:
-    #   boiler_fueltype: "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
+    #   boiler_fueltype: "NaturalGas","Electricity","PropaneGas","FuelOilNo1","FuelOilNO2","Coal","Diesel","Gasoline","OtherFuel1"
     #   chiller_type: "Scroll";"Centrifugal";"Rotary Screw";"Reciprocating"
     #   mua_cooling_type: make-up air unit cooling type "DX";"Hydronic"
     #   fan_coil_type options are "TPFC" or "FPFC"
@@ -87,6 +87,7 @@ class NECB2011
     # Add DX or hydronic cooling coil
     if mau_cooling_type == 'DX'
       clg_coil = self.add_onespeed_DX_coil(model, tpfc_clg_availability_sch)
+      clg_coil.setName("CoilCoolingDXSingleSpeed_dx")
     elsif mau_cooling_type == 'Hydronic'
       clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, tpfc_clg_availability_sch)
       chw_loop.addDemandBranchForComponent(clg_coil)
@@ -154,5 +155,19 @@ class NECB2011
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
       air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
     end # zone loop
+    sys_abbr = "sys_2"
+    sys_abbr = "sys_5" if fan_coil_type == "TPFC"
+    sys_name_pars = {}
+    sys_name_pars["sys_hr"] = "none"
+    sys_name_pars["sys_clg"] = mau_cooling_type
+    sys_name_pars["sys_htg"] = "g"
+    sys_name_pars["sys_sf"] = "cv"
+    sys_name_pars["zone_htg"] = fan_coil_type
+    sys_name_pars["zone_clg"] = fan_coil_type
+    sys_name_pars["sys_rf"] = "none"
+    assign_base_sys_name(mau_air_loop,
+                         sys_abbr: sys_abbr,
+                         sys_oa: "doas",
+                         sys_name_pars: sys_name_pars)
   end
 end

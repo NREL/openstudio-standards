@@ -8,6 +8,7 @@
     "chiller_cooling_type": "WaterCooled",
     "chiller_condenser_type": null,
     "chiller_compressor_type": "Centrifugal",
+    "waterside_economizer": "none",
     "space_names": [
       "DataCenter"
     ]

@@ -1,11 +1,37 @@
 class NECB2011
 
+  def add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model:,
+                                                                            zones:,
+                                                                            heating_coil_type:,
+                                                                            baseboard_type:,
+                                                                            hw_loop:,
+                                                                            new_auto_zoner: true,
+                                                                            multispeed: false)
+    if multispeed
+      add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
+                                                                                         zones: zones,
+                                                                                         heating_coil_type: heating_coil_type,
+                                                                                         baseboard_type: baseboard_type,
+                                                                                         hw_loop: hw_loop,
+                                                                                         new_auto_zoner: new_auto_zoner)
+    else
+      add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                        zones: zones,
+                                                                                        heating_coil_type: heating_coil_type,
+                                                                                        baseboard_type: baseboard_type,
+                                                                                        hw_loop: hw_loop,
+                                                                                        new_auto_zoner: new_auto_zoner)
+    end
+  end
+
+  # Some tests still require a simple way to set up a system without sizing.. so we are keeping the auto_zoner flag for this  method.
+  #
   def add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model:,
                                                                                          zones:,
                                                                                          heating_coil_type:,
                                                                                          baseboard_type:,
                                                                                          hw_loop:,
-                                                                                         new_auto_zoner: false)
+                                                                                         new_auto_zoner: true)
 
 
     system_data = Hash.new
@@ -65,7 +91,6 @@ class NECB2011
                                   zone)
 
       end
-      return true
     else
       zones.each do |zone|
         air_loop = add_system_3_and_8_airloop(heating_coil_type, model, system_data, zone)
@@ -75,8 +100,20 @@ class NECB2011
                                   model,
                                   zone)
       end
-      return true
     end
+    sys_name_pars = {}
+    sys_name_pars["sys_hr"] = "none"
+    sys_name_pars["sys_clg"] = "dx"
+    sys_name_pars["sys_htg"] = heating_coil_type
+    sys_name_pars["sys_sf"] = "cv"
+    sys_name_pars["zone_htg"] = baseboard_type
+    sys_name_pars["zone_clg"] = "none"
+    sys_name_pars["sys_rf"] = "none"
+    assign_base_sys_name(air_loop,
+                         sys_abbr: "sys_3",
+                         sys_oa: "mixed",
+                         sys_name_pars: sys_name_pars)
+    return true
   end
 
 
@@ -90,7 +127,7 @@ class NECB2011
     # zone baseboards: hot water or electric, depending on argument baseboard_type
     # baseboard_type choices are "Hot Water" or "Electric"
     # boiler_fueltype choices match OS choices for Boiler component fuel type, i.e.
-    # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
+    # "NaturalGas","Electricity","PropaneGas","FuelOilNo1","FuelOilNo2","Coal","Diesel","Gasoline","OtherFuel1"
 
 
     always_on = model.alwaysOnDiscreteSchedule
@@ -125,6 +162,7 @@ class NECB2011
 
     # Set up DX coil with NECB performance curve characteristics;
     clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
+    clg_coil.setName("CoilCoolingDXSingleSpeed_dx")
 
     # oa_controller
     oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
