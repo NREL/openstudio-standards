@@ -295,29 +295,138 @@ class ECMS
   end
 
   # =============================================================================================================================
+  # Method to determine whether zone can have terminal vrf equipment. Zones with no vrf terminal equipment are characterized by
+  # transient occupancy such is the case for corridors, stairwells, storage, etc ...
+  def zone_with_no_vrf_eqpt?(zone)
+    space_types_to_skip = {}
+    space_types_to_skip["NECB2011"] = ["Atrium - H < 13m",
+                                       "Atrium - H > 13m","Audience - auditorium",
+                                       "Corr. < 2.4m wide",
+                                       "Corr. >= 2.4m wide",
+                                       "Electrical/Mechanical",
+                                       "Hospital corr. < 2.4m",
+                                       "Hospital corr. >= 2.4m",
+                                       "Mfg - corr. < 2.4m",
+                                       "Mfg - corr. >= 2.4m",
+                                       "Lobby - elevator",
+                                       "Lobby - hotel",
+                                       "Lobby - motion picture",
+                                       "Lobby - other",
+                                       "Lobby - performance arts",
+                                       "Locker room",
+                                       "Parking garage space",
+                                       "Stairway",
+                                       "Storage area",
+                                       "Storage area - occsens",
+                                       "Storage area - refrigerated",
+                                       "Storage area - refrigerated - occsens",
+                                       "Washroom",
+                                       "Warehouse - fine",
+                                       "Warehouse - fine - refrigerated",
+                                       "Warehouse - med/blk",
+                                       "Warehouse - med/blk - refrigerated",
+                                       "Warehouse - med/blk2",
+                                       "Warehouse - med/blk2 - refrigerated",
+                                       "Hotel/Motel - lobby"]
+
+    space_types_to_skip["NECB2015"] = ["Atrium (height < 6m)",
+                                       "Atrium (6 =< height <= 12m)",
+                                       "Atrium (height > 12m)",
+                                       "Computer/Server room-sch-A",
+                                       "Copy/Print room",
+                                       "Corridor/Transition area - hospital",
+                                       "Corridor/Transition area - manufacturing facility",
+                                       "Corridor/Transition area - space designed to ANSI/IES RP-28",
+                                       "Corridor/Transition area other",
+                                       "Electrical/Mechanical room",
+                                       "Emergency vehicle garage",
+                                       "Lobby - elevator",
+                                       "Lobby - hotel",
+                                       "Lobby - motion picture theatre",
+                                       "Lobby - performing arts theatre",
+                                       "Lobby - space designed to ANSI/IES RP-28",
+                                       "Lobby - other",
+                                       "Locker room",
+                                       "Storage garage interior",
+                                       "Storage room < 5 m2",
+                                       "Storage room <= 5 m2 <= 100 m2",
+                                       "Storage room > 100 m2",
+                                       "Washroom - space designed to ANSI/IES RP-28",
+                                       "Washroom - other",
+                                       "Warehouse storage area medium to bulky palletized items",
+                                       "Warehouse storage area small hand-carried items(4)"]
+
+    space_types_to_skip["NECB2017"] = ["Atrium (height < 6m)",
+                                       "Atrium (6 =< height <= 12m)",
+                                       "Atrium (height > 12m)",
+                                       "Computer/Server room",
+                                       "Copy/Print room",
+                                       "Corridor/Transition area - hospital",
+                                       "Corridor/Transition area - manufacturing facility",
+                                       "Corridor/Transition area - space designed to ANSI/IES RP-28",
+                                       "Corridor/Transition area other",
+                                       "Electrical/Mechanical room",
+                                       "Emergency vehicle garage",
+                                       "Lobby - elevator",
+                                       "Lobby - hotel",
+                                       "Lobby - motion picture theatre",
+                                       "Lobby - performing arts theatre",
+                                       "Lobby - space designed to ANSI/IES RP-28",
+                                       "Lobby - other",
+                                       "Locker room",
+                                       "Stairway/Stairwell",
+                                       "Storage garage interior",
+                                       "Storage room < 5 m2",
+                                       "Storage room <= 5 m2 <= 100 m2",
+                                       "Storage room > 100 m2",
+                                       "Washroom - space designed to ANSI/IES RP-28",
+                                       "Washroom - other",
+                                       "Warehouse storage area medium to bulky palletized items",
+                                       "Warehouse storage area small hand-carried items(4)"]
+
+    zone_does_not_have_vrf_eqpt = false
+    zone.spaces.each do |space|
+      space_types_to_skip.each do |std,spfs|
+        spfs.each do |spf|
+          if space.spaceType.get.name.to_s.downcase.include? spf.downcase
+            zone_does_not_have_vrf_eqpt = true
+            break
+          end
+        end
+        break if zone_does_not_have_vrf_eqpt
+      end
+      break if zone_does_not_have_vrf_eqpt
+    end
+
+    return zone_does_not_have_vrf_eqpt
+  end
+
+  # =============================================================================================================================
   # Add indoor VRF units and update horizontal and vertical pipe runs for outdoor VRF unit
-  def add_indoor_vrf_units(model:,system_zones_map:,outdoor_vrf_unit:)
+  def add_indoor_vrf_units(model:,system_zones_map:,outdoor_vrf_unit:,apply_to_all_zones: true)
     always_on = model.alwaysOnDiscreteSchedule
     always_off = model.alwaysOffDiscreteSchedule
     system_zones_map.sort.each do |sname,zones|
-      zones.sort.each do |izone|
-        zone_vrf_fan = OpenStudio::Model::FanOnOff.new(model, always_on)
-        zone_vrf_fan.setName("#{izone.name} VRF Fan")
-        zone_vrf_clg_coil = OpenStudio::Model::CoilCoolingDXVariableRefrigerantFlow.new(model)
-        zone_vrf_clg_coil.setName("#{izone.name} VRF Clg Coil")
-        zone_vrf_htg_coil = OpenStudio::Model::CoilHeatingDXVariableRefrigerantFlow.new(model)
-        zone_vrf_htg_coil.setName("#{izone.name} VRF Htg Coil")
-        zone_vrf_unit = OpenStudio::Model::ZoneHVACTerminalUnitVariableRefrigerantFlow.new(model,zone_vrf_clg_coil,zone_vrf_htg_coil,zone_vrf_fan)
-        zone_vrf_unit.setName("#{izone.name} VRF Indoor Unit")
-        zone_vrf_unit.setOutdoorAirFlowRateDuringCoolingOperation(0.000001)
-        zone_vrf_unit.setOutdoorAirFlowRateDuringHeatingOperation(0.000001)
-        zone_vrf_unit.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(0.000001)
-        zone_vrf_unit.setZoneTerminalUnitOffParasiticElectricEnergyUse(0.000001)
-        zone_vrf_unit.setZoneTerminalUnitOnParasiticElectricEnergyUse(0.000001)
-        zone_vrf_unit.setSupplyAirFanOperatingModeSchedule(always_off)
-        zone_vrf_unit.setRatedTotalHeatingCapacitySizingRatio(1.3)
-        zone_vrf_unit.addToThermalZone(izone)
-        outdoor_vrf_unit.addTerminal(zone_vrf_unit)
+      zones.each do |izone|
+        if !zone_with_no_vrf_eqpt?(izone) || apply_to_all_zones
+          zone_vrf_fan = OpenStudio::Model::FanOnOff.new(model, always_on)
+          zone_vrf_fan.setName("#{izone.name} VRF Fan")
+          zone_vrf_clg_coil = OpenStudio::Model::CoilCoolingDXVariableRefrigerantFlow.new(model)
+          zone_vrf_clg_coil.setName("#{izone.name} VRF Clg Coil")
+          zone_vrf_htg_coil = OpenStudio::Model::CoilHeatingDXVariableRefrigerantFlow.new(model)
+          zone_vrf_htg_coil.setName("#{izone.name} VRF Htg Coil")
+          zone_vrf_unit = OpenStudio::Model::ZoneHVACTerminalUnitVariableRefrigerantFlow.new(model,zone_vrf_clg_coil,zone_vrf_htg_coil,zone_vrf_fan)
+          zone_vrf_unit.setName("#{izone.name} VRF Indoor Unit")
+          zone_vrf_unit.setOutdoorAirFlowRateDuringCoolingOperation(0.000001)
+          zone_vrf_unit.setOutdoorAirFlowRateDuringHeatingOperation(0.000001)
+          zone_vrf_unit.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(0.000001)
+          zone_vrf_unit.setZoneTerminalUnitOffParasiticElectricEnergyUse(0.000001)
+          zone_vrf_unit.setZoneTerminalUnitOnParasiticElectricEnergyUse(0.000001)
+          zone_vrf_unit.setSupplyAirFanOperatingModeSchedule(always_off)
+          zone_vrf_unit.setRatedTotalHeatingCapacitySizingRatio(1.3)
+          zone_vrf_unit.addToThermalZone(izone)
+          outdoor_vrf_unit.addTerminal(zone_vrf_unit)
+        end
         # add electric baseboards
         add_zone_baseboards(baseboard_type: 'Electric', hw_loop: nil, model: model, zone: izone)
       end
