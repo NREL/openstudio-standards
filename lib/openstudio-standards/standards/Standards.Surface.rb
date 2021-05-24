@@ -395,9 +395,14 @@ class Standard
     end
 
     surface.subSurfaces.sort.each do |subsurface|
-      # the uFactor() method does not work for complex glazing inputs
-      # For this cases the U-Factor is retrieved from previous sizing run
-      u_factor = subsurface.uFactor.is_initialized ? subsurface.uFactor.get : construction_calculated_fenestration_u_factor_w_frame(subsurface.construction.get)
+      if subsurface.construction.get.to_Construction.get.layers[0].to_Material.get.to_SimpleGlazing.empty?
+        # the uFactor() method does not work for complex glazing inputs
+        # For this case the U-Factor is retrieved from previous sizing run
+        u_factor = construction_calculated_fenestration_u_factor_w_frame(subsurface.construction.get)
+      else
+        u_factor = subsurface.uFactor.get
+      end
+      # u_factor = subsurface.uFactor.is_initialized ? (subsurface.uFactor.get) : (construction_calculated_fenestration_u_factor_w_frame(subsurface.construction.get))
       ua += u_factor * subsurface.netArea
     end
 
