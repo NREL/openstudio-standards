@@ -1,3 +1,5 @@
+
+
 module SpeedConstructions
   extend self
 
@@ -46,12 +48,25 @@ module SpeedConstructions
 
     speed_enum = speed_construction_enum_map[os_enum]
     if speed_enum.nil?
+      #binding.pry
+      if os_enum.include? "Weighted"
+        #binding.pry
+        #return 'WoodFramed' => {'key' => 'Wood_Framed', 'gui' => 'Wood Framed'}
+
+        building_type = os_enum.gsub(/\s+/m, ' ').strip.split(" ")[1]
+
+        return {'key' => building_type, 'gui' => 'weighted_frame'}
+
+      end
+
       puts "ERROR Missing SPEED enum for #{os_enum}"
       return "TODO add SPEED enum for #{os_enum}"
     end
 
     speed_enum = speed_construction_enum_map[os_enum][enum_type]
     if speed_enum.nil?
+      #### Not executing with 2016
+      binding.pry
       puts "ERROR Missising SPEED #{enum_type} enum for #{os_enum}"
       return "TODO add SPEED #{enum_type} enum for #{os_enum}"
     end
@@ -197,6 +212,8 @@ module SpeedConstructions
   # Create a construction from the openstudio standards dataset.
   # If construction_props are specified, modifies the insulation layer accordingly.
   def model_add_construction(std, model, construction_name, construction_props = nil, climate_zone = nil)
+
+    ### 2016 needs building type too?
     # Get the object data
     data = std.model_find_object(std.standards_data['constructions'], 'name' => construction_name)
     unless data
