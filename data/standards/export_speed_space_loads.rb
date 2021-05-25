@@ -2,7 +2,7 @@ require 'openstudio'
 require 'openstudio-standards'
 require 'csv'
 require 'json'
-require 'pry-nav'
+#require 'pry-nav'
 
 # Standards to export
 templates = ['90.1-2007', '90.1-2010', '90.1-2013','90.1-2016']

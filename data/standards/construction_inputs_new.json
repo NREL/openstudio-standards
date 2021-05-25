@@ -5333,6 +5333,3128 @@
                     }
                 }
             }
+        },
+        "ASHRAE_90_1_2016": {
+            "1": {
+                "Roof": {
+                    "Attic_and_Other": {
+                        "Roof_Type": {
+                            "Default": "Typical Attic & Other Roof CZ1 R-37",
+                            "Options": [
+                                "Typical Attic & Other Roof CZ1 R-37",
+                                "Attic & Other Roof CZ1 R-47",
+                                "Attic & Other Roof CZ1 R-52",
+                                "Attic & Other Roof CZ1 R-57",
+                                "Attic & Other Roof CZ1 R-62"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 37,
+                            "Options": [
+                                37,
+                                47,
+                                52,
+                                57,
+                                62
+                            ]
+                        }
+                    },
+                    "IEAD": {
+                        "Roof_Type": {
+                            "Default": "Typical IEAD Roof CZ1 R-21",
+                            "Options": [
+                                "Typical IEAD Roof CZ1 R-21",
+                                "IEAD Roof CZ1 R-31",
+                                "IEAD Roof CZ1 R-36",
+                                "IEAD Roof CZ1 R-41",
+                                "IEAD Roof CZ1 R-46"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 21,
+                            "Options": [
+                                21,
+                                31,
+                                36,
+                                41,
+                                46
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Roof_Type": {
+                            "Default": "Typical Metal Roof CZ1 R-24",
+                            "Options": [
+                                "Typical Metal Roof CZ1 R-24",
+                                "Metal Roof CZ1 R-34",
+                                "Metal Roof CZ1 R-39",
+                                "Metal Roof CZ1 R-44",
+                                "Metal Roof CZ1 R-49"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 24,
+                            "Options": [
+                                24,
+                                34,
+                                39,
+                                44,
+                                49
+                            ]
+                        }
+                    }
+                },
+                "Exterior_Walls": {
+                    "Mass": {
+                        "Wall_Type": {
+                            "Default": "Typical Mass Wall CZ1 R-2",
+                            "Options": [
+                                "Typical Mass Wall CZ1 R-2",
+                                "Mass Wall CZ1 R-7",
+                                "Mass Wall CZ1 R-12",
+                                "Mass Wall CZ1 R-17",
+                                "Mass Wall CZ1 R-22"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 2,
+                            "Options": [
+                                2,
+                                7,
+                                12,
+                                17,
+                                22
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Wall_Type": {
+                            "Default": "Typical Metal Wall CZ1 R-11",
+                            "Options": [
+                                "Typical Metal Wall CZ1 R-11",
+                                "Metal Wall CZ1 R-16",
+                                "Metal Wall CZ1 R-21",
+                                "Metal Wall CZ1 R-26",
+                                "Metal Wall CZ1 R-31"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 11,
+                            "Options": [
+                                11,
+                                16,
+                                21,
+                                26,
+                                31
+                            ]
+                        }
+                    },
+                    "Steel_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Steel Framed Wall CZ1 R-8",
+                            "Options": [
+                                "Typical Steel Framed Wall CZ1 R-8",
+                                "Steel Framed Wall CZ1 R-13",
+                                "Steel Framed Wall CZ1 R-18",
+                                "Steel Framed Wall CZ1 R-23",
+                                "Steel Framed Wall CZ1 R-28"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 8,
+                            "Options": [
+                                8,
+                                13,
+                                18,
+                                23,
+                                28
+                            ]
+                        }
+                    },
+                    "Wood_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Wood Framed Wall CZ1 R-11",
+                            "Options": [
+                                "Typical Wood Framed Wall CZ1 R-11",
+                                "Wood Framed Wall CZ1 R-16",
+                                "Wood Framed Wall CZ1 R-21",
+                                "Wood Framed Wall CZ1 R-26",
+                                "Wood Framed Wall CZ1 R-31"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 11,
+                            "Options": [
+                                11,
+                                16,
+                                21,
+                                26,
+                                31
+                            ]
+                        }
+                    }
+                },
+                "Foundation": {
+                    "Slab_Type": {
+                        "Default": "Typical Insulated Slab CZ1 R-3",
+                        "Options": [
+                            "Typical Insulated Slab CZ1 R-3"
+                        ]
+                    }
+                },
+                "Exterior_Window": {
+                    "Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CZ1 U-1.1 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical Mtl Framed CZ1 U-1.1 SHGC-0.25 VT-0.28",
+                                "Mtl Framed CZ1 U-0.88 SHGC-0.23 VT-0.25",
+                                "Mtl Framed CZ1 U-0.77 SHGC-0.2 VT-0.22",
+                                "Mtl Framed CZ1 U-0.66 SHGC-0.18 VT-0.19",
+                                "Mtl Framed CZ1 U-0.55 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "Metal_Framing_CurtainWall": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CW CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical Mtl Framed CW CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "Mtl Framed CW CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "Mtl Framed CW CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "Mtl Framed CW CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "Mtl Framed CW CZ1 U-0.29 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "Non-Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Non Mtl Framed CZ1 U-0.5 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical Non Mtl Framed CZ1 U-0.5 SHGC-0.25 VT-0.28",
+                                "Non Mtl Framed CZ1 U-0.4 SHGC-0.23 VT-0.25",
+                                "Non Mtl Framed CZ1 U-0.35 SHGC-0.2 VT-0.22",
+                                "Non Mtl Framed CZ1 U-0.3 SHGC-0.18 VT-0.19",
+                                "Non Mtl Framed CZ1 U-0.25 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Hospital 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted MediumOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Outpatient 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Retail 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted StripMall 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Warehouse 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    }
+                },
+                "Interior_Walls": {
+                    "Int_Wall_Type": {
+                        "Default": "Typical Interior Wall",
+                        "Options": [
+                            "Typical Interior Wall"
+                        ]
+                    }
+                },
+                "Floors": {
+                    "Floor_Type": {
+                        "Default": "Typical Interior Floor",
+                        "Options": [
+                            "Typical Interior Floor"
+                        ]
+                    }
+                }
+            },
+            "2": {
+                "Roof": {
+                    "Attic_and_Other": {
+                        "Roof_Type": {
+                            "Default": "Typical Attic & Other Roof CZ2 R-37",
+                            "Options": [
+                                "Typical Attic & Other Roof CZ2 R-37",
+                                "Attic & Other Roof CZ2 R-47",
+                                "Attic & Other Roof CZ2 R-52",
+                                "Attic & Other Roof CZ2 R-57",
+                                "Attic & Other Roof CZ2 R-62"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 37,
+                            "Options": [
+                                37,
+                                47,
+                                52,
+                                57,
+                                62
+                            ]
+                        }
+                    },
+                    "IEAD": {
+                        "Roof_Type": {
+                            "Default": "Typical IEAD Roof CZ2 R-26",
+                            "Options": [
+                                "Typical IEAD Roof CZ2 R-26",
+                                "IEAD Roof CZ2 R-36",
+                                "IEAD Roof CZ2 R-41",
+                                "IEAD Roof CZ2 R-46",
+                                "IEAD Roof CZ2 R-51"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 26,
+                            "Options": [
+                                26,
+                                36,
+                                41,
+                                46,
+                                51
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Roof_Type": {
+                            "Default": "Typical Metal Roof CZ2 R-24",
+                            "Options": [
+                                "Typical Metal Roof CZ2 R-24",
+                                "Metal Roof CZ2 R-34",
+                                "Metal Roof CZ2 R-39",
+                                "Metal Roof CZ2 R-44",
+                                "Metal Roof CZ2 R-49"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 24,
+                            "Options": [
+                                24,
+                                34,
+                                39,
+                                44,
+                                49
+                            ]
+                        }
+                    }
+                },
+                "Exterior_Walls": {
+                    "Mass": {
+                        "Wall_Type": {
+                            "Default": "Typical Mass Wall CZ2 R-7",
+                            "Options": [
+                                "Typical Mass Wall CZ2 R-7",
+                                "Mass Wall CZ2 R-12",
+                                "Mass Wall CZ2 R-17",
+                                "Mass Wall CZ2 R-22",
+                                "Mass Wall CZ2 R-27"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 7,
+                            "Options": [
+                                7,
+                                12,
+                                17,
+                                22,
+                                27
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Wall_Type": {
+                            "Default": "Typical Metal Wall CZ2 R-11",
+                            "Options": [
+                                "Typical Metal Wall CZ2 R-11",
+                                "Metal Wall CZ2 R-16",
+                                "Metal Wall CZ2 R-21",
+                                "Metal Wall CZ2 R-26",
+                                "Metal Wall CZ2 R-31"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 11,
+                            "Options": [
+                                11,
+                                16,
+                                21,
+                                26,
+                                31
+                            ]
+                        }
+                    },
+                    "Steel_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Steel Framed Wall CZ2 R-12",
+                            "Options": [
+                                "Typical Steel Framed Wall CZ2 R-12",
+                                "Steel Framed Wall CZ2 R-17",
+                                "Steel Framed Wall CZ2 R-22",
+                                "Steel Framed Wall CZ2 R-27",
+                                "Steel Framed Wall CZ2 R-32"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 12,
+                            "Options": [
+                                12,
+                                17,
+                                22,
+                                27,
+                                32
+                            ]
+                        }
+                    },
+                    "Wood_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Wood Framed Wall CZ2 R-11",
+                            "Options": [
+                                "Typical Wood Framed Wall CZ2 R-11",
+                                "Wood Framed Wall CZ2 R-16",
+                                "Wood Framed Wall CZ2 R-21",
+                                "Wood Framed Wall CZ2 R-26",
+                                "Wood Framed Wall CZ2 R-31"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 11,
+                            "Options": [
+                                11,
+                                16,
+                                21,
+                                26,
+                                31
+                            ]
+                        }
+                    }
+                },
+                "Foundation": {
+                    "Slab_Type": {
+                        "Default": "Typical Insulated Slab CZ2 R-3",
+                        "Options": [
+                            "Typical Insulated Slab CZ2 R-3"
+                        ]
+                    }
+                },
+                "Exterior_Window": {
+                    "Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CZ2 U-0.83 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical Mtl Framed CZ2 U-0.83 SHGC-0.25 VT-0.28",
+                                "Mtl Framed CZ2 U-0.66 SHGC-0.23 VT-0.25",
+                                "Mtl Framed CZ2 U-0.58 SHGC-0.2 VT-0.22",
+                                "Mtl Framed CZ2 U-0.5 SHGC-0.18 VT-0.19",
+                                "Mtl Framed CZ2 U-0.42 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "Metal_Framing_CurtainWall": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CW CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical Mtl Framed CW CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                                "Mtl Framed CW CZ2 U-0.43 SHGC-0.23 VT-0.25",
+                                "Mtl Framed CW CZ2 U-0.38 SHGC-0.2 VT-0.22",
+                                "Mtl Framed CW CZ2 U-0.32 SHGC-0.18 VT-0.19",
+                                "Mtl Framed CW CZ2 U-0.27 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "Non-Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Non Mtl Framed CZ2 U-0.37 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical Non Mtl Framed CZ2 U-0.37 SHGC-0.25 VT-0.28",
+                                "Non Mtl Framed CZ2 U-0.3 SHGC-0.23 VT-0.25",
+                                "Non Mtl Framed CZ2 U-0.26 SHGC-0.2 VT-0.22",
+                                "Non Mtl Framed CZ2 U-0.22 SHGC-0.18 VT-0.19",
+                                "Non Mtl Framed CZ2 U-0.19 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Hospital 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted MediumOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Outpatient 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ2 U-0.53 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ2 U-0.53 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ2 U-0.42 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ2 U-0.37 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Retail 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ2 U-0.53 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ2 U-0.53 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ2 U-0.42 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ2 U-0.37 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted StripMall 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Warehouse 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    }
+                },
+                "Interior_Walls": {
+                    "Int_Wall_Type": {
+                        "Default": "Typical Interior Wall",
+                        "Options": [
+                            "Typical Interior Wall"
+                        ]
+                    }
+                },
+                "Floors": {
+                    "Floor_Type": {
+                        "Default": "Typical Interior Floor",
+                        "Options": [
+                            "Typical Interior Floor"
+                        ]
+                    }
+                }
+            },
+            "3": {
+                "Roof": {
+                    "Attic_and_Other": {
+                        "Roof_Type": {
+                            "Default": "Typical Attic & Other Roof CZ3 R-37",
+                            "Options": [
+                                "Typical Attic & Other Roof CZ3 R-37",
+                                "Attic & Other Roof CZ3 R-47",
+                                "Attic & Other Roof CZ3 R-52",
+                                "Attic & Other Roof CZ3 R-57",
+                                "Attic & Other Roof CZ3 R-62"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 37,
+                            "Options": [
+                                37,
+                                47,
+                                52,
+                                57,
+                                62
+                            ]
+                        }
+                    },
+                    "IEAD": {
+                        "Roof_Type": {
+                            "Default": "Typical IEAD Roof CZ3 R-26",
+                            "Options": [
+                                "Typical IEAD Roof CZ3 R-26",
+                                "IEAD Roof CZ3 R-36",
+                                "IEAD Roof CZ3 R-41",
+                                "IEAD Roof CZ3 R-46",
+                                "IEAD Roof CZ3 R-51"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 26,
+                            "Options": [
+                                26,
+                                36,
+                                41,
+                                46,
+                                51
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Roof_Type": {
+                            "Default": "Typical Metal Roof CZ3 R-24",
+                            "Options": [
+                                "Typical Metal Roof CZ3 R-24",
+                                "Metal Roof CZ3 R-34",
+                                "Metal Roof CZ3 R-39",
+                                "Metal Roof CZ3 R-44",
+                                "Metal Roof CZ3 R-49"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 24,
+                            "Options": [
+                                24,
+                                34,
+                                39,
+                                44,
+                                49
+                            ]
+                        }
+                    }
+                },
+                "Exterior_Walls": {
+                    "Mass": {
+                        "Wall_Type": {
+                            "Default": "Typical Mass Wall CZ3 R-8",
+                            "Options": [
+                                "Typical Mass Wall CZ3 R-8",
+                                "Mass Wall CZ3 R-13",
+                                "Mass Wall CZ3 R-18",
+                                "Mass Wall CZ3 R-23",
+                                "Mass Wall CZ3 R-28"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 8,
+                            "Options": [
+                                8,
+                                13,
+                                18,
+                                23,
+                                28
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Wall_Type": {
+                            "Default": "Typical Metal Wall CZ3 R-11",
+                            "Options": [
+                                "Typical Metal Wall CZ3 R-11",
+                                "Metal Wall CZ3 R-16",
+                                "Metal Wall CZ3 R-21",
+                                "Metal Wall CZ3 R-26",
+                                "Metal Wall CZ3 R-31"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 11,
+                            "Options": [
+                                11,
+                                16,
+                                21,
+                                26,
+                                31
+                            ]
+                        }
+                    },
+                    "Steel_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Steel Framed Wall CZ3 R-13",
+                            "Options": [
+                                "Typical Steel Framed Wall CZ3 R-13",
+                                "Steel Framed Wall CZ3 R-18",
+                                "Steel Framed Wall CZ3 R-23",
+                                "Steel Framed Wall CZ3 R-28",
+                                "Steel Framed Wall CZ3 R-33"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 13,
+                            "Options": [
+                                13,
+                                18,
+                                23,
+                                28,
+                                33
+                            ]
+                        }
+                    },
+                    "Wood_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Wood Framed Wall CZ3 R-11",
+                            "Options": [
+                                "Typical Wood Framed Wall CZ3 R-11",
+                                "Wood Framed Wall CZ3 R-16",
+                                "Wood Framed Wall CZ3 R-21",
+                                "Wood Framed Wall CZ3 R-26",
+                                "Wood Framed Wall CZ3 R-31"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 11,
+                            "Options": [
+                                11,
+                                16,
+                                21,
+                                26,
+                                31
+                            ]
+                        }
+                    }
+                },
+                "Foundation": {
+                    "Slab_Type": {
+                        "Default": "Typical Insulated Slab CZ3 R-3",
+                        "Options": [
+                            "Typical Insulated Slab CZ3 R-3"
+                        ]
+                    }
+                },
+                "Exterior_Window": {
+                    "Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CZ3 U-0.77 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical Mtl Framed CZ3 U-0.77 SHGC-0.25 VT-0.28",
+                                "Mtl Framed CZ3 U-0.62 SHGC-0.23 VT-0.25",
+                                "Mtl Framed CZ3 U-0.54 SHGC-0.2 VT-0.22",
+                                "Mtl Framed CZ3 U-0.46 SHGC-0.18 VT-0.19",
+                                "Mtl Framed CZ3 U-0.39 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "Metal_Framing_CurtainWall": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CW CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical Mtl Framed CW CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                                "Mtl Framed CW CZ3 U-0.36 SHGC-0.23 VT-0.25",
+                                "Mtl Framed CW CZ3 U-0.32 SHGC-0.2 VT-0.22",
+                                "Mtl Framed CW CZ3 U-0.27 SHGC-0.18 VT-0.19",
+                                "Mtl Framed CW CZ3 U-0.23 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "Non-Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Non Mtl Framed CZ3 U-0.33 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical Non Mtl Framed CZ3 U-0.33 SHGC-0.25 VT-0.28",
+                                "Non Mtl Framed CZ3 U-0.26 SHGC-0.23 VT-0.25",
+                                "Non Mtl Framed CZ3 U-0.23 SHGC-0.2 VT-0.22",
+                                "Non Mtl Framed CZ3 U-0.2 SHGC-0.18 VT-0.19",
+                                "Non Mtl Framed CZ3 U-0.17 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Hospital 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted MediumOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Outpatient 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Retail 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted StripMall 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Warehouse 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17"
+                            ]
+                        }
+                    }
+                },
+                "Interior_Walls": {
+                    "Int_Wall_Type": {
+                        "Default": "Typical Interior Wall",
+                        "Options": [
+                            "Typical Interior Wall"
+                        ]
+                    }
+                },
+                "Floors": {
+                    "Floor_Type": {
+                        "Default": "Typical Interior Floor",
+                        "Options": [
+                            "Typical Interior Floor"
+                        ]
+                    }
+                }
+            },
+            "4": {
+                "Roof": {
+                    "Attic_and_Other": {
+                        "Roof_Type": {
+                            "Default": "Typical Attic & Other Roof CZ4 R-48",
+                            "Options": [
+                                "Typical Attic & Other Roof CZ4 R-48",
+                                "Attic & Other Roof CZ4 R-58",
+                                "Attic & Other Roof CZ4 R-63",
+                                "Attic & Other Roof CZ4 R-68",
+                                "Attic & Other Roof CZ4 R-73"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 48,
+                            "Options": [
+                                48,
+                                58,
+                                63,
+                                68,
+                                73
+                            ]
+                        }
+                    },
+                    "IEAD": {
+                        "Roof_Type": {
+                            "Default": "Typical IEAD Roof CZ4 R-31",
+                            "Options": [
+                                "Typical IEAD Roof CZ4 R-31",
+                                "IEAD Roof CZ4 R-41",
+                                "IEAD Roof CZ4 R-46",
+                                "IEAD Roof CZ4 R-51",
+                                "IEAD Roof CZ4 R-56"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 31,
+                            "Options": [
+                                31,
+                                41,
+                                46,
+                                51,
+                                56
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Roof_Type": {
+                            "Default": "Typical Metal Roof CZ4 R-27",
+                            "Options": [
+                                "Typical Metal Roof CZ4 R-27",
+                                "Metal Roof CZ4 R-37",
+                                "Metal Roof CZ4 R-42",
+                                "Metal Roof CZ4 R-47",
+                                "Metal Roof CZ4 R-52"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 27,
+                            "Options": [
+                                27,
+                                37,
+                                42,
+                                47,
+                                52
+                            ]
+                        }
+                    }
+                },
+                "Exterior_Walls": {
+                    "Mass": {
+                        "Wall_Type": {
+                            "Default": "Typical Mass Wall CZ4 R-10",
+                            "Options": [
+                                "Typical Mass Wall CZ4 R-10",
+                                "Mass Wall CZ4 R-15",
+                                "Mass Wall CZ4 R-20",
+                                "Mass Wall CZ4 R-25",
+                                "Mass Wall CZ4 R-30"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 10,
+                            "Options": [
+                                10,
+                                15,
+                                20,
+                                25,
+                                30
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Wall_Type": {
+                            "Default": "Typical Metal Wall CZ4 R-17",
+                            "Options": [
+                                "Typical Metal Wall CZ4 R-17",
+                                "Metal Wall CZ4 R-22",
+                                "Metal Wall CZ4 R-27",
+                                "Metal Wall CZ4 R-32",
+                                "Metal Wall CZ4 R-37"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 17,
+                            "Options": [
+                                17,
+                                22,
+                                27,
+                                32,
+                                37
+                            ]
+                        }
+                    },
+                    "Steel_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Steel Framed Wall CZ4 R-16",
+                            "Options": [
+                                "Typical Steel Framed Wall CZ4 R-16",
+                                "Steel Framed Wall CZ4 R-21",
+                                "Steel Framed Wall CZ4 R-26",
+                                "Steel Framed Wall CZ4 R-31",
+                                "Steel Framed Wall CZ4 R-36"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 16,
+                            "Options": [
+                                16,
+                                21,
+                                26,
+                                31,
+                                36
+                            ]
+                        }
+                    },
+                    "Wood_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Wood Framed Wall CZ4 R-16",
+                            "Options": [
+                                "Typical Wood Framed Wall CZ4 R-16",
+                                "Wood Framed Wall CZ4 R-21",
+                                "Wood Framed Wall CZ4 R-26",
+                                "Wood Framed Wall CZ4 R-31",
+                                "Wood Framed Wall CZ4 R-36"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 16,
+                            "Options": [
+                                16,
+                                21,
+                                26,
+                                31,
+                                36
+                            ]
+                        }
+                    }
+                },
+                "Foundation": {
+                    "Slab_Type": {
+                        "Default": "Typical Insulated Slab CZ4 R-3",
+                        "Options": [
+                            "Typical Insulated Slab CZ4 R-3"
+                        ]
+                    }
+                },
+                "Exterior_Window": {
+                    "Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CZ4 U-0.68 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical Mtl Framed CZ4 U-0.68 SHGC-0.36 VT-0.4",
+                                "Mtl Framed CZ4 U-0.54 SHGC-0.32 VT-0.36",
+                                "Mtl Framed CZ4 U-0.48 SHGC-0.29 VT-0.32",
+                                "Mtl Framed CZ4 U-0.41 SHGC-0.25 VT-0.28",
+                                "Mtl Framed CZ4 U-0.34 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "Metal_Framing_CurtainWall": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CW CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical Mtl Framed CW CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                                "Mtl Framed CW CZ4 U-0.3 SHGC-0.32 VT-0.36",
+                                "Mtl Framed CW CZ4 U-0.27 SHGC-0.29 VT-0.32",
+                                "Mtl Framed CW CZ4 U-0.23 SHGC-0.25 VT-0.28",
+                                "Mtl Framed CW CZ4 U-0.19 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "Non-Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Non Mtl Framed CZ4 U-0.31 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical Non Mtl Framed CZ4 U-0.31 SHGC-0.36 VT-0.4",
+                                "Non Mtl Framed CZ4 U-0.25 SHGC-0.32 VT-0.36",
+                                "Non Mtl Framed CZ4 U-0.22 SHGC-0.29 VT-0.32",
+                                "Non Mtl Framed CZ4 U-0.19 SHGC-0.25 VT-0.28",
+                                "Non Mtl Framed CZ4 U-0.16 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Hospital 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted MediumOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Outpatient 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Retail 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted StripMall 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Warehouse 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24"
+                            ]
+                        }
+                    }
+                },
+                "Interior_Walls": {
+                    "Int_Wall_Type": {
+                        "Default": "Typical Interior Wall",
+                        "Options": [
+                            "Typical Interior Wall"
+                        ]
+                    }
+                },
+                "Floors": {
+                    "Floor_Type": {
+                        "Default": "Typical Interior Floor",
+                        "Options": [
+                            "Typical Interior Floor"
+                        ]
+                    }
+                }
+            },
+            "5": {
+                "Roof": {
+                    "Attic_and_Other": {
+                        "Roof_Type": {
+                            "Default": "Typical Attic & Other Roof CZ5 R-48",
+                            "Options": [
+                                "Typical Attic & Other Roof CZ5 R-48",
+                                "Attic & Other Roof CZ5 R-58",
+                                "Attic & Other Roof CZ5 R-63",
+                                "Attic & Other Roof CZ5 R-68",
+                                "Attic & Other Roof CZ5 R-73"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 48,
+                            "Options": [
+                                48,
+                                58,
+                                63,
+                                68,
+                                73
+                            ]
+                        }
+                    },
+                    "IEAD": {
+                        "Roof_Type": {
+                            "Default": "Typical IEAD Roof CZ5 R-31",
+                            "Options": [
+                                "Typical IEAD Roof CZ5 R-31",
+                                "IEAD Roof CZ5 R-41",
+                                "IEAD Roof CZ5 R-46",
+                                "IEAD Roof CZ5 R-51",
+                                "IEAD Roof CZ5 R-56"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 31,
+                            "Options": [
+                                31,
+                                41,
+                                46,
+                                51,
+                                56
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Roof_Type": {
+                            "Default": "Typical Metal Roof CZ5 R-27",
+                            "Options": [
+                                "Typical Metal Roof CZ5 R-27",
+                                "Metal Roof CZ5 R-37",
+                                "Metal Roof CZ5 R-42",
+                                "Metal Roof CZ5 R-47",
+                                "Metal Roof CZ5 R-52"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 27,
+                            "Options": [
+                                27,
+                                37,
+                                42,
+                                47,
+                                52
+                            ]
+                        }
+                    }
+                },
+                "Exterior_Walls": {
+                    "Mass": {
+                        "Wall_Type": {
+                            "Default": "Typical Mass Wall CZ5 R-11",
+                            "Options": [
+                                "Typical Mass Wall CZ5 R-11",
+                                "Mass Wall CZ5 R-16",
+                                "Mass Wall CZ5 R-21",
+                                "Mass Wall CZ5 R-26",
+                                "Mass Wall CZ5 R-31"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 11,
+                            "Options": [
+                                11,
+                                16,
+                                21,
+                                26,
+                                31
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Wall_Type": {
+                            "Default": "Typical Metal Wall CZ5 R-20",
+                            "Options": [
+                                "Typical Metal Wall CZ5 R-20",
+                                "Metal Wall CZ5 R-25",
+                                "Metal Wall CZ5 R-30",
+                                "Metal Wall CZ5 R-35",
+                                "Metal Wall CZ5 R-40"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 20,
+                            "Options": [
+                                20,
+                                25,
+                                30,
+                                35,
+                                40
+                            ]
+                        }
+                    },
+                    "Steel_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Steel Framed Wall CZ5 R-18",
+                            "Options": [
+                                "Typical Steel Framed Wall CZ5 R-18",
+                                "Steel Framed Wall CZ5 R-23",
+                                "Steel Framed Wall CZ5 R-28",
+                                "Steel Framed Wall CZ5 R-33",
+                                "Steel Framed Wall CZ5 R-38"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 18,
+                            "Options": [
+                                18,
+                                23,
+                                28,
+                                33,
+                                38
+                            ]
+                        }
+                    },
+                    "Wood_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Wood Framed Wall CZ5 R-20",
+                            "Options": [
+                                "Typical Wood Framed Wall CZ5 R-20",
+                                "Wood Framed Wall CZ5 R-25",
+                                "Wood Framed Wall CZ5 R-30",
+                                "Wood Framed Wall CZ5 R-35",
+                                "Wood Framed Wall CZ5 R-40"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 20,
+                            "Options": [
+                                20,
+                                25,
+                                30,
+                                35,
+                                40
+                            ]
+                        }
+                    }
+                },
+                "Foundation": {
+                    "Slab_Type": {
+                        "Default": "Typical Insulated Slab CZ5 R-3",
+                        "Options": [
+                            "Typical Insulated Slab CZ5 R-3"
+                        ]
+                    }
+                },
+                "Exterior_Window": {
+                    "Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CZ5 U-0.68 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical Mtl Framed CZ5 U-0.68 SHGC-0.38 VT-0.42",
+                                "Mtl Framed CZ5 U-0.54 SHGC-0.34 VT-0.38",
+                                "Mtl Framed CZ5 U-0.48 SHGC-0.3 VT-0.33",
+                                "Mtl Framed CZ5 U-0.41 SHGC-0.27 VT-0.29",
+                                "Mtl Framed CZ5 U-0.34 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "Metal_Framing_CurtainWall": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CW CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical Mtl Framed CW CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                                "Mtl Framed CW CZ5 U-0.3 SHGC-0.34 VT-0.38",
+                                "Mtl Framed CW CZ5 U-0.27 SHGC-0.3 VT-0.33",
+                                "Mtl Framed CW CZ5 U-0.23 SHGC-0.27 VT-0.29",
+                                "Mtl Framed CW CZ5 U-0.19 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "Non-Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Non Mtl Framed CZ5 U-0.31 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical Non Mtl Framed CZ5 U-0.31 SHGC-0.38 VT-0.42",
+                                "Non Mtl Framed CZ5 U-0.25 SHGC-0.34 VT-0.38",
+                                "Non Mtl Framed CZ5 U-0.22 SHGC-0.3 VT-0.33",
+                                "Non Mtl Framed CZ5 U-0.19 SHGC-0.27 VT-0.29",
+                                "Non Mtl Framed CZ5 U-0.16 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Hospital 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted MediumOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Outpatient 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Retail 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted StripMall 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Warehouse 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25"
+                            ]
+                        }
+                    }
+                },
+                "Interior_Walls": {
+                    "Int_Wall_Type": {
+                        "Default": "Typical Interior Wall",
+                        "Options": [
+                            "Typical Interior Wall"
+                        ]
+                    }
+                },
+                "Floors": {
+                    "Floor_Type": {
+                        "Default": "Typical Interior Floor",
+                        "Options": [
+                            "Typical Interior Floor"
+                        ]
+                    }
+                }
+            },
+            "6": {
+                "Roof": {
+                    "Attic_and_Other": {
+                        "Roof_Type": {
+                            "Default": "Typical Attic & Other Roof CZ6 R-48",
+                            "Options": [
+                                "Typical Attic & Other Roof CZ6 R-48",
+                                "Attic & Other Roof CZ6 R-58",
+                                "Attic & Other Roof CZ6 R-63",
+                                "Attic & Other Roof CZ6 R-68",
+                                "Attic & Other Roof CZ6 R-73"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 48,
+                            "Options": [
+                                48,
+                                58,
+                                63,
+                                68,
+                                73
+                            ]
+                        }
+                    },
+                    "IEAD": {
+                        "Roof_Type": {
+                            "Default": "Typical IEAD Roof CZ6 R-31",
+                            "Options": [
+                                "Typical IEAD Roof CZ6 R-31",
+                                "IEAD Roof CZ6 R-41",
+                                "IEAD Roof CZ6 R-46",
+                                "IEAD Roof CZ6 R-51",
+                                "IEAD Roof CZ6 R-56"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 31,
+                            "Options": [
+                                31,
+                                41,
+                                46,
+                                51,
+                                56
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Roof_Type": {
+                            "Default": "Typical Metal Roof CZ6 R-32",
+                            "Options": [
+                                "Typical Metal Roof CZ6 R-32",
+                                "Metal Roof CZ6 R-42",
+                                "Metal Roof CZ6 R-47",
+                                "Metal Roof CZ6 R-52",
+                                "Metal Roof CZ6 R-57"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 32,
+                            "Options": [
+                                32,
+                                42,
+                                47,
+                                52,
+                                57
+                            ]
+                        }
+                    }
+                },
+                "Exterior_Walls": {
+                    "Mass": {
+                        "Wall_Type": {
+                            "Default": "Typical Mass Wall CZ6 R-13",
+                            "Options": [
+                                "Typical Mass Wall CZ6 R-13",
+                                "Mass Wall CZ6 R-18",
+                                "Mass Wall CZ6 R-23",
+                                "Mass Wall CZ6 R-28",
+                                "Mass Wall CZ6 R-33"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 13,
+                            "Options": [
+                                13,
+                                18,
+                                23,
+                                28,
+                                33
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Wall_Type": {
+                            "Default": "Typical Metal Wall CZ6 R-20",
+                            "Options": [
+                                "Typical Metal Wall CZ6 R-20",
+                                "Metal Wall CZ6 R-25",
+                                "Metal Wall CZ6 R-30",
+                                "Metal Wall CZ6 R-35",
+                                "Metal Wall CZ6 R-40"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 20,
+                            "Options": [
+                                20,
+                                25,
+                                30,
+                                35,
+                                40
+                            ]
+                        }
+                    },
+                    "Steel_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Steel Framed Wall CZ6 R-20",
+                            "Options": [
+                                "Typical Steel Framed Wall CZ6 R-20",
+                                "Steel Framed Wall CZ6 R-25",
+                                "Steel Framed Wall CZ6 R-30",
+                                "Steel Framed Wall CZ6 R-35",
+                                "Steel Framed Wall CZ6 R-40"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 20,
+                            "Options": [
+                                20,
+                                25,
+                                30,
+                                35,
+                                40
+                            ]
+                        }
+                    },
+                    "Wood_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Wood Framed Wall CZ6 R-20",
+                            "Options": [
+                                "Typical Wood Framed Wall CZ6 R-20",
+                                "Wood Framed Wall CZ6 R-25",
+                                "Wood Framed Wall CZ6 R-30",
+                                "Wood Framed Wall CZ6 R-35",
+                                "Wood Framed Wall CZ6 R-40"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 20,
+                            "Options": [
+                                20,
+                                25,
+                                30,
+                                35,
+                                40
+                            ]
+                        }
+                    }
+                },
+                "Foundation": {
+                    "Slab_Type": {
+                        "Default": "Typical Insulated Slab CZ6 R-3",
+                        "Options": [
+                            "Typical Insulated Slab CZ6 R-3"
+                        ]
+                    }
+                },
+                "Exterior_Window": {
+                    "Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CZ6 U-0.68 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical Mtl Framed CZ6 U-0.68 SHGC-0.4 VT-0.44",
+                                "Mtl Framed CZ6 U-0.54 SHGC-0.36 VT-0.4",
+                                "Mtl Framed CZ6 U-0.48 SHGC-0.32 VT-0.35",
+                                "Mtl Framed CZ6 U-0.41 SHGC-0.28 VT-0.31",
+                                "Mtl Framed CZ6 U-0.34 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "Metal_Framing_CurtainWall": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CW CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical Mtl Framed CW CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                                "Mtl Framed CW CZ6 U-0.29 SHGC-0.36 VT-0.4",
+                                "Mtl Framed CW CZ6 U-0.25 SHGC-0.32 VT-0.35",
+                                "Mtl Framed CW CZ6 U-0.22 SHGC-0.28 VT-0.31",
+                                "Mtl Framed CW CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "Non-Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Non Mtl Framed CZ6 U-0.3 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical Non Mtl Framed CZ6 U-0.3 SHGC-0.4 VT-0.44",
+                                "Non Mtl Framed CZ6 U-0.24 SHGC-0.36 VT-0.4",
+                                "Non Mtl Framed CZ6 U-0.21 SHGC-0.32 VT-0.35",
+                                "Non Mtl Framed CZ6 U-0.18 SHGC-0.28 VT-0.31",
+                                "Non Mtl Framed CZ6 U-0.15 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Hospital 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted MediumOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Outpatient 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Retail 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted StripMall 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Warehouse 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26"
+                            ]
+                        }
+                    }
+                },
+                "Interior_Walls": {
+                    "Int_Wall_Type": {
+                        "Default": "Typical Interior Wall",
+                        "Options": [
+                            "Typical Interior Wall"
+                        ]
+                    }
+                },
+                "Floors": {
+                    "Floor_Type": {
+                        "Default": "Typical Interior Floor",
+                        "Options": [
+                            "Typical Interior Floor"
+                        ]
+                    }
+                }
+            },
+            "7": {
+                "Roof": {
+                    "Attic_and_Other": {
+                        "Roof_Type": {
+                            "Default": "Typical Attic & Other Roof CZ7 R-59",
+                            "Options": [
+                                "Typical Attic & Other Roof CZ7 R-59",
+                                "Attic & Other Roof CZ7 R-69",
+                                "Attic & Other Roof CZ7 R-74",
+                                "Attic & Other Roof CZ7 R-79",
+                                "Attic & Other Roof CZ7 R-84"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 59,
+                            "Options": [
+                                59,
+                                69,
+                                74,
+                                79,
+                                84
+                            ]
+                        }
+                    },
+                    "IEAD": {
+                        "Roof_Type": {
+                            "Default": "Typical IEAD Roof CZ7 R-36",
+                            "Options": [
+                                "Typical IEAD Roof CZ7 R-36",
+                                "IEAD Roof CZ7 R-46",
+                                "IEAD Roof CZ7 R-51",
+                                "IEAD Roof CZ7 R-56",
+                                "IEAD Roof CZ7 R-61"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 36,
+                            "Options": [
+                                36,
+                                46,
+                                51,
+                                56,
+                                61
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Roof_Type": {
+                            "Default": "Typical Metal Roof CZ7 R-34",
+                            "Options": [
+                                "Typical Metal Roof CZ7 R-34",
+                                "Metal Roof CZ7 R-44",
+                                "Metal Roof CZ7 R-49",
+                                "Metal Roof CZ7 R-54",
+                                "Metal Roof CZ7 R-59"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 34,
+                            "Options": [
+                                34,
+                                44,
+                                49,
+                                54,
+                                59
+                            ]
+                        }
+                    }
+                },
+                "Exterior_Walls": {
+                    "Mass": {
+                        "Wall_Type": {
+                            "Default": "Typical Mass Wall CZ7 R-14",
+                            "Options": [
+                                "Typical Mass Wall CZ7 R-14",
+                                "Mass Wall CZ7 R-19",
+                                "Mass Wall CZ7 R-24",
+                                "Mass Wall CZ7 R-29",
+                                "Mass Wall CZ7 R-34"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 14,
+                            "Options": [
+                                14,
+                                19,
+                                24,
+                                29,
+                                34
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Wall_Type": {
+                            "Default": "Typical Metal Wall CZ7 R-23",
+                            "Options": [
+                                "Typical Metal Wall CZ7 R-23",
+                                "Metal Wall CZ7 R-28",
+                                "Metal Wall CZ7 R-33",
+                                "Metal Wall CZ7 R-38",
+                                "Metal Wall CZ7 R-43"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 23,
+                            "Options": [
+                                23,
+                                28,
+                                33,
+                                38,
+                                43
+                            ]
+                        }
+                    },
+                    "Steel_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Steel Framed Wall CZ7 R-20",
+                            "Options": [
+                                "Typical Steel Framed Wall CZ7 R-20",
+                                "Steel Framed Wall CZ7 R-25",
+                                "Steel Framed Wall CZ7 R-30",
+                                "Steel Framed Wall CZ7 R-35",
+                                "Steel Framed Wall CZ7 R-40"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 20,
+                            "Options": [
+                                20,
+                                25,
+                                30,
+                                35,
+                                40
+                            ]
+                        }
+                    },
+                    "Wood_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Wood Framed Wall CZ7 R-20",
+                            "Options": [
+                                "Typical Wood Framed Wall CZ7 R-20",
+                                "Wood Framed Wall CZ7 R-25",
+                                "Wood Framed Wall CZ7 R-30",
+                                "Wood Framed Wall CZ7 R-35",
+                                "Wood Framed Wall CZ7 R-40"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 20,
+                            "Options": [
+                                20,
+                                25,
+                                30,
+                                35,
+                                40
+                            ]
+                        }
+                    }
+                },
+                "Foundation": {
+                    "Slab_Type": {
+                        "Default": "Typical Insulated Slab CZ7 R-3",
+                        "Options": [
+                            "Typical Insulated Slab CZ7 R-3"
+                        ]
+                    }
+                },
+                "Exterior_Window": {
+                    "Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CZ7 U-0.68 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical Mtl Framed CZ7 U-0.68 SHGC-0.45 VT-0.5",
+                                "Mtl Framed CZ7 U-0.54 SHGC-0.41 VT-0.45",
+                                "Mtl Framed CZ7 U-0.48 SHGC-0.36 VT-0.4",
+                                "Mtl Framed CZ7 U-0.41 SHGC-0.32 VT-0.35",
+                                "Mtl Framed CZ7 U-0.34 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "Metal_Framing_CurtainWall": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CW CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical Mtl Framed CW CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                                "Mtl Framed CW CZ7 U-0.26 SHGC-0.41 VT-0.45",
+                                "Mtl Framed CW CZ7 U-0.23 SHGC-0.36 VT-0.4",
+                                "Mtl Framed CW CZ7 U-0.2 SHGC-0.32 VT-0.35",
+                                "Mtl Framed CW CZ7 U-0.17 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "Non-Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Non Mtl Framed CZ7 U-0.28 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical Non Mtl Framed CZ7 U-0.28 SHGC-0.45 VT-0.5",
+                                "Non Mtl Framed CZ7 U-0.22 SHGC-0.41 VT-0.45",
+                                "Non Mtl Framed CZ7 U-0.2 SHGC-0.36 VT-0.4",
+                                "Non Mtl Framed CZ7 U-0.17 SHGC-0.32 VT-0.35",
+                                "Non Mtl Framed CZ7 U-0.14 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Hospital 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted MediumOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Outpatient 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Retail 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted StripMall 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Warehouse 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    }
+                },
+                "Interior_Walls": {
+                    "Int_Wall_Type": {
+                        "Default": "Typical Interior Wall",
+                        "Options": [
+                            "Typical Interior Wall"
+                        ]
+                    }
+                },
+                "Floors": {
+                    "Floor_Type": {
+                        "Default": "Typical Interior Floor",
+                        "Options": [
+                            "Typical Interior Floor"
+                        ]
+                    }
+                }
+            },
+            "8": {
+                "Roof": {
+                    "Attic_and_Other": {
+                        "Roof_Type": {
+                            "Default": "Typical Attic & Other Roof CZ8 R-59",
+                            "Options": [
+                                "Typical Attic & Other Roof CZ8 R-59",
+                                "Attic & Other Roof CZ8 R-69",
+                                "Attic & Other Roof CZ8 R-74",
+                                "Attic & Other Roof CZ8 R-79",
+                                "Attic & Other Roof CZ8 R-84"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 59,
+                            "Options": [
+                                59,
+                                69,
+                                74,
+                                79,
+                                84
+                            ]
+                        }
+                    },
+                    "IEAD": {
+                        "Roof_Type": {
+                            "Default": "Typical IEAD Roof CZ8 R-36",
+                            "Options": [
+                                "Typical IEAD Roof CZ8 R-36",
+                                "IEAD Roof CZ8 R-46",
+                                "IEAD Roof CZ8 R-51",
+                                "IEAD Roof CZ8 R-56",
+                                "IEAD Roof CZ8 R-61"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 36,
+                            "Options": [
+                                36,
+                                46,
+                                51,
+                                56,
+                                61
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Roof_Type": {
+                            "Default": "Typical Metal Roof CZ8 R-38",
+                            "Options": [
+                                "Typical Metal Roof CZ8 R-38",
+                                "Metal Roof CZ8 R-48",
+                                "Metal Roof CZ8 R-53",
+                                "Metal Roof CZ8 R-58",
+                                "Metal Roof CZ8 R-63"
+                            ]
+                        },
+                        "Roof_R_Value": {
+                            "Default": 38,
+                            "Options": [
+                                38,
+                                48,
+                                53,
+                                58,
+                                63
+                            ]
+                        }
+                    }
+                },
+                "Exterior_Walls": {
+                    "Mass": {
+                        "Wall_Type": {
+                            "Default": "Typical Mass Wall CZ8 R-21",
+                            "Options": [
+                                "Typical Mass Wall CZ8 R-21",
+                                "Mass Wall CZ8 R-26",
+                                "Mass Wall CZ8 R-31",
+                                "Mass Wall CZ8 R-36",
+                                "Mass Wall CZ8 R-41"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 21,
+                            "Options": [
+                                21,
+                                26,
+                                31,
+                                36,
+                                41
+                            ]
+                        }
+                    },
+                    "Metal_Building": {
+                        "Wall_Type": {
+                            "Default": "Typical Metal Wall CZ8 R-26",
+                            "Options": [
+                                "Typical Metal Wall CZ8 R-26",
+                                "Metal Wall CZ8 R-31",
+                                "Metal Wall CZ8 R-36",
+                                "Metal Wall CZ8 R-41",
+                                "Metal Wall CZ8 R-46"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 26,
+                            "Options": [
+                                26,
+                                31,
+                                36,
+                                41,
+                                46
+                            ]
+                        }
+                    },
+                    "Steel_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Steel Framed Wall CZ8 R-27",
+                            "Options": [
+                                "Typical Steel Framed Wall CZ8 R-27",
+                                "Steel Framed Wall CZ8 R-32",
+                                "Steel Framed Wall CZ8 R-37",
+                                "Steel Framed Wall CZ8 R-42",
+                                "Steel Framed Wall CZ8 R-47"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 27,
+                            "Options": [
+                                27,
+                                32,
+                                37,
+                                42,
+                                47
+                            ]
+                        }
+                    },
+                    "Wood_Framed": {
+                        "Wall_Type": {
+                            "Default": "Typical Wood Framed Wall CZ8 R-31",
+                            "Options": [
+                                "Typical Wood Framed Wall CZ8 R-31",
+                                "Wood Framed Wall CZ8 R-36",
+                                "Wood Framed Wall CZ8 R-41",
+                                "Wood Framed Wall CZ8 R-46",
+                                "Wood Framed Wall CZ8 R-51"
+                            ]
+                        },
+                        "Wall_R_Value": {
+                            "Default": 31,
+                            "Options": [
+                                31,
+                                36,
+                                41,
+                                46,
+                                51
+                            ]
+                        }
+                    }
+                },
+                "Foundation": {
+                    "Slab_Type": {
+                        "Default": "Typical Insulated Slab CZ8 R-3",
+                        "Options": [
+                            "Typical Insulated Slab CZ8 R-3"
+                        ]
+                    }
+                },
+                "Exterior_Window": {
+                    "Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CZ8 U-0.68 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical Mtl Framed CZ8 U-0.68 SHGC-0.45 VT-0.5",
+                                "Mtl Framed CZ8 U-0.54 SHGC-0.41 VT-0.45",
+                                "Mtl Framed CZ8 U-0.48 SHGC-0.36 VT-0.4",
+                                "Mtl Framed CZ8 U-0.41 SHGC-0.32 VT-0.35",
+                                "Mtl Framed CZ8 U-0.34 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "Metal_Framing_CurtainWall": {
+                        "Window_Type": {
+                            "Default": "Typical Mtl Framed CW CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical Mtl Framed CW CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                                "Mtl Framed CW CZ8 U-0.23 SHGC-0.41 VT-0.45",
+                                "Mtl Framed CW CZ8 U-0.2 SHGC-0.36 VT-0.4",
+                                "Mtl Framed CW CZ8 U-0.17 SHGC-0.32 VT-0.35",
+                                "Mtl Framed CW CZ8 U-0.15 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "Non-Metal_Framing": {
+                        "Window_Type": {
+                            "Default": "Typical Non Mtl Framed CZ8 U-0.25 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical Non Mtl Framed CZ8 U-0.25 SHGC-0.45 VT-0.5",
+                                "Non Mtl Framed CZ8 U-0.2 SHGC-0.41 VT-0.45",
+                                "Non Mtl Framed CZ8 U-0.18 SHGC-0.36 VT-0.4",
+                                "Non Mtl Framed CZ8 U-0.15 SHGC-0.32 VT-0.35",
+                                "Non Mtl Framed CZ8 U-0.13 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Hospital 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted LargeOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted MediumOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Outpatient 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Retail 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted Retail 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallHotel 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted SmallOffice 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted StripMall 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    },
+                    "TODO add SPEED enum for Weighted Warehouse 90.1-2016": {
+                        "Window_Type": {
+                            "Default": "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                            "Options": [
+                                "Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35",
+                                "TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3"
+                            ]
+                        }
+                    }
+                },
+                "Interior_Walls": {
+                    "Int_Wall_Type": {
+                        "Default": "Typical Interior Wall",
+                        "Options": [
+                            "Typical Interior Wall"
+                        ]
+                    }
+                },
+                "Floors": {
+                    "Floor_Type": {
+                        "Default": "Typical Interior Floor",
+                        "Options": [
+                            "Typical Interior Floor"
+                        ]
+                    }
+                }
+            }
         }
     }
 }

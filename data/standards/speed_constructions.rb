@@ -14,6 +14,7 @@ module SpeedConstructions
       '90.1-2007' => {'key' => 'ASHRAE_90_1_2007', 'gui' => 'ASHRAE_90_1_2007'},
       '90.1-2010' => {'key' => 'ASHRAE_90_1_2010', 'gui' => 'ASHRAE_90_1_2010'},
       '90.1-2013' => {'key' => 'ASHRAE_90_1_2013', 'gui' => 'ASHRAE_90_1_2013'},
+      '90.1-2016' => {'key' => 'ASHRAE_90_1_2016', 'gui' => 'ASHRAE_90_1_2016'},
       # Climate Zones
       '1' => {'key' => '1', 'gui' => 'CZ1'},
       '2' => {'key' => '2', 'gui' => 'CZ2'},

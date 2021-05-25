@@ -1271,5 +1271,989 @@ ASHRAE_90_1_2013,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.19 S
 ASHRAE_90_1_2013,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.16 SHGC-0.27 VT-0.3,false
 ASHRAE_90_1_2013,8,Interior_Walls,"",Typical Interior Wall,true
 ASHRAE_90_1_2013,8,Floors,"",Typical Interior Floor,true
+ASHRAE_90_1_2016,1,Roof,Attic_and_Other,Typical Attic & Other Roof CZ1 R-37,true
+ASHRAE_90_1_2016,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-47,true
+ASHRAE_90_1_2016,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-52,true
+ASHRAE_90_1_2016,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-57,true
+ASHRAE_90_1_2016,1,Roof,Attic_and_Other,Attic & Other Roof CZ1 R-62,true
+ASHRAE_90_1_2016,1,Roof,IEAD,Typical IEAD Roof CZ1 R-21,true
+ASHRAE_90_1_2016,1,Roof,IEAD,IEAD Roof CZ1 R-31,true
+ASHRAE_90_1_2016,1,Roof,IEAD,IEAD Roof CZ1 R-36,true
+ASHRAE_90_1_2016,1,Roof,IEAD,IEAD Roof CZ1 R-41,true
+ASHRAE_90_1_2016,1,Roof,IEAD,IEAD Roof CZ1 R-46,true
+ASHRAE_90_1_2016,1,Roof,Metal_Building,Typical Metal Roof CZ1 R-24,true
+ASHRAE_90_1_2016,1,Roof,Metal_Building,Metal Roof CZ1 R-34,true
+ASHRAE_90_1_2016,1,Roof,Metal_Building,Metal Roof CZ1 R-39,true
+ASHRAE_90_1_2016,1,Roof,Metal_Building,Metal Roof CZ1 R-44,true
+ASHRAE_90_1_2016,1,Roof,Metal_Building,Metal Roof CZ1 R-49,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Mass,Typical Mass Wall CZ1 R-2,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Mass,Mass Wall CZ1 R-7,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Mass,Mass Wall CZ1 R-12,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Mass,Mass Wall CZ1 R-17,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Mass,Mass Wall CZ1 R-22,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Metal_Building,Typical Metal Wall CZ1 R-11,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-16,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-21,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-26,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Metal_Building,Metal Wall CZ1 R-31,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ1 R-8,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-13,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-18,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-23,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ1 R-28,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ1 R-11,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-16,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-21,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-26,true
+ASHRAE_90_1_2016,1,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ1 R-31,true
+ASHRAE_90_1_2016,1,Foundation,"",Typical Insulated Slab CZ1 R-3,true
+ASHRAE_90_1_2016,1,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ1 U-1.1 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.88 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.77 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.66 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,1,Exterior_Window,Metal_Framing,Mtl Framed CZ1 U-0.55 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,1,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ1 U-0.57 SHGC-0.25 VT-0.28,true
+ASHRAE_90_1_2016,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.46 SHGC-0.23 VT-0.25,true
+ASHRAE_90_1_2016,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.4 SHGC-0.2 VT-0.22,true
+ASHRAE_90_1_2016,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.34 SHGC-0.18 VT-0.19,true
+ASHRAE_90_1_2016,1,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ1 U-0.29 SHGC-0.15 VT-0.17,true
+ASHRAE_90_1_2016,1,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ1 U-0.5 SHGC-0.25 VT-0.28,true
+ASHRAE_90_1_2016,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.4 SHGC-0.23 VT-0.25,true
+ASHRAE_90_1_2016,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.35 SHGC-0.2 VT-0.22,true
+ASHRAE_90_1_2016,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.3 SHGC-0.18 VT-0.19,true
+ASHRAE_90_1_2016,1,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ1 U-0.25 SHGC-0.15 VT-0.17,true
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ1 U-0.57 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ1 U-0.46 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ1 U-0.4 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ1 U-0.34 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,1,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ1 U-0.29 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,1,Interior_Walls,"",Typical Interior Wall,true
+ASHRAE_90_1_2016,1,Floors,"",Typical Interior Floor,true
+ASHRAE_90_1_2016,2,Roof,Attic_and_Other,Typical Attic & Other Roof CZ2 R-37,true
+ASHRAE_90_1_2016,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-47,true
+ASHRAE_90_1_2016,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-52,true
+ASHRAE_90_1_2016,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-57,true
+ASHRAE_90_1_2016,2,Roof,Attic_and_Other,Attic & Other Roof CZ2 R-62,true
+ASHRAE_90_1_2016,2,Roof,IEAD,Typical IEAD Roof CZ2 R-26,true
+ASHRAE_90_1_2016,2,Roof,IEAD,IEAD Roof CZ2 R-36,true
+ASHRAE_90_1_2016,2,Roof,IEAD,IEAD Roof CZ2 R-41,true
+ASHRAE_90_1_2016,2,Roof,IEAD,IEAD Roof CZ2 R-46,true
+ASHRAE_90_1_2016,2,Roof,IEAD,IEAD Roof CZ2 R-51,true
+ASHRAE_90_1_2016,2,Roof,Metal_Building,Typical Metal Roof CZ2 R-24,true
+ASHRAE_90_1_2016,2,Roof,Metal_Building,Metal Roof CZ2 R-34,true
+ASHRAE_90_1_2016,2,Roof,Metal_Building,Metal Roof CZ2 R-39,true
+ASHRAE_90_1_2016,2,Roof,Metal_Building,Metal Roof CZ2 R-44,true
+ASHRAE_90_1_2016,2,Roof,Metal_Building,Metal Roof CZ2 R-49,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Mass,Typical Mass Wall CZ2 R-7,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Mass,Mass Wall CZ2 R-12,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Mass,Mass Wall CZ2 R-17,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Mass,Mass Wall CZ2 R-22,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Mass,Mass Wall CZ2 R-27,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Metal_Building,Typical Metal Wall CZ2 R-11,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-16,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-21,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-26,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Metal_Building,Metal Wall CZ2 R-31,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ2 R-12,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-17,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-22,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-27,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ2 R-32,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ2 R-11,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-16,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-21,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-26,true
+ASHRAE_90_1_2016,2,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ2 R-31,true
+ASHRAE_90_1_2016,2,Foundation,"",Typical Insulated Slab CZ2 R-3,true
+ASHRAE_90_1_2016,2,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ2 U-0.83 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.66 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.58 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.5 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,Metal_Framing,Mtl Framed CZ2 U-0.42 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ2 U-0.54 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.43 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.38 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.32 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ2 U-0.27 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ2 U-0.37 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.3 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.26 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.22 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ2 U-0.19 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ2 U-0.53 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ2 U-0.42 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ2 U-0.37 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ2 U-0.53 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ2 U-0.42 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ2 U-0.37 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ2 U-0.54 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ2 U-0.43 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ2 U-0.38 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ2 U-0.32 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,2,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ2 U-0.27 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,2,Interior_Walls,"",Typical Interior Wall,true
+ASHRAE_90_1_2016,2,Floors,"",Typical Interior Floor,true
+ASHRAE_90_1_2016,3,Roof,Attic_and_Other,Typical Attic & Other Roof CZ3 R-37,true
+ASHRAE_90_1_2016,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-47,true
+ASHRAE_90_1_2016,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-52,true
+ASHRAE_90_1_2016,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-57,true
+ASHRAE_90_1_2016,3,Roof,Attic_and_Other,Attic & Other Roof CZ3 R-62,true
+ASHRAE_90_1_2016,3,Roof,IEAD,Typical IEAD Roof CZ3 R-26,true
+ASHRAE_90_1_2016,3,Roof,IEAD,IEAD Roof CZ3 R-36,true
+ASHRAE_90_1_2016,3,Roof,IEAD,IEAD Roof CZ3 R-41,true
+ASHRAE_90_1_2016,3,Roof,IEAD,IEAD Roof CZ3 R-46,true
+ASHRAE_90_1_2016,3,Roof,IEAD,IEAD Roof CZ3 R-51,true
+ASHRAE_90_1_2016,3,Roof,Metal_Building,Typical Metal Roof CZ3 R-24,true
+ASHRAE_90_1_2016,3,Roof,Metal_Building,Metal Roof CZ3 R-34,true
+ASHRAE_90_1_2016,3,Roof,Metal_Building,Metal Roof CZ3 R-39,true
+ASHRAE_90_1_2016,3,Roof,Metal_Building,Metal Roof CZ3 R-44,true
+ASHRAE_90_1_2016,3,Roof,Metal_Building,Metal Roof CZ3 R-49,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Mass,Typical Mass Wall CZ3 R-8,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Mass,Mass Wall CZ3 R-13,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Mass,Mass Wall CZ3 R-18,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Mass,Mass Wall CZ3 R-23,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Mass,Mass Wall CZ3 R-28,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Metal_Building,Typical Metal Wall CZ3 R-11,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-16,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-21,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-26,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Metal_Building,Metal Wall CZ3 R-31,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ3 R-13,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-18,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-23,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-28,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ3 R-33,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ3 R-11,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-16,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-21,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-26,true
+ASHRAE_90_1_2016,3,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ3 R-31,true
+ASHRAE_90_1_2016,3,Foundation,"",Typical Insulated Slab CZ3 R-3,true
+ASHRAE_90_1_2016,3,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ3 U-0.77 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.62 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.54 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.46 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,Metal_Framing,Mtl Framed CZ3 U-0.39 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ3 U-0.45 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.36 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.32 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.27 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ3 U-0.23 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ3 U-0.33 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.26 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.23 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.2 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ3 U-0.17 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ3 U-0.45 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ3 U-0.36 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ3 U-0.32 SHGC-0.2 VT-0.22,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ3 U-0.27 SHGC-0.18 VT-0.19,false
+ASHRAE_90_1_2016,3,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ3 U-0.23 SHGC-0.15 VT-0.17,false
+ASHRAE_90_1_2016,3,Interior_Walls,"",Typical Interior Wall,true
+ASHRAE_90_1_2016,3,Floors,"",Typical Interior Floor,true
+ASHRAE_90_1_2016,4,Roof,Attic_and_Other,Typical Attic & Other Roof CZ4 R-48,true
+ASHRAE_90_1_2016,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-58,true
+ASHRAE_90_1_2016,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-63,true
+ASHRAE_90_1_2016,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-68,true
+ASHRAE_90_1_2016,4,Roof,Attic_and_Other,Attic & Other Roof CZ4 R-73,true
+ASHRAE_90_1_2016,4,Roof,IEAD,Typical IEAD Roof CZ4 R-31,true
+ASHRAE_90_1_2016,4,Roof,IEAD,IEAD Roof CZ4 R-41,true
+ASHRAE_90_1_2016,4,Roof,IEAD,IEAD Roof CZ4 R-46,true
+ASHRAE_90_1_2016,4,Roof,IEAD,IEAD Roof CZ4 R-51,true
+ASHRAE_90_1_2016,4,Roof,IEAD,IEAD Roof CZ4 R-56,true
+ASHRAE_90_1_2016,4,Roof,Metal_Building,Typical Metal Roof CZ4 R-27,true
+ASHRAE_90_1_2016,4,Roof,Metal_Building,Metal Roof CZ4 R-37,true
+ASHRAE_90_1_2016,4,Roof,Metal_Building,Metal Roof CZ4 R-42,true
+ASHRAE_90_1_2016,4,Roof,Metal_Building,Metal Roof CZ4 R-47,true
+ASHRAE_90_1_2016,4,Roof,Metal_Building,Metal Roof CZ4 R-52,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Mass,Typical Mass Wall CZ4 R-10,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Mass,Mass Wall CZ4 R-15,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Mass,Mass Wall CZ4 R-20,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Mass,Mass Wall CZ4 R-25,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Mass,Mass Wall CZ4 R-30,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Metal_Building,Typical Metal Wall CZ4 R-17,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-22,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-27,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-32,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Metal_Building,Metal Wall CZ4 R-37,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ4 R-16,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-21,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-26,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-31,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ4 R-36,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ4 R-16,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-21,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-26,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-31,true
+ASHRAE_90_1_2016,4,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ4 R-36,true
+ASHRAE_90_1_2016,4,Foundation,"",Typical Insulated Slab CZ4 R-3,true
+ASHRAE_90_1_2016,4,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ4 U-0.68 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.54 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.48 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.41 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,Metal_Framing,Mtl Framed CZ4 U-0.34 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ4 U-0.38 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.3 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.27 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.23 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ4 U-0.19 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ4 U-0.31 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.25 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.22 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.19 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ4 U-0.16 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ4 U-0.38 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ4 U-0.3 SHGC-0.32 VT-0.36,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ4 U-0.27 SHGC-0.29 VT-0.32,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ4 U-0.23 SHGC-0.25 VT-0.28,false
+ASHRAE_90_1_2016,4,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ4 U-0.19 SHGC-0.22 VT-0.24,false
+ASHRAE_90_1_2016,4,Interior_Walls,"",Typical Interior Wall,true
+ASHRAE_90_1_2016,4,Floors,"",Typical Interior Floor,true
+ASHRAE_90_1_2016,5,Roof,Attic_and_Other,Typical Attic & Other Roof CZ5 R-48,true
+ASHRAE_90_1_2016,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-58,true
+ASHRAE_90_1_2016,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-63,true
+ASHRAE_90_1_2016,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-68,true
+ASHRAE_90_1_2016,5,Roof,Attic_and_Other,Attic & Other Roof CZ5 R-73,true
+ASHRAE_90_1_2016,5,Roof,IEAD,Typical IEAD Roof CZ5 R-31,true
+ASHRAE_90_1_2016,5,Roof,IEAD,IEAD Roof CZ5 R-41,true
+ASHRAE_90_1_2016,5,Roof,IEAD,IEAD Roof CZ5 R-46,true
+ASHRAE_90_1_2016,5,Roof,IEAD,IEAD Roof CZ5 R-51,true
+ASHRAE_90_1_2016,5,Roof,IEAD,IEAD Roof CZ5 R-56,true
+ASHRAE_90_1_2016,5,Roof,Metal_Building,Typical Metal Roof CZ5 R-27,true
+ASHRAE_90_1_2016,5,Roof,Metal_Building,Metal Roof CZ5 R-37,true
+ASHRAE_90_1_2016,5,Roof,Metal_Building,Metal Roof CZ5 R-42,true
+ASHRAE_90_1_2016,5,Roof,Metal_Building,Metal Roof CZ5 R-47,true
+ASHRAE_90_1_2016,5,Roof,Metal_Building,Metal Roof CZ5 R-52,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Mass,Typical Mass Wall CZ5 R-11,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Mass,Mass Wall CZ5 R-16,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Mass,Mass Wall CZ5 R-21,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Mass,Mass Wall CZ5 R-26,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Mass,Mass Wall CZ5 R-31,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Metal_Building,Typical Metal Wall CZ5 R-20,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-25,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-30,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-35,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Metal_Building,Metal Wall CZ5 R-40,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ5 R-18,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-23,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-28,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-33,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ5 R-38,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ5 R-20,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-25,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-30,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-35,true
+ASHRAE_90_1_2016,5,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ5 R-40,true
+ASHRAE_90_1_2016,5,Foundation,"",Typical Insulated Slab CZ5 R-3,true
+ASHRAE_90_1_2016,5,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ5 U-0.68 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.54 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.48 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.41 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,Metal_Framing,Mtl Framed CZ5 U-0.34 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ5 U-0.38 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.3 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.27 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.23 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ5 U-0.19 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ5 U-0.31 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.25 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.22 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.19 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ5 U-0.16 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ5 U-0.38 SHGC-0.38 VT-0.42,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ5 U-0.3 SHGC-0.34 VT-0.38,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ5 U-0.27 SHGC-0.3 VT-0.33,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ5 U-0.23 SHGC-0.27 VT-0.29,false
+ASHRAE_90_1_2016,5,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ5 U-0.19 SHGC-0.23 VT-0.25,false
+ASHRAE_90_1_2016,5,Interior_Walls,"",Typical Interior Wall,true
+ASHRAE_90_1_2016,5,Floors,"",Typical Interior Floor,true
+ASHRAE_90_1_2016,6,Roof,Attic_and_Other,Typical Attic & Other Roof CZ6 R-48,true
+ASHRAE_90_1_2016,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-58,true
+ASHRAE_90_1_2016,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-63,true
+ASHRAE_90_1_2016,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-68,true
+ASHRAE_90_1_2016,6,Roof,Attic_and_Other,Attic & Other Roof CZ6 R-73,true
+ASHRAE_90_1_2016,6,Roof,IEAD,Typical IEAD Roof CZ6 R-31,true
+ASHRAE_90_1_2016,6,Roof,IEAD,IEAD Roof CZ6 R-41,true
+ASHRAE_90_1_2016,6,Roof,IEAD,IEAD Roof CZ6 R-46,true
+ASHRAE_90_1_2016,6,Roof,IEAD,IEAD Roof CZ6 R-51,true
+ASHRAE_90_1_2016,6,Roof,IEAD,IEAD Roof CZ6 R-56,true
+ASHRAE_90_1_2016,6,Roof,Metal_Building,Typical Metal Roof CZ6 R-32,true
+ASHRAE_90_1_2016,6,Roof,Metal_Building,Metal Roof CZ6 R-42,true
+ASHRAE_90_1_2016,6,Roof,Metal_Building,Metal Roof CZ6 R-47,true
+ASHRAE_90_1_2016,6,Roof,Metal_Building,Metal Roof CZ6 R-52,true
+ASHRAE_90_1_2016,6,Roof,Metal_Building,Metal Roof CZ6 R-57,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Mass,Typical Mass Wall CZ6 R-13,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Mass,Mass Wall CZ6 R-18,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Mass,Mass Wall CZ6 R-23,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Mass,Mass Wall CZ6 R-28,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Mass,Mass Wall CZ6 R-33,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Metal_Building,Typical Metal Wall CZ6 R-20,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-25,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-30,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-35,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Metal_Building,Metal Wall CZ6 R-40,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ6 R-20,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-25,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-30,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-35,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ6 R-40,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ6 R-20,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-25,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-30,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-35,true
+ASHRAE_90_1_2016,6,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ6 R-40,true
+ASHRAE_90_1_2016,6,Foundation,"",Typical Insulated Slab CZ6 R-3,true
+ASHRAE_90_1_2016,6,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ6 U-0.68 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.54 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.48 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.41 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,Metal_Framing,Mtl Framed CZ6 U-0.34 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ6 U-0.36 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.29 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.25 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.22 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ6 U-0.18 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ6 U-0.3 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.24 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.21 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.18 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ6 U-0.15 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ6 U-0.36 SHGC-0.4 VT-0.44,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ6 U-0.29 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ6 U-0.25 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ6 U-0.22 SHGC-0.28 VT-0.31,false
+ASHRAE_90_1_2016,6,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ6 U-0.18 SHGC-0.24 VT-0.26,false
+ASHRAE_90_1_2016,6,Interior_Walls,"",Typical Interior Wall,true
+ASHRAE_90_1_2016,6,Floors,"",Typical Interior Floor,true
+ASHRAE_90_1_2016,7,Roof,Attic_and_Other,Typical Attic & Other Roof CZ7 R-59,true
+ASHRAE_90_1_2016,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-69,true
+ASHRAE_90_1_2016,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-74,true
+ASHRAE_90_1_2016,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-79,true
+ASHRAE_90_1_2016,7,Roof,Attic_and_Other,Attic & Other Roof CZ7 R-84,true
+ASHRAE_90_1_2016,7,Roof,IEAD,Typical IEAD Roof CZ7 R-36,true
+ASHRAE_90_1_2016,7,Roof,IEAD,IEAD Roof CZ7 R-46,true
+ASHRAE_90_1_2016,7,Roof,IEAD,IEAD Roof CZ7 R-51,true
+ASHRAE_90_1_2016,7,Roof,IEAD,IEAD Roof CZ7 R-56,true
+ASHRAE_90_1_2016,7,Roof,IEAD,IEAD Roof CZ7 R-61,true
+ASHRAE_90_1_2016,7,Roof,Metal_Building,Typical Metal Roof CZ7 R-34,true
+ASHRAE_90_1_2016,7,Roof,Metal_Building,Metal Roof CZ7 R-44,true
+ASHRAE_90_1_2016,7,Roof,Metal_Building,Metal Roof CZ7 R-49,true
+ASHRAE_90_1_2016,7,Roof,Metal_Building,Metal Roof CZ7 R-54,true
+ASHRAE_90_1_2016,7,Roof,Metal_Building,Metal Roof CZ7 R-59,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Mass,Typical Mass Wall CZ7 R-14,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Mass,Mass Wall CZ7 R-19,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Mass,Mass Wall CZ7 R-24,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Mass,Mass Wall CZ7 R-29,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Mass,Mass Wall CZ7 R-34,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Metal_Building,Typical Metal Wall CZ7 R-23,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-28,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-33,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-38,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Metal_Building,Metal Wall CZ7 R-43,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ7 R-20,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-25,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-30,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-35,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ7 R-40,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ7 R-20,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-25,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-30,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-35,true
+ASHRAE_90_1_2016,7,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ7 R-40,true
+ASHRAE_90_1_2016,7,Foundation,"",Typical Insulated Slab CZ7 R-3,true
+ASHRAE_90_1_2016,7,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ7 U-0.68 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.54 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.48 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.41 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,Metal_Framing,Mtl Framed CZ7 U-0.34 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ7 U-0.33 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.26 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.23 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.2 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ7 U-0.17 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ7 U-0.28 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.22 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ7 U-0.14 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ7 U-0.33 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ7 U-0.26 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ7 U-0.23 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ7 U-0.2 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,7,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ7 U-0.17 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,7,Interior_Walls,"",Typical Interior Wall,true
+ASHRAE_90_1_2016,7,Floors,"",Typical Interior Floor,true
+ASHRAE_90_1_2016,8,Roof,Attic_and_Other,Typical Attic & Other Roof CZ8 R-59,true
+ASHRAE_90_1_2016,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-69,true
+ASHRAE_90_1_2016,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-74,true
+ASHRAE_90_1_2016,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-79,true
+ASHRAE_90_1_2016,8,Roof,Attic_and_Other,Attic & Other Roof CZ8 R-84,true
+ASHRAE_90_1_2016,8,Roof,IEAD,Typical IEAD Roof CZ8 R-36,true
+ASHRAE_90_1_2016,8,Roof,IEAD,IEAD Roof CZ8 R-46,true
+ASHRAE_90_1_2016,8,Roof,IEAD,IEAD Roof CZ8 R-51,true
+ASHRAE_90_1_2016,8,Roof,IEAD,IEAD Roof CZ8 R-56,true
+ASHRAE_90_1_2016,8,Roof,IEAD,IEAD Roof CZ8 R-61,true
+ASHRAE_90_1_2016,8,Roof,Metal_Building,Typical Metal Roof CZ8 R-38,true
+ASHRAE_90_1_2016,8,Roof,Metal_Building,Metal Roof CZ8 R-48,true
+ASHRAE_90_1_2016,8,Roof,Metal_Building,Metal Roof CZ8 R-53,true
+ASHRAE_90_1_2016,8,Roof,Metal_Building,Metal Roof CZ8 R-58,true
+ASHRAE_90_1_2016,8,Roof,Metal_Building,Metal Roof CZ8 R-63,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Mass,Typical Mass Wall CZ8 R-21,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Mass,Mass Wall CZ8 R-26,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Mass,Mass Wall CZ8 R-31,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Mass,Mass Wall CZ8 R-36,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Mass,Mass Wall CZ8 R-41,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Metal_Building,Typical Metal Wall CZ8 R-26,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-31,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-36,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-41,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Metal_Building,Metal Wall CZ8 R-46,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Steel_Framed,Typical Steel Framed Wall CZ8 R-27,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-32,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-37,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-42,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Steel_Framed,Steel Framed Wall CZ8 R-47,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Wood_Framed,Typical Wood Framed Wall CZ8 R-31,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-36,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-41,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-46,true
+ASHRAE_90_1_2016,8,Exterior_Walls,Wood_Framed,Wood Framed Wall CZ8 R-51,true
+ASHRAE_90_1_2016,8,Foundation,"",Typical Insulated Slab CZ8 R-3,true
+ASHRAE_90_1_2016,8,Exterior_Window,Metal_Framing,Typical Mtl Framed CZ8 U-0.68 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.54 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.48 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.41 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,Metal_Framing,Mtl Framed CZ8 U-0.34 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,Metal_Framing_CurtainWall,Typical Mtl Framed CW CZ8 U-0.29 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.23 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,Metal_Framing_CurtainWall,Mtl Framed CW CZ8 U-0.15 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,Non-Metal_Framing,Typical Non Mtl Framed CZ8 U-0.25 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.2 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.18 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.15 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,Non-Metal_Framing,Non Mtl Framed CZ8 U-0.13 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted FullServiceRestaurant 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,Typical TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Hospital 90.1-2016,TODO add SPEED enum for Weighted Hospital 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,Typical TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted LargeHotel 90.1-2016,TODO add SPEED enum for Weighted LargeHotel 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,Typical TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted LargeOffice 90.1-2016,TODO add SPEED enum for Weighted LargeOffice 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,Typical TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted MediumOffice 90.1-2016,TODO add SPEED enum for Weighted MediumOffice 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,Typical TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Outpatient 90.1-2016,TODO add SPEED enum for Weighted Outpatient 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016,TODO add SPEED enum for Weighted PrimarySchool 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,Typical TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016,TODO add SPEED enum for Weighted QuickServiceRestaurant 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,Typical TODO add SPEED enum for Weighted Retail 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Retail 90.1-2016,TODO add SPEED enum for Weighted Retail 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,Typical TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016,TODO add SPEED enum for Weighted SecondarySchool 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,Typical TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted SmallHotel 90.1-2016,TODO add SPEED enum for Weighted SmallHotel 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,Typical TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted SmallOffice 90.1-2016,TODO add SPEED enum for Weighted SmallOffice 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,Typical TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted StripMall 90.1-2016,TODO add SPEED enum for Weighted StripMall 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,Typical TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ8 U-0.29 SHGC-0.45 VT-0.5,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ8 U-0.23 SHGC-0.41 VT-0.45,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ8 U-0.2 SHGC-0.36 VT-0.4,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ8 U-0.17 SHGC-0.32 VT-0.35,false
+ASHRAE_90_1_2016,8,Exterior_Window,TODO add SPEED enum for Weighted Warehouse 90.1-2016,TODO add SPEED enum for Weighted Warehouse 90.1-2016 CZ8 U-0.15 SHGC-0.27 VT-0.3,false
+ASHRAE_90_1_2016,8,Interior_Walls,"",Typical Interior Wall,true
+ASHRAE_90_1_2016,8,Floors,"",Typical Interior Floor,true
 "","","","",Typical Interior Floor Reversed,false
 "","","","",ShadingDevices,false

@@ -313,6 +313,13 @@ def parse_units(unit)
   return unit_parsed
 end
 
+def rubyxl_extract_data(worksheet)
+  ### Method added by Dan just for SPEED
+  worksheet.sheet_data.rows.map { |row|
+    row.cells.map { |c| c && c.value() } unless row.nil?
+  }
+end
+
 # Exports spreadsheet data to data jsons, nested by the standards templates
 #
 # @param spreadsheet_titles
@@ -398,8 +405,11 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
       # and data from roworksheet 4 onward.
       header_row = 2 # Base 0
 
+      puts "worksheet.class = #{worksheet.class}"
+
       # Get all data
-      all_data = worksheet.extract_data
+      ### Method added by Dan just for SPEED
+      all_data = rubyxl_extract_data(worksheet)
 
       # Get the header row data
       header_data = all_data[header_row]
