@@ -1,3 +1,5 @@
+
+### Loads OpenStudio here instead of what is installed locally on PC
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'openstudio-standards/version'
