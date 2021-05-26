@@ -53,7 +53,7 @@ class ASHRAE901PRM < Standard
 
     # Get non-mechanically cooled flag
     if zone_hvac.thermalZone.get.additionalProperties.hasFeature('non_mechanically_cooled')
-      nmc_flag = zone_hvac.thermalZone.additionalProperties.hasFeature('non_mechanically_cooled')
+      nmc_flag = zone_hvac.thermalZone.get.additionalProperties.hasFeature('non_mechanically_cooled')
     else nmc_flag = false
     end
 

@@ -1572,7 +1572,7 @@ class Standard
       else
         # This is the 2019 PRM method
         lighting_properties = interior_lighting_get_prm_data(space_type)
-        if lighting_properties.nil?
+        if lighting_properties.size == 0
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find lighting properties for #{space_to_check.name}, assuming nonresidential.")
           is_res = false
         else

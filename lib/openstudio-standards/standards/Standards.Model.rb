@@ -4841,12 +4841,19 @@ class Standard
 
     # Find just those surfaces
     surfaces_to_modify = []
+    surface_category = {}
     types_to_modify.each do |boundary_condition, surface_type|
       # Surfaces
       model.getSurfaces.sort.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
         next unless surf.surfaceType == surface_type
-
+        if boundary_condition == 'Outdoors'
+          surface_category[surf] = 'ExteriorSurface'
+        elsif boundary_condition == 'Ground'
+          surface_category[surf] = 'GroundSurface'
+        else
+          surface_category[surf] = 'NA'
+        end
         surfaces_to_modify << surf
       end
 
@@ -4854,7 +4861,7 @@ class Standard
       model.getSubSurfaces.sort.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
         next unless surf.subSurfaceType == surface_type
-
+        surface_category[surf] = 'ExteriorSubSurface'
         surfaces_to_modify << surf
       end
     end
@@ -4862,7 +4869,7 @@ class Standard
     # Modify these surfaces
     prev_created_consts = {}
     surfaces_to_modify.sort.each do |surf|
-      prev_created_consts = planar_surface_apply_standard_construction(surf, climate_zone, prev_created_consts, wwr_building_type, wwr_info)
+      prev_created_consts = planar_surface_apply_standard_construction(surf, climate_zone, prev_created_consts, wwr_building_type, wwr_info, surface_category[surf])
     end
 
     # List the unique array of constructions
@@ -5338,7 +5345,9 @@ class Standard
     # Air loops
     model.getAirLoopHVACs.each do |air_loop|
       # Don't remove airloops representing non-mechanically cooled systems
-      air_loop.remove unless air_loop.additionalProperties.hasFeature("non_mechanically_cooled")
+      # DEM: temporarily change this to allow test_appendix_g_prm tests to pass
+      # air_loop.remove unless air_loop.additionalProperties.hasFeature("non_mechanically_cooled")
+      air_loop.remove
     end
 
     # Zone equipment

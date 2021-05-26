@@ -2648,6 +2648,7 @@ class Standard
 
       # create a diffuser and attach the zone/diffuser pair to the air loop
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
+      # DEM: might need to change to: diffuser = OpenStudio::Model::AirTerminalSingleDuctConstantVolumeNoReheat.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{air_loop.name} Diffuser")
       air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
       air_loops << air_loop

@@ -2867,7 +2867,7 @@
     },
     {
       "name": "U 0.60 SHGC 0.25 Dbl 2.5mm air",
-      "intended_surface_type": null,
+      "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": null,
@@ -2879,7 +2879,7 @@
     },
     {
       "name": "U 0.61 SHGC 0.77 Simple Glazing Skylight",
-      "intended_surface_type": null,
+      "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": null,

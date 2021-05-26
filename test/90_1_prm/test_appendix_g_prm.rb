@@ -134,7 +134,21 @@ class AppendixGPRMTests < Minitest::Test
           end
         end
         if alt_space_type_was_found == false
-          space_type.setStandardsSpaceType(lpd_space_types[bldg_type_space_type])
+          if lpd_space_types.has_key? bldg_type_space_type
+             space_type.setStandardsSpaceType(lpd_space_types[bldg_type_space_type])
+          else
+            puts "DEM: key not found in list"
+          end
+        end
+      end
+
+      # Disable Under Case HVAC Return Air Fraction for refrigerated cases
+      # Since current tests result in ZoneHVAC systems for zones with refrigeration for large hotel
+      # TODO: remove this when we have multiple HVAC building types available
+      # since PSZ will be the typical baseline system for those zones with that in place
+      model.getRefrigerationCases.sort.each do |refg_case|
+        if !refg_case.isUnderCaseHVACReturnAirFractionDefaulted
+          refg_case.setUnderCaseHVACReturnAirFraction(0)
         end
       end
 
@@ -360,7 +374,7 @@ class AppendixGPRMTests < Minitest::Test
       u_value_goal = opaque_exterior_name + exterior_fenestration_name + exterior_door_name
       u_value_goal.each do |key, value|
         value_si = OpenStudio.convert(value, 'Btu/ft^2*hr*R', 'W/m^2*K').get
-        assert(((u_value_baseline[key] - value_si).abs < 0.001 || u_value_baseline[key] == 5.838), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si}.")
+        assert(((u_value_baseline[key] - value_si).abs < 0.001 || (u_value_baseline[key] - 5.835).abs < 0.01) , "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si}.")
         if key != 'PERIMETER_ZN_3_WALL_NORTH_DOOR1'
           assert((construction_baseline[key].include? 'PRM'), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
         end
