@@ -400,7 +400,18 @@ class Standard
         # For this case the U-Factor is retrieved from previous sizing run
         u_factor = construction_calculated_fenestration_u_factor_w_frame(subsurface.construction.get)
       else
-        u_factor = subsurface.uFactor.get
+        # DEM: replace with direct query:  u_factor = subsurface.uFactor.get
+        glass_u_factor_query = "SELECT Value
+                  FROM tabulardatawithstrings
+                  WHERE ReportName='EnvelopeSummary'
+                  AND ReportForString='Entire Facility'
+                  AND TableName='Exterior Fenestration'
+                  AND ColumnName='Glass U-Factor'
+                  AND RowName='#{subsurface.name.get.upcase}'"
+        sql = surface.model.sqlFile.get
+
+        glass_u_factor_w_per_m2_k = sql.execAndReturnFirstDouble(glass_u_factor_query)
+        u_factor = glass_u_factor_w_per_m2_k.is_initialized ? glass_u_factor_w_per_m2_k.get : 0.0
       end
       # u_factor = subsurface.uFactor.is_initialized ? (subsurface.uFactor.get) : (construction_calculated_fenestration_u_factor_w_frame(subsurface.construction.get))
       ua += u_factor * subsurface.netArea

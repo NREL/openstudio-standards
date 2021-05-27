@@ -1654,7 +1654,7 @@ class Standard
 
   # This is the operating hours for calulating EFLH which is used for determining whether a zone 
   # should be included in a multizone system or isolated to a separate PSZ system
-  # Based on the intersection of the fan schedule for that zone and the occupancy schedule for that zone
+  # Based on the occupancy schedule for that zone
   # @author Doug Maddox, PNNL
   # @return [Array] 8760 array with 1 = operating, 0 = not operating
   def thermal_zone_get_annual_operating_hours(model, zone, zone_fan_sched)
@@ -1671,19 +1671,7 @@ class Standard
       end
     end
 
-    if zone_fan_sched.nil?
-      # There was no fan delivering conditioned air to the zone
-      # i.e. it was radiant heat only or radiant heat/cool, or some other odd case
-      # Use people schedule alone to determine operation schedule
-      zone_op_sch = zone_ppl_sch
-    else
-      # Merge with fan schedule: intersection with occupant schedule
-      (0..8759).each do |ihr|
-        if zone_ppl_sch[ihr] > 0 && zone_fan_sched[ihr] > 0
-          zone_op_sch[ihr] = 1
-        end
-      end
-    end
+    zone_op_sch = zone_ppl_sch
 
     return zone_op_sch
   end

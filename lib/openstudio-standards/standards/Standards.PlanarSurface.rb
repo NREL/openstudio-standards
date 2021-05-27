@@ -184,11 +184,11 @@ class Standard
   def get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
 
     # Get DefaultSurfaceContstructions or DefaultSubSurfaceConstructions object
-    if surface_category = 'ExteriorSurface'
+    if surface_category == 'ExteriorSurface'
       cons_list = cons_set.defaultExteriorSurfaceConstructions.get
-    elsif surface_category = 'GroundSurface'
+    elsif surface_category == 'GroundSurface'
       cons_list = cons_set.defaultGroundContactSurfaceConstructions.get
-    elsif surface_category = 'ExteriorSubSurface'
+    elsif surface_category == 'ExteriorSubSurface'
       cons_list = cons_set.defaultExteriorSubSurfaceConstructions.get
     else
       cons_list = nil

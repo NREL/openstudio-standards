@@ -137,7 +137,7 @@ class AppendixGPRMTests < Minitest::Test
           if lpd_space_types.has_key? bldg_type_space_type
              space_type.setStandardsSpaceType(lpd_space_types[bldg_type_space_type])
           else
-            puts "DEM: key not found in list"
+            puts "key not found in lpd_space_types.json"
           end
         end
       end

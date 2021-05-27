@@ -195,7 +195,12 @@ class Standard
     end
 
     # Unoccupied shutdown
-    air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac)
+    if /prm/i =~ template
+      occ_threshold = air_loop_hvac_unoccupied_threshold
+    else
+      occ_threshold = 0.05
+    end
+    air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, occ_threshold)
 
     return true
   end
