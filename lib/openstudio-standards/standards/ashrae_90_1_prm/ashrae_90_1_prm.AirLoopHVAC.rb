@@ -12,7 +12,7 @@ class ASHRAE901PRM < Standard
 
   # Default occupancy fraction threshold for determining if the spaces on the air loop are occupied
   def air_loop_hvac_unoccupied_threshold
-    return 0.01
+    return 0.05
   end
 
   # Calculate and apply the performance rating method
