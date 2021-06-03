@@ -289,6 +289,7 @@ class NECB2011 < Standard
     if File.file?(osm_model_path)
       model = BTAP::FileIO::load_osm(osm_model_path)
       model.getBuilding.setName(building_type)
+    end
     return model
   end
 
