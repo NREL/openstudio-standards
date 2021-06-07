@@ -285,8 +285,11 @@ class NECB2011 < Standard
 
   def load_building_type_from_library(building_type:)
     osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
-    model = BTAP::FileIO::load_osm(osm_model_path)
-    model.getBuilding.setName(building_type)
+    model = false
+    if File.file?(osm_model_path)
+      model = BTAP::FileIO::load_osm(osm_model_path)
+      model.getBuilding.setName(building_type)
+    end
     return model
   end
 
