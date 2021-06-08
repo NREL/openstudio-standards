@@ -222,13 +222,8 @@ class BTAPDatapoint
                                   cost_result: @cost_result,
                                   qaqc: @qaqc).btap_data
 
-        # The below method calculates energy performance indicators (i.e. TEDI and MEUI) as per BC Energy Step Code
-        self.bc_energy_step_code_performance_indicators()
 
         # Write Files
-
-
-
         File.open(File.join(@dp_temp_folder, 'btap_data.json'), 'w') { |f| f.write(JSON.pretty_generate(@btap_data.sort.to_h, :allow_nan => true)) }
         puts "Wrote File btap_data.json in #{Dir.pwd()} "
 
@@ -271,20 +266,7 @@ class BTAPDatapoint
 
   end
 
-  def bc_energy_step_code_performance_indicators
-    # TEDI (Thermal Energy Demand Intensity) [kWh/(m2.year)]
-    tedi_kwh_per_m_sq = OpenStudio.convert(@btap_data["energy_eui_heating_gj_per_m_sq"].to_f, 'GJ', 'kWh')
-    @btap_data.merge!("bc_step_code_tedi_kwh_per_m_sq" => tedi_kwh_per_m_sq)
 
-    # MEUI (Mechanical Energy Use Intensity) [kWh/(m2.year)]
-    meui_gj_per_m_sq = @btap_data["energy_eui_heating_gj_per_m_sq"].to_f +
-        @btap_data["energy_eui_cooling_gj_per_m_sq"].to_f +
-        @btap_data["energy_eui_fans_gj_per_m_sq"].to_f +
-        @btap_data["energy_eui_pumps_gj_per_m_sq"].to_f +
-        @btap_data["energy_eui_water systems_gj_per_m_sq"].to_f
-    meui_kwh_per_m_sq = OpenStudio.convert(meui_gj_per_m_sq, 'GJ', 'kWh')
-    @btap_data.merge!("bc_step_code_meui_kwh_per_m_sq" => meui_kwh_per_m_sq)
-  end
 
 
   def s3_copy_file_to_s3( bucket_name:, source_file:, target_file:,n: 0)
@@ -353,6 +335,7 @@ class BTAPDatapoint
     end
     return exit_code
   end
+
 end
 
 

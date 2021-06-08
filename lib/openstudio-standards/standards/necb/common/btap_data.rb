@@ -78,6 +78,10 @@ class BTAPData
       # This does not work with the new VRF or CCASHP systems. Commenting it for now.
       # @btap_data.merge!('trunk_ducts_cost_table' => trunk_ducts_cost_table(cost_result))
     end
+    # calculate energy demands and peak loads calculations as per PHIUS and NECB and compare them
+    # self.phius_performance_indicators(model)
+    # The below method calculates energy performance indicators (i.e. TEDI and MEUI) as per BC Energy Step Code
+    self.bc_energy_step_code_performance_indicators()
 
     self.measure_metrics(qaqc)
     @btap_data
@@ -1236,6 +1240,53 @@ class BTAPData
                                                                            " AND ColumnName='Gas Maximum Value' AND Units='W'")
     data["energy_peak_electric_w_per_m_sq"] = electric_peak.empty? ? 0.0 : electric_peak.get / @conditioned_floor_area_m_sq
     data["energy_peak_natural_gas_w_per_m_sq"] = natural_gas_peak.empty? ? 0.0 : natural_gas_peak.get / @conditioned_floor_area_m_sq
+
+
+    # Peak heating load  #TODO: IMPORTANT NOTE: Peak heating load must be updated if a combination of fuel types is used in a building model.
+    command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='EnergyMeters'
+               AND ReportForString='Entire Facility'
+               AND TableName='Annual and Peak Values - Electricity'
+               AND RowName='Heating:Electricity'
+               AND ColumnName='Electricity Maximum Value'
+               AND Units='W'"
+    heating_peak_w_electricity = @sqlite_file.get.execAndReturnFirstDouble(command)
+    command = "SELECT Value
+              FROM TabularDataWithStrings
+              WHERE ReportName='EnergyMeters'
+              AND ReportForString='Entire Facility'
+              AND TableName='Annual and Peak Values - Gas'
+              AND RowName='Heating:Gas'
+              AND ColumnName='Gas Maximum Value'
+              AND Units='W'"
+    heating_peak_w_gas = @sqlite_file.get.execAndReturnFirstDouble(command)
+    heating_peak_w = [heating_peak_w_electricity.to_f, heating_peak_w_gas.to_f].max
+    data["heating_peak_w_per_m_sq"] = heating_peak_w / @conditioned_floor_area_m_sq
+
+    # Peak cooling load    #TODO: IMPORTANT NOTE: Peak cooling load must be updated if a combination of fuel types is used in a building model.
+    command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='EnergyMeters'
+               AND ReportForString='Entire Facility'
+               AND TableName='Annual and Peak Values - Electricity'
+               AND RowName='Cooling:Electricity'
+               AND ColumnName='Electricity Maximum Value'
+               AND Units='W'"
+    cooling_peak_w_electricity = @sqlite_file.get.execAndReturnFirstDouble(command)
+    command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='EnergyMeters'
+               AND ReportForString='Entire Facility'
+               AND TableName='Annual and Peak Values - Gas'
+               AND RowName='Cooling:Electricity'
+               AND ColumnName='Electricity Maximum Value'
+               AND Units='W'"
+    cooling_peak_w_gas = @sqlite_file.get.execAndReturnFirstDouble(command)
+    cooling_peak_w = [cooling_peak_w_electricity.to_f, cooling_peak_w_gas.to_f].max
+    data["cooling_peak_w_per_m_sq"] = cooling_peak_w / @conditioned_floor_area_m_sq
+
+
     return data
   end
 
@@ -1620,6 +1671,205 @@ class BTAPData
     raise ("could not find ghg factor for province name #{province} and fuel_type #{fuel_type}") if factor.nil?
     return factor[:"CO2eq Emissions (kg/MBtu)"] / mbtu_to_gj
   end
+
+
+  def bc_energy_step_code_performance_indicators()
+    # TEDI (Thermal Energy Demand Intensity) [kWh/(m2.year)]
+    tedi_kwh_per_m_sq = OpenStudio.convert(@btap_data["energy_eui_heating_gj_per_m_sq"].to_f, 'GJ', 'kWh')
+    @btap_data.merge!("bc_step_code_tedi_kwh_per_m_sq" => tedi_kwh_per_m_sq)
+
+    # MEUI (Mechanical Energy Use Intensity) [kWh/(m2.year)]
+    meui_gj_per_m_sq = @btap_data["energy_eui_heating_gj_per_m_sq"].to_f +
+        @btap_data["energy_eui_cooling_gj_per_m_sq"].to_f +
+        @btap_data["energy_eui_fans_gj_per_m_sq"].to_f +
+        @btap_data["energy_eui_pumps_gj_per_m_sq"].to_f +
+        @btap_data["energy_eui_water systems_gj_per_m_sq"].to_f
+    meui_kwh_per_m_sq = OpenStudio.convert(meui_gj_per_m_sq, 'GJ', 'kWh')
+    @btap_data.merge!("bc_step_code_meui_kwh_per_m_sq" => meui_kwh_per_m_sq)
+  end
+
+
+  # The below method calculates energy demands and peak loads calculations as per PHIUS and NECB; and compares them to see if NECB meets PHIUS' performance criteria.
+  ### References:
+  ### (1) PHIUS 2021 Passive Building Standard Standard-Setting Documentation. Available at https://www.phius.org/phius-certification-for-buildings-products/project-certification/phius-2021-emissions-down-scale-up
+  ### (2) Wright, L. (2019). Setting the Heating/Cooling Performance Criteria for the PHIUS 2018 Passive Building Standard. In ASHRAE Topical Conference Proceedings, pp. 399-409
+  def phius_performance_indicators(model)
+
+    ### Envelope to Floor Area ratio (EnvFlr)
+    ### Note: 'Floor Area' has been considered as iCFA (interior conditioned floor area) as per REF: Wright (2019)
+    bldg_exterior_area_m_sq = @btap_data["bldg_exterior_area_m_sq"]
+    bldg_conditioned_floor_area_m_sq = @btap_data["bldg_conditioned_floor_area_m_sq"]
+    bldg_conditioned_floor_area_ft_sq = OpenStudio.convert(bldg_conditioned_floor_area_m_sq, 'm^2', 'ft^2').get
+    envelope_to_floor_area_ratio = bldg_exterior_area_m_sq / bldg_conditioned_floor_area_m_sq
+
+    ### UnitDens: Unit density (1/ft²) (inverse of the floor area per unit) in PHIUS, 2021
+    ### Note: if commercial buildings, set the number of units to 1 and divide by the floor area
+    building_type = @btap_data["bldg_standards_building_type"]
+    sum_handle = 0.0
+    number_of_dwelling_units = 0.0
+    @btap_data["space_table"].each do |space_info|
+      if space_info["space_type"] == 'Dwelling units general' && (building_type.upcase == 'HIGHRISEAPARTMENT' || building_type.upcase == 'MIDRISEAPARTMENT' || building_type.upcase == 'LOWRISEAPARTMENT')
+        sum_handle += space_info["floor_area_ft2"]
+        number_of_dwelling_units += 1.0 * space_info["multiplier"]
+      end
+    end
+    if number_of_dwelling_units > 0.0
+      unit_density_per_ft_sq = 1.0 / (sum_handle / number_of_dwelling_units)
+    else #i.e. if commercial buildings, set the number of units to 1 and divide by the floor area
+      unit_density_per_ft_sq = 1.0 / bldg_conditioned_floor_area_ft_sq
+    end
+
+    ### Get weather file name
+    weather_file = model.weatherFile.get.path.get.to_s
+    weather_file = weather_file.split('/')[-1]
+
+    ### Cooling Degree Days, base 50°F
+    cdd10_degree_c_days = BTAP::Environment::WeatherFile.new(weather_file).cdd10
+    cdd50_degree_f_days = cdd10_degree_c_days * 9.0 / 5.0
+
+    ### Heating Degree Days, base 65°F (note that base temperature of 18°C has been considered)
+    hdd18_degree_c_days = BTAP::Environment::WeatherFile.new(weather_file).hdd18
+    hdd65_degree_f_days = hdd18_degree_c_days * 9.0 / 5.0
+
+    ### Dehumidification degree days
+    ### ('Dehumidification degree-days, base 0.010' in REF: Wright (2019))
+    dehumidification_degree_days = BTAP::Environment::WeatherFile.new(weather_file).calculate_humidity_ratio
+
+    ### annual global horizontal irradiance (GHI)
+    annual_ghi_kwh_per_m_sq = BTAP::Environment::WeatherFile.new(weather_file).get_annual_ghi
+
+    ### THD-1 Temperature at the colder of the two heating design conditions in PHIUS, 2021
+    ### ('Heating design temperature' in REF: Wright (2019))
+    thd_degree_c = BTAP::Environment::WeatherFile.new(weather_file).heating_design_info[1]
+    thd_degree_f = OpenStudio.convert(thd_degree_c, 'C', 'F').get
+
+    ### TCD  Temperature at the cooling design condition in PHIUS, 2021
+    ### ('Cooling design temperature' in REF: Wright (2019))
+    tcd_degree_c = BTAP::Environment::WeatherFile.new(weather_file).cooling_design_info[2]
+    tcd_degree_f = OpenStudio.convert(tcd_degree_c.to_f, 'C', 'F').get
+
+    ### IGHL (Irradiance, Global, at the heating design condition) (Btu/h.ft²) in PHIUS, 2021
+    solar_irradiance_on_heating_design_day_w_per_m_sq = BTAP::Environment::WeatherFile.new(weather_file).get_ghi_on_heating_design_day
+    solar_irradiance_on_heating_design_day_btu_per_hr_ft_sq = OpenStudio.convert(solar_irradiance_on_heating_design_day_w_per_m_sq.to_f, 'W/m^2', 'Btu/ft^2*h').get
+
+    ### IGCL (Irradiance, Global, at the cooling design condition) (Btu/h.ft²) in PHIUS, 2021
+    solar_irradiance_on_cooling_design_day_w_per_m_sq = BTAP::Environment::WeatherFile.new(weather_file).get_ghi_on_cooling_design_day
+    solar_irradiance_on_cooling_design_day_btu_per_hr_ft_sq = OpenStudio.convert(solar_irradiance_on_cooling_design_day_w_per_m_sq.to_f, 'W/m^2', 'Btu/ft^2*h').get
+
+    ### occupant density (persons per ft2 of floor area)
+    sum_handle = 0.0
+    @btap_data["space_type_table"].each do |space_info|
+      sum_handle += space_info["floor_m_sq"] * space_info["occ_per_m_sq"]
+    end
+    occ_density_person_per_m_sq = sum_handle / bldg_conditioned_floor_area_m_sq
+    occ_density_person_per_ft_sq = OpenStudio.convert(occ_density_person_per_m_sq, 'ft^2', 'm^2').get
+
+    ### marginal electricity price ($/kWh)
+    ### ('Electricity price' in REF: Wright (2019))
+    electricity_price_per_gj = @btap_data["cost_utility_neb_electricity_cost_per_m_sq"] / @btap_data["energy_eui_electricity_gj_per_m_sq"]
+    electricity_price_per_kwh = OpenStudio.convert(electricity_price_per_gj, 'kWh', 'GJ').get #note: this is not GJ to kWh since 1/GJ should be converted to 1/kWh.
+
+    ### Calculate annual heating and cooling energy demands based on PHIUS
+    # REF: page 27 of PHIUS 2021 Passive Building Standard Standard-Setting Documentation. Available at https://www.phius.org/phius-certification-for-buildings-products/project-certification/phius-2021-emissions-down-scale-up
+    annual_heating_demand_kbtu_per_ft_sq_phius = 3.2606827206 +
+        1.1634499236 * envelope_to_floor_area_ratio +
+        904.39163818 * unit_density_per_ft_sq +
+        0.000604853 * hdd65_degree_f_days +
+        -0.001645777 * annual_ghi_kwh_per_m_sq +
+        -11.87299596 * electricity_price_per_kwh +
+        (envelope_to_floor_area_ratio - 1.766) * (envelope_to_floor_area_ratio - 1.766) * 0.8314860529 +
+        (envelope_to_floor_area_ratio - 1.766) * (hdd65_degree_f_days - 5860.0833333) * 0.0002310823 +
+        (hdd65_degree_f_days - 5860.0833333) * (hdd65_degree_f_days - 5860.0833333) * -5.736435e-8 +
+        (hdd65_degree_f_days - 5860.0833333) * (annual_ghi_kwh_per_m_sq - 1451.0633333) * -3.260379e-7 +
+        (envelope_to_floor_area_ratio - 1.766) * (electricity_price_per_kwh - -0.2029193333) * -3.851052937 +
+        (hdd65_degree_f_days - 5860.0833333) * (electricity_price_per_kwh - -0.2029193333) * -0.001897043
+    annual_heating_demand_kwh_per_m_sq_phius = OpenStudio.convert(annual_heating_demand_kbtu_per_ft_sq_phius, 'kBtu/ft^2', 'kWh/m^2').get
+    @btap_data.merge!("phius_annual_heating_demand_kwh_per_m_sq" => annual_heating_demand_kwh_per_m_sq_phius)
+
+    # REF: page 28 of PHIUS 2021 Passive Building Standard Standard-Setting Documentation. Available at https://www.phius.org/phius-certification-for-buildings-products/project-certification/phius-2021-emissions-down-scale-up
+    annual_cooling_demand_kbtu_per_ft_sq_phius = -6.510791255 +
+        -0.749993351 * envelope_to_floor_area_ratio +
+        0.0004550801 * cdd50_degree_f_days +
+        0.004990109 * annual_ghi_kwh_per_m_sq +
+        7.9460878688 * dehumidification_degree_days +
+        (envelope_to_floor_area_ratio - 1.766) * (envelope_to_floor_area_ratio - 1.766) * 1.6367059356 +
+        (cdd50_degree_f_days - 4104.8333333) * (cdd50_degree_f_days - 4104.8333333) * 8.6952014e-8 +
+        (envelope_to_floor_area_ratio - 1.766) * (annual_ghi_kwh_per_m_sq - 1451.0633333) * 0.001671947 +
+        (cdd50_degree_f_days - 4104.8333333) * (annual_ghi_kwh_per_m_sq - 1451.0633333) * 0.0000013639 +
+        (unit_density_per_ft_sq - 0.0008646735) * (dehumidification_degree_days - 0.3233057481) * 5547.7542211 +
+        (dehumidification_degree_days - 0.3233057481) * (electricity_price_per_kwh - 0.2029193333) * -15.67511944 +
+        1624.6144639 * unit_density_per_ft_sq
+    annual_cooling_demand_kwh_per_m_sq_phius = OpenStudio.convert(annual_cooling_demand_kbtu_per_ft_sq_phius, 'kBtu/ft^2', 'kWh/m^2').get
+    @btap_data.merge!("phius_annual_cooling_demand_kwh_per_m_sq" => annual_cooling_demand_kwh_per_m_sq_phius)
+
+    ### Calculate peak heating and cooling loads based on PHIUS
+    # REF: page 29 of PHIUS 2021 Passive Building Standard Standard-Setting Documentation. Available at https://www.phius.org/phius-certification-for-buildings-products/project-certification/phius-2021-emissions-down-scale-up
+    peak_heating_load_btu_per_hr_ft_sq_phius = 4.6700403241 +
+        0.6774809481 * envelope_to_floor_area_ratio +
+        239.08369574 * occ_density_person_per_ft_sq +
+        596.681543 * unit_density_per_ft_sq +
+        -0.000177742 * hdd65_degree_f_days +
+        -0.076727655 * thd_degree_f +
+        -0.03316804 * solar_irradiance_on_heating_design_day_btu_per_hr_ft_sq +
+        -4.140193817 * electricity_price_per_kwh +
+        (envelope_to_floor_area_ratio - 1.766) * (envelope_to_floor_area_ratio - 1.766) * 0.8449921713 +
+        (hdd65_degree_f_days - 5860.0833333) * (hdd65_degree_f_days - 5860.0833333) * 2.8376386e-8 +
+        (envelope_to_floor_area_ratio - 1.766) * (thd_degree_f - 14.7102) * -0.013821021 +
+        (unit_density_per_ft_sq - 0.0008646735) * (thd_degree_f - 14.7102) * -20.10551451 +
+        (hdd65_degree_f_days - 5860.0833333) * (thd_degree_f - 14.7102) * 5.1870203e-6 +
+        (thd_degree_f - 14.7102) * (electricity_price_per_kwh - 0.2029193333) * 0.1264922802
+    peak_heating_load_w_per_m_sq_phius = OpenStudio.convert(peak_heating_load_btu_per_hr_ft_sq_phius, 'Btu/ft^2*h', 'W/m^2').get
+    @btap_data.merge!("phius_peak_heating_load_w_per_m_sq" => peak_heating_load_w_per_m_sq_phius)
+
+    # REF: page 30 of PHIUS 2021 Passive Building Standard Standard-Setting Documentation. Available at https://www.phius.org/phius-certification-for-buildings-products/project-certification/phius-2021-emissions-down-scale-up
+    peak_cooling_load_btu_per_hr_ft_sq_phius = -7.289806442 +
+        98.245977611 * occ_density_person_per_ft_sq +
+        236.93351876 * unit_density_per_ft_sq +
+        0.0967328928 * tcd_degree_f +
+        0.010777725 * solar_irradiance_on_cooling_design_day_btu_per_hr_ft_sq +
+        (cdd50_degree_f_days - 4104.8333333) * (cdd50_degree_f_days - 4104.8333333) * 1.7699655e-8 +
+        (cdd50_degree_f_days - 4104.8333333) * (tcd_degree_f - 78.127) * 6.5268802e-6 +
+        (tcd_degree_f - 78.127) * (envelope_to_floor_area_ratio - 1.766) * 0.0165401721 +
+        (tcd_degree_f - 78.127) * (occ_density_person_per_ft_sq - 0.0027218) * 8.0465528305 +
+        (cdd50_degree_f_days - 4104.8333333) * (envelope_to_floor_area_ratio - 1.766) * 0.0000322288 +
+        (envelope_to_floor_area_ratio - 1.766) * (envelope_to_floor_area_ratio - 1.766) * 0.6579032913
+    peak_cooling_load_w_per_m_sq_phius = OpenStudio.convert(peak_cooling_load_btu_per_hr_ft_sq_phius, 'Btu/ft^2*h', 'W/m^2').get
+    @btap_data.merge!("phius_peak_cooling_load_w_per_m_sq" => peak_cooling_load_w_per_m_sq_phius)
+
+    ### Gather annual heating and cooling energy demands based on NECB
+    annual_heating_demand_kwh_per_m_sq_necb = OpenStudio.convert(@btap_data["energy_eui_heating_gj_per_m_sq"], 'GJ', 'kWh')
+    annual_cooling_demand_kwh_per_m_sq_necb = OpenStudio.convert(@btap_data["energy_eui_cooling_gj_per_m_sq"], 'GJ', 'kWh')
+
+    ### Gather peak heating and cooling loads based on NECB
+    peak_heating_load_w_per_m_sq_necb = @btap_data["heating_peak_w_per_m_sq"]
+    peak_cooling_load_w_per_m_sq_necb = @btap_data["cooling_peak_w_per_m_sq"]
+    @btap_data.merge!("peak_heating_load_w_per_m_sq_necb" => peak_heating_load_w_per_m_sq_necb)
+    @btap_data.merge!("peak_cooling_load_w_per_m_sq_necb" => peak_cooling_load_w_per_m_sq_necb)
+
+    ### Compare annual heating and cooling energy demands of NECB with PHIUS to see if NECB meets PHIUS
+    if annual_heating_demand_kwh_per_m_sq_necb.to_f <= annual_heating_demand_kwh_per_m_sq_phius.to_f
+      @btap_data.merge!("phius_necb_meet_heating_demand" => "True")
+    else
+      @btap_data.merge!("phius_necb_meet_heating_demand" => "False")
+    end
+    if annual_cooling_demand_kwh_per_m_sq_necb.to_f <= annual_cooling_demand_kwh_per_m_sq_phius.to_f
+      @btap_data.merge!("phius_necb_meet_cooling_demand" => "True")
+    else
+      @btap_data.merge!("phius_necb_meet_cooling_demand" => "False")
+    end
+
+    ### Compare peak heating and cooling loads of NECB with PHIUS to see if NECB meets PHIUS
+    if peak_heating_load_w_per_m_sq_necb.to_f <= peak_heating_load_w_per_m_sq_phius.to_f
+      @btap_data.merge!("phius_necb_meet_heating_peak_load" => "True")
+    else
+      @btap_data.merge!("phius_necb_meet_heating_peak_load" => "False")
+    end
+    if peak_cooling_load_w_per_m_sq_necb.to_f <= peak_cooling_load_w_per_m_sq_phius.to_f
+      @btap_data.merge!("phius_necb_meet_cooling_peak_load" => "True")
+    else
+      @btap_data.merge!("phius_necb_meet_cooling_peak_load" => "False")
+    end
+  end # def phius_metrics(model)
 
 end
 
