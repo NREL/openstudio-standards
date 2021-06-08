@@ -10,7 +10,7 @@ else
 end
 
 #load costing files if we are in btap_costing repository
-resource_folder = File.join(__dir__, '..','..', '..', 'measures/btap_results/resources')
+resource_folder = File.join(__dir__, '..', '..', 'measures/btap_results/resources')
 
 if Dir.exist?(resource_folder)
   puts('Loading Costing libs')
