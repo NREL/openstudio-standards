@@ -1,5 +1,4 @@
-require_relative File.join(__dir__, '/btap_datapoint.rb')
-
+require_relative './libs.rb'
 @argument={}
 @options={}
 # Default folders if not using s3
