@@ -205,25 +205,6 @@ class BTAPDatapoint
 
         @cost_result = nil
         if @options[:enable_costing] == true
-          resource_folder = File.join(__dir__, '..', '..', 'measures/btap_results/resources')
-          require_relative File.join(resource_folder, 'os_lib_reporting')
-          require_relative File.join(resource_folder, 'os_lib_schedules')
-          require_relative File.join(resource_folder, 'os_lib_helper_methods')
-          require_relative File.join(resource_folder, 'btap_measure_helper')
-          require_relative File.join(resource_folder, 'btap_costing.rb')
-          require_relative File.join(resource_folder, 'ventilation_costing.rb')
-          require_relative File.join(resource_folder, 'envelope_costing.rb')
-          require_relative File.join(resource_folder, 'lighting_costing.rb')
-          require_relative File.join(resource_folder, 'heating_cooling_costing.rb')
-          require_relative File.join(resource_folder, 'heating_cooling_costing.rb')
-          require_relative File.join(resource_folder, 'shw_costing.rb')
-          require_relative File.join(resource_folder, 'btap_data.rb')
-          require_relative File.join(resource_folder, 'dcv_costing.rb')
-          require_relative File.join(resource_folder, 'daylighting_sensor_control_costing.rb')
-          require_relative File.join(resource_folder, 'led_lighting_costing.rb')
-          require_relative File.join(resource_folder, 'pv_ground_costing.rb')
-          require_relative File.join(resource_folder, 'nv_costing.rb')
-
           # Perform costing
           costing = BTAPCosting.new()
           costing.load_database()
