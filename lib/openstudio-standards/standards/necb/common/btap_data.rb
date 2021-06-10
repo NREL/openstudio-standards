@@ -51,7 +51,7 @@ class BTAPData
     # Data in tables...
     @btap_data.merge!({'measures_data_table' => measures_data_table(runner)}) unless runner.nil?
     @btap_data.merge!({'envelope_exterior_surface_table' => self.envelope_exterior_surface_table()})
-    @btap_data.merge!({'space_table' => space_table(model, cost_result)}) unless cost_result == nil
+    @btap_data.merge!({'space_table' => space_table(model, cost_result)}) # unless cost_result == nil  #Sara
     @btap_data.merge!({'space_type_table' => space_type_table(model)})
     # This does not work with the new VRF or CCASHP systems. Commenting it for now.
     #@btap_data.merge!({'zone_table' => thermal_zones_table(model, cost_result)['table']})
@@ -79,7 +79,7 @@ class BTAPData
       # @btap_data.merge!('trunk_ducts_cost_table' => trunk_ducts_cost_table(cost_result))
     end
     # calculate energy demands and peak loads calculations as per PHIUS and NECB and compare them
-    # self.phius_performance_indicators(model)
+    self.phius_performance_indicators(model)
     # The below method calculates energy performance indicators (i.e. TEDI and MEUI) as per BC Energy Step Code
     self.bc_energy_step_code_performance_indicators()
 
@@ -341,6 +341,7 @@ class BTAPData
       spaceinfo["space_type_name"] = space.spaceType.get.name.get unless space.spaceType.empty? #should have a space types name defined.
       spaceinfo["breathing_zone_outdoor_airflow_vbz"] = -1
       spaceinfo["infiltration_flow_per_m_sq"] = space.infiltrationDesignFlowPerExteriorSurfaceArea
+      spaceinfo["floor_area_m2"] = space.floorArea #Sara
       #shw
       spaceinfo["shw_peak_flow_rate_m_cu_per_s"] = 0
       spaceinfo["shw_peak_flow_rate_per_floor_area_m_cu_per_s_per_m_sq"] = 0
@@ -351,18 +352,20 @@ class BTAPData
         #                             Watt per person =             m_cu/s/m_cu                * 1000W/kW * (specific heat * dT) * m_sq/person
         spaceinfo["shw_watts_per_person"] = spaceinfo["shw_peak_flow_rate_per_floor_area_m_cu_per_s_per_m_sq"] * 1000 * (4.19 * 44.4) * 1000 * area_per_occ
       end
-      # Including space level lighting costs in the existing space table...
-      spaceLgtInfo = cost_result['lighting']['space_report'].detect { |spaceLgtInfo| spaceLgtInfo["zone"].downcase == spaceinfo["thermal_zone_name"].downcase }
-      raise("Could not find zone name \"#{spaceinfo["thermal_zone_name"]}\" in lighting space_report") if spaceLgtInfo.nil?
-      spaceinfo['space_type'] = spaceLgtInfo['space_type']
-      spaceinfo['fixture_type'] = spaceLgtInfo['fixture_type']
-      # Note spelling mistake of "description" in cost_result hash fixed below in copy
-      spaceinfo['fixture_description'] = spaceLgtInfo['fixture_desciption']
-      spaceinfo['height_avg_ft'] = spaceLgtInfo['height_avg_ft']
-      spaceinfo['floor_area_ft2'] = spaceLgtInfo['floor_area_ft2']
-      spaceinfo['lighting_cost'] = spaceLgtInfo['cost']
-      spaceinfo['lighting_cost_per_ft2'] = spaceLgtInfo['cost_per_ft2']
-      spaceinfo['lighting_note'] = spaceLgtInfo['note']
+      unless cost_result.nil?  #Sara
+        # Including space level lighting costs in the existing space table...
+        spaceLgtInfo = cost_result['lighting']['space_report'].detect { |spaceLgtInfo| spaceLgtInfo["zone"].downcase == spaceinfo["thermal_zone_name"].downcase }
+        raise("Could not find zone name \"#{spaceinfo["thermal_zone_name"]}\" in lighting space_report") if spaceLgtInfo.nil?
+        spaceinfo['space_type'] = spaceLgtInfo['space_type']
+        spaceinfo['fixture_type'] = spaceLgtInfo['fixture_type']
+        # Note spelling mistake of "description" in cost_result hash fixed below in copy
+        spaceinfo['fixture_description'] = spaceLgtInfo['fixture_desciption']
+        spaceinfo['height_avg_ft'] = spaceLgtInfo['height_avg_ft']
+        spaceinfo['floor_area_ft2'] = spaceLgtInfo['floor_area_ft2']
+        spaceinfo['lighting_cost'] = spaceLgtInfo['cost']
+        spaceinfo['lighting_cost_per_ft2'] = spaceLgtInfo['cost_per_ft2']
+        spaceinfo['lighting_note'] = spaceLgtInfo['note']
+      end
     end
     table.sort_by! { |spaceinfo| [spaceinfo["thermal_zone_name"], spaceinfo["space_name"]] }
     return table
@@ -1315,6 +1318,31 @@ class BTAPData
       data["energy_eui_#{column.downcase}_per_m_sq"] = table.inject(0) { |sum, row| sum + (row[column].nil? ? 0.0 : row[column]) } / @conditioned_floor_area_m_sq
       data['energy_eui_total_gj_per_m_sq'] += data["energy_eui_#{column.downcase}_per_m_sq"] unless data["energy_eui_#{column.downcase}_per_m_sq"].nil?
     end
+    # Get total and net site energy use intensity  #Sara
+    # Note: 'Total Site Energy' is the "gross" energy used by a building.
+    # Note: 'Net Site Energy' is the final energy used by the building after considering any on-site energy generation (e.g. PV).
+    # Reference: https://unmethours.com/question/25416/what-is-the-difference-between-site-energy-and-source-energy/
+    # Reference: https://designbuilder.co.uk/helpv6.0/Content/KPIs.htm
+    command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
+               AND ReportForString='Entire Facility'
+               AND TableName='Site and Source Energy'
+               AND RowName='Total Site Energy'
+               AND ColumnName='Energy Per Conditioned Building Area'
+               AND Units='MJ/m2'"
+    total_site_eui_mj_per_m_sq = @sqlite_file.get.execAndReturnFirstDouble(command)
+    data['total_site_eui_gj_per_m_sq'] = OpenStudio.convert(total_site_eui_mj_per_m_sq.to_f, 'MJ', 'GJ').get
+    command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
+               AND ReportForString='Entire Facility'
+               AND TableName='Site and Source Energy'
+               AND RowName='Net Site Energy'
+               AND ColumnName='Energy Per Conditioned Building Area'
+               AND Units='MJ/m2'"
+    net_site_eui_mj_per_m_sq = @sqlite_file.get.execAndReturnFirstDouble(command)
+    data['net_site_eui_gj_per_m_sq'] = OpenStudio.convert(net_site_eui_mj_per_m_sq.to_f, 'MJ', 'GJ').get
     return data
   end
 
@@ -1708,8 +1736,8 @@ class BTAPData
     sum_handle = 0.0
     number_of_dwelling_units = 0.0
     @btap_data["space_table"].each do |space_info|
-      if space_info["space_type"] == 'Dwelling units general' && (building_type.upcase == 'HIGHRISEAPARTMENT' || building_type.upcase == 'MIDRISEAPARTMENT' || building_type.upcase == 'LOWRISEAPARTMENT')
-        sum_handle += space_info["floor_area_ft2"]
+      if space_info["space_type_name"] == 'Space Function Dwelling Unit(s)' && (building_type.upcase == 'HIGHRISEAPARTMENT' || building_type.upcase == 'MIDRISEAPARTMENT' || building_type.upcase == 'LOWRISEAPARTMENT')
+        sum_handle += OpenStudio.convert(space_info["floor_area_m2"], 'm^2', 'ft^2').get
         number_of_dwelling_units += 1.0 * space_info["multiplier"]
       end
     end
