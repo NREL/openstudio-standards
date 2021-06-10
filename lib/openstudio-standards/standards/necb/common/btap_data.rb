@@ -1694,7 +1694,27 @@ class BTAPData
 
   def bc_energy_step_code_performance_indicators()
     # TEDI (Thermal Energy Demand Intensity) [kWh/(m2.year)]
-    tedi_kwh_per_m_sq = OpenStudio.convert(@btap_data["energy_eui_heating_gj_per_m_sq"].to_f, 'GJ', 'kWh')
+    command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='EnergyMeters'
+               AND ReportForString='Entire Facility'
+               AND TableName='Annual and Peak Values - Other'
+               AND RowName='Baseboard:EnergyTransfer'
+               AND ColumnName='Annual Value'
+               AND Units='GJ'"
+    baseboard_energy_transfer_gj = @sqlite_file.get.execAndReturnFirstDouble(command)
+    baseboard_energy_transfer_kwh = OpenStudio.convert(baseboard_energy_transfer_gj.to_f, 'GJ', 'kWh')
+    command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='EnergyMeters'
+               AND ReportForString='Entire Facility'
+               AND TableName='Annual and Peak Values - Other'
+               AND RowName='HeatingCoils:EnergyTransfer'
+               AND ColumnName='Annual Value'
+               AND Units='GJ'"
+    heating_coils_energy_transfer_gj = @sqlite_file.get.execAndReturnFirstDouble(command)
+    heating_coils_energy_transfer_kwh = OpenStudio.convert(heating_coils_energy_transfer_gj.to_f, 'GJ', 'kWh')
+    tedi_kwh_per_m_sq = (baseboard_energy_transfer_kwh.to_f + heating_coils_energy_transfer_kwh.to_f) / @btap_data["bldg_conditioned_floor_area_m_sq"]
     @btap_data.merge!("bc_step_code_tedi_kwh_per_m_sq" => tedi_kwh_per_m_sq)
 
     # MEUI (Mechanical Energy Use Intensity) [kWh/(m2.year)]
@@ -1703,7 +1723,7 @@ class BTAPData
         @btap_data["energy_eui_fans_gj_per_m_sq"].to_f +
         @btap_data["energy_eui_pumps_gj_per_m_sq"].to_f +
         @btap_data["energy_eui_water systems_gj_per_m_sq"].to_f
-    meui_kwh_per_m_sq = OpenStudio.convert(meui_gj_per_m_sq, 'GJ', 'kWh')
+    meui_kwh_per_m_sq = OpenStudio.convert(meui_gj_per_m_sq, 'GJ', 'kWh').to_f
     @btap_data.merge!("bc_step_code_meui_kwh_per_m_sq" => meui_kwh_per_m_sq)
   end
 
