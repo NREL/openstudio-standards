@@ -24,12 +24,8 @@ class ASHRAE901PRM < Standard
     # Get list of possible files from lib\openstudio-standards\standards\ashrae_90_1_prm\userdata_csv
     stds_dir = File.expand_path(File.dirname(__FILE__))
     src_csv_dir = "#{stds_dir}/userdata_csv/*.csv"
-    #csv_files = []
     json_objs = {}
     Dir.glob(src_csv_dir) do |csv_full_name|
-      #csv_files << csv_file_name
-      #json_obj = {}
-      #json_obj[csv_file_name] = []
       json_rows = []
       csv_file_name = File.basename(csv_full_name, File.extname(csv_full_name))
       json_objs[csv_file_name] = json_rows
@@ -41,14 +37,9 @@ class ASHRAE901PRM < Standard
         csv_file_name = File.basename(csv_full_name, File.extname(csv_full_name))
         if json_objs.has_key?(csv_file_name)
           # Load csv file into array of hashes
-          # csv_full_name = "#{user_data_path}/#{csv_file_name}"
           json_rows = CSV.foreach(csv_full_name, headers: true).map{ |row| row.to_h }
-          #csv_data = CSV.read(csv_full_name, headers:true)
           next if json_rows.size == 0
-          #json_rows = []
-          #csv_data.each do |row|
-          #  json_rows << row
-          #end
+
           # remove file extension
           file_name = File.basename(csv_full_name, File.extname(csv_full_name))
           json_objs[file_name] = json_rows
