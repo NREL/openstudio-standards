@@ -650,6 +650,38 @@
           "cool_eir_fflow": "Mitsubishi Hyper Heating VRF Outdoor Unit CEIRFFF curve",
           "cool_plf_fplr": "Mitsubishi Hyper Heating VRF Outdoor Unit CPLFFPLR curve",
           "notes": "Mitsubishi Hyper Heating VRF Outdoor Unit (model: PUHY_HP)"
+        },
+        {
+          "name": "PTHP_Test_Data",
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 999999999.0,
+          "minimum_seasonal_efficiency": null,
+          "minimum_full_load_efficiency": null,
+          "minimum_iplv": null,
+          "minimum_integrated_energy_efficiency_ratio": null,
+          "minimum_coefficient_of_performance_cooling": 3.0,
+          "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
+          "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+          "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
+          "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+          "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+          "notes": "?"
+        },
+        {
+          "name": "ASHP_Test_Data",
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 999999999.0,
+          "minimum_seasonal_efficiency": null,
+          "minimum_full_load_efficiency": null,
+          "minimum_iplv": null,
+          "minimum_integrated_energy_efficiency_ratio": null,
+          "minimum_coefficient_of_performance_cooling": 3.0,
+          "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
+          "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+          "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
+          "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+          "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+          "notes": "?"
         }
       ]
     }

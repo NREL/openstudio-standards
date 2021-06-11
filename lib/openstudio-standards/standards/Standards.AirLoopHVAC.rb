@@ -716,7 +716,6 @@ class Standard
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
         end
-        # CoilCoolingDXTwoSpeed
       elsif sc.to_CoilCoolingDXTwoSpeed.is_initialized
         coil = sc.to_CoilCoolingDXTwoSpeed.get
         if coil.ratedHighSpeedTotalCoolingCapacity.is_initialized
@@ -827,6 +826,15 @@ class Standard
         if clg_coil.to_CoilCoolingDXMultiSpeed.is_initialized
           coil = clg_coil.to_CoilCoolingDXMultiSpeed.get
           total_cooling_capacity_w = coil_cooling_dx_multi_speed_find_capacity(coil)
+        end
+      elsif sc.to_CoilCoolingDXVariableSpeed.is_initialized
+        coil = sc.to_CoilCoolingDXVariableSpeed.get
+        if coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
+          total_cooling_capacity_w = coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
+        elsif coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
+          total_cooling_capacity_w = coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
         end
       elsif sc.to_CoilCoolingDXMultiSpeed.is_initialized ||
             sc.to_CoilCoolingCooledBeam.is_initialized ||
