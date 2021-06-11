@@ -1,6 +1,6 @@
 require 'openstudio'
 require 'openstudio-standards'
-require 'aws-sdk'
+require 'aws-sdk-s3'
 require 'securerandom'
 require 'optparse'
 require 'yaml'
@@ -50,9 +50,15 @@ class BTAPDatapoint
     if @dp_input_folder.start_with?('s3:')
       # Lets dissect the information from the s3 path.
       m = @dp_input_folder.match(/s3:\/\/(.*?)\/(.*)/)
+      puts(m)
+      puts(m[1])
+      puts(m[2])
       @s3_bucket = m[1]
       @s3_input_folder_object = m[2]
       m = output_folder.match(/s3:\/\/(.*?)\/(.*)/)
+      puts(m)
+      puts(m[1])
+      puts(m[2])
       @s3_output_folder_object = m[2]
       puts("s3_bucket:#{@s3_bucket}")
       puts("s3_input_folder_object:#{@s3_input_folder_object}")
