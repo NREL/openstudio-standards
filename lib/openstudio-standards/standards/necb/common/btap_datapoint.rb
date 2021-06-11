@@ -1,6 +1,6 @@
 require 'openstudio'
 require 'openstudio-standards'
-require 'aws-sdk'
+require 'aws-sdk-s3'
 require 'securerandom'
 require 'optparse'
 require 'yaml'
