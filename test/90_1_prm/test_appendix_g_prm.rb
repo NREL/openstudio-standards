@@ -72,11 +72,6 @@ class AppendixGPRMTests < Minitest::Test
         end
       end
 
-      # user data CSV files are in @user_data_dir, if appicable
-      # user data JSON files will be created in sub-folder inside @test_dir
-      # json_path = @prototype_creator.convert_userdata_csv_to_json(@user_data_dir, @test_dir)
-
-
       # Store alternate building type into hash
       if !@bldg_type_alt_now.nil?
         @bldg_type_alt[prototype] = @bldg_type_alt_now
