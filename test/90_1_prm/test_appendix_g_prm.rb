@@ -59,6 +59,10 @@ class AppendixGPRMTests < Minitest::Test
       @prototype_creator = Standard.build("#{template}_#{building_type}")
       model = @prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
 
+      # Initialize userdata folder to empty
+      # Will be set by mod methods below, if appicable
+      @user_data_dir = ''
+
       # Make modification if requested
       @bldg_type_alt_now = nil
       if !mod.empty?
@@ -111,6 +115,13 @@ class AppendixGPRMTests < Minitest::Test
       # Initialize Standard class
       @prototype_creator = Standard.build('90.1-PRM-2019')
 
+      # user data CSV files are in @user_data_dir, if appicable
+      # user data JSON files will be created in sub-folder inside @test_dir
+      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
+      proto_run_dir = "#{@test_dir}/#{model_name}"
+      json_path = @prototype_creator.convert_userdata_csv_to_json(@user_data_dir, proto_run_dir)
+      @prototype_creator.load_userdata_to_standards_database(json_path)
+
       # Convert standardSpaceType string for each space to values expected for prm creation
       lpd_space_types = JSON.parse(File.read("#{@@json_dir}/lpd_space_types.json"))
       model.getSpaceTypes.sort.each do |space_type|
@@ -153,7 +164,6 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # Define run directory and run name, delete existing folder if it exists
-      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
       run_dir = "#{@test_dir}/#{model_name}"
       run_dir_baseline = "#{run_dir}-Baseline"
       if Dir.exist?(run_dir_baseline)
@@ -1537,6 +1547,16 @@ class AppendixGPRMTests < Minitest::Test
   def change_bldg_type(model, arguments)
     bldg_type_new = arguments[0]
     @bldg_type_alt_now = bldg_type_new
+    return model
+  end
+
+  # Set path to userdata folder for one unit test
+  # Located in 90_1_prm/data sub folder
+  # @param model
+  # @arguments  [array] name of userdata sub folder
+  def set_userdata_path(model, arguments)
+    userdata_folder = arguments[0]
+    @user_data_dir = "#{@@json_dir}/#{userdata_folder}"
     return model
   end
 
