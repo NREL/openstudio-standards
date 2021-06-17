@@ -47,6 +47,7 @@ class BTAPData
     @btap_data.merge!(energy_eui_data())
     @btap_data.merge!(energy_peak_data())
     @btap_data.merge!(utility(model))
+    @btap_data.merge!(unmet_hours(model))
 
     # Data in tables...
     @btap_data.merge!({'measures_data_table' => measures_data_table(runner)}) unless runner.nil?
@@ -342,6 +343,8 @@ class BTAPData
       spaceinfo["breathing_zone_outdoor_airflow_vbz"] = -1
       spaceinfo["infiltration_flow_per_m_sq"] = space.infiltrationDesignFlowPerExteriorSurfaceArea
       spaceinfo["floor_area_m2"] = space.floorArea
+      spaceinfo["building_type"] = space.spaceType.get.standardsBuildingType.get
+      spaceinfo["is_conditioned"] = space.thermalZone.get.isConditioned.get unless space.thermalZone.empty?
       #shw
       spaceinfo["shw_peak_flow_rate_m_cu_per_s"] = 0
       spaceinfo["shw_peak_flow_rate_per_floor_area_m_cu_per_s_per_m_sq"] = 0
@@ -1343,6 +1346,24 @@ class BTAPData
     unmet_hours = {}
     unmet_hours["unmet_hours_cooling"] = model.getFacility.hoursCoolingSetpointNotMet().get unless model.getFacility.hoursCoolingSetpointNotMet().empty?
     unmet_hours["unmet_hours_heating"] = model.getFacility.hoursHeatingSetpointNotMet().get unless model.getFacility.hoursHeatingSetpointNotMet().empty?
+    command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
+               AND ReportForString='Entire Facility'
+               AND TableName='Comfort and Setpoint Not Met Summary'
+               AND RowName='Time Setpoint Not Met During Occupied Cooling'
+               AND ColumnName='Facility'
+               AND Units='Hours'"
+    unmet_hours["unmet_hours_cooling_during_occupied"] = @sqlite_file.get.execAndReturnFirstDouble(command).to_f
+    command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
+               AND ReportForString='Entire Facility'
+               AND TableName='Comfort and Setpoint Not Met Summary'
+               AND RowName='Time Setpoint Not Met During Occupied Heating'
+               AND ColumnName='Facility'
+               AND Units='Hours'"
+    unmet_hours["unmet_hours_heating_during_occupied"] = @sqlite_file.get.execAndReturnFirstDouble(command).to_f
     return unmet_hours
   end
 
@@ -1743,17 +1764,33 @@ class BTAPData
 
     ### UnitDens: Unit density (1/ft²) (inverse of the floor area per unit) in PHIUS, 2021
     # Note: if commercial buildings, set the number of units to 1 and divide by the floor area
-    building_type = @btap_data["bldg_standards_building_type"]
-    space_type_names_necb_2011 = ["Dormitory - living quarters", "Dwelling Unit(s)", "Hotel/Motel - rooms", "Hway lodging - rooms"]
-    space_type_names_necb_2015 = ["Guest room", "Dormitory living quarters", "Dwelling units general", "Dwelling units long-term", "Fire station sleeping quarters", "Health care facility patient room", "Health care facility recovery room"]
-    space_type_names_necb_2017 = ["Guest room", "Dormitory living quarters", "Dwelling units general", "Dwelling units long-term", "Fire station sleeping quarters", "Health care facility patient room", "Health care facility recovery room"]
+    # This is the list of building types considered as some sort of residential buildings when the whole building method is used
+    building_type_names_necb_2011 = ['Dormitory', 'Hospital', 'Hotel', 'Motel', 'Multi-unit residential', 'Penitentiary']
+    building_type_names_necb_2015 = ['Dormitory', 'Health care clinic', 'Hospital', 'Hotel/Motel', 'Long-term care - dwelling units,' 'Long-term care - other', 'Multi-unit residential building', 'Penitentiary']
+    building_type_names_necb_2017 = ['Dormitory', 'Health care clinic', 'Hospital', 'Hotel/Motel', 'Long-term care - dwelling units', 'Long-term care - other', 'Multi-unit residential building', 'Penitentiary']
+    building_type_names_list = building_type_names_necb_2011 + building_type_names_necb_2015 + building_type_names_necb_2017
+    building_type_names_list = building_type_names_list.uniq
+    # This is the list of space types considered as some sort of residential spaces when the space type method is used
+    space_type_names_necb_2011 = ['Dormitory - living quarters', 'Dwelling Unit(s)', 'Hotel/Motel - rooms', 'Hway lodging - rooms']
+    space_type_names_necb_2015 = ['Guest room', 'Dormitory living quarters', 'Dwelling units general', 'Dwelling units long-term', 'Fire station sleeping quarters', 'Health care facility patient room', 'Health care facility recovery room']
+    space_type_names_necb_2017 = ['Guest room', 'Dormitory living quarters', 'Dwelling units general', 'Dwelling units long-term', 'Fire station sleeping quarters', 'Health care facility patient room', 'Health care facility recovery room']
     space_type_names_list = space_type_names_necb_2011 + space_type_names_necb_2015 + space_type_names_necb_2017
     space_type_names_list = space_type_names_list.uniq
     sum_handle = 0.0
     number_of_dwelling_units = 0.0
     @btap_data["space_table"].each do |space_info|
-      space_type_name = space_info["space_type_name"].sub! 'Space Function ', ''  # This removes 'Space Function' from space type name
-      if space_type_names_list.include?(space_type_name)
+      building_type_name = space_info["building_type"].sub! 'building', ''
+      building_type_name = building_type_name.strip unless building_type_name.nil?
+      space_type_name = space_info["space_type_name"]
+      if not space_type_name.include?('WholeBuilding')
+        # puts "This_is_the_space_type_method"
+        space_type_name = space_info["space_type_name"].sub! 'Space Function ', ''  # This removes 'Space Function' from space type name
+        if space_type_names_list.include?(space_type_name)
+          number_of_dwelling_units += 1.0 * space_info["multiplier"]
+          sum_handle += (OpenStudio.convert(space_info["floor_area_m2"], 'm^2', 'ft^2').get) * space_info["multiplier"]
+        end
+      elsif space_type_name.include?('WholeBuilding') && building_type_names_list.include?(building_type_name) && space_info["is_conditioned"]=='Yes'
+        # puts "This_is_the_whole_building_method"
         number_of_dwelling_units += 1.0 * space_info["multiplier"]
         sum_handle += (OpenStudio.convert(space_info["floor_area_m2"], 'm^2', 'ft^2').get) * space_info["multiplier"]
       end
