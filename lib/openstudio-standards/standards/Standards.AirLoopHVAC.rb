@@ -1748,7 +1748,8 @@ class Standard
     return true
   end
 
-  # Adjust minimum VAV damper positions to the values
+  # Adjust minimum VAV damper positions and set minimum design
+  # system outdoor air flow
   #
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
@@ -1964,6 +1965,7 @@ class Standard
     # object with the calculated min OA flow rate
     sizing_system = air_loop_hvac.sizingSystem
     sizing_system.setDesignOutdoorAirFlowRate(v_ot_adj)
+    sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
     return true
   end

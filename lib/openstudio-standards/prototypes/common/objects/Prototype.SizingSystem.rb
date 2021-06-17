@@ -40,14 +40,11 @@ class Standard
 
   def model_system_outdoor_air_sizing_vrp_method(air_loop_hvac)
     sizing_system = air_loop_hvac.sizingSystem
-    # sizing_system.setSystemOutdoorAirMethod("VentilationRateProcedure")
+    sizing_system.setSystemOutdoorAirMethod('VentilationRateProcedure')
     # Set the minimum zone ventilation efficiency to be 0.6
     air_loop_hvac.thermalZones.sort.each do |zone|
       sizing_zone = zone.sizingZone
-      # It is not yet possible to adjust the minimum zone ventilation efficiency
-      # @todo, update this section when OS allows to adjust minimum zone ventilation efficiency
-      # In EnergyPlus this is done through the DesignSpecification:ZoneAirDistribution object
-      # which is then assigned to a Sizing:Zone object
+      sizing_zone.setDesignMinimumZoneVentilationEfficiency(0.6)
     end
 
     return true
