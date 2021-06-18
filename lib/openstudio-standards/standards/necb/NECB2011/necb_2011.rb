@@ -1768,7 +1768,7 @@ class NECB2011 < Standard
       puts output_variable
       puts output_variable['frequency']
 
-      raise("Frequency is not valid. Must by \"hourly\" or \"timestep\" but got #{output_variable}.") unless ["hourly","timestep"].include?(output_variable['frequency'])
+      raise("Frequency is not valid. Must by \"hourly\" or \"timestep\" but got #{output_variable}.") unless ["timestep","hourly",'daily','monthly','annual'].include?(output_variable['frequency'])
       output = OpenStudio::Model::OutputVariable.new(output_variable['variable'],model)
       output.setKeyValue(output_variable['key'])
       output.setReportingFrequency(output_variable['frequency'])
