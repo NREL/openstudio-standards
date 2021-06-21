@@ -1,27 +1,6 @@
 class ASHRAE9012019 < ASHRAE901
   # @!group AirLoopHVAC
 
-  # Apply multizone vav outdoor air method and
-  # adjust multizone VAV damper positions
-  # to achieve a system minimum ventilation effectiveness
-  # of 0.6 per PNNL.  Hard-size the resulting min OA
-  # into the sizing:system object.
-  #
-  # return [Bool] returns true if successful, false if not
-  # @todo move building-type-specific code to Prototype classes
-  def air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(air_loop_hvac)
-    # First time adjustment:
-    # Only applies to multi-zone vav systems
-    # exclusion: for Outpatient: (1) both AHU1 and AHU2 in 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004'
-    # (2) AHU1 in 2004-2019
-    # TODO refactor: move building-type-specific code to Prototype classes
-    if air_loop_hvac_multizone_vav_system?(air_loop_hvac) && !(air_loop_hvac.name.to_s.include? 'Outpatient F1')
-      air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
-    end
-
-    return true
-  end
-
   # Determine the limits for the type of economizer present on the AirLoopHVAC, if any.
   # @return [Array<Double>] [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
   def air_loop_hvac_economizer_limits(air_loop_hvac, climate_zone)
@@ -576,40 +555,41 @@ class ASHRAE9012019 < ASHRAE901
 
     # Add EMS sensors
     # OA mass flow calculated by the Controller:MechanicalVentilation
+    air_loop_hvac_name_ems = "EMS_#{air_loop_hvac.name.to_s.gsub(' ', '_')}"
     oa_vrp_mass_flow = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'Air System Outdoor Air Mechanical Ventilation Requested Mass Flow Rate')
     oa_vrp_mass_flow.setKeyName(air_loop_hvac.name.to_s)
-    oa_vrp_mass_flow.setName("#{air_loop_hvac.name.to_s.gsub(' ', '_')}_OA_VRP")
+    oa_vrp_mass_flow.setName("#{air_loop_hvac_name_ems}_OA_VRP")
     # Actual sensed OA mass flow
     oa_mass_flow = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'Air System Outdoor Air Mass Flow Rate')
     oa_mass_flow.setKeyName(air_loop_hvac.name.to_s)
-    oa_mass_flow.setName("#{air_loop_hvac.name.to_s.gsub(' ', '_')}_OA")
+    oa_mass_flow.setName("#{air_loop_hvac_name_ems}_OA")
     # Actual sensed volumetric OA flow
     oa_vol_flow = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'System Node Standard Density Volume Flow Rate')
     oa_vol_flow.setKeyName("#{air_loop_hvac.name} Mixed Air Node")
-    oa_vol_flow.setName("#{air_loop_hvac.name.to_s.gsub(' ', '_')}_SUPPLY_FLOW")
+    oa_vol_flow.setName("#{air_loop_hvac_name_ems}_SUPPLY_FLOW")
 
     # Add EMS actuator
     max_oa_fraction = OpenStudio::Model::EnergyManagementSystemActuator.new(max_oa_frac_sch, max_oa_frac_sch_type, 'Schedule Value')
-    max_oa_fraction.setName("#{air_loop_hvac.name.to_s.gsub(' ', '_')}_MAX_OA_FRAC")
+    max_oa_fraction.setName("#{air_loop_hvac_name_ems}_MAX_OA_FRAC")
 
     # Add EMS program
     max_oa_ems_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(air_loop_hvac.model)
     max_oa_ems_prog.setName("#{air_loop_hvac.name}_MAX_OA_FRAC")
     max_oa_ems_prog_body = <<-EMS
-    IF #{air_loop_hvac.name.to_s.gsub(' ', '_')}_OA > #{air_loop_hvac.name.to_s.gsub(' ', '_')}_OA_VRP,
-    SET #{air_loop_hvac.name.to_s.gsub(' ', '_')}_MAX_OA_FRAC = NULL,
+    IF #{air_loop_hvac_name_ems}_OA > #{air_loop_hvac_name_ems}_OA_VRP,
+    SET #{air_loop_hvac_name_ems}_MAX_OA_FRAC = NULL,
     ELSE,
-    IF #{air_loop_hvac.name.to_s.gsub(' ', '_')}_SUPPLY_FLOW > 0,
-    SET #{air_loop_hvac.name.to_s.gsub(' ', '_')}_MAX_OA_FRAC = #{v_ot} / #{air_loop_hvac.name.to_s.gsub(' ', '_')}_SUPPLY_FLOW,
+    IF #{air_loop_hvac_name_ems}_SUPPLY_FLOW > 0,
+    SET #{air_loop_hvac_name_ems}_MAX_OA_FRAC = #{v_ot} / #{air_loop_hvac_name_ems}_SUPPLY_FLOW,
     ELSE,
-    SET #{air_loop_hvac.name.to_s.gsub(' ', '_')}_MAX_OA_FRAC = NULL,
+    SET #{air_loop_hvac_name_ems}_MAX_OA_FRAC = NULL,
     ENDIF,
     ENDIF
     EMS
     max_oa_ems_prog.setBody(max_oa_ems_prog_body)
 
     max_oa_ems_prog_manager = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(air_loop_hvac.model)
-    max_oa_ems_prog_manager.setName("#{air_loop_hvac}_MAX_OA_FRAC")
+    max_oa_ems_prog_manager.setName("SET_#{air_loop_hvac.name.to_s.gsub(' ', '_')}_MAX_OA_FRAC")
     max_oa_ems_prog_manager.setCallingPoint('InsideHVACSystemIterationLoop')
     max_oa_ems_prog_manager.addProgram(max_oa_ems_prog)
 

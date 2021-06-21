@@ -1,27 +1,6 @@
 class ASHRAE9012010 < ASHRAE901
   # @!group AirLoopHVAC
 
-  # Apply multizone vav outdoor air method and
-  # adjust multizone VAV damper positions
-  # to achieve a system minimum ventilation effectiveness
-  # of 0.6 per PNNL.  Hard-size the resulting min OA
-  # into the sizing:system object.
-  #
-  # return [Bool] returns true if successful, false if not
-  # @todo move building-type-specific code to Prototype classes
-  def air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(air_loop_hvac)
-    # First time adjustment:
-    # Only applies to multi-zone vav systems
-    # exclusion: for Outpatient: (1) both AHU1 and AHU2 in 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004'
-    # (2) AHU1 in 2004-2019
-    # TODO refactor: move building-type-specific code to Prototype classes
-    if air_loop_hvac_multizone_vav_system?(air_loop_hvac) && !(air_loop_hvac.name.to_s.include? 'Outpatient F1')
-      air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
-    end
-
-    return true
-  end
-
   # Determine the limits for the type of economizer present
   # on the AirLoopHVAC, if any.
   # @return [Array<Double>] [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
