@@ -153,7 +153,8 @@ class BTAPDatapoint
                                      electrical_loads_scale: @options[:electrical_loads_scale],
                                      oa_scale: @options[:oa_scale],
                                      infiltration_scale: @options[:infiltration_scale],
-                                     chiller_type: @options[:chiller_type]
+                                     chiller_type: @options[:chiller_type],
+                                     output_variables: @options[:output_variables]
 
       )
 
