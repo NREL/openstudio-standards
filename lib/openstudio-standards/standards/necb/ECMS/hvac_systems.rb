@@ -280,7 +280,7 @@ class ECMS
     outdoor_vrf_unit.setHeatRecoveryCoolingEnergyTimeConstant(0.0)
     outdoor_vrf_unit.setMinimumHeatPumpPartLoadRatio(0.5)
     outdoor_vrf_unit.setCondenserType(condenser_type)
-    outdoor_vrf_unit.setCrankcaseHeaterPowerperCompressor(0.001)
+    outdoor_vrf_unit.setCrankcaseHeaterPowerperCompressor(1.0e-6)
     heat_defrost_eir_ft = nil
     if ecm_name
       search_criteria = {}
@@ -477,12 +477,14 @@ class ECMS
     when "ashp"
       clg_eqpt = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
       clg_eqpt.setName("CoilCoolingDxSingleSpeed_ASHP")
+      clg_eqpt.setCrankcaseHeaterCapacity(1.0e-6)
     when "ccashp"
       clg_eqpt = OpenStudio::Model::CoilCoolingDXVariableSpeed.new(model)
       clg_eqpt.setName("CoilCoolingDXVariableSpeed_CCASHP")
       clg_eqpt_speed1 = OpenStudio::Model::CoilCoolingDXVariableSpeedSpeedData.new(model)
       clg_eqpt.addSpeed(clg_eqpt_speed1)
       clg_eqpt.setNominalSpeedLevel(1)
+      clg_eqpt.setCrankcaseHeaterCapacity(1.0e-6)
     when "vrf"
       clg_eqpt = OpenStudio::Model::CoilCoolingDXVariableRefrigerantFlow.new(model)
       clg_eqpt.setName("CoilCoolingDXVariableRefrigerantFlow")
@@ -505,6 +507,7 @@ class ECMS
       htg_eqpt.setName("CoilHeatingDXSingleSpeed_ASHP")
       htg_eqpt.setDefrostStrategy('ReverseCycle')
       htg_eqpt.setDefrostControl('OnDemand')
+      htg_eqpt.setCrankcaseHeaterCapacity(1.0e-6)
     when "ccashp"
       htg_eqpt = OpenStudio::Model::CoilHeatingDXVariableSpeed.new(model)
       htg_eqpt.setName("CoilHeatingDXVariableSpeed_CCASHP")
@@ -514,7 +517,7 @@ class ECMS
       htg_eqpt.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(-25.0)
       htg_eqpt.setDefrostStrategy("ReverseCycle")
       htg_eqpt.setDefrostControl("OnDemand")
-      htg_eqpt.setCrankcaseHeaterCapacity(0.001)
+      htg_eqpt.setCrankcaseHeaterCapacity(1.0e-6)
     end
 
     return htg_eqpt
@@ -612,6 +615,7 @@ class ECMS
       htg_eqpt.setName("CoilHeatingDXSingleSpeed_PTHP")
       htg_eqpt.setDefrostStrategy('ReverseCycle')
       htg_eqpt.setDefrostControl("OnDemand")
+      htg_eqpt.setCrankcaseHeaterCapacity(1.0e-6)
     when "vrf"
       htg_eqpt = OpenStudio::Model::CoilHeatingDXVariableRefrigerantFlow.new(model)
       htg_eqpt.setName("CoilHeatingDXVariableRefrigerantFlow")
@@ -628,7 +632,9 @@ class ECMS
     case zone_clg_eqpt_type.downcase
     when "ptac_electric_off","pthp"
       clg_eqpt = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
-      clg_eqpt.setName("CoilCoolingDXSingleSpeed_PTHP")
+      clg_eqpt.setName("CoilCoolingDXSingleSpeed_PTHP") if zone_clg_eqpt_type.downcase == "pthp"
+      clg_eqpt.setName("CoilCoolingDXSingleSpeed_PTAC") if zone_clg_eqpt_type.downcase == "ptac_electric_off"
+      clg_eqpt.setCrankcaseHeaterCapacity(1.0e-6)
     when "vrf"
       clg_eqpt = OpenStudio::Model::CoilCoolingDXVariableRefrigerantFlow.new(model)
       clg_eqpt.setName("CoilCoolingDXVariableRefrigerantFlow")
@@ -879,24 +885,25 @@ class ECMS
         clg_dx_coil_init_name = get_hvac_comp_init_name(clg_dx_coil,false)
         clg_dx_coil.setName(clg_dx_coil_init_name)
         if clg_dx_coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
-          clg_dx_coil_cap = clg_dx_coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
+          max_pd = 0.0
+          supply_fan = nil
+          fans.each do |fan|
+            if fan.pressureRise.to_f > max_pd
+              max_pd = fan.pressureRise.to_f
+              supply_fan = fan  # assume supply fan has higher pressure drop
+            end
+          end
+          fan_power = supply_fan.autosizedMaximumFlowRate.to_f*max_pd/supply_fan.fanTotalEfficiency.to_f
+          clg_dx_coil_cap = clg_dx_coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f*
+              supply_fan.autosizedMaximumFlowRate.to_f/clg_dx_coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.to_f+
+              fan_power/clg_dx_coil.speeds.last.referenceUnitGrossRatedSensibleHeatRatio.to_f
         else
           clg_dx_coil_cap = clg_dx_coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
         end
-        htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil,true)
-        if htg_dx_coil.autosizedRatedHeatingCapacityAtSelectedNominalSpeedLevel.is_initialized
-          htg_dx_coil_cap = htg_dx_coil.autosizedRatedHeatingCapacityAtSelectedNominalSpeedLevel.to_f
-        else
-          htg_dx_coil_cap = htg_dx_coil.ratedHeatingCapacityAtSelectedNominalSpeedLevel.to_f
-        end
         backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
-        fan_power = 0.0
-        fans.each do |ifan|
-          fan_power += ifan.pressureRise.to_f*ifan.autosizedMaximumFlowRate.to_f/ifan.fanEfficiency.to_f
-        end
         # Set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
         dx_cap = fr_backup_coil_cap_as_dx_coil_cap*backup_coil_cap
-        if dx_cap < (clg_dx_coil_cap+fan_power) then dx_cap = clg_dx_coil_cap+fan_power end
+        if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
         clg_dx_coil.setGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel(dx_cap)
         htg_dx_coil.setRatedHeatingCapacityAtSelectedNominalSpeedLevel(dx_cap)
         # Assign performance curves and COPs
@@ -936,7 +943,7 @@ class ECMS
                                            sys_setpoint_mgr_type: sys_info["sys_setpoint_mgr_type"])
       # Get and assign defrost performance curve
       search_criteria = {}
-      search_criteria["name"] = "PTHP_Test_Data"
+      search_criteria["name"] = "HS11_PTHP"
       props = model_find_object(standards_data['tables']["heat_pump_heating_ecm"]['table'], search_criteria, 1.0)
       heat_defrost_eir_ft = model_add_curve(model, props["heat_defrost_eir_ft"])
       if !heat_defrost_eir_ft
@@ -983,7 +990,7 @@ class ECMS
   # Apply efficiencies and performance curves for ECM "hs11_pthp"
   def apply_efficiency_ecm_hs11_pthp(model)
     fr_backup_coil_cap_as_dx_coil_cap = 0.5  # fraction of electric backup heating coil capacity assigned to dx heating coil
-    ashp_eqpt_name = "ASHP_Test_Data"
+    ashp_eqpt_name = "NECB2015_ASHP"
     model.getAirLoopHVACs.sort.each do |isys|
       clg_dx_coil = nil
       htg_dx_coil = nil
@@ -1008,11 +1015,6 @@ class ECMS
         end
         htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil,true)
         htg_dx_coil.setName(htg_dx_coil_init_name)
-        if htg_dx_coil.autosizedRatedTotalHeatingCapacity.is_initialized
-          htg_dx_coil_cap = htg_dx_coil.autosizedRatedTotalHeatingCapacity.to_f
-        else
-          htg_dx_coil_cap = htg_dx_coil.ratedTotalHeatingCapacity.to_f
-        end
         backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
         # set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
         dx_cap = fr_backup_coil_cap_as_dx_coil_cap*backup_coil_cap
@@ -1022,12 +1024,9 @@ class ECMS
         # assign performance curves and COPs
         coil_cooling_dx_single_speed_apply_efficiency_and_curves(clg_dx_coil,ashp_eqpt_name)
         coil_heating_dx_single_speed_apply_efficiency_and_curves(htg_dx_coil,ashp_eqpt_name)
-        # set crankcase heater capacity to 1% of rated power
-        clg_dx_coil.setCrankcaseHeaterCapacity(0.01*dx_cap/clg_dx_coil.ratedCOP.to_f)
-        htg_dx_coil.setCrankcaseHeaterCapacity(0.01*dx_cap/htg_dx_coil.ratedCOP.to_f)
       end
     end
-    pthp_eqpt_name = "PTHP_Test_Data"
+    pthp_eqpt_name = "HS11_PTHP"
     model.getAirLoopHVACs.sort.each do |isys|
       isys.thermalZones.each do |zone|
         clg_dx_coil = nil
@@ -1059,11 +1058,6 @@ class ECMS
             end
             htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil,true)
             htg_dx_coil.setName(htg_dx_coil_init_name)
-            if htg_dx_coil.autosizedRatedTotalHeatingCapacity.is_initialized
-              htg_dx_coil_cap = htg_dx_coil.autosizedRatedTotalHeatingCapacity.to_f
-            else
-              htg_dx_coil.ratedTotalHeatingCapacity
-            end
             backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
             # Set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
             dx_cap = fr_backup_coil_cap_as_dx_coil_cap*backup_coil_cap
@@ -1073,9 +1067,6 @@ class ECMS
             # assign performance curves and COPs
             coil_cooling_dx_single_speed_apply_efficiency_and_curves(clg_dx_coil,pthp_eqpt_name)
             coil_heating_dx_single_speed_apply_efficiency_and_curves(htg_dx_coil,pthp_eqpt_name)
-            # set crankcase heater capacity to 1% of rated power
-            clg_dx_coil.setCrankcaseHeaterCapacity(0.01*dx_cap/clg_dx_coil.ratedCOP.to_f)
-            htg_dx_coil.setCrankcaseHeaterCapacity(0.01*dx_cap/htg_dx_coil.ratedCOP.to_f)
             # Set fan power
             fan_power_per_flow_rate = 150.0  # based on Mitsubishi data: 100 low and 200 high (W-s/m3)
             fan_pr_rise = fan_power_per_flow_rate*(fan.fanEfficiency*fan.motorEfficiency)
@@ -1116,7 +1107,7 @@ class ECMS
       # get and assign defrost curve
       htg_dx_coils = model.getCoilHeatingDXSingleSpeeds
       search_criteria = {}
-      search_criteria["name"] = "ASHP_Test_Data"
+      search_criteria["name"] = "NECB2015_ASHP"
           props =  model_find_object(standards_data['tables']["heat_pump_heating_ecm"]['table'], search_criteria, 1.0)
       heat_defrost_eir_ft = model_add_curve(model, props['heat_defrost_eir_ft'])
       if heat_defrost_eir_ft
@@ -1176,7 +1167,7 @@ class ECMS
   # Apply efficiencies and performance curves for ECM "hs12_ashpsys"
   def apply_efficiency_ecm_hs12_ashpsys(model)
     fr_backup_coil_cap_as_dx_coil_cap = 0.5  # fraction of electric backup heating coil capacity assigned to dx heating coil
-    ashp_eqpt_name = "ASHP_Test_Data"
+    ashp_eqpt_name = "NECB2015_ASHP"
     model.getAirLoopHVACs.sort.each do |isys|
       clg_dx_coil = nil
       htg_dx_coil = nil
@@ -1216,9 +1207,6 @@ class ECMS
         # assign performance curves and COPs
         coil_cooling_dx_single_speed_apply_efficiency_and_curves(clg_dx_coil,ashp_eqpt_name)
         coil_heating_dx_single_speed_apply_efficiency_and_curves(htg_dx_coil,ashp_eqpt_name)
-        # set crankcase heater capacity to 1% of rated power
-        clg_dx_coil.setCrankcaseHeaterCapacity(0.01*dx_cap/clg_dx_coil.ratedCOP.to_f)
-        htg_dx_coil.setCrankcaseHeaterCapacity(0.01*dx_cap/htg_dx_coil.ratedCOP.to_f)
       end
     end
   end
@@ -1290,7 +1278,7 @@ class ECMS
     end
 
     # Find the minimum COP and rename with efficiency rating
-    cop = coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, true,search_criteria)
+    cop = coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, false,search_criteria)
 
     # Set the efficiency values
     unless cop.nil?
@@ -1368,7 +1356,7 @@ class ECMS
     end
 
     # Find the minimum COP and rename with efficiency rating
-    cop = coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, true,search_criteria)
+    cop = coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, false,search_criteria)
 
     # Set the efficiency values
     unless cop.nil?
@@ -1444,7 +1432,7 @@ class ECMS
     end
 
     # Find the minimum COP and rename with efficiency rating
-    cop = coil_cooling_dx_variable_speed_standard_minimum_cop(coil_cooling_dx_variable_speed, true,search_criteria)
+    cop = coil_cooling_dx_variable_speed_standard_minimum_cop(coil_cooling_dx_variable_speed, false,search_criteria)
 
     # Set the efficiency values
     unless cop.nil?
@@ -1522,7 +1510,7 @@ class ECMS
     end
 
     # Find the minimum COP and rename with efficiency rating
-    cop = coil_heating_dx_variable_speed_standard_minimum_cop(coil_heating_dx_variable_speed, true,search_criteria)
+    cop = coil_heating_dx_variable_speed_standard_minimum_cop(coil_heating_dx_variable_speed, false,search_criteria)
 
     # Set the efficiency values
     unless cop.nil?
@@ -1793,7 +1781,7 @@ class ECMS
     end
 
     # Find the minimum COP and rename with efficiency rating
-    cop = airconditioner_variablerefrigerantflow_heating_standard_minimum_cop(airconditioner_variablerefrigerantflow, true, search_criteria)
+    cop = airconditioner_variablerefrigerantflow_heating_standard_minimum_cop(airconditioner_variablerefrigerantflow, false, search_criteria)
 
     # Set the efficiency values
     unless cop.nil?
@@ -1854,7 +1842,7 @@ class ECMS
       min_eer = ac_props['minimum_full_load_efficiency']
       cop = eer_to_cop(min_eer)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_Single_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_single_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
     # If specified as COP

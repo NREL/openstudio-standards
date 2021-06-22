@@ -830,9 +830,23 @@ class Standard
       elsif sc.to_CoilCoolingDXVariableSpeed.is_initialized
         coil = sc.to_CoilCoolingDXVariableSpeed.get
         if coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
-          total_cooling_capacity_w = coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
+          # autosized capacity needs to be corrected for actual flow rate and fan power
+          fans = sc.model.getFanConstantVolumes + sc.model.getFanVariableVolumes
+          sys_fans = fans.select {|fan| fan.airLoopHVAC.get.name.to_s == air_loop_hvac.name.to_s}
+          max_pd = 0.0
+          supply_fan = nil
+          sys_fans.each do |fan|
+            if fan.pressureRise.to_f > max_pd
+              max_pd = fan.pressureRise.to_f
+              supply_fan = fan  # assume supply fan has higher pressure drop
+            end
+          end
+          fan_power = supply_fan.autosizedMaximumFlowRate.to_f*supply_fan.pressureRise.to_f/supply_fan.fanTotalEfficiency.to_f
+          total_cooling_capacity_w += coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f*
+              supply_fan.autosizedMaximumFlowRate.to_f/coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.to_f+
+              fan_power/coil.speeds.last.referenceUnitGrossRatedSensibleHeatRatio.to_f
         elsif coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
-          total_cooling_capacity_w = coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
+          total_cooling_capacity_w += coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
         end
