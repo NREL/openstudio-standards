@@ -39,6 +39,17 @@ class Standard
   end
 
   def model_system_outdoor_air_sizing_vrp_method(air_loop_hvac)
+    # Do not apply the adjustment to some of the system in
+    # the hospital and outpatient which have their minimum
+    # damper position determined based on AIA 2001 ventilation
+    # requirements
+    if (@instvarbuilding_type == 'Hospital' && (air_loop_hvac.name.to_s.include?('VAV_ER') || air_loop_hvac.name.to_s.include?('VAV_ICU') ||
+       air_loop_hvac.name.to_s.include?('VAV_OR') || air_loop_hvac.name.to_s.include?('VAV_LABS') ||
+       air_loop_hvac.name.to_s.include?('VAV_PATRMS'))) ||
+       (@instvarbuilding_type == 'Outpatient' && air_loop_hvac.name.to_s.include?('Outpatient F1'))
+      return true
+    end
+
     sizing_system = air_loop_hvac.sizingSystem
     sizing_system.setSystemOutdoorAirMethod('VentilationRateProcedure')
     # Set the minimum zone ventilation efficiency to be 0.6
