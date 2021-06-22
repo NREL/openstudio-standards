@@ -828,8 +828,10 @@ class ECMS
       supp_htg_eqpt = create_zone_htg_eqpt(model,zone_supp_htg_eqpt_type)
       fan = create_air_sys_fan(model,zone_fan_type)
       # for container zonal equipment call method "create_zone_container_equipment"
-      if (zone_htg_eqpt_type == "pthp") || (zone_htg_eqpt_type == "vrf" && zone_with_no_vrf_eqpt?(zone)) ||
+      this_is_container_comp = false
+      if (zone_htg_eqpt_type == "pthp") || (zone_htg_eqpt_type == "vrf") ||
          (zone_htg_eqpt_type.include? "unitheater")  || (zone_htg_eqpt_type.include? "ptac")
+        this_is_container_comp = true
         zone_cont_eqpt = create_zone_container_eqpt(model: model,
                                                     zone_cont_eqpt_type: zone_htg_eqpt_type,
                                                     zone_htg_eqpt: htg_eqpt,
@@ -840,7 +842,7 @@ class ECMS
       if zone_cont_eqpt
         zone_cont_eqpt.addToThermalZone(zone)
         outdoor_unit.addTerminal(zone_cont_eqpt) if outdoor_unit
-      elsif htg_eqpt
+      elsif htg_eqpt && !this_is_container_comp
         htg_eqpt.addToThermalZone(zone)
       end
     end
