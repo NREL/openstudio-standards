@@ -298,6 +298,111 @@ class ECMS
   end
 
   # =============================================================================================================================
+  # Method to determine whether zone can have terminal vrf equipment. Zones with no vrf terminal equipment are characterized by
+  # transient occupancy such is the case for corridors, stairwells, storage, etc ...
+  def zone_with_no_vrf_eqpt?(zone)
+    space_types_to_skip = {}
+    space_types_to_skip["NECB2011"] = ["Atrium - H < 13m",
+                                       "Atrium - H > 13m","Audience - auditorium",
+                                       "Corr. < 2.4m wide",
+                                       "Corr. >= 2.4m wide",
+                                       "Electrical/Mechanical",
+                                       "Hospital corr. < 2.4m",
+                                       "Hospital corr. >= 2.4m",
+                                       "Mfg - corr. < 2.4m",
+                                       "Mfg - corr. >= 2.4m",
+                                       "Lobby - elevator",
+                                       "Lobby - hotel",
+                                       "Lobby - motion picture",
+                                       "Lobby - other",
+                                       "Lobby - performance arts",
+                                       "Locker room",
+                                       "Parking garage space",
+                                       "Stairway",
+                                       "Storage area",
+                                       "Storage area - occsens",
+                                       "Storage area - refrigerated",
+                                       "Storage area - refrigerated - occsens",
+                                       "Washroom",
+                                       "Warehouse - fine",
+                                       "Warehouse - fine - refrigerated",
+                                       "Warehouse - med/blk",
+                                       "Warehouse - med/blk - refrigerated",
+                                       "Warehouse - med/blk2",
+                                       "Warehouse - med/blk2 - refrigerated",
+                                       "Hotel/Motel - lobby"]
+
+    space_types_to_skip["NECB2015"] = ["Atrium (height < 6m)",
+                                       "Atrium (6 =< height <= 12m)",
+                                       "Atrium (height > 12m)",
+                                       "Computer/Server room-sch-A",
+                                       "Copy/Print room",
+                                       "Corridor/Transition area - hospital",
+                                       "Corridor/Transition area - manufacturing facility",
+                                       "Corridor/Transition area - space designed to ANSI/IES RP-28",
+                                       "Corridor/Transition area other",
+                                       "Electrical/Mechanical room",
+                                       "Emergency vehicle garage",
+                                       "Lobby - elevator",
+                                       "Lobby - hotel",
+                                       "Lobby - motion picture theatre",
+                                       "Lobby - performing arts theatre",
+                                       "Lobby - space designed to ANSI/IES RP-28",
+                                       "Lobby - other",
+                                       "Locker room",
+                                       "Storage garage interior",
+                                       "Storage room < 5 m2",
+                                       "Storage room <= 5 m2 <= 100 m2",
+                                       "Storage room > 100 m2",
+                                       "Washroom - space designed to ANSI/IES RP-28",
+                                       "Washroom - other",
+                                       "Warehouse storage area medium to bulky palletized items",
+                                       "Warehouse storage area small hand-carried items(4)"]
+
+    space_types_to_skip["NECB2017"] = ["Atrium (height < 6m)",
+                                       "Atrium (6 =< height <= 12m)",
+                                       "Atrium (height > 12m)",
+                                       "Computer/Server room",
+                                       "Copy/Print room",
+                                       "Corridor/Transition area - hospital",
+                                       "Corridor/Transition area - manufacturing facility",
+                                       "Corridor/Transition area - space designed to ANSI/IES RP-28",
+                                       "Corridor/Transition area other",
+                                       "Electrical/Mechanical room",
+                                       "Emergency vehicle garage",
+                                       "Lobby - elevator",
+                                       "Lobby - hotel",
+                                       "Lobby - motion picture theatre",
+                                       "Lobby - performing arts theatre",
+                                       "Lobby - space designed to ANSI/IES RP-28",
+                                       "Lobby - other",
+                                       "Locker room",
+                                       "Stairway/Stairwell",
+                                       "Storage garage interior",
+                                       "Storage room < 5 m2",
+                                       "Storage room <= 5 m2 <= 100 m2",
+                                       "Storage room > 100 m2",
+                                       "Washroom - space designed to ANSI/IES RP-28",
+                                       "Washroom - other",
+                                       "Warehouse storage area medium to bulky palletized items",
+                                       "Warehouse storage area small hand-carried items(4)"]
+
+    zone_does_not_have_vrf_eqpt = false
+    zone.spaces.each do |space|
+      space_types_to_skip.each do |std,spfs|
+        spfs.each do |spf|
+          if space.spaceType.get.name.to_s.downcase.include? spf.downcase
+            zone_does_not_have_vrf_eqpt = true
+            break
+          end
+        end
+        break if zone_does_not_have_vrf_eqpt
+      end
+      break if zone_does_not_have_vrf_eqpt
+    end
+  end
+
+  # =============================================================================================================================
   # Add equipment for ECM 'hs08_zonalvrf':
   #   -Constant-volume DOAS with cold-climate air source heat pump for heating and cooling and electric backup
   #   -Zonal terminal VRF units connected to an outdoor VRF condenser unit
@@ -723,7 +828,7 @@ class ECMS
       supp_htg_eqpt = create_zone_htg_eqpt(model,zone_supp_htg_eqpt_type)
       fan = create_air_sys_fan(model,zone_fan_type)
       # for container zonal equipment call method "create_zone_container_equipment"
-      if (zone_htg_eqpt_type == "pthp") || (zone_htg_eqpt_type == "vrf") ||
+      if (zone_htg_eqpt_type == "pthp") || (zone_htg_eqpt_type == "vrf" && zone_with_no_vrf_eqpt?(zone)) ||
          (zone_htg_eqpt_type.include? "unitheater")  || (zone_htg_eqpt_type.include? "ptac")
         zone_cont_eqpt = create_zone_container_eqpt(model: model,
                                                     zone_cont_eqpt_type: zone_htg_eqpt_type,
@@ -2778,7 +2883,5 @@ class ECMS
     end
 
   end
-
-  # ============================================================================================================================
 
 end

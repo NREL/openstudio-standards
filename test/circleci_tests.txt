@@ -86,9 +86,9 @@ necb/unit_tests/tests/test_necb_boiler_rules.rb
 necb/unit_tests/tests/test_daylighting_sensor_control.rb
 necb/unit_tests/tests/test_led_lighting.rb
 necb/unit_tests/tests/test_dcv.rb
+necb/unit_tests/tests/test_ecm_erv.rb
 necb/unit_tests/tests/test_pv_ground.rb
 necb/unit_tests/tests/test_nv.rb
-necb/unit_tests/tests/test_ecm_erv.rb
 necb/unit_tests/tests/test_ecm_chiller.rb
 necb/unit_tests/tests/test_ecm_scaling_loads.rb
 
@@ -365,3 +365,4 @@ necb/building_regression_tests/tests/test_necb_bldg_Warehouse_BTAP1980TO2010_Nat
 necb/building_regression_tests/tests/test_necb_bldg_Warehouse_BTAP1980TO2010_Electricity.rb
 necb/building_regression_tests/tests/test_necb_bldg_LowriseApartment_BTAP1980TO2010_NaturalGas.rb
 necb/building_regression_tests/tests/test_necb_bldg_LowriseApartment_BTAP1980TO2010_Electricity.rb
+/home/osdev/openstudio-standards/utilities/btap_cli/tests/btap_cli_local_osm_test.rb

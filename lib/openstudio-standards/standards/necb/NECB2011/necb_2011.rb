@@ -226,7 +226,8 @@ class NECB2011 < Standard
                                    occupancy_loads_scale: nil,
                                    electrical_loads_scale: nil,
                                    oa_scale: nil,
-                                   infiltration_scale: nil
+                                   infiltration_scale: nil,
+                                   output_variables: nil
   )
 
 
@@ -278,15 +279,19 @@ class NECB2011 < Standard
                                 electrical_loads_scale: electrical_loads_scale,
                                 oa_scale: oa_scale,
                                 infiltration_scale: infiltration_scale,
-                                chiller_type: chiller_type # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) e.g. 'VSD'
+                                chiller_type: chiller_type, # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) e.g. 'VSD'
+                                output_variables: output_variables
     )
 
   end
 
   def load_building_type_from_library(building_type:)
     osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
-    model = BTAP::FileIO::load_osm(osm_model_path)
-    model.getBuilding.setName(building_type)
+    model = false
+    if File.file?(osm_model_path)
+      model = BTAP::FileIO::load_osm(osm_model_path)
+      model.getBuilding.setName(building_type)
+    end
     return model
   end
 
@@ -340,7 +345,8 @@ class NECB2011 < Standard
                            occupancy_loads_scale: nil,
                            electrical_loads_scale: nil,
                            oa_scale: nil,
-                           infiltration_scale: nil
+                           infiltration_scale: nil,
+                           output_variables: nil
 
   )
 
@@ -401,7 +407,7 @@ class NECB2011 < Standard
                                    pv_ground_module_description: pv_ground_module_description,
                                    chiller_type: chiller_type
     )
-
+    self.set_output_variables(model:model, output_variables: output_variables)
     return model
   end
 
@@ -1754,6 +1760,21 @@ class NECB2011 < Standard
     end #daylight_space.surfaces.each do |surface|
 
     return daylighted_under_skylight_area, skylight_area_weighted_vt_handle, skylight_area_sum
+  end
+
+  def set_output_variables(model:,output_variables:)
+    unless output_variables.nil?
+    output_variables.each do |output_variable|
+      puts output_variable
+      puts output_variable['frequency']
+
+      raise("Frequency is not valid. Must by \"hourly\" or \"timestep\" but got #{output_variable}.") unless ["timestep","hourly",'daily','monthly','annual'].include?(output_variable['frequency'])
+      output = OpenStudio::Model::OutputVariable.new(output_variable['variable'],model)
+      output.setKeyValue(output_variable['key'])
+      output.setReportingFrequency(output_variable['frequency'])
+    end
+    end
+    return model
   end
 
 end
