@@ -300,7 +300,11 @@ module Hospital
       model.getAirTerminalSingleDuctVAVReheats.sort.each do |air_terminal|
         air_terminal_name = air_terminal.name.get
         if air_terminal_name.include?('OR1') || air_terminal_name.include?('OR2') || air_terminal_name.include?('OR3') || air_terminal_name.include?('OR4')
-          air_terminal.setZoneMinimumAirFlowInputMethod('Scheduled')
+          if model.version < OpenStudio::VersionString.new('3.0.1')
+            air_terminal.setZoneMinimumAirFlowMethod('Scheduled')
+          else
+            air_terminal.setZoneMinimumAirFlowInputMethod('Scheduled')
+          end
           air_terminal.setMinimumAirFlowFractionSchedule(model_add_schedule(model, 'Hospital OR_MinSA_Sched'))
         end
       end
