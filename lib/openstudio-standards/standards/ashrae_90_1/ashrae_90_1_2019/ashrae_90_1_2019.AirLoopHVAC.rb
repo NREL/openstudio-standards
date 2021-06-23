@@ -506,7 +506,7 @@ class ASHRAE9012019 < ASHRAE901
       v_pz /= zone.multiplier.to_f
 
       # Set minimum damper position
-      air_loop_hvac_set_minimum_damper_position(zone, 1.5 * v_oz / v_pz)
+      air_loop_hvac_set_minimum_damper_position(zone, [0.01, [1.5 * v_oz / v_pz, 1.0].min].max.round(3))
     end
 
     # Occupant diversity (D): Ps / sum(Pz)
