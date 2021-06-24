@@ -1,4 +1,7 @@
 # This class holds methods that apply NECB2020 rules.
+
+# Also need to edit necb_2011.rb:determine_spacetype_vintage method to include the new standard.
+
 # @ref [References::NECB2020]
 class NECB2020 < NECB2017
   @template = self.new.class.name # rubocop:disable Style/ClassVars
