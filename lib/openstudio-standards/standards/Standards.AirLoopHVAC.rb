@@ -831,8 +831,14 @@ class Standard
         coil = sc.to_CoilCoolingDXVariableSpeed.get
         if coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
           # autosized capacity needs to be corrected for actual flow rate and fan power
-          fans = sc.model.getFanConstantVolumes + sc.model.getFanVariableVolumes
-          sys_fans = fans.select {|fan| fan.airLoopHVAC.get.name.to_s == air_loop_hvac.name.to_s}
+          sys_fans = []
+          air_loop_hvac.supplyComponents.each do |comp|
+            if comp.to_FanConstantVolume.is_initialized
+              sys_fans << comp.to_FanConstantVolume.get
+            elsif comp.to_FanVariableVolume.is_initialized
+              sys_fans << comp.to_FanVariableVolume.get
+            end
+          end
           max_pd = 0.0
           supply_fan = nil
           sys_fans.each do |fan|

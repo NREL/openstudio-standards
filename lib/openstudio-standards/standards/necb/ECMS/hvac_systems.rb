@@ -1007,6 +1007,8 @@ class ECMS
         else
           clg_dx_coil_cap = clg_dx_coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
         end
+        htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil,false)
+        htg_dx_coil.setName(htg_dx_coil_init_name)
         backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
         # Set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
         dx_cap = fr_backup_coil_cap_as_dx_coil_cap*backup_coil_cap
@@ -1169,8 +1171,8 @@ class ECMS
             # Set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
             dx_cap = fr_backup_coil_cap_as_dx_coil_cap*backup_coil_cap
             if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
-            clg_dx_coil.setRatedTotalCoolingCapacity(dx_cap)
-            htg_dx_coil.setRatedTotalHeatingCapacity(dx_cap)
+            #clg_dx_coil.setRatedTotalCoolingCapacity(dx_cap)
+            #htg_dx_coil.setRatedTotalHeatingCapacity(dx_cap)
             # assign performance curves and COPs
             coil_cooling_dx_single_speed_apply_efficiency_and_curves(clg_dx_coil,pthp_eqpt_name)
             coil_heating_dx_single_speed_apply_efficiency_and_curves(htg_dx_coil,pthp_eqpt_name)
@@ -1261,6 +1263,7 @@ class ECMS
   # Name of HVAC component might have been updated by standards methods for setting efficiency. Here original name of the component
   # is restored.
   def get_hvac_comp_init_name(obj,htg_flag)
+    return obj.name.to_s if obj.name.to_s.split.size <= 2
     init_name = obj.name.to_s.split[0]
     range = obj.name.to_s.split.size-3
     range = obj.name.to_s.split.size-5 if htg_flag
@@ -1300,11 +1303,6 @@ class ECMS
         end
         htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil,true)
         htg_dx_coil.setName(htg_dx_coil_init_name)
-        if htg_dx_coil.autosizedRatedTotalHeatingCapacity.is_initialized
-          htg_dx_coil_cap = htg_dx_coil.autosizedRatedTotalHeatingCapacity.to_f
-        else
-          htg_dx_coil_cap = htg_dx_coil.ratedTotalHeatingCapacity.to_f
-        end
         backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
         # set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
         dx_cap = fr_backup_coil_cap_as_dx_coil_cap*backup_coil_cap
@@ -1341,6 +1339,7 @@ class ECMS
 
     # Make the COOL-CAP-FT curve
     cool_cap_ft = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_cap_ft'])
+
     if cool_cap_ft
       coil_cooling_dx_single_speed.setTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft)
     else
