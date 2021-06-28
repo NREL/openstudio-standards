@@ -8,7 +8,7 @@ class Standard
   def schedule_compact_annual_min_max_value(schedule_compact)
     vals = []
     prev_str = ''
-    sch.extensibleGroups.each do |eg|
+    schedule_compact.extensibleGroups.each do |eg|
       if prev_str.include?('until')
         val = eg.getDouble(0)
         if val.is_initialized
