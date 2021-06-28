@@ -709,7 +709,7 @@ class ECMS
     case zone_htg_eqpt_type.downcase
     when "baseboard_electric"
       htg_eqpt = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-      htg_eqpt.setName("ZoneHVACBaseboardConvectiveElectric")
+      htg_eqpt.setName("Zone HVAC Baseboard Convective Electric")
     when "coil_electric","ptac_electric_off","unitheater_electric"
       htg_eqpt = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
       htg_eqpt.setName("CoilHeatingElectric")
