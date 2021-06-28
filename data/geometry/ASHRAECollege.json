@@ -163,20 +163,5 @@
             "CB_STUDENTS_RESTROOMS_2_F4",
             "CB_UTILITY_F4"
         ]
-    },
-    {
-        "type": "Refrigeration_system",
-        "compressor_type": "Low Temp",
-        "cases": [{
-            "case_type": "Case College",
-            "space_names": ["CB_CAFE_STUDY_LOUNGE_F1"]
-        }],
-        "walkins": [{
-            "walkin_type": "Walk-In College",
-            "space_names": ["CB_CAFE_STUDY_LOUNGE_F1"],
-            "number_of_walkins": 1
-        }],
-        "name": "RefrSystem - College",
-        "space_names": ["CB_CAFE_STUDY_LOUNGE_F1"]
     }
 ]
