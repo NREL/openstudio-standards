@@ -678,7 +678,6 @@ class ECMS
     sys_name_pars["sys_rf"] = "cv" if sys_ret_fan_type == "constant_volume"
     sys_name_pars["sys_rf"] = "vv" if sys_ret_fan_type == "variable_volume"
     assign_base_sys_name(airloop,sys_abbr: sys_abbr,sys_oa: sys_vent_type,sys_name_pars: sys_name_pars)
-
     return airloop,return_fan
   end
 
@@ -861,7 +860,7 @@ class ECMS
                                 system_doas_flags:)
 
     sys_info = {}
-    sys_info["sys_abbr"] = "sys"
+    sys_info["sys_abbr"] = sys_name.split("|")[0]
     sys_info["sys_vent_type"] = "mixed"
     sys_info["sys_vent_type"] = "doas" if system_doas_flags[sys_name.to_s]
     sys_info["sys_heat_rec_type"] = "none"
