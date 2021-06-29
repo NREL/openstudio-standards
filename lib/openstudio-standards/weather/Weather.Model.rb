@@ -84,8 +84,8 @@ class Standard
   # Adds the design days and weather file for the specified climate zone
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @param [String] the name of the epw file; if blank will default to epw file for the ASHRAE climate zone
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param epw_file [String] the name of the epw file; if blank will default to epw file for the ASHRAE climate zone
   # @return [Bool] returns true if successful, false if not
   def model_add_design_days_and_weather_file(model, climate_zone, epw_file = '')
     success = true

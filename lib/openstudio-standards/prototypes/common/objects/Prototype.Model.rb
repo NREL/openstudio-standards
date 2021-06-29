@@ -1,6 +1,14 @@
 Standard.class_eval do
   # @!group Model
 
+  # creates an openstudio standards version of PNNL/DOE prototype buildings
+  #
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param epw_file []
+  # @param sizing_run_dir [String]
+  # @param debug
+  # @param measure_model
+  # @return
   def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil)
     building_type = @instvarbuilding_type
     raise 'no building_type!' if @instvarbuilding_type.nil?
@@ -39,13 +47,13 @@ Standard.class_eval do
     model_modify_surface_convection_algorithm(model)
     model_create_thermal_zones(model, @space_multiplier_map)
     model_add_design_days_and_weather_file(model, climate_zone, epw_file)
-    model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
+    model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_constructions(model, @instvarbuilding_type, climate_zone)
     model_fenestration_orientation(model, climate_zone)
     model_custom_hvac_tweaks(building_type, climate_zone, @prototype_input, model)
     model_add_transfer_air(model)
     model_add_internal_mass(model, @instvarbuilding_type)
-    model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
+    model_add_swh(model, @instvarbuilding_type, @prototype_input)
     model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
     model_add_daylight_savings(model)
@@ -105,6 +113,10 @@ Standard.class_eval do
   # Replaces the contents of 'model_to_replace' with the contents of 'new_model.'
   # This method can be used when the memory location of model_to_replace needs
   # to be preserved, for example, when a measure is passed.
+  #
+  # @param model_to_replace [OpenStudio::Model::Model] OpenStudio model object
+  # @param new_model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
   def model_replace_model(model_to_replace, new_model, runner = nil)
     # remove existing objects from model
     handles = OpenStudio::UUIDVector.new
@@ -116,12 +128,14 @@ Standard.class_eval do
     # put contents of new_model into model_to_replace
     model_to_replace.addObjects(new_model.toIdfFile.objects)
     BTAP.runner_register('Info', "Model name is now #{model_to_replace.building.get.name}.", runner)
+    return model_to_replace
   end
 
   # Replaces all objects in the current model
   # with the objects in the .osm.  Typically used to
   # load a model as a starting point.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param rel_path_to_osm [String] the path to an .osm file, relative to this file
   # @return [Bool] returns true if successful, false if not
   def model_replace_model_from_osm(model, rel_path_to_osm)
@@ -341,8 +355,9 @@ Standard.class_eval do
   # individual space type, this construction set will be created and applied
   # to this space type, overriding the whole-building construction set.
   #
-  # @param building_type [String] the type of building
-  # @param climate_zone [String] the name of the climate zone the building is in
+  # @param model[OpenStudio::Model::Model] OpenStudio Model
+  # @param building_type [String] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Bool] returns true if successful, false if not
   def model_add_constructions(model, building_type, climate_zone)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
@@ -526,9 +541,10 @@ Standard.class_eval do
 
   # Creates and sets below grade wall constructions for 90.1 prototype building models. These utilize
   # CFactorUndergroundWallConstruction and require some additional parameters when compared to Construction
+  #
   # @param model[OpenStudio::Model::Model] OpenStudio Model
   # @param climate_zone [string] climate zone as described for prototype models. C-Factor is based on this parameter
-  # @param building_type [string] the type of building
+  # @param building_type [string] the building type
   # @return [void]
   def model_set_below_grade_wall_constructions(model, building_type, climate_zone)
     # Find ground contact wall building category
@@ -603,8 +619,9 @@ Standard.class_eval do
 
   # Searches a model for spaces adjacent to ground. If the slab's perimeter is adjacent to ground, the length is
   # calculated. Used for F-Factor floors that require additional parameters.
+  #
   # @param model [OpenStudio Model] OpenStudio model being modified
-  # @param building_type [string] the type of building
+  # @param building_type [string] the building type
   # @param climate_zone [string] climate zone as described for prototype models. F-Factor is based on this parameter
   def model_set_floor_constructions(model, building_type, climate_zone)
     # Find ground contact wall building category
@@ -631,8 +648,8 @@ Standard.class_eval do
       next if area == 0 # skip floors not adjacent to ground
 
       # Record combination of perimeter and area. Each unique combination requires a FFactorGroundFloorConstruction.
-      # NOTE: periods '.' were causing issues and were therefore removed. Caused E+ error with duplicate names despite
-      #       being different.
+      # @note periods '.' were causing issues and were therefore removed.
+      #   Caused E+ error with duplicate names despite being different.
       f_floor_const_name = "Foundation F #{f_factor_si.round(2)} Perim #{perimeter.round(2)} Area #{area.round(2)}".gsub('.', '')
 
       # Check if the floor construction has been constructed already. If so, look it up in the model
@@ -696,7 +713,7 @@ Standard.class_eval do
 
   # This function returns the length of intersection between a wall and floor sharing space. Primarily used for
   # FFactorGroundFloorConstruction exposed perimeter calculations.
-  # NOTE: this calculation has a few assumptions:
+  # @note this calculation has a few assumptions:
   # - Floors are flat. This means they have a constant z-axis value.
   # - If a wall shares an edge with a floor, it's assumed that edge intersects with only this floor.
   # - The wall and floor share a common space. This space is assumed to only have one floor!
@@ -769,7 +786,8 @@ Standard.class_eval do
 
   # Adds internal mass objects and constructions based on the building type
   #
-  # @param building_type [String] the type of building
+  # @param model[OpenStudio::Model::Model] OpenStudio Model
+  # @param building_type [String] the building type
   # @return [Bool] returns true if successful, false if not
   def model_add_internal_mass(model, building_type)
     # Assign a material to all internal mass objects
@@ -1101,7 +1119,7 @@ Standard.class_eval do
   #
   # @code_sections [90.1-2016_6.4.3.3.5]
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [String] Building type
+  # @param building_type [String] the building type
   # @return [Boolean] Returns true if successful, false otherwise
   def model_add_guestroom_vacancy_controls(model, building_type)
     # Guestrooms are currently only included in the small and large hotel prototypes
@@ -2198,7 +2216,7 @@ Standard.class_eval do
   # Defaults to the pre-90.1-2010 assumption of DifferentialDryBulb.
   #
   # @param model [OpenStudio::Model::Model] the model
-  # @param climate_zone [String] the climate zone
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] the economizer type.  Possible values are:
   # 'NoEconomizer'
   # 'FixedDryBulb'
@@ -2352,7 +2370,7 @@ Standard.class_eval do
   # Add door infiltration
   #
   # @param [OpenStudio:Model::Model] OpenStudio model object
-  # @climate_zone [String] Climate zone
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Boolean] Returns true if successful, false otherwise or not applicable
   def model_add_door_infiltration(model, climate_zone)
     # Get door parameters for the building model

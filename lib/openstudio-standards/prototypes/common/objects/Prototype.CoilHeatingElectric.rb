@@ -2,11 +2,14 @@ class Standard
   # @!group CoilHeatingElectric
 
   # Prototype CoilHeatingElectric object
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param air_loop_node [<OpenStudio::Model::Node>] the coil will be placed on this node of the air loop
   # @param name [String] the name of the system, or nil in which case it will be defaulted
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param nominal_capacity [Double] rated nominal capacity
   # @param efficiency [Double] rated heating efficiency
+  # @return [OpenStudio::Model::CoilHeatingElectric] the electric heating coil
   def create_coil_heating_electric(model,
                                    air_loop_node: nil,
                                    name: 'Electric Htg Coil',

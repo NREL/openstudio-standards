@@ -17,7 +17,7 @@ class Standard
   # @note Per 90.1, the Performance Rating Method "does NOT offer an alternative compliance path for minimum standard compliance."
   # This means you can't use this method for code compliance to get a permit.
   # @param building_type [String] the building type
-  # @param climate_zone [String] the climate zone
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param custom [String] the custom logic that will be applied during baseline creation.  Valid choices are 'Xcel Energy CO EDA' or '90.1-2007 with addenda dn'.
   #   If nothing is specified, no custom logic will be applied; the process will follow the template logic explicitly.
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
@@ -2905,8 +2905,8 @@ class Standard
 
   # Method to gather prototype simulation results for a specific climate zone, building type, and template
   #
-  # @param climate_zone [String] string for the ASHRAE climate zone.
-  # @param building_type [String] string for prototype building type.
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param building_type [String] the building type
   # @return [Hash] Returns a hash with data presented in various bins. Returns nil if no search results
   def model_process_results_for_datapoint(model, climate_zone, building_type)
     # Hash to store the legacy results by fuel and by end use
@@ -3473,7 +3473,7 @@ class Standard
   # @param intended_surface_type [string] the surface type
   # @param standards_construction_type [string]  the type of construction
   # @param building_category [string] the type of building
-  # @param climate_zone [string] the building's climate zone
+  # @param climate_zone [string] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [hash] hash of construction properties
   def model_get_construction_properties(model, intended_surface_type, standards_construction_type, building_category, climate_zone = nil)
     # get climate_zone_set
@@ -4520,7 +4520,7 @@ class Standard
   # Clears out any climate zones previously added to the model.
   #
   # @param model [OpenStudio::Model::Model] the model
-  # @param climate_zone [String] the climate zone in openstudio-standards format.
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # For example: ASHRAE 169-2013-2A, CEC T24-CEC3
   # @return [Boolean] returns true if successful, false if not
   def model_set_climate_zone(model, climate_zone)

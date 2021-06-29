@@ -2,7 +2,7 @@ class Standard
   # @!group hvac_systems
 
   # Returns standard design sizing temperatures
-
+  #
   # @return [Hash] Hash of design sizing temperature lookups
   def standard_design_sizing_temperatures
     dsgn_temps = {}
@@ -21,9 +21,9 @@ class Standard
     return dsgn_temps
   end
 
-  # Creates a hot water loop with a boiler, district heating, or a
-  # water-to-water heat pump and adds it to the model.
+  # Creates a hot water loop with a boiler, district heating, or a water-to-water heat pump and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param boiler_fuel_type [String] valid choices are Electricity, NaturalGas, PropaneGas, FuelOilNo1, FuelOilNo2, DistrictHeating, HeatPump
   # @param ambient_loop [OpenStudio::Model::PlantLoop] The condenser loop for the heat pump. Only used when boiler_fuel_type is HeatPump.
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
@@ -152,7 +152,7 @@ class Standard
                                          max_plr: boiler_max_plr,
                                          sizing_factor: boiler_sizing_factor)
 
-        # TODO: Yixing. Adding temperature setpoint controller at boiler outlet causes simulation errors
+        # @todo Yixing. Adding temperature setpoint controller at boiler outlet causes simulation errors
         # boiler_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self, hw_temp_sch)
         # boiler_stpt_manager.setName("Boiler outlet setpoint manager")
         # boiler_stpt_manager.addToNode(boiler.outletModelObject.get.to_Node.get)
@@ -186,6 +186,7 @@ class Standard
 
   # Creates a chilled water loop and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param cooling_fuel [String] cooling fuel. Valid choices are: Electricity, DistrictCooling
   # @param dsgn_sup_wtr_temp [Double] design supply water temperature in degrees Fahrenheit, default 44F
@@ -249,8 +250,8 @@ class Standard
     chw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, chw_temp_sch)
     chw_stpt_manager.setName("#{chilled_water_loop.name} Setpoint Manager")
     chw_stpt_manager.addToNode(chilled_water_loop.supplyOutletNode)
-    # TODO: Yixing check the CHW Setpoint from standards
-    # TODO: Should be a OutdoorAirReset, see the changes I've made in Standards.PlantLoop.apply_prm_baseline_temperatures
+    # @todo Yixing check the CHW Setpoint from standards
+    # @todo Should be a OutdoorAirReset, see the changes I've made in Standards.PlantLoop.apply_prm_baseline_temperatures
 
     # create chilled water pumps
     if chw_pumping_type == 'const_pri'
@@ -379,6 +380,7 @@ class Standard
 
   # Creates a condenser water loop and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param cooling_tower_type [String] valid choices are Open Cooling Tower, Closed Cooling Tower
   # @param cooling_tower_fan_type [String] valid choices are Centrifugal, "Propeller or Axial"
@@ -501,7 +503,7 @@ class Standard
         end
       when 'TwoSpeed Fan'
         cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(model)
-        # TODO: expose newer cooling tower sizing fields in API
+        # @todo expose newer cooling tower sizing fields in API
         # cooling_tower.setLowFanSpeedAirFlowRateSizingFactor(0.5)
         # cooling_tower.setLowFanSpeedFanPowerSizingFactor(0.3)
         # cooling_tower.setLowFanSpeedUFactorTimesAreaSizingFactor
@@ -629,6 +631,7 @@ class Standard
 
   # Creates a heat pump loop which has a boiler and fluid cooler for supplemental heating/cooling and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param heating_fuel [String]
   # @param cooling_fuel [String] cooling fuel. Valid options are: Electricity, DistrictCooling
   # @param cooling_type [String] cooling type if not DistrictCooling.
@@ -642,7 +645,7 @@ class Standard
   # @param dsgn_sup_wtr_temp [Double] design supply water temperature in degrees Fahrenheit, default 102.2F
   # @param dsgn_sup_wtr_temp_delt [Double] design supply-return water temperature difference in degrees Rankine, default 19.8R
   # @return [OpenStudio::Model::PlantLoop] the resulting plant loop
-  # TODO: replace cooling tower with fluid cooler after fixing sizing inputs
+  # @todo replace cooling tower with fluid cooler after fixing sizing inputs
   def model_add_hp_loop(model,
                         heating_fuel: 'NaturalGas',
                         cooling_fuel: 'Electricity',
@@ -840,9 +843,10 @@ class Standard
 
   # Creates loop that roughly mimics a properly sized ground heat exchanger for supplemental heating/cooling and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @return [OpenStudio::Model::PlantLoop] the resulting plant loop
-  # TODO: replace condenser loop w/ ground HX model that does not involve district objects
+  # @todo replace condenser loop w/ ground HX model that does not involve district objects
   def model_add_ground_hx_loop(model,
                                system_name: 'Ground HX Loop')
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding ground source loop.')
@@ -935,10 +939,11 @@ class Standard
 
   # Adds an ambient condenser water loop that will be used in a district to connect buildings as a shared sink/source for heat pumps.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @return [OpenStudio::Model::PlantLoop] the ambient loop
-  # TODO: add inputs for design temperatures like heat pump loop object
-  # TODO: handle ground and heat pump with this; make heating/cooling source options (boiler, fluid cooler, district)
+  # @todo add inputs for design temperatures like heat pump loop object
+  # @todo handle ground and heat pump with this; make heating/cooling source options (boiler, fluid cooler, district)
   def model_add_district_ambient_loop(model,
                                       system_name: 'Ambient Loop')
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding district ambient loop.')
@@ -1027,6 +1032,7 @@ class Standard
   # Creates a DOAS system with cold supply and terminal units for each zone.
   # This is the default DOAS system for DOE prototype buildings. Use model_add_doas for other DOAS systems.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect to heating and zone fan coils
@@ -1209,7 +1215,7 @@ class Standard
       erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
       erv.addToNode(oa_system.outboardOANode.get)
       erv.setHeatExchangerType('Rotary')
-      # TODO: come up with scheme for estimating power of ERV motor wheel which might require knowing airflow.
+      # @todo come up with scheme for estimating power of ERV motor wheel which might require knowing airflow.
       # erv.setNominalElectricPower(value_new)
       erv.setEconomizerLockout(true)
       erv.setSupplyAirOutletTemperatureControl(false)
@@ -1254,6 +1260,7 @@ class Standard
 
   # Creates a DOAS system with terminal units for each zone.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param doas_type [String] DOASCV or DOASVAV, determines whether the DOAS is operated at scheduled,
@@ -1555,6 +1562,7 @@ class Standard
 
   # Creates a VAV system and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param return_plenum [OpenStudio::Model::ThermalZone] the zone to attach as the supply plenum, or nil, in which case no return plenum will be used
@@ -1795,6 +1803,7 @@ class Standard
 
   # Creates a VAV system with parallel fan powered boxes and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop to connect to the cooling coil
@@ -1926,6 +1935,7 @@ class Standard
 
   # Creates a packaged VAV system and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param return_plenum [OpenStudio::Model::ThermalZone] the zone to attach as the supply plenum, or nil, in which case no return plenum will be used
@@ -2113,6 +2123,7 @@ class Standard
 
   # Creates a packaged VAV system with parallel fan powered boxes and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop to connect cooling coils to. If nil, will be DX cooling
@@ -2251,6 +2262,7 @@ class Standard
 
   # Creates a CAV system and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect to heating and reheat coils.
@@ -2413,6 +2425,7 @@ class Standard
 
   # Creates a PSZ-AC system for each zone and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param cooling_type [String] valid choices are Water, Two Speed DX AC, Single Speed DX AC, Single Speed Heat Pump, Water To Air Heat Pump
@@ -2655,7 +2668,7 @@ class Standard
       oa_system.setName("#{air_loop.name} OA System")
       oa_system.addToNode(air_loop.supplyInletNode)
 
-      # TODO: enable economizer maximum fraction outdoor air schedule input
+      # @todo enable economizer maximum fraction outdoor air schedule input
       # econ_eff_sch = model_add_schedule(model, 'RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
 
       # set air loop availability controls and night cycle manager, after oa system added
@@ -2682,6 +2695,7 @@ class Standard
 
   # Creates a packaged single zone VAV system for each zone and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param heating_type [String] valid choices are NaturalGas, Electricity, Water, nil (no heat)
@@ -2797,7 +2811,7 @@ class Standard
       clg_coil.addSpeed(clg_spd_1)
       clg_coil.setNominalSpeedLevel(1)
 
-      # TODO: enable economizer maximum fraction outdoor air schedule input
+      # @todo enable economizer maximum fraction outdoor air schedule input
       # econ_eff_sch = model_add_schedule(model, 'RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
 
       # wrap coils in a unitary system
@@ -2807,7 +2821,7 @@ class Standard
       unitary_system.setCoolingCoil(clg_coil)
       unitary_system.setSupplementalHeatingCoil(supplemental_htg_coil)
       unitary_system.setName("#{zone.name} Unitary PSZ-VAV")
-      unitary_system.setString(2, 'SingleZoneVAV') # TODO: add setControlType() method
+      unitary_system.setString(2, 'SingleZoneVAV') # @todo add setControlType() method
       unitary_system.setControllingZoneorThermostatLocation(zone)
       unitary_system.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       unitary_system.setFanPlacement('BlowThrough')
@@ -2844,6 +2858,7 @@ class Standard
 
   # Adds a data center load to a given space.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param space [OpenStudio::Model::Space] which space to assign the data center loads to
   # @param dc_watts_per_area [Double] data center load, in W/m^2
   # @return [Bool] returns true if successful, false if not
@@ -2863,6 +2878,7 @@ class Standard
 
   # Creates a data center PSZ-AC system for each zone.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect to the heating coil
   # @param heat_pump_loop [OpenStudio::Model::PlantLoop] heat pump water loop to connect to heat pump
@@ -3023,6 +3039,7 @@ class Standard
 
   # Creates a CRAC system for data center and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
@@ -3235,6 +3252,7 @@ class Standard
 
   # Creates a CRAH system for larger size data center and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param chilled_water_loop [string]
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
@@ -3391,6 +3409,7 @@ class Standard
 
   # Creates a split DX AC system for each zone and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param cooling_type [String] valid choices are Two Speed DX AC, Single Speed DX AC, Single Speed Heat Pump
   # @param heating_type [String] valid choices are Gas, Single Speed Heat Pump
@@ -3550,6 +3569,7 @@ class Standard
 
   # Creates a minisplit heatpump system for each zone and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param cooling_type [String] valid choices are Two Speed DX AC, Single Speed DX AC, Single Speed Heat Pump
   # @param heating_type [String] valid choices are Single Speed DX
@@ -3664,6 +3684,7 @@ class Standard
 
   # Creates a PTAC system for each zone and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param cooling_type [String] valid choices are Two Speed DX AC, Single Speed DX AC
   # @param heating_type [String] valid choices are NaturalGas, Electricity, Water, nil (no heat)
@@ -3785,6 +3806,7 @@ class Standard
 
   # Creates a PTHP system for each zone and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param fan_type [String] valid choices are ConstantVolume, Cycling
   # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
@@ -3870,6 +3892,7 @@ class Standard
 
   # Creates a unit heater for each zone and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
   # @param fan_control_type [String] valid choices are OnOff, ConstantVolume, VariableVolume
@@ -3986,6 +4009,7 @@ class Standard
 
   # Creates a high temp radiant heater for each zone and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param heating_type [String] valid choices are Gas, Electric
   # @param combustion_efficiency [Double] combustion efficiency as decimal
@@ -4043,6 +4067,7 @@ class Standard
 
   # Creates an evaporative cooler for each zone and adds it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] the resulting evaporative coolers
   def model_add_evap_cooler(model,
@@ -4127,7 +4152,7 @@ class Standard
       programs << avail_program
 
       # Direct Evap Cooler
-      # TODO: better assumptions for evap cooler performance and fan pressure rise
+      # @todo better assumptions for evap cooler performance and fan pressure rise
       evap = OpenStudio::Model::EvaporativeCoolerDirectResearchSpecial.new(model, model.alwaysOnDiscreteSchedule)
       evap.setName("#{zone.name} Evap Media")
       evap.autosizePrimaryAirDesignFlowRate
@@ -4198,6 +4223,7 @@ class Standard
 
   # Adds hydronic or electric baseboard heating to each zone.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add baseboards to.
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] The hot water loop that serves the baseboards.  If nil, baseboards are electric.
   # @return [Array<OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric, OpenStudio::Model::ZoneHVACBaseboardConvectiveWater>]
@@ -4232,6 +4258,7 @@ class Standard
 
   # Adds Variable Refrigerant Flow system and terminal units for each zone
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units
   # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
   #   no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
@@ -4288,6 +4315,7 @@ class Standard
 
   # Adds four pipe fan coil units to each zone.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] the chilled water loop that serves the fan coils.
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] the hot water loop that serves the fan coils.
@@ -4372,6 +4400,7 @@ class Standard
 
   # Adds low temperature radiant loop systems to each zone.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add radiant loops
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] the hot water loop that serves the radiant loop.
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] the chilled water loop that serves the radiant loop.
@@ -4693,7 +4722,7 @@ class Standard
 
       # radiant loop layout details
       radiant_loop.setHydronicTubingInsideDiameter(0.015875) # 5/8 in. ID, 3/4 in. OD
-      # @TODO include a method to determine tubing length in the zone
+      # @todo include a method to determine tubing length in the zone
       # loop_length = 7*zone.floorArea
       # radiant_loop.setHydronicTubingLength()
       radiant_loop.setNumberofCircuits('CalculateFromCircuitLength')
@@ -4725,6 +4754,7 @@ class Standard
   # Adds a window air conditioner to each zone.
   # Code adapted from: https://github.com/NREL/OpenStudio-BEopt/blob/master/measures/ResidentialHVACRoomAirConditioner/measure.rb
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
   # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] and array of PTACs used as window AC units
   def model_add_window_ac(model,
@@ -4779,6 +4809,7 @@ class Standard
   # Code adapted from:
   # https://github.com/NREL/OpenStudio-BEopt/blob/master/measures/ResidentialHVACFurnaceFuel/measure.rb
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
   # @param heating [Bool] if true, the unit will include a NaturalGas heating coil
   # @param cooling [Bool] if true, the unit will include a DX cooling coil
@@ -4909,6 +4940,7 @@ class Standard
   # Code adapted from:
   # https://github.com/NREL/OpenStudio-BEopt/blob/master/measures/ResidentialHVACAirSourceHeatPumpSingleSpeed/measure.rb
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
   # @param heating [Bool] if true, the unit will include a NaturalGas heating coil
   # @param cooling [Bool] if true, the unit will include a DX cooling coil
@@ -5044,6 +5076,7 @@ class Standard
 
   # Adds zone level water-to-air heat pumps for each zone.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones served by heat pumps
   # @param condenser_loop [OpenStudio::Model::PlantLoop] the condenser loop for the heat pumps  #
   # @param ventilation [Bool] if true, ventilation will be supplied through the unit.
@@ -5095,9 +5128,10 @@ class Standard
 
   # Adds zone level ERVs for each zone.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add heat pumps to.
   # @return [Array<OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator>] an array of zone ERVs
-  # TODO: review the static pressure rise for the ERV
+  # @todo review the static pressure rise for the ERV
   def model_add_zone_erv(model,
                          thermal_zones)
     ervs = []
@@ -5192,6 +5226,7 @@ class Standard
 
   # Adds ideal air loads systems for each zone.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to enable ideal air loads
   # @param hvac_op_sch [String] name of the HVAC operation schedule, default is always on
   # @param heat_avail_sch [String] name of the heating availability schedule, default is always on
@@ -5269,7 +5304,7 @@ class Standard
       ideal_loads.setHumidificationControlType(humid_ctrl_type)
       if include_outdoor_air
         # get the design specification outdoor air of the largest space in the zone
-        # TODO: create a new design specification outdoor air object that sums ventilation rates and schedules if multiple design specification outdoor air objects
+        # @todo create a new design specification outdoor air object that sums ventilation rates and schedules if multiple design specification outdoor air objects
         space_areas = zone.spaces.map(&:floorArea)
         largest_space = zone.spaces.select { |s| s.floorArea == space_areas.max }
         largest_space = largest_space[0]
@@ -5353,13 +5388,14 @@ class Standard
 
   # Adds an exhaust fan to each zone.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] an array of thermal zones
   # @param flow_rate [Double] the exhaust fan flow rate in m^3/s
   # @param availability_sch_name [String] the name of the fan availability schedule
   # @param flow_fraction_schedule_name [String] the name of the flow fraction schedule
   # @param balanced_exhaust_fraction_schedule_name [String] the name of the balanced exhaust fraction schedule
   # @return [Array<OpenStudio::Model::FanZoneExhaust>] an array of exhaust fans created
-  # @todo: use the create_fan_zone_exhaust method, default to 1.25 inH2O pressure rise and fan efficiency of 0.6
+  # @todo use the create_fan_zone_exhaust method, default to 1.25 inH2O pressure rise and fan efficiency of 0.6
   def model_add_exhaust_fan(model,
                             thermal_zones,
                             flow_rate: nil,
@@ -5410,6 +5446,7 @@ class Standard
 
   # Adds a zone ventilation design flow rate to each zone.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] an array of thermal zones
   # @param ventilation_type [String] the zone ventilation type either Exhaust, Natural, or Intake
   # @param flow_rate [Double] the ventilation design flow rate in m^3/s
@@ -5488,6 +5525,7 @@ class Standard
 
   # Get the existing chilled water loop in the model or add a new one if there isn't one already.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param cool_fuel [String] the cooling fuel. Valid choices are Electricity, DistrictCooling, and HeatPump.
   # @param chilled_water_loop_cooling_type [String] Archetype for chilled water loops, AirCooled or WaterCooled
   def model_get_or_add_chilled_water_loop(model, cool_fuel,
@@ -5537,6 +5575,8 @@ class Standard
   end
 
   # Determine which type of fan the cooling tower will have.  Defaults to TwoSpeed Fan.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [String] the fan type: TwoSpeed Fan, Variable Speed Fan
   def model_cw_loop_cooling_tower_fan_type(model)
     fan_type = 'Variable Speed Fan'
@@ -5545,6 +5585,7 @@ class Standard
 
   # Adds a waterside economizer to the chilled water and condenser loop
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param integrated [Bool] when set to true, models an integrated waterside economizer
   #   Integrated: in series with chillers, can run simultaneously with chillers
   #   Non-Integrated: in parallel with chillers, chillers locked out during operation
@@ -5693,6 +5734,7 @@ class Standard
 
   # Get the existing hot water loop in the model or add a new one if there isn't one already.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param heat_fuel [String] the heating fuel. Valid choices are NaturalGas, Electricity, DistrictHeating
   # @param hot_water_loop_type [String] Archetype for hot water loops
   #   HighTemperature (180F supply) or LowTemperature (120F supply)
@@ -5735,6 +5777,9 @@ class Standard
   end
 
   # Get the existing ambient water loop in the model or add a new one if there isn't one already.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::PlantLoop] the ambient water loop
   def model_get_or_add_ambient_water_loop(model)
     # retrieve the existing hot water loop or add a new one if necessary
     ambient_water_loop = if model.getPlantLoopByName('Ambient Loop').is_initialized
@@ -5746,6 +5791,9 @@ class Standard
   end
 
   # Get the existing ground heat exchanger loop in the model or add a new one if there isn't one already.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::PlantLoop] the ground hx loop
   def model_get_or_add_ground_hx_loop(model)
     # retrieve the existing ground HX loop or add a new one if necessary
     ground_hx_loop = if model.getPlantLoopByName('Ground HX Loop').is_initialized
@@ -5758,6 +5806,7 @@ class Standard
 
   # Get the existing heat pump loop in the model or add a new one if there isn't one already.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param heat_fuel [String] the heating fuel. Valid choices are NaturalGas, Electricity, DistrictHeating
   # @param cool_fuel [String] the cooling fuel. Valid choices are Electricity and DistrictCooling.
   # @param heat_pump_loop_cooling_type [String] the type of cooling equipment if not DistrictCooling.
@@ -5779,6 +5828,7 @@ class Standard
   # Add the specified system type to the specified zones based on the specified template.
   # For multi-zone system types, add one system per story.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param system_type [String] The system type
   # @param main_heat_fuel [String] Main heating fuel used for air loops and plant loops
   # @param zone_heat_fuel [String] Zone heating fuel for zone hvac equipment and terminal units
@@ -6421,50 +6471,5 @@ class Standard
     # rename air loop and plant loop nodes for readability
     rename_air_loop_nodes(model)
     rename_plant_loop_nodes(model)
-  end
-
-  # This method will add an swh water fixture to the model for the space.
-  # if the it will return a water fixture object, or NIL if there is no water load at all.
-  def model_add_swh_end_uses_by_spaceonly(model, space, swh_loop)
-    # Water use connection
-    swh_connection = OpenStudio::Model::WaterUseConnections.new(model)
-
-    # Water fixture definition
-    water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(model)
-
-    # water_use_sensible_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
-    # water_use_sensible_frac_sch.setValue(0.2)
-    # water_use_latent_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
-    # water_use_latent_frac_sch.setValue(0.05)
-    # Note that when water use equipment is assigned to spaces then the water used by the equipment is multiplied by the
-    # space (ultimately thermal zone) multiplier.  Note that there is a separate water use equipment multiplier as well
-    # which is different than the space (ultimately thermal zone) multiplier.
-    rated_flow_rate_gal_per_min = OpenStudio.convert(space['shw_peakflow_ind_SI'], 'm^3/s', 'gal/min').get
-    water_use_sensible_frac_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-    water_use_sensible_frac_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.2)
-    water_use_latent_frac_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-    water_use_latent_frac_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.05)
-    water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
-    water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
-    water_fixture_def.setPeakFlowRate(space['shw_peakflow_ind_SI'])
-    water_fixture_def.setName("#{space['shw_spaces'].name.to_s.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gal/min")
-    # Target mixed water temperature
-    mixed_water_temp_c = space['shw_temp_SI']
-    mixed_water_temp_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-    mixed_water_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), mixed_water_temp_c)
-    water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
-
-    # Water use equipment
-    water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
-    schedule = model_add_schedule(model, space['shw_sched'])
-    water_fixture.setFlowRateFractionSchedule(schedule)
-    water_fixture.setName("#{space['shw_spaces'].name.to_s.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
-    swh_connection.addWaterUseEquipment(water_fixture)
-    # Assign water fixture to a space
-    water_fixture.setSpace(space['shw_spaces']) if model_attach_water_fixtures_to_spaces?(model)
-
-    # Connect the water use connection to the SWH loop
-    swh_loop.addDemandBranchForComponent(swh_connection)
-    return water_fixture
   end
 end

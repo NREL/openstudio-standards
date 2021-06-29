@@ -1483,7 +1483,7 @@ class Standard
   # Determines whether the space is conditioned per 90.1,
   # which is based on heating and cooling loads.
   #
-  # @param climate_zone [String] climate zone
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
   # @todo add logic to detect indirectly-conditioned spaces
   def space_conditioning_category(space, climate_zone)

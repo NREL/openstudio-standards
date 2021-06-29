@@ -3,12 +3,15 @@ class Standard
 
   # Prototype CoilHeatingDXSingleSpeed object
   # Enters in default curves for coil by type of coil
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param air_loop_node [<OpenStudio::Model::Node>] the coil will be placed on this node of the air loop
   # @param name [String] the name of the system, or nil in which case it will be defaulted
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param type [String] the type of single speed DX coil to reference the correct curve set
   # @param cop [Double] rated heating coefficient of performance
   # @param defrost_strategy [String] type of defrost strategy. options are reverse-cycle or resistive
+  # @return [OpenStudio::Model::CoilHeatingDXSingleSpeed] the DX heating coil
   def create_coil_heating_dx_single_speed(model,
                                           air_loop_node: nil,
                                           name: '1spd DX Htg Coil',
@@ -194,6 +197,10 @@ class Standard
     return htg_coil
   end
 
+  # sets defrost curve limits
+  #
+  # @param htg_coil [OpenStudio::Model::CoilHeatingDXSingleSpeed] a DX heating coil
+  # @return [Bool] returns true if successful, false if not
   def coil_heating_dx_single_speed_apply_defrost_eir_curve_limits(htg_coil)
     return false unless htg_coil.defrostEnergyInputRatioFunctionofTemperatureCurve.is_initialized
 
@@ -202,5 +209,7 @@ class Standard
     def_eir_f_of_temp.setMaximumValueofx(23.88889)
     def_eir_f_of_temp.setMinimumValueofy(21.11111)
     def_eir_f_of_temp.setMaximumValueofy(46.11111)
+
+    return true
   end
 end
