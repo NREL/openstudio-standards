@@ -38,9 +38,9 @@ class Standard
       end
 
       # Attach the end uses if specified in prototype inputs
-      # TODO remove special logic for large office SWH end uses
-      # TODO remove special logic for stripmall SWH end uses and service water loops
-      # TODO remove special logic for large hotel SWH end uses
+      # @todo remove special logic for large office SWH end uses
+      # @todo remove special logic for stripmall SWH end uses and service water loops
+      # @todo remove special logic for large hotel SWH end uses
       if building_type == 'LargeOffice' && template != 'NECB2011'
 
         # Only the core spaces have service water

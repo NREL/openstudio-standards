@@ -3,6 +3,10 @@ class Standard
   # water mains temperature, and set ground temperature.
   # Based on ChangeBuildingLocation measure by Nicholas Long
 
+  # A method to return an array of .epw files names mapped to each climate zone
+  #
+  # @param epw_file [String] optional epw_file name for NECB methods
+  # @return [Hash] a hash of ashrae climate zone weather file pairs
   def model_get_climate_zone_weather_file_map(epw_file = '')
     # Define the weather file for each climate zone
     climate_zone_weather_file_map = {
@@ -77,7 +81,13 @@ class Standard
     return climate_zone_weather_file_map
   end
 
-  def model_add_design_days_and_weather_file(model, climate_zone, epw_file)
+  # Adds the design days and weather file for the specified climate zone
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param [String] the name of the epw file; if blank will default to epw file for the ASHRAE climate zone
+  # @return [Bool] returns true if successful, false if not
+  def model_add_design_days_and_weather_file(model, climate_zone, epw_file = '')
     success = true
     require_relative 'Weather.stat_file'
 
@@ -183,6 +193,15 @@ class Standard
     return success
   end
 
+  # Adds ground temperatures to the model based on a building type and climate zone lookup
+  # It will first attempt to find ground temperatures from the .stat file associated with the epw
+  # Otherwise, it will use values from the prototypes per a given template, building type, and climate zone
+  # If neither are available, it will default to a set of typical ground temperatures
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param [String] openstudio-standards building type
+  # @param [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if successful, false if not
   def model_add_ground_temperatures(model, building_type, climate_zone)
     # Define the weather file for each climate zone
     climate_zone_weather_file_map = model_get_climate_zone_weather_file_map
@@ -270,13 +289,13 @@ class Standard
     end
   end
 
-  # Gets the maximum OA dry bulb temperatures
-  # for all WinterDesignDays in the model.
+  # Returns the winter design outdoor air dry bulb temperatures in the model
   #
-  # @return [Array<Double>] an array of OA temperatures in C
-  def heating_design_outdoor_temperatures
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Array<Double>] an array of outdoor design dry bulb temperatures in degrees Celsius
+  def model_get_heating_design_outdoor_temperatures(model)
     heating_design_outdoor_temps = []
-    getDesignDays.each do |dd|
+    model.getDesignDays.each do |dd|
       next unless dd.dayType == 'WinterDesignDay'
 
       heating_design_outdoor_temps << dd.maximumDryBulbTemperature
@@ -286,10 +305,11 @@ class Standard
   end
 
   # This function gets the average ground temperature averages, under the assumption that ground temperature
-  # lags 3 months behind the ambient dry bulb temperature. (e.g. April's ground temperature equal January's
-  # average dry bulb temperature)
+  # lags 3 months behind the ambient dry bulb temperature.
+  # (e.g. April's ground temperature equal January's average dry bulb temperature)
+  #
   # @param stat_file_path [String] path to STAT file
-  # @return [Array] a length 12 array of monthly ground temperatures, one for each month
+  # @return [Array<Double>] a length 12 array of monthly ground temperatures, one for each month
   def model_get_monthly_ground_temps_from_stat_file(stat_file_path)
     if File.exist? stat_file_path
       stat_file = EnergyPlus::StatFile.new(stat_file_path)

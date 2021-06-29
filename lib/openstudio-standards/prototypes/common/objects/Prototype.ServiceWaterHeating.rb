@@ -3,6 +3,7 @@ class Standard
 
   # Creates a service water heating loop.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone]
   #   zones to place water heater in.  If nil, will be assumed in 70F air for heat loss.
@@ -143,6 +144,7 @@ class Standard
 
   # Creates a water heater and attaches it to the supplied service water heating loop.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param water_heater_capacity [Double] water heater capacity, in W
   # @param water_heater_volume [Double] water heater volume, in m^3
   # @param water_heater_fuel [Double] valid choices are NaturalGas, Electricity
@@ -304,6 +306,7 @@ class Standard
 
   # Creates a heatpump water heater and attaches it to the supplied service water heating loop.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param water_heater_capacity [Double] water heater capacity, in W
   # @param water_heater_volume [Double] water heater volume, in m^3
   # @param service_water_temperature [Double] water heater temperature, in C
@@ -578,6 +581,7 @@ class Standard
   # Creates a booster water heater and attaches it
   # to the supplied service water heating loop.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param main_service_water_loop [OpenStudio::Model::PlantLoop]
   # the main service water loop that this booster assists.
   # @param water_heater_capacity [Double] water heater capacity, in W
@@ -775,6 +779,7 @@ class Standard
   # Creates water fixtures and attaches them
   # to the supplied service water loop.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param use_name [String] The name that will be assigned
   # to the newly created fixture.
   # @param swh_loop [OpenStudio::Model::PlantLoop]
@@ -860,7 +865,7 @@ class Standard
   # Adds a WaterUseEquipment object representing the SWH loads of the supplied Space.
   # Attaches this WaterUseEquipment to the supplied PlantLoop via a new WaterUseConnections object.
   #
-  # @param model [OpenStudio::Model::Model] the model
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param swh_loop [OpenStudio::Model::PlantLoop] the SWH loop to connect the WaterUseEquipment to
   # @space [OpenStudio::Model::Space] the Space to add a WaterUseEquipment for
   # @space_multiplier [Double] the multiplier to use if the supplied Space actually represents
@@ -962,24 +967,25 @@ class Standard
   end
 
   # Determine whether or not water fixtures are attached to spaces
+  # @todo For hotels and apartments, add the water fixture at the space level
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_attach_water_fixtures_to_spaces?(model)
-    # TODO: For hotels and apartments, add the water fixture at the space level
     # if building_type!=nil && ((building_type.downcase.include?"hotel") || (building_type.downcase.include?"apartment"))
     #   return true
     # end
     return false
   end
 
-  # Creates water fixtures and attaches them
-  # to the supplied booster water loop.
+  # Creates water fixtures and attaches them to the supplied booster water loop.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param swh_booster_loop [OpenStudio::Model::PlantLoop]
   # the booster water loop to add water fixtures to.
   # @param peak_flowrate [Double] in m^3/s
   # @param flowrate_schedule [String] name of the flow rate schedule
   # @param water_use_temperature [Double] mixed water use temperature, in C
-  # @return [OpenStudio::Model::WaterUseEquipment]
-  # the resulting water fixture.
+  # @return [OpenStudio::Model::WaterUseEquipment] the resulting water fixture
   def model_add_booster_swh_end_uses(model,
                                      swh_booster_loop,
                                      peak_flowrate,
@@ -1025,13 +1031,14 @@ class Standard
   # are close to the point of use.
   # Assume that piping is located in a zone
   #
-  # @param model [OpenStudio::Model::Model] the model
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param swh_loop [OpenStudio::Model::PlantLoop] the service water heating loop
   # @param floor_area_served [Double] the area of building served by the service water heating loop, in m^2
   # @param number_of_stories [Integer] the number of stories served by the service water heating loop
   # @param pipe_insulation_thickness [Double] the thickness of the pipe insulation, in m.  Use 0 for no insulation
   # @param circulating [Bool] use true for circulating systems, false for non-circulating systems
   # @param air_temp_surrounding_piping [Double] the temperature of the air surrounding the piping, in C.
+  # @return [Bool] returns true if successful, false if not
   def model_add_piping_losses_to_swh_system(model,
                                             swh_loop,
                                             circulating,

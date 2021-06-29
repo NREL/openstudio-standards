@@ -3,6 +3,7 @@ $OPENSTUDIO_LOG = OpenStudio::StringStreamLogSink.new
 $OPENSTUDIO_LOG.setLogLevel(OpenStudio::Debug)
 
 # Log the info, warning, and error messages to a runner.
+#
 # runner @param [Runner] The Measure runner to add the messages to
 # debug @param [Boolean] If true, include the debug messages in the log
 # @return [Runner] The same Measure runner, with messages from the openstudio-standards library added
@@ -36,6 +37,7 @@ def log_messages_to_runner(runner, debug = false)
 end
 
 # Log the info, warning, and error messages to a file.
+#
 # runner @param [file_path] The path to the log file
 # debug @param [Boolean] If true, include the debug messages in the log
 # @return [Array<String>] The array of messages, which can be used elsewhere.
@@ -83,6 +85,9 @@ def log_messages_to_file(file_path, debug = false)
 end
 
 # Get an array of all messages of a given type in the log
+#
+# @param log_type [OpenStudio::Class] type of messages to return from the log, e.g. OpenStudio::Error
+# @return [Array<String>] An array of strings
 def get_logs(log_type = OpenStudio::Error)
   errors = []
 
@@ -109,6 +114,8 @@ def get_logs(log_type = OpenStudio::Error)
   return errors
 end
 
+
+# resets the log
 def reset_log
   $OPENSTUDIO_LOG.resetStringStream
 end

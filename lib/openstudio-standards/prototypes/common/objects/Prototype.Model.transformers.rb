@@ -1,6 +1,13 @@
 class Standard
   # Add transformers for some prototypes
-
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param wired_lighting_fraction [Double] the wired lighting fraction, 0-1
+  # @param transformer_size [Double] the transformer size in VA
+  # @param transformer_efficiency [Double] the transformer efficiency, 0-1
+  # @param excluded_interiorequip_key [String] key to exclude
+  # @param excluded_interiorequip_meter [String] meter to exclude
+  # @return [OpenStudio::Model::ElectricLoadCenterTransformer] the transformer object
   def model_add_transformer(model,
                             wired_lighting_frac: nil,
                             transformer_size: nil,
@@ -13,7 +20,7 @@ class Standard
       return false
     end
 
-    # TODO: default values are for testing only.
+    # @todo default values are for testing only
     # ems sensor for interior lighting
     facility_int_ltg = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'InteriorLights:Electricity')
     facility_int_ltg.setName('Facility_Int_LTG')
@@ -77,5 +84,7 @@ class Standard
     else
       transformer.addMeter('Wired_Int_EQUIP')
     end
+
+    return transformer
   end
 end

@@ -4394,7 +4394,7 @@ class Standard
   # @param radiant_lockout_end_time [double] decimal hour of when radiant lockout ends
   #   Only used if radiant_lockout is true
   # @return [Array<OpenStudio::Model::ZoneHVACLowTemperatureRadiantVariableFlow>] array of radiant objects.
-  # TODO - Once the OpenStudio API supports it, make chilled water loops optional for heating only systems
+  # @todo Once the OpenStudio API supports it, make chilled water loops optional for heating only systems
   def model_add_low_temp_radiant(model,
                                  thermal_zones,
                                  hot_water_loop,
