@@ -662,8 +662,7 @@ class NECB2011
           spaceinfo[:waterUseEquipment] << waterUseEquipment_info
           waterUseEquipment_info[:peak_flow_rate]= space.waterUseEquipment[0].waterUseEquipmentDefinition.peakFlowRate
           waterUseEquipment_info[:peak_flow_rate_per_area] = waterUseEquipment_info[:peak_flow_rate] / space.floorArea
-          area_per_occ = space.spaceType.get.people[0].spaceFloorAreaPerPerson
-          area_per_occ = validate_optional(area_per_occ, model, -1.0)
+          area_per_occ = space.spaceType.get.people[0].nil? ? 0.0 : validate_optional(space.spaceType.get.people[0].spaceFloorAreaPerPerson,model, -1.0)
           #                             Watt per person =             m3/s/m3                * 1000W/kW * (specific heat * dT) * m2/person
           waterUseEquipment_info[:shw_watts_per_person] = waterUseEquipment_info[:peak_flow_rate_per_area] * 1000 * (4.19 * 44.4) * 1000 * area_per_occ
           #puts waterUseEquipment_info[:shw_watts_per_ponce the erson]

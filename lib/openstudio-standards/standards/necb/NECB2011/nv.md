@@ -6,8 +6,8 @@ The workflow of this measure is as follows:
 * Ask for users' inputs for below arguments:
     * nv_type: whether to add NV to a building model or not
     * nv_opening_fraction: what is the opening fraction of windows (this value is used to calculate the opening area of windows for NV)
-    * nv_Tout_min: As per E+ I/O Reference, "minimum outdoor temperature is the outdoor temperature (in Celsius) below which ventilation is shut off. This lower temperature limit is intended to avoid overcooling a space, which could result in a heating load."
-    * nv_Delta_Tin_Tout: As per E+ I/O Reference, "Delta temperature is the temperature difference (in Celsius) between the indoor and outdoor air dry-bulb temperatures below which ventilation is shutoff."
+    * nv_temp_out_min: As per E+ I/O Reference, "minimum outdoor temperature is the outdoor temperature (in Celsius) below which ventilation is shut off. This lower temperature limit is intended to avoid overcooling a space, which could result in a heating load."
+    * nv_delta_temp_in_out: As per E+ I/O Reference, "Delta temperature is the temperature difference (in Celsius) between the indoor and outdoor air dry-bulb temperatures below which ventilation is shutoff."
 * Loop through **ZoneHVACEquipmentLists**.
     * Get which thermal zone is served by each of the "ZoneHVACEquipmentLists" objects.
     * Get heating/cooling setpoint temperature schedules for the thermal zone from the osm file. 
@@ -36,7 +36,7 @@ Hence, this measure excludes stack-driven NV.
 * It uses a built-in object called **AvailabilityManager:HybridVentilation** in EnergyPlus to avoid simultaneous NV and HVAC system operation.
     * Note that **Ventilation Control Mode Schedule Name** was set by default.
     Hence, the integer value in the schedule is set to 1 (i.e. temperature control).
-    * Note that users' input for nv_Tout_min is used for the fields of "Minimum Outdoor Temperature".
+    * Note that users' input for nv_temp_out_min is used for the fields of "Minimum Outdoor Temperature".
         * As per E+ I/O Reference, "Minimum Outdoor Temperature is the outdoor temperature (in Celsius) below which hybrid ventilation is shut off when the ventilation control mode = 1 (Temperature). This lower temperature limit is intended to avoid overcooling a space, which could result in a heating load."
     * Note that the "Maximum Outdoor Temperature" has been set to 30C. (there is no temperature schedule unlike the ZoneVentilation:DesignFlowRate and ZoneVentilation:WindandStackOpenArea objects)    
         * As per E+ I/O Reference, "Maximum Outdoor Temperature is the outdoor temperature (in Celsius) above which hybrid ventilation is shut off when the ventilation control mode = 1 (Temperature). This upper temperature limit is intended to avoid overheating a space, which could result in a cooling load."

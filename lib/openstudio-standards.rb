@@ -74,6 +74,7 @@ module OpenstudioStandards
   require_relative "#{stds}/necb/ECMS/hvac_systems.rb"
   require_relative "#{stds}/necb/ECMS/nv.rb"
   require_relative "#{stds}/necb/ECMS/pv_ground.rb"
+  require_relative "#{stds}/necb/ECMS/loads.rb"
 
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1"
   require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980"
