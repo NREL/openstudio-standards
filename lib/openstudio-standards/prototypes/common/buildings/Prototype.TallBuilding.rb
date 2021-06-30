@@ -379,8 +379,15 @@ module TallBuilding
     return true
   end
 
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-    # TODO: make additional parameters mutable by the user
+  # geometry adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
+    # @todo make additional parameters mutable by the user
     # the number of floors for each function type is defined in additional_params
     additional_params = {
       num_of_floor_retail: 2,
