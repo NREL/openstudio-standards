@@ -2,7 +2,14 @@
 # These are changes that are inconsistent with other prototype
 # building types.
 module QuickServiceRestaurant
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+  # hvac adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # add extra equipment for kitchen

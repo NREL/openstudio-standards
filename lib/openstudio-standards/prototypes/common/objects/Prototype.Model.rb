@@ -50,7 +50,7 @@ Standard.class_eval do
     model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_constructions(model, @instvarbuilding_type, climate_zone)
     model_fenestration_orientation(model, climate_zone)
-    model_custom_hvac_tweaks(building_type, climate_zone, @prototype_input, model)
+    model_custom_hvac_tweaks(model, building_type, climate_zone, @prototype_input)
     model_add_transfer_air(model)
     model_add_internal_mass(model, @instvarbuilding_type)
     model_add_swh(model, @instvarbuilding_type, @prototype_input)
