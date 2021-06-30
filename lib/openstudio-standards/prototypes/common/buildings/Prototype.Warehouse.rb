@@ -1,5 +1,4 @@
 # Custom changes for the Warehouse prototype
-
 # These are changes that are inconsistent with other prototype
 # building types.
 module Warehouse
@@ -15,7 +14,7 @@ module Warehouse
     return true
   end
 
-  # custom swh adjustments to the prototype model
+  # swh adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param building_type [string] the building type

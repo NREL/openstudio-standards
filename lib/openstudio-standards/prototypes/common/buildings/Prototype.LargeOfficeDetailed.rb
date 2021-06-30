@@ -105,6 +105,13 @@ module LargeOfficeDetailed
     end
   end
 
+  # swh adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     update_waterheater_loss_coefficient(model)
     return true

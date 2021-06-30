@@ -365,11 +365,17 @@ module TallBuilding
     end
   end
 
+  # swh adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     # customized swh system is not added here, but in model_custom_hvac_tweaks instead
     # because model_custom_swh_tweaks is performed in Prototype.Model after efficiency assignment. If swh added here, efficiency can't be updated.
     # this can't be moved upwards in Prototype.Model as it will affect other building types (e.g. SmallOfficeDetailed, LargeOfficeDetailed).
-
     return true
   end
 
