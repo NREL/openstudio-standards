@@ -553,10 +553,11 @@ class Standard
 
   def apply_lighting_schedule(space_type, space_type_properties, default_sch_set)
     lighting_sch = space_type_properties['lighting_schedule']
-    unless lighting_sch.nil?
-      default_sch_set.setLightingSchedule(model_add_schedule(space_type.model, lighting_sch))
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set lighting schedule to #{lighting_sch}.")
-    end
+    return false if lighting_sch.nil?
+
+    default_sch_set.setLightingSchedule(model_add_schedule(space_type.model, lighting_sch))
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set lighting schedule to #{lighting_sch}.")
+    return true
   end
 
   # Returns standards data for selected construction

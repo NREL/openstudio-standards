@@ -2,8 +2,8 @@ class ASHRAE9012016 < ASHRAE901
   # @!group Pump
 
   # Determine type of pump part load control type
+  # @note code_sections [90.1-2016_6.5.4.2]
   #
-  # @code_sections [90.1-2016_6.5.4.2]
   # @param pump [OpenStudio::Model::PumpVariableSpeed] OpenStudio pump object
   # @param plant_loop_type [String] Type of plant loop
   # @param pump_nominal_hp [Float] Pump nominal horsepower
@@ -135,10 +135,9 @@ class ASHRAE9012016 < ASHRAE901
         return false
     end
 
-    if pump_nominal_hp * design_sizing_factor > threshold
-      return 'VSD DP Reset'
-    else
-      return 'Riding Curve'
-    end
+    return 'VSD DP Reset' if pump_nominal_hp * design_sizing_factor > threshold
+
+    # else
+    return 'Riding Curve'
   end
 end

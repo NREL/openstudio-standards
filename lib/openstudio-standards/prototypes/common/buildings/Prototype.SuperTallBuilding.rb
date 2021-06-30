@@ -831,9 +831,9 @@ module SuperTallBuilding
     add_skylobby_story(model, building_height)
 
     # Relocate the ElevatorMachineRm story
-    top_elevatorMachineRm_story = model.getBuildingStoryByName('ElevatorMachineRm story').get
-    top_elevatorMachineRm_story.setNominalZCoordinate(building_height)
-    top_elevatorMachineRm_story.spaces.each do |space|
+    top_elevator_machine_rm_story = model.getBuildingStoryByName('ElevatorMachineRm story').get
+    top_elevator_machine_rm_story.setNominalZCoordinate(building_height)
+    top_elevator_machine_rm_story.spaces.each do |space|
       space.setZOrigin(building_height)
     end
 

@@ -392,12 +392,12 @@ class Standard
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Hard sized Design Supply Air Flow Rate.")
     end
 
-    # TODO: determine the presence of MERV filters and other stuff
+    # @todo determine the presence of MERV filters and other stuff
     # in Table 6.5.3.1.1B
     # perhaps need to extend AirLoopHVAC data model
     has_fully_ducted_return_and_or_exhaust_air_systems = false
-    has_MERV_9_through_12 = false
-    has_MERV_13_through_15 = false
+    has_merv_9_through_12 = false
+    has_merv_13_through_15 = false
 
     # Calculate Fan Power Limitation Pressure Drop Adjustment (in wc)
     fan_pwr_adjustment_in_wc = 0
@@ -410,14 +410,14 @@ class Standard
     end
 
     # MERV 9 through 12
-    if has_MERV_9_through_12
+    if has_merv_9_through_12
       adj_in_wc = 0.5
       fan_pwr_adjustment_in_wc += adj_in_wc
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "--Added #{adj_in_wc} in wc for Particulate Filtration Credit: MERV 9 through 12")
     end
 
     # MERV 13 through 15
-    if has_MERV_13_through_15
+    if has_merv_13_through_15
       adj_in_wc = 0.9
       fan_pwr_adjustment_in_wc += adj_in_wc
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "--Added #{adj_in_wc} in wc for Particulate Filtration Credit: MERV 13 through 15")
@@ -690,9 +690,10 @@ class Standard
 
     # Calculate the total bhp of the system to make sure it matches the goal
     calc_sys_bhp = air_loop_hvac_system_fan_brake_horsepower(air_loop_hvac, false)
-    if ((calc_sys_bhp - allowable_fan_bhp) / allowable_fan_bhp).abs > 0.02
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} baseline system bhp supposed to be #{allowable_fan_bhp}, but is #{calc_sys_bhp}.")
-    end
+    return true unless ((calc_sys_bhp - allowable_fan_bhp) / allowable_fan_bhp).abs > 0.02
+
+    OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} baseline system bhp supposed to be #{allowable_fan_bhp}, but is #{calc_sys_bhp}.")
+    return false
   end
 
   # Get the total cooling capacity for the air loop
@@ -938,11 +939,9 @@ class Standard
 
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return false # No OA system
-    end
+    return false unless oa_sys.is_initialized
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
     economizer_type = oa_control.getEconomizerControlType
 
@@ -1002,11 +1001,9 @@ class Standard
 
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return [nil, nil, nil] # No OA system
-    end
+    return [nil, nil, nil] unless oa_sys.is_initialized
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
     economizer_type = oa_control.getEconomizerControlType
 
@@ -1250,11 +1247,9 @@ class Standard
 
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return false # No OA system
-    end
+    return false unless oa_sys.is_initialized
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
 
     # Set the economizer type
@@ -1366,18 +1361,14 @@ class Standard
 
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return true # No OA system
-    end
+    return false unless oa_sys.is_initialized
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
     economizer_type = oa_control.getEconomizerControlType
 
     # Return true if no economizer is present
-    if economizer_type == 'NoEconomizer'
-      return true
-    end
+    return true if economizer_type == 'NoEconomizer'
 
     # Determine the prohibited types
     prohibited_types = []
@@ -1997,9 +1988,9 @@ class Standard
       zone = space.thermalZone.get
       sizing_zone = zone.sizingZone
       space_area = space.floorArea
-      if sizing_zone.coolingDesignAirFlowMethod == 'DesignDay'
-        next
-      elsif sizing_zone.coolingDesignAirFlowMethod == 'DesignDayWithLimit'
+      next if sizing_zone.coolingDesignAirFlowMethod == 'DesignDay'
+
+      if sizing_zone.coolingDesignAirFlowMethod == 'DesignDayWithLimit'
         minimum_airflow_per_zone_floor_area = sizing_zone.coolingMinimumAirFlowperZoneFloorArea
         minimum_airflow_per_zone = minimum_airflow_per_zone_floor_area * space_area
         # get the autosized maximum air flow of the VAV terminal
@@ -2266,20 +2257,16 @@ class Standard
   def air_loop_hvac_economizer?(air_loop_hvac)
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return false # No OA system
-    end
+    return false unless oa_sys.is_initialized
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
     economizer_type = oa_control.getEconomizerControlType
 
     # Return false if no economizer is present
-    if economizer_type == 'NoEconomizer'
-      return false
-    else
-      return true
-    end
+    return false if economizer_type == 'NoEconomizer'
+
+    return true
   end
 
   # Determine if the system is a VAV system based on the fan
@@ -2357,13 +2344,10 @@ class Standard
 
     # Get the OA system
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return has_erv # No OA system
-    end
+    return false unless oa_sys.is_initialized
 
     # Find any ERV on the OA system
+    oa_sys = oa_sys.get
     oa_sys.oaComponents.each do |oa_comp|
       if oa_comp.to_HeatExchangerAirToAirSensibleAndLatent.is_initialized
         has_erv = true
@@ -2546,11 +2530,9 @@ class Standard
   def air_loop_hvac_add_motorized_oa_damper(air_loop_hvac, min_occ_pct = 0.05, occ_sch = nil)
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return false # No OA system
-    end
+    return false unless oa_sys.is_initialized
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
 
     # Get the current min OA schedule and do nothing
@@ -2588,11 +2570,9 @@ class Standard
   def air_loop_hvac_remove_motorized_oa_damper(air_loop_hvac)
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return false # No OA system
-    end
+    return false unless oa_sys.is_initialized
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
 
     # Set the minimum OA schedule to always 1 (100%)
@@ -2665,11 +2645,9 @@ class Standard
 
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return false # No OA system
-    end
+    return false unless oa_sys.is_initialized
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
     oa_node = oa_sys.outboardOANode.get
 

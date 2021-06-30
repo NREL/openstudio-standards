@@ -303,7 +303,7 @@ class Standard
       # If no outdoor roofceiling go to the next space.
       next if outdoor_roof == false
 
-      z_Origin = space.zOrigin.to_f
+      z_origin = space.zOrigin.to_f
       ceiling_centroid = [0, 0, 0]
 
       # Go through the surfaces and look for ones that are the highest.  Any that are the highest get added to the
@@ -325,12 +325,12 @@ class Standard
         space: space,
         x: ceiling_centroid[0] + space.xOrigin.to_f,
         y: ceiling_centroid[1] + space.yOrigin.to_f,
-        z: max_surf.centroid.z.to_f + z_Origin,
+        z: max_surf.centroid.z.to_f + z_origin,
         area_m2: ceiling_centroid[2]
       }
       # This is to determine which are the global highest outdoor roofceilings
-      if max_height.round(tol) < (max_surf.centroid.z.to_f + z_Origin).round(tol)
-        max_height = (max_surf.centroid.z.to_f + z_Origin).round(tol)
+      if max_height.round(tol) < (max_surf.centroid.z.to_f + z_origin).round(tol)
+        max_height = (max_surf.centroid.z.to_f + z_origin).round(tol)
       end
     end
     # Go through the roofceilings and find the highest one(s) and calculate the centroid.
@@ -370,9 +370,9 @@ class Standard
 
     # Calculate azimuth
     surface_azimuth_rel_space = OpenStudio.convert(surface.azimuth, 'rad', 'deg').get
-    space_dir_rel_N = space.directionofRelativeNorth
-    building_dir_rel_N = model.getBuilding.northAxis
-    surface_abs_azimuth = surface_azimuth_rel_space + space_dir_rel_N + building_dir_rel_N
+    space_dir_rel_north = space.directionofRelativeNorth
+    building_dir_rel_north = model.getBuilding.northAxis
+    surface_abs_azimuth = surface_azimuth_rel_space + space_dir_rel_north + building_dir_rel_north
     surface_abs_azimuth -= 360.0 until surface_abs_azimuth < 360.0
 
     return surface_abs_azimuth
@@ -387,7 +387,9 @@ class Standard
     surface_abs_azimuth = surface_absolute_azimuth(surface)
 
     # Determine the surface's cardinal direction
-    if (surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45) || (surface_abs_azimuth > 315 && surface_abs_azimuth <= 360)
+    if surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45
+      return 'N'
+    elsif surface_abs_azimuth > 315 && surface_abs_azimuth <= 360
       return 'N'
     elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135
       return 'E'

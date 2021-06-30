@@ -58,7 +58,7 @@ Standard.class_eval do
     sql = model_get_sql_file(model)
 
     # convert tolerance to Kelvin
-    tolerance_K = OpenStudio.convert(tolerance, 'R', 'K').get
+    tolerance_k = OpenStudio.convert(tolerance, 'R', 'K').get
 
     ann_env_pd = model_get_weather_run_period(model)
     unless ann_env_pd
@@ -114,7 +114,7 @@ Standard.class_eval do
 
       # calculate difference accounting for unmet hours tolerance
       zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| (zone_temperatures[i] - x) }
-      zone_unmet_hours = zone_temperature_diff.map { |x| (x + tolerance_K) < 0 ? 1 : 0 }
+      zone_unmet_hours = zone_temperature_diff.map { |x| (x + tolerance_k) < 0 ? 1 : 0 }
       zone_occ_unmet_hours = []
       for i in (0..zone_unmet_hours.size - 1)
         bldg_unmet_hours[i] = 0 if bldg_unmet_hours[i].nil?
@@ -162,7 +162,7 @@ Standard.class_eval do
     sql = model_get_sql_file(model)
 
     # convert tolerance to Kelvin
-    tolerance_K = OpenStudio.convert(tolerance, 'R', 'K').get
+    tolerance_k = OpenStudio.convert(tolerance, 'R', 'K').get
 
     ann_env_pd = model_get_weather_run_period(model)
     unless ann_env_pd
@@ -218,7 +218,7 @@ Standard.class_eval do
 
       # calculate difference accounting for unmet hours tolerance
       zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| (x - zone_temperatures[i]) }
-      zone_unmet_hours = zone_temperature_diff.map { |x| (x - tolerance_K) > 0 ? 1 : 0 }
+      zone_unmet_hours = zone_temperature_diff.map { |x| (x - tolerance_k) > 0 ? 1 : 0 }
       zone_occ_unmet_hours = []
       for i in (0..zone_unmet_hours.size - 1)
         bldg_unmet_hours[i] = 0 if bldg_unmet_hours[i].nil?
@@ -269,13 +269,13 @@ Standard.class_eval do
 
     reporting_tolerances = model.getOutputControlReportingTolerances
     model_tolerance = reporting_tolerances.toleranceforTimeHeatingSetpointNotMet
-    model_tolerance_R = OpenStudio.convert(model_tolerance, 'K', 'R')
+    model_tolerance_r = OpenStudio.convert(model_tolerance, 'K', 'R')
 
     use_detailed = false
     unless tolerance.nil?
       # check to see if input argument tolerance matches model tolerance
-      tolerance_K = OpenStudio.convert(tolerance, 'R', 'K').get
-      unless (model_tolerance - tolerance_K).abs < 1e-3
+      tolerance_k = OpenStudio.convert(tolerance, 'R', 'K').get
+      unless (model_tolerance - tolerance_k).abs < 1e-3
         # input argument tolerance does not match model tolerance; need to recalculate unmet hours
         use_detailed = true
       end
@@ -287,7 +287,7 @@ Standard.class_eval do
       heating_unmet_hours = zones_unmet_hours['sum_bldg_occupied_unmet_hours']
     else
       # use default EnergyPlus unmet hours reporting
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating heating unmet hours with #{model_tolerance_R} R tolerance")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating heating unmet hours with #{model_tolerance_r} R tolerance")
 
       # setup the queries
       heating_setpoint_unmet_query = "SELECT Value
@@ -327,13 +327,13 @@ Standard.class_eval do
 
     reporting_tolerances = model.getOutputControlReportingTolerances
     model_tolerance = reporting_tolerances.toleranceforTimeHeatingSetpointNotMet
-    model_tolerance_R = OpenStudio.convert(model_tolerance, 'K', 'R')
+    model_tolerance_r = OpenStudio.convert(model_tolerance, 'K', 'R')
 
     use_detailed = false
     unless tolerance.nil?
       # check to see if input argument tolerance matches model tolerance
-      tolerance_K = OpenStudio.convert(tolerance, 'R', 'K').get
-      unless (model_tolerance - tolerance_K).abs < 1e-3
+      tolerance_k = OpenStudio.convert(tolerance, 'R', 'K').get
+      unless (model_tolerance - tolerance_k).abs < 1e-3
         # input argument tolerance does not match model tolerance; need to recalculate unmet hours
         use_detailed = true
       end
@@ -345,7 +345,7 @@ Standard.class_eval do
       cooling_unmet_hours = zones_unmet_hours['sum_bldg_occupied_unmet_hours']
     else
       # use default EnergyPlus unmet hours reporting
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating cooling unmet hours with #{model_tolerance_R} R tolerance")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating cooling unmet hours with #{model_tolerance_r} R tolerance")
 
       # setup the queries
       cooling_setpoint_unmet_query = "SELECT Value

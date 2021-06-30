@@ -207,7 +207,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [OpenStudio::Model::Model] OpenStudio model object
-  def remove_HVAC(model)
+  def remove_hvac(model)
     remove_air_loops(model)
     remove_plant_loops(model)
     remove_vrf(model)
@@ -220,7 +220,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [OpenStudio::Model::Model] OpenStudio model object
-  def remove_all_HVAC(model)
+  def remove_all_hvac(model)
     remove_air_loops(model)
     remove_all_plant_loops(model)
     remove_vrf(model)

@@ -559,7 +559,10 @@ class Standard
             if EmbeddedScripting.hasFile(ddy_file)
               ddy_string = EmbeddedScripting.getFileAsString(ddy_file)
               temp_ddy_path = "#{Dir.pwd}/in.ddy"
-              File.open(temp_ddy_path, 'wb') { |f| f << ddy_string; f.flush }
+              File.open(temp_ddy_path, 'wb') do |f|
+                f << ddy_string
+                f.flush
+              end
               ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(temp_ddy_path).get
               File.delete(temp_ddy_path) if File.exist?(temp_ddy_path)
             else

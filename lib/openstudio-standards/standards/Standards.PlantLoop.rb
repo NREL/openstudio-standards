@@ -844,9 +844,9 @@ class Standard
 
     # Ensure there is only 1 boiler to start
     first_boiler = nil
-    if boilers.size.zero?
-      return true
-    elsif boilers.size > 1
+    return true if boilers.size.zero?
+
+    if boilers.size > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{boilers.size}, cannot split up per performance rating method baseline requirements.")
     else
       first_boiler = boilers[0]
@@ -925,9 +925,9 @@ class Standard
 
     # Ensure there is only 1 chiller to start
     first_chiller = nil
-    if chillers.size.zero?
-      return true
-    elsif chillers.size > 1
+    return true if chillers.size.zero?
+
+    if chillers.size > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{chillers.size} chillers, cannot split up per performance rating method baseline requirements.")
     else
       first_chiller = chillers[0]
@@ -1052,9 +1052,9 @@ class Standard
 
     # Ensure there is only 1 cooling tower to start
     orig_twr = nil
-    if clg_twrs.size.zero?
-      return true
-    elsif clg_twrs.size > 1
+    return true if clg_twrs.size.zero?
+
+    if clg_twrs.size > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{clg_twrs.size} cooling towers, cannot split up per performance rating method baseline requirements.")
       return false
     else
@@ -1371,7 +1371,7 @@ class Standard
   # the fluid density, and the fluid heat capacity (currently only works with water).  This may be a little more approximate than the
   # heating and cooling capacity methods described above however is not limited to certain types of equipment and can be used for
   # condensing plant loops too.
-  def plant_loop_capacity_W_by_maxflow_and_deltaT_forwater(plant_loop)
+  def plant_loop_capacity_w_by_maxflow_and_delta_t_forwater(plant_loop)
     plantloop_maxflowrate = nil
     if plant_loop.fluidType != 'Water'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "The fluid used in the plant loop named #{plant_loop.name} is not water.  The current version of this method only calculates the capacity of plant loops that use water.")

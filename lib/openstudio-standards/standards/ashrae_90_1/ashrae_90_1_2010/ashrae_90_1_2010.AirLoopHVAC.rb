@@ -84,11 +84,9 @@ class ASHRAE9012010 < ASHRAE901
 
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return true # No OA system
-    end
+    return true unless oa_sys.is_initialized
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
     economizer_type = oa_control.getEconomizerControlType
 

@@ -178,10 +178,11 @@ class Standard
     end
 
     # Set the efficiency values
-    unless cop.nil?
-      htg_stages.each do |istage|
-        istage.setGrossRatedHeatingCOP(cop)
-      end
+    return false if cop.nil?
+
+    htg_stages.each do |istage|
+      istage.setGrossRatedHeatingCOP(cop)
     end
+    return true
   end
 end

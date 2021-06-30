@@ -190,7 +190,7 @@ class Standard
 
   def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction, model)
     # Get rid of all existing subsurfaces.
-    remove_All_Subsurfaces(surface: surface)
+    remove_all_subsurfaces(surface: surface)
     # What is the centroid of the surface.
     surf_cent = surface.centroid
     scale_factor = Math.sqrt(area_fraction)
@@ -235,7 +235,7 @@ class Standard
     # Set geometry tolerences:
     geometry_tolerence = 12
     # Get rid of all existing subsurfaces.
-    remove_All_Subsurfaces(surface: surface)
+    remove_all_subsurfaces(surface: surface)
     # Return vertices of smaller surfaces that fit inside this surface.  This is done in case the surface is
     # concave.
 
@@ -309,7 +309,7 @@ class Standard
 
   # This just uses applies 'setWindowToWallRatio' method from the OpenStudio SDK.  The only addition is that it changes
   # the name of the window to be the surface name plus the subsurface type (always 'fixedwindow').
-  def set_Window_To_Wall_Ratio_set_name(surface:, area_fraction:, construction:)
+  def set_window_to_wall_ratio_set_name(surface:, area_fraction:, construction:)
     surface.setWindowToWallRatio(area_fraction)
     surface.subSurfaces.sort.each do |sub_surf|
       sub_surf.setSubSurfaceType('FixedWindow')
@@ -321,7 +321,7 @@ class Standard
 
   # This removes all of the subsurfaces from a surface.  Is a preparation for replaceing windows or clearing doors
   # before adding windows.
-  def remove_All_Subsurfaces(surface:)
+  def remove_all_subsurfaces(surface:)
     surface.subSurfaces.sort.each(&:remove)
   end
 end

@@ -263,7 +263,7 @@ class Standard
           # Add these polygons to the list
           pri_sidelit_polygons << pri_sidelit_sub_polygon
           sec_sidelit_polygons << sec_sidelit_sub_polygon
-        end # Next subsurface
+        end
       elsif surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'RoofCeiling'
 
         # TODO: stop skipping non-horizontal roofs
@@ -367,10 +367,10 @@ class Standard
 
           # Add these polygons to the list
           toplit_polygons << toplit_sub_polygon
-        end # Next subsurface
+        end
 
-      end # End if outdoor wall or roofceiling
-    end # Next surface
+      end
+    end
 
     # Set z=0 for all the polygons so that intersection will work
     toplit_polygons = space_polygons_set_z(space, toplit_polygons, 0.0)
@@ -906,29 +906,26 @@ class Standard
       # Find the azimuth of the facade
       facade = nil
       group = surface.planarSurfaceGroup
-      if group.is_initialized
-        group = group.get
-        site_transformation = group.buildingTransformation
-        site_vertices = site_transformation * surface.vertices
-        site_outward_normal = OpenStudio.getOutwardNormal(site_vertices)
-        if site_outward_normal.empty?
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', "Could not compute outward normal for #{surface.name.get}")
-          next
-        end
-        site_outward_normal = site_outward_normal.get
-        north = OpenStudio::Vector3d.new(0.0, 1.0, 0.0)
-        azimuth = if site_outward_normal.x < 0.0
-                    360.0 - OpenStudio.radToDeg(OpenStudio.getAngle(site_outward_normal, north))
-                  else
-                    OpenStudio.radToDeg(OpenStudio.getAngle(site_outward_normal, north))
-                  end
-      else
-        # The surface is not in a group; should not hit, since
-        # called from Space.surfaces
+      # The surface is not in a group; should not hit, since called from Space.surfaces
+      next unless group.is_initialized
+
+      group = group.get
+      site_transformation = group.buildingTransformation
+      site_vertices = site_transformation * surface.vertices
+      site_outward_normal = OpenStudio.getOutwardNormal(site_vertices)
+      if site_outward_normal.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', "Could not compute outward normal for #{surface.name.get}")
         next
       end
+      site_outward_normal = site_outward_normal.get
+      north = OpenStudio::Vector3d.new(0.0, 1.0, 0.0)
+      azimuth = if site_outward_normal.x < 0.0
+                  360.0 - OpenStudio.radToDeg(OpenStudio.getAngle(site_outward_normal, north))
+                else
+                  OpenStudio.radToDeg(OpenStudio.getAngle(site_outward_normal, north))
+                end
 
-      # TODO: modify to work for buildings in the southern hemisphere?
+      # @todo modify to work for buildings in the southern hemisphere?
       if azimuth >= 315.0 || azimuth < 45.0
         facade = '4-North'
       elsif azimuth >= 45.0 && azimuth < 135.0
@@ -967,8 +964,8 @@ class Standard
         else
           windows[sub_surface] = properties
         end
-      end # next sub-surface
-    end # next surface
+      end
+    end
 
     # Determine the illuminance setpoint for the controls based on space type
     daylight_stpt_lux = 375
@@ -1881,9 +1878,7 @@ class Standard
       end
     end
     # OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Space", "Checking z=0: #{name} is greater than or equal to #{clsss.uniq.to_s.gsub(/\[|\]/,'|')}.")
-    if errs > 0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "***FAIL*** #{space.name} z=0 failed for #{errs} vertices in #{name}; #{fails.join(', ')}.")
-    end
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "***FAIL*** #{space.name} z=0 failed for #{errs} vertices in #{name}; #{fails.join(', ')}.") if errs > 0
   end
 
   # A method to convert an array of arrays to

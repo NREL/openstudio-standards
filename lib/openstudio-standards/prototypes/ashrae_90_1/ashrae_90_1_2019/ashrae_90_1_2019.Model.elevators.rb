@@ -15,8 +15,9 @@ class ASHRAE9012019 < ASHRAE901
   # Determines the power of the elevator ventilation fan.
   # 90.1-2019 has a requirement for ventilation fan efficiency.
   #
-  # @param model [OpenStudio::Model::Model] the model
-  # @return [Double] the ventilaton fan power (W)
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param vent_rate_cfm [Double] the ventilation rate in ft^3/min
+  # @return [Double] the ventilation fan power in watts
   def model_elevator_fan_pwr(model, vent_rate_cfm)
     vent_pwr_per_flow_w_per_cfm = 0.33
     vent_pwr_w = vent_pwr_per_flow_w_per_cfm * vent_rate_cfm

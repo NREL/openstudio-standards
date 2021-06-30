@@ -1778,13 +1778,11 @@ class Standard
     # needed for NRCan data structure compatibility. We keep all tables in a 'tables' hash in @standards_data and the table
     # itself is in the 'table' hash index.
     if hash_of_objects.nil?
-      if @standards_data['tables'].nil?
-        # Format of @standards_data is not NRCan-style and table simply doesn't exist.
-        return matching_objects
-      else
-        table = @standards_data['tables'][table_name]['table']
-        hash_of_objects = table
-      end
+      # Format of @standards_data is not NRCan-style and table simply doesn't exist.
+      return matching_objects if @standards_data['tables'].nil?
+
+      table = @standards_data['tables'][table_name]['table']
+      hash_of_objects = table
     end
 
     # Compare each of the objects against the search criteria
@@ -1899,10 +1897,6 @@ class Standard
   #   the objects will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
   # @param date [<OpenStudio::Date>] date of the object in question.  If date is supplied,
   #   the objects will only be returned if the specified date is between the start_date and end_date.
-  # @param area [Double] area of the object in question.  If area is supplied,
-  #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
-  # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
-  #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
   # @return [Hash] Return tbe first matching object hash if successful, nil if not.
   # @example Find the motor that meets these size criteria
   #   search_criteria = {
@@ -2168,7 +2162,7 @@ class Standard
         sch_rule.setApplySaturday(true) if day_types.include?('Sat')
         sch_rule.setApplySunday(true) if day_types.include?('Sun')
       end
-    end # Next rule
+    end
     return sch_ruleset
   end
 
@@ -2459,7 +2453,7 @@ class Standard
       almost_adiabatic = OpenStudio::Model::MasslessOpaqueMaterial.new(model, 'Smooth', 500)
       construction.insertLayer(0, almost_adiabatic)
       return construction
-    else
+      # else
       # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
     end
 
@@ -3497,7 +3491,7 @@ class Standard
 
   # Returns standards data for selected construction set
   #
-  # @param building_category [string] the type of building
+  # @param building_type [string] the type of building
   # @param space_type [string] space type within the building type. Typically nil.
   # @return [hash] hash of construction set data
   def model_get_construction_set(building_type, space_type = nil)
@@ -4175,12 +4169,11 @@ class Standard
         end
       end
     end
-    if error_string == ''
-      return true
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', error_string)
-      return false
-    end
+    return true if error_string == ''
+
+    # else
+    OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', error_string)
+    return false
   end
 
   # Create sorted hash of stories with data need to determine effective number of stories above and below grade
@@ -4407,7 +4400,7 @@ class Standard
 
   # This method will apply the a FDWR to a model. It will remove any existing windows and doors and use the
   # Default contruction to set to apply the window construction. Sill height is in meters
-  def apply_max_fdwr(model, runner, sillHeight_si, wwr)
+  def apply_max_fdwr(model, runner, sill_height_si, wwr)
     empty_const_warning = false
     model.getSpaces.sort.each do |space|
       space.surfaces.sort.each do |surface|
@@ -4417,7 +4410,7 @@ class Standard
 
         if (surface.outsideBoundaryCondition == 'Outdoors') && (surface.surfaceType == 'Wall')
           surface.subSurfaces.each(&:remove)
-          new_window = surface.setWindowToWallRatio(wwr, sillHeight_si, true)
+          new_window = surface.setWindowToWallRatio(wwr, sill_height_si, true)
           raise "#{surface.name.get} did not get set to #{wwr}. The size of the surface is #{surface.grossArea}" unless surface.windowToWallRatio.round(3) == wwr.round(3)
 
           if new_window.empty?

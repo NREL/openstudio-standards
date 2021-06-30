@@ -114,7 +114,6 @@ def get_logs(log_type = OpenStudio::Error)
   return errors
 end
 
-
 # resets the log
 def reset_log
   $OPENSTUDIO_LOG.resetStringStream

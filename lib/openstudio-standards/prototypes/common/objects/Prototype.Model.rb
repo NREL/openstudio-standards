@@ -102,12 +102,10 @@ Standard.class_eval do
     # Add output variables for debugging
     model_request_timeseries_outputs(model) if debug
     # If measure model is passed, then replace measure model with new model created here.
-    if measure_model.nil?
-      return model
-    else
-      model_replace_model(measure_model, model)
-      return measure_model
-    end
+    return model if measure_model.nil?
+
+    model_replace_model(measure_model, model)
+    return measure_model
   end
 
   # Replaces the contents of 'model_to_replace' with the contents of 'new_model.'
@@ -891,16 +889,16 @@ Standard.class_eval do
       end
     end
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
- end
+  end
 
   # Loop through thermal zones and model_run(model)  thermal_zone.add_exhaust
   # If kitchen_makeup is "None" then exhaust will be modeled in every kitchen zone without makeup air
   # If kitchen_makeup is "Adjacent" then exhaust will be modeled in every kitchen zone. Makeup air will be provided when there as an adjacent dining,cafe, or cafeteria zone of the same building type.
   # If kitchen_makeup is "Largest Zone" then exhaust will only be modeled in the largest kitchen zone, but the flow rate will be based on the kitchen area for all zones. Makeup air will be modeled in the largest dining,cafe, or cafeteria zone of the same building type.
   #
-  # @param kitchen_makeup [String] Valid choices are
+  # @param kitchen_makeup [String] Valid choices are None, Largest Zone, Adjacent
   # @return [Hash] Hash of newly made exhaust fan objects along with secondary exhaust and zone mixing objects
-  def model_add_exhaust(model, kitchen_makeup = 'Adjacent') # kitchen_makeup options are (None, Largest Zone, Adjacent)
+  def model_add_exhaust(model, kitchen_makeup = 'Adjacent')
     zone_exhaust_fans = {}
 
     # apply use specified kitchen_makup logic
@@ -1116,8 +1114,8 @@ Standard.class_eval do
   end
 
   # Add guestroom vacancy controls
+  # @note code_sections [90.1-2016_6.4.3.3.5]
   #
-  # @code_sections [90.1-2016_6.4.3.3.5]
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param building_type [String] the building type
   # @return [Boolean] Returns true if successful, false otherwise
@@ -1210,7 +1208,7 @@ Standard.class_eval do
                 equipment.supplyAirFan.to_FanVariableVolume.get
               elsif equipment.supplyAirFan.to_FanOnOff.is_initialized
                 equipment.supplyAirFan.to_FanOnOff.get
-        end
+              end
         fan.setAvailabilitySchedule(model_add_schedule(model, 'GuestroomVacantFanSchedule'))
       end
 
@@ -2247,7 +2245,7 @@ Standard.class_eval do
         # that exception c to 90.1-2004/7 Section 6.5.1 applies.
         if template == '90.1-2004' || template == '90.1-2007'
           economizer_required = false
-                  end
+        end
         # This exception exist through 90.1-2019, for hospitals
         # see Section 6.5.1 exception 4
         if @instvarbuilding_type == 'Hospital' &&
@@ -2316,17 +2314,18 @@ Standard.class_eval do
   end
 
   # Implement occupancy based lighting level threshold (0.02 W/sqft). This is only for ASHRAE 90.1 2016 onwards.
-  #
-  # @code_sections [90.1-2016_9.4.1.1.h/i]
+  # @note code_sections [90.1-2016_9.4.1.1.h/i]
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] OpenStudio Model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio Model
+  # @return [Bool] returns true if successful, false if not
   def model_add_lights_shutoff(model)
     return false
   end
 
   # Get building door information to update infiltration
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio Model
   # return [Hash] Door infiltration information
   def get_building_door_info(model)
     get_building_door_info = {}
@@ -2473,11 +2472,10 @@ Standard.class_eval do
       end
     end
 
-    if wwr
-      return window_area / wall_area
-    else
-      window_area
-    end
+    return window_area / wall_area if wwr
+
+    # else
+    return window_area
   end
 
   # Adjust model to comply with fenestration orientation

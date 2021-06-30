@@ -1,5 +1,4 @@
 class Standard
-
   # Add service water heating to the model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object

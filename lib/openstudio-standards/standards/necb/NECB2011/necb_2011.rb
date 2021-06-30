@@ -328,7 +328,7 @@ class NECB2011 < Standard
                            pv_ground_module_description: nil
   )
     #clean model..
-    model = remove_all_HVAC(model)
+    model = remove_all_hvac(model)
     model.getThermalZones.sort.each {|zone| zone.setUseIdealAirLoads(true)}
     model.getZoneHVACPackagedTerminalAirConditioners.each(&:remove)
     model.getCoilCoolingDXSingleSpeeds.each(&:remove)
