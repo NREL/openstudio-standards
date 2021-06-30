@@ -26,4 +26,4 @@ class ASHRAE9012010 < ASHRAE901
       end
     end
   end
-  end
+end

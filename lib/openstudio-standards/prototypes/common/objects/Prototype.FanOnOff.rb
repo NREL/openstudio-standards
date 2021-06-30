@@ -61,8 +61,7 @@ class Standard
     return true
   end
 
-  # Determine the prototype fan pressure rise for an on off fan
-  # on an AirLoopHVAC or inside a unitary system based on the airflow of the system.
+  # Determine the prototype fan pressure rise for an on off fan on an AirLoopHVAC or inside a unitary system based on system airflow.
   # Defaults to the logic from ASHRAE 90.1-2004 prototypes.
   #
   # @param fan_on_off [OpenStudio::Model::FanOnOff] on off fan object

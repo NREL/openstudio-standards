@@ -1096,9 +1096,9 @@ class Standard
     copper_pipe.setThermalConductivity(386.0)
     copper_pipe.setDensity(OpenStudio.convert(556, 'lb/ft^3', 'kg/m^3').get)
     copper_pipe.setSpecificHeat(OpenStudio.convert(0.092, 'Btu/lb*R', 'J/kg*K').get)
-    copper_pipe.setThermalAbsorptance(0.9) # TODO: find reference for property
-    copper_pipe.setSolarAbsorptance(0.7) # TODO: find reference for property
-    copper_pipe.setVisibleAbsorptance(0.7) # TODO: find reference for property
+    copper_pipe.setThermalAbsorptance(0.9) # @todo find reference for property
+    copper_pipe.setSolarAbsorptance(0.7) # @todo find reference for property
+    copper_pipe.setVisibleAbsorptance(0.7) # @todo find reference for property
 
     # Construction for pipe
     pipe_construction = OpenStudio::Model::Construction.new(model)
@@ -1131,9 +1131,11 @@ class Standard
     heat_loss_pipe = OpenStudio::Model::PipeIndoor.new(model)
     heat_loss_pipe.setName("#{swh_loop.name} Pipe #{pipe_length_ft}ft")
     heat_loss_pipe.setEnvironmentType('Schedule')
-    # heat_loss_pipe.setAmbientTemperatureSchedule(swh_piping_air_temp_sch) # TODO: schedule type registry error for this setter
+    # @todoschedule type registry error for this setter
+    # heat_loss_pipe.setAmbientTemperatureSchedule(swh_piping_air_temp_sch)
     heat_loss_pipe.setPointer(7, swh_piping_air_temp_sch.handle)
-    # heat_loss_pipe.setAmbientAirVelocitySchedule(model.alwaysOffDiscreteSchedule) # TODO: schedule type registry error for this setter
+    # @todo schedule type registry error for this setter
+    # heat_loss_pipe.setAmbientAirVelocitySchedule(model.alwaysOffDiscreteSchedule)
     heat_loss_pipe.setPointer(8, swh_piping_air_velocity_sch.handle)
     heat_loss_pipe.setConstruction(pipe_construction)
     heat_loss_pipe.setPipeInsideDiameter(OpenStudio.convert(0.785, 'in', 'm').get)

@@ -56,11 +56,10 @@ class Standard
     return true
   end
 
-  # Determine the prototype fan pressure rise for a constant volume fan
-  # on an AirLoopHVAC based on the airflow of the system.
+  # Determine the prototype fan pressure rise for a constant volume fan on an AirLoopHVAC based on system airflow.
   # Defaults to the logic from ASHRAE 90.1-2004 prototypes.
   #
-  # @param fan_on_off [OpenStudio::Model::FanConstantVolume] constant volume fan object
+  # @param fan_constant_volume [OpenStudio::Model::FanConstantVolume] constant volume fan object
   # @return [Double] pressure rise in inches H20
   def fan_constant_volume_airloop_fan_pressure_rise(fan_constant_volume)
     # Get the max flow rate from the fan.

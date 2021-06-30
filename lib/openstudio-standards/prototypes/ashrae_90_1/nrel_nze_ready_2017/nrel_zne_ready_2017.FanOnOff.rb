@@ -1,11 +1,11 @@
 class NRELZNEReady2017 < ASHRAE901
   # @!group FanOnOff
 
-  # Determine the prototype fan pressure rise for an on off
-  # fan on an AirLoopHVAC or inside a unitary system
-  # based on the airflow of the system.
-  # @return [Double] the pressure rise (in H2O).  Defaults
-  # to the logic from ASHRAE 90.1-2004 prototypes.
+  # Determine the prototype fan pressure rise for an on off fan on an AirLoopHVAC or inside a unitary system based on system airflow.
+  # Defaults to the logic from ASHRAE 90.1-2004 prototypes.
+  #
+  # @param fan_on_off [OpenStudio::Model::FanOnOff] on off fan object
+  # @return [Double] pressure rise in inches H20
   def fan_on_off_airloop_or_unitary_fan_pressure_rise(fan_on_off)
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil

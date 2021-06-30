@@ -11,8 +11,8 @@ module TallBuilding
   def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
-    # TODO: make additional parameters mutable by the user
-    # the number of floors for each function type is defined in additional_params
+    # @todomake additional parameters mutable by the user
+    #   the number of floors for each function type is defined in additional_params
     additional_params = {
       num_of_floor_retail: 2,
       num_of_floor_office: 18,
@@ -26,9 +26,9 @@ module TallBuilding
     # for tall and super tall buildings, add main (multiple) and booster swh here instead of model_add_swh
     add_swh_tall_bldg(model, prototype_input, additional_params)
 
-    # # update the infiltration coefficients of tall buildings based on Lisa Ng's research (from NIST)
-    # # The set of coefficients are not quite appropriate for tall buildings, leading to super high infiltration rate
-    # # TODO: further infiltration research is needed
+    # update the infiltration coefficients of tall buildings based on Lisa Ng's research (from NIST)
+    # The set of coefficients are not quite appropriate for tall buildings, leading to super high infiltration rate
+    # @todo further infiltration research is needed
     # update_infil_coeff(model)
 
     # apply vertical weather variations to tall buildings

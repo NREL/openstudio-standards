@@ -202,7 +202,6 @@ module Outpatient
 
   # add door infiltration
   #
-  # @param template [String] the model template
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Bool] returns true if successful, false if not
@@ -244,6 +243,10 @@ module Outpatient
   end
 
   # add humidifier to AHU1 (contains operating room1)
+  #
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_humidifier(hot_water_loop, model)
     operatingroom1_space = model.getSpaceByName('Floor 1 Operating Room 1').get
     operatingroom1_zone = operatingroom1_space.thermalZone.get
@@ -283,6 +286,7 @@ module Outpatient
         humidity_spm.setControlZone(operatingroom1_zone)
       end
     end
+    return true
   end
 
   # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
@@ -311,6 +315,10 @@ module Outpatient
     return true
   end
 
+  # adjust room vav damper minimums
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_adjust_vav_minimum_damper(model)
     # Minimum damper position for Outpatient prototype
     # Based on AIA 2001 ventilation requirements
@@ -366,6 +374,7 @@ module Outpatient
         end
       end
     end
+    return true
   end
 
   # For operating room 1&2 in 2010, 2013, 2016, and 2019 VAV minimum air flow is set by schedule
@@ -373,6 +382,10 @@ module Outpatient
   # instead it is called by model_reset_or_room_vav_minimum_damper AFTER the sizing run,
   # so that the system is sized at a constant airflow fraction of 1.0,
   # not 0.3 as defaulted in the zone sizing object
+  #
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
     case template
     when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
@@ -387,15 +400,19 @@ module Outpatient
           air_terminal.setMinimumAirFlowFractionSchedule(model_add_schedule(model, 'OutPatientHealthCare OR_MinSA_Sched'))
         end
       end
-    else
-      return true
     end
+    return true
   end
 
+  # reset boiler sizing factor
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def reset_boiler_sizing_factor(model)
     model.getBoilerHotWaters.sort.each do |boiler|
       boiler.setSizingFactor(0.3)
     end
+    return true
   end
 
   # update exhuast fan efficiency
@@ -425,6 +442,10 @@ module Outpatient
   end
 
   # assign the minimum total air changes to the cooling minimum air flow in Sizing:Zone
+  #
+  # @param building_type [string] the building type
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def apply_minimum_total_ach(building_type, model)
     model.getSpaces.sort.each do |space|
       space_type_name = space.spaceType.get.standardsSpaceType.get
@@ -460,6 +481,7 @@ module Outpatient
           sizingzone.setCoolingMinimumAirFlowperZoneFloorArea(minimum_airflow_per_zone_floor_area)
       end
     end
+    return true
   end
 
   # swh adjustments specific to the prototype model

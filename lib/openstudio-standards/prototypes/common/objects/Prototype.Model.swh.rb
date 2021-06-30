@@ -290,7 +290,8 @@ class Standard
         peak_flow_rate_m3_per_s = OpenStudio.convert(peak_flow_rate_gal_per_hr, 'gal/hr', 'm^3/s').get
         use_name = "#{space_type.name} #{num_units} units"
       else
-        # TODO: - add building type or sice specific logic or just assume Gas? (SmallOffice and Warehouse are only non unit prototypes with Electric heating)
+        # @todo add building type or sice specific logic or just assume Gas?
+        #   (SmallOffice and Warehouse are only non unit prototypes with Electric heating)
         water_heater_fuel = 'NaturalGas' if water_heater_fuel.nil?
         num_units = 1
         peak_flow_rate_gal_per_hr = peak_flow_rate_gal_per_hr_per_ft2 * floor_area_ft2

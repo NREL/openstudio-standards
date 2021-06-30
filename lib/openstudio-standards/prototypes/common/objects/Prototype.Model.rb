@@ -365,8 +365,8 @@ Standard.class_eval do
 
     # The constructions lookup table uses a slightly different list of building types.
     @lookup_building_type = model_get_lookup_name(building_type)
-    # TODO: this is a workaround.  Need to synchronize the building type names
-    # across different parts of the code, including splitting of Office types
+    # @todo this is a workaround.  Need to synchronize the building type names
+    #   across different parts of the code, including splitting of Office types
     case building_type
       when 'SmallOffice', 'MediumOffice', 'LargeOffice', 'SmallOfficeDetailed', 'MediumOfficeDetailed', 'LargeOfficeDetailed'
         new_lookup_building_type = building_type
@@ -956,7 +956,7 @@ Standard.class_eval do
           # populate floor area
           space_type_hash[space_type][:effective_floor_area] += space.floorArea * space.multiplier
 
-          # TODO: - populate adjacent zones (need to add methods to space and zone for this)
+          # @todo populate adjacent zones (need to add methods to space and zone for this)
           if kitchen_makeup == 'Adjacent'
             space_type_hash[space_type][:adjacent_zones] << nil
           end
@@ -1071,7 +1071,7 @@ Standard.class_eval do
                 if zones_by_standards.key?(makeup_source) && zones_by_standards[makeup_source].key?(adjacent_zone)
                   first_adjacent_makeup_source = adjacent_zone
 
-                  # TODO: - add in extra arguments for makeup air
+                  # @todo add in extra arguments for makeup air
                   exhaust_makeup_inputs = {}
                   exhaust_makeup_inputs[makeup_target] = {} # for now only one makeup target per zone, but method could have multiple
                   exhaust_makeup_inputs[makeup_target][:source_zone] = first_adjacent_makeup_source
@@ -1192,7 +1192,7 @@ Standard.class_eval do
 
       # Get zone equipment fan
       # Currently prototypes with guestrooms use PTAC and 4PFC
-      # TODO: Implement additional system type (zonal and air loop-based)
+      # @todo Implement additional system type (zonal and air loop-based)
       thermal_zone.equipment.sort.each do |zone_equipment|
         if zone_equipment.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
           equipment = zone_equipment.to_ZoneHVACPackagedTerminalAirConditioner.get
@@ -1258,7 +1258,7 @@ Standard.class_eval do
     # currently modeled using different schedules
     # hence this code double counts savings from
     # sensors.
-    # TODO: Move occupancy sensor modeling from
+    # @todo Move occupancy sensor modeling from
     # schedule to code.
     case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
@@ -1358,9 +1358,9 @@ Standard.class_eval do
   #   into lookup table and implement that way instead of hard-coding as
   #   inputs in the spreadsheet.
   def model_add_exterior_lights(model, building_type, climate_zone, prototype_input)
-    # TODO: Standards - translate w/linear foot of facade, door, parking, etc
-    # into lookup table and implement that way instead of hard-coding as
-    # inputs in the spreadsheet.
+    # @todo Standards - translate w/linear foot of facade, door, parking, etc
+    #   into lookup table and implement that way instead of hard-coding as
+    #   inputs in the spreadsheet.
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding exterior lights')
 
     # Occupancy Sensing Exterior Lights
@@ -1449,7 +1449,7 @@ Standard.class_eval do
     # modify the infiltration coefficients
     case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-        # TODO: make this consistent with newer prototypes
+        # @todo make this consistent with newer prototypes
         const_coeff = 1.0
         temp_coeff = 0.0
         velo_coeff = 0.0
@@ -1583,8 +1583,7 @@ Standard.class_eval do
     # Add Economizers
     apply_economizers(climate_zone, model)
 
-    # TODO: What is the logic behind hard-sizing
-    # hot water coil convergence tolerances?
+    # @todo What is the logic behind hard-sizing hot water coil convergence tolerances?
     model.getControllerWaterCoils.sort.each { |obj| controller_water_coil_set_convergence_limits(obj) }
 
     # Adjust defrost curve limits for coil heating dx single speed

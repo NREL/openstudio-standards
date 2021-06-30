@@ -202,7 +202,10 @@ module Hospital
     return true
   end
 
-  # add swh
+  # reset kitchen outdoor air
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def reset_kitchen_oa(model)
     space_kitchen = model.getSpaceByName('Kitchen_Flr_5').get
     ventilation = space_kitchen.designSpecificationOutdoorAir.get
@@ -214,6 +217,7 @@ module Hospital
       when '90.1-2004', '90.1-2007', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         ventilation.setOutdoorAirFlowRate(3.776)
     end
+    return true
   end
 
   # update exhuast fan efficiency
@@ -236,6 +240,12 @@ module Hospital
     return true
   end
 
+  # add humidifier
+  #
+  # @param space_name [String] space name
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_humidifier(space_name, hot_water_loop, model)
     space = model.getSpaceByName(space_name).get
     zone = space.thermalZone.get
@@ -276,17 +286,26 @@ module Hospital
         humidity_spm.setControlZone(zone)
       end
     end
+    return true
   end
 
+  # add daylighting controls
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_add_daylighting_controls(model)
     space_names = ['Office1_Flr_5', 'Office3_Flr_5', 'Lobby_Records_Flr_1']
     space_names.each do |space_name|
       space = model.getSpaceByName(space_name).get
       space_add_daylighting_controls(space, false, false)
     end
+    return true
   end
 
   # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_adjust_vav_minimum_damper(model)
     model.getThermalZones.each do |zone|
       air_terminal = zone.airLoopHVACTerminal
@@ -319,8 +338,14 @@ module Hospital
         end
       end
     end
+    return true
   end
 
+  # reset room vav damper minimums
+  #
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
     case template
     when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
@@ -335,9 +360,8 @@ module Hospital
           air_terminal.setMinimumAirFlowFractionSchedule(model_add_schedule(model, 'Hospital OR_MinSA_Sched'))
         end
       end
-    else
-      return true
     end
+    return true
   end
 
   # certain air handlers do not have an economizer

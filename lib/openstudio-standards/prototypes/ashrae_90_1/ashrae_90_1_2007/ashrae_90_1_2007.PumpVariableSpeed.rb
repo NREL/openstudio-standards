@@ -25,4 +25,4 @@ class ASHRAE9012007 < ASHRAE901
       return 'Riding Curve'
     end
   end
-  end
+end

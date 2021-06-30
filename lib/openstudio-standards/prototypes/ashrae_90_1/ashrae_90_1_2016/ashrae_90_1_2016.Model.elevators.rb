@@ -13,8 +13,9 @@ class ASHRAE9012016 < ASHRAE901
   end
 
   # Determines the power of the elevator ventilation fan.
-  # 90.1-2016 has a requirement
-  # for ventilation fan efficiency.
+  # 90.1-2016 has a requirement for ventilation fan efficiency.
+  #
+  # @param model [OpenStudio::Model::Model] the model
   # @return [Double] the ventilaton fan power (W)
   def model_elevator_fan_pwr(model, vent_rate_cfm)
     vent_pwr_per_flow_w_per_cfm = 0.33

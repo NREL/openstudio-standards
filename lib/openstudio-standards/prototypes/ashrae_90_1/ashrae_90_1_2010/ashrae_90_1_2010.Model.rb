@@ -51,10 +51,10 @@ class ASHRAE9012010 < ASHRAE901
         building_type = model.getBuilding.standardsBuildingType.get
 
         case building_type
-          # TODO: Implementatation for other building types not meeting the requirement
-          # The offices, schools, warehouse (exempted), large hotel, outpatient,
-          # retails, apartments should meet the requirement according to Section
-          # 5.2.1.7 in Thornton et al. 2011
+          # @todo Implementatation for other building types not meeting the requirement
+          #   The offices, schools, warehouse (exempted), large hotel, outpatient,
+          #   retails, apartments should meet the requirement according to Section
+          #   5.2.1.7 in Thornton et al. 2011
           when 'Hospital'
             # Rotate the building counter-clockwise
             model_set_building_north_axis(model, 270.0)
@@ -78,7 +78,7 @@ class ASHRAE9012010 < ASHRAE901
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Boolean] true if transfer air is required, false otherwise
   def model_transfer_air_required?(model)
-    # TODO: It actually is for kitchen but not implemented yet
+    # @todo It actually is for kitchen but not implemented yet
     return false
   end
 end

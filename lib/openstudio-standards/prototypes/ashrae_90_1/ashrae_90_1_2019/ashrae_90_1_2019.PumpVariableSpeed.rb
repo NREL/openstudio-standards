@@ -141,4 +141,4 @@ class ASHRAE9012019 < ASHRAE901
       return 'Riding Curve'
     end
   end
-  end
+end

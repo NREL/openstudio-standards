@@ -141,7 +141,7 @@ class Standard
         if system['heating_type'] == 'Water To Air Heat Pump'
           # @code_sections [90.1-2016_6.5.5.2.1]
           # change highrise apartment heat rejection fan (< 5hp) from single speed to two speed evaporative fluid cooler
-          # TODO: this is temporary fix, it should be applied to all heat rejection devices smaller than 5hp.
+          # @todo this is temporary fix, it should be applied to all heat rejection devices smaller than 5hp.
           if system['heat_pump_loop_cooling_type'].nil?
             hp_loop_cooling_type = 'EvaporativeFluidCooler'
           else
