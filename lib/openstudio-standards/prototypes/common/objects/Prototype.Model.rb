@@ -91,7 +91,7 @@ Standard.class_eval do
     # only four zones in large hotel have daylighting controls
     # todo: YXC to merge to the main function
     model_add_daylighting_controls(model)
-    model_custom_daylighting_tweaks(building_type, climate_zone, @prototype_input, model)
+    model_custom_daylighting_tweaks(model, building_type, climate_zone, @prototype_input)
     model_update_exhaust_fan_efficiency(model)
     model_update_fan_efficiency(model)
     # rename air loop and plant loop nodes for readability

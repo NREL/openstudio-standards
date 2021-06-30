@@ -158,11 +158,14 @@ end
     return lookup_name
   end
 
-  # Makes changes to the daylighting sensors that are too
-  # specific to be coded generically.
+  # daylighting adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_daylighting_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 end
@@ -660,11 +663,14 @@ end
     return true
   end
 
-  # Makes changes to the daylighting sensors that are too
-  # specific to be coded generically.
+  # daylighting adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_daylighting_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 end
@@ -840,11 +846,14 @@ end
     return true
   end
 
-  # Makes changes to the daylighting sensors that are too
-  # specific to be coded generically.
+  # daylighting adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_daylighting_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 end
