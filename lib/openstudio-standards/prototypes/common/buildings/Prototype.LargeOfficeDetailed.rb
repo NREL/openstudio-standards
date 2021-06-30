@@ -86,6 +86,10 @@ module LargeOfficeDetailed
     return true
   end
 
+  # remove basement infiltration
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def remove_basement_infiltration(model)
     space_infltrations = model.getSpaceInfiltrationDesignFlowRates
     space_infltrations.each do |space_inf|
@@ -93,8 +97,13 @@ module LargeOfficeDetailed
         space_inf = nil
       end
     end
+    return true
   end
 
+  # update water heater loss coefficient
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019', 'NECB2011'
@@ -103,6 +112,7 @@ module LargeOfficeDetailed
           water_heater.setOnCycleLossCoefficienttoAmbientTemperature(11.25413987)
         end
     end
+    return true
   end
 
   # swh adjustments specific to the prototype model

@@ -2,10 +2,10 @@
 # These are changes that are inconsistent with other prototype
 # building types.
 module RetailStandalone
-  # TODO: The ElectricEquipment schedules are wrong in OpenStudio Standards... It needs to be 'RetailStandalone BLDG_EQUIP_SCH' for 90.1-2010 at least but probably all
-  # TODO: There is an OpenStudio bug where two heat exchangers are on the equipment list and it references the same single heat exchanger for both. This doubles the heat recovery energy.
-  # TODO: The HeatExchangerAirToAir is not calculating correctly. It does not equal the legacy IDF and has higher energy usage due to that.
-  # TODO: Need to determine if WaterHeater can be alone or if we need to 'fake' it.
+  # @todo The ElectricEquipment schedules are wrong in OpenStudio Standards... It needs to be 'RetailStandalone BLDG_EQUIP_SCH' for 90.1-2010 at least but probably all
+  # @todo There is an OpenStudio bug where two heat exchangers are on the equipment list and it references the same single heat exchanger for both. This doubles the heat recovery energy.
+  # @todo The HeatExchangerAirToAir is not calculating correctly. It does not equal the legacy IDF and has higher energy usage due to that.
+  # @todo Need to determine if WaterHeater can be alone or if we need to 'fake' it.
 
   # hvac adjustments specific to the prototype model
   #

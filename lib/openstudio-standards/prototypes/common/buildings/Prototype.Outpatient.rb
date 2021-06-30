@@ -1,6 +1,5 @@
 # Custom changes for the Outpatient prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module Outpatient
   # hvac adjustments specific to the prototype model
   #
@@ -80,6 +79,10 @@ module Outpatient
     return true
   end
 
+  # add extra equipment for mechanical room
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_extra_equip_elevator_pump_room(model)
     elevator_pump_room = model.getSpaceByName('Floor 1 Elevator Pump Room').get
     elec_equip_def = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
@@ -128,6 +131,11 @@ module Outpatient
     return true
   end
 
+  # adjust cooling setpoint
+  #
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def adjust_clg_setpoint(climate_zone, model)
     model.getSpaceTypes.sort.each do |space_type|
       space_type_name = space_type.name.get
@@ -151,6 +159,10 @@ module Outpatient
     return true
   end
 
+  # adjust infiltration
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def adjust_infiltration(model)
     case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -185,8 +197,15 @@ module Outpatient
       else
         return true
     end
+    return true
   end
 
+  # add door infiltration
+  #
+  # @param template [String] the model template
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_door_infiltration(climate_zone, model)
     # add extra infiltration for vestibule door
     case template
@@ -221,6 +240,7 @@ module Outpatient
         infiltration_vestibule_door.setDesignFlowRate(infiltration_rate_vestibule_door)
         infiltration_vestibule_door.setSpace(vestibule_space)
     end
+    return true
   end
 
   # add humidifier to AHU1 (contains operating room1)
@@ -267,6 +287,9 @@ module Outpatient
 
   # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
   # AHU1 doesn't have economizer
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_modify_oa_controller(model)
     model.getAirLoopHVACs.sort.each do |air_loop|
       oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
@@ -285,6 +308,7 @@ module Outpatient
         controller_oa.setMinimumFractionofOutdoorAirSchedule(model_add_schedule(model, 'OutPatientHealthCare BLDG_OA_FRAC_SCH'))
       end
     end
+    return true
   end
 
   def model_adjust_vav_minimum_damper(model)
@@ -374,6 +398,10 @@ module Outpatient
     end
   end
 
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
@@ -393,6 +421,7 @@ module Outpatient
           exhaust_fan.setPressureRise(125)
         end
     end
+    return true
   end
 
   # assign the minimum total air changes to the cooling minimum air flow in Sizing:Zone

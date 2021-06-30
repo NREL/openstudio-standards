@@ -1,6 +1,5 @@
 # Custom changes for the Warehouse prototype
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module Warehouse
 
   # hvac adjustments specific to the prototype model
@@ -248,6 +247,7 @@ end
 
   # Get building door information to update infiltration
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # return [Hash] Door infiltration information
   def get_building_door_info(model)
     # Get Bulk storage space infiltration schedule name

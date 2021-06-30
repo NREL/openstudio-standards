@@ -122,9 +122,15 @@ end
   # Does nothing unless implmented by the specific standard
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
   end
-  # Does nothing unless implmented by the specific standard
+
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
+    return true
   end
+
   # Does nothing unless implmented by the specific standard
   def model_update_fan_efficiency(model)
   end
@@ -260,8 +266,12 @@ end
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
   end
 
-  # Does nothing unless implmented by the specific standard
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
+    return true
   end
 
   # Does nothing unless implmented by the specific standard
@@ -615,8 +625,12 @@ end
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
   end
 
-  # Does nothing unless implmented by the specific standard
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
+    return true
   end
 
   # Does nothing unless implmented by the specific standard
@@ -783,8 +797,12 @@ end
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
   end
 
-  # Does nothing unless implmented by the specific standard
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
+    return true
   end
 
   # Does nothing unless implmented by the specific standard

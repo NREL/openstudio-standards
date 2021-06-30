@@ -1,6 +1,5 @@
 # Custom changes for the LargeOffice prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module LargeOffice
   # hvac adjustments specific to the prototype model
   #

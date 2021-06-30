@@ -1,6 +1,5 @@
 # Custom changes for the SmallDataCenterLowITE prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module SmallDataCenterLowITE
   # hvac adjustments specific to the prototype model
   #
@@ -25,8 +24,10 @@ module SmallDataCenterLowITE
   end
 
   # add IT equipment (ITE object) for data center building types
-  # Normal electric equipment has been added in model_add_load prior to this
-  # will replace with ITE object here
+  # Normal electric equipment has been added in model_add_load prior to this will replace with ITE object here
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_data_center_load(model)
     model.getSpaceTypes.each do |space_type|
       # Get the standards data
@@ -63,14 +64,18 @@ module SmallDataCenterLowITE
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set Design Power Input Schedule to #{elec_equip_sch}.")
           end
           it_equipment.setCPULoadingSchedule(model.alwaysOnDiscreteSchedule)
-
         end
       end
     end
     # remove normal electric equipment
     model.getElectricEquipments.each(&:remove)
+    return true
   end
 
+  # modify CRAC supply air setpoint manager
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def modify_crac_sa_stpt_manager(model)
     supply_temp_sch = get_crac_supply_temp_sch(model)
     model.getSetpointManagerScheduleds.each do |stpt_manager|
@@ -78,8 +83,13 @@ module SmallDataCenterLowITE
 
       stpt_manager.setSchedule(supply_temp_sch)
     end
+    return true
   end
 
+  # get CRAC supply air temperature schedule
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Schedule] supply temperature schedule object
   def get_crac_supply_temp_sch(model)
     supply_temp_diff_max = 0
     supply_temp_diff_sch = nil
@@ -117,7 +127,6 @@ module SmallDataCenterLowITE
                                                               name = 'AHU Supply Temp Sch updated')
       end
     end
-
     return supply_temp_sch
   end
 

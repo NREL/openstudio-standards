@@ -1,6 +1,5 @@
 # Custom changes for the RetailStripmall prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module RetailStripmall
   # hvac adjustments specific to the prototype model
   #

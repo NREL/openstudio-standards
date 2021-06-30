@@ -1,6 +1,5 @@
 # Custom changes for the TallBuilding prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module TallBuilding
   # hvac adjustments specific to the prototype model
   #
@@ -43,12 +42,15 @@ module TallBuilding
     return true
   end
 
-  # Add elevators to elevator machine room
-  # schedules:
+  # Add elevators to elevator machine room schedules:
   # Large Office BLDG ELEVATORS, OfficeLarge ELEV_LIGHT_FAN_SCH_ADD_DF
   # HotelLarge BLDG_ELEVATORS, HotelLarge ELEV_LIGHT_FAN_SCH_ADD_DF
   # ApartmentMidRise BLDG_ELEVATORS, ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7
   # Retail elevator schedule developed
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param additional_params [Hash] hash of additional parameters
+  # @return [Bool] returns true if successful, false if not
   def add_elevator_system_loads(model, additional_params)
     # get the elevator machine room space from the model
     if model.getSpaceTypeByName('Elevator Machine Room').empty?
@@ -91,8 +93,20 @@ module TallBuilding
                        'ApartmentMidRise BLDG_ELEVATORS', 'ApartmentHighRise ELEV_LIGHT_FAN_SCH_24_7')
     add_elevator_equip(model, elev_mc_room, num_elev_hotel, 'Hotel', motor_power_per_elev, fan_light_power_per_elev,
                        'HotelLarge BLDG_ELEVATORS', 'HotelLarge ELEV_LIGHT_FAN_SCH_24_7')
+    return true
   end
 
+  # adds elevator equipment to space
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param space [OpenStudio::Model::Space] OpenStudio space object
+  # @param num_of_elev [Double] number of elevators
+  # @param function_type [String] function type
+  # @param motor_power_per_elev [Double] elevator motor power in watts
+  # @param fan_light_power_per_elev [Double] elevator fan power in watts
+  # @param elev_power_sch_name [String] schedule to use for the elevator motor
+  # @param elev_fan_light_sch_name [String] schedule to use for the elevator fan
+  # @return [Bool] returns true if successful, false if not
   def add_elevator_equip(model, space, num_of_elev, function_type, motor_power_per_elev, fan_light_power_per_elev,
                          elev_power_sch_name, elev_fan_light_sch_name)
     motor_equip_frac_loss = 0.85
@@ -124,9 +138,15 @@ module TallBuilding
     elevator_fan_sch = model_add_schedule(model, elev_fan_light_sch_name)
     elevator_fan_equipment.setSchedule(elevator_fan_sch)
     elevator_fan_equipment.setSpace(space)
+    return true
   end
 
   # for tall and super tall buildings, add main (multiple) and booster swh in model_custom_hvac_tweaks
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @param additional_params [Hash] hash of additional parameters
+  # @return [Bool] returns true if successful, false if not
   def add_swh_tall_bldg(model, prototype_input, additional_params)
     # get all building stories and rank based on Z-origin
     story_info = {}
@@ -268,9 +288,13 @@ module TallBuilding
                              OpenStudio.convert(prototype_input['laundry_water_use_temperature'], 'F', 'C').get,
                              nil)
     end
+    return true
   end
 
   # update the infiltration coefficients of tall buildings based on Lisa Ng's research (from NIST)
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def update_infil_coeff(model)
     #       System On  | System Off
     #  A: -0.03973203 | 0
@@ -331,22 +355,30 @@ module TallBuilding
         infiltration_hvac_off.setVelocitySquaredTermCoefficient(coeff_d_off)
       end
     end
+    return true
   end
 
   # apply vertical weather variations to tall buildings
   # current method is using the E+ default variation trend by specifying the height of outdoor air nodes
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def apply_vertical_weather_variation(model)
-    # OA node height is not implemented OpenStudio yet.
-    # Temporary fix to be done via adding EnergyPlus measure.
+    # @todo OA node height is not implemented OpenStudio yet.
+    # @todo Temporary fix to be done via adding EnergyPlus measure.
     # model.getAirLoopHVACOutdoorAirSystems.each do |oa_system|
     #   # get the outdoor air system outdoor air node
     #   oa_node = oa_system.outdoorAirModelObject.get.to_Node.get
     #   # get the height of the plenum if any, assign to outdoor air node
     #
     # end
+    return true
   end
 
   # HighriseApartment doesn't apply thermostat to corridor spaces
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_thermostat_to_corridor(model)
     thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(model)
     thermostat.setName('HighriseApartment Corridor Thermostat')
@@ -363,6 +395,7 @@ module TallBuilding
         end
       end
     end
+    return true
   end
 
   # swh adjustments specific to the prototype model
@@ -820,6 +853,11 @@ module TallBuilding
     return true
   end
 
+  # generate input json based on input parameters
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param additional_params [Hash] hash of additional parameters
+  # @return [Json] json file
   def generate_new_json(model, additional_params)
     new_json = []
 
@@ -967,6 +1005,10 @@ module TallBuilding
     return JSON.pretty_generate(new_json)
   end
 
+  # generate multipler list from number of floors
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Array<Double>] mutiplier list
   def get_multiplier_list(num_floors)
     a = (num_floors.to_f / 10).ceil #  a = (25.0/10).ceil => 3
     return num_floors if a == 1
@@ -988,6 +1030,12 @@ module TallBuilding
     return multiplier_list
   end
 
+  # adjust space boundary conditions to adiabatic
+  #
+  # @param space [OpenStudio::Model::Space] OpenStudio space object
+  # @param if_top_story_floor_adiabatic [Bool] flag if top floor is adiabatic
+  # @param if_ground_story_plenum_adiabatic [Bool] flag if ground story plenum is adiabatic
+  # @return [Bool] returns true if successful, false if not
   def update_space_outside_boundary_to_adiabatic(space, if_top_story_floor_adiabatic: false, if_ground_story_plenum_adiabatic: false)
     if (space.name.to_s.include? 'Plenum') && !if_top_story_floor_adiabatic
       space.surfaces.each do |surface|
@@ -1017,8 +1065,21 @@ module TallBuilding
         end
       end
     end
+    return true
   end
 
+  # copies a building story
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param original_story [OpenStudio::Model::BuildingStory] OpenStudio building story object
+  # @param multiplier [Double] multipler for number of stories
+  # @param new_z_origin [Double] new z origin height in meters
+  # @param f_to_c_height [Double] floor to ceiling height in meters
+  # @param f_to_f_height [Double] floor to floor height in meters
+  # @param current_story [OpenStudio::Model::BuildingStory] OpenStudio building story object
+  # @param if_top_story_floor_adiabatic [Bool] flag if top floor is adiabatic
+  # @param if_ground_story_plenum_adiabatic [Bool] flag if ground story plenum is adiabatic
+  # @return [Bool] returns true if successful, false if not
   def deep_copy_story(model, original_story, multiplier, new_z_origin, f_to_c_height, f_to_f_height, current_story, if_top_story_floor_adiabatic: false, if_ground_story_plenum_adiabatic: false)
     # clone the story
     new_story = original_story.clone(model).to_BuildingStory.get
@@ -1063,5 +1124,6 @@ module TallBuilding
         update_space_outside_boundary_to_adiabatic(new_space, if_top_story_floor_adiabatic: if_top_story_floor_adiabatic, if_ground_story_plenum_adiabatic: if_ground_story_plenum_adiabatic)
       end
     end
+    return true
   end
 end

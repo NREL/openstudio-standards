@@ -1,6 +1,5 @@
 # Custom changes for the SecondarySchool prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module SecondarySchool
   # hvac adjustments specific to the prototype model
   #
@@ -74,6 +73,9 @@ module SecondarySchool
   end
 
   # add extra equipment for kitchen
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_extra_equip_kitchen(model)
     kitchen_space = model.getSpaceByName('Kitchen_ZN_1_FLR_1')
     kitchen_space = kitchen_space.get
@@ -107,8 +109,13 @@ module SecondarySchool
         elec_equip1.setSchedule(model_add_schedule(model, 'SchoolSecondary ALWAYS_ON'))
         elec_equip2.setSchedule(model_add_schedule(model, 'SchoolSecondary ALWAYS_ON'))
     end
+    return true
   end
 
+  # update water heater ambient conditions
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def update_waterheater_ambient_parameters(model)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('Booster')
@@ -117,6 +124,7 @@ module SecondarySchool
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen_ZN_1_FLR_1 ZN').get)
       end
     end
+    return true
   end
 
   # swh adjustments specific to the prototype model
@@ -756,15 +764,16 @@ module SecondarySchool
 
   # Type of SAT reset for this building type
   #
-  # @param air_loop_hvac [OpenStudio::model::AirLoopHVAC] Airloop
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @return [String] Returns type of SAT reset
   def air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
     return 'oa'
   end
 
   # List transfer air target and source zones, and air aflow (cfm)
-  #
   # code_sections [90.1-2019_6.5.7.1], [90.1-2016_6.5.7.1]
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Hash] target zones (key) and source zones (value) and air flow (value)
   def model_transfer_air_target_and_source_zones(model)
     model_transfer_air_target_and_source_zones_hash = {

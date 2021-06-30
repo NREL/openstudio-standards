@@ -1,6 +1,5 @@
 # Custom changes for the SmallHotel prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module SmallHotel
   # hvac adjustments specific to the prototype model
   #
@@ -62,6 +61,9 @@ module SmallHotel
   end
 
   # add this for elevator lights/fans (elevator lift is implemented through standard lookup)
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_extra_equip_elevator_coreflr1(model)
     elevator_coreflr1 = model.getSpaceByName('ElevatorCoreFlr1').get
     elec_equip_def = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
@@ -100,6 +102,10 @@ module SmallHotel
     return true
   end
 
+  # update water heater ambient conditions
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def update_waterheater_ambient_parameters(model)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('200gal')
@@ -108,6 +114,7 @@ module SmallHotel
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('LaundryRoomFlr1 ZN').get)
       end
     end
+    return true
   end
 
   # swh adjustments specific to the prototype model

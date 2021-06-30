@@ -1,6 +1,5 @@
 # Custom changes for the LargeDataCenterLowITE prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module LargeDataCenterLowITE
   # hvac adjustments specific to the prototype model
   #
@@ -25,8 +24,10 @@ module LargeDataCenterLowITE
   end
 
   # add IT equipment (ITE object) for data center building types
-  # Normal electric equipment has been added in model_add_load prior to this
-  # will replace with ITE object here
+  # Normal electric equipment has been added in model_add_load prior to this will replace with ITE object here
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_data_center_load(model)
     model.getSpaceTypes.each do |space_type|
       # Get the standards data
@@ -69,9 +70,10 @@ module LargeDataCenterLowITE
     end
     # remove normal electric equipment
     model.getElectricEquipments.each(&:remove)
+    return true
   end
 
-  # TODO: (maybe) for large data center, if sized AHU is too big, implement multiple AHUs to the same zone.
+  # @todo (maybe) for large data center, if sized AHU is too big, implement multiple AHUs to the same zone.
   # def update_crah_num(building_type,prototype_input,template,model,sizing_run_dir)
   #
   #   # get the chilled water loop
@@ -118,6 +120,10 @@ module LargeDataCenterLowITE
   #   end
   # end
 
+  # modify CRAH supply air setpoint manager
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def modify_crah_sa_stpt_manager(model)
     supply_temp_sch = get_crah_supply_temp_sch(model)
     model.getSetpointManagerScheduleds.each do |stpt_manager|
@@ -125,8 +131,13 @@ module LargeDataCenterLowITE
 
       stpt_manager.setSchedule(supply_temp_sch)
     end
+    return true
   end
 
+  # get CRAH supply air temperature schedule
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Schedule] supply temperature schedule object
   def get_crah_supply_temp_sch(model)
     supply_temp_diff_max = 0
     supply_temp_diff_sch = nil
@@ -164,7 +175,6 @@ module LargeDataCenterLowITE
                                                               name = 'AHU Supply Temp Sch updated')
       end
     end
-
     return supply_temp_sch
   end
 

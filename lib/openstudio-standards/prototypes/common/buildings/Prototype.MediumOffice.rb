@@ -1,6 +1,5 @@
 # Custom changes for the MediumOffice prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module MediumOffice
   # hvac adjustments specific to the prototype model
   #
@@ -87,42 +86,46 @@ module MediumOffice
     return true
   end
 
-  # add hvac
-
+  # add door infiltration
+  #
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_door_infiltration(climate_zone, model)
     # add extra infiltration for entry door in m3/s (there is no attic in 'DOE Ref Pre-1980')
-    unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
-      entry_space = model.getSpaceByName('Perimeter_bot_ZN_1').get
-      infiltration_entrydoor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
-      infiltration_entrydoor.setName('entry door Infiltration')
-      infiltration_per_zone_entrydoor = 0
-      if template == '90.1-2004'
-        infiltration_per_zone_entrydoor = 1.04300287
-        infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeMedium INFIL_Door_Opening_SCH'))
-      elsif template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
-        case climate_zone
-          when 'ASHRAE 169-2006-0A',
-               'ASHRAE 169-2006-1A',
-               'ASHRAE 169-2006-0B',
-               'ASHRAE 169-2006-1B',
-               'ASHRAE 169-2006-2A',
-               'ASHRAE 169-2006-2B',
-               'ASHRAE 169-2013-0A',
-               'ASHRAE 169-2013-1A',
-               'ASHRAE 169-2013-0B',
-               'ASHRAE 169-2013-1B',
-               'ASHRAE 169-2013-2A',
-               'ASHRAE 169-2013-2B'
-            infiltration_per_zone_entrydoor = 1.04300287
-            infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeMedium INFIL_Door_Opening_SCH'))
-          else
-            infiltration_per_zone_entrydoor = 0.678659786
-            infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeMedium INFIL_Door_Opening_SCH'))
-        end
+    return false if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
+
+    entry_space = model.getSpaceByName('Perimeter_bot_ZN_1').get
+    infiltration_entrydoor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+    infiltration_entrydoor.setName('entry door Infiltration')
+    infiltration_per_zone_entrydoor = 0
+    if template == '90.1-2004'
+      infiltration_per_zone_entrydoor = 1.04300287
+      infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeMedium INFIL_Door_Opening_SCH'))
+    elsif template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
+      case climate_zone
+        when 'ASHRAE 169-2006-0A',
+             'ASHRAE 169-2006-1A',
+             'ASHRAE 169-2006-0B',
+             'ASHRAE 169-2006-1B',
+             'ASHRAE 169-2006-2A',
+             'ASHRAE 169-2006-2B',
+             'ASHRAE 169-2013-0A',
+             'ASHRAE 169-2013-1A',
+             'ASHRAE 169-2013-0B',
+             'ASHRAE 169-2013-1B',
+             'ASHRAE 169-2013-2A',
+             'ASHRAE 169-2013-2B'
+          infiltration_per_zone_entrydoor = 1.04300287
+          infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeMedium INFIL_Door_Opening_SCH'))
+        else
+          infiltration_per_zone_entrydoor = 0.678659786
+          infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeMedium INFIL_Door_Opening_SCH'))
       end
-      infiltration_entrydoor.setDesignFlowRate(infiltration_per_zone_entrydoor)
-      infiltration_entrydoor.setSpace(entry_space)
     end
+    infiltration_entrydoor.setDesignFlowRate(infiltration_per_zone_entrydoor)
+    infiltration_entrydoor.setSpace(entry_space)
+    return true
   end
 
   # daylighting adjustments specific to the prototype model

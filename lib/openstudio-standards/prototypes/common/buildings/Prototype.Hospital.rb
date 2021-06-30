@@ -1,6 +1,5 @@
 # Custom changes for the Hospital prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module Hospital
   # hvac adjustments specific to the prototype model
   #
@@ -132,6 +131,9 @@ module Hospital
   end
 
   # add extra equipment for kitchen
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_extra_equip_kitchen(model)
     kitchen_space = model.getSpaceByName('Kitchen_Flr_5')
     kitchen_space = kitchen_space.get
@@ -165,8 +167,13 @@ module Hospital
         elec_equip1.setSchedule(model_add_schedule(model, 'Hospital ALWAYS_ON'))
         elec_equip2.setSchedule(model_add_schedule(model, 'Hospital ALWAYS_ON'))
     end
+    return true
   end
 
+  # update water heater ambient conditions
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def update_waterheater_ambient_parameters(model)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('300gal')
@@ -179,6 +186,7 @@ module Hospital
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen_Flr_5 ZN').get)
       end
     end
+    return true
   end
 
   # swh adjustments specific to the prototype model
@@ -208,6 +216,10 @@ module Hospital
     end
   end
 
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
@@ -221,6 +233,7 @@ module Hospital
           exhaust_fan.setPressureRise(125)
         end
     end
+    return true
   end
 
   def add_humidifier(space_name, hot_water_loop, model)
@@ -327,6 +340,10 @@ module Hospital
     end
   end
 
+  # certain air handlers do not have an economizer
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_modify_oa_controller(model)
     model.getAirLoopHVACs.sort.each do |air_loop|
       oa_sys = air_loop.airLoopHVACOutdoorAirSystem.get
@@ -336,6 +353,7 @@ module Hospital
           oa_control.setEconomizerControlType('NoEconomizer')
       end
     end
+    return true
   end
 
   # geometry adjustments specific to the prototype model
