@@ -1098,42 +1098,7 @@ class ECMS
   # Apply efficiencies and performance curves for ECM "hs11_pthp"
   def apply_efficiency_ecm_hs11_pthp(model)
     fr_backup_coil_cap_as_dx_coil_cap = 0.5  # fraction of electric backup heating coil capacity assigned to dx heating coil
-    ashp_eqpt_name = "NECB2015_ASHP"
-    model.getAirLoopHVACs.sort.each do |isys|
-      clg_dx_coil = nil
-      htg_dx_coil = nil
-      backup_coil = nil
-      # Find the coils on the air loop
-      isys.supplyComponents.sort.each do |icomp|
-        if icomp.to_CoilCoolingDXSingleSpeed.is_initialized
-          clg_dx_coil = icomp.to_CoilCoolingDXSingleSpeed.get
-        elsif icomp.to_CoilHeatingDXSingleSpeed.is_initialized
-          htg_dx_coil = icomp.to_CoilHeatingDXSingleSpeed.get
-        elsif  icomp.to_CoilHeatingElectric.is_initialized
-          backup_coil = icomp.to_CoilHeatingElectric.get
-        end
-      end
-      if clg_dx_coil && htg_dx_coil && backup_coil
-        clg_dx_coil_init_name = get_hvac_comp_init_name(clg_dx_coil,false)
-        clg_dx_coil.setName(clg_dx_coil_init_name)
-        if clg_dx_coil.autosizedRatedTotalCoolingCapacity.is_initialized
-          clg_dx_coil_cap = clg_dx_coil.autosizedRatedTotalCoolingCapacity.to_f
-        else
-          clg_dx_coil_cap = clg_dx_coil.ratedTotalCoolingCapacity.to_f
-        end
-        htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil,true)
-        htg_dx_coil.setName(htg_dx_coil_init_name)
-        backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
-        # set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
-        dx_cap = fr_backup_coil_cap_as_dx_coil_cap*backup_coil_cap
-        if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
-        clg_dx_coil.setRatedTotalCoolingCapacity(dx_cap)
-        htg_dx_coil.setRatedTotalHeatingCapacity(dx_cap)
-        # assign performance curves and COPs
-        coil_cooling_dx_single_speed_apply_efficiency_and_curves(clg_dx_coil,ashp_eqpt_name)
-        coil_heating_dx_single_speed_apply_efficiency_and_curves(htg_dx_coil,ashp_eqpt_name)
-      end
-    end
+    apply_efficiency_ecm_hs12_ashpsys(model)
     pthp_eqpt_name = "HS11_PTHP"
     model.getAirLoopHVACs.sort.each do |isys|
       isys.thermalZones.each do |zone|
