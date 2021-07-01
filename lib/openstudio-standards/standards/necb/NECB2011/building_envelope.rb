@@ -772,7 +772,7 @@ class NECB2011
     # L or a V).
     exp_surf_info["exp_nonplenum_roofs"].sort.each do |roof|
       # sub_surface_create_centered_subsurface_from_scaled_surface(roof, srr_lim, model)
-      sub_surface_create_scaled_subsurfaces_from_surface(surface: roof, area_fraction: srr_lim, model: model, consturction: skylight_construct_set)
+      sub_surface_create_scaled_subsurfaces_from_surface(surface: roof, area_fraction: srr_lim, construction: skylight_construct_set)
     end
     return true
   end
