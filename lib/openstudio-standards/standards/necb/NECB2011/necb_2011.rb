@@ -435,7 +435,7 @@ class NECB2011 < Standard
     scale_y = convert_arg_to_f(variable: scale_y,default: 1.0)
     scale_z = convert_arg_to_f(variable: scale_z,default: 1.0)
     if scale_x != 1.0 || scale_y != 1.0 || scale_z != 1.0
-      BTAP::Geometry::scale_model(model, scale_x, scale_x, scale_x)
+      BTAP::Geometry::scale_model(model, scale_x, scale_y, scale_z)
     end
   end
 
