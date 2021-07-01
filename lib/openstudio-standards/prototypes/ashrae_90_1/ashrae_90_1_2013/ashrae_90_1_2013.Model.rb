@@ -38,7 +38,7 @@ class ASHRAE9012013 < ASHRAE901
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] Returns true if successful, false otherwise
+  # @return [Bool] returns true if successful, false if not
   def model_fenestration_orientation(model, climate_zone)
     # Building rotation to meet the same code requirement for
     # 90.1-2010 are kept
@@ -181,7 +181,7 @@ class ASHRAE9012013 < ASHRAE901
   # @note code_sections [90.1-2013_6.5.7.1.2]
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] true if transfer air is required, false otherwise
+  # @return [Bool] returns true if transfer air is required, false if not
   def model_transfer_air_required?(model)
     # @todo It actually is for kitchen but not implemented yet
     return false

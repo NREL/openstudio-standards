@@ -236,7 +236,7 @@ class Standard
 
   # Determines if the construction is a simple glazing construction,
   # as indicated by having a single layer of type SimpleGlazing.
-  # @return [Bool] returns true if it is a simple glazing, false if not.
+  # @return [Bool] returns true if it is a simple glazing, false if not
   def construction_simple_glazing?(construction)
     # Not simple if more than 1 layer
     if construction.layers.length > 1

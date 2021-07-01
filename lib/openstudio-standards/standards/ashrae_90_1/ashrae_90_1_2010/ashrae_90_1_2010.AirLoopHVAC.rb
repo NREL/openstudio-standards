@@ -1,12 +1,11 @@
 class ASHRAE9012010 < ASHRAE901
   # @!group AirLoopHVAC
 
-  # Apply multizone vav outdoor air method and
-  # adjust multizone VAV damper positions
-  # to achieve a system minimum ventilation effectiveness
-  # of 0.6 per PNNL.  Hard-size the resulting min OA
-  # into the sizing:system object.
+  # Apply multizone vav outdoor air method and adjust multizone VAV damper positions
+  # to achieve a system minimum ventilation effectiveness of 0.6 per PNNL.
+  # Hard-size the resulting min OA into the sizing:system object.
   #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # return [Bool] returns true if successful, false if not
   # @todo move building-type-specific code to Prototype classes
   def air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(air_loop_hvac)
@@ -14,7 +13,7 @@ class ASHRAE9012010 < ASHRAE901
     # Only applies to multi-zone vav systems
     # exclusion: for Outpatient: (1) both AHU1 and AHU2 in 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004'
     # (2) AHU1 in 2004-2019
-    # TODO refactor: move building-type-specific code to Prototype classes
+    # @todo refactor: move building-type-specific code to Prototype classes
     if air_loop_hvac_multizone_vav_system?(air_loop_hvac) && !(air_loop_hvac.name.to_s.include? 'Outpatient F1')
       air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
     end
@@ -22,8 +21,10 @@ class ASHRAE9012010 < ASHRAE901
     return true
   end
 
-  # Determine the limits for the type of economizer present
-  # on the AirLoopHVAC, if any.
+  # Determine the limits for the type of economizer present on the AirLoopHVAC, if any.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Array<Double>] [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
   def air_loop_hvac_economizer_limits(air_loop_hvac, climate_zone)
     drybulb_limit_f = nil
@@ -60,17 +61,21 @@ class ASHRAE9012010 < ASHRAE901
 
   # Determine if the system economizer must be integrated or not.
   # All economizers must be integrated in 90.1-2010
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if required, false if not
   def air_loop_hvac_integrated_economizer_required?(air_loop_hvac, climate_zone)
-    integrated_economizer_required = true
-    return integrated_economizer_required
+    return true
   end
 
   # Check the economizer type currently specified in the ControllerOutdoorAir object on this air loop
   # is acceptable per the standard.
   #
-  # @param (see #economizer_required?)
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Bool] Returns true if allowable, if the system has no economizer or no OA system.
-  # Returns false if the economizer type is not allowable.
+  #   Returns false if the economizer type is not allowable.
   def air_loop_hvac_economizer_type_allowable?(air_loop_hvac, climate_zone)
     # EnergyPlus economizer types
     # 'NoEconomizer'
@@ -153,13 +158,12 @@ class ASHRAE9012010 < ASHRAE901
   end
 
   # Determine if multizone vav optimization is required.
+  # @note code_sections [90.1-2010_6.5.3.3]
   #
-  # @code_sections [90.1-2010_6.5.3.3]
-  # @param (see #economizer_required?)
-  # @return [Bool] Returns true if required, false if not.
-  # @todo Add exception logic for
-  #   systems with AIA healthcare ventilation requirements
-  #   dual duct systems
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if required, false if not
+  # @todo Add exception logic for systems with AIA healthcare ventilation requirements dual duct systems
   def air_loop_hvac_multizone_vav_optimization_required?(air_loop_hvac, climate_zone)
     multizone_opt_required = false
 
@@ -229,7 +233,7 @@ class ASHRAE9012010 < ASHRAE901
       return multizone_opt_required
     end
 
-    # TODO: Not required for dual-duct systems
+    # @todo Not required for dual-duct systems
     # if self.isDualDuct
     # OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{controller_oa.name}: multizone optimization is not applicable because it is a dual duct system")
     # return multizone_opt_required
@@ -242,9 +246,9 @@ class ASHRAE9012010 < ASHRAE901
   end
 
   # Determines the OA flow rates above which an economizer is required.
-  # Two separate rates, one for systems with an economizer and another
-  # for systems without.
-  # are zero for both types.
+  # Two separate rates, one for systems with an economizer and another for systems without.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @return [Array<Double>] [min_oa_without_economizer_cfm, min_oa_with_economizer_cfm]
   def air_loop_hvac_demand_control_ventilation_limits(air_loop_hvac)
     min_oa_without_economizer_cfm = 3000
@@ -252,9 +256,11 @@ class ASHRAE9012010 < ASHRAE901
     return [min_oa_without_economizer_cfm, min_oa_with_economizer_cfm]
   end
 
-  # Determine the air flow and number of story limits
-  # for whether motorized OA damper is required.
-  # @return [Array<Double>] [minimum_oa_flow_cfm, maximum_stories]
+  # Determine the air flow and number of story limits for whether motorized OA damper is required.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Array<Double>] [minimum_oa_flow_cfm, maximum_stories]. If both nil, never required
   def air_loop_hvac_motorized_oa_damper_limits(air_loop_hvac, climate_zone)
     case climate_zone
     when 'ASHRAE 169-2006-0A',
@@ -285,10 +291,11 @@ class ASHRAE9012010 < ASHRAE901
     return [minimum_oa_flow_cfm, maximum_stories]
   end
 
-  # Determine the number of stages that should be used as controls
-  # for single zone DX systems.  90.1-2010 depends on the cooling
-  # capacity of the system.
+  # Determine the number of stages that should be used as controls for single zone DX systems.
+  # 90.1-2010 depends on the cooling capacity of the system.
   #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Integer] the number of stages: 0, 1, 2
   def air_loop_hvac_single_zone_controls_num_stages(air_loop_hvac, climate_zone)
     min_clg_cap_btu_per_hr = 65_000
@@ -307,8 +314,9 @@ class ASHRAE9012010 < ASHRAE901
   # Determine if the system required supply air temperature
   # (SAT) reset. For 90.1-2010, SAT reset requirements are based on climate zone.
   #
-  # @param (see #economizer_required?)
-  # @return [Bool] Returns true if required, false if not.
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if required, false if not
   def air_loop_hvac_supply_air_temperature_reset_required?(air_loop_hvac, climate_zone)
     is_sat_reset_required = false
 
@@ -368,10 +376,13 @@ class ASHRAE9012010 < ASHRAE901
     end
   end
 
-  # Determine the airflow limits that govern whether or not
-  # an ERV is required.  Based on climate zone and % OA.
-  # @return [Double] the flow rate above which an ERV is required.
-  # if nil, ERV is never required.
+  # Determine the airflow limits that govern whether or not an ERV is required.
+  # Based on climate zone and % OA.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param pct_oa [Double] percentage of outdoor air
+  # @return [Double] the flow rate above which an ERV is required. if nil, ERV is never required.
   def air_loop_hvac_energy_recovery_ventilator_flow_limit(air_loop_hvac, climate_zone, pct_oa)
     # Table 6.5.6.1
     search_criteria = {

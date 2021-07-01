@@ -221,7 +221,7 @@ class Standard
     # Delete all the unused resource objects
     model_remove_unused_resource_objects(model)
 
-    # TODO: turn off self shading
+    # @todo turn off self shading
     # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
     # It won't be taken into account, while it should: only self shading from the building itself should be turned off but to my knowledge there isn't a way to do this in E+
 
@@ -534,7 +534,7 @@ class Standard
       gp['zones'] = gp_zns
     end
 
-    # TODO: Remove the secondary zones before
+    # @todo Remove the secondary zones before
     # determining the area used to pick the HVAC system, per PNNL PRM RM
 
     # If there is any district heating or district cooling in the proposed building, the heating and cooling
@@ -617,7 +617,7 @@ class Standard
   # @param num_stories [Integer] Number of stories
   # @return [String] The system type.  Possibilities are PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
   #   VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
-  # TODO: add 90.1-2013 systems 11-13
+  # @todo add 90.1-2013 systems 11-13
   def model_prm_baseline_system_type(model, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
     #             [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
     system_type = [nil, nil, nil, nil]
@@ -727,7 +727,7 @@ class Standard
   # @param main_heat_fuel [String] main heating fuel.  Valid choices are Electricity, NaturalGas, DistrictHeating
   # @param zone_heat_fuel [String] zone heating/reheat fuel.  Valid choices are Electricity, NaturalGas, DistrictHeating
   # @param cool_fuel [String] cooling fuel.  Valid choices are Electricity, DistrictCooling
-  # TODO: Add 90.1-2013 systems 11-13
+  # @todo Add 90.1-2013 systems 11-13
   def model_add_prm_baseline_system(model, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones)
     case system_type
       when 'PTAC' # System 1
@@ -1428,7 +1428,7 @@ class Standard
   # If no story object is found for a particular height, create a new one and assign it to the space.
   # Does not assign a story to plenum spaces.
   #
-  # @return [Bool] returns true if successful, false if not.
+  # @return [Bool] returns true if successful, false if not
   def model_assign_spaces_to_stories(model)
     # Make hash of spaces and minz values
     sorted_spaces = {}
@@ -1576,7 +1576,7 @@ class Standard
   # and removes the SpaceType-level infiltration objects.
   #
   # base infiltration rates off of.
-  # @return [Bool] true if successful, false if not
+  # @return [Bool] returns true if successful, false if not
   # @todo This infiltration method is not used by the Reference
   # buildings, fix this inconsistency.
   def model_apply_infiltration_standard(model)
@@ -2183,7 +2183,8 @@ class Standard
     data = model_find_object(standards_data['materials'], 'name' => material_name)
     unless data
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for material: #{material_name}, will not be created.")
-      return false # TODO: change to return empty optional material
+      return false
+      # @todo change to return empty optional material
     end
 
     material = nil
@@ -2297,7 +2298,7 @@ class Standard
     standards_construction_type ||= ''
     standards_info.setStandardsConstructionType(standards_construction_type)
 
-    # TODO: could put construction rendering color in the spreadsheet
+    # @todo could put construction rendering color in the spreadsheet
 
     # Add the material layers to the construction
     layers = OpenStudio::Model::MaterialVector.new
@@ -2384,7 +2385,7 @@ class Standard
           model.getSubSurfaces.each do |sub_surface|
             next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && sub_surface.subSurfaceType == 'Skylight'
 
-            # TODO: enable proper window frame setting after https://github.com/NREL/OpenStudio/issues/2895 is fixed
+            # @todo enable proper window frame setting after https://github.com/NREL/OpenStudio/issues/2895 is fixed
             sub_surface.setString(8, frame.name.get.to_s)
             skylights_frame_added += 1
             # if sub_surface.allowWindowPropertyFrameAndDivider
@@ -2397,7 +2398,8 @@ class Standard
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding #{frame.name} to #{skylights_frame_added} skylights.") if skylights_frame_added > 0
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find skylight framing data for: #{framing_name}, will not be created.")
-          return false # TODO: change to return empty optional material
+          return false
+          # @todo change to return empty optional material
         end
       end
 
@@ -2994,7 +2996,7 @@ class Standard
       result = 3135
     elsif building_type == 'Office'
       result = nil
-      # TODO: there shouldn't be a prototype building for this
+      # @todo there shouldn't be a prototype building for this
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Measures calling this should choose between SmallOffice, MediumOffice, and LargeOffice')
     elsif building_type == 'Outpatient' # 40.950 ft^2
       result = 3804
@@ -3388,7 +3390,7 @@ class Standard
 
   # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Bool] returns true if successful, false if not
   def model_apply_standard_constructions(model, climate_zone)
     types_to_modify = []
 
@@ -3553,7 +3555,7 @@ class Standard
       end
 
       # Determine the space category
-      # TODO: This should really use the heating/cooling loads from the proposed building.
+      # @todo This should really use the heating/cooling loads from the proposed building.
       # However, in an attempt to avoid another sizing run just for this purpose,
       # conditioned status is based on heating/cooling setpoints.
       # If heated-only, will be assumed Semiheated.
@@ -3827,7 +3829,7 @@ class Standard
   # Remove all HVAC that will be replaced during the performance rating method baseline generation.
   # This does not include plant loops that serve WaterUse:Equipment or Fan:ZoneExhaust
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Bool] returns true if successful, false if not
   def model_remove_prm_hvac(model)
     # Plant loops
     model.getPlantLoops.sort.each do |loop|
@@ -3857,7 +3859,7 @@ class Standard
 
   # Remove EMS objects that may be orphaned from removing HVAC
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Bool] returns true if successful, false if not
   def model_remove_prm_ems_objects(model)
     model.getEnergyManagementSystemActuators.each(&:remove)
     model.getEnergyManagementSystemConstructionIndexVariables.each(&:remove)
@@ -3876,7 +3878,7 @@ class Standard
   end
 
   # Remove external shading devices. Site shading will not be impacted.
-  # @return [Bool] returns true if successful, false if not.
+  # @return [Bool] returns true if successful, false if not
   def model_remove_external_shading_devices(model)
     shading_surfaces_removed = 0
     model.getShadingSurfaceGroups.sort.each do |shade_group|
@@ -3939,7 +3941,7 @@ class Standard
   # @return [Array] array of hashes. Each array entry based on different capacity
   # specific to building type. Array will be empty for some building types.
   def model_find_ashrae_hot_water_demand(model)
-    # TODO: - for types not in table use standards area normalized swh values
+    # @todo for types not in table use standards area normalized swh values
 
     # get building type
     building_data = model_get_building_climate_zone_and_building_type(model)
@@ -4222,7 +4224,8 @@ class Standard
 
           # update count of ground wall areas
           next if surface.surfaceType != 'Wall'
-          next if surface.outsideBoundaryCondition != 'Ground' # TODO: - make more flexible for slab/basement model.modeling
+          next if surface.outsideBoundaryCondition != 'Ground'
+          # @todo make more flexible for slab/basement model.modeling
 
           story_ground_wall_area += surface.grossArea
         end
@@ -4817,9 +4820,9 @@ class Standard
   # @author David Goldwasser
   # @param model [Model]
   # @param step_ramp_logic [String]
-  # @param infer_hoo_for_non_assigned_objects [Bool] # attempt to get hoo for objects like swh with and exterior lighting
-  # @param gather_data_only: false (stops method before changes made if true)
-  # @param [hoo_var_method] accepts hours and fractional. Any other value value will result in hoo variables not being applied
+  # @param infer_hoo_for_non_assigned_objects [Bool] attempt to get hoo for objects like swh with and exterior lighting
+  # @param gather_data_only [Bool] false (stops method before changes made if true)
+  # @param hoo_var_method [String] accepts hours and fractional. Any other value value will result in hoo variables not being applied
   # @return [Hash] schedule is key, value is hash of number of objects
   def model_setup_parametric_schedules(model, step_ramp_logic: nil, infer_hoo_for_non_assigned_objects: true, gather_data_only: false, hoo_var_method: 'hours')
     parametric_inputs = {}
@@ -4873,7 +4876,7 @@ class Standard
       end
       avail_mgrs = air_loop.availabilityManagers
       avail_mgrs.sort.each do |avail_mgr|
-        # TODO: - I'm finding availability mangers, but not any resources for them, even if I use OpenStudio::Model.getRecursiveChildren(avail_mgr)
+        # @todo I'm finding availability mangers, but not any resources for them, even if I use OpenStudio::Model.getRecursiveChildren(avail_mgr)
         resources = avail_mgr.resources
         resources = OpenStudio::Model.getRecursiveResources(avail_mgr)
         resources.sort.each do |resource|
@@ -4941,11 +4944,11 @@ class Standard
       end
     end
 
-    # TODO: - Service Water Heating supply side (may or may not be associated with a space)
-    # todo - water use equipment definitions (temperature, sensible, latent) may be in multiple spaces, need to identify hoo, but typically constant schedules
+    # @todo Service Water Heating supply side (may or may not be associated with a space)
+    # @todo water use equipment definitions (temperature, sensible, latent) may be in multiple spaces, need to identify hoo, but typically constant schedules
 
     # water use equipment (flow rate fraction)
-    # todo - address common schedules used across multiple instances
+    # @todo address common schedules used across multiple instances
     model.getWaterUseEquipments.sort.each do |water_use_equipment|
       if water_use_equipment.flowRateFractionSchedule.is_initialized && water_use_equipment.flowRateFractionSchedule.get.to_ScheduleRuleset.is_initialized
         schedule = water_use_equipment.flowRateFractionSchedule.get.to_ScheduleRuleset.get
@@ -4965,8 +4968,8 @@ class Standard
 
       end
     end
-    # TODO: - Refrigeration (will be associated with thermal zone)
-    # todo - exterior lights (will be astronomical, but like AEDG's may have reduction later at night)
+    # @todo Refrigeration (will be associated with thermal zone)
+    # @todo exterior lights (will be astronomical, but like AEDG's may have reduction later at night)
 
     return parametric_inputs
   end
@@ -5003,7 +5006,7 @@ class Standard
         # for now don't look at schedules without targets, in future can alter these by looking at building level hours of operation
         next if sch.directUseCount <= 0 # won't catch if used for space type load instance, but that space type isn't used
 
-        # TODO: - address schedules that fall into this category, if they are used in the model
+        # @todo address schedules that fall into this category, if they are used in the model
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "For #{sch.sources.first.name}, #{sch.name} is not setup as parametric schedule. It has #{sch.sources.size} sources.")
         next
       end
@@ -5036,7 +5039,7 @@ class Standard
   end
 
   # Modify the existing service water heating loops to match the baseline required heating type.
-  # @return [Bool] return true if successful, false if not
+  # @return [Bool] returns true if successful, false if not
   # @author Julien Marrec
   def model_apply_baseline_swh_loops(model, building_type)
     model.getPlantLoops.sort.each do |plant_loop|
@@ -5084,7 +5087,7 @@ class Standard
           water_heater.setHeaterFuelType('Electricity')
           water_heater.setHeaterThermalEfficiency(1.0)
         else
-          # TODO: for now, just get the first fuel that isn't Electricity
+          # @todo for now, just get the first fuel that isn't Electricity
           # A better way would be to count the capacities associated
           # with each fuel type and use the preponderant one
           fuels = htg_fuels - ['Electricity']
@@ -5121,7 +5124,7 @@ class Standard
   # This should be done by the forward translator, and this code should be removed after this bug is fixed:
   # https://github.com/NREL/OpenStudio/issues/2598
   #
-  # TODO: remove this method after OpenStudio issue #2598 is fixed.
+  # @todo remove this method after OpenStudio issue #2598 is fixed.
   def model_temp_fix_ems_references(model)
     # Internal Variables
     model.getEnergyManagementSystemInternalVariables.sort.each do |var|
@@ -5234,8 +5237,10 @@ class Standard
   # pass array of space types or spaces
   #
   # @author David Goldwasser
-  # @param array of spaces or space types
-  # @return hash
+  # @param space_space_types [Array] array of spaces or space types
+  # @param parametric_inputs [Hash]
+  # @param gather_data_only [Bool]
+  # @return [Hash]
   def gather_inputs_parametric_space_space_type_schedules(space_space_types, parametric_inputs, gather_data_only)
     space_space_types.each do |space_type|
       # get hours of operation for space type once
@@ -5290,8 +5295,11 @@ class Standard
   # method to process load instance schedules for model_setup_parametric_schedules
   #
   # @author David Goldwasser
-  # @param opt_sch
-  # @return hash
+  # @param load_inst [OpenStudio::Model::SpaceLoadInstance]
+  # @param parametric_inputs [Hash]
+  # @param hours_of_operation [Hash]
+  # @param gather_data_only [Bool]
+  # @return [Hash]
   def gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
     if load_inst.class.to_s == 'OpenStudio::Model::People'
       opt_sch = load_inst.numberofPeopleSchedule
@@ -5312,9 +5320,15 @@ class Standard
   # method to process load instance schedules for model_setup_parametric_schedules
   #
   # @author David Goldwasser
-  # @param [sch]
-  # @param [hoo_var_Method] accepts hours and fractional. Any other value value will result in hoo variables not being applied
-  # @return [hash]
+  # @param sch [OpenStudio::Model::Schedule]
+  # @param load_inst [OpenStudio::Model::SpaceLoadInstance]
+  # @param parametric_inputs [Hash]
+  # @param hours_of_operation [Hash]
+  # @param ramp [Bool]
+  # @param min_ramp_dur_hr [Double]
+  # @param gather_data_only [Bool]
+  # @param hoo_var_method [String] accepts hours and fractional. Any other value value will result in hoo variables not being applied
+  # @return [Hash]
   def gather_inputs_parametric_schedules(sch, load_inst, parametric_inputs, hours_of_operation, ramp: true, min_ramp_dur_hr: 2.0, gather_data_only: false, hoo_var_method: 'hours')
     if parametric_inputs.key?(sch)
       if hours_of_operation != parametric_inputs[sch][:hoo_inputs] # don't warn if the hours of operation between old and new schedule are equivalent
@@ -5382,7 +5396,7 @@ class Standard
         hoo_end = nil
         occ = nil
         vac = nil
-        # TODO: - issue warning when this happens on any profile that isn't a constant value
+        # @todo issue warning when this happens on any profile that isn't a constant value
       else
         # get hours of operation for this specific profile
         hoo_start = hours_of_operation[hoo_target_index][:hoo_start]
@@ -5465,7 +5479,7 @@ class Standard
       daily_flh = day_schedule_equivalent_full_load_hrs(schedule_day)
       percent_change = ((daily_flh - est_daily_flh) / daily_flh) * 100.0
       if percent_change.abs > 0.05
-        # TODO: - this estimation can have flaws. Fix or remove it, make sure to update for secondary logic (if we implement that here)
+        # @todo this estimation can have flaws. Fix or remove it, make sure to update for secondary logic (if we implement that here)
         # post application checks compares against actual instead of estimated values
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "For day schedule #{schedule_day.name} in #{sch.name} there was a #{percent_change.round(4)}% change. Expected full load hours is #{daily_flh.round(4)}, but estimated value is #{est_daily_flh.round(4)}")
       end
@@ -5568,7 +5582,7 @@ class Standard
                 time = "hoo_start - vac * #{min_value_vac_fract.round(3)}"
               end
             elsif min_key == 'mid'
-              # TODO: - see what is going wrong with after mid in formula
+              # @todo see what is going wrong with after mid in formula
               if min_value == 0
                 time = 'mid'
                 # converted to variable for simplicity but could also be described like this
@@ -5603,10 +5617,10 @@ class Standard
       # store profile formula with hoo and value variables
       props.setFeature('param_day_profile', raw_string.join(' | '))
 
-      # TODO: - not used yet, but will add methods described below and others
-      # todo - lower infiltration based on air loop hours of operation if air loop has outdoor air object
-      # todo - lower lighting or plug loads based on occupancy at given time steps in a space
-      # todo - set elevator fraction based multiple factors such as trips, occupants per trip, and elevator type to determine floor consumption when not in use.
+      # @todo not used yet, but will add methods described below and others
+      # @todo lower infiltration based on air loop hours of operation if air loop has outdoor air object
+      # @todo lower lighting or plug loads based on occupancy at given time steps in a space
+      # @todo set elevator fraction based multiple factors such as trips, occupants per trip, and elevator type to determine floor consumption when not in use.
       props.setFeature('param_day_secondary_logic', '') # secondary logic method such as occupancy impacting schedule values
       props.setFeature('param_day_secondary_logic_arg_val', '') # optional argument used for some secondary logic applied to values
 
@@ -5632,7 +5646,7 @@ class Standard
 
   # Default SAT reset type
   #
-  # @param air_loop_hvac [OpenStudio::model::AirLoopHVAC] Airloop
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @return [String] Returns type of SAT reset
   def air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
     return 'warmest_zone'

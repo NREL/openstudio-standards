@@ -36,7 +36,8 @@ class ASHRAE9012010 < ASHRAE901
   # Adjust model to comply with fenestration orientation requirements
   # @note code_sections [90.1-2010_5.5.4.5]
   #
-  # @param [OpenStudio::Model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Boolean] Returns true if successful, false otherwise
   def model_fenestration_orientation(model, climate_zone)
     wwr = false

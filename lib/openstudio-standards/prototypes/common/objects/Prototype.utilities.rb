@@ -289,8 +289,8 @@ class Standard
   # Convert from COP to SEER (with fan) for cooling coils
   # per the method specified in 90.1-2013 Appendix G
   #
-  # @param seer [Double] seasonal energy efficiency ratio (SEER)
-  # @return [Double] Coefficient of Performance (COP)
+  # @param cop [Double] Coefficient of Performance (COP)
+  # @return [Double] seasonal energy efficiency ratio (SEER)
   def cop_to_seer_cooling_with_fan(cop)
     eer = cop_to_eer(cop)
     delta = 1.1088**2 - 4.0 * 0.0182 * eer

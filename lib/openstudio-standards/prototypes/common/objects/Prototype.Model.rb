@@ -89,7 +89,7 @@ Standard.class_eval do
     model_temp_fix_ems_references(model)
     # Add daylighting controls per standard
     # only four zones in large hotel have daylighting controls
-    # todo: YXC to merge to the main function
+    # @todo YXC to merge to the main function
     model_add_daylighting_controls(model)
     model_custom_daylighting_tweaks(model, building_type, climate_zone, @prototype_input)
     model_update_exhaust_fan_efficiency(model)
@@ -2367,7 +2367,7 @@ Standard.class_eval do
 
   # Add door infiltration
   #
-  # @param [OpenStudio:Model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Boolean] Returns true if successful, false otherwise or not applicable
   def model_add_door_infiltration(model, climate_zone)
@@ -2480,7 +2480,8 @@ Standard.class_eval do
 
   # Adjust model to comply with fenestration orientation
   #
-  # @param [OpenStudio::Model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Boolean] Returns true if successful, false otherwise
   def model_fenestration_orientation(model, climate_zone)
     return true

@@ -3,9 +3,9 @@ class Standard
 
   # Determine the component infiltration rate for this surface
   #
+  # @param surface [OpenStudio::Model::Surface] surface object
   # @param type [String] choices are 'baseline' and 'advanced'
-  # @return [Double] infiltration rate
-  #   @units cubic meters per second (m^3/s)
+  # @return [Double] infiltration rate in cubic meters per second, m^3/s
   # @todo handle floors over unconditioned spaces
   def surface_component_infiltration_rate(surface, type)
     comp_infil_rate_m3_per_s = 0.0
@@ -75,11 +75,21 @@ class Standard
     return comp_infil_rate_m3_per_s
   end
 
-  # Chris Kirney 2018-05-17:  Not complete-do not call.  Start of method meant to help implement NECB2015 8.4.4.5.(5).
-  # The method starts by finding exterior surfaces which help enclose conditioned spaces.  It then removes the
-  # subsurfaces.  Though not implemented yet it was supposed to then put a window centered in the surface with a sill
-  # height and window height defined passed via sill_heght_m and window_height_m (0.9 m, and 1.8 m respectively for
-  # NECB2015).  The width of the window was to be set so that the fdwr matched whatever code said (passed by fdwr).
+  # Start of method meant to help implement NECB2015 8.4.4.5.(5).
+  # The method starts by finding exterior surfaces which help enclose conditioned spaces.
+  # It then removes the subsurfaces.
+  # Though not implemented yet it was supposed to then put a window centered in the surface with a sill
+  # height and window height defined passed via sill_heght_m and window_height_m
+  # (0.9 m, and 1.8 m respectively for NECB2015).
+  # The width of the window was to be set so that the fdwr matched whatever code said (passed by fdwr).
+  # @author Chris Kirney
+  # @note 2018-05-17 not complete-do not call.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param sill_height_m [Double] sill height in meters
+  # @param window_height_m [Double] window height in meters
+  # @param fdwr [Double] fdwr
+  # @return [Bool] returns true if successful, false if not
   def surface_replace_existing_subsurfaces_with_centered_subsurface(model, sill_height_m, window_height_m, fdwr)
     vertical_surfaces = find_exposed_conditioned_vertical_surfaces(model)
     vertical_surfaces.each do |vertical_surface|
@@ -105,14 +115,22 @@ class Standard
       surface_centroid = vertical_surface.centroid
       surface_normal = vertical_surface.outwardNormal
     end
+    return true
   end
 
-  # Chris Kirney 2018-09-12:  This method searches through a model a returns vertical exterior surfaces which help
+  # This method searches through a model a returns vertical exterior surfaces which help
   # enclose a conditioned space.  It distinguishes between walls adjacent to plenums and wall adjacent to other
   # conditioned spaces (as attics in OpenStudio are considered plenums and conditioned spaces though many would
   # not agree).  It returns a hash of the total exposed wall area adjacent to conditioned spaces (including plenums), the
   # total exposed plenum wall area, the total exposed non-plenum area (adjacent to conditioned spaces), the exposed
   # plenum walls and the exposed non-plenum walls (adjacent to conditioned spaces).
+  # @author Chris Kirney
+  # @note 2018-09-12
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param max_angle [Double] maximum angle to consider surface
+  # @param min_angle [Double] minimum angle to consider surface
+  # @return [Hash] hash of exposed surface information
   def find_exposed_conditioned_vertical_surfaces(model, max_angle: 91, min_angle: 89)
     exposed_surfaces = []
     plenum_surfaces = []
@@ -192,6 +210,9 @@ class Standard
 
   # This method is similar to the 'find_exposed_conditioned_vertical_surfaces' above only it is for roofs.  Again, it
   # distinguishes between plenum and non plenum roof area but collects and returns both.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Hash] hash of exposed roof information
   def find_exposed_conditioned_roof_surfaces(model)
     exposed_surfaces = []
     plenum_surfaces = []
@@ -264,19 +285,21 @@ class Standard
 
   # This method finds the centroid of the highest roof(s).  It cycles through each space and finds which surfaces are
   # described as roofceiling whose outside boundary condition is outdoors.  Of those surfaces that do it looks for the
-  # highest one(s) and finds the centroid of those.  It returns the following hash:
-  # roof_cent = {
-  #   top_spaces:  array of spaces which contain the highest roofs,
-  #   roof_centroid:  global x, y, and z coords of the centroid of the highest roof surfaces,
-  #   roof_area:  area of the highst roof surfaces}
+  # highest one(s) and finds the centroid of those.
   #
-  # Each element of the top_spaces is a hash containing the following:
-  # top_space = {
-  #   space:  OpenStudio space containing the surface,
-  #   x:  global x coord of the centroid of roof surface(s),
-  #   y:  global y coord of the centroid of roof surface(s),
-  #   z:  global z coord of the centroid of roof surface(s),
-  #   area_m2:  area of the roof surface(s)}
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Hash] It returns the following hash:
+  #   roof_cent = {
+  #     top_spaces:  array of spaces which contain the highest roofs,
+  #     roof_centroid:  global x, y, and z coords of the centroid of the highest roof surfaces,
+  #     roof_area:  area of the highst roof surfaces}
+  #   Each element of the top_spaces is a hash containing the following:
+  #     top_space = {
+  #       space:  OpenStudio space containing the surface,
+  #       x:  global x coord of the centroid of roof surface(s),
+  #       y:  global y coord of the centroid of roof surface(s),
+  #       z:  global z coord of the centroid of roof surface(s),
+  #       area_m2:  area of the roof surface(s)}
   def find_highest_roof_centre(model)
     # Initialize some variables
     tol = 6
@@ -359,8 +382,8 @@ class Standard
   # Calculate a surface's absolute azimuth
   # source: https://github.com/NREL/openstudio-extension-gem/blob/e354355054b83ffc26e3b69befa20d6baf5ef242/lib/openstudio/extension/core/os_lib_geometry.rb#L913
   #
-  # @param surface [OpenStudio::Model:Surface] OpenStudio Surface object
-  # @return [Float] Surface absolute azimuth
+  # @param surface [OpenStudio::Model::Surface] surface object
+  # @return [Double] surface absolute azimuth
   def surface_absolute_azimuth(surface)
     # Get associated space
     space = surface.space.get
@@ -380,8 +403,8 @@ class Standard
 
   # Determine a surface absolute cardinal direction
   #
-  # @param surface [OpenStudio::Model::Surface] OpenStudio Surface object
-  # @return [String] Surface absolute cardinal
+  # @param surface [OpenStudio::Model::Surface] surface object
+  # @return [String] surface absolute cardinal direction
   def surface_cardinal_direction(surface)
     # Get the surface's absolute azimuth
     surface_abs_azimuth = surface_absolute_azimuth(surface)

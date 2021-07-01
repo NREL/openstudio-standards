@@ -2,7 +2,7 @@ class Standard
   # Add transformers for some prototypes
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param wired_lighting_fraction [Double] the wired lighting fraction, 0-1
+  # @param wired_lighting_frac [Double] the wired lighting fraction, 0-1
   # @param transformer_size [Double] the transformer size in VA
   # @param transformer_efficiency [Double] the transformer efficiency, 0-1
   # @param excluded_interiorequip_key [String] key to exclude

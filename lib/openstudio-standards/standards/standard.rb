@@ -78,9 +78,10 @@ class Standard
   # Loads the openstudio standards dataset for this standard.
   # For standards subclassed from other standards, the lowest-level
   # data will override data supplied at a higher level.
-  # For example, data from ASHRAE 90.1-2004 will be overriden by
+  # For example, data from ASHRAE 90.1-2004 will be overridden by
   # data from ComStock ASHRAE 90.1-2004.
   #
+  # @param data_directories [Array<String>] array of file paths that contain standards data
   # @return [Hash] a hash of standards data
   def load_standards_database(data_directories = [])
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.standard', "Loading OpenStudio Standards data for #{template}")

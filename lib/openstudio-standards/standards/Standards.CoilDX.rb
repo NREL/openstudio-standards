@@ -7,6 +7,8 @@ module CoilDX
   # Finds the subcategory.  Possible choices are:
   # Single Package, Split System, PTAC, or PTHP
   #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @return [String] the coil_dx_subcategory(coil_dx)
   # @todo Add add split system vs single package to model object
   def coil_dx_subcategory(coil_dx)
@@ -35,7 +37,7 @@ module CoilDX
         elsif containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
           sub_category = 'PTHP'
         end
-        # TODO: Add other zone hvac systems
+        # @todo Add other zone hvac systems
       end
     end
 
@@ -43,7 +45,10 @@ module CoilDX
   end
 
   # Determine if it is a heat pump
-  # @return [Bool] true if it is a heat pump, false if not
+  #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+  # @return [Bool] returns true if it is a heat pump, false if not
   def coil_dx_heat_pump?(coil_dx)
     heat_pump = false
 
@@ -62,7 +67,7 @@ module CoilDX
         if containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
           heat_pump = true
         end
-        # TODO: Add other zone hvac systems
+        # todo Add other zone hvac systems
       end
     else
       if !coil_dx.airLoopHVAC.get.supplyComponents('OS:Coil:Heating:DX:SingleSpeed'.to_IddObjectType).empty? ||
@@ -74,8 +79,11 @@ module CoilDX
     return heat_pump
   end
 
-  # Determine the heating type.  Possible choices are:
-  # Electric Resistance or None, All Other
+  # Determine the heating type.
+  # Possible choices are: Electric Resistance or None, All Other
+  #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @return [String] the heating type
   def coil_dx_heating_type(coil_dx)
     htg_type = nil
@@ -99,7 +107,7 @@ module CoilDX
             htg_type = 'All Other'
           end
         end
-        # TODO: Add other unitary systems
+        # @todo Add other unitary systems
       elsif coil_dx.containingZoneHVACComponent.is_initialized
         containing_comp = coil_dx.containingZoneHVACComponent.get
         # PTAC
@@ -114,7 +122,7 @@ module CoilDX
         elsif containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
           htg_type = 'Electric Resistance or None'
         end
-        # TODO: Add other zone hvac systems
+        # @todo Add other zone hvac systems
       end
     end
 
@@ -149,6 +157,8 @@ module CoilDX
 
   # Finds the search criteria
   #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @return [hash] has for search criteria to be used for find object
   def coil_dx_find_search_criteria(coil_dx)
     search_criteria = {}
@@ -184,7 +194,7 @@ module CoilDX
             if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
               search_criteria['heating_type'] = nil
             end
-            # TODO: Add other unitary systems
+            # @todo Add other unitary systems
           end
         end
       end

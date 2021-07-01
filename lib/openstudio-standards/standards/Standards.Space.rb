@@ -15,7 +15,7 @@ class Standard
   #   Hash keys are: 'toplighted_area', 'primary_sidelighted_area',
   #   'secondary_sidelighted_area', 'total_window_area', 'total_skylight_area'
   # @todo add a list of valid choices for template argument
-  # TODO stop skipping non-vertical walls
+  # @todo stop skipping non-vertical walls
   def space_daylighted_areas(space, draw_daylight_areas_for_debugging = false)
     ### Begin the actual daylight area calculations ###
 
@@ -108,7 +108,7 @@ class Standard
     space.surfaces.sort.each do |surface|
       if surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'Wall'
 
-        # TODO: stop skipping non-vertical walls
+        # @todo stop skipping non-vertical walls
         surface_normal = surface.outwardNormal
         surface_normal_z = surface_normal.z
         unless surface_normal_z.abs < 0.001
@@ -251,7 +251,8 @@ class Standard
           down_vector = OpenStudio::Vector3d.new(0, 0, -1)
           outward_normal_vector = sub_surface.outwardNormal
           rot_vector = down_vector.cross(outward_normal_vector)
-          ninety_deg_in_rad = OpenStudio.degToRad(90) # TODO: change
+          ninety_deg_in_rad = OpenStudio.degToRad(90)
+          # @todo change
           new_rotation = OpenStudio.createRotation(rot_origin, rot_vector, ninety_deg_in_rad)
           pri_sidelit_sub_polygon = new_rotation * pri_sidelit_sub_polygon
           sec_sidelit_sub_polygon = new_rotation * sec_sidelit_sub_polygon
@@ -266,7 +267,7 @@ class Standard
         end
       elsif surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'RoofCeiling'
 
-        # TODO: stop skipping non-horizontal roofs
+        # @todo stop skipping non-horizontal roofs
         surface_normal = surface.outwardNormal
         straight_upward = OpenStudio::Vector3d.new(0, 0, 1)
         unless surface_normal.to_s == straight_upward.to_s
@@ -885,7 +886,7 @@ class Standard
       straight_upward = OpenStudio::Vector3d.new(0, 0, 1)
       surface_normal = surface.outwardNormal
       if surface.surfaceType == 'Wall'
-        # TODO: stop skipping non-vertical walls
+        # @todo stop skipping non-vertical walls
         unless surface_normal.z.abs < 0.001
           unless surface.subSurfaces.empty?
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Cannot currently handle non-vertical walls; skipping windows on #{surface.name} in #{space.name} for daylight sensor positioning.")
@@ -893,7 +894,7 @@ class Standard
           end
         end
       elsif surface.surfaceType == 'RoofCeiling'
-        # TODO: stop skipping non-horizontal roofs
+        # @todo stop skipping non-horizontal roofs
         unless surface_normal.to_s == straight_upward.to_s
           unless surface.subSurfaces.empty?
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Cannot currently handle non-horizontal roofs; skipping skylights on #{surface.name} in #{space.name} for daylight sensor positioning.")
@@ -1131,7 +1132,7 @@ class Standard
       end
       sensor_1.setPosition(sensor_vertex)
 
-      # TODO: rotate sensor to face window (only needed for glare calcs)
+      # @todo rotate sensor to face window (only needed for glare calcs)
       zone.setPrimaryDaylightingControl(sensor_1)
       zone.setFractionofZoneControlledbyPrimaryDaylightingControl(sensor_1_frac)
     end
@@ -1173,7 +1174,7 @@ class Standard
       end
       sensor_2.setPosition(sensor_vertex)
 
-      # TODO: rotate sensor to face window (only needed for glare calcs)
+      # @todo rotate sensor to face window (only needed for glare calcs)
       zone.setSecondaryDaylightingControl(sensor_2)
       zone.setFractionofZoneControlledbySecondaryDaylightingControl(sensor_2_frac)
     end
@@ -1391,7 +1392,7 @@ class Standard
       return plenum_status
     end
 
-    # TODO: - update to check if it has internal loads
+    # @todo update to check if it has internal loads
 
     # Check if the space type name
     # contains the word plenum.
@@ -1503,7 +1504,7 @@ class Standard
   # setpoint above 5C (41F), counts as heated.
   #
   # @author Andrew Parker, Julien Marrec
-  # @return [Bool] true if heated, false if not
+  # @return [Bool] returns true if heated, false if not
   def space_heated?(space)
     # Get the zone this space is inside
     zone = space.thermalZone
@@ -1524,7 +1525,7 @@ class Standard
   # setpoint above 33C (91F), counts as cooled.
   #
   # @author Andrew Parker, Julien Marrec
-  # @return [Bool] true if cooled, false if not
+  # @return [Bool] returns true if cooled, false if not
   def space_cooled?(space)
     # Get the zone this space is inside
     zone = space.thermalZone
@@ -1652,8 +1653,8 @@ class Standard
     return get_adjacent_spaces_with_touching_area(same_floor)[0][0]
   end
 
-  # TODO: - add related related to space_hours_of_operation like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
-  # todo - ideally these could take in a date range, array of dates and or days of week. Hold off until need is a bit more defined.
+  # @todo add related related to space_hours_of_operation like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
+  # @todo ideally these could take in a date range, array of dates and or days of week. Hold off until need is a bit more defined.
 
   # If the model has an hours of operation schedule set in default schedule set for building that looks valid it will
   # report hours of operation. Won't be a single set of values, will be a collection of rules
@@ -1826,7 +1827,7 @@ class Standard
   # expand hours of operation. When hours of operation do not overlap for two spaces, add logic to remove all but largest gap
   #
   # @author David Goldwasser
-  # @param space [Spaces] takes array of spaces
+  # @param spaces [Array<OpenStudio::Model::Space>] takes array of spaces
   # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
   def spaces_hours_of_operation(spaces)
     hours_of_operation_array = []
@@ -1840,7 +1841,7 @@ class Standard
       end
     end
 
-    # TODO: - replace this with logic to get combined hours of operation for collection of spaces.
+    # @todo replace this with logic to get combined hours of operation for collection of spaces.
     # each hours_of_operation_array is hash with key for each profile.
     # each profile has hash with keys for hoo_start, hoo_end, hoo_hours, days_used
     # my goal is to compare profiles and days used across all profiles to create new entries as necessary
@@ -1850,7 +1851,7 @@ class Standard
 
     # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "Evaluating hours of operation for #{space_names.join(',')}: #{hours_of_operation_array}")
 
-    # TODO: - what is this getting max of, it isn't longest hours of operation, is it the most profiles?
+    # @todo what is this getting max of, it isn't longest hours of operation, is it the most profiles?
     hours_of_operation = hours_of_operation_array.max_by { |i| hours_of_operation_array.count(i) }
 
     return hours_of_operation
@@ -1967,7 +1968,7 @@ class Standard
         a_polygon_ruby << [vertex.x, vertex.y, vertex.z]
       end
 
-      # TODO: Skip really small polygons
+      # @todo Skip really small polygons
       # reduced_b_polygons = []
       # b_polygons.each do |b_polygon|
       # next
@@ -2010,7 +2011,7 @@ class Standard
 
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "---Remove duplicates: #{a_minus_b_polygons_ruby.size} to #{unique_a_minus_b_polygons_ruby.size}")
 
-      # TODO: bug workaround?
+      # @todo bug workaround?
       # If the result includes the a polygon, the a polygon
       # was unchanged; only include that polgon and throw away the other junk?/bug? polygons.
       # If the result does not include the a polygon, the a polygon was
@@ -2034,7 +2035,7 @@ class Standard
     # Remove duplicate polygons again
     unique_final_polygons_ruby = final_polygons_ruby.uniq
 
-    # TODO: remove this workaround
+    # @todo remove this workaround
     # Split any polygons that are joined by a line into two separate
     # polygons.  Do this by finding duplicate
     # unique_final_polygons_ruby.each do |unique_final_polygon_ruby|
@@ -2092,7 +2093,7 @@ class Standard
     # Disable the log sink to prevent memory hogging
     msg_log.disable
 
-    # TODO: remove this workaround, which is tried if there
+    # @todo remove this workaround, which is tried if there
     # are any join errors.  This handles the case of polygons
     # that make an inner loop, the most common case being
     # when all 4 sides of a space have windows.

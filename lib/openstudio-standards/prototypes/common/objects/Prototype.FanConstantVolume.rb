@@ -6,7 +6,7 @@ class Standard
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
   #
-  # @param fan_on_off [OpenStudio::Model::FanConstantVolume] constant volume fan object
+  # @param fan_constant_volume [OpenStudio::Model::FanConstantVolume] constant volume fan object
   # @return [Bool] returns true if successful, false if not
   def fan_constant_volume_apply_prototype_fan_pressure_rise(fan_constant_volume)
     # Don't modify unit heater fans

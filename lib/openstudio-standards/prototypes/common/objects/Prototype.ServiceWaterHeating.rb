@@ -867,8 +867,8 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param swh_loop [OpenStudio::Model::PlantLoop] the SWH loop to connect the WaterUseEquipment to
-  # @space [OpenStudio::Model::Space] the Space to add a WaterUseEquipment for
-  # @space_multiplier [Double] the multiplier to use if the supplied Space actually represents
+  # @param space [OpenStudio::Model::Space] the Space to add a WaterUseEquipment for
+  # @param space_multiplier [Double] the multiplier to use if the supplied Space actually represents
   #   more area than is shown in the model.
   # @param is_flow_per_area [Bool] if true, use the value in the 'service_water_heating_peak_flow_per_area'
   #   field of the space_types JSON.  If false, use the value in the 'service_water_heating_peak_flow_rate' field.

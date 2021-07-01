@@ -96,7 +96,7 @@ class Standard
 
   # Convert total minimum OA requirement to a per-area value.
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Bool] returns true if successful, false if not
   def thermal_zone_convert_oa_req_to_per_area(thermal_zone)
     # For each space in the zone, convert
     # all design OA to per-area
@@ -518,7 +518,7 @@ class Standard
         prior_rules.each do |prior_rule|
           # see if they are similar
           next if rules_combined
-          # TODO: update to combine adjacent date ranges vs. just matching date ranges
+          # @todo update to combine adjacent date ranges vs. just matching date ranges
           next if prior_rule.startDate.get != rule.startDate.get
           next if prior_rule.endDate.get != rule.endDate.get
           next if prior_rule.daySchedule.times.to_a != rule.daySchedule.times.to_a
@@ -912,7 +912,7 @@ class Standard
   # counts as heated.  Plenums are also assumed to be heated.
   #
   # @author Andrew Parker, Julien Marrec
-  # @return [Bool] true if heated, false if not
+  # @return [Bool] returns true if heated, false if not
   def thermal_zone_heated?(thermal_zone)
     temp_f = 41
     temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
@@ -1054,7 +1054,7 @@ class Standard
   # counts as cooled.  Plenums are also assumed to be cooled.
   #
   # @author Andrew Parker, Julien Marrec
-  # @return [Bool] true if cooled, false if not
+  # @return [Bool] returns true if cooled, false if not
   def thermal_zone_cooled?(thermal_zone)
     temp_f = 91
     temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
@@ -1186,7 +1186,7 @@ class Standard
   # Determine if the thermal zone is a plenum
   # based on whether a majority of the spaces
   # in the zone are plenums or not.
-  # @return [Bool] true if majority plenum, false if not
+  # @return [Bool] returns true if majority plenum, false if not
   def thermal_zone_plenum?(thermal_zone)
     plenum_status = false
 
@@ -1461,7 +1461,7 @@ class Standard
   # air flows, which will be summed during system
   # design airflow calculation.
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Bool] returns true if successful, false if not
   def thermal_zone_apply_prm_baseline_supply_temperatures(thermal_zone)
     # Skip spaces that aren't heated or cooled
     return true unless thermal_zone_heated?(thermal_zone) || thermal_zone_cooled?(thermal_zone)
@@ -1614,7 +1614,7 @@ class Standard
   # Does not account for System requirements like ERV, economizer, etc.
   # Those are accounted for in the AirLoopHVAC method of the same name.
   #
-  # @return [Bool] Returns true if required, false if not.
+  # @return [Bool] Returns true if required, false if not
   # @todo Add exception logic for 90.1-2013
   #   for cells, sickrooms, labs, barbers, salons, and bowling alleys
   def thermal_zone_demand_control_ventilation_required?(thermal_zone, climate_zone)
@@ -1790,7 +1790,7 @@ class Standard
         transfer_air_source_zone_exhaust.addToThermalZone(exhaust_makeup_inputs[makeup_target][:source_zone])
         exhaust_fans[zone_exhaust_fan][:transfer_air_source_zone_exhaust] = transfer_air_source_zone_exhaust
 
-        # TODO: - make zone mixing schedule by combining exhaust availability and fraction flow
+        # @todo make zone mixing schedule by combining exhaust availability and fraction flow
         zone_mixing_schedule = exhaust_schedule
 
         # add zone mixing

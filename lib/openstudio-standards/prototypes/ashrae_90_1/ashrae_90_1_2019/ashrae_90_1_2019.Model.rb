@@ -36,7 +36,7 @@ class ASHRAE9012019 < ASHRAE901
   # Adjust model to comply with fenestration orientation requirements
   # @note code_sections [90.1-2013_5.5.4.5]
   #
-  # @param [OpenStudio::Model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Bool] Returns true if successful, false otherwise
   def model_fenestration_orientation(model, climate_zone)
@@ -232,7 +232,7 @@ class ASHRAE9012019 < ASHRAE901
   # @note code_sections [90.1-2019_6.5.7.1]
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] true if transfer air is required, false otherwise
+  # @return [Bool] returns true if transfer air is required, false if not
   def model_transfer_air_required?(model)
     return true
   end

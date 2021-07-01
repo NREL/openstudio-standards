@@ -52,7 +52,7 @@ class NECB2011
     #   mua_cooling_type: make-up air unit cooling type "DX";"Hydronic"
     #   fan_coil_type options are "TPFC" or "FPFC"
 
-    # TODO: Add arguments as needed when the sizing routine is finalized. For example we will need to know the
+    # @todo Add arguments as needed when the sizing routine is finalized. For example we will need to know the
     # required size of the boilers to decide on how many units are needed based on NECB rules.
 
     always_on = model.alwaysOnDiscreteSchedule

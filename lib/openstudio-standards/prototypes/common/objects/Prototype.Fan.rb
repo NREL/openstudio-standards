@@ -9,7 +9,7 @@ module PrototypeFan
   #
   # @param fan [OpenStudio::Model::StraightComponent] fan object of type:
   #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
-  # @return [Bool] true if successful, false if not
+  # @return [Bool] returns true if successful, false if not
   def prototype_fan_apply_prototype_fan_efficiency(fan)
     # Do not modify dummy exhaust fans
     return true unless !fan.name.to_s.downcase.include? 'dummy'

@@ -232,7 +232,7 @@ class ASHRAE9012016 < ASHRAE901
   # @note code_sections [90.1-2016_6.5.7.1]
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] true if transfer air is required, false otherwise
+  # @return [Bool] returns true if transfer air is required, false if not
   def model_transfer_air_required?(model)
     return true
   end

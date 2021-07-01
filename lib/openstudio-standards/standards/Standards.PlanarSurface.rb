@@ -1,26 +1,24 @@
 class Standard
   # @!group PlanarSurface
 
-  # If construction properties can be found
-  # based on the template,
-  # the standards intended surface type,
-  # the standards construction type,
+  # If construction properties can be found based on the template,
+  # the standards intended surface type, the standards construction type,
   # the climate zone, and the occupancy type,
-  # create a construction that meets those properties and
-  # assign it to this surface.
-  #
+  # create a construction that meets those properties and assign it to this surface.
   # 90.1-2007, 90.1-2010, 90.1-2013
+  #
+  # @param planar_surface [Openstudio::Model:PlanarSurface] surface object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param previous_construction_map [Hash] a hash where the keys are an array of inputs
-  # [template, climate_zone, intended_surface_type, standards_construction_type, occ_type]
-  # and the values are the constructions.  If supplied, constructions will be pulled
-  # from this hash if already created to avoid creating duplicate constructions.
+  #   [template, climate_zone, intended_surface_type, standards_construction_type, occ_type]
+  #   and the values are the constructions.  If supplied, constructions will be pulled
+  #   from this hash if already created to avoid creating duplicate constructions.
   # @return [Hash] returns a hash where the key is an array of inputs
-  # [template, climate_zone, intended_surface_type, standards_construction_type, occ_type]
-  # and the value is the newly created construction.  This can be
-  # used to avoid creating duplicate constructions.
+  #   [template, climate_zone, intended_surface_type, standards_construction_type, occ_type]
+  #   and the value is the newly created construction.
+  #   This can be used to avoid creating duplicate constructions.
   # @todo Align the standard construction enumerations in the
-  # spreadsheet with the enumerations in OpenStudio (follow CBECC-Com).
+  #   spreadsheet with the enumerations in OpenStudio (follow CBECC-Com).
   def planar_surface_apply_standard_construction(planar_surface, climate_zone, previous_construction_map = {})
     # Skip surfaces not in a space
     return previous_construction_map if planar_surface.space.empty?

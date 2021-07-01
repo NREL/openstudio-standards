@@ -287,14 +287,14 @@ module Baseline9012013
     eff_diff = []
     
     #currently only gets coils associated with air loops
-    #TODO: cover zone system coils
+    # @todo cover zone system coils
     model.getAirLoopHVACs.sort.each do |lp|
       coil = lp.supplyComponents.each do |comp|
         size = nil
         if !comp.to_CoilCoolingDXTwoSpeed.empty?
-          #we have a System 5 or 6
-          #system 6 not being created yet
-          #TODO: add logic to check for heating coil type, changes standard efficiencies
+          # we have a System 5 or 6
+          # system 6 not being created yet
+          # @todo add logic to check for heating coil type, changes standard efficiencies
           coil = comp.to_CoilCoolingDXTwoSpeed.get
           name = coil.name.get
           
@@ -311,8 +311,8 @@ module Baseline9012013
           size = OpenStudio.convert(size,si_cap,ip_cap).get
 
         elsif !comp.to_CoilCoolingDXSingleSpeed.empty?
-          #System 3 or system 4
-          #TODO: refine system type by heating coil - system 4 efficiencies come from different table
+          # System 3 or system 4
+          # @todo refine system type by heating coil - system 4 efficiencies come from different table
           coil = comp.to_CoilCoolingDXSingleSpeed.get
           name = coil.name.get
           

@@ -1,8 +1,11 @@
 class ZEAEDGMultifamily < ASHRAE901
   # @!group AirLoopHVAC
 
-  # Same as 90.1-2013
   # Determine the limits for the type of economizer present on the AirLoopHVAC, if any.
+  # @note Same as 90.1-2013
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Array<Double>] [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
   def air_loop_hvac_economizer_limits(air_loop_hvac, climate_zone)
     drybulb_limit_f = nil
@@ -73,21 +76,25 @@ class ZEAEDGMultifamily < ASHRAE901
     return [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
   end
 
-  # Same as 90.1-2013
   # Determine if the system economizer must be integrated or not.
-  # All economizers must be integrated in NREL ZNE Ready 2017
+  # @note same as 90.1-2013
+  # All economizers must be integrated in 90.1-2013
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if required, false if not
   def air_loop_hvac_integrated_economizer_required?(air_loop_hvac, climate_zone)
-    integrated_economizer_required = true
-    return integrated_economizer_required
+    return true
   end
 
   # Same as 90.1-2013
   # Check the economizer type currently specified in the ControllerOutdoorAir object on this air loop
   # is acceptable per the standard.
   #
-  # @param (see #economizer_required?)
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Bool] Returns true if allowable, if the system has no economizer or no OA system.
-  # Returns false if the economizer type is not allowable.
+  #   Returns false if the economizer type is not allowable.
   def air_loop_hvac_economizer_type_allowable?(air_loop_hvac, climate_zone)
     # EnergyPlus economizer types
     # 'NoEconomizer'
@@ -169,14 +176,13 @@ class ZEAEDGMultifamily < ASHRAE901
     return economizer_type_allowed
   end
 
-  # Same as 90.1-2013
   # Determine if multizone vav optimization is required.
+  # @note Same as 90.1-2013
   #
-  # @param (see #economizer_required?)
-  # @return [Bool] Returns true if required, false if not.
-  # @todo Add exception logic for
-  #   systems with AIA healthcare ventilation requirements
-  #   dual duct systems
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if required, false if not
+  # @todo Add exception logic for systems with AIA healthcare ventilation requirements dual duct systems
   def air_loop_hvac_multizone_vav_optimization_required?(air_loop_hvac, climate_zone)
     multizone_opt_required = false
 
@@ -245,7 +251,7 @@ class ZEAEDGMultifamily < ASHRAE901
       return multizone_opt_required
     end
 
-    # TODO: Not required for dual-duct systems
+    # @todo Not required for dual-duct systems
     # if self.isDualDuct
     # OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{controller_oa.name}: multizone optimization is not applicable because it is a dual duct system")
     # return multizone_opt_required
@@ -258,9 +264,9 @@ class ZEAEDGMultifamily < ASHRAE901
   end
 
   # Determines the OA flow rates above which an economizer is required.
-  # Two separate rates, one for systems with an economizer and another
-  # for systems without.
-  # are zero for both types.
+  # Two separate rates, one for systems with an economizer and another for systems without.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @return [Array<Double>] [min_oa_without_economizer_cfm, min_oa_with_economizer_cfm]
   def air_loop_hvac_demand_control_ventilation_limits(air_loop_hvac)
     min_oa_without_economizer_cfm = 1500.0 # half the 90.1-2013 requirement
@@ -270,14 +276,20 @@ class ZEAEDGMultifamily < ASHRAE901
 
   # Determine if the standard has an exception for demand control ventilation when an energy recovery device is present.
   # DCV and an ERV may be used in conjunction.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @return [Bool] returns true if required, false if not
   def air_loop_hvac_dcv_required_when_erv(air_loop_hvac)
     dcv_required_when_erv_present = true
     return dcv_required_when_erv_present
   end
 
-  # Same as 90.1-2013
   # Determine the air flow and number of story limits for whether motorized OA damper is required.
-  # @return [Array<Double>] [minimum_oa_flow_cfm, maximum_stories]
+  # @note Same as 90.1-2013
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Array<Double>] [minimum_oa_flow_cfm, maximum_stories]. If both nil, never required
   def air_loop_hvac_motorized_oa_damper_limits(air_loop_hvac, climate_zone)
     case climate_zone
     when 'ASHRAE 169-2006-0A',
@@ -308,10 +320,12 @@ class ZEAEDGMultifamily < ASHRAE901
     return [minimum_oa_flow_cfm, maximum_stories]
   end
 
-  # Same as 90.1-2013
   # Determine the number of stages that should be used as controls for single zone DX systems.
+  # @note Same as 90.1-2013
   # 90.1-2013 depends on the cooling capacity of the system.
   #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Integer] the number of stages: 0, 1, 2
   def air_loop_hvac_single_zone_controls_num_stages(air_loop_hvac, climate_zone)
     min_clg_cap_btu_per_hr = 65_000
@@ -327,12 +341,13 @@ class ZEAEDGMultifamily < ASHRAE901
     return num_stages
   end
 
-  # Same as 90.1-2013
   # Determine if the system required supply air temperature (SAT) reset.
+  # @note Same as 90.1-2013
   # For 90.1-2013, SAT reset requirements are based on climate zone.
   #
-  # @param (see #economizer_required?)
-  # @return [Bool] Returns true if required, false if not.
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if required, false if not
   def air_loop_hvac_supply_air_temperature_reset_required?(air_loop_hvac, climate_zone)
     is_sat_reset_required = false
 
@@ -393,6 +408,7 @@ class ZEAEDGMultifamily < ASHRAE901
   end
 
   # Default occupancy fraction threshold for determining if the spaces on the air loop are occupied
+  # @return [Double] threshold at which the air loop space are considered unoccupied
   def air_loop_hvac_unoccupied_threshold
     return 0.05
   end
@@ -400,7 +416,9 @@ class ZEAEDGMultifamily < ASHRAE901
   # Same as Standards method but with no DCV exception
   # Check if ERV is required on this airloop.
   #
-  # @return [Bool] Returns true if required, false if not.
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] Returns true if required, false if not
   def air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
     if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
       oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
@@ -456,11 +474,14 @@ class ZEAEDGMultifamily < ASHRAE901
     return erv_required
   end
 
-  # Same as 90.1-2016
   # Determine the airflow limits that govern whether or not an ERV is required.
   # Based on climate zone and % OA, plus the number of operating hours the system has.
-  # @return [Double] the flow rate above which an ERV is required.
-  # if nil, ERV is never required.
+  # @note Same as 90.1-2016
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param pct_oa [Double] percentage of outdoor air
+  # @return [Double] the flow rate above which an ERV is required. if nil, ERV is never required.
   def air_loop_hvac_energy_recovery_ventilator_flow_limit(air_loop_hvac, climate_zone, pct_oa)
     # Calculate the number of system operating hours
     # based on the availability schedule.
@@ -725,9 +746,13 @@ class ZEAEDGMultifamily < ASHRAE901
     return erv_cfm
   end
 
-  # Determine whether to apply an Energy Recovery Ventilator 'ERV' or a Heat Recovery Ventilator 'HRV' depending on the climate zone
+  # Determine whether to apply an Energy Recovery Ventilator 'ERV'
+  # or a Heat Recovery Ventilator 'HRV' depending on the climate zone
   # Defaults to ERV.
-  # @return [String] the ERV type
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [String] the erv type
   def air_loop_hvac_energy_recovery_ventilator_type(air_loop_hvac, climate_zone)
     erv_type = 'ERV'
     return erv_type
@@ -735,7 +760,9 @@ class ZEAEDGMultifamily < ASHRAE901
 
   # Determine whether to use a Plate-Frame or Rotary Wheel style ERV depending on air loop outdoor air flow rate
   # Defaults to Rotary.
-  # @return [String] the ERV type
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @return [String] the erv type
   def air_loop_hvac_energy_recovery_ventilator_heat_exchanger_type(air_loop_hvac)
     # Get the OA system
     if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
@@ -774,7 +801,7 @@ class ZEAEDGMultifamily < ASHRAE901
   # @param erv [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
   # @param erv_type [String] erv type ERV or HRV
   # @param heat_exchanger_type [String] heat exchanger type Rotary or Plate
-  # @return erv [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
+  # @return [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
   def air_loop_hvac_apply_energy_recovery_ventilator_efficiency(erv, erv_type: 'ERV', heat_exchanger_type: 'Rotary')
     if heat_exchanger_type == 'Plate'
       # based on Zehnder ComfoAir

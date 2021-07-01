@@ -6,9 +6,10 @@ class Standard
   # Per PNNL http://www.energycodes.gov/sites/default/files/documents/PrototypeModelEnhancements_2014_0.pdf
   # Appendix A: Service Water Heating
   #
-  # @return [Bool] true if successful, false if not
+  # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] water heater mixed object
+  # @return [Bool] returns true if successful, false if not
   def water_heater_mixed_apply_efficiency(water_heater_mixed)
-    # TODO: remove this once workaround for HPWHs is removed
+    # @todo remove this once workaround for HPWHs is removed
     if water_heater_mixed.partLoadFactorCurve.is_initialized
       if water_heater_mixed.partLoadFactorCurve.get.name.get.include?('HPWH_COP')
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, the workaround for HPWHs has been applied, efficiency will not be changed.")
@@ -29,7 +30,7 @@ class Standard
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
     # Get the volume of the water heater
-    # TODO: add capability to pull autosized water heater volume
+    # @todo add capability to pull autosized water heater volume
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
     volume_m3 = water_heater_mixed.tankVolume
     if volume_m3.empty?
@@ -177,7 +178,7 @@ class Standard
     # Skin loss
     water_heater_mixed.setOffCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
     water_heater_mixed.setOnCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
-    # TODO: Parasitic loss (pilot light)
+    # @todo Parasitic loss (pilot light)
     # PNNL document says pilot lights were removed, but IDFs
     # still have the on/off cycle parasitic fuel consumptions filled in
     water_heater_mixed.setOnCycleParasiticFuelType(fuel_type)
@@ -198,8 +199,9 @@ class Standard
   # in the baseline model.  For most standards and for most building
   # types, the baseline uses the same fuel type as the proposed.
   #
+  # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] water heater mixed object
   # @param building_type [String] the building type
-  # @return [Bool] returns true if successful, false if not.
+  # @return [Bool] returns true if successful, false if not
   def water_heater_mixed_apply_prm_baseline_fuel_type(water_heater_mixed, building_type)
     # baseline is same as proposed per Table G3.1 item 11.b
     return true # Do nothing
@@ -207,6 +209,7 @@ class Standard
 
   # Finds capacity in Btu/hr
   #
+  # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] water heater mixed object
   # @return [Double] capacity in Btu/hr to be used for find object
   def water_heater_mixed_find_capacity(water_heater_mixed)
     # Get the coil capacity

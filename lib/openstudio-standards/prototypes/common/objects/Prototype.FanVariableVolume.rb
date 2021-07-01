@@ -7,7 +7,7 @@ class Standard
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
   #
-  # @param fan_on_off [OpenStudio::Model::FanVariableVolume] variable volume fan object
+  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] variable volume fan object
   # @return [Bool] returns true if successful, false if not
   def fan_variable_volume_apply_prototype_fan_pressure_rise(fan_variable_volume)
     # Get the max flow rate from the fan.

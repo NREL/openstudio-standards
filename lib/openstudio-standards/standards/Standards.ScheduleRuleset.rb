@@ -3,8 +3,8 @@ class Standard
 
   # Returns the min and max value for this schedule_day object
   #
-  # @param [object] daySchedule
-  # @return [Double]
+  # @param day_sch [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
+  # @return [Double] day full load hours
   def day_schedule_equivalent_full_load_hrs(day_sch)
     # Determine the full load hours for just one day
     daily_flh = 0
@@ -31,7 +31,7 @@ class Standard
   # (always 1.0, 24/7, 365) would return a value of 8760.
   #
   # @author Andrew Parker, NREL.  Matt Leach, NORESCO.
-  # @param [object] scheduleRuleset
+  # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
   # @return [Double] The total number of full load hours for this schedule.
   def schedule_ruleset_annual_equivalent_full_load_hrs(schedule_ruleset)
     # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "Calculating total annual EFLH for schedule: #{self.name}")
@@ -119,7 +119,7 @@ class Standard
   # It doesn't evaluate design days only run-period conditions
   #
   # @author David Goldwasser, NREL.
-  # @param [object] scheduleRuleset
+  # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
   # @return [Hash] Hash has two keys, min and max.
   def schedule_ruleset_annual_min_max_value(schedule_ruleset)
     # gather profiles
@@ -152,14 +152,12 @@ class Standard
     return result
   end
 
-  # Returns the total number of hours where the schedule
-  # is greater than the specified value.
+  # Returns the total number of hours where the schedule is greater than the specified value.
   #
   # @author Andrew Parker, NREL.
-  # @param lower_limit [Double] the lower limit.  Values equal to the limit
-  # will not be counted.
-  # @return [Double] The total number of hours
-  # this schedule is above the specified value.
+  # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
+  # @param lower_limit [Double] the lower limit.  Values equal to the limit will not be counted.
+  # @return [Double] The total number of hours this schedule is above the specified value.
   def schedule_ruleset_annual_hours_above_value(schedule_ruleset, lower_limit)
     # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "Calculating total annual hours above #{lower_limit} for schedule: #{self.name}")
 
@@ -251,7 +249,7 @@ class Standard
 
   # Returns the averaged hourly values of the ruleset schedule for all hours of the year
   #
-  # @param schedule_ruleset [<OpenStudio::Model::ScheduleRuleset>] A ScheduleRuleset object
+  # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
   # @return [Array<Double>] An array of hourly values over the whole year
   def schedule_ruleset_annual_hourly_values(schedule_ruleset)
     schedule_values = []
@@ -276,8 +274,8 @@ class Standard
   # method expands on functionality of RemoveUnusedDefaultProfiles measure
   #
   # @author David Goldwasser
-  # @param [Object] ScheduleRuleset
-  # @return [Object] ScheduleRuleset
+  # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
+  # @return [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
   def schedule_ruleset_cleanup_profiles(schedule_ruleset)
     # set start and end dates
     year_description = schedule_ruleset.model.yearDescription.get
@@ -379,10 +377,11 @@ class Standard
   # this will use parametric inputs contained in schedule and profiles along with inferred hours of operation to generate updated ruleset schedule profiles
   #
   # @author David Goldwasser
-  # @param schedule
-  # @param infer_hoo_for_non_assigned_objects [Bool] # attempt to get hoo for objects like swh with and exterior lighting
+  # @param schedule [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
+  # @param ramp_frequency [Double] time frequency to do ramp
+  # @param infer_hoo_for_non_assigned_objects [Bool] attempt to get hoo for objects like swh with and exterior lighting
   # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
-  # @return schedule
+  # @return [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
   def schedule_apply_parametric_inputs(schedule, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order, parametric_inputs = nil)
     # Check if parametric inputs were supplied and generate them if not
     if parametric_inputs.nil?
@@ -512,7 +511,8 @@ class Standard
           else
             sch_rule_autogen.setName("autogen #{rule.name} #{target_index}")
           end
-          schedule.setScheduleRuleIndex(sch_rule_autogen, target_index) # TODO: - confirm this is higher priority than the non-auto-generated rule
+          schedule.setScheduleRuleIndex(sch_rule_autogen, target_index)
+          # @todo confirm this is higher priority than the non-auto-generated rule
           hash[:days_to_fill].each do |day|
             date = OpenStudio::Date.fromDayOfYear(day, year)
             sch_rule_autogen.addSpecificDate(date)
@@ -547,8 +547,8 @@ class Standard
       end
     end
 
-    # TODO: - create summer and winter design day profiles (make sure scheduleDay objects parametric)
-    # todo - should they have their own formula, or should this be hard coded logic by schedule type
+    # @todo create summer and winter design day profiles (make sure scheduleDay objects parametric)
+    # @todo should they have their own formula, or should this be hard coded logic by schedule type
 
     # check orig vs. updated aeflh
     final_aeflh = schedule_ruleset_annual_equivalent_full_load_hrs(schedule)
@@ -567,13 +567,15 @@ class Standard
   # Sunday values will be applied to any rules that are used on a Sunday.
   # If a rule applies to Weekdays, Saturdays, and/or Sundays, values will be applied in that order of precedence.
   # If a rule does not apply to any of these days, it is unused and will not be modified.
+  #
+  # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
   # @param wkdy_start_time [OpenStudio::Time] Weekday start time. If nil, no change will be made to this day.
   # @param wkdy_end_time [OpenStudio::Time] Weekday end time.  If greater than 24:00, hours of operation will wrap over midnight.
   # @param sat_start_time [OpenStudio::Time] Saturday start time. If nil, no change will be made to this day.
   # @param sat_end_time [OpenStudio::Time] Saturday end time.  If greater than 24:00, hours of operation will wrap over midnight.
   # @param sun_start_time [OpenStudio::Time] Sunday start time.  If nil, no change will be made to this day.
   # @param sun_end_time [OpenStudio::Time] Sunday end time.  If greater than 24:00, hours of operation will wrap over midnight.
-  # @return [Bool] Returns true if successful, false if not
+  # @return [Bool] returns true if successful, false if not
   def schedule_ruleset_set_hours_of_operation(schedule_ruleset, wkdy_start_time: nil, wkdy_end_time: nil, sat_start_time: nil, sat_end_time: nil, sun_start_time: nil, sun_end_time: nil)
     # Default day is assumed to represent weekdays
     if wkdy_start_time && wkdy_end_time
@@ -613,7 +615,7 @@ class Standard
   # @param schedule_day [OpenStudio::Model::ScheduleDay] The day schedule to set.
   # @param start_time [OpenStudio::Time] Start time.
   # @param end_time [OpenStudio::Time] End time.  If greater than 24:00, hours of operation will wrap over midnight.
-
+  #
   # @return [Void]
   # @api private
   def schedule_day_set_hours_of_operation(schedule_day, start_time, end_time)
@@ -635,7 +637,15 @@ class Standard
   # process individual schedule profiles
   #
   # @author David Goldwasser
-  # @return schedule_day
+  # @param sch_day [OpenStudio::Model::ScheduleDay] schedule day object
+  # @param hoo_start [Double] hours of operation start
+  # @param hoo_end [Double] hours of operation end
+  # @param val_flr [Double] value floor
+  # @param val_clg [Double] value ceiling
+  # @param ramp_frequency [Double] time frequency to do ramp
+  # @param infer_hoo_for_non_assigned_objects [Bool] attempt to get hoo for objects like swh with and exterior lighting
+  # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
+  # @return [OpenStudio::Model::ScheduleDay] schedule day
   # @api private
   def process_hrs_of_operation_hash(sch_day, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
     # process hoo and floor/ceiling vars to develop formulas without variables
@@ -736,7 +746,7 @@ class Standard
         last_time = time_value_pair[0]
       elsif time_value_pair[0] < last_time || neg_time_hash.key?(i)
 
-        # TODO: - it doesn't actually stop here now
+        # @todo it doesn't actually stop here now
         if error_on_out_of_order
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Pre-interpolated processed hash for #{sch_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Method will stop because Error on Out of Order was set to true.")
         end
@@ -848,7 +858,7 @@ class Standard
       value = time_val.last
       sch_day.addValue(os_time, value)
     end
-    # TODO: apply secondary logic
+    # @todo apply secondary logic
 
     # Tell EnergyPlus to interpolate schedules to timestep so that it doesn't have to be done in this code
     sch_day.setInterpolatetoTimestep(true)
