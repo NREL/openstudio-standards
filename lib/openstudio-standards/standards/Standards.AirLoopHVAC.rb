@@ -1361,7 +1361,7 @@ class Standard
 
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    return false unless oa_sys.is_initialized
+    return true unless oa_sys.is_initialized
 
     oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
