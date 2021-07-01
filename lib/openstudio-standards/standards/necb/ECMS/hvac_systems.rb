@@ -403,11 +403,11 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Add equipment for ECM 'hs08_zonalvrf':
+  # Add equipment for ECM 'hs08_doas_ccashp_vrf':
   #   -Constant-volume DOAS with cold-climate air source heat pump for heating and cooling and electric backup
   #   -Zonal terminal VRF units connected to an outdoor VRF condenser unit
   #   -Zonal electric backup
-  def add_ecm_hs08_vrfzonal(model:,
+  def add_ecm_hs08_ccashp_vrf(model:,
                             system_zones_map:,
                             system_doas_flags:)
     # Add outdoor VRF unit
@@ -472,7 +472,7 @@ class ECMS
 
   # =============================================================================================================================
   # Apply efficiencies and performance curves for ECM 'hs08_vrfzonal'
-  def apply_efficiency_ecm_hs08_vrfzonal(model)
+  def apply_efficiency_ecm_hs08_ccashp_vrf(model)
     # Use same performance data as ECM "hs09_ccashpsys" for air system
     apply_efficiency_ecm_hs09_ccashpsys(model)
     # Apply efficiency and curves for VRF units
