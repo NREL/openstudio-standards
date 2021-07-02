@@ -67,7 +67,7 @@ module CoilDX
         if containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
           heat_pump = true
         end
-        # todo Add other zone hvac systems
+        # @todo Add other zone hvac systems
       end
     else
       if !coil_dx.airLoopHVAC.get.supplyComponents('OS:Coil:Heating:DX:SingleSpeed'.to_IddObjectType).empty? ||

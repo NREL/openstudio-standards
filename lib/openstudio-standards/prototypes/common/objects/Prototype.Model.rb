@@ -672,7 +672,7 @@ Standard.class_eval do
   end
 
   # This function returns the space's ground perimeter and area. Assumes only one floor per space!
-  # @param space[OpenStudio::Model::Space]
+  # @param space [OpenStudio::Model::Space] space object
   # @return [Numeric, Numeric]
   def model_get_f_floor_geometry(space)
     perimeter = 0

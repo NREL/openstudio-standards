@@ -53,7 +53,7 @@ module Outpatient
     end
 
     # Some exceptions for the Outpatient
-    # TODO Refactor: not sure if this is actually enabled in the original code
+    # @todo Refactor: not sure if this is actually enabled in the original code
     #     if system_name.include? 'PVAV Outpatient F1'
     #       # Outpatient two AHU1 and AHU2 have different HVAC schedule
     #       hvac_op_sch = model_add_schedule(model, 'OutPatientHealthCare AHU1-Fan_Pre2004')

@@ -25,7 +25,7 @@ class Standard
             clg_coil = unitary.coolingCoil.get
           end
         end
-        #@todo Add other unitary systems
+        # @todo Add other unitary systems
       elsif coil_heating_dx_single_speed.containingZoneHVACComponent.is_initialized
         containing_comp = coil_heating_dx_single_speed.containingZoneHVACComponent.get
         # PTHP

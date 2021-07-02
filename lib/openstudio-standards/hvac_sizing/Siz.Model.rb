@@ -74,7 +74,7 @@ class OpenStudio::Model::Model
       return false
     end
 
-    # TODO Sizing methods for these types of equipment are
+    # @todo Sizing methods for these types of equipment are
     # currently only stubs that need to be filled in.
     self.getAirConditionerVariableRefrigerantFlows.sort.each {|obj| obj.applySizingValues}
     self.getAirLoopHVACUnitaryHeatCoolVAVChangeoverBypasss.sort.each {|obj| obj.applySizingValues}
@@ -176,7 +176,7 @@ class OpenStudio::Model::Model
   # Changes all hard-sized HVAC values to Autosized
   def autosize
   
-    # TODO Sizing methods for these types of equipment are
+    # @todo Sizing methods for these types of equipment are
     # currently only stubs that need to be filled in.
     self.getAirConditionerVariableRefrigerantFlows.sort.each {|obj| obj.autosize}
     self.getAirLoopHVACUnitaryHeatCoolVAVChangeoverBypasss.sort.each {|obj| obj.autosize}

@@ -173,7 +173,7 @@ class Standard
                              water_heater_thermal_zone,
                              number_water_heaters)
     # Water heater
-    # TODO Standards - Change water heater methodology to follow
+    # @todo Standards - Change water heater methodology to follow
     # 'Model Enhancements Appendix A.'
     water_heater_capacity_btu_per_hr = OpenStudio.convert(water_heater_capacity, 'W', 'Btu/hr').get
     water_heater_capacity_kbtu_per_hr = OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'kBtu/hr').get
@@ -265,7 +265,7 @@ class Standard
       # Make a part-load efficiency modifier curve with a value above 1, which
       # is multiplied by the nominal efficiency of 100% to represent
       # the COP of a HPWH.
-      # TODO could make this workaround better by using EMS
+      # @todo could make this workaround better by using EMS
       # to modify this curve output in realtime based on
       # the OA temperature.
       hpwh_cop = 2.8
@@ -646,7 +646,7 @@ class Standard
     swh_pump.addToNode(booster_service_water_loop.supplyInletNode)
 
     # Water heater
-    # TODO Standards - Change water heater methodology to follow
+    # @todo Standards - Change water heater methodology to follow
     # 'Model Enhancements Appendix A.'
     water_heater_capacity_btu_per_hr = OpenStudio.convert(water_heater_capacity, 'W', 'Btu/hr').get
     water_heater_capacity_kbtu_per_hr = OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'kBtu/hr').get

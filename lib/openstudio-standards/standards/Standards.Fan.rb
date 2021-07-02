@@ -207,11 +207,11 @@ module Fan
   def fan_baseline_impeller_efficiency(fan)
     # Assume that the fan efficiency is 65% for normal fans
     # and 55% for small fans (like exhaust fans).
-    # TODO add fan type to fan data model
+    # @todo add fan type to fan data model
     # and infer impeller efficiency from that?
     # or do we always assume a certain type of
     # fan impeller for the baseline system?
-    # TODO check COMNET and T24 ACM and PNNL 90.1 doc
+    # @todo check COMNET and T24 ACM and PNNL 90.1 doc
     fan_impeller_eff = 0.65
 
     if fan_small_fan?(fan)

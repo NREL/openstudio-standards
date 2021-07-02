@@ -18,7 +18,7 @@ class Standard
     end
 
     # Get the capacity of the water heater
-    # TODO add capability to pull autosized water heater capacity
+    # @todo add capability to pull autosized water heater capacity
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
     capacity_w = water_heater_mixed.heaterMaximumCapacity
     if capacity_w.empty?

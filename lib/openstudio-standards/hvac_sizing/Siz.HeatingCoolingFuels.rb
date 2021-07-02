@@ -270,7 +270,7 @@ class OpenStudio::Model::Model
         equipment = equipment.to_AirTerminalSingleDuctConstantVolumeReheat.get
         fuels += self.coil_heating_fuels(equipment.reheatCoil)  
       when 'OS_AirTerminal_SingleDuct_InletSideMixer'
-        # TODO
+        # @todo complete method
       when 'OS_AirTerminal_SingleDuct_ParallelPIUReheat'
         equipment = equipment.to_AirTerminalSingleDuctParallelPIUReheat.get
         fuels += self.coil_heating_fuels(equipment.reheatCoil) 

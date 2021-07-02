@@ -7,6 +7,7 @@ class Standard
   #   and therefore may not return perfect results.  However, it works well in most tested
   #   situations.  When it fails, it will log warnings/errors for users to see.
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @param draw_daylight_areas_for_debugging [Bool] If this argument is set to true,
   #   daylight areas will be added to the model as surfaces for visual debugging.
   #   Yellow = toplighted area, Red = primary sidelighted area,
@@ -541,13 +542,13 @@ class Standard
     return result
   end
 
-  # Determines the method used to extend the daylighted area horizontally
-  # next to a window.  If the method is 'fixed', 2 ft is added to the
-  # width of each window.  If the method is 'proportional', a distance
-  # equal to half of the head height of the window is added.  If the method is 'none',
-  # no additional width is added.
+  # Determines the method used to extend the daylighted area horizontally next to a window.
+  # If the method is 'fixed', 2 ft is added to the width of each window.
+  # If the method is 'proportional', a distance equal to half of the head height of the window is added.
+  # If the method is 'none', no additional width is added.
   # Default is none.
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @return [String] returns 'fixed' or 'proportional'
   def space_daylighted_area_window_width(space)
     method = 'none'
@@ -555,8 +556,9 @@ class Standard
   end
 
   # Returns the sidelighting effective aperture
-  # space_sidelighting_effective_aperture(space)  = E(window area * window VT) / primary_sidelighted_area
+  # space_sidelighting_effective_aperture(space) = E(window area * window VT) / primary_sidelighted_area
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @param primary_sidelighted_area [Double] the primary sidelighted area (m^2) of the space
   # @return [Double] the unitless sidelighting effective aperture metric
   def space_sidelighting_effective_aperture(space, primary_sidelighted_area)
@@ -667,8 +669,9 @@ class Standard
   end
 
   # Returns the skylight effective aperture
-  # space_skylight_effective_aperture(space)  = E(0.85 * skylight area * skylight VT * WF) / toplighted_area
+  # space_skylight_effective_aperture(space) = E(0.85 * skylight area * skylight VT * WF) / toplighted_area
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @param toplighted_area [Double] the toplighted area (m^2) of the space
   # @return [Double] the unitless skylight effective aperture metric
   def space_skylight_effective_aperture(space, toplighted_area)
@@ -788,6 +791,7 @@ class Standard
   #   and therefore may not return perfect results.  However, it works well in most tested
   #   situations.  When it fails, it will log warnings/errors for users to see.
   #
+  # @param space [OpenStudio::Model::Space] the space with daylighting
   # @param remove_existing_controls [Bool] if true, will remove existing controls then add new ones
   # @param draw_daylight_areas_for_debugging [Bool] If this argument is set to true,
   #   daylight areas will be added to the model as surfaces for visual debugging.
@@ -1197,12 +1201,17 @@ class Standard
     return [req_top_ctrl, req_pri_ctrl, req_sec_ctrl]
   end
 
-  # Determine the fraction controlled by each sensor and which
-  # window each sensor should go near.
+  # Determine the fraction controlled by each sensor and which window each sensor should go near.
   #
-  # @param space [OpenStudio::Model::Space] the space with the daylighting
+  # @param space [OpenStudio::Model::Space] space object
+  # @param areas [Hash] a hash of daylighted areas
   # @param sorted_windows [Hash] a hash of windows, sorted by priority
   # @param sorted_skylights [Hash] a hash of skylights, sorted by priority
+  # @param req_top_ctrl [Bool] if toplighting controls are required
+  # @param req_pri_ctrl [Bool] if primary sidelighting controls are required
+  # @param req_sec_ctrl [Bool] if secondary sidelighting controls are required
+  # @return [Array] array of 4 items
+  #   [sensor 1 fraction, sensor 2 fraction, sensor 1 window, sensor 2 window]
   def space_daylighting_fractions_and_windows(space,
                                               areas,
                                               sorted_windows,
@@ -1218,9 +1227,9 @@ class Standard
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end
 
-  # Set the infiltration rate for this space to include
-  # the impact of air leakage requirements in the standard.
+  # Set the infiltration rate for this space to include the impact of air leakage requirements in the standard.
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @return [Double] true if successful, false if not
   # @todo handle doors and vestibules
   def space_apply_infiltration_rate(space)
@@ -1315,15 +1324,16 @@ class Standard
 
   # Baseline infiltration rate
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @return [Double] the baseline infiltration rate, in cfm/ft^2 exterior above grade wall area at 75 Pa
   def space_infiltration_rate_75_pa(space)
     basic_infil_rate_cfm_per_ft2 = 1.8
     return basic_infil_rate_cfm_per_ft2
   end
 
-  # Calculate the area of the exterior walls,
-  # including the area of the windows on these walls.
+  # Calculate the area of the exterior walls, including the area of the windows on these walls.
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @return [Double] area in m^2
   def space_exterior_wall_and_window_area(space)
     area_m2 = 0.0
@@ -1346,9 +1356,9 @@ class Standard
     return area_m2
   end
 
-  # Calculate the area of the exterior walls,
-  # including the area of the windows on these walls.
+  # Calculate the area of the exterior walls, including the area of the windows on these walls.
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @return [Double] area in m^2
   def space_exterior_wall_and_roof_and_subsurface_area(space)
     area_m2 = 0.0
@@ -1372,12 +1382,11 @@ class Standard
   end
 
   # Determine if the space is a plenum.
-  # Assume it is a plenum if it is a supply
-  # or return plenum for an AirLoop,
+  # Assume it is a plenum if it is a supply or return plenum for an AirLoop,
   # if it is not part of the total floor area,
-  # or if the space type name contains the
-  # word plenum.
+  # or if the space type name contains the word plenum.
   #
+  # @param space [OpenStudio::Model::Space] space object
   # return [Bool] returns true if plenum, false if not
   def space_plenum?(space)
     plenum_status = false
@@ -1414,12 +1423,12 @@ class Standard
     return plenum_status
   end
 
-  # Determine if the space is residential based on the
-  # space type properties for the space.
+  # Determine if the space is residential based on the space type properties for the space.
   # For spaces with no space type, assume nonresidential.
   # For spaces that are plenums, base the decision on the space
   # type of the space below the largest floor in the plenum.
   #
+  # @param space [OpenStudio::Model::Space] space object
   # return [Bool] true if residential, false if nonresidential
   def space_residential?(space)
     is_res = false
@@ -1478,9 +1487,9 @@ class Standard
     return is_res
   end
 
-  # Determines whether the space is conditioned per 90.1,
-  # which is based on heating and cooling loads.
+  # Determines whether the space is conditioned per 90.1, which is based on heating and cooling loads.
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
   # @todo add logic to detect indirectly-conditioned spaces
@@ -1499,11 +1508,11 @@ class Standard
     return cond_cat
   end
 
-  # Determines heating status.  If the space's
-  # zone has a thermostat with a maximum heating
-  # setpoint above 5C (41F), counts as heated.
+  # Determines heating status.
+  # If the space's zone has a thermostat with a maximum heating setpoint above 5C (41F), counts as heated.
   #
   # @author Andrew Parker, Julien Marrec
+  # @param space [OpenStudio::Model::Space] space object
   # @return [Bool] returns true if heated, false if not
   def space_heated?(space)
     # Get the zone this space is inside
@@ -1520,11 +1529,11 @@ class Standard
     return htd
   end
 
-  # Determines cooling status.  If the space's
-  # zone has a thermostat with a minimum cooling
-  # setpoint above 33C (91F), counts as cooled.
+  # Determines cooling status.
+  # If the space's zone has a thermostat with a minimum cooling setpoint above 33C (91F), counts as cooled.
   #
   # @author Andrew Parker, Julien Marrec
+  # @param space [OpenStudio::Model::Space] space object
   # @return [Bool] returns true if cooled, false if not
   def space_cooled?(space)
     # Get the zone this space is inside
@@ -1541,13 +1550,11 @@ class Standard
     return cld
   end
 
-  # Determine the design internal load (W) for
-  # this space without space multipliers.
-  # This include People, Lights, Electric Equipment,
-  # and Gas Equipment.  It assumes 100% of the wattage
-  # is converted to heat, and that the design peak
-  # schedule value is 1 (100%).
+  # Determine the design internal load (W) for this space without space multipliers.
+  # This include People, Lights, Electric Equipment, and Gas Equipment.
+  # It assumes 100% of the wattage is converted to heat, and that the design peak schedule value is 1 (100%).
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @return [Double] the design internal load, in W
   def space_design_internal_load(space)
     load_w = 0.0
@@ -1588,6 +1595,10 @@ class Standard
   end
 
   # will return a sorted array of array of spaces and connected area (Descending)
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param same_floor [Bool] only consider spaces on the same floor
+  # @return [Array<OpenStudio::Model::Space>] sorted array of spaces
   def space_get_adjacent_spaces_with_shared_wall_areas(space, same_floor = true)
     same_floor_spaces = []
     spaces = []
@@ -1649,19 +1660,22 @@ class Standard
   end
 
   # Find the space that has the most wall area touching this space.
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param same_floor [Bool] only consider spaces on the same floor
+  # @return [OpenStudio::Model::Space] space object
   def space_get_adjacent_space_with_most_shared_wall_area(space, same_floor = true)
     return get_adjacent_spaces_with_touching_area(same_floor)[0][0]
   end
 
   # @todo add related related to space_hours_of_operation like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
   # @todo ideally these could take in a date range, array of dates and or days of week. Hold off until need is a bit more defined.
-
   # If the model has an hours of operation schedule set in default schedule set for building that looks valid it will
   # report hours of operation. Won't be a single set of values, will be a collection of rules
   # note Building, space, and spaceType can get hours of operation from schedule set, but not buildingStory
   #
   # @author David Goldwasser
-  # @param space [Space] takes space
+  # @param space [OpenStudio::Model::Space] space object
   # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
   def space_hours_of_operation(space)
     default_sch_type = OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')
@@ -1859,11 +1873,15 @@ class Standard
 
   private
 
-  # A series of private methods to modify polygons.  Most are
-  # wrappers of native OpenStudio methods, but with
-  # workarounds for known issues or limitations.
+  # A series of private methods to modify polygons.
+  # Most are wrappers of native OpenStudio methods, but with workarounds for known issues or limitations.
 
   # Check the z coordinates of a polygon
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param polygons [Array<Array>] Array of array of vertices (polygons)
+  # @param name [String] name of polygons
+  # @return [Integer] return number of errors
   # @api private
   def space_check_z_zero(space, polygons, name)
     fails = []
@@ -1880,10 +1898,14 @@ class Standard
     end
     # OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Space", "Checking z=0: #{name} is greater than or equal to #{clsss.uniq.to_s.gsub(/\[|\]/,'|')}.")
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "***FAIL*** #{space.name} z=0 failed for #{errs} vertices in #{name}; #{fails.join(', ')}.") if errs > 0
+    return errs
   end
 
-  # A method to convert an array of arrays to
-  # an array of OpenStudio::Point3ds.
+  # A method to convert an array of arrays to an array of OpenStudio::Point3ds.
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param ruby_polygons [Array<Array>] Array of array of vertices (polygons)
+  # @return [Array<Array>] Array of array of Point3D objects (polygons)
   # @api private
   def space_ruby_polygons_to_point3d_z_zero(space, ruby_polygons)
     # Convert the final polygons back to OpenStudio
@@ -1901,6 +1923,11 @@ class Standard
   end
 
   # A method to zero-out the z vertex of an array of polygons
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param polygons [Array<Array>] Array of array of vertices (polygons)
+  # @param new_z [Double] new z value in meters
+  # @return [Array<Array>] Array of array of Point3D objects (polygons)
   # @api private
   def space_polygons_set_z(space, polygons, new_z)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "### #{polygons}")
@@ -1920,7 +1947,12 @@ class Standard
   end
 
   # A method to returns the number of duplicate vertices in a polygon.
-  # TODO does not actually wor
+  # @todo does not actually work
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param ruby_polygon [Array] array of vertices (polygon)
+  # @param tol [Double] tolerance
+  # @return [Array] array of duplicates
   # @api private
   def space_find_duplicate_vertices(space, ruby_polygon, tol = 0.001)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', '***')
@@ -1942,8 +1974,14 @@ class Standard
     return duplicates
   end
 
-  # Subtracts one array of polygons from the next,
-  # returning an array of resulting polygons.
+  # Subtracts one array of polygons from the next, returning an array of resulting polygons.
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param a_polygons [Array<Array>] Array of array of vertices (polygons)
+  # @param b_polygons [Array<Array>] Array of array of vertices (polygons)
+  # @param a_name [String] name of a polygons
+  # @param b_name [String] name of b polygons
+  # @return [Array<Array>] Array of array of vertices (polygons)
   # @api private
   def space_a_polygons_minus_b_polygons(space, a_polygons, b_polygons, a_name, b_name)
     final_polygons_ruby = []
@@ -2058,6 +2096,12 @@ class Standard
 
   # Wrapper to catch errors in joinAll method
   # [utilities.geometry.joinAll] <1> Expected polygons to join together
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param polygons [Array] array of vertices (polygon)
+  # @param tol [Double] tolerance
+  # @param name [String] name of polygons
+  # @return [Array<Array>] Array of array of vertices (polygons)
   # @api private
   def space_join_polygons(space, polygons, tol, name)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "Joining #{name} from #{space.name}")
@@ -2157,6 +2201,10 @@ class Standard
   end
 
   # Gets the total area of a series of polygons
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param polygons [Array] array of vertices (polygon)
+  # @return [Double] area in meters
   # @api private
   def space_total_area_of_polygons(space, polygons)
     total_area_m2 = 0
@@ -2174,6 +2222,12 @@ class Standard
 
   # Returns an array of resulting polygons.
   # Assumes that a_polygons don't overlap one another, and that b_polygons don't overlap one another
+  #
+  # @param a_polygons [Array<Array>] Array of array of vertices (polygons)
+  # @param b_polygons [Array<Array>] Array of array of vertices (polygons)
+  # @param a_name [String] name of a polygons
+  # @param b_name [String] name of b polygons
+  # @return [Double] overlapping area in meters
   # @api private
   def space_area_a_polygons_overlap_b_polygons(space, a_polygons, b_polygons, a_name, b_name)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "#{a_polygons.size} #{a_name} overlaps #{b_polygons.size} #{b_name}")

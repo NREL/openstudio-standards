@@ -56,7 +56,8 @@ class Standard
       air_loop_hvac_apply_vav_damper_action(air_loop_hvac)
 
       # Multizone VAV Optimization
-      # This rule does not apply to two hospital and one outpatient systems (TODO add hospital two systems as exception)
+      # This rule does not apply to two hospital and one outpatient systems
+      # @todo add hospital two systems as exception
       unless air_loop_hvac.name.to_s.include? 'Outpatient F1'
         if air_loop_hvac_multizone_vav_optimization_required?(air_loop_hvac, climate_zone)
           air_loop_hvac_enable_multizone_vav_optimization(air_loop_hvac)
@@ -1468,7 +1469,7 @@ class Standard
 
     erv_required = nil
     # ERV not applicable for medical AHUs (AHU1 in Outpatient), per AIA 2001 - 7.31.D2.
-    # TODO refactor: move building type specific code
+    # @todo refactor: move building type specific code
     if air_loop_hvac.name.to_s.include? 'Outpatient F1'
       erv_required = false
       return erv_required

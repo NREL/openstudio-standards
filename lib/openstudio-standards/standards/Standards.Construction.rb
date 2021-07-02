@@ -1,9 +1,9 @@
 class Standard
   # @!group Construction
 
-  # Sets the U-value of a construction to a specified value
-  # by modifying the thickness of the insulation layer.
+  # Sets the U-value of a construction to a specified value by modifying the thickness of the insulation layer.
   #
+  # @param construction [OpenStudio::Model::Construction] construction object
   # @param target_u_value_ip [Double] U-Value (Btu/ft^2*hr*R)
   # @param insulation_layer_name [String] The name of the insulation layer in this construction
   # @param intended_surface_type [String]
@@ -118,9 +118,9 @@ class Standard
     return true
   end
 
-  # Sets the U-value of a construction to a specified value
-  # by modifying the thickness of the insulation layer.
+  # Sets the U-value of a construction to a specified value by modifying the thickness of the insulation layer.
   #
+  # @param construction [OpenStudio::Model::Construction] construction object
   # @param target_u_value_ip [Double] U-Value (Btu/ft^2*hr*R)
   # @param intended_surface_type [String]
   #   Valid choices:  'AtticFloor', 'AtticWall', 'AtticRoof', 'DemisingFloor', 'InteriorFloor', 'InteriorCeiling',
@@ -209,9 +209,9 @@ class Standard
     return true
   end
 
-  # Sets the U-value of a construction to a specified value
-  # by modifying the thickness of the insulation layer.
+  # Sets the U-value of a construction to a specified value by modifying the thickness of the insulation layer.
   #
+  # @param construction [OpenStudio::Model::Construction] construction object
   # @param target_shgc [Double] Solar Heat Gain Coefficient
   # @return [Bool] returns true if successful, false if not
   def construction_set_glazing_shgc(construction, target_shgc)
@@ -236,6 +236,8 @@ class Standard
 
   # Determines if the construction is a simple glazing construction,
   # as indicated by having a single layer of type SimpleGlazing.
+  #
+  # @param construction [OpenStudio::Model::Construction] construction object
   # @return [Bool] returns true if it is a simple glazing, false if not
   def construction_simple_glazing?(construction)
     # Not simple if more than 1 layer
@@ -257,6 +259,7 @@ class Standard
   # the insulation layer according to the values from 90.1-2004
   # Table A6.3 Assembly F-Factors for Slab-on-Grade Floors.
   #
+  # @param construction [OpenStudio::Model::Construction] construction object
   # @param target_f_factor_ip [Double] F-Factor
   # @param insulation_layer_name [String] The name of the insulation layer in this construction
   # @return [Bool] returns true if successful, false if not
@@ -279,6 +282,7 @@ class Standard
   # the insulation layer according to the values from 90.1-2004
   # Table A4.2 Assembly C-Factors for Below-Grade walls.
   #
+  # @param construction [OpenStudio::Model::Construction] construction object
   # @param target_c_factor_ip [Double] C-Factor
   # @param insulation_layer_name [String] The name of the insulation layer in this construction
   # @return [Bool] returns true if successful, false if not
@@ -298,6 +302,8 @@ class Standard
 
   # Get the SHGC as calculated by EnergyPlus.
   # Only applies to fenestration constructions.
+  #
+  # @param construction [OpenStudio::Model::Construction] construction object
   # @return [Double] the SHGC as a decimal.
   def construction_calculated_solar_heat_gain_coefficient(construction)
     construction_name = construction.name.get.to_s
@@ -348,6 +354,8 @@ class Standard
 
   # Get the VT as calculated by EnergyPlus.
   # Only applies to fenestration constructions.
+  #
+  # @param construction [OpenStudio::Model::Construction] construction object
   # @return [Double] the visible transmittance as a decimal.
   def construction_calculated_visible_transmittance(construction)
     construction_name = construction.name.get.to_s
@@ -398,6 +406,8 @@ class Standard
 
   # Get the U-Factor as calculated by EnergyPlus.
   # Only applies to fenestration constructions.
+  #
+  # @param construction [OpenStudio::Model::Construction] construction object
   # @return [Double] the U-Factor in W/m^2*K.
   def construction_calculated_u_factor(construction)
     construction_name = construction.name.get.to_s
@@ -446,39 +456,48 @@ class Standard
     return u_factor_w_per_m2_k
   end
 
+  # find and get the insulation layer for a construction
+  #
+  # @param construction [OpenStudio::Model::Construction] construction object
+  # @return [OpenStudio::Model::Material] insulation layer
   def find_and_set_insulation_layer(construction)
     # skip if already has an insulation layer set.
-    if construction.insulation.empty?
-      # find insulation layer
-      min_conductance = 100.0
-      # loop through Layers
-      construction.layers.each do |layer|
-        # try casting the layer to an OpaqueMaterial.
-        material = nil
-        material = layer.to_OpaqueMaterial.get unless layer.to_OpaqueMaterial.empty?
-        material = layer.to_FenestrationMaterial.get unless layer.to_FenestrationMaterial.empty?
-        # check if the cast was successful, then find the insulation layer.
-        unless material.nil?
+    return construction.insulation.get unless construction.insulation.empty?
 
-          if BTAP::Resources::Envelope::Materials.get_conductance(material) < min_conductance
-            # Keep track of the highest thermal resistance value.
-            min_conductance = BTAP::Resources::Envelope::Materials.get_conductance(material)
-            return_material = material
-            unless material.to_OpaqueMaterial.empty?
-              construction.setInsulation(material)
-            end
+    # find insulation layer
+    min_conductance = 100.0
+    # loop through Layers
+    construction.layers.each do |layer|
+      # try casting the layer to an OpaqueMaterial.
+      material = nil
+      material = layer.to_OpaqueMaterial.get unless layer.to_OpaqueMaterial.empty?
+      material = layer.to_FenestrationMaterial.get unless layer.to_FenestrationMaterial.empty?
+      # check if the cast was successful, then find the insulation layer.
+      unless material.nil?
+
+        if BTAP::Resources::Envelope::Materials.get_conductance(material) < min_conductance
+          # Keep track of the highest thermal resistance value.
+          min_conductance = BTAP::Resources::Envelope::Materials.get_conductance(material)
+          return_material = material
+          unless material.to_OpaqueMaterial.empty?
+            construction.setInsulation(material)
           end
         end
       end
-      if construction.insulation.empty? && construction.isOpaque
-        raise
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "This construction has no insulation layer specified. Construction #{construction.name.get} insulation layer could not be set!. This occurs when a insulation layer is duplicated in the construction.")
-      end
-    else
-      return construction.insulation.get
     end
+    if construction.insulation.empty? && construction.isOpaque
+      raise
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "This construction has no insulation layer specified. Construction #{construction.name.get} insulation layer could not be set!. This occurs when a insulation layer is duplicated in the construction.")
+    end
+    return construction.insulation.get
   end
 
+  # change construction properties based on an a set of values
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param values [Hash] has of values
+  # @param is_percentage [Bool] toggle is percentage
+  # @return [Hash] json information
   def change_construction_properties_in_model(model, values, is_percentage = false)
     puts JSON.pretty_generate(values)
     # copy orginal model for reporting.
@@ -532,6 +551,15 @@ class Standard
     return info
   end
 
+  # apply changes to a surface construction
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param surface [OpenStudio::Model::Surface] surface object
+  # @param conductance [Double] conductance value in SI
+  # @param shgc [Double] solar heat gain coefficient value, unitless
+  # @param tvis [Double] visible transmittance
+  # @param is_percentage [Bool] toggle is percentage
+  # @return [Bool] returns true if successful, false if not
   def apply_changes_to_surface_construction(model, surface, conductance = nil, shgc = nil, tvis = nil, is_percentage = false)
     # If user has no changes...do nothing and return true.
     return true if conductance.nil? && shgc.nil? && tvis.nil?
@@ -634,13 +662,15 @@ class Standard
       new_construction = new_construction.get
     end
     surface.setConstruction(new_construction)
+    return true
   end
 
   # This will create a deep copy of the construction
   # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-  # @param model [OpenStudio::Model::Model]
-  # @param construction <String>
-  # @return [String] new_construction
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param construction [OpenStudio::Model::Construction] construction object
+  # @return [OpenStudio::Model::Construction] new construction object
   def construction_deep_copy(model, construction)
     construction = BTAP::Common.validate_array(model, construction, 'Construction').first
     new_construction = construction.clone.to_Construction.get
@@ -657,6 +687,7 @@ class Standard
   # Sets the T-vis of a simple glazing construction to a specified value
   # by modifying the thickness of the insulation layer.
   #
+  # @param construction [OpenStudio::Model::Construction] construction object
   # @param target_tvis [Double] Visible Transmittance
   # @return [Bool] returns true if successful, false if not
   def construction_set_glazing_tvis(construction, target_tvis)

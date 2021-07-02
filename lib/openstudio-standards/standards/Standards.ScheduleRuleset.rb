@@ -3,7 +3,7 @@ class Standard
 
   # Returns the min and max value for this schedule_day object
   #
-  # @param day_sch [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
+  # @param day_sch [OpenStudio::Model::ScheduleDay] schedule day object
   # @return [Double] day full load hours
   def day_schedule_equivalent_full_load_hrs(day_sch)
     # Determine the full load hours for just one day
@@ -378,7 +378,7 @@ class Standard
   #
   # @author David Goldwasser
   # @param schedule [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
-  # @param ramp_frequency [Double] time frequency to do ramp
+  # @param ramp_frequency [Double] ramp frequency in minutes
   # @param infer_hoo_for_non_assigned_objects [Bool] attempt to get hoo for objects like swh with and exterior lighting
   # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
   # @return [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
@@ -642,7 +642,7 @@ class Standard
   # @param hoo_end [Double] hours of operation end
   # @param val_flr [Double] value floor
   # @param val_clg [Double] value ceiling
-  # @param ramp_frequency [Double] time frequency to do ramp
+  # @param ramp_frequency [Double] ramp frequency in minutes
   # @param infer_hoo_for_non_assigned_objects [Bool] attempt to get hoo for objects like swh with and exterior lighting
   # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
   # @return [OpenStudio::Model::ScheduleDay] schedule day

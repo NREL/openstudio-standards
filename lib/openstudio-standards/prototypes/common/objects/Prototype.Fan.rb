@@ -37,7 +37,8 @@ module PrototypeFan
 
     # Calculate the Brake Horsepower
     brake_hp = (pressure_rise_in_h2o * maximum_flow_rate_cfm) / (fan_impeller_eff * 6356)
-    allowed_hp = brake_hp * 1.1 # Per PNNL document #TODO add reference
+    allowed_hp = brake_hp * 1.1 # Per PNNL document
+    # @todo add reference
     if allowed_hp > 0.1
       allowed_hp = allowed_hp.round(2) + 0.0001
     elsif allowed_hp < 0.01

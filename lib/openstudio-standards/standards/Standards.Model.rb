@@ -4,6 +4,9 @@ class Standard
   attr_accessor :space_multiplier_map
   attr_accessor :standards_data
 
+  # returns the space multiplier map
+
+  # @return [Hash] space multiplier map
   def define_space_multiplier
     return @space_multiplier_map
   end
@@ -12,10 +15,11 @@ class Standard
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
   # based on the inputs currently in the model.
-  # the current model with this model.
   #
   # @note Per 90.1, the Performance Rating Method "does NOT offer an alternative compliance path for minimum standard compliance."
-  # This means you can't use this method for code compliance to get a permit.
+  #   This means you can't use this method for code compliance to get a permit.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param building_type [String] the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param custom [String] the custom logic that will be applied during baseline creation.  Valid choices are 'Xcel Energy CO EDA' or '90.1-2007 with addenda dn'.
@@ -240,6 +244,9 @@ class Standard
   # Determine if there needs to be a sizing run after constructions are added
   # so that EnergyPlus can calculate the VLTs of layer-by-layer glazing constructions.
   # These VLT values are needed for the daylighting controls logic for some templates.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if required, false if not
   def model_create_prm_baseline_building_requires_vlt_sizing_run(model)
     return false # Not required for most templates
   end
@@ -247,6 +254,7 @@ class Standard
   # Determine the residential and nonresidential floor areas based on the space type properties for each space.
   # For spaces with no space type, assume nonresidential.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Hash] keys are 'residential' and 'nonresidential', units are m^2
   def model_residential_and_nonresidential_floor_areas(model)
     res_area_m2 = 0
@@ -263,10 +271,11 @@ class Standard
   end
 
   # Determine the number of stories spanned by the supplied zones.
-  # If all zones on one of the stories have an indentical multiplier,
+  # If all zones on one of the stories have an identical multiplier,
   # assume that the multiplier is a floor multiplier and increase the number of stories accordingly.
   # Stories do not have to be contiguous.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param zones [Array<OpenStudio::Model::ThermalZone>] an array of zones
   # @return [Integer] the number of stories spanned
   def model_num_stories_spanned(model, zones)
@@ -295,7 +304,10 @@ class Standard
 
   # Categorize zones by occupancy type and fuel type, where the types depend on the standard.
   #
-  # @return [Array<Hash>] an array of hashes, one for each zone, with the keys 'zone', 'type' (occ type), 'fuel', and 'area'
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param custom [String] custom fuel type
+  # @return [Array<Hash>] an array of hashes, one for each zone,
+  #   with the keys 'zone', 'type' (occ type), 'fuel', and 'area'
   def model_zones_with_occ_and_fuel_type(model, custom)
     zones = []
 
@@ -337,11 +349,12 @@ class Standard
     return zones
   end
 
-  # Determine the dominant and exceptional areas of the
-  # building based on fuel types and occupancy types.
+  # Determine the dominant and exceptional areas of the building based on fuel types and occupancy types.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param custom [String] custom fuel type
   # @return [Array<Hash>] an array of hashes of area information,
-  # with keys area_ft2, type, fuel, and zones (an array of zones)
+  #   with keys area_ft2, type, fuel, and zones (an array of zones)
   def model_prm_baseline_system_groups(model, custom)
     # Define the minimum area for the
     # exception that allows a different
@@ -600,6 +613,9 @@ class Standard
 
   # Determines the area of the building above which point
   # the non-dominant area type gets it's own HVAC system type.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param custom [String] custom fuel type
   # @return [Double] the minimum area (m^2)
   def model_prm_baseline_system_group_minimum_area(model, custom)
     exception_min_area_ft2 = 20_000
@@ -610,11 +626,15 @@ class Standard
   # Determine the baseline system type given the inputs.  Logic is different for different standards.
   #
   # 90.1-2007, 90.1-2010, 90.1-2013
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param area_type [String] Valid choices are residential, nonresidential, and heatedonly
   # @param fuel_type [String] Valid choices are electric, fossil, fossilandelectric,
   #   purchasedheat, purchasedcooling, purchasedheatandcooling
   # @param area_ft2 [Double] Area in ft^2
   # @param num_stories [Integer] Number of stories
+  # @param custom [String] custom fuel type
   # @return [String] The system type.  Possibilities are PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
   #   VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
   # @todo add 90.1-2013 systems 11-13
@@ -681,6 +701,15 @@ class Standard
   end
 
   # Determines which system number is used for the baseline system. Default is 90.1-2004 approach.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param area_type [String] Valid choices are residential, nonresidential, and heatedonly
+  # @param fuel_type [String] Valid choices are electric, fossil, fossilandelectric,
+  #   purchasedheat, purchasedcooling, purchasedheatandcooling
+  # @param area_ft2 [Double] Area in ft^2
+  # @param num_stories [Integer] Number of stories
+  # @param custom [String] custom fuel type
   # @return [String] the system number: 1_or_2, 3_or_4, 5_or_6, 7_or_8, 9_or_10
   def model_prm_baseline_system_number(model, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
     sys_num = nil
@@ -712,6 +741,12 @@ class Standard
   end
 
   # Change the fuel type based on climate zone, depending on the standard. Defaults to no change.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param fuel_type [String] Valid choices are electric, fossil, fossilandelectric,
+  #   purchasedheat, purchasedcooling, purchasedheatandcooling
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param custom [String] custom fuel type
   # @return [String] the revised fuel type
   def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom = nil)
     return fuel_type # Don't change fuel type for most templates
@@ -721,12 +756,15 @@ class Standard
   # For some multi-zone system types, the standards require identifying zones whose loads or schedules
   # are outliers and putting these systems on separate single-zone systems.  This method does that.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param system_type [String] The system type.  Valid choices are PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat,
   #   PVAV_PFP_Boxes, VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace,
   #   which are also returned by the method OpenStudio::Model::Model.prm_baseline_system_type.
   # @param main_heat_fuel [String] main heating fuel.  Valid choices are Electricity, NaturalGas, DistrictHeating
   # @param zone_heat_fuel [String] zone heating/reheat fuel.  Valid choices are Electricity, NaturalGas, DistrictHeating
   # @param cool_fuel [String] cooling fuel.  Valid choices are Electricity, DistrictCooling
+  # @param zones [Array<OpenStudio::Model::ThermalZone>] an array of zones
+  # @return [Bool] returns true if successful, false if not
   # @todo Add 90.1-2013 systems 11-13
   def model_add_prm_baseline_system(model, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones)
     case system_type
@@ -1108,6 +1146,8 @@ class Standard
 
   # Determines the fan type used by VAV_Reheat and VAV_PFP_Boxes systems.
   # Defaults to two speed fan.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [String] the fan type: TwoSpeed Fan, Variable Speed Fan
   def model_baseline_system_vav_fan_type(model)
     fan_type = 'TwoSpeed Fan'
@@ -1116,9 +1156,12 @@ class Standard
 
   # Looks through the model and creates an hash of what the baseline system type should be for each zone.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param custom [String] custom fuel type
   # @return [Hash] keys are zones, values are system type strings
-  # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
-  # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
+  #   PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
+  #   VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
   def model_get_baseline_system_type_by_zone(model, climate_zone, custom = nil)
     zone_to_sys_type = {}
 
@@ -1187,7 +1230,15 @@ class Standard
     return zone_to_sys_type
   end
 
-  # @param array_of_zones [Array] an array of Hashes for each zone, with the keys 'zone',
+  # elimates outlier zones based on a set of keys
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param array_of_zones [Array] an array of Hashes for each zone, with the keys 'zone'
+  # @param key_to_inspect [String] hash key to inspect in array of zones
+  # @param tolerance [Double] tolerance
+  # @param field_name [String] field name to inspect
+  # @param units [String] units
+  # @return [Array] an array of Hashes for each zone
   def model_eliminate_outlier_zones(model, array_of_zones, key_to_inspect, tolerance, field_name, units)
     # Sort the zones by the desired key
     begin
@@ -1264,8 +1315,10 @@ class Standard
   # Second, eliminate zones whose design internal loads differ from the area-weighted average of all other zones
   # on the system by more than 10 Btu/hr*ft^2.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param zones [Array<OpenStudio::Model::ThermalZone>] an array of zones
   # @return [Hash] A hash of two arrays of ThermalZones,
-  # where the keys are 'primary' and 'secondary'
+  #   where the keys are 'primary' and 'secondary'
   def model_differentiate_primary_secondary_thermal_zones(model, zones)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Determining which zones are served by the primary vs. secondary HVAC system.')
 
@@ -1384,6 +1437,9 @@ class Standard
   # Group an array of zones into multiple arrays, one for each story in the building.
   # Zones with spaces on multiple stories will be assigned to only one of the stories.
   # Removes empty array (when the story doesn't contain any of the zones)
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param zones [Array<OpenStudio::Model::ThermalZone>] an array of zones
   # @return [Array<Array<OpenStudio::Model::ThermalZone>>] array of arrays of zones
   def model_group_zones_by_story(model, zones)
     story_zone_lists = []
@@ -1428,6 +1484,7 @@ class Standard
   # If no story object is found for a particular height, create a new one and assign it to the space.
   # Does not assign a story to plenum spaces.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Bool] returns true if successful, false if not
   def model_assign_spaces_to_stories(model)
     # Make hash of spaces and minz values
@@ -1464,10 +1521,11 @@ class Standard
     return true
   end
 
-  # Applies the multi-zone VAV outdoor air sizing requirements
-  # to all applicable air loops in the model.
-  #
+  # Applies the multi-zone VAV outdoor air sizing requirements to all applicable air loops in the model.
   # @note This must be performed before the sizing run because it impacts component sizes, which in turn impact efficiencies.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_apply_multizone_vav_outdoor_air_sizing(model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying multizone vav OA sizing.')
 
@@ -1478,6 +1536,12 @@ class Standard
   end
 
   # Applies the HVAC parts of the template to all objects in the model using the the template specified in the model.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param apply_controls [Bool] toggle whether to apply air loop and plant loop controls
+  # @param sql_db_vars_map [Hash] hash map
+  # @return [Bool] returns true if successful, false if not
   def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true, sql_db_vars_map: nil)
     sql_db_vars_map = {} if sql_db_vars_map.nil?
 
@@ -1559,6 +1623,9 @@ class Standard
   end
 
   # Applies daylighting controls to each space in the model per the standard.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_add_daylighting_controls(model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding daylighting controls.')
 
@@ -1568,17 +1635,16 @@ class Standard
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding daylighting controls.')
+    return true
   end
 
-  # Apply the air leakage requirements to the model,
-  # as described in PNNL section 5.2.1.6.  This method
-  # creates customized infiltration objects for each space
+  # Apply the air leakage requirements to the model, as described in PNNL section 5.2.1.6.
+  # This method creates customized infiltration objects for each space
   # and removes the SpaceType-level infiltration objects.
   #
-  # base infiltration rates off of.
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Bool] returns true if successful, false if not
-  # @todo This infiltration method is not used by the Reference
-  # buildings, fix this inconsistency.
+  # @todo This infiltration method is not used by the Reference buildings, fix this inconsistency.
   def model_apply_infiltration_standard(model)
     # Set the infiltration rate at each space
     model.getSpaces.sort.each do |space|
@@ -1928,11 +1994,12 @@ class Standard
 
   # Create constant ScheduleRuleset
   #
-  # @param value [double] the value to use, 24-7, 365
-  # @param name [string] the name of the schedule
-  # @param sch_type_limit [string] the name of a schedule type limit
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param value [Double] the value to use, 24-7, 365
+  # @param name [String] the name of the schedule
+  # @param sch_type_limit [String] the name of a schedule type limit
   #   options are Temperature, Humidity Ratio, Fractional, OnOff, and Activity
-  # @return schedule
+  # @return [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
   def model_add_constant_schedule_ruleset(model,
                                           value,
                                           name = nil,
@@ -1966,14 +2033,15 @@ class Standard
 
   # Create ScheduleTypeLimits
   #
-  # @param standard_sch_type_limit [string] the name of a standard schedule type limit with predefined limits
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param standard_sch_type_limit [String] the name of a standard schedule type limit with predefined limits
   #   options are Temperature, Humidity Ratio, Fractional, OnOff, and Activity
-  # @param name[string] the name of the schedule type limits
+  # @param name [String] the name of the schedule type limits
   # @param lower_limit_value [double] the lower limit value for the schedule type
   # @param upper_limit_value [double] the upper limit value for the schedule type
-  # @param numeric_type [string] the numeric type, options are Continuous or Discrete
-  # @param unit_type [string] the unit type, options are defined in EnergyPlus I/O reference
-  # @return [<OpenStudio::Model::ScheduleTypeLimits>]
+  # @param numeric_type [String] the numeric type, options are Continuous or Discrete
+  # @param unit_type [String] the unit type, options are defined in EnergyPlus I/O reference
+  # @return [OpenStudio::Model::ScheduleTypeLimits] schedule type limits
   def model_add_schedule_type_limits(model,
                                      standard_sch_type_limit: nil,
                                      name: nil,
@@ -2052,9 +2120,9 @@ class Standard
     return schedule_type_limits
   end
 
-  # Create a schedule from the openstudio standards dataset and
-  # add it to the model.
+  # Create a schedule from the openstudio standards dataset and add it to the model.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param schedule_name [String} name of the schedule
   # @return [ScheduleRuleset] the resulting schedule ruleset
   # @todo make return an OptionalScheduleRuleset
@@ -2167,6 +2235,10 @@ class Standard
   end
 
   # Create a material from the openstudio standards dataset.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param material_name [String] name of the material
+  # @return [OpenStudio::Model::Material] material object
   # @todo make return an OptionalMaterial
   def model_add_material(model, material_name)
     # First check model and return material if it already exists
@@ -2266,6 +2338,11 @@ class Standard
 
   # Create a construction from the openstudio standards dataset.
   # If construction_props are specified, modifies the insulation layer accordingly.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param construction_name [String] name of the construction
+  # @param construction_props [Hash] hash of construction properties
+  # @return [OpenStudio::Model::Construction] construction object
   # @todo make return an OptionalConstruction
   def model_add_construction(model, construction_name, construction_props = nil)
     # First check model and return construction if it already exists
@@ -2340,14 +2417,14 @@ class Standard
       elsif target_f_factor_ip && data['intended_surface_type'] == 'GroundContactFloor'
 
         # Set the F-Factor (only applies to slabs on grade)
-        # TODO figure out what the prototype buildings did about ground heat transfer
+        # @todo figure out what the prototype buildings did about ground heat transfer
         # construction_set_slab_f_factor(construction, target_f_factor_ip.to_f, data['insulation_layer'])
         construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
 
       elsif target_c_factor_ip && data['intended_surface_type'] == 'GroundContactWall'
 
         # Set the C-Factor (only applies to underground walls)
-        # TODO figure out what the prototype buildings did about ground heat transfer
+        # @todo figure out what the prototype buildings did about ground heat transfer
         # construction_set_underground_wall_c_factor(construction, target_c_factor_ip.to_f, data['insulation_layer'])
         construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
 
@@ -2435,6 +2512,13 @@ class Standard
   end
 
   # Helper method to find a particular construction and add it to the model after modifying the insulation value if necessary.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone_set [String] climate zone set
+  # @param intended_surface_type [String] intended surface type
+  # @param standards_construction_type [String] standards construction type
+  # @param building_category [String] building category
+  # @return [OpenStudio::Model::Construction] construction object
   def model_find_and_add_construction(model, climate_zone_set, intended_surface_type, standards_construction_type, building_category)
     # Get the construction properties,
     # which specifies properties by construction category by climate zone set.
@@ -2475,12 +2559,18 @@ class Standard
   end
 
   # Create a construction set from the openstudio standards dataset.
-  # Returns an Optional DefaultConstructionSet
-  def model_add_construction_set(model, clim, building_type, spc_type, is_residential)
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param building_type [String] the building type
+  # @param spc_type [String] the space type
+  # @param is_residential [Bool] true if the building is residential
+  # @return [OpenStudio::Model::OptionalDefaultConstructionSet] an optional default construction set
+  def model_add_construction_set(model, climate_zone, building_type, spc_type, is_residential)
     construction_set = OpenStudio::Model::OptionalDefaultConstructionSet.new
 
     # Find the climate zone set that this climate zone falls into
-    climate_zone_set = model_find_climate_zone_set(model, clim)
+    climate_zone_set = model_find_climate_zone_set(model, climate_zone)
     unless climate_zone_set
       return construction_set
     end
@@ -2499,7 +2589,7 @@ class Standard
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{template}-#{clim}-#{building_type}-#{spc_type}-is_residential#{is_residential}")
 
-    name = model_make_name(model, clim, building_type, spc_type)
+    name = model_make_name(model, climate_zone, building_type, spc_type)
 
     # Create a new construction set and name it
     construction_set = OpenStudio::Model::DefaultConstructionSet.new(model)
@@ -2681,8 +2771,11 @@ class Standard
     return OpenStudio::Model::OptionalDefaultConstructionSet.new(construction_set)
   end
 
-  # Adds a curve from the OpenStudio-Standards dataset to the model
-  # based on the curve name.
+  # Adds a curve from the OpenStudio-Standards dataset to the model based on the curve name.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param curve_name [String] name of the curve
+  # @return [OpenStudio::Model::Curve] curve object, nil if not found
   def model_add_curve(model, curve_name)
     # First check model and return curve if it already exists
     existing_curves = []
@@ -2825,7 +2918,9 @@ class Standard
   end
 
   # Get the full path to the weather file that is specified in the model
-  # @return [OpenStudio::OptionalPath]
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::OptionalPath] path to weather file
   def model_get_full_weather_file_path(model)
     full_epw_path = OpenStudio::OptionalPath.new
 
@@ -2856,10 +2951,14 @@ class Standard
 
   # Find the legacy simulation results from a CSV of previously created results.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param building_type [String] the building type
+  # @param run_type [String] design day is dd-only, otherwise annual run
   # @return [Hash] a hash of results for each fuel, where the keys are in the form 'End Use|Fuel Type',
-  # e.g. Heating|Electricity, Exterior Equipment|Water.  All end use/fuel type combos are present, with
-  # values of 0.0 if none of this end use/fuel type combo was used by the simulation.  Returns nil
-  # if the legacy results couldn't be found.
+  #   e.g. Heating|Electricity, Exterior Equipment|Water.  All end use/fuel type combos are present,
+  #   with values of 0.0 if none of this end use/fuel type combo was used by the simulation.
+  #   Returns nil if the legacy results couldn't be found.
   def model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type)
     # Load the legacy idf results CSV file into a ruby hash
     top_dir = File.expand_path('../../..', File.dirname(__FILE__))
@@ -2901,9 +3000,11 @@ class Standard
 
   # Method to gather prototype simulation results for a specific climate zone, building type, and template
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param building_type [String] the building type
-  # @return [Hash] Returns a hash with data presented in various bins. Returns nil if no search results
+  # @return [Hash] Returns a hash with data presented in various bins.
+  #   Returns nil if no search results
   def model_process_results_for_datapoint(model, climate_zone, building_type)
     # Hash to store the legacy results by fuel and by end use
     legacy_results_hash = {}
@@ -2975,8 +3076,10 @@ class Standard
   # This is used to calculate EUI's to compare against non prototype buildings
   # Areas taken from scorecard Excel Files
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param building_type [String] the building type
-  # @return [Double] floor area (m^2) of prototype building for building type passed in. Returns nil if unexpected building type
+  # @return [Double] floor area (m^2) of prototype building for building type passed in.
+  #   Returns nil if unexpected building type
   def model_find_prototype_floor_area(model, building_type)
     if building_type == 'FullServiceRestaurant' # 5502 ft^2
       result = 511
@@ -3034,8 +3137,11 @@ class Standard
     return result
   end
 
-  # this is used by other methods to get the climate zone and building type from a model.
-  # it has logic to break office into small, medium or large based on building area that can be turned off
+  # This is used by other methods to get the climate zone and building type from a model.
+  # It has logic to break office into small,
+  # medium or large based on building area that can be turned off
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param remap_office [bool] re-map small office or leave it alone
   # @return [hash] key for climate zone and building type, both values are strings
   def model_get_building_climate_zone_and_building_type(model, remap_office = true)
@@ -3061,7 +3167,9 @@ class Standard
     return results
   end
 
-  # remap office to one of the protptye buildings
+  # remap office to one of the prototype buildings
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param floor_area [Double] floor area (m^2)
   # @return [String] SmallOffice, MediumOffice, LargeOffice
   def model_remap_office(model, floor_area)
@@ -3078,10 +3186,12 @@ class Standard
                     end
   end
 
-  # user needs to pass in template as string. The building type and climate zone will come from the model.
+  # User needs to pass in template as string.
+  # The building type and climate zone will come from the model.
   # If the building type or ASHRAE climate zone is not set in the model this will return nil
   # If the lookup doesn't find matching simulation results this wil return nil
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Double] EUI (MJ/m^2) for target template for given OSM. Returns nil if can't calculate EUI
   def model_find_target_eui(model)
     building_data = model_get_building_climate_zone_and_building_type(model)
@@ -3109,10 +3219,12 @@ class Standard
     return result
   end
 
-  # user needs to pass in template as string. The building type and climate zone will come from the model.
+  # User needs to pass in template as string.
+  # The building type and climate zone will come from the model.
   # If the building type or ASHRAE climate zone is not set in the model this will return nil
   # If the lookup doesn't find matching simulation results this wil return nil
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Hash] EUI (MJ/m^2) This will return a hash of end uses. key is end use, value is eui
   def model_find_target_eui_by_end_use(model)
     building_data = model_get_building_climate_zone_and_building_type(model)
@@ -3146,41 +3258,39 @@ class Standard
   # Get a unique list of constructions with given boundary condition and a given type of surface.
   # Pulls from both default construction sets and hard-assigned constructions.
   #
-  # @param boundary_condition [String] the desired boundary condition
-  # valid choices are:
-  # Adiabatic
-  # Surface
-  # Outdoors
-  # Ground
-  # @param type [String] the type of surface to find
-  # valid choices are:
-  # AtticFloor
-  # AtticWall
-  # AtticRoof
-  # DemisingFloor
-  # DemisingWall
-  # DemisingRoof
-  # ExteriorFloor
-  # ExteriorWall
-  # ExteriorRoof
-  # ExteriorWindow
-  # ExteriorDoor
-  # GlassDoor
-  # GroundContactFloor
-  # GroundContactWall
-  # GroundContactRoof
-  # InteriorFloor
-  # InteriorWall
-  # InteriorCeiling
-  # InteriorPartition
-  # InteriorWindow
-  # InteriorDoor
-  # OverheadDoor
-  # Skylight
-  # TubularDaylightDome
-  # TubularDaylightDiffuser
-  # return [Array<OpenStudio::Model::ConstructionBase>]
-  # an array of all constructions.
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param boundary_condition [String] the desired boundary condition. valid choices are:
+  #   Adiabatic
+  #   Surface
+  #   Outdoors
+  #   Ground
+  # @param type [String] the type of surface to find. valid choices are:
+  #   AtticFloor
+  #   AtticWall
+  #   AtticRoof
+  #   DemisingFloor
+  #   DemisingWall
+  #   DemisingRoof
+  #   ExteriorFloor
+  #   ExteriorWall
+  #   ExteriorRoof
+  #   ExteriorWindow
+  #   ExteriorDoor
+  #   GlassDoor
+  #   GroundContactFloor
+  #   GroundContactWall
+  #   GroundContactRoof
+  #   InteriorFloor
+  #   InteriorWall
+  #   InteriorCeiling
+  #   InteriorPartition
+  #   InteriorWindow
+  #   InteriorDoor
+  #   OverheadDoor
+  #   Skylight
+  #   TubularDaylightDome
+  #   TubularDaylightDiffuser
+  # return [Array<OpenStudio::Model::ConstructionBase>] an array of all constructions.
   def model_find_constructions(model, boundary_condition, type)
     constructions = []
 
@@ -3306,6 +3416,7 @@ class Standard
   # For some standards, this will involve making modifications.  For others, it will not.
   #
   # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Bool] returns true if successful, false if not
   def model_apply_prm_construction_types(model)
     types_to_modify = []
@@ -3390,6 +3501,8 @@ class Standard
 
   # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Bool] returns true if successful, false if not
   def model_apply_standard_constructions(model, climate_zone)
     types_to_modify = []
@@ -3466,11 +3579,12 @@ class Standard
 
   # Returns standards data for selected construction
   #
-  # @param intended_surface_type [string] the surface type
-  # @param standards_construction_type [string]  the type of construction
-  # @param building_category [string] the type of building
-  # @param climate_zone [string] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [hash] hash of construction properties
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param intended_surface_type [String] the surface type
+  # @param standards_construction_type [String]  the type of construction
+  # @param building_category [String] the type of building
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Hash] hash of construction properties
   def model_get_construction_properties(model, intended_surface_type, standards_construction_type, building_category, climate_zone = nil)
     # get climate_zone_set
     climate_zone = model_get_building_climate_zone_and_building_type(model)['climate_zone'] if climate_zone.nil?
@@ -3493,9 +3607,9 @@ class Standard
 
   # Returns standards data for selected construction set
   #
-  # @param building_type [string] the type of building
-  # @param space_type [string] space type within the building type. Typically nil.
-  # @return [hash] hash of construction set data
+  # @param building_type [String] the type of building
+  # @param space_type [String] space type within the building type. Typically nil.
+  # @return [Hash] hash of construction set data
   def model_get_construction_set(building_type, space_type = nil)
     # populate search hash
     search_criteria = {
@@ -3514,9 +3628,12 @@ class Standard
   # WWR reduction will be done by moving vertices inward toward centroid.
   # This causes the least impact on the daylighting area calculations and controls placement.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if successful, false if not
   # @todo add proper support for 90.1-2013 with all those building type specific values
   # @todo support 90.1-2004 requirement that windows be modeled as horizontal bands.
-  # Currently just using existing window geometry, and shrinking as necessary if WWR is above limit.
+  #   Currently just using existing window geometry, and shrinking as necessary if WWR is above limit.
   # @todo support semiheated spaces as a separate WWR category
   # @todo add window frame area to calculation of WWR
   def model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone)
@@ -3686,6 +3803,8 @@ class Standard
 
   # Reduces the SRR to the values specified by the PRM. SRR reduction will be done by shrinking vertices toward the centroid.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   # @todo support semiheated spaces as a separate SRR category
   # @todo add skylight frame area to calculation of SRR
   def model_apply_prm_baseline_skylight_to_roof_ratio(model)
@@ -3819,8 +3938,9 @@ class Standard
   end
 
   # Determines the skylight to roof ratio limit for a given standard
-  # @return [Double] the skylight to roof ratio, as a percent: 5.0 = 5%
-  # 5% by default.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Double] the skylight to roof ratio, as a percent: 5.0 = 5%. 5% by default.
   def model_prm_skylight_to_roof_ratio_limit(model)
     srr_lim = 5.0
     return srr_lim
@@ -3829,6 +3949,7 @@ class Standard
   # Remove all HVAC that will be replaced during the performance rating method baseline generation.
   # This does not include plant loops that serve WaterUse:Equipment or Fan:ZoneExhaust
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Bool] returns true if successful, false if not
   def model_remove_prm_hvac(model)
     # Plant loops
@@ -3859,6 +3980,7 @@ class Standard
 
   # Remove EMS objects that may be orphaned from removing HVAC
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Bool] returns true if successful, false if not
   def model_remove_prm_ems_objects(model)
     model.getEnergyManagementSystemActuators.each(&:remove)
@@ -3878,6 +4000,8 @@ class Standard
   end
 
   # Remove external shading devices. Site shading will not be impacted.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Bool] returns true if successful, false if not
   def model_remove_external_shading_devices(model)
     shading_surfaces_removed = 0
@@ -3896,6 +4020,9 @@ class Standard
   end
 
   # Changes the sizing parameters to the PRM specifications.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_apply_prm_sizing_parameters(model)
     clg = 1.15
     htg = 1.25
@@ -3905,12 +4032,13 @@ class Standard
     sizing_params.setCoolingSizingFactor(clg)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{htg} for heating and #{clg} for cooling.")
+    return true
   end
 
   # Helper method to get the story object that corresponds to a specific minimum z value.
   # Makes a new story if none found at this height.
   #
-  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param minz [Double] the z value (height) of the desired story, in meters.
   # @param tolerance [Double] tolerance for comparison, in m. Default is 0.3 m ~1ft
   # @return [OpenStudio::Model::BuildingStory] the story
@@ -3938,8 +4066,9 @@ class Standard
   # Will return an array of hashes. Many may have one array entry.
   # all values other than block size are gallons.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Array] array of hashes. Each array entry based on different capacity
-  # specific to building type. Array will be empty for some building types.
+  #   specific to building type. Array will be empty for some building types.
   def model_find_ashrae_hot_water_demand(model)
     # @todo for types not in table use standards area normalized swh values
 
@@ -3993,6 +4122,9 @@ class Standard
   # gal/day from ICC IECC 2015 Residential Standard Reference Design
   # from Table R405.5.2(1)
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param units_per_bldg [Double] number of units in the building
+  # @param bedrooms_per_unit [Double] number of bedrooms per unit
   # @return [Double] gal/day
   def model_find_icc_iecc_2015_hot_water_demand(model, units_per_bldg, bedrooms_per_unit)
     swh_gal_per_day = units_per_bldg * (30.0 + (10.0 * bedrooms_per_unit))
@@ -4002,6 +4134,9 @@ class Standard
 
   # Returns average daily internal loads for residential buildings from Table R405.5.2(1)
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param units_per_bldg [Double] number of units in the building
+  # @param bedrooms_per_unit [Double] number of bedrooms per unit
   # @return [Hash] mech_vent_cfm, infiltration_ach, igain_btu_per_day, internal_mass_lbs
   def model_find_icc_iecc_2015_internal_loads(model, units_per_bldg, bedrooms_per_unit)
     # get total and conditioned floor area
@@ -4030,10 +4165,16 @@ class Standard
   end
 
   # Helper method to make a shortened version of a name that will be readable in a GUI.
-  def model_make_name(model, clim, building_type, spc_type)
-    clim = clim.gsub('ClimateZone ', 'CZ')
-    if clim == 'CZ1-8'
-      clim = ''
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param building_type [String] the building type
+  # @param spc_type [String] the space type
+  # @return [String] string of the model name
+  def model_make_name(model, climate_zone, building_type, spc_type)
+    climate_zone = climate_zone.gsub('ClimateZone ', 'CZ')
+    if climate_zone == 'CZ1-8'
+      climate_zone = ''
     end
 
     if building_type == 'FullServiceRestaurant'
@@ -4098,8 +4239,8 @@ class Standard
       parts << spc_type
     end
 
-    unless clim.empty?
-      parts << clim
+    unless climate_zone.empty?
+      parts << climate_zone
     end
 
     result = parts.join(' - ')
@@ -4109,12 +4250,16 @@ class Standard
 
   # Helper method to find out which climate zone set contains a specific climate zone.
   # Returns climate zone set name as String if success, nil if not found.
-  def model_find_climate_zone_set(model, clim)
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [String] climate zone set
+  def model_find_climate_zone_set(model, climate_zone)
     result = nil
 
     possible_climate_zone_sets = []
     standards_data['climate_zone_sets'].each do |climate_zone_set|
-      if climate_zone_set['climate_zones'].include?(clim)
+      if climate_zone_set['climate_zones'].include?(climate_zone)
         possible_climate_zone_sets << climate_zone_set['name']
       end
     end
@@ -4140,6 +4285,10 @@ class Standard
   # Determine which climate zone to use.
   # Defaults to the least specific climate zone set.
   # For example, 2A and 2 both contain 2A, so use 2.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param possible_climate_zone_sets [Array] climate zone sets
+  # @return [String] climate zone ses
   def model_get_climate_zone_set_from_list(model, possible_climate_zone_sets)
     climate_zone_set = possible_climate_zone_sets.min
     return climate_zone_set
@@ -4148,6 +4297,9 @@ class Standard
   # This method ensures that all spaces with spacetypes defined contain at least a standardSpaceType appropriate for the template.
   # So, if any space with a space type defined does not have a Stnadard spacetype, or is undefined, an error will stop
   # with information that the spacetype needs to be defined.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_validate_standards_spacetypes_in_model(model)
     error_string = ''
     # populate search hash
@@ -4181,7 +4333,8 @@ class Standard
   # Create sorted hash of stories with data need to determine effective number of stories above and below grade
   # the key should be the story object, which would allow other measures the ability to for example loop through spaces of the bottom story
   #
-  # @return [hash] hash of space types with data in value necessary to determine effective number of stories above and below grade
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Hash] hash of space types with data in value necessary to determine effective number of stories above and below grade
   def model_create_story_hash(model)
     story_hash = {}
 
@@ -4265,7 +4418,8 @@ class Standard
   # populate this method
   # Determine the effective number of stories above and below grade
   #
-  # @return hash with effective_num_stories_below_grade and effective_num_stories_above_grade
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Hash] hash with effective_num_stories_below_grade and effective_num_stories_above_grade
   def model_effective_num_stories(model)
     below_grade = 0
     above_grade = 0
@@ -4296,8 +4450,9 @@ class Standard
 
   # create space_type_hash with info such as effective_num_spaces, num_units, num_meds, num_meals
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param trust_effective_num_spaces [Bool] defaults to false - set to true if modeled every space as a real rpp, vs. space as collection of rooms
-  # @return [hash] hash of space types with misc information
+  # @return [Hash] hash of space types with misc information
   # @todo - add code when determining number of units to makeuse of trust_effective_num_spaces arg
   def model_create_space_type_hash(model, trust_effective_num_spaces = false)
     # assumed class size to deduct teachers from occupant count for classrooms
@@ -4401,58 +4556,13 @@ class Standard
     return space_type_hash.sort.to_h
   end
 
-  # This method will apply the a FDWR to a model. It will remove any existing windows and doors and use the
-  # Default contruction to set to apply the window construction. Sill height is in meters
-  def apply_max_fdwr(model, runner, sill_height_si, wwr)
-    empty_const_warning = false
-    model.getSpaces.sort.each do |space|
-      space.surfaces.sort.each do |surface|
-        zone = surface.space.get.thermalZone
-        zone_multiplier = nil
-        next if zone.empty?
-
-        if (surface.outsideBoundaryCondition == 'Outdoors') && (surface.surfaceType == 'Wall')
-          surface.subSurfaces.each(&:remove)
-          new_window = surface.setWindowToWallRatio(wwr, sill_height_si, true)
-          raise "#{surface.name.get} did not get set to #{wwr}. The size of the surface is #{surface.grossArea}" unless surface.windowToWallRatio.round(3) == wwr.round(3)
-
-          if new_window.empty?
-            runner.registerWarning("The requested window to wall ratio for surface '#{surface.name}' was too large. Fenestration was not altered for this surface.")
-          else
-            windows_added = true
-            # warn user if resulting window doesn't have a construction, as it will result in failed simulation. In the future may use logic from starting windows to apply construction to new window.
-            if new_window.get.construction.empty? && (empty_const_warning == false)
-              runner.registerWarning('one or more resulting windows do not have constructions. This script is intended to be used with models using construction sets versus hard assigned constructions.')
-              empty_const_warning = true
-            end
-          end
-        end
-      end
-    end
-  end
-
-  # This method will apply the a SRR to a model. It will remove any existing skylights and use the
-  # Default contruction to set to apply the skylight construction. A default skylight square area of 0.25^2 is used.
-  def apply_max_srr(model, runner, srr, skylight_area = 0.25 * 0.25)
-    spaces = []
-    surface_type = 'RoofCeiling'
-    model.getSpaces.sort.each do |space|
-      space.surfaces.sort.each do |surface|
-        if (surface.outsideBoundaryCondition == 'Outdoors') && (surface.surfaceType == surface_type)
-          spaces << space
-          break
-        end
-      end
-    end
-    pattern = OpenStudio::Model.generateSkylightPattern(spaces, spaces[0].directionofRelativeNorth, srr, Math.sqrt(skylight_area), Math.sqrt(skylight_area)) # ratio, x value, y value
-    # applying skylight pattern
-    skylights = OpenStudio::Model.applySkylightPattern(pattern, spaces, OpenStudio::Model::OptionalConstructionBase.new)
-    spacenames = spaces.map { |space| space.name.get }
-    runner.registerInfo("Adding #{skylights.size} skylights to #{spacenames}")
-  end
-
   # This method will limit the subsurface of a given surface_type ("Wall" or "RoofCeiling") to the ratio for the building.
   # This method only reduces subsurface sizes at most.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param ratio [Double] ratio
+  # @param surface_type [String] surface type
+  # @return [Bool] returns true if successful, false if not
   def apply_limit_to_subsurface_ratio(model, ratio, surface_type = 'Wall')
     fdwr = get_outdoor_subsurface_ratio(model, surface_type)
     if fdwr <= ratio
@@ -4482,14 +4592,14 @@ class Standard
     return true
   end
 
-  # Converts the climate zone in the model into the format used
-  # by the openstudio-standards lookup tables.  For example:
-  # institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2013-6A.
-  # institution: CEC, value: 3  becomes: CEC T24-CEC3.
+  # Converts the climate zone in the model into the format used by the openstudio-standards lookup tables.
+  # For example,
+  #   institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2013-6A.
+  #   institution: CEC, value: 3  becomes: CEC T24-CEC3.
   #
   # @param model [OpenStudio::Model::Model] the model
   # @return [String] the string representation of the climate zone,
-  # empty string if no climate zone is present in the model.
+  #   empty string if no climate zone is present in the model.
   def model_standards_climate_zone(model)
     climate_zone = ''
     model.getClimateZones.climateZones.each do |cz|
@@ -4517,8 +4627,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] the model
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # For example: ASHRAE 169-2013-2A, CEC T24-CEC3
-  # @return [Boolean] returns true if successful, false if not
+  # @return [Bool] returns true if successful, false if not
   def model_set_climate_zone(model, climate_zone)
     # Remove previous climate zones from the model
     model.getClimateZones.clear
@@ -4534,7 +4643,12 @@ class Standard
     return true
   end
 
-  # This method return the building ratio of subsurface_area / surface_type_area where surface_type can be "Wall" or "RoofCeiling"
+  # This method return the building ratio of subsurface_area / surface_type_area
+  # where surface_type can be "Wall" or "RoofCeiling"
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @param surface_type [String] surface type
+  # @return [Double] surface ratio
   def get_outdoor_subsurface_ratio(model, surface_type = 'Wall')
     surface_area = 0.0
     sub_surface_area = 0
@@ -4560,6 +4674,7 @@ class Standard
 
   # Loads a osm as a starting point.
   #
+  # @param osm_file [String] path to the .osm file, relative to the /data folder
   # @return [Bool] returns true if successful, false if not
   def load_initial_osm(osm_file)
     # Load the geometry .osm
@@ -4575,6 +4690,10 @@ class Standard
     return model
   end
 
+  # validate that model contains objects
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @return [Bool] returns true if valid, false if not
   def validate_initial_model(model)
     is_valid = true
     if model.getBuildingStorys.empty?
@@ -4640,6 +4759,7 @@ class Standard
   # Removes all of the unused ResourceObjects
   # (Curves, ScheduleDay, Material, etc.) from the model.
   #
+  # @param model [OpenStudio::Model::Model] the model
   # @return [Bool] returns true if successful, false if not
   def model_remove_unused_resource_objects(model)
     start_size = model.objects.size
@@ -4664,7 +4784,7 @@ class Standard
   # Future new schedules should be designed as paramtric from the start and would not need to run through this inference process
   #
   # @author David Goldwasser
-  # @param model [Model]
+  # @param model [OpenStudio::Model::Model] the model
   # @param fraction_of_daily_occ_range [Double] fraction above/below daily min range required to start and end hours of operation
   # @param invert_res [Bool] if true will reverse hours of operation for residential space types
   # @param gen_occ_profile [Bool] if true creates a merged occupancy schedule for diagnostic purposes. This schedule is added to the model but no specifically returned by this method
@@ -4818,8 +4938,8 @@ class Standard
   # should be traced back to a space or spaces.
   #
   # @author David Goldwasser
-  # @param model [Model]
-  # @param step_ramp_logic [String]
+  # @param model [OpenStudio::Model::Model] the model
+  # @param step_ramp_logic [String] type of step logic to use
   # @param infer_hoo_for_non_assigned_objects [Bool] attempt to get hoo for objects like swh with and exterior lighting
   # @param gather_data_only [Bool] false (stops method before changes made if true)
   # @param hoo_var_method [String] accepts hours and fractional. Any other value value will result in hoo variables not being applied
@@ -4981,7 +5101,7 @@ class Standard
   # @note This measure will replace any prior chagnes made to ScheduleRule objects with new ScheduleRule values from
   # profile formulas
   # @author David Goldwasser
-  # @param model [Model]
+  # @param model [OpenStudio::Model::Model] the model
   # @param ramp_frequency [Double] ramp frequency in minutes. If nil method will match simulation timestep
   # @param infer_hoo_for_non_assigned_objects [Bool] # attempt to get hoo for objects like swh with and exterior lighting
   # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
@@ -5024,6 +5144,12 @@ class Standard
   private
 
   # Helper method to fill in hourly values
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @param day_sch [OpenStudio::Model::ScheduleDay] schedule day object
+  # @param sch_type [String] Constant or Hourly
+  # @param values [Array<Double>]
+  # @return [Bool] returns true if successful, false if not
   def model_add_vals_to_sch(model, day_sch, sch_type, values)
     if sch_type == 'Constant'
       day_sch.addValue(OpenStudio::Time.new(0, 24, 0, 0), values[0])
@@ -5039,6 +5165,9 @@ class Standard
   end
 
   # Modify the existing service water heating loops to match the baseline required heating type.
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @param building_type [String] the building type
   # @return [Bool] returns true if successful, false if not
   # @author Julien Marrec
   def model_apply_baseline_swh_loops(model, building_type)
@@ -5124,6 +5253,8 @@ class Standard
   # This should be done by the forward translator, and this code should be removed after this bug is fixed:
   # https://github.com/NREL/OpenStudio/issues/2598
   #
+  # @param model [OpenStudio::Model::Model] the model
+  # @return [Bool] returns true if successful, false if not
   # @todo remove this method after OpenStudio issue #2598 is fixed.
   def model_temp_fix_ems_references(model)
     # Internal Variables
@@ -5143,6 +5274,10 @@ class Standard
     return true
   end
 
+  # Loads a geometry osm as a starting point.
+  #
+  # @param osm_model_path [String] path to the .osm file, relative to the /data folder
+  # @return [OpenStudio::Model::Model] model object
   def load_user_geometry_osm(osm_model_path:)
     version_translator = OpenStudio::OSVersion::VersionTranslator.new
     model = version_translator.loadModel(osm_model_path)
@@ -5183,7 +5318,7 @@ class Standard
   # Loads a osm as a starting point.
   #
   # @param osm_file [String] path to the .osm file, relative to the /data folder
-  # @return [Bool] returns true if successful, false if not
+  # @return [OpenStudio::Model::Model] model object, false if not
   def load_geometry_osm(osm_file)
     # Load the geometry .osm from relative to the data folder
     osm_model_path = "../../../data/#{osm_file}"

@@ -32,7 +32,8 @@ module SmallHotel
     end
 
     unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
-      # hardsize corridor1. put in standards in the future  #TODO
+      # hardsize corridor1. put in standards in the future
+      # @todo
       model.getZoneHVACPackagedTerminalAirConditioners.sort.each do |ptac|
         zone = ptac.thermalZone.get
         if zone.spaces.include?(corridor_space)
