@@ -245,7 +245,7 @@ class Standard
   # @param area_fraction [Double] fraction of area of the larger surface
   # @param construction [OpenStudio::Model::Construction] construction to use for the new surface
   # @return [Bool] returns true if successful, false if not
-  def sub_surface_create_scaled_subsurfaces_from_surface(surface, area_fraction, construction)
+  def sub_surface_create_scaled_subsurfaces_from_surface(surface:, area_fraction:, construction:)
     # Set geometry tolerences:
     geometry_tolerence = 12
     # Get rid of all existing subsurfaces.
@@ -329,7 +329,7 @@ class Standard
   # @param area_fraction [Double] fraction of area of the larger surface
   # @param construction [OpenStudio::Model::Construction] construction to use for the new surface
   # @return [Bool] returns true if successful, false if not
-  def set_window_to_wall_ratio_set_name(surface, area_fraction, construction)
+  def set_window_to_wall_ratio_set_name(surface:, area_fraction:, construction:)
     surface.setWindowToWallRatio(area_fraction)
     surface.subSurfaces.sort.each do |sub_surf|
       sub_surf.setSubSurfaceType('FixedWindow')
@@ -345,7 +345,7 @@ class Standard
   #
   # @param surface [OpenStudio::Model::Surface] surface object
   # @return [Bool] returns true if successful, false if not
-  def remove_all_subsurfaces(surface)
+  def remove_all_subsurfaces(surface:)
     surface.subSurfaces.sort.each(&:remove)
     return true
   end
