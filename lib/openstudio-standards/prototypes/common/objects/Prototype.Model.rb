@@ -14,10 +14,6 @@ Standard.class_eval do
         OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at   are not available, the measure is disabled for this specific type.")
         return false
       end
-    when 'College'
-      # delete this case statement once the College model is complete
-     # OpenStudio.logFree(OpenStudio::Error, 'Not available', 'While this release includes data for colleges, this only an early draft and should not be used for anything other that early testing or work to improve the college prototype.')
-     # return false
     end
     # optionally  determine the climate zone from the epw and stat files.
     if climate_zone == 'NECB HDD Method'
