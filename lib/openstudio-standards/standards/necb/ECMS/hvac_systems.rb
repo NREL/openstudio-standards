@@ -403,7 +403,7 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Add equipment for ECM 'hs08_doas_ccashp_vrf':
+  # Add equipment for ECM 'hs08_ccashp_vrf':
   #   -Constant-volume DOAS with cold-climate air source heat pump for heating and cooling and electric backup
   #   -Zonal terminal VRF units connected to an outdoor VRF condenser unit
   #   -Zonal electric backup
@@ -471,10 +471,10 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Apply efficiencies and performance curves for ECM 'hs08_vrfzonal'
+  # Apply efficiencies and performance curves for ECM 'hs08_ccashp_vrf'
   def apply_efficiency_ecm_hs08_ccashp_vrf(model)
     # Use same performance data as ECM "hs09_ccashpsys" for air system
-    apply_efficiency_ecm_hs09_ccashpsys(model)
+    apply_efficiency_ecm_hs09_ccashp_baseboard(model)
     # Apply efficiency and curves for VRF units
     eqpt_name = "Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit"
     model.getAirConditionerVariableRefrigerantFlows.sort.each do |vrf_unit|
@@ -891,12 +891,12 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Add equipment for ecm "hs09_ccashpsys":
+  # Add equipment for ecm "hs09_ccashp_baseboard":
   #   -Constant-volume reheat system for single zone systems
   #   -VAV system with reheat for non DOAS multi-zone systems
   #   -Cold-climate air-source heat pump for heating and cooling with electric backup
   #   -Electric baseboards
-  def add_ecm_hs09_ccashpsys(model:,
+  def add_ecm_hs09_ccashp_baseboard(model:,
                              system_zones_map:,    # hash of ailoop names as keys and array of zones as values
                              system_doas_flags:)   # hash of system names as keys and flag for DOAS as values
 
@@ -964,8 +964,8 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Apply efficiencies and performance curves for ECM "hs09_ccashpsys"
-  def apply_efficiency_ecm_hs09_ccashpsys(model)
+  # Apply efficiencies and performance curves for ECM "hs09_ccashp_baseboard"
+  def apply_efficiency_ecm_hs09_ccashp_baseboard(model)
     # fraction of electric backup heating coil capacity assigned to dx heating coil
     fr_backup_coil_cap_as_dx_coil_cap = 0.5
     model.getAirLoopHVACs.sort.each do |isys|
@@ -1023,10 +1023,10 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Add equipment for ECM "hs11_pthp"
+  # Add equipment for ECM "hs11_ashp_pthp"
   #   -Constant volume DOAS with air-source heat pump for heating and cooling and electric backup
   #   -Packaged-Terminal air-source heat pumps with electric backup
-  def add_ecm_hs11_pthp(model:,
+  def add_ecm_hs11_ashp_pthp(model:,
                         system_zones_map:,
                         system_doas_flags:)
 
@@ -1095,10 +1095,10 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Apply efficiencies and performance curves for ECM "hs11_pthp"
-  def apply_efficiency_ecm_hs11_pthp(model)
+  # Apply efficiencies and performance curves for ECM "hs11_ashp_pthp"
+  def apply_efficiency_ecm_hs11_ashp_pthp(model)
     fr_backup_coil_cap_as_dx_coil_cap = 0.5  # fraction of electric backup heating coil capacity assigned to dx heating coil
-    apply_efficiency_ecm_hs12_ashpsys(model)
+    apply_efficiency_ecm_hs12_ashp_baseboard(model)
     pthp_eqpt_name = "HS11_PTHP"
     model.getAirLoopHVACs.sort.each do |isys|
       isys.thermalZones.each do |zone|
@@ -1151,12 +1151,12 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Add equipment for ecm "hs12_ashpsys":
+  # Add equipment for ecm "hs12_ashp_baseboard":
   #   -Constant-volume reheat system for single zone systems
   #   -VAV system with reheat for non DOAS multi-zone systems
   #   -Air-source heat pump for heating and cooling with electric backup
   #   -Electric baseboards
-  def add_ecm_hs12_ashpsys(model:,
+  def add_ecm_hs12_ashp_baseboard(model:,
                            system_zones_map:,
                            system_doas_flags:)
 
@@ -1238,8 +1238,8 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Apply efficiencies and performance curves for ECM "hs12_ashpsys"
-  def apply_efficiency_ecm_hs12_ashpsys(model)
+  # Apply efficiencies and performance curves for ECM "hs12_ashp_baseboard"
+  def apply_efficiency_ecm_hs12_ashp_baseboard(model)
     fr_backup_coil_cap_as_dx_coil_cap = 0.5  # fraction of electric backup heating coil capacity assigned to dx heating coil
     ashp_eqpt_name = "NECB2015_ASHP"
     model.getAirLoopHVACs.sort.each do |isys|
