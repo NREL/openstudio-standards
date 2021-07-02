@@ -1,6 +1,13 @@
 # This class holds methods that apply NECB2020 rules.
 
-# Also need to edit necb_2011.rb:determine_spacetype_vintage method to include the new standard.
+# Notes for adding new version of NECB:
+#  Essentially all you need to do is copy this file to a new folder and update the class name. Only add json files and other rb
+#  files if the content has changed. Do not forget to update the class name in the rb files.
+#  The spacetypes and led lighting json files are required (in the data folder) as they have the NECB version hardcoded (which requires updating).
+#  However there are a few other files to update:
+#  1) NECB2011/necb_2011.rb:determine_spacetype_vintage method has an array of available versions of NECB hardcoded. Add the new one.
+#  2) common/space_type_upgrade_map.json needs all the space types for the new version defined (386 in NECB 2020).
+#  3) Add references to the new rb files in openstudio_standards.rb
 
 # @ref [References::NECB2020]
 class NECB2020 < NECB2017
