@@ -404,14 +404,15 @@ class ECMS
 
   # =============================================================================================================================
   # Add equipment for ECM 'hs08_ccashp_vrf':
-  #   -Constant-volume DOAS with cold-climate air source heat pump for heating and cooling and electric backup
+  #   -Constant-volume DOAS with air-source heat pump for heating and cooling and electric backup
   #   -Zonal terminal VRF units connected to an outdoor VRF condenser unit
   #   -Zonal electric backup
   def add_ecm_hs08_ccashp_vrf(model:,
                             system_zones_map:,
-                            system_doas_flags:)
+                            system_doas_flags:,
+                            air_sys_eqpt_type: "ccashp")
     # Add outdoor VRF unit
-    outdoor_vrf_unit = add_outdoor_vrf_unit(model: model,ecm_name: "hs08_vrfzonal")
+    outdoor_vrf_unit = add_outdoor_vrf_unit(model: model,ecm_name: "hs08_ccashp_vrf")
     # Update system doas flags
     system_doas_flags.keys.each {|sname| system_doas_flags[sname] = true}
     # use system zones map and generate new air system and zonal equipment
@@ -424,22 +425,33 @@ class ECMS
                                            sys_abbr: sys_info["sys_abbr"],
                                            sys_vent_type: sys_info["sys_vent_type"],
                                            sys_heat_rec_type: sys_info["sys_heat_rec_type"],
-                                           sys_htg_eqpt_type: "ccashp",
+                                           sys_htg_eqpt_type: air_sys_eqpt_type,
                                            sys_supp_htg_eqpt_type: "coil_electric",
-                                           sys_clg_eqpt_type: "ccashp",
+                                           sys_clg_eqpt_type: air_sys_eqpt_type,
                                            sys_supp_fan_type: sys_info["sys_supp_fan_type"],
                                            sys_ret_fan_type: sys_info["sys_ret_fan_type"],
                                            sys_setpoint_mgr_type: sys_info["sys_setpoint_mgr_type"])
-      htg_dx_coils = model.getCoilHeatingDXVariableSpeeds
+      # get and assign defrost curve
+      dx_htg_coil = nil
+      airloop.supplyComponents.sort.each do |comp|
+        if comp.to_CoilHeatingDXSingleSpeed.is_initialized
+          dx_htg_coil = comp.to_CoilHeatingDXSingleSpeed.get
+        elsif comp.to_CoilHeatingDXVariableSpeed.is_initialized
+          dx_htg_coil = comp.to_CoilHeatingDXVariableSpeed.get
+        end
+      end
       search_criteria = {}
-      search_criteria["name"] = "Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU"
+      if air_sys_eqpt_type == "ccashp"
+          search_criteria["name"] = "Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU"
+      elsif air_sys_eqpt_type == "ashp"
+        search_criteria["name"] = "NECB2015_ASHP"
+      end
       props =  model_find_object(standards_data['tables']["heat_pump_heating_ecm"]['table'], search_criteria, 1.0)
       heat_defrost_eir_ft = model_add_curve(model, props['heat_defrost_eir_ft'])
-      # This defrost curve has to be assigned here before sizing
       if heat_defrost_eir_ft
-        htg_dx_coils.sort.each {|dxcoil| dxcoil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft)}
+        dx_htg_coil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft)
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{htg_dx_coils[0].name}, cannot find heat_defrost_eir_ft curve, will not be set.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDX', "For #{dx_htg_coil.name}, cannot find heat_defrost_eir_ft curve, will not be set.")
       end
       # add zone equipment and diffuser
       # add terminal VRF units
@@ -472,9 +484,13 @@ class ECMS
 
   # =============================================================================================================================
   # Apply efficiencies and performance curves for ECM 'hs08_ccashp_vrf'
-  def apply_efficiency_ecm_hs08_ccashp_vrf(model)
+  def apply_efficiency_ecm_hs08_ccashp_vrf(model,air_sys_eqpt_type: "ccashp")
     # Use same performance data as ECM "hs09_ccashpsys" for air system
-    apply_efficiency_ecm_hs09_ccashp_baseboard(model)
+    if air_sys_eqpt_type == "ccashp"
+      apply_efficiency_ecm_hs09_ccashp_baseboard(model)
+    elsif air_sys_eqpt_type == "ashp"
+      apply_efficiency_ecm_hs12_ashp_baseboard(model)
+    end
     # Apply efficiency and curves for VRF units
     eqpt_name = "Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit"
     model.getAirConditionerVariableRefrigerantFlows.sort.each do |vrf_unit|
@@ -1278,6 +1294,28 @@ class ECMS
         coil_heating_dx_single_speed_apply_efficiency_and_curves(htg_dx_coil,ashp_eqpt_name)
       end
     end
+  end
+
+  # =============================================================================================================================
+  # Add equipment for ecm "hs13_ashp_vrf":
+  #   -Constant-volume dedicated-outside air system
+  #   -Air-source heat pump for heating and cooling with electric backup
+  #   -Zonal VRF terminal units for heating and cooling with electric baseboards
+  def add_ecm_hs13_ashp_vrf(model:,
+                            system_zones_map:,
+                            system_doas_flags:)
+    # call method for ECM hs08 with ASHP in the air system
+    add_ecm_hs08_ccashp_vrf(model: model,
+                            system_zones_map: system_zones_map,
+                            system_doas_flags: system_doas_flags,
+                            air_sys_eqpt_type: "ashp")
+  end
+
+  # =============================================================================================================================
+  # Apply efficiencies and performance curves for ECM "hs12_ashp_vrf"
+  def apply_efficiency_ecm_hs13_ashp_vrf(model)
+    # call method for ECM hs08 with ASHP in air system
+    apply_efficiency_ecm_hs08_ccashp_vrf(model,air_sys_eqpt_type: "ashp")
   end
 
   # =============================================================================================================================
