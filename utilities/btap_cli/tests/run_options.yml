@@ -53,3 +53,6 @@
 :skylight_solar_trans: NECB_Default
 :srr_set: NECB_Default
 :template: NECB2017
+:output_variables: [
+  {    key: '*',     variable: 'Zone Air Temperature',     frequency: 'hourly'}
+]

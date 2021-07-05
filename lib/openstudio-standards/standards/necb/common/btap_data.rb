@@ -47,11 +47,12 @@ class BTAPData
     @btap_data.merge!(energy_eui_data())
     @btap_data.merge!(energy_peak_data())
     @btap_data.merge!(utility(model))
+    @btap_data.merge!(unmet_hours(model))
 
     # Data in tables...
     @btap_data.merge!({'measures_data_table' => measures_data_table(runner)}) unless runner.nil?
     @btap_data.merge!({'envelope_exterior_surface_table' => self.envelope_exterior_surface_table()})
-    @btap_data.merge!({'space_table' => space_table(model, cost_result)}) unless cost_result == nil
+    @btap_data.merge!({'space_table' => space_table(model, cost_result)})
     @btap_data.merge!({'space_type_table' => space_type_table(model)})
     # This does not work with the new VRF or CCASHP systems. Commenting it for now.
     #@btap_data.merge!({'zone_table' => thermal_zones_table(model, cost_result)['table']})
@@ -79,7 +80,7 @@ class BTAPData
       # @btap_data.merge!('trunk_ducts_cost_table' => trunk_ducts_cost_table(cost_result))
     end
     # calculate energy demands and peak loads calculations as per PHIUS and NECB and compare them
-    # self.phius_performance_indicators(model)
+    self.phius_performance_indicators(model)
     # The below method calculates energy performance indicators (i.e. TEDI and MEUI) as per BC Energy Step Code
     self.bc_energy_step_code_performance_indicators()
 
@@ -341,6 +342,9 @@ class BTAPData
       spaceinfo["space_type_name"] = space.spaceType.get.name.get unless space.spaceType.empty? #should have a space types name defined.
       spaceinfo["breathing_zone_outdoor_airflow_vbz"] = -1
       spaceinfo["infiltration_flow_per_m_sq"] = space.infiltrationDesignFlowPerExteriorSurfaceArea
+      spaceinfo["floor_area_m2"] = space.floorArea
+      spaceinfo["building_type"] = space.spaceType.get.standardsBuildingType.get
+      spaceinfo["is_conditioned"] = space.thermalZone.get.isConditioned.get unless space.thermalZone.empty?
       #shw
       spaceinfo["shw_peak_flow_rate_m_cu_per_s"] = 0
       spaceinfo["shw_peak_flow_rate_per_floor_area_m_cu_per_s_per_m_sq"] = 0
@@ -351,18 +355,20 @@ class BTAPData
         #                             Watt per person =             m_cu/s/m_cu                * 1000W/kW * (specific heat * dT) * m_sq/person
         spaceinfo["shw_watts_per_person"] = spaceinfo["shw_peak_flow_rate_per_floor_area_m_cu_per_s_per_m_sq"] * 1000 * (4.19 * 44.4) * 1000 * area_per_occ
       end
-      # Including space level lighting costs in the existing space table...
-      spaceLgtInfo = cost_result['lighting']['space_report'].detect { |spaceLgtInfo| spaceLgtInfo["zone"].downcase == spaceinfo["thermal_zone_name"].downcase }
-      raise("Could not find zone name \"#{spaceinfo["thermal_zone_name"]}\" in lighting space_report") if spaceLgtInfo.nil?
-      spaceinfo['space_type'] = spaceLgtInfo['space_type']
-      spaceinfo['fixture_type'] = spaceLgtInfo['fixture_type']
-      # Note spelling mistake of "description" in cost_result hash fixed below in copy
-      spaceinfo['fixture_description'] = spaceLgtInfo['fixture_desciption']
-      spaceinfo['height_avg_ft'] = spaceLgtInfo['height_avg_ft']
-      spaceinfo['floor_area_ft2'] = spaceLgtInfo['floor_area_ft2']
-      spaceinfo['lighting_cost'] = spaceLgtInfo['cost']
-      spaceinfo['lighting_cost_per_ft2'] = spaceLgtInfo['cost_per_ft2']
-      spaceinfo['lighting_note'] = spaceLgtInfo['note']
+      unless cost_result.nil?
+        # Including space level lighting costs in the existing space table...
+        spaceLgtInfo = cost_result['lighting']['space_report'].detect { |spaceLgtInfo| spaceLgtInfo["zone"].downcase == spaceinfo["thermal_zone_name"].downcase }
+        raise("Could not find zone name \"#{spaceinfo["thermal_zone_name"]}\" in lighting space_report") if spaceLgtInfo.nil?
+        spaceinfo['space_type'] = spaceLgtInfo['space_type']
+        spaceinfo['fixture_type'] = spaceLgtInfo['fixture_type']
+        # Note spelling mistake of "description" in cost_result hash fixed below in copy
+        spaceinfo['fixture_description'] = spaceLgtInfo['fixture_desciption']
+        spaceinfo['height_avg_ft'] = spaceLgtInfo['height_avg_ft']
+        spaceinfo['floor_area_ft2'] = spaceLgtInfo['floor_area_ft2']
+        spaceinfo['lighting_cost'] = spaceLgtInfo['cost']
+        spaceinfo['lighting_cost_per_ft2'] = spaceLgtInfo['cost_per_ft2']
+        spaceinfo['lighting_note'] = spaceLgtInfo['note']
+      end
     end
     table.sort_by! { |spaceinfo| [spaceinfo["thermal_zone_name"], spaceinfo["space_name"]] }
     return table
@@ -1315,6 +1321,22 @@ class BTAPData
       data["energy_eui_#{column.downcase}_per_m_sq"] = table.inject(0) { |sum, row| sum + (row[column].nil? ? 0.0 : row[column]) } / @conditioned_floor_area_m_sq
       data['energy_eui_total_gj_per_m_sq'] += data["energy_eui_#{column.downcase}_per_m_sq"] unless data["energy_eui_#{column.downcase}_per_m_sq"].nil?
     end
+    # Get total and net site energy use intensity
+    # Note: 'Total Site Energy' is the "gross" energy used by a building.
+    # Note: 'Net Site Energy' is the final energy used by the building after considering any on-site energy generation (e.g. PV).
+    # Reference: https://unmethours.com/question/25416/what-is-the-difference-between-site-energy-and-source-energy/
+    # Reference: https://designbuilder.co.uk/helpv6.0/Content/KPIs.htm
+    data['total_site_eui_gj_per_m_sq'] = data['energy_eui_total_gj_per_m_sq'].to_f
+    command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
+               AND ReportForString='Entire Facility'
+               AND TableName='Site and Source Energy'
+               AND RowName='Net Site Energy'
+               AND ColumnName='Energy Per Conditioned Building Area'
+               AND Units='MJ/m2'"
+    net_site_eui_mj_per_m_sq = @sqlite_file.get.execAndReturnFirstDouble(command)
+    data['net_site_eui_gj_per_m_sq'] = OpenStudio.convert(net_site_eui_mj_per_m_sq.to_f, 'MJ', 'GJ').get
     return data
   end
 
@@ -1324,6 +1346,24 @@ class BTAPData
     unmet_hours = {}
     unmet_hours["unmet_hours_cooling"] = model.getFacility.hoursCoolingSetpointNotMet().get unless model.getFacility.hoursCoolingSetpointNotMet().empty?
     unmet_hours["unmet_hours_heating"] = model.getFacility.hoursHeatingSetpointNotMet().get unless model.getFacility.hoursHeatingSetpointNotMet().empty?
+    command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
+               AND ReportForString='Entire Facility'
+               AND TableName='Comfort and Setpoint Not Met Summary'
+               AND RowName='Time Setpoint Not Met During Occupied Cooling'
+               AND ColumnName='Facility'
+               AND Units='Hours'"
+    unmet_hours["unmet_hours_cooling_during_occupied"] = @sqlite_file.get.execAndReturnFirstDouble(command).to_f
+    command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
+               AND ReportForString='Entire Facility'
+               AND TableName='Comfort and Setpoint Not Met Summary'
+               AND RowName='Time Setpoint Not Met During Occupied Heating'
+               AND ColumnName='Facility'
+               AND Units='Hours'"
+    unmet_hours["unmet_hours_heating_during_occupied"] = @sqlite_file.get.execAndReturnFirstDouble(command).to_f
     return unmet_hours
   end
 
@@ -1675,7 +1715,27 @@ class BTAPData
 
   def bc_energy_step_code_performance_indicators()
     # TEDI (Thermal Energy Demand Intensity) [kWh/(m2.year)]
-    tedi_kwh_per_m_sq = OpenStudio.convert(@btap_data["energy_eui_heating_gj_per_m_sq"].to_f, 'GJ', 'kWh')
+    command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='EnergyMeters'
+               AND ReportForString='Entire Facility'
+               AND TableName='Annual and Peak Values - Other'
+               AND RowName='Baseboard:EnergyTransfer'
+               AND ColumnName='Annual Value'
+               AND Units='GJ'"
+    baseboard_energy_transfer_gj = @sqlite_file.get.execAndReturnFirstDouble(command)
+    baseboard_energy_transfer_kwh = OpenStudio.convert(baseboard_energy_transfer_gj.to_f, 'GJ', 'kWh')
+    command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='EnergyMeters'
+               AND ReportForString='Entire Facility'
+               AND TableName='Annual and Peak Values - Other'
+               AND RowName='HeatingCoils:EnergyTransfer'
+               AND ColumnName='Annual Value'
+               AND Units='GJ'"
+    heating_coils_energy_transfer_gj = @sqlite_file.get.execAndReturnFirstDouble(command)
+    heating_coils_energy_transfer_kwh = OpenStudio.convert(heating_coils_energy_transfer_gj.to_f, 'GJ', 'kWh')
+    tedi_kwh_per_m_sq = (baseboard_energy_transfer_kwh.to_f + heating_coils_energy_transfer_kwh.to_f) / @btap_data["bldg_conditioned_floor_area_m_sq"]
     @btap_data.merge!("bc_step_code_tedi_kwh_per_m_sq" => tedi_kwh_per_m_sq)
 
     # MEUI (Mechanical Energy Use Intensity) [kWh/(m2.year)]
@@ -1684,7 +1744,7 @@ class BTAPData
         @btap_data["energy_eui_fans_gj_per_m_sq"].to_f +
         @btap_data["energy_eui_pumps_gj_per_m_sq"].to_f +
         @btap_data["energy_eui_water systems_gj_per_m_sq"].to_f
-    meui_kwh_per_m_sq = OpenStudio.convert(meui_gj_per_m_sq, 'GJ', 'kWh')
+    meui_kwh_per_m_sq = OpenStudio.convert(meui_gj_per_m_sq, 'GJ', 'kWh').to_f
     @btap_data.merge!("bc_step_code_meui_kwh_per_m_sq" => meui_kwh_per_m_sq)
   end
 
@@ -1703,17 +1763,47 @@ class BTAPData
     envelope_to_floor_area_ratio = bldg_exterior_area_m_sq / bldg_conditioned_floor_area_m_sq
 
     ### UnitDens: Unit density (1/ft²) (inverse of the floor area per unit) in PHIUS, 2021
-    ### Note: if commercial buildings, set the number of units to 1 and divide by the floor area
-    building_type = @btap_data["bldg_standards_building_type"]
+    # Note: if commercial buildings, set the number of units to 1 and divide by the floor area
+    # This is the list of building types considered as some sort of residential buildings when the whole building method is used
+    building_type_names_necb_2011 = ['Dormitory', 'Hospital', 'Hotel', 'Motel', 'Multi-unit residential', 'Penitentiary']
+    building_type_names_necb_2015 = ['Dormitory', 'Health care clinic', 'Hospital', 'Hotel/Motel', 'Long-term care - dwelling units,' 'Long-term care - other', 'Multi-unit residential building', 'Penitentiary']
+    building_type_names_necb_2017 = ['Dormitory', 'Health care clinic', 'Hospital', 'Hotel/Motel', 'Long-term care - dwelling units', 'Long-term care - other', 'Multi-unit residential building', 'Penitentiary']
+    building_type_names_list = building_type_names_necb_2011 + building_type_names_necb_2015 + building_type_names_necb_2017
+    building_type_names_list = building_type_names_list.uniq
+    # This is the list of space types considered as some sort of residential spaces when the space type method is used
+    space_type_names_necb_2011 = ['Dormitory - living quarters', 'Dwelling Unit(s)', 'Hotel/Motel - rooms', 'Hway lodging - rooms']
+    space_type_names_necb_2015 = ['Guest room', 'Dormitory living quarters', 'Dwelling units general', 'Dwelling units long-term', 'Fire station sleeping quarters', 'Health care facility patient room', 'Health care facility recovery room']
+    space_type_names_necb_2017 = ['Guest room', 'Dormitory living quarters', 'Dwelling units general', 'Dwelling units long-term', 'Fire station sleeping quarters', 'Health care facility patient room', 'Health care facility recovery room']
+    space_type_names_list = space_type_names_necb_2011 + space_type_names_necb_2015 + space_type_names_necb_2017
+    space_type_names_list = space_type_names_list.uniq
     sum_handle = 0.0
     number_of_dwelling_units = 0.0
     @btap_data["space_table"].each do |space_info|
-      if space_info["space_type"] == 'Dwelling units general' && (building_type.upcase == 'HIGHRISEAPARTMENT' || building_type.upcase == 'MIDRISEAPARTMENT' || building_type.upcase == 'LOWRISEAPARTMENT')
-        sum_handle += space_info["floor_area_ft2"]
+      building_type_name = space_info["building_type"].sub! 'building', ''
+      building_type_name = building_type_name.strip unless building_type_name.nil?
+      space_type_name = space_info["space_type_name"]
+      if not space_type_name.include?('WholeBuilding')
+        # puts "This_is_the_space_type_method"
+        space_type_name = space_info["space_type_name"].sub! 'Space Function ', ''  # This removes 'Space Function' from space type name
+        if space_type_names_list.include?(space_type_name)
+          number_of_dwelling_units += 1.0 * space_info["multiplier"]
+          sum_handle += (OpenStudio.convert(space_info["floor_area_m2"], 'm^2', 'ft^2').get) * space_info["multiplier"]
+        end
+      elsif space_type_name.include?('WholeBuilding') && building_type_names_list.include?(building_type_name) && space_info["is_conditioned"]=='Yes'
+        # puts "This_is_the_whole_building_method"
         number_of_dwelling_units += 1.0 * space_info["multiplier"]
+        sum_handle += (OpenStudio.convert(space_info["floor_area_m2"], 'm^2', 'ft^2').get) * space_info["multiplier"]
       end
     end
-    if number_of_dwelling_units > 0.0
+    # Calculate what percentage of conditioned floor area has space types of the 'space_type_names_list' list.
+    # This percentage is used to determine if most of a building model is sort of dwelling type or not.
+    # The threshold for this percentage has been set to 60% based on the below reference:
+    # GSA (2012), Circulation: Defining and planning, U.S. General Services Administration, Available at Https://Www.Gsa.Gov/
+    # The above reference says: 'As a general planning rule of thumb, Circulation Area comprises roughly 25 to 40% of the total Usable Area.'
+    # Moreover, ~63% and ~41% of the SmallHotel and LargeHotel archetype, respectively, are guest rooms. So, the threshold has been chosen as 40%.
+    percentage_dwelling = 100.0 * sum_handle / bldg_conditioned_floor_area_ft_sq
+    # now, calculate UnitDens depending on whether a building model is sort of dwelling type or not
+    if percentage_dwelling >= 40.0 && number_of_dwelling_units > 0.0
       unit_density_per_ft_sq = 1.0 / (sum_handle / number_of_dwelling_units)
     else #i.e. if commercial buildings, set the number of units to 1 and divide by the floor area
       unit_density_per_ft_sq = 1.0 / bldg_conditioned_floor_area_ft_sq
