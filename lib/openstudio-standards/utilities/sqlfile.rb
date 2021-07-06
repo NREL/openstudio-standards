@@ -1,7 +1,12 @@
 Standard.class_eval do
+  # A set of methods that access the model .sql file after a run and return data
+
   # Gets the sql file for the model, erroring if not found
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::SqlFile] sql file associated with the model, boolean false if not found
   # @todo candidate for C++
-  def model_sql_file(model)
+  def model_get_sql_file(model)
     # Ensure that the model has a sql file associated with it
     if model.sqlFile.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Failed to retrieve data because the sql file containing results is missing.')
@@ -13,9 +18,10 @@ Standard.class_eval do
 
   # Get the weather run period for the model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [<OpenStudio::EnvironmentType>] the weather run period environment type
-  def model_weather_run_period(model)
-    sql = model_sql_file(model)
+  def model_get_weather_run_period(model)
+    sql = model_get_sql_file(model)
     unless sql
       return false
     end
@@ -42,18 +48,19 @@ Standard.class_eval do
 
   # Gets the annual occupied unmet heating hours from zone temperature time series in the sql file
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param tolerance [Double] tolerance in degrees Rankine to log an unmet hour
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
   # @return [Hash] Hash with 'sum' of heating unmet hours and 'zone_temperature_differences' of all zone unmet hours data
   # @todo account for operative temperature thermostats
   def model_annual_occupied_unmet_heating_hours_detailed(model, tolerance: 1.0, occupied_percentage_threshold: 0.05)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating zone heating occupied unmet hours with #{tolerance} R tolerance.  This may take some time.")
-    sql = model_sql_file(model)
+    sql = model_get_sql_file(model)
 
     # convert tolerance to Kelvin
-    tolerance_K = OpenStudio.convert(tolerance, 'R', 'K').get
+    tolerance_k = OpenStudio.convert(tolerance, 'R', 'K').get
 
-    ann_env_pd = model_weather_run_period(model)
+    ann_env_pd = model_get_weather_run_period(model)
     unless ann_env_pd
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Could not get annual run period.')
       return false
@@ -107,7 +114,7 @@ Standard.class_eval do
 
       # calculate difference accounting for unmet hours tolerance
       zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| (zone_temperatures[i] - x) }
-      zone_unmet_hours = zone_temperature_diff.map { |x| (x + tolerance_K) < 0 ? 1 : 0 }
+      zone_unmet_hours = zone_temperature_diff.map { |x| (x + tolerance_k) < 0 ? 1 : 0 }
       zone_occ_unmet_hours = []
       for i in (0..zone_unmet_hours.size - 1)
         bldg_unmet_hours[i] = 0 if bldg_unmet_hours[i].nil?
@@ -145,18 +152,19 @@ Standard.class_eval do
 
   # Gets the annual occupied unmet cooling hours from zone temperature time series in the sql file
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
   # @param tolerance [Double] tolerance in degrees Rankine to log an unmet hour
   # @return [Hash] Hash with 'sum' of cooling unmet hours and 'zone_temperature_differences' of all zone unmet hours data
   # @todo account for operative temperature thermostats
   def model_annual_occupied_unmet_cooling_hours_detailed(model, tolerance: 1.0, occupied_percentage_threshold: 0.05)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating zone cooling occupied unmet hours with #{tolerance} R tolerance. This may take some time.")
-    sql = model_sql_file(model)
+    sql = model_get_sql_file(model)
 
     # convert tolerance to Kelvin
-    tolerance_K = OpenStudio.convert(tolerance, 'R', 'K').get
+    tolerance_k = OpenStudio.convert(tolerance, 'R', 'K').get
 
-    ann_env_pd = model_weather_run_period(model)
+    ann_env_pd = model_get_weather_run_period(model)
     unless ann_env_pd
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Could not get annual run period.')
       return false
@@ -210,7 +218,7 @@ Standard.class_eval do
 
       # calculate difference accounting for unmet hours tolerance
       zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| (x - zone_temperatures[i]) }
-      zone_unmet_hours = zone_temperature_diff.map { |x| (x - tolerance_K) > 0 ? 1 : 0 }
+      zone_unmet_hours = zone_temperature_diff.map { |x| (x - tolerance_k) > 0 ? 1 : 0 }
       zone_occ_unmet_hours = []
       for i in (0..zone_unmet_hours.size - 1)
         bldg_unmet_hours[i] = 0 if bldg_unmet_hours[i].nil?
@@ -248,6 +256,7 @@ Standard.class_eval do
 
   # Gets the annual occupied unmet heating hours from the sql file
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param tolerance [Double] tolerance in degrees Rankine to log an unmet hour
   #   If this is unspecified, the tolerance will be the tolerance specified in OutputControl:ReportingTolerances.
   #   If there isn't an OutputControl:ReportingTolerances object, the EnergyPlus default is 0.2 degrees Kelvin.
@@ -256,17 +265,17 @@ Standard.class_eval do
   #   Generally, it is much faster to define tolerances with the OutputControl:ReportingTolerances object.
   # @return [Double] heating unmet hours
   def model_annual_occupied_unmet_heating_hours(model, tolerance: nil)
-    sql = model_sql_file(model)
+    sql = model_get_sql_file(model)
 
     reporting_tolerances = model.getOutputControlReportingTolerances
     model_tolerance = reporting_tolerances.toleranceforTimeHeatingSetpointNotMet
-    model_tolerance_R = OpenStudio.convert(model_tolerance, 'K', 'R')
+    model_tolerance_r = OpenStudio.convert(model_tolerance, 'K', 'R')
 
     use_detailed = false
     unless tolerance.nil?
       # check to see if input argument tolerance matches model tolerance
-      tolerance_K = OpenStudio.convert(tolerance, 'R', 'K').get
-      unless (model_tolerance - tolerance_K).abs < 1e-3
+      tolerance_k = OpenStudio.convert(tolerance, 'R', 'K').get
+      unless (model_tolerance - tolerance_k).abs < 1e-3
         # input argument tolerance does not match model tolerance; need to recalculate unmet hours
         use_detailed = true
       end
@@ -278,7 +287,7 @@ Standard.class_eval do
       heating_unmet_hours = zones_unmet_hours['sum_bldg_occupied_unmet_hours']
     else
       # use default EnergyPlus unmet hours reporting
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating heating unmet hours with #{model_tolerance_R} R tolerance")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating heating unmet hours with #{model_tolerance_r} R tolerance")
 
       # setup the queries
       heating_setpoint_unmet_query = "SELECT Value
@@ -305,6 +314,7 @@ Standard.class_eval do
 
   # Gets the annual occupied unmet cooling hours from the sql file
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param tolerance [Double] tolerance in degrees Rankine to log an unmet hour
   #   If this is unspecified, the tolerance will be the tolerance specified in OutputControl:ReportingTolerances.
   #   If there isn't an OutputControl:ReportingTolerances object, the EnergyPlus default is 0.2 degrees Kelvin.
@@ -313,17 +323,17 @@ Standard.class_eval do
   #   Generally, it is much faster to define tolerances with the OutputControl:ReportingTolerances object.
   # @return [Double] heating unmet hours
   def model_annual_occupied_unmet_cooling_hours(model, tolerance: nil)
-    sql = model_sql_file(model)
+    sql = model_get_sql_file(model)
 
     reporting_tolerances = model.getOutputControlReportingTolerances
     model_tolerance = reporting_tolerances.toleranceforTimeHeatingSetpointNotMet
-    model_tolerance_R = OpenStudio.convert(model_tolerance, 'K', 'R')
+    model_tolerance_r = OpenStudio.convert(model_tolerance, 'K', 'R')
 
     use_detailed = false
     unless tolerance.nil?
       # check to see if input argument tolerance matches model tolerance
-      tolerance_K = OpenStudio.convert(tolerance, 'R', 'K').get
-      unless (model_tolerance - tolerance_K).abs < 1e-3
+      tolerance_k = OpenStudio.convert(tolerance, 'R', 'K').get
+      unless (model_tolerance - tolerance_k).abs < 1e-3
         # input argument tolerance does not match model tolerance; need to recalculate unmet hours
         use_detailed = true
       end
@@ -335,7 +345,7 @@ Standard.class_eval do
       cooling_unmet_hours = zones_unmet_hours['sum_bldg_occupied_unmet_hours']
     else
       # use default EnergyPlus unmet hours reporting
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating cooling unmet hours with #{model_tolerance_R} R tolerance")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating cooling unmet hours with #{model_tolerance_r} R tolerance")
 
       # setup the queries
       cooling_setpoint_unmet_query = "SELECT Value
@@ -361,6 +371,9 @@ Standard.class_eval do
   end
 
   # Gets the annual occupied unmet hours from the sql file
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Double] the total number of unmet heating or cooling hours
   def model_annual_occupied_unmet_hours(model)
     heating_setpoint_unmet = model_annual_occupied_unmet_heating_hours(model)
     cooling_setpoint_unmet = model_annual_occupied_unmet_cooling_hours(model)
@@ -371,55 +384,14 @@ Standard.class_eval do
     return heating_or_cooling_setpoint_unmet
   end
 
-  # Gets the annual EUI from the sql file
-  def model_annual_eui_kbtu_per_ft2(model)
-    sql = model_sql_file(model)
-
-    building = model.getBuilding
-
-    # make sure all required data are available
-    if sql.totalSiteEnergy.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Site energy data unavailable.')
-      return false
-    end
-
-    total_site_energy_kbtu = OpenStudio.convert(sql.totalSiteEnergy.get, 'GJ', 'kBtu').get
-
-    floor_area_ft2 = OpenStudio.convert(building.floorArea, 'm^2', 'ft^2').get
-
-    site_eui_kbtu_per_ft2 = total_site_energy_kbtu / floor_area_ft2
-
-    return site_eui_kbtu_per_ft2
-  end
-
-  # Gets the net conditioned area from the sql file
-  def model_net_conditioned_floor_area(model)
-    sql = model_sql_file(model)
-
-    # setup the queries
-    area_query = "SELECT Value
-                  FROM TabularDataWithStrings
-                  WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
-                  AND ReportForString='Entire Facility'
-                  AND TableName='Building Area'
-                  AND RowName = 'Net Conditioned Building Area'
-                  AND ColumnName='Area'"
-
-    # get the info
-    area_m2 = sql.execAndReturnFirstDouble(area_query)
-
-    # make sure all the data are availalbe
-    if area_m2.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Could not get conditioned area information.')
-      return false
-    end
-
-    return area_m2.get
-  end
-
-  # Gets the annual energy consumption by fuel and enduse from the sql file
+  # Gets the model annual energy consumption by fuel and enduse in GJ from the sql file
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param fuel_type [String] the fuel type, e.g. 'Electricity'
+  # @param end_use [String] the end use, e.g. 'InteriorEquipment'
+  # @return [Double] the model energy fuel type end use in Gigajoules
   def model_annual_energy_by_fuel_and_enduse(model, fuel_type, end_use)
-    sql = model_sql_file(model)
+    sql = model_get_sql_file(model)
 
     # setup the queries
     query = "SELECT Value
@@ -442,8 +414,15 @@ Standard.class_eval do
     return energy_gj.get
   end
 
+  # Gets the model design day energy consumption by fuel and enduse in J from the sql file
+  # Uses the meter data dictionary instead of annual building utility performance summary
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param fuel_type [String] the fuel type, e.g. 'Electricity'
+  # @param end_use [String] the end use, e.g. 'InteriorEquipment'
+  # @return [Double] the model energy fuel type end use in Joules
   def model_dd_energy_by_fuel_by_enduse(model, fuel_type, end_use)
-    sql = model_sql_file(model)
+    sql = model_get_sql_file(model)
 
     # setup the end use index query
     get_rpt_mtr_data_dic_idx = "SELECT ReportMeterDataDictionaryIndex
@@ -476,6 +455,7 @@ Standard.class_eval do
 
   # Gets all annual energy consumption by enduse and fuel type from the sql file
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Hash] a hash of results for each fuel, where the keys are in the form 'End Use|Fuel Type',
   # e.g. Heating|Electricity, Exterior Equipment|Water.  All end use/fuel type combos are present, with
   # values of 0.0 if none of this end use/fuel type combo was used by the simulation.
@@ -498,6 +478,12 @@ Standard.class_eval do
     return energy_values
   end
 
+  # Gets all design day energy consumption by enduse and fuel type from the sql file
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Hash] a hash of results for each fuel, where the keys are in the form 'End Use|Fuel Type',
+  #   # e.g. Heating|Electricity, Exterior Equipment|Water.  All end use/fuel type combos are present, with
+  #   # values of 0.0 if none of this end use/fuel type combo was used by the simulation.
   def model_dd_results_by_end_use_and_fuel_type(model)
     energy_values = {}
 
@@ -519,7 +505,10 @@ Standard.class_eval do
     return energy_values
   end
 
-  # Gets annual eui by fuel and end use from the sql file
+  # Gets annual energy use intensity by fuel and end use in kBtu/ft^2 from the sql file
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Double] a hash of annual energy use intensity by each fuel and end use in kBtu/ft^2, inclusive of all spaces
   def model_annual_eui_kbtu_per_ft2_by_fuel_and_enduse(model, fuel_type, end_use)
     energy_gj = model_annual_energy_by_fuel_and_enduse(model, fuel_type, end_use)
     energy_kbtu = OpenStudio.convert(energy_gj, 'GJ', 'kBtu').get
@@ -531,5 +520,57 @@ Standard.class_eval do
     eui_kbtu_per_ft2 = energy_kbtu / floor_area_ft2
 
     return eui_kbtu_per_ft2
+  end
+
+  # Gets the model total annual energy use intensity in kBtu/ft^2 from the sql file
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Double] the model total annual site energy use intensity in kBtu/ft^2, inclusive of all spaces
+  def model_annual_eui_kbtu_per_ft2(model)
+    sql = model_get_sql_file(model)
+
+    building = model.getBuilding
+
+    # make sure all required data are available
+    if sql.totalSiteEnergy.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Site energy data unavailable.')
+      return false
+    end
+
+    total_site_energy_kbtu = OpenStudio.convert(sql.totalSiteEnergy.get, 'GJ', 'kBtu').get
+
+    floor_area_ft2 = OpenStudio.convert(building.floorArea, 'm^2', 'ft^2').get
+
+    site_eui_kbtu_per_ft2 = total_site_energy_kbtu / floor_area_ft2
+
+    return site_eui_kbtu_per_ft2
+  end
+
+  # Gets the model net conditioned area  in m^2 from the sql file
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Double] the model net conditioned floor area in m^2
+  def model_net_conditioned_floor_area(model)
+    sql = model_get_sql_file(model)
+
+    # setup the queries
+    area_query = "SELECT Value
+                  FROM TabularDataWithStrings
+                  WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
+                  AND ReportForString='Entire Facility'
+                  AND TableName='Building Area'
+                  AND RowName = 'Net Conditioned Building Area'
+                  AND ColumnName='Area'"
+
+    # get the info
+    area_m2 = sql.execAndReturnFirstDouble(area_query)
+
+    # make sure all the data are availalbe
+    if area_m2.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Could not get conditioned area information.')
+      return false
+    end
+
+    return area_m2.get
   end
 end

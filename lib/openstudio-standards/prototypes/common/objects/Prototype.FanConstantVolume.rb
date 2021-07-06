@@ -5,6 +5,9 @@ class Standard
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
+  #
+  # @param fan_constant_volume [OpenStudio::Model::FanConstantVolume] constant volume fan object
+  # @return [Bool] returns true if successful, false if not
   def fan_constant_volume_apply_prototype_fan_pressure_rise(fan_constant_volume)
     # Don't modify unit heater fans
     return true if fan_constant_volume.name.to_s.include?('UnitHeater Fan')
@@ -53,10 +56,11 @@ class Standard
     return true
   end
 
-  # Determine the prototype fan pressure rise for a constant volume
-  # fan on an AirLoopHVAC based on the airflow of the system.
-  # @return [Double] the pressure rise (in H2O).  Defaults
-  # to the logic from ASHRAE 90.1-2004 prototypes.
+  # Determine the prototype fan pressure rise for a constant volume fan on an AirLoopHVAC based on system airflow.
+  # Defaults to the logic from ASHRAE 90.1-2004 prototypes.
+  #
+  # @param fan_constant_volume [OpenStudio::Model::FanConstantVolume] constant volume fan object
+  # @return [Double] pressure rise in inches H20
   def fan_constant_volume_airloop_fan_pressure_rise(fan_constant_volume)
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
@@ -84,6 +88,16 @@ class Standard
     return pressure_rise_in_h2o
   end
 
+  # creates a constant volume fan
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param fan_name [String] fan name
+  # @param fan_efficiency [Double] fan efficiency
+  # @param pressure_rise [Double] fan pressure rise in Pa
+  # @param motor_efficiency [Double] fan motor efficiency
+  # @param motor_in_airstream_fraction [Double] fraction of motor heat in airstream
+  # @param end_use_subcategory [String] end use subcategory name
+  # @return [OpenStudio::Model::FanConstantVolume] constant volume fan object
   def create_fan_constant_volume(model,
                                  fan_name: nil,
                                  fan_efficiency: nil,
@@ -102,6 +116,17 @@ class Standard
     return fan
   end
 
+  # creates a constant volume fan from a json
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param fan_json [Hash] hash of fan properties
+  # @param fan_name [String] fan name
+  # @param fan_efficiency [Double] fan efficiency
+  # @param pressure_rise [Double] fan pressure rise in Pa
+  # @param motor_efficiency [Double] fan motor efficiency
+  # @param motor_in_airstream_fraction [Double] fraction of motor heat in airstream
+  # @param end_use_subcategory [String] end use subcategory name
+  # @return [OpenStudio::Model::FanConstantVolume] constant volume fan object
   def create_fan_constant_volume_from_json(model,
                                            fan_json,
                                            fan_name: nil,

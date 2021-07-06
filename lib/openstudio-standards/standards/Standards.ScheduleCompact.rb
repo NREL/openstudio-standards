@@ -4,6 +4,7 @@ class Standard
   # Returns the min and max value for this schedule.
   #
   # @author Andrew Parker, NREL.
+  # @param schedule_compact [OpenStudio::Model::ScheduleCompact] compact schedule object
   # return [Hash] Hash has two keys, min and max.
   def schedule_compact_annual_min_max_value(schedule_compact)
     vals = []

@@ -1,8 +1,14 @@
 # Custom changes for the SmallDataCenterHighITE prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module SmallDataCenterHighITE
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+  # hvac adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # add IT equipment (ITE object) for data center building types
@@ -18,8 +24,10 @@ module SmallDataCenterHighITE
   end
 
   # add IT equipment (ITE object) for data center building types
-  # Normal electric equipment has been added in model_add_load prior to this
-  # will replace with ITE object here
+  # Normal electric equipment has been added in model_add_load prior to this will replace with ITE object here
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_data_center_load(model)
     model.getSpaceTypes.each do |space_type|
       # Get the standards data
@@ -62,8 +70,13 @@ module SmallDataCenterHighITE
     end
     # remove normal electric equipment
     model.getElectricEquipments.each(&:remove)
+    return true
   end
 
+  # modify CRAC supply air setpoint manager
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def modify_crac_sa_stpt_manager(model)
     supply_temp_sch = get_crac_supply_temp_sch(model)
     model.getSetpointManagerScheduleds.each do |stpt_manager|
@@ -71,8 +84,13 @@ module SmallDataCenterHighITE
 
       stpt_manager.setSchedule(supply_temp_sch)
     end
+    return true
   end
 
+  # get CRAC supply air temperature schedule
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Schedule] supply temperature schedule object
   def get_crac_supply_temp_sch(model)
     supply_temp_diff_max = 0
     supply_temp_diff_sch = nil
@@ -110,15 +128,28 @@ module SmallDataCenterHighITE
                                                               name = 'AHU Supply Temp Sch updated')
       end
     end
-
     return supply_temp_sch
   end
 
+  # swh adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+  # geometry adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 end

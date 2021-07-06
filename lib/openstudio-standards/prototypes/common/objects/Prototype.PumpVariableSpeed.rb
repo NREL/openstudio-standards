@@ -53,20 +53,18 @@ class Standard
         area_served_m2 = plant_loop_total_floor_area_served(plant_loop)
         area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
 
-        if area_served_ft2 > 120_000
-          return 'VSD No Reset'
-        else
-          return 'Riding Curve'
-        end
+        return 'VSD No Reset' if area_served_ft2 > 120_000
+
+        # else
+        return 'Riding Curve'
       when 'Cooling'
         # Get plant loop capacity capacity
         cooling_capacity_w = plant_loop_total_cooling_capacity(plant_loop)
 
-        if cooling_capacity_w >= 300
-          return 'VSD No Reset'
-        else
-          return 'Riding Curve'
-        end
+        return 'VSD No Reset' if cooling_capacity_w >= 300
+
+        # else
+        return 'Riding Curve'
     end
   end
 end

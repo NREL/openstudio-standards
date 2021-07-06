@@ -2,6 +2,8 @@ class Standard
   # @!group CoilCoolingWater
 
   # Prototype CoilCoolingWater object
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param chilled_water_loop [<OpenStudio::Model::PlantLoop>] the coil will be placed on the demand side of this plant loop
   # @param air_loop_node [<OpenStudio::Model::Node>] the coil will be placed on this node of the air loop
   # @param name [String] the name of the coil, or nil in which case it will be defaulted
@@ -9,6 +11,7 @@ class Standard
   # @param design_inlet_water_temperature [Double] design inlet water temperature in degrees Celsius, default is nil
   # @param design_inlet_air_temperature [Double] design inlet air temperature in degrees Celsius, default is nil
   # @param design_outlet_air_temperature [Double] design outlet air temperature in degrees Celsius, default is nil
+  # @return [OpenStudio::Model::CoilCoolingWater] the cooling coil
   def create_coil_cooling_water(model,
                                 chilled_water_loop,
                                 air_loop_node: nil,
@@ -65,7 +68,7 @@ class Standard
     clg_coil.setHeatExchangerConfiguration('CrossFlow')
 
     # coil controller properties
-    # NOTE: These inputs will get overwritten if addToNode or addDemandBranchForComponent is called on the htg_coil object after this
+    # @note These inputs will get overwritten if addToNode or addDemandBranchForComponent is called on the htg_coil object after this
     clg_coil_controller = clg_coil.controllerWaterCoil.get
     clg_coil_controller.setName("#{clg_coil.name} Controller")
     clg_coil_controller.setAction('Reverse')

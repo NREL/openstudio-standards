@@ -190,7 +190,7 @@ class TestAddHVACSystems < Minitest::Test
     log_hvac_test_errors(errs)
     log_messages_to_file("#{model_dir}/openstudio-standards.log", debug=false)
 
-    # TODO: add checks for hvac enduse euis, ventilation unmet hours
+    # @todo add checks for hvac enduse euis, ventilation unmet hours
     return errs
   end
 
@@ -206,7 +206,7 @@ class TestAddHVACSystems < Minitest::Test
     assert(group_errs.size == 0, group_errs.join("\n"))
   end
 
-  # TODO: add support for additional variations of building type (office, multifamily), geometry (20, 60 wwr), and climate zone (2A, 5B, 7A)
+  # @todo add support for additional variations of building type (office, multifamily), geometry (20, 60 wwr), and climate zone (2A, 5B, 7A)
 
   def test_add_hvac_systems_ideal_loads
     hvac_systems = [
@@ -222,7 +222,7 @@ class TestAddHVACSystems < Minitest::Test
       {system_type: 'Residential Forced Air Furnace', main_heat_fuel: 'NaturalGas', unmet_hrs_clg: 6000.0},
       {system_type: 'Residential Forced Air Furnace with AC', main_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity'},
       {system_type: 'Residential Air Source Heat Pump', main_heat_fuel: 'Electricity', cool_fuel: 'Electricity'}
-      # TODO: couple with baseboards and other heating systems, e.g. window ac and forced air
+      # @todo couple with baseboards and other heating systems, e.g. window ac and forced air
     ]
     group_hvac_test(hvac_systems)
   end
@@ -244,9 +244,9 @@ class TestAddHVACSystems < Minitest::Test
     hvac_systems = [
       {system_type: 'Evaporative Cooler', cool_fuel: 'Electricity', zones: 'cooled_zones', climate_zone: 'ASHRAE 169-2013-2B', unmet_hrs_htg: 6000.0, unmet_hrs_clg: 3000.0}
     ]
-    # TODO: debug evaporative cooler performance
-    # TODO: add more evaporative cooler tests, combine with baseboards
-    # TODO: add climate zone coverage
+    # @todo debug evaporative cooler performance
+    # @todo add more evaporative cooler tests, combine with baseboards
+    # @todo add climate zone coverage
     group_hvac_test(hvac_systems)
   end
 
@@ -255,10 +255,10 @@ class TestAddHVACSystems < Minitest::Test
       {model_test_name: 'PTAC_elec', system_type: 'PTAC', main_heat_fuel: 'Electricity', cool_fuel: 'Electricity'},
       {model_test_name: 'PTAC_gas', system_type: 'PTAC', main_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity'},
       # {model_test_name: 'PTAC_ashp', system_type: 'PTAC', main_heat_fuel: 'AirSourceHeatPump', cool_fuel: 'Electricity'},
-      # TODO: this test is failing the sizing run
+      # @todo this test is failing the sizing run
       {model_test_name: 'PTAC_district_heat', system_type: 'PTAC', main_heat_fuel: 'DistrictHeating', cool_fuel: 'Electricity'},
       {model_test_name: 'PTAC_no_heat', system_type: 'PTAC', main_heat_fuel: nil, cool_fuel: 'Electricity', unmet_hrs_htg: 6000.0},
-      # TODO: add PTAC and baseboard pairings
+      # @todo add PTAC and baseboard pairings
       {system_type: 'PTHP', main_heat_fuel: 'Electricity', cool_fuel: 'Electricity'}
     ]
     group_hvac_test(hvac_systems)
@@ -272,12 +272,12 @@ class TestAddHVACSystems < Minitest::Test
       {model_test_name: 'PSZAC_gas_district', system_type: 'PSZ-AC', main_heat_fuel: 'NaturalGas', cool_fuel: 'DistrictCooling', unmet_hrs_htg: 450.0},
       # {model_test_name: 'PSZAC_ashp_elec', system_type: 'PSZ-AC', main_heat_fuel: 'AirSourceHeatPump', cool_fuel: 'Electricity'},
       # {model_test_name: 'PSZAC_ashp_district', system_type: 'PSZ-AC', main_heat_fuel: 'AirSourceHeatPump', cool_fuel: 'DistrictCooling'},
-      # TODO: this test is failing the sizing run
+      # @todo this test is failing the sizing run
       {model_test_name: 'PSZAC_district_elec', system_type: 'PSZ-AC', main_heat_fuel: 'DistrictHeating', cool_fuel: 'Electricity', unmet_hrs_htg: 450.0},
       {model_test_name: 'PSZAC_district_district', system_type: 'PSZ-AC', main_heat_fuel: 'DistrictHeating', cool_fuel: 'DistrictCooling', unmet_hrs_htg: 450.0},
       {model_test_name: 'PSZAC_no_heat_elec', system_type: 'PSZ-AC', main_heat_fuel: nil, cool_fuel: 'Electricity', unmet_hrs_htg: 6000.0},
       {model_test_name: 'PSZAC_no_heat_district', system_type: 'PSZ-AC', main_heat_fuel: nil, cool_fuel: 'DistrictCooling', unmet_hrs_htg: 6000.0},
-      # TODO: add PSZ-AC and baseboard pairings
+      # @todo add PSZ-AC and baseboard pairings
       {system_type: 'PSZ-HP', main_heat_fuel: ['Electricity'], cool_fuel: ['Electricity']}
     ]
     group_hvac_test(hvac_systems)
@@ -314,11 +314,11 @@ class TestAddHVACSystems < Minitest::Test
       {model_test_name: 'WSHP_elec_elec_fld_clr', system_type: 'Water Source Heat Pumps', main_heat_fuel: 'Electricity', cool_fuel: 'Electricity', heat_pump_loop_cooling_type: 'FluidCooler'},
       {model_test_name: 'WSHP_gas_elec_clg_twr', system_type: 'Water Source Heat Pumps', main_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity', heat_pump_loop_cooling_type: 'CoolingTower'},
       # {model_test_name: 'WSHP_ashp_clg_twr', system_type: 'Water Source Heat Pumps', main_heat_fuel: 'AirSourceHeatPump', cool_fuel: 'Electricity', heat_pump_loop_cooling_type: 'CoolingTower'},
-      # TODO: fix failing sizing run
+      # @todo fix failing sizing run
       {model_test_name: 'WSHP_ambient_clg_twr', system_type: 'Water Source Heat Pumps', main_heat_fuel: 'DistrictHeating', cool_fuel: 'Electricity', heat_pump_loop_cooling_type: 'CoolingTower'},
       {model_test_name: 'WSHP_ambient_clg_twr', system_type: 'Water Source Heat Pumps', main_heat_fuel: 'AmbientLoop', cool_fuel: 'AmbientLoop', heat_pump_loop_cooling_type: 'CoolingTower'},
       # {model_test_name: 'WSHP_ambient_fld_clr', system_type: 'Water Source Heat Pumps', main_heat_fuel: 'AmbientLoop', cool_fuel: 'AmbientLoop', heat_pump_loop_cooling_type: 'FluidCooler'}
-      # TODO: this test is failing the sizing run
+      # @todo this test is failing the sizing run
     ]
     group_hvac_test(hvac_systems)
   end
@@ -341,7 +341,7 @@ class TestAddHVACSystems < Minitest::Test
       {model_test_name: 'VAV_Gas_Reheat_ashp', system_type: 'VAV Gas Reheat', main_heat_fuel: 'AirSourceHeatPump', zone_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity', unmet_hrs_htg: 1500.0},
       {model_test_name: 'VAV_Gas_Reheat_district', system_type: 'VAV Gas Reheat', main_heat_fuel: 'DistrictHeating', zone_heat_fuel: 'NaturalGas', cool_fuel: 'DistrictCooling', unmet_hrs_htg: 1500.0},
       {model_test_name: 'VAV_No_Reheat', system_type: 'VAV No Reheat', main_heat_fuel: 'NaturalGas', zone_heat_fuel: nil, cool_fuel: 'Electricity', zones: 'cooled_zones', unmet_hrs_htg: 3750.0}
-      # TODO: unmet hours are likely related to the different ventilation rate procedure/zone sum sizing criteria
+      # @todo unmet hours are likely related to the different ventilation rate procedure/zone sum sizing criteria
     ]
     group_hvac_test(hvac_systems)
   end
@@ -378,7 +378,6 @@ class TestAddHVACSystems < Minitest::Test
       {system_type: 'Radiant Slab with DOAS', main_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity',
        hot_water_loop_type: 'LowTemperature', climate_zone: 'ASHRAE 169-2013-5B', model_name: 'basic_2_story_office_no_hvac_20WWR',
        unmet_hrs_htg: 700.0, unmet_hrs_clg: 3500.0}
-       #TODO:
     ]
     group_hvac_test(hvac_systems)
   end

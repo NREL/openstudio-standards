@@ -3,17 +3,17 @@ class ASHRAE9012016 < ASHRAE901
 
   # Determine the prototypical economizer type for the model.
   #
-  # @param model [OpenStudio::Model::Model] the model
-  # @param climate_zone [String] the climate zone
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] the economizer type.  Possible values are:
-  # 'NoEconomizer'
-  # 'FixedDryBulb'
-  # 'FixedEnthalpy'
-  # 'DifferentialDryBulb'
-  # 'DifferentialEnthalpy'
-  # 'FixedDewPointAndDryBulb'
-  # 'ElectronicEnthalpy'
-  # 'DifferentialDryBulbAndEnthalpy'
+  #   'NoEconomizer'
+  #   'FixedDryBulb'
+  #   'FixedEnthalpy'
+  #   'DifferentialDryBulb'
+  #   'DifferentialEnthalpy'
+  #   'FixedDewPointAndDryBulb'
+  #   'ElectronicEnthalpy'
+  #   'DifferentialDryBulbAndEnthalpy'
   def model_economizer_type(model, climate_zone)
     economizer_type = case climate_zone
                       when 'ASHRAE 169-2006-0A',
@@ -34,10 +34,11 @@ class ASHRAE9012016 < ASHRAE901
   end
 
   # Adjust model to comply with fenestration orientation requirements
+  # @note code_sections [90.1-2013_5.5.4.5]
   #
-  # @code_sections [90.1-2013_5.5.4.5]
-  # @param [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Boolean] Returns true if successful, false otherwise
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] Returns true if successful, false otherwise
   def model_fenestration_orientation(model, climate_zone)
     # Building rotation to meet the same code requirement for
     # 90.1-2010 are kept
@@ -228,19 +229,19 @@ class ASHRAE9012016 < ASHRAE901
   end
 
   # Is transfer air required?
+  # @note code_sections [90.1-2016_6.5.7.1]
   #
-  # @code_sections [90.1-2016_6.5.7.1]
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Boolean] true if transfer air is required, false otherwise
+  # @return [Bool] returns true if transfer air is required, false if not
   def model_transfer_air_required?(model)
     return true
   end
 
   # Metal coiling door code minimum infiltration rate at 75 Pa
+  # @note code_sections [90.1-2019_5.4.3.2]
   #
-  # @code_sections [90.1-2019_5.4.3.2]
-  # @param [String] Climate zone
-  # @return [Float] Minimum infiltration rate for metal coiling doors
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Double] Minimum infiltration rate for metal coiling doors
   def model_door_infil_flow_rate_metal_coiling_cfm_ft2(climate_zone)
     case climate_zone
       when 'ASHRAE 169-2006-7A',
@@ -258,11 +259,11 @@ class ASHRAE9012016 < ASHRAE901
   end
 
   # Implement occupancy based lighting level threshold (0.02 W/sqft). This is only for ASHRAE 90.1 2016 onwards.
-  #
-  # @code_sections [90.1-2016_9.4.1.1.h/i]
+  # @note code_sections [90.1-2016_9.4.1.1.h/i]
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] OpenStudio Model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio Model
+  # @return [Bool] returns true if successful, false if not
   def model_add_lights_shutoff(model)
     zones = model.getThermalZones
     num_zones = 0
