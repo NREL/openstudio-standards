@@ -3,6 +3,7 @@ class Standard
 
   # Prototype BoilerHotWater object
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param hot_water_loop [<OpenStudio::Model::PlantLoop>] a hot water loop served by the boiler
   # @param name [String] the name of the boiler, or nil in which case it will be defaulted
   # @param fuel_type [String] type of fuel serving the boiler
@@ -17,6 +18,7 @@ class Standard
   # @param max_plr [Double] boiler maximum part load ratio
   # @param opt_plr [Double] boiler optimum part load ratio
   # @param sizing_factor [Double] boiler oversizing factor
+  # @return [OpenStudio::Model::BoilerHotWater] the boiler object
   def create_boiler_hot_water(model,
                               hot_water_loop: nil,
                               name: 'Boiler',

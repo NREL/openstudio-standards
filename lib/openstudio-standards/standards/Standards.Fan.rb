@@ -3,8 +3,12 @@
 module Fan
   # @!group Fan
 
-  # Applies the minimum motor efficiency for this fan
-  # based on the motor's brake horsepower.
+  # Applies the minimum motor efficiency for this fan based on the motor's brake horsepower.
+  #
+  # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
+  #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
+  # @param allowed_bhp [Double] allowable brake horsepower
+  # @return [Bool] returns true if successful, false if not
   def fan_apply_standard_minimum_motor_efficiency(fan, allowed_bhp)
     # Find the motor efficiency
     motor_eff, nominal_hp = fan_standard_minimum_motor_efficiency_and_size(fan, allowed_bhp)
@@ -32,8 +36,10 @@ module Fan
   # Adjust the fan pressure rise to hit the target fan power (W).
   # Keep the fan impeller and motor efficiencies static.
   #
-  # @param target_fan_power [Double] the target fan power in W
-  # @return [Bool] true if successful, false if not
+  # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
+  #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
+  # @param target_fan_power [Double] the target fan power in watts
+  # @return [Bool] returns true if successful, false if not
   def fan_adjust_pressure_rise_to_meet_fan_power(fan, target_fan_power)
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
@@ -67,11 +73,12 @@ module Fan
     return true
   end
 
-  # Determines the fan power (W) based on
-  # flow rate, pressure rise, and total fan efficiency(impeller eff * motor eff)
+  # Determines the fan power (W) based on flow rate,
+  # pressure rise, and total fan efficiency(impeller eff * motor eff)
   #
-  # @return [Double] fan power
-  #   @units Watts (W)
+  # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
+  #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
+  # @return [Double] fan power in watts
   def fan_fanpower(fan)
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = if fan.to_FanZoneExhaust.empty?
@@ -104,11 +111,11 @@ module Fan
     return fan_power_w
   end
 
-  # Determines the brake horsepower of the fan
-  # based on fan power and fan motor efficiency.
+  # Determines the brake horsepower of the fan based on fan power and fan motor efficiency.
   #
+  # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
+  #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
   # @return [Double] brake horsepower
-  #   @units horsepower (hp)
   def fan_brake_horsepower(fan)
     # Get the fan motor efficiency
     existing_motor_eff = 0.7
@@ -125,11 +132,11 @@ module Fan
     return fan_bhp
   end
 
-  # Determines the horsepower of the fan
-  # motor, including motor efficiency and
-  # fan impeller efficiency.
+  # Determines the horsepower of the fan motor, including motor efficiency and fan impeller efficiency.
   #
-  # @return [Double] horsepower
+  # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
+  #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
+  # @return [Double] motor horsepower
   def fan_motor_horsepower(fan)
     # Get the fan power
     fan_power_w = fan_fanpower(fan)
@@ -143,7 +150,10 @@ module Fan
   # Changes the fan motor efficiency and also the fan total efficiency
   # at the same time, preserving the impeller efficiency.
   #
+  # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
+  #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
   # @param motor_eff [Double] motor efficiency (0.0 to 1.0)
+  # @return [Bool] returns true if successful, false if not
   def fan_change_motor_efficiency(fan, motor_eff)
     # Calculate the existing impeller efficiency
     existing_motor_eff = 0.7
@@ -163,12 +173,16 @@ module Fan
       fan.setFanEfficiency(new_total_eff)
       fan.setMotorEfficiency(motor_eff)
     end
+    return true
   end
 
   # Changes the fan impeller efficiency and also the fan total efficiency
   # at the same time, preserving the motor efficiency.
   #
+  # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
+  #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
   # @param impeller_eff [Double] impeller efficiency (0.0 to 1.0)
+  # @return [Bool] returns true if successful, false if not
   def fan_change_impeller_efficiency(fan, impeller_eff)
     # Get the existing motor efficiency
     existing_motor_eff = 0.7
@@ -181,21 +195,23 @@ module Fan
 
     # Set the revised motor and total fan efficiencies
     fan.setFanEfficiency(new_total_eff)
+    return true
   end
 
-  # Determines the baseline fan impeller efficiency
-  # based on the specified fan type.
+  # Determines the baseline fan impeller efficiency based on the specified fan type.
   #
+  # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
+  #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
   # @return [Double] impeller efficiency (0.0 to 1.0)
   # @todo Add fan type to data model and modify this method
   def fan_baseline_impeller_efficiency(fan)
     # Assume that the fan efficiency is 65% for normal fans
     # and 55% for small fans (like exhaust fans).
-    # TODO add fan type to fan data model
+    # @todo add fan type to fan data model
     # and infer impeller efficiency from that?
     # or do we always assume a certain type of
     # fan impeller for the baseline system?
-    # TODO check COMNET and T24 ACM and PNNL 90.1 doc
+    # @todo check COMNET and T24 ACM and PNNL 90.1 doc
     fan_impeller_eff = 0.65
 
     if fan_small_fan?(fan)
@@ -205,15 +221,16 @@ module Fan
     return fan_impeller_eff
   end
 
-  # Determines the minimum fan motor efficiency and nominal size
-  # for a given motor bhp.  This should be the total brake horsepower with
-  # any desired safety factor already included.  This method picks
-  # the next nominal motor catgory larger than the required brake
-  # horsepower, and the efficiency is based on that size.  For example,
-  # if the bhp = 6.3, the nominal size will be 7.5HP and the efficiency
-  # for 90.1-2010 will be 91.7% from Table 10.8B.  This method assumes
-  # 4-pole, 1800rpm totally-enclosed fan-cooled motors.
+  # Determines the minimum fan motor efficiency and nominal size for a given motor bhp.
+  # This should be the total brake horsepower with any desired safety factor already included.
+  # This method picks the next nominal motor catgory larger than the required brake horsepower,
+  # and the efficiency is based on that size.
+  # For example, if the bhp = 6.3, the nominal size will be 7.5HP and the efficiency
+  # for 90.1-2010 will be 91.7% from Table 10.8B.
+  # This method assumes 4-pole, 1800rpm totally-enclosed fan-cooled motors.
   #
+  # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
+  #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
   # @param motor_bhp [Double] motor brake horsepower (hp)
   # @return [Array<Double>] minimum motor efficiency (0.0 to 1.0), nominal horsepower
   def fan_standard_minimum_motor_efficiency_and_size(fan, motor_bhp)
@@ -275,10 +292,11 @@ module Fan
     return [fan_motor_eff, nominal_hp]
   end
 
-  # Zone exhaust fans, fan coil unit fans,
-  # and powered VAV terminal fans all count
-  # as small fans and get different impeller efficiencies
-  # and motor efficiencies than other fans
+  # Zone exhaust fans, fan coil unit fans, and powered VAV terminal fans all count
+  # as small fans and get different impeller efficiencies and motor efficiencies than other fans
+  #
+  # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
+  #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
   # @return [Bool] returns true if it is a small fan, false if not
   def fan_small_fan?(fan)
     is_small = false
@@ -315,11 +333,11 @@ module Fan
     return is_small
   end
 
-  # Find the actual rated fan power per flow (W/CFM)
-  # by querying the sql file
+  # Find the actual rated fan power per flow (W/CFM) by querying the sql file
   #
-  # @return [Double] rated power consumption per flow
-  #   @units Watts per CFM (W*min/ft^3)
+  # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
+  #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
+  # @return [Double] rated power consumption per flow in watters per cfm, W*min/ft^3
   def fan_rated_w_per_cfm(fan)
     # Get design power (whether autosized or hard-sized)
     rated_power_w = fan.model.getAutosizedValueFromEquipmentSummary(fan, 'Fans', 'Rated Electric Power', 'W')

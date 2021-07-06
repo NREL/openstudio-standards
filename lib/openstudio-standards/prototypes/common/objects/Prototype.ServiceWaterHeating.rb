@@ -3,6 +3,7 @@ class Standard
 
   # Creates a service water heating loop.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone]
   #   zones to place water heater in.  If nil, will be assumed in 70F air for heat loss.
@@ -143,6 +144,7 @@ class Standard
 
   # Creates a water heater and attaches it to the supplied service water heating loop.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param water_heater_capacity [Double] water heater capacity, in W
   # @param water_heater_volume [Double] water heater volume, in m^3
   # @param water_heater_fuel [Double] valid choices are NaturalGas, Electricity
@@ -171,7 +173,7 @@ class Standard
                              water_heater_thermal_zone,
                              number_water_heaters)
     # Water heater
-    # TODO Standards - Change water heater methodology to follow
+    # @todo Standards - Change water heater methodology to follow
     # 'Model Enhancements Appendix A.'
     water_heater_capacity_btu_per_hr = OpenStudio.convert(water_heater_capacity, 'W', 'Btu/hr').get
     water_heater_capacity_kbtu_per_hr = OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'kBtu/hr').get
@@ -216,11 +218,11 @@ class Standard
     if water_heater_thermal_zone.nil?
       # Assume the water heater is indoors at 70F or 72F
       case template
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
-          indoor_temp = 71.6
-        else
-          indoor_temp = 70.0
-        end
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
+        indoor_temp = 71.6
+      else
+        indoor_temp = 70.0
+      end
       default_water_heater_ambient_temp_sch = model_add_constant_schedule_ruleset(model,
                                                                                   OpenStudio.convert(indoor_temp, 'F', 'C').get,
                                                                                   name = 'Water Heater Ambient Temp Schedule - ' + indoor_temp.to_s + 'f')
@@ -263,7 +265,7 @@ class Standard
       # Make a part-load efficiency modifier curve with a value above 1, which
       # is multiplied by the nominal efficiency of 100% to represent
       # the COP of a HPWH.
-      # TODO could make this workaround better by using EMS
+      # @todo could make this workaround better by using EMS
       # to modify this curve output in realtime based on
       # the OA temperature.
       hpwh_cop = 2.8
@@ -304,6 +306,7 @@ class Standard
 
   # Creates a heatpump water heater and attaches it to the supplied service water heating loop.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param water_heater_capacity [Double] water heater capacity, in W
   # @param water_heater_volume [Double] water heater volume, in m^3
   # @param service_water_temperature [Double] water heater temperature, in C
@@ -578,6 +581,7 @@ class Standard
   # Creates a booster water heater and attaches it
   # to the supplied service water heating loop.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param main_service_water_loop [OpenStudio::Model::PlantLoop]
   # the main service water loop that this booster assists.
   # @param water_heater_capacity [Double] water heater capacity, in W
@@ -642,7 +646,7 @@ class Standard
     swh_pump.addToNode(booster_service_water_loop.supplyInletNode)
 
     # Water heater
-    # TODO Standards - Change water heater methodology to follow
+    # @todo Standards - Change water heater methodology to follow
     # 'Model Enhancements Appendix A.'
     water_heater_capacity_btu_per_hr = OpenStudio.convert(water_heater_capacity, 'W', 'Btu/hr').get
     water_heater_capacity_kbtu_per_hr = OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'kBtu/hr').get
@@ -659,11 +663,11 @@ class Standard
     if booster_water_heater_thermal_zone.nil?
       # Assume the water heater is indoors at 70F or 72F
       case template
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
-          indoor_temp = 71.6
-        else
-          indoor_temp = 70.0
-        end
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
+        indoor_temp = 71.6
+      else
+        indoor_temp = 70.0
+      end
       default_water_heater_ambient_temp_sch = model_add_constant_schedule_ruleset(model,
                                                                                   OpenStudio.convert(indoor_temp, 'F', 'C').get,
                                                                                   name = 'Water Heater Ambient Temp Schedule - ' + indoor_temp.to_s)
@@ -775,6 +779,7 @@ class Standard
   # Creates water fixtures and attaches them
   # to the supplied service water loop.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param use_name [String] The name that will be assigned
   # to the newly created fixture.
   # @param swh_loop [OpenStudio::Model::PlantLoop]
@@ -860,10 +865,10 @@ class Standard
   # Adds a WaterUseEquipment object representing the SWH loads of the supplied Space.
   # Attaches this WaterUseEquipment to the supplied PlantLoop via a new WaterUseConnections object.
   #
-  # @param model [OpenStudio::Model::Model] the model
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param swh_loop [OpenStudio::Model::PlantLoop] the SWH loop to connect the WaterUseEquipment to
-  # @space [OpenStudio::Model::Space] the Space to add a WaterUseEquipment for
-  # @space_multiplier [Double] the multiplier to use if the supplied Space actually represents
+  # @param space [OpenStudio::Model::Space] the Space to add a WaterUseEquipment for
+  # @param space_multiplier [Double] the multiplier to use if the supplied Space actually represents
   #   more area than is shown in the model.
   # @param is_flow_per_area [Bool] if true, use the value in the 'service_water_heating_peak_flow_per_area'
   #   field of the space_types JSON.  If false, use the value in the 'service_water_heating_peak_flow_rate' field.
@@ -962,24 +967,25 @@ class Standard
   end
 
   # Determine whether or not water fixtures are attached to spaces
+  # @todo For hotels and apartments, add the water fixture at the space level
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_attach_water_fixtures_to_spaces?(model)
-    # TODO: For hotels and apartments, add the water fixture at the space level
     # if building_type!=nil && ((building_type.downcase.include?"hotel") || (building_type.downcase.include?"apartment"))
     #   return true
     # end
     return false
   end
 
-  # Creates water fixtures and attaches them
-  # to the supplied booster water loop.
+  # Creates water fixtures and attaches them to the supplied booster water loop.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param swh_booster_loop [OpenStudio::Model::PlantLoop]
   # the booster water loop to add water fixtures to.
   # @param peak_flowrate [Double] in m^3/s
   # @param flowrate_schedule [String] name of the flow rate schedule
   # @param water_use_temperature [Double] mixed water use temperature, in C
-  # @return [OpenStudio::Model::WaterUseEquipment]
-  # the resulting water fixture.
+  # @return [OpenStudio::Model::WaterUseEquipment] the resulting water fixture
   def model_add_booster_swh_end_uses(model,
                                      swh_booster_loop,
                                      peak_flowrate,
@@ -1025,13 +1031,14 @@ class Standard
   # are close to the point of use.
   # Assume that piping is located in a zone
   #
-  # @param model [OpenStudio::Model::Model] the model
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param swh_loop [OpenStudio::Model::PlantLoop] the service water heating loop
   # @param floor_area_served [Double] the area of building served by the service water heating loop, in m^2
   # @param number_of_stories [Integer] the number of stories served by the service water heating loop
   # @param pipe_insulation_thickness [Double] the thickness of the pipe insulation, in m.  Use 0 for no insulation
   # @param circulating [Bool] use true for circulating systems, false for non-circulating systems
   # @param air_temp_surrounding_piping [Double] the temperature of the air surrounding the piping, in C.
+  # @return [Bool] returns true if successful, false if not
   def model_add_piping_losses_to_swh_system(model,
                                             swh_loop,
                                             circulating,
@@ -1089,9 +1096,9 @@ class Standard
     copper_pipe.setThermalConductivity(386.0)
     copper_pipe.setDensity(OpenStudio.convert(556, 'lb/ft^3', 'kg/m^3').get)
     copper_pipe.setSpecificHeat(OpenStudio.convert(0.092, 'Btu/lb*R', 'J/kg*K').get)
-    copper_pipe.setThermalAbsorptance(0.9) # TODO: find reference for property
-    copper_pipe.setSolarAbsorptance(0.7) # TODO: find reference for property
-    copper_pipe.setVisibleAbsorptance(0.7) # TODO: find reference for property
+    copper_pipe.setThermalAbsorptance(0.9) # @todo find reference for property
+    copper_pipe.setSolarAbsorptance(0.7) # @todo find reference for property
+    copper_pipe.setVisibleAbsorptance(0.7) # @todo find reference for property
 
     # Construction for pipe
     pipe_construction = OpenStudio::Model::Construction.new(model)
@@ -1124,9 +1131,11 @@ class Standard
     heat_loss_pipe = OpenStudio::Model::PipeIndoor.new(model)
     heat_loss_pipe.setName("#{swh_loop.name} Pipe #{pipe_length_ft}ft")
     heat_loss_pipe.setEnvironmentType('Schedule')
-    # heat_loss_pipe.setAmbientTemperatureSchedule(swh_piping_air_temp_sch) # TODO: schedule type registry error for this setter
+    # @todoschedule type registry error for this setter
+    # heat_loss_pipe.setAmbientTemperatureSchedule(swh_piping_air_temp_sch)
     heat_loss_pipe.setPointer(7, swh_piping_air_temp_sch.handle)
-    # heat_loss_pipe.setAmbientAirVelocitySchedule(model.alwaysOffDiscreteSchedule) # TODO: schedule type registry error for this setter
+    # @todo schedule type registry error for this setter
+    # heat_loss_pipe.setAmbientAirVelocitySchedule(model.alwaysOffDiscreteSchedule)
     heat_loss_pipe.setPointer(8, swh_piping_air_velocity_sch.handle)
     heat_loss_pipe.setConstruction(pipe_construction)
     heat_loss_pipe.setPipeInsideDiameter(OpenStudio.convert(0.785, 'in', 'm').get)

@@ -3,6 +3,7 @@ class Standard
 
   # find search criteria
   #
+  # @param coil_heating_gas_multi_stage [OpenStudio::Model::CoilHeatingGasMultiStage] coil heating gas multi stage object
   # @return [Hash] used for model_find_object(model)
   def coil_heating_gas_multi_stage_find_search_criteria(coil_heating_gas_multi_stage)
     # Define the criteria to find the coil heating gas multi-stage properties
@@ -17,8 +18,9 @@ class Standard
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
-  def coil_heating_gas_multi_stage_apply_efficiency_and_curves(coil_heating_gas_multi_stage, standards)
+  # @param coil_heating_gas_multi_stage [OpenStudio::Model::CoilHeatingGasMultiStage] coil heating gas multi stage object
+  # @return [Bool] returns true if successful, false if not
+  def coil_heating_gas_multi_stage_apply_efficiency_and_curves(coil_heating_gas_multi_stage)
     successfully_set_all_properties = true
 
     # Get the coil capacity
@@ -46,6 +48,7 @@ class Standard
 
   # Finds capacity in W
   #
+  # @param coil_heating_gas_multi_stage [OpenStudio::Model::CoilHeatingGasMultiStage] coil heating gas multi stage object
   # @return [Double] capacity in W to be used for find object
   def coil_heating_gas_multi_stage_find_capacity(coil_heating_gas_multi_stage)
     capacity_w = nil

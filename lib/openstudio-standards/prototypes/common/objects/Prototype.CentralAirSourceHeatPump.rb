@@ -3,9 +3,11 @@ class Standard
 
   # Prototype CentralAirSourceHeatPump object using PlantComponentUserDefined
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param hot_water_loop [<OpenStudio::Model::PlantLoop>] a hot water loop served by the central air source heat pump
   # @param name [String] the name of the central air source heat pump, or nil in which case it will be defaulted
   # @param cop [Double] air source heat pump rated cop
+  # @return [OpenStudio::Model::PlantComponentUserDefined] a plant component representing the air source heat pump
   # @todo update curve to better calculate based on the rated cop
   # @todo refactor to use the new EnergyPlus central air source heat pump object when it becomes available
   #   set hot_water_loop to an optional keyword argument, and add input keyword arguments for other characteristics

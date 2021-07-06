@@ -50,7 +50,7 @@ Where a method needs to operate **very differently** in two different situations
     - **`model_add_swh_end_uses_by_space()`** Adds `WaterUseEquipment` on a space-by-space basis based on the information in `OpenStudio_Standards_space_types.json`
   - **`model_add_exterior_lights()`** Adds `Exteriorlights` to the model as specified in `OpenStudio_Standards_prototype_inputs.json`.
   - **`model_add_occupancy_sensors()`** Adds lighting power reductions on a space-by-space basis based on `SpaceType`.  **NOTE: This method requires pre-computed assumptions about how much of each `SpaceType` exists in some models.  It would be better to make this more generic.**
-  - **`model_add_design_days_and_weather_file()`** Adds the correct design days and weather file for the specified climate zone.
+  - **`model_add_design_days_and_weather_file()`** Adds design days and weather file for the specified climate zone.
   - **`model_apply_sizing_parameters()`** Sets the heating and cooling sizing factors.  **NOTE: These are not consistent between building types.  Why?**
   - **`model_run_sizing_run()`** Runs the first sizing run.  Equipment sizes (mainly flow rates) are necessary for some of the subsequent steps.
   - **`model_apply_multizone_vav_outdoor_air_sizing()`** Reset damper positions on VAV systems to achieve a 60% ventilation effectiveness based on the 62.1 multizone calculations.

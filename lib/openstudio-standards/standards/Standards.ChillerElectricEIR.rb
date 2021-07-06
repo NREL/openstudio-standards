@@ -3,6 +3,7 @@ class Standard
 
   # Finds the search criteria
   #
+  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
   # @return [hash] has for search criteria to be used for find object
   def chiller_electric_eir_find_search_criteria(chiller_electric_eir)
     search_criteria = {}
@@ -18,7 +19,7 @@ class Standard
 
     search_criteria['cooling_type'] = cooling_type
 
-    # TODO: Standards replace this with a mechanism to store this
+    # @todo Standards replace this with a mechanism to store this
     # data in the chiller object itself.
     # For now, retrieve the condenser type from the name
     name = chiller_electric_eir.name.get
@@ -53,6 +54,7 @@ class Standard
 
   # Finds capacity in W
   #
+  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
   # @return [Double] capacity in W to be used for find object
   def chiller_electric_eir_find_capacity(chiller_electric_eir)
     if chiller_electric_eir.referenceCapacity.is_initialized
@@ -69,6 +71,7 @@ class Standard
 
   # Finds lookup object in standards and return full load efficiency
   #
+  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
   # @return [Double] full load efficiency (COP)
   def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
     # Get the chiller properties
@@ -93,7 +96,10 @@ class Standard
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
+  # @param clg_tower_objs [Array] cooling towers, currently unused
+  # @return [Bool] returns true if successful, false if not
+  # @todo remove clg_tower_objs parameter if unused
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
     chillers = standards_data['chillers']
 
