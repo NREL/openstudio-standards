@@ -190,6 +190,9 @@ Standard.class_eval do
     # Change the model back to running the weather file
     sim_control.setRunSimulationforSizingPeriods(false)
     sim_control.setRunSimulationforWeatherFileRunPeriods(true)
+    if model.version >= OpenStudio::VersionString.new('3.0.0')
+      sim_control.setDoHVACSizingSimulationforSizingPeriods(false)
+    end
 
     return success
   end
