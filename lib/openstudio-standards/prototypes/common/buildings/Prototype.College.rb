@@ -39,6 +39,10 @@ module College
         else
          infiltration_per_zone_entrydoor = 7.678585
          infiltration_entrydoor.setSchedule(model_add_schedule(model, 'College INFIL_Door_Opening_SCH'))
+        end
+      end
+    end
+  end
 
 
   # swh adjustments specific to the prototype model
