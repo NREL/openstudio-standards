@@ -3,17 +3,17 @@ class ZEAEDGMultifamily < ASHRAE901
 
   # Determine the prototypical economizer type for the model.
   #
-  # @param model [OpenStudio::Model::Model] the model
-  # @param climate_zone [String] the climate zone
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] the economizer type.  Possible values are:
-  # 'NoEconomizer'
-  # 'FixedDryBulb'
-  # 'FixedEnthalpy'
-  # 'DifferentialDryBulb'
-  # 'DifferentialEnthalpy'
-  # 'FixedDewPointAndDryBulb'
-  # 'ElectronicEnthalpy'
-  # 'DifferentialDryBulbAndEnthalpy'
+  #   'NoEconomizer'
+  #   'FixedDryBulb'
+  #   'FixedEnthalpy'
+  #   'DifferentialDryBulb'
+  #   'DifferentialEnthalpy'
+  #   'FixedDewPointAndDryBulb'
+  #   'ElectronicEnthalpy'
+  #   'DifferentialDryBulbAndEnthalpy'
   def model_economizer_type(model, climate_zone)
     economizer_type = case climate_zone
                       when 'ASHRAE 169-2006-0A',

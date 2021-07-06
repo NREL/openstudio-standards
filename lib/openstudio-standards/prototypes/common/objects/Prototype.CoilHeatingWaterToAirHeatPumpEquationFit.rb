@@ -3,11 +3,14 @@ class Standard
 
   # Prototype CoilHeatingWaterToAirHeatPumpEquationFit object
   # Enters in default curves for coil by type of coil
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param plant_loop [<OpenStudio::Model::PlantLoop>] the coil will be placed on the demand side of this plant loop
   # @param air_loop_node [<OpenStudio::Model::Node>] the coil will be placed on this node of the air loop
   # @param name [String] the name of the system, or nil in which case it will be defaulted
   # @param type [String] the type of coil to reference the correct curve set
   # @param cop [Double] rated heating coefficient of performance
+  # @return [OpenStudio::Model::CoilHeatingWaterToAirHeatPumpEquationFit] the heating coil
   def create_coil_heating_water_to_air_heat_pump_equation_fit(model,
                                                               plant_loop,
                                                               air_loop_node: nil,

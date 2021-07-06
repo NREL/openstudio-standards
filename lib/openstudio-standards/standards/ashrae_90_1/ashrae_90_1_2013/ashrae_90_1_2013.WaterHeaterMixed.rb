@@ -6,7 +6,7 @@ class ASHRAE9012013 < ASHRAE901
   # from the proposed building in some scenarios.
   #
   # @param building_type [String] the building type
-  # @return [Bool] returns true if successful, false if not.
+  # @return [Bool] returns true if successful, false if not
   def water_heater_mixed_apply_prm_baseline_fuel_type(water_heater_mixed, building_type)
     # Determine the building-type specific
     # fuel requirements from Table G3.1.1-2

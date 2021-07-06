@@ -4,7 +4,7 @@ class ASHRAE9012010 < ASHRAE901
   # Determine the prototypical economizer type for the model.
   #
   # @param model [OpenStudio::Model::Model] the model
-  # @param climate_zone [String] the climate zone
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] the economizer type.  Possible values are:
   # 'NoEconomizer'
   # 'FixedDryBulb'
@@ -34,9 +34,10 @@ class ASHRAE9012010 < ASHRAE901
   end
 
   # Adjust model to comply with fenestration orientation requirements
+  # @note code_sections [90.1-2010_5.5.4.5]
   #
-  # @code_sections [90.1-2010_5.5.4.5]
-  # @param [OpenStudio::Model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Boolean] Returns true if successful, false otherwise
   def model_fenestration_orientation(model, climate_zone)
     wwr = false
@@ -51,10 +52,10 @@ class ASHRAE9012010 < ASHRAE901
         building_type = model.getBuilding.standardsBuildingType.get
 
         case building_type
-          # TODO: Implementatation for other building types not meeting the requirement
-          # The offices, schools, warehouse (exempted), large hotel, outpatient,
-          # retails, apartments should meet the requirement according to Section
-          # 5.2.1.7 in Thornton et al. 2011
+          # @todo Implementatation for other building types not meeting the requirement
+          #   The offices, schools, warehouse (exempted), large hotel, outpatient,
+          #   retails, apartments should meet the requirement according to Section
+          #   5.2.1.7 in Thornton et al. 2011
           when 'Hospital'
             # Rotate the building counter-clockwise
             model_set_building_north_axis(model, 270.0)
@@ -73,12 +74,12 @@ class ASHRAE9012010 < ASHRAE901
   end
 
   # Is transfer air required?
+  # @note code_sections [90.1-2010_6.5.7.1.2]
   #
-  # @code_sections [90.1-2010_6.5.7.1.2]
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Boolean] true if transfer air is required, false otherwise
   def model_transfer_air_required?(model)
-    # TODO: It actually is for kitchen but not implemented yet
+    # @todo It actually is for kitchen but not implemented yet
     return false
   end
 end

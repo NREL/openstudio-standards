@@ -4,7 +4,8 @@ class Standard
   # Apply approach temperature sizing criteria to a condenser water loop
   #
   # @param condenser_loop [<OpenStudio::Model::PlantLoop>] a condenser loop served by a cooling tower
-  # @param design_wet_bulb_c [Double] the outdoor design wetbulb conditions in degrees C
+  # @param design_wet_bulb_c [Double] the outdoor design wetbulb conditions in degrees Celsius
+  # @return [Bool] returns true if successful, false if not
   def prototype_apply_condenser_water_temperatures(condenser_loop,
                                                    design_wet_bulb_c: nil)
     sizing_plant = condenser_loop.sizingPlant
@@ -99,6 +100,8 @@ class Standard
     cw_t_stpt_manager.setMaximumSetpointTemperature(leaving_cw_t_c)
     cw_t_stpt_manager.setMinimumSetpointTemperature(float_down_to_c)
     cw_t_stpt_manager.setOffsetTemperatureDifference(approach_k)
+
+    return true
   end
 
   # Determine the performance rating method specified design condenser water temperature, approach, and range
