@@ -4825,8 +4825,10 @@ class Standard
   # @param model [Model]
   # @param step_ramp_logic [String]
   # @param infer_hoo_for_non_assigned_objects [Bool] # attempt to get hoo for objects like swh with and exterior lighting
+  # @param gather_data_only: false (stops method before changes made if true)
+  # @param [hoo_var_method] accepts hours and fractional. Any other value value will result in hoo variables not being applied
   # @return [Hash] schedule is key, value is hash of number of objects
-  def model_setup_parametric_schedules(model, step_ramp_logic: nil, infer_hoo_for_non_assigned_objects: true, gather_data_only: false)
+  def model_setup_parametric_schedules(model, step_ramp_logic: nil, infer_hoo_for_non_assigned_objects: true, gather_data_only: false, hoo_var_method: 'hours')
     parametric_inputs = {}
     default_sch_type = OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')
     # thermal zones, air loops, plant loops will require some logic if they refer to more than one hours of operaiton schedule.
@@ -4852,11 +4854,11 @@ class Standard
         thermostat = zone.thermostatSetpointDualSetpoint.get
         if thermostat.heatingSetpointTemperatureSchedule.is_initialized && thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
           schedule = thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
-          gather_inputs_parametric_schedules(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only)
+          gather_inputs_parametric_schedules(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
         end
         if thermostat.coolingSetpointTemperatureSchedule.is_initialized && thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
           schedule = thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
-          gather_inputs_parametric_schedules(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only)
+          gather_inputs_parametric_schedules(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
         end
       end
     end
@@ -4874,7 +4876,7 @@ class Standard
       air_loop_hash[air_loop] = hours_of_operation
       if air_loop.availabilitySchedule.to_ScheduleRuleset.is_initialized
         schedule = air_loop.availabilitySchedule.to_ScheduleRuleset.get
-        gather_inputs_parametric_schedules(schedule, air_loop, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only)
+        gather_inputs_parametric_schedules(schedule, air_loop, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
       end
       avail_mgrs = air_loop.availabilityManagers
       avail_mgrs.sort.each do |avail_mgr|
@@ -4884,7 +4886,7 @@ class Standard
         resources.sort.each do |resource|
           if resource.to_ScheduleRuleset.is_initialized
             schedule = resource.to_ScheduleRuleset.get
-            gather_inputs_parametric_schedules(schedule, avail_mgr, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only)
+            gather_inputs_parametric_schedules(schedule, avail_mgr, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
           end
         end
       end
@@ -4942,7 +4944,7 @@ class Standard
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Cannot identify where #{component.name.get} is in system. Will not gather parametric inputs for #{schedule.name.get}")
           next
         end
-        gather_inputs_parametric_schedules(schedule, component, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only)
+        gather_inputs_parametric_schedules(schedule, component, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
       end
     end
 
@@ -4960,11 +4962,11 @@ class Standard
         if opt_space.is_initialized
           space = space.get
           hours_of_operation = space_hours_of_operation(space)
-          gather_inputs_parametric_schedules(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only)
+          gather_inputs_parametric_schedules(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
         else
           hours_of_operation = spaces_hours_of_operation(model.getSpaces)
           if !hours_of_operation.nil?
-            gather_inputs_parametric_schedules(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only)
+            gather_inputs_parametric_schedules(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
           end
         end
 
@@ -5274,7 +5276,7 @@ class Standard
         gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
         if load_inst.activityLevelSchedule.is_initialized && load_inst.activityLevelSchedule.get.to_ScheduleRuleset.is_initialized
           act_sch = load_inst.activityLevelSchedule.get.to_ScheduleRuleset.get
-          gather_inputs_parametric_schedules(act_sch, load_inst, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only)
+          gather_inputs_parametric_schedules(act_sch, load_inst, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'hours')
         end
       end
       space_type.spaceInfiltrationDesignFlowRates.each do |load_inst|
@@ -5309,7 +5311,7 @@ class Standard
       return nil
     end
 
-    gather_inputs_parametric_schedules(opt_sch.get.to_ScheduleRuleset.get, load_inst, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only)
+    gather_inputs_parametric_schedules(opt_sch.get.to_ScheduleRuleset.get, load_inst, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'hours')
 
     return parametric_inputs
   end
