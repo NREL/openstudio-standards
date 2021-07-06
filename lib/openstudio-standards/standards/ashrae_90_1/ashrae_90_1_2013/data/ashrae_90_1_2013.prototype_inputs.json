@@ -36,7 +36,7 @@
       "main_water_heater_capacity": 300000.0,
       "main_service_water_temperature": 140.0,
       "main_service_water_flowrate_schedule": "College BLDG_SWH_SCH",
-      "main_water_heater_space_name": "CB_UTILITY_F1",
+      "main_water_heater_space_name": "CB_STORAGE_F1",
       "main_service_water_peak_flowrate": 0.58,
       "main_off_cycle_parasitic_heat_fraction_to_tank": 0.8,
       "other_off_cycle_parasitic_heat_fraction_to_tank": null,
