@@ -3,6 +3,7 @@ class Standard
 
   # Returns standards data for selected space type and template
   #
+  # @param space_type [OpenStudio::Model::SpaceType] space type object
   # @return [hash] hash of internal loads for different load types
   def space_type_get_standards_data(space_type)
     standards_building_type = if space_type.standardsBuildingType.is_initialized
@@ -30,10 +31,10 @@ class Standard
     return space_type_properties
   end
 
-  # Sets the color for the space types as shown
-  # in the SketchUp plugin using render by space type.
+  # Sets the color for the space types as shown in the SketchUp plugin using render by space type.
   #
-  # @return [Bool] returns true if successful, false if not.
+  # @param space_type [OpenStudio::Model::SpaceType] space type object
+  # @return [Bool] returns true if successful, false if not
   def space_type_apply_rendering_color(space_type)
     # Get the standards data
     space_type_properties = space_type_get_standards_data(space_type)
@@ -65,11 +66,12 @@ class Standard
   # to have the specified values. This method does not alter any
   # loads directly assigned to spaces.  This method skips plenums.
   #
+  # @param space_type [OpenStudio::Model::SpaceType] space type object
   # @param set_people [Bool] if true, set the people density.
-  # Also, assign reasonable clothing, air velocity, and work efficiency inputs
-  # to allow reasonable thermal comfort metrics to be calculated.
+  #   Also, assign reasonable clothing, air velocity, and work efficiency inputs
+  #   to allow reasonable thermal comfort metrics to be calculated.
   # @param set_lights [Bool] if true, set the lighting density, lighting fraction
-  # to return air, fraction radiant, and fraction visible.
+  #   to return air, fraction radiant, and fraction visible.
   # @param set_electric_equipment [Bool] if true, set the electric equipment density
   # @param set_gas_equipment [Bool] if true, set the gas equipment density
   # @param set_ventilation [Bool] if true, set the ventilation rates (per-person and per-area)
@@ -456,14 +458,15 @@ class Standard
   # This method does not alter any schedules of any internal loads that
   # does not inherit from the default schedule set.
   #
+  # @param space_type [OpenStudio::Model::SpaceType] space type object
   # @param set_people [Bool] if true, set the occupancy and activity schedules
   # @param set_lights [Bool] if true, set the lighting schedule
   # @param set_electric_equipment [Bool] if true, set the electric schedule schedule
   # @param set_gas_equipment [Bool] if true, set the gas equipment density
   # @param set_infiltration [Bool] if true, set the infiltration schedule
   # @param make_thermostat [Bool] if true, makes a thermostat for this space type from the
-  # schedules listed for the space type.  This thermostat is not hooked to any zone by this method,
-  # but may be found and used later.
+  #   schedules listed for the space type.  This thermostat is not hooked to any zone by this method,
+  #   but may be found and used later.
   # @return [Bool] returns true if successful, false if not
   def space_type_apply_internal_load_schedules(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, make_thermostat)
     # Get the standards data
@@ -551,16 +554,24 @@ class Standard
     return true
   end
 
+  # applies a lighting schedule to a space type
+  #
+  # @param space_type [OpenStudio::Model::SpaceType] space type object
+  # @param space_type_properties [Hash] hash of space type properties
+  # @param default_sch_set [OpenStudio::Model::DefaultScheduleSet] default schedule set
+  # @return [Bool] returns true if successful, false if not
   def apply_lighting_schedule(space_type, space_type_properties, default_sch_set)
     lighting_sch = space_type_properties['lighting_schedule']
-    unless lighting_sch.nil?
-      default_sch_set.setLightingSchedule(model_add_schedule(space_type.model, lighting_sch))
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set lighting schedule to #{lighting_sch}.")
-    end
+    return false if lighting_sch.nil?
+
+    default_sch_set.setLightingSchedule(model_add_schedule(space_type.model, lighting_sch))
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set lighting schedule to #{lighting_sch}.")
+    return true
   end
 
   # Returns standards data for selected construction
   #
+  # @param space_type [OpenStudio::Model::SpaceType] space type object
   # @param intended_surface_type [string] the type of surface
   # @param standards_construction_type [string] the type of construction
   # @return [hash] hash of construction properties

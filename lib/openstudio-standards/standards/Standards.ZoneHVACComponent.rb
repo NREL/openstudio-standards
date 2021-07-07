@@ -1,6 +1,9 @@
 class Standard
   # @!group ZoneHVACComponent
 
+  # default fan efficiency for small zone hvac fans, in watts per cfm
+  #
+  # @return [Double] fan efficiency in watts per cfm
   def zone_hvac_component_prm_baseline_fan_efficacy
     fan_efficacy_w_per_cfm = 0.3
     return fan_efficacy_w_per_cfm
@@ -10,6 +13,7 @@ class Standard
   # (Fan coils, Unit Heaters, PTACs, PTHPs, VRF Terminals, WSHPs, ERVs)
   # based on the W/cfm specified in the standard.
   #
+  # @param zone_hvac_component [OpenStudio::Model::ZoneHVACComponent] zone hvac component
   # @return [Bool] returns true if successful, false if not
   def zone_hvac_component_apply_prm_baseline_fan_power(zone_hvac_component)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ZoneHVACComponent', "Setting fan power for #{zone_hvac_component.name}.")
@@ -83,12 +87,17 @@ class Standard
   end
 
   # Default occupancy fraction threshold for determining if the spaces served by the zone hvac are occupied
+  #
+  # @return [Double] unoccupied threshold
   def zone_hvac_unoccupied_threshold
     return 0.15
   end
 
   # If the supply air fan operating mode schedule is always off (to follow load),
   # and the zone requires ventilation, override it to follow the zone occupancy schedule
+  #
+  # @param zone_hvac_component [OpenStudio::Model::ZoneHVACComponent] zone hvac component
+  # @return [Bool] returns true if successful, false if not
   def zone_hvac_component_occupancy_ventilation_control(zone_hvac_component)
     ventilation = false
     # Zone HVAC operating schedule if providing ventilation
@@ -164,6 +173,7 @@ class Standard
 
   # Apply all standard required controls to the zone equipment
   #
+  # @param zone_hvac_component [OpenStudio::Model::ZoneHVACComponent] zone hvac component
   # @return [Bool] returns true if successful, false if not
   def zone_hvac_component_apply_standard_controls(zone_hvac_component)
     # Vestibule heating control
@@ -180,6 +190,7 @@ class Standard
   # Determine if vestibule heating control is required.
   # Defaults to 90.1-2004 through 2010, not required.
   #
+  # @param zone_hvac_component [OpenStudio::Model::ZoneHVACComponent] zone hvac component
   # @return [Bool] returns true if successful, false if not
   def zone_hvac_component_vestibule_heating_control_required?(zone_hvac_component)
     vest_htg_control_required = false
@@ -188,6 +199,7 @@ class Standard
 
   # Turns off vestibule heating below 45F
   #
+  # @param zone_hvac_component [OpenStudio::Model::ZoneHVACComponent] zone hvac component
   # @return [Bool] returns true if successful, false if not
   def zone_hvac_component_apply_vestibule_heating_control(zone_hvac_component)
     # Ensure that the equipment is assigned to a thermal zone

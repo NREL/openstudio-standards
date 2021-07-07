@@ -158,7 +158,7 @@ class NECB2015
       # This is more general than the other method in Standards.PlantLoop.rb which only looks at heat and cooling.  Also,
       # that method looks for spceific equipment and would be thrown if other equipment was present.  However my method
       # only works for water for now.
-      plantloop_capacity = plant_loop_capacity_W_by_maxflow_and_deltaT_forwater (plantloop)
+      plantloop_capacity = plant_loop_capacity_w_by_maxflow_and_delta_t_forwater(plantloop)
       # Sizing factor is pump power (W)/ zone demand (in kW, as approximated using plant loop capacity).
       necb_pump_power_cap = plantloop_capacity*max_powertoload/1000
       pump_power_adjustment = necb_pump_power_cap/total_pump_power

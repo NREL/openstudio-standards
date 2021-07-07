@@ -24,7 +24,8 @@ class ASHRAE9012019 < ASHRAE901
         case bldg_type
         when 'Retail', 'StripMall', 'SuperMarket'
           occ_type = 'retail'
-          # when 'SomeBuildingType' # TODO add publicassembly building types
+          # when 'SomeBuildingType'
+          # @todo add publicassembly building types
           # occ_type = 'publicassembly'
         end
       end

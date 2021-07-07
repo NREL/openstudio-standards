@@ -287,14 +287,14 @@ module Baseline9012013
     eff_diff = []
     
     #currently only gets coils associated with air loops
-    #TODO: cover zone system coils
+    # @todo cover zone system coils
     model.getAirLoopHVACs.sort.each do |lp|
       coil = lp.supplyComponents.each do |comp|
         size = nil
         if !comp.to_CoilCoolingDXTwoSpeed.empty?
-          #we have a System 5 or 6
-          #system 6 not being created yet
-          #TODO: add logic to check for heating coil type, changes standard efficiencies
+          # we have a System 5 or 6
+          # system 6 not being created yet
+          # @todo add logic to check for heating coil type, changes standard efficiencies
           coil = comp.to_CoilCoolingDXTwoSpeed.get
           name = coil.name.get
           
@@ -311,8 +311,8 @@ module Baseline9012013
           size = OpenStudio.convert(size,si_cap,ip_cap).get
 
         elsif !comp.to_CoilCoolingDXSingleSpeed.empty?
-          #System 3 or system 4
-          #TODO: refine system type by heating coil - system 4 efficiencies come from different table
+          # System 3 or system 4
+          # @todo refine system type by heating coil - system 4 efficiencies come from different table
           coil = comp.to_CoilCoolingDXSingleSpeed.get
           name = coil.name.get
           
@@ -453,9 +453,11 @@ module Baseline9012013
       # concert halls, arenas, enclosed stadiums, ice rinks, gymnasiums, 
       # convention centers, exhibition centers, and natatoriums. 
       # elsif (building_type == 'PublicAssembly' && model_area_ip < 120000)
-      #   correct_sys_type = 'PSZ_AC' #TODO add boolean for this PRM building type since not included in prototypes
+      #   correct_sys_type = 'PSZ_AC'
+      # @todo add boolean for this PRM building type since not included in prototypes
       # elsif (building_type == 'PublicAssembly' && model_area_ip >= 120000)
-      #   correct_sys_type = 'SZ_CV_HW' #TODO
+      #   correct_sys_type = 'SZ_CV_HW'
+      # @todo
       elsif (building_storys <= 3 && model_area_ip < 25000)
         correct_sys_type = 'PSZ_AC'
       elsif ( (building_storys = 4 || building_storys = 5) && model_area_ip < 25000 )
@@ -477,9 +479,11 @@ module Baseline9012013
       # concert halls, arenas, enclosed stadiums, ice rinks, gymnasiums, 
       # convention centers, exhibition centers, and natatoriums. 
       # elsif building_type == 'PublicAssembly' && model_area_ip < 120000
-      #   correct_sys_type = 'PSZ_HP' #TODO add boolean for this PRM building type since not included in prototypes
+      #   correct_sys_type = 'PSZ_HP'
+      # @todo add boolean for this PRM building type since not included in prototypes
       # elsif building_type == 'PublicAssembly' && model_area_ip >= 120000
-      #   correct_sys_type = 'SZ_CV_ER' #TODO
+      #   correct_sys_type =
+      # @todo
       elsif building_storys <= 3 && model_area_ip < 25000
         correct_sys_type = 'PSZ_HP'
       elsif (building_storys = 4 || building_storys = 5) && model_area_ip < 25000
@@ -656,8 +660,8 @@ module Baseline9012013
     chiller_num = chillers.size
     
     # get baseline peak cooling laod
-    base_peak_clg_si = 'TODO' #get from sql
-    base_peak_clg_ip = 200 #OpenStudio.convert(base_peak_clg_si, 'W', 'tons').get
+    base_peak_clg_si = 'TODO' # get from sql
+    base_peak_clg_ip = 200 # OpenStudio.convert(base_peak_clg_si, 'W', 'tons').get
     
     chiller_cap = []
     
@@ -816,7 +820,7 @@ module Baseline9012013
           if wb > 80
             wb = 80
           end
-          #TODO reconcile EP and PRM limits
+          # @todo reconcile EP and PRM limits
           # PRM limits
           if wb < 55
             wb = 55
@@ -934,7 +938,7 @@ module Baseline9012013
           elsif cap > prm_cap_elec && vol >= prm_vol_elec
             e_ht = 1
             # ua = sl * 1 / 70
-            #TODO
+            # @todo
           end  
           
         when 'NaturalGas' 
@@ -944,7 +948,7 @@ module Baseline9012013
             ef = 0.67 - 0.0005 * vol
             # from PNNL
             e_ht = 0.82
-            #TODO solve equations
+            # @todo solve equations
             assert_in_delta(0.82, eff, delta=0, "#{prm_maj_sec}: baseline water heater efficiency")
           elsif cap > prm_cap_gas
             # from standard

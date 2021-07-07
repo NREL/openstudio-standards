@@ -3,7 +3,9 @@ class Standard
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @param coil_cooling_dx_multi_speed [OpenStudio::Model::CoilCoolingDXMultiSpeed] coil cooling dx multi speed object
+  # @param sql_db_vars_map [Hash] hash map
+  # @return [Hash] hash of coil objects
   def coil_cooling_dx_multi_speed_apply_efficiency_and_curves(coil_cooling_dx_multi_speed, sql_db_vars_map)
     successfully_set_all_properties = true
 
@@ -14,7 +16,7 @@ class Standard
     cooling_type = coil_cooling_dx_multi_speed.condenserType
     search_criteria['cooling_type'] = cooling_type
 
-    # TODO: Standards - add split system vs single package to model
+    # @todo Standards - add split system vs single package to model
     # For now, assume single package as default
     sub_category = 'Single Package'
 
@@ -33,7 +35,7 @@ class Standard
           elsif htg_coil.to_CoilHeatingGasMultiStage.is_initialized
             heating_type = 'All Other'
           end
-          # TODO: Add other unitary systems
+          # @todo Add other unitary systems
         end
       elsif coil_cooling_dx_multi_speed.containingZoneHVACComponent.is_initialized
         containing_comp = coil_cooling_dx_multi_speed.containingZoneHVACComponent.get
@@ -45,7 +47,7 @@ class Standard
           elsif htg_coil.to_CoilHeatingWater.is_initialized || htg_coil.to_CoilHeatingGas.is_initialized || htg_col.to_CoilHeatingGasMultiStage
             heating_type = 'All Other'
           end
-          # TODO: Add other zone hvac systems
+          # @todo Add other zone hvac systems
         end
       end
     end
@@ -217,6 +219,7 @@ class Standard
 
   # Finds capacity in W
   #
+  # @param coil_cooling_dx_multi_speed [OpenStudio::Model::CoilCoolingDXMultiSpeed] coil cooling dx multi speed object
   # @return [Double] capacity in W to be used for find object
   def coil_cooling_dx_multi_speed_find_capacity(coil_cooling_dx_multi_speed)
     capacity_w = nil
@@ -242,8 +245,9 @@ class Standard
 
   # Finds lookup object in standards and return efficiency
   #
-  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
-  # @return [Double] full load efficiency (COP)
+  # @param coil_cooling_dx_multi_speed [OpenStudio::Model::CoilCoolingDXMultiSpeed] coil cooling dx multi speed object
+  # @return [Array] array of full load efficiency (COP), new object name
+  # @todo align the method arguments and return types
   def coil_cooling_dx_multi_speed_standard_minimum_cop(coil_cooling_dx_multi_speed)
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_multi_speed)
     cooling_type = search_criteria['cooling_type']

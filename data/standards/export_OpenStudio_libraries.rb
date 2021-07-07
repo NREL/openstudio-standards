@@ -409,7 +409,7 @@ def export_openstudio_libraries
       end
 
       # Construction Sets, Constructions, and Materials
-      # TODO fix code to remove duplicate constructions and materials
+      # @todo fix code to remove duplicate constructions and materials
       if include_construction_sets
         puts "* Construction Sets *"
         std.standards_data['construction_sets'].each do |props|

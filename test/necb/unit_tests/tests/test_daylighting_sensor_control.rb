@@ -106,7 +106,8 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
                 daylighted_area_under_skylights_hash = {}
                 skylight_effective_aperture_hash = {}
 
-                ##### Calculate "Primary Sidelighted Areas" AND "Sidelighting Effective Aperture" as per NECB2011. #TODO: consider removing overlapped sidelighted area
+                ##### Calculate "Primary Sidelighted Areas" AND "Sidelighting Effective Aperture" as per NECB2011.
+                # @todo consider removing overlapped sidelighted area
                 daylight_spaces.sort.each do |daylight_space|
                   primary_sidelighted_area = 0.0
                   area_weighted_vt_handle = 0.0
