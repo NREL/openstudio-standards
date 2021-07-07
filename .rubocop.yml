@@ -19,10 +19,10 @@ inherit_from:
 # =============== OpenStudio Standards Specific ===========
 # Ignore file name convention; choices based on OpenStudio C++ class names
 Metrics/AbcSize:
-  Max: 150
+  Max: 200
 
 Metrics/BlockLength:
-  Max: 75
+  Max: 100
 
 Naming/FileName:
   Enabled: false    

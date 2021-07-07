@@ -3,17 +3,17 @@ class ASHRAE9012013 < ASHRAE901
 
   # Determine the prototypical economizer type for the model.
   #
-  # @param model [OpenStudio::Model::Model] the model
-  # @param climate_zone [String] the climate zone
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] the economizer type.  Possible values are:
-  # 'NoEconomizer'
-  # 'FixedDryBulb'
-  # 'FixedEnthalpy'
-  # 'DifferentialDryBulb'
-  # 'DifferentialEnthalpy'
-  # 'FixedDewPointAndDryBulb'
-  # 'ElectronicEnthalpy'
-  # 'DifferentialDryBulbAndEnthalpy'
+  #   'NoEconomizer'
+  #   'FixedDryBulb'
+  #   'FixedEnthalpy'
+  #   'DifferentialDryBulb'
+  #   'DifferentialEnthalpy'
+  #   'FixedDewPointAndDryBulb'
+  #   'ElectronicEnthalpy'
+  #   'DifferentialDryBulbAndEnthalpy'
   def model_economizer_type(model, climate_zone)
     economizer_type = case climate_zone
                       when 'ASHRAE 169-2006-0A',
@@ -34,10 +34,11 @@ class ASHRAE9012013 < ASHRAE901
   end
 
   # Adjust model to comply with fenestration orientation requirements
+  # @note code_sections [90.1-2013_5.5.4.5]
   #
-  # @code_sections [90.1-2013_5.5.4.5]
-  # @param [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Boolean] Returns true if successful, false otherwise
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if successful, false if not
   def model_fenestration_orientation(model, climate_zone)
     # Building rotation to meet the same code requirement for
     # 90.1-2010 are kept
@@ -177,12 +178,12 @@ class ASHRAE9012013 < ASHRAE901
   end
 
   # Is transfer air required?
+  # @note code_sections [90.1-2013_6.5.7.1.2]
   #
-  # @code_sections [90.1-2013_6.5.7.1.2]
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Boolean] true if transfer air is required, false otherwise
+  # @return [Bool] returns true if transfer air is required, false if not
   def model_transfer_air_required?(model)
-    # TODO: It actually is for kitchen but not implemented yet
+    # @todo It actually is for kitchen but not implemented yet
     return false
   end
 end

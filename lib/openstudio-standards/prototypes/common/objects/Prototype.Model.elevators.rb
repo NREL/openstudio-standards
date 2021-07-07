@@ -1,11 +1,10 @@
 class Standard
   # Add an elevator the the specified space
   #
-  # @param space [OpenStudio::Model::Space] the space
-  # to assign the elevators to.
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param space [OpenStudio::Model::Space] the space that contains the elevators
   # @param number_of_elevators [Integer] the number of elevators
-  # @param elevator_type [String] valid choices are
-  # Traction, Hydraulic
+  # @param elevator_type [String] valid choices are Traction, Hydraulic
   # @param elevator_schedule [String] the name of the elevator schedule
   # @param elevator_fan_schedule [String] the name of the elevator fan schedule
   # @param elevator_lights_schedule [String] the name of the elevator lights schedule
@@ -99,11 +98,13 @@ class Standard
     return elevator_equipment
   end
 
-  # Determines the power required by an individual elevator
-  # of a given type.  Defaults to the values used by the DOE
-  # prototype buildings.
-  # @param elevator_type [String] valid choices are
-  # Traction, Hydraulic
+  # Determines the power required by an individual elevator of a given type.
+  # Defaults to the values used by the DOE prototype buildings.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param elevator_type [String] valid choices are Traction, Hydraulic
+  # @param building_type [String] the building type
+  # @return [Double] lift power in watts
   def model_elevator_lift_power(model, elevator_type, building_type)
     lift_pwr_w = 0
     if elevator_type == 'Traction'
@@ -118,19 +119,23 @@ class Standard
     return lift_pwr_w
   end
 
-  # Determines the percentage of the elevator cab
-  # lighting that is incandescent.  The remainder
-  # is assumed to be LED.  Defaults to 70% incandescent,
-  # representing older elevators.
+  # Determines the percentage of the elevator cab lighting that is incandescent.
+  # The remainder is assumed to be LED.
+  # Defaults to 70% incandescent, representing older elevators.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Double] incandescent lighting percentage
   def model_elevator_lighting_pct_incandescent(model)
     pct_incandescent = 0.7
     return pct_incandescent
   end
 
   # Determines the power of the elevator ventilation fan.
-  # Defaults to 90.1-2010, which had no requirement
-  # for ventilation fan efficiency.
-  # @return [Double] the ventilation fan power (W)
+  # Defaults to 90.1-2010, which had no requirement for ventilation fan efficiency.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param vent_rate_cfm [Double] the ventilation rate in ft^3/min
+  # @return [Double] the ventilation fan power in watts
   def model_elevator_fan_pwr(model, vent_rate_cfm)
     vent_pwr_per_flow_w_per_cfm = 0.33
     vent_pwr_w = vent_pwr_per_flow_w_per_cfm * vent_rate_cfm
@@ -138,17 +143,17 @@ class Standard
     return vent_pwr_w
   end
 
-  # Add elevators to the model based on the building size,
-  # number of stories, and building type.  Logic was derived
-  # from the DOE prototype buildings.
+  # Add elevators to the model based on the building size, number of stories, and building type.
+  # Logic was derived from the DOE prototype buildings.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [OpenStudio::Model::ElectricEquipment] the resulting elevator
   def model_add_elevators(model)
     # determine effective number of stories
     effective_num_stories = model_effective_num_stories(model)
 
     # determine elevator type
-    # todo - add logic here or upstream to have some multi-story buildings without elevators (e.g. small multi-family and small hotels)
+    # todo add logic here or upstream to have some multi-story buildings without elevators (e.g. small multi-family and small hotels)
     if effective_num_stories[:below_grade] + effective_num_stories[:above_grade] < 2
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', 'The building only has 1 story, no elevators will be added.')
       return nil # don't add elevators
@@ -395,10 +400,10 @@ class Standard
     end
     elevator_fan_schedule = fan_sch.name.to_s
 
-    # TODO: - currently add elevator doesn't allow me to choose the size of the elevator?
+    # @todo currently add elevator doesn't allow me to choose the size of the elevator?
     # ref bldg pdf has formula for motor hp based on weight, speed, counterweight fraction and mech eff (in 5.1.4)
 
-    # TODO: - should schedules change based on traction vs. hydraulic vs. just taking what is in prototype.
+    # @todo should schedules change based on traction vs. hydraulic vs. just taking what is in prototype.
 
     # call add_elevator in Prototype.hvac_systems.rb to create elevator objects
     elevator = model_add_elevator(model,

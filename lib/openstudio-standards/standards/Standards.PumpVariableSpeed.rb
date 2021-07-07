@@ -3,11 +3,10 @@ class Standard
 
   include Pump
 
-  # Set the pump curve coefficients based
-  # on the specified control type.
+  # Set the pump curve coefficients based on the specified control type.
   #
-  # @param control_type [String] valid choices
-  # are Riding Curve, VSD No Reset, VSD DP Reset
+  # @param pump_variable_speed [OpenStudio::Model::PumpVariableSpeed] variable speed pump
+  # @param control_type [String] valid choices are Riding Curve, VSD No Reset, VSD DP Reset
   def pump_variable_speed_set_control_type(pump_variable_speed, control_type)
     # Determine the coefficients
     coeff_a = nil

@@ -2,11 +2,14 @@ class Standard
   # @!group CoilHeatingGas
 
   # Prototype CoilHeatingGas object
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param air_loop_node [<OpenStudio::Model::Node>] the coil will be placed on this node of the air loop
   # @param name [String] the name of the system, or nil in which case it will be defaulted
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param nominal_capacity [Double] rated nominal capacity
   # @param efficiency [Double] rated heating efficiency
+  # @return [OpenStudio::Model::CoilHeatingGas] the gas heating coil
   def create_coil_heating_gas(model,
                               air_loop_node: nil,
                               name: 'Gas Htg Coil',
@@ -54,11 +57,13 @@ class Standard
     return htg_coil
   end
 
-  # Updates the efficiency of some gas heating coils
-  # per the prototype assumptions.  Defaults to
-  # making no changes.
+  # Updates the efficiency of some gas heating coils per the prototype assumptions.
+  # Defaults to making no changes.
+  #
+  # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] a gas heating coil
+  # @return [Bool] returns true if successful, false if not
   def coil_heating_gas_apply_prototype_efficiency(coil_heating_gas)
-    # Do nothing
+    # do nothing
     return true
   end
 end

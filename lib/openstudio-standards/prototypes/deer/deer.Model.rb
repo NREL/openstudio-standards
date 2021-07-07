@@ -6,7 +6,7 @@ class DEER
   # only FixedDryBulb economizers are used.
   #
   # @param model [OpenStudio::Model::Model] the model
-  # @param climate_zone [String] the climate zone
+  # @param climate_zone [String] DEER climate zone
   # @return [String] the economizer type.  Possible values are:
   # 'NoEconomizer'
   # 'FixedDryBulb'

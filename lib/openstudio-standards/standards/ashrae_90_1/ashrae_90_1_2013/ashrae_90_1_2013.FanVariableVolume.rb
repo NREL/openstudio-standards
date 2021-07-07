@@ -5,7 +5,7 @@ class ASHRAE9012013 < ASHRAE901
   # Per 90.1-2013, table 6.5.3.2.1: the fan motor size for chiller-water
   # and evaporative cooling is 0.25 hp as of 1/1/2014 instead of 5 hp
   #
-  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] the fan
+  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] variable volume fan object
   # @return [Double] the limit, in horsepower. Return nil for no limit by default.
   def fan_variable_volume_part_load_fan_power_limitation_hp_limit(fan_variable_volume)
     hp_limit = case fan_variable_volume_cooling_system_type(fan_variable_volume)
@@ -24,7 +24,7 @@ class ASHRAE9012013 < ASHRAE901
   # Per 90.1-2013, table 6.5.3.2.1: the cooling capacity threshold is 75000
   # instead of 110000 as of 1/1/2014
   #
-  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] the fan
+  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] variable volume fan object
   # @return [Double] the limit, in Btu/hr. Return nil for no limit by default.
   def fan_variable_volume_part_load_fan_power_limitation_capacity_limit(fan_variable_volume)
     cap_limit_btu_per_hr = case fan_variable_volume_cooling_system_type(fan_variable_volume)

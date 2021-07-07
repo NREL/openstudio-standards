@@ -5,6 +5,7 @@ class Standard
 
   # Finds capacity in W
   #
+  # @param coil_cooling_dx_single_speed [OpenStudio::Model::CoilCoolingDXSingleSpeed] coil cooling dx single speed object
   # @return [Double] capacity in W to be used for find object
   def coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed)
     capacity_w = nil
@@ -39,6 +40,7 @@ class Standard
 
   # Finds lookup object in standards and return efficiency
   #
+  # @param coil_cooling_dx_single_speed [OpenStudio::Model::CoilCoolingDXSingleSpeed] coil cooling dx single speed object
   # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
   def coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, rename = false)
@@ -167,7 +169,9 @@ class Standard
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @param coil_cooling_dx_single_speed [OpenStudio::Model::CoilCoolingDXSingleSpeed] coil cooling dx single speed object
+  # @param sql_db_vars_map [Hash] hash map
+  # @return [Hash] hash of coil objects
   def coil_cooling_dx_single_speed_apply_efficiency_and_curves(coil_cooling_dx_single_speed, sql_db_vars_map)
     successfully_set_all_properties = true
 
