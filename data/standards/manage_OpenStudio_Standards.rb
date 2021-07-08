@@ -179,8 +179,21 @@ def standard_directory_name_from_template(template)
   return directory_name
 end
 
-# Downloads the OpenStudio_Standards.xlsx
-# from Google Drive
+# checks whether your authorization credentials are set up to access the spreadsheets
+# @return [Bool] returns true if api is working, false if not
+def check_google_drive_configuration
+  require 'google_drive'
+  client_config_path = File.join(Dir.home, '.credentials', "client_secret.json")
+  unless File.exists? client_config_path
+    puts "Unable to locate client_secret.json file at #{client_config_path}."
+    return false
+  end
+  session = GoogleDrive::Session.from_config(client_config_path)
+  puts 'Spreadsheets accessed successfully'
+  return true
+end
+
+# Downloads the OpenStudio_Standards.xlsx from Google Drive
 # @note This requires you to have a client_secret.json file saved in your
 # username/.credentials folder.  To get one of these files, please contact
 # andrew.parker@nrel.gov
