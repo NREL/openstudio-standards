@@ -22,7 +22,7 @@ class NECB2011
   # @return [Bool] returns true if an economizer is required, false if not
   def air_loop_hvac_economizer_required?(air_loop_hvac)
     economizer_required = false
-
+    return
     # need a better way to determine if an economizer is needed.
     return economizer_required if air_loop_hvac.name.to_s.include? 'Outpatient F1'
 
@@ -120,6 +120,7 @@ class NECB2011
     # end
 
     erv_required = nil
+
     # ERV not applicable for medical AHUs (AHU1 in Outpatient), per AIA 2001 - 7.31.D2.
     if air_loop_hvac.name.to_s.include? 'Outpatient F1'
       erv_required = false
@@ -1606,11 +1607,8 @@ class NECB2011
 
     # boiler
     boiler1 = OpenStudio::Model::BoilerHotWater.new(model)
-    boiler2 = OpenStudio::Model::BoilerHotWater.new(model)
     boiler1.setFuelType(boiler_fueltype)
-    boiler2.setFuelType(boiler_fueltype)
     boiler1.setName('Primary Boiler')
-    boiler2.setName('Secondary Boiler')
 
     # boiler_bypass_pipe
     boiler_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
@@ -1624,7 +1622,6 @@ class NECB2011
     pump.addToNode(hw_supply_inlet_node)
 
     hw_loop.addSupplyBranchForComponent(boiler1)
-    hw_loop.addSupplyBranchForComponent(boiler2)
     hw_loop.addSupplyBranchForComponent(boiler_bypass_pipe)
     supply_outlet_pipe.addToNode(hw_supply_outlet_node)
 

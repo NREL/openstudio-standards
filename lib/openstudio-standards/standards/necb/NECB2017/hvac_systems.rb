@@ -5,8 +5,8 @@ class NECB2017
   # @return [Bool] Returns true if required, false if not.
   def air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
 
-    erv_required = nil
-
+    erv_required = false
+    return
     # ERV Not Applicable for AHUs that have no OA intake.
     oa_system = nil
     controller_oa = nil

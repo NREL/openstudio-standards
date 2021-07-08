@@ -25,8 +25,8 @@
           "synchronous_speed": 1800.0,
           "minimum_capacity": 0.0,
           "maximum_capacity": 9999.0,
-          "nominal_full_load_efficiency": 0.8461,
-          "notes": "To get total fan efficiency of 55% (0.55/0.65)"
+          "nominal_full_load_efficiency": 0.731,
+          "notes": "To get total fan efficiency of 55% (0.475/0.65)"
         },
         {
           "motor_use": "FAN",
@@ -36,8 +36,8 @@
           "synchronous_speed": 1800.0,
           "minimum_capacity": 0.0,
           "maximum_capacity": 9999.0,
-          "nominal_full_load_efficiency": 0.8461,
-          "notes": "To get total fan efficiency of 55% (0.55/0.65)"
+          "nominal_full_load_efficiency": 0.731,
+          "notes": "To get total fan efficiency of 55% (0.475/0.65)"
         },
         {
           "motor_use": "FAN",
