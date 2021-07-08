@@ -29,7 +29,7 @@
         {
           "boundary_condition": "Outdoors",
           "surface": "Window",
-          "formula": "3.2"
+          "formula": "3.5"
         },
         {
           "boundary_condition": "Outdoors",

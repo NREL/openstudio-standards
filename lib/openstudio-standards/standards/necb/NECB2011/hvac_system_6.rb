@@ -35,9 +35,8 @@ class NECB2011
     supply_fan = OpenStudio::Model::FanVariableVolume.new(model, always_on)
     supply_fan.setName('Sys6 Supply Fan')
 
-    htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
-    hw_loop.addDemandBranchForComponent(htg_coil)
-
+    htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+    htg_coil.setGasBurnerEfficiency(0.8)
     clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
 
     oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)

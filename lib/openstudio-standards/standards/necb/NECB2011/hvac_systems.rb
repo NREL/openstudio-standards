@@ -577,7 +577,7 @@ class NECB2011
 
     # Set the efficiency values
     unless thermal_eff.nil?
-      boiler_hot_water.setNominalThermalEfficiency(thermal_eff)
+      boiler_hot_water.setNominalThermalEfficiency(0.8)
     end
 
     return successfully_set_all_properties
@@ -721,7 +721,7 @@ class NECB2011
   #
   # @return [Double] minimum thermal efficiency
   def coil_heating_gas_standard_minimum_thermal_efficiency(coil_heating_gas, rename = false)
-
+    return 0.8
     # Get the coil properties
     search_criteria = coil_heating_gas_find_search_criteria
     capacity_w = coil_heating_gas_find_capacity(coil_heating_gas)
