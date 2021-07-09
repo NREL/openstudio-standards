@@ -87,4 +87,27 @@ class ECMS
       end
     end
   end
+
+  # Service hot water
+  def scale_shw_use(model: , scale: 'NECB_Default')
+    ##### Remove leading or trailing whitespace in case users add them in inputs
+    if scale.instance_of?(String)
+      scale = scale.strip
+    end
+    return model if scale == 'NECB_Default' or scale.nil?
+    ##### Convert a string to a float
+    if scale.instance_of?(String)
+      scale = scale.to_f
+    end
+    model.getWaterUseEquipmentDefinitions.sort.each do |water_use_equipment_definition|
+      water_use_equipment_definition_name = water_use_equipment_definition.name.to_s
+
+      water_use_equipment_definition.setPeakFlowRate(water_use_equipment_definition.peakFlowRate * scale)
+      peak_flow_rate_gal_per_min = OpenStudio.convert(water_use_equipment_definition.peakFlowRate, 'm^3/s', 'gal/min').get.round(2).to_s
+      water_use_equipment_definition_name = water_use_equipment_definition_name.gsub(/#{'Service Water Use Def'}.+/, 'Service Water Use Def ' + peak_flow_rate_gal_per_min + 'gal/min')
+      water_use_equipment_definition.setName(water_use_equipment_definition_name)
+
+    end
+  end
+
 end

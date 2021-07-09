@@ -6,9 +6,6 @@ class NECB_scaling_loads_Tests < Minitest::Test
 
   def test_scaling_loads()
 
-    # Create ECM object.
-    ecm = ECMS.new
-
     # File paths.
     @output_folder = File.join(__dir__, 'output/test_scaling_loads')
     @expected_results_file = File.join(__dir__, '../expected_results/scaling_loads_expected_results.json')
@@ -119,7 +116,8 @@ class NECB_scaling_loads_Tests < Minitest::Test
                                                       pv_ground_tilt_angle: nil,
                                                       pv_ground_azimuth_angle: nil,
                                                       pv_ground_module_description: nil,
-                                                      chiller_type: nil
+                                                      chiller_type: nil,
+                                                      shw_scale: loads_scale
               )
 
               # # comment out for regular tests
@@ -152,6 +150,11 @@ class NECB_scaling_loads_Tests < Minitest::Test
                 result["#{item.name.to_s} - flowperSpaceFloorArea"] = item.flowperSpaceFloorArea.to_f
                 result["#{item.name.to_s} - flowperExteriorSurfaceArea"] = item.flowperExteriorSurfaceArea.to_f
                 result["#{item.name.to_s} - airChangesperHour"] = item.airChangesperHour.to_f
+              end
+
+              ##### Gather info of shw_scale in the model
+              model.getWaterUseEquipmentDefinitions.sort.each do |item|
+                result["#{item.name.to_s} - peakFlowRate"] = item.peakFlowRate .to_f
               end
 
               # puts JSON.pretty_generate(result)

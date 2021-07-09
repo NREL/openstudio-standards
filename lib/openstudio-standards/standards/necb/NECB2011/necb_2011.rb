@@ -227,7 +227,8 @@ class NECB2011 < Standard
                                    electrical_loads_scale: nil,
                                    oa_scale: nil,
                                    infiltration_scale: nil,
-                                   output_variables: nil
+                                   output_variables: nil,
+                                   shw_scale: nil
   )
 
 
@@ -280,7 +281,8 @@ class NECB2011 < Standard
                                 oa_scale: oa_scale,
                                 infiltration_scale: infiltration_scale,
                                 chiller_type: chiller_type, # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) e.g. 'VSD'
-                                output_variables: output_variables
+                                output_variables: output_variables,
+                                shw_scale: shw_scale
     )
 
   end
@@ -346,7 +348,8 @@ class NECB2011 < Standard
                            electrical_loads_scale: nil,
                            oa_scale: nil,
                            infiltration_scale: nil,
-                           output_variables: nil
+                           output_variables: nil,
+                           shw_scale: nil
 
   )
 
@@ -405,7 +408,8 @@ class NECB2011 < Standard
                                    pv_ground_tilt_angle: pv_ground_tilt_angle,
                                    pv_ground_azimuth_angle: pv_ground_azimuth_angle,
                                    pv_ground_module_description: pv_ground_module_description,
-                                   chiller_type: chiller_type
+                                   chiller_type: chiller_type,
+                                   shw_scale: shw_scale
     )
     self.set_output_variables(model:model, output_variables: output_variables)
     return model
@@ -459,7 +463,8 @@ class NECB2011 < Standard
                                      pv_ground_tilt_angle:,
                                      pv_ground_azimuth_angle:,
                                      pv_ground_module_description:,
-                                     chiller_type: 'NECB_Default'
+                                     chiller_type: 'NECB_Default',
+                                     shw_scale:
   )
 
     # Create ECM object.
@@ -521,6 +526,9 @@ class NECB2011 < Standard
                         pv_ground_tilt_angle: pv_ground_tilt_angle,
                         pv_ground_azimuth_angle: pv_ground_azimuth_angle,
                         pv_ground_module_description: pv_ground_module_description) if pv_ground_type == 'add_pv_ground'
+
+    #-------SHW scaling-----------------------------
+    ecm.scale_shw_use(model: model, scale: shw_scale)
 
   end
 
