@@ -189,6 +189,12 @@ def check_google_drive_configuration
     return false
   end
   session = GoogleDrive::Session.from_config(client_config_path)
+
+  # Gets list of remote files.
+  session.files.each do |file|
+    puts file.title if file.title.include? 'OpenStudio'
+  end
+
   puts 'Spreadsheets accessed successfully'
   return true
 end
