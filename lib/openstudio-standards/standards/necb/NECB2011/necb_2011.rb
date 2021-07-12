@@ -227,7 +227,8 @@ class NECB2011 < Standard
                                    electrical_loads_scale: nil,
                                    oa_scale: nil,
                                    infiltration_scale: nil,
-                                   output_variables: nil
+                                   output_variables: nil,
+                                   output_meters: nil
   )
 
 
@@ -280,7 +281,8 @@ class NECB2011 < Standard
                                 oa_scale: oa_scale,
                                 infiltration_scale: infiltration_scale,
                                 chiller_type: chiller_type, # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) e.g. 'VSD'
-                                output_variables: output_variables
+                                output_variables: output_variables,
+                                output_meters: output_meters
     )
 
   end
@@ -346,7 +348,8 @@ class NECB2011 < Standard
                            electrical_loads_scale: nil,
                            oa_scale: nil,
                            infiltration_scale: nil,
-                           output_variables: nil
+                           output_variables: nil,
+                           output_meters: nil
 
   )
 
@@ -407,7 +410,8 @@ class NECB2011 < Standard
                                    pv_ground_module_description: pv_ground_module_description,
                                    chiller_type: chiller_type
     )
-    self.set_output_variables(model:model, output_variables: output_variables)
+    self.set_output_variables(model: model, output_variables: output_variables)
+    self.set_output_meters(model: model, output_meters: output_meters)
     return model
   end
 
@@ -1767,7 +1771,6 @@ class NECB2011 < Standard
     output_variables.each do |output_variable|
       puts output_variable
       puts output_variable['frequency']
-
       raise("Frequency is not valid. Must by \"hourly\" or \"timestep\" but got #{output_variable}.") unless ["timestep","hourly",'daily','monthly','annual'].include?(output_variable['frequency'])
       output = OpenStudio::Model::OutputVariable.new(output_variable['variable'],model)
       output.setKeyValue(output_variable['key'])
@@ -1777,4 +1780,31 @@ class NECB2011 < Standard
     return model
   end
 
+  def set_output_meters(model:,output_meters:)
+    unless output_meters.nil?
+      # remove existing output meters
+      existing_meters = model.getOutputMeters
+
+      # OpenStudio doesn't seemt to like two meters of the same name, even if they have different reporting frequencies.
+      output_meters.each do |new_meter|
+        #check if meter already exists
+        result = existing_meters.select { |e_m| e_m.name == new_meter['name'] }
+        raise("More and one output meter named #{new_meter['name']}") if result.size > 1
+        if result.size == 1
+          existing_meter = result[0]
+          puts("A meter named #{new_meter['name']} already exists. One will not be added to the model.")
+          if existing_meter.reportingFrequency != new_meter['frequency']
+            existing_meter.setReportingFrequency(new_meter['frequency'])
+            puts("Changing reporting frequency of existing meter to #{new_meter['frequency']}.")
+          end
+        end
+        if result.size == 0
+          meter = OpenStudio::Model::OutputMeter.new(model)
+          meter.setName(new_meter['name'])
+          meter.setReportingFrequency(new_meter['frequency'])
+          puts("Adding meter for #{meter.name} reporting #{new_meter['frequency']}")
+        end
+      end
+    end
+  end
 end
