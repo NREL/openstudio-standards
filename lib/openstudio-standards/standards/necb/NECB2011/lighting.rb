@@ -83,7 +83,10 @@ class NECB2011
         definition = inst.lightsDefinition
         unless lighting_per_area.zero?
           if lights_type == 'NECB_Default'
-            set_lighting_per_area(space_type, definition, lighting_per_area)
+            set_lighting_per_area(space_type: space_type,
+                                  definition: definition,
+                                  lighting_per_area: lighting_per_area,
+                                  lights_scale: lights_scale)
           elsif lights_type == 'LED'
             set_lighting_per_area_led_lighting(space_type: space_type,
                                                definition: definition,
@@ -141,7 +144,10 @@ class NECB2011
   end
 
 
-  def set_lighting_per_area(space_type, definition, lighting_per_area)
+  def set_lighting_per_area(space_type:,
+                            definition:,
+                            lighting_per_area:,
+                            lights_scale:)
     occ_sens_lpd_frac = 1.0
     # NECB2011 space types that require a reduction in the LPD to account for
     # the requirement of an occupancy sensor (8.4.4.6(3) and 4.2.2.2(2))
@@ -157,7 +163,7 @@ class NECB2011
       # This is checked in a space loop after this function in the calling routine.
       occ_sens_lpd_frac = 0.9
     end
-    definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f * occ_sens_lpd_frac, 'W/ft^2', 'W/m^2').get)
+    definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f * occ_sens_lpd_frac * lights_scale, 'W/ft^2', 'W/m^2').get)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set LPD to #{lighting_per_area} W/ft^2.")
   end
 end

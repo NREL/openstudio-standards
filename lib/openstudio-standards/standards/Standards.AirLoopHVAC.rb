@@ -722,7 +722,6 @@ class Standard
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
         end
-        # CoilCoolingDXTwoSpeed
       elsif sc.to_CoilCoolingDXTwoSpeed.is_initialized
         coil = sc.to_CoilCoolingDXTwoSpeed.get
         if coil.ratedHighSpeedTotalCoolingCapacity.is_initialized
@@ -836,6 +835,36 @@ class Standard
         if clg_coil.to_CoilCoolingDXMultiSpeed.is_initialized
           coil = clg_coil.to_CoilCoolingDXMultiSpeed.get
           total_cooling_capacity_w = coil_cooling_dx_multi_speed_find_capacity(coil)
+        end
+      elsif sc.to_CoilCoolingDXVariableSpeed.is_initialized
+        coil = sc.to_CoilCoolingDXVariableSpeed.get
+        if coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
+          # autosized capacity needs to be corrected for actual flow rate and fan power
+          sys_fans = []
+          air_loop_hvac.supplyComponents.each do |comp|
+            if comp.to_FanConstantVolume.is_initialized
+              sys_fans << comp.to_FanConstantVolume.get
+            elsif comp.to_FanVariableVolume.is_initialized
+              sys_fans << comp.to_FanVariableVolume.get
+            end
+          end
+          max_pd = 0.0
+          supply_fan = nil
+          sys_fans.each do |fan|
+            if fan.pressureRise.to_f > max_pd
+              max_pd = fan.pressureRise.to_f
+              supply_fan = fan # assume supply fan has higher pressure drop
+            end
+          end
+          fan_power = supply_fan.autosizedMaximumFlowRate.to_f * supply_fan.pressureRise.to_f / supply_fan.fanTotalEfficiency.to_f
+          nominal_cooling_capacity_w = coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
+          nominal_flow_rate_factor = supply_fan.autosizedMaximumFlowRate.to_f / coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.to_f
+          fan_power_adjustment_w = fan_power / coil.speeds.last.referenceUnitGrossRatedSensibleHeatRatio.to_f
+          total_cooling_capacity_w += nominal_cooling_capacity_w * nominal_flow_rate_factor + fan_power_adjustment_w
+        elsif coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
+          total_cooling_capacity_w += coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
         end
       elsif sc.to_CoilCoolingDXMultiSpeed.is_initialized ||
             sc.to_CoilCoolingCooledBeam.is_initialized ||

@@ -2054,14 +2054,13 @@ class NECB2011
   end
 
   # Method to set the base system name based on the following syntax:
-  # |sys_abbr|sys_oa|sh>?|sc>?|ssf>?|zh>?|zc>?|srf>?|
+  # |sys_abbr|sys_oa|sc>?|sh>?|ssf>?|zh>?|zc>?|srf>?|
   # "sys_abbr" designates the NECB system type ("sys_1, sys_2, ... sys_6")
   # "sys_oa": "mixed" or "doas"
   # "sys_name_pars" is a hash for the remaining system name parts for heat recovery,
   # heating, cooling, supply fan, zone heating, zone cooling, and return fan
   def assign_base_sys_name(airloop,sys_abbr:,sys_oa:,sys_name_pars:)
     sys_name = "#{sys_abbr}|#{sys_oa}|"
-
     sys_name_pars.each do |key,value|
       case key.downcase
       when "sys_hr"
@@ -2082,6 +2081,10 @@ class NECB2011
           sys_name += "sh>c-g"
         when "dx"
           sys_name += "sh>ashp"
+        when "ccashp"
+          sys_name += "sh>ccashp"
+        when "ashp"
+          sys_name += "sh>ashp"
         end
 
       when "sys_clg"
@@ -2091,8 +2094,15 @@ class NECB2011
         when "chilled water"
           sys_name += "sc>c-chw"
         when "dx"
-          sys_name += "sc>dx"
-          sys_name += "sc>ashp" if sys_name_pars["sys_htg"] == "dx"
+          if sys_name_pars["sys_htg"] == "dx"
+            sys_name += "sc>ashp"
+          else
+            sys_name += "sc>dx"
+          end
+        when "ccashp"
+          sys_name += "sc>ccashp"
+        when "ashp"
+          sys_name += "sc>ashp"
         end
 
       when "sys_sf"
@@ -2117,6 +2127,8 @@ class NECB2011
           sys_name += "zh>fpfc"
         when "fpfc"
           sys_name += "zh>tpfc"
+        when "pthp"
+          sys_name += "zh>pthp"
         end
 
       when "zone_clg"
@@ -2129,6 +2141,8 @@ class NECB2011
           sys_name += "zc>fpfc"
         when "ptac"
           sys_name += "zc>ptac"
+        when "pthp"
+          sys_name += "zc>pthp"
         end
 
       when "sys_rf"

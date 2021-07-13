@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
     spec.add_development_dependency 'bundler', '~> 1.9'
   elsif RUBY_VERSION < '2.7'
     spec.add_development_dependency 'parallel_tests', '~> 3.0.0'
-    spec.add_development_dependency 'nokogiri', '<= 1.8.2'
+    spec.add_development_dependency 'nokogiri', '<= 1.11.7' #updated to use more secure version
     spec.add_development_dependency 'bundler', '~> 2.1'
   else
     spec.add_development_dependency 'parallel_tests', '~> 3.7.0'
@@ -47,4 +47,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'aes', '0.5.0'
   spec.add_development_dependency 'roo', '2.7.1'
   spec.add_development_dependency 'openstudio-api-stubs'
+  spec.add_development_dependency 'aws-sdk-s3'
+  spec.add_development_dependency 'git-revision'
 end

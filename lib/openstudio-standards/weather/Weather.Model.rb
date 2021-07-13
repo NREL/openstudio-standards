@@ -496,6 +496,12 @@ module BTAP
       ALBEDO = 32 # not used
       LIQUID_PRECIPITATION_DEPTH = 33
       LIQUID_PRECIPITATION_QUANTITY = 34
+      CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR = 100 # pws
+      CALCULATED_PARTIAL_PRESSURE_OF_WATER_VAPOR = 101 # pw
+      CALCULATED_TOTAL_MIXTURE_PRESSURE = 102 # p
+      CALCULATED_HUMIDITY_RATIO = 103 # w
+      CALCULATED_HUMIDITY_RATIO_AVG_DAILY = 104 # w averaged daily
+      CALCULATED_HUMIDITY_RATIO_AVG_DAILY_DIFF_BASE = 105 # difference of w_averaged_daily from base if w_averaged_daily > base
 
       # This method initializes and returns self.
       # @author phylroy.lopez@nrcan.gc.ca
@@ -824,6 +830,180 @@ module BTAP
         FileUtils.cp(@ddy_filepath, "#{File.dirname(filename)}/#{File.basename(filename, '.epw')}.ddy")
         FileUtils.cp(@stat_filepath, "#{File.dirname(filename)}/#{File.basename(filename, '.epw')}.stat")
       end
+
+      # This method calculates annual global horizontal irradiance (GHI)
+      # @author sara.gilani@canada.ca
+      # This value has been used as 'Irradiance, Global, Annual' (IGA) (kWh/m2.yr) for PHIUS performance targets calculation.
+      def get_annual_ghi
+        sum_hourly_ghi = 0.0
+        scan if @filearray.nil?
+        @filearray.each do |line|
+          unless line.first =~ /\D(.*)/
+            ghi_hourly = line[GLOBAL_HORIZONTAL_RADIATION].to_f
+            sum_hourly_ghi += ghi_hourly
+          end
+        end
+        annual_ghi_kwh_per_m_sq = sum_hourly_ghi / 1000.0
+        return annual_ghi_kwh_per_m_sq
+      end
+
+      # This method calculates global horizontal irradiance on heating design day
+      # @author sara.gilani@canada.ca
+      # This value has been used as 'Irradiance, Global, at the heating design condition' (IGHL) for PHIUS performance targets calculation.
+      def get_ghi_on_heating_design_day
+        heating_design_day_number, cooling_design_day_number = get_heating_design_day_number
+        coldest_month = @heating_design_info[0].to_f
+        sum_hourly_ghi_on_heating_design_day = 0.0
+        number_of_hours_with_sunshine = 0.0
+        scan if @filearray.nil?
+        @filearray.each do |line|
+          unless line.first =~ /\D(.*)/
+            if line[MONTH].to_f == coldest_month && line[DAY].to_f == heating_design_day_number.to_f && line[GLOBAL_HORIZONTAL_RADIATION].to_f > 0.0
+              sum_hourly_ghi_on_heating_design_day += line[GLOBAL_HORIZONTAL_RADIATION].to_f
+              number_of_hours_with_sunshine += 1.0
+            end
+          end
+        end
+        ghi_on_heating_design_day_w_per_m_sq = sum_hourly_ghi_on_heating_design_day / number_of_hours_with_sunshine
+        return ghi_on_heating_design_day_w_per_m_sq
+      end
+
+      # This method calculates global horizontal irradiance on cooling design day
+      # @author sara.gilani@canada.ca
+      # This value has been used as 'Irradiance, Global, at the cooling design condition' (IGHL) for PHIUS performance targets calculation.
+      def get_ghi_on_cooling_design_day
+        heating_design_day_number, cooling_design_day_number = get_heating_design_day_number
+        hottest_month = @cooling_design_info[0].to_f
+        sum_hourly_ghi_on_cooling_design_day = 0.0
+        number_of_hours_with_sunshine = 0.0
+        scan if @filearray.nil?
+        @filearray.each do |line|
+          unless line.first =~ /\D(.*)/
+            if line[MONTH].to_f == hottest_month && line[DAY].to_f == cooling_design_day_number.to_f && line[GLOBAL_HORIZONTAL_RADIATION].to_f > 0.0
+              sum_hourly_ghi_on_cooling_design_day += line[GLOBAL_HORIZONTAL_RADIATION].to_f
+              number_of_hours_with_sunshine += 1.0
+            end
+          end
+        end
+        ghi_on_cooling_design_day_w_per_m_sq = sum_hourly_ghi_on_cooling_design_day / number_of_hours_with_sunshine
+        return ghi_on_cooling_design_day_w_per_m_sq
+      end
+
+      # This method finds which day of the coldest/hottest month is the heating/cooling design day
+      # @author sara.gilani@canada.ca
+      def get_heating_design_day_number
+        heating_design_day_number = nil
+        cooling_design_day_number = nil
+        # which day of the coldest month is the heating design day
+        @ddy_file.getObjectsByType('OS:SizingPeriod:DesignDay'.to_IddObjectType).each do |d|
+          if d.name.to_s.include?('Htg 99.6% Condns DB')
+            idf_object = d.idfObject
+            idf_object.dataFields.each do |data_field|
+              design_day_field = idf_object.fieldComment(data_field, true)
+              if design_day_field.to_s.include?('Day of Month')
+                heating_design_day_number = idf_object.getString(data_field)
+                heating_design_day_number = heating_design_day_number.to_s
+                # puts "heating_design_day_number is #{heating_design_day_number}"
+              end
+            end
+          end
+
+          # which day of the hottest month is the cooling design day
+          if d.name.to_s.include?('Clg .4% Condns DB=>MWB')
+            idf_object = d.idfObject
+            idf_object.dataFields.each do |data_field|
+              design_day_field = idf_object.fieldComment(data_field, true)
+              if design_day_field.to_s.include?('Day of Month')
+                cooling_design_day_number = idf_object.getString(data_field)
+                cooling_design_day_number = cooling_design_day_number.to_s
+                # puts "cooling_design_day_number is #{cooling_design_day_number}"
+              end
+            end
+          end
+        end
+        return heating_design_day_number, cooling_design_day_number
+      end #def get_heating_design_day_number
+
+      # This method calculates dehumidification degree days (DDD)
+      # @author sara.gilani@canada.ca
+      # Reference: ASHRAE Handbook - Fundamentals > CHAPTER 1. PSYCHROMETRICS
+      def calculate_humidity_ratio
+        # coefficients for the calculation of pws (Reference: ASHRAE Handbook - Fundamentals > CHAPTER 1. PSYCHROMETRICS)
+        c1 = -5.6745359E+03
+        c2 = 6.3925247E+00
+        c3 = -9.6778430E-03
+        c4 = 6.2215701E-07
+        c5 = 2.0747825E-09
+        c6 = -9.4840240E-13
+        c7 = 4.1635019E+00
+        c8 = -5.8002206E+03
+        c9 = 1.3914993E+00
+        c10 = -4.8640239E-02
+        c11 = 4.1764768E-05
+        c12 = -1.4452093E-08
+        c13 = 6.5459673E+00
+        sum_w = 0.0
+        w_base = 0.010 # Note: this is base for the calculation of 'dehumidification degree days' (REF: Wright, L. (2019). Setting the Heating/Cooling Performance Criteria for the PHIUS 2018 Passive Building Standard. In ASHRAE Topical Conference Proceedings, pp. 399-409)
+        ddd = 0.0 # dehimudifation degree-days
+        convert_c_to_k = 273.15 # convert degree C to kelvins (k)
+
+        scan if @filearray.nil?
+        @filearray.each do |line|
+          unless line.first =~ /\D(.*)/
+            # Note: the below Step 1, 2, 3, and 4 are the steps for the calculation of humidity ratio as per ASHRAE Handbook - Fundamentals > CHAPTER 1. PSYCHROMETRICS
+            # Step 1: calculate pws (SATURATION_PRESSURE_OF_WATER_VAPOR), [Pascal]
+            if line[DRY_BULB_TEMPERATURE].to_f <= 0.0
+              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = c1 / (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k) +
+                                                                    c2 +
+                                                                    c3 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k) +
+                                                                    c4 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**2 +
+                                                                    c5 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**3 +
+                                                                    c6 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**4 +
+                                                                    c7 * Math.log((line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k), Math.exp(1)) # 2.718281828459
+              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = (Math.exp(1))**(line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR].to_f)
+            else # if line[DRY_BULB_TEMPERATURE].to_f > 0.0
+              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = c8 / (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k) +
+                                                                    c9 +
+                                                                    c10 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k) +
+                                                                    c11 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**2 +
+                                                                    c12 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**3 +
+                                                                    c13 * Math.log((line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k), Math.exp(1))
+              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = (Math.exp(1))**(line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR].to_f)
+            end
+
+            # Step 2: calculate pw (PARTIAL_PRESSURE_OF_WATER_VAPOR), [Pascal]
+            # Relative Humidity (RH) = 100 * pw / pws
+            line[CALCULATED_PARTIAL_PRESSURE_OF_WATER_VAPOR] = line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR].to_f * line[RELATIVE_HUMIDITY].to_f / 100.0
+
+            # Step 3: calculate p (TOTAL_MIXTURE_PRESSURE), [Pascal]
+            line[CALCULATED_TOTAL_MIXTURE_PRESSURE] = line[CALCULATED_PARTIAL_PRESSURE_OF_WATER_VAPOR].to_f + line[ATMOSPHERIC_STATION_PRESSURE].to_f
+
+            # Step 4: calculate w (HUMIDITY_RATIO)
+            line[CALCULATED_HUMIDITY_RATIO] = 0.621945 * line[CALCULATED_PARTIAL_PRESSURE_OF_WATER_VAPOR].to_f / (line[CALCULATED_TOTAL_MIXTURE_PRESSURE].to_f - line[CALCULATED_PARTIAL_PRESSURE_OF_WATER_VAPOR].to_f)
+
+            #-----------------------------------------------------------------------------------------------------------
+            # calculate daily average of w AND its difference from base
+            if line[HOUR].to_f < 24.0
+              sum_w += line[CALCULATED_HUMIDITY_RATIO].to_f
+              line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY] = 0.0
+            elsif line[HOUR].to_f == 24.0
+              line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY] = (sum_w + line[CALCULATED_HUMIDITY_RATIO].to_f) / 24.0
+              if line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY].to_f > w_base
+                line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY_DIFF_BASE] = line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY].to_f - w_base
+              else
+                line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY_DIFF_BASE] = 0.0
+              end
+              sum_w = 0.0
+            end
+
+            ddd += line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY_DIFF_BASE].to_f
+
+          end # unless line.first =~ /\D(.*)/
+        end # @filearray.each do |line|
+        # puts @filearray
+        return ddd
+      end # def calculate_humidity_ratio
+
     end # Environment
   end
 end
