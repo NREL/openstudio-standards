@@ -1767,7 +1767,7 @@ class NECB2011 < Standard
   end
 
   def set_output_variables(model:,output_variables:)
-    unless output_variables.nil?
+    unless output_variables.nil? or output_variables.empty?
     output_variables.each do |output_variable|
       puts output_variable
       puts output_variable['frequency']
@@ -1781,7 +1781,7 @@ class NECB2011 < Standard
   end
 
   def set_output_meters(model:,output_meters:)
-    unless output_meters.nil?
+    unless output_meters.nil? or output_meters.empty?
       # remove existing output meters
       existing_meters = model.getOutputMeters
 
@@ -1789,8 +1789,8 @@ class NECB2011 < Standard
       output_meters.each do |new_meter|
         #check if meter already exists
         result = existing_meters.select { |e_m| e_m.name == new_meter['name'] }
-        raise("More and one output meter named #{new_meter['name']}") if result.size > 1
-        if result.size == 1
+        puts("More and one output meter named #{new_meter['name']}") if result.size > 1
+        if result.size >= 1
           existing_meter = result[0]
           puts("A meter named #{new_meter['name']} already exists. One will not be added to the model.")
           if existing_meter.reportingFrequency != new_meter['frequency']
@@ -1806,5 +1806,6 @@ class NECB2011 < Standard
         end
       end
     end
+    return model
   end
 end
