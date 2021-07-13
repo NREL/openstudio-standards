@@ -54,9 +54,13 @@ This project uses [Rake](http://rake.rubyforge.org/) to run tasks from the termi
 - `bundle exec rake build`                    # Build openstudio-standards-X.X.XX.gem into the pkg directory
 - `bundle exec rake clean`                    # Remove any temporary products
 - `bundle exec rake clobber`                  # Remove any generated files
+- `bundle exec rake data:apicheck`            # Check Google Drive configuration  
+- `bundle exec rake data:download`            # Download OpenStudio_Standards spreadsheets from Google Drive
 - `bundle exec rake data:update`              # Download OpenStudio_Standards from Google & export JSONs
+- `bundle exec rake data:update`              # Download OpenStudio_Standards spreadsheets and generate JSONs
+- `bundle exec rake data:update:manual`       # Generate JSONs from OpenStudio_Standards spreadsheets
+- `bundle exec rake data:export:jsons`        # Export JSONs from OpenStudio_Standards to data library
 - `bundle exec rake data:update:costing`      # Update RS-Means Database
-- `bundle exec rake data:update:manual`       # Export JSONs from OpenStudio_Standards
 - `bundle exec rake doc`                      # Generate the documentation
 - `bundle exec rake doc:show`                 # Show the documentation in a web browser
 - `bundle exec rake install`                  # Build and install openstudio-standards-X.X.XX.gem into system gems
