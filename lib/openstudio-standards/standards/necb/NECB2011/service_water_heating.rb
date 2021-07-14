@@ -1,5 +1,5 @@
 class NECB2011
-  def model_add_swh(model:, swh_fueltype: 'DefaultFuel')
+  def model_add_swh(model:, swh_fueltype: 'DefaultFuel', shw_scale:)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
     #Get default fuel based on epw location province.
     if swh_fueltype == 'DefaultFuel'
@@ -230,7 +230,7 @@ class NECB2011
 
   # This calculates the volume and capacity of one mixed tank that is assumed to service all shw in the building
   # u is the tank insulation in W/(m^2*K), height_to_radius is the ratio of tank radius to tank height and is dimensionless
-  def auto_size_shw_capacity(model, u: 0.45, height_to_radius: 2)
+  def auto_size_shw_capacity(model, u: 0.45, height_to_radius: 2, shw_scale: 1.0)
     peak_flow_rate = 0
     shw_space_types = []
     space_peak_flows = []
@@ -282,7 +282,7 @@ class NECB2011
       # when defining water use equipment.  When when water use equipment is assigned to spaces then the water use
       # by the equipment is multiplied by the space multiplier.  Note that there is a separate water use equipment
       # multiplier as well which is different than the space (ultimately thermal zone) multiplier.
-      space_peak_flow_ind = data['service_water_heating_peak_flow_per_area'].to_f * space_area
+      space_peak_flow_ind = data['service_water_heating_peak_flow_per_area'].to_f * space_area * shw_scale
       space_peak_flow = space_peak_flow_ind * space.multiplier
       #      space_peak_flows << space_peak_flow
       # Add the peak shw flow rate for the space to the total for the entire building

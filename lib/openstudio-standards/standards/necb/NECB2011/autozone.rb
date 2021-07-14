@@ -95,7 +95,7 @@ class NECB2011
 
   # Organizes Zones and assigns them to appropriate systems according to NECB 2011-17 systems spacetype rules in Sec 8.
   # requires requires fuel type to be assigned for each system aspect. Defaults to gas hydronic.
-  def apply_systems(model:, primary_heating_fuel:, sizing_run_dir:)
+  def apply_systems(model:, primary_heating_fuel:, sizing_run_dir:, shw_scale:)
     raise('validation of model failed.') unless validate_initial_model(model)
     # Check to see if model is using another vintage of spacetypes. If so overwrite the @standards for the object with the
     # other spacetype data. This is required for correct system mapping.
@@ -188,7 +188,7 @@ class NECB2011
                                  mau_heating_coil_type: mau_heating_coil_type,
                                  mau_type: mau_type
     )
-    model_add_swh(model: model, swh_fueltype: system_fuel_defaults['swh_fueltype'])
+    model_add_swh(model: model, swh_fueltype: system_fuel_defaults['swh_fueltype'], shw_scale: shw_scale)
     model_apply_sizing_parameters(model)
     # set a larger tolerance for unmet hours from default 0.2 to 1.0C
     model.getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
