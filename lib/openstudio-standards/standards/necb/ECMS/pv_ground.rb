@@ -1,7 +1,5 @@
 class ECMS
-
   def apply_pv_ground(model:, pv_ground_type:, pv_ground_total_area_pv_panels_m2:, pv_ground_tilt_angle:, pv_ground_azimuth_angle:, pv_ground_module_description:)
-
     ##### Remove leading or trailing whitespace in case users add them in inputs
     if pv_ground_total_area_pv_panels_m2.instance_of?(String)
       pv_ground_total_area_pv_panels_m2 = pv_ground_total_area_pv_panels_m2.strip
@@ -34,8 +32,6 @@ class ECMS
     ##### Calculate footprint of the building model (this is used as default value for pv_ground_total_area_pv_panels_m2)
     building_footprint_m2 = calculate_building_footprint(model: model)
     # puts "building_footprint_m2 is #{building_footprint_m2}"
-
-
     ##### Set default PV panels' total area as the building footprint
     if pv_ground_total_area_pv_panels_m2 == 'NECB_Default'
       pv_ground_total_area_pv_panels_m2 = building_footprint_m2
@@ -49,7 +45,7 @@ class ECMS
 
     ##### Set default PV panels' azimuth angle as south-facing arrays
     if pv_ground_azimuth_angle == 'NECB_Default'
-      pv_ground_azimuth_angle = 180 # EnergyPlus I/O Reference: "An azimuth angle of 180° is for a south-facing array, and an azimuth angle of 0° is for a north-facing array."
+      pv_ground_azimuth_angle = 180 # EnergyPlus I/O Reference: "An azimuth angle of 180deg is for a south-facing array, and an azimuth angle of 0deg is for a north-facing array."
     end
 
     ##### Set default PV module type as the the below one
@@ -60,8 +56,8 @@ class ECMS
     ##### Calculate number of PV panels
     # Note: assuming 5 ft x 2 ft as PV panel's size since it seems to fit the racking system used for ground mounts as per Mike Lubun's comment.
     pv_area_each_ft2 = 5.0 * 2.0
-    pv_area_each_m2 = (OpenStudio.convert(pv_area_each_ft2, 'ft^2', 'm^2').get) #convert pv_area_each_ft2 to m2
-    pv_number_panels = pv_ground_total_area_pv_panels_m2/pv_area_each_m2
+    pv_area_each_m2 = OpenStudio.convert(pv_area_each_ft2, 'ft^2', 'm^2').get # convert pv_area_each_ft2 to m2
+    pv_number_panels = pv_ground_total_area_pv_panels_m2 / pv_area_each_m2
 
     ##### Get data of the PV panel from the json file
     pv_info = @standards_data['tables']['pv']['table'].detect { |item| item['pv_module_description'] == pv_ground_module_description }
@@ -71,9 +67,9 @@ class ECMS
     ##### Create the generator
     # Assuming one PVWatts generator in E+ as per Mike Lubun's comment for simplification, however exact number of PVWatts generators (and inverters) are calculated for costing.
     dc_system_capacity = pv_number_panels * pv_watt
-    generator = OpenStudio::Model::GeneratorPVWatts.new(model,dc_system_capacity)
+    generator = OpenStudio::Model::GeneratorPVWatts.new(model, dc_system_capacity)
     generator.setModuleType(pv_ground_module_type)
-    generator.setArrayType('OneAxis')   # Note: "tilt and azimuth are fixed" for this array type (see E+ I/O Reference). This array type has been chosen as per Mike Lubun's costing spec.
+    generator.setArrayType('OneAxis') # Note: "tilt and azimuth are fixed" for this array type (see E+ I/O Reference). This array type has been chosen as per Mike Lubun's costing spec.
     generator.setTiltAngle(pv_ground_tilt_angle)
     generator.setAzimuthAngle(pv_ground_azimuth_angle)
 
@@ -83,19 +79,18 @@ class ECMS
     inverter.setInverterEfficiency(0.96) # Note: This is EnergyPlus' default value; This default value has been chosen as per Mike Lubun's costing spec.
 
     ##### Get distribution systems and set relevant parameters
-    model.getElectricLoadCenterDistributions.sort.each  do |elc_distribution|
+    model.getElectricLoadCenterDistributions.sort.each do |elc_distribution|
       elc_distribution.setInverter(inverter)
-      elc_distribution.setGeneratorOperationSchemeType('Baseload')  # E+ I/O Reference: "The Baseload scheme requests all generators scheduled ON (available) to operate, even if the amount of electric power generated exceeds the total facility electric power demand." This scheme type has been chosen as per Mike Lubun's costing spec.
+      elc_distribution.setGeneratorOperationSchemeType('Baseload') # E+ I/O Reference: "The Baseload scheme requests all generators scheduled ON (available) to operate, even if the amount of electric power generated exceeds the total facility electric power demand." This scheme type has been chosen as per Mike Lubun's costing spec.
     end
-
   end
 
   # Method for calculating footprint of the building model
   def calculate_building_footprint(model:)
     building_footprint_m2_array = []
-    lowest_floor = 10000000000.0 #dummy number as initialization to find the lowest floor among spaces #TODO: Question:it it fine that it has been assumed that the floor of all lowest spaces are at the same level?
+    lowest_floor = 10000000000.0 # dummy number as initialization to find the lowest floor among spaces #TODO: Question:it it fine that it has been assumed that the floor of all lowest spaces are at the same level?
     model.getSpaces.sort.each do |space|
-      space.surfaces.sort.select{ |surface| (surface.surfaceType == 'Floor') &&  (surface.outsideBoundaryCondition != 'Surface') &&  (surface.outsideBoundaryCondition != 'Adiabatic')}.each do |surface|
+      space.surfaces.sort.select { |surface| (surface.surfaceType == 'Floor') && (surface.outsideBoundaryCondition != 'Surface') && (surface.outsideBoundaryCondition != 'Adiabatic') }.each do |surface|
         floor_vertices = surface.vertices
         floor_z = floor_vertices[0].z.round(1)
         if floor_z <= lowest_floor
@@ -107,5 +102,4 @@ class ECMS
     building_footprint_m2 = building_footprint_m2_array.sum
     return building_footprint_m2
   end
-
 end
