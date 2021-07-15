@@ -1597,7 +1597,10 @@ class NECB2011
 
     # pump (set to variable speed for now till fix to run away plant temperature is found)
     # pump = OpenStudio::Model::PumpConstantSpeed.new(model)
-    pump = OpenStudio::Model::PumpVariableSpeed.new(model)
+    pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+    pump.setRatedPumpHead(7551.0)
+    pump.setMotorEfficiency(0.95)
+    pump.setDesignShaftPowerPerUnitFlowRatePerUnitHead(1.61)
     # TODO: the keyword "setPumpFlowRateSchedule" does not seem to work. A message
     # was sent to NREL to let them know about this. Once there is a fix for this,
     # use the proper pump schedule depending on whether we have two-pipe or four-pipe

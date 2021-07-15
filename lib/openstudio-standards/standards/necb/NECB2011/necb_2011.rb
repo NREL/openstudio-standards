@@ -230,6 +230,7 @@ class NECB2011 < Standard
                                    output_variables: nil
   )
 
+    raise("test100#{model.getSpaceTypes[0].spaceInfiltrationDesignFlowRates[0]}")
 
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
@@ -362,6 +363,7 @@ class NECB2011 < Standard
                 electrical_loads_scale: electrical_loads_scale,
                 oa_scale: oa_scale
     )
+
     apply_envelope(model: model,
                    ext_wall_cond: ext_wall_cond,
                    ext_floor_cond: ext_floor_cond,
@@ -407,6 +409,7 @@ class NECB2011 < Standard
                                    pv_ground_module_description: pv_ground_module_description,
                                    chiller_type: chiller_type
     )
+
     self.set_output_variables(model:model, output_variables: output_variables)
     return model
   end
@@ -576,7 +579,7 @@ class NECB2011 < Standard
                      skylight_solar_trans: nil,
                      infiltration_scale: nil)
     raise('validation of model failed.') unless validate_initial_model(model)
-    model_apply_infiltration_standard(model)
+#    model_apply_infiltration_standard(model)
     ecm = ECMS.new
     ecm.scale_infiltration_loads(model: model, scale: infiltration_scale)
     model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
@@ -1489,6 +1492,7 @@ class NECB2011 < Standard
 
       # Schedules
       space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true, true)
+
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')

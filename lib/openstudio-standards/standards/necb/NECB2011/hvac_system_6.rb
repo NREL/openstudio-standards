@@ -17,7 +17,6 @@ class NECB2011
     system_data[:AllOutdoorAirinCooling] = false
     system_data[:AllOutdoorAirinHeating] = false
     system_data[:MinimumSystemAirFlowRatio] = 0.3
-
     system_data[:system_supply_air_temperature] = 13.0
     system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
     system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
@@ -35,8 +34,13 @@ class NECB2011
     supply_fan = OpenStudio::Model::FanVariableVolume.new(model, always_on)
     supply_fan.setName('Sys6 Supply Fan')
 
-    htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
-    htg_coil.setGasBurnerEfficiency(0.8)
+    if heating_coil_type == "Hot Water"
+      htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
+      hw_loop.addDemandBranchForComponent(htg_coil)
+      #htg_coil.setGasBurnerEfficiency(0.8)
+    elsif heating_coil_type == "Electric"
+      htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+    end
     clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
 
     oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -63,8 +67,12 @@ class NECB2011
        sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
        sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
 
-       reheat_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
-       hw_loop.addDemandBranchForComponent(reheat_coil)
+       if heating_coil_type == "Hot Water"
+         reheat_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
+         hw_loop.addDemandBranchForComponent(reheat_coil)
+       elsif heating_coil_type == "Electric"
+         reheat_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+       end
 
        vav_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, always_on, reheat_coil)
        air_loop.addBranchForZone(zone, vav_terminal.to_StraightComponent)
