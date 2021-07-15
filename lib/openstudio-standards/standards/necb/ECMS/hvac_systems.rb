@@ -1629,7 +1629,7 @@ class ECMS
     end
 
     # Find the minimum COP and rename with efficiency rating
-    cop = coil_heating_dx_variable_speed_standard_minimum_cop(coil_heating_dx_variable_speed, sarch_criteria, false)
+    cop = coil_heating_dx_variable_speed_standard_minimum_cop(coil_heating_dx_variable_speed, search_criteria, false)
 
     # Set the efficiency values
     coil_heating_dx_variable_speed.speeds.each { |speed| speed.setReferenceUnitGrossRatedHeatingCOP(cop.to_f) } unless cop.nil?
