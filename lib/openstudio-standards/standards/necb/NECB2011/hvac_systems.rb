@@ -2193,7 +2193,8 @@ class NECB2011
                 rescue StandardError
                   nil
                 end
-    sys_name.chop unless check_int.nil?
-    airloop.setName(sys_name.chop)
+    sys_name = sys_name.chop unless check_int.nil?
+
+    airloop.setName(sys_name)
   end
 end
