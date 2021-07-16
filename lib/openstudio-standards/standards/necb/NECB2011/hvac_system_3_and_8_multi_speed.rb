@@ -1,14 +1,12 @@
 class NECB2011
-
   # Some tests still require a simple way to set up a system without sizing.. so we are keeping the auto_zoner flag for this  method.
-
   def add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model:,
                                                                                         zones:,
                                                                                         heating_coil_type:,
                                                                                         baseboard_type:,
                                                                                         hw_loop:,
                                                                                         new_auto_zoner: true)
-    system_data = Hash.new
+    system_data = {}
     system_data[:name] = 'Sys_3_PSZ'
     system_data[:CentralCoolingDesignSupplyAirTemperature] = 13.0
     system_data[:CentralHeatingDesignSupplyAirTemperature] = 43.0
@@ -30,7 +28,7 @@ class NECB2011
     system_data[:CentralCoolingDesignSupplyAirHumidityRatio] = 0.0085
     system_data[:CentralHeatingDesignSupplyAirHumidityRatio] = 0.0080
 
-    #System 3 Zone data
+    # System 3 Zone data
     system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
     system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
     system_data[:SetpointManagerSingleZoneReheatSupplyTempMin] = 13.0
@@ -46,9 +44,9 @@ class NECB2011
 
       # Add Air Loop
       air_loop = add_system_3_and_8_airloop_multi_speed(heating_coil_type,
-                                            model,
-                                            system_data,
-                                            determine_control_zone(zones))
+                                                        model,
+                                                        system_data,
+                                                        determine_control_zone(zones))
       # Add Zone equipment
       zones.each do |zone| # Zone sizing temperature
         sizing_zone = zone.sizingZone
@@ -61,7 +59,6 @@ class NECB2011
                                   hw_loop,
                                   model,
                                   zone)
-
       end
       return true
     else
@@ -103,7 +100,7 @@ class NECB2011
     fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
 
     # Setup heating and cooling coils
-    if(heating_coil_type == 'Gas') || (heating_coil_type == 'Electric')
+    if (heating_coil_type == 'Gas') || (heating_coil_type == 'Electric')
       clg_coil = OpenStudio::Model::CoilCoolingDXMultiSpeed.new(model)
       clg_coil.setFuelType('Electricity')
       clg_stage_1 = OpenStudio::Model::CoilCoolingDXMultiSpeedStageData.new(model)
@@ -122,7 +119,7 @@ class NECB2011
         htg_stage_1.setNominalCapacity(0.001)
       end
     # Single stage DX and Electric heating
-    elsif(heating_coil_type == 'DX')
+    elsif heating_coil_type == 'DX'
       clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
       clg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(system_data[:MinimumOutdoorDryBulbTemperatureforCompressorOperation])
       htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)
@@ -142,13 +139,13 @@ class NECB2011
     # in order from closest to zone to furthest from zone
     supply_inlet_node = air_loop.supplyInletNode
 
-    if(heating_coil_type == "Gas") || (heating_coil_type == "Electric")
+    if (heating_coil_type == 'Gas') || (heating_coil_type == 'Electric')
       air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.new(model, fan, htg_coil, clg_coil, supplemental_htg_coil)
       air_to_air_heatpump.setControllingZoneorThermostatLocation(control_zone)
       air_to_air_heatpump.setNumberofSpeedsforHeating(1)
       air_to_air_heatpump.setNumberofSpeedsforCooling(2)
       air_to_air_heatpump.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(system_data[:MinimumOutdoorDryBulbTemperatureforCompressorOperation])
-    elsif(heating_coil_type == 'DX')
+    elsif heating_coil_type == 'DX'
       air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAir.new(model, always_on, fan, htg_coil, clg_coil, supplemental_htg_coil)
       air_to_air_heatpump.setControllingZone(zone)
     end
@@ -168,5 +165,4 @@ class NECB2011
 
     return air_loop
   end
-
 end
