@@ -3465,10 +3465,10 @@ OS:Surface,
 
 OS:SubSurface,
   {840a7df4-740c-4408-8c73-04780c0c04ff}, !- Handle
-  Aux_Gym_ZN_1_FLR_2_Wall_2_window_1,     !- Name
+  Aux_Gym_ZN_1_FLR_1_Wall_2_window_1,     !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
-  {45cb91c4-6082-4294-8acd-ba3623d35030}, !- Surface Name
+  {2b46bc89-e8f9-4905-afed-89ef2b8faaf9}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
