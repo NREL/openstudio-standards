@@ -40,7 +40,7 @@ class ASHRAE901PRM < Standard
     relief_fan_power_fraction = 0
     if system_type == 'PSZ_AC' ||
        system_type == 'PSZ_HP' ||
-       system_type == 'PVAV_Reheat'
+       system_type == 'PVAV_Reheat' ||
       system_type == 'PVAV_PFP_Boxes' ||
         system_type == 'VAV_Reheat' ||
         system_type == 'VAV_PFP_Boxes' ||

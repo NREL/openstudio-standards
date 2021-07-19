@@ -797,7 +797,7 @@ class AppendixGPRMTests < Minitest::Test
   # Expected outcome depends on prototype name and 'mod' variation defined with
   #
   # @param prototypes_base [Hash] Baseline prototypes
-  def check_hvac_type(prototypes_base)
+  def check_hvac(prototypes_base)
     prototypes_base.each do |prototype, model|
       building_type, template, climate_zone, mod = prototype
 
@@ -970,6 +970,17 @@ class AppendixGPRMTests < Minitest::Test
         end
       end
     end
+
+    # check baseline system fan power
+    model.getFanOnOffs.sort.each do |fan|
+      fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
+      fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
+      fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
+      assert(fan_bhp_ip.round(5) == 0.00094, "Fan power for #{sub_text} is #{fan_power_ip.round(1)} instead of 0.00094.")
+      if fan_bhp_ip * OpenStudio.convert(std.fan_design_air_flow(fan), 'm^3/s', 'cfm').get <= 1.0
+        assert(fan.motorEfficiency == 0.825, "Fan motor efficiency for #{fan.name} in #{sub_text} is #{fan.motorEfficiency}, 0.825 is expected.")
+      end
+    end
   end
 
   # Check if any baseline system type is PVAV
@@ -990,6 +1001,26 @@ class AppendixGPRMTests < Minitest::Test
       end
     end
     assert(has_multizone && num_dx_coils > 0 && has_chiller == false, 'Baseline system selection failed; should be PVAV for ' + sub_text)
+
+    # check baseline system fan power
+    # central fans
+    model.getFanVariableVolumes.sort.each do |fan|
+      fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
+      fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
+      fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
+      assert(fan_bhp_ip.round(5) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_power_ip.round(1)} instead of 0.0013.")
+      fan_bhp_ip *= OpenStudio.convert(std.fan_design_air_flow(fan), 'm^3/s', 'cfm').get
+      if fan_bhp_ip <= 20.0 && fan_bhp_ip > 15.0
+        assert(fan.motorEfficiency == 0.91, "Fan motor efficiency for #{fan.name} in #{sub_text} is #{fan.motorEfficiency}, 0.91 is expected.")
+      end
+    end
+
+    # PFP fans
+    model.getFanConstantVolumes.sort.each do |fan|
+      fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
+      fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
+      assert(fan_power_ip.round(2) == 0.35, "Fan power for terminal fan in #{sub_text} is #{fan_power_ip.round(1)} instead of 0.35.")
+    end
   end
 
   # Check if building has baseline VAV/chiller for at least one air loop
@@ -1007,6 +1038,26 @@ class AppendixGPRMTests < Minitest::Test
       end
     end
     assert(has_multizone && has_chiller, 'Baseline system selection failed; should be VAV/chiller for ' + sub_text)
+
+    # check baseline system fan power
+    # central fans
+    model.getFanVariableVolumes.sort.each do |fan|
+      fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
+      fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
+      fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
+      assert(fan_bhp_ip.round(5) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_power_ip.round(1)} instead of 0.0013.")
+      fan_bhp_ip *= OpenStudio.convert(std.fan_design_air_flow(fan), 'm^3/s', 'cfm').get
+      if fan_bhp_ip <= 20.0 && fan_bhp_ip > 15.0
+        assert(fan.motorEfficiency == 0.91, "Fan motor efficiency for #{fan.name} in #{sub_text} is #{fan.motorEfficiency}, 0.91 is expected.")
+      end
+    end
+
+    # PFP fans
+    model.getFanConstantVolumes.sort.each do |fan|
+      fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
+      fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
+      assert(fan_power_ip.round(2) == 0.35, "Fan power for terminal fan in #{sub_text} is #{fan_power_ip.round(1)} instead of 0.35.")
+    end
   end
 
   # Check if baseline system type is PTAC or PTHP
@@ -1048,6 +1099,13 @@ class AppendixGPRMTests < Minitest::Test
     else
       assert(pass_test, "Baseline system selection failed for climate #{climate_zone}: should be PTAC for " + sub_text)
     end
+
+    # check baseline system fan power
+    model.getFanConstantVolumes.sort.each do |fan|
+      fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
+      fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
+      assert(fan_power_ip.round(1) == 0.3, "Fan power for #{sub_text} is #{fan_power_ip.round(1)} instead of 0.3.")
+    end
   end
 
   # Check if baseline system type is four pipe fan coil/ constant speed
@@ -1082,6 +1140,17 @@ class AppendixGPRMTests < Minitest::Test
         end
       end
       assert(pass_test, 'Baseline system selection failed: should be FPFC for ' + sub_text)
+    end
+
+    # check baseline system fan power
+    model.getFanOnOffs.sort.each do |fan|
+      fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
+      fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
+      fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
+      assert(fan_bhp_ip.round(5) == 0.00094, "Fan power for #{sub_text} is #{fan_power_ip.round(1)} instead of 0.00094.")
+      if fan_bhp_ip * OpenStudio.convert(std.fan_design_air_flow(fan), 'm^3/s', 'cfm').get <= 1.0
+        assert(fan.motorEfficiency == 0.825, "Fan motor efficiency for #{fan.name} in #{sub_text} is #{fan.motorEfficiency}, 0.825 is expected.")
+      end
     end
   end
 
@@ -1706,13 +1775,13 @@ class AppendixGPRMTests < Minitest::Test
       #'daylighting_control',
       #'light_occ_sensor',
       #'infiltration',
-      #'hvac_baseline',
-      'hvac_psz_split_from_mz',
+      'hvac_baseline',
+      #'hvac_psz_split_from_mz',
       #'sat_ctrl',
       #'number_of_boilers',
       #'number_of_chillers',
       #'number_of_cooling_towers',
-      #'hvac_sizing'
+      #'hvac_sizing',
     ]
 
     # Get list of unique prototypes
@@ -1734,7 +1803,7 @@ class AppendixGPRMTests < Minitest::Test
     check_lpd(prototypes_base['lpd']) if (tests.include? 'lpd')
     check_light_occ_sensor(prototypes['light_occ_sensor'],prototypes_base['light_occ_sensor']) if (tests.include? 'light_occ_sensor')
     check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if (tests.include? 'infiltration')
-    check_hvac_type(prototypes_base['hvac_baseline']) if (tests.include? 'hvac_baseline')
+    check_hvac(prototypes_base['hvac_baseline']) if (tests.include? 'hvac_baseline')
     check_sat_ctrl(prototypes_base['sat_ctrl']) if tests.include? 'sat_ctrl'
     check_number_of_boilers(prototypes_base['number_of_boilers']) if (tests.include? 'number_of_boilers')
     check_number_of_chillers(prototypes_base['number_of_chillers']) if (tests.include? 'number_of_chillers')
