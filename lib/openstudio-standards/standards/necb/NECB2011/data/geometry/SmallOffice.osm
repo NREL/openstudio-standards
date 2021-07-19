@@ -63,6 +63,7 @@ OS:Building,
   ,                                       !- Default Schedule Set Name
   2,                                      !- Standards Number of Stories
   2,                                      !- Standards Number of Above Ground Stories
+  NECB2017,                               ! Standards Template
   SmallOffice;                            !- Standards Building Type
 
 OS:Rendering:Color,
@@ -2946,8 +2947,8 @@ OS:SpaceType,
   {5b08e567-7ad2-49b4-8e02-e7247c102cb6}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
-  Space Function,                            !- Standards Building Type
-  Office - enclosed;                                       !- Standards Space Type
+  Space Function,                         !- Standards Building Type
+  Office - enclosed;                      !- Standards Space Type
 
 OS:Rendering:Color,
   {5b08e567-7ad2-49b4-8e02-e7247c102cb6}, !- Handle
