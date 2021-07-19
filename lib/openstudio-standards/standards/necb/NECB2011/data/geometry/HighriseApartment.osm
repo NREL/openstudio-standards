@@ -21537,7 +21537,7 @@ OS:Site:GroundTemperature:BuildingSurface,
 
 OS:SpaceType,
   {8665a24a-abc7-4550-8a8b-534d96f647fe}, !- Handle
-  Space Function Office - enclosed,       !- Name
+  Space Function Dwelling Unit(s),       !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {60033ff6-8b3e-4fb2-9f59-6687c207d7be}, !- Group Rendering Name
