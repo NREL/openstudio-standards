@@ -63,11 +63,7 @@ OS:Building,
   ,                                       !- Default Schedule Set Name
   2,                                      !- Standards Number of Stories
   2,                                      !- Standards Number of Above Ground Stories
-  ,                                       !- Standards Template
-  ,                                       !- Standards Building Type
-  ,                                       !- Standards Number of Living Units
-  ,                                       !- Relocatable
-  ;                                       !- Nominal Floor to Ceiling Height {m}
+  SmallOffice;                            !- Standards Building Type
 
 OS:Rendering:Color,
   {15265381-e5e1-46ed-aa83-2328823b2654}, !- Handle
@@ -2950,8 +2946,8 @@ OS:SpaceType,
   {5b08e567-7ad2-49b4-8e02-e7247c102cb6}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
-  Space Function,                         !- Standards Building Type
-  Office - enclosed;                      !- Standards Space Type
+  Space Function,                            !- Standards Building Type
+  Office - enclosed;                                       !- Standards Space Type
 
 OS:Rendering:Color,
   {5b08e567-7ad2-49b4-8e02-e7247c102cb6}, !- Handle
