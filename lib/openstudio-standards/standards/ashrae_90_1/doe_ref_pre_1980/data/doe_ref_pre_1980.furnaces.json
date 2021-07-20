@@ -1,0 +1,37 @@
+{
+  "furnaces": [
+    {
+      "template": "DOE Ref Pre-1980",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 249999.0,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_annual_fuel_utilization_efficiency": null,
+      "minimum_thermal_efficiency": null,
+      "minimum_combustion_efficiency": null,
+      "notes": null
+    },
+    {
+      "template": "DOE Ref Pre-1980",
+      "minimum_capacity": 250000.0,
+      "maximum_capacity": 9999999999.0,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_annual_fuel_utilization_efficiency": null,
+      "minimum_thermal_efficiency": null,
+      "minimum_combustion_efficiency": null,
+      "notes": null
+    },
+    {
+      "template": "DOE Ref Pre-1980",
+      "minimum_capacity": 250000000.0,
+      "maximum_capacity": 9999999999.0,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_annual_fuel_utilization_efficiency": null,
+      "minimum_thermal_efficiency": null,
+      "minimum_combustion_efficiency": null,
+      "notes": null
+    }
+  ]
+}
