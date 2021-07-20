@@ -664,7 +664,7 @@ class NECB2011
       end
     end
 
-    return if mech_rooms.size == 1
+    return [cond_spaces[mech_rooms[0]], cond_spaces] if mech_rooms.size == 1
 
     if mech_rooms.size > 1
       check_spaces = []
