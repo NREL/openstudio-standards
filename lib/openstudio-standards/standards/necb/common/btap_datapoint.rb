@@ -90,7 +90,7 @@ class BTAPDatapoint
       # it will search the libary first,.
       # model = load_osm(@options[:building_type]) # loads skeleton file from path.
       model = @standard.load_building_type_from_library(building_type: @options[:building_type])
-      if model == false
+      if false == model
         osm_model_path = File.absolute_path(File.join(input_folder, @options[:building_type] + '.osm'))
         raise("File #{osm_model_path} not found") unless File.exist?(osm_model_path)
 
