@@ -19,8 +19,8 @@ class NECB_nv_Tests < Minitest::Test
 
     #Range of test options.
     @templates = [
-        'NECB2011',
-        'NECB2015',
+        # 'NECB2011',
+        # 'NECB2015',
         'NECB2017'
     ]
     @building_types = [
@@ -93,12 +93,12 @@ class NECB_nv_Tests < Minitest::Test
                                          fdwr_set: -1.0,
                                          srr_set: -1.0)
               standard.apply_auto_zoning(model: model,
-                                sizing_run_dir: Dir.pwd,
+                                sizing_run_dir: @sizing_run_dir,
                                 lights_type: 'NECB_Default',
                                 lights_scale: 1.0)
               standard.apply_systems_and_efficiencies(model: model,
                                                       primary_heating_fuel: primary_heating_fuel,
-                                                      sizing_run_dir: Dir.pwd,
+                                                      sizing_run_dir: @sizing_run_dir,
                                                       dcv_type: 'NECB_Default',
                                                       ecm_system_name: 'NECB_Default',
                                                       erv_package: 'NECB_Default',
