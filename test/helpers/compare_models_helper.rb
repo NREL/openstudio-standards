@@ -139,7 +139,7 @@ def object_name(object)
        'OS:ZoneCapacitanceMultiplier:ResearchSpecial'
     # Objects that are unique (1 per model)
     name = object_type
-  when 'OS:Sizing:Zone', 'OS:Sizing:Plant', 'OS:Sizing:System', 'OS:StandardsInformation:Construction'
+  when 'OS:Sizing:Zone', 'OS:Sizing:Plant', 'OS:Sizing:System', 'OS:StandardsInformation:Construction', 'OS:WaterHeater:Sizing'
     # Objects referencing a parent in the first field
     parent = object.getTarget(1).get
     name = "#{object_type} #{parent.name.get.to_s}"
