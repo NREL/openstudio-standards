@@ -2616,6 +2616,7 @@ class Standard
   #   If not supplied, one will be created based on the supplied occupancy threshold.
   # @return [Bool] returns true if successful, false if not
   def air_loop_hvac_add_motorized_oa_damper(air_loop_hvac, min_occ_pct = 0.05, occ_sch = nil)
+    return true
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
     return false unless oa_sys.is_initialized

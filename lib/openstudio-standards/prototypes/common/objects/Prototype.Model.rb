@@ -41,7 +41,7 @@ Standard.class_eval do
     # save new basefile to new geometry folder as class name.
     model.getBuilding.setName("-#{@instvarbuilding_type}-#{climate_zone} created: #{Time.new}")
     model_add_loads(model)
-    model_apply_infiltration_standard(model)
+    #model_apply_infiltration_standard(model)
     model_modify_infiltration_coefficients(model, @instvarbuilding_type, climate_zone)
     model_add_door_infiltration(model, climate_zone)
     model_modify_surface_convection_algorithm(model)

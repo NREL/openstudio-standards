@@ -576,7 +576,7 @@ class NECB2011 < Standard
                      skylight_solar_trans: nil,
                      infiltration_scale: nil)
     raise('validation of model failed.') unless validate_initial_model(model)
-    model_apply_infiltration_standard(model)
+    #model_apply_infiltration_standard(model)
     ecm = ECMS.new
     ecm.scale_infiltration_loads(model: model, scale: infiltration_scale)
     model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
@@ -666,7 +666,7 @@ class NECB2011 < Standard
     end
 
     # Get the airloop occupancy schedule
-    loop_occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: min_occ_pct)
+    loop_occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: 0.001)
     flh = schedule_ruleset_annual_equivalent_full_load_hrs(loop_occ_sch)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Annual occupied hours = #{flh.round} hr/yr, assuming a #{min_occ_pct} occupancy threshold.  This schedule will be used as the HVAC operation schedule.")
 

@@ -983,13 +983,14 @@ module BTAP
           if model.getSimpleGlazingByName(glazing_name).empty?
             glazing_name = "SimpleGlazing:" + data_name_suffix
             glazing = OpenStudio::Model::SimpleGlazing.new(construction.model)
-            glazing.setSolarHeatGainCoefficient(solarTransmittanceatNormalIncidence)
+            glazing.setSolarHeatGainCoefficient(0.42)
             glazing.setUFactor(conductance)
             glazing.setThickness(0.21)
             glazing.setVisibleTransmittance(visibleTransmittance)
             glazing.setName(glazing_name)
           else
             glazing = model.getSimpleGlazingByName(glazing_name).get
+            glazing.setSolarHeatGainCoefficient(0.42)
           end
 
           #add the glazing and any shading materials to the array and create construction based on this.

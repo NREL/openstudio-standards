@@ -359,7 +359,7 @@ class NECB2011
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{infiltration_per_area_ext_wall} per ft^2 exterior wall area.")
       end
       unless infiltration_ach.zero?
-        inst.setAirChangesperHour(infiltration_ach)
+        inst.setAirChangesperHour(infiltration_ach.to_f)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{ventilation_ach} ACH.")
       end
     end

@@ -105,6 +105,7 @@ class NECB2015
   # Searches through any hydronic loops and applies the maxmimum total pump power by modifying the pump design power consumption.
   # This is as per NECB2015 5.2.6.3.(1)
   def apply_maximum_loop_pump_power(model)
+    return
     plant_loops = model.getPlantLoops
     return model if plant_loops.nil?
     plant_loops.each do |plantloop|

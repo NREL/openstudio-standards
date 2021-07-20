@@ -22,6 +22,7 @@ class NECB2011
   def air_loop_hvac_economizer_required?(air_loop_hvac)
     economizer_required = false
 
+    return
     # need a better way to determine if an economizer is needed.
     return economizer_required if air_loop_hvac.name.to_s.include? 'Outpatient F1'
 
@@ -575,7 +576,7 @@ class NECB2011
 
     # Set the efficiency values
     unless thermal_eff.nil?
-      boiler_hot_water.setNominalThermalEfficiency(thermal_eff)
+      boiler_hot_water.setNominalThermalEfficiency(0.8)
     end
 
     return successfully_set_all_properties
@@ -719,6 +720,7 @@ class NECB2011
   #
   # @return [Double] minimum thermal efficiency
   def coil_heating_gas_standard_minimum_thermal_efficiency(coil_heating_gas, rename = false)
+    return 0.8
     # Get the coil properties
     search_criteria = coil_heating_gas_find_search_criteria
     capacity_w = coil_heating_gas_find_capacity(coil_heating_gas)
@@ -1591,7 +1593,10 @@ class NECB2011
 
     # pump (set to variable speed for now till fix to run away plant temperature is found)
     # pump = OpenStudio::Model::PumpConstantSpeed.new(model)
-    pump = OpenStudio::Model::PumpVariableSpeed.new(model)
+    pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+    pump.setRatedPumpHead(15102.0)
+    pump.setMotorEfficiency(0.95)
+    pump.setDesignShaftPowerPerUnitFlowRatePerUnitHead(1.61)
     # TODO: the keyword "setPumpFlowRateSchedule" does not seem to work. A message
     # was sent to NREL to let them know about this. Once there is a fix for this,
     # use the proper pump schedule depending on whether we have two-pipe or four-pipe
@@ -1601,11 +1606,8 @@ class NECB2011
 
     # boiler
     boiler1 = OpenStudio::Model::BoilerHotWater.new(model)
-    boiler2 = OpenStudio::Model::BoilerHotWater.new(model)
     boiler1.setFuelType(boiler_fueltype)
-    boiler2.setFuelType(boiler_fueltype)
     boiler1.setName('Primary Boiler')
-    boiler2.setName('Secondary Boiler')
 
     # boiler_bypass_pipe
     boiler_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
@@ -1619,7 +1621,6 @@ class NECB2011
     pump.addToNode(hw_supply_inlet_node)
 
     hw_loop.addSupplyBranchForComponent(boiler1)
-    hw_loop.addSupplyBranchForComponent(boiler2)
     hw_loop.addSupplyBranchForComponent(boiler_bypass_pipe)
     supply_outlet_pipe.addToNode(hw_supply_outlet_node)
 
