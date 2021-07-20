@@ -10,7 +10,6 @@ class NECB_LED_Lighting_Tests < Minitest::Test
     @output_folder = File.join(__dir__, 'output/test_led_lighting')
     @expected_results_file = File.join(__dir__, '../expected_results/led_lighting_expected_results.json')
     @test_results_file = File.join(__dir__, '../expected_results/led_lighting_test_results.json')
-    @sizing_run_dir = File.join(@output_folder, 'sizing_folder')
 
     # Intial test condition
     @test_passed = true
