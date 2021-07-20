@@ -1,5 +1,4 @@
 class NECB2015
-
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @return [Bool] true if successful, false if not
@@ -107,8 +106,10 @@ class NECB2015
   def apply_maximum_loop_pump_power(model)
     plant_loops = model.getPlantLoops
     return model if plant_loops.nil?
+
     plant_loops.each do |plantloop|
       next if plant_loop_swh_loop?(plantloop) == true
+
       pumps = []
       max_powertoload = 0
       total_pump_power = 0
@@ -119,8 +120,9 @@ class NECB2015
       max_total_loop_pump_power_table = @standards_data['max_total_loop_pump_power']
       plantloop.supplyComponents.each do |supplycomp|
         case supplycomp.iddObjectType.valueName.to_s
-          when 'OS_CentralHeatPumpSystem', 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit','OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit','OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit_SpeedData','OS_HeatPump_WaterToWater_EquationFit_Cooling','OS_HeatPump_WaterToWater_EquationFit_Heating'
-            max_powertoload = model_find_object(max_total_loop_pump_power_table, {'hydronic_system_type' => 'WSHP'})['total_normalized_pump_power_wperkw']
+          when 'OS_CentralHeatPumpSystem', 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit', 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit', 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit_SpeedData', 'OS_HeatPump_WaterToWater_EquationFit_Cooling', 'OS_HeatPump_WaterToWater_EquationFit_Heating'
+            search_hash = { 'hydronic_system_type' => 'WSHP' }
+            max_powertoload = model_find_object(max_total_loop_pump_power_table, search_hash)['total_normalized_pump_power_wperkw']
           when 'OS_Pump_VariableSpeed'
             pumps << supplycomp.to_PumpVariableSpeed.get
             total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
@@ -128,47 +130,52 @@ class NECB2015
             pumps << supplycomp.to_PumpConstantSpeed.get
             total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
           when 'OS_HeaderedPumps_ConstantSpeed'
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "A pump used in the plant loop named #{plantloop.name.to_s} is headered.  This may result in an error and cause a failure.")
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "A pump used in the plant loop named #{plantloop.name} is headered.  This may result in an error and cause a failure.")
             pumps << supplycomp.to_HeaderedPumpsConstantSpeed.get
             total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
           when 'OS_HeaderedPumps_VariableSpeed'
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "A pump used in the plant loop named #{plantloop.name.to_s} is headered.  This may result in an error and cause a failure.")
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "A pump used in the plant loop named #{plantloop.name} is headered.  This may result in an error and cause a failure.")
             pumps << supplycomp.to_HeaderedPumpsVariableSpeed.get
             total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
         end
       end
       # If no pumps were found then there is nothing to set so go to the next plant loop
-      next if pumps.length == 0
+      next if pumps.empty?
+
       # If a heat pump was found then the pump power to total demand ratio should have been set to what NECB 2015 table 5.2.6.3 says.
       # If the pump power to total demand ratio was not set then no heat pump was present so set according to if the plant loop is
       # used for heating, cooling, or heat rejection (condeser as OpenStudio calls it).
       unless max_powertoload > 0
         case plantloop.sizingPlant.loopType
-          when 'Heating'
-            max_powertoload = model_find_object(max_total_loop_pump_power_table, {'hydronic_system_type' => 'Heating'})['total_normalized_pump_power_wperkw']
-          when 'Cooling'
-            max_powertoload = model_find_object(max_total_loop_pump_power_table, {'hydronic_system_type' => 'Cooling'})['total_normalized_pump_power_wperkw']
-          when 'Condenser'
-            max_powertoload = model_find_object(max_total_loop_pump_power_table, {'hydronic_system_type' => 'Heat_rejection'})['total_normalized_pump_power_wperkw']
+        when 'Heating'
+          search_hash = { 'hydronic_system_type' => 'Heating' }
+          max_powertoload = model_find_object(max_total_loop_pump_power_table, search_hash)['total_normalized_pump_power_wperkw']
+        when 'Cooling'
+          search_hash = { 'hydronic_system_type' => 'Cooling' }
+          max_powertoload = model_find_object(max_total_loop_pump_power_table, search_hash)['total_normalized_pump_power_wperkw']
+        when 'Condenser'
+          search_hash = { 'hydronic_system_type' => 'Heat_rejection' }
+          max_powertoload = model_find_object(max_total_loop_pump_power_table, search_hash)['total_normalized_pump_power_wperkw']
         end
       end
       # If nothing was found then do nothing (though by this point if nothing was found then an error should have been thrown).
       next if max_powertoload == 0
+
       # Get the capacity of the loop (using the more general method of calculating via maxflow*temp diff*density*heat capacity)
       # This is more general than the other method in Standards.PlantLoop.rb which only looks at heat and cooling.  Also,
       # that method looks for spceific equipment and would be thrown if other equipment was present.  However my method
       # only works for water for now.
       plantloop_capacity = plant_loop_capacity_w_by_maxflow_and_delta_t_forwater(plantloop)
       # Sizing factor is pump power (W)/ zone demand (in kW, as approximated using plant loop capacity).
-      necb_pump_power_cap = plantloop_capacity*max_powertoload/1000
-      pump_power_adjustment = necb_pump_power_cap/total_pump_power
+      necb_pump_power_cap = plantloop_capacity * max_powertoload / 1000
+      pump_power_adjustment = necb_pump_power_cap / total_pump_power
       # Multiply the factor EnergyPlus uses to calculate the pump power by the sizing factor to make pump power in line with NECB 2015.
       pumps.each do |pump|
         case pump.designPowerSizingMethod
           when 'PowerPerFlowPerPressure'
-            pump.setDesignShaftPowerPerUnitFlowRatePerUnitHead(pump.designShaftPowerPerUnitFlowRatePerUnitHead.to_f*pump_power_adjustment)
+            pump.setDesignShaftPowerPerUnitFlowRatePerUnitHead(pump.designShaftPowerPerUnitFlowRatePerUnitHead.to_f * pump_power_adjustment)
           when 'PowerPerFlow'
-            pump.setDesignElectricPowerPerUnitFlowRate(pump.designElectricPowerPerUnitFlowRate.to_f*pump_power_adjustment)
+            pump.setDesignElectricPowerPerUnitFlowRate(pump.designElectricPowerPerUnitFlowRate.to_f * pump_power_adjustment)
         end
       end
     end

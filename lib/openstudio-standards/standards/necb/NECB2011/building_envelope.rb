@@ -11,7 +11,7 @@ class NECB2011
     # -1:  Remove all windows and add windows to match max fdwr from NECB
     # -2:  Do not apply any fdwr changes, leave windows alone (also works for fdwr > 1)
     # -3:  Use old method which reduces existing window size (if necessary) to meet maximum NECB fdwr limit
-    # <-3.1:  Remove all windows and add windows to match this fdwr (same as for fdwr_set 0-1)
+    # <-3.1:  Remove all windows and doors
     # > 1:  Do nothing
 
     return if fdwr_set.to_f > 1.0
@@ -171,7 +171,7 @@ class NECB2011
     # -1:  Remove all skylights and add skylights to match max srr from NECB
     # -2:  Do not apply any srr changes, leave skylights alone (also works for srr > 1)
     # -3:  Use old method which reduces existing skylight size (if necessary) to meet maximum NECB skylight limit
-    # <-3.1:  Remove all skylights and add skylights to match this srr (same as with srr_set 0-1)
+    # <-3.1:  Remove all skylights
     # > 1:  Do nothing
 
     return if srr_set.to_f > 1.0

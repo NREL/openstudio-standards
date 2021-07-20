@@ -1,15 +1,15 @@
 require 'minitest/autorun'
 require 'openstudio'
 
-#if running from openstudio-standards.. load local standards
+# if running from openstudio-standards.. load local standards
 os_standards_local_lib_path = '../../../lib/openstudio-standards.rb'
-if Dir.exist?(os_standards_local_lib_path )
+if Dir.exist?(os_standards_local_lib_path)
   require_relative os_standards_local_lib_path
 else
   require 'openstudio-standards'
 end
 
-#load costing files if we are in btap_costing repository
+# load costing files if we are in btap_costing repository
 resource_folder = File.join(__dir__, '..', '..', 'measures/btap_results/resources')
 
 if Dir.exist?(resource_folder)
