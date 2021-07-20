@@ -3,7 +3,7 @@ class BTAPPRE1980
   # NECB 3.2.1.4
   def apply_standard_window_to_wall_ratio(model:, fdwr_set: -1.0)
     # NECB FDWR limit
-    hdd = self.get_necb_hdd18(model)
+    hdd = get_necb_hdd18(model)
 
     # Get the maximum NECB fdwr
     # fdwr_set settings:
@@ -14,30 +14,18 @@ class BTAPPRE1980
     # <-3.1:  Remove all the windows
     # > 1:  Do nothing
 
-    if fdwr_set.to_f > 1.0
-      return
-    elsif fdwr_set.to_f >= 0.0 and fdwr_set <= 1.0
-      apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f)
-      return
-    elsif fdwr_set.to_f >= -1.1 and fdwr_set <= -0.9
-      # Use fdwr from model for BTAPPRE1980.
-      return
-    elsif fdwr_set.to_f >= -2.1 and fdwr_set <= -1.9
-      return
-    elsif fdwr_set.to_f >= -3.1 and fdwr_set <= -2.9
-      fdwr_lim = (max_fwdr(hdd) * 100.0).round(1)
-      return apply_limit_fdwr(model: model, fdwr_lim: fdwr_lim.to_f)
-    elsif fdwr_set < -3.1
-      apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f)
-      return
-    end
+    return if fdwr_set.to_f > 1.0
+    return apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f) if fdwr_set.to_f >= 0.0 && fdwr_set <= 1.0
+    return if fdwr_set.to_f >= -1.1 && fdwr_set <= -0.9
+    return if fdwr_set.to_f >= -2.1 && fdwr_set <= -1.9
+    return apply_limit_fdwr(model: model, fdwr_lim: (max_fwdr(hdd) * 100.0).to_f.round(1)) if fdwr_set.to_f >= -3.1 && fdwr_set <= -2.9
+    return apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f) if fdwr_set < -3.1
   end
 
   # Reduces the SRR to the values specified by the PRM. SRR reduction
   # will be done by shrinking vertices toward the centroid.
   #
   def apply_standard_skylight_to_roof_ratio(model:, srr_set: -1.0)
-
     # If srr_set is between 1.0 and 1.2 set it to the maximum allowed by the NECB.  If srr_set is between 0.0 and 1.0
     # apply whatever was passed.  If srr_set >= 1.2 then set the existing srr of the building to be the necb maximum
     # only if the the srr exceeds this maximum (otherwise leave it to be whatever was modeled).
@@ -50,28 +38,20 @@ class BTAPPRE1980
     # <-3.1:  Remove all the skylights
     # > 1:  Do nothing
 
-    if srr_set.to_f > 1.0
-      return
-    elsif srr_set.to_f >= 0.0 && srr_set <= 1.0
-      apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f)
-      return
-    elsif srr_set.to_f >= -1.1 && srr_set <= -0.9
-      # No skylights set for BTAPPRE1980 buildings.
-      return
-    elsif srr_set.to_f >= -2.1 && srr_set <= -1.9
-      return
-    elsif srr_set.to_f >= -3.1 && srr_set <= -2.9
-      # Continue with the rest of this method, use old method which reduces existing skylight size (if necessary) to
-      # meet maximum srr limit
-    elsif srr_set < -3.1
-      apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f)
-      return
-    else
-      return
-    end
+    return if srr_set.to_f > 1.0
+    return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f) if srr_set.to_f >= 0.0 && srr_set <= 1.0
+
+    # No skylights set for BTAPPRE1980 buildings.
+    return if srr_set.to_f >= -1.1 && srr_set <= -0.9
+    return if srr_set.to_f >= -2.1 && srr_set <= -1.9
+    return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f) if srr_set < -3.1
+
+    # Continue with the rest of this method, use old method which reduces existing skylight size (if necessary) to
+    # meet maximum srr limit
+    return unless srr_set.to_f >= -3.1 && srr_set <= -2.9
 
     # SRR limit
-    srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value') * 100.0
+    srr_lim = get_standards_constant('skylight_to_roof_ratio_max_value') * 100.0
 
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
@@ -92,8 +72,10 @@ class BTAPPRE1980
       space.surfaces.sort.each do |surface|
         # Skip non-outdoor surfaces
         next unless surface.outsideBoundaryCondition == 'Outdoors'
+
         # Skip non-walls
         next unless surface.surfaceType == 'RoofCeiling'
+
         # This wall's gross area (including skylight area)
         wall_area_m2 += surface.grossArea * space.multiplier
         # Subsurfaces in this surface
@@ -134,7 +116,6 @@ class BTAPPRE1980
     srr = ((total_subsurface_m2 / total_roof_m2) * 100.0).round(1)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The skylight to roof ratios (SRRs) are: NonRes: #{srr_nr.round}%, Res: #{srr_res.round}%.")
 
-
     # Check against SRR limit
     red_nr = srr_nr > srr_lim
     red_res = srr_res > srr_lim
@@ -142,6 +123,7 @@ class BTAPPRE1980
 
     # Stop here unless windows need reducing
     return true unless srr > srr_lim
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all windows (by raising sill height) to reduce window area down to the limit of #{srr_lim.round}%.")
     # Determine the factors by which to reduce the window / door area
     mult = srr_lim / srr
@@ -154,6 +136,7 @@ class BTAPPRE1980
         next unless surface.outsideBoundaryCondition == 'Outdoors'
         # Skip non-walls
         next unless surface.surfaceType == 'RoofCeiling'
+
         # Subsurfaces in this surface
         surface.subSurfaces.sort.each do |ss|
           # Reduce the size of the subsurface
@@ -175,23 +158,25 @@ class BTAPPRE1980
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @return [Bool] returns true if successful, false if not
 
-  def apply_standard_construction_properties(model:,
-                                             runner: nil,
-                                             ext_wall_cond: nil,
-                                             ext_floor_cond: nil,
-                                             ext_roof_cond: nil,
-                                             ground_wall_cond: nil,
-                                             ground_floor_cond: nil,
-                                             ground_roof_cond: nil,
-                                             door_construction_cond: nil,
-                                             fixed_window_cond: nil,
-                                             glass_door_cond: nil,
-                                             overhead_door_cond: nil,
-                                             skylight_cond: nil,
-                                             glass_door_solar_trans: nil,
-                                             fixed_wind_solar_trans: nil,
-                                             skylight_solar_trans: nil)
-    #this call should be removed for a more general application.
+  def apply_standard_construction_properties(
+    model:,
+    runner: nil,
+    ext_wall_cond: nil,
+    ext_floor_cond: nil,
+    ext_roof_cond: nil,
+    ground_wall_cond: nil,
+    ground_floor_cond: nil,
+    ground_roof_cond: nil,
+    door_construction_cond: nil,
+    fixed_window_cond: nil,
+    glass_door_cond: nil,
+    overhead_door_cond: nil,
+    skylight_cond: nil,
+    glass_door_solar_trans: nil,
+    fixed_wind_solar_trans: nil,
+    skylight_solar_trans: nil
+  )
+    # this call should be removed for a more general application.
     model.getDefaultConstructionSets.sort.each do |set|
       # Set the SHGC of the default glazing material before making new constructions based on it and changing U-values.
       assign_SHGC_to_windows(model: model, default_construction_set: set)
@@ -216,13 +201,13 @@ class BTAPPRE1980
 
   def assign_SHGC_to_windows(model:, default_construction_set:)
     # Get HDD to determine which SHGC to use
-    hdd = self.get_necb_hdd18(model)
+    hdd = get_necb_hdd18(model)
     # Determine the solar heat gain coefficient from the standards data
     shgc_table = @standards_data['SHGC']
     shgc = eval(shgc_table[0]['formula'])
     # Find the default window construction material
     sub_surf_consts = default_construction_set.defaultExteriorSubSurfaceConstructions.get
-    fixed_window_material = OpenStudio::Model::getConstructionByName(model, sub_surf_consts.fixedWindowConstruction.get.name.to_s).get.getLayer(0).to_SimpleGlazing.get
+    fixed_window_material = OpenStudio::Model.getConstructionByName(model, sub_surf_consts.fixedWindowConstruction.get.name.to_s).get.getLayer(0).to_SimpleGlazing.get
     # Reset the SHGC for the window material.  When I wrote this all of the windows, doors etc. used the same window
     # material.  So I set the SHGC for that material expecting it will be modified for all of the other constructions
     # too.

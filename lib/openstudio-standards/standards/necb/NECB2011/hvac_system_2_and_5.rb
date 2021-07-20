@@ -1,6 +1,4 @@
 class NECB2011
-
-
   def add_sys2_FPFC_sys5_TPFC(model:,
                               zones:,
                               chiller_type:,
@@ -8,8 +6,8 @@ class NECB2011
                               mau_cooling_type:,
                               hw_loop:)
 
-    #System 2 AHU data
-    system_data = Hash.new
+    # System 2 AHU data
+    system_data = {}
     system_data[:name] = 'Sys_2_Make-up air unit'
     system_data[:PreheatDesignTemperature] = 7.0
     system_data[:PreheatDesignHumidityRatio] = 0.008
@@ -33,13 +31,11 @@ class NECB2011
     system_data[:SetpointManagerSingleZoneReheatSupplyTempMin] = 13.1
     system_data[:MinimumSystemAirFlowRatio] = 1.0
 
-    #System 2 Zone data
+    # System 2 Zone data
     system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
     system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
     system_data[:ZoneCoolingSizingFactor] = 1.1
     system_data[:ZoneHeatingSizingFactor] = 1.3
-
-
 
     # System Type 2: FPFC or System 5: TPFC
     # This measure creates:
@@ -62,11 +58,11 @@ class NECB2011
 
     # Create a chilled water loop
     chw_loop = OpenStudio::Model::PlantLoop.new(model)
-    chiller1, chiller2 = self.setup_chw_loop_with_components(model, chw_loop, chiller_type)
+    chiller1, chiller2 = setup_chw_loop_with_components(model, chw_loop, chiller_type)
 
     # Create a condenser Loop
     cw_loop = OpenStudio::Model::PlantLoop.new(model)
-    ctower = self.setup_cw_loop_with_components(model, cw_loop, chiller1, chiller2)
+    ctower = setup_cw_loop_with_components(model, cw_loop, chiller1, chiller2)
 
     # Set up make-up air unit for ventilation
     # TO DO: Need to investigate characteristics of make-up air unit for NECB reference
@@ -74,8 +70,6 @@ class NECB2011
 
     air_loop = mau_air_loop = common_air_loop(model: model, system_data: system_data)
     air_loop.setName(system_data[:name])
-
-
 
     fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
 
@@ -86,8 +80,8 @@ class NECB2011
 
     # Add DX or hydronic cooling coil
     if mau_cooling_type == 'DX'
-      clg_coil = self.add_onespeed_DX_coil(model, tpfc_clg_availability_sch)
-      clg_coil.setName("CoilCoolingDXSingleSpeed_dx")
+      clg_coil = add_onespeed_DX_coil(model, tpfc_clg_availability_sch)
+      clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
     elsif mau_cooling_type == 'Hydronic'
       clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, tpfc_clg_availability_sch)
       chw_loop.addDemandBranchForComponent(clg_coil)
@@ -147,27 +141,28 @@ class NECB2011
       hw_loop.addDemandBranchForComponent(fc_htg_coil)
       chw_loop.addDemandBranchForComponent(fc_clg_coil)
 
-      #add connections to FPFC.
+      # add connections to FPFC.
       zone_fc = OpenStudio::Model::ZoneHVACFourPipeFanCoil.new(model, always_on, fc_fan, fc_clg_coil, fc_htg_coil)
       zone_fc.addToThermalZone(zone)
 
       # Create a diffuser and attach the zone/diffuser pair to the air loop (make-up air unit)
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
       air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
-    end # zone loop
-    sys_abbr = "sys_2"
-    sys_abbr = "sys_5" if fan_coil_type == "TPFC"
+      # zone loop
+    end
+    sys_abbr = 'sys_2'
+    sys_abbr = 'sys_5' if fan_coil_type == 'TPFC'
     sys_name_pars = {}
-    sys_name_pars["sys_hr"] = "none"
-    sys_name_pars["sys_clg"] = mau_cooling_type
-    sys_name_pars["sys_htg"] = "g"
-    sys_name_pars["sys_sf"] = "cv"
-    sys_name_pars["zone_htg"] = fan_coil_type
-    sys_name_pars["zone_clg"] = fan_coil_type
-    sys_name_pars["sys_rf"] = "none"
+    sys_name_pars['sys_hr'] = 'none'
+    sys_name_pars['sys_clg'] = mau_cooling_type
+    sys_name_pars['sys_htg'] = 'g'
+    sys_name_pars['sys_sf'] = 'cv'
+    sys_name_pars['zone_htg'] = fan_coil_type
+    sys_name_pars['zone_clg'] = fan_coil_type
+    sys_name_pars['sys_rf'] = 'none'
     assign_base_sys_name(mau_air_loop,
                          sys_abbr: sys_abbr,
-                         sys_oa: "doas",
+                         sys_oa: 'doas',
                          sys_name_pars: sys_name_pars)
   end
 end
