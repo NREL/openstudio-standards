@@ -1,7 +1,5 @@
 class ECMS
-
   def apply_nv(model:, nv_type:, nv_opening_fraction:, nv_temp_out_min:, nv_delta_temp_in_out:)
-
     ##### If any of users' inputs are nil/false/none, do nothing.
     ##### If users' input for 'nv_type' is 'NECB_Default', do nothing.
     ##### If any of users' inputs for nv_opening_fraction/nv_temp_out_min/nv_delta_temp_in_out is 'NECB_Default', use default values as defined here.
@@ -27,17 +25,16 @@ class ECMS
     end
     ##### Set default nv_temp_out_min as 13.0
     if nv_temp_out_min == 'NECB_Default'
-      nv_temp_out_min = 13.0 #Note: 13.0 is based on inputs from Michel Tardif re a real school in QC
+      nv_temp_out_min = 13.0 # Note: 13.0 is based on inputs from Michel Tardif re a real school in QC
     end
     ##### Set default nv_delta_temp_in_out as 1.0
     if nv_delta_temp_in_out == 'NECB_Default'
-      nv_delta_temp_in_out = 1.0 #Note: 1.0 is based on inputs from Michel Tardif re a real school in QC
+      nv_delta_temp_in_out = 1.0 # Note: 1.0 is based on inputs from Michel Tardif re a real school in QC
     end
 
-    setpoint_adjustment_for_nv = 2.0  #This is to adjust heating and cooling setpoint temperature as min and max indoor temperature to have NV
+    setpoint_adjustment_for_nv = 2.0 # This is to adjust heating and cooling setpoint temperature as min and max indoor temperature to have NV
 
     model.getZoneHVACEquipmentLists.sort.each do |zone_hvac_equipment_list|
-
       thermal_zone = zone_hvac_equipment_list.thermalZone
 
       thermal_zone.spaces.sort.each do |space|
@@ -54,7 +51,7 @@ class ECMS
         if thermal_zone.thermostat.is_initialized
           if thermal_zone.thermostat.get.to_ThermostatSetpointDualSetpoint.is_initialized
             if thermal_zone.thermostat.get.to_ThermostatSetpointDualSetpoint.get.heatingSetpointTemperatureSchedule.is_initialized ||
-                thermal_zone.thermostat.get.to_ThermostatSetpointDualSetpoint.get.coolingSetpointTemperatureSchedule.is_initialized
+               thermal_zone.thermostat.get.to_ThermostatSetpointDualSetpoint.get.coolingSetpointTemperatureSchedule.is_initialized
               zone_thermostat = thermal_zone.thermostatSetpointDualSetpoint.get
               zone_clg_thermostat_sch = zone_thermostat.coolingSetpointTemperatureSchedule.get
               zone_htg_thermostat_sch = zone_thermostat.heatingSetpointTemperatureSchedule.get
@@ -87,14 +84,12 @@ class ECMS
               min_Tin_schedule_defaultDay.setName('natural_ventilation_min_Tin_schedule_defaultDay')
               min_Tin_schedule_defaultDay_times = min_Tin_schedule_defaultDay.times
               min_Tin_schedule_defaultDay_values = min_Tin_schedule_defaultDay.values
-              min_Tin_schedule_defaultDay_values_adjusted = min_Tin_schedule_defaultDay_values.map { |i| i - setpoint_adjustment_for_nv }
+              min_Tin_schedule_defaultDay_values_adjusted = min_Tin_schedule_defaultDay_values.map { |index| index - setpoint_adjustment_for_nv }
               i = 0.0
               min_Tin_schedule_defaultDay_times.each do |time|
                 min_Tin_schedule_defaultDay.addValue(time, min_Tin_schedule_defaultDay_values_adjusted[i])
                 i += 1.0
               end
-
-
             end
           end
         end
@@ -109,20 +104,20 @@ class ECMS
             end
           end
         end
-        oa_per_person_normalized_by_number_of_windows = outdoor_air_flow_per_person/number_of_windows
-        oa_per_floor_area_normalized_by_number_of_windows = outdoor_air_flow_per_floor_area/number_of_windows
+        oa_per_person_normalized_by_number_of_windows = outdoor_air_flow_per_person / number_of_windows
+        oa_per_floor_area_normalized_by_number_of_windows = outdoor_air_flow_per_floor_area / number_of_windows
 
         ##### Add NV in each space that has window(s) using two objects: "ZoneVentilation:DesignFlowRate" and "ZoneVentilation:WindandStackOpenArea"
         space.surfaces.sort.each do |surface|
           surface.subSurfaces.sort.each do |subsurface|
             if (subsurface.subSurfaceType == 'OperableWindow' || subsurface.subSurfaceType == 'FixedWindow') && subsurface.outsideBoundaryCondition == 'Outdoors'
-              window_azimuth_deg = OpenStudio::convert(subsurface.azimuth,"rad","deg").get
+              window_azimuth_deg = OpenStudio.convert(subsurface.azimuth, 'rad', 'deg').get
               window_area = subsurface.netArea
 
               ##### Define a constant schedule for operable windows
               operable_window_schedule = OpenStudio::Model::ScheduleConstant.new(model)
               operable_window_schedule.setName('operable_window_schedule_constant')
-              operable_window_schedule.setScheduleTypeLimits(BTAP::Resources::Schedules::StandardScheduleTypeLimits::get_on_off(model))
+              operable_window_schedule.setScheduleTypeLimits(BTAP::Resources::Schedules::StandardScheduleTypeLimits.get_on_off(model))
 
               ##### Add a "ZoneVentilation:DesignFlowRate" object for NV to set OA per person.
               zn_vent_design_flow_rate_1 = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(model)
@@ -133,7 +128,7 @@ class ECMS
               zn_vent_design_flow_rate_1.setMaximumIndoorTemperatureSchedule(max_Tin_schedule)
               zn_vent_design_flow_rate_1.setMinimumOutdoorTemperature(nv_temp_out_min)
               zn_vent_design_flow_rate_1.setMaximumOutdoorTemperatureSchedule(max_Tin_schedule)
-              zn_vent_design_flow_rate_1.setDeltaTemperature(nv_delta_temp_in_out) #E+ I/O Ref.: "This is the temperature difference between the indoor and outdoor air dry-bulb temperatures below which ventilation is shutoff."
+              zn_vent_design_flow_rate_1.setDeltaTemperature(nv_delta_temp_in_out) # E+ I/O Ref.: "This is the temperature difference between the indoor and outdoor air dry-bulb temperatures below which ventilation is shutoff."
               zone_hvac_equipment_list.addEquipment(zn_vent_design_flow_rate_1)
 
               ##### Add another "ZoneVentilation:DesignFlowRate" object for NV to set OA per floor area.
@@ -162,28 +157,26 @@ class ECMS
               zn_vent_wind_and_stack.setMaximumOutdoorTemperatureSchedule(max_Tin_schedule)
               zn_vent_wind_and_stack.setDeltaTemperature(nv_delta_temp_in_out)
               zone_hvac_equipment_list.addEquipment(zn_vent_wind_and_stack)
-
-            end #if (subsurface.subSurfaceType == 'OperableWindow' || subsurface.subSurfaceType == 'FixedWindow') && subsurface.outsideBoundaryCondition == 'Outdoors'
-          end #surface.subSurfaces.sort.each do |subsurface|
-        end #space.surfaces.sort.each do |surface|
-
-
-      end #thermal_zone.spaces.sort.each do |space|
-
-    end #model.getZoneHVACEquipmentLists.sort.each do |zone_hvac_equipment_list|
-
+              # if (subsurface.subSurfaceType == 'OperableWindow' || subsurface.subSurfaceType == 'FixedWindow') && subsurface.outsideBoundaryCondition == 'Outdoors'
+            end
+            # surface.subSurfaces.sort.each do |subsurface|
+          end
+          # space.surfaces.sort.each do |surface|
+        end
+        # thermal_zone.spaces.sort.each do |space|
+      end
+      # model.getZoneHVACEquipmentLists.sort.each do |zone_hvac_equipment_list|
+    end
     ##### Add AvailabilityManagerHybridVentilation to "prevents simultaneous natural ventilation and HVAC system operation" (Ref: E+ I/O)
     model.getAirLoopHVACs.sort.each do |air_loop|
       air_loop.availabilityManagers.sort.each do |avail_mgr|
         if avail_mgr.to_AvailabilityManagerHybridVentilation.empty?
           avail_mgr_hybr_vent = OpenStudio::Model::AvailabilityManagerHybridVentilation.new(model)
-          avail_mgr_hybr_vent.setMinimumOutdoorTemperature(nv_temp_out_min) #Note: since "Ventilation Control Mode" is by default set to "Temperature (i.e. 1)", only min and max Tout are needed. (see E+ I/O Ref.)  #Note: Tout_min is to avoid overcooling (see E+ I/O Ref).
-          avail_mgr_hybr_vent.setMaximumOutdoorTemperature(30.0) #Note: the AvailabilityManagerHybridVentilation obj does not have a schedule field for Tout, so it has been set to a fixed value of 30C.
+          avail_mgr_hybr_vent.setMinimumOutdoorTemperature(nv_temp_out_min) # Note: since "Ventilation Control Mode" is by default set to "Temperature (i.e. 1)", only min and max Tout are needed. (see E+ I/O Ref.)  #Note: Tout_min is to avoid overcooling (see E+ I/O Ref).
+          avail_mgr_hybr_vent.setMaximumOutdoorTemperature(30.0) # Note: the AvailabilityManagerHybridVentilation obj does not have a schedule field for Tout, so it has been set to a fixed value of 30C.
           air_loop.addAvailabilityManager(avail_mgr_hybr_vent)
         end
       end
     end
-
   end
-
 end

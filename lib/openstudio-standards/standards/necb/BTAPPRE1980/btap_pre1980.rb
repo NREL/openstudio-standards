@@ -1,19 +1,17 @@
 # This class holds methods that apply NECB2011 rules.
 # @ref [References::NECB2011]
 class BTAPPRE1980 < NECB2011
-  @template = self.new.class.name # rubocop:disable Style/ClassVars
+  @template = new.class.name
   register_standard(@template)
-
 
   def initialize
     super()
-    @template = self.class.name
-    @standards_data = self.load_standards_database_new()
-    self.corrupt_standards_database()
+    @standards_data = load_standards_database_new
+    corrupt_standards_database
   end
 
-  def load_standards_database_new()
-    #load NECB2011 data.
+  def load_standards_database_new
+    # load NECB2011 data
     super()
 
     if __dir__[0] == ':' # Running from OpenStudio CLI
@@ -56,7 +54,7 @@ class BTAPPRE1980 < NECB2011
   #     # <-3.1:  Remove all the windows/skylights
   #     # > 1:  Do nothing
   def apply_fdwr_srr_daylighting(model:, fdwr_set: -2.0, srr_set: -2.0)
-    fdwr_set = -2.0 if (fdwr_set == 'NECB_default') || (fdwr_set.nil?) || (fdwr_set.to_f.round(0) == -1.0)
+    fdwr_set = -2.0 if (fdwr_set == 'NECB_default') || fdwr_set.nil? || (fdwr_set.to_f.round(0) == -1.0)
     srr_set = -2.0 if (srr_set == 'NECB_default') || srr_set.nil? || (srr_set.to_f.round(0) == -1.0)
     fdwr_set = fdwr_set.to_f
     srr_set = srr_set.to_f
@@ -67,8 +65,10 @@ class BTAPPRE1980 < NECB2011
 
   def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default')
     raise('validation of model failed.') unless validate_initial_model(model)
+
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
+
     # This is needed for NECB2011 as a workaround for sizing the reheat boxes
     model.getAirTerminalSingleDuctVAVReheats.each { |iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj) }
     # Apply the prototype HVAC assumptions
@@ -81,25 +81,8 @@ class BTAPPRE1980 < NECB2011
     return sql_db_vars_map
   end
 
-  #occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method
+  # occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method
   def set_occ_sensor_spacetypes(model, space_type_map)
     return true
   end
-
-=begin
-  def apply_loop_pump_power(model:, sizing_run_dir:)
-    # NECB2015 Custom code
-    # Do another sizing run to take into account adjustments to equipment efficiency etc. on capacities. This was done primarily
-    # because the cooling tower loop capacity is affected by the chiller COP.  If the chiller COP is not properly set then
-    # the cooling tower loop capacity can be significantly off which will affect the NECB 2015 maximum loop pump capacity.  Found
-    # all sizing was off somewhat if the additional sizing run was not done.
-    if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
-      raise("sizing run 2 failed!")
-    end
-    # Apply maxmimum loop pump power normalized by peak demand by served spaces as per NECB2015 5.2.6.3.(1)
-    apply_maximum_loop_pump_power(model)
-    #model = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
-    return model
-  end
-=end
 end
