@@ -1,7 +1,6 @@
 class BTAPPRE1980
-
   # Some tests still require a simple way to set up a system without sizing.. so we are keeping the auto_zoner flag for this  method.
-  #
+
   def add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model:,
                                                                                          zones:,
                                                                                          heating_coil_type:,
@@ -9,8 +8,7 @@ class BTAPPRE1980
                                                                                          hw_loop:,
                                                                                          new_auto_zoner: true)
 
-
-    system_data = Hash.new
+    system_data = {}
     system_data[:name] = 'Sys_3_PSZ'
     system_data[:CentralCoolingDesignSupplyAirTemperature] = 13.0
     system_data[:CentralHeatingDesignSupplyAirTemperature] = 43.0
@@ -32,8 +30,7 @@ class BTAPPRE1980
     system_data[:CentralCoolingDesignSupplyAirHumidityRatio] = 0.0085
     system_data[:CentralHeatingDesignSupplyAirHumidityRatio] = 0.0080
 
-
-    #System 3 Zone data
+    # System 3 Zone data
     system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
     system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
     system_data[:SetpointManagerSingleZoneReheatSupplyTempMin] = 13.0
@@ -43,7 +40,6 @@ class BTAPPRE1980
     system_data[:ZoneCoolingSizingFactor] = 1.1
     system_data[:ZoneHeatingSizingFactor] = 1.3
     system_data[:MinimumOutdoorDryBulbTemperatureforCompressorOperation] = -10.0
-
 
     if new_auto_zoner == true
       # Create system airloop
@@ -65,7 +61,6 @@ class BTAPPRE1980
                                   hw_loop,
                                   model,
                                   zone)
-
       end
     else
       zones.each do |zone|
@@ -78,22 +73,21 @@ class BTAPPRE1980
       end
     end
 
-    #Modifying airloop name.
+    # Modifying airloop name.
     sys_name_pars = {}
-    sys_name_pars["sys_hr"] = "none"
-    sys_name_pars["sys_clg"] = "dx"
-    sys_name_pars["sys_htg"] = heating_coil_type
-    sys_name_pars["sys_sf"] = "cv"
-    sys_name_pars["zone_htg"] = baseboard_type
-    sys_name_pars["zone_clg"] = "none"
-    sys_name_pars["sys_rf"] = "none"
+    sys_name_pars['sys_hr'] = 'none'
+    sys_name_pars['sys_clg'] = 'dx'
+    sys_name_pars['sys_htg'] = heating_coil_type
+    sys_name_pars['sys_sf'] = 'cv'
+    sys_name_pars['zone_htg'] = baseboard_type
+    sys_name_pars['zone_clg'] = 'none'
+    sys_name_pars['sys_rf'] = 'none'
     assign_base_sys_name(air_loop,
-                         sys_abbr: "sys_3",
-                         sys_oa: "mixed",
+                         sys_abbr: 'sys_3',
+                         sys_oa: 'mixed',
                          sys_name_pars: sys_name_pars)
     return true
   end
-
 
   def add_system_3_and_8_airloop(heating_coil_type, model, system_data, control_zone)
     # System Type 3: PSZ-AC
@@ -107,7 +101,6 @@ class BTAPPRE1980
     # boiler_fueltype choices match OS choices for Boiler component fuel type, i.e.
     # "NaturalGas","Electricity","PropaneGas","FuelOilNo1","FuelOilNo2","Coal","Diesel","Gasoline","OtherFuel1"
     # For BTAPPRE1980 (and BTAP1980TO2010 which is created from BTAPPRE1980) add a constant speed return fan
-
 
     always_on = model.alwaysOnDiscreteSchedule
     air_loop = common_air_loop(model: model, system_data: system_data)
@@ -146,7 +139,7 @@ class BTAPPRE1980
 
     # Set up DX coil with NECB performance curve characteristics;
     clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
-    clg_coil.setName("CoilCoolingDXSingleSpeed_dx")
+    clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
 
     # oa_controller
     oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -194,5 +187,4 @@ class BTAPPRE1980
     air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
     add_zone_baseboards(baseboard_type: baseboard_type, hw_loop: hw_loop, model: model, zone: zone)
   end
-
 end
