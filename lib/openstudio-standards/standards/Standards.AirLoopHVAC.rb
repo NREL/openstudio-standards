@@ -853,13 +853,14 @@ class Standard
           sys_fans.each do |fan|
             if fan.pressureRise.to_f > max_pd
               max_pd = fan.pressureRise.to_f
-              supply_fan = fan  # assume supply fan has higher pressure drop
+              supply_fan = fan # assume supply fan has higher pressure drop
             end
           end
-          fan_power = supply_fan.autosizedMaximumFlowRate.to_f*supply_fan.pressureRise.to_f/supply_fan.fanTotalEfficiency.to_f
-          total_cooling_capacity_w += coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f*
-              supply_fan.autosizedMaximumFlowRate.to_f/coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.to_f+
-              fan_power/coil.speeds.last.referenceUnitGrossRatedSensibleHeatRatio.to_f
+          fan_power = supply_fan.autosizedMaximumFlowRate.to_f * supply_fan.pressureRise.to_f / supply_fan.fanTotalEfficiency.to_f
+          nominal_cooling_capacity_w = coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
+          nominal_flow_rate_factor = supply_fan.autosizedMaximumFlowRate.to_f / coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.to_f
+          fan_power_adjustment_w = fan_power / coil.speeds.last.referenceUnitGrossRatedSensibleHeatRatio.to_f
+          total_cooling_capacity_w += nominal_cooling_capacity_w * nominal_flow_rate_factor + fan_power_adjustment_w
         elsif coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
           total_cooling_capacity_w += coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
         else
