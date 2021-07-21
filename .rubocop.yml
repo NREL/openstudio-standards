@@ -11,7 +11,6 @@ AllCops:
     - 'lib/openstudio-standards/hvac_sizing/**/*'
     - 'lib/openstudio-standards/btap/**/*'
     - 'lib/openstudio-standards/standards/necb/**/*'
-    - 'utilities/**/*'
     - 'lib/openstudio-standards/prototypes/common/do_not_edit_metaclasses.rb'
 
 inherit_from:
