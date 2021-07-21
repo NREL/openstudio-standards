@@ -2,14 +2,6 @@
   "refrigeration_system": [
     {
       "template": "DOE Ref Pre-1980",
-      "building_type": "College",
-      "size_category": "Any",
-      "system_type": "Low Temperature",
-      "refrigerant": "R404a",
-      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
-    },
-    {
-      "template": "DOE Ref Pre-1980",
       "building_type": "FullServiceRestaurant",
       "size_category": "Any",
       "system_type": "Low Temperature",
