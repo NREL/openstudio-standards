@@ -154,7 +154,8 @@ class BTAPDatapoint
                                      oa_scale: @options[:oa_scale],
                                      infiltration_scale: @options[:infiltration_scale],
                                      chiller_type: @options[:chiller_type],
-                                     output_variables: @options[:output_variables]
+                                     output_variables: @options[:output_variables],
+                                     airloop_economizer: @options[:airloop_economizer]
 
       )
 
