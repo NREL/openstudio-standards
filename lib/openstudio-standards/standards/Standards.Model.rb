@@ -5345,9 +5345,7 @@ class Standard
     # Air loops
     model.getAirLoopHVACs.each do |air_loop|
       # Don't remove airloops representing non-mechanically cooled systems
-      # DEM: temporarily change this to allow test_appendix_g_prm tests to pass
-      # air_loop.remove unless air_loop.additionalProperties.hasFeature("non_mechanically_cooled")
-      air_loop.remove
+      air_loop.remove unless air_loop.additionalProperties.hasFeature("non_mechanically_cooled")
     end
 
     # Zone equipment

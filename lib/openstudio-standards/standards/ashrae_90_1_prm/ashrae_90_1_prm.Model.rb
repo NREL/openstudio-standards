@@ -422,7 +422,6 @@ class ASHRAE901PRM < Standard
     return true
   end
 
-  #
   # Add design day schedule objects for space loads, for PRM 2019 baseline models
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::model::Model] OpenStudio model object
