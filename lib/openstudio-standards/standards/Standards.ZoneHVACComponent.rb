@@ -108,16 +108,14 @@ class Standard
     # Get the fan
     if !zone_hvac.nil?
       fan_obj = if zone_hvac.supplyAirFan.to_FanConstantVolume.is_initialized
-              zone_hvac.supplyAirFan.to_FanConstantVolume.get
-            elsif zone_hvac.supplyAirFan.to_FanVariableVolume.is_initialized
-              zone_hvac.supplyAirFan.to_FanVariableVolume.get
-            elsif zone_hvac.supplyAirFan.to_FanOnOff.is_initialized
-              zone_hvac.supplyAirFan.to_FanOnOff.get
-            elsif zone_hvac.supplyAirFan.to_FanSystemModel.is_initialized
-              zone_hvac.supplyAirFan.to_FanSystemModel.get
-            else
-              nil
-            end
+                  zone_hvac.supplyAirFan.to_FanConstantVolume.get
+                elsif zone_hvac.supplyAirFan.to_FanVariableVolume.is_initialized
+                  zone_hvac.supplyAirFan.to_FanVariableVolume.get
+                elsif zone_hvac.supplyAirFan.to_FanOnOff.is_initialized
+                  zone_hvac.supplyAirFan.to_FanOnOff.get
+                elsif zone_hvac.supplyAirFan.to_FanSystemModel.is_initialized
+                  zone_hvac.supplyAirFan.to_FanSystemModel.get
+                end
       return fan_obj
     else
       return nil

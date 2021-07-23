@@ -31,7 +31,6 @@ class Standard
   end
 
   def interior_lighting_get_prm_data(space_type)
-
     standards_space_type = if space_type.standardsSpaceType.is_initialized
                              space_type.standardsSpaceType.get
                            end
@@ -546,6 +545,7 @@ class Standard
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -592,9 +592,9 @@ class Standard
         # modify day schedule
         sptypname = space_type.name.get.to_s
         lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
-          day_rule = week_rule.daySchedule()
+          day_rule = week_rule.daySchedule
           day_rule_name = day_rule.name.to_s
-          if not dayschedule_name_check.include?(day_rule_name)
+          if !dayschedule_name_check.include?(day_rule_name)
             dayschedule_name_check << day_rule_name
             times = day_rule.times()
             # remove the effect of occupancy sensors
@@ -603,9 +603,9 @@ class Standard
               day_rule.removeValue(time)
               new_value = old_value / (1.0 - space_type_properties['occup_sensor_savings'].to_f)
               if new_value > 1
-                day_rule.addValue(time,1.0)
+                day_rule.addValue(time, 1.0)
               else
-                day_rule.addValue(time,new_value)
+                day_rule.addValue(time, new_value)
               end
             end
           end
@@ -613,7 +613,7 @@ class Standard
         # modify default schedule
         day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
         day_rule_name = day_rule.name.to_s
-        if not dayschedule_name_check.include?(day_rule_name)
+        if !dayschedule_name_check.include?(day_rule_name)
           dayschedule_name_check << day_rule_name
           times = day_rule.times()
           # remove the effect of occupancy sensors
@@ -622,9 +622,9 @@ class Standard
             day_rule.removeValue(time)
             new_value = old_value / (1.0 - space_type_properties['occup_sensor_savings'].to_f)
             if new_value > 1
-              day_rule.addValue(time,1.0)
+              day_rule.addValue(time, 1.0)
             else
-              day_rule.addValue(time,new_value)
+              day_rule.addValue(time, new_value)
             end
           end
         end

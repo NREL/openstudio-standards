@@ -101,5 +101,4 @@ class ASHRAE901PRM < Standard
 
     return true
   end
-
 end

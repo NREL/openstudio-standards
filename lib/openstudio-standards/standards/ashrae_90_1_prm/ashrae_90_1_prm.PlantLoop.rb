@@ -1,5 +1,4 @@
 class ASHRAE901PRM < Standard
-
   # Keep only one cooling tower, but use one condenser pump per chiller
   def plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
     # Skip non-cooling plants
@@ -86,6 +85,5 @@ class ASHRAE901PRM < Standard
       # Attach the new headered pumps
       new_pump.addToNode(plant_loop.supplyInletNode)
     end
-
   end
 end

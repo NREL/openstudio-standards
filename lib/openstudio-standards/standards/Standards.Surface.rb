@@ -363,7 +363,7 @@ class Standard
   # @retrun [Double] UA product in W/K
   def surface_subsurface_ua(surface)
     # Compute the surface UA product
-    if surface.outsideBoundaryCondition.to_s == "GroundFCfactorMethod" && surface.construction.is_initialized
+    if surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod' && surface.construction.is_initialized
       cons = surface.construction.get
       fc_obj_type = cons.iddObjectType.valueName.to_s
       case fc_obj_type
@@ -387,7 +387,7 @@ class Standard
 
           r_eff = 1 / cfac + r_soil
           u_eff = 1 / (r_eff + r_inside_film + r_outside_film)
-          
+
           ua = u_eff * surface.netArea
       end
     else

@@ -3597,5 +3597,4 @@ class Standard
 
     return relief_fan_power
   end
-
 end
