@@ -227,7 +227,8 @@ class NECB2011 < Standard
                                    electrical_loads_scale: nil,
                                    oa_scale: nil,
                                    infiltration_scale: nil,
-                                   output_variables: nil
+                                   output_variables: nil,
+                                   airloop_economizer: nil
   )
 
 
@@ -280,7 +281,8 @@ class NECB2011 < Standard
                                 oa_scale: oa_scale,
                                 infiltration_scale: infiltration_scale,
                                 chiller_type: chiller_type, # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) e.g. 'VSD'
-                                output_variables: output_variables
+                                output_variables: output_variables,
+                                airloop_economizer: airloop_economizer
     )
 
   end
@@ -346,7 +348,8 @@ class NECB2011 < Standard
                            electrical_loads_scale: nil,
                            oa_scale: nil,
                            infiltration_scale: nil,
-                           output_variables: nil
+                           output_variables: nil,
+                           airloop_economizer: nil
 
   )
 
@@ -405,7 +408,8 @@ class NECB2011 < Standard
                                    pv_ground_tilt_angle: pv_ground_tilt_angle,
                                    pv_ground_azimuth_angle: pv_ground_azimuth_angle,
                                    pv_ground_module_description: pv_ground_module_description,
-                                   chiller_type: chiller_type
+                                   chiller_type: chiller_type,
+                                   airloop_economizer: airloop_economizer
     )
     self.set_output_variables(model:model, output_variables: output_variables)
     return model
@@ -459,7 +463,8 @@ class NECB2011 < Standard
                                      pv_ground_tilt_angle:,
                                      pv_ground_azimuth_angle:,
                                      pv_ground_module_description:,
-                                     chiller_type: 'NECB_Default'
+                                     chiller_type: 'NECB_Default',
+                                     airloop_economizer: nil
   )
 
     # Create ECM object.
@@ -500,6 +505,8 @@ class NECB2011 < Standard
     model_add_daylighting_controls(model) if daylighting_type == 'add_daylighting_controls'
     # Apply Chiller efficiency
     ecm.modify_chiller_efficiency(model: model, chiller_type: chiller_type)
+    # Apply airloop economizer
+    ecm.add_airloop_economizer(model: model, airloop_economizer: airloop_economizer)
 
     # -------Pump sizing required by some vintages----------------
     # Apply Pump power as required.
