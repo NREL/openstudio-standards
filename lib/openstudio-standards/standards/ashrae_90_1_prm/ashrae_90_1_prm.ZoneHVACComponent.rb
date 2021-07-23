@@ -61,8 +61,8 @@ class ASHRAE901PRM < Standard
       end
       dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
 
-      # Determine allowable fan BHP
-      # @TODO: adjustments for single zone system, exisiting method is design around air loops
+      # Determine allowable fan BHP and power
+      # TODO: adjustments for single zone system, exisiting method is design around air loops
       allowable_fan_bhp = 0.00094 * dsn_air_flow_cfm
       fan_apply_standard_minimum_motor_efficiency(fan, allowable_fan_bhp)
       allowable_power_w = allowable_fan_bhp * 746 / fan.motorEfficiency

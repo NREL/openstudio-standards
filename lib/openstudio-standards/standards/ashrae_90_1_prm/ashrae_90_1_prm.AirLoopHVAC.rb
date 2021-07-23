@@ -58,8 +58,8 @@ class ASHRAE901PRM < Standard
       # Calculate the allowable fan motor bhp for the air loop
       allowable_fan_bhp = air_loop_hvac_allowable_system_brake_horsepower(air_loop_hvac) + fan_pwr_adjustment_bhp
 
-      # Divide the allowable power evenly between the fans
-      # on this air loop.
+      # Divide the allowable power based
+      # individual zone air flow
       air_loop_total_zone_design_airflow = 0
       air_loop_hvac.thermalZones.sort.each do |zone|
         zone_air_flow = zone.designAirFlowRate.to_f
