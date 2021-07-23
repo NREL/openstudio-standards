@@ -1,4 +1,3 @@
-
 # Custom changes for the SmallOffice prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -14,7 +13,7 @@ module SmallOffice
 
     # reset defrost time fraction
     # TODO: set this to a reasonable defrost time fraction based on research and implement in Prototype.CoilHeatingDXSingleSpeed
-    model.getCoilHeatingDXSingleSpeeds.each { |coil| coil.resetDefrostTimePeriodFraction }
+    model.getCoilHeatingDXSingleSpeeds.each(&:resetDefrostTimePeriodFraction)
 
     return true
   end
@@ -29,13 +28,17 @@ module SmallOffice
       if template == '90.1-2004'
         infiltration_per_zone_entrydoor = 0.129785425
         infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeSmall INFIL_Door_Opening_SCH'))
-      elsif template == '90.1-2007' || template == '90.1-2010'|| template == '90.1-2013'
+      elsif template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
         case climate_zone
-        when 'ASHRAE 169-2006-1A',
+        when 'ASHRAE 169-2006-0A',
+             'ASHRAE 169-2006-1A',
+             'ASHRAE 169-2006-0B',
              'ASHRAE 169-2006-1B',
              'ASHRAE 169-2006-2A',
              'ASHRAE 169-2006-2B',
+             'ASHRAE 169-2013-0A',
              'ASHRAE 169-2013-1A',
+             'ASHRAE 169-2013-0B',
              'ASHRAE 169-2013-1B',
              'ASHRAE 169-2013-2A',
              'ASHRAE 169-2013-2B'
@@ -76,61 +79,85 @@ module SmallOffice
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting daylight sensor positions and fractions')
 
     adjustments = [
-                    { '90.1-2010' => { 'Perimeter_ZN_1' => { 'sensor_1_frac' => 0.02,
-                                                             'sensor_2_frac' => 0.1,
-                                                             'sensor_1_xyz' => [3.3236, 1.6002, 0.762],
-                                                             'sensor_2_xyz' => [8.9611, 1.6002, 0.762],
-																												},
-                                       'Perimeter_ZN_2' => { 'sensor_1_frac' => 0.06,
-                                                             'sensor_2_frac' => 0.15,
-                                                             'sensor_1_xyz' => [26.0898, 3.3236, 0.762],
-                                                             'sensor_2_xyz' => [26.0898, 9.23, 0.762],
-																												},
-                                       'Perimeter_ZN_3' => { 'sensor_1_frac' => 0.1,
-                                                             'sensor_2_frac' => 0.02,
-                                                             'sensor_1_xyz' => [13.8684, 16.8598, 0.762],
-                                                             'sensor_2_xyz' => [24.3664, 16.8598, 0.762],
-																												},
-                                       'Perimeter_ZN_4' => { 'sensor_1_frac' => 0.06,
-                                                             'sensor_2_frac' => 0.15,
-                                                             'sensor_1_xyz' => [1.6002, 15.1364, 0.762],
-                                                             'sensor_2_xyz' => [1.6002, 9.2446, 0.762],
-																												},
-                                      },
-                      '90.1-2013' => { 'Perimeter_ZN_1' => { 'sensor_1_frac' => 0.2399,
-                                                             'sensor_2_frac' => 0.0302,
-                                                             'sensor_1_xyz' => [9.144, 1.6337, 0.762],
-                                                             'sensor_2_xyz' => [9.144, 3.2675, 0.762],
-																												},
-                                       'Perimeter_ZN_2' => { 'sensor_1_frac' => 0.2399,
-                                                             'sensor_2_frac' => 0.0302,
-                                                             'sensor_1_xyz' => [26.0898, 9.144, 0.762],
-                                                             'sensor_2_xyz' => [24.4561, 9.144, 0.762],
-																												},
-                                       'Perimeter_ZN_3' => { 'sensor_1_frac' => 0.2399,
-                                                             'sensor_2_frac' => 0.0302,
-                                                             'sensor_1_xyz' => [18.288, 16.825, 0.762],
-                                                             'sensor_2_xyz' => [18.288, 15.1925, 0.762],
-																												},
-                                       'Perimeter_ZN_4' => { 'sensor_1_frac' => 0.2399,
-                                                             'sensor_2_frac' => 0.0302,
-                                                             'sensor_1_xyz' => [1.6337, 9.144, 0.762],
-                                                             'sensor_2_xyz' => [3.2675, 9.144, 0.762],
-																												},
-                                      },
-										}
-                  ]
+      { '90.1-2010' => { 'Perimeter_ZN_1' => { 'sensor_1_frac' => 0.02,
+                                               'sensor_2_frac' => 0.1,
+                                               'sensor_1_xyz' => [3.3236, 1.6002, 0.762],
+                                               'sensor_2_xyz' => [8.9611, 1.6002, 0.762] },
+                         'Perimeter_ZN_2' => { 'sensor_1_frac' => 0.06,
+                                               'sensor_2_frac' => 0.15,
+                                               'sensor_1_xyz' => [26.0898, 3.3236, 0.762],
+                                               'sensor_2_xyz' => [26.0898, 9.23, 0.762] },
+                         'Perimeter_ZN_3' => { 'sensor_1_frac' => 0.1,
+                                               'sensor_2_frac' => 0.02,
+                                               'sensor_1_xyz' => [13.8684, 16.8598, 0.762],
+                                               'sensor_2_xyz' => [24.3664, 16.8598, 0.762] },
+                         'Perimeter_ZN_4' => { 'sensor_1_frac' => 0.06,
+                                               'sensor_2_frac' => 0.15,
+                                               'sensor_1_xyz' => [1.6002, 15.1364, 0.762],
+                                               'sensor_2_xyz' => [1.6002, 9.2446, 0.762] } },
+        '90.1-2013' => { 'Perimeter_ZN_1' => { 'sensor_1_frac' => 0.2399,
+                                               'sensor_2_frac' => 0.0302,
+                                               'sensor_1_xyz' => [9.144, 1.6337, 0.762],
+                                               'sensor_2_xyz' => [9.144, 3.2675, 0.762] },
+                         'Perimeter_ZN_2' => { 'sensor_1_frac' => 0.2399,
+                                               'sensor_2_frac' => 0.0302,
+                                               'sensor_1_xyz' => [26.0898, 9.144, 0.762],
+                                               'sensor_2_xyz' => [24.4561, 9.144, 0.762] },
+                         'Perimeter_ZN_3' => { 'sensor_1_frac' => 0.2399,
+                                               'sensor_2_frac' => 0.0302,
+                                               'sensor_1_xyz' => [18.288, 16.825, 0.762],
+                                               'sensor_2_xyz' => [18.288, 15.1925, 0.762] },
+                         'Perimeter_ZN_4' => { 'sensor_1_frac' => 0.2399,
+                                               'sensor_2_frac' => 0.0302,
+                                               'sensor_1_xyz' => [1.6337, 9.144, 0.762],
+                                               'sensor_2_xyz' => [3.2675, 9.144, 0.762] } },
+        '90.1-2016' => { 'Perimeter_ZN_1' => { 'sensor_1_frac' => 0.2399,
+                                               'sensor_2_frac' => 0.0302,
+                                               'sensor_1_xyz' => [9.144, 1.6337, 0.762],
+                                               'sensor_2_xyz' => [9.144, 3.2675, 0.762] },
+                         'Perimeter_ZN_2' => { 'sensor_1_frac' => 0.2399,
+                                               'sensor_2_frac' => 0.0302,
+                                               'sensor_1_xyz' => [26.0898, 9.144, 0.762],
+                                               'sensor_2_xyz' => [24.4561, 9.144, 0.762] },
+                         'Perimeter_ZN_3' => { 'sensor_1_frac' => 0.2399,
+                                               'sensor_2_frac' => 0.0302,
+                                               'sensor_1_xyz' => [18.288, 16.825, 0.762],
+                                               'sensor_2_xyz' => [18.288, 15.1925, 0.762] },
+                         'Perimeter_ZN_4' => { 'sensor_1_frac' => 0.2399,
+                                               'sensor_2_frac' => 0.0302,
+                                               'sensor_1_xyz' => [1.6337, 9.144, 0.762],
+                                               'sensor_2_xyz' => [3.2675, 9.144, 0.762] } },
+        '90.1-2019' => { 'Perimeter_ZN_1' => { 'sensor_1_frac' => 0.2399,
+                                               'sensor_2_frac' => 0.0302,
+                                               'sensor_1_xyz' => [9.144, 1.6337, 0.762],
+                                               'sensor_2_xyz' => [9.144, 3.2675, 0.762] },
+                         'Perimeter_ZN_2' => { 'sensor_1_frac' => 0.2399,
+                                               'sensor_2_frac' => 0.0302,
+                                               'sensor_1_xyz' => [26.0898, 9.144, 0.762],
+                                               'sensor_2_xyz' => [24.4561, 9.144, 0.762] },
+                         'Perimeter_ZN_3' => { 'sensor_1_frac' => 0.2399,
+                                               'sensor_2_frac' => 0.0302,
+                                               'sensor_1_xyz' => [18.288, 16.825, 0.762],
+                                               'sensor_2_xyz' => [18.288, 15.1925, 0.762] },
+                         'Perimeter_ZN_4' => { 'sensor_1_frac' => 0.2399,
+                                               'sensor_2_frac' => 0.0302,
+                                               'sensor_1_xyz' => [1.6337, 9.144, 0.762],
+                                               'sensor_2_xyz' => [3.2675, 9.144, 0.762] } } }
+    ]
 
     # Adjust daylight sensors in each space
     model.getSpaces.each do |space|
-      if adjustments[0].keys.include? (template)
-        if adjustments[0][template].keys.include? (space.name.to_s)
+      if adjustments[0].keys.include?(template)
+        if adjustments[0][template].keys.include?(space.name.to_s)
           adj = adjustments[0][template][space.name.to_s]
           next if space.thermalZone.empty?
+
           zone = space.thermalZone.get
           next if space.spaceType.empty?
+
           spc_type = space.spaceType.get
           next if spc_type.standardsSpaceType.empty?
+
           stds_spc_type = spc_type.standardsSpaceType.get
           # Adjust the primary sensor
           if adj['sensor_1_frac'] && zone.primaryDaylightingControl.is_initialized
@@ -170,11 +197,12 @@ module SmallOffice
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-
     return true
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 0.0)
 
     return true
   end

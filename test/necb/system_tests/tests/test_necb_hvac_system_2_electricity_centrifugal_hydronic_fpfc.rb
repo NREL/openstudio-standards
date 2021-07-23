@@ -24,7 +24,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # Hopefully this makes is easier to debug the HVAC stuff!
 
 
-class NECB_HVAC_System_2_Test < MiniTest::Test
+class NECB_HVAC_System_2_Test_E_C_H_FPFC < MiniTest::Test
 
 
   #System #2
@@ -38,7 +38,7 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
     chiller_type = 'Centrifugal'
     mua_cooling_type = 'Hydronic'
     fan_coil_type = 'FPFC'
-    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_system_2"
+    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_hvac_system_2_electricity_centrifugal_hydronic_fpfc"
 
     name = String.new
     #create folders

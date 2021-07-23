@@ -166,6 +166,7 @@ class Standard
     bottom_story = effective_num_stories[:story_hash].keys.first
     bottom_story.spaces.each do |space|
       next if space.multiplier > 1
+
       bottom_spaces[space] = space.floorArea
     end
     target_space = bottom_spaces.key(bottom_spaces.values.max)
@@ -342,6 +343,7 @@ class Standard
                        elevator_hourly_fractions[0]
                      end
         next if value == value_plus
+
         day_schedule.addValue(t, elevator_hourly_fractions[hr])
       end
     end
@@ -412,8 +414,9 @@ class Standard
 
     # check fraction lost on heat from elevator if traction, change to 100% lost if not setup that way.
     if elevator_type == 'Traction'
-      elevator.definition.to_ElectricEquipmentDefinition.get.setFractionLost(1.0)
+      elevator.definition.to_ElectricEquipmentDefinition.get.setFractionLatent(0.0)
       elevator.definition.to_ElectricEquipmentDefinition.get.setFractionRadiant(0.0)
+      elevator.definition.to_ElectricEquipmentDefinition.get.setFractionLost(1.0)
     end
 
     return elevator

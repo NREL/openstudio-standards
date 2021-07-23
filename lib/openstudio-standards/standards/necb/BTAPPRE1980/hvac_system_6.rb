@@ -138,6 +138,20 @@ class BTAPPRE1980
                               baseboard_type: baseboard_type,
                               hw_loop: hw_loop)
         end
+
+        # Modifying airloop name.
+        sys_name_pars = {}
+        sys_name_pars["sys_hr"] = "none"
+        sys_name_pars["sys_htg"] = heating_coil_type
+        sys_name_pars["sys_clg"] = "Chilled Water"
+        sys_name_pars["sys_sf"] = "vv"
+        sys_name_pars["zone_htg"] = baseboard_type
+        sys_name_pars["zone_clg"] = "none"
+        sys_name_pars["sys_rf"] = "vv"
+        assign_base_sys_name(air_loop,
+                             sys_abbr: "sys_6",
+                             sys_oa: "mixed",
+                             sys_name_pars: sys_name_pars)
       end
     end # next story
 

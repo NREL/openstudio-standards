@@ -1,4 +1,3 @@
-
 # Custom changes for the SuperMarket prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -71,7 +70,7 @@ module SuperMarket
       ventilation.setOutdoorAirFlowperPerson(0)
       ventilation.setOutdoorAirFlowperFloorArea(0.0015)
       # case template
-      # when '90.1-2004','90.1-2007','90.1-2010', '90.1-2013'
+      # when '90.1-2004','90.1-2007','90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019',
       #  ventilation.setOutdoorAirFlowRate(4.27112436)
       # end
     end
@@ -79,7 +78,7 @@ module SuperMarket
 
   def update_waterheater_loss_coefficient(model)
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019', 'NECB2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(0.798542707)
           water_heater.setOnCycleLossCoefficienttoAmbientTemperature(0.798542707)
@@ -94,7 +93,6 @@ module SuperMarket
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-
     return true
   end
 end

@@ -11,11 +11,9 @@ class ZEAEDGMultifamily < ASHRAE901
 
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return [nil, nil, nil] # No OA system
-    end
+    return [nil, nil, nil] unless oa_sys.is_initialized # No OA system
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
     economizer_type = oa_control.getEconomizerControlType
     oa_control.resetEconomizerMinimumLimitDryBulbTemperature
@@ -406,7 +404,6 @@ class ZEAEDGMultifamily < ASHRAE901
   #
   # @return [Bool] Returns true if required, false if not.
   def air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
-
     if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
       oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir

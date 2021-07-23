@@ -1,4 +1,3 @@
-
 class ASHRAE901 < Standard
   # @!group FanVariableVolume
 

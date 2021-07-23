@@ -1,4 +1,3 @@
-
 # Custom changes for the RetailStripmall prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -15,13 +14,17 @@ module RetailStripmall
       door_infiltration_map = { ['LGstore1', 'LGstore2'] => 0.388884328,
                                 ['SMstore1', 'SMstore2', 'SMstore3', 'SMstore4', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'] => 0.222287037 }
       infiltration_schedule = model_add_schedule(model, 'RetailStripmall INFIL_Door_Opening_SCH')
-    when '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
       case climate_zone
-      when 'ASHRAE 169-2006-1A',
+      when 'ASHRAE 169-2006-0A',
+           'ASHRAE 169-2006-1A',
+           'ASHRAE 169-2006-0B',
            'ASHRAE 169-2006-1B',
            'ASHRAE 169-2006-2A',
            'ASHRAE 169-2006-2B',
+           'ASHRAE 169-2013-0A',
            'ASHRAE 169-2013-1A',
+           'ASHRAE 169-2013-0B',
            'ASHRAE 169-2013-1B',
            'ASHRAE 169-2013-2A',
            'ASHRAE 169-2013-2B'
@@ -60,7 +63,7 @@ module RetailStripmall
 
     # Add economizer max fraction schedules
     case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019', 'NREL ZNE Ready 2017'
       econ_eff_sch = model_add_schedule(model, 'RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
       model.getAirLoopHVACs.each do |air_loop|
         oa_sys = air_loop.airLoopHVACOutdoorAirSystem
@@ -79,11 +82,12 @@ module RetailStripmall
   # add hvac
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-
     return true
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 0.0)
 
     return true
   end

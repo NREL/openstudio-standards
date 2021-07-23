@@ -1,0 +1,126 @@
+[
+  {
+    "template": "NECB2011",
+    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "building_type": "Hospital",
+    "primary_heating_fuel": "DefaultFuel",
+    "dcv_type": "No DCV",
+    "Lobby_Records_Flr_1 - area": 1474.810614,
+    "Lobby_Records_Flr_1 - primary_daylighting_control_fraction_of_zone_controlled": 1.0,
+    "Lobby_Records_Flr_1 - primary_daylighting_control_illuminance_setpoint": 500.0,
+    "Lobby_Records_Flr_1 - primary_daylighting_control_lighting_control_type": "Stepped",
+    "Lobby_Records_Flr_1 - primary_daylighting_control_number_of_stepped_control_steps": 2,
+    "Lobby_Records_Flr_1 - primary_daylighting_x_pos": 14.478,
+    "Lobby_Records_Flr_1 - primary_daylighting_y_pos": -26.67,
+    "Lobby_Records_Flr_1 - primary_daylighting_z_pos": 0.8
+  },
+  {
+    "template": "NECB2011",
+    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "building_type": "LargeOffice",
+    "primary_heating_fuel": "DefaultFuel",
+    "dcv_type": "No DCV"
+  },
+  {
+    "template": "NECB2011",
+    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "building_type": "Outpatient",
+    "primary_heating_fuel": "DefaultFuel",
+    "dcv_type": "No DCV"
+  },
+  {
+    "template": "NECB2011",
+    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "building_type": "Warehouse",
+    "primary_heating_fuel": "DefaultFuel",
+    "dcv_type": "No DCV",
+    "Zone1 Office - area": 236.87964658059664,
+    "Zone1 Office - primary_daylighting_control_fraction_of_zone_controlled": 1.0,
+    "Zone1 Office - primary_daylighting_control_illuminance_setpoint": 500.0,
+    "Zone1 Office - primary_daylighting_control_lighting_control_type": "Stepped",
+    "Zone1 Office - primary_daylighting_control_number_of_stepped_control_steps": 2,
+    "Zone1 Office - primary_daylighting_x_pos": 12.9533682747483,
+    "Zone1 Office - primary_daylighting_y_pos": 4.57177703814646,
+    "Zone1 Office - primary_daylighting_z_pos": 0.8,
+    "Zone3 Bulk Storage - area": 3204.8422772668932,
+    "Zone3 Bulk Storage - primary_daylighting_control_fraction_of_zone_controlled": 1.0,
+    "Zone3 Bulk Storage - primary_daylighting_control_illuminance_setpoint": 500.0,
+    "Zone3 Bulk Storage - primary_daylighting_control_lighting_control_type": "Stepped",
+    "Zone3 Bulk Storage - primary_daylighting_control_number_of_stepped_control_steps": 2,
+    "Zone3 Bulk Storage - primary_daylighting_x_pos": 22.8588851907324,
+    "Zone3 Bulk Storage - primary_daylighting_y_pos": 65.5288042134326,
+    "Zone3 Bulk Storage - primary_daylighting_z_pos": 0.8
+  },
+  {
+    "template": "NECB2015",
+    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "building_type": "Hospital",
+    "primary_heating_fuel": "DefaultFuel",
+    "dcv_type": "No DCV"
+  },
+  {
+    "template": "NECB2015",
+    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "building_type": "LargeOffice",
+    "primary_heating_fuel": "DefaultFuel",
+    "dcv_type": "No DCV"
+  },
+  {
+    "template": "NECB2015",
+    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "building_type": "Outpatient",
+    "primary_heating_fuel": "DefaultFuel",
+    "dcv_type": "No DCV"
+  },
+  {
+    "template": "NECB2015",
+    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "building_type": "Warehouse",
+    "primary_heating_fuel": "DefaultFuel",
+    "dcv_type": "No DCV",
+    "Zone3 Bulk Storage - area": 3204.8422772668932,
+    "Zone3 Bulk Storage - primary_daylighting_control_fraction_of_zone_controlled": 1.0,
+    "Zone3 Bulk Storage - primary_daylighting_control_illuminance_setpoint": 500.0,
+    "Zone3 Bulk Storage - primary_daylighting_control_lighting_control_type": "Stepped",
+    "Zone3 Bulk Storage - primary_daylighting_control_number_of_stepped_control_steps": 2,
+    "Zone3 Bulk Storage - primary_daylighting_x_pos": 22.8588851907324,
+    "Zone3 Bulk Storage - primary_daylighting_y_pos": 65.5288042134326,
+    "Zone3 Bulk Storage - primary_daylighting_z_pos": 0.8
+  },
+  {
+    "template": "NECB2017",
+    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "building_type": "Hospital",
+    "primary_heating_fuel": "DefaultFuel",
+    "dcv_type": "No DCV"
+  },
+  {
+    "template": "NECB2017",
+    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "building_type": "LargeOffice",
+    "primary_heating_fuel": "DefaultFuel",
+    "dcv_type": "No DCV"
+  },
+  {
+    "template": "NECB2017",
+    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "building_type": "Outpatient",
+    "primary_heating_fuel": "DefaultFuel",
+    "dcv_type": "No DCV"
+  },
+  {
+    "template": "NECB2017",
+    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "building_type": "Warehouse",
+    "primary_heating_fuel": "DefaultFuel",
+    "dcv_type": "No DCV",
+    "Zone3 Bulk Storage - area": 3204.8422772668932,
+    "Zone3 Bulk Storage - primary_daylighting_control_fraction_of_zone_controlled": 1.0,
+    "Zone3 Bulk Storage - primary_daylighting_control_illuminance_setpoint": 500.0,
+    "Zone3 Bulk Storage - primary_daylighting_control_lighting_control_type": "Stepped",
+    "Zone3 Bulk Storage - primary_daylighting_control_number_of_stepped_control_steps": 2,
+    "Zone3 Bulk Storage - primary_daylighting_x_pos": 22.8588851907324,
+    "Zone3 Bulk Storage - primary_daylighting_y_pos": 65.5288042134326,
+    "Zone3 Bulk Storage - primary_daylighting_z_pos": 0.8
+  }
+]

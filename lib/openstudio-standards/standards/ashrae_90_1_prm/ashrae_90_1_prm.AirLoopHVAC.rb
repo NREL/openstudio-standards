@@ -10,6 +10,11 @@ class ASHRAE901PRM < Standard
     return false
   end
 
+  # Default occupancy fraction threshold for determining if the spaces on the air loop are occupied
+  def air_loop_hvac_unoccupied_threshold
+    return 0.05
+  end
+
   # Calculate and apply the performance rating method
   # baseline fan power to this air loop based on the
   # system type that it represents.
@@ -25,6 +30,9 @@ class ASHRAE901PRM < Standard
   def air_loop_hvac_apply_prm_baseline_fan_power(air_loop_hvac)
     # Get system type associated with air loop
     system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
+
+    # Get the fan limitation pressure drop adjustment bhp
+    fan_pwr_adjustment_bhp = air_loop_hvac_fan_power_limitation_pressure_drop_adjustment_brake_horsepower(air_loop_hvac)
 
     # Find out if air loop represents a non mechanically cooled system
     is_nmc = false
@@ -45,10 +53,10 @@ class ASHRAE901PRM < Standard
         system_type == 'VAV_Reheat' ||
         system_type == 'VAV_PFP_Boxes' ||
         system_type == 'SZ_VAV' ||
-        system_type == 'SZ_CAV'
+        system_type == 'SZ_CV'
 
       # Calculate the allowable fan motor bhp for the air loop
-      allowable_fan_bhp = air_loop_hvac_allowable_system_brake_horsepower(air_loop_hvac)
+      allowable_fan_bhp = air_loop_hvac_allowable_system_brake_horsepower(air_loop_hvac) + fan_pwr_adjustment_bhp
 
       # Divide the allowable power evenly between the fans
       # on this air loop.
@@ -188,7 +196,7 @@ class ASHRAE901PRM < Standard
            'SZ_VAV' # 11
         allowable_fan_bhp = dsn_air_flow_cfm * 0.0013 + fan_pwr_adjustment_bhp
       when
-           'SZ_CAV' # 12, 13
+           'SZ_CV' # 12, 13
         allowable_fan_bhp = dsn_air_flow_cfm * 0.00094 + fan_pwr_adjustment_bhp
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.AirLoopHVAC', "Air loop #{air_loop_hvac.name} is not associated with a baseline system.")

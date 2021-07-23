@@ -21,14 +21,44 @@ class Standard
   # used to avoid creating duplicate constructions.
   # @todo Align the standard construction enumerations in the
   # spreadsheet with the enumerations in OpenStudio (follow CBECC-Com).
-  def planar_surface_apply_standard_construction(planar_surface, climate_zone, previous_construction_map = {}, wwr_building_type = nil, wwr_info = {})
+  def planar_surface_apply_standard_construction(planar_surface, climate_zone, previous_construction_map = {}, wwr_building_type = nil, wwr_info = {}, surface_category)
     # Skip surfaces not in a space
     return previous_construction_map if planar_surface.space.empty?
+
     space = planar_surface.space.get
+    if surface_category == 'ExteriorSubSurface'
+      surface_type = planar_surface.subSurfaceType
+    else
+      surface_type = planar_surface.surfaceType
+    end
 
     # Skip surfaces that don't have a construction
-    return previous_construction_map if planar_surface.construction.empty?
-    construction = planar_surface.construction.get
+    # return previous_construction_map if planar_surface.construction.empty?
+    if !planar_surface.construction.empty?
+      construction = planar_surface.construction.get
+    else
+      # Get appropriate default construction if not defined inside surface object
+      construction = nil
+      space_type = space.spaceType.get
+      if space.defaultConstructionSet.is_initialized
+        cons_set = space.defaultConstructionSet.get
+        construction = get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
+      end
+      if construction.nil? && space_type.defaultConstructionSet.is_initialized
+        cons_set = space_type.defaultConstructionSet.get
+        construction = get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
+      end
+      if construction.nil? && space.buildingStory.get.defaultConstructionSet.is_initialized
+        cons_set = space.buildingStory.get.defaultConstructionSet.get
+        construction = get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
+      end
+      if construction.nil? &&  space.model.building.get.defaultConstructionSet.is_initialized
+        cons_set = space.model.building.get.defaultConstructionSet.get
+        construction = get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
+      end
+
+      return previous_construction_map if construction.nil?
+    end
 
     # Determine if residential or nonresidential
     # based on the space type.
@@ -144,4 +174,75 @@ class Standard
 
     return previous_construction_map
   end
+
+  # Get appropriate construction object based on type of surface or subsurface
+  # @author: Doug Maddox, PNNL
+  # @param: surface_category [string] type of surface: this is not an OpenStudio string
+  # @param: surface_type [string] SubSurfaceType: this is an OpenStudio string
+  # @param: cons_set [object] DefaultSubSurfaceConstructions object
+  # @return: [object] Construction object
+  def get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
+
+    # Get DefaultSurfaceContstructions or DefaultSubSurfaceConstructions object
+    if surface_category == 'ExteriorSurface'
+      cons_list = cons_set.defaultExteriorSurfaceConstructions.get
+    elsif surface_category == 'GroundSurface'
+      cons_list = cons_set.defaultGroundContactSurfaceConstructions.get
+    elsif surface_category == 'ExteriorSubSurface'
+      cons_list = cons_set.defaultExteriorSubSurfaceConstructions.get
+    else
+      cons_list = nil
+    end
+
+    cons = nil
+    case surface_type
+    when 'FixedWindow'
+      if cons_list.fixedWindowConstruction.is_initialized
+        cons = cons_list.fixedWindowConstruction.get
+      end
+    when 'OperableWindow'
+      if cons_list.operableWindowConstruction.is_initialized
+        cons = cons_list.operableWindowConstruction.get
+      end
+    when 'Door'
+      if  cons_list.doorConstruction.is_initialized
+        cons = cons_list.doorConstruction.get
+      end
+    when 'GlassDoor'
+      if  cons_list.glassDoorConstruction.is_initialized
+        cons = cons_list.glassDoorConstruction.get
+      end
+    when 'OverheadDoor'
+      if  cons_list.overheadDoorConstruction.is_initialized
+        cons = cons_list.overheadDoorConstruction.get
+      end
+    when 'Skylight'
+      if  cons_list.skylightConstruction.is_initialized
+        cons = cons_list.skylightConstruction.get
+      end
+    when 'TubularDaylightDome'
+      if  cons_list.tubularDaylightDomeConstruction.is_initialized
+        cons = cons_list.tubularDaylightDomeConstruction.get
+      end
+    when 'TubularDaylightDiffuser'
+      if  cons_list.tubularDaylightDiffuserConstruction.is_initialized
+        cons = cons_list.tubularDaylightDiffuserConstruction.get
+      end
+    when 'Floor'
+      if cons_list.floorConstruction.is_initialized
+        cons = cons_list.floorConstruction.get
+      end
+    when 'Wall'
+      if cons_list.wallConstruction.is_initialized
+        cons = cons_list.wallConstruction.get
+      end
+    when 'Roof'
+      if cons_list.roofConstruction.is_initialized
+        cons = cons_list.roofConstruction.get
+      end
+    end
+
+    return cons
+  end
+
 end

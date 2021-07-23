@@ -62,6 +62,14 @@ class NECB2011
           Units='#{unit}'
 "
           column_name = "#{col}".gsub(/\s+/, "_").downcase
+          # If the column name is "additional_fuel" and the file contains a boiler with a FuelOilNo2 fuel type assume
+          # the column name should be "fueloilno2".
+          if column_name.include? "additional_fuel"
+            model.getPlantLoops.sort.each do |iplantloop|
+              boilers = iplantloop.components.select {|icomponent| icomponent.to_BoilerHotWater.is_initialized}
+              column_name = "fueloilno2" unless boilers.select {|boiler| boiler.to_BoilerHotWater.get.fuelType.to_s == "FuelOilNo2"}.empty?
+            end
+          end
           column_name = column_name + "_#{unit}" if unit != ''
           value = model.sqlFile.get.execAndReturnFirstString(query)
           next if value.empty? || value.get.nil?
@@ -243,7 +251,7 @@ class NECB2011
     qaqc[:building][:standards_number_of_above_ground_stories] = nil
     qaqc[:building][:standards_number_of_above_ground_stories] = model.building.get.standardsNumberOfAboveGroundStories.get unless model.building.get.standardsNumberOfAboveGroundStories().empty?
     qaqc[:building][:standards_number_of_living_units] = nil
-    qaqc[:building][:standards_number_of_living_units] = model.building.get.standardsNumberOfLivingUnits ().get unless model.building.get.standardsNumberOfLivingUnits().empty?
+    qaqc[:building][:standards_number_of_living_units] = model.building.get.standardsNumberOfLivingUnits().get unless model.building.get.standardsNumberOfLivingUnits().empty?
     qaqc[:building][:nominal_floor_to_ceiling_height] = nil
     qaqc[:building][:nominal_floor_to_ceiling_height] = model.building.get.nominalFloortoCeilingHeight.get unless model.building.get.nominalFloortoCeilingHeight().empty?
     qaqc[:building][:nominal_floor_to_floor_height] = nil
@@ -291,7 +299,7 @@ class NECB2011
     qaqc[:economics][:total_neb_cost_per_m2] = 0.0
     neb_eplus_fuel_map.each do |neb_fuel, ep_fuel|
       row = look_up_csv_data(neb_prices_csv_file_name, {0 => building_type, 1 => province, 2 => neb_fuel})
-      neb_fuel_cost = row['2018']
+      neb_fuel_cost = row['2020']
       fuel_consumption_gj = 0.0
       if neb_fuel == 'Electricity' || neb_fuel == 'Natural Gas'
         if model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM tabulardatawithstrings WHERE ReportName='EnergyMeters' AND ReportForString='Entire Facility' AND
@@ -654,8 +662,7 @@ class NECB2011
           spaceinfo[:waterUseEquipment] << waterUseEquipment_info
           waterUseEquipment_info[:peak_flow_rate]= space.waterUseEquipment[0].waterUseEquipmentDefinition.peakFlowRate
           waterUseEquipment_info[:peak_flow_rate_per_area] = waterUseEquipment_info[:peak_flow_rate] / space.floorArea
-          area_per_occ = space.spaceType.get.people[0].spaceFloorAreaPerPerson
-          area_per_occ = validate_optional(area_per_occ, model, -1.0)
+          area_per_occ = space.spaceType.get.people[0].nil? ? 0.0 : validate_optional(space.spaceType.get.people[0].spaceFloorAreaPerPerson,model, -1.0)
           #                             Watt per person =             m3/s/m3                * 1000W/kW * (specific heat * dT) * m2/person
           waterUseEquipment_info[:shw_watts_per_person] = waterUseEquipment_info[:peak_flow_rate_per_area] * 1000 * (4.19 * 44.4) * 1000 * area_per_occ
           #puts waterUseEquipment_info[:shw_watts_per_ponce the erson]
@@ -730,7 +737,7 @@ class NECB2011
         vbz = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName='Zone Ventilation Parameters' AND ColumnName='Breathing Zone Outdoor Airflow - Vbz' AND Units='m3/s' AND RowName='#{zone.name.get.to_s.upcase}' ")
         vbz = validate_optional(vbz, model, 0)
         air_loop_info[:total_breathing_zone_outdoor_airflow_vbz] += vbz
-        air_loop_info[:total_floor_area_served] += zone.floorArea
+        air_loop_info[:total_floor_area_served] += zone.floorArea*zone.multiplier.to_f
       end
       air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName='System Ventilation Parameters' AND ColumnName='Area Outdoor Air Rate - Ra' AND Units='m3/s-m2' AND RowName='#{air_loop_info[:name].to_s.upcase}' ")
       air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] = validate_optional(air_loop_info[:area_outdoor_air_rate_m3_per_s_m2], model, -1.0)

@@ -1,0 +1,162 @@
+<measure>
+  <schema_version>3.0</schema_version>
+  <name>btap_model_measure</name>
+  <uid>224561f4-8ccc-4f60-8118-34b85359d6f7</uid>
+  <version_id>f73a0c59-ff93-4645-b8a4-dfaa6c16b114</version_id>
+  <version_modified>20180516T161828Z</version_modified>
+  <xml_checksum>2609226D</xml_checksum>
+  <class_name>BTAPModelMeasure</class_name>
+  <display_name>BTAPTemplateMeasure</display_name>
+  <description>This template measure is used to ensure consistency in detailed BTAP measures.</description>
+  <modeler_description>This template measure is used to ensure consistency in BTAP measures.</modeler_description>
+  <arguments>
+    <argument>
+      <name>a_string_argument</name>
+      <display_name>A String Argument (string)</display_name>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>The Default Value</default_value>
+    </argument>
+    <argument>
+      <name>a_double_argument</name>
+      <display_name>A Double numeric Argument (double)</display_name>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>0</default_value>
+    </argument>
+    <argument>
+      <name>a_string_double_argument</name>
+      <display_name>A String Double numeric Argument (double)</display_name>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>23.0</default_value>
+    </argument>
+    <argument>
+      <name>a_choice_argument</name>
+      <display_name>A Choice String Argument </display_name>
+      <type>Choice</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>choice_1</default_value>
+      <choices>
+        <choice>
+          <value>choice_1</value>
+          <display_name>choice_1</display_name>
+        </choice>
+        <choice>
+          <value>choice_2</value>
+          <display_name>choice_2</display_name>
+        </choice>
+      </choices>
+    </argument>
+    <argument>
+      <name>a_bool_argument</name>
+      <display_name>A Boolean Argument </display_name>
+      <type>Boolean</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>false</default_value>
+      <choices>
+        <choice>
+          <value>true</value>
+          <display_name>true</display_name>
+        </choice>
+        <choice>
+          <value>false</value>
+          <display_name>false</display_name>
+        </choice>
+      </choices>
+    </argument>
+  </arguments>
+  <outputs/>
+  <provenances/>
+  <tags>
+    <tag>Envelope.Opaque</tag>
+  </tags>
+  <attributes>
+    <attribute>
+      <name>Measure Type</name>
+      <value>ModelMeasure</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Apply Measure Now</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>OpenStudio Application</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Parametric Analysis Tool</value>
+      <datatype>string</datatype>
+    </attribute>
+  </attributes>
+  <files>
+    <file>
+      <filename>BTAPTemplateModelMeasure_test.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>test</usage_type>
+      <checksum>5E7EBF34</checksum>
+    </file>
+    <file>
+      <filename>BTAPMeasureHelper.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>3D94B7AC</checksum>
+    </file>
+    <file>
+      <version>
+        <software_program>OpenStudio</software_program>
+        <identifier>2.3.0</identifier>
+        <min_compatible>2.3.0</min_compatible>
+      </version>
+      <filename>measure.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>script</usage_type>
+      <checksum>B821DA93</checksum>
+    </file>
+    <file>
+      <filename>fileio.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>55494222</checksum>
+    </file>
+    <file>
+      <filename>Standards.Construction.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>9C6C6E51</checksum>
+    </file>
+    <file>
+      <filename>git_revision</filename>
+      <filetype></filetype>
+      <usage_type>resource</usage_type>
+      <checksum>DAE275A8</checksum>
+    </file>
+    <file>
+      <filename>Standards.Model.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>46874C01</checksum>
+    </file>
+    <file>
+      <filename>btap_additions.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>6DC45CBD</checksum>
+    </file>
+    <file>
+      <filename>building_envelope.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>6ED0F4FE</checksum>
+    </file>
+  </files>
+</measure>

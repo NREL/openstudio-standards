@@ -1,4 +1,3 @@
-
 # Custom changes for the MidriseApartment prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -26,9 +25,11 @@ module MidriseApartment
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010'
         case climate_zone
-          when 'ASHRAE 169-2006-1B',
+          when 'ASHRAE 169-2006-0B',
+               'ASHRAE 169-2006-1B',
                'ASHRAE 169-2006-2B',
                'ASHRAE 169-2006-3B',
+               'ASHRAE 169-2013-0B',
                'ASHRAE 169-2013-1B',
                'ASHRAE 169-2013-2B',
                'ASHRAE 169-2013-3B'
@@ -45,7 +46,7 @@ module MidriseApartment
     elec_equip_def1.setName('Ground Corridor Electric Equipment Definition1')
     elec_equip_def2.setName('Ground Corridor Electric Equipment Definition2')
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         elec_equip_def1.setFractionLatent(0)
         elec_equip_def1.setFractionRadiant(0)
         elec_equip_def1.setFractionLost(0.95)
@@ -53,7 +54,7 @@ module MidriseApartment
         elec_equip_def2.setFractionRadiant(0)
         elec_equip_def2.setFractionLost(0.95)
         elec_equip_def1.setDesignLevel(16_055)
-        if template == '90.1-2013'
+        if template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
           elec_equip_def2.setDesignLevel(63)
         elsif template == '90.1-2010'
           elec_equip_def2.setDesignLevel(105.9)
@@ -71,7 +72,7 @@ module MidriseApartment
         case template
           when '90.1-2004', '90.1-2007'
             elec_equip2.setSchedule(model_add_schedule(model, 'ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7'))
-          when '90.1-2010', '90.1-2013'
+          when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
             elec_equip2.setSchedule(model_add_schedule(model, 'ApartmentMidRise ELEV_LIGHT_FAN_SCH_ADD_DF'))
         end
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -92,7 +93,7 @@ module MidriseApartment
     case template
       when 'DOE Ref 1980-2004', 'DOE Ref Pre-1980'
         # no door infiltration in these two vintages
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
         g_corridor = model.getSpaceByName('G Corridor').get
         infiltration_g_corridor_door = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
         infiltration_g_corridor_door.setName('G Corridor door Infiltration')
@@ -103,11 +104,15 @@ module MidriseApartment
             infiltration_g_corridor_door.setSchedule(model_add_schedule(model, 'ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007'))
           when '90.1-2007'
             case climate_zone
-              when 'ASHRAE 169-2006-1A',
+              when 'ASHRAE 169-2006-0A',
+                   'ASHRAE 169-2006-1A',
+                   'ASHRAE 169-2006-0B',
                    'ASHRAE 169-2006-1B',
                    'ASHRAE 169-2006-2A',
                    'ASHRAE 169-2006-2B',
+                   'ASHRAE 169-2013-0A',
                    'ASHRAE 169-2013-1A',
+                   'ASHRAE 169-2013-0B',
                    'ASHRAE 169-2013-1B',
                    'ASHRAE 169-2013-2A',
                    'ASHRAE 169-2013-2B'
@@ -116,13 +121,17 @@ module MidriseApartment
                 infiltration_g_corridor_door.setDesignFlowRate(0.327531218)
             end
             infiltration_g_corridor_door.setSchedule(model_add_schedule(model, 'ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007'))
-          when '90.1-2010', '90.1-2013'
+          when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
             case climate_zone
-              when 'ASHRAE 169-2006-1A',
+              when 'ASHRAE 169-2006-0A',
+                   'ASHRAE 169-2006-1A',
+                   'ASHRAE 169-2006-0B',
                    'ASHRAE 169-2006-1B',
                    'ASHRAE 169-2006-2A',
                    'ASHRAE 169-2006-2B',
+                   'ASHRAE 169-2013-0A',
                    'ASHRAE 169-2013-1A',
+                   'ASHRAE 169-2013-0B',
                    'ASHRAE 169-2013-1B',
                    'ASHRAE 169-2013-2A',
                    'ASHRAE 169-2013-2B'
@@ -133,20 +142,21 @@ module MidriseApartment
             infiltration_g_corridor_door.setSchedule(model_add_schedule(model, 'ApartmentMidRise INFIL_Door_Opening_SCH_2010_2013'))
         end
 
-      # Door infiltration in model not impacted by wind or temperature
-      infiltration_g_corridor_door.setConstantTermCoefficient(1.0)
-      infiltration_g_corridor_door.setTemperatureTermCoefficient(0.0)
-      infiltration_g_corridor_door.setVelocityTermCoefficient(0.0)
-      infiltration_g_corridor_door.setVelocitySquaredTermCoefficient(0.0)
+        # Door infiltration in model not impacted by wind or temperature
+        infiltration_g_corridor_door.setConstantTermCoefficient(1.0)
+        infiltration_g_corridor_door.setTemperatureTermCoefficient(0.0)
+        infiltration_g_corridor_door.setVelocityTermCoefficient(0.0)
+        infiltration_g_corridor_door.setVelocitySquaredTermCoefficient(0.0)
     end
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-
     return true
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    # Set original building North axis
+    model_set_building_north_axis(model, 0.0)
 
     return true
   end

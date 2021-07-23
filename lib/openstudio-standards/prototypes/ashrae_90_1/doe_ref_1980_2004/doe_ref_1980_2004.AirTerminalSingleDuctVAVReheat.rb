@@ -7,7 +7,6 @@ class DOERef1980to2004 < ASHRAE901
   # @param zone_oa_per_area [Double] the zone outdoor air per area, m^3/s
   # @return [Bool] returns true if successful, false if not
   def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
-
     # Set the minimum flow fraction
     min_damper_position = 0.3
     air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)

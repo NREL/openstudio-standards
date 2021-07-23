@@ -59,6 +59,10 @@ class AppendixGPRMTests < Minitest::Test
       @prototype_creator = Standard.build("#{template}_#{building_type}")
       model = @prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
 
+      # Initialize userdata folder to empty
+      # Will be set by mod methods below, if appicable
+      @user_data_dir = ''
+
       # Make modification if requested
       @bldg_type_alt_now = nil
       if !mod.empty?
@@ -111,6 +115,13 @@ class AppendixGPRMTests < Minitest::Test
       # Initialize Standard class
       @prototype_creator = Standard.build('90.1-PRM-2019')
 
+      # user data CSV files are in @user_data_dir, if appicable
+      # user data JSON files will be created in sub-folder inside @test_dir
+      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
+      proto_run_dir = "#{@test_dir}/#{model_name}"
+      json_path = @prototype_creator.convert_userdata_csv_to_json(@user_data_dir, proto_run_dir)
+      @prototype_creator.load_userdata_to_standards_database(json_path)
+
       # Convert standardSpaceType string for each space to values expected for prm creation
       lpd_space_types = JSON.parse(File.read("#{@@json_dir}/lpd_space_types.json"))
       model.getSpaceTypes.sort.each do |space_type|
@@ -134,12 +145,25 @@ class AppendixGPRMTests < Minitest::Test
           end
         end
         if alt_space_type_was_found == false
-          space_type.setStandardsSpaceType(lpd_space_types[bldg_type_space_type])
+          if lpd_space_types.has_key? bldg_type_space_type
+             space_type.setStandardsSpaceType(lpd_space_types[bldg_type_space_type])
+          else
+            puts "key not found in lpd_space_types.json"
+          end
+        end
+      end
+
+      # Disable Under Case HVAC Return Air Fraction for refrigerated cases
+      # Since current tests result in ZoneHVAC systems for zones with refrigeration for large hotel
+      # TODO: remove this when we have multiple HVAC building types available
+      # since PSZ will be the typical baseline system for those zones with that in place
+      model.getRefrigerationCases.sort.each do |refg_case|
+        if !refg_case.isUnderCaseHVACReturnAirFractionDefaulted
+          refg_case.setUnderCaseHVACReturnAirFraction(0)
         end
       end
 
       # Define run directory and run name, delete existing folder if it exists
-      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
       run_dir = "#{@test_dir}/#{model_name}"
       run_dir_baseline = "#{run_dir}-Baseline"
       if Dir.exist?(run_dir_baseline)
@@ -360,7 +384,7 @@ class AppendixGPRMTests < Minitest::Test
       u_value_goal = opaque_exterior_name + exterior_fenestration_name + exterior_door_name
       u_value_goal.each do |key, value|
         value_si = OpenStudio.convert(value, 'Btu/ft^2*hr*R', 'W/m^2*K').get
-        assert(((u_value_baseline[key] - value_si).abs < 0.001 || u_value_baseline[key] == 5.838), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si}.")
+        assert(((u_value_baseline[key] - value_si).abs < 0.001 || (u_value_baseline[key] - 5.835).abs < 0.01) , "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si}.")
         if key != 'PERIMETER_ZN_3_WALL_NORTH_DOOR1'
           assert((construction_baseline[key].include? 'PRM'), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
         end
@@ -972,11 +996,12 @@ class AppendixGPRMTests < Minitest::Test
     end
 
     # check baseline system fan power
+    std = Standard.build('90.1-PRM-2019')
     model.getFanOnOffs.sort.each do |fan|
       fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
       fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
       fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
-      assert(fan_bhp_ip.round(5) == 0.00094, "Fan power for #{sub_text} is #{fan_power_ip.round(1)} instead of 0.00094.")
+      assert(fan_bhp_ip.round(5) == 0.00094, "Fan power for #{sub_text} is #{fan_bhp_ip.round(5)} instead of 0.00094.")
       if fan_bhp_ip * OpenStudio.convert(std.fan_design_air_flow(fan), 'm^3/s', 'cfm').get <= 1.0
         assert(fan.motorEfficiency == 0.825, "Fan motor efficiency for #{fan.name} in #{sub_text} is #{fan.motorEfficiency}, 0.825 is expected.")
       end
@@ -1004,6 +1029,7 @@ class AppendixGPRMTests < Minitest::Test
 
     # check baseline system fan power
     # central fans
+    std = Standard.build('90.1-PRM-2019')
     model.getFanVariableVolumes.sort.each do |fan|
       fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
       fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
@@ -1041,6 +1067,7 @@ class AppendixGPRMTests < Minitest::Test
 
     # check baseline system fan power
     # central fans
+    std = Standard.build('90.1-PRM-2019')
     model.getFanVariableVolumes.sort.each do |fan|
       fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
       fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
@@ -1101,6 +1128,7 @@ class AppendixGPRMTests < Minitest::Test
     end
 
     # check baseline system fan power
+    std = Standard.build('90.1-PRM-2019')
     model.getFanConstantVolumes.sort.each do |fan|
       fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
       fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
@@ -1143,11 +1171,12 @@ class AppendixGPRMTests < Minitest::Test
     end
 
     # check baseline system fan power
+    std = Standard.build('90.1-PRM-2019')
     model.getFanOnOffs.sort.each do |fan|
       fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
       fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
       fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
-      assert(fan_bhp_ip.round(5) == 0.00094, "Fan power for #{sub_text} is #{fan_power_ip.round(1)} instead of 0.00094.")
+      assert(fan_bhp_ip.round(5) == 0.00094, "Fan power for #{sub_text} is #{fan_bhp_ip.round(5)} instead of 0.00094.")
       if fan_bhp_ip * OpenStudio.convert(std.fan_design_air_flow(fan), 'm^3/s', 'cfm').get <= 1.0
         assert(fan.motorEfficiency == 0.825, "Fan motor efficiency for #{fan.name} in #{sub_text} is #{fan.motorEfficiency}, 0.825 is expected.")
       end
@@ -1592,6 +1621,16 @@ class AppendixGPRMTests < Minitest::Test
   def change_bldg_type(model, arguments)
     bldg_type_new = arguments[0]
     @bldg_type_alt_now = bldg_type_new
+    return model
+  end
+
+  # Set path to userdata folder for one unit test
+  # Located in 90_1_prm/data sub folder
+  # @param model
+  # @arguments  [array] name of userdata sub folder
+  def set_userdata_path(model, arguments)
+    userdata_folder = arguments[0]
+    @user_data_dir = "#{@@json_dir}/#{userdata_folder}"
     return model
   end
 

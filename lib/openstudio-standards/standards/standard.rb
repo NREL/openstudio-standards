@@ -27,13 +27,15 @@ class Standard
   #
   # @param name [String] the name of the Standard to build.
   #   valid choices are: DOE Pre-1980, DOE 1980-2004, 90.1-2004,
-  #   90.1-2007, 90.1-2010, 90.1-2013, NREL ZNE Ready 2017, NECB2011
+  #   90.1-2007, 90.1-2010, 90.1-2013, 90.1-2016, 90.1-2019,
+  #   NREL ZNE Ready 2017, NECB2011
   # @example Create a new Standard object by name
   #   standard = Standard.build('NECB2011')
   def self.build(name)
     if STANDARDS_LIST[name].nil?
       raise "ERROR: Did not find a class called '#{name}' to create in #{JSON.pretty_generate(STANDARDS_LIST)}"
     end
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.standard', "Using OpenStudio Standards version #{OpenstudioStandards::VERSION} with template #{name}.")
     return STANDARDS_LIST[name].new
   end
@@ -73,7 +75,6 @@ class Standard
     return lookup_name
   end
 
-
   # Loads the openstudio standards dataset for this standard.
   # For standards subclassed from other standards, the lowest-level
   # data will override data supplied at a higher level.
@@ -101,7 +102,7 @@ class Standard
           data.each_pair do |key, objs|
             # Override the template in inherited files to match the instantiated template
             objs.each do |obj|
-              if obj.has_key?('template')
+              if obj.key?('template')
                 obj['template'] = template
               end
             end
@@ -115,13 +116,13 @@ class Standard
         end
       else
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.standard', "Loading JSON files from #{data_dir}")
-        files = Dir.glob("#{data_dir}/data/*.json").select {|e| File.file? e}
+        files = Dir.glob("#{data_dir}/data/*.json").select { |e| File.file? e }
         files.each do |file|
           data = JSON.parse(File.read(file))
           data.each_pair do |key, objs|
             # Override the template in inherited files to match the instantiated template
             objs.each do |obj|
-              if obj.has_key?('template')
+              if obj.key?('template')
                 obj['template'] = template
               end
             end

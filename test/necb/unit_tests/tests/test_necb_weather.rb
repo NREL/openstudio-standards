@@ -3,7 +3,7 @@ require_relative '../../../helpers/minitest_helper'
 
 #This test verifies that we can read in the weatherfile data from all the
 # epw/stat files.
-class WeatherTests < Minitest::Test
+class NECB_Weather_Tests < Minitest::Test
 
   def setup()
     @file_folder = __dir__

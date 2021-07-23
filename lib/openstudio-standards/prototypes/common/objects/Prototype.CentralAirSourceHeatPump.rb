@@ -66,7 +66,7 @@ class Standard
     setpt_mgr_sch_sen.setName("#{plant_comp.name}_Setpt_Mgr_Temp_Sen")
     hot_water_loop.supplyOutletNode.setpointManagers.each do |m|
       if m.to_SetpointManagerScheduled.is_initialized
-        setpt_mgr_sch_sen.setKeyName("#{m.to_SetpointManagerScheduled.get.schedule.name}")
+        setpt_mgr_sch_sen.setKeyName(m.to_SetpointManagerScheduled.get.schedule.name.to_s)
       end
     end
 
@@ -191,6 +191,7 @@ class Standard
 
     # metered output variable
     elec_mtr_out_var = OpenStudio::Model::EnergyManagementSystemMeteredOutputVariable.new(model, "#{plant_comp.name} Electricity Consumption")
+    elec_mtr_out_var.setName("#{plant_comp.name} Electricity Consumption")
     elec_mtr_out_var.setEMSVariableName('Elec')
     elec_mtr_out_var.setUpdateFrequency('SystemTimestep')
     elec_mtr_out_var.setString(4, sim_pgrm.handle.to_s)

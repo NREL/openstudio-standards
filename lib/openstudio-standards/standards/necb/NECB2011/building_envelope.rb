@@ -1,4 +1,5 @@
 class NECB2011
+
   # Reduces the WWR to the values specified by the NECB
   # NECB 3.2.1.4
   def apply_standard_window_to_wall_ratio(model:, fdwr_set: -1.0)
@@ -141,7 +142,6 @@ class NECB2011
     red_res = wwr_res > wwr_lim
     red_sh = wwr_sh > wwr_lim
 
-
     # puts "Current FDWR is #{fdwr}, must be less than #{fdwr_lim}."
     # puts "Current subsurf area is #{total_subsurface_m2} and gross surface area is #{total_wall_m2}"
     # Stop here unless windows / doors need reducing
@@ -271,7 +271,6 @@ class NECB2011
     srr = ((total_subsurface_m2 / total_roof_m2) * 100.0).round(1)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The skylight to roof ratios (SRRs) are: NonRes: #{srr_nr.round}%, Res: #{srr_res.round}%.")
 
-
     # Check against SRR limit
     red_nr = srr_nr > srr_lim
     red_res = srr_res > srr_lim
@@ -307,8 +306,8 @@ class NECB2011
   # @param hdd [Float]
   # @return [Double] a constant float
   def max_fwdr(hdd)
-    #get formula from json database.
-    return eval(self.get_standards_formula('fdwr_formula'))
+    #  get formula from json database.
+    return eval(get_standards_formula('fdwr_formula'))
   end
 
   # Go through the default construction sets and hard-assigned
@@ -322,93 +321,110 @@ class NECB2011
 
   def apply_standard_construction_properties(model:,
                                              runner: nil,
-                                             properties: {
-                                                 'outdoors_wall_conductance' => nil,
-                                                 'outdoors_floor_conductance' => nil,
-                                                 'outdoors_roofceiling_conductance' => nil,
-                                                 'ground_wall_conductance' => nil,
-                                                 'ground_floor_conductance' => nil,
-                                                 'ground_roofceiling_conductance' => nil,
-                                                 'outdoors_door_conductance' => nil,
-                                                 'outdoors_fixedwindow_conductance' => nil
-                                             })
+                                             # ext surfaces
+                                             ext_wall_cond: nil,
+                                             ext_floor_cond: nil,
+                                             ext_roof_cond: nil,
+                                             # ground surfaces
+                                             ground_wall_cond: nil,
+                                             ground_floor_cond: nil,
+                                             ground_roof_cond: nil,
+                                             # fixed Windows
+                                             fixed_window_cond: nil,
+                                             fixed_wind_solar_trans: nil,
+                                             fixed_wind_vis_trans: nil,
+                                             # operable windows
+                                             operable_wind_solar_trans: nil,
+                                             operable_window_cond: nil,
+                                             operable_wind_vis_trans: nil,
+                                             # glass doors
+                                             glass_door_cond: nil,
+                                             glass_door_solar_trans: nil,
+                                             glass_door_vis_trans: nil,
+                                             # opaque doors
+                                             door_construction_cond: nil,
+                                             overhead_door_cond: nil,
+                                             # skylights
+                                             skylight_cond: nil,
+                                             skylight_solar_trans: nil,
+                                             skylight_vis_trans: nil,
+                                             # tubular daylight dome
+                                             tubular_daylight_dome_cond: nil,
+                                             tubular_daylight_dome_solar_trans: nil,
+                                             tubular_daylight_dome_vis_trans: nil,
+                                             # tubular daylight diffuser
+                                             tubular_daylight_diffuser_cond: nil,
+                                             tubular_daylight_diffuser_solar_trans: nil,
+                                             tubular_daylight_diffuser_vis_trans: nil)
 
-    model.getDefaultConstructionSets.sort.each do |set|
-      set_construction_set_to_necb!(model: model,
-                                    default_surface_construction_set: set,
-                                    runner: nil,
-                                    properties: properties)
+    model.getDefaultConstructionSets.sort.each do |default_surface_construction_set|
+      BTAP.runner_register('Info', 'apply_standard_construction_properties', runner)
+      if model.weatherFile.empty? || model.weatherFile.get.path.empty? || !File.exist?(model.weatherFile.get.path.get.to_s)
+
+        BTAP.runner_register('Error', 'Weather file is not defined. Please ensure the weather file is defined and exists.', runner)
+        return false
+      end
+
+      # Lambdas are preferred over methods in methods for small utility methods.
+      correct_cond = lambda do |conductivity, surface_type|
+        # hdd required in scope for eval function.
+        hdd = get_necb_hdd18(model)
+        return conductivity.nil? || conductivity.to_f <= 0.0 || conductivity =="NECB_Default"  ? eval(model_find_objects(@standards_data['surface_thermal_transmittance'], surface_type)[0]['formula']) : conductivity.to_f
+      end
+
+      # Converts trans and vis to nil if requesting default.. or casts the string to a float.
+      correct_vis_trans = lambda do |value|
+        return value.nil? || value.to_f <= 0.0 || value =="NECB_Default"  ? nil : value.to_f
+      end
+
+      BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set!(model: model,
+                                                                                              name: "#{default_surface_construction_set.name.get} at hdd = #{get_necb_hdd18(model)}",
+                                                                                              default_surface_construction_set: default_surface_construction_set,
+                                                                                              # ext surfaces
+                                                                                              ext_wall_cond: correct_cond.call(ext_wall_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Wall'}),
+                                                                                              ext_floor_cond: correct_cond.call(ext_floor_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Floor'}),
+                                                                                              ext_roof_cond: correct_cond.call(ext_roof_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling'}),
+                                                                                              # ground surfaces
+                                                                                              ground_wall_cond: correct_cond.call(ground_wall_cond, {'boundary_condition' => 'Ground', 'surface' => 'Wall'}),
+                                                                                              ground_floor_cond: correct_cond.call(ground_floor_cond, {'boundary_condition' => 'Ground', 'surface' => 'Floor'}),
+                                                                                              ground_roof_cond: correct_cond.call(ground_roof_cond, {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling'}),
+                                                                                              # fixed Windows
+                                                                                              fixed_window_cond: correct_cond.call(fixed_window_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
+                                                                                              fixed_wind_solar_trans: correct_vis_trans.call(fixed_wind_solar_trans),
+                                                                                              fixed_wind_vis_trans: correct_vis_trans.call(fixed_wind_vis_trans),
+                                                                                              # operable windows
+                                                                                              operable_wind_solar_trans: correct_vis_trans.call(operable_wind_solar_trans),
+                                                                                              operable_window_cond: correct_cond.call(fixed_window_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
+                                                                                              operable_wind_vis_trans: correct_vis_trans.call(operable_wind_vis_trans),
+                                                                                              # glass doors
+                                                                                              glass_door_cond: correct_cond.call(glass_door_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
+                                                                                              glass_door_solar_trans: correct_vis_trans.call(glass_door_solar_trans),
+                                                                                              glass_door_vis_trans: correct_vis_trans.call(glass_door_vis_trans),
+                                                                                              # opaque doors
+                                                                                              door_construction_cond: correct_cond.call(door_construction_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Door'}),
+                                                                                              overhead_door_cond: correct_cond.call(overhead_door_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Door'}),
+                                                                                              # skylights
+                                                                                              skylight_cond: correct_cond.call(skylight_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
+                                                                                              skylight_solar_trans: correct_vis_trans.call(skylight_solar_trans),
+                                                                                              skylight_vis_trans: correct_vis_trans.call(skylight_vis_trans),
+                                                                                              # tubular daylight dome
+                                                                                              tubular_daylight_dome_cond: correct_cond.call(skylight_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
+                                                                                              tubular_daylight_dome_solar_trans: correct_vis_trans.call(tubular_daylight_dome_solar_trans),
+                                                                                              tubular_daylight_dome_vis_trans: correct_vis_trans.call(tubular_daylight_dome_vis_trans),
+                                                                                              # tubular daylight diffuser
+                                                                                              tubular_daylight_diffuser_cond: correct_cond.call(skylight_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
+                                                                                              tubular_daylight_diffuser_solar_trans: correct_vis_trans.call(tubular_daylight_diffuser_solar_trans),
+                                                                                              tubular_daylight_diffuser_vis_trans: correct_vis_trans.call(tubular_daylight_diffuser_vis_trans)
+      )
+
+
     end
     # sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
     model.getPlanarSurfaces.sort.each(&:resetConstruction)
     # if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
     BTAP::Resources::Envelope.assign_interior_surface_construction_to_adiabatic_surfaces(model, nil)
-  end
+    BTAP.runner_register('Info', ' apply_standard_construction_properties was sucessful.', runner)
 
-  # this will create a copy and convert all construction sets to NECB reference conductances.
-  # @author phylroy.lopez@nrcan.gc.ca
-  # @param model [OpenStudio::model::Model] A model object
-  # @param default_surface_construction_set [String]
-  # @return [Boolean] returns true if sucessful, false if not
-  def set_construction_set_to_necb!(model:,
-                                    default_surface_construction_set:,
-                                    runner: nil,
-                                    properties: {
-                                        'outdoors_wall_conductance' => nil,
-                                        'outdoors_floor_conductance' => nil,
-                                        'outdoors_roofceiling_conductance' => nil,
-                                        'ground_wall_conductance' => nil,
-                                        'ground_floor_conductance' => nil,
-                                        'ground_roofceiling_conductance' => nil,
-                                        'outdoors_door_conductance' => nil,
-                                        'outdoors_fixedwindow_conductance' => nil
-                                    })
-    BTAP.runner_register('Info', 'set_construction_set_to_necb!', runner)
-    if model.weatherFile.empty? || model.weatherFile.get.path.empty? || !File.exist?(model.weatherFile.get.path.get.to_s)
-
-      BTAP.runner_register('Error', 'Weather file is not defined. Please ensure the weather file is defined and exists.', runner)
-      return false
-    end
-
-    #Note:hdd needs to be defined for eval to work on table eval below.
-    hdd = self.get_necb_hdd18(model)
-
-    old_name = default_surface_construction_set.name.get.to_s
-    new_name = "#{old_name} at hdd = #{hdd}"
-    # Get appropriate standards table
-    standards_table = @standards_data['surface_thermal_transmittance']
-
-    surface_types = [
-        {'boundary_condition' => 'Outdoors', 'surface' => 'Wall', 'conductance' => properties['outdoors_wall_conductance']},
-        {'boundary_condition' => 'Outdoors', 'surface' => 'Floor', 'conductance' => properties['outdoors_floor_conductance']},
-        {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling', 'conductance' => properties['outdoors_roofceiling_conductance']},
-        {'boundary_condition' => 'Ground', 'surface' => 'Wall', 'conductance' => properties['ground_wall_conductance']},
-        {'boundary_condition' => 'Ground', 'surface' => 'Floor', 'conductance' => properties['ground_floor_conductance']},
-        {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling', 'conductance' => properties['ground_roofceiling_conductance']},
-        {'boundary_condition' => 'Outdoors', 'surface' => 'Window', 'conductance' => properties['outdoors_fixedwindow_conductance']},
-        {'boundary_condition' => 'Outdoors', 'surface' => 'Door', 'conductance' => properties['outdoors_door_conductance']}
-    ]
-
-    surface_types_rsi = {}
-    surface_types.each do |surface_type|
-      surface_types_rsi["#{surface_type['boundary_condition'].downcase}_#{surface_type['surface'].downcase}_conductance"] = surface_type['conductance'].nil? ? 1.0 / (eval(self.model_find_objects(standards_table, surface_type)[0]['formula'])) : (1.0 / surface_type['conductance'])
-    end
-    puts surface_types_rsi
-
-    # convert conductance values to rsi values. (Note: we should really be only using conductances in)
-    BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set_rsi!(model, new_name, default_surface_construction_set,
-                                                                                                surface_types_rsi['outdoors_wall_conductance'], surface_types_rsi['outdoors_floor_conductance'], surface_types_rsi['outdoors_roofceiling_conductance'],
-                                                                                                surface_types_rsi['ground_wall_conductance'], surface_types_rsi['ground_floor_conductance'], surface_types_rsi['ground_roofceiling_conductance'],
-                                                                                                surface_types_rsi['outdoors_window_conductance'], nil, nil,
-                                                                                                surface_types_rsi['outdoors_window_conductance'], nil, nil,
-                                                                                                surface_types_rsi['outdoors_door_conductance'],
-                                                                                                surface_types_rsi['outdoors_door_conductance'], nil, nil,
-                                                                                                surface_types_rsi['outdoors_door_conductance'],
-                                                                                                surface_types_rsi['outdoors_window_conductance'], nil, nil,
-                                                                                                surface_types_rsi['outdoors_window_conductance'], nil, nil,
-                                                                                                surface_types_rsi['outdoors_window_conductance'], nil, nil)
-    BTAP.runner_register('Info', 'set_construction_set_to_necb! was sucessful.', runner)
-    return true
   end
 
   # Set all external surface conductances to NECB values.
@@ -425,11 +441,11 @@ class NECB2011
 
       case surface.surfaceType.downcase
       when 'wall'
-        conductance_value = @standards_data['conductances']['Wall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+        conductance_value = @standards_data['conductances']['Wall'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
       when 'floor'
-        conductance_value = @standards_data['conductances']['Floor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+        conductance_value = @standards_data['conductances']['Floor'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
       when 'roofceiling'
-        conductance_value = @standards_data['conductances']['Roof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+        conductance_value = @standards_data['conductances']['Roof'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
       end
       if is_radiant
         conductance_value *= 0.80
@@ -440,11 +456,11 @@ class NECB2011
     if surface.outsideBoundaryCondition.downcase =~ /ground/
       case surface.surfaceType.downcase
       when 'wall'
-        conductance_value = @standards_data['conductances']['GroundWall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+        conductance_value = @standards_data['conductances']['GroundWall'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
       when 'floor'
-        conductance_value = @standards_data['conductances']['GroundFloor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+        conductance_value = @standards_data['conductances']['GroundFloor'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
       when 'roofceiling'
-        conductance_value = @standards_data['conductances']['GroundRoof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+        conductance_value = @standards_data['conductances']['GroundRoof'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
       end
       if is_radiant
         conductance_value *= 0.80
@@ -463,14 +479,13 @@ class NECB2011
     if subsurface.outsideBoundaryCondition.downcase.match('outdoors')
       case subsurface.subSurfaceType.downcase
       when /window/
-        conductance_value = @standards_data['conductances']['Window'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+        conductance_value = @standards_data['conductances']['Window'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
       when /door/
-        conductance_value = @standards_data['conductances']['Door'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+        conductance_value = @standards_data['conductances']['Door'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
       end
       subsurface.setRSI(1 / conductance_value)
     end
   end
-
 
   # Adds code-minimum constructions based on the building type
   # as defined in the OpenStudio_Standards_construction_sets.json file.
@@ -491,7 +506,7 @@ class NECB2011
     # building types.
     apply_building_default_constructionset(model)
     # Make a construction set for each space type, if one is specified
-    #apply_default_constructionsets_to_spacetypes(climate_zone, model)
+    # apply_default_constructionsets_to_spacetypes(climate_zone, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying constructions')
     return true
   end
@@ -536,7 +551,6 @@ class NECB2011
     end
   end
 
-
   def model_add_construction_set_from_osm(model:,
                                           construction_set_name: 'BTAP-Mass',
                                           osm_path: File.absolute_path(File.join(__FILE__, '..', '..', 'common/construction_defaults.osm')))
@@ -551,7 +565,6 @@ class NECB2011
     new_construction_set = selected_construction_set.clone(model).to_DefaultConstructionSet.get
     return new_construction_set
   end
-
 
   def assign_contruction_to_adiabatic_surfaces(model)
     cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
@@ -678,7 +691,6 @@ class NECB2011
     construct_set = model.getBuilding.defaultConstructionSet.get
     fixed_window_construct_set = construct_set.defaultExteriorSubSurfaceConstructions.get.fixedWindowConstruction.get
 
-
     # IF FDWR is greater than 1 then something is wrong raise an error.  If it is less than 0.001 assume all the windows
     # should go.
     if fdwr_lim > 1
@@ -737,7 +749,6 @@ class NECB2011
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "This building has no exposed ceilings adjacent to spaces that are not attics or plenums.  No skylights will be added.")
       return false
     end
-
 
     # If the SRR is greater than one something is seriously wrong so raise an error.  If it is less than 0.001 assume
     # all the skylights should go.

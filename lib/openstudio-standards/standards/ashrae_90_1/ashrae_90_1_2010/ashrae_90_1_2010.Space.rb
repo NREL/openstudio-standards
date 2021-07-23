@@ -20,7 +20,7 @@ class ASHRAE9012010 < ASHRAE901
   # @param space [OpenStudio::Model::Space] the space in question
   # @param areas [Hash] a hash of daylighted areas
   # @return [Array<Bool>] req_top_ctrl, req_pri_ctrl, req_sec_ctrl
-  def space_daylighting_control_required?(space, areas, climate_zone)
+  def space_daylighting_control_required?(space, areas)
     req_top_ctrl = true
     req_pri_ctrl = true
     req_sec_ctrl = false
@@ -39,7 +39,7 @@ class ASHRAE9012010 < ASHRAE901
       # Check effective sidelighted aperture
       sidelighted_effective_aperture = space_sidelighting_effective_aperture(space, areas['primary_sidelighted_area'])
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_pri = #{sidelighted_effective_aperture}")
-      if sidelighted_effective_aperture < 0.1 and @instvarbuilding_type.nil?
+      if sidelighted_effective_aperture < 0.1 && @instvarbuilding_type.nil?
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because sidelighted effective aperture less than 0.1 per 9.4.1.4 Exception b.")
         req_pri_ctrl = false
       end
@@ -106,8 +106,7 @@ class ASHRAE9012010 < ASHRAE901
                                               sorted_skylights,
                                               req_top_ctrl,
                                               req_pri_ctrl,
-                                              req_sec_ctrl,
-                                              climate_zone)
+                                              req_sec_ctrl)
     sensor_1_frac = 0.0
     sensor_2_frac = 0.0
     sensor_1_window = nil
@@ -115,6 +114,9 @@ class ASHRAE9012010 < ASHRAE901
 
     # Get the area of the space
     space_area_m2 = space.floorArea
+
+    # get the climate zone
+    climate_zone = model_standards_climate_zone(space.model)
 
     if req_top_ctrl && req_pri_ctrl
       # Sensor 1 controls toplighted area

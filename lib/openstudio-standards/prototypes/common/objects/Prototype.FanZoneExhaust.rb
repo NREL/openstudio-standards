@@ -5,6 +5,9 @@ class Standard
 
   # Sets the fan pressure rise based on the Prototype buildings inputs
   def fan_zone_exhaust_apply_prototype_fan_pressure_rise(fan_zone_exhaust)
+    # Do not modify dummy exhaust fans
+    return true if fan_zone_exhaust.name.to_s.downcase.include? 'dummy'
+
     # All exhaust fans are assumed to have a pressure rise of
     # 0.5 in w.c. in the prototype building models.
     pressure_rise_in_h2o = 0.5
@@ -27,9 +30,9 @@ class Standard
                                         end_use_subcategory: nil)
 
     # check values to use
-    fan_efficiency = fan_efficiency ? fan_efficiency : fan_json['fan_efficiency']
-    pressure_rise = pressure_rise ? pressure_rise : fan_json['pressure_rise']
-    system_availability_manager_coupling_mode = system_availability_manager_coupling_mode ? system_availability_manager_coupling_mode : fan_json['system_availability_manager_coupling_mode']
+    fan_efficiency ||= fan_json['fan_efficiency']
+    pressure_rise ||= fan_json['pressure_rise']
+    system_availability_manager_coupling_mode ||= fan_json['system_availability_manager_coupling_mode']
 
     # convert values
     pressure_rise = pressure_rise ? OpenStudio.convert(pressure_rise, 'inH_{2}O', 'Pa').get : nil
@@ -59,5 +62,4 @@ class Standard
     fan.setSystemAvailabilityManagerCouplingMode(system_availability_manager_coupling_mode) unless system_availability_manager_coupling_mode.nil?
     return fan
   end
-
 end
