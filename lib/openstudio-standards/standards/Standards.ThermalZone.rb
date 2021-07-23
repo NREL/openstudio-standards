@@ -1085,7 +1085,7 @@ class Standard
       clg_sch = nil
       if equip.to_ZoneHVACLowTempRadiantConstFlow.is_initialized
         equip = equip.to_ZoneHVACLowTempRadiantConstFlow.get
-        clg_coil = equip.heatingCoil
+        clg_coil = equip.coolingCoil
         if clg_coil.to_CoilCoolingLowTempRadiantConstFlow.is_initialized
           clg_coil = clg_coil.to_CoilCoolingLowTempRadiantConstFlow.get
           if clg_coil.coolingLowControlTemperatureSchedule.is_initialized
@@ -1094,7 +1094,7 @@ class Standard
         end
       elsif equip.to_ZoneHVACLowTempRadiantVarFlow.is_initialized
         equip = equip.to_ZoneHVACLowTempRadiantVarFlow.get
-        clg_coil = equip.heatingCoil
+        clg_coil = equip.coolingCoil
         if clg_coil.to_CoilCoolingLowTempRadiantVarFlow.is_initialized
           clg_coil = clg_coil.to_CoilCoolingLowTempRadiantVarFlow.get
           if clg_coil.coolingControlTemperatureSchedule.is_initialized
@@ -1414,7 +1414,6 @@ class Standard
   # @return [Double] the design heating supply temperature, in C
   # @todo Exception: 17F delta-T for labs
   def thermal_zone_prm_baseline_heating_design_supply_temperature(thermal_zone)
-
     unit_heater_sup_temp = thermal_zone_prm_unitheater_design_supply_temperature(thermal_zone)
     unless unit_heater_sup_temp.nil?
       return unit_heater_sup_temp
@@ -1652,13 +1651,12 @@ class Standard
     return load_w
   end
 
-  # This is the operating hours for calulating EFLH which is used for determining whether a zone 
+  # This is the operating hours for calulating EFLH which is used for determining whether a zone
   # should be included in a multizone system or isolated to a separate PSZ system
   # Based on the occupancy schedule for that zone
   # @author Doug Maddox, PNNL
   # @return [Array] 8760 array with 1 = operating, 0 = not operating
   def thermal_zone_get_annual_operating_hours(model, zone, zone_fan_sched)
-
     zone_ppl_sch = Array.new(8760, 0)     # merged people schedule for zone
     zone_op_sch = Array.new(8760, 0)      # intersection of fan and people scheds
 
@@ -1682,8 +1680,7 @@ class Standard
   # @author Doug Maddox, PNNL
   # @return [Double] the design internal load, in W
   def thermal_zone_occupancy_eflh(zone, zone_op_sch)
-
-    eflhs = []    # weekly array of eflh values
+    eflhs = [] # weekly array of eflh values
 
     # Convert 8760 array to weekly eflh values
     hr_of_yr = -1
@@ -1702,15 +1699,14 @@ class Standard
     # This is the statistical mode of the array of values
     eflh_mode_list = eflhs.mode
 
-    if eflh_mode_list.size > 1 then
+    if eflh_mode_list.size > 1
       # Mode is an array of multiple values, take the largest value
       eflh = eflh_mode_list.max
-    else 
+    else
       eflh = eflh_mode_list[0]
     end
     return eflh
   end
-
 
   # Returns the space type that represents a majority
   # of the floor area.

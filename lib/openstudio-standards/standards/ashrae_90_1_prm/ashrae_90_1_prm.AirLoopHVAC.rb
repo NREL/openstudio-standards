@@ -80,7 +80,7 @@ class ASHRAE901PRM < Standard
         return_fan_power_fraction /= total_fan_avg_fan_w
         relief_fan_power_fraction /= total_fan_avg_fan_w
       else
-        Openstudio::logFree(OpenStudio::Error, "Total zone design airflow for #{air_loop_hvac.name} is 0.")
+        Openstudio.logFree(OpenStudio::Error, "Total zone design airflow for #{air_loop_hvac.name} is 0.")
       end
     elsif system_type == 'PTAC' ||
           system_type == 'PTHP' ||

@@ -600,7 +600,7 @@ class Standard
 
   def change_construction_properties_in_model(model, values, is_percentage = false)
     # puts JSON.pretty_generate(values)
-    #copy orginal model for reporting.
+    # copy orginal model for reporting.
     before_measure_model = BTAP::FileIO.deep_copy(model)
     # report change as Info
     info = ''

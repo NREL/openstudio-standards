@@ -1,6 +1,5 @@
-
 # *******************************************************************************
-# The following notice pertains to the function below named 
+# The following notice pertains to the function below named
 # convert_schedule_compact_to_schedule_ruleset
 # *******************************************************************************
 # OpenStudio(R), Copyright (c) 2008-2020, Alliance for Sustainable Energy, LLC.
