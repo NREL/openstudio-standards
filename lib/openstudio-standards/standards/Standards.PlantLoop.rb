@@ -530,7 +530,7 @@ class Standard
         # If chiller is autosized, check sizing run results. If sizing run not ran, run it first
         if chiller.isReferenceCapacityAutosized
           model = chiller.model
-          sizing_run_ran = model_run_sizing_run(model, "#{sizing_run_dir}/SR_cooling_plant") if not sizing_run_ran
+          sizing_run_ran = model_run_sizing_run(model, "#{sizing_run_dir}/SR_cooling_plant") if !sizing_run_ran
 
           if sizing_run_ran
             sizing_run_capacity = model.getAutosizedValueFromEquipmentSummary(chiller, 'Central Plant', 'Nominal Capacity', 'W').get

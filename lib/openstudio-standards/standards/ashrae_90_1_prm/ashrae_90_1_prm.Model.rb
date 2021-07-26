@@ -196,7 +196,7 @@ class ASHRAE901PRM < Standard
         old_infil = space.spaceInfiltrationDesignFlowRates[0]
         old_infil_method = old_infil.designFlowRateCalculationMethod.to_s
         # Return flow per space floor area if method is inconsisten in proposed model
-        return 'Flow/Area' if (infil_method != old_infil_method && !infil_method.nil?)
+        return 'Flow/Area' if infil_method != old_infil_method && !infil_method.nil?
 
         infil_method = old_infil_method
       end
@@ -361,6 +361,7 @@ class ASHRAE901PRM < Standard
     total_subsurface_m2 = 0
     model.getSpaces.sort.each do |space|
       next if space_conditioning_category(space) == 'Unconditioned'
+
       # Loop through all surfaces in this space
       roof_area_m2 = 0
       sky_area_m2 = 0
@@ -369,11 +370,13 @@ class ASHRAE901PRM < Standard
         next unless surface.outsideBoundaryCondition == 'Outdoors'
         # Skip non-walls
         next unless surface.surfaceType == 'RoofCeiling'
+
         # This roof's gross area (including skylight area)
         roof_area_m2 += surface.grossArea * space.multiplier
         # Subsurfaces in this surface
         surface.subSurfaces.sort.each do |ss|
           next unless ss.subSurfaceType == 'Skylight'
+
           sky_area_m2 += ss.netArea * space.multiplier
         end
       end
@@ -403,15 +406,18 @@ class ASHRAE901PRM < Standard
     # Reduce the skylight area if any of the categories necessary
     model.getSpaces.sort.each do |space|
       next if space_conditioning_category(space) == 'Unconditioned'
+
       # Loop through all surfaces in this space
       space.surfaces.sort.each do |surface|
         # Skip non-outdoor surfaces
         next unless surface.outsideBoundaryCondition == 'Outdoors'
         # Skip non-walls
         next unless surface.surfaceType == 'RoofCeiling'
+
         # Subsurfaces in this surface
         surface.subSurfaces.sort.each do |ss|
           next unless ss.subSurfaceType == 'Skylight'
+
           # Reduce the size of the skylight
           red = 1.0 - mult
           sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
@@ -437,16 +443,16 @@ class ASHRAE901PRM < Standard
         casted_load = space_load.public_send(casting_method_name).get
         loads << casted_load
       else
-        p "Need Debug, casting method not found @JXL"
+        p 'Need Debug, casting method not found @JXL'
       end
     end
 
     load_schedule_name_hash = {
-        "People" => "numberofPeopleSchedule",
-        "Lights" => "schedule",
-        "ElectricEquipment" => "schedule",
-        "GasEquipment" => "schedule",
-        "SpaceInfiltration_DesignFlowRate" => "schedule"
+      'People' => 'numberofPeopleSchedule',
+      'Lights' => 'schedule',
+      'ElectricEquipment' => 'schedule',
+      'GasEquipment' => 'schedule',
+      'SpaceInfiltration_DesignFlowRate' => 'schedule'
     }
 
     loads.each do |load|
@@ -614,8 +620,7 @@ class ASHRAE901PRM < Standard
   # are needed
   #
   # @return [Boolean] true if necessary, false otherwise
-  def model_get_fan_power_breakdown()
-
+  def model_get_fan_power_breakdown
     return true
   end
 end

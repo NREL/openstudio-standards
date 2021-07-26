@@ -20,9 +20,8 @@ class ASHRAE901PRM < Standard
   # @param project_folder [string] path to project folder
   # @return [string] path to json files
   def convert_userdata_csv_to_json(user_data_path, project_path)
-
     # Get list of possible files from lib\openstudio-standards\standards\ashrae_90_1_prm\userdata_csv
-    stds_dir = File.expand_path(File.dirname(__FILE__))
+    stds_dir = __dir__
     src_csv_dir = "#{stds_dir}/userdata_csv/*.csv"
     json_objs = {}
     Dir.glob(src_csv_dir) do |csv_full_name|
@@ -35,10 +34,10 @@ class ASHRAE901PRM < Standard
     unless user_data_path == ''
       Dir.glob("#{user_data_path}/*.csv") do |csv_full_name|
         csv_file_name = File.basename(csv_full_name, File.extname(csv_full_name))
-        if json_objs.has_key?(csv_file_name)
+        if json_objs.key?(csv_file_name)
           # Load csv file into array of hashes
-          json_rows = CSV.foreach(csv_full_name, headers: true).map{ |row| row.to_h }
-          next if json_rows.size == 0
+          json_rows = CSV.foreach(csv_full_name, headers: true).map(&:to_h)
+          next if json_rows.empty?
 
           # remove file extension
           file_name = File.basename(csv_full_name, File.extname(csv_full_name))
@@ -65,9 +64,8 @@ class ASHRAE901PRM < Standard
         file << JSON.pretty_generate(json_obj)
       end
     end
-    
-    return json_path
 
+    return json_path
   end
 
   # Load user data from project folder into standards database data structure
@@ -89,5 +87,4 @@ class ASHRAE901PRM < Standard
       end
     end
   end
-
 end

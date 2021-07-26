@@ -52,7 +52,7 @@ class Standard
         cons_set = space.buildingStory.get.defaultConstructionSet.get
         construction = get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
       end
-      if construction.nil? &&  space.model.building.get.defaultConstructionSet.is_initialized
+      if construction.nil? && space.model.building.get.defaultConstructionSet.is_initialized
         cons_set = space.model.building.get.defaultConstructionSet.get
         construction = get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
       end
@@ -90,7 +90,7 @@ class Standard
       stds_type = standards_info.fenestrationFrameType
       if stds_type.is_initialized
         stds_type = stds_type.get
-        if wwr_building_type != nil
+        if !wwr_building_type.nil?
           stds_type = 'Any Vertical Glazing'
         end
         case stds_type
@@ -105,7 +105,7 @@ class Standard
           return previous_construction_map
         end
       else
-        if wwr_building_type != nil
+        if !wwr_building_type.nil?
           stds_type = 'Any Vertical Glazing'
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards fenestration frame type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
@@ -182,7 +182,6 @@ class Standard
   # @param: cons_set [object] DefaultSubSurfaceConstructions object
   # @return: [object] Construction object
   def get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
-
     # Get DefaultSurfaceContstructions or DefaultSubSurfaceConstructions object
     if surface_category == 'ExteriorSurface'
       cons_list = cons_set.defaultExteriorSurfaceConstructions.get
@@ -205,27 +204,27 @@ class Standard
         cons = cons_list.operableWindowConstruction.get
       end
     when 'Door'
-      if  cons_list.doorConstruction.is_initialized
+      if cons_list.doorConstruction.is_initialized
         cons = cons_list.doorConstruction.get
       end
     when 'GlassDoor'
-      if  cons_list.glassDoorConstruction.is_initialized
+      if cons_list.glassDoorConstruction.is_initialized
         cons = cons_list.glassDoorConstruction.get
       end
     when 'OverheadDoor'
-      if  cons_list.overheadDoorConstruction.is_initialized
+      if cons_list.overheadDoorConstruction.is_initialized
         cons = cons_list.overheadDoorConstruction.get
       end
     when 'Skylight'
-      if  cons_list.skylightConstruction.is_initialized
+      if cons_list.skylightConstruction.is_initialized
         cons = cons_list.skylightConstruction.get
       end
     when 'TubularDaylightDome'
-      if  cons_list.tubularDaylightDomeConstruction.is_initialized
+      if cons_list.tubularDaylightDomeConstruction.is_initialized
         cons = cons_list.tubularDaylightDomeConstruction.get
       end
     when 'TubularDaylightDiffuser'
-      if  cons_list.tubularDaylightDiffuserConstruction.is_initialized
+      if cons_list.tubularDaylightDiffuserConstruction.is_initialized
         cons = cons_list.tubularDaylightDiffuserConstruction.get
       end
     when 'Floor'
@@ -244,5 +243,4 @@ class Standard
 
     return cons
   end
-
 end
