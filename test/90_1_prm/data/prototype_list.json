@@ -29,6 +29,8 @@
         ["Warehouse", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
     "hvac_baseline": [
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["remove_transformer", []], ["return_relief_fan", []]]],
+        ["Warehouse", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_cooling_coils", []]]],
         ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", []],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["change_bldg_type",["Assembly"]], ["remove_transformer", []]]],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-4A", [["change_bldg_type",["Assembly"]], ["remove_transformer", []]]],

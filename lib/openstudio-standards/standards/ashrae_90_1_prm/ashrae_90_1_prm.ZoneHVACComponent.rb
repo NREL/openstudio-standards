@@ -43,13 +43,13 @@ class ASHRAE901PRM < Standard
 
     # Get the fan
     fan = if zone_hvac.supplyAirFan.to_FanConstantVolume.is_initialized
-      zone_hvac.supplyAirFan.to_FanConstantVolume.get
-    elsif zone_hvac.supplyAirFan.to_FanVariableVolume.is_initialized
-      zone_hvac.supplyAirFan.to_FanVariableVolume.get
-    elsif zone_hvac.supplyAirFan.to_FanOnOff.is_initialized
-      zone_hvac.supplyAirFan.to_FanOnOff.get
+            zone_hvac.supplyAirFan.to_FanConstantVolume.get
+          elsif zone_hvac.supplyAirFan.to_FanVariableVolume.is_initialized
+            zone_hvac.supplyAirFan.to_FanVariableVolume.get
+          elsif zone_hvac.supplyAirFan.to_FanOnOff.is_initialized
+            zone_hvac.supplyAirFan.to_FanOnOff.get
     end
-  
+
     if system_type == 'SZ_CV' # System 12, 13
       # Get design supply air flow rate (whether autosized or hard-sized)
       dsn_air_flow_m3_per_s = 0
@@ -69,21 +69,21 @@ class ASHRAE901PRM < Standard
 
       # Modify fan pressure rise to match target fan power
       fan_adjust_pressure_rise_to_meet_fan_power(fan, allowable_power_w)
-    else # System 1, 2 
+    else # System 1, 2
       # Determine the W/cfm
       fan_efficacy_w_per_cfm = 0.0
       case system_type
       when 'PTAC', 'PTHP'
         fan_efficacy_w_per_cfm = 0.3 # System 9, 10
-      when 'Gas_Furnace', 'Electric_furnace'
-        if nmc_flag
+      when 'Gas_Furnace', 'Electric_Furnace'
+        # Zone heater cannot provide cooling
+        if nmc_flag & !zone_hvac_component.to_ZoneHVACUnitHeater.is_initialized
           fan_efficacy_w_per_cfm = 0.054
         else
           fan_efficacy_w_per_cfm = 0.3
         end
       else OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.ZoneHVACComponent', 'Zone HVAC system fan power lookup missing.')
       end
-      return fan_efficacy_w_per_cfm
 
       # Convert efficacy to metric
       fan_efficacy_w_per_m3_per_s = OpenStudio.convert(fan_efficacy_w_per_cfm, 'm^3/s', 'cfm').get

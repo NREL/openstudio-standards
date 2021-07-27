@@ -5339,7 +5339,26 @@ class Standard
     # Air loops
     model.getAirLoopHVACs.each do |air_loop|
       # Don't remove airloops representing non-mechanically cooled systems
-      air_loop.remove unless air_loop.additionalProperties.hasFeature("non_mechanically_cooled")
+      if !air_loop.additionalProperties.hasFeature('non_mechanically_cooled')
+        air_loop.remove
+      else
+        # Remove heating coil on
+        air_loop.supplyComponents.each do |supply_comp|
+          # Remove standalone heating coils
+          if supply_comp.iddObjectType.valueName.to_s.include?('OS_Coil_Heating')
+            supply_comp.remove
+          # Remove heating coils wrapped in a unitary system
+          elsif supply_comp.iddObjectType.valueName.to_s.include?('OS_AirLoopHVAC_UnitarySystem')
+            unitary_system = supply_comp.to_AirLoopHVACUnitarySystem.get
+            htg_coil = unitary_system.heatingCoil
+            if htg_coil.is_initialized
+              htg_coil = htg_coil.get
+              unitary_system.resetCoolingCoil
+              htg_coil.remove
+            end
+          end
+        end
+      end
     end
 
     # Zone equipment
@@ -5347,7 +5366,7 @@ class Standard
       zone.equipment.each do |zone_equipment|
         next if zone_equipment.to_FanZoneExhaust.is_initialized
 
-        zone_equipment.remove
+        zone_equipment.remove unless zone.additionalProperties.hasFeature('non_mechanically_cooled')
       end
     end
 

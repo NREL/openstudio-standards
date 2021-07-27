@@ -1106,6 +1106,7 @@ class Standard
       return true if comp.to_CoilCoolingWater.is_initialized
       return true if comp.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
       return true if comp.to_CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit.is_initialized
+
       if comp.to_AirLoopHVACUnitarySystem.is_initialized
         unitary_system = comp.to_AirLoopHVACUnitarySystem.get
         if unitary_system.coolingCoil.is_initialized

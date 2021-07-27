@@ -73,19 +73,19 @@ module Fan
   def fan_design_air_flow(fan)
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = if fan.to_FanZoneExhaust.empty?
-      if fan.maximumFlowRate.is_initialized
-        fan.maximumFlowRate.get
-      elsif fan.autosizedMaximumFlowRate.is_initialized
-        fan.autosizedMaximumFlowRate.get
-      else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "The maximum flow rate for fan '#{fan.name}' was neither specified nor set to Autosize.")
-      end
-    else
-      if fan.maximumFlowRate.is_initialized
-        fan.maximumFlowRate.get
-      else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "The maximum flow rate for exhaust fan '#{fan.name}' was not specified.")
-      end
+                              if fan.maximumFlowRate.is_initialized
+                                fan.maximumFlowRate.get
+                              elsif fan.autosizedMaximumFlowRate.is_initialized
+                                fan.autosizedMaximumFlowRate.get
+                              else
+                                OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "The maximum flow rate for fan '#{fan.name}' was neither specified nor set to Autosize.")
+                              end
+                            else
+                              if fan.maximumFlowRate.is_initialized
+                                fan.maximumFlowRate.get
+                              else
+                                OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "The maximum flow rate for exhaust fan '#{fan.name}' was not specified.")
+                              end
     end
     return dsn_air_flow_m3_per_s
   end
