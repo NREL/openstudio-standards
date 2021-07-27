@@ -1927,7 +1927,7 @@ class AppendixGPRMTests < Minitest::Test
       'daylighting_control',
       'light_occ_sensor',
       'infiltration',
-      'hvac_baseline'
+      'hvac_baseline',
       'hvac_psz_split_from_mz',
       'sat_ctrl',
       'number_of_boilers',
