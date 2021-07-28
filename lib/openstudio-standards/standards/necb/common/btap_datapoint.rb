@@ -2,8 +2,7 @@ require 'openstudio'
 require 'securerandom'
 require 'optparse'
 require 'yaml'
-resource_folder = File.join(__dir__, '..', '..', 'measures/btap_results/resources')
-require_relative File.join(__dir__, 'btap_data.rb')
+# resource_folder = File.join(__dir__, '..', '..', 'measures/btap_results/resources')
 # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 class BTAPDatapoint
