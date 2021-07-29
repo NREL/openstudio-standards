@@ -2883,4 +2883,25 @@ class ECMS
     component.setElectricInputToCoolingOutputRatioFunctionOfPLR(eirfplr_curve) if eirfplr_curve
     raise "There was a problem setting the ElectricInputToCoolingOutputRatioFunctionOfPLR curve named #{eirfplr_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json and chiller_set.json files." if !eirfplr_curve
   end
+
+  # ============================================================================================================================
+  # Add air side economizer for each airloop
+  def add_airloop_economizer(model:, airloop_economizer_type:)
+    return if airloop_economizer_type.nil? || (airloop_economizer_type.to_s == 'NECB_Default')
+
+    if airloop_economizer_type.downcase == "differentialenthalpy"
+      economizer_type = 'DifferentialEnthalpy'
+    elsif airloop_economizer_type.downcase == "differentialdrybulb"
+      economizer_type = 'DifferentialDryBulb'
+    end
+
+    model.getAirLoopHVACs.sort.each do |air_loop|
+      oa_sys = air_loop.airLoopHVACOutdoorAirSystem
+      if oa_sys.is_initialized
+        oa_sys = oa_sys.get
+        oa_control = oa_sys.getControllerOutdoorAir
+        oa_control.setEconomizerControlType(economizer_type)
+      end
+    end
+  end
 end
