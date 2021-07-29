@@ -16,6 +16,24 @@
           "efficiency": 0.85,
           "part_load_curve": "FURNACE-EFFPLR-COND-NECB2011",
           "notes": "From NECB 2011 and AHRI."
+        },
+        {
+          "name": "NECB 88% Efficient Condensing Gas Furnace",
+          "efficiency": 0.88,
+          "part_load_curve": "FURNACE-EFFPLR-COND-NECB2011",
+          "notes": "From NECB 2011 and AHRI."
+        },
+        {
+          "name": "NECB 91% Efficient Condensing Gas Furnace",
+          "efficiency": 0.91,
+          "part_load_curve": "FURNACE-EFFPLR-COND-NECB2011",
+          "notes": "From NECB 2011 and AHRI."
+        },
+        {
+          "name": "NECB 94% Efficient Condensing Gas Furnace",
+          "efficiency": 0.94,
+          "part_load_curve": "FURNACE-EFFPLR-COND-NECB2011",
+          "notes": "From NECB 2011 and AHRI."
         }
       ]
     }

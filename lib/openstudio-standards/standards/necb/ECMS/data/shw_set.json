@@ -12,14 +12,32 @@
           "notes": "Do nothing."
         },
         {
-          "name": "Natural Gas Power Vent with Electric Ignition",
-          "efficiency": 0.94,
+          "name": "Natural Gas 85% Efficient SHW",
+          "efficiency": 0.85,
+          "part_load_curve": "SWH-EFFFPLR-NECB2011",
+          "notes": "From AHRI."
+        },
+        {
+          "name": "Natural Gas 88$ Efficient SHW",
+          "efficiency": 0.88,
           "part_load_curve": "SWH-EFFFPLR-NECB2011",
           "notes": "From AHRI."
         },
         {
           "name": "Natural Gas Direct Vent with Electric Ignition",
           "efficiency": 0.91,
+          "part_load_curve": "SWH-EFFFPLR-NECB2011",
+          "notes": "From AHRI."
+        },
+        {
+          "name": "Natural Gas Power Vent with Electric Ignition",
+          "efficiency": 0.94,
+          "part_load_curve": "SWH-EFFFPLR-NECB2011",
+          "notes": "From AHRI."
+        },
+        {
+          "name": "Natural Gas Power Vent with Electric Ignition 97% Efficient",
+          "efficiency": 0.97,
           "part_load_curve": "SWH-EFFFPLR-NECB2011",
           "notes": "From AHRI."
         }
