@@ -145,7 +145,8 @@ class BTAPDatapoint
                                      oa_scale: @options[:oa_scale],
                                      infiltration_scale: @options[:infiltration_scale],
                                      chiller_type: @options[:chiller_type],
-                                     output_variables: @options[:output_variables])
+                                     output_variables: @options[:output_variables],
+                                     airloop_economizer_type: @options[:airloop_economizer_type])
 
       # Save model to to disk.
       puts "saving model to #{File.join(@dp_temp_folder, 'output.osm')}"
