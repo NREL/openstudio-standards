@@ -452,7 +452,7 @@ class Standard
 
     # set coil properties
     coil.setName("#{hpwh.name} Coil")
-    coil.setRatedHeatingCapacity(water_heater_capacity * cop)
+    coil.setRatedHeatingCapacity(water_heater_capacity)
     coil.setRatedCOP(cop)
     coil.setRatedSensibleHeatRatio(shr)
     coil.setRatedEvaporatorInletAirDryBulbTemperature(OpenStudio.convert(67.5, 'F', 'C').get)
