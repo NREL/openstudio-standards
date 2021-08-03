@@ -1026,7 +1026,7 @@ class NECB2011
         avail_manager_name = multi_speed_heat_pump.airLoopHVAC.get.availabilityManagers[0].name.to_s
       end
     end
-    return unless avil_manager_name
+    return unless avail_manager_name
 
     avail_manager_out_var_name = 'Availability Manager Night Cycle Control Status'
     avail_manager_out_var = OpenStudio::Model::OutputVariable.new(avail_manager_out_var_name, model)
