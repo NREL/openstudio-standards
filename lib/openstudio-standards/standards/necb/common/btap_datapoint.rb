@@ -146,7 +146,9 @@ class BTAPDatapoint
                                      infiltration_scale: @options[:infiltration_scale],
                                      chiller_type: @options[:chiller_type],
                                      output_variables: @options[:output_variables],
+                                     output_meters: @options[:output_meters],
                                      airloop_economizer_type: @options[:airloop_economizer_type])
+
 
       # Save model to to disk.
       puts "saving model to #{File.join(@dp_temp_folder, 'output.osm')}"
@@ -220,6 +222,9 @@ class BTAPDatapoint
 
         File.open(File.join(@dp_temp_folder, 'qaqc.json'), 'w') { |f| f.write(JSON.pretty_generate(@qaqc, allow_nan: true)) }
         puts "Wrote File qaqc.json in #{Dir.pwd} "
+
+        #output hourly data
+        self.output_hourly_data(model,@dp_temp_folder, @options[:datapoint_id])
       end
     rescue StandardError => bang
       puts "Error occured: #{bang}"
@@ -314,5 +319,77 @@ class BTAPDatapoint
     end
 
     return exit_code
+  end
+
+
+  def output_hourly_data(model, output_folder,datapoint_id)
+    osm_path = File.join(output_folder, "run_dir/in.osm")
+    sql_path = File.join(output_folder, "run_dir/run/eplusout.sql")
+    csv_output = File.join(output_folder, "hourly.csv")
+
+    hours_of_year = []
+    d = Time.new(2006, 1, 1, 1)
+    (0...8760).each do |increment|
+      hours_of_year << (d + (60 * 60) * increment).strftime('%Y-%m-%d %H:%M')
+    end
+
+
+    array_of_hashes = []
+
+
+#Find hourly outputs available for this datapoint.
+    query = "
+        SELECT ReportDataDictionaryIndex
+        FROM ReportDataDictionary
+        WHERE ReportingFrequency == 'Hourly'
+                                                       "
+# Get hourly data for each output.
+    model.sqlFile.get.execAndReturnVectorOfInt(query).get.each do |rdd_index|
+
+      #Get Name
+      query = "
+        SELECT Name
+        FROM ReportDataDictionary
+        WHERE ReportDataDictionaryIndex == #{rdd_index}
+      "
+      name = model.sqlFile.get.execAndReturnFirstString(query).get
+
+      #Get KeyValue
+      query = "
+        SELECT KeyValue
+        FROM ReportDataDictionary
+        WHERE ReportDataDictionaryIndex == #{rdd_index}
+      "
+      key_value = model.sqlFile.get.execAndReturnFirstString(query).get
+
+      #Get Units
+      query = "
+        SELECT Units
+        FROM ReportDataDictionary
+        WHERE ReportDataDictionaryIndex == #{rdd_index}
+      "
+      units = model.sqlFile.get.execAndReturnFirstString(query).get
+
+      #Get hourly data
+      query = "
+                    Select Value
+                    FROM ReportData
+                    WHERE
+                        ReportDataDictionaryIndex = #{rdd_index}
+      "
+      hourly_values = model.sqlFile.get.execAndReturnVectorOfDouble(query).get
+
+      hourly_hash = Hash[hours_of_year.zip(hourly_values)]
+
+      data_hash = {"datapoint_id": datapoint_id, "Name": name, "KeyValue": key_value, "Units": units}.merge(hourly_hash)
+      array_of_hashes << data_hash
+    end
+
+    CSV.open(csv_output, "wb") do |csv|
+      csv << array_of_hashes.first.keys # adds the attributes name on the first line
+      array_of_hashes.each do |hash|
+        csv << hash.values
+      end
+    end
   end
 end

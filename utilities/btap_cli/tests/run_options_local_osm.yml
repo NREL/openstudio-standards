@@ -57,3 +57,10 @@
 :output_variables: [
 {    key: '*',     variable: 'Zone Air Temperature',     frequency: 'hourly'}
 ]
+:output_meters: [
+{    name: 'Gas:Facility',     frequency: 'hourly'},
+{    name: 'Electricity:Facility',     frequency: 'hourly'},
+{    name: 'DISTRICTHEATING:FACILITY',     frequency: 'hourly'},
+{    name: 'DISTRICTCOOLING:FACILITY',     frequency: 'hourly'},
+{    name: 'FuelOil#2:Facility',     frequency: 'hourly'}
+]

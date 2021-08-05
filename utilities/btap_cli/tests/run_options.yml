@@ -36,7 +36,7 @@
 :oa_scale: NECB_Default
 :occupancy_loads_scale: NECB_Default
 :overhead_door_cond: NECB_Default
-:primary_heating_fuel: Electricity
+:primary_heating_fuel: FuelOilNo2
 :pv_ground_azimuth_angle: NECB_Default
 :pv_ground_module_description: NECB_Default
 :pv_ground_tilt_angle: NECB_Default
@@ -56,4 +56,11 @@
 :template: NECB2017
 :output_variables: [
   {    key: '*',     variable: 'Zone Air Temperature',     frequency: 'hourly'}
+]
+:output_meters: [
+  {    name: 'Gas:Facility',     frequency: 'hourly'},
+  {    name: 'Electricity:Facility',     frequency: 'hourly'},
+  {    name: 'DISTRICTHEATING:FACILITY',     frequency: 'hourly'},
+  {    name: 'DISTRICTCOOLING:FACILITY',     frequency: 'hourly'},
+  {    name: 'FuelOil#2:Facility',     frequency: 'hourly'}
 ]

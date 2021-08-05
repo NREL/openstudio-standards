@@ -223,7 +223,9 @@ class NECB2011 < Standard
                                    oa_scale: nil,
                                    infiltration_scale: nil,
                                    output_variables: nil,
+                                   output_meters: nil,
                                    airloop_economizer_type: nil)
+
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 epw_file: epw_file,
@@ -274,7 +276,9 @@ class NECB2011 < Standard
                                 infiltration_scale: infiltration_scale,
                                 chiller_type: chiller_type, # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) e.g. 'VSD'
                                 output_variables: output_variables,
+                                output_meters: output_meters,
                                 airloop_economizer_type: airloop_economizer_type) # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
+
   end
 
   def load_building_type_from_library(building_type:)
@@ -338,6 +342,7 @@ class NECB2011 < Standard
                            oa_scale: nil,
                            infiltration_scale: nil,
                            output_variables: nil,
+                           output_meters: nil,
                            airloop_economizer_type: nil)
 
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
@@ -396,7 +401,9 @@ class NECB2011 < Standard
                                    pv_ground_module_description: pv_ground_module_description,
                                    chiller_type: chiller_type,
                                    airloop_economizer_type: airloop_economizer_type)
-    set_output_variables(model: model, output_variables: output_variables)
+    self.set_output_variables(model: model, output_variables: output_variables)
+    self.set_output_meters(model: model, output_meters: output_meters)
+
     return model
   end
 
@@ -1751,18 +1758,47 @@ class NECB2011 < Standard
     return daylighted_under_skylight_area, skylight_area_weighted_vt_handle, skylight_area_sum
   end
 
-  def set_output_variables(model:, output_variables:)
-    unless output_variables.nil?
+  def set_output_variables(model:,output_variables:)
+    unless output_variables.nil? or output_variables.empty?
       output_variables.each do |output_variable|
         puts output_variable
         puts output_variable['frequency']
-        raise("Frequency is not valid. Must by \"hourly\" or \"timestep\" but got #{output_variable}.") unless ['timestep', 'hourly', 'daily', 'monthly', 'annual'].include?(output_variable['frequency'])
-
-        output = OpenStudio::Model::OutputVariable.new(output_variable['variable'], model)
+        raise("Frequency is not valid. Must by \"hourly\" or \"timestep\" but got #{output_variable}.") unless ["timestep","hourly",'daily','monthly','annual'].include?(output_variable['frequency'])
+        output = OpenStudio::Model::OutputVariable.new(output_variable['variable'],model)
         output.setKeyValue(output_variable['key'])
         output.setReportingFrequency(output_variable['frequency'])
       end
     end
     return model
   end
+
+  def set_output_meters(model:,output_meters:)
+    unless output_meters.nil? or output_meters.empty?
+      # remove existing output meters
+      existing_meters = model.getOutputMeters
+
+      # OpenStudio doesn't seemt to like two meters of the same name, even if they have different reporting frequencies.
+      output_meters.each do |new_meter|
+        #check if meter already exists
+        result = existing_meters.select { |e_m| e_m.name == new_meter['name'] }
+        puts("More and one output meter named #{new_meter['name']}") if result.size > 1
+        if result.size >= 1
+          existing_meter = result[0]
+          puts("A meter named #{new_meter['name']} already exists. One will not be added to the model.")
+          if existing_meter.reportingFrequency != new_meter['frequency']
+            existing_meter.setReportingFrequency(new_meter['frequency'])
+            puts("Changing reporting frequency of existing meter to #{new_meter['frequency']}.")
+          end
+        end
+        if result.size == 0
+          meter = OpenStudio::Model::OutputMeter.new(model)
+          meter.setName(new_meter['name'])
+          meter.setReportingFrequency(new_meter['frequency'])
+          puts("Adding meter for #{meter.name} reporting #{new_meter['frequency']}")
+        end
+      end
+    end
+    return model
+  end
+
 end
