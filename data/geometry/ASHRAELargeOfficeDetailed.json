@@ -10,10 +10,16 @@
     "chiller_condenser_type": null,
     "chiller_compressor_type": "Centrifugal",
     "space_names": [
-         "OpenOffice_Bot_ZN_1","OpenOffice_Bot_ZN_2","OpenOffice_Bot_ZN_3","EnclosedOffice_Bot_ZN_1","EnclosedOffice_Bot_ZN_2","EnclosedOffice_Bot_ZN_3",
-		 "EnclosedOffice_Bot_ZN_4","EnclosedOffice_Bot_ZN_5","EnclosedOffice_Bot_ZN_6","Mechanical_Bot_ZN_1","Mechanical_Bot_ZN_2",
-		 "Corridor_Bot_ZN_1","Corridor_Bot_ZN_2","Restroom_Bot_ZN","Lobby_Bot_ZN_1","Lobby_Bot_ZN_2","Stair_Bot_ZN_1","Stair_Bot_ZN_2","Dining_Bot_ZN",
-		 "ConfRoom_Bot_ZN_1","ConfRoom_Bot_ZN_2","ActiveStorage_Bot_ZN","Atrium_Bot_ZN","Classroom_Bot_ZN","Lounge_Bot_ZN"
+      "OpenOffice_Bot_ZN_1","OpenOffice_Bot_ZN_2","OpenOffice_Bot_ZN_3",
+      "EnclosedOffice_Bot_ZN_1_1","EnclosedOffice_Bot_ZN_1_2","EnclosedOffice_Bot_ZN_1_3","EnclosedOffice_Bot_ZN_1_4","EnclosedOffice_Bot_ZN_1_5","EnclosedOffice_Bot_ZN_1_6",
+      "EnclosedOffice_Bot_ZN_2_1","EnclosedOffice_Bot_ZN_2_2","EnclosedOffice_Bot_ZN_2_3","EnclosedOffice_Bot_ZN_2_4","EnclosedOffice_Bot_ZN_2_5","EnclosedOffice_Bot_ZN_2_6",
+      "EnclosedOffice_Bot_ZN_3_1","EnclosedOffice_Bot_ZN_3_2","EnclosedOffice_Bot_ZN_3_3","EnclosedOffice_Bot_ZN_3_4","EnclosedOffice_Bot_ZN_3_5","EnclosedOffice_Bot_ZN_3_6",
+      "EnclosedOffice_Bot_ZN_4_1","EnclosedOffice_Bot_ZN_4_2","EnclosedOffice_Bot_ZN_4_3",
+      "EnclosedOffice_Bot_ZN_5_1","EnclosedOffice_Bot_ZN_5_2","EnclosedOffice_Bot_ZN_5_3","EnclosedOffice_Bot_ZN_5_4","EnclosedOffice_Bot_ZN_5_5",
+      "EnclosedOffice_Bot_ZN_6_1","EnclosedOffice_Bot_ZN_6_2","EnclosedOffice_Bot_ZN_6_3","EnclosedOffice_Bot_ZN_6_4","EnclosedOffice_Bot_ZN_6_5","EnclosedOffice_Bot_ZN_6_6",
+      "Mechanical_Bot_ZN_1","Mechanical_Bot_ZN_2",
+      "Corridor_Bot_ZN_1","Corridor_Bot_ZN_2","Restroom_Bot_ZN","Lobby_Bot_ZN_1","Lobby_Bot_ZN_2","Stair_Bot_ZN_1","Stair_Bot_ZN_2","Dining_Bot_ZN",
+      "ConfRoom_Bot_ZN_1","ConfRoom_Bot_ZN_2","ActiveStorage_Bot_ZN","Atrium_Bot_ZN","Classroom_Bot_ZN","Lounge_Bot_ZN"
     ]
   },
   {
@@ -27,10 +33,18 @@
     "chiller_condenser_type": null,
     "chiller_compressor_type": "Centrifugal",
     "space_names": [
-		 "OpenOffice_Mid_ZN_1","OpenOffice_Mid_ZN_2","OpenOffice_Mid_ZN_3","OpenOffice_Mid_ZN_4","EnclosedOffice_Mid_ZN_1","EnclosedOffice_Mid_ZN_2","EnclosedOffice_Mid_ZN_3",
-		 "EnclosedOffice_Mid_ZN_4","EnclosedOffice_Mid_ZN_5","EnclosedOffice_Mid_ZN_6","EnclosedOffice_Mid_ZN_7","EnclosedOffice_Mid_ZN_8","Mechanical_Mid_ZN_1","Mechanical_Mid_ZN_2",
-		 "Corridor_Mid_ZN_1","Corridor_Mid_ZN_2","Restroom_Mid_ZN","Lobby_Mid_ZN","Stair_Mid_ZN_1","Stair_Mid_ZN_2","Dining_Mid_ZN",
-		 "ConfRoom_Mid_ZN_1","ConfRoom_Mid_ZN_2","ActiveStorage_Mid_ZN","Classroom_Mid_ZN"
+      "OpenOffice_Mid_ZN_1","OpenOffice_Mid_ZN_2","OpenOffice_Mid_ZN_3","OpenOffice_Mid_ZN_4",
+      "EnclosedOffice_Mid_ZN_1_1","EnclosedOffice_Mid_ZN_1_2","EnclosedOffice_Mid_ZN_1_3","EnclosedOffice_Mid_ZN_1_4","EnclosedOffice_Mid_ZN_1_5","EnclosedOffice_Mid_ZN_1_6",
+      "EnclosedOffice_Mid_ZN_2_1","EnclosedOffice_Mid_ZN_2_2","EnclosedOffice_Mid_ZN_2_3","EnclosedOffice_Mid_ZN_2_4","EnclosedOffice_Mid_ZN_2_5","EnclosedOffice_Mid_ZN_2_6",
+      "EnclosedOffice_Mid_ZN_3_1","EnclosedOffice_Mid_ZN_3_2","EnclosedOffice_Mid_ZN_3_3","EnclosedOffice_Mid_ZN_3_4","EnclosedOffice_Mid_ZN_3_5","EnclosedOffice_Mid_ZN_3_6",
+      "EnclosedOffice_Mid_ZN_4_1","EnclosedOffice_Mid_ZN_4_2","EnclosedOffice_Mid_ZN_4_3",
+      "EnclosedOffice_Mid_ZN_5_1","EnclosedOffice_Mid_ZN_5_2","EnclosedOffice_Mid_ZN_5_3","EnclosedOffice_Mid_ZN_5_4","EnclosedOffice_Mid_ZN_5_5","EnclosedOffice_Mid_ZN_5_6",
+      "EnclosedOffice_Mid_ZN_6_1","EnclosedOffice_Mid_ZN_6_2","EnclosedOffice_Mid_ZN_6_3","EnclosedOffice_Mid_ZN_6_4","EnclosedOffice_Mid_ZN_6_5","EnclosedOffice_Mid_ZN_6_6",
+      "EnclosedOffice_Mid_ZN_7_1","EnclosedOffice_Mid_ZN_7_2","EnclosedOffice_Mid_ZN_7_3","EnclosedOffice_Mid_ZN_7_4","EnclosedOffice_Mid_ZN_7_5","EnclosedOffice_Mid_ZN_7_6",
+      "EnclosedOffice_Mid_ZN_8_1","EnclosedOffice_Mid_ZN_8_2","EnclosedOffice_Mid_ZN_8_3","EnclosedOffice_Mid_ZN_8_4","EnclosedOffice_Mid_ZN_8_5","EnclosedOffice_Mid_ZN_8_6",
+      "Mechanical_Mid_ZN_1","Mechanical_Mid_ZN_2",
+      "Corridor_Mid_ZN_1","Corridor_Mid_ZN_2","Restroom_Mid_ZN","Lobby_Mid_ZN","Stair_Mid_ZN_1","Stair_Mid_ZN_2","Dining_Mid_ZN",
+      "ConfRoom_Mid_ZN_1","ConfRoom_Mid_ZN_2","ActiveStorage_Mid_ZN","Classroom_Mid_ZN"
     ]
   },
   {
@@ -44,10 +58,18 @@
     "chiller_condenser_type": null,
     "chiller_compressor_type": "Centrifugal",
     "space_names": [
-         "OpenOffice_Top_ZN_1","OpenOffice_Top_ZN_2","OpenOffice_Top_ZN_3","OpenOffice_Top_ZN_4","EnclosedOffice_Top_ZN_1","EnclosedOffice_Top_ZN_2","EnclosedOffice_Top_ZN_3",
-		 "EnclosedOffice_Top_ZN_4","EnclosedOffice_Top_ZN_5","EnclosedOffice_Top_ZN_6","EnclosedOffice_Top_ZN_7","EnclosedOffice_Top_ZN_8","Mechanical_Top_ZN_1","Mechanical_Top_ZN_2",
-		 "Corridor_Top_ZN_1","Corridor_Top_ZN_2","Restroom_Top_ZN","Lobby_Top_ZN","Stair_Top_ZN_1","Stair_Top_ZN_2","Dining_Top_ZN",
-		 "ConfRoom_Top_ZN_1","ConfRoom_Top_ZN_2","ActiveStorage_Top_ZN","Classroom_Top_ZN"
+      "OpenOffice_Top_ZN_1","OpenOffice_Top_ZN_2","OpenOffice_Top_ZN_3","OpenOffice_Top_ZN_4",
+      "EnclosedOffice_Top_ZN_1_1","EnclosedOffice_Top_ZN_1_2","EnclosedOffice_Top_ZN_1_3","EnclosedOffice_Top_ZN_1_4","EnclosedOffice_Top_ZN_1_5","EnclosedOffice_Top_ZN_1_6",
+      "EnclosedOffice_Top_ZN_2_1","EnclosedOffice_Top_ZN_2_2","EnclosedOffice_Top_ZN_2_3","EnclosedOffice_Top_ZN_2_4","EnclosedOffice_Top_ZN_2_5","EnclosedOffice_Top_ZN_2_6",
+      "EnclosedOffice_Top_ZN_3_1","EnclosedOffice_Top_ZN_3_2","EnclosedOffice_Top_ZN_3_3","EnclosedOffice_Top_ZN_3_4","EnclosedOffice_Top_ZN_3_5","EnclosedOffice_Top_ZN_3_6",
+      "EnclosedOffice_Top_ZN_4_1","EnclosedOffice_Top_ZN_4_2","EnclosedOffice_Top_ZN_4_3",
+      "EnclosedOffice_Top_ZN_5_1","EnclosedOffice_Top_ZN_5_2","EnclosedOffice_Top_ZN_5_3","EnclosedOffice_Top_ZN_5_4","EnclosedOffice_Top_ZN_5_5","EnclosedOffice_Top_ZN_5_6",
+      "EnclosedOffice_Top_ZN_6_1","EnclosedOffice_Top_ZN_6_2","EnclosedOffice_Top_ZN_6_3","EnclosedOffice_Top_ZN_6_4","EnclosedOffice_Top_ZN_6_5","EnclosedOffice_Top_ZN_6_6",
+      "EnclosedOffice_Top_ZN_7_1","EnclosedOffice_Top_ZN_7_2","EnclosedOffice_Top_ZN_7_3","EnclosedOffice_Top_ZN_7_4","EnclosedOffice_Top_ZN_7_5","EnclosedOffice_Top_ZN_7_6",
+      "EnclosedOffice_Top_ZN_8_1","EnclosedOffice_Top_ZN_8_2","EnclosedOffice_Top_ZN_8_3","EnclosedOffice_Top_ZN_8_4","EnclosedOffice_Top_ZN_8_5","EnclosedOffice_Top_ZN_8_6",
+      "Mechanical_Top_ZN_1","Mechanical_Top_ZN_2",
+      "Corridor_Top_ZN_1","Corridor_Top_ZN_2","Restroom_Top_ZN","Lobby_Top_ZN","Stair_Top_ZN_1","Stair_Top_ZN_2","Dining_Top_ZN",
+      "ConfRoom_Top_ZN_1","ConfRoom_Top_ZN_2","ActiveStorage_Top_ZN","Classroom_Top_ZN"
     ]
   },
   {
@@ -60,9 +82,12 @@
     "chiller_condenser_type": null,
     "chiller_compressor_type": "Centrifugal",
     "space_names": [
-         "OpenOffice_Basement_ZN_1","OpenOffice_Basement_ZN_2","EnclosedOffice_Basement_ZN_1","EnclosedOffice_Basement_ZN_2","EnclosedOffice_Basement_ZN_3",
-		 "Mechanical_Basement_ZN_1","Mechanical_Basement_ZN_2", "Corridor_Basement_ZN_1","Corridor_Basement_ZN_2","Corridor_Basement_ZN_3","Restroom_Basement_ZN","Lobby_Basement_ZN","Stair_Basement_ZN_1","Stair_Basement_ZN_2","Dining_Basement_ZN",
-		 "ConfRoom_Basement_ZN","ActiveStorage_Basement_ZN","Classroom_Basement_ZN","Workshop_Basement_ZN","FoodPrep_Basement_ZN","Locker_Basement_ZN"
+      "OpenOffice_Basement_ZN_1","OpenOffice_Basement_ZN_2",
+      "EnclosedOffice_Basement_ZN_1_1","EnclosedOffice_Basement_ZN_1_2","EnclosedOffice_Basement_ZN_1_3","EnclosedOffice_Basement_ZN_1_4","EnclosedOffice_Basement_ZN_1_5","EnclosedOffice_Basement_ZN_1_6",
+      "EnclosedOffice_Basement_ZN_2_1","EnclosedOffice_Basement_ZN_2_2","EnclosedOffice_Basement_ZN_2_3","EnclosedOffice_Basement_ZN_2_4","EnclosedOffice_Basement_ZN_2_5",
+      "EnclosedOffice_Basement_ZN_3_1","EnclosedOffice_Basement_ZN_3_2","EnclosedOffice_Basement_ZN_3_3","EnclosedOffice_Basement_ZN_3_4","EnclosedOffice_Basement_ZN_3_5","EnclosedOffice_Basement_ZN_3_6",
+      "Mechanical_Basement_ZN_1","Mechanical_Basement_ZN_2", "Corridor_Basement_ZN_1","Corridor_Basement_ZN_2","Corridor_Basement_ZN_3","Restroom_Basement_ZN","Lobby_Basement_ZN","Stair_Basement_ZN_1","Stair_Basement_ZN_2","Dining_Basement_ZN",
+      "ConfRoom_Basement_ZN","ActiveStorage_Basement_ZN","Classroom_Basement_ZN","Workshop_Basement_ZN","FoodPrep_Basement_ZN","Locker_Basement_ZN"
     ]
   },
   {

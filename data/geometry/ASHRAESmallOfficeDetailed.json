@@ -87,7 +87,33 @@
     "heating_type": "Single Speed Heat Pump",
     "supplemental_heating_type": "Gas",
     "space_names": [
-      "EnclosedOffice_3"
+      "EnclosedOffice_3_1"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-7",
+    "operation_schedule": "OfficeSmall HVACOperationSchd",
+    "oa_damper_schedule": "OfficeSmall MinOA_Sched",
+    "fan_type": "Cycling",
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EnclosedOffice_3_2"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-7",
+    "operation_schedule": "OfficeSmall HVACOperationSchd",
+    "oa_damper_schedule": "OfficeSmall MinOA_Sched",
+    "fan_type": "Cycling",
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EnclosedOffice_3_3"
     ]
   },
    {
@@ -100,7 +126,33 @@
     "heating_type": "Single Speed Heat Pump",
     "supplemental_heating_type": "Gas",
     "space_names": [
-      "EnclosedOffice_4"
+      "EnclosedOffice_4_1"
+    ]
+  },
+     {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-8",
+    "operation_schedule": "OfficeSmall HVACOperationSchd",
+    "oa_damper_schedule": "OfficeSmall MinOA_Sched",
+    "fan_type": "Cycling",
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EnclosedOffice_4_2"
+    ]
+  },
+     {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-8",
+    "operation_schedule": "OfficeSmall HVACOperationSchd",
+    "oa_damper_schedule": "OfficeSmall MinOA_Sched",
+    "fan_type": "Cycling",
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EnclosedOffice_4_3"
     ]
   },
    {
