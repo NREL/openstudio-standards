@@ -154,7 +154,10 @@ class NECB_scaling_loads_Tests < Minitest::Test
 
               ##### Gather info of shw_scale in the model
               model.getWaterUseEquipmentDefinitions.sort.each do |item|
-                result["#{item.name.to_s} - peakFlowRate"] = item.peakFlowRate .to_f
+                result["#{item.name.to_s} - peakFlowRate"] = item.peakFlowRate.to_f
+              end
+              model.getWaterHeaterMixeds.sort.each do |item|
+                result["#{item.name.to_s} - tankVolume"] = item.tankVolume.to_f
               end
 
               # puts JSON.pretty_generate(result)
