@@ -1,5 +1,5 @@
 class NECB2011
-  def model_add_swh(model:, swh_fueltype: 'DefaultFuel', shw_scale:)
+  def model_add_swh(model:, swh_fueltype: 'DefaultFuel', shw_scale: shw_scale)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
     # Get default fuel based on epw location province.
     if swh_fueltype == 'DefaultFuel'
@@ -7,8 +7,18 @@ class NECB2011
       swh_fueltype = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
     end
 
+    ##### Modify shw_scale if required
+    if shw_scale.instance_of?(String)
+      shw_scale = shw_scale.strip # remove leading or trailing whitespace in case users add them in shw_scale
+    end
+    if shw_scale == 'NECB_Default' or shw_scale.nil? or shw_scale == 'none' or shw_scale == false
+      shw_scale = 1.0
+    elsif shw_scale.instance_of?(String) # Convert a string to a float
+      shw_scale = shw_scale.to_f
+    end
+
     # Calculate the tank size and service water pump information
-    shw_sizing = auto_size_shw_capacity(model)
+    shw_sizing = auto_size_shw_capacity(model, shw_scale: shw_scale)
     if shw_sizing['loop_peak_flow_rate_SI'] == 0
       # Only add a shw_loop if at least one space calls for shw.  If no space calls for shw put out a warning but do not
       # add a shw loop.
@@ -228,7 +238,7 @@ class NECB2011
 
   # This calculates the volume and capacity of one mixed tank that is assumed to service all shw in the building
   # u is the tank insulation in W/(m^2*K), height_to_radius is the ratio of tank radius to tank height and is dimensionless
-  def auto_size_shw_capacity(model, u: 0.45, height_to_radius: 2, shw_scale: 1.0)
+  def auto_size_shw_capacity(model, u: 0.45, height_to_radius: 2, shw_scale: shw_scale)
     peak_flow_rate = 0
     shw_space_types = []
     space_peak_flows = []
@@ -278,7 +288,11 @@ class NECB2011
       # when defining water use equipment.  When when water use equipment is assigned to spaces then the water use
       # by the equipment is multiplied by the space multiplier.  Note that there is a separate water use equipment
       # multiplier as well which is different than the space (ultimately thermal zone) multiplier.
-      space_peak_flow_ind = data['service_water_heating_peak_flow_per_area'].to_f * space_area * shw_scale
+      unless shw_scale=='NECB_Default' or shw_scale.nil?
+        space_peak_flow_ind = data['service_water_heating_peak_flow_per_area'].to_f * space_area * shw_scale
+      else
+        space_peak_flow_ind = data['service_water_heating_peak_flow_per_area'].to_f * space_area
+      end
       space_peak_flow = space_peak_flow_ind * space.multiplier
       #      space_peak_flows << space_peak_flow
       # Add the peak shw flow rate for the space to the total for the entire building
