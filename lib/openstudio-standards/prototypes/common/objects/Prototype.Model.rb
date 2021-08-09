@@ -845,6 +845,7 @@ Standard.class_eval do
     model.getThermalZones.each(&:remove)
 
     # Create a thermal zone for each space in the self
+    thermostat_to_offset = []
     model.getSpaces.sort.each do |space|
       zone = OpenStudio::Model::ThermalZone.new(model)
       zone.setName("#{space.name} ZN")
@@ -871,7 +872,17 @@ Standard.class_eval do
           ideal_loads.addToThermalZone(zone)
         end
       end
+
+      # Modify thermostat schedules if space
+      # has standby mode occupancy requirements
+      if space_is_occupancy_standby_mode(space)
+        next if thermostat_to_offset.include?(thermostat_clone.name)
+
+        space_occupancy_standby_mode(thermostat_clone)
+        thermostat_to_offset << thermostat_name
+      end
     end
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
  end
 
@@ -2544,6 +2555,94 @@ Standard.class_eval do
       end
     end
 
+    return true
+  end
+
+  # Offset values of a schedule
+  # Main usage is for modeling occupancy standby mode
+  # where the thermostat schedule in these mode are
+  # required to setup/back their thermostat setpoints
+  #
+  # @param time_offset_hash [Hash] Hash providing time (key) and schedule value offset (values)
+  # @param schedule [OpenStudio::model::ScheduleRuleset] OpenStudio schedule object
+  # @return [OpenStudio::model::ScheduleRuleset] Modified OpenStudio schedule object
+  def model_offset_schedule_value(schedule, time_offset_hash)
+    offset_sch = schedule.clone(schedule.model).to_ScheduleRuleset.get
+
+    # Get day schedule
+    day_schedules = []
+    default_day_schedule = offset_sch.defaultDaySchedule
+    day_schedules << default_day_schedule
+    offset_sch.scheduleRules.each do |rule|
+      day_schedules << rule.daySchedule
+    end
+
+    # Offset schedule values
+    day_schedules.each do |day_schedule|
+      (0..23).each do |hr|
+        t = OpenStudio::Time.new(0, hr, 0, 0)
+
+        # Get schedule value
+        value = day_schedule.getValue(t)
+
+        # Offset schedule value
+        if time_offset_hash.key?(hr.to_s)
+          day_schedule.addValue(t, value)
+          t_p_1 = OpenStudio::Time.new(0, hr + 1, 0, 0)
+          day_schedule.addValue(t_p_1, value + time_offset_hash[hr.to_s])
+        end
+      end
+    end
+
+    offset_sch.setName("#{schedule.name} - offset")
+    return offset_sch
+  end
+
+  # Set/change values of a schedule
+  # Main usage is for modeling occupancy standby mode
+  # where the thermostat schedule in these mode are
+  # required to setup/back their thermostat setpoints
+  #
+  # @param time_offset_hash [Hash] Hash providing time (key) and schedule value offset (values)
+  # @param schedule [OpenStudio::model::ScheduleRuleset] OpenStudio schedule object
+  # @return [OpenStudio::model::ScheduleRuleset] Modified OpenStudio schedule object
+  def model_set_schedule_value(schedule, time_value_hash)
+    new_sch = schedule.clone(schedule.model).to_ScheduleRuleset.get
+
+    # Get day schedule
+    day_schedules = []
+    default_day_schedule = new_sch.defaultDaySchedule
+    day_schedules << default_day_schedule
+    new_sch.scheduleRules.each do |rule|
+      day_schedules << rule.daySchedule
+    end
+
+    # Offset schedule values
+    day_schedules.each do |day_schedule|
+      (0..23).each do |hr|
+        t = OpenStudio::Time.new(0, hr, 0, 0)
+
+        # Get schedule value
+        value = day_schedule.getValue(t)
+
+        # Offset schedule value
+        if time_value_hash.key?(hr.to_s)
+          day_schedule.addValue(t, value)
+          t_p_1 = OpenStudio::Time.new(0, hr + 1, 0, 0)
+          day_schedule.addValue(t_p_1, time_value_hash[hr.to_s])
+        end
+      end
+    end
+
+    new_sch.setName("#{schedule.name} - adjusted")
+    return new_sch
+  end
+
+  # Modify thermostat schedule to account for a thermostat setback/up
+  #
+  # @param space [OpenStudio::model::Space] OpenStudio Space object
+  # @return [Boolean] true if success
+  def space_occupancy_standby_mode(thermostat)
     return true
   end
 end

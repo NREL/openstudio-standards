@@ -160,6 +160,24 @@ class Standard
       end
       air_loop_hvac_apply_single_zone_controls(air_loop_hvac, climate_zone)
     end
+
+    # Standby mode occupancy control
+    unless air_loop_hvac.thermalZones.empty?
+      thermal_zones = air_loop_hvac.thermalZones
+
+      standby_mode_spaces = []
+      thermal_zones.sort.each do |thermal_zone|
+        thermal_zone.spaces.sort.each do |space|
+          if space_is_occupancy_standby_mode(space)
+            standby_mode_spaces << space
+          end
+        end
+      end
+
+      if !standby_mode_spaces.empty?
+        air_loop_hvac_standby_mode_occupancy_control(air_loop_hvac, standby_mode_spaces)
+      end
+    end
   end
 
   # Apply all PRM baseline required controls to the airloop.
@@ -1094,6 +1112,17 @@ class Standard
 
       end
     end
+    return false
+  end
+
+  # Determine if the air loop includes a unitary system
+  #
+  # @return [Bool] returns true if a unitary system is included on the air loop
+  def air_loop_hvac_include_unitary_system?(air_loop_hvac)
+    air_loop_hvac.supplyComponents.each do |comp|
+      return true if comp.to_AirLoopHVACUnitarySystem.is_initialized
+    end
+
     return false
   end
 
@@ -3153,7 +3182,7 @@ class Standard
 
   # Determine how much residential area the airloop serves
   #
-  # @returns [Double] res_area m^2
+  # @return [Double] res_area m^2
   def air_loop_hvac_residential_area_served(air_loop_hvac)
     res_area = 0.0
 
@@ -3413,5 +3442,18 @@ class Standard
     end
 
     return dx_clg
+  end
+
+  # Add occupant standby controls to air loop
+  # When the thermostat schedule is setup or setback
+  # the ventilation is shutoff. Currently this is done
+  # by scheduling air terminal dampers (so load can
+  # still be met) and cycling unitary system fans
+  #
+  # @param air_loop_hvac [OpenStudio::model::AirLoopHVAC] OpenStudio AirLoopHVAC object
+  # @param standby_mode_space [Array] List of all spaces required to have standby mode controls
+  # @return [Boolean] true if sucessful, false otherwise
+  def air_loop_hvac_standby_mode_occupancy_control(air_loop_hvac, standby_mode_spaces)
+    return true
   end
 end
