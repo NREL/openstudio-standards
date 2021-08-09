@@ -227,6 +227,11 @@ class Standard
   # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
   # @todo Speed up this method.  Bottleneck is ScheduleRule.getDaySchedules
   def spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil, threshold_calc_method: 'value')
+    unless !spaces.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', 'Empty spaces array passed to spaces_get_occupancy_schedule method.')
+      return false
+    end
+
     annual_normalized_tol = nil
     if threshold_calc_method == 'normalized_annual_range'
       # run this method without threshold to get annual min and max

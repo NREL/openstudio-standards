@@ -1,10 +1,8 @@
 class NECB2017
-
   # Check if ERV is required on this airloop.
   #
   # @return [Bool] Returns true if required, false if not.
   def air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
-
     erv_required = nil
 
     # ERV Not Applicable for AHUs that have no OA intake.
@@ -43,9 +41,8 @@ class NECB2017
     hdd = BTAP::Environment::WeatherFile.new(air_loop_hvac.model.weatherFile.get.path.get).hdd18
     flow = min_oa_flow_m3_per_s
     oaf = min_oa_flow_m3_per_s / dsn_flow_m3_per_s
-    erv_required = eval(self.get_standards_formula('heat_recovery_requirement_formula'))
+    erv_required = eval(get_standards_formula('heat_recovery_requirement_formula'))
 
     return erv_required
   end
-
 end
