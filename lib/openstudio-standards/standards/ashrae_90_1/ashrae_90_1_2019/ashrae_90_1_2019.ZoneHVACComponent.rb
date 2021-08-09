@@ -33,23 +33,9 @@ class ASHRAE9012019 < ASHRAE901
       return true
     end
 
-    # Convert this to the actual class type
-    zone_hvac = if zone_hvac_component.to_ZoneHVACFourPipeFanCoil.is_initialized
-                  zone_hvac_component.to_ZoneHVACFourPipeFanCoil.get
-                elsif zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
-                  zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.get
-                elsif zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
-                  zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.get
-                end
-
-    # Do nothing for other types of zone HVAC equipment
-    if zone_hvac.nil?
-      return true
-    end
-
     # Get supply fan
     # Only Fan:OnOff can cycle
-    fan = zone_hvac.supplyAirFan
+    fan = zone_hvac_component.supplyAirFan
     if fan.to_FanOnOff.is_initialized
       fan = fan.to_FanOnOff.get
     else
@@ -57,7 +43,7 @@ class ASHRAE9012019 < ASHRAE901
     end
 
     # Set fan operating schedule during assumed occupant standby mode time to 0 so the fan can cycle
-    zone_hvac.setSupplyAirFanOperatingModeSchedule(model_set_schedule_value(zone_hvac.supplyAirFanOperatingModeSchedule.get, '12' => 0))
+    zone_hvac_component.setSupplyAirFanOperatingModeSchedule(model_set_schedule_value(zone_hvac_component.supplyAirFanOperatingModeSchedule.get, '12' => 0))
 
     return true
   end

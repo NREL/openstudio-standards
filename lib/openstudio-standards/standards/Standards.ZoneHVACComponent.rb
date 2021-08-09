@@ -171,6 +171,20 @@ class Standard
       zone_hvac_component_apply_vestibule_heating_control(zone_hvac_component)
     end
 
+    # Convert to objects
+    zone_hvac_component = if zone_hvac_component.to_ZoneHVACFourPipeFanCoil.is_initialized
+                            zone_hvac_component.to_ZoneHVACFourPipeFanCoil.get
+                          elsif zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+                            zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.get
+                          elsif zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+                            zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.get
+                          end
+
+    # Do nothing for other types of zone HVAC equipment
+    if zone_hvac_component.nil?
+      return true
+    end
+
     # Standby mode occupancy control
     return true unless zone_hvac_component.thermalZone.empty?
 
