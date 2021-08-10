@@ -43,7 +43,8 @@ class ASHRAE9012019 < ASHRAE901
     end
 
     # Set fan operating schedule during assumed occupant standby mode time to 0 so the fan can cycle
-    zone_hvac_component.setSupplyAirFanOperatingModeSchedule(model_set_schedule_value(zone_hvac_component.supplyAirFanOperatingModeSchedule.get, '12' => 0))
+    new_sch = model_set_schedule_value(zone_hvac_component.supplyAirFanOperatingModeSchedule.get, '12' => 0)
+    zone_hvac_component.setSupplyAirFanOperatingModeSchedule(new_sch) unless new_sch == true
 
     return true
   end
