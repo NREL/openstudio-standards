@@ -2651,7 +2651,7 @@ class ECMS
         search_criteria = {}
         search_criteria['name'] = unitary_cop_copy
         coil_name = coil.name.to_s
-        coil.setName(sql_db_vars_map[coil_name])
+        if sql_db_vars_map.has_key? coil_name then coil.setName(sql_db_vars_map[coil_name])  end
         if coil_type == 'SingleSpeed'
           capacity_w = coil_cooling_dx_single_speed_find_capacity(coil)
         elsif coil_type == 'MultiSpeed'
@@ -2677,7 +2677,7 @@ class ECMS
               unitary_cop['cool_cap_fflow'].nil? && unitary_cop['cool_eir_ft'].nil? && unitary_cop['cool_eir_fflow'].nil? && unitary_cop['cool_plf_fplr'].nil?
 
       # If the dx coil is on an air loop then update its cop and the performance curves when these are specified in the ecm data
-      if (coil_type == 'SingleSpeed' && coil.airLoopHVAC.is_initialized) ||
+      if (coil_type == 'SingleSpeed' && coil.airLoopHVAC.is_initialized && (!coil.name.to_s.include? "_ASHP")) ||
          (coil_type == 'MultiSpeed' && coil.containingHVACComponent.get.airLoopHVAC.is_initialized)
         cop = nil
         if unitary_cop['minimum_energy_efficiency_ratio']
