@@ -1,7 +1,7 @@
 
 OS:Version,
-  {ae7d8bfb-f45b-4b83-87a2-a767385816c0}, !- Handle
-  1.4.0;                                  !- Version Identifier
+  {447840f2-78d4-4b9f-83d1-a2da8c85b2da}, !- Handle
+  3.0.1;                                  !- Version Identifier
 
 OS:Schedule:Constant,
   {5362ad87-1b35-4912-9c6a-e637bd4c4ffd}, !- Handle
@@ -12,8 +12,8 @@ OS:Schedule:Constant,
 OS:ScheduleTypeLimits,
   {774a102c-20dc-4c33-8bcd-fcfec334c425}, !- Handle
   Always On Discrete Limits,              !- Name
-  0,                                      !- Lower Limit Value {BasedOnField A4}
-  1,                                      !- Upper Limit Value {BasedOnField A4}
+  0,                                      !- Lower Limit Value
+  1,                                      !- Upper Limit Value
   Discrete,                               !- Numeric Type
   Availability;                           !- Unit Type
 
@@ -84,130 +84,130 @@ OS:Lights:Definition,
   ;                                       ! Return Air Fraction Function of Plenum Temperature Coefficient 2
 
 OS:Material,
-  {ab2b6805-18a2-4e07-a2cb-4572d04f6890}, ! Handle
-  000 F08 Metal surface,                  ! Name
-  Smooth,                                 ! Roughness
-  0.00080000000000000004,                 ! Thickness
-  45.280000000000001,                     ! Conductivity
-  7824,                                   ! Density
-  500;                                    ! Specific Heat
+  {ab2b6805-18a2-4e07-a2cb-4572d04f6890}, !- Handle
+  000 F08 Metal surface,                  !- Name
+  Smooth,                                 !- Roughness
+  0.00080000000000000004,                 !- Thickness {m}
+  45.280000000000001,                     !- Conductivity {W/m-K}
+  7824,                                   !- Density {kg/m3}
+  500;                                    !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {364c7d39-64f6-45c6-a3b5-715541cdf78c}, ! Handle
-  000 F16 Acoustic tile,                  ! Name
-  MediumSmooth,                           ! Roughness
-  0.019099999999999999,                   ! Thickness
-  0.059999999999999998,                   ! Conductivity
-  368,                                    ! Density
-  590;                                    ! Specific Heat
+  {364c7d39-64f6-45c6-a3b5-715541cdf78c}, !- Handle
+  000 F16 Acoustic tile,                  !- Name
+  MediumSmooth,                           !- Roughness
+  0.019099999999999999,                   !- Thickness {m}
+  0.059999999999999998,                   !- Conductivity {W/m-K}
+  368,                                    !- Density {kg/m3}
+  590;                                    !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {29d7f267-ab87-4d62-8306-440e6f53637e}, ! Handle
-  000 G01a 19mm gypsum board,             ! Name
-  MediumSmooth,                           ! Roughness
-  0.019,                                  ! Thickness
-  0.16,                                   ! Conductivity
-  800,                                    ! Density
-  1090;                                   ! Specific Heat
+  {29d7f267-ab87-4d62-8306-440e6f53637e}, !- Handle
+  000 G01a 19mm gypsum board,             !- Name
+  MediumSmooth,                           !- Roughness
+  0.019,                                  !- Thickness {m}
+  0.16,                                   !- Conductivity {W/m-K}
+  800,                                    !- Density {kg/m3}
+  1090;                                   !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {2d8c20fd-e8a4-44df-b399-58414f1b82da}, ! Handle
-  000 G05 25mm wood,                      ! Name
-  MediumSmooth,                           ! Roughness
-  0.025399999999999999,                   ! Thickness
-  0.14999999999999999,                    ! Conductivity
-  608,                                    ! Density
-  1630;                                   ! Specific Heat
+  {2d8c20fd-e8a4-44df-b399-58414f1b82da}, !- Handle
+  000 G05 25mm wood,                      !- Name
+  MediumSmooth,                           !- Roughness
+  0.025399999999999999,                   !- Thickness {m}
+  0.14999999999999999,                    !- Conductivity {W/m-K}
+  608,                                    !- Density {kg/m3}
+  1630;                                   !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {fe097386-a229-4196-90e2-4a422c321f26}, ! Handle
-  000 I01 25mm insulation board,          ! Name
-  MediumRough,                            ! Roughness
-  0.025399999999999999,                   ! Thickness
-  0.029999999999999999,                   ! Conductivity
-  43,                                     ! Density
-  1210;                                   ! Specific Heat
+  {fe097386-a229-4196-90e2-4a422c321f26}, !- Handle
+  000 I01 25mm insulation board,          !- Name
+  MediumRough,                            !- Roughness
+  0.025399999999999999,                   !- Thickness {m}
+  0.029999999999999999,                   !- Conductivity {W/m-K}
+  43,                                     !- Density {kg/m3}
+  1210;                                   !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {f5ff5b8a-abba-4c43-b424-7ce4541deb2e}, ! Handle
-  000 M11 100mm lightweight concrete,     ! Name
-  MediumRough,                            ! Roughness
-  0.1016,                                 ! Thickness
-  0.53000000000000003,                    ! Conductivity
-  1280,                                   ! Density
-  840;                                    ! Specific Heat
+  {f5ff5b8a-abba-4c43-b424-7ce4541deb2e}, !- Handle
+  000 M11 100mm lightweight concrete,     !- Name
+  MediumRough,                            !- Roughness
+  0.1016,                                 !- Thickness {m}
+  0.53000000000000003,                    !- Conductivity {W/m-K}
+  1280,                                   !- Density {kg/m3}
+  840;                                    !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {dd291baf-0dfd-4dc8-9861-b87566b1ebe7}, ! Handle
-  1/2IN Gypsum,                           ! Name
-  Smooth,                                 ! Roughness
-  0.012699999999999999,                   ! Thickness
-  0.16,                                   ! Conductivity
-  784.89999999999998,                     ! Density
-  830,                                    ! Specific Heat
-  0.90000000000000002,                    ! Thermal Absorptance
-  0.92000000000000004,                    ! Solar Absorptance
-  0.92000000000000004;                    ! Visible Absorptance
+  {dd291baf-0dfd-4dc8-9861-b87566b1ebe7}, !- Handle
+  1/2IN Gypsum,                           !- Name
+  Smooth,                                 !- Roughness
+  0.012699999999999999,                   !- Thickness {m}
+  0.16,                                   !- Conductivity {W/m-K}
+  784.89999999999998,                     !- Density {kg/m3}
+  830,                                    !- Specific Heat {J/kg-K}
+  0.90000000000000002,                    !- Thermal Absorptance
+  0.92000000000000004,                    !- Solar Absorptance
+  0.92000000000000004;                    !- Visible Absorptance
 
 OS:Material,
-  {8984dd43-df62-4d44-ae87-bc2bd2873b0e}, ! Handle
-  MAT-CC05 4 HW CONCRETE,                 ! Name
-  Rough,                                  ! Roughness
-  0.1016,                                 ! Thickness
-  1.3109999999999999,                     ! Conductivity
-  2240,                                   ! Density
-  836.79999999999995,                     ! Specific Heat
-  0.90000000000000002,                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.69999999999999996;                    ! Visible Absorptance
+  {8984dd43-df62-4d44-ae87-bc2bd2873b0e}, !- Handle
+  MAT-CC05 4 HW CONCRETE,                 !- Name
+  Rough,                                  !- Roughness
+  0.1016,                                 !- Thickness {m}
+  1.3109999999999999,                     !- Conductivity {W/m-K}
+  2240,                                   !- Density {kg/m3}
+  836.8,                                  !- Specific Heat {J/kg-K}
+  0.90000000000000002,                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.69999999999999996;                    !- Visible Absorptance
 
 OS:Material,
-  {fcb365fd-eecd-4d24-85d7-1f03e46a153f}, ! Handle
-  Metal Decking,                          ! Name
-  MediumSmooth,                           ! Roughness
-  0.0015,                                 ! Thickness
-  45.006,                                 ! Conductivity
-  7680,                                   ! Density
-  418.39999999999998,                     ! Specific Heat
-  0.90000000000000002,                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.29999999999999999;                    ! Visible Absorptance
+  {fcb365fd-eecd-4d24-85d7-1f03e46a153f}, !- Handle
+  Metal Decking,                          !- Name
+  MediumSmooth,                           !- Roughness
+  0.0015,                                 !- Thickness {m}
+  45.006,                                 !- Conductivity {W/m-K}
+  7680,                                   !- Density {kg/m3}
+  418.4,                                  !- Specific Heat {J/kg-K}
+  0.90000000000000002,                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.29999999999999999;                    !- Visible Absorptance
 
 OS:Material,
-  {18b72934-41b6-4f32-a5f4-8b7a91e77efd}, ! Handle
-  Roof Insulation [21],                   ! Name
-  MediumRough,                            ! Roughness
-  0.21049999999999999,                    ! Thickness
-  0.049000000000000002,                   ! Conductivity
-  265,                                    ! Density
-  836.79999999999995,                     ! Specific Heat
-  0.90000000000000002,                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.69999999999999996;                    ! Visible Absorptance
+  {18b72934-41b6-4f32-a5f4-8b7a91e77efd}, !- Handle
+  Roof Insulation [21],                   !- Name
+  MediumRough,                            !- Roughness
+  0.21049999999999999,                    !- Thickness {m}
+  0.049000000000000002,                   !- Conductivity {W/m-K}
+  265,                                    !- Density {kg/m3}
+  836.8,                                  !- Specific Heat {J/kg-K}
+  0.90000000000000002,                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.69999999999999996;                    !- Visible Absorptance
 
 OS:Material,
-  {c5f0408f-a551-46fc-bb2a-66e8fe03a7e4}, ! Handle
-  Roof Membrane,                          ! Name
-  VeryRough,                              ! Roughness
-  0.0094999999999999998,                  ! Thickness
-  0.16,                                   ! Conductivity
-  1121.29,                                ! Density
-  1460,                                   ! Specific Heat
-  0.90000000000000002,                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.69999999999999996;                    ! Visible Absorptance
+  {c5f0408f-a551-46fc-bb2a-66e8fe03a7e4}, !- Handle
+  Roof Membrane,                          !- Name
+  VeryRough,                              !- Roughness
+  0.0094999999999999998,                  !- Thickness {m}
+  0.16,                                   !- Conductivity {W/m-K}
+  1121.29,                                !- Density {kg/m3}
+  1460,                                   !- Specific Heat {J/kg-K}
+  0.90000000000000002,                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.69999999999999996;                    !- Visible Absorptance
 
 OS:Material,
-  {23728136-9ebb-48c4-8d6a-634b96902763}, ! Handle
-  Wall Insulation [39],                   ! Name
-  MediumRough,                            ! Roughness
-  0.11840000000000001,                    ! Thickness
-  0.044999999999999998,                   ! Conductivity
-  265,                                    ! Density
-  836.79999999999995,                     ! Specific Heat
-  0.90000000000000002,                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.69999999999999996;                    ! Visible Absorptance
+  {23728136-9ebb-48c4-8d6a-634b96902763}, !- Handle
+  Wall Insulation [39],                   !- Name
+  MediumRough,                            !- Roughness
+  0.11840000000000001,                    !- Thickness {m}
+  0.044999999999999998,                   !- Conductivity {W/m-K}
+  265,                                    !- Density {kg/m3}
+  836.8,                                  !- Specific Heat {J/kg-K}
+  0.90000000000000002,                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.69999999999999996;                    !- Visible Absorptance
 
 OS:Material:AirGap,
   {b5810d0b-c582-4615-81dc-b681455a0b89}, ! Handle
@@ -553,24 +553,23 @@ OS:Schedule:Day,
   1;                                      ! Value Until Time 1
 
 OS:Schedule:Rule,
-  {93134e4d-2171-49ee-a0f5-e1c7d470aec2}, ! Handle
-  Medium Office Clothing Rule 2,          ! Name
-  {1203caec-c2ae-41a2-a1f4-40ebc91052ed}, ! Schedule Ruleset Name
-  1,                                      ! Rule Order
-  {635a4460-73a0-47fe-971d-8530d2aed1f8}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  Yes,                                    ! Apply Monday
-  Yes,                                    ! Apply Tuesday
-  Yes,                                    ! Apply Wednesday
-  Yes,                                    ! Apply Thursday
-  Yes,                                    ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  5,                                      ! Start Month
-  1,                                      ! Start Day
-  9,                                      ! End Month
-  30;                                     ! End Day
+  {93134e4d-2171-49ee-a0f5-e1c7d470aec2}, !- Handle
+  Medium Office Clothing Rule 2,          !- Name
+  {1203caec-c2ae-41a2-a1f4-40ebc91052ed}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {635a4460-73a0-47fe-971d-8530d2aed1f8}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  5,                                      !- Start Month
+  1,                                      !- Start Day
+  9,                                      !- End Month
+  30;                                     !- End Day
 
 OS:Schedule:Day,
   {635a4460-73a0-47fe-971d-8530d2aed1f8}, ! Handle
@@ -591,24 +590,23 @@ OS:Schedule:Day,
   0.5;                                    ! Value Until Time 1
 
 OS:Schedule:Rule,
-  {a0723843-08d2-478a-93c5-b1b5550fb05e}, ! Handle
-  Medium Office Clothing Rule 1,          ! Name
-  {1203caec-c2ae-41a2-a1f4-40ebc91052ed}, ! Schedule Ruleset Name
-  0,                                      ! Rule Order
-  {88e1c690-2eba-4209-a8f9-7b4482336c74}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  Yes,                                    ! Apply Monday
-  Yes,                                    ! Apply Tuesday
-  Yes,                                    ! Apply Wednesday
-  Yes,                                    ! Apply Thursday
-  Yes,                                    ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  10,                                     ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {a0723843-08d2-478a-93c5-b1b5550fb05e}, !- Handle
+  Medium Office Clothing Rule 1,          !- Name
+  {1203caec-c2ae-41a2-a1f4-40ebc91052ed}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {88e1c690-2eba-4209-a8f9-7b4482336c74}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  10,                                     !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {88e1c690-2eba-4209-a8f9-7b4482336c74}, ! Handle
@@ -658,24 +656,23 @@ OS:Schedule:Day,
   1;                                      ! Value Until Time 3
 
 OS:Schedule:Rule,
-  {e79cc5fd-8782-4ecc-90bb-db81ea2fa926}, ! Handle
-  Medium Office Infil Quarter On Rule 2,  ! Name
-  {1815dc4a-c907-4ffb-9942-3ff084ece1be}, ! Schedule Ruleset Name
-  1,                                      ! Rule Order
-  {997bd35d-ddb6-4746-a228-40098f05a30d}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {e79cc5fd-8782-4ecc-90bb-db81ea2fa926}, !- Handle
+  Medium Office Infil Quarter On Rule 2,  !- Name
+  {1815dc4a-c907-4ffb-9942-3ff084ece1be}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {997bd35d-ddb6-4746-a228-40098f05a30d}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {997bd35d-ddb6-4746-a228-40098f05a30d}, ! Handle
@@ -708,24 +705,23 @@ OS:Schedule:Day,
   1;                                      ! Value Until Time 3
 
 OS:Schedule:Rule,
-  {daf8f977-913a-4687-ab19-482eafeec91b}, ! Handle
-  Medium Office Infil Quarter On Rule 1,  ! Name
-  {1815dc4a-c907-4ffb-9942-3ff084ece1be}, ! Schedule Ruleset Name
-  0,                                      ! Rule Order
-  {939262c5-3402-485e-852e-d9c3cb646785}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {daf8f977-913a-4687-ab19-482eafeec91b}, !- Handle
+  Medium Office Infil Quarter On Rule 1,  !- Name
+  {1815dc4a-c907-4ffb-9942-3ff084ece1be}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {939262c5-3402-485e-852e-d9c3cb646785}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {939262c5-3402-485e-852e-d9c3cb646785}, ! Handle
@@ -778,24 +774,23 @@ OS:Schedule:Day,
   0.05;                                   !- Value Until Time 9
 
 OS:Schedule:Rule,
-  {8f6b04a2-d4d0-4f72-a79f-f41dcad31249}, ! Handle
-  Medium Office Bldg Light Rule 2,        ! Name
-  {0aa9a306-4ed4-43fa-87dd-b9d7c06edc84}, ! Schedule Ruleset Name
-  1,                                      ! Rule Order
-  {9bea73d8-8236-4cba-a405-b2d3488043c5}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {8f6b04a2-d4d0-4f72-a79f-f41dcad31249}, !- Handle
+  Medium Office Bldg Light Rule 2,        !- Name
+  {0aa9a306-4ed4-43fa-87dd-b9d7c06edc84}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {9bea73d8-8236-4cba-a405-b2d3488043c5}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {9bea73d8-8236-4cba-a405-b2d3488043c5}, ! Handle
@@ -837,24 +832,23 @@ OS:Schedule:Day,
   0;                                      ! Value Until Time 1
 
 OS:Schedule:Rule,
-  {32b9ab4a-cfa2-488a-93a6-2f830390ece9}, ! Handle
-  Medium Office Bldg Light Rule 1,        ! Name
-  {0aa9a306-4ed4-43fa-87dd-b9d7c06edc84}, ! Schedule Ruleset Name
-  0,                                      ! Rule Order
-  {41f7c022-ed57-43dd-8e83-a386aad0f064}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {32b9ab4a-cfa2-488a-93a6-2f830390ece9}, !- Handle
+  Medium Office Bldg Light Rule 1,        !- Name
+  {0aa9a306-4ed4-43fa-87dd-b9d7c06edc84}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {41f7c022-ed57-43dd-8e83-a386aad0f064}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {41f7c022-ed57-43dd-8e83-a386aad0f064}, ! Handle
@@ -982,24 +976,23 @@ OS:Schedule:Day,
   0;                                      ! Value Until Time 16
 
 OS:Schedule:Rule,
-  {71130ec1-583b-4d50-a408-108e32919e83}, ! Handle
-  Medium Office BLDG ELEVATORS Rule 2,    ! Name
-  {fc0445be-4f62-4365-aa30-d4a7519c9c3a}, ! Schedule Ruleset Name
-  1,                                      ! Rule Order
-  {d36585c9-cd5b-46f9-9ca6-8f74bc0aceef}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {71130ec1-583b-4d50-a408-108e32919e83}, !- Handle
+  Medium Office BLDG ELEVATORS Rule 2,    !- Name
+  {fc0445be-4f62-4365-aa30-d4a7519c9c3a}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {d36585c9-cd5b-46f9-9ca6-8f74bc0aceef}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {d36585c9-cd5b-46f9-9ca6-8f74bc0aceef}, ! Handle
@@ -1092,24 +1085,23 @@ OS:Schedule:Day,
   0;                                      ! Value Until Time 13
 
 OS:Schedule:Rule,
-  {ea3461f3-388f-4416-8323-58699d9187d1}, ! Handle
-  Medium Office BLDG ELEVATORS Rule 1,    ! Name
-  {fc0445be-4f62-4365-aa30-d4a7519c9c3a}, ! Schedule Ruleset Name
-  0,                                      ! Rule Order
-  {772732a7-6e7b-46c3-913c-58162c976a16}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {ea3461f3-388f-4416-8323-58699d9187d1}, !- Handle
+  Medium Office BLDG ELEVATORS Rule 1,    !- Name
+  {fc0445be-4f62-4365-aa30-d4a7519c9c3a}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {772732a7-6e7b-46c3-913c-58162c976a16}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {772732a7-6e7b-46c3-913c-58162c976a16}, ! Handle
@@ -1159,24 +1151,23 @@ OS:Schedule:Day,
   0.4;                                    !- Value Until Time 8
 
 OS:Schedule:Rule,
-  {48fd2d38-2797-4e0c-afd1-41ae9cfc8fe2}, ! Handle
-  Medium Office Bldg Equip Rule 2,        ! Name
-  {9fdd0eef-5ec6-41fd-85aa-d69720564a22}, ! Schedule Ruleset Name
-  1,                                      ! Rule Order
-  {29c38996-74cb-4fca-9ef7-67391754578e}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {48fd2d38-2797-4e0c-afd1-41ae9cfc8fe2}, !- Handle
+  Medium Office Bldg Equip Rule 2,        !- Name
+  {9fdd0eef-5ec6-41fd-85aa-d69720564a22}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {29c38996-74cb-4fca-9ef7-67391754578e}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {29c38996-74cb-4fca-9ef7-67391754578e}, ! Handle
@@ -1218,24 +1209,23 @@ OS:Schedule:Day,
   0;                                      ! Value Until Time 1
 
 OS:Schedule:Rule,
-  {3a9b7835-c19c-458a-abf6-6a20846f82dd}, ! Handle
-  Medium Office Bldg Equip Rule 1,        ! Name
-  {9fdd0eef-5ec6-41fd-85aa-d69720564a22}, ! Schedule Ruleset Name
-  0,                                      ! Rule Order
-  {a7b1d794-7e83-4708-bd8f-adaa1e83cb72}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {3a9b7835-c19c-458a-abf6-6a20846f82dd}, !- Handle
+  Medium Office Bldg Equip Rule 1,        !- Name
+  {9fdd0eef-5ec6-41fd-85aa-d69720564a22}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {a7b1d794-7e83-4708-bd8f-adaa1e83cb72}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {a7b1d794-7e83-4708-bd8f-adaa1e83cb72}, ! Handle
@@ -1279,24 +1269,23 @@ OS:Schedule:Day,
   15.6;                                   ! Value Until Time 1
 
 OS:Schedule:Rule,
-  {8481dbc7-23e8-4523-8f37-e3274d623060}, ! Handle
-  Medium Office HtgSetp Rule 2,           ! Name
-  {694cceca-1b0f-4555-b96e-1d68a1080f78}, ! Schedule Ruleset Name
-  1,                                      ! Rule Order
-  {6959a3b4-2c7a-424d-b69b-1331a2a9f7a9}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {8481dbc7-23e8-4523-8f37-e3274d623060}, !- Handle
+  Medium Office HtgSetp Rule 2,           !- Name
+  {694cceca-1b0f-4555-b96e-1d68a1080f78}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {6959a3b4-2c7a-424d-b69b-1331a2a9f7a9}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {6959a3b4-2c7a-424d-b69b-1331a2a9f7a9}, ! Handle
@@ -1323,24 +1312,23 @@ OS:Schedule:Day,
   21;                                     ! Value Until Time 1
 
 OS:Schedule:Rule,
-  {736fb37e-1e77-4b84-bde3-cf40466a5e11}, ! Handle
-  Medium Office HtgSetp Rule 1,           ! Name
-  {694cceca-1b0f-4555-b96e-1d68a1080f78}, ! Schedule Ruleset Name
-  0,                                      ! Rule Order
-  {c19c87b0-f54e-4b61-8780-3253d1b943e1}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {736fb37e-1e77-4b84-bde3-cf40466a5e11}, !- Handle
+  Medium Office HtgSetp Rule 1,           !- Name
+  {694cceca-1b0f-4555-b96e-1d68a1080f78}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {c19c87b0-f54e-4b61-8780-3253d1b943e1}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {c19c87b0-f54e-4b61-8780-3253d1b943e1}, ! Handle
@@ -1486,24 +1474,23 @@ OS:Schedule:Day,
   0.050000000000000003;                   ! Value Until Time 19
 
 OS:Schedule:Rule,
-  {e01836d9-b1ae-4b9c-8de8-957faa83a00d}, ! Handle
-  Medium Office Bldg Swh Rule 2,          ! Name
-  {7bd16987-6bed-40b9-b73d-bb2149157844}, ! Schedule Ruleset Name
-  1,                                      ! Rule Order
-  {71da8f1b-099d-4876-b537-aba860ef0152}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {e01836d9-b1ae-4b9c-8de8-957faa83a00d}, !- Handle
+  Medium Office Bldg Swh Rule 2,          !- Name
+  {7bd16987-6bed-40b9-b73d-bb2149157844}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {71da8f1b-099d-4876-b537-aba860ef0152}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {71da8f1b-099d-4876-b537-aba860ef0152}, ! Handle
@@ -1614,24 +1601,23 @@ OS:Schedule:Day,
   0.050000000000000003;                   ! Value Until Time 16
 
 OS:Schedule:Rule,
-  {12b858df-8060-403f-95a0-b0983a3954b8}, ! Handle
-  Medium Office Bldg Swh Rule 1,          ! Name
-  {7bd16987-6bed-40b9-b73d-bb2149157844}, ! Schedule Ruleset Name
-  0,                                      ! Rule Order
-  {5ff6ca6d-415f-4565-b607-f866ee7df65a}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {12b858df-8060-403f-95a0-b0983a3954b8}, !- Handle
+  Medium Office Bldg Swh Rule 1,          !- Name
+  {7bd16987-6bed-40b9-b73d-bb2149157844}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {5ff6ca6d-415f-4565-b607-f866ee7df65a}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {5ff6ca6d-415f-4565-b607-f866ee7df65a}, ! Handle
@@ -1726,24 +1712,23 @@ OS:Schedule:Day,
   0.050000000000000003;                   ! Value Until Time 3
 
 OS:Schedule:Rule,
-  {801d3700-1a84-4423-8bbe-2a23e1cf9afa}, ! Handle
-  Medium Office Bldg Occ Rule 2,          ! Name
-  {34919a6f-e6d8-47b8-b201-824c95e09ae4}, ! Schedule Ruleset Name
-  1,                                      ! Rule Order
-  {391968bc-c3a8-4a40-a8a2-d811ce2aac6e}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {801d3700-1a84-4423-8bbe-2a23e1cf9afa}, !- Handle
+  Medium Office Bldg Occ Rule 2,          !- Name
+  {34919a6f-e6d8-47b8-b201-824c95e09ae4}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {391968bc-c3a8-4a40-a8a2-d811ce2aac6e}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {391968bc-c3a8-4a40-a8a2-d811ce2aac6e}, ! Handle
@@ -1767,24 +1752,23 @@ OS:Schedule:Day,
   0;                                      ! Value Until Time 5
 
 OS:Schedule:Rule,
-  {c908ee67-ea6e-49ed-bd0d-4bec5059ff37}, ! Handle
-  Medium Office Bldg Occ Rule 1,          ! Name
-  {34919a6f-e6d8-47b8-b201-824c95e09ae4}, ! Schedule Ruleset Name
-  0,                                      ! Rule Order
-  {b06ac4fe-a4a5-4493-af7b-d6380a080be3}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {c908ee67-ea6e-49ed-bd0d-4bec5059ff37}, !- Handle
+  Medium Office Bldg Occ Rule 1,          !- Name
+  {34919a6f-e6d8-47b8-b201-824c95e09ae4}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {b06ac4fe-a4a5-4493-af7b-d6380a080be3}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {b06ac4fe-a4a5-4493-af7b-d6380a080be3}, ! Handle
@@ -1843,24 +1827,23 @@ OS:Schedule:Day,
   26.699999999999999;                     ! Value Until Time 3
 
 OS:Schedule:Rule,
-  {62c70222-4115-4e04-8c79-6c384c3ff658}, ! Handle
-  Medium Office ClgSetp Rule 2,           ! Name
-  {cf910c2b-7c8a-463b-a623-5a7996457a2d}, ! Schedule Ruleset Name
-  1,                                      ! Rule Order
-  {6ee12714-127e-412b-b303-0353260df287}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {62c70222-4115-4e04-8c79-6c384c3ff658}, !- Handle
+  Medium Office ClgSetp Rule 2,           !- Name
+  {cf910c2b-7c8a-463b-a623-5a7996457a2d}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {6ee12714-127e-412b-b303-0353260df287}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {6ee12714-127e-412b-b303-0353260df287}, ! Handle
@@ -1887,24 +1870,23 @@ OS:Schedule:Day,
   26.699999999999999;                     ! Value Until Time 1
 
 OS:Schedule:Rule,
-  {5c260c4a-e2ea-43e8-88f9-c3bdd1fe7b16}, ! Handle
-  Medium Office ClgSetp Rule 1,           ! Name
-  {cf910c2b-7c8a-463b-a623-5a7996457a2d}, ! Schedule Ruleset Name
-  0,                                      ! Rule Order
-  {1e8620a8-54e0-47ec-b834-4fe1f951457d}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {5c260c4a-e2ea-43e8-88f9-c3bdd1fe7b16}, !- Handle
+  Medium Office ClgSetp Rule 1,           !- Name
+  {cf910c2b-7c8a-463b-a623-5a7996457a2d}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {1e8620a8-54e0-47ec-b834-4fe1f951457d}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {1e8620a8-54e0-47ec-b834-4fe1f951457d}, ! Handle
@@ -2422,8 +2404,16 @@ OS:ConvergenceLimits,
 
 OS:ShadowCalculation,
   {2ac7ffc4-801e-4f46-978f-7dc8ce58e41e}, !- Handle
-  7,                                      !- Calculation Frequency
-  15000;                                  !- Maximum Figures in Shadow Overlap Calculations
+  PolygonClipping,                        !- Shading Calculation Method
+  ,                                       !- Shading Calculation Update Frequency Method
+  7,                                      !- Shading Calculation Update Frequency
+  15000,                                  !- Maximum Figures in Shadow Overlap Calculations
+  ,                                       !- Polygon Clipping Algorithm
+  512,                                    !- Pixel Counting Resolution
+  ,                                       !- Sky Diffuse Modeling Algorithm
+  No,                                     !- Output External Shading Calculation Results
+  No,                                     !- Disable Self-Shading Within Shading Zone Groups
+  No;                                     !- Disable Self-Shading From Shading Zone Groups to Other Zones
 
 OS:SurfaceConvectionAlgorithm:Inside,
   {379538d9-bc20-4712-8d63-e9dc8c3c1099}, !- Handle
@@ -2436,7 +2426,7 @@ OS:SurfaceConvectionAlgorithm:Outside,
 OS:HeatBalanceAlgorithm,
   {3cb10d56-9d11-4794-9207-a1660a1ee5b6}, !- Handle
   ConductionTransferFunction,             !- Algorithm
-  200;                                    !- Surface Temperature Upper Limit {F}
+  200;                                    !- Surface Temperature Upper Limit {C}
 
 OS:ZoneAirHeatBalanceAlgorithm,
   {ea95e0f1-d10c-4b5e-9630-2d95409a30d3}, !- Handle
@@ -2465,25 +2455,11 @@ OS:RunPeriod,
   ,                                       !- Use Weather File Snow Indicators
   ;                                       !- Number of Times Runperiod to be Repeated
 
-OS:WeatherFile,
-  {0d77f6ea-86a7-450c-bbfa-58ef31d8e4fb}, !- Handle
-  Edmonton Stony Plain,                   !- City
-  AB,                                     !- State Province Region
-  CAN,                                    !- Country
-  WYEC2-B-25145,                          !- Data Source
-  711230,                                 !- WMO Number
-  53.53,                                  !- Latitude {deg}
-  -114.1,                                 !- Longitude {deg}
-  -7,                                     !- Time Zone {hr}
-  723,                                    !- Elevation {m}
-  file:///F:/osruby/lib/btap/btap_measures/ColdLakeVintageMaker//resources/CAN_AB_Edmonton.711230_CWEC.epw, !- Url
-  93926C9F;                               !- Checksum
-
 OS:Site,
   {d83341b4-1852-4283-a79f-535d293e657a}, !- Handle
-  Site 1,                                 !- Name
-  53.53,                                  !- Latitude {deg}
-  -114.1,                                 !- Longitude {deg}
+  Edmonton Intl AP,                       !- Name
+  53.32,                                  !- Latitude {deg}
+  -113.58,                                !- Longitude {deg}
   -7,                                     !- Time Zone {hr}
   723,                                    !- Elevation {m}
   ;                                       !- Terrain
@@ -2529,64 +2505,61 @@ OS:Schedule:Day,
   0;                                      ! Value Until Time 1
 
 OS:Schedule:Rule,
-  {48533781-f431-46cb-8a84-a02143c219f8}, ! Handle
-  sunMNECB-E-Fanrule,                     ! Name
-  {e5f4b81c-dc19-4677-a284-9546944f1cd2}, ! Schedule Ruleset Name
-  0,                                      ! Rule Order
-  {d7112a79-575d-4d78-aa54-c79759e41856}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {48533781-f431-46cb-8a84-a02143c219f8}, !- Handle
+  sunMNECB-E-Fanrule,                     !- Name
+  {e5f4b81c-dc19-4677-a284-9546944f1cd2}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {d7112a79-575d-4d78-aa54-c79759e41856}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Rule,
-  {3e87d77d-3d80-40f0-8399-95516f2ac330}, ! Handle
-  satMNECB-E-Fanrule,                     ! Name
-  {e5f4b81c-dc19-4677-a284-9546944f1cd2}, ! Schedule Ruleset Name
-  1,                                      ! Rule Order
-  {a571fb39-4a35-4122-84b6-63c97cb58684}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {3e87d77d-3d80-40f0-8399-95516f2ac330}, !- Handle
+  satMNECB-E-Fanrule,                     !- Name
+  {e5f4b81c-dc19-4677-a284-9546944f1cd2}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {a571fb39-4a35-4122-84b6-63c97cb58684}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Rule,
-  {0a9cbf50-fcc6-49cf-bc2d-68379eec8eca}, ! Handle
-  wkdMNECB-E-Fan rule,                    ! Name
-  {e5f4b81c-dc19-4677-a284-9546944f1cd2}, ! Schedule Ruleset Name
-  2,                                      ! Rule Order
-  {fc6a9646-406d-47d6-9c61-33e748c043b2}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  Yes,                                    ! Apply Monday
-  Yes,                                    ! Apply Tuesday
-  Yes,                                    ! Apply Wednesday
-  Yes,                                    ! Apply Thursday
-  Yes,                                    ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {0a9cbf50-fcc6-49cf-bc2d-68379eec8eca}, !- Handle
+  wkdMNECB-E-Fan rule,                    !- Name
+  {e5f4b81c-dc19-4677-a284-9546944f1cd2}, !- Schedule Ruleset Name
+  2,                                      !- Rule Order
+  {fc6a9646-406d-47d6-9c61-33e748c043b2}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {d7112a79-575d-4d78-aa54-c79759e41856}, ! Handle
@@ -2838,64 +2811,61 @@ OS:Schedule:Day,
   0;                                      ! Value Until Time 1
 
 OS:Schedule:Rule,
-  {c37f5c37-51d6-494c-b34f-d89e341ba056}, ! Handle
-  sunMNECB-E-Occrule,                     ! Name
-  {fc387d61-0ef8-4217-8aef-b13113454f3e}, ! Schedule Ruleset Name
-  0,                                      ! Rule Order
-  {9196303e-bc48-45ce-9ac9-7beccc0647aa}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {c37f5c37-51d6-494c-b34f-d89e341ba056}, !- Handle
+  sunMNECB-E-Occrule,                     !- Name
+  {fc387d61-0ef8-4217-8aef-b13113454f3e}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {9196303e-bc48-45ce-9ac9-7beccc0647aa}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Rule,
-  {1713cbdf-92ec-4aac-984c-d1f43378bdd4}, ! Handle
-  satMNECB-E-Occrule,                     ! Name
-  {fc387d61-0ef8-4217-8aef-b13113454f3e}, ! Schedule Ruleset Name
-  1,                                      ! Rule Order
-  {9288693e-37ac-487b-9d1a-b4f1a0048be8}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {1713cbdf-92ec-4aac-984c-d1f43378bdd4}, !- Handle
+  satMNECB-E-Occrule,                     !- Name
+  {fc387d61-0ef8-4217-8aef-b13113454f3e}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {9288693e-37ac-487b-9d1a-b4f1a0048be8}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Rule,
-  {483421d9-947e-4caa-b6ec-71be9ea3e7ab}, ! Handle
-  wkdMNECB-E-Occ rule,                    ! Name
-  {fc387d61-0ef8-4217-8aef-b13113454f3e}, ! Schedule Ruleset Name
-  2,                                      ! Rule Order
-  {89df1cd1-afc1-4501-90c7-48a24f565462}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  Yes,                                    ! Apply Monday
-  Yes,                                    ! Apply Tuesday
-  Yes,                                    ! Apply Wednesday
-  Yes,                                    ! Apply Thursday
-  Yes,                                    ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {483421d9-947e-4caa-b6ec-71be9ea3e7ab}, !- Handle
+  wkdMNECB-E-Occ rule,                    !- Name
+  {fc387d61-0ef8-4217-8aef-b13113454f3e}, !- Schedule Ruleset Name
+  2,                                      !- Rule Order
+  {89df1cd1-afc1-4501-90c7-48a24f565462}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {9196303e-bc48-45ce-9ac9-7beccc0647aa}, ! Handle
@@ -3147,64 +3117,61 @@ OS:Schedule:Day,
   0;                                      ! Value Until Time 1
 
 OS:Schedule:Rule,
-  {80cce476-66e6-40d7-a144-20f2221b3203}, ! Handle
-  sunMNECB-E-Ltgrule,                     ! Name
-  {bd73fb70-4db1-4021-949d-60e44bcd818f}, ! Schedule Ruleset Name
-  0,                                      ! Rule Order
-  {ef1e706b-6e56-424e-969b-9041cb72b884}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {80cce476-66e6-40d7-a144-20f2221b3203}, !- Handle
+  sunMNECB-E-Ltgrule,                     !- Name
+  {bd73fb70-4db1-4021-949d-60e44bcd818f}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {ef1e706b-6e56-424e-969b-9041cb72b884}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Rule,
-  {b3d755f4-b65e-4bb1-a128-bfacfad80059}, ! Handle
-  satMNECB-E-Ltgrule,                     ! Name
-  {bd73fb70-4db1-4021-949d-60e44bcd818f}, ! Schedule Ruleset Name
-  1,                                      ! Rule Order
-  {a502b1a2-7d28-432a-bc36-3a95cb0633ac}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {b3d755f4-b65e-4bb1-a128-bfacfad80059}, !- Handle
+  satMNECB-E-Ltgrule,                     !- Name
+  {bd73fb70-4db1-4021-949d-60e44bcd818f}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {a502b1a2-7d28-432a-bc36-3a95cb0633ac}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Rule,
-  {f1cc2668-d8b7-4cdb-a6e3-02b3dec9eed3}, ! Handle
-  wkdMNECB-E-Ltg rule,                    ! Name
-  {bd73fb70-4db1-4021-949d-60e44bcd818f}, ! Schedule Ruleset Name
-  2,                                      ! Rule Order
-  {91f326f9-59a9-424a-94cd-64ba26e36cca}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  Yes,                                    ! Apply Monday
-  Yes,                                    ! Apply Tuesday
-  Yes,                                    ! Apply Wednesday
-  Yes,                                    ! Apply Thursday
-  Yes,                                    ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {f1cc2668-d8b7-4cdb-a6e3-02b3dec9eed3}, !- Handle
+  wkdMNECB-E-Ltg rule,                    !- Name
+  {bd73fb70-4db1-4021-949d-60e44bcd818f}, !- Schedule Ruleset Name
+  2,                                      !- Rule Order
+  {91f326f9-59a9-424a-94cd-64ba26e36cca}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {ef1e706b-6e56-424e-969b-9041cb72b884}, ! Handle
@@ -3456,64 +3423,61 @@ OS:Schedule:Day,
   0;                                      ! Value Until Time 1
 
 OS:Schedule:Rule,
-  {d306e45f-35f9-4e78-9fe5-2bd4a1d89322}, ! Handle
-  sunMNECB-E-Equrule,                     ! Name
-  {efb44dad-d071-4cf1-9873-58b4f69597d8}, ! Schedule Ruleset Name
-  0,                                      ! Rule Order
-  {42a81f11-1af3-43fb-b5a1-b7c3eaba1d40}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {d306e45f-35f9-4e78-9fe5-2bd4a1d89322}, !- Handle
+  sunMNECB-E-Equrule,                     !- Name
+  {efb44dad-d071-4cf1-9873-58b4f69597d8}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {42a81f11-1af3-43fb-b5a1-b7c3eaba1d40}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Rule,
-  {712cfb63-c4f5-4a4f-aaba-44234f05f9eb}, ! Handle
-  satMNECB-E-Equrule,                     ! Name
-  {efb44dad-d071-4cf1-9873-58b4f69597d8}, ! Schedule Ruleset Name
-  1,                                      ! Rule Order
-  {2a5f57a3-b7d9-4795-a275-35b20a853916}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {712cfb63-c4f5-4a4f-aaba-44234f05f9eb}, !- Handle
+  satMNECB-E-Equrule,                     !- Name
+  {efb44dad-d071-4cf1-9873-58b4f69597d8}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {2a5f57a3-b7d9-4795-a275-35b20a853916}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Rule,
-  {5581b513-3c22-4d2b-8a2b-68e50faf36c5}, ! Handle
-  wkdMNECB-E-Equ rule,                    ! Name
-  {efb44dad-d071-4cf1-9873-58b4f69597d8}, ! Schedule Ruleset Name
-  2,                                      ! Rule Order
-  {33f17f08-4ed4-4aec-bccd-3787c2c3f01f}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  Yes,                                    ! Apply Monday
-  Yes,                                    ! Apply Tuesday
-  Yes,                                    ! Apply Wednesday
-  Yes,                                    ! Apply Thursday
-  Yes,                                    ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {5581b513-3c22-4d2b-8a2b-68e50faf36c5}, !- Handle
+  wkdMNECB-E-Equ rule,                    !- Name
+  {efb44dad-d071-4cf1-9873-58b4f69597d8}, !- Schedule Ruleset Name
+  2,                                      !- Rule Order
+  {33f17f08-4ed4-4aec-bccd-3787c2c3f01f}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {42a81f11-1af3-43fb-b5a1-b7c3eaba1d40}, ! Handle
@@ -3765,64 +3729,61 @@ OS:Schedule:Day,
   0;                                      ! Value Until Time 1
 
 OS:Schedule:Rule,
-  {efc6856f-f465-4ef9-b868-c41077f8ade9}, ! Handle
-  sunMNECB-E-HWrule,                      ! Name
-  {f7cd01d5-66fb-4fd0-b0b1-040adb6d8d99}, ! Schedule Ruleset Name
-  0,                                      ! Rule Order
-  {bde3c2e1-229d-4e0e-a13a-529b4399100f}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {efc6856f-f465-4ef9-b868-c41077f8ade9}, !- Handle
+  sunMNECB-E-HWrule,                      !- Name
+  {f7cd01d5-66fb-4fd0-b0b1-040adb6d8d99}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {bde3c2e1-229d-4e0e-a13a-529b4399100f}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Rule,
-  {21eb26a4-d605-4ba6-87ff-8c65bf492bcb}, ! Handle
-  satMNECB-E-HWrule,                      ! Name
-  {f7cd01d5-66fb-4fd0-b0b1-040adb6d8d99}, ! Schedule Ruleset Name
-  1,                                      ! Rule Order
-  {cd0a210e-ee3f-4e18-85fd-71ab4f99e745}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {21eb26a4-d605-4ba6-87ff-8c65bf492bcb}, !- Handle
+  satMNECB-E-HWrule,                      !- Name
+  {f7cd01d5-66fb-4fd0-b0b1-040adb6d8d99}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {cd0a210e-ee3f-4e18-85fd-71ab4f99e745}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Rule,
-  {81082f5f-9ed5-4e98-b7c0-374be55ff148}, ! Handle
-  wkdMNECB-E-HW rule,                     ! Name
-  {f7cd01d5-66fb-4fd0-b0b1-040adb6d8d99}, ! Schedule Ruleset Name
-  2,                                      ! Rule Order
-  {62aa35c8-0b08-4ca8-8991-c244e40f0925}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  Yes,                                    ! Apply Monday
-  Yes,                                    ! Apply Tuesday
-  Yes,                                    ! Apply Wednesday
-  Yes,                                    ! Apply Thursday
-  Yes,                                    ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {81082f5f-9ed5-4e98-b7c0-374be55ff148}, !- Handle
+  wkdMNECB-E-HW rule,                     !- Name
+  {f7cd01d5-66fb-4fd0-b0b1-040adb6d8d99}, !- Schedule Ruleset Name
+  2,                                      !- Rule Order
+  {62aa35c8-0b08-4ca8-8991-c244e40f0925}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {bde3c2e1-229d-4e0e-a13a-529b4399100f}, ! Handle
@@ -4074,64 +4035,61 @@ OS:Schedule:Day,
   0;                                      ! Value Until Time 1
 
 OS:Schedule:Rule,
-  {160e3563-b5d6-40d2-8af2-892e9a8d17b8}, ! Handle
-  sunMNECB-E-Procrule,                    ! Name
-  {8f973e0c-b419-4c57-a14e-4265e6f3f5f5}, ! Schedule Ruleset Name
-  0,                                      ! Rule Order
-  {3a22eb5a-bfa6-4724-aea2-5410d91cd76f}, ! Day Schedule Name
-  Yes,                                    ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {160e3563-b5d6-40d2-8af2-892e9a8d17b8}, !- Handle
+  sunMNECB-E-Procrule,                    !- Name
+  {8f973e0c-b419-4c57-a14e-4265e6f3f5f5}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {3a22eb5a-bfa6-4724-aea2-5410d91cd76f}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Rule,
-  {f7cec980-1090-4f8f-887f-8c64ee202735}, ! Handle
-  satMNECB-E-Procrule,                    ! Name
-  {8f973e0c-b419-4c57-a14e-4265e6f3f5f5}, ! Schedule Ruleset Name
-  1,                                      ! Rule Order
-  {034dbac9-934c-458b-853e-4f22cc871acc}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  No,                                     ! Apply Monday
-  No,                                     ! Apply Tuesday
-  No,                                     ! Apply Wednesday
-  No,                                     ! Apply Thursday
-  No,                                     ! Apply Friday
-  Yes,                                    ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {f7cec980-1090-4f8f-887f-8c64ee202735}, !- Handle
+  satMNECB-E-Procrule,                    !- Name
+  {8f973e0c-b419-4c57-a14e-4265e6f3f5f5}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {034dbac9-934c-458b-853e-4f22cc871acc}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  No,                                     !- Apply Monday
+  No,                                     !- Apply Tuesday
+  No,                                     !- Apply Wednesday
+  No,                                     !- Apply Thursday
+  No,                                     !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Rule,
-  {0d0f4665-04bb-45bb-a33d-acb65719a2a7}, ! Handle
-  wkdMNECB-E-Proc rule,                   ! Name
-  {8f973e0c-b419-4c57-a14e-4265e6f3f5f5}, ! Schedule Ruleset Name
-  2,                                      ! Rule Order
-  {c5784adb-efac-4658-8259-705c6219efaf}, ! Day Schedule Name
-  No,                                     ! Apply Sunday
-  Yes,                                    ! Apply Monday
-  Yes,                                    ! Apply Tuesday
-  Yes,                                    ! Apply Wednesday
-  Yes,                                    ! Apply Thursday
-  Yes,                                    ! Apply Friday
-  No,                                     ! Apply Saturday
-  ,                                       ! Apply Holiday
-  DateRange,                              ! Date Specification Type
-  1,                                      ! Start Month
-  1,                                      ! Start Day
-  12,                                     ! End Month
-  31;                                     ! End Day
+  {0d0f4665-04bb-45bb-a33d-acb65719a2a7}, !- Handle
+  wkdMNECB-E-Proc rule,                   !- Name
+  {8f973e0c-b419-4c57-a14e-4265e6f3f5f5}, !- Schedule Ruleset Name
+  2,                                      !- Rule Order
+  {c5784adb-efac-4658-8259-705c6219efaf}, !- Day Schedule Name
+  No,                                     !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  No,                                     !- Apply Saturday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
 
 OS:Schedule:Day,
   {3a22eb5a-bfa6-4724-aea2-5410d91cd76f}, ! Handle
@@ -4802,8 +4760,8 @@ OS:Schedule:Day,
 OS:ScheduleTypeLimits,
   {72e26ac1-12b9-4f6f-82fc-c998f46cb6f2}, !- Handle
   ActivityLevel 1,                        !- Name
-  0,                                      !- Lower Limit Value {BasedOnField A4}
-  ,                                       !- Upper Limit Value {BasedOnField A4}
+  0,                                      !- Lower Limit Value
+  ,                                       !- Upper Limit Value
   Continuous,                             !- Numeric Type
   ActivityLevel;                          !- Unit Type
 
@@ -4833,7 +4791,8 @@ OS:DefaultConstructionSet,
   ,                                       !- Interior Partition Construction Name
   ,                                       !- Space Shading Construction Name
   ,                                       !- Building Shading Construction Name
-  ;                                       !- Site Shading Construction Name
+  ,                                       !- Site Shading Construction Name
+  ;                                       !- Adiabatic Surface Construction Name
 
 OS:DefaultSurfaceConstructions,
   {0edfb057-d5c5-4717-87e5-c674616f6889}, !- Handle
@@ -4919,16 +4878,16 @@ OS:Rendering:Color,
   213;                                    !- Rendering Blue Value
 
 OS:Material,
-  {fc5e768a-f76b-45ae-a6b0-9361b9e553f3}, ! Handle
-  V2-Storage Wall mtl R15,                ! Name
-  MediumRough,                            ! Roughness
-  0.11842,                                ! Thickness
-  0.045,                                  ! Conductivity
-  265,                                    ! Density
-  836.79999999999995,                     ! Specific Heat
-  0.90000000000000002,                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.69999999999999996;                    ! Visible Absorptance
+  {fc5e768a-f76b-45ae-a6b0-9361b9e553f3}, !- Handle
+  V2-Storage Wall mtl R15,                !- Name
+  MediumRough,                            !- Roughness
+  0.11842,                                !- Thickness {m}
+  0.045,                                  !- Conductivity {W/m-K}
+  265,                                    !- Density {kg/m3}
+  836.8,                                  !- Specific Heat {J/kg-K}
+  0.90000000000000002,                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.69999999999999996;                    !- Visible Absorptance
 
 OS:Rendering:Color,
   {0d769d32-18b6-46bb-8ce4-acea17c1a0e5}, !- Handle
@@ -4938,16 +4897,16 @@ OS:Rendering:Color,
   0;                                      !- Rendering Blue Value
 
 OS:Material,
-  {b910bb4e-b98f-4e8b-9d71-867fbd7d7a1e}, ! Handle
-  V2-Storage Roof mtl R20,                ! Name
-  MediumRough,                            ! Roughness
-  0.1607,                                 ! Thickness
-  0.045,                                  ! Conductivity
-  265,                                    ! Density
-  836.79999999999995,                     ! Specific Heat
-  0.90000000000000002,                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.69999999999999996;                    ! Visible Absorptance
+  {b910bb4e-b98f-4e8b-9d71-867fbd7d7a1e}, !- Handle
+  V2-Storage Roof mtl R20,                !- Name
+  MediumRough,                            !- Roughness
+  0.1607,                                 !- Thickness {m}
+  0.045,                                  !- Conductivity {W/m-K}
+  265,                                    !- Density {kg/m3}
+  836.8,                                  !- Specific Heat {J/kg-K}
+  0.90000000000000002,                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.69999999999999996;                    !- Visible Absorptance
 
 OS:Rendering:Color,
   {65de1d26-d69c-4a1e-94f2-7679b7904ee3}, ! Handle
@@ -4992,16 +4951,16 @@ OS:Rendering:Color,
   147;                                    !- Rendering Blue Value
 
 OS:Material,
-  {417245e1-c348-4666-94d7-bfbdaa8a9c4c}, ! Handle
-  V2 Door mtl R4,                         ! Name
-  MediumRough,                            ! Roughness
-  0.03169,                                ! Thickness
-  0.045,                                  ! Conductivity
-  265,                                    ! Density
-  836.79999999999995,                     ! Specific Heat
-  0.90000000000000002,                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.69999999999999996;                    ! Visible Absorptance
+  {417245e1-c348-4666-94d7-bfbdaa8a9c4c}, !- Handle
+  V2 Door mtl R4,                         !- Name
+  MediumRough,                            !- Roughness
+  0.03169,                                !- Thickness {m}
+  0.045,                                  !- Conductivity {W/m-K}
+  265,                                    !- Density {kg/m3}
+  836.8,                                  !- Specific Heat {J/kg-K}
+  0.90000000000000002,                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.69999999999999996;                    !- Visible Absorptance
 
 OS:ThermalZone,
   {0616033e-92d5-4260-9419-4214eabeceb0}, !- Handle
@@ -5016,7 +4975,7 @@ OS:ThermalZone,
   {2bf8ad3f-80f2-4009-ae2a-c1679587ba9e}, !- Zone Air Inlet Port List
   {9bf3f341-2c25-479d-8f36-92ceae9fcb79}, !- Zone Air Exhaust Port List
   {8783049a-5d93-44d1-bb82-a89be28ce27f}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {c480daf7-1f20-4989-aa11-8b86720030c6}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -5025,6 +4984,12 @@ OS:ThermalZone,
   {fd326df2-1620-4461-aa15-0a11fabe12bb}, !- Group Rendering Name
   {e03835bd-698f-4227-8ae0-0c8076e9ee5f}, !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {c480daf7-1f20-4989-aa11-8b86720030c6}, !- Handle
+  Port List 1,                            !- Name
+  {0616033e-92d5-4260-9419-4214eabeceb0}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {19a5ae32-3bf1-4831-9298-5417bebcdcfa}, !- Handle
@@ -5042,7 +5007,7 @@ OS:Connection,
 
 OS:PortList,
   {2bf8ad3f-80f2-4009-ae2a-c1679587ba9e}, !- Handle
-  Port List 1,                            !- Name
+  Port List 3,                            !- Name
   {0616033e-92d5-4260-9419-4214eabeceb0}, !- HVAC Component
   {836040ad-7f08-4b75-8495-dd4b154efc16}; !- Port 1
 
@@ -5056,8 +5021,12 @@ OS:PortList,
 OS:Sizing:Zone,
   {d7ff98aa-1264-466e-87ee-716680c4f744}, !- Handle
   {0616033e-92d5-4260-9419-4214eabeceb0}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
   14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
   40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
   0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
   0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
   1,                                      !- Zone Heating Sizing Factor
@@ -5072,19 +5041,26 @@ OS:Sizing:Zone,
   ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
   ,                                       !- Heating Maximum Air Flow {m3/s}
   ,                                       !- Heating Maximum Air Flow Fraction
-  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
-  ;                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  Autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  Autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
 
 OS:ZoneHVAC:EquipmentList,
   {bde4cf87-05ec-4baa-aa07-e44b3ca8f7d8}, !- Handle
   Zone HVAC Equipment List 1,             !- Name
   {0616033e-92d5-4260-9419-4214eabeceb0}, !- Thermal Zone
+  ,                                       !- Load Distribution Scheme
   {a625efda-b481-4bd4-81d2-c9a1050ee9c2}, !- Zone Equipment 1
   1,                                      !- Zone Equipment Cooling Sequence 1
   1,                                      !- Zone Equipment Heating or No-Load Sequence 1
+  ,                                       !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
+  ,                                       !- Zone Equipment Sequential Heating Fraction Schedule Name 1
   {0fd20e6e-2f13-439d-8b81-4f063cddff64}, !- Zone Equipment 2
   2,                                      !- Zone Equipment Cooling Sequence 2
-  2;                                      !- Zone Equipment Heating or No-Load Sequence 2
+  2,                                      !- Zone Equipment Heating or No-Load Sequence 2
+  ,                                       !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
+  ;                                       !- Zone Equipment Sequential Heating Fraction Schedule Name 2
 
 OS:Rendering:Color,
   {fd326df2-1620-4461-aa15-0a11fabe12bb}, !- Handle
@@ -5096,8 +5072,8 @@ OS:Rendering:Color,
 OS:ScheduleTypeLimits,
   {f28fff23-962d-4d26-972c-c171b94b70e7}, !- Handle
   Temperature,                            !- Name
-  ,                                       !- Lower Limit Value {BasedOnField A4}
-  ,                                       !- Upper Limit Value {BasedOnField A4}
+  ,                                       !- Lower Limit Value
+  ,                                       !- Upper Limit Value
   Continuous,                             !- Numeric Type
   Temperature;                            !- Unit Type
 
@@ -5145,8 +5121,8 @@ OS:ThermostatSetpoint:DualSetpoint,
 OS:ScheduleTypeLimits,
   {534b5b83-ac5c-4905-b18a-aa7132745269}, !- Handle
   Temperature 3,                          !- Name
-  ,                                       !- Lower Limit Value {BasedOnField A4}
-  ,                                       !- Upper Limit Value {BasedOnField A4}
+  ,                                       !- Lower Limit Value
+  ,                                       !- Upper Limit Value
   Continuous,                             !- Numeric Type
   Temperature;                            !- Unit Type
 
@@ -5195,7 +5171,7 @@ OS:ZoneHVAC:UnitHeater,
   AutoSize,                               !- Maximum Supply Air Flow Rate {m3/s}
   OnOff,                                  !- Fan Control Type
   {556a1ee2-ee7b-4a18-807c-8548a708f069}, !- Heating Coil Name
-  AutoSize,                               !- Maximum Hot Water Flow Rate {m3/s}
+  autosize,                               !- Maximum Hot Water Flow Rate {m3/s}
   0.0,                                    !- Minimum Hot Water Flow Rate {m3/s}
   0.001,                                  !- Heating Convergence Tolerance
   ;                                       !- Availability Manager List Name
@@ -5209,8 +5185,8 @@ OS:Schedule:Constant,
 OS:ScheduleTypeLimits,
   {ec5d300c-d050-46b2-8438-897d26471bf4}, !- Handle
   Schedule Type Limits 1,                 !- Name
-  0,                                      !- Lower Limit Value {BasedOnField A4}
-  1,                                      !- Upper Limit Value {BasedOnField A4}
+  0,                                      !- Lower Limit Value
+  1,                                      !- Upper Limit Value
   Discrete,                               !- Numeric Type
   Availability;                           !- Unit Type
 
@@ -5218,7 +5194,7 @@ OS:Fan:ConstantVolume,
   {06c9e543-3cff-4a09-9073-70df58acbdb7}, !- Handle
   Unit Heater CV Fan,                     !- Name
   {5b69f7e2-5c1e-4310-9f5a-d0fbbb210a88}, !- Availability Schedule Name
-  0.8,                                    !- Fan Efficiency
+  0.8,                                    !- Fan Total Efficiency
   ,                                       !- Pressure Rise {Pa}
   AutoSize,                               !- Maximum Flow Rate {m3/s}
   0.8,                                    !- Motor Efficiency
@@ -5302,8 +5278,6 @@ OS:Building,
 
 OS:ClimateZones,
   {739804a8-b54b-4e21-a2c3-0bceecfe2bf3}, !- Handle
-  ,                                       !- Active Institution
-  ,                                       !- Active Year
   ASHRAE,                                 !- Climate Zone Institution Name 1
   ANSI/ASHRAE Standard 169,               !- Climate Zone Document Name 1
   2006,                                   !- Climate Zone Document Year 1
@@ -5338,7 +5312,7 @@ OS:Fan:ZoneExhaust,
   {0fd20e6e-2f13-439d-8b81-4f063cddff64}, !- Handle
   Fan Zone Exhaust,                       !- Name
   ,                                       !- Availability Schedule Name
-  0.6,                                    !- Fan Efficiency
+  0.6,                                    !- Fan Total Efficiency
   11850,                                  !- Pressure Rise {Pa}
   0.0944,                                 !- Maximum Flow Rate {m3/s}
   {50bbb4a5-0b7d-408d-9622-fadc2c16ac2b}, !- Air Inlet Node Name
@@ -5546,7 +5520,7 @@ OS:SizingPeriod:DesignDay,
   Edmonton Stony Plain Ann Clg .4% Condns DB=>MWB, !- Name
   27.5,                                   !- Maximum Dry-Bulb Temperature {C}
   12,                                     !- Daily Dry-Bulb Temperature Range {deltaC}
-  17.6,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
+  17.6,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb
   92936,                                  !- Barometric Pressure {Pa}
   3.8,                                    !- Wind Speed {m/s}
   180,                                    !- Wind Direction {deg}
@@ -5572,7 +5546,7 @@ OS:SizingPeriod:DesignDay,
   Edmonton Stony Plain Ann Htg Wind 99.6% Condns WS=>MCDB, !- Name
   -5.8,                                   !- Maximum Dry-Bulb Temperature {C}
   0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
-  -5.8,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
+  -5.8,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb
   92936,                                  !- Barometric Pressure {Pa}
   11.6,                                   !- Wind Speed {m/s}
   180,                                    !- Wind Direction {deg}
@@ -5594,7 +5568,7 @@ OS:SizingPeriod:DesignDay,
   Edmonton Stony Plain Ann Hum_n 99.6% Condns DP=>MCDB, !- Name
   -32.4,                                  !- Maximum Dry-Bulb Temperature {C}
   0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
-  -37.7,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
+  -37.7,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb
   92936,                                  !- Barometric Pressure {Pa}
   1.9,                                    !- Wind Speed {m/s}
   180,                                    !- Wind Direction {deg}
@@ -5616,7 +5590,7 @@ OS:SizingPeriod:DesignDay,
   Edmonton Stony Plain Ann Htg 99.6% Condns DB, !- Name
   -32.5,                                  !- Maximum Dry-Bulb Temperature {C}
   0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
-  -32.5,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
+  -32.5,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb
   92936,                                  !- Barometric Pressure {Pa}
   1.9,                                    !- Wind Speed {m/s}
   180,                                    !- Wind Direction {deg}
@@ -5638,7 +5612,7 @@ OS:SizingPeriod:DesignDay,
   Edmonton Stony Plain Ann Clg .4% Condns DP=>MDB, !- Name
   22.6,                                   !- Maximum Dry-Bulb Temperature {C}
   12,                                     !- Daily Dry-Bulb Temperature Range {deltaC}
-  16.5,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
+  16.5,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb
   92936,                                  !- Barometric Pressure {Pa}
   3.8,                                    !- Wind Speed {m/s}
   180,                                    !- Wind Direction {deg}
@@ -5664,7 +5638,7 @@ OS:SizingPeriod:DesignDay,
   Edmonton Stony Plain Ann Clg .4% Condns Enth=>MDB, !- Name
   25.6,                                   !- Maximum Dry-Bulb Temperature {C}
   12,                                     !- Daily Dry-Bulb Temperature Range {deltaC}
-  57100,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
+  57100,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb
   92936,                                  !- Barometric Pressure {Pa}
   3.8,                                    !- Wind Speed {m/s}
   180,                                    !- Wind Direction {deg}
@@ -5690,7 +5664,7 @@ OS:SizingPeriod:DesignDay,
   Edmonton Stony Plain Ann Clg .4% Condns WB=>MDB, !- Name
   25.3,                                   !- Maximum Dry-Bulb Temperature {C}
   12,                                     !- Daily Dry-Bulb Temperature Range {deltaC}
-  19,                                     !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
+  19,                                     !- Humidity Indicating Conditions at Maximum Dry-Bulb
   92936,                                  !- Barometric Pressure {Pa}
   3.8,                                    !- Wind Speed {m/s}
   180,                                    !- Wind Direction {deg}
@@ -5722,7 +5696,8 @@ OS:DefaultConstructionSet,
   {e13c611e-4c6d-4993-be0d-39c1da1f6c8d}, ! Interior Partition Construction Name
   ,                                       ! Space Shading Construction Name
   ,                                       ! Building Shading Construction Name
-  ;                                       ! Site Shading Construction Name
+  ,                                       ! Site Shading Construction Name
+  ;                                       !- Adiabatic Surface Construction Name
 
 OS:DefaultSurfaceConstructions,
   {f4d2bb50-806c-455a-a38b-84bb184919bf}, ! Handle
@@ -5888,13 +5863,13 @@ OS:Rendering:Color,
   255.0;                                  ! Rendering Blue Value
 
 OS:Material,
-  {d91c6d93-7c73-41bb-86ea-d7c850d9d593}, ! Handle
-  000_G05 25mm wood,                      ! Name
-  MediumSmooth,                           ! Roughness
-  0.025399999999999999,                   ! Thickness
-  0.14999999999999999,                    ! Conductivity
-  608,                                    ! Density
-  1630;                                   ! Specific Heat
+  {d91c6d93-7c73-41bb-86ea-d7c850d9d593}, !- Handle
+  000_G05 25mm wood,                      !- Name
+  MediumSmooth,                           !- Roughness
+  0.025399999999999999,                   !- Thickness {m}
+  0.14999999999999999,                    !- Conductivity {W/m-K}
+  608,                                    !- Density {kg/m3}
+  1630;                                   !- Specific Heat {J/kg-K}
 
 OS:Rendering:Color,
   {4961f9b6-4849-4c7f-82aa-ef6463b062d4}, ! Handle
@@ -5911,13 +5886,13 @@ OS:Rendering:Color,
   196;                                    !- Rendering Blue Value
 
 OS:Material,
-  {e4467133-972e-4164-9fda-e663df71abf6}, ! Handle
-  MNECB Ref Brick 100mm,                  ! Name
-  MediumRough,                            ! Roughness
-  0.1016,                                 ! Thickness
-  1.311,                                  ! Conductivity
-  2082.332,                               ! Density
-  795.312;                                ! Specific Heat
+  {e4467133-972e-4164-9fda-e663df71abf6}, !- Handle
+  MNECB Ref Brick 100mm,                  !- Name
+  MediumRough,                            !- Roughness
+  0.1016,                                 !- Thickness {m}
+  1.311,                                  !- Conductivity {W/m-K}
+  2082.332,                               !- Density {kg/m3}
+  795.312;                                !- Specific Heat {J/kg-K}
 
 OS:Material:AirGap,
   {e650abc6-0c04-4857-94b7-5199a1d5ff04}, ! Handle
@@ -5925,25 +5900,25 @@ OS:Material:AirGap,
   0.1717;                                 ! Thermal Resistance
 
 OS:Material,
-  {21891b46-7366-4738-977e-10dedc027003}, ! Handle
-  Mass NonRes Wall Insulation-2.89,       ! Name
-  MediumRough,                            ! Roughness
-  0.120860609077674,                      ! Thickness
-  0.049000000000000002,                   ! Conductivity
-  265,                                    ! Density
-  836.79999999999995,                     ! Specific Heat
-  0.90000000000000002,                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.69999999999999996;                    ! Visible Absorptance
+  {21891b46-7366-4738-977e-10dedc027003}, !- Handle
+  Mass NonRes Wall Insulation-2.89,       !- Name
+  MediumRough,                            !- Roughness
+  0.120860609077674,                      !- Thickness {m}
+  0.049000000000000002,                   !- Conductivity {W/m-K}
+  265,                                    !- Density {kg/m3}
+  836.8,                                  !- Specific Heat {J/kg-K}
+  0.90000000000000002,                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.69999999999999996;                    !- Visible Absorptance
 
 OS:Material,
-  {6b50aad1-6f15-44ae-85be-bb65ec38f87d}, ! Handle
-  000_G01a 19mm gypsum board,             ! Name
-  MediumSmooth,                           ! Roughness
-  0.019,                                  ! Thickness
-  0.16,                                   ! Conductivity
-  800,                                    ! Density
-  1090;                                   ! Specific Heat
+  {6b50aad1-6f15-44ae-85be-bb65ec38f87d}, !- Handle
+  000_G01a 19mm gypsum board,             !- Name
+  MediumSmooth,                           !- Roughness
+  0.019,                                  !- Thickness {m}
+  0.16,                                   !- Conductivity {W/m-K}
+  800,                                    !- Density {kg/m3}
+  1090;                                   !- Specific Heat {J/kg-K}
 
 OS:Rendering:Color,
   {2cf85434-1ffc-412c-811c-6ac3db0faec9}, !- Handle
@@ -5953,55 +5928,55 @@ OS:Rendering:Color,
   212;                                    !- Rendering Blue Value
 
 OS:Material,
-  {10fd5b3c-a256-4198-81fd-11722c6f646b}, ! Handle
-  MNECB Ref Gravel 50mm,                  ! Name
-  VeryRough,                              ! Roughness
-  0.0508,                                 ! Thickness
-  1.80282,                                ! Conductivity
-  1601.794,                               ! Density
-  837.17,                                 ! Specific Heat
-  0.9,                                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.69999999999999996;                    ! Visible Absorptance
+  {10fd5b3c-a256-4198-81fd-11722c6f646b}, !- Handle
+  MNECB Ref Gravel 50mm,                  !- Name
+  VeryRough,                              !- Roughness
+  0.0508,                                 !- Thickness {m}
+  1.80282,                                !- Conductivity {W/m-K}
+  1601.794,                               !- Density {kg/m3}
+  837.17,                                 !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.69999999999999996;                    !- Visible Absorptance
 
 OS:Material,
-  {499c80fa-56b8-4ebc-8191-caa8a2e02e89}, ! Handle
-  MNECB Built-up Roof 9.5mm,              ! Name
-  VeryRough,                              ! Roughness
-  0.0095,                                 ! Thickness
-  0.1634,                                 ! Conductivity
-  1121.29,                                ! Density
-  1465.048,                               ! Specific Heat
-  0.9,                                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.69999999999999996;                    ! Visible Absorptance
+  {499c80fa-56b8-4ebc-8191-caa8a2e02e89}, !- Handle
+  MNECB Built-up Roof 9.5mm,              !- Name
+  VeryRough,                              !- Roughness
+  0.0095,                                 !- Thickness {m}
+  0.1634,                                 !- Conductivity {W/m-K}
+  1121.29,                                !- Density {kg/m3}
+  1465.048,                               !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.69999999999999996;                    !- Visible Absorptance
 
 OS:Material,
-  {976c4669-9fd5-4e14-a341-18671f73dec8}, ! Handle
-  MNECB Ref Polystyrene 46mm,             ! Name
-  MediumRough,                            ! Roughness
-  0.0462359,                              ! Thickness
-  0.02885,                                ! Conductivity
-  28.832,                                 ! Density
-  1213.897;                               ! Specific Heat
+  {976c4669-9fd5-4e14-a341-18671f73dec8}, !- Handle
+  MNECB Ref Polystyrene 46mm,             !- Name
+  MediumRough,                            !- Roughness
+  0.0462359,                              !- Thickness {m}
+  0.02885,                                !- Conductivity {W/m-K}
+  28.832,                                 !- Density {kg/m3}
+  1213.897;                               !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {023b1332-4149-4fbb-8e59-3309b408f532}, ! Handle
-  000_F08 Metal surface,                  ! Name
-  Smooth,                                 ! Roughness
-  0.00080000000000000004,                 ! Thickness
-  45.280000000000001,                     ! Conductivity
-  7824,                                   ! Density
-  500;                                    ! Specific Heat
+  {023b1332-4149-4fbb-8e59-3309b408f532}, !- Handle
+  000_F08 Metal surface,                  !- Name
+  Smooth,                                 !- Roughness
+  0.00080000000000000004,                 !- Thickness {m}
+  45.280000000000001,                     !- Conductivity {W/m-K}
+  7824,                                   !- Density {kg/m3}
+  500;                                    !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {871a43c4-a4a3-442f-b32a-7c05802384e0}, ! Handle
-  000 G05 25mm wood 1,                    ! Name
-  MediumSmooth,                           ! Roughness
-  0.025399999999999999,                   ! Thickness
-  0.14999999999999999,                    ! Conductivity
-  608,                                    ! Density
-  1630;                                   ! Specific Heat
+  {871a43c4-a4a3-442f-b32a-7c05802384e0}, !- Handle
+  000 G05 25mm wood 1,                    !- Name
+  MediumSmooth,                           !- Roughness
+  0.025399999999999999,                   !- Thickness {m}
+  0.14999999999999999,                    !- Conductivity {W/m-K}
+  608,                                    !- Density {kg/m3}
+  1630;                                   !- Specific Heat {J/kg-K}
 
 OS:Rendering:Color,
   {0ac4b079-37a7-44c6-baa8-be58a3f3d950}, ! Handle
@@ -6011,13 +5986,13 @@ OS:Rendering:Color,
   142.8;                                  ! Rendering Blue Value
 
 OS:Material,
-  {7b7854be-a17d-483b-bd82-c408ad1a3ec9}, ! Handle
-  000_F16 Acoustic tile,                  ! Name
-  MediumSmooth,                           ! Roughness
-  0.019099999999999999,                   ! Thickness
-  0.059999999999999998,                   ! Conductivity
-  368,                                    ! Density
-  590;                                    ! Specific Heat
+  {7b7854be-a17d-483b-bd82-c408ad1a3ec9}, !- Handle
+  000_F16 Acoustic tile,                  !- Name
+  MediumSmooth,                           !- Roughness
+  0.019099999999999999,                   !- Thickness {m}
+  0.059999999999999998,                   !- Conductivity {W/m-K}
+  368,                                    !- Density {kg/m3}
+  590;                                    !- Specific Heat {J/kg-K}
 
 OS:Material:AirGap,
   {22b3b879-b8aa-4c2d-b2e5-4e50b9652425}, ! Handle
@@ -6025,13 +6000,13 @@ OS:Material:AirGap,
   0.17999999999999999;                    ! Thermal Resistance
 
 OS:Material,
-  {88159a7d-5d23-47d9-8cc6-235311877103}, ! Handle
-  000_M11 100mm lightweight concrete,     ! Name
-  MediumRough,                            ! Roughness
-  0.1016,                                 ! Thickness
-  0.53000000000000003,                    ! Conductivity
-  1280,                                   ! Density
-  840;                                    ! Specific Heat
+  {88159a7d-5d23-47d9-8cc6-235311877103}, !- Handle
+  000_M11 100mm lightweight concrete,     !- Name
+  MediumRough,                            !- Roughness
+  0.1016,                                 !- Thickness {m}
+  0.53000000000000003,                    !- Conductivity {W/m-K}
+  1280,                                   !- Density {kg/m3}
+  840;                                    !- Specific Heat {J/kg-K}
 
 OS:Rendering:Color,
   {7e54eef7-242f-437a-a4d5-009591bdb98b}, ! Handle
@@ -6060,22 +6035,22 @@ OS:Rendering:Color,
   154;                                    !- Rendering Blue Value
 
 OS:Material,
-  {02d97092-b36f-4b20-851c-6df2fb3ee8f5}, ! Handle
-  MNECB Ref Polystyrene 25mm,             ! Name
-  MediumRough,                            ! Roughness
-  0.02487,                                ! Thickness
-  0.02885,                                ! Conductivity
-  28.832,                                 ! Density
-  1213.897;                               ! Specific Heat
+  {02d97092-b36f-4b20-851c-6df2fb3ee8f5}, !- Handle
+  MNECB Ref Polystyrene 25mm,             !- Name
+  MediumRough,                            !- Roughness
+  0.02487,                                !- Thickness {m}
+  0.02885,                                !- Conductivity {W/m-K}
+  28.832,                                 !- Density {kg/m3}
+  1213.897;                               !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {045c2fc5-fdf0-48b2-ac91-97a6825981c5}, ! Handle
-  MNECB Ref concrete 100mm,               ! Name
-  MediumRough,                            ! Roughness
-  0.1016,                                 ! Thickness
-  1.80282,                                ! Conductivity
-  2242.512,                               ! Density
-  837.17;                                 ! Specific Heat
+  {045c2fc5-fdf0-48b2-ac91-97a6825981c5}, !- Handle
+  MNECB Ref concrete 100mm,               !- Name
+  MediumRough,                            !- Roughness
+  0.1016,                                 !- Thickness {m}
+  1.80282,                                !- Conductivity {W/m-K}
+  2242.512,                               !- Density {kg/m3}
+  837.17;                                 !- Specific Heat {J/kg-K}
 
 OS:Rendering:Color,
   {80ae6e41-4489-48cc-802b-42872770180a}, !- Handle
@@ -6085,13 +6060,13 @@ OS:Rendering:Color,
   238;                                    !- Rendering Blue Value
 
 OS:Material,
-  {f5ab0b2b-09e0-47e3-9886-c47db15f5024}, ! Handle
-  MNECB Ref Polystyrene 44mm,             ! Name
-  MediumRough,                            ! Roughness
-  0.04398,                                ! Thickness
-  0.02885,                                ! Conductivity
-  28.832,                                 ! Density
-  1213.897;                               ! Specific Heat
+  {f5ab0b2b-09e0-47e3-9886-c47db15f5024}, !- Handle
+  MNECB Ref Polystyrene 44mm,             !- Name
+  MediumRough,                            !- Roughness
+  0.04398,                                !- Thickness {m}
+  0.02885,                                !- Conductivity {W/m-K}
+  28.832,                                 !- Density {kg/m3}
+  1213.897;                               !- Specific Heat {J/kg-K}
 
 OS:Rendering:Color,
   {0fe4ead2-4afd-4be3-9334-59a98c3b6417}, ! Handle
@@ -6115,13 +6090,13 @@ OS:Rendering:Color,
   89.505;                                 ! Rendering Blue Value
 
 OS:Material,
-  {22ddd369-42e6-4ff5-a757-6fa2f1aa4aab}, ! Handle
-  000_I01 25mm insulation board,          ! Name
-  MediumRough,                            ! Roughness
-  0.025399999999999999,                   ! Thickness
-  0.029999999999999999,                   ! Conductivity
-  43,                                     ! Density
-  1210;                                   ! Specific Heat
+  {22ddd369-42e6-4ff5-a757-6fa2f1aa4aab}, !- Handle
+  000_I01 25mm insulation board,          !- Name
+  MediumRough,                            !- Roughness
+  0.025399999999999999,                   !- Thickness {m}
+  0.029999999999999999,                   !- Conductivity {W/m-K}
+  43,                                     !- Density {kg/m3}
+  1210;                                   !- Specific Heat {J/kg-K}
 
 OS:Rendering:Color,
   {79980a2d-6e18-4b6b-961d-a0e2772bc46c}, ! Handle
@@ -6182,16 +6157,16 @@ OS:Construction,
   {7a194955-f890-450a-864b-2d3b62b9a146}; ! Layer 2
 
 OS:Material,
-  {9534ad02-6f8b-4c09-9fb0-b40a3c5b2421}, ! Handle
-  MAT-CC05 4 HW CONCRETE 1,               ! Name
-  Rough,                                  ! Roughness
-  0.1016,                                 ! Thickness
-  1.3109999999999999,                     ! Conductivity
-  2240,                                   ! Density
-  836.79999999999995,                     ! Specific Heat
-  0.90000000000000002,                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.69999999999999996;                    ! Visible Absorptance
+  {9534ad02-6f8b-4c09-9fb0-b40a3c5b2421}, !- Handle
+  MAT-CC05 4 HW CONCRETE 1,               !- Name
+  Rough,                                  !- Roughness
+  0.1016,                                 !- Thickness {m}
+  1.3109999999999999,                     !- Conductivity {W/m-K}
+  2240,                                   !- Density {kg/m3}
+  836.8,                                  !- Specific Heat {J/kg-K}
+  0.90000000000000002,                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.69999999999999996;                    !- Visible Absorptance
 
 OS:Material:NoMass,
   {7a194955-f890-450a-864b-2d3b62b9a146}, ! Handle
@@ -6222,13 +6197,13 @@ OS:Construction,
   {3faecbbd-9022-4997-8f45-65512b1e40f8}; !- Layer 5
 
 OS:Material,
-  {d533bfcd-b40f-4d54-a557-2d4de594f0ff}, ! Handle
-  MNECB Ref Brick 100mm 1,                ! Name
-  MediumRough,                            ! Roughness
-  0.1016,                                 ! Thickness
-  1.311,                                  ! Conductivity
-  2082.332,                               ! Density
-  795.312;                                ! Specific Heat
+  {d533bfcd-b40f-4d54-a557-2d4de594f0ff}, !- Handle
+  MNECB Ref Brick 100mm 1,                !- Name
+  MediumRough,                            !- Roughness
+  0.1016,                                 !- Thickness {m}
+  1.311,                                  !- Conductivity {W/m-K}
+  2082.332,                               !- Density {kg/m3}
+  795.312;                                !- Specific Heat {J/kg-K}
 
 OS:Material:AirGap,
   {fe7524d7-62ae-4554-9241-cc336acb7183}, ! Handle
@@ -6236,34 +6211,34 @@ OS:Material:AirGap,
   0.1717;                                 ! Thermal Resistance
 
 OS:Material,
-  {34586a58-ee66-4dd9-bed0-4d73756305ee}, ! Handle
-  000 G05 25mm wood 2,                    ! Name
-  MediumSmooth,                           ! Roughness
-  0.025399999999999999,                   ! Thickness
-  0.14999999999999999,                    ! Conductivity
-  608,                                    ! Density
-  1630;                                   ! Specific Heat
+  {34586a58-ee66-4dd9-bed0-4d73756305ee}, !- Handle
+  000 G05 25mm wood 2,                    !- Name
+  MediumSmooth,                           !- Roughness
+  0.025399999999999999,                   !- Thickness {m}
+  0.14999999999999999,                    !- Conductivity {W/m-K}
+  608,                                    !- Density {kg/m3}
+  1630;                                   !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {46fa1cf3-8e56-4a18-9f12-7403a73d91d6}, ! Handle
-  Mass NonRes Wall Insulation-2.89 1,     ! Name
-  MediumRough,                            ! Roughness
-  0.232589210106789,                      ! Thickness
-  0.049000000000000002,                   ! Conductivity
-  265,                                    ! Density
-  836.79999999999995,                     ! Specific Heat
-  0.90000000000000002,                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.69999999999999996;                    ! Visible Absorptance
+  {46fa1cf3-8e56-4a18-9f12-7403a73d91d6}, !- Handle
+  Mass NonRes Wall Insulation-2.89 1,     !- Name
+  MediumRough,                            !- Roughness
+  0.232589210106789,                      !- Thickness {m}
+  0.049000000000000002,                   !- Conductivity {W/m-K}
+  265,                                    !- Density {kg/m3}
+  836.8,                                  !- Specific Heat {J/kg-K}
+  0.90000000000000002,                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.69999999999999996;                    !- Visible Absorptance
 
 OS:Material,
-  {3faecbbd-9022-4997-8f45-65512b1e40f8}, ! Handle
-  000_G01a 19mm gypsum board 1,           ! Name
-  MediumSmooth,                           ! Roughness
-  0.019,                                  ! Thickness
-  0.16,                                   ! Conductivity
-  800,                                    ! Density
-  1090;                                   ! Specific Heat
+  {3faecbbd-9022-4997-8f45-65512b1e40f8}, !- Handle
+  000_G01a 19mm gypsum board 1,           !- Name
+  MediumSmooth,                           !- Roughness
+  0.019,                                  !- Thickness {m}
+  0.16,                                   !- Conductivity {W/m-K}
+  800,                                    !- Density {kg/m3}
+  1090;                                   !- Specific Heat {J/kg-K}
 
 OS:StandardsInformation:Construction,
   {7a2a3b14-1023-45e6-bad7-375010a0d51d}, !- Handle
@@ -6285,55 +6260,55 @@ OS:Construction,
   {05142e43-bb6f-4168-bf5d-280d608c0c1c}; !- Layer 5
 
 OS:Material,
-  {e2619af0-64a9-44de-926e-12c79b596723}, ! Handle
-  MNECB Ref Gravel 50mm 1,                ! Name
-  VeryRough,                              ! Roughness
-  0.0508,                                 ! Thickness
-  1.80282,                                ! Conductivity
-  1601.794,                               ! Density
-  837.17,                                 ! Specific Heat
-  0.9,                                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.69999999999999996;                    ! Visible Absorptance
+  {e2619af0-64a9-44de-926e-12c79b596723}, !- Handle
+  MNECB Ref Gravel 50mm 1,                !- Name
+  VeryRough,                              !- Roughness
+  0.0508,                                 !- Thickness {m}
+  1.80282,                                !- Conductivity {W/m-K}
+  1601.794,                               !- Density {kg/m3}
+  837.17,                                 !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.69999999999999996;                    !- Visible Absorptance
 
 OS:Material,
-  {dd0c300d-33a6-46c9-833d-c8f4aa892dee}, ! Handle
-  MNECB Built-up Roof 9.5mm 1,            ! Name
-  VeryRough,                              ! Roughness
-  0.0095,                                 ! Thickness
-  0.1634,                                 ! Conductivity
-  1121.29,                                ! Density
-  1465.048,                               ! Specific Heat
-  0.9,                                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.69999999999999996;                    ! Visible Absorptance
+  {dd0c300d-33a6-46c9-833d-c8f4aa892dee}, !- Handle
+  MNECB Built-up Roof 9.5mm 1,            !- Name
+  VeryRough,                              !- Roughness
+  0.0095,                                 !- Thickness {m}
+  0.1634,                                 !- Conductivity {W/m-K}
+  1121.29,                                !- Density {kg/m3}
+  1465.048,                               !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.69999999999999996;                    !- Visible Absorptance
 
 OS:Material,
-  {79f60c56-f577-4660-97ed-509e40b2856f}, ! Handle
-  MNECB Ref Polystyrene 46mm 1,           ! Name
-  MediumRough,                            ! Roughness
-  0.12472811052561,                       ! Thickness
-  0.02885,                                ! Conductivity
-  28.832,                                 ! Density
-  1213.897;                               ! Specific Heat
+  {79f60c56-f577-4660-97ed-509e40b2856f}, !- Handle
+  MNECB Ref Polystyrene 46mm 1,           !- Name
+  MediumRough,                            !- Roughness
+  0.12472811052561,                       !- Thickness {m}
+  0.02885,                                !- Conductivity {W/m-K}
+  28.832,                                 !- Density {kg/m3}
+  1213.897;                               !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {cf030f84-8ca8-4c22-9452-0115d522c7b5}, ! Handle
-  000_F08 Metal surface 1,                ! Name
-  Smooth,                                 ! Roughness
-  0.00080000000000000004,                 ! Thickness
-  45.280000000000001,                     ! Conductivity
-  7824,                                   ! Density
-  500;                                    ! Specific Heat
+  {cf030f84-8ca8-4c22-9452-0115d522c7b5}, !- Handle
+  000_F08 Metal surface 1,                !- Name
+  Smooth,                                 !- Roughness
+  0.00080000000000000004,                 !- Thickness {m}
+  45.280000000000001,                     !- Conductivity {W/m-K}
+  7824,                                   !- Density {kg/m3}
+  500;                                    !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {05142e43-bb6f-4168-bf5d-280d608c0c1c}, ! Handle
-  000 G05 25mm wood 3,                    ! Name
-  MediumSmooth,                           ! Roughness
-  0.025399999999999999,                   ! Thickness
-  0.14999999999999999,                    ! Conductivity
-  608,                                    ! Density
-  1630;                                   ! Specific Heat
+  {05142e43-bb6f-4168-bf5d-280d608c0c1c}, !- Handle
+  000 G05 25mm wood 3,                    !- Name
+  MediumSmooth,                           !- Roughness
+  0.025399999999999999,                   !- Thickness {m}
+  0.14999999999999999,                    !- Conductivity {W/m-K}
+  608,                                    !- Density {kg/m3}
+  1630;                                   !- Specific Heat {J/kg-K}
 
 OS:StandardsInformation:Construction,
   {cb71861e-0155-457a-97e5-45689e500e85}, !- Handle
@@ -6359,22 +6334,22 @@ OS:Construction,
   {7f70c396-c021-4bfd-95f4-7e6ca2cafb50}; !- Layer 2
 
 OS:Material,
-  {590b81d5-bcc8-4976-a7b6-5caa605672c7}, ! Handle
-  MNECB Ref Polystyrene 25mm 1,           ! Name
-  MediumRough,                            ! Roughness
-  0.0491789749819727,                     ! Thickness
-  0.02885,                                ! Conductivity
-  28.832,                                 ! Density
-  1213.897;                               ! Specific Heat
+  {590b81d5-bcc8-4976-a7b6-5caa605672c7}, !- Handle
+  MNECB Ref Polystyrene 25mm 1,           !- Name
+  MediumRough,                            !- Roughness
+  0.0491789749819727,                     !- Thickness {m}
+  0.02885,                                !- Conductivity {W/m-K}
+  28.832,                                 !- Density {kg/m3}
+  1213.897;                               !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {7f70c396-c021-4bfd-95f4-7e6ca2cafb50}, ! Handle
-  MNECB Ref concrete 100mm 1,             ! Name
-  MediumRough,                            ! Roughness
-  0.1016,                                 ! Thickness
-  1.80282,                                ! Conductivity
-  2242.512,                               ! Density
-  837.17;                                 ! Specific Heat
+  {7f70c396-c021-4bfd-95f4-7e6ca2cafb50}, !- Handle
+  MNECB Ref concrete 100mm 1,             !- Name
+  MediumRough,                            !- Roughness
+  0.1016,                                 !- Thickness {m}
+  1.80282,                                !- Conductivity {W/m-K}
+  2242.512,                               !- Density {kg/m3}
+  837.17;                                 !- Specific Heat {J/kg-K}
 
 OS:StandardsInformation:Construction,
   {6af23439-7e35-4af9-bfed-e56b364ab5bb}, !- Handle
@@ -6393,22 +6368,22 @@ OS:Construction,
   {4fcdf057-838d-4a44-821b-83be8a122118}; !- Layer 2
 
 OS:Material,
-  {be8b8517-e61d-43dc-8039-d0f93915c2ef}, ! Handle
-  MNECB Ref Polystyrene 44mm 1,           ! Name
-  MediumRough,                            ! Roughness
-  0.0491789749819727,                     ! Thickness
-  0.02885,                                ! Conductivity
-  28.832,                                 ! Density
-  1213.897;                               ! Specific Heat
+  {be8b8517-e61d-43dc-8039-d0f93915c2ef}, !- Handle
+  MNECB Ref Polystyrene 44mm 1,           !- Name
+  MediumRough,                            !- Roughness
+  0.0491789749819727,                     !- Thickness {m}
+  0.02885,                                !- Conductivity {W/m-K}
+  28.832,                                 !- Density {kg/m3}
+  1213.897;                               !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {4fcdf057-838d-4a44-821b-83be8a122118}, ! Handle
-  MNECB Ref concrete 100mm 2,             ! Name
-  MediumRough,                            ! Roughness
-  0.1016,                                 ! Thickness
-  1.80282,                                ! Conductivity
-  2242.512,                               ! Density
-  837.17;                                 ! Specific Heat
+  {4fcdf057-838d-4a44-821b-83be8a122118}, !- Handle
+  MNECB Ref concrete 100mm 2,             !- Name
+  MediumRough,                            !- Roughness
+  0.1016,                                 !- Thickness {m}
+  1.80282,                                !- Conductivity {W/m-K}
+  2242.512,                               !- Density {kg/m3}
+  837.17;                                 !- Specific Heat {J/kg-K}
 
 OS:StandardsInformation:Construction,
   {2787c41b-09bc-420e-9f39-914276ca8016}, !- Handle
@@ -6427,16 +6402,16 @@ OS:Construction,
   {a7627167-fc03-44e0-8063-e0a01410724a}; ! Layer 2
 
 OS:Material,
-  {303a20ad-284e-4700-9867-8c5e1dd06d92}, ! Handle
-  MAT-CC05 4 HW CONCRETE 2,               ! Name
-  Rough,                                  ! Roughness
-  0.1016,                                 ! Thickness
-  1.3109999999999999,                     ! Conductivity
-  2240,                                   ! Density
-  836.79999999999995,                     ! Specific Heat
-  0.90000000000000002,                    ! Thermal Absorptance
-  0.69999999999999996,                    ! Solar Absorptance
-  0.69999999999999996;                    ! Visible Absorptance
+  {303a20ad-284e-4700-9867-8c5e1dd06d92}, !- Handle
+  MAT-CC05 4 HW CONCRETE 2,               !- Name
+  Rough,                                  !- Roughness
+  0.1016,                                 !- Thickness {m}
+  1.3109999999999999,                     !- Conductivity {W/m-K}
+  2240,                                   !- Density {kg/m3}
+  836.8,                                  !- Specific Heat {J/kg-K}
+  0.90000000000000002,                    !- Thermal Absorptance
+  0.69999999999999996,                    !- Solar Absorptance
+  0.69999999999999996;                    !- Visible Absorptance
 
 OS:Material:NoMass,
   {a7627167-fc03-44e0-8063-e0a01410724a}, ! Handle
@@ -6501,22 +6476,22 @@ OS:Construction,
   {238c4d33-4a47-4a30-8d4b-f1aa38f65323}; ! Layer 2
 
 OS:Material,
-  {4575572e-c133-4229-874b-02a5a091a37e}, ! Handle
-  000_F08 Metal surface 2,                ! Name
-  Smooth,                                 ! Roughness
-  0.00080000000000000004,                 ! Thickness
-  45.280000000000001,                     ! Conductivity
-  7824,                                   ! Density
-  500;                                    ! Specific Heat
+  {4575572e-c133-4229-874b-02a5a091a37e}, !- Handle
+  000_F08 Metal surface 2,                !- Name
+  Smooth,                                 !- Roughness
+  0.00080000000000000004,                 !- Thickness {m}
+  45.280000000000001,                     !- Conductivity {W/m-K}
+  7824,                                   !- Density {kg/m3}
+  500;                                    !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {238c4d33-4a47-4a30-8d4b-f1aa38f65323}, ! Handle
-  000_I01 25mm insulation board 1,        ! Name
-  MediumRough,                            ! Roughness
-  0.0211194699646643,                     ! Thickness
-  0.029999999999999999,                   ! Conductivity
-  43,                                     ! Density
-  1210;                                   ! Specific Heat
+  {238c4d33-4a47-4a30-8d4b-f1aa38f65323}, !- Handle
+  000_I01 25mm insulation board 1,        !- Name
+  MediumRough,                            !- Roughness
+  0.0211194699646643,                     !- Thickness {m}
+  0.029999999999999999,                   !- Conductivity {W/m-K}
+  43,                                     !- Density {kg/m3}
+  1210;                                   !- Specific Heat {J/kg-K}
 
 OS:StandardsInformation:Construction,
   {a41fcdaa-a6e4-4db9-add2-43432d70c152}, !- Handle
@@ -6535,22 +6510,22 @@ OS:Construction,
   {42e85031-8ead-4f5c-a34f-b5eae497e894}; ! Layer 2
 
 OS:Material,
-  {91ca5b28-3f76-4736-a991-6149913c6a93}, ! Handle
-  000_F08 Metal surface 3,                ! Name
-  Smooth,                                 ! Roughness
-  0.00080000000000000004,                 ! Thickness
-  45.280000000000001,                     ! Conductivity
-  7824,                                   ! Density
-  500;                                    ! Specific Heat
+  {91ca5b28-3f76-4736-a991-6149913c6a93}, !- Handle
+  000_F08 Metal surface 3,                !- Name
+  Smooth,                                 !- Roughness
+  0.00080000000000000004,                 !- Thickness {m}
+  45.280000000000001,                     !- Conductivity {W/m-K}
+  7824,                                   !- Density {kg/m3}
+  500;                                    !- Specific Heat {J/kg-K}
 
 OS:Material,
-  {42e85031-8ead-4f5c-a34f-b5eae497e894}, ! Handle
-  000_I01 25mm insulation board 2,        ! Name
-  MediumRough,                            ! Roughness
-  0.0528294699646643,                     ! Thickness
-  0.029999999999999999,                   ! Conductivity
-  43,                                     ! Density
-  1210;                                   ! Specific Heat
+  {42e85031-8ead-4f5c-a34f-b5eae497e894}, !- Handle
+  000_I01 25mm insulation board 2,        !- Name
+  MediumRough,                            !- Roughness
+  0.0528294699646643,                     !- Thickness {m}
+  0.029999999999999999,                   !- Conductivity {W/m-K}
+  43,                                     !- Density {kg/m3}
+  1210;                                   !- Specific Heat {J/kg-K}
 
 OS:StandardsInformation:Construction,
   {3eb55c72-7ac7-4585-bc47-44f7d6b44db4}, !- Handle
@@ -6610,8 +6585,8 @@ OS:Schedule:Ruleset,
 OS:ScheduleTypeLimits,
   {f61301ea-2970-421e-b9db-cae4fea03124}, !- Handle
   Temperature 4,                          !- Name
-  ,                                       !- Lower Limit Value {BasedOnField A4}
-  ,                                       !- Upper Limit Value {BasedOnField A4}
+  ,                                       !- Lower Limit Value
+  ,                                       !- Upper Limit Value
   Continuous,                             !- Numeric Type
   Temperature;                            !- Unit Type
 
@@ -6642,8 +6617,8 @@ OS:Schedule:Day,
 OS:ScheduleTypeLimits,
   {dd346282-4c67-44f4-9fac-4394f11c5f01}, !- Handle
   TEMPERATURE 5,                          !- Name
-  ,                                       !- Lower Limit Value {BasedOnField A4}
-  ,                                       !- Upper Limit Value {BasedOnField A4}
+  ,                                       !- Lower Limit Value
+  ,                                       !- Upper Limit Value
   Continuous,                             !- Numeric Type
   Temperature;                            !- Unit Type
 
@@ -6673,7 +6648,6 @@ OS:Schedule:Rule,
   No,                                     !- Apply Thursday
   Yes,                                    !- Apply Friday
   Yes,                                    !- Apply Saturday
-  ,                                       !- Apply Holiday
   DateRange,                              !- Date Specification Type
   1,                                      !- Start Month
   31,                                     !- Start Day
@@ -6912,4 +6886,394 @@ OS:Output:Variable,
   *,                                      !- Key Value
   Air System Fan Electric Energy,         !- Variable Name
   Hourly;                                 !- Reporting Frequency
+
+OS:StandardsInformation:Construction,
+  {8125eb3a-a2dc-4e27-b0f7-d12b1e52ec35}, !- Handle
+  {a4707411-1a3e-43c1-b1c3-26a5dadf04f2}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {a68f4df0-7e55-4fe7-a3d9-2fb2f0429073}, !- Handle
+  {c9ec5036-78a9-455e-b264-b2a62182a6b1}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {a4b1a446-3b0c-42d7-b98b-b8faf1d222c2}, !- Handle
+  {93349841-d95e-46e4-93eb-90902241d529}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {dc1a1bd2-75cc-4425-9e40-6542eb7bc68c}, !- Handle
+  {3926bc23-cb28-4481-bed7-a8959aa9784e}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {f9d98695-470d-4c92-ba43-9e58c34ac223}, !- Handle
+  {ab2b6805-18a2-4e07-a2cb-4572d04f6890}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {2bb91559-119c-4658-abdf-aa94ad62b67a}, !- Handle
+  {364c7d39-64f6-45c6-a3b5-715541cdf78c}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {0e04087e-eb8b-4ea8-9637-99fb8924ab02}, !- Handle
+  {29d7f267-ab87-4d62-8306-440e6f53637e}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {7d8b9adb-8f2f-48a1-80c5-671a4533eba1}, !- Handle
+  {2d8c20fd-e8a4-44df-b399-58414f1b82da}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {61ee53d4-925c-43f5-b49c-08d4081ae54e}, !- Handle
+  {fe097386-a229-4196-90e2-4a422c321f26}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {3e8c0a7b-abe0-4b55-996d-ae9e10c376f8}, !- Handle
+  {f5ff5b8a-abba-4c43-b424-7ce4541deb2e}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {223b55f8-ae93-46f0-bff7-43151ccdcc2b}, !- Handle
+  {dd291baf-0dfd-4dc8-9861-b87566b1ebe7}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {e5111ebe-732e-4e5d-94cc-dd836c00d965}, !- Handle
+  {8984dd43-df62-4d44-ae87-bc2bd2873b0e}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {3a802b96-c765-484e-bbed-e8413407a9a5}, !- Handle
+  {fcb365fd-eecd-4d24-85d7-1f03e46a153f}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {bf92cc31-5795-494d-9d8c-ca0fdd529bac}, !- Handle
+  {18b72934-41b6-4f32-a5f4-8b7a91e77efd}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {7fb8ff01-eae6-4a66-b9b2-7d50352a76c4}, !- Handle
+  {c5f0408f-a551-46fc-bb2a-66e8fe03a7e4}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {ccfa4dd6-b312-4f18-a73d-71cba63e0732}, !- Handle
+  {23728136-9ebb-48c4-8d6a-634b96902763}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {ec055a3e-85e5-4027-ac9b-fbc62dec895a}, !- Handle
+  {b5810d0b-c582-4615-81dc-b681455a0b89}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {831db119-24a7-4948-a51d-f23f2b96aa4e}, !- Handle
+  {7046c4c7-d903-44e8-85a6-633f6dfd0880}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {ed47dfae-5654-4078-917e-c6f6047cffab}, !- Handle
+  {1fe29fd1-e434-43da-9987-3e0281921913}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {6fc78308-6c18-40c6-9104-cc20b0f95ee1}, !- Handle
+  {cf43fad8-0e82-4f83-ae04-66d40df51c35}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {598dd403-4255-48d1-a2ea-37d69514916a}, !- Handle
+  {ef054e0e-b819-4df7-af1e-4bced2204c22}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {476ff45f-d7e6-4e22-87ca-93cec30473e0}, !- Handle
+  {e206938a-22d6-40d6-a854-d669000ee30e}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {99f42460-6ed5-44c4-831c-c1f009bbcbac}, !- Handle
+  {f1c02e84-56ed-458b-88f2-c04a48b49010}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {17ec6279-d78d-423d-8ae5-f68c956e54ba}, !- Handle
+  {21af3466-d55f-4752-adcd-d84768abc6a2}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {d16fa557-2f06-4e99-b113-ff664a0dc7c7}, !- Handle
+  {1e9767ad-aefd-4b68-a5c0-58dd338c3429}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {291587c9-0aea-4c62-ae39-c7c1e8781ed0}, !- Handle
+  {fd6cd573-4a8b-4b6e-ad70-8590a093d269}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {e2f3809a-aca6-437d-b0a7-81be07a9334c}, !- Handle
+  {108e6401-a434-455e-ab49-ef43022eb292}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {65af321d-1d26-42a0-9916-4cdc3d12b706}, !- Handle
+  {4bb7aa4b-6651-4206-a143-6c7e11f8fcc7}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {20729369-7c01-4a51-9189-7f9b52188348}, !- Handle
+  {2e3aeca6-6eea-439b-9a3a-1cf8ab3e0e3f}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {edd3657c-fa5d-4147-a8ad-bcca9173458d}, !- Handle
+  {fc5e768a-f76b-45ae-a6b0-9361b9e553f3}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {8a3b82ef-9226-4f6f-af38-fcc701b6963c}, !- Handle
+  {b910bb4e-b98f-4e8b-9d71-867fbd7d7a1e}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {729ceb1e-4069-4ea8-9367-944c08c123f8}, !- Handle
+  {e0cb9b1b-9d0e-4088-9e30-e030390291c4}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {b63e4e48-5465-483b-b818-1d4c45e6f5f0}, !- Handle
+  {417245e1-c348-4666-94d7-bfbdaa8a9c4c}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {3ea9fb20-6190-4e73-b4eb-9c0414780778}, !- Handle
+  {e13c611e-4c6d-4993-be0d-39c1da1f6c8d}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {0818e547-53db-4ce5-9ed5-d9f15fb20171}, !- Handle
+  {9040eaf4-fdf9-4545-825d-336694b3e445}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {47cbb162-21b2-4a1b-b2c0-e98921fb8327}, !- Handle
+  {eec8d460-7c53-4b5a-acda-c69e08b4ac7c}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {557570e0-deea-46a5-afea-fcb437a858dd}, !- Handle
+  {377e9d77-4047-432c-b680-4695d5495951}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {8ff7d61a-546f-45ca-8119-505f1a217936}, !- Handle
+  {76bd03d0-346e-459f-b46b-8e58a78a0e75}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {67376d6b-d17d-4671-b062-47f8705655fd}, !- Handle
+  {86852436-8e2b-49de-8ba5-8012299bae3b}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {4807724b-c22a-40f5-8d1d-c5b10528cead}, !- Handle
+  {c5e6ac44-bf3d-4478-ae56-df368eca6586}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {bd1fb841-84ef-45f5-8fa1-3b2cc710a1e0}, !- Handle
+  {7f7c5147-cf9c-4e54-b1b8-9ae93000a9d7}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {d22beb6e-7c8b-475f-9e00-49d1c41f0c64}, !- Handle
+  {aad1f911-89dd-4a04-9839-1def44383f37}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {fcbb45c8-314b-449c-a744-422693a09b56}, !- Handle
+  {2b8ba3ff-c82b-4a36-a985-a058c9569280}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {22df645c-611f-4c90-9baa-0d13473686c3}, !- Handle
+  {eea2cf8c-2c33-4839-a4b4-4595fbdd8b0f}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {68d49bcb-6103-4359-95c0-083579c88c2b}, !- Handle
+  {de48cf9d-2902-46d1-81b9-3caeeaadd5b0}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {217605af-ae8a-4787-86a0-e74ad00f1c72}, !- Handle
+  {d718b528-dc69-4815-b472-da226e158270}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {78de8fd3-d114-4a63-80b8-7fb378d1800a}, !- Handle
+  {40f6c277-41fe-4336-a510-309da5395aa5}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {1a73fe51-1bb4-4dc7-b290-00b5aea7ac9c}, !- Handle
+  {d91c6d93-7c73-41bb-86ea-d7c850d9d593}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {1dbc6119-c23a-4beb-b348-5b1d6adf4f69}, !- Handle
+  {e4467133-972e-4164-9fda-e663df71abf6}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {98919f2d-955d-4076-abd3-3f87317b0578}, !- Handle
+  {e650abc6-0c04-4857-94b7-5199a1d5ff04}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {c1482f93-f1d7-4b05-bbbb-79f4b7e96587}, !- Handle
+  {21891b46-7366-4738-977e-10dedc027003}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {50b2b51f-9b21-4366-9793-7bd869051579}, !- Handle
+  {6b50aad1-6f15-44ae-85be-bb65ec38f87d}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {668cfb15-3e45-429f-a152-06387df53786}, !- Handle
+  {10fd5b3c-a256-4198-81fd-11722c6f646b}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {4f856c9e-c96c-440e-a975-23b2449674f0}, !- Handle
+  {499c80fa-56b8-4ebc-8191-caa8a2e02e89}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {6662db8d-18c6-4398-842d-a109237b75ab}, !- Handle
+  {976c4669-9fd5-4e14-a341-18671f73dec8}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {402d64ef-a9f5-4abe-a92d-e3f2905ffab3}, !- Handle
+  {023b1332-4149-4fbb-8e59-3309b408f532}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {c8c74212-144a-4cbd-bffa-655075893a59}, !- Handle
+  {871a43c4-a4a3-442f-b32a-7c05802384e0}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {2eccc634-525d-4680-9a34-736d41966b3a}, !- Handle
+  {7b7854be-a17d-483b-bd82-c408ad1a3ec9}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {ebf36694-63a2-4129-9851-fe083c3e35c7}, !- Handle
+  {22b3b879-b8aa-4c2d-b2e5-4e50b9652425}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {9fff2ca5-169b-41c1-ab3d-f74a0492b259}, !- Handle
+  {88159a7d-5d23-47d9-8cc6-235311877103}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {c179c5bc-2ff5-4d25-b1c8-1860e2df0aa4}, !- Handle
+  {3f312279-d8d2-4968-8f48-b7d55f945515}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {a83cd916-7421-4498-a364-9f876b86c828}, !- Handle
+  {02d97092-b36f-4b20-851c-6df2fb3ee8f5}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {25a1391c-63f2-46da-b34d-eb8d7a686676}, !- Handle
+  {045c2fc5-fdf0-48b2-ac91-97a6825981c5}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {a47f6166-39cd-4e05-a795-6fda2f6d02e6}, !- Handle
+  {f5ab0b2b-09e0-47e3-9886-c47db15f5024}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {c6cc1c12-9d4d-40f2-bb8c-49011effa8e4}, !- Handle
+  {00b84046-95c7-4455-992e-03d7d7ef531b}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {23e3437e-aae1-45db-80b8-a30e6119cf22}, !- Handle
+  {22ddd369-42e6-4ff5-a757-6fa2f1aa4aab}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {ccf27ec0-66f5-47ad-bd0f-e7d1c3284ee2}, !- Handle
+  {71376b32-904f-41f4-941e-ea5cfacb3705}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {d5004be7-5856-4b73-b193-f552d4f56c2f}, !- Handle
+  {3ccd774e-848c-403e-8d51-d8e317fd5c09}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {09730bff-6254-441e-bd36-7aab80b07563}, !- Handle
+  {9534ad02-6f8b-4c09-9fb0-b40a3c5b2421}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {5320afe3-5dae-41a2-b4a9-64bed1cbf6b5}, !- Handle
+  {7a194955-f890-450a-864b-2d3b62b9a146}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {c9493031-cd30-4f9a-9604-b00cb359109e}, !- Handle
+  {d533bfcd-b40f-4d54-a557-2d4de594f0ff}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {75eda27f-c7f9-4c45-b2cb-69d12d7dc7a2}, !- Handle
+  {fe7524d7-62ae-4554-9241-cc336acb7183}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {ceec7a78-eb52-4239-b07d-5aa9971725bf}, !- Handle
+  {34586a58-ee66-4dd9-bed0-4d73756305ee}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {9b8821c2-cef2-4dd7-8432-e76b2c7aad4b}, !- Handle
+  {46fa1cf3-8e56-4a18-9f12-7403a73d91d6}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {f72323c3-fb15-4651-89df-7ad2a378f320}, !- Handle
+  {3faecbbd-9022-4997-8f45-65512b1e40f8}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {f5968bd0-d71e-4f23-a5a2-1ff1b383caed}, !- Handle
+  {e2619af0-64a9-44de-926e-12c79b596723}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {2da01516-a823-46af-8609-982a9a0dbc69}, !- Handle
+  {dd0c300d-33a6-46c9-833d-c8f4aa892dee}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {c0563534-0b74-459e-b8e0-d8542165d080}, !- Handle
+  {79f60c56-f577-4660-97ed-509e40b2856f}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {53c1514a-5cda-4ad6-b3e1-f226fe87bdf4}, !- Handle
+  {cf030f84-8ca8-4c22-9452-0115d522c7b5}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {2c34966b-1d1c-42db-ab3e-7a42134906c4}, !- Handle
+  {05142e43-bb6f-4168-bf5d-280d608c0c1c}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {580d8bbb-057c-48ad-bf1c-f2731c1e75ed}, !- Handle
+  {590b81d5-bcc8-4976-a7b6-5caa605672c7}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {799e8f75-e822-4734-b342-c705320cf1f1}, !- Handle
+  {7f70c396-c021-4bfd-95f4-7e6ca2cafb50}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {3a8fa020-53f0-43f0-8a1a-75ea9f5afd8d}, !- Handle
+  {be8b8517-e61d-43dc-8039-d0f93915c2ef}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {7e9a789b-69bd-4fb0-b0c8-6785db9d4049}, !- Handle
+  {4fcdf057-838d-4a44-821b-83be8a122118}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {31ceca82-d861-445c-95f9-0cb072e22613}, !- Handle
+  {303a20ad-284e-4700-9867-8c5e1dd06d92}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {5fba19d0-00f1-42db-a124-71cbb4d2a90a}, !- Handle
+  {a7627167-fc03-44e0-8063-e0a01410724a}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {dbb4bc75-0dc8-4efe-99f7-7e526c2d5947}, !- Handle
+  {412fec0a-2526-495c-8637-977179efc098}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {ff04082b-22f6-42be-b7eb-c51ae5ad08a0}, !- Handle
+  {1b218f46-59cd-4113-86f8-c6e8dc16cf3a}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {176b7868-1389-4a6b-8d3e-726cc66bd659}, !- Handle
+  {4575572e-c133-4229-874b-02a5a091a37e}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {1130f857-02ae-44ac-ba21-a6ff283f2949}, !- Handle
+  {238c4d33-4a47-4a30-8d4b-f1aa38f65323}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {180d21cd-e9a5-4249-8810-37fc785523c6}, !- Handle
+  {91ca5b28-3f76-4736-a991-6149913c6a93}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {4863216d-252e-4cb8-9533-15a844565657}, !- Handle
+  {42e85031-8ead-4f5c-a34f-b5eae497e894}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {297eb70f-5a8c-47c8-a2ef-43edaf6a3194}, !- Handle
+  {5cabff8c-3130-44b8-86bc-49e841179928}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {c2661792-aaea-454f-8b80-0ef48b09e564}, !- Handle
+  {26f1e6a0-85cb-468e-8afb-3bdae1ba6315}; !- Construction Name
+
+OS:WeatherFile,
+  {b428ce5b-b52b-48ca-b345-b4f8d3470ffc}, !- Handle
+  Edmonton Intl AP,                       !- City
+  AB,                                     !- State Province Region
+  CAN,                                    !- Country
+  CWEC,                                   !- Data Source
+  711230,                                 !- WMO Number
+  53.32,                                  !- Latitude {deg}
+  -113.58,                                !- Longitude {deg}
+  -7,                                     !- Time Zone {hr}
+  723,                                    !- Elevation {m}
+  CAN_AB_Edmonton.Intl.AP.711230_CWEC.epw, !- Url
+  F7E69D13;                               !- Checksum
 
