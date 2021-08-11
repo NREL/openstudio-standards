@@ -18,7 +18,7 @@ class NECB2011
     end
 
     # Calculate the tank size and service water pump information
-    shw_sizing = auto_size_shw_capacity(model, shw_scale: shw_scale)
+    shw_sizing = auto_size_shw_capacity(model: model, shw_scale: shw_scale)
     if shw_sizing['loop_peak_flow_rate_SI'] == 0
       # Only add a shw_loop if at least one space calls for shw.  If no space calls for shw put out a warning but do not
       # add a shw loop.
@@ -238,7 +238,7 @@ class NECB2011
 
   # This calculates the volume and capacity of one mixed tank that is assumed to service all shw in the building
   # u is the tank insulation in W/(m^2*K), height_to_radius is the ratio of tank radius to tank height and is dimensionless
-  def auto_size_shw_capacity(model, u: 0.45, height_to_radius: 2, shw_scale: shw_scale)
+  def auto_size_shw_capacity(model:, u: 0.45, height_to_radius: 2, shw_scale:)
     peak_flow_rate = 0
     shw_space_types = []
     space_peak_flows = []
