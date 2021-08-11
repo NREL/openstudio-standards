@@ -364,4 +364,44 @@ class ASHRAE9012019 < ASHRAE901
 
     return true
   end
+
+  # This function is used to add zone ERV
+  #
+  # This function is only used for nontransient dwelling units (Mid-rise and High-rise Apartment)
+  def model_apply_prototype_hvac_efficiency_adjustments(model)
+    # identify the building type
+    building_data = model_get_building_climate_zone_and_building_type(model)
+    building_type = building_data['building_type']
+    if building_type == 'MidriseApartment' || building_type == 'HighriseApartment'
+      # update effectiveness based err
+      climate_zone = building_data['climate_zone']
+      model.getAirLoopHVACs.each do |air_loop_hvac|
+        if air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
+          # calculate the number of system operating hours based on the availability schedule
+          under_8000_hour = false
+          avail_sch = air_loop_hvac.availabilitySchedule
+          if avail_sch == air_loop_hvac.model.alwaysOnDiscreteSchedule
+            under_8000_hour = false
+          elsif avail_sch.to_ScheduleRuleset.is_initialized
+            avail_sch = avail_sch.to_ScheduleRuleset.get
+            ann_op_hrs = schedule_ruleset_annual_hours_above_value(avail_sch, 0.0)
+            if ann_op_hrs < 8000
+              under_8000_hour = true
+            end
+          else
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "For #{air_loop_hvac.name}: could not determine annual operating hours. Assuming less than 8,000 for ERV determination.")
+          end
+          # determine search_criteria
+          search_criteria = {
+              'template' => template,
+              'climate_zone' => climate_zone,
+              'under_8000_hour' => under_8000_hour,
+              'nontransient_dwelling' => 1
+          }
+          zones = air_loop_hvac.thermalZones
+          model_add_zone_erv(model, zones, search_criteria)
+        end
+      end
+    end
+  end
 end
