@@ -1,5 +1,5 @@
 class NECB2011
-  def model_add_swh(model:, swh_fueltype: 'DefaultFuel', shw_scale: shw_scale)
+  def model_add_swh(model:, swh_fueltype: 'DefaultFuel', shw_scale:)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
     # Get default fuel based on epw location province.
     if swh_fueltype == 'DefaultFuel'
