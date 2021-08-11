@@ -19449,11 +19449,14 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {bcc157a3-7869-4473-acd0-662f19a8415c}, !- Handle
-  Firehall-Office,                        !- Name
+  Space Function-Office - open plan,      !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {0c9819e3-1785-4250-b349-15bcceb1566b}, !- Group Rendering Name
-  {7b8b543c-93e1-4e04-9d52-2e0b9d5f5a80}; !- Design Specification Outdoor Air Object Name
+  {7b8b543c-93e1-4e04-9d52-2e0b9d5f5a80}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Office - open plan;                     !- Standards Space Type
 
 OS:People,
   {5b785f93-8041-4412-a894-c01c7deee2ef}, ! Handle
@@ -19546,11 +19549,14 @@ OS:SpaceInfiltration:DesignFlowRate,
 
 OS:SpaceType,
   {ef70e577-c26b-437b-8429-d99663e50f88}, !- Handle
-  Firehall-Corridors,                     !- Name
+  Space Function-Corr. < 2.4m wide-sch-A, !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {41b811e5-817a-484c-bbec-59526ddfcc7c}, !- Group Rendering Name
-  {658eecba-ff3a-4a99-ae67-37a2dc2bbde5}; !- Design Specification Outdoor Air Object Name
+  {658eecba-ff3a-4a99-ae67-37a2dc2bbde5}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Corr. < 2.4m wide-sch-A;                !- Standards Space Type
 
 OS:People,
   {8765aa3a-e469-42d8-a686-732f6806bb62}, ! Handle
@@ -19604,11 +19610,14 @@ OS:SpaceInfiltration:DesignFlowRate,
 
 OS:SpaceType,
   {d5f995e0-5cc9-4433-bcd0-b1ed367abc99}, !- Handle
-  Firehall-Conference/meeting,            !- Name
+  Space Function-Conf./meet./multi-purpose, !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {28bd92f5-9f67-4470-b46c-ee4898e3b95c}, !- Group Rendering Name
-  {fa06968a-3263-4676-90da-98cf592df00c}; !- Design Specification Outdoor Air Object Name
+  {fa06968a-3263-4676-90da-98cf592df00c}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Conf./meet./multi-purpose;              !- Standards Space Type
 
 OS:People,
   {ec971f15-876b-4482-90cc-834b922f24ac}, ! Handle
@@ -19763,11 +19772,14 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:SpaceType,
   {f9aed88a-563f-4cb6-8f45-8bb094249271}, !- Handle
-  Firehall-Electrical/Mechanical,         !- Name
+  Space Function-Electrical/Mechanical-sch-A, !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {c9e97cdf-19e0-443d-b075-079363ce1fea}, !- Group Rendering Name
-  {aeaa905c-e6d2-4bee-88cd-58b73f414a64}; !- Design Specification Outdoor Air Object Name
+  {aeaa905c-e6d2-4bee-88cd-58b73f414a64}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Electrical/Mechanical-sch-A;            !- Standards Space Type
 
 OS:People,
   {5bec9021-2638-4280-8d25-7093826b9360}, ! Handle
@@ -19799,11 +19811,14 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {e7dda3ac-6d57-4193-9899-960d25df616b}, !- Handle
-  Firehall-Fire engine room,              !- Name
+  Space Function-Fire station - engine room, !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {41fdd4be-aab8-489a-b4a4-c88526a26f09}, !- Group Rendering Name
-  {c1daa014-2098-4e89-bc9c-d997bcdcbc64}; !- Design Specification Outdoor Air Object Name
+  {c1daa014-2098-4e89-bc9c-d997bcdcbc64}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Fire station - engine room;             !- Standards Space Type
 
 OS:People,
   {69e369b3-21b1-4db3-a5da-007a38165a34}, ! Handle
@@ -19837,11 +19852,14 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {99ecab25-0ac2-4323-bca3-05b3bfebf79d}, !- Handle
-  Firehall-Kitchen,                       !- Name
+  Space Function-Food preparation,        !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {25517ea0-1210-4076-9639-f29f34a20a24}, !- Group Rendering Name
-  {31da1884-580e-4f6b-bed4-397f9f9e5833}; !- Design Specification Outdoor Air Object Name
+  {31da1884-580e-4f6b-bed4-397f9f9e5833}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Food preparation;                       !- Standards Space Type
 
 OS:People,
   {4d1a2a91-ecc8-459c-95c1-ecc1c9621b14}, ! Handle
@@ -19873,11 +19891,14 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {c2eaccb6-6748-434b-97ab-35638a8b48b3}, !- Handle
-  Firehall-Lounge/recreation,             !- Name
+  Space Function-Lounge/recreation,       !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {a99c5bd8-05c3-4415-b408-6dbd167cbb1c}, !- Group Rendering Name
-  {96c927b6-452d-4308-838f-002fb9633fd2}; !- Design Specification Outdoor Air Object Name
+  {96c927b6-452d-4308-838f-002fb9633fd2}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Lounge/recreation;                      !- Standards Space Type
 
 OS:DesignSpecification:OutdoorAir,
   {96c927b6-452d-4308-838f-002fb9633fd2}, ! Handle
@@ -19941,11 +19962,14 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {aba75fb3-d5c1-4700-a1c4-20ec79ec3234}, !- Handle
-  Firehall-Storage area,                  !- Name
+  Space Function-Storage area,            !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {6efc8e6c-396b-4121-827b-a6a6bac8fc58}, !- Group Rendering Name
-  {97a5cf98-5bfc-481d-bd24-32d273e9d6b7}; !- Design Specification Outdoor Air Object Name
+  {97a5cf98-5bfc-481d-bd24-32d273e9d6b7}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Storage area;                           !- Standards Space Type
 
 OS:People,
   {8f45b020-30fc-46a1-a7a3-4e903f234313}, ! Handle
@@ -20062,11 +20086,14 @@ OS:SpaceInfiltration:DesignFlowRate,
 
 OS:SpaceType,
   {deea49b6-8f4e-4fbd-bc42-b1cc9a8f7d1a}, !- Handle
-  Firehall-Washroom,                      !- Name
+  Space Function-Washroom-sch-A,          !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {9605cc7e-8dff-4b14-a3bf-b60192768b6d}, !- Group Rendering Name
-  {2adc131d-582e-4e3d-904f-43670a368c66}; !- Design Specification Outdoor Air Object Name
+  {2adc131d-582e-4e3d-904f-43670a368c66}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Washroom-sch-A;                         !- Standards Space Type
 
 OS:People,
   {09c9b71d-e4a3-43e5-9508-f18434ea1ecd}, ! Handle
@@ -20104,11 +20131,14 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {27f1f8f2-158a-4b7c-a110-4cc1c6b39ee6}, !- Handle
-  Firehall-Workshop,                      !- Name
+  Space Function-Lab - classrooms,        !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {c366a3e5-2139-4e53-907d-d2cf52d5c2ac}, !- Group Rendering Name
-  {7dd5cc91-67a8-40ac-8bcb-245665f4b1aa}; !- Design Specification Outdoor Air Object Name
+  {7dd5cc91-67a8-40ac-8bcb-245665f4b1aa}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Lab - classrooms;                       !- Standards Space Type
 
 OS:People,
   {f7a56bc8-7e24-4217-9c44-55c984aa43ca}, ! Handle

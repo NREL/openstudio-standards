@@ -2466,11 +2466,14 @@ OS:Site,
 
 OS:SpaceType,
   {caa693f1-c7f5-440d-8bb3-e25e94fe44aa}, !- Handle
-  Storage/Warehouse-Material Handling,    !- Name
+  Space Function-Warehouse - fine,        !- Name
   {27dec1a2-30ca-4d77-8754-7a74ed512208}, !- Default Construction Set Name
   {ad2a8cfe-c300-4202-9e94-19bf3e6f01d8}, !- Default Schedule Set Name
   {e16d0e14-d943-4f48-bc68-d6f6d2b5f35b}, !- Group Rendering Name
-  {835dd76c-a4fa-42a2-b3c4-202f1954d345}; !- Design Specification Outdoor Air Object Name
+  {835dd76c-a4fa-42a2-b3c4-202f1954d345}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Warehouse - fine;                       !- Standards Space Type
 
 OS:Rendering:Color,
   {e16d0e14-d943-4f48-bc68-d6f6d2b5f35b}, !- Handle

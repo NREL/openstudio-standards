@@ -18653,11 +18653,14 @@ OS:RunPeriod,
 
 OS:SpaceType,
   {f1853f79-98a0-47c9-bc8c-63d92628b2e4}, !- Handle
-  Dormitory-Bedroom,                      !- Name
+  Space Function-Dwelling Unit(s),        !- Name
   {00e0dab8-59a9-4a69-99be-749d0371caba}, !- Default Construction Set Name
   {f6bb2872-cc08-47df-9f4e-ea104b5c0d71}, !- Default Schedule Set Name
   {f138e64e-ee20-428f-8b74-d34a86e84d50}, !- Group Rendering Name
-  {a92564a2-8a7e-4713-9ced-5c0b1135f6fd}; !- Design Specification Outdoor Air Object Name
+  {a92564a2-8a7e-4713-9ced-5c0b1135f6fd}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Dwelling Unit(s);                       !- Standards Space Type
 
 OS:Rendering:Color,
   {f138e64e-ee20-428f-8b74-d34a86e84d50}, !- Handle
@@ -20574,11 +20577,14 @@ OS:ElectricEquipment:Definition,
 
 OS:SpaceType,
   {b46dbc12-8a67-425e-b49e-015a65e0664e}, !- Handle
-  Laundry-Washing,                        !- Name
+  Space Function-Hospital - laundry/washing, !- Name
   {00e0dab8-59a9-4a69-99be-749d0371caba}, !- Default Construction Set Name
   {f6bb2872-cc08-47df-9f4e-ea104b5c0d71}, !- Default Schedule Set Name
   {0c36b918-2012-404a-933d-cafd92889011}, !- Group Rendering Name
-  {56eaea5e-f4c1-4371-a9ea-356dcab8ef9a}; !- Design Specification Outdoor Air Object Name
+  {56eaea5e-f4c1-4371-a9ea-356dcab8ef9a}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Hospital - laundry/washing;             !- Standards Space Type
 
 OS:Rendering:Color,
   {0c36b918-2012-404a-933d-cafd92889011}, !- Handle
@@ -22482,11 +22488,14 @@ OS:ElectricEquipment:Definition,
 
 OS:SpaceType,
   {79fd01cb-54c4-4a9f-aaac-40ae0e2452f2}, !- Handle
-  Service and Common-Active Stairway,     !- Name
+  Space Function-Stairway-sch-A,          !- Name
   {00e0dab8-59a9-4a69-99be-749d0371caba}, !- Default Construction Set Name
   {f6bb2872-cc08-47df-9f4e-ea104b5c0d71}, !- Default Schedule Set Name
   {a36a8217-bbdd-4e3b-b33e-2600f41425db}, !- Group Rendering Name
-  {a47db02a-d21f-45b3-a627-94fd1e3b49ad}; !- Design Specification Outdoor Air Object Name
+  {a47db02a-d21f-45b3-a627-94fd1e3b49ad}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Stairway-sch-A;                         !- Standards Space Type
 
 OS:Rendering:Color,
   {a36a8217-bbdd-4e3b-b33e-2600f41425db}, !- Handle
@@ -22553,11 +22562,14 @@ OS:ElectricEquipment:Definition,
 
 OS:SpaceType,
   {94ece546-e9ca-4ca2-9da9-63b88337ef0d}, !- Handle
-  Service and Common-Mechanical/electrical room, !- Name
+  Space Function-Electrical/Mechanical-sch-A, !- Name
   {00e0dab8-59a9-4a69-99be-749d0371caba}, !- Default Construction Set Name
   {f6bb2872-cc08-47df-9f4e-ea104b5c0d71}, !- Default Schedule Set Name
   {d91a3518-9eed-4ede-8b2a-d698c78e46ff}, !- Group Rendering Name
-  {c55210a7-9386-444b-b6f6-ad14036ecf19}; !- Design Specification Outdoor Air Object Name
+  {c55210a7-9386-444b-b6f6-ad14036ecf19}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Electrical/Mechanical-sch-A;            !- Standards Space Type
 
 OS:Rendering:Color,
   {d91a3518-9eed-4ede-8b2a-d698c78e46ff}, !- Handle
@@ -22624,11 +22636,14 @@ OS:ElectricEquipment:Definition,
 
 OS:SpaceType,
   {2a50d00a-54dd-4e31-a053-a8fe910c1b55}, !- Handle
-  Storage/Warehouse-Active Storage Bulky, !- Name
+  Space Function-Warehouse - med/blk,     !- Name
   {00e0dab8-59a9-4a69-99be-749d0371caba}, !- Default Construction Set Name
   {f6bb2872-cc08-47df-9f4e-ea104b5c0d71}, !- Default Schedule Set Name
   {f9599c2b-2fd9-40e0-bef9-b47585c0b8bc}, !- Group Rendering Name
-  {b3ff8159-1076-410e-a226-08294911d0df}; !- Design Specification Outdoor Air Object Name
+  {b3ff8159-1076-410e-a226-08294911d0df}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Warehouse - med/blk;                    !- Standards Space Type
 
 OS:Rendering:Color,
   {f9599c2b-2fd9-40e0-bef9-b47585c0b8bc}, !- Handle
@@ -24530,11 +24545,14 @@ OS:ElectricEquipment:Definition,
 
 OS:SpaceType,
   {f2613880-9794-4d84-9ea9-6ba4ff9e82fe}, !- Handle
-  Service and Common-Toilet and Washrooms, !- Name
+  Space Function-Washroom-sch-A,          !- Name
   {00e0dab8-59a9-4a69-99be-749d0371caba}, !- Default Construction Set Name
   {f6bb2872-cc08-47df-9f4e-ea104b5c0d71}, !- Default Schedule Set Name
   {b1bc88c9-dcf5-4f90-beda-7f6cb292729c}, !- Group Rendering Name
-  {3e0b70e0-7493-4cd4-bc5b-d4adca0ef475}; !- Design Specification Outdoor Air Object Name
+  {3e0b70e0-7493-4cd4-bc5b-d4adca0ef475}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Washroom-sch-A;                         !- Standards Space Type
 
 OS:Rendering:Color,
   {b1bc88c9-dcf5-4f90-beda-7f6cb292729c}, !- Handle
@@ -25851,11 +25869,14 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {42770014-1382-4b13-adf3-eeaead4b7946}, !- Handle
-  Service and Common-Corridors,           !- Name
+  Space Function-Corr. < 2.4m wide-sch-A, !- Name
   {00e0dab8-59a9-4a69-99be-749d0371caba}, !- Default Construction Set Name
   {f6bb2872-cc08-47df-9f4e-ea104b5c0d71}, !- Default Schedule Set Name
   {40fe2a73-b716-4158-ab96-527874239b0a}, !- Group Rendering Name
-  {8be7e3cb-738a-49dd-bd5d-fbcdccd5aed5}; !- Design Specification Outdoor Air Object Name
+  {8be7e3cb-738a-49dd-bd5d-fbcdccd5aed5}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Corr. < 2.4m wide-sch-A;                !- Standards Space Type
 
 OS:Rendering:Color,
   {40fe2a73-b716-4158-ab96-527874239b0a}, !- Handle
@@ -38142,10 +38163,14 @@ OS:People,
 
 OS:SpaceType,
   {ddc9b4fb-04f1-4771-b429-b09315b6da17}, !- Handle
-  Attic space,                            !- Name
+  Space Function-- undefined -,           !- Name
   {00e0dab8-59a9-4a69-99be-749d0371caba}, !- Default Construction Set Name
   {f6bb2872-cc08-47df-9f4e-ea104b5c0d71}, !- Default Schedule Set Name
-  {eb300617-6750-4522-8a76-917817265ffb}; !- Group Rendering Name
+  {eb300617-6750-4522-8a76-917817265ffb}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  - undefined -;                          !- Standards Space Type
 
 OS:Rendering:Color,
   {eb300617-6750-4522-8a76-917817265ffb}, !- Handle

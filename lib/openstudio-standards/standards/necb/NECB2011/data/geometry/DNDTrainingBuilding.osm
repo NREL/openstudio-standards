@@ -21316,11 +21316,14 @@ OS:Material,
 
 OS:SpaceType,
   {08716a7b-a5fa-4e77-a775-89ce508890b1}, !- Handle
-  MNECB-Electrical/Mechanical,            !- Name
+  Space Function-Electrical/Mechanical-sch-A, !- Name
   {72068800-524f-471e-b4dd-3aeca566972a}, !- Default Construction Set Name
   {c3e0b787-338a-4453-8e5f-fa824d8a3a88}, !- Default Schedule Set Name
   {acdd86b7-c9cf-46ed-8303-b040528ac90d}, !- Group Rendering Name
-  {281140e3-3928-485e-a619-408dd8d66b29}; !- Design Specification Outdoor Air Object Name
+  {281140e3-3928-485e-a619-408dd8d66b29}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Electrical/Mechanical-sch-A;            !- Standards Space Type
 
 OS:Rendering:Color,
   {acdd86b7-c9cf-46ed-8303-b040528ac90d}, !- Handle
@@ -21641,11 +21644,14 @@ OS:DesignSpecification:OutdoorAir,
 
 OS:SpaceType,
   {734be2b7-6ada-4737-af83-7d9fd08fdab4}, !- Handle
-  MNECB-Office - open plan,               !- Name
+  Space Function-Office - open plan,      !- Name
   {72068800-524f-471e-b4dd-3aeca566972a}, !- Default Construction Set Name
   {c3e0b787-338a-4453-8e5f-fa824d8a3a88}, !- Default Schedule Set Name
   {9ffdac8d-3c83-4b45-939e-930052505455}, !- Group Rendering Name
-  {11ce0ef4-67d3-41f0-9704-ad465df7cecc}; !- Design Specification Outdoor Air Object Name
+  {11ce0ef4-67d3-41f0-9704-ad465df7cecc}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Office - open plan;                     !- Standards Space Type
 
 OS:Rendering:Color,
   {9ffdac8d-3c83-4b45-939e-930052505455}, !- Handle
@@ -22211,11 +22217,14 @@ OS:DesignSpecification:OutdoorAir,
 
 OS:SpaceType,
   {3f28f45f-8146-41ce-8fcd-7433911eff98}, !- Handle
-  MNECB-Conference/meeting,               !- Name
+  Space Function-Conf./meet./multi-purpose, !- Name
   {72068800-524f-471e-b4dd-3aeca566972a}, !- Default Construction Set Name
   {c3e0b787-338a-4453-8e5f-fa824d8a3a88}, !- Default Schedule Set Name
   {9e5fb5e1-d987-4fd0-84de-0d7f2d55d2f3}, !- Group Rendering Name
-  {d61ead8f-cd3d-4b28-bf34-9b2eb1695712}; !- Design Specification Outdoor Air Object Name
+  {d61ead8f-cd3d-4b28-bf34-9b2eb1695712}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Conf./meet./multi-purpose;              !- Standards Space Type
 
 OS:Rendering:Color,
   {9e5fb5e1-d987-4fd0-84de-0d7f2d55d2f3}, !- Handle
@@ -22536,11 +22545,14 @@ OS:DesignSpecification:OutdoorAir,
 
 OS:SpaceType,
   {a11f2b21-f28e-4ee3-84e7-eeb2d53c4776}, !- Handle
-  MNECB-Corridors,                        !- Name
+  Space Function-Corr. < 2.4m wide-sch-A, !- Name
   {72068800-524f-471e-b4dd-3aeca566972a}, !- Default Construction Set Name
   {c3e0b787-338a-4453-8e5f-fa824d8a3a88}, !- Default Schedule Set Name
   {51fd94fa-d8d7-4e0a-ae6b-0bf214660f83}, !- Group Rendering Name
-  {f40d9c97-8d88-436c-a89c-0afe84a958f8}; !- Design Specification Outdoor Air Object Name
+  {f40d9c97-8d88-436c-a89c-0afe84a958f8}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Corr. < 2.4m wide-sch-A;                !- Standards Space Type
 
 OS:Rendering:Color,
   {51fd94fa-d8d7-4e0a-ae6b-0bf214660f83}, !- Handle
@@ -22997,11 +23009,14 @@ OS:DesignSpecification:OutdoorAir,
 
 OS:SpaceType,
   {e09f2eac-6f2d-41c9-923d-d51c297a263c}, !- Handle
-  MNECB-Office - enclosed,                !- Name
+  Space Function-Office - enclosed,       !- Name
   {72068800-524f-471e-b4dd-3aeca566972a}, !- Default Construction Set Name
   {c3e0b787-338a-4453-8e5f-fa824d8a3a88}, !- Default Schedule Set Name
   {96f8b89a-0490-4269-8dad-ba06f1a4227c}, !- Group Rendering Name
-  {080d8def-a157-44a3-803e-c5fa97ede85a}; !- Design Specification Outdoor Air Object Name
+  {080d8def-a157-44a3-803e-c5fa97ede85a}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Office - enclosed;                      !- Standards Space Type
 
 OS:Rendering:Color,
   {96f8b89a-0490-4269-8dad-ba06f1a4227c}, !- Handle
@@ -23406,11 +23421,14 @@ OS:DesignSpecification:OutdoorAir,
 
 OS:SpaceType,
   {1bfd60d5-8726-487a-a4a5-625695e391b2}, !- Handle
-  MNECB-Classroom,                        !- Name
+  Space Function-Classroom/lecture/training, !- Name
   {72068800-524f-471e-b4dd-3aeca566972a}, !- Default Construction Set Name
   {c3e0b787-338a-4453-8e5f-fa824d8a3a88}, !- Default Schedule Set Name
   {a9514ebe-a3fa-47d2-b562-9603abb4d418}, !- Group Rendering Name
-  {9a02ae2b-75a8-4c40-aac5-e6944b217c8e}; !- Design Specification Outdoor Air Object Name
+  {9a02ae2b-75a8-4c40-aac5-e6944b217c8e}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Classroom/lecture/training;             !- Standards Space Type
 
 OS:Rendering:Color,
   {a9514ebe-a3fa-47d2-b562-9603abb4d418}, !- Handle
@@ -35772,11 +35790,14 @@ OS:Schedule:Day,
 
 OS:SpaceType,
   {76488f28-e869-481a-8070-c8dcc9a613f1}, !- Handle
-  MNECB-Washroom,                         !- Name
+  Space Function-Washroom-sch-A,          !- Name
   {72068800-524f-471e-b4dd-3aeca566972a}, !- Default Construction Set Name
   {c3e0b787-338a-4453-8e5f-fa824d8a3a88}, !- Default Schedule Set Name
   {3b510a55-0ec0-4529-a855-7c23c1d39a13}, !- Group Rendering Name
-  {71fb4b75-c1ab-4fdb-9407-e55cb5dd500b}; !- Design Specification Outdoor Air Object Name
+  {71fb4b75-c1ab-4fdb-9407-e55cb5dd500b}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Washroom-sch-A;                         !- Standards Space Type
 
 OS:Rendering:Color,
   {3b510a55-0ec0-4529-a855-7c23c1d39a13}, !- Handle
