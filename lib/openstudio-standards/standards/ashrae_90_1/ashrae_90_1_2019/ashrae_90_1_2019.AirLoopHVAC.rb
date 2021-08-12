@@ -476,7 +476,7 @@ class ASHRAE9012019 < ASHRAE901
 
       # Set fan operating schedule during assumed occupant standby mode time to 0 so the fan can cycle
       new_sch = model_set_schedule_value(unitary_system.supplyAirFanOperatingModeSchedule.get, '12' => 0)
-      unitary_system.setSupplyAirFanOperatingModeSchedule(new_sch) unless new_sch == true
+      unitary_system.setSupplyAirFanOperatingModeSchedule(new_sch) unless new_sch.nil?
     else
       # Get thermal zones associated with spaces having standby mode occupancy requirements
       standby_mode_zones = []

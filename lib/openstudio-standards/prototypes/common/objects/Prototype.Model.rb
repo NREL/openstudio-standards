@@ -2607,7 +2607,7 @@ Standard.class_eval do
   # @param schedule [OpenStudio::model::ScheduleRuleset] OpenStudio schedule object
   # @return [OpenStudio::model::ScheduleRuleset] Modified OpenStudio schedule object
   def model_set_schedule_value(schedule, time_value_hash)
-    return true unless schedule.to_ScheduleRuleset.is_initialized
+    return nil unless schedule.to_ScheduleRuleset.is_initialized
 
     new_sch = schedule.clone(schedule.model).to_ScheduleRuleset.get
 
