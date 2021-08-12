@@ -2082,9 +2082,9 @@ OS:Surface,
   ,                                       ! View Factor to Ground
   ,                                       ! Number of Vertices
   2.1844, -4.1240901631526, 3.048,        !- X,Y,Z Vertex 1 {m}
-  2.1844, -4.12409016315264, 3.83001856541487e-029, !- X,Y,Z Vertex 2 {m}
-  2.18440000000002, 6.21734224763712e-029, -2.87251392406113e-029, !- X,Y,Z Vertex 3 {m}
-  2.18440000000001, -1.86520267429112e-028, 3.048; !- X,Y,Z Vertex 4 {m}
+  2.1844, -4.12409016315264, 4.30877088609173e-29, !- X,Y,Z Vertex 2 {m}
+  2.18440000000002, 6.99451002859176e-29, -3.23157816456877e-29, !- X,Y,Z Vertex 3 {m}
+  2.18440000000001, -1.96882504508507e-28, 3.048; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {08f669b5-d54b-4667-9a09-0605cb10a18a}, ! Handle
@@ -2174,7 +2174,7 @@ OS:Surface,
   6.81875981962434, 5.39409016315264, 0,  !- X,Y,Z Vertex 1 {m}
   6.81875981962434, 0, 0,                 !- X,Y,Z Vertex 2 {m}
   0, 0, 0,                                !- X,Y,Z Vertex 3 {m}
-  2.31011654250324e-014, 5.39409016315264, 0; !- X,Y,Z Vertex 4 {m}
+  2.31011654250324e-14, 5.39409016315264, 0; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {3ab23e46-c4b3-43d4-9fda-e41a5e2b3542}, ! Handle
@@ -2205,10 +2205,10 @@ OS:Surface,
   NoWind,                                 ! Wind Exposure
   ,                                       ! View Factor to Ground
   ,                                       ! Number of Vertices
-  2.31011654250324e-014, 5.39409016315264, 3.048, !- X,Y,Z Vertex 1 {m}
-  2.31011654250324e-014, 5.39409016315264, 0, !- X,Y,Z Vertex 2 {m}
-  -3.84711686258183e-030, 1.27, 0,        !- X,Y,Z Vertex 3 {m}
-  -3.84711686258183e-030, 1.27, 3.048;    !- X,Y,Z Vertex 4 {m}
+  2.31011654250324e-14, 5.39409016315264, 3.048, !- X,Y,Z Vertex 1 {m}
+  2.31011654250324e-14, 5.39409016315264, 0, !- X,Y,Z Vertex 2 {m}
+  -3.84711686258183e-30, 1.27, 0,         !- X,Y,Z Vertex 3 {m}
+  -3.84711686258183e-30, 1.27, 3.048;     !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {307fa1fb-078e-4049-abaa-0760ba672ef6}, ! Handle
@@ -2224,8 +2224,8 @@ OS:Surface,
   ,                                       ! Number of Vertices
   6.81875981962434, 5.39409016315264, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
   6.81875981962434, 5.39409016315264, 0,  !- X,Y,Z Vertex 2 {m}
-  2.31011654250324e-014, 5.39409016315264, 0, !- X,Y,Z Vertex 3 {m}
-  2.31011654250324e-014, 5.39409016315264, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
+  2.31011654250324e-14, 5.39409016315264, 0, !- X,Y,Z Vertex 3 {m}
+  2.31011654250324e-14, 5.39409016315264, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {773b46b2-14e5-4121-9f74-e8c3bc7900d1}, ! Handle
@@ -2299,7 +2299,7 @@ OS:Surface,
   ,                                       ! Number of Vertices
   6.81875981962434, 0, 3.79695970268515,  !- X,Y,Z Vertex 1 {m}
   6.81875981962434, 5.39409016315264, 3.79695970268515, !- X,Y,Z Vertex 2 {m}
-  2.31011654250324e-014, 5.39409016315264, 3.79695970268515, !- X,Y,Z Vertex 3 {m}
+  2.31011654250324e-14, 5.39409016315264, 3.79695970268515, !- X,Y,Z Vertex 3 {m}
   0, 0, 3.79695970268515;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Rendering:Color,
@@ -4867,16 +4867,16 @@ OS:Surface,
   NoWind,                                 ! Wind Exposure
   ,                                       ! View Factor to Ground
   ,                                       ! Number of Vertices
-  27.94, -7.21911419532262e-014, 2.21551719102878e-030, !- X,Y,Z Vertex 1 {m}
-  27.94, -1.5708818373718, 1.81516373818794e-030, !- X,Y,Z Vertex 2 {m}
-  14.6145993108658, -1.5708818373718, 7.42727257789072e-031, !- X,Y,Z Vertex 3 {m}
-  14.6145993108658, -5.7659750762477, -3.26430220015426e-031, !- X,Y,Z Vertex 4 {m}
-  12.496062143502, -5.7659750762477, -4.96931400157382e-031, !- X,Y,Z Vertex 5 {m}
-  12.496062143502, -1.57088183737182, 5.7222607764711e-031, !- X,Y,Z Vertex 6 {m}
-  9.2324053593616, -1.5749750762477, 3.08521764277088e-031, !- X,Y,Z Vertex 7 {m}
-  5.8796053593616, -1.5749750762477, 3.86863487902355e-032, !- X,Y,Z Vertex 8 {m}
-  -5.77761956234815e-015, -1.61290000000003, -4.44173433215513e-031, !- X,Y,Z Vertex 9 {m}
-  9.61779215645457e-031, -3.44521942524208e-045, -3.31112713616363e-032; !- X,Y,Z Vertex 10 {m}
+  9.61779215645457e-31, -3.44521942524208e-45, -3.31112713616366e-32, !- X,Y,Z Vertex 1 {m}
+  27.94, -7.21911419532262e-14, 2.21551719102878e-30, !- X,Y,Z Vertex 2 {m}
+  27.94, -1.5708818373718, 1.81516373818794e-30, !- X,Y,Z Vertex 3 {m}
+  14.6145993108658, -1.5708818373718, 7.42727257789072e-31, !- X,Y,Z Vertex 4 {m}
+  14.6145993108658, -5.7659750762477, -3.26430220015425e-31, !- X,Y,Z Vertex 5 {m}
+  12.496062143502, -5.7659750762477, -4.96931400157382e-31, !- X,Y,Z Vertex 6 {m}
+  12.496062143502, -1.57088183737182, 5.7222607764711e-31, !- X,Y,Z Vertex 7 {m}
+  9.2324053593616, -1.5749750762477, 3.08521764277088e-31, !- X,Y,Z Vertex 8 {m}
+  5.8796053593616, -1.5749750762477, 3.86863487902355e-32, !- X,Y,Z Vertex 9 {m}
+  -5.77761956234815e-15, -1.61290000000003, -4.44173433215513e-31; !- X,Y,Z Vertex 10 {m}
 
 OS:Surface,
   {3c797a13-dd75-4034-920f-dfe38a6f98cd}, ! Handle
@@ -4892,8 +4892,8 @@ OS:Surface,
   ,                                       ! Number of Vertices
   27.94, -1.5708818373718, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
   27.94, -1.5708818373718, 0,             !- X,Y,Z Vertex 2 {m}
-  27.94, -7.21911419532262e-014, 4.39219702885958e-030, !- X,Y,Z Vertex 3 {m}
-  27.94, -6.64158505969681e-014, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
+  27.94, -7.21911419532262e-14, 4.39219702885958e-30, !- X,Y,Z Vertex 3 {m}
+  27.94, -6.64158505969681e-14, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {4c47a7d0-f3ad-4e04-b564-ef5efb270c50}, ! Handle
@@ -5009,8 +5009,8 @@ OS:Surface,
   NoWind,                                 ! Wind Exposure
   ,                                       ! View Factor to Ground
   ,                                       ! Number of Vertices
-  -5.78693238670839e-015, -1.61290000000003, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
-  -5.78693238670839e-015, -1.61290000000003, -1.07070077553506e-036, !- X,Y,Z Vertex 2 {m}
+  -5.78809648975342e-15, -1.61290000000003, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
+  -5.78809648975342e-15, -1.61290000000003, -1.07070077553506e-36, !- X,Y,Z Vertex 2 {m}
   5.8796053593616, -1.5749750762477, 0,   !- X,Y,Z Vertex 3 {m}
   5.8796053593616, -1.5749750762477, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
 
@@ -5975,9 +5975,9 @@ OS:Surface,
   14.6145993108658, -5.7659750762477, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
   14.6145993108658, -1.5708818373718, 3.79695970268515, !- X,Y,Z Vertex 2 {m}
   27.94, -1.5708818373718, 3.79695970268515, !- X,Y,Z Vertex 3 {m}
-  27.94, -6.64158505969681e-014, 3.79695970268515, !- X,Y,Z Vertex 4 {m}
-  9.61779215645457e-031, -3.44521942524208e-045, 3.79695970268515, !- X,Y,Z Vertex 5 {m}
-  -5.77761956234815e-015, -1.61290000000003, 3.79695970268515, !- X,Y,Z Vertex 6 {m}
+  27.94, -6.64158505969681e-14, 3.79695970268515, !- X,Y,Z Vertex 4 {m}
+  9.61779215645457e-31, -3.44521942524208e-45, 3.79695970268515, !- X,Y,Z Vertex 5 {m}
+  -5.77761956234815e-15, -1.61290000000003, 3.79695970268515, !- X,Y,Z Vertex 6 {m}
   5.8796053593616, -1.5749750762477, 3.79695970268515, !- X,Y,Z Vertex 7 {m}
   9.2324053593616, -1.5749750762477, 3.79695970268515, !- X,Y,Z Vertex 8 {m}
   12.496062143502, -1.57088183737182, 3.79695970268515, !- X,Y,Z Vertex 9 {m}
@@ -5995,10 +5995,10 @@ OS:Surface,
   NoWind,                                 ! Wind Exposure
   ,                                       ! View Factor to Ground
   ,                                       ! Number of Vertices
-  9.61779215645457e-031, -3.44521942524208e-045, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
-  9.61779215645457e-031, -3.44521942524208e-045, 9.48114658209004e-038, !- X,Y,Z Vertex 2 {m}
-  -5.77761956234815e-015, -1.61290000000003, -1.07070077553506e-036, !- X,Y,Z Vertex 3 {m}
-  -5.77761956234815e-015, -1.61290000000003, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
+  9.61779215645457e-31, -3.44521942524208e-45, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
+  9.61779215645457e-31, -3.44521942524208e-45, 9.48114658209004e-38, !- X,Y,Z Vertex 2 {m}
+  -5.77761956234815e-15, -1.61290000000003, -1.07070077553506e-36, !- X,Y,Z Vertex 3 {m}
+  -5.77761956234815e-15, -1.61290000000003, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {7093a14f-4264-4d7f-b3c5-f4d0f212c0bb}, ! Handle
@@ -6012,10 +6012,10 @@ OS:Surface,
   NoWind,                                 ! Wind Exposure
   ,                                       ! View Factor to Ground
   ,                                       ! Number of Vertices
-  14.7903627411057, -1.29944055515807e-014, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
-  14.7903627411057, -2.16573425859678e-014, -1.86668373726547e-029, !- X,Y,Z Vertex 2 {m}
-  7.23265, -3.89832166547422e-014, 9.88244331493368e-030, !- X,Y,Z Vertex 3 {m}
-  7.23265, -3.0320279620355e-014, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
+  14.7903627411057, -1.29944055515807e-14, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
+  14.7903627411057, -2.16573425859678e-14, -1.86668373726547e-29, !- X,Y,Z Vertex 2 {m}
+  7.23265, -3.89832166547422e-14, 9.88244331493361e-30, !- X,Y,Z Vertex 3 {m}
+  7.23265, -3.0320279620355e-14, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {af075484-2901-4b63-ba5a-8da24a7dc4c6}, ! Handle
@@ -6029,10 +6029,10 @@ OS:Surface,
   NoWind,                                 ! Wind Exposure
   ,                                       ! View Factor to Ground
   ,                                       ! Number of Vertices
-  23.79352256073, -3.03202796203551e-014, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
-  23.79352256073, -3.89832166547422e-014, -1.06510777949853e-028, !- X,Y,Z Vertex 2 {m}
-  16.9747627411057, -2.7432633942226e-014, -8.67458913199845e-029, !- X,Y,Z Vertex 3 {m}
-  16.9747627411057, -1.87696969078388e-014, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
+  23.79352256073, -3.03202796203551e-14, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
+  23.79352256073, -3.89832166547422e-14, -1.06510777949853e-28, !- X,Y,Z Vertex 2 {m}
+  16.9747627411057, -2.7432633942226e-14, -8.67458913199845e-29, !- X,Y,Z Vertex 3 {m}
+  16.9747627411057, -1.87696969078388e-14, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {65d9d667-1ced-44cd-9abf-9c7183a3c379}, ! Handle
@@ -6046,10 +6046,10 @@ OS:Surface,
   NoWind,                                 ! Wind Exposure
   ,                                       ! View Factor to Ground
   ,                                       ! Number of Vertices
-  27.94, -6.64158505969681e-014, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
-  27.94, -7.21911419532262e-014, 4.3921970288591e-030, !- X,Y,Z Vertex 2 {m}
-  23.79352256073, -3.75393938156777e-014, -1.09804925721498e-028, !- X,Y,Z Vertex 3 {m}
-  23.79352256073, -3.17641024594196e-014, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
+  27.94, -6.64158505969681e-14, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
+  27.94, -7.21911419532262e-14, 4.39219702885904e-30, !- X,Y,Z Vertex 2 {m}
+  23.79352256073, -3.75393938156777e-14, -1.09804925721498e-28, !- X,Y,Z Vertex 3 {m}
+  23.79352256073, -3.17641024594196e-14, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {53214602-1bdd-4f8f-8a48-9c1c8f644b74}, ! Handle
@@ -6063,10 +6063,10 @@ OS:Surface,
   NoWind,                                 ! Wind Exposure
   ,                                       ! View Factor to Ground
   ,                                       ! Number of Vertices
-  16.9747627411057, -1.80477854883066e-014, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
-  16.9747627411057, -2.81545453617582e-014, -8.5373329748465e-029, !- X,Y,Z Vertex 2 {m}
-  14.7903627411057, -2.23792540055001e-014, -1.67452511725291e-029, !- X,Y,Z Vertex 3 {m}
-  14.7903627411057, -1.22724941320484e-014, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
+  16.9747627411057, -1.80477854883066e-14, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
+  16.9747627411057, -2.81545453617582e-14, -8.53733297484649e-29, !- X,Y,Z Vertex 2 {m}
+  14.7903627411057, -2.23792540055001e-14, -1.67452511725292e-29, !- X,Y,Z Vertex 3 {m}
+  14.7903627411057, -1.22724941320484e-14, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {15158bfb-8a90-417e-9bf1-4fbc0779ddb4}, ! Handle
@@ -6080,10 +6080,10 @@ OS:Surface,
   NoWind,                                 ! Wind Exposure
   ,                                       ! View Factor to Ground
   ,                                       ! Number of Vertices
-  3.27025, -5.12948915010911e-030, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
-  3.27025, -5.12948915010911e-030, 0,     !- X,Y,Z Vertex 2 {m}
-  9.61779215645457e-031, -3.41692617540964e-045, 9.48114658209004e-038, !- X,Y,Z Vertex 3 {m}
-  9.61779215645457e-031, -3.41692617540964e-045, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
+  3.27025, -5.12948915010911e-30, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
+  3.27025, -5.12948915010911e-30, 0,      !- X,Y,Z Vertex 2 {m}
+  9.61779215645457e-31, -3.41692617540964e-45, 9.48114658209004e-38, !- X,Y,Z Vertex 3 {m}
+  9.61779215645457e-31, -3.41692617540964e-45, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {3247a329-4dd9-4154-a51e-288849dcb525}, ! Handle
@@ -6097,10 +6097,10 @@ OS:Surface,
   NoWind,                                 ! Wind Exposure
   ,                                       ! View Factor to Ground
   ,                                       ! Number of Vertices
-  7.23265, -3.24860138789518e-014, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
-  7.23265, -3.68174823961454e-014, 7.41183248620047e-030, !- X,Y,Z Vertex 2 {m}
-  3.27025, -2.16573425859681e-015, 2.47061082873377e-030, !- X,Y,Z Vertex 3 {m}
-  3.27025, 2.16573425859678e-015, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
+  7.23265, -3.24860138789518e-14, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
+  7.23265, -3.68174823961454e-14, 7.41183248620047e-30, !- X,Y,Z Vertex 2 {m}
+  3.27025, -2.16573425859681e-15, 2.47061082873377e-30, !- X,Y,Z Vertex 3 {m}
+  3.27025, 2.16573425859679e-15, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {565f4fb6-93ea-4327-96e9-406a8f7c0943}, ! Handle
@@ -6182,8 +6182,8 @@ OS:Surface,
   NoWind,                                 ! Wind Exposure
   ,                                       ! View Factor to Ground
   ,                                       ! Number of Vertices
-  2.31011654250324e-014, 5.39409016315264, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
-  2.31011654250324e-014, 5.39409016315264, 3.048, !- X,Y,Z Vertex 2 {m}
+  2.31011654250324e-14, 5.39409016315264, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
+  2.31011654250324e-14, 5.39409016315264, 3.048, !- X,Y,Z Vertex 2 {m}
   0, 1.27, 3.048,                         !- X,Y,Z Vertex 3 {m}
   0, 1.27, 3.79695970268515;              !- X,Y,Z Vertex 4 {m}
 
@@ -6218,8 +6218,8 @@ OS:Surface,
   ,                                       ! Number of Vertices
   2.1844, -4.12409016315264, 3.79695970268515, !- X,Y,Z Vertex 1 {m}
   2.1844, -4.1240901631526, 3.048,        !- X,Y,Z Vertex 2 {m}
-  2.18440000000001, -1.86520267429112e-028, 3.048, !- X,Y,Z Vertex 3 {m}
-  2.18440000000002, 6.21734224763712e-029, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
+  2.18440000000001, -1.96882504508507e-28, 3.048, !- X,Y,Z Vertex 3 {m}
+  2.18440000000002, 6.99451002859176e-29, 3.79695970268515; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {5be2a222-0a4a-4963-aec7-8d3fd9de4b9a}, ! Handle
@@ -19449,11 +19449,14 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {bcc157a3-7869-4473-acd0-662f19a8415c}, !- Handle
-  Firehall-Office,                        !- Name
+  Space Function-Office - open plan,      !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {0c9819e3-1785-4250-b349-15bcceb1566b}, !- Group Rendering Name
-  {7b8b543c-93e1-4e04-9d52-2e0b9d5f5a80}; !- Design Specification Outdoor Air Object Name
+  {7b8b543c-93e1-4e04-9d52-2e0b9d5f5a80}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Office - open plan;                     !- Standards Space Type
 
 OS:People,
   {5b785f93-8041-4412-a894-c01c7deee2ef}, ! Handle
@@ -19546,11 +19549,14 @@ OS:SpaceInfiltration:DesignFlowRate,
 
 OS:SpaceType,
   {ef70e577-c26b-437b-8429-d99663e50f88}, !- Handle
-  Firehall-Corridors,                     !- Name
+  Space Function-Corr. < 2.4m wide-sch-A, !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {41b811e5-817a-484c-bbec-59526ddfcc7c}, !- Group Rendering Name
-  {658eecba-ff3a-4a99-ae67-37a2dc2bbde5}; !- Design Specification Outdoor Air Object Name
+  {658eecba-ff3a-4a99-ae67-37a2dc2bbde5}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Corr. < 2.4m wide-sch-A;                !- Standards Space Type
 
 OS:People,
   {8765aa3a-e469-42d8-a686-732f6806bb62}, ! Handle
@@ -19604,11 +19610,14 @@ OS:SpaceInfiltration:DesignFlowRate,
 
 OS:SpaceType,
   {d5f995e0-5cc9-4433-bcd0-b1ed367abc99}, !- Handle
-  Firehall-Conference/meeting,            !- Name
+  Space Function-Conf./meet./multi-purpose, !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {28bd92f5-9f67-4470-b46c-ee4898e3b95c}, !- Group Rendering Name
-  {fa06968a-3263-4676-90da-98cf592df00c}; !- Design Specification Outdoor Air Object Name
+  {fa06968a-3263-4676-90da-98cf592df00c}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Conf./meet./multi-purpose;              !- Standards Space Type
 
 OS:People,
   {ec971f15-876b-4482-90cc-834b922f24ac}, ! Handle
@@ -19763,11 +19772,14 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:SpaceType,
   {f9aed88a-563f-4cb6-8f45-8bb094249271}, !- Handle
-  Firehall-Electrical/Mechanical,         !- Name
+  Space Function-Electrical/Mechanical-sch-A, !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {c9e97cdf-19e0-443d-b075-079363ce1fea}, !- Group Rendering Name
-  {aeaa905c-e6d2-4bee-88cd-58b73f414a64}; !- Design Specification Outdoor Air Object Name
+  {aeaa905c-e6d2-4bee-88cd-58b73f414a64}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Electrical/Mechanical-sch-A;            !- Standards Space Type
 
 OS:People,
   {5bec9021-2638-4280-8d25-7093826b9360}, ! Handle
@@ -19799,11 +19811,14 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {e7dda3ac-6d57-4193-9899-960d25df616b}, !- Handle
-  Firehall-Fire engine room,              !- Name
+  Space Function-Fire station - engine room, !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {41fdd4be-aab8-489a-b4a4-c88526a26f09}, !- Group Rendering Name
-  {c1daa014-2098-4e89-bc9c-d997bcdcbc64}; !- Design Specification Outdoor Air Object Name
+  {c1daa014-2098-4e89-bc9c-d997bcdcbc64}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Fire station - engine room;             !- Standards Space Type
 
 OS:People,
   {69e369b3-21b1-4db3-a5da-007a38165a34}, ! Handle
@@ -19837,11 +19852,14 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {99ecab25-0ac2-4323-bca3-05b3bfebf79d}, !- Handle
-  Firehall-Kitchen,                       !- Name
+  Space Function-Food preparation,        !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {25517ea0-1210-4076-9639-f29f34a20a24}, !- Group Rendering Name
-  {31da1884-580e-4f6b-bed4-397f9f9e5833}; !- Design Specification Outdoor Air Object Name
+  {31da1884-580e-4f6b-bed4-397f9f9e5833}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Food preparation;                       !- Standards Space Type
 
 OS:People,
   {4d1a2a91-ecc8-459c-95c1-ecc1c9621b14}, ! Handle
@@ -19873,11 +19891,14 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {c2eaccb6-6748-434b-97ab-35638a8b48b3}, !- Handle
-  Firehall-Lounge/recreation,             !- Name
+  Space Function-Lounge/recreation,       !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {a99c5bd8-05c3-4415-b408-6dbd167cbb1c}, !- Group Rendering Name
-  {96c927b6-452d-4308-838f-002fb9633fd2}; !- Design Specification Outdoor Air Object Name
+  {96c927b6-452d-4308-838f-002fb9633fd2}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Lounge/recreation;                      !- Standards Space Type
 
 OS:DesignSpecification:OutdoorAir,
   {96c927b6-452d-4308-838f-002fb9633fd2}, ! Handle
@@ -19941,11 +19962,14 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {aba75fb3-d5c1-4700-a1c4-20ec79ec3234}, !- Handle
-  Firehall-Storage area,                  !- Name
+  Space Function-Storage area,            !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {6efc8e6c-396b-4121-827b-a6a6bac8fc58}, !- Group Rendering Name
-  {97a5cf98-5bfc-481d-bd24-32d273e9d6b7}; !- Design Specification Outdoor Air Object Name
+  {97a5cf98-5bfc-481d-bd24-32d273e9d6b7}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Storage area;                           !- Standards Space Type
 
 OS:People,
   {8f45b020-30fc-46a1-a7a3-4e903f234313}, ! Handle
@@ -20062,11 +20086,14 @@ OS:SpaceInfiltration:DesignFlowRate,
 
 OS:SpaceType,
   {deea49b6-8f4e-4fbd-bc42-b1cc9a8f7d1a}, !- Handle
-  Firehall-Washroom,                      !- Name
+  Space Function-Washroom-sch-A,          !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {9605cc7e-8dff-4b14-a3bf-b60192768b6d}, !- Group Rendering Name
-  {2adc131d-582e-4e3d-904f-43670a368c66}; !- Design Specification Outdoor Air Object Name
+  {2adc131d-582e-4e3d-904f-43670a368c66}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Washroom-sch-A;                         !- Standards Space Type
 
 OS:People,
   {09c9b71d-e4a3-43e5-9508-f18434ea1ecd}, ! Handle
@@ -20104,11 +20131,14 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {27f1f8f2-158a-4b7c-a110-4cc1c6b39ee6}, !- Handle
-  Firehall-Workshop,                      !- Name
+  Space Function-Lab - classrooms,        !- Name
   {e0024be1-f912-4f29-a732-8604c7abc357}, !- Default Construction Set Name
   {d9a1a8c6-f28e-4348-8532-ca1ef0be63f9}, !- Default Schedule Set Name
   {c366a3e5-2139-4e53-907d-d2cf52d5c2ac}, !- Group Rendering Name
-  {7dd5cc91-67a8-40ac-8bcb-245665f4b1aa}; !- Design Specification Outdoor Air Object Name
+  {7dd5cc91-67a8-40ac-8bcb-245665f4b1aa}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
+  Space Function,                         !- Standards Building Type
+  Lab - classrooms;                       !- Standards Space Type
 
 OS:People,
   {f7a56bc8-7e24-4217-9c44-55c984aa43ca}, ! Handle
@@ -23849,8 +23879,8 @@ OS:Building,
   ,                                       !- Space Type Name
   {751f0989-638b-4ca4-b54d-38032a9c4bdc}, !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  ,                                       !- Standards Number of Stories
-  ,                                       !- Standards Number of Above Ground Stories
+  1,                                      !- Standards Number of Stories
+  1,                                      !- Standards Number of Above Ground Stories
   ,                                       !- Standards Template
   ;                                       !- Standards Building Type
 
@@ -25361,7 +25391,7 @@ OS:WindowMaterial:Glazing,
 OS:Construction,
   {a4288eaa-a43c-4e40-87c9-2b660d5c3964}, !- Handle
   Customized Fenestration: cond=0.355 tvis=0.210 tsol=0.500, !- Name
-  ,                                       !- Surface Rendering Name
+  {65ccfcef-73cd-410b-90cb-bede9e1f3fc3}, !- Surface Rendering Name
   {4f61a663-0e5c-498d-80d7-86e1f42f9675}; !- Layer 1
 
 OS:Construction,
@@ -25454,7 +25484,7 @@ OS:WindowMaterial:Glazing,
 OS:Construction,
   {11c8a8a0-7840-47f2-826d-10a19cde9e19}, !- Handle
   Customized Fenestration: cond=0.280 tvis=0.210 tsol=0.500, !- Name
-  ,                                       !- Surface Rendering Name
+  {ea18157d-1d6f-4091-aa08-14c212bee215}, !- Surface Rendering Name
   {e1e822ec-8ad5-4024-a2d1-35d37ffed14d}; !- Layer 1
 
 OS:Schedule:Ruleset,
@@ -26255,17 +26285,17 @@ OS:StandardsInformation:Construction,
   {a0c20b86-95dd-4605-b19f-194ab0bf7664}, !- Handle
   {11c8a8a0-7840-47f2-826d-10a19cde9e19}; !- Construction Name
 
-OS:WeatherFile,
-  {00f45909-1aca-4eb4-b394-c6163f8a375c}, !- Handle
-  Edmonton Intl AP,                       !- City
-  AB,                                     !- State Province Region
-  CAN,                                    !- Country
-  CWEC,                                   !- Data Source
-  711230,                                 !- WMO Number
-  53.32,                                  !- Latitude {deg}
-  -113.58,                                !- Longitude {deg}
-  -7,                                     !- Time Zone {hr}
-  723,                                    !- Elevation {m}
-  CAN_AB_Edmonton.Intl.AP.711230_CWEC.epw, !- Url
-  F7E69D13;                               !- Checksum
+OS:Rendering:Color,
+  {ea18157d-1d6f-4091-aa08-14c212bee215}, !- Handle
+  Rendering Color 116,                    !- Name
+  253,                                    !- Rendering Red Value
+  230,                                    !- Rendering Green Value
+  245;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {65ccfcef-73cd-410b-90cb-bede9e1f3fc3}, !- Handle
+  Rendering Color 117,                    !- Name
+  255,                                    !- Rendering Red Value
+  0,                                      !- Rendering Green Value
+  69;                                     !- Rendering Blue Value
 
