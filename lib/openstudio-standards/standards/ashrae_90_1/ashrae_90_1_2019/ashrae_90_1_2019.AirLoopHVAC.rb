@@ -505,10 +505,10 @@ class ASHRAE9012019 < ASHRAE901
             elsif air_terminal.zoneMinimumAirFlowInputMethod == 'Scheduled'
               air_terminal.setMinimumAirFlowFractionSchedule(model_set_schedule_value(air_terminal.minimumAirFlowFractionSchedule.get, '12' => 0.1))
             else
-              OpenStudio.logFree(OpenStudio::Warn, "The air terminal associated with #{zone.name} uses a zone minimum air flow input method that is currently not supported so occupant standby controls were not modeled.")
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "The air terminal associated with #{zone.name} uses a zone minimum air flow input method that is currently not supported so occupant standby controls were not modeled.")
             end
           else
-            OpenStudio.logFree(OpenStudio::Warn, "The air terminal associated with #{zone.name} isn't of the SingleDuctVAVReheat type so occupant standby controls were not modeled.")
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "The air terminal associated with #{zone.name} isn't of the SingleDuctVAVReheat type so occupant standby controls were not modeled.")
           end
         end
       end
