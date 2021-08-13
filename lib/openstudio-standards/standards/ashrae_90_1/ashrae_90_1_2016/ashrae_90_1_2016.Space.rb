@@ -160,7 +160,7 @@ class ASHRAE9012016 < ASHRAE901
           sensor_1_window = sorted_skylights[0]
         else
           # Sensor 1 controls toplighted area
-          sensor_1_frac = areas['toplighted_area'] / space_area_m2
+          sensor_1_frac = areas['toplighted_area'] / space_area_m2 / 2
           sensor_1_window = sorted_skylights[0]
           sensor_2_frac = sensor_1_frac
           sensor_2_window = sensor_1_window
