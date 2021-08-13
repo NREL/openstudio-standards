@@ -96,10 +96,14 @@ class BTAPDatapoint
 
         model = BTAP::FileIO.load_osm(osm_model_path)
       end
-      #If analysis type is osm_batch..do nothing to the osm files other than add temporal outputs.
+      #If analysis type is osm_batch..do nothing to the osm files other than add temporal outputs and weather data.
       if @options[:algorithm_type] == 'osm_batch'
         @standard.set_output_variables(model: model, output_variables: @options[:output_variables])
         @standard.set_output_meters(model: model, output_meters: @options[:output_meters])
+        climate_zone = 'NECB HDD Method'
+        model.getYearDescription.setDayofWeekforStartDay('Sunday')
+        @standard.model_add_design_days_and_weather_file(model, climate_zone, @options[:epw_file]) # Standards
+        @standard.model_add_ground_temperatures(model, nil, climate_zone)
       else
         # Otherwise modify osm input with options.
         @standard.model_apply_standard(model: model,
@@ -154,7 +158,6 @@ class BTAPDatapoint
                                        output_variables: @options[:output_variables],
                                        output_meters: @options[:output_meters],
                                        airloop_economizer_type: @options[:airloop_economizer_type])
-
       end
 
       # Save model to to disk.
