@@ -106,7 +106,6 @@ module RetailStandalone
   end
 
   def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
-
     return true
   end
 

@@ -186,4 +186,21 @@ class ASHRAE9012019 < ASHRAE901
     basic_infil_rate_cfm_per_ft2 = 1.0
     return basic_infil_rate_cfm_per_ft2
   end
+
+  # Provide the type of daylighting control type
+  #
+  # @param [OpenStudio::Model::Space] OpenStudio Space object
+  # return [String] daylighting control type
+  def space_daylighting_control_type(space)
+    return 'ContinuousOff'
+  end
+
+  # Provide the minimum input power fraction for continuous
+  # dimming daylighting control
+  #
+  # @param [OpenStudio::Model::Space] OpenStudio Space object
+  # return [Float] daylighting minimum input power fraction
+  def space_daylighting_minimum_input_power_fraction(space)
+    return 0.2
+  end
 end
