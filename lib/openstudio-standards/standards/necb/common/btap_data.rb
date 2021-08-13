@@ -28,9 +28,12 @@ class BTAPData
                   AND ColumnName='Area'"
     area = @sqlite_file.get.execAndReturnFirstDouble(command)
     # make sure all the data are available
-    raise("model.building.get.conditionedFloorArea() is empty for #{model.building.get.name.get}") if area.empty?
+   if area.empty?
+     @conditioned_floor_area_m_sq = 0.0
+   else
+     @conditioned_floor_area_m_sq = area.get
+   end
 
-    @conditioned_floor_area_m_sq = area.get
 
     @btap_data['simulation_btap_data_version'] = '0.1'
     # @btap_data["simulation_openstudio_version"] = open("| \"#{OpenStudio.getOpenStudioCLI}\" openstudio_version").read().strip
@@ -331,7 +334,7 @@ class BTAPData
     model.getSpaces.sort.each do |space|
       spaceinfo = {}
       table << spaceinfo
-      spaceinfo['thermal_zone_name'] = space.thermalZone.get.name.get unless space.thermalZone.empty? # should be assigned a thermalzone name.
+      spaceinfo['thermal_zone_name'] = space.thermalZone.empty? ? 'None' : space.thermalZone.get.name.get # should be assigned a thermalzone name.
       spaceinfo['space_name'] = space.name.get # name should be defined test
       spaceinfo['multiplier'] = space.multiplier
       spaceinfo['volume'] = space.volume # should be greater than zero
@@ -340,8 +343,8 @@ class BTAPData
       spaceinfo['breathing_zone_outdoor_airflow_vbz'] = -1
       spaceinfo['infiltration_flow_per_m_sq'] = space.infiltrationDesignFlowPerExteriorSurfaceArea
       spaceinfo['floor_area_m2'] = space.floorArea
-      spaceinfo['building_type'] = space.spaceType.get.standardsBuildingType.get
-      spaceinfo['is_conditioned'] = space.thermalZone.get.isConditioned.get unless space.thermalZone.empty?
+      spaceinfo['building_type'] = space.spaceType.get.standardsBuildingType.empty? ? 'None' : space.spaceType.get.standardsBuildingType.get
+      spaceinfo['is_conditioned'] = space.thermalZone.get.isConditioned.get unless space.thermalZone.empty? or space.thermalZone.get.isConditioned.empty?
       # shw
       spaceinfo['shw_peak_flow_rate_m_cu_per_s'] = 0
       spaceinfo['shw_peak_flow_rate_per_floor_area_m_cu_per_s_per_m_sq'] = 0
@@ -608,15 +611,18 @@ class BTAPData
         item['air_loop_name'] = nil
         model.getAirLoopHVACs.sort.each do |air_loop|
           if air_loop.thermalZones.include?(zone)
-            item['air_loop_name'] = air_loop.name.get
+            item['air_loop_name'] = air_loop.name.empty? ? 'None' : air_loop.name.get
+          else
+            item['air_loop_name'] =  'None'
           end
         end
-        item['thermal_zone_name'] = zone.name.get
-        item['zone_equipment_name'] = equipment.name.get
+        item['thermal_zone_name'] = zone.name.empty? ? 'None' : zone.name.get
+        item['zone_equipment_name'] = equipment.name.empty? ? 'None' : equipment.name.get
         item['type'] = get_actual_child_object(equipment).class.name
         table << item
       end
     end
+
     table.sort_by! { |item| [item['air_loop_name'], item['thermal_zone_name'], item['zone_equipment_name']] }
     return table
   end
@@ -1225,9 +1231,11 @@ class BTAPData
                   AND ColumnName='Data'"
     value = @sqlite_file.get.execAndReturnFirstString(command)
     # make sure all the data are availalbe
-    raise("Could not determine primary heating source from sql file #{@model.building.get.name.get}") if value.empty?
 
-    data['energy_principal_heating_source'] = value.get
+    data['energy_principal_heating_source'] = 'unknown'
+    unless value.empty?
+      data['energy_principal_heating_source'] = value.get
+    end
 
     # Peaks
     electric_peak = @model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM tabulardatawithstrings WHERE ReportName='EnergyMeters'" \
@@ -1836,7 +1844,9 @@ class BTAPData
     ### occupant density (persons per ft2 of floor area)
     sum_handle = 0.0
     @btap_data['space_type_table'].each do |space_info|
-      sum_handle += space_info['floor_m_sq'] * space_info['occ_per_m_sq']
+      unless space_info['occ_per_m_sq'].nil?
+        sum_handle += space_info['floor_m_sq'] * space_info['occ_per_m_sq']
+      end
     end
     occ_density_person_per_m_sq = sum_handle / bldg_conditioned_floor_area_m_sq
     occ_density_person_per_ft_sq = OpenStudio.convert(occ_density_person_per_m_sq, 'ft^2', 'm^2').get
@@ -1914,8 +1924,9 @@ class BTAPData
     @btap_data.merge!('phius_peak_cooling_load_w_per_m_sq' => peak_cooling_load_w_per_m_sq_phius)
 
     ### Gather annual heating and cooling energy demands based on NECB
-    annual_heating_demand_kwh_per_m_sq_necb = OpenStudio.convert(@btap_data['energy_eui_heating_gj_per_m_sq'], 'GJ', 'kWh')
-    annual_cooling_demand_kwh_per_m_sq_necb = OpenStudio.convert(@btap_data['energy_eui_cooling_gj_per_m_sq'], 'GJ', 'kWh')
+
+    annual_heating_demand_kwh_per_m_sq_necb = OpenStudio.convert(@btap_data['energy_eui_heating_gj_per_m_sq'], 'GJ', 'kWh') unless @btap_data['energy_eui_heating_gj_per_m_sq'].nil?
+    annual_cooling_demand_kwh_per_m_sq_necb = OpenStudio.convert(@btap_data['energy_eui_cooling_gj_per_m_sq'], 'GJ', 'kWh') unless @btap_data['energy_eui_cooling_gj_per_m_sq'].nil?
 
     ### Gather peak heating and cooling loads based on NECB
     peak_heating_load_w_per_m_sq_necb = @btap_data['heating_peak_w_per_m_sq']

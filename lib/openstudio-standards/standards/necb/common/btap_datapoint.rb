@@ -84,6 +84,7 @@ class BTAPDatapoint
     begin
       # set up basic model.
       # This dynamically creates a class by string using the factory method design pattern.
+      @options[:template] = 'NECB2011' if @options[:algorithm_type] == 'osm_batch'
       @standard = Standard.build(@options[:template])
 
       # This allows you to select the skeleton model from our built in starting points. You can add a custom file as
@@ -181,10 +182,12 @@ class BTAPDatapoint
                   AND ColumnName='Data'"
         value = model.sqlFile.get.execAndReturnFirstString(command)
         # make sure all the data are available
-        raise("Could not determine primary heating source from sql file #{@model.building.get.name.get}") if value.empty?
+        @qaqc[:building][:principal_heating_source] = 'unknown'
+        unless value.empty?
+          @qaqc[:building][:principal_heating_source] = value.get
+        end
 
-        @qaqc[:building][:principal_heating_source] = value.get
-        if value.get == 'Additional Fuel'
+        if @qaqc[:building][:principal_heating_source] == 'Additional Fuel'
           model.getPlantLoops.sort.each do |iplantloop|
             boilers = iplantloop.components.select { |icomponent| icomponent.to_BoilerHotWater.is_initialized }
             @qaqc[:building][:principal_heating_source] = 'FuelOilNo2' unless boilers.select { |boiler| boiler.to_BoilerHotWater.get.fuelType.to_s == 'FuelOilNo2' }.empty?

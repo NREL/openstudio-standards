@@ -315,7 +315,7 @@ class NECB2011
       qaqc[:economics][:"#{neb_fuel}_neb_cost"] = fuel_consumption_gj * neb_fuel_cost.to_f
       qaqc[:economics][:"#{neb_fuel}_neb_cost_per_m2"] = qaqc[:economics][:"#{neb_fuel}_neb_cost"] / qaqc[:building][:conditioned_floor_area_m2] unless model.building.get.conditionedFloorArea.empty?
       qaqc[:economics][:total_neb_cost] += qaqc[:economics][:"#{neb_fuel}_neb_cost"]
-      qaqc[:economics][:total_neb_cost_per_m2] += qaqc[:economics][:"#{neb_fuel}_neb_cost_per_m2"]
+      qaqc[:economics][:total_neb_cost_per_m2] += qaqc[:economics][:"#{neb_fuel}_neb_cost_per_m2"] || 0.0
     end
 
     # Fuel cost based local utility rates
@@ -627,7 +627,7 @@ class NECB2011
           end
         end
 
-        spaceinfo[:occ_per_m2] = space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.get.round(3) unless space.spaceType.get.people[0].nil?
+        spaceinfo[:occ_per_m2] = space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.get.round(3) unless space.spaceType.get.people[0].nil? or space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.empty?
         if space.spaceType.get.lights[0].nil?
           error_warning << "space.spaceType.get.lights[0] is nil for Space:[#{space.name.get}] Space Type:[#{spaceinfo[:space_type_name]}]"
         else
@@ -974,15 +974,18 @@ class NECB2011
                                                          qaqc[:envelope][:outdoor_floors_area_m2] +
                                                          qaqc[:envelope][:ground_floors_area_m2]
     # TEDI
-    qaqc[:code_metrics][:building_tedi_gj_per_m2] = (qaqc[:end_uses]['heating_gj'] + qaqc[:end_uses]['cooling_gj']
-                                                    ) / qaqc[:building][:conditioned_floor_area_m2]
-    # Mech TEDI?
-    qaqc[:code_metrics][:building_medi_gj_per_m2] = (qaqc[:end_uses]['fans_gj'] +
-        qaqc[:end_uses]['pumps_gj'] +
-        qaqc[:end_uses]['heat_rejection_gj'] +
-        qaqc[:end_uses]['humidification_gj'] +
-        qaqc[:end_uses]['heat_recovery_gj']
-                                                    ) / qaqc[:building][:conditioned_floor_area_m2]
+    unless qaqc[:building][:conditioned_floor_area_m2].nil?
+      qaqc[:code_metrics][:building_tedi_gj_per_m2] = (qaqc[:end_uses]['heating_gj'] + qaqc[:end_uses]['cooling_gj']
+                                                      ) / qaqc[:building][:conditioned_floor_area_m2]
+      # Mech TEDI?
+      qaqc[:code_metrics][:building_medi_gj_per_m2] = (qaqc[:end_uses]['fans_gj'] +
+          qaqc[:end_uses]['pumps_gj'] +
+          qaqc[:end_uses]['heat_rejection_gj'] +
+          qaqc[:end_uses]['humidification_gj'] +
+          qaqc[:end_uses]['heat_recovery_gj']
+      ) / qaqc[:building][:conditioned_floor_area_m2]
+    end
+
 
     return qaqc
   end
