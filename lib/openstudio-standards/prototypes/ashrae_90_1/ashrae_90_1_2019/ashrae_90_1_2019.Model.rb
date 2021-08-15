@@ -396,7 +396,7 @@ class ASHRAE9012019 < ASHRAE901
               'template' => template,
               'climate_zone' => climate_zone,
               'under_8000_hour' => under_8000_hour,
-              'nontransient_dwelling' => 1
+              'nontransient_dwelling' => true
           }
           zones = air_loop_hvac.thermalZones
           model_add_zone_erv(model, zones, search_criteria)
