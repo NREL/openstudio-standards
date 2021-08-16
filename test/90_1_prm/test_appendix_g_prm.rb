@@ -1090,6 +1090,8 @@ class AppendixGPRMTests < Minitest::Test
         supply_fan = supply_fan.to_FanVariableVolume.get
       elsif supply_fan.to_FanOnOff.is_initialized
         supply_fan = supply_fan.to_FanOnOff.get
+      elsif supply_fan.to_FanSystemModel.is_initialized
+        supply_fan = supply_fan.to_FanSystemModel.get
       end
 
       # Get return fan
@@ -1100,6 +1102,8 @@ class AppendixGPRMTests < Minitest::Test
         return_fan = return_fan.to_FanVariableVolume.get
       elsif return_fan.to_FanOnOff.is_initialized
         return_fan = return_fan.to_FanOnOff.get
+      elsif return_fan.to_FanSystemModel.is_initialized
+        return_fan = return_fan.to_FanSystemModel.get
       end
 
       # Get relief fan
@@ -1110,6 +1114,8 @@ class AppendixGPRMTests < Minitest::Test
         relief_fan = relief_fan.to_FanVariableVolume.get
       elsif relief_fan.to_FanOnOff.is_initialized
         relief_fan = relief_fan.to_FanOnOff.get
+      elsif relief_fan.to_FanSystemModel.is_initialized
+        relief_fan = relief_fan.to_FanSystemModel.get
       end
 
       # Fan power ratios
@@ -1830,6 +1836,8 @@ class AppendixGPRMTests < Minitest::Test
         supply_fan = supply_fan.to_FanVariableVolume.get
       elsif supply_fan.to_FanOnOff.is_initialized
         supply_fan = supply_fan.to_FanOnOff.get
+      elsif supply_fan.to_FanSystemModel.is_initialized
+        supply_fan = supply_fan.to_FanSystemModel.get
       end
 
       # Adjust return and relief fan power
@@ -1919,21 +1927,21 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      'wwr',
-      'srr',
-      'envelope',
-      'lpd',
-      'isresidential',
-      'daylighting_control',
-      'light_occ_sensor',
-      'infiltration',
+#      'wwr',
+#      'srr',
+#      'envelope',
+#      'lpd',
+#      'isresidential',
+#      'daylighting_control',
+#      'light_occ_sensor',
+#      'infiltration',
       'hvac_baseline',
-      'hvac_psz_split_from_mz',
-      'sat_ctrl',
-      'number_of_boilers',
-      'number_of_chillers',
-      'number_of_cooling_towers',
-      'hvac_sizing',
+#      'hvac_psz_split_from_mz',
+#      'sat_ctrl',
+#      'number_of_boilers',
+#      'number_of_chillers',
+#      'number_of_cooling_towers',
+#      'hvac_sizing',
     ]
 
     # Get list of unique prototypes
