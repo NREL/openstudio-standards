@@ -399,9 +399,15 @@ class ASHRAE9012019 < ASHRAE901
               'nontransient_dwelling' => true
           }
           zones = air_loop_hvac.thermalZones
-          model_add_zone_erv(model, zones, search_criteria)
+          model_add_zone_erv_err(model, zones, search_criteria)
         end
       end
+    else
+      # ERVs
+      # # Applies the DOE Prototype Building assumption that ERVs use
+      # # enthalpy wheels and therefore exceed the minimum effectiveness specified by 90.1
+      model.getHeatExchangerAirToAirSensibleAndLatents.each { |obj| heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency(obj) }
+      return true
     end
   end
 end

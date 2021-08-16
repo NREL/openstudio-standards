@@ -5,7 +5,7 @@ class ASHRAE9012019 < ASHRAE901
   # The values are calculated by using ERR, which is introduced in 90.1-2016 Addendum CE
   #
   # This function is only used for nontransient dwelling units (Mid-rise and High-rise Apartment)
-  def heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency(heat_exchanger_air_to_air_sensible_and_latent, err, basis, climate_zone)
+  def heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_err(heat_exchanger_air_to_air_sensible_and_latent, err, basis, climate_zone)
     # Assumed to be sensible and latent at all flow
     err = enthalpy_recovery_ratio_design_to_typical_adjustment(err, climate_zone)
     full_htg_sens_eff, full_htg_lat_eff, part_htg_sens_eff, part_htg_lat_eff, full_cool_sens_eff, full_cool_lat_eff, part_cool_sens_eff, part_cool_lat_eff = heat_exchanger_air_to_air_sensible_and_latent_enthalpy_recovery_ratio_to_effectiveness(err, basis)

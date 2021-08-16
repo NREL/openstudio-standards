@@ -13,7 +13,7 @@ class ASHRAE9012019 < ASHRAE901
   # This function adds supply fan, exhaust fan, heat exchanger, and zone hvac
   #
   # This function is only used for nontransient dwelling units (Mid-rise and High-rise Apartment)
-  def model_add_zone_erv(model, thermal_zones, search_criteria)
+  def model_add_zone_erv_err(model, thermal_zones, search_criteria)
     ervs = []
     thermal_zones.each do |zone|
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding ERV for #{zone.name}.")
@@ -43,7 +43,7 @@ class ASHRAE9012019 < ASHRAE901
       heat_exchanger.setHeatExchangerType('Plate')
       heat_exchanger.setEconomizerLockout(false)
       heat_exchanger.setSupplyAirOutletTemperatureControl(false)
-      heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency(heat_exchanger, err, err_basis, climate_zone)
+      heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_err(heat_exchanger, err, err_basis, climate_zone)
 
       zone_hvac = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator.new(model, heat_exchanger, supply_fan, exhaust_fan)
       zone_hvac.setName("#{zone.name} ERV")
