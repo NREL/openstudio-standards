@@ -1106,6 +1106,28 @@ class Standard
       return true if comp.to_CoilCoolingWater.is_initialized
       return true if comp.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
       return true if comp.to_CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit.is_initialized
+
+      if comp.to_AirLoopHVACUnitarySystem.is_initialized
+        unitary_system = comp.to_AirLoopHVACUnitarySystem.get
+        if unitary_system.coolingCoil.is_initialized
+          cooling_coil = unitary_system.coolingCoil.get
+          return true if cooling_coil.to_CoilCoolingWater.is_initialized
+          return true if cooling_coil.to_CoilCoolingWater.is_initialized
+          return true if cooling_coil.to_CoilCoolingCooledBeam.is_initialized
+          return true if cooling_coil.to_CoilCoolingDXMultiSpeed.is_initialized
+          return true if cooling_coil.to_CoilCoolingDXSingleSpeed.is_initialized
+          return true if cooling_coil.to_CoilCoolingDXTwoSpeed.is_initialized
+          return true if cooling_coil.to_CoilCoolingDXTwoStageWithHumidityControlMode.is_initialized
+          return true if cooling_coil.to_CoilCoolingDXVariableRefrigerantFlow.is_initialized
+          return true if cooling_coil.to_CoilCoolingDXVariableSpeed.is_initialized
+          return true if cooling_coil.to_CoilCoolingFourPipeBeam.is_initialized
+          return true if cooling_coil.to_CoilCoolingLowTempRadiantConstFlow.is_initialized
+          return true if cooling_coil.to_CoilCoolingLowTempRadiantVarFlow.is_initialized
+          return true if cooling_coil.to_CoilCoolingWater.is_initialized
+          return true if cooling_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
+          return true if cooling_coil.to_CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit.is_initialized
+        end
+      end
     end
     return false
   end

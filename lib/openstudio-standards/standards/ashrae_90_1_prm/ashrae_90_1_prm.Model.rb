@@ -428,7 +428,6 @@ class ASHRAE901PRM < Standard
     return true
   end
 
-  #
   # Add design day schedule objects for space loads, for PRM 2019 baseline models
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::model::Model] OpenStudio model object
@@ -582,38 +581,6 @@ class ASHRAE901PRM < Standard
       end
     end
     return nil
-  end
-
-  # Provides baseline system allowable base BHP
-  #
-  # @param system_type [String] Baseline system type abbreviation
-  # @return allowable_base_system_fan_bhp [Float] Allowable base baseline system fan BHP
-  def allowable_base_system_brake_horsepower(system_type, non_mechanically_cooled_flag)
-    allowable_base_system_fan_bhp = 0.0
-    case system_type
-    when 'PTAC', 'PTHP'
-      allowable_base_system_fan_bhp = 0.0003
-    when 'PSZ_HP', 'PSZ_AC' # 3, 4
-      allowable_base_system_fan_bhp = 0.00094
-    when
-    'PVAV_Reheat', 'PVAV_PFP_Boxes', # 5, 6
-      'VAV_Reheat', 'VAV_PFP_Boxes', # 7, 8
-      'SZ_VAV' # 11
-      allowable_base_system_fan_bhp = 0.0013
-    when 'Gas_Furnace', 'Electric_Furnace' # 9, 10
-      if non_mechanically_cooled_flag
-        allowable_base_system_fan_bhp = 0.000054
-      else
-        allowable_base_system_fan_bhp = 0.0003
-      end
-    when
-    'SZ_CAV' # 12, 13
-      allowable_base_system_fan_bhp = 0.00094
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.AirLoopHVAC', "Air loop #{air_loop_hvac.name} is not associated with a baseline system.")
-    end
-
-    return allowable_base_system_fan_bhp
   end
 
   # Indicate if fan power breakdown (supply, return, and relief)
