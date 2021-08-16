@@ -48,6 +48,8 @@ class ASHRAE901PRM < Standard
             zone_hvac.supplyAirFan.to_FanVariableVolume.get
           elsif zone_hvac.supplyAirFan.to_FanOnOff.is_initialized
             zone_hvac.supplyAirFan.to_FanOnOff.get
+          elsif zone_hvac.supplyAirFan.to_FanSystemModel.is_initialized
+            zone_hvac.supplyAirFan.to_FanSystemModel.get
     end
 
     if system_type == 'SZ_CV' # System 12, 13

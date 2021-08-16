@@ -122,6 +122,8 @@ class ASHRAE901PRM < Standard
         return_fan = return_fan.to_FanVariableVolume.get
       elsif return_fan.to_FanOnOff.is_initialized
         return_fan = return_fan.to_FanOnOff.get
+      elsif return_fan.to_FanSystemModel.is_initialized
+        return_fan = return_fan.to_FanSystemModel.get
       end
       return_fan.setName("#{air_loop_hvac.name} Return Fan")
       return_fan.addToNode(air_loop_hvac.returnAirNode.get)
@@ -136,6 +138,8 @@ class ASHRAE901PRM < Standard
         relief_fan = relief_fan.to_FanVariableVolume.get
       elsif relief_fan.to_FanOnOff.is_initialized
         relief_fan = relief_fan.to_FanOnOff.get
+      elsif relief_fan.to_FanSystemModel.is_initialized
+        relief_fan = relief_fan.to_FanSystemModel.get
       end
       relief_fan.setName("#{air_loop_hvac.name} Relief Fan")
       relief_fan.addToNode(air_loop_hvac.reliefAirNode.get)
