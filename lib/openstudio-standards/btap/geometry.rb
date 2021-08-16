@@ -3788,6 +3788,34 @@ module BTAP
         new_surf_cent[:z] /= surf.length
         return new_surf_cent
       end
+
+      # This method calculates the surface area of a 2-D polygon from an array of OpenStudio vertices.  It ignores any z
+      # vertices.  This method assumes that the polygon is complete, has no holes, does not cross itself, and that the
+      # vertices are provided in counter-clockwise order.  This method is used in cases when you want to find the area
+      # of something before creating an OpenStudio surface/subsurface.
+      #
+      # Input arguments:
+      # vetices:  Array of openstudio vertices.
+      #
+      # Output:
+      # Area:  Float, area of polygot represented by the vertices.
+      def self.getSurfaceAreafromVertices(vertices:)
+        area = 0.0
+        numberVertices = vertices.size
+
+        # Check that a polygon is actually provided and not just a line or point.  Return 0 if the vertices are a line
+        # or point.
+        return 0.0 if numberVertices < 3
+
+        # Go through the vertices and get the cross product.  This adopted from:
+        # https://web.archive.org/web/20100405070507/http://valis.cs.uiuc.edu/~sariel/research/CG/compgeom/msg00831.html
+        vertices.each_with_index do |vertex, i|
+          j = (i + 1) % numberVertices
+          area += vertex.x.to_f * vertices[j].y.to_f
+          area -= vertex.y.to_f * vertices[j].x.to_f
+        end
+        return area
+      end
     end #Module Surfaces
   end #module Geometry
 end
