@@ -3229,43 +3229,37 @@ module BTAP
         # This goes through all the line segments and determines which correspond to the current upward pointing line
         # segment(line a).  It also determines the x coordinate distance between the top and bottom of the overlapping
         # portions of the line segments.
-        for j in 0..(overlap_segs.length - 1)
-          if (overlap_segs[j][:index_a1] == index) && (overlap_segs[j][:index_a2] == (index - 1))
-            linea_x_top = line_segment_overlap_x_coord(y_check: overlap_segs[j][:overlap_y][:overlap_start], point_b1: point_a1, point_b2: point_a2)
-            linea_x_bottom = line_segment_overlap_x_coord(y_check: overlap_segs[j][:overlap_y][:overlap_end], point_b1: point_a1, point_b2: point_a2)
-            lineb_x_top = line_segment_overlap_x_coord(y_check: overlap_segs[j][:overlap_y][:overlap_start], point_b1: overlap_segs[j][:point_b1], point_b2: overlap_segs[j][:point_b2])
-            lineb_x_bottom = line_segment_overlap_x_coord(y_check: overlap_segs[j][:overlap_y][:overlap_end], point_b1: overlap_segs[j][:point_b1], point_b2: overlap_segs[j][:point_b2])
-            x_distance_top = linea_x_top - lineb_x_top
-            x_distance_bottom = linea_x_bottom - lineb_x_bottom
-            linea_overlap = {
-                dx_top: x_distance_top,
-                dx_bottom: x_distance_bottom,
-                overlap: overlap_segs[j]
-            }
-            linea_overlaps << linea_overlap
-          end
+        curr_overlap_segs = overlap_segs.select { |seg| (seg[:index_a1] == index) && (seg[:index_a2] == (index - 1)) }
+        curr_overlap_segs.each do |overlap_seg|
+          line_a_x_top = line_segment_overlap_x_coord(y_check: overlap_seg[:overlap_y][:overlap_start], point_b1: point_a1, point_b2: point_a2)
+          line_a_x_bottom = line_segment_overlap_x_coord(y_check: overlap_seg[:overlap_y][:overlap_end], point_b1: point_a1, point_b2: point_a2)
+          line_b_x_top = line_segment_overlap_x_coord(y_check: overlap_seg[:overlap_y][:overlap_start], point_b1: overlap_seg[:point_b1], point_b2: overlap_seg[:point_b2])
+          line_b_x_bottom = line_segment_overlap_x_coord(y_check: overlap_seg[:overlap_y][:overlap_end], point_b1: overlap_seg[:point_b1], point_b2: overlap_seg[:point_b2])
+          x_distance_top = line_a_x_top - line_b_x_top
+          x_distance_bottom = line_a_x_bottom - line_b_x_bottom
+          linea_overlap = {
+            dx_top: x_distance_top,
+            dx_bottom: x_distance_bottom,
+            overlap: overlap_seg
+          }
+          linea_overlaps << linea_overlap
         end
+
         # This sorts through the overlapping downward pointing line segments corresponding to the current upward pointing
         # line a.  The overlapping downward pointing line segments closest to the current upward pointing line segment
         # are kept.  The other are discarded.  Unique overlapping line segments are kept as well.  There should only be
         # unuique overlapping line segments or overlapping line segments that precisely match one another because of
         # the 'subdivide_overlaps' method which this method is supposed to work with.
-        for j in 0..(linea_overlaps.length - 1)
-          overlap_found = false
-          for k in 0..(linea_overlaps.length - 1)
-            if linea_overlaps[j][:overlap] == linea_overlaps[k][:overlap]
-              next
-            elsif (linea_overlaps[j][:overlap][:overlap_y][:overlap_start] == linea_overlaps[k][:overlap][:overlap_y][:overlap_start]) && (linea_overlaps[j][:overlap][:overlap_y][:overlap_end] == linea_overlaps[k][:overlap][:overlap_y][:overlap_end])
-              overlap_found = true
-              if (linea_overlaps[j][:dx_top] < linea_overlaps[k][:dx_top]) && (linea_overlaps[j][:dx_bottom] < linea_overlaps[k][:dx_bottom])
-                closest_overlaps << linea_overlaps[j][:overlap]
-              end
-            end
-          end
-          if overlap_found == false
-            closest_overlaps << linea_overlaps[j][:overlap]
+        linea_overlaps.each do |line_a_overlap|
+          overlaps = linea_overlaps.select { |seg| seg[:overlap][:overlap_y] == line_a_overlap[:overlap][:overlap_y]}
+          if overlaps.size > 1
+            redundant_overlap = closest_overlaps.select { |dup_seg| dup_seg[:overlap_y] == overlaps[0][:overlap][:overlap_y] }
+            closest_overlaps << (overlaps.min_by { |dup_seg| dup_seg[:dx_top] })[:overlap] if redundant_overlap.empty?
+          elsif overlaps.size == 1
+            closest_overlaps << overlaps[0][:overlap]
           end
         end
+
         # This combines the line segments that belong together.  These were broken apart because of the
         # 'subdivide_overlaps' method.
         overlap_exts = [closest_overlaps[0]]
