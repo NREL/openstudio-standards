@@ -170,7 +170,8 @@ class BTAPDatapoint
         @run_dir = File.join(@dp_temp_folder, 'run_dir')
         puts "running simulation in #{@run_dir}"
         @standard.model_run_simulation_and_log_errors(model, @run_dir)
-
+        #Check if sql file was create.. if not we can't get much output.
+        raise('no sql file found,simulation probably could not start due to error...see error logs.') if model.sqlFile.empty?
         # Create qaqc file and save it.
         @qaqc = @standard.init_qaqc(model)
         command = "SELECT Value

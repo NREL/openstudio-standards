@@ -768,9 +768,8 @@ class NECB2011
 
       # economizer
       air_loop_info[:economizer] = {}
-      air_loop_info[:economizer][:name] = air_loop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.name.get
-      air_loop_info[:economizer][:control_type] = air_loop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.getEconomizerControlType
-
+      air_loop_info[:economizer][:name] = air_loop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.name.get unless air_loop.airLoopHVACOutdoorAirSystem.empty? or air_loop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.name.empty?
+      air_loop_info[:economizer][:control_type] = air_loop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.getEconomizerControlType unless air_loop.airLoopHVACOutdoorAirSystem.empty?
       # DX cooling coils
       air_loop_info[:cooling_coils] = {}
       air_loop_info[:cooling_coils][:dx_single_speed] = []
