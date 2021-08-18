@@ -1095,7 +1095,7 @@ class Standard
       sensor_1.setIlluminanceSetpoint(daylight_stpt_lux)
       sensor_1.setLightingControlType(space_daylighting_control_type(space))
       sensor_1.setNumberofSteppedControlSteps(3) unless space_daylighting_control_type(space) != 'Stepped' # all sensors 3-step per design
-      sensor_1.setMinimumInputPowerFractionforContinuousDimmingControl(space_daylighting_minimum_input_power(space))
+      sensor_1.setMinimumInputPowerFractionforContinuousDimmingControl(space_daylighting_minimum_input_power_fraction(space))
       sensor_1.setMinimumLightOutputFractionforContinuousDimmingControl(0.2)
       sensor_1.setProbabilityLightingwillbeResetWhenNeededinManualSteppedControl(1.0)
       sensor_1.setMaximumAllowableDiscomfortGlareIndex(22.0)
@@ -1137,7 +1137,7 @@ class Standard
       sensor_2.setIlluminanceSetpoint(daylight_stpt_lux)
       sensor_2.setLightingControlType(space_daylighting_control_type(space))
       sensor_2.setNumberofSteppedControlSteps(3) unless space_daylighting_control_type(space) != 'Stepped' # all sensors 3-step per design
-      sensor_2.setMinimumInputPowerFractionforContinuousDimmingControl(space_daylighting_minimum_input_power(space))
+      sensor_2.setMinimumInputPowerFractionforContinuousDimmingControl(space_daylighting_minimum_input_power_fraction(space))
       sensor_2.setMinimumLightOutputFractionforContinuousDimmingControl(0.2)
       sensor_2.setProbabilityLightingwillbeResetWhenNeededinManualSteppedControl(1.0)
       sensor_2.setMaximumAllowableDiscomfortGlareIndex(22.0)
