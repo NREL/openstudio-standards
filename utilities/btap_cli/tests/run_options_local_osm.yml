@@ -1,8 +1,9 @@
 :adv_dx_units: NECB_Default
 :analysis_id: c3ae0124-f685-46a1-8798-433713d702fc
 :analysis_name: test_analysis_para
+:algorithm_type: osm_batch
 :boiler_eff: NECB_Default
-:building_type: LocalFullServiceRestaurant
+:building_type: LocalCompleteModel
 :chiller_type: NECB_Default
 :compute_environment: local
 :datapoint_id: b7603ab9-6597-4ef0-830f-afbe65820746

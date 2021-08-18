@@ -10,7 +10,7 @@ class BTAP_CLI_Test < Minitest::Test
     FileUtils.rm_rf(output_folder) if Dir.exist?(output_folder)
     FileUtils.mkdir_p(input_folder)
     FileUtils.cp(File.join(__dir__, 'run_options_local_osm.yml'), File.join(input_folder, 'run_options.yml'))
-    FileUtils.cp(File.join(__dir__, 'LocalFullServiceRestaurant.osm'), File.join(input_folder, 'LocalFullServiceRestaurant.osm'))
+    FileUtils.cp(File.join(__dir__, 'LocalCompleteModel.osm'), File.join(input_folder, 'LocalCompleteModel.osm'))
     BTAPDatapoint.new(input_folder: input_folder, output_folder: output_folder, input_folder_cache: File.join(__dir__, 'input_cache'))
   end
 end
