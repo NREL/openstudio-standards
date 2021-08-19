@@ -3953,7 +3953,7 @@
       "high_bay_lighting_schedule": null,
       "specialty_lighting_schedule": null,
       "exit_lighting_schedule": null,
-      "target_illuminance_setpoint": null,
+      "target_illuminance_setpoint": 323.0,
       "psa_nongeometry_fraction": null,
       "ssa_nongeometry_fraction": null,
       "notes": null,
