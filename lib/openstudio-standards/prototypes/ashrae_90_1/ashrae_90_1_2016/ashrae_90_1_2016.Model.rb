@@ -278,7 +278,7 @@ class ASHRAE9012016 < ASHRAE901
     business_sensor.setName('Business_Sensor')
     business_sensor_name = business_sensor.name.to_s
 
-    zones.each do |zone|
+    zones.sort.each do |zone|
       spaces = zone.spaces
       if spaces.length != 1
         puts 'warning, there are more than one spaces in the zone, need to confirm the implementation'
