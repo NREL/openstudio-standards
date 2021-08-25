@@ -66,6 +66,7 @@ class Standard
       # Set the name
       coil_heating_gas.setName(new_comp_name)
       coil_heating_gas.setGasBurnerEfficiency(thermal_eff)
+      successfully_set_all_properties = true
     end
 
     return successfully_set_all_properties
