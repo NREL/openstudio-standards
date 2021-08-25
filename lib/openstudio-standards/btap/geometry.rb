@@ -3109,19 +3109,34 @@ module BTAP
         #    pointing lines or overlapping segments that exactly match one another.
         # 2. Goes through each upward pointing line and finds the closest overlapping downward pointing line segments (if
         #    these downward pointing segments belong together they are re-attached).
-        # 3. Makes quadrilaterals (or triangles as the case may be) out of each upward poinding line and the closest
+        # 3. Makes quadrilaterals (or triangles as the case may be) out of each upward pointing line and the closest
         #    downward pointing line segment.
         if overlap_segs.length > 1
           # Subdivide the overlapping segments found above into either unique overlaps between the upward and downward
           # pointing lines or overlapping segments that exactly match one another.
           overlap_segs = subdivide_overlaps(overlap_segs: overlap_segs)
+          # Remove redundant overlapping segments
+          recheck = true
+          while recheck
+            recheck = false
+            # Go through each overlapping segment and look for duplicate segments
+            overlap_segs.each_with_index do |ind_overlap_seg, seg_index|
+              # Find duplicate overlapping segments
+              redundant_segs = overlap_segs.select { |check_seg| check_seg == ind_overlap_seg}
+              # Remove the first one and then restart the while loop to recompile the seg_index
+              if redundant_segs.size > 1
+                overlap_segs.delete_at(seg_index)
+                recheck = true
+              end
+            end
+          end
           for i in 1..(surf_verts.length - 1)
             # Does the line point up?  No then ignore and go on to the next one.
             if surf_verts[i][:y] > surf_verts[i - 1][:y]
-              # Finds the closest overlapping downward pointing line segments that correspond to this updard pointing
+              # Finds the closest overlapping downward pointing line segments that correspond to this upward pointing
               # line (if some of these downward pointing segments belong together then re-attached them).
               closest_overlaps = get_overlapping_segments(overlap_segs: overlap_segs, index: i, point_a1: surf_verts[i], point_a2: surf_verts[i - 1])
-              closest_overlaps = closest_overlaps.sort_by {|closest_overlap| [closest_overlap[:overlap_y][:overlap_start]]}
+              closest_overlaps = closest_overlaps.sort_by {|closest_overlap| closest_overlap[:overlap_y][:overlap_start]}
               # Create the quadrilaterals out of the downward pointing line segments closest to the current upward
               # pointing line.
               for j in 0..(closest_overlaps.length - 1)
@@ -3129,17 +3144,17 @@ module BTAP
                 z_loc = surf_verts[closest_overlaps[j][:index_a1]][:z]
                 y_loc = closest_overlaps[j][:overlap_y][:overlap_start]
                 x_loc = line_segment_overlap_x_coord(y_check: y_loc, point_b1: surf_verts[closest_overlaps[j][:index_a1]], point_b2: surf_verts[closest_overlaps[j][:index_a2]])
-                new_surf << {x: x_loc, y: y_loc, z: z_loc}
+                new_surf << {x: x_loc.to_f.round(tol), y: y_loc.to_f.round(tol), z: z_loc.to_f.round(tol)}
                 x_loc = line_segment_overlap_x_coord(y_check: y_loc, point_b1: closest_overlaps[j][:point_b1], point_b2: closest_overlaps[j][:point_b2])
                 z_loc = surf_verts[closest_overlaps[j][:index_b2]][:z]
-                new_surf << {x: x_loc, y: y_loc, z: z_loc}
+                new_surf << {x: x_loc.to_f.round(tol), y: y_loc.to_f.round(tol), z: z_loc.to_f.round(tol)}
                 y_loc = closest_overlaps[j][:overlap_y][:overlap_end]
                 x_loc = line_segment_overlap_x_coord(y_check: y_loc, point_b1: closest_overlaps[j][:point_b1], point_b2: closest_overlaps[j][:point_b2])
                 z_loc = surf_verts[closest_overlaps[j][:index_b1]][:z]
-                new_surf << {x: x_loc, y: y_loc, z: z_loc}
+                new_surf << {x: x_loc.to_f.round(tol), y: y_loc.to_f.round(tol), z: z_loc.to_f.round(tol)}
                 x_loc = line_segment_overlap_x_coord(y_check: y_loc, point_b1: surf_verts[closest_overlaps[j][:index_a1]], point_b2: surf_verts[closest_overlaps[j][:index_a2]])
                 z_loc = surf_verts[closest_overlaps[j][:index_a2]][:z]
-                new_surf << {x: x_loc, y: y_loc, z: z_loc}
+                new_surf << {x: x_loc.to_f.round(tol), y: y_loc.to_f.round(tol), z: z_loc.to_f.round(tol)}
                 # Check if this should be a triangle.
                 for k in 0..(new_surf.length - 1)
                   break_now = false
@@ -3214,43 +3229,37 @@ module BTAP
         # This goes through all the line segments and determines which correspond to the current upward pointing line
         # segment(line a).  It also determines the x coordinate distance between the top and bottom of the overlapping
         # portions of the line segments.
-        for j in 0..(overlap_segs.length - 1)
-          if (overlap_segs[j][:index_a1] == index) && (overlap_segs[j][:index_a2] == (index - 1))
-            linea_x_top = line_segment_overlap_x_coord(y_check: overlap_segs[j][:overlap_y][:overlap_start], point_b1: point_a1, point_b2: point_a2)
-            linea_x_bottom = line_segment_overlap_x_coord(y_check: overlap_segs[j][:overlap_y][:overlap_end], point_b1: point_a1, point_b2: point_a2)
-            lineb_x_top = line_segment_overlap_x_coord(y_check: overlap_segs[j][:overlap_y][:overlap_start], point_b1: overlap_segs[j][:point_b1], point_b2: overlap_segs[j][:point_b2])
-            lineb_x_bottom = line_segment_overlap_x_coord(y_check: overlap_segs[j][:overlap_y][:overlap_end], point_b1: overlap_segs[j][:point_b1], point_b2: overlap_segs[j][:point_b2])
-            x_distance_top = linea_x_top - lineb_x_top
-            x_distance_bottom = linea_x_bottom - lineb_x_bottom
-            linea_overlap = {
-                dx_top: x_distance_top,
-                dx_bottom: x_distance_bottom,
-                overlap: overlap_segs[j]
-            }
-            linea_overlaps << linea_overlap
-          end
+        curr_overlap_segs = overlap_segs.select { |seg| (seg[:index_a1] == index) && (seg[:index_a2] == (index - 1)) }
+        curr_overlap_segs.each do |overlap_seg|
+          line_a_x_top = line_segment_overlap_x_coord(y_check: overlap_seg[:overlap_y][:overlap_start], point_b1: point_a1, point_b2: point_a2)
+          line_a_x_bottom = line_segment_overlap_x_coord(y_check: overlap_seg[:overlap_y][:overlap_end], point_b1: point_a1, point_b2: point_a2)
+          line_b_x_top = line_segment_overlap_x_coord(y_check: overlap_seg[:overlap_y][:overlap_start], point_b1: overlap_seg[:point_b1], point_b2: overlap_seg[:point_b2])
+          line_b_x_bottom = line_segment_overlap_x_coord(y_check: overlap_seg[:overlap_y][:overlap_end], point_b1: overlap_seg[:point_b1], point_b2: overlap_seg[:point_b2])
+          x_distance_top = line_a_x_top - line_b_x_top
+          x_distance_bottom = line_a_x_bottom - line_b_x_bottom
+          linea_overlap = {
+            dx_top: x_distance_top,
+            dx_bottom: x_distance_bottom,
+            overlap: overlap_seg
+          }
+          linea_overlaps << linea_overlap
         end
+
         # This sorts through the overlapping downward pointing line segments corresponding to the current upward pointing
         # line a.  The overlapping downward pointing line segments closest to the current upward pointing line segment
         # are kept.  The other are discarded.  Unique overlapping line segments are kept as well.  There should only be
         # unuique overlapping line segments or overlapping line segments that precisely match one another because of
         # the 'subdivide_overlaps' method which this method is supposed to work with.
-        for j in 0..(linea_overlaps.length - 1)
-          overlap_found = false
-          for k in 0..(linea_overlaps.length - 1)
-            if linea_overlaps[j][:overlap] == linea_overlaps[k][:overlap]
-              next
-            elsif (linea_overlaps[j][:overlap][:overlap_y][:overlap_start] == linea_overlaps[k][:overlap][:overlap_y][:overlap_start]) && (linea_overlaps[j][:overlap][:overlap_y][:overlap_end] == linea_overlaps[k][:overlap][:overlap_y][:overlap_end])
-              overlap_found = true
-              if (linea_overlaps[j][:dx_top] < linea_overlaps[k][:dx_top]) && (linea_overlaps[j][:dx_bottom] < linea_overlaps[k][:dx_bottom])
-                closest_overlaps << linea_overlaps[j][:overlap]
-              end
-            end
-          end
-          if overlap_found == false
-            closest_overlaps << linea_overlaps[j][:overlap]
+        linea_overlaps.each do |line_a_overlap|
+          overlaps = linea_overlaps.select { |seg| seg[:overlap][:overlap_y] == line_a_overlap[:overlap][:overlap_y]}
+          if overlaps.size > 1
+            redundant_overlap = closest_overlaps.select { |dup_seg| dup_seg[:overlap_y] == overlaps[0][:overlap][:overlap_y] }
+            closest_overlaps << (overlaps.min_by { |dup_seg| dup_seg[:dx_top] })[:overlap] if redundant_overlap.empty?
+          elsif overlaps.size == 1
+            closest_overlaps << overlaps[0][:overlap]
           end
         end
+
         # This combines the line segments that belong together.  These were broken apart because of the
         # 'subdivide_overlaps' method.
         overlap_exts = [closest_overlaps[0]]
@@ -3316,13 +3325,13 @@ module BTAP
         # lines.
         while restart == true
           restart = false
-          overlap_segs.each do |overlap_seg|
+          overlap_segs.each_with_index do |overlap_seg, curr_seg_index|
             for j in 0..(overlap_segs.length - 1)
               # Skip this y projection if it is the same as that in overlap_seg
               if overlap_seg == overlap_segs[j]
                 next
               end
-              # Check to see if the y projection of line a overlaps with the y prjoection of line b
+              # Check to see if the y projection of line a overlaps with the y projection of line b
               overlap_segs_overlap = line_segment_overlap_y?(point_a1: overlap_seg[:overlap_y][:overlap_start], point_a2: overlap_seg[:overlap_y][:overlap_end], point_b1: overlap_segs[j][:overlap_y][:overlap_end], point_b2: overlap_segs[j][:overlap_y][:overlap_start])
               # If the y projections of the two lines overlap then the components of overlap_segs_overlap should not be
               # nil.
@@ -3368,7 +3377,7 @@ module BTAP
                         overlap_y: overlap_bottom_over
                     }
                     # delete the existing y projection overlaps and replace it with the ones we just made.
-                    overlap_segs.delete(overlap_seg)
+                    overlap_segs.delete_at(curr_seg_index)
                     overlap_segs << overlap_top
                     overlap_segs << overlap_bottom
                   elsif overlap_seg[:overlap_y][:overlap_end] == overlap_segs[j][:overlap_y][:overlap_end]
@@ -3397,7 +3406,7 @@ module BTAP
                         overlap_y: overlap_segs_overlap
                     }
                     # delete the existing y projection overlaps and replace it with the ones we just made.
-                    overlap_segs.delete(overlap_seg)
+                    overlap_segs.delete_at(curr_seg_index)
                     overlap_segs << overlap_top
                     overlap_segs << overlap_bottom
                   elsif (overlap_seg[:overlap_y][:overlap_start] > overlap_segs[j][:overlap_y][:overlap_start]) && (overlap_seg[:overlap_y][:overlap_end] < overlap_segs[j][:overlap_y][:overlap_end])
@@ -3439,7 +3448,7 @@ module BTAP
                         overlap_y: overlap_bottom_over
                     }
                     # delete the existing y projection overlaps and replace it with the ones we just made.
-                    overlap_segs.delete(overlap_seg)
+                    overlap_segs.delete_at(curr_seg_index)
                     overlap_segs << overlap_top
                     overlap_segs << overlap_mid
                     overlap_segs << overlap_bottom
@@ -3480,7 +3489,7 @@ module BTAP
                         overlap_y: overlap_bottom_over
                     }
                     # delete the existing y projection overlaps and replace it with the ones we just made.
-                    overlap_segs.delete(overlap_segs[j])
+                    overlap_segs.delete_at(j)
                     overlap_segs << overlap_top
                     overlap_segs << overlap_bottom
                   elsif overlap_seg[:overlap_y][:overlap_end] == overlap_segs[j][:overlap_y][:overlap_end]
@@ -3509,7 +3518,7 @@ module BTAP
                         overlap_y: overlap_segs_overlap
                     }
                     # delete the existing y projection overlaps and replace it with the ones we just made.
-                    overlap_segs.delete(overlap_segs[j])
+                    overlap_segs.delete_at(j)
                     overlap_segs << overlap_top
                     overlap_segs << overlap_bottom
                   elsif overlap_seg[:overlap_y][:overlap_start] < overlap_segs[j][:overlap_y][:overlap_start] && overlap_seg[:overlap_y][:overlap_end] > overlap_segs[j][:overlap_y][:overlap_end]
@@ -3551,7 +3560,7 @@ module BTAP
                         overlap_y: overlap_bottom_over
                     }
                     # delete the existing y projection overlaps and replace it with the ones we just made.
-                    overlap_segs.delete(overlap_segs[j])
+                    overlap_segs.delete_at(j)
                     overlap_segs << overlap_top
                     overlap_segs << overlap_mid
                     overlap_segs << overlap_bottom
@@ -3560,7 +3569,7 @@ module BTAP
                   break
                   # if overlap_seg covers the top of overlap_segs[j] then break overlap_seg into a top and an overlap portion
                   # ond break overlap_segs[j] into an overlap portion and a bottom portion.
-                elsif (overlap_seg[:overlap_y][:overlap_start] >= overlap_segs[j][:overlap_y][:overlap_start]) && (overlap_seg[:overlap_end] <= overlap_segs[j][:overlap_start]) && (overlap_seg[:overlap_y][:overlap_end] > overlap_segs[j][:overlap_y][:overlap_end])
+                elsif (overlap_seg[:overlap_y][:overlap_start] >= overlap_segs[j][:overlap_y][:overlap_start]) && (overlap_seg[:overlap_y][:overlap_end] <= overlap_segs[j][:overlap_y][:overlap_start]) && (overlap_seg[:overlap_y][:overlap_end] > overlap_segs[j][:overlap_y][:overlap_end])
                   overlap_top_over = {
                       overlap_start: overlap_seg[:overlap_y][:overlap_start],
                       overlap_end: overlap_segs_overlap[:overlap_start]
@@ -3606,8 +3615,13 @@ module BTAP
                       overlap_y: overlap_bottom_over
                   }
                   # delete the existing y projection overlaps and replace it with the ones we just made.
-                  overlap_segs.delete(overlap_seg)
-                  overlap_segs.delete(overlap_segs[j])
+                  if curr_seg_index > j
+                    overlap_segs.delete_at(curr_seg_index)
+                    overlap_segs.delete_at(j)
+                  else
+                    overlap_segs.delete_at(j)
+                    overlap_segs.delete_at(curr_seg_index)
+                  end
                   overlap_segs << overlap_top
                   overlap_segs << overlap_mid_seg
                   overlap_segs << overlap_mid_segs
@@ -3662,8 +3676,13 @@ module BTAP
                       overlap_y: overlap_bottom_over
                   }
                   # delete the existing y projection overlaps and replace it with the ones we just made.
-                  overlap_segs.delete(overlap_seg)
-                  overlap_segs.delete(overlap_seg[j])
+                  if curr_seg_index > j
+                    overlap_segs.delete_at(curr_seg_index)
+                    overlap_segs.delete_at(j)
+                  else
+                    overlap_segs.delete_at(j)
+                    overlap_segs.delete_at(curr_seg_index)
+                  end
                   overlap_segs << overlap_top
                   overlap_segs << overlap_mid_seg
                   overlap_segs << overlap_mid_segs
@@ -3762,6 +3781,34 @@ module BTAP
         new_surf_cent[:y] /= surf.length
         new_surf_cent[:z] /= surf.length
         return new_surf_cent
+      end
+
+      # This method calculates the surface area of a 2-D polygon from an array of OpenStudio vertices.  It ignores any z
+      # vertices.  This method assumes that the polygon is complete, has no holes, does not cross itself, and that the
+      # vertices are provided in counter-clockwise order.  This method is used in cases when you want to find the area
+      # of something before creating an OpenStudio surface/subsurface.
+      #
+      # Input arguments:
+      # vetices:  Array of openstudio vertices.
+      #
+      # Output:
+      # Area:  Float, area of polygot represented by the vertices.
+      def self.getSurfaceAreafromVertices(vertices:)
+        area = 0.0
+        numberVertices = vertices.size
+
+        # Check that a polygon is actually provided and not just a line or point.  Return 0 if the vertices are a line
+        # or point.
+        return 0.0 if numberVertices < 3
+
+        # Go through the vertices and get the cross product.  This adopted from:
+        # https://web.archive.org/web/20100405070507/http://valis.cs.uiuc.edu/~sariel/research/CG/compgeom/msg00831.html
+        vertices.each_with_index do |vertex, i|
+          j = (i + 1) % numberVertices
+          area += vertex.x.to_f * vertices[j].y.to_f
+          area -= vertex.y.to_f * vertices[j].x.to_f
+        end
+        return area
       end
     end #Module Surfaces
   end #module Geometry

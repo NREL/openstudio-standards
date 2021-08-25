@@ -414,6 +414,7 @@ class NECB2011 < Standard
   # This method cleans the model of any existing HVAC systems and applies any desired ratation or scaling to the model.
   def clean_and_scale_model(model:, rotation_degrees: nil, scale_x: nil, scale_y: nil, scale_z: nil)
     # clean model..
+    BTAP::Resources::Envelope::remove_all_envelope_information(model)
     model = remove_all_hvac(model)
     model.getThermalZones.sort.each { |zone| zone.setUseIdealAirLoads(true) }
     model.getZoneHVACPackagedTerminalAirConditioners.each(&:remove)
