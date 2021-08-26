@@ -131,7 +131,7 @@ class NECB2020 < NECB2017
 	
 	# Get infiltration rate from standards and convert to value at 5 Pa applied to all above grade surfaces.
     infil_75Pa_all_surf = self.get_standards_constant('infiltration_rate_m3_per_s_per_m2')
-    infil_5Pa_above_grade = infil_75Pa_all_surf * ((5.0 / 75.0) ** (flow_exponent)) * totalAreaBuildingEnvelope / totalAboveGradeArea
+    infil_5Pa_above_grade = infil_75Pa_all_surf * ((5.0 / 75.0) ** (0.6)) * totalAreaBuildingEnvelope / totalAboveGradeArea
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Space', "For #{space.name}, adj infil = #{infil_5Pa_above_grade.round(5)} m^3/s*m^2.")
 
     # Get any infiltration schedule already assigned to this space or its space type
