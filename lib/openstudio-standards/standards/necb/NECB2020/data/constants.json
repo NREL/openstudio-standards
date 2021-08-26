@@ -5,9 +5,9 @@
       "refs": [
         "PCF 1414"
       ],
-      "value": 0.00029,
+      "value": 0.0015,
       "units": "m3/s/m2",
-      "notes": "1.5 L/s/m2 at 75 Pa converted to 5 Pa assuming all surfaces above grade."
+      "notes": "Air tightness at 75 Pa as would be measured in a test (i.e. normalised by entire building air barrier area). This is converted to apply to the above grade surfaces only as per the code."
     }
   }
 }
