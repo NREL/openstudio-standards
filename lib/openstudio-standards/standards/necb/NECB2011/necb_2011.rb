@@ -422,6 +422,12 @@ class NECB2011 < Standard
     model.getWaterUseEquipmentDefinitions.each(&:remove)
     model.getWaterUseEquipments.each(&:remove)
     model.getWaterUseConnectionss.each(&:remove)
+    model.getPumpConstantSpeeds.each(&:remove)
+    model.getPumpVariableSpeeds.each(&:remove)
+    model.getBoilerHotWaters.each(&:remove)
+    model.getBoilerSteams.each(&:remove)
+    model.getPlantLoops.each(&:remove)
+    model.getSchedules.each(&:remove)
 
     # Rotate to model if requested
     rotation_degrees = convert_arg_to_f(variable: rotation_degrees, default: 0.0)

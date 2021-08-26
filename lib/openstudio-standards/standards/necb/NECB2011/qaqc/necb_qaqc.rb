@@ -759,8 +759,13 @@ class NECB2011
         else
           if max_air_flow_info.include? air_loop_info[:supply_fan][:name].to_s.upcase.to_s
             air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Max Air Flow Rate' AND Units='m3/s' AND RowName='#{air_loop_info[:supply_fan][:name].upcase}' ").get
-            air_loop_info[:supply_fan][:rated_electric_power_w] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Rated Electric Power' AND Units='W' AND RowName='#{air_loop_info[:supply_fan][:name].upcase}' ").get
-          else
+            air_loop_info[:supply_fan][:rated_electric_power_w] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Rated Electric Power' AND Units='W' AND RowName='#{air_loop_info[:supply_fan][:name].upcase}' ")
+            # Version 3.2.0 has renamed  rated electric_power  to rated electricity rate
+            if air_loop_info[:supply_fan][:rated_electric_power_w].empty?
+              air_loop_info[:supply_fan][:rated_electric_power_w] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Rated Electricity Rate' AND Units='W' AND RowName='#{air_loop_info[:supply_fan][:name].upcase}' ")
+            end
+            air_loop_info[:supply_fan][:rated_electric_power_w] = air_loop_info[:supply_fan][:rated_electric_power_w].get
+            else
             error_warning << "#{air_loop_info[:supply_fan][:name]} does not exist in sql file WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Max Air Flow Rate' AND Units='m3/s'"
           end
         end
