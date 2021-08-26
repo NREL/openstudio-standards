@@ -72,9 +72,11 @@ class Standard
     return successfully_set_all_properties
   end
 
-  # Find capacity in W
+  # Retrieves the capacity of an OpenStudio::Model::CoilHeatingGas in watts
   #
-  # @return [Double] capacity in W
+  # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] the gas heating coil
+  # @return [Double, false] a double representing the capacity of the CoilHeatingGas object in watts. If unsuccessful in
+  #   determining the capacity, this function returns false.
   def coil_heating_gas_find_capacity(coil_heating_gas)
     capacity_w = nil
     if coil_heating_gas.nominalCapacity.is_initialized
