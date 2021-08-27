@@ -18,5 +18,6 @@ BTAPDatapoint.new(input_folder: @options[:input_folder],
                   output_folder: @options[:output_folder],
                   input_folder_cache: File.join(__dir__, 'input_cache'))
 
+
 # Example command using s3 urls for input/output
 # bundle exec ruby utilities/btap_cli/btap_cli.rb --input_path 's3://834599497928/test_analysis_new/test_analysis_id/input/02ade4c9-5c11-437b-9664-b28a8d5d9efb' --output_path 's3://834599497928/test_analysis_new/test_analysis_id/output/'

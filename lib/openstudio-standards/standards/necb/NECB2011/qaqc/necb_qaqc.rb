@@ -315,7 +315,7 @@ class NECB2011
       qaqc[:economics][:"#{neb_fuel}_neb_cost"] = fuel_consumption_gj * neb_fuel_cost.to_f
       qaqc[:economics][:"#{neb_fuel}_neb_cost_per_m2"] = qaqc[:economics][:"#{neb_fuel}_neb_cost"] / qaqc[:building][:conditioned_floor_area_m2] unless model.building.get.conditionedFloorArea.empty?
       qaqc[:economics][:total_neb_cost] += qaqc[:economics][:"#{neb_fuel}_neb_cost"]
-      qaqc[:economics][:total_neb_cost_per_m2] += qaqc[:economics][:"#{neb_fuel}_neb_cost_per_m2"]
+      qaqc[:economics][:total_neb_cost_per_m2] += qaqc[:economics][:"#{neb_fuel}_neb_cost_per_m2"] || 0.0
     end
 
     # Fuel cost based local utility rates
@@ -627,7 +627,7 @@ class NECB2011
           end
         end
 
-        spaceinfo[:occ_per_m2] = space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.get.round(3) unless space.spaceType.get.people[0].nil?
+        spaceinfo[:occ_per_m2] = space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.get.round(3) unless space.spaceType.get.people[0].nil? or space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.empty?
         if space.spaceType.get.lights[0].nil?
           error_warning << "space.spaceType.get.lights[0] is nil for Space:[#{space.name.get}] Space Type:[#{spaceinfo[:space_type_name]}]"
         else
@@ -759,8 +759,13 @@ class NECB2011
         else
           if max_air_flow_info.include? air_loop_info[:supply_fan][:name].to_s.upcase.to_s
             air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Max Air Flow Rate' AND Units='m3/s' AND RowName='#{air_loop_info[:supply_fan][:name].upcase}' ").get
-            air_loop_info[:supply_fan][:rated_electric_power_w] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Rated Electric Power' AND Units='W' AND RowName='#{air_loop_info[:supply_fan][:name].upcase}' ").get
-          else
+            air_loop_info[:supply_fan][:rated_electric_power_w] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Rated Electric Power' AND Units='W' AND RowName='#{air_loop_info[:supply_fan][:name].upcase}' ")
+            # Version 3.2.0 has renamed  rated electric_power  to rated electricity rate
+            if air_loop_info[:supply_fan][:rated_electric_power_w].empty?
+              air_loop_info[:supply_fan][:rated_electric_power_w] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Rated Electricity Rate' AND Units='W' AND RowName='#{air_loop_info[:supply_fan][:name].upcase}' ")
+            end
+            air_loop_info[:supply_fan][:rated_electric_power_w] = air_loop_info[:supply_fan][:rated_electric_power_w].get
+            else
             error_warning << "#{air_loop_info[:supply_fan][:name]} does not exist in sql file WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Max Air Flow Rate' AND Units='m3/s'"
           end
         end
@@ -768,9 +773,8 @@ class NECB2011
 
       # economizer
       air_loop_info[:economizer] = {}
-      air_loop_info[:economizer][:name] = air_loop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.name.get
-      air_loop_info[:economizer][:control_type] = air_loop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.getEconomizerControlType
-
+      air_loop_info[:economizer][:name] = air_loop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.name.get unless air_loop.airLoopHVACOutdoorAirSystem.empty? or air_loop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.name.empty?
+      air_loop_info[:economizer][:control_type] = air_loop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.getEconomizerControlType unless air_loop.airLoopHVACOutdoorAirSystem.empty?
       # DX cooling coils
       air_loop_info[:cooling_coils] = {}
       air_loop_info[:cooling_coils][:dx_single_speed] = []
@@ -974,15 +978,18 @@ class NECB2011
                                                          qaqc[:envelope][:outdoor_floors_area_m2] +
                                                          qaqc[:envelope][:ground_floors_area_m2]
     # TEDI
-    qaqc[:code_metrics][:building_tedi_gj_per_m2] = (qaqc[:end_uses]['heating_gj'] + qaqc[:end_uses]['cooling_gj']
-                                                    ) / qaqc[:building][:conditioned_floor_area_m2]
-    # Mech TEDI?
-    qaqc[:code_metrics][:building_medi_gj_per_m2] = (qaqc[:end_uses]['fans_gj'] +
-        qaqc[:end_uses]['pumps_gj'] +
-        qaqc[:end_uses]['heat_rejection_gj'] +
-        qaqc[:end_uses]['humidification_gj'] +
-        qaqc[:end_uses]['heat_recovery_gj']
-                                                    ) / qaqc[:building][:conditioned_floor_area_m2]
+    unless qaqc[:building][:conditioned_floor_area_m2].nil?
+      qaqc[:code_metrics][:building_tedi_gj_per_m2] = (qaqc[:end_uses]['heating_gj'] + qaqc[:end_uses]['cooling_gj']
+                                                      ) / qaqc[:building][:conditioned_floor_area_m2]
+      # Mech TEDI?
+      qaqc[:code_metrics][:building_medi_gj_per_m2] = (qaqc[:end_uses]['fans_gj'] +
+          qaqc[:end_uses]['pumps_gj'] +
+          qaqc[:end_uses]['heat_rejection_gj'] +
+          qaqc[:end_uses]['humidification_gj'] +
+          qaqc[:end_uses]['heat_recovery_gj']
+      ) / qaqc[:building][:conditioned_floor_area_m2]
+    end
+
 
     return qaqc
   end

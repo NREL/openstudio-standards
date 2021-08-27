@@ -726,16 +726,18 @@ end
 def get_total_nominal_capacity (model)
   total_nominal_capacity = 0
   model.getSpaces.sort.each do |space|
-    zone_name = space.thermalZone.get.name.get.upcase
-    area = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='InputVerificationandResultsSummary' AND ReportForString='Entire Facility' AND TableName='Zone Summary' AND ColumnName='Area' AND RowName='#{zone_name}'")
-    area = validate_optional(area, model, -1)
-    multiplier = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='InputVerificationandResultsSummary' AND ReportForString='Entire Facility' AND TableName='Zone Summary' AND ColumnName='Multipliers' AND RowName='#{zone_name}'")
-    multiplier = validate_optional(multiplier, model, -1)
-    area_per_person = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='InputVerificationandResultsSummary' AND ReportForString='Entire Facility' AND TableName='Zone Summary' AND ColumnName='People' AND RowName='#{zone_name}'")
-    area_per_person = validate_optional(area_per_person, model, -1)
-    next if area_per_person == 0
-    puts "area: #{area}  multiplier: #{multiplier}   area_per_person: #{area_per_person}"
-    total_nominal_capacity += area*multiplier/area_per_person
+    unless space.thermalZone.empty?
+      zone_name = space.thermalZone.get.name.get.upcase
+      area = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='InputVerificationandResultsSummary' AND ReportForString='Entire Facility' AND TableName='Zone Summary' AND ColumnName='Area' AND RowName='#{zone_name}'")
+      area = validate_optional(area, model, -1)
+      multiplier = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='InputVerificationandResultsSummary' AND ReportForString='Entire Facility' AND TableName='Zone Summary' AND ColumnName='Multipliers' AND RowName='#{zone_name}'")
+      multiplier = validate_optional(multiplier, model, -1)
+      area_per_person = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='InputVerificationandResultsSummary' AND ReportForString='Entire Facility' AND TableName='Zone Summary' AND ColumnName='People' AND RowName='#{zone_name}'")
+      area_per_person = validate_optional(area_per_person, model, -1)
+      next if area_per_person == 0
+      puts "area: #{area}  multiplier: #{multiplier}   area_per_person: #{area_per_person}"
+      total_nominal_capacity += area*multiplier/area_per_person
+    end
   end
   return total_nominal_capacity
 end
