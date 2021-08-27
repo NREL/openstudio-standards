@@ -1299,6 +1299,7 @@ class BTAPData
     # default to zero to start.
     ['energy_eui_fans_gj_per_m_sq',
      'energy_eui_heating_gj_per_m_sq',
+     'energy_eui_cooling_gj_per_m_sq',
      'energy_eui_interior equipment_gj_per_m_sq',
      'energy_eui_natural_gas_gj_per_m_sq',
      'energy_eui_pumps_gj_per_m_sq',
