@@ -35,7 +35,7 @@ class Standard
     thermal_eff = nil
 
     # If specified as thermal efficiency, this takes precedent
-    if not furnace_props['minimum_thermal_efficiency'].nil?
+    if !furnace_props['minimum_thermal_efficiency'].nil?
       thermal_eff = furnace_props['minimum_thermal_efficiency']
       new_comp_name = "#{coil_heating_gas.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{thermal_eff} Thermal Eff"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingGas', "For #{template}: #{coil_heating_gas.name}: = #{capacity_kbtu_per_hr.round}kBtu/hr; Thermal Efficiency = #{thermal_eff}")
