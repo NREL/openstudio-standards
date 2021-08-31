@@ -1227,6 +1227,40 @@ Standard.class_eval do
     end
   end
 
+  def model_add_guestroom_vent_sch(model, building_type)
+    # Guestrooms are currently only included in the small and large hotel prototypes
+    return true unless (building_type == 'LargeHotel') || (building_type == 'SmallHotel')
+
+    # Guestrooms ventilation schedules are only added to 2019 TODO: JXL check to confirm whether to change baselines.
+    return true unless (template == '90.1-2016') || (template == '90.1-2019')
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Guestroom Ventilation Schedules')
+
+    # Extract thermostat schedule as the base for ventilation schedule
+    guestroom_thermostat = model.getThermostatSetpointDualSetpointByName('LargeHotel GuestRoom Thermostat').get
+    guestroom_htg_schrst = guestroom_thermostat.getHeatingSchedule.get
+    guestroom_clg_schrst = guestroom_thermostat.getCoolingSchedule.get
+
+    # intentionally no check so if anything is wrong, this will break
+    guestroom_htg_sch = guestroom_htg_schrst.to_ScheduleRuleset.get.defaultDaySchedule
+    guestroom_clg_sch = guestroom_clg_schrst.to_ScheduleRuleset.get.defaultDaySchedule
+
+    if guestroom_htg_sch.times != guestroom_clg_sch.times
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "#{building_type} Guestroom heating and cooling schedule has different setback times, will use htg for generating the ventilation binary schedule")
+    end
+
+    # Build ventilation binary schedule
+    htg_sch_values = guestroom_htg_sch.values
+    htg_sch_times = guestroom_htg_sch.times
+
+    vent_day_sch = guestroom_htg_sch.clone
+    #TODO: JXL WIP to add more below
+
+
+    # Set ventilation schedule
+
+  end
+
   # Adds occupancy sensors to certain space types per
   # the PNNL documentation.
   #

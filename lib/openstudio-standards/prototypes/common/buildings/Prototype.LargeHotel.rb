@@ -129,6 +129,9 @@ module LargeHotel
     # Guestroom vacancy controls
     model_add_guestroom_vacancy_controls(model, 'LargeHotel')
 
+    # Guestroom ventilation availability schedule setup
+    model_add_guestroom_vent_sch(model, 'LargeHotel')
+
     return true
   end
 
