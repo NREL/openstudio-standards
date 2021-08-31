@@ -10,9 +10,9 @@ class NECB2011 < Standard
 
   # This is a helper method to convert arguments that may support 'NECB_Default, and nils to convert to float'
   def convert_arg_to_f(variable:, default:)
-    return variable if variable.instance_of?(Numeric)
+    return variable if variable.kind_of?(Numeric)
     return default if variable.nil? || (variable == 'NECB_Default')
-    return unless variable.instance_of?(String)
+    return unless variable.kind_of?(String)
 
     variable = variable.strip
     return variable.to_f
@@ -429,6 +429,9 @@ class NECB2011 < Standard
     model.getPlantLoops.each(&:remove)
     model.getSchedules.each(&:remove)
 
+    scale_x = 1.0
+    scale_y = 1.0
+    scale_z = 1.0
     # Rotate to model if requested
     rotation_degrees = convert_arg_to_f(variable: rotation_degrees, default: 0.0)
     BTAP::Geometry.rotate_building(model: model, degrees: rotation_degrees) unless rotation_degrees == 0.0
