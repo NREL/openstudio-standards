@@ -2894,7 +2894,8 @@ class ECMS
     elsif airloop_economizer_type.downcase == "differentialdrybulb"
       economizer_type = 'DifferentialDryBulb'
     else
-      raise "The airloop economizer type #{airloop_economizer_type} was not recognized.  Please verify that the model uses either a DifferentialEnthalpy or DefferentialDryBulb economizer."
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.airLoopHVACOutdoorAirSystem', "The air loop economizer type #{airloop_economizer_type} is not recognized.  Please make sure that the economizer being applied by the ECM is either a DifferentialEnthalpy or DifferentialDryBulb type.  No economizer will be applied.")
+      return
     end
 
     model.getAirLoopHVACs.sort.each do |air_loop|
