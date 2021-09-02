@@ -2893,6 +2893,8 @@ class ECMS
       economizer_type = 'DifferentialEnthalpy'
     elsif airloop_economizer_type.downcase == "differentialdrybulb"
       economizer_type = 'DifferentialDryBulb'
+    else
+      raise "The airloop economizer type #{airloop_economizer_type} was not recognized.  Please verify that the model uses either a DifferentialEnthalpy or DefferentialDryBulb economizer."
     end
 
     model.getAirLoopHVACs.sort.each do |air_loop|
