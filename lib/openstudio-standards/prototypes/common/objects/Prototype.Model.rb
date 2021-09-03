@@ -1231,13 +1231,59 @@ Standard.class_eval do
     # Guestrooms are currently only included in the small and large hotel prototypes
     return true unless (building_type == 'LargeHotel') || (building_type == 'SmallHotel')
 
-    # Guestrooms ventilation schedules are only added to 2019 TODO: JXL check to confirm whether to change baselines.
+    # Guestrooms ventilation schedules are only added to 2019
     return true unless (template == '90.1-2016') || (template == '90.1-2019')
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Guestroom Ventilation Schedules')
 
+    # Define guestroom occupied maps
+    # List of all spaces that represent vacant rooms
+    guestroom_occupied_map = {
+      'LargeHotel' => [
+        'Room_1_Flr_3',
+        'Room_1_Flr_6',
+        'Room_2_Flr_3',
+        'Room_2_Flr_6',
+        'Room_3_Mult9_Flr_6',
+        'Room_4_Mult19_Flr_3',
+        'Room_5_Flr_3',
+        'Room_6_Flr_3'
+      ],
+      'SmallHotel' => [
+        'GuestRoom103',
+        'GuestRoom104',
+        'GuestRoom105',
+        'GuestRoom202_205',
+        'GuestRoom206_208',
+        'GuestRoom209_212',
+        'GuestRoom213',
+        'GuestRoom214',
+        'GuestRoom219',
+        'GuestRoom220_223',
+        'GuestRoom224',
+        'GuestRoom306_308',
+        'GuestRoom309_312',
+        'GuestRoom314',
+        'GuestRoom315_318',
+        'GuestRoom320_323',
+        'GuestRoom401',
+        'GuestRoom409_412',
+        'GuestRoom415_418',
+        'GuestRoom419',
+        'GuestRoom420_423',
+        'GuestRoom424',
+      ]
+    }
+
     # Extract thermostat schedule as the base for ventilation schedule
-    guestroom_thermostat = model.getThermostatSetpointDualSetpointByName('LargeHotel GuestRoom Thermostat').get
+    if building_type == 'LargeHotel'
+      thermostat_name = 'LargeHotel GuestRoom Thermostat'
+      air_terminals = model.getAirTerminalSingleDuctConstantVolumeNoReheats.sort
+    elsif building_type == 'SmallHotel'
+      thermostat_name = 'SmallHotel GuestRoom4Occ Thermostat'
+      air_terminals = model.getZoneHVACPackagedTerminalAirConditioners.sort
+    end
+    guestroom_thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
     guestroom_htg_schrst = guestroom_thermostat.getHeatingSchedule.get
     guestroom_clg_schrst = guestroom_thermostat.getCoolingSchedule.get
 
@@ -1253,12 +1299,43 @@ Standard.class_eval do
     htg_sch_values = guestroom_htg_sch.values
     htg_sch_times = guestroom_htg_sch.times
 
-    vent_day_sch = guestroom_htg_sch.clone
-    #TODO: JXL WIP to add more below
+    vent_schrst = OpenStudio::Model::ScheduleRuleset.new(model)
+    vent_schrst.setName("#{building_type}_GuestRoom_Vent_Ctrl_Sch")
+    # add design day values (1)
+    vent_winterdesignday_sch = OpenStudio::Model::ScheduleDay.new(model)
+    vent_winterdesignday_sch.setName("#{building_type}_GuestRoom_Vent_Ctrl_Sch Winter Design Day")
+    model_add_vals_to_sch(model, vent_winterdesignday_sch, 'Constant', [1])
+    vent_schrst.setSummerDesignDaySchedule(vent_winterdesignday_sch)
+    vent_summerdesignday_sch = OpenStudio::Model::ScheduleDay.new(model)
+    vent_summerdesignday_sch.setName("#{building_type}_GuestRoom_Vent_Ctrl_Sch Summer Design Day")
+    model_add_vals_to_sch(model, vent_summerdesignday_sch, 'Constant', [1])
+    vent_schrst.setWinterDesignDaySchedule(vent_summerdesignday_sch)
 
+    # add default ventilation schedule
+    vent_day_sch = vent_schrst.defaultDaySchedule
+    vent_day_sch.setName("#{building_type}_GuestRoom_Vent_Ctrl_Sch Default")
+    vent_day_binary_values = []
+    off_value = htg_sch_values.min
+    htg_sch_values.each do |value|
+      vent_day_binary_values << if value > off_value
+                                    1.0
+                                  else
+                                    0.0
+                                  end
+    end
+    vent_day_binary_values.each_with_index do |binary_value, i|
+      vent_day_sch.addValue(htg_sch_times[i], binary_value)
+    end
 
-    # Set ventilation schedule
-
+    # link vent schedule to guest room air terminals (seems to be all spaces with AirTerminalSingleDuctConstantVolumeNoReheat)
+    modified_zones = []
+    air_terminals.each do |airterminal| # seems all spaces having such air terminals are guest rooms
+      zone_name = airterminal.name.to_s.strip.split[0]
+      if guestroom_occupied_map[building_type].include? zone_name
+        airterminal.setAvailabilitySchedule(vent_schrst)
+        modified_zones << zone_name
+      end
+    end
   end
 
   # Adds occupancy sensors to certain space types per

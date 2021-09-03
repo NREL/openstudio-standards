@@ -51,6 +51,9 @@ module SmallHotel
     # Guestroom vacancy controls
     model_add_guestroom_vacancy_controls(model, 'SmallHotel')
 
+    # Guestroom ventilation availability schedule setup
+    model_add_guestroom_vent_sch(model, 'SmallHotel')
+
     return true
   end
 
