@@ -80,6 +80,7 @@ class BTAPDatapoint
     begin
       # set up basic model.
       # This dynamically creates a class by string using the factory method design pattern.
+      @options[:template] = 'NECB2011' if @options[:algorithm_type] == 'osm_batch'
       @standard = Standard.build(@options[:template])
 
       # This allows you to select the skeleton model from our built in starting points. You can add a custom file as
@@ -92,56 +93,69 @@ class BTAPDatapoint
 
         model = BTAP::FileIO.load_osm(osm_model_path)
       end
-      @standard.model_apply_standard(model: model,
-                                     epw_file: @options[:epw_file],
-                                     sizing_run_dir: File.join(@dp_temp_folder, 'sizing_folder'),
-                                     primary_heating_fuel: @options[:primary_heating_fuel],
-                                     dcv_type: @options[:dcv_type], # Four options: @options[: (1) 'NECB_Default', (2) 'No DCV', (3) 'Occupancy-based DCV' , (4) 'CO2-based DCV'
-                                     lights_type: @options[:lights_type], # Two options: @options[: (1) 'NECB_Default', (2) 'LED'
-                                     lights_scale: @options[:lights_scale],
-                                     daylighting_type: @options[:daylighting_type], # Two options: @options[: (1) 'NECB_Default', (2) 'add_daylighting_controls'
-                                     ecm_system_name: @options[:ecm_system_name],
-                                     erv_package: @options[:erv_package],
-                                     boiler_eff: @options[:boiler_eff],
-                                     # Inconsistent naming Todo Chris K.
-                                     unitary_cop: @options[:adv_dx_units],
-                                     furnace_eff: @options[:furnace_eff],
-                                     shw_eff: @options[:shw_eff],
-                                     ext_wall_cond: @options[:ext_wall_cond],
-                                     ext_floor_cond: @options[:ext_floor_cond],
-                                     ext_roof_cond: @options[:ext_roof_cond],
-                                     ground_wall_cond: @options[:ground_wall_cond],
-                                     ground_floor_cond: @options[:ground_floor_cond],
-                                     ground_roof_cond: @options[:ground_roof_cond],
-                                     door_construction_cond: @options[:door_construction_cond],
-                                     fixed_window_cond: @options[:fixed_window_cond],
-                                     glass_door_cond: @options[:glass_door_cond],
-                                     overhead_door_cond: @options[:overhead_door_cond],
-                                     skylight_cond: @options[:skylight_cond],
-                                     glass_door_solar_trans: @options[:glass_door_solar_trans],
-                                     fixed_wind_solar_trans: @options[:fixed_wind_solar_trans],
-                                     skylight_solar_trans: @options[:skylight_solar_trans],
-                                     fdwr_set: @options[:fdwr_set],
-                                     srr_set: @options[:srr_set],
-                                     rotation_degrees: @options[:rotation_degrees],
-                                     scale_x: @options[:scale_x],
-                                     scale_y: @options[:scale_y],
-                                     scale_z: @options[:scale_z],
-                                     pv_ground_type: @options[:pv_ground_type],
-                                     pv_ground_total_area_pv_panels_m2: @options[:pv_ground_total_area_pv_panels_m2],
-                                     pv_ground_tilt_angle: @options[:pv_ground_tilt_angle],
-                                     pv_ground_azimuth_angle: @options[:pv_ground_azimuth_angle],
-                                     pv_ground_module_description: @options[:pv_ground_module_description],
-                                     nv_type: @options[:nv_type],
-                                     nv_opening_fraction: @options[:nv_opening_fraction],
-                                     nv_temp_out_min: @options[:nv_temp_out_min],
-                                     nv_delta_temp_in_out: @options[:nv_delta_temp_in_out],
-                                     occupancy_loads_scale: @options[:occupancy_loads_scale],
-                                     electrical_loads_scale: @options[:electrical_loads_scale],
-                                     oa_scale: @options[:oa_scale],
-                                     infiltration_scale: @options[:infiltration_scale],
-                                     chiller_type: @options[:chiller_type],
-                                     output_variables: @options[:output_variables])
+      #If analysis type is osm_batch..do nothing to the osm files other than add temporal outputs and weather data.
+      if @options[:algorithm_type] == 'osm_batch'
+        @standard.set_output_variables(model: model, output_variables: @options[:output_variables])
+        @standard.set_output_meters(model: model, output_meters: @options[:output_meters])
+        climate_zone = 'NECB HDD Method'
+        model.getYearDescription.setDayofWeekforStartDay('Sunday')
+        @standard.model_add_design_days_and_weather_file(model, climate_zone, @options[:epw_file]) # Standards
+        @standard.model_add_ground_temperatures(model, nil, climate_zone)
+      else
+        # Otherwise modify osm input with options.
+        @standard.model_apply_standard(model: model,
+                                       epw_file: @options[:epw_file],
+                                       sizing_run_dir: File.join(@dp_temp_folder, 'sizing_folder'),
+                                       primary_heating_fuel: @options[:primary_heating_fuel],
+                                       dcv_type: @options[:dcv_type], # Four options: @options[: (1) 'NECB_Default', (2) 'No DCV', (3) 'Occupancy-based DCV' , (4) 'CO2-based DCV'
+                                       lights_type: @options[:lights_type], # Two options: @options[: (1) 'NECB_Default', (2) 'LED'
+                                       lights_scale: @options[:lights_scale],
+                                       daylighting_type: @options[:daylighting_type], # Two options: @options[: (1) 'NECB_Default', (2) 'add_daylighting_controls'
+                                       ecm_system_name: @options[:ecm_system_name],
+                                       erv_package: @options[:erv_package],
+                                       boiler_eff: @options[:boiler_eff],
+                                       # Inconsistent naming Todo Chris K.
+                                       unitary_cop: @options[:adv_dx_units],
+                                       furnace_eff: @options[:furnace_eff],
+                                       shw_eff: @options[:shw_eff],
+                                       ext_wall_cond: @options[:ext_wall_cond],
+                                       ext_floor_cond: @options[:ext_floor_cond],
+                                       ext_roof_cond: @options[:ext_roof_cond],
+                                       ground_wall_cond: @options[:ground_wall_cond],
+                                       ground_floor_cond: @options[:ground_floor_cond],
+                                       ground_roof_cond: @options[:ground_roof_cond],
+                                       door_construction_cond: @options[:door_construction_cond],
+                                       fixed_window_cond: @options[:fixed_window_cond],
+                                       glass_door_cond: @options[:glass_door_cond],
+                                       overhead_door_cond: @options[:overhead_door_cond],
+                                       skylight_cond: @options[:skylight_cond],
+                                       glass_door_solar_trans: @options[:glass_door_solar_trans],
+                                       fixed_wind_solar_trans: @options[:fixed_wind_solar_trans],
+                                       skylight_solar_trans: @options[:skylight_solar_trans],
+                                       fdwr_set: @options[:fdwr_set],
+                                       srr_set: @options[:srr_set],
+                                       rotation_degrees: @options[:rotation_degrees],
+                                       scale_x: @options[:scale_x],
+                                       scale_y: @options[:scale_y],
+                                       scale_z: @options[:scale_z],
+                                       pv_ground_type: @options[:pv_ground_type],
+                                       pv_ground_total_area_pv_panels_m2: @options[:pv_ground_total_area_pv_panels_m2],
+                                       pv_ground_tilt_angle: @options[:pv_ground_tilt_angle],
+                                       pv_ground_azimuth_angle: @options[:pv_ground_azimuth_angle],
+                                       pv_ground_module_description: @options[:pv_ground_module_description],
+                                       nv_type: @options[:nv_type],
+                                       nv_opening_fraction: @options[:nv_opening_fraction],
+                                       nv_temp_out_min: @options[:nv_temp_out_min],
+                                       nv_delta_temp_in_out: @options[:nv_delta_temp_in_out],
+                                       occupancy_loads_scale: @options[:occupancy_loads_scale],
+                                       electrical_loads_scale: @options[:electrical_loads_scale],
+                                       oa_scale: @options[:oa_scale],
+                                       infiltration_scale: @options[:infiltration_scale],
+                                       chiller_type: @options[:chiller_type],
+                                       output_variables: @options[:output_variables],
+                                       output_meters: @options[:output_meters],
+                                       airloop_economizer_type: @options[:airloop_economizer_type])
+      end
 
       # Save model to to disk.
       puts "saving model to #{File.join(@dp_temp_folder, 'output.osm')}"
@@ -152,7 +166,8 @@ class BTAPDatapoint
         @run_dir = File.join(@dp_temp_folder, 'run_dir')
         puts "running simulation in #{@run_dir}"
         @standard.model_run_simulation_and_log_errors(model, @run_dir)
-
+        #Check if sql file was create.. if not we can't get much output.
+        raise('no sql file found,simulation probably could not start due to error...see error logs.') if model.sqlFile.empty?
         # Create qaqc file and save it.
         @qaqc = @standard.init_qaqc(model)
         command = "SELECT Value
@@ -164,10 +179,12 @@ class BTAPDatapoint
                   AND ColumnName='Data'"
         value = model.sqlFile.get.execAndReturnFirstString(command)
         # make sure all the data are available
-        raise("Could not determine primary heating source from sql file #{@model.building.get.name.get}") if value.empty?
+        @qaqc[:building][:principal_heating_source] = 'unknown'
+        unless value.empty?
+          @qaqc[:building][:principal_heating_source] = value.get
+        end
 
-        @qaqc[:building][:principal_heating_source] = value.get
-        if value.get == 'Additional Fuel'
+        if @qaqc[:building][:principal_heating_source] == 'Additional Fuel'
           model.getPlantLoops.sort.each do |iplantloop|
             boilers = iplantloop.components.select { |icomponent| icomponent.to_BoilerHotWater.is_initialized }
             @qaqc[:building][:principal_heating_source] = 'FuelOilNo2' unless boilers.select { |boiler| boiler.to_BoilerHotWater.get.fuelType.to_s == 'FuelOilNo2' }.empty?
@@ -215,6 +232,9 @@ class BTAPDatapoint
 
         File.open(File.join(@dp_temp_folder, 'qaqc.json'), 'w') { |f| f.write(JSON.pretty_generate(@qaqc, allow_nan: true)) }
         puts "Wrote File qaqc.json in #{Dir.pwd} "
+
+        #output hourly data
+        self.output_hourly_data(model,@dp_temp_folder, @options[:datapoint_id])
       end
     rescue StandardError => bang
       puts "Error occured: #{bang}"
@@ -308,5 +328,77 @@ class BTAPDatapoint
     end
 
     return exit_code
+  end
+
+
+  def output_hourly_data(model, output_folder,datapoint_id)
+    osm_path = File.join(output_folder, "run_dir/in.osm")
+    sql_path = File.join(output_folder, "run_dir/run/eplusout.sql")
+    csv_output = File.join(output_folder, "hourly.csv")
+
+    hours_of_year = []
+    d = Time.new(2006, 1, 1, 1)
+    (0...8760).each do |increment|
+      hours_of_year << (d + (60 * 60) * increment).strftime('%Y-%m-%d %H:%M')
+    end
+
+
+    array_of_hashes = []
+
+
+#Find hourly outputs available for this datapoint.
+    query = "
+        SELECT ReportDataDictionaryIndex
+        FROM ReportDataDictionary
+        WHERE ReportingFrequency == 'Hourly'
+                                                       "
+# Get hourly data for each output.
+    model.sqlFile.get.execAndReturnVectorOfInt(query).get.each do |rdd_index|
+
+      #Get Name
+      query = "
+        SELECT Name
+        FROM ReportDataDictionary
+        WHERE ReportDataDictionaryIndex == #{rdd_index}
+      "
+      name = model.sqlFile.get.execAndReturnFirstString(query).get
+
+      #Get KeyValue
+      query = "
+        SELECT KeyValue
+        FROM ReportDataDictionary
+        WHERE ReportDataDictionaryIndex == #{rdd_index}
+      "
+      key_value = model.sqlFile.get.execAndReturnFirstString(query).get
+
+      #Get Units
+      query = "
+        SELECT Units
+        FROM ReportDataDictionary
+        WHERE ReportDataDictionaryIndex == #{rdd_index}
+      "
+      units = model.sqlFile.get.execAndReturnFirstString(query).get
+
+      #Get hourly data
+      query = "
+                    Select Value
+                    FROM ReportData
+                    WHERE
+                        ReportDataDictionaryIndex = #{rdd_index}
+      "
+      hourly_values = model.sqlFile.get.execAndReturnVectorOfDouble(query).get
+
+      hourly_hash = Hash[hours_of_year.zip(hourly_values)]
+
+      data_hash = {"datapoint_id": datapoint_id, "Name": name, "KeyValue": key_value, "Units": units}.merge(hourly_hash)
+      array_of_hashes << data_hash
+    end
+
+    CSV.open(csv_output, "wb") do |csv|
+      csv << array_of_hashes.first.keys # adds the attributes name on the first line
+      array_of_hashes.each do |hash|
+        csv << hash.values
+      end
+    end
   end
 end

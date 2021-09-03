@@ -145,6 +145,10 @@ class BTAPPRE1980
     oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
     oa_controller.autosizeMinimumOutdoorAirFlowRate
 
+    # Set mechanical ventilation controller outdoor air to ZoneSum (used to be defaulted to ZoneSum but now should be
+    # set explicitly)
+    oa_controller.controllerMechanicalVentilation.setSystemOutdoorAirMethod('ZoneSum')
+
     # oa_system
     oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
 

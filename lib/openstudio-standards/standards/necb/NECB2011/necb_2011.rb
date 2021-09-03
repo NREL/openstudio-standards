@@ -10,9 +10,9 @@ class NECB2011 < Standard
 
   # This is a helper method to convert arguments that may support 'NECB_Default, and nils to convert to float'
   def convert_arg_to_f(variable:, default:)
-    return variable if variable.instance_of?(Numeric)
+    return variable if variable.kind_of?(Numeric)
     return default if variable.nil? || (variable == 'NECB_Default')
-    return unless variable.instance_of?(String)
+    return unless variable.kind_of?(String)
 
     variable = variable.strip
     return variable.to_f
@@ -222,7 +222,10 @@ class NECB2011 < Standard
                                    electrical_loads_scale: nil,
                                    oa_scale: nil,
                                    infiltration_scale: nil,
-                                   output_variables: nil)
+                                   output_variables: nil,
+                                   output_meters: nil,
+                                   airloop_economizer_type: nil)
+
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 epw_file: epw_file,
@@ -272,7 +275,10 @@ class NECB2011 < Standard
                                 oa_scale: oa_scale,
                                 infiltration_scale: infiltration_scale,
                                 chiller_type: chiller_type, # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) e.g. 'VSD'
-                                output_variables: output_variables)
+                                output_variables: output_variables,
+                                output_meters: output_meters,
+                                airloop_economizer_type: airloop_economizer_type) # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
+
   end
 
   def load_building_type_from_library(building_type:)
@@ -335,7 +341,9 @@ class NECB2011 < Standard
                            electrical_loads_scale: nil,
                            oa_scale: nil,
                            infiltration_scale: nil,
-                           output_variables: nil)
+                           output_variables: nil,
+                           output_meters: nil,
+                           airloop_economizer_type: nil)
 
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
@@ -391,14 +399,18 @@ class NECB2011 < Standard
                                    pv_ground_tilt_angle: pv_ground_tilt_angle,
                                    pv_ground_azimuth_angle: pv_ground_azimuth_angle,
                                    pv_ground_module_description: pv_ground_module_description,
-                                   chiller_type: chiller_type)
-    set_output_variables(model: model, output_variables: output_variables)
+                                   chiller_type: chiller_type,
+                                   airloop_economizer_type: airloop_economizer_type)
+    self.set_output_variables(model: model, output_variables: output_variables)
+    self.set_output_meters(model: model, output_meters: output_meters)
+
     return model
   end
 
   # This method cleans the model of any existing HVAC systems and applies any desired ratation or scaling to the model.
   def clean_and_scale_model(model:, rotation_degrees: nil, scale_x: nil, scale_y: nil, scale_z: nil)
     # clean model..
+    BTAP::Resources::Envelope::remove_all_envelope_information(model)
     model = remove_all_hvac(model)
     model.getThermalZones.sort.each { |zone| zone.setUseIdealAirLoads(true) }
     model.getZoneHVACPackagedTerminalAirConditioners.each(&:remove)
@@ -410,7 +422,16 @@ class NECB2011 < Standard
     model.getWaterUseEquipmentDefinitions.each(&:remove)
     model.getWaterUseEquipments.each(&:remove)
     model.getWaterUseConnectionss.each(&:remove)
+    model.getPumpConstantSpeeds.each(&:remove)
+    model.getPumpVariableSpeeds.each(&:remove)
+    model.getBoilerHotWaters.each(&:remove)
+    model.getBoilerSteams.each(&:remove)
+    model.getPlantLoops.each(&:remove)
+    model.getSchedules.each(&:remove)
 
+    scale_x = 1.0
+    scale_y = 1.0
+    scale_z = 1.0
     # Rotate to model if requested
     rotation_degrees = convert_arg_to_f(variable: rotation_degrees, default: 0.0)
     BTAP::Geometry.rotate_building(model: model, degrees: rotation_degrees) unless rotation_degrees == 0.0
@@ -444,7 +465,8 @@ class NECB2011 < Standard
                                      pv_ground_tilt_angle:,
                                      pv_ground_azimuth_angle:,
                                      pv_ground_module_description:,
-                                     chiller_type: 'NECB_Default')
+                                     chiller_type: 'NECB_Default',
+                                     airloop_economizer_type: nil)
 
     # Create ECM object.
     ecm = ECMS.new
@@ -465,7 +487,6 @@ class NECB2011 < Standard
     sql_db_vars_map = apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
     # Apply System
     ecm.apply_system_efficiencies_ecm(model: model, ecm_system_name: ecm_system_name)
-
     # Apply ECM ERV charecteristics as required. Part 2 of above ECM.
     ecm.apply_erv_ecm_efficiency(model: model, erv_package: erv_package)
     # Apply DCV as required
@@ -482,6 +503,8 @@ class NECB2011 < Standard
     model_add_daylighting_controls(model) if daylighting_type == 'add_daylighting_controls'
     # Apply Chiller efficiency
     ecm.modify_chiller_efficiency(model: model, chiller_type: chiller_type)
+    # Apply airloop economizer
+    ecm.add_airloop_economizer(model: model, airloop_economizer_type: airloop_economizer_type)
 
     # -------Pump sizing required by some vintages----------------
     # Apply Pump power as required.
@@ -678,9 +701,9 @@ class NECB2011 < Standard
   # this method will determine the vintage of NECB spacetypes the model contains. It will return nil if it can't
   # determine it.
   def determine_spacetype_vintage(model)
-    # this code is the list of available vintages
-    space_type_vintage_list = ['NECB2011', 'NECB2015', 'NECB2017', 'BTAPPRE1980', 'BTAP1980TO2010']
-    # this reorders the list to do the current class first.
+    #this code is the list of available vintages
+    space_type_vintage_list = ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020', 'BTAPPRE1980', 'BTAP1980TO2010']
+    #this reorders the list to do the current class first.
     space_type_vintage_list.insert(0, space_type_vintage_list.delete(self.class.name))
     # Set the space_type
     space_type_vintage = nil
@@ -1745,18 +1768,47 @@ class NECB2011 < Standard
     return daylighted_under_skylight_area, skylight_area_weighted_vt_handle, skylight_area_sum
   end
 
-  def set_output_variables(model:, output_variables:)
-    unless output_variables.nil?
+  def set_output_variables(model:,output_variables:)
+    unless output_variables.nil? or output_variables.empty?
       output_variables.each do |output_variable|
         puts output_variable
         puts output_variable['frequency']
-        raise("Frequency is not valid. Must by \"hourly\" or \"timestep\" but got #{output_variable}.") unless ['timestep', 'hourly', 'daily', 'monthly', 'annual'].include?(output_variable['frequency'])
-
-        output = OpenStudio::Model::OutputVariable.new(output_variable['variable'], model)
+        raise("Frequency is not valid. Must by \"hourly\" or \"timestep\" but got #{output_variable}.") unless ["timestep","hourly",'daily','monthly','annual'].include?(output_variable['frequency'])
+        output = OpenStudio::Model::OutputVariable.new(output_variable['variable'],model)
         output.setKeyValue(output_variable['key'])
         output.setReportingFrequency(output_variable['frequency'])
       end
     end
     return model
   end
+
+  def set_output_meters(model:,output_meters:)
+    unless output_meters.nil? or output_meters.empty?
+      # remove existing output meters
+      existing_meters = model.getOutputMeters
+
+      # OpenStudio doesn't seemt to like two meters of the same name, even if they have different reporting frequencies.
+      output_meters.each do |new_meter|
+        #check if meter already exists
+        result = existing_meters.select { |e_m| e_m.name == new_meter['name'] }
+        puts("More and one output meter named #{new_meter['name']}") if result.size > 1
+        if result.size >= 1
+          existing_meter = result[0]
+          puts("A meter named #{new_meter['name']} already exists. One will not be added to the model.")
+          if existing_meter.reportingFrequency != new_meter['frequency']
+            existing_meter.setReportingFrequency(new_meter['frequency'])
+            puts("Changing reporting frequency of existing meter to #{new_meter['frequency']}.")
+          end
+        end
+        if result.size == 0
+          meter = OpenStudio::Model::OutputMeter.new(model)
+          meter.setName(new_meter['name'])
+          meter.setReportingFrequency(new_meter['frequency'])
+          puts("Adding meter for #{meter.name} reporting #{new_meter['frequency']}")
+        end
+      end
+    end
+    return model
+  end
+
 end

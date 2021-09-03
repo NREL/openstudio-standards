@@ -2651,7 +2651,7 @@ class ECMS
         search_criteria = {}
         search_criteria['name'] = unitary_cop_copy
         coil_name = coil.name.to_s
-        coil.setName(sql_db_vars_map[coil_name])
+        if sql_db_vars_map.has_key? coil_name then coil.setName(sql_db_vars_map[coil_name])  end
         if coil_type == 'SingleSpeed'
           capacity_w = coil_cooling_dx_single_speed_find_capacity(coil)
         elsif coil_type == 'MultiSpeed'
@@ -2677,7 +2677,7 @@ class ECMS
               unitary_cop['cool_cap_fflow'].nil? && unitary_cop['cool_eir_ft'].nil? && unitary_cop['cool_eir_fflow'].nil? && unitary_cop['cool_plf_fplr'].nil?
 
       # If the dx coil is on an air loop then update its cop and the performance curves when these are specified in the ecm data
-      if (coil_type == 'SingleSpeed' && coil.airLoopHVAC.is_initialized) ||
+      if (coil_type == 'SingleSpeed' && coil.airLoopHVAC.is_initialized && (!coil.name.to_s.include? "_ASHP")) ||
          (coil_type == 'MultiSpeed' && coil.containingHVACComponent.get.airLoopHVAC.is_initialized)
         cop = nil
         if unitary_cop['minimum_energy_efficiency_ratio']
@@ -2882,5 +2882,29 @@ class ECMS
     eirfplr_curve = model_add_curve(model, eirfplr_curve_name)
     component.setElectricInputToCoolingOutputRatioFunctionOfPLR(eirfplr_curve) if eirfplr_curve
     raise "There was a problem setting the ElectricInputToCoolingOutputRatioFunctionOfPLR curve named #{eirfplr_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json and chiller_set.json files." if !eirfplr_curve
+  end
+
+  # ============================================================================================================================
+  # Add air side economizer for each airloop
+  def add_airloop_economizer(model:, airloop_economizer_type:)
+    return if airloop_economizer_type.nil? || (airloop_economizer_type.to_s == 'NECB_Default')
+
+    if airloop_economizer_type.downcase == "differentialenthalpy"
+      economizer_type = 'DifferentialEnthalpy'
+    elsif airloop_economizer_type.downcase == "differentialdrybulb"
+      economizer_type = 'DifferentialDryBulb'
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.airLoopHVACOutdoorAirSystem', "The air loop economizer type #{airloop_economizer_type} is not recognized.  Please make sure that the economizer being applied by the ECM is either a DifferentialEnthalpy or DifferentialDryBulb type.  No economizer will be applied.")
+      return
+    end
+
+    model.getAirLoopHVACs.sort.each do |air_loop|
+      oa_sys = air_loop.airLoopHVACOutdoorAirSystem
+      if oa_sys.is_initialized
+        oa_sys = oa_sys.get
+        oa_control = oa_sys.getControllerOutdoorAir
+        oa_control.setEconomizerControlType(economizer_type)
+      end
+    end
   end
 end
