@@ -1231,7 +1231,8 @@ Standard.class_eval do
     # Guestrooms are currently only included in the small and large hotel prototypes
     return true unless (building_type == 'LargeHotel') || (building_type == 'SmallHotel')
 
-    # Guestrooms ventilation schedules are only added to 2019
+    # Guestrooms ventilation schedules are only added to 2019 TODO: JXL check if this applies to pre 2016 models
+    # JXL TODO: confirm when to deviate ventilation schedule from temperature (e.g. purge)
     return true unless (template == '90.1-2016') || (template == '90.1-2019')
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Guestroom Ventilation Schedules')
@@ -1335,6 +1336,59 @@ Standard.class_eval do
         airterminal.setAvailabilitySchedule(vent_schrst)
         modified_zones << zone_name
       end
+    end
+  end
+
+  def model_reduce_setback_sch_delay(model, building_type)
+    # Guestrooms are currently only included in the small and large hotel prototypes
+    return true unless (building_type == 'LargeHotel') || (building_type == 'SmallHotel')
+
+    # Guestrooms setback schedule delay modifications are only added to 2019
+    return true unless template == '90.1-2019'
+
+    thermostats = model.getThermostatSetpointDualSetpoints.sort
+    thermostats.each do |thermostat|
+      next unless thermostat.name.to_s.include? "GuestRoom" # JXL TODO: confirm using this or the approach in above method (specific thermostat)
+
+      heating_schrst = thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
+      cooling_schrst = thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
+      next unless heating_schrst.name.to_s.include? "Occ"
+      next unless cooling_schrst.name.to_s.include? "Occ"
+
+      heating_default_day_sch = heating_schrst.defaultDaySchedule
+      schedule_reduce_reset_delay_10min(heating_default_day_sch, heating_default_day_sch.values.min)
+      cooling_default_day_sch = cooling_schrst.defaultDaySchedule
+      schedule_reduce_reset_delay_10min(cooling_default_day_sch, cooling_default_day_sch.values.max)
+
+      break
+    end
+  end
+
+  def schedule_reduce_reset_delay_10min(sch, off_value)
+    sch_values = sch.values
+    sch_times = sch.times
+    ten_mins = OpenStudio::Time.new(0,0,10,0)
+    new_times = []
+    (0..(sch_values.length - 2)).each do |i|
+      current_time = sch_times[i]
+      current_value = sch_values[i]
+      next_value = sch_values[i + 1]
+      if ((current_value - off_value).abs >= 0.01) && ((next_value - off_value).abs < 0.01) # reduce occupied (current) time by 10 min if next value is off_value
+        new_times << (current_time - ten_mins)
+      else
+        new_times << current_time
+      end
+    end
+    new_times << sch_times[-1]
+
+    # remove old values
+    sch_times.each do |old_time|
+      sch.removeValue(old_time)
+    end
+
+    # add new time
+    (0..(new_times.length - 1)).each do |i|
+      sch.addValue(new_times[i], sch_values[i])
     end
   end
 
