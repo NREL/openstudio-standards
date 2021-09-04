@@ -130,7 +130,7 @@ module LargeHotel
     model_add_guestroom_vacancy_controls(model, 'LargeHotel')
 
     # Guestroom temperature reset schedule delay reduction from 30 min to 20 min
-    model_reduce_setback_sch_delay(model, 'LargeHotel')
+    # model_reduce_setback_sch_delay(model, 'LargeHotel')
 
     # Guestroom ventilation availability schedule setup
     model_add_guestroom_vent_sch(model, 'LargeHotel')

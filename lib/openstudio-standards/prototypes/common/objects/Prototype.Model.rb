@@ -1228,6 +1228,7 @@ Standard.class_eval do
   end
 
   # Add guestroom ventilation availability schedules based on the thermostat heating setpoint schedules (to infer setback)
+  # Call to this method needs to be place before purge hour implementation of zone ventilation (if any)
   #
   # @code_sections [90.1-2019_6.4.3.3.5.2]
   # @author Xuechen (Jerry) Lei, PNNL
@@ -1236,10 +1237,6 @@ Standard.class_eval do
   def model_add_guestroom_vent_sch(model, building_type)
     # Guestrooms are currently only included in the small and large hotel prototypes
     return true unless (building_type == 'LargeHotel') || (building_type == 'SmallHotel')
-
-    # Guestrooms ventilation schedules are only added to 2019 TODO: JXL check if this applies to pre 2016 models
-    # JXL TODO: confirm when to deviate ventilation schedule from temperature (e.g. purge)
-    return true unless (template == '90.1-2016') || (template == '90.1-2019')
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Guestroom Ventilation Schedules')
 
