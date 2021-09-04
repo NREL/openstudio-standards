@@ -1227,6 +1227,12 @@ Standard.class_eval do
     end
   end
 
+  # Add guestroom ventilation availability schedules based on the thermostat heating setpoint schedules (to infer setback)
+  #
+  # @code_sections [90.1-2019_6.4.3.3.5.2]
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] OpenStudio Model
+  # @param building_type [String] Building type
   def model_add_guestroom_vent_sch(model, building_type)
     # Guestrooms are currently only included in the small and large hotel prototypes
     return true unless (building_type == 'LargeHotel') || (building_type == 'SmallHotel')
@@ -1339,6 +1345,12 @@ Standard.class_eval do
     end
   end
 
+  # Reduce thermostat temperature setpoint delay (when switching from occupied to unoccupied ) by 10 mins
+  #
+  # @code_sections [90.1-2019_6.4.3.3.5.1]
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] OpenStudio Model
+  # @param building_type [String] Building type
   def model_reduce_setback_sch_delay(model, building_type)
     # Guestrooms are currently only included in the small and large hotel prototypes
     return true unless (building_type == 'LargeHotel') || (building_type == 'SmallHotel')
@@ -1364,10 +1376,14 @@ Standard.class_eval do
     end
   end
 
+
+  # Helper method for model_reduce_setback_sch_delay
+  # @author Xuechen (Jerry) Lei, PNNL
+  #
   def schedule_reduce_reset_delay_10min(sch, off_value)
     sch_values = sch.values
     sch_times = sch.times
-    ten_mins = OpenStudio::Time.new(0,0,10,0)
+    ten_mins = OpenStudio::Time.new(0, 0, 10, 0)
     new_times = []
     (0..(sch_values.length - 2)).each do |i|
       current_time = sch_times[i]
