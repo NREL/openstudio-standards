@@ -1275,21 +1275,22 @@ Standard.class_eval do
         'GuestRoom415_418',
         'GuestRoom419',
         'GuestRoom420_423',
-        'GuestRoom424',
+        'GuestRoom424'
       ]
     }
 
     # Extract thermostat schedule as the base for ventilation schedule
     if building_type == 'LargeHotel'
-      thermostat_name = 'LargeHotel GuestRoom Thermostat'
+      # thermostat_name = 'LargeHotel GuestRoom Thermostat'
       air_terminals = model.getAirTerminalSingleDuctConstantVolumeNoReheats.sort
     elsif building_type == 'SmallHotel'
-      thermostat_name = 'SmallHotel GuestRoom4Occ Thermostat'
+      # thermostat_name = 'SmallHotel GuestRoom4Occ Thermostat'
       air_terminals = model.getZoneHVACPackagedTerminalAirConditioners.sort
     end
-    guestroom_thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
-    guestroom_htg_schrst = guestroom_thermostat.getHeatingSchedule.get
-    guestroom_clg_schrst = guestroom_thermostat.getCoolingSchedule.get
+    # guestroom_thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
+    # guestroom_htg_schrst = guestroom_thermostat.getHeatingSchedule.get
+    # guestroom_clg_schrst = guestroom_thermostat.getCoolingSchedule.get
+    guestroom_htg_schrst, guestroom_clg_schrst = get_occ_guestroom_setpoint_schedules(model)
 
     # intentionally no check so if anything is wrong, this will break
     guestroom_htg_sch = guestroom_htg_schrst.to_ScheduleRuleset.get.defaultDaySchedule
@@ -1322,10 +1323,10 @@ Standard.class_eval do
     off_value = htg_sch_values.min
     htg_sch_values.each do |value|
       vent_day_binary_values << if value > off_value
-                                    1.0
-                                  else
-                                    0.0
-                                  end
+                                  1.0
+                                else
+                                  0.0
+                                end
     end
     vent_day_binary_values.each_with_index do |binary_value, i|
       vent_day_sch.addValue(htg_sch_times[i], binary_value)
@@ -1355,24 +1356,30 @@ Standard.class_eval do
     # Guestrooms setback schedule delay modifications are only added to 2019
     return true unless template == '90.1-2019'
 
+    heating_schrst, cooling_schrst = get_occ_guestroom_setpoint_schedules(model)
+    heating_default_day_sch = heating_schrst.defaultDaySchedule
+    schedule_reduce_reset_delay_10min(heating_default_day_sch, heating_default_day_sch.values.min)
+    cooling_default_day_sch = cooling_schrst.defaultDaySchedule
+    schedule_reduce_reset_delay_10min(cooling_default_day_sch, cooling_default_day_sch.values.max)
+  end
+
+  # Helper method for model_add_guestroom_vent_sch and model_reduce_setback_sch_delay
+  # @author Xuechen (Jerry) Lei, PNNL
+  #
+  def get_occ_guestroom_setpoint_schedules(model)
     thermostats = model.getThermostatSetpointDualSetpoints.sort
     thermostats.each do |thermostat|
-      next unless thermostat.name.to_s.include? "GuestRoom" # JXL TODO: confirm using this or the approach in above method (specific thermostat)
+      next unless thermostat.name.to_s.include? 'GuestRoom'
 
       heating_schrst = thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
       cooling_schrst = thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
-      next unless heating_schrst.name.to_s.include? "Occ"
-      next unless cooling_schrst.name.to_s.include? "Occ"
+      next unless heating_schrst.name.to_s.include? 'Occ'
+      next unless cooling_schrst.name.to_s.include? 'Occ'
 
-      heating_default_day_sch = heating_schrst.defaultDaySchedule
-      schedule_reduce_reset_delay_10min(heating_default_day_sch, heating_default_day_sch.values.min)
-      cooling_default_day_sch = cooling_schrst.defaultDaySchedule
-      schedule_reduce_reset_delay_10min(cooling_default_day_sch, cooling_default_day_sch.values.max)
-
-      break
+      return heating_schrst, cooling_schrst
     end
+    return false
   end
-
 
   # Helper method for model_reduce_setback_sch_delay
   # @author Xuechen (Jerry) Lei, PNNL
