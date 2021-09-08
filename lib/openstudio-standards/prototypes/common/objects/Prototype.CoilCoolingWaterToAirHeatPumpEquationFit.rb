@@ -61,4 +61,52 @@ class Standard
 
     return clg_coil
   end
+
+  # Finds lookup object in standards and return efficiency
+  #
+  # @param object: water to air heat pump cooling coil
+  # @return [Double] full load efficiency (COP)
+  def coil_cooling_water_to_air_heat_pump_standard_minimum_cop_crac(coil_cooling_water_to_air_heat_pump)
+    search_criteria = {}
+    search_criteria['template'] = template
+    search_criteria['cooling_type'] = 'WaterCooled'
+    search_criteria['heating_type'] = 'All Other'
+    search_criteria['subcategory'] = 'CRAC'
+    cooling_type = search_criteria['cooling_type']
+    heating_type = search_criteria['heating_type']
+    sub_category = search_criteria['subcategory']
+    capacity_w = coil_cooling_water_to_air_heat_pump_find_capacity(coil_cooling_water_to_air_heat_pump)
+    capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
+    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
+
+    # Look up the efficiency characteristics
+    coil_props = model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+
+    # If capacity is larger than 0
+    if capacity_btu_per_hr > 0
+      crac_minimum_scop = coil_props['minimum_scop']
+      # If CRAC, use equations if coefficients are specified
+      if sub_category == 'CRAC' && !crac_minimum_scop.nil?
+        # cop = scop/sensible cool ratio
+        # sensible cool ratio = sensible cool capacity/total cool capacity
+        if coil_cooling_water_to_air_heat_pump.ratedSensibleCoolingCapacity.is_initialized
+          crac_sensible_cool = coil_cooling_water_to_air_heat_pump.ratedSensibleCoolingCapacity.get
+          crac_total_cool = coil_cooling_water_to_air_heat_pump.ratedTotalCoolingCapacity.get
+          crac_sensible_cool_ratio = crac_sensible_cool / crac_total_cool
+        elsif coil_cooling_water_to_air_heat_pump.autosizedRatedSensibleCoolingCapacity.is_initialized
+          crac_sensible_cool = coil_cooling_water_to_air_heat_pump.autosizedRatedSensibleCoolingCapacity.get
+          crac_total_cool = coil_cooling_water_to_air_heat_pump.autosizedRatedTotalCoolingCapacity.get
+          crac_sensible_cool_ratio = crac_sensible_cool / crac_total_cool
+        else
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', 'Failed to get autosized sensible cool capacity')
+        end
+        cop = crac_minimum_scop / crac_sensible_cool_ratio
+        cop = cop.round(2)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{coil_cooling_water_to_air_heat_pump.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SCOP = #{crac_minimum_scop}")
+      end
+    else
+      cop = nil
+    end
+    return cop
+  end
 end
