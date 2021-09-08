@@ -317,6 +317,13 @@ class ASHRAE9012019 < ASHRAE901
       return is_sat_reset_required
     end
 
+    # check if design outside air is less than 10,000cfm (5000L/s) 90.1 2019 6.5.3.5 Exception 1 and 2
+    design_oa_m3s = air_loop_hvac.sizingSystem.designOutdoorAirFlowRate.to_f
+    design_oa_cfm = OpenStudio.convert(design_oa_m3s, 'm^3/s', 'cfm').get
+
+    # check if there is erv 90.1 2019 Exceptions to 6.5.3.5 Exception 3
+    has_erv = air_loop_hvac_energy_recovery?(air_loop_hvac)
+
     case climate_zone
     when 'ASHRAE 169-2006-0A',
          'ASHRAE 169-2006-1A',
@@ -324,12 +331,14 @@ class ASHRAE9012019 < ASHRAE901
          'ASHRAE 169-2013-0A',
          'ASHRAE 169-2013-1A',
          'ASHRAE 169-2013-3A'
-      # check if design outside air is less than 10,000cfm (5000L/s) 90.1 2019 Exceptions to 6.5.3.5
-      design_oa_m3s = air_loop_hvac.sizingSystem.designOutdoorAirFlowRate.to_f
-      design_oa_cfm = OpenStudio.convert(design_oa_m3s, 'm^3/s', 'cfm').get
       if design_oa_cfm >= 3000
-        is_sat_reset_required = true
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset is required.")
+        if has_erv
+          is_sat_reset_required = false
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset is not required per 6.5.3.5 Exception 3, the system is located in climate zone #{climate_zone}.")
+        else
+          is_sat_reset_required = true
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset is required.")
+        end
       else
         is_sat_reset_required = false
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset is not required per 6.5.3.5 Exception 1, the system is located in climate zone #{climate_zone}.")
@@ -337,11 +346,14 @@ class ASHRAE9012019 < ASHRAE901
       return is_sat_reset_required
     when 'ASHRAE 169-2006-2A',
          'ASHRAE 169-2013-2A'
-      # check if design outside air is less than 10,000cfm (5000L/s) 90.1 2019 Exceptions to 6.5.3.5
-      design_oa = nil
       if design_oa_cfm >= 10000
-        is_sat_reset_required = true
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset is required.")
+        if has_erv
+          is_sat_reset_required = false
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset is not required per 6.5.3.5 Exception 3, the system is located in climate zone #{climate_zone}.")
+        else
+          is_sat_reset_required = true
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset is required.")
+        end
       else
         is_sat_reset_required = false
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset is not required per 6.5.3.5 Exception 2, the system is located in climate zone #{climate_zone}.")
