@@ -5,6 +5,10 @@ class ASHRAE9012019 < ASHRAE901
   # The values are calculated by using ERR, which is introduced in 90.1-2016 Addendum CE
   #
   # This function is only used for nontransient dwelling units (Mid-rise and High-rise Apartment)
+  # @param [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] heat exchanger air to air sensible and latent
+  # @param [String] err
+  # @param [String] err basis (Cooling/Heating)
+  # @param [String] climate zone
   def heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_err(heat_exchanger_air_to_air_sensible_and_latent, err, basis, climate_zone)
     # Assumed to be sensible and latent at all flow
     err = enthalpy_recovery_ratio_design_to_typical_adjustment(err, climate_zone)

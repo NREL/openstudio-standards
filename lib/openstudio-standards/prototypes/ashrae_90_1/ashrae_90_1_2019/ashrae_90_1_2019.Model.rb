@@ -368,6 +368,7 @@ class ASHRAE9012019 < ASHRAE901
   # This function is used to add zone ERV
   #
   # This function is only used for nontransient dwelling units (Mid-rise and High-rise Apartment)
+  # @param [OpenStudio::model::Model] model
   def model_apply_prototype_hvac_efficiency_adjustments(model)
     # identify the building type
     building_data = model_get_building_climate_zone_and_building_type(model)
