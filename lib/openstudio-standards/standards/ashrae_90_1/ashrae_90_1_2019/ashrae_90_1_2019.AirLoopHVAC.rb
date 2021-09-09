@@ -303,7 +303,7 @@ class ASHRAE9012019 < ASHRAE901
 
     return num_stages
   end
-  
+
   # Determine if the system required supply air temperature (SAT) reset.
   # For 90.1-2019, SAT reset requirements are based on climate zone. More exceptions are added for 90.1 2019 6.5.3.5
   #
