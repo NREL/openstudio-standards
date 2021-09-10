@@ -2683,6 +2683,7 @@ class Standard
                    air_loop_hvac.model.alwaysOnDiscreteSchedule
                  end
 
+    # placing this max OA schedule code before supply fan check because for single zone systems with AirLoopHVAC:UnitarySystem being a component of air_loop_hvac, air_loop_hvac.supplyFan.empty? = true
     max_oa_sch = set_max_frac_oa_sch(air_loop_hvac, oa_control, snc)
 
     # Get the supply fan
