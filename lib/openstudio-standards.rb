@@ -436,6 +436,7 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.hvac_systems"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Pump"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.PumpVariableSpeed"
   # DOE Ref 1980-2004
   require_relative "#{proto}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.AirTerminalSingleDuctVAVReheat"
