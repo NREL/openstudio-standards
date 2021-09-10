@@ -86,4 +86,4 @@ class ASHRAE9012019 < ASHRAE901
 
     return [motor_eff, nominal_hp]
   end
-  end
+end
