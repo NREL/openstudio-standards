@@ -185,9 +185,12 @@ module QuickServiceRestaurant
         elec_equip_def2.setFractionLatent(0)
         elec_equip_def2.setFractionRadiant(0.25)
         elec_equip_def2.setFractionLost(0)
-        if template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
+        if template == '90.1-2013' || template == '90.1-2016'
           elec_equip_def1.setDesignLevel(457.5)
           elec_equip_def2.setDesignLevel(570)
+        elsif template == '90.1-2019'
+          elec_equip_def1.setDesignLevel(277.5)
+          elec_equip_def2.setDesignLevel(313.3)
         else
           elec_equip_def1.setDesignLevel(515.917)
           elec_equip_def2.setDesignLevel(851.67)
