@@ -192,7 +192,7 @@ class Standard
 
     standby_mode_spaces = []
     thermal_zone.spaces.sort.each do |space|
-      if space_is_occupancy_standby_mode(space)
+      if space_occupancy_standby_mode_required?(space)
         standby_mode_spaces << space
       end
     end

@@ -5,7 +5,7 @@ class ASHRAE9012019 < ASHRAE901
   #
   # @param space [OpenStudio::model::Space] OpenStudio Space object
   # @return [Boolean] true if occupancy standby mode is to be modeled, false otherwise
-  def space_is_occupancy_standby_mode(space)
+  def space_occupancy_standby_mode_required?(space)
     # Get space type
     return false if space.spaceType.empty?
 
@@ -35,7 +35,7 @@ class ASHRAE9012019 < ASHRAE901
 
   # Modify thermostat schedule to account for a thermostat setback/up
   #
-  # @param space [OpenStudio::model::Space] OpenStudio Space object
+  # @param thermostat [OpenStudio::model::ThermostatSetpointDualSetpoint] OpenStudio ThermostatSetpointDualSetpoint object
   # @return [Boolean] true if success
   def space_occupancy_standby_mode(thermostat)
     htg_sch = thermostat.getHeatingSchedule.get

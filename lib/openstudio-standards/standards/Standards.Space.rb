@@ -2271,7 +2271,7 @@ class Standard
   #
   # @param space [OpenStudio::Model::Space] OpenStudio Space object
   # @return [Boolean] true if occupancy standby mode is to be modeled, false otherwise
-  def space_is_occupancy_standby_mode(space)
+  def space_occupancy_standby_mode_required?(space)
     return false
   end
 end

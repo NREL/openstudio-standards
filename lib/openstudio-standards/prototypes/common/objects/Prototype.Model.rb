@@ -875,7 +875,7 @@ Standard.class_eval do
 
       # Modify thermostat schedules if space
       # has standby mode occupancy requirements
-      if space_is_occupancy_standby_mode(space)
+      if space_occupancy_standby_mode_required?(space)
         next if thermostat_to_offset.include?(thermostat_clone.name)
 
         space_occupancy_standby_mode(thermostat_clone)
@@ -2642,9 +2642,9 @@ Standard.class_eval do
 
   # Modify thermostat schedule to account for a thermostat setback/up
   #
-  # @param space [OpenStudio::model::Space] OpenStudio Space object
+  # @param thermostat [OpenStudio::model::ThermostatSetpointDualSetpoint] OpenStudio ThermostatSetpointDualSetpoint object
   # @return [Boolean] true if success
   def space_occupancy_standby_mode(thermostat)
-    return true
+    return false
   end
 end
