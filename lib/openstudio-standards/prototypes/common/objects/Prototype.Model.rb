@@ -1235,6 +1235,8 @@ Standard.class_eval do
   # @param model [OpenStudio::Model::Model] OpenStudio Model
   # @param building_type [String] Building type
   def model_add_guestroom_vent_sch(model, building_type)
+    return true unless (template == '90.1-2016') || (template == '90.1-2019')
+
     # Guestrooms are currently only included in the small and large hotel prototypes
     return true unless (building_type == 'LargeHotel') || (building_type == 'SmallHotel')
 
@@ -1337,7 +1339,11 @@ Standard.class_eval do
     air_terminals.each do |airterminal| # seems all spaces having such air terminals are guest rooms
       zone_name = airterminal.name.to_s.strip.split[0]
       if guestroom_occupied_map[building_type].include? zone_name
-        airterminal.setAvailabilitySchedule(vent_schrst)
+        if building_type == 'LargeHotel'
+          airterminal.setAvailabilitySchedule(vent_schrst)
+        elsif building_type == 'SmallHotel'
+          airterminal.setSupplyAirFanOperatingModeSchedule(vent_schrst)
+        end
         modified_zones << zone_name
       end
     end
