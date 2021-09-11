@@ -2683,8 +2683,9 @@ class Standard
                    air_loop_hvac.model.alwaysOnDiscreteSchedule
                  end
 
-    # placing this max OA schedule code before supply fan check because for single zone systems with AirLoopHVAC:UnitarySystem being a component of air_loop_hvac, air_loop_hvac.supplyFan.empty? = true
-    max_oa_sch = set_max_frac_oa_sch(air_loop_hvac, oa_control, snc)
+    # Create an economizer maximum OA fraction schedule with
+    # a maximum of 70% to reflect damper leakage per PNNL
+    max_oa_sch = set_max_frac_oa_sch(air_loop_hvac, oa_control, snc) unless air_loop_hvac_uses_simple_transfer_air(air_loop_hvac)
 
     # Get the supply fan
     if air_loop_hvac.supplyFan.empty?
@@ -3425,5 +3426,25 @@ class Standard
     max_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
     oa_control.setMaximumFractionofOutdoorAirSchedule(max_oa_sch)
     max_oa_sch
+  end
+
+  # Checks if zones served by the air loop use zone exhaust fan
+  # a simplified approach to model transfer air
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] OpenStudio AirLoopHVAC object
+  # @return [Boolean] true if simple transfer air is modeled, false otherwise
+  def air_loop_hvac_uses_simple_transfer_air(air_loop_hvac)
+    simple_transfer_air = false
+    zones = air_loop_hvac.thermalZones
+    zones_name = []
+    zones.each do |zone|
+      zones_name << zone.name.to_s
+    end
+    air_loop_hvac.model.getFanZoneExhausts.sort.each do |exhaust_fan|
+      if (zones_name.include? exhaust_fan.thermalZone.get.name.to_s) && exhaust_fan.balancedExhaustFractionSchedule.is_initialized
+        simple_transfer_air = true
+      end
+    end
+    return simple_transfer_air
   end
 end
