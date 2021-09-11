@@ -1567,6 +1567,27 @@ class Standard
     return heat_exchanger_type
   end
 
+  def air_loop_hvac_remove_erv(air_loop_hvac)
+    # Get the OA system
+    oa_sys = nil
+    if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+      oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+    else
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV cannot be removed because the system has no OA intake.")
+      return false
+    end
+
+    # Get the existing ERV or create an ERV and add it to the OA system
+    oa_sys.oaComponents.each do |oa_comp|
+      if oa_comp.to_HeatExchangerAirToAirSensibleAndLatent.is_initialized
+        erv = oa_comp.to_HeatExchangerAirToAirSensibleAndLatent.get
+        erv.remove
+      end
+    end
+
+    return true
+  end
+
   # Add an ERV to this airloop
   #
   # @param (see #economizer_required?)

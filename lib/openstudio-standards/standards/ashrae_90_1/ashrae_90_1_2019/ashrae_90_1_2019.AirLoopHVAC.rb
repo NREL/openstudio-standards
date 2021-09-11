@@ -419,11 +419,26 @@ class ASHRAE9012019 < ASHRAE901
         erv_cfm = energy_recovery_limits['greater_than_80_percent_oa']
       end
     else
+      # Check if air loop serves a non-transient dwelling unit,
+      # currently non-transient dwelling units are residential
+      # spaces in the apartment prototypes
+      building_data = model_get_building_climate_zone_and_building_type(air_loop_hvac.model)
+      building_type = building_data['building_type']
+      nontrans_dwel = false
+      if building_type == 'MidriseApartment' || building_type == 'HighriseApartment'
+        air_loop_hvac.thermalZones.each do |zone|
+          next unless thermal_zone_residential?(zone)
+
+          nontrans_dwel = true
+        end
+      end
+
       # Table 6.5.6.1-2, above 8000 hrs
       search_criteria = {
         'template' => template,
         'climate_zone' => climate_zone,
-        'under_8000_hours' => false
+        'under_8000_hours' => false,
+        'nontransient_dwelling' => nontrans_dwel
       }
       energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
       if energy_recovery_limits.nil?
@@ -431,7 +446,11 @@ class ASHRAE9012019 < ASHRAE901
         return nil
       end
       if pct_oa < 0.1
-        erv_cfm = nil
+        if nontrans_dwel
+          erv_cfm = energy_recovery_limits['0_to_10_percent_oa']
+        else
+          erv_cfm = nil
+        end
       elsif pct_oa >= 0.1 && pct_oa < 0.2
         erv_cfm = energy_recovery_limits['10_to_20_percent_oa']
       elsif pct_oa >= 0.2 && pct_oa < 0.3

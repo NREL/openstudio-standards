@@ -6435,4 +6435,181 @@ class Standard
     swh_loop.addDemandBranchForComponent(swh_connection)
     return water_fixture
   end
+
+  # Add a residential ERV: standalone ERV that operates to provide OA,
+  # use in conjuction witha system that having mechanical cooling and
+  # a heating coil
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio Model object
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+  # @param climate_zone [String] Climate zone
+  # @param energy_recovery [Boolean] Indicates if the ERV is to recover energy, if false, only provides OA
+  # @return [OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator] Standalone ERV
+  def model_add_residential_erv(model,
+                                thermal_zone,
+                                climate_zone,
+                                energy_recovery,
+                                min_oa_flow_m3_per_s_per_m2: nil)
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding standalone ERV for #{thermal_zone.name}.")
+
+    # Exception 3 to 6.5.6.1.1
+    case template
+      when '90.1-2019'
+        case climate_zone
+          when 'ASHRAE 169-2006-0A',
+            'ASHRAE 169-2006-0B',
+            'ASHRAE 169-2006-1A',
+            'ASHRAE 169-2006-1B',
+            'ASHRAE 169-2006-2A',
+            'ASHRAE 169-2006-2B',
+            'ASHRAE 169-2006-3A',
+            'ASHRAE 169-2006-3B',
+            'ASHRAE 169-2006-3C',
+            'ASHRAE 169-2006-4A',
+            'ASHRAE 169-2006-4B',
+            'ASHRAE 169-2006-4C',
+            'ASHRAE 169-2006-5A',
+            'ASHRAE 169-2006-5B',
+            'ASHRAE 169-2006-5C',
+            'ASHRAE 169-2013-0A',
+            'ASHRAE 169-2013-0B',
+            'ASHRAE 169-2013-1A',
+            'ASHRAE 169-2013-1B',
+            'ASHRAE 169-2013-2A',
+            'ASHRAE 169-2013-2B',
+            'ASHRAE 169-2013-3A',
+            'ASHRAE 169-2013-3B',
+            'ASHRAE 169-2013-3C',
+            'ASHRAE 169-2013-4A',
+            'ASHRAE 169-2013-4B',
+            'ASHRAE 169-2013-4C',
+            'ASHRAE 169-2013-5A',
+            'ASHRAE 169-2013-5B',
+            'ASHRAE 169-2013-5C'
+            if thermal_zone_floor_area_with_zone_multipliers(thermal_zone) <= OpenStudio.convert(500, 'ft^2', 'm^2').get
+              energy_recovery = false
+              OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Energy recovery will not be modeled for the ERV serving #{thermal_zone.name}.")
+            end
+        end
+    end
+
+    # Determine ERR and design basis when energy recovery is required
+    #
+    # err = nil will trigger an ERV with no effectiveness that only provides OA
+    err = nil
+    if energy_recovery
+      case template
+        when '90.1-2019'
+          search_criteria = {
+            'template' => template,
+            'climate_zone' => climate_zone,
+            'under_8000_hours' => false,
+            'nontransient_dwelling' => true
+          }
+        else
+          search_criteria = {
+            'template' => template,
+            'climate_zone' => climate_zone,
+            'under_8000_hours' => false
+          }
+      end
+
+      erv_err = model_find_object(standards_data['energy_recovery'], search_criteria)
+
+      # Extract ERR from data lookup
+      if !erv_err.nil?
+        if erv_err['err'].nil? & erv_err['err_basis'].nil?
+          # If not included in the data, an enthalpy
+          # recovery ratio (ERR) of 50% is used
+          err = 0.5
+          case climate_zone
+            when 'ASHRAE 169-2006-6B',
+              'ASHRAE 169-2013-6B',
+              'ASHRAE 169-2006-7A',
+              'ASHRAE 169-2013-7A',
+              'ASHRAE 169-2006-7B',
+              'ASHRAE 169-2013-7B',
+              'ASHRAE 169-2006-8A',
+              'ASHRAE 169-2013-8A',
+              'ASHRAE 169-2006-8B',
+              'ASHRAE 169-2013-8B'
+              err_basis = 'heating'
+            else
+              err_basis = 'cooling'
+          end
+        else
+          err_basis = erv_err['err_basis'].downcase
+          err = erv_err['err']
+        end
+      end
+    end
+
+    # Create fans
+    #
+    # Fan power:
+    # No energy recovery = 0.806 W/cfm
+    # Energy recovery = 0.934 W/cfm
+    supply_fan = create_fan_by_name(model,
+                                    'ERV_Supply_Fan',
+                                    fan_name: "#{thermal_zone.name} ERV Supply Fan")
+    exhaust_fan = create_fan_by_name(model,
+                                     'ERV_Supply_Fan',
+                                     fan_name: "#{thermal_zone.name} ERV Exhaust Fan")
+    supply_fan.setMotorEfficiency(0.48)
+    exhaust_fan.setMotorEfficiency(0.48)
+    supply_fan.setFanTotalEfficiency(0.303158)
+    exhaust_fan.setFanTotalEfficiency(0.303158)
+    if energy_recovery
+      supply_fan.setPressureRise(270.64755)
+      exhaust_fan.setPressureRise(270.64755)
+    else
+      supply_fan.setPressureRise(233.6875)
+      exhaust_fan.setPressureRise(233.6875)
+    end
+
+    # Create ERV Controller
+    erv_controller = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilatorController.new(model)
+    erv_controller.setName("#{thermal_zone.name} ERV Controller")
+    erv_controller.setControlHighIndoorHumidityBasedonOutdoorHumidityRatio(false)
+
+    # Create heat exchanger
+    heat_exchanger = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
+    heat_exchanger.setName("#{thermal_zone.name} ERV HX")
+    heat_exchanger.setSupplyAirOutletTemperatureControl(false)
+    heat_exchanger.setHeatExchangerType('Rotary')
+    heat_exchanger.setEconomizerLockout(false)
+    heat_exchanger.setFrostControlType('ExhaustOnly')
+    heat_exchanger.setThresholdTemperature(-23.3)
+    heat_exchanger.setInitialDefrostTimeFraction(0.167)
+    heat_exchanger.setRateofDefrostTimeFractionIncrease(1.44)
+    heat_exchanger.setAvailabilitySchedule(model_add_schedule(model, 'Always On - No DD'))
+    heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_err(heat_exchanger, err, err_basis, climate_zone)
+
+    erv = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator.new(model, heat_exchanger, supply_fan, exhaust_fan)
+    erv.setName("#{thermal_zone.name} ERV")
+
+    erv.setController(erv_controller)
+    erv.addToThermalZone(thermal_zone)
+
+    # Set OA requirements; Assumes a default of 55 cfm
+    if min_oa_flow_m3_per_s_per_m2.nil?
+      erv.setSupplyAirFlowRate(OpenStudio.convert(55.0, 'cfm', 'm^3/s').get)
+      erv.setExhaustAirFlowRate(OpenStudio.convert(55.0, 'cfm', 'm^3/s').get)
+    else
+      erv.setVentilationRateperUnitFloorArea(min_oa_flow_m3_per_s_per_m2)
+    end
+
+    # Ensure the ERV takes priority, so ventilation load is included when treated by other zonal systems
+    # From EnergyPlus I/O reference:
+    # "For situations where one or more equipment types has limited capacity or limited control capability, order the
+    #  sequence so that the most controllable piece of equipment runs last. For example, with a dedicated outdoor air
+    #  system (DOAS), the air terminal for the DOAS should be assigned Heating Sequence = 1 and Cooling Sequence = 1.
+    #  Any other equipment should be assigned sequence 2 or higher so that it will see the net load after the DOAS air
+    #  is added to the zone."
+    thermal_zone.setCoolingPriority(erv.to_ModelObject.get, 1)
+    thermal_zone.setHeatingPriority(erv.to_ModelObject.get, 1)
+
+    return erv
+  end
 end

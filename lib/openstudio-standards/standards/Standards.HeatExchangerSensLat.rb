@@ -64,7 +64,7 @@ class Standard
   # @return [Array] heating and cooling heat exchanger effectiveness at 100% and 75% nominal airflow
   def heat_exchanger_air_to_air_sensible_and_latent_enthalpy_recovery_ratio_to_effectiveness(err, basis)
     case basis
-      when 'Cooling'
+      when 'cooling'
         full_htg_sens_eff = (20.707 * err**2 + 41.354 * err + 40.755) / 100
         full_htg_lat_eff = (127.45 * err - 18.625) / 100
         part_htg_sens_eff = (-0.1214 * err + 1.111) * full_htg_sens_eff
@@ -73,7 +73,7 @@ class Standard
         full_cool_lat_eff = (48.054 * err**2 + 83.082 * err - 12.881) / 100
         part_cool_sens_eff = (-0.1214 * err + 1.111) * full_cool_sens_eff
         part_cool_lat_eff = (-0.3982 * err  + 1.3151) * full_cool_lat_eff
-      when 'Heating'
+      when 'heating'
         full_htg_sens_eff = err
         full_htg_lat_eff = 0.0
         part_htg_sens_eff = (-0.1214 * err + 1.111) * full_htg_sens_eff

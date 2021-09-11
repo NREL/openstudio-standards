@@ -112,6 +112,8 @@ module HighriseApartment
 
   def model_update_fan_efficiency(model)
     model.getFanOnOffs.sort.each do |fan_onoff|
+      next if fan_onoff.name.get.to_s.include?('ERV')
+
       fan_onoff.setFanEfficiency(0.53625)
       fan_onoff.setMotorEfficiency(0.825)
     end
