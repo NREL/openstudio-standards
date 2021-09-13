@@ -6,6 +6,7 @@ class Standard
   # (always 1.0, 24/7, 365) would return a value of 8760.
   #
   # @author Andrew Parker, NREL
+  # @param schedule_constant [OpenStudio::Model::ScheduleConstant] constant schedule object
   # return [Double] The total number of full load hours for this schedule
   def schedule_constant_annual_equivalent_full_load_hrs(schedule_constant)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ScheduleConstant', "Calculating total annual EFLH for schedule: #{schedule_constant.name}")
@@ -17,6 +18,7 @@ class Standard
   # It doesn't evaluate design days only run-period conditions
   #
   # @author David Goldwasser, NREL.
+  # @param schedule_constant [OpenStudio::Model::ScheduleConstant] constant schedule object
   # return [Hash] Hash has two keys, min and max.
   def schedule_constant_annual_min_max_value(schedule_constant)
     result = { 'min' => schedule_constant.value, 'max' => schedule_constant.value }

@@ -1,4 +1,11 @@
 Standard.class_eval do
+  # A set of methods to run the OpenStudio model
+
+  # Runs an annual simulation
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param run_dir [String] file path location for the annual run, defaults to 'Run' in the current directory
+  # @return [Bool] returns true if successful, false if not
   def model_run_simulation_and_log_errors(model, run_dir = "#{Dir.pwd}/Run")
     # Make the directory if it doesn't exist
     unless Dir.exist?(run_dir)
@@ -94,6 +101,10 @@ Standard.class_eval do
       workflow.setWeatherFile(epw_name)
       workflow.saveAs(File.absolute_path(osw_path.to_s))
 
+      # 'touch' the weather file - for some odd reason this fixes the simulation not running issue we had on openstudio-server.
+      # Removed for until further investigation completed.
+      # FileUtils.touch("#{run_dir}/#{epw_name}")
+
       cli_path = OpenStudio.getOpenStudioCLI
       cmd = "\"#{cli_path}\" run -w \"#{osw_path}\""
       # cmd = "\"#{cli_path}\" --verbose run -w \"#{osw_path}\""
@@ -108,8 +119,7 @@ Standard.class_eval do
 
     end
 
-    # TODO: Delete the eplustbl.htm and other files created
-    # by the run for cleanliness.
+    # @todo Delete the eplustbl.htm and other files created by the run for cleanliness.
 
     if OpenStudio.exists(sql_path)
       sql = OpenStudio::SqlFile.new(sql_path)
@@ -169,8 +179,11 @@ Standard.class_eval do
     return true
   end
 
-  # A helper method to run a sizing run and pull any values calculated during
-  # autosizing back into the model.
+  # A helper method to run a sizing run and pull any values calculated during autosizing back into the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param sizing_run_dir [String] file path location for the sizing run, defaults to 'SR' in the current directory
+  # @return [Bool] returns true if successful, false if not
   def model_run_sizing_run(model, sizing_run_dir = "#{Dir.pwd}/SR")
     # Change the simulation to only run the sizing days
     sim_control = model.getSimulationControl
@@ -190,32 +203,35 @@ Standard.class_eval do
     # Change the model back to running the weather file
     sim_control.setRunSimulationforSizingPeriods(false)
     sim_control.setRunSimulationforWeatherFileRunPeriods(true)
+    if model.version >= OpenStudio::VersionString.new('3.0.0')
+      sim_control.setDoHVACSizingSimulationforSizingPeriods(false)
+    end
 
     return success
   end
 
   # Method to check if all zones have surfaces. This is required to run a simulation.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_do_all_zones_have_surfaces?(model)
-    error_string = ''
-    error = false
     # Check to see if all zones have surfaces.
     model.getThermalZones.each do |zone|
       if BTAP::Geometry::Surfaces.get_surfaces_from_thermal_zones([zone]).empty?
-        error_string << "Error: Thermal zone #{zone.name} does not contain surfaces.\n"
-        error = true
-      end
-      if error == true
+        error_string = "Error: Thermal zone #{zone.name} does not contain surfaces.\n"
         puts error_string
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Siz.Model', error_string)
         return false
-      else
-        return true
       end
     end
+    return true
   end
 
-  # A helper method to run a sizing run and pull any values calculated during
-  # autosizing back into the model.
+  # A helper method to run a space sizing run and pull any values calculated during autosizing back into the model.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param sizing_run_dir [String] file path location for the sizing run, defaults to 'SpaceSR' in the current directory
+  # @return [OpenStudio::Model::Model] returns the model if successful
   def model_run_space_sizing_run(sizing_run_dir = "#{Dir.pwd}/SpaceSR")
     puts '*************Runing sizing space Run ***************************'
     # Make copy of model

@@ -3,13 +3,15 @@ class Standard
 
   # Adds a refrigerated case to the model.
   #
-  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the
-  # case is located, and which will be impacted by the case's thermal load.
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the case is located,
+  #   and which will be impacted by the case's thermal load.
   # @param case_type [String] the case type/name. For valid choices
-  # This parameter is used also by the "Refrigeration System Lineup" tab.
-  # refer to the ""Refrigerated Cases" tab on the OpenStudio_Standards spreadsheet.
-  # @param size_category [String] size category of the building area. Valid choices
-  # are: "<35k ft2", "35k - 50k ft2", ">50k ft2"
+  #   refer to the ""Refrigerated Cases" tab on the OpenStudio_Standards spreadsheet.
+  #   This parameter is used also by the "Refrigeration System Lineup" tab.
+  # @param size_category [String] size category of the building area. Valid choices are:
+  #   "<35k ft2", "35k - 50k ft2", ">50k ft2"
+  # @return [OpenStudio::Model::RefrigerationCase] the refrigeration case
   def model_add_refrigeration_case(model, thermal_zone, case_type, size_category)
     # Get the case properties
     #
@@ -142,13 +144,17 @@ class Standard
     return ref_case
   end
 
-  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the
-  # walkin is located, and which will be impacted by the walkin's thermal load.
-  # @param size_category [String] size category of the building area. Valid choices
-  # are: "<35k ft2", "35k - 50k ft2", ">50k ft2"
-  # @param walkin_type [String] the walkin type/name. For valid choices
-  # refer to the "Refrigerated Walkins" tab on the OpenStudio_Standards spreadsheet.
-  # This parameter is used also by the "Refrigeration System Lineup" tab.
+  # Adds a refrigerated walkin unit to the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the walkin is located,
+  #   and which will be impacted by the walkin's thermal load.
+  # @param size_category [String] size category of the building area. Valid choices are:
+  #   "<35k ft2", "35k - 50k ft2", ">50k ft2"
+  # @param walkin_type [String] the walkin type/name. For valid choices,
+  #   refer to the "Refrigerated Walkins" tab on the OpenStudio_Standards spreadsheet.
+  #   This parameter is used also by the "Refrigeration System Lineup" tab.
+  # @return [OpenStudio::Model::RefrigerationWalkIn] the walk in refrigerator
   def model_add_refrigeration_walkin(model, thermal_zone, size_category, walkin_type)
     # Get the walkin properties
     search_criteria = {
@@ -343,7 +349,10 @@ class Standard
     return ref_walkin
   end
 
-  # Adds a refrigeration compressor to the model.
+  # Adds a refrigeration compressor to the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::RefrigerationCompressor] the refrigeration compressor
   def model_add_refrigeration_compressor(model, compressor_name)
     # Get the compressor properties
     search_criteria = {
@@ -372,8 +381,9 @@ class Standard
   # Find the thermal zone that is best for adding refrigerated display cases into.
   # First, check for space types that typically have refrigeration.
   # Fall back to largest zone in the model if no typical space types are found.
-  #   # @param model [OpenStudio::Model::Model] the model
-  #   # @return [OpenStudio::Model::ThermalZone] returns a thermal zone if found, nil if not.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::ThermalZone] returns a thermal zone if found, nil if not.
   def model_typical_display_case_zone(model)
     # Ideally, look for one of the space types
     # that would typically have refrigeration.
@@ -438,7 +448,8 @@ class Standard
   # Find the thermal zone that is best for adding refrigerated walkins into.
   # First, check for space types that typically have refrigeration.
   # Fall back to largest zone in the model if no typical space types are found.
-  # @param model [OpenStudio::Model::Model] the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [OpenStudio::Model::ThermalZone] returns a thermal zone if found, nil if not.
   def model_typical_walkin_zone(model)
     # Ideally, look for one of the space types
@@ -506,6 +517,10 @@ class Standard
   # compressors, and condensors.  For small stores, each case and walkin is served
   # by one compressor and one condenser.  For larger stores, all medium temp cases and walkins
   # are served by one multi-compressor rack, and all low temp cases and walkins another.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [String] building type
+  # @return [Bool] returns true if successful, false if not
   def model_add_typical_refrigeration(model, building_type)
     # Define system category and scaling factor
     floor_area_ft2 = OpenStudio.convert(model.getBuilding.floorArea, 'm^2', 'ft^2').get
@@ -819,28 +834,28 @@ class Standard
     return true
   end
 
-  # Determine the latent case credit curve to use
-  # for walkins. Defaults to values after 90.1-2007.
-  # @todo Should probably use the model_add_refrigeration_walkin
-  # and lookups from the spreadsheet instead of hard-coded values.
+  # Determine the latent case credit curve to use for walkins. Defaults to values after 90.1-2007.
+  # @todo Should probably use the model_add_refrigeration_walkin and lookups from the spreadsheet instead of hard-coded values
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_walkin_freezer_latent_case_credit_curve(model)
     latent_case_credit_curve_name = 'Single Shelf Horizontal Latent Energy Multiplier_After2004'
     return latent_case_credit_curve_name
   end
 
-  # Adds a full commercial refrigeration rack, as would be found in a supermarket,
-  # to the model.
-  #
-  # @param compressor_type [String] the system temperature range.  valid choices are:
-  # Low Temp, Med Temp
-  # @param system_name [String] the name of the refrigeration system
-  # @param cases [Array<Hash>] an array of cases with keys:
-  # case_type and space_names.
-  # @param walkins [Array<Hashs>] an array of walkins with keys:
-  # walkin_type, space_names, and number_of_walkins
-  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the
-  # refrigeration piping is located.
+  # Adds a full commercial refrigeration rack to the model, as would be found in a supermarket
   # @todo Move refrigeration compressors to spreadsheet
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param compressor_type [String] the system temperature range
+  #   valid choices are Low Temp, Med Temp
+  # @param system_name [String] the name of the refrigeration system
+  # @param cases [Array<Hash>] an array of cases with keys: case_type and space_names
+  # @param walkins [Array<Hashs>] an array of walkins with keys:
+  #   walkin_type, space_names, and number_of_walkins
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the refrigeration piping is located
+  # @return [Bool] returns true if successful, false if not
   def model_add_refrigeration_system(model,
                                      compressor_type,
                                      system_name,

@@ -1,5 +1,4 @@
 class NECB2011
-
   # end add_sys4_single_zone_make_up_air_unit_with_baseboard_heating
 
   def add_sys6_multi_zone_built_up_system_with_baseboard_heating(model:,
@@ -24,7 +23,7 @@ class NECB2011
     # "chiller_type": "Scroll";"Centrifugal";""Screw";"Reciprocating"
     # "fan_type": "AF_or_BI_rdg_fancurve";"AF_or_BI_inletvanes";"fc_inletvanes";"var_speed_drive"
     #
-    system_data = Hash.new
+    system_data = {}
     system_data[:name] = 'Sys_6_VAV with Reheat'
     system_data[:CentralCoolingDesignSupplyAirTemperature] = 13.0
     system_data[:CentralHeatingDesignSupplyAirTemperature] = 13.1
@@ -32,8 +31,7 @@ class NECB2011
     system_data[:AllOutdoorAirinHeating] = false
     system_data[:MinimumSystemAirFlowRatio] = 0.3
 
-    
-    #zone data
+    # zone data
     system_data[:system_supply_air_temperature] = 13.0
     system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
     system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
@@ -48,18 +46,18 @@ class NECB2011
     # Chilled Water Plant
 
     chw_loop = OpenStudio::Model::PlantLoop.new(model)
-    chiller1, chiller2 = self.setup_chw_loop_with_components(model, chw_loop, chiller_type)
+    chiller1, chiller2 = setup_chw_loop_with_components(model, chw_loop, chiller_type)
 
     # Condenser System
 
     cw_loop = OpenStudio::Model::PlantLoop.new(model)
-    ctower = self.setup_cw_loop_with_components(model, cw_loop, chiller1, chiller2)
+    ctower = setup_cw_loop_with_components(model, cw_loop, chiller1, chiller2)
 
     # Make a Packaged VAV w/ PFP Boxes for each story of the building
     model.getBuildingStorys.sort.each do |story|
       unless (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).empty?
 
-        air_loop = common_air_loop( model: model, system_data: system_data)
+        air_loop = common_air_loop(model: model, system_data: system_data)
         air_loop.setName('Sys_6_VAV with Reheat')
 
         supply_fan = OpenStudio::Model::FanVariableVolume.new(model, always_on)
@@ -80,6 +78,10 @@ class NECB2011
 
         oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
         oa_controller.autosizeMinimumOutdoorAirFlowRate
+
+        # Set mechanical ventilation controller outdoor air to ZoneSum (used to be defaulted to ZoneSum but now should be
+        # set explicitly)
+        oa_controller.controllerMechanicalVentilation.setSystemOutdoorAirMethod('ZoneSum')
 
         oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
 
@@ -123,7 +125,7 @@ class NECB2011
           vav_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, always_on, reheat_coil)
           air_loop.addBranchForZone(zone, vav_terminal.to_StraightComponent)
           # NECB2011 minimum zone airflow setting
-          vav_terminal.setFixedMinimumAirFlowRate(system_data[:ZoneVAVMinFlowFactorPerFloorArea] * zone.floorArea )
+          vav_terminal.setFixedMinimumAirFlowRate(system_data[:ZoneVAVMinFlowFactorPerFloorArea] * zone.floorArea)
           vav_terminal.setMaximumReheatAirTemperature(system_data[:ZoneVAVMaxReheatTemp])
           vav_terminal.setDamperHeatingAction(system_data[:ZoneVAVDamperAction])
 
@@ -134,36 +136,32 @@ class NECB2011
                               hw_loop: hw_loop)
         end
         sys_name_pars = {}
-        sys_name_pars["sys_hr"] = "none"
-        sys_name_pars["sys_htg"] = heating_coil_type
-        sys_name_pars["sys_clg"] = "Chilled Water"
-        sys_name_pars["sys_sf"] = "vv"
-        sys_name_pars["zone_htg"] = baseboard_type
-        sys_name_pars["zone_clg"] = "none"
-        sys_name_pars["sys_rf"] = "vv"
+        sys_name_pars['sys_hr'] = 'none'
+        sys_name_pars['sys_htg'] = heating_coil_type
+        sys_name_pars['sys_clg'] = 'Chilled Water'
+        sys_name_pars['sys_sf'] = 'vv'
+        sys_name_pars['zone_htg'] = baseboard_type
+        sys_name_pars['zone_clg'] = 'none'
+        sys_name_pars['sys_rf'] = 'vv'
         assign_base_sys_name(air_loop,
-                             sys_abbr: "sys_6",
-                             sys_oa: "mixed",
+                             sys_abbr: 'sys_6',
+                             sys_oa: 'mixed',
                              sys_name_pars: sys_name_pars)
       end
-    end # next story
-
+      # next story
+    end
     # for debugging
     # puts "end add_sys6_multi_zone_built_up_with_baseboard_heating"
-
     return true
   end
 
-
-
-
   def new_add_sys6_multi_zone_built_up_system_with_baseboard_heating(model:,
-                                                                 zones:,
-                                                                 heating_coil_type:,
-                                                                 baseboard_type:,
-                                                                 chiller_type:,
-                                                                 fan_type:,
-                                                                 hw_loop:)
+                                                                     zones:,
+                                                                     heating_coil_type:,
+                                                                     baseboard_type:,
+                                                                     chiller_type:,
+                                                                     fan_type:,
+                                                                     hw_loop:)
     # System Type 6: VAV w/ Reheat
     # This measure creates:
     # a single hot water loop with a natural gas or electric boiler or for the building
@@ -178,14 +176,14 @@ class NECB2011
     # "baseboard_type": "Electric" and "Hot Water"
     # "chiller_type": "Scroll";"Centrifugal";""Screw";"Reciprocating"
     # "fan_type": "AF_or_BI_rdg_fancurve";"AF_or_BI_inletvanes";"fc_inletvanes";"var_speed_drive"
-    system_6_data = Hash.new
+    system_6_data = {}
     system_6_data[:name] = 'Sys_6_VAV with Reheat'
     system_6_data[:CentralCoolingDesignSupplyAirTemperature] = 13.0
     system_6_data[:CentralHeatingDesignSupplyAirTemperature] = 43.0
     system_6_data[:AllOutdoorAirinCooling] = false
     system_6_data[:AllOutdoorAirinHeating] = false
     system_6_data[:MinimumSystemAirFlowRatio] = 0.03
-    #zone data
+    # zone data
     system_6_data[:system_supply_air_temperature] = 13.0
     system_6_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
     system_6_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
@@ -201,22 +199,21 @@ class NECB2011
     # Chilled Water Plant
 
     chw_loop = OpenStudio::Model::PlantLoop.new(model)
-    chiller1, chiller2 = self.setup_chw_loop_with_components(model, chw_loop, chiller_type)
+    chiller1, chiller2 = setup_chw_loop_with_components(model, chw_loop, chiller_type)
 
     # Condenser System
 
     cw_loop = OpenStudio::Model::PlantLoop.new(model)
-    ctower = self.setup_cw_loop_with_components(model, cw_loop, chiller1, chiller2)
+    ctower = setup_cw_loop_with_components(model, cw_loop, chiller1, chiller2)
 
     # Make a Packaged VAV w/ PFP Boxes for each story of the building
     model.getBuildingStorys.sort.each do |story|
       unless (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).empty?
-
-        air_loop = common_air_loop(model: model)
+        air_loop = common_air_loop(model: model, system_data: system_data)
         air_loop.setName(system_data[:name])
         air_loop_sizing = air_loop.sizingSystem
-        air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(system_data[:CentralCoolingDesignSupplyAirTemperature] )
-        air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(system_data[:CentralHeatingDesignSupplyAirTemperature] )
+        air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(system_data[:CentralCoolingDesignSupplyAirTemperature])
+        air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(system_data[:CentralHeatingDesignSupplyAirTemperature])
         air_loop_sizing.setAllOutdoorAirinCooling(system_data[:AllOutdoorAirinCooling])
         air_loop_sizing.setAllOutdoorAirinHeating(system_data[:AllOutdoorAirinHeating])
         if model.version < OpenStudio::VersionString.new('2.7.0')
@@ -243,6 +240,10 @@ class NECB2011
 
         oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
         oa_controller.autosizeMinimumOutdoorAirFlowRate
+
+        # Set mechanical ventilation controller outdoor air to ZoneSum (used to be defaulted to ZoneSum but now should be
+        # set explicitly)
+        oa_controller.controllerMechanicalVentilation.setSystemOutdoorAirMethod('ZoneSum')
 
         oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
 
@@ -291,7 +292,6 @@ class NECB2011
           vav_terminal.setMaximumReheatAirTemperature(system_data[:ZoneVAVMaxReheatTemp])
           vav_terminal.setDamperHeatingAction(system_data[:ZoneVAVDamperAction])
 
-
           # Set zone baseboards
           add_zone_baseboards(model: model,
                               zone: zone,
@@ -299,11 +299,10 @@ class NECB2011
                               hw_loop: hw_loop)
         end
       end
-    end # next story
-
+      # next story
+    end
     # for debugging
     # puts "end add_sys6_multi_zone_built_up_with_baseboard_heating"
-
     return true
   end
 end

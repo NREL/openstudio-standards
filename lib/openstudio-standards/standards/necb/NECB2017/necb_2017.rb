@@ -1,18 +1,17 @@
 # This class holds methods that apply NECB2017 rules.
 # @ref [References::NECB2017]
 class NECB2017 < NECB2015
-  @template = self.new.class.name # rubocop:disable Style/ClassVars
+  @template = new.class.name
   register_standard(@template)
 
   def initialize
     super()
-    @template = self.class.name
-    @standards_data = self.load_standards_database_new()
-    self.corrupt_standards_database()
+    @standards_data = load_standards_database_new
+    corrupt_standards_database
   end
 
-  def load_standards_database_new()
-    #load NECB2011 data.
+  def load_standards_database_new
+    # load NECB2011 data.
     super()
 
     if __dir__[0] == ':' # Running from OpenStudio CLI
@@ -27,7 +26,7 @@ class NECB2017 < NECB2015
         end
       end
     else
-      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select { |e| File.file? e }
       files.each do |file|
         data = JSON.parse(File.read(file))
         if !data['tables'].nil?
@@ -39,21 +38,19 @@ class NECB2017 < NECB2015
         end
       end
     end
-    #Write test report file.
+    # Write test report file.
     # Write database to file.
     # File.open(File.join(File.dirname(__FILE__), '..', 'NECB2017.json'), 'w') {|f| f.write(JSON.pretty_generate(@standards_data))}
-
     return @standards_data
   end
 
   def set_lighting_per_area_led_lighting(space_type:, definition:, lighting_per_area_led_lighting:, lights_scale:)
-
     # puts "#{space_type.name.to_s} - 'space_height' - #{space_height.to_s}"
-    #TODO: Note that 'occ_sens_lpd_frac' in this function has been removed for NECB2015 and 2017.
+    # TODO: Note that 'occ_sens_lpd_frac' in this function has been removed for NECB2015 and 2017.
     # ##### Since Atrium's LPD for LED lighting depends on atrium's height, the height of the atrium (if applicable) should be found.
-    standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil #Sara
+    standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil # Sara
     if standards_space_type.include? 'Atrium' # TODO: Note that since none of the archetypes has Atrium, this was tested for 'Dining'. #Atrium
-      puts "#{standards_space_type} - has atrium"  # space_type.name.to_s
+      puts "#{standards_space_type} - has atrium" # space_type.name.to_s
       # puts space_height
       if get_max_space_height_for_space_type(space_type: space_type) < 12.0
         # TODO: Regarding the below equations, identify which version of ASHRAE 90.1 was used in NECB2017.
@@ -74,5 +71,4 @@ class NECB2017 < NECB2015
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set LPD to #{lighting_per_area_led_lighting} W/ft^2.")
   end
-
 end

@@ -1,8 +1,10 @@
 class Standard
   # @!group HeatExchangerSensLat
 
-  # Sets the minimum effectiveness of the heat exchanger per
-  # the standard.
+  # Sets the minimum effectiveness of the heat exchanger per the standard.
+  #
+  # @param heat_exchanger_air_to_air_sensible_and_latent [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] the heat exchanger
+  # @return [Bool] returns true if successful, false if not
   def heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(heat_exchanger_air_to_air_sensible_and_latent)
     # Assumed to be sensible and latent at all flow
     min_effct = heat_exchanger_air_to_air_sensible_and_latent_minimum_efficiency(heat_exchanger_air_to_air_sensible_and_latent)
@@ -21,11 +23,11 @@ class Standard
     return true
   end
 
-  # Defines the minimum sensible and latent effectiveness of
-  # the heat exchanger.  Assumed to apply to sensible and latent
-  # effectiveness at all flow rates.
+  # Defines the minimum sensible and latent effectiveness of the heat exchanger.
+  # Assumed to apply to sensible and latent effectiveness at all flow rates.
   #
   # @param heat_exchanger_air_to_air_sensible_and_latent [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] the heat exchanger
+  # @return [Double] minimum effectiveness
   def heat_exchanger_air_to_air_sensible_and_latent_minimum_efficiency(heat_exchanger_air_to_air_sensible_and_latent)
     min_effct = 0.5
     return min_effct

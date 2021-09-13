@@ -74,7 +74,7 @@ class OpenStudio::Model::Model
       return false
     end
 
-    # TODO Sizing methods for these types of equipment are
+    # @todo Sizing methods for these types of equipment are
     # currently only stubs that need to be filled in.
     self.getAirConditionerVariableRefrigerantFlows.sort.each {|obj| obj.applySizingValues}
     self.getAirLoopHVACUnitaryHeatCoolVAVChangeoverBypasss.sort.each {|obj| obj.applySizingValues}
@@ -176,7 +176,7 @@ class OpenStudio::Model::Model
   # Changes all hard-sized HVAC values to Autosized
   def autosize
   
-    # TODO Sizing methods for these types of equipment are
+    # @todo Sizing methods for these types of equipment are
     # currently only stubs that need to be filled in.
     self.getAirConditionerVariableRefrigerantFlows.sort.each {|obj| obj.autosize}
     self.getAirLoopHVACUnitaryHeatCoolVAVChangeoverBypasss.sort.each {|obj| obj.autosize}
@@ -310,7 +310,7 @@ class OpenStudio::Model::Model
       if val.is_initialized
         result = OpenStudio::OptionalDouble.new(val.get)
       else
-        # TODO: comment following line (debugging new HVACsizing objects right now)
+        # @todo comment following line (debugging new HVACsizing objects right now)
         # OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "QUERY ERROR: Data not found for query: #{query}")
       end
     else
@@ -346,7 +346,7 @@ class OpenStudio::Model::Model
       if val.is_initialized
         result = OpenStudio::OptionalDouble.new(val.get)
       else
-        # TODO: comment following line (debugging new HVACsizing objects right now)
+        # @todo comment following line (debugging new HVACsizing objects right now)
         # OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "QUERY ERROR: Data not found for query: #{query}")
       end
     else
@@ -360,8 +360,8 @@ class OpenStudio::Model::Model
   # Helper function to output the fan power for each fan in the model
   # @param [String] csv_path: if given, will output a csv file
   # @return [Array of Hash] each row is a fan, with its name, type, rated watts per cfm, and the airloop or hvac component or zonehvac component it serves
-  # Todo: output actual bhp and allowable bhp for systems 3-4 and 5-8
-  # Todo: remove maybe later?
+  # @todo output actual bhp and allowable bhp for systems 3-4 and 5-8
+  # @todo remove maybe later?
   def output_fan_report(csv_path = nil)
 
     table = []

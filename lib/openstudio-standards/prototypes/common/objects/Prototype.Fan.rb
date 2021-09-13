@@ -7,7 +7,9 @@ module PrototypeFan
   # model assumptions for fan impeller efficiency,
   # motor type, and a 10% safety factor on brake horsepower.
   #
-  # @return [Bool] true if successful, false if not
+  # @param fan [OpenStudio::Model::StraightComponent] fan object of type:
+  #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
+  # @return [Bool] returns true if successful, false if not
   def prototype_fan_apply_prototype_fan_efficiency(fan)
     # Do not modify dummy exhaust fans
     return true unless !fan.name.to_s.downcase.include? 'dummy'
@@ -35,7 +37,8 @@ module PrototypeFan
 
     # Calculate the Brake Horsepower
     brake_hp = (pressure_rise_in_h2o * maximum_flow_rate_cfm) / (fan_impeller_eff * 6356)
-    allowed_hp = brake_hp * 1.1 # Per PNNL document #TODO add reference
+    allowed_hp = brake_hp * 1.1 # Per PNNL document
+    # @todo add reference
     if allowed_hp > 0.1
       allowed_hp = allowed_hp.round(2) + 0.0001
     elsif allowed_hp < 0.01
@@ -70,6 +73,15 @@ module PrototypeFan
     return true
   end
 
+  # fan class method to apply fan variables
+  #
+  # @param fan [OpenStudio::Model::StraightComponent] fan object of type:
+  #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
+  # @param fan_name [String] fan name
+  # @param fan_efficiency [Double] fan efficiency
+  # @param pressure_rise [Double] fan pressure rise in Pa
+  # @param end_use_subcategory [String] end use subcategory name
+  # @return [OpenStudio::Model::StraightComponent] fan object
   def self.apply_base_fan_variables(fan,
                                     fan_name: nil,
                                     fan_efficiency: nil,
@@ -82,6 +94,8 @@ module PrototypeFan
     return fan
   end
 
+  # @param fan_efficiency [Double] fan efficiency
+  # @param pressure_rise [Double] fan pressure rise in Pa
   def get_fan_from_standards(standards_name: nil,
                              type: nil,
                              fan_efficiency: nil,
@@ -115,6 +129,13 @@ module PrototypeFan
     model_find_object(@standards_data['fans'], search_criteria)
   end
 
+  # create a fan with properties for a fan name in the standards data
+  #
+  # @param fan_name [String] fan name
+  # @param fan_efficiency [Double] fan efficiency
+  # @param pressure_rise [Double] fan pressure rise in Pa
+  # @param end_use_subcategory [String] end use subcategory name
+  # @return [OpenStudio::Model::StraightComponent] fan object
   def create_fan_by_name(model,
                          standards_name,
                          fan_name: nil,
