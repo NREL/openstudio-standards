@@ -837,12 +837,6 @@ class Standard
 
     areas = nil
 
-    # Get the area of the space
-    space_area_m2 = space.floorArea
-
-    # Get the LPD of the space
-    space_lpd_w_per_m2 = space.lightingPowerPerFloorArea
-
     # Get the daylighting areas
     areas = space_daylighted_areas(space, draw_daylight_areas_for_debugging)
 
@@ -851,6 +845,7 @@ class Standard
 
     # Stop here if no controls are required
     if !req_top_ctrl && !req_pri_ctrl && !req_sec_ctrl
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, no daylighting control is required.")
       return false
     end
 
@@ -858,13 +853,6 @@ class Standard
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, toplighting control required = #{req_top_ctrl}")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, primary sidelighting control required = #{req_pri_ctrl}")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, secondary sidelighting control required = #{req_sec_ctrl}")
-
-    # Stop here if no lighting controls are required.
-    # Do not put daylighting control points into the space.
-    if !req_top_ctrl && !req_pri_ctrl && !req_sec_ctrl
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, no daylighting control is required.")
-      return false
-    end
 
     # Record a floor in the space for later use
     floor_surface = nil
@@ -1105,9 +1093,9 @@ class Standard
       sensor_1.setName("#{space.name} Daylt Sensor 1")
       sensor_1.setSpace(space)
       sensor_1.setIlluminanceSetpoint(daylight_stpt_lux)
-      sensor_1.setLightingControlType('Stepped')
-      sensor_1.setNumberofSteppedControlSteps(3) # all sensors 3-step per design
-      sensor_1.setMinimumInputPowerFractionforContinuousDimmingControl(0.3)
+      sensor_1.setLightingControlType(space_daylighting_control_type(space))
+      sensor_1.setNumberofSteppedControlSteps(3) unless space_daylighting_control_type(space) != 'Stepped' # all sensors 3-step per design
+      sensor_1.setMinimumInputPowerFractionforContinuousDimmingControl(space_daylighting_minimum_input_power_fraction(space))
       sensor_1.setMinimumLightOutputFractionforContinuousDimmingControl(0.2)
       sensor_1.setProbabilityLightingwillbeResetWhenNeededinManualSteppedControl(1.0)
       sensor_1.setMaximumAllowableDiscomfortGlareIndex(22.0)
@@ -1147,9 +1135,9 @@ class Standard
       sensor_2.setName("#{space.name} Daylt Sensor 2")
       sensor_2.setSpace(space)
       sensor_2.setIlluminanceSetpoint(daylight_stpt_lux)
-      sensor_2.setLightingControlType('Stepped')
-      sensor_2.setNumberofSteppedControlSteps(3) # all sensors 3-step per design
-      sensor_2.setMinimumInputPowerFractionforContinuousDimmingControl(0.3)
+      sensor_2.setLightingControlType(space_daylighting_control_type(space))
+      sensor_2.setNumberofSteppedControlSteps(3) unless space_daylighting_control_type(space) != 'Stepped' # all sensors 3-step per design
+      sensor_2.setMinimumInputPowerFractionforContinuousDimmingControl(space_daylighting_minimum_input_power_fraction(space))
       sensor_2.setMinimumLightOutputFractionforContinuousDimmingControl(0.2)
       sensor_2.setProbabilityLightingwillbeResetWhenNeededinManualSteppedControl(1.0)
       sensor_2.setMaximumAllowableDiscomfortGlareIndex(22.0)
@@ -2265,5 +2253,22 @@ class Standard
     end
 
     return overlap_area
+  end
+
+  # Provide the type of daylighting control type
+  #
+  # @param [OpenStudio::Model::Space] OpenStudio Space object
+  # return [String] daylighting control type
+  def space_daylighting_control_type(space)
+    return 'Stepped'
+  end
+
+  # Provide the minimum input power fraction for continuous
+  # dimming daylighting control
+  #
+  # @param [OpenStudio::Model::Space] OpenStudio Space object
+  # return [Float] daylighting minimum input power fraction
+  def space_daylighting_minimum_input_power_fraction(space)
+    return 0.3
   end
 end
