@@ -2580,17 +2580,17 @@ Standard.class_eval do
     # Offset schedule values
     day_schedules.each do |day_schedule|
       (0..23).each do |hr|
+        next if !time_offset_hash.key?(hr.to_s)
+
         t = OpenStudio::Time.new(0, hr, 0, 0)
 
         # Get schedule value
         value = day_schedule.getValue(t)
 
         # Offset schedule value
-        if time_offset_hash.key?(hr.to_s)
-          day_schedule.addValue(t, value)
-          t_p_1 = OpenStudio::Time.new(0, hr + 1, 0, 0)
-          day_schedule.addValue(t_p_1, value + time_offset_hash[hr.to_s])
-        end
+        day_schedule.addValue(t, value)
+        t_p_1 = OpenStudio::Time.new(0, hr + 1, 0, 0)
+        day_schedule.addValue(t_p_1, value + time_offset_hash[hr.to_s])
       end
     end
 
@@ -2619,20 +2619,20 @@ Standard.class_eval do
       day_schedules << rule.daySchedule
     end
 
-    # Offset schedule values
+    # Set schedule values
     day_schedules.each do |day_schedule|
       (0..23).each do |hr|
+        next if !time_offset_hash.key?(hr.to_s)
+
         t = OpenStudio::Time.new(0, hr, 0, 0)
 
         # Get schedule value
         value = day_schedule.getValue(t)
 
-        # Offset schedule value
-        if time_value_hash.key?(hr.to_s)
-          day_schedule.addValue(t, value)
-          t_p_1 = OpenStudio::Time.new(0, hr + 1, 0, 0)
-          day_schedule.addValue(t_p_1, time_value_hash[hr.to_s])
-        end
+        # Set schedule value
+        day_schedule.addValue(t, value)
+        t_p_1 = OpenStudio::Time.new(0, hr + 1, 0, 0)
+        day_schedule.addValue(t_p_1, time_value_hash[hr.to_s])
       end
     end
 

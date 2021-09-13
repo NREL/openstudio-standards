@@ -45,7 +45,7 @@ class ASHRAE9012019 < ASHRAE901
     # Setback is 1 deg. F per code requirement
     # Time of the day is arbitrary lack of dynamic occupant modeling
     setup = 1 # deg. F
-    htg_sch_mod = { '12' => -1 * (OpenStudio.convert(1, 'F', 'C').get - OpenStudio.convert(1 - setup, 'F', 'C').get) }
+    htg_sch_mod = { '12' => -1 * OpenStudio.convert(setup, 'R', 'K').get }
     htg_sch_name = "#{htg_sch.name} - occupant standby mode"
     htg_sch_old = thermostat.model.getScheduleRulesetByName(htg_sch_name)
     if htg_sch_old.empty?
@@ -60,7 +60,7 @@ class ASHRAE9012019 < ASHRAE901
     # Setup is 1 deg. F per code requirement
     # Time of the day is arbitrary lack of dynamic occupant modeling
     setback = 1 # deg. F
-    clg_sch_mod = { '12' => (OpenStudio.convert(1, 'F', 'C').get - OpenStudio.convert(1 - setback, 'F', 'C').get) }
+    clg_sch_mod = { '12' => OpenStudio.convert(setback, 'R', 'K').get }
     clg_sch_name = "#{clg_sch.name} - occupant standby mode"
     clg_sch_old = thermostat.model.getScheduleRulesetByName(clg_sch_name)
     if clg_sch_old.empty?
