@@ -147,7 +147,7 @@ class Standard
     unless existing_sch.nil?
       if existing_sch.name.is_initialized
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ZoneHVACComponent', "#{zone_hvac_component.name} has ventilation, and schedule is set to always on; keeping always on schedule.")
-        return false if existing_sch.name.get.to_s.downcase.include? 'always on discrete'
+        return false if existing_sch.name.get.to_s.downcase.include?('always on discrete') || existing_sch.name.get.to_s.downcase.include?('guestroom_vent_ctrl_sch')
       end
     end
 
