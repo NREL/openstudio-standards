@@ -1289,9 +1289,7 @@ Standard.class_eval do
       # thermostat_name = 'SmallHotel GuestRoom4Occ Thermostat'
       air_terminals = model.getZoneHVACPackagedTerminalAirConditioners.sort
     end
-    # guestroom_thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
-    # guestroom_htg_schrst = guestroom_thermostat.getHeatingSchedule.get
-    # guestroom_clg_schrst = guestroom_thermostat.getCoolingSchedule.get
+
     guestroom_htg_schrst, guestroom_clg_schrst = get_occ_guestroom_setpoint_schedules(model)
 
     # intentionally no check so if anything is wrong, this will break
@@ -1334,9 +1332,9 @@ Standard.class_eval do
       vent_day_sch.addValue(htg_sch_times[i], binary_value)
     end
 
-    # link vent schedule to guest room air terminals (seems to be all spaces with AirTerminalSingleDuctConstantVolumeNoReheat)
+    # link vent schedule to guest room air terminals
     modified_zones = []
-    air_terminals.each do |airterminal| # seems all spaces having such air terminals are guest rooms
+    air_terminals.each do |airterminal|
       zone_name = airterminal.name.to_s.strip.split[0]
       if guestroom_occupied_map[building_type].include? zone_name
         if building_type == 'LargeHotel'
