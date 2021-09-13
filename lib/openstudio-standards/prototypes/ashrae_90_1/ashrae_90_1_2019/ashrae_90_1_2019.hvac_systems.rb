@@ -17,7 +17,7 @@ class ASHRAE9012019 < ASHRAE901
   # @param snc [String] System name
   #
   # @return [OpenStudio::Model::ScheduleRuleset] Generated maximum outdoor air fraction schedule for later use
-  def set_max_frac_oa_sch(air_loop_hvac, oa_control, snc)
+  def set_maximum_fraction_outdoor_air_schedule(air_loop_hvac, oa_control, snc)
     max_oa_sch_name = "#{snc}maxOASch"
     max_oa_sch = OpenStudio::Model::ScheduleRuleset.new(air_loop_hvac.model)
     max_oa_sch.setName(max_oa_sch_name)
