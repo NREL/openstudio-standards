@@ -23,7 +23,9 @@ class Standard
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
-    # Get the boiler properties
+    # Get the boiler properties, if it exists for this template
+    return false unless standards_data.include?('furnaces')
+
     furnace_props = model_find_object(standards_data['furnaces'], search_criteria, capacity_btu_per_hr)
     unless furnace_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingGas', "For #{coil_heating_gas.name}, cannot find furnace properties with search criteria #{search_criteria}, cannot apply efficiency standard.")
