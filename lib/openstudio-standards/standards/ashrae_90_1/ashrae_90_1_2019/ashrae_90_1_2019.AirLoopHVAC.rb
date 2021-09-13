@@ -318,18 +318,19 @@ class ASHRAE9012019 < ASHRAE901
     end
 
     # check if design outside air is less than 10,000cfm (5000L/s) 90.1 2019 6.5.3.5 Exception 1 and 2
-    design_oa_m3s = air_loop_hvac.sizingSystem.designOutdoorAirFlowRate.to_f
-    if design_oa_m3s < 0.0001
-      design_oa_m3s = air_loop_hvac.sizingSystem.autosizedDesignOutdoorAirFlowRate.to_f
+    design_oa_m3s = nil
+    if air_loop_hvac.sizingSystem.designOutdoorAirFlowRate.is_initialized
+      design_oa_m3s = air_loop_hvac.sizingSystem.designOutdoorAirFlowRate.get
+    elsif air_loop_hvac.sizingSystem.autosizedDesignOutdoorAirFlowRate.is_initialized
+      design_oa_m3s = air_loop_hvac.sizingSystem.autosizedDesignOutdoorAirFlowRate.get
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} design outdoor air flow rate is not available.")
     end
     design_oa_cfm = OpenStudio.convert(design_oa_m3s, 'm^3/s', 'cfm').get
 
     # check if there is erv 90.1 2019 Exceptions to 6.5.3.5 Exception 3
     has_erv = air_loop_hvac_energy_recovery?(air_loop_hvac)
-    design_sa_m3s = air_loop_hvac.designSupplyAirFlowRate.to_f
-    if design_sa_m3s < 0.0001
-      design_sa_m3s = air_loop_hvac.autosizedDesignSupplyAirFlowRate.to_f
-    end
+    design_sa_m3s = air_loop_hvac_find_design_supply_air_flow_rate(air_loop_hvac)
 
     oa_ratio = 0
     if design_sa_m3s > 0
