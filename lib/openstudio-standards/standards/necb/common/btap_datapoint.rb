@@ -268,6 +268,7 @@ class BTAPDatapoint
 
   def s3_copy_file_to_s3(bucket_name:, source_file:, target_file:, n: 0)
     require 'aws-sdk-s3'
+    OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
     s3_resource = Aws::S3::Resource.new(region: 'ca-central-1')
 
     puts("Copying File to S3. source_file:#{source_file} bucket:#{bucket_name} target_folder:#{target_file}")
