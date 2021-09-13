@@ -82,13 +82,14 @@ class Standard
     # Look up the efficiency characteristics
     coil_props = model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
 
+    cop = nil
     # If capacity is larger than 0
     if capacity_btu_per_hr > 0
       crac_minimum_scop = coil_props['minimum_scop']
       # If CRAC, use equations if coefficients are specified
       if sub_category == 'CRAC' && !crac_minimum_scop.nil?
-        # cop = scop/sensible cool ratio
-        # sensible cool ratio = sensible cool capacity/total cool capacity
+        # cop = scop/sensible heat ratio
+        # sensible heat ratio = sensible cool capacity/total cool capacity
         if coil_cooling_water_to_air_heat_pump.ratedSensibleCoolingCapacity.is_initialized
           crac_sensible_cool = coil_cooling_water_to_air_heat_pump.ratedSensibleCoolingCapacity.get
           crac_total_cool = coil_cooling_water_to_air_heat_pump.ratedTotalCoolingCapacity.get
@@ -96,17 +97,14 @@ class Standard
         elsif coil_cooling_water_to_air_heat_pump.autosizedRatedSensibleCoolingCapacity.is_initialized
           crac_sensible_cool = coil_cooling_water_to_air_heat_pump.autosizedRatedSensibleCoolingCapacity.get
           crac_total_cool = coil_cooling_water_to_air_heat_pump.autosizedRatedTotalCoolingCapacity.get
-          crac_sensible_cool_ratio = crac_sensible_cool / crac_total_cool
+          crac_sensible_heat_ratio = crac_sensible_cool / crac_total_cool
         else
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', 'Failed to get autosized sensible cool capacity')
         end
-        cop = crac_minimum_scop / crac_sensible_cool_ratio
+        cop = crac_minimum_scop / crac_sensible_heat_ratio
         cop = cop.round(2)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{coil_cooling_water_to_air_heat_pump.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SCOP = #{crac_minimum_scop}")
       end
-    else
-      cop = nil
-    end
     return cop
   end
 end
