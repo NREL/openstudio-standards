@@ -141,12 +141,15 @@ module Hospital
         elec_equip_def2.setFractionLatent(0)
         elec_equip_def2.setFractionRadiant(0.25)
         elec_equip_def2.setFractionLost(0)
-        if template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
+        if template == '90.1-2013' || template == '90.1-2016'
           elec_equip_def1.setDesignLevel(915)
           elec_equip_def2.setDesignLevel(855)
+        elsif template == '90.1-2019'
+          elec_equip_def1.setDesignLevel(555)
+          elec_equip_def2.setDesignLevel(470)
         else
-          elec_equip_def1.setDesignLevel(915)
-          elec_equip_def2.setDesignLevel(855)
+          elec_equip_def1.setDesignLevel(1031.8)
+          elec_equip_def2.setDesignLevel(1277.5)
         end
         # Create the electric equipment instance and hook it up to the space type
         elec_equip1 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def1)
@@ -300,7 +303,11 @@ module Hospital
       model.getAirTerminalSingleDuctVAVReheats.sort.each do |air_terminal|
         air_terminal_name = air_terminal.name.get
         if air_terminal_name.include?('OR1') || air_terminal_name.include?('OR2') || air_terminal_name.include?('OR3') || air_terminal_name.include?('OR4')
-          air_terminal.setZoneMinimumAirFlowInputMethod('Scheduled')
+          if model.version < OpenStudio::VersionString.new('3.0.1')
+            air_terminal.setZoneMinimumAirFlowMethod('Scheduled')
+          else
+            air_terminal.setZoneMinimumAirFlowInputMethod('Scheduled')
+          end
           air_terminal.setMinimumAirFlowFractionSchedule(model_add_schedule(model, 'Hospital OR_MinSA_Sched'))
         end
       end
