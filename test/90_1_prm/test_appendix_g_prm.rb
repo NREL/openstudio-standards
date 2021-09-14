@@ -18,7 +18,7 @@ class AppendixGPRMTests < Minitest::Test
   @@hasres_values = JSON.parse(File.read("#{@@json_dir}/hasres_values.json"))
 
   # Generate one of the ASHRAE 90.1 prototype model included in openstudio-standards.
-  #
+  # 
   # @param prototypes_to_generate [Array] List of prototypes to generate, see prototype_list.json to see the structure of the list
   #
   # @return [Hash] Hash of OpenStudio Model of the prototypes
