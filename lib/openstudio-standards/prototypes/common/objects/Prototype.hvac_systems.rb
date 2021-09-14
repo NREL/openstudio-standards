@@ -6475,7 +6475,6 @@ class Standard
     rename_air_loop_nodes(model)
     rename_plant_loop_nodes(model)
   end
-<<<<<<< HEAD
 
   # This method will add an swh water fixture to the model for the space.
   # if the it will return a water fixture object, or NIL if there is no water load at all.
@@ -6699,6 +6698,4 @@ class Standard
 
     return erv
   end
-=======
->>>>>>> master
 end
