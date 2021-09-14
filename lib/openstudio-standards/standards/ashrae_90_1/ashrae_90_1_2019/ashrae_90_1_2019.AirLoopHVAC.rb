@@ -623,9 +623,6 @@ class ASHRAE9012019 < ASHRAE901
       end
     end
 
-    return true
-  end
-
     # Add EMS to "cap" the OA calculated by the
     # Controller:MechanicalVentilation object
     # to the design v_ot using the maximum OA
@@ -676,6 +673,9 @@ class ASHRAE9012019 < ASHRAE901
     sizing_system = air_loop_hvac.sizingSystem
     sizing_system.setDesignOutdoorAirFlowRate(v_ot)
     sizing_system.setSystemOutdoorAirMethod('ZoneSum')
+
+    return true
+  end
 
   # Add occupant standby controls to air loop
   # When the thermostat schedule is setup or setback
