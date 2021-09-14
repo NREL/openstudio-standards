@@ -145,7 +145,7 @@ def unique_properties(sheet_name)
          when 'climate_zones'
            ['name', 'standard']
          when 'energy_recovery'
-           ['template', 'climate_zone', 'under_8000_hours', 'nontransient_dwelling', 'err_basis']
+           ['template', 'climate_zone', 'under_8000_hours', 'nontransient_dwelling', 'enthalpy_recovery_ratio_design_conditions']
          when 'space_types_lighting_control'
            ['template', 'building_type', 'space_type']
          else

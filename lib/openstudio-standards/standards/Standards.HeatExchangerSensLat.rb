@@ -59,10 +59,10 @@ class Standard
   # Calculate a heat exchanger's effectiveness for a specific ERR and design basis.
   # Regressions were determined based available manufacturer data.
   #
-  # @param err [float] Enthalpy Recovery Ratio (ERR)
-  # @param basis [String] basis for effectiveness calculation, either cooling or heating
+  # @param enthalpy_recovery_ratio [float] Enthalpy Recovery Ratio (ERR)
+  # @param design_conditions [String] design_conditions for effectiveness calculation, either 'cooling' or 'heating'
   # @return [Array] heating and cooling heat exchanger effectiveness at 100% and 75% nominal airflow
-  def heat_exchanger_air_to_air_sensible_and_latent_enthalpy_recovery_ratio_to_effectiveness(err, basis)
+  def heat_exchanger_air_to_air_sensible_and_latent_enthalpy_recovery_ratio_to_effectiveness(enthalpy_recovery_ratio, design_conditions)
     case basis
       when 'cooling'
         full_htg_sens_eff = (20.707 * err**2 + 41.354 * err + 40.755) / 100

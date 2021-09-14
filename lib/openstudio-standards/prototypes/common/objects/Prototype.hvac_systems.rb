@@ -6449,7 +6449,7 @@ class Standard
                                 thermal_zone,
                                 climate_zone,
                                 energy_recovery,
-                                min_oa_flow_m3_per_s_per_m2: nil)
+                                min_oa_flow_m3_per_s_per_m2 = nil)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding standalone ERV for #{thermal_zone.name}.")
 
@@ -6496,8 +6496,8 @@ class Standard
 
     # Determine ERR and design basis when energy recovery is required
     #
-    # err = nil will trigger an ERV with no effectiveness that only provides OA
-    err = nil
+    # enthalpy_recovery_ratio = nil will trigger an ERV with no effectiveness that only provides OA
+    enthalpy_recovery_ratio = nil
     if energy_recovery
       case template
         when '90.1-2019'
@@ -6515,14 +6515,14 @@ class Standard
           }
       end
 
-      erv_err = model_find_object(standards_data['energy_recovery'], search_criteria)
+      erv_enthalpy_recovery_ratio = model_find_object(standards_data['energy_recovery'], search_criteria)
 
       # Extract ERR from data lookup
-      if !erv_err.nil?
-        if erv_err['err'].nil? & erv_err['err_basis'].nil?
+      if !erv_enthalpy_recovery_ratio.nil?
+        if erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio'].nil? & erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio_design_conditions'].nil?
           # If not included in the data, an enthalpy
           # recovery ratio (ERR) of 50% is used
-          err = 0.5
+          enthalpy_recovery_ratio = 0.5
           case climate_zone
             when 'ASHRAE 169-2006-6B',
               'ASHRAE 169-2013-6B',
@@ -6534,13 +6534,13 @@ class Standard
               'ASHRAE 169-2013-8A',
               'ASHRAE 169-2006-8B',
               'ASHRAE 169-2013-8B'
-              err_basis = 'heating'
+              design_conditions = 'heating'
             else
-              err_basis = 'cooling'
+              design_conditions = 'cooling'
           end
         else
-          err_basis = erv_err['err_basis'].downcase
-          err = erv_err['err']
+          design_conditions = erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio_design_conditions'].downcase
+          enthalpy_recovery_ratio = erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio']
         end
       end
     end
@@ -6583,8 +6583,8 @@ class Standard
     heat_exchanger.setThresholdTemperature(-23.3)
     heat_exchanger.setInitialDefrostTimeFraction(0.167)
     heat_exchanger.setRateofDefrostTimeFractionIncrease(1.44)
-    heat_exchanger.setAvailabilitySchedule(model_add_schedule(model, 'Always On - No DD'))
-    heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_err(heat_exchanger, err, err_basis, climate_zone)
+    heat_exchanger.setAvailabilitySchedule(model_add_schedule(model, 'Always On - No Design Day'))
+    heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_enthalpy_recovery_ratio(heat_exchanger, enthalpy_recovery_ratio, design_conditions, climate_zone)
 
     erv = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator.new(model, heat_exchanger, supply_fan, exhaust_fan)
     erv.setName("#{thermal_zone.name} ERV")
@@ -6599,6 +6599,7 @@ class Standard
     else
       erv.setVentilationRateperUnitFloorArea(min_oa_flow_m3_per_s_per_m2)
     end
+    erv.setVentilationRateperOccupant(0.0)
 
     # Ensure the ERV takes priority, so ventilation load is included when treated by other zonal systems
     # From EnergyPlus I/O reference:

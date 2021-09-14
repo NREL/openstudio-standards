@@ -14,8 +14,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -31,8 +31,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -48,8 +48,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -65,8 +65,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -82,8 +82,8 @@
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -99,8 +99,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -116,8 +116,8 @@
       "60_to_70_percent_oa": 12000.0,
       "70_to_80_percent_oa": 5000.0,
       "greater_than_80_percent_oa": 4000.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -133,8 +133,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -150,8 +150,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -167,8 +167,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -184,8 +184,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -201,8 +201,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -218,8 +218,8 @@
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -235,8 +235,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -252,8 +252,8 @@
       "60_to_70_percent_oa": 12000.0,
       "70_to_80_percent_oa": 5000.0,
       "greater_than_80_percent_oa": 4000.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -269,8 +269,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -286,8 +286,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -303,8 +303,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -320,8 +320,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -337,8 +337,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -354,8 +354,8 @@
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -371,8 +371,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -388,8 +388,8 @@
       "60_to_70_percent_oa": 12000.0,
       "70_to_80_percent_oa": 5000.0,
       "greater_than_80_percent_oa": 4000.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -405,8 +405,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -422,8 +422,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -439,8 +439,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -456,8 +456,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -473,8 +473,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -490,8 +490,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -507,8 +507,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -524,8 +524,8 @@
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -541,8 +541,8 @@
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -558,8 +558,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -575,8 +575,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -592,8 +592,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -609,8 +609,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -626,8 +626,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -643,8 +643,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -660,8 +660,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": null,
-      "err": null
+      "enthalpy_recovery_ratio_design_conditions": null,
+      "enthalpy_recovery_ratio": null
     },
     {
       "template": "90.1-2019",
@@ -677,8 +677,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -694,8 +694,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -711,8 +711,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": null,
-      "err": null
+      "enthalpy_recovery_ratio_design_conditions": null,
+      "enthalpy_recovery_ratio": null
     },
     {
       "template": "90.1-2019",
@@ -728,8 +728,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -745,8 +745,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -762,25 +762,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
-    },
-    {
-      "template": "90.1-2019",
-      "climate_zone": "ASHRAE 169-2006-4A",
-      "under_8000_hours": true,
-      "nontransient_dwelling": false,
-      "0_to_10_percent_oa": null,
-      "10_to_20_percent_oa": 26000.0,
-      "20_to_30_percent_oa": 16000.0,
-      "30_to_40_percent_oa": 5500.0,
-      "40_to_50_percent_oa": 4500.0,
-      "50_to_60_percent_oa": 3500.0,
-      "60_to_70_percent_oa": 2000.0,
-      "70_to_80_percent_oa": 1000.0,
-      "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -796,8 +779,25 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
+    },
+    {
+      "template": "90.1-2019",
+      "climate_zone": "ASHRAE 169-2006-4A",
+      "under_8000_hours": true,
+      "nontransient_dwelling": false,
+      "0_to_10_percent_oa": null,
+      "10_to_20_percent_oa": 26000.0,
+      "20_to_30_percent_oa": 16000.0,
+      "30_to_40_percent_oa": 5500.0,
+      "40_to_50_percent_oa": 4500.0,
+      "50_to_60_percent_oa": 3500.0,
+      "60_to_70_percent_oa": 2000.0,
+      "70_to_80_percent_oa": 1000.0,
+      "greater_than_80_percent_oa": 120.0,
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -813,8 +813,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -830,8 +830,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -847,8 +847,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -864,8 +864,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -881,8 +881,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -898,8 +898,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -915,8 +915,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -932,8 +932,8 @@
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -949,8 +949,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -966,8 +966,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -983,8 +983,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1000,8 +1000,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1017,8 +1017,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1034,8 +1034,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1051,8 +1051,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1068,8 +1068,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1085,8 +1085,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1102,8 +1102,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1119,8 +1119,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1136,8 +1136,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1153,8 +1153,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1170,8 +1170,8 @@
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1187,8 +1187,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1204,8 +1204,8 @@
       "60_to_70_percent_oa": 12000.0,
       "70_to_80_percent_oa": 5000.0,
       "greater_than_80_percent_oa": 4000.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1221,8 +1221,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1238,8 +1238,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1255,8 +1255,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1272,8 +1272,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1289,8 +1289,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1306,8 +1306,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1323,8 +1323,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1340,8 +1340,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1357,8 +1357,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1374,8 +1374,8 @@
       "60_to_70_percent_oa": 3500.0,
       "70_to_80_percent_oa": 2500.0,
       "greater_than_80_percent_oa": 1500.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1391,8 +1391,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1408,8 +1408,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1425,8 +1425,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1442,8 +1442,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1459,8 +1459,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1476,8 +1476,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1493,8 +1493,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1510,8 +1510,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1527,8 +1527,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1544,8 +1544,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1561,8 +1561,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1578,8 +1578,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1595,8 +1595,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1612,8 +1612,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1629,8 +1629,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1646,8 +1646,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1663,8 +1663,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -1680,8 +1680,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1697,8 +1697,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1714,8 +1714,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1731,8 +1731,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1748,8 +1748,8 @@
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1765,8 +1765,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1782,8 +1782,8 @@
       "60_to_70_percent_oa": 12000.0,
       "70_to_80_percent_oa": 5000.0,
       "greater_than_80_percent_oa": 4000.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1799,8 +1799,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1816,8 +1816,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1833,8 +1833,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1850,8 +1850,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1867,8 +1867,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1884,8 +1884,8 @@
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1901,8 +1901,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1918,8 +1918,8 @@
       "60_to_70_percent_oa": 12000.0,
       "70_to_80_percent_oa": 5000.0,
       "greater_than_80_percent_oa": 4000.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1935,8 +1935,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1952,8 +1952,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1969,8 +1969,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -1986,8 +1986,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2003,8 +2003,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2020,8 +2020,8 @@
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2037,8 +2037,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2054,8 +2054,8 @@
       "60_to_70_percent_oa": 12000.0,
       "70_to_80_percent_oa": 5000.0,
       "greater_than_80_percent_oa": 4000.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2071,8 +2071,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2088,8 +2088,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2105,8 +2105,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2122,8 +2122,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2139,8 +2139,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2156,8 +2156,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2173,8 +2173,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2190,8 +2190,8 @@
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2207,8 +2207,8 @@
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2224,8 +2224,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2241,8 +2241,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2258,8 +2258,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2275,8 +2275,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2292,8 +2292,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2309,8 +2309,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": null,
-      "err": null
+      "enthalpy_recovery_ratio_design_conditions": null,
+      "enthalpy_recovery_ratio": null
     },
     {
       "template": "90.1-2019",
@@ -2326,8 +2326,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2343,8 +2343,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": null,
-      "err": null
+      "enthalpy_recovery_ratio_design_conditions": null,
+      "enthalpy_recovery_ratio": null
     },
     {
       "template": "90.1-2019",
@@ -2360,8 +2360,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2377,8 +2377,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2394,25 +2394,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
-    },
-    {
-      "template": "90.1-2019",
-      "climate_zone": "ASHRAE 169-2013-4A",
-      "under_8000_hours": true,
-      "nontransient_dwelling": false,
-      "0_to_10_percent_oa": null,
-      "10_to_20_percent_oa": 26000.0,
-      "20_to_30_percent_oa": 16000.0,
-      "30_to_40_percent_oa": 5500.0,
-      "40_to_50_percent_oa": 4500.0,
-      "50_to_60_percent_oa": 3500.0,
-      "60_to_70_percent_oa": 2000.0,
-      "70_to_80_percent_oa": 1000.0,
-      "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -2428,8 +2411,25 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
+    },
+    {
+      "template": "90.1-2019",
+      "climate_zone": "ASHRAE 169-2013-4A",
+      "under_8000_hours": true,
+      "nontransient_dwelling": false,
+      "0_to_10_percent_oa": null,
+      "10_to_20_percent_oa": 26000.0,
+      "20_to_30_percent_oa": 16000.0,
+      "30_to_40_percent_oa": 5500.0,
+      "40_to_50_percent_oa": 4500.0,
+      "50_to_60_percent_oa": 3500.0,
+      "60_to_70_percent_oa": 2000.0,
+      "70_to_80_percent_oa": 1000.0,
+      "greater_than_80_percent_oa": 120.0,
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2445,8 +2445,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -2462,8 +2462,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2479,8 +2479,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2496,8 +2496,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -2513,8 +2513,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2530,8 +2530,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2547,8 +2547,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -2564,8 +2564,8 @@
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2581,8 +2581,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -2598,8 +2598,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2615,8 +2615,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -2632,8 +2632,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2649,8 +2649,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2666,8 +2666,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -2683,8 +2683,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2700,8 +2700,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2717,8 +2717,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -2734,8 +2734,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2751,8 +2751,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -2768,8 +2768,8 @@
       "60_to_70_percent_oa": null,
       "70_to_80_percent_oa": null,
       "greater_than_80_percent_oa": null,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2785,8 +2785,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -2802,8 +2802,8 @@
       "60_to_70_percent_oa": 3000.0,
       "70_to_80_percent_oa": 1500.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2819,8 +2819,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -2836,8 +2836,8 @@
       "60_to_70_percent_oa": 12000.0,
       "70_to_80_percent_oa": 5000.0,
       "greater_than_80_percent_oa": 4000.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2853,8 +2853,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -2870,8 +2870,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2887,8 +2887,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2904,8 +2904,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -2921,8 +2921,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Cooling",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Cooling",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2938,8 +2938,8 @@
       "60_to_70_percent_oa": 2000.0,
       "70_to_80_percent_oa": 1000.0,
       "greater_than_80_percent_oa": 120.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2955,8 +2955,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -2972,8 +2972,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -2989,8 +2989,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -3006,8 +3006,8 @@
       "60_to_70_percent_oa": 3500.0,
       "70_to_80_percent_oa": 2500.0,
       "greater_than_80_percent_oa": 1500.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -3023,8 +3023,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -3040,8 +3040,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -3057,8 +3057,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -3074,8 +3074,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -3091,8 +3091,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -3108,8 +3108,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -3125,8 +3125,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -3142,8 +3142,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -3159,8 +3159,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -3176,8 +3176,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -3193,8 +3193,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -3210,8 +3210,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -3227,8 +3227,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -3244,8 +3244,8 @@
       "60_to_70_percent_oa": 60.0,
       "70_to_80_percent_oa": 50.0,
       "greater_than_80_percent_oa": 40.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -3261,8 +3261,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     },
     {
       "template": "90.1-2019",
@@ -3278,8 +3278,8 @@
       "60_to_70_percent_oa": 120.0,
       "70_to_80_percent_oa": 100.0,
       "greater_than_80_percent_oa": 80.0,
-      "err_basis": "Heating",
-      "err": 0.5
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.5
     },
     {
       "template": "90.1-2019",
@@ -3295,8 +3295,8 @@
       "60_to_70_percent_oa": 0.0,
       "70_to_80_percent_oa": 0.0,
       "greater_than_80_percent_oa": 0.0,
-      "err_basis": "Heating",
-      "err": 0.6
+      "enthalpy_recovery_ratio_design_conditions": "Heating",
+      "enthalpy_recovery_ratio": 0.6
     }
   ]
 }

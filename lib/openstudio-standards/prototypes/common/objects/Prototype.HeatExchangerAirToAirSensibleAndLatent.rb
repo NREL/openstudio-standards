@@ -91,13 +91,13 @@ class Standard
   # The values are calculated by using ERR, which is introduced in 90.1-2016 Addendum CE
   #
   # This function is only used for nontransient dwelling units (Mid-rise and High-rise Apartment)
-  # @param [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] heat exchanger air to air sensible and latent
-  # @param [String] err
-  # @param [String] err basis (Cooling/Heating)
-  # @param [String] climate zone
-  def heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_err(heat_exchanger_air_to_air_sensible_and_latent, err, basis, climate_zone)
+  # @param heat_exchanger_air_to_air_sensible_and_latent [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] heat exchanger air to air sensible and latent
+  # @param enthalpy_recovery_ratio [String] enthalpy recovery ratio
+  # @param design_conditions [String] enthalpy recovery ratio design conditions: 'heating' or 'cooling'
+  # @param climate_zone [String] climate zone
+  def heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_enthalpy_recovery_ratio(heat_exchanger_air_to_air_sensible_and_latent, enthalpy_recovery_ratio, design_conditions, climate_zone)
     # Assumed to be sensible and latent at all flow
-    if err.nil?
+    if enthalpy_recovery_ratio.nil?
       full_htg_sens_eff = 0.0
       full_htg_lat_eff = 0.0
       part_htg_sens_eff = 0.0
@@ -107,8 +107,8 @@ class Standard
       part_cool_sens_eff = 0.0
       part_cool_lat_eff = 0.0
     else
-      err = enthalpy_recovery_ratio_design_to_typical_adjustment(err, climate_zone)
-      full_htg_sens_eff, full_htg_lat_eff, part_htg_sens_eff, part_htg_lat_eff, full_cool_sens_eff, full_cool_lat_eff, part_cool_sens_eff, part_cool_lat_eff = heat_exchanger_air_to_air_sensible_and_latent_enthalpy_recovery_ratio_to_effectiveness(err, basis)
+      enthalpy_recovery_ratio = enthalpy_recovery_ratio_design_to_typical_adjustment(enthalpy_recovery_ratio, climate_zone)
+      full_htg_sens_eff, full_htg_lat_eff, part_htg_sens_eff, part_htg_lat_eff, full_cool_sens_eff, full_cool_lat_eff, part_cool_sens_eff, part_cool_lat_eff = heat_exchanger_air_to_air_sensible_and_latent_enthalpy_recovery_ratio_to_effectiveness(enthalpy_recovery_ratio, design_conditions)
     end
 
     heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(full_htg_sens_eff)

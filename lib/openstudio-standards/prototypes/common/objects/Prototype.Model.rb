@@ -1601,7 +1601,9 @@ Standard.class_eval do
         air_loop_hvac.thermalZones.each do |zone|
           next unless thermal_zone_residential?(zone)
 
-          model_add_residential_erv(model, zone, climate_zone, has_erv)
+          oa_cfm_per_ft2 = 0.0578940512546562
+          oa_m3_per_m2 = OpenStudio.convert(OpenStudio.convert(oa_cfm_per_ft2, 'cfm', 'm^3/s').get, '1/ft^2', '1/m^2').get
+          model_add_residential_erv(model, zone, climate_zone, has_erv, oa_m3_per_m2)
 
           # Shut-off air loop level OA intake
           oa_controller = air_loop_hvac.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir
