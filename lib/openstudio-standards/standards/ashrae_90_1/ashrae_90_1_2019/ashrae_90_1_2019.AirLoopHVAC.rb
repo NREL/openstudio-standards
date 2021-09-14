@@ -453,4 +453,67 @@ class ASHRAE9012019 < ASHRAE901
 
     return erv_cfm
   end
+
+  # Add occupant standby controls to air loop
+  # When the thermostat schedule is setup or setback
+  # the ventilation is shutoff. Currently this is done
+  # by scheduling air terminal dampers (so load can
+  # still be met) and cycling unitary system fans
+  #
+  # @param air_loop_hvac [OpenStudio::model::AirLoopHVAC] OpenStudio AirLoopHVAC object
+  # @param standby_mode_space [Array] List of all spaces required to have standby mode controls
+  # @return [Boolean] true if sucessful, false otherwise
+  def air_loop_hvac_standby_mode_occupancy_control(air_loop_hvac, standby_mode_spaces)
+    if air_loop_hvac_include_unitary_system?(air_loop_hvac)
+      unitary_system = nil
+      # Get unitary system
+      air_loop_hvac.supplyComponents.each do |comp|
+        if comp.to_AirLoopHVACUnitarySystem.is_initialized
+          unitary_system = comp.to_AirLoopHVACUnitarySystem.get
+        end
+      end
+      return false unless !unitary_system.nil?
+
+      # Set fan operating schedule during assumed occupant standby mode time to 0 so the fan can cycle
+      new_sch = model_set_schedule_value(unitary_system.supplyAirFanOperatingModeSchedule.get, '12' => 0)
+      unitary_system.setSupplyAirFanOperatingModeSchedule(new_sch) unless new_sch.nil?
+    else
+      # Get thermal zones associated with spaces having standby mode occupancy requirements
+      standby_mode_zones = []
+      standby_mode_spaces.sort.each do |space|
+        standby_mode_zones << space.thermalZone.get
+      end
+      # Schedule the MDP of terminals to a low value during occupant standby mode
+      # The intent is to reduce ventilation while still allowing the terminal to
+      # meet loads
+      standby_mode_zones.each do |zone|
+        air_terminal = zone.airLoopHVACTerminal
+        if air_terminal.is_initialized
+          air_terminal = air_terminal.get
+          if air_terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
+            air_terminal = air_terminal.to_AirTerminalSingleDuctVAVReheat.get
+            if air_terminal.zoneMinimumAirFlowInputMethod == 'Constant' || air_terminal.zoneMinimumAirFlowInputMethod == 'FixedFlow'
+              if air_terminal.zoneMinimumAirFlowInputMethod == 'FixedFlow'
+                mdp_org = air_terminal.fixedMinimumAirFlowRate.get / air_terminal.autosizedMaximumAirFlowRate.get
+                air_terminal.setFixedMinimumAirFlowRate(0)
+              else
+                mdp_org = air_terminal.constantMinimumAirFlowFraction.get
+                air_terminal.setConstantMinimumAirFlowFraction(0)
+              end
+              air_terminal.setZoneMinimumAirFlowInputMethod('Scheduled')
+              air_terminal.setMinimumAirFlowFractionSchedule(model_set_schedule_value(model_add_constant_schedule_ruleset(air_loop_hvac.model, mdp_org, name = "#{air_terminal.name} - MDP", sch_type_limit: 'Fraction'), '12' => 0.1))
+            elsif air_terminal.zoneMinimumAirFlowInputMethod == 'Scheduled'
+              air_terminal.setMinimumAirFlowFractionSchedule(model_set_schedule_value(air_terminal.minimumAirFlowFractionSchedule.get, '12' => 0.1))
+            else
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "The air terminal associated with #{zone.name} uses a zone minimum air flow input method that is currently not supported so occupant standby controls were not modeled.")
+            end
+          else
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "The air terminal associated with #{zone.name} isn't of the SingleDuctVAVReheat type so occupant standby controls were not modeled.")
+          end
+        end
+      end
+    end
+
+    return true
+  end
 end
