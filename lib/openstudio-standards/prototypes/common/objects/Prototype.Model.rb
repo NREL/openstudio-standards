@@ -1783,10 +1783,62 @@ Standard.class_eval do
   #
   # @param model [OpenStudio::Model::Model] the model
   def model_apply_prototype_hvac_efficiency_adjustments(model)
+    building_data = model_get_building_climate_zone_and_building_type(model)
+    building_type = building_data['building_type']
+    climate_zone = building_data['climate_zone']
+
     # ERVs
-    # Applies the DOE Prototype Building assumption that ERVs use
-    # enthalpy wheels and therefore exceed the minimum effectiveness specified by 90.1
-    model.getHeatExchangerAirToAirSensibleAndLatents.each { |obj| heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency(obj) }
+    if building_type == 'MidriseApartment' || building_type == 'HighriseApartment'
+      # Use standalone ERV in dwelling units to provide OA
+      # Loads are met by mechanical cooling and the heating system with a cycling fan
+      model.getAirLoopHVACs.each do |air_loop_hvac|
+        # Find out if air loop has an ERV (i.e. if heat recovery is required)
+        has_erv = false
+        has_erv = true if air_loop_hvac_energy_recovery?(air_loop_hvac)
+
+        serves_res_spc = false
+
+        air_loop_hvac.thermalZones.each do |zone|
+          next unless thermal_zone_residential?(zone)
+
+          oa_cfm_per_ft2 = 0.0578940512546562
+          oa_m3_per_m2 = OpenStudio.convert(OpenStudio.convert(oa_cfm_per_ft2, 'cfm', 'm^3/s').get, '1/ft^2', '1/m^2').get
+          model_add_residential_erv(model, zone, climate_zone, has_erv, oa_m3_per_m2)
+
+          # Shut-off air loop level OA intake
+          oa_controller = air_loop_hvac.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir
+          oa_controller.setMinimumOutdoorAirSchedule(model.alwaysOffDiscreteSchedule)
+
+          serves_res_spc = true
+        end
+
+        if has_erv & serves_res_spc
+          # Remove air loop ERV
+          air_loop_hvac_remove_erv(air_loop_hvac)
+        elsif has_erv
+          # Apply regular adjustment if the ERV doesn't serve a residential space
+          oa_sys = nil
+          if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+            oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+          else
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV cannot be removed because the system has no OA intake.")
+            return false
+          end
+
+          # Get the existing ERV or create an ERV and add it to the OA system
+          oa_sys.oaComponents.each do |oa_comp|
+            if oa_comp.to_HeatExchangerAirToAirSensibleAndLatent.is_initialized
+              erv = oa_comp.to_HeatExchangerAirToAirSensibleAndLatent.get
+              heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency(erv)
+            end
+          end
+        end
+      end
+    else
+      # Applies the DOE Prototype Building assumption that ERVs use
+      # enthalpy wheels and therefore exceed the minimum effectiveness specified by 90.1
+      model.getHeatExchangerAirToAirSensibleAndLatents.each { |obj| heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency(obj) }
+    end
 
     # Update COP for large office CRAC
     # Applies the DOE Prototype Building Model (Large Office only)
