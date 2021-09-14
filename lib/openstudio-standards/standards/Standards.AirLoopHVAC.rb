@@ -2712,6 +2712,10 @@ class Standard
                    air_loop_hvac.model.alwaysOnDiscreteSchedule
                  end
 
+    # Create an economizer maximum OA fraction schedule with
+    # a maximum of 70% to reflect damper leakage per PNNL
+    max_oa_sch = set_maximum_fraction_outdoor_air_schedule(air_loop_hvac, oa_control, snc) unless air_loop_hvac_has_simple_transfer_air?(air_loop_hvac)
+
     # Get the supply fan
     if air_loop_hvac.supplyFan.empty?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: No supply fan found, cannot apply DX fan/economizer control.")
@@ -2753,15 +2757,6 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: No heating coil found, cannot apply DX fan/economizer control.")
       return false
     end
-
-    # Create an economizer maximum OA fraction schedule with
-    # a maximum of 70% to reflect damper leakage per PNNL
-    max_oa_sch_name = "#{snc}maxOASch"
-    max_oa_sch = OpenStudio::Model::ScheduleRuleset.new(air_loop_hvac.model)
-    max_oa_sch.setName(max_oa_sch_name)
-    max_oa_sch.defaultDaySchedule.setName("#{max_oa_sch_name}Default")
-    max_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
-    oa_control.setMaximumFractionofOutdoorAirSchedule(max_oa_sch)
 
     ### EMS shared by both programs ###
     # Sensors
@@ -3455,5 +3450,43 @@ class Standard
   # @return [Boolean] true if sucessful, false otherwise
   def air_loop_hvac_standby_mode_occupancy_control(air_loop_hvac, standby_mode_spaces)
     return true
+  end
+
+  # Create an economizer maximum OA fraction schedule with
+  # For ASHRAE 90.1 2019, a maximum of 75% to reflect damper leakage per PNNL
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] HVAC air loop object
+  # @param oa_control [OpenStudio::Model::ControllerOutdoorAir] Outdoor air controller object to have this maximum OA fraction schedule
+  # @param snc [String] System name
+  #
+  # @return [OpenStudio::Model::ScheduleRuleset] Generated maximum outdoor air fraction schedule for later use
+  def set_maximum_fraction_outdoor_air_schedule(air_loop_hvac, oa_control, snc)
+    max_oa_sch_name = "#{snc}maxOASch"
+    max_oa_sch = OpenStudio::Model::ScheduleRuleset.new(air_loop_hvac.model)
+    max_oa_sch.setName(max_oa_sch_name)
+    max_oa_sch.defaultDaySchedule.setName("#{max_oa_sch_name}Default")
+    max_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
+    oa_control.setMaximumFractionofOutdoorAirSchedule(max_oa_sch)
+    max_oa_sch
+  end
+
+  # Checks if zones served by the air loop use zone exhaust fan
+  # a simplified approach to model transfer air
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] OpenStudio AirLoopHVAC object
+  # @return [Boolean] true if simple transfer air is modeled, false otherwise
+  def air_loop_hvac_has_simple_transfer_air?(air_loop_hvac)
+    simple_transfer_air = false
+    zones = air_loop_hvac.thermalZones
+    zones_name = []
+    zones.each do |zone|
+      zones_name << zone.name.to_s
+    end
+    air_loop_hvac.model.getFanZoneExhausts.sort.each do |exhaust_fan|
+      if (zones_name.include? exhaust_fan.thermalZone.get.name.to_s) && exhaust_fan.balancedExhaustFractionSchedule.is_initialized
+        simple_transfer_air = true
+      end
+    end
+    return simple_transfer_air
   end
 end

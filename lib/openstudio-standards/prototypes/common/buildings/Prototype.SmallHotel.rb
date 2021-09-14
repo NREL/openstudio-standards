@@ -51,6 +51,12 @@ module SmallHotel
     # Guestroom vacancy controls
     model_add_guestroom_vacancy_controls(model, 'SmallHotel')
 
+    # Guestroom temperature reset schedule delay reduction from 30 min to 20 min
+    model_reduce_setback_sch_delay(model, 'SmallHotel')
+
+    # Guestroom ventilation availability schedule setup
+    model_add_guestroom_vent_sch(model, 'SmallHotel')
+
     return true
   end
 

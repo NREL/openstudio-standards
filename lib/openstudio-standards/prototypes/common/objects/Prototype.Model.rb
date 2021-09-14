@@ -1238,6 +1238,195 @@ Standard.class_eval do
     end
   end
 
+  # Add guestroom ventilation availability schedules based on the thermostat heating setpoint schedules (to infer setback)
+  # Call to this method needs to be place before purge hour implementation of zone ventilation (if any)
+  #
+  # @code_sections [90.1-2019_6.4.3.3.5.2]
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] OpenStudio Model
+  # @param building_type [String] Building type
+  def model_add_guestroom_vent_sch(model, building_type)
+    return true unless (template == '90.1-2016') || (template == '90.1-2019')
+
+    # Guestrooms are currently only included in the small and large hotel prototypes
+    return true unless (building_type == 'LargeHotel') || (building_type == 'SmallHotel')
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Guestroom Ventilation Schedules')
+
+    # Define guestroom occupied maps
+    # List of all spaces that represent vacant rooms
+    guestroom_occupied_map = {
+      'LargeHotel' => [
+        'Room_1_Flr_3',
+        'Room_1_Flr_6',
+        'Room_2_Flr_3',
+        'Room_2_Flr_6',
+        'Room_3_Mult9_Flr_6',
+        'Room_4_Mult19_Flr_3',
+        'Room_5_Flr_3',
+        'Room_6_Flr_3'
+      ],
+      'SmallHotel' => [
+        'GuestRoom103',
+        'GuestRoom104',
+        'GuestRoom105',
+        'GuestRoom202_205',
+        'GuestRoom206_208',
+        'GuestRoom209_212',
+        'GuestRoom213',
+        'GuestRoom214',
+        'GuestRoom219',
+        'GuestRoom220_223',
+        'GuestRoom224',
+        'GuestRoom306_308',
+        'GuestRoom309_312',
+        'GuestRoom314',
+        'GuestRoom315_318',
+        'GuestRoom320_323',
+        'GuestRoom401',
+        'GuestRoom409_412',
+        'GuestRoom415_418',
+        'GuestRoom419',
+        'GuestRoom420_423',
+        'GuestRoom424'
+      ]
+    }
+
+    # Extract thermostat schedule as the base for ventilation schedule
+    if building_type == 'LargeHotel'
+      # thermostat_name = 'LargeHotel GuestRoom Thermostat'
+      air_terminals = model.getAirTerminalSingleDuctConstantVolumeNoReheats.sort
+    elsif building_type == 'SmallHotel'
+      # thermostat_name = 'SmallHotel GuestRoom4Occ Thermostat'
+      air_terminals = model.getZoneHVACPackagedTerminalAirConditioners.sort
+    end
+
+    guestroom_htg_schrst, guestroom_clg_schrst = get_occ_guestroom_setpoint_schedules(model)
+
+    # intentionally no check so if anything is wrong, this will break
+    guestroom_htg_sch = guestroom_htg_schrst.to_ScheduleRuleset.get.defaultDaySchedule
+    guestroom_clg_sch = guestroom_clg_schrst.to_ScheduleRuleset.get.defaultDaySchedule
+
+    if guestroom_htg_sch.times != guestroom_clg_sch.times
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "#{building_type} Guestroom heating and cooling schedule has different setback times, will use htg for generating the ventilation binary schedule")
+    end
+
+    # Build ventilation binary schedule
+    htg_sch_values = guestroom_htg_sch.values
+    htg_sch_times = guestroom_htg_sch.times
+
+    vent_schrst = OpenStudio::Model::ScheduleRuleset.new(model)
+    vent_schrst.setName("#{building_type}_GuestRoom_Vent_Ctrl_Sch")
+    # add design day values (1)
+    vent_winterdesignday_sch = OpenStudio::Model::ScheduleDay.new(model)
+    vent_winterdesignday_sch.setName("#{building_type}_GuestRoom_Vent_Ctrl_Sch Winter Design Day")
+    model_add_vals_to_sch(model, vent_winterdesignday_sch, 'Constant', [1])
+    vent_schrst.setSummerDesignDaySchedule(vent_winterdesignday_sch)
+    vent_summerdesignday_sch = OpenStudio::Model::ScheduleDay.new(model)
+    vent_summerdesignday_sch.setName("#{building_type}_GuestRoom_Vent_Ctrl_Sch Summer Design Day")
+    model_add_vals_to_sch(model, vent_summerdesignday_sch, 'Constant', [1])
+    vent_schrst.setWinterDesignDaySchedule(vent_summerdesignday_sch)
+
+    # add default ventilation schedule
+    vent_day_sch = vent_schrst.defaultDaySchedule
+    vent_day_sch.setName("#{building_type}_GuestRoom_Vent_Ctrl_Sch Default")
+    vent_day_binary_values = []
+    off_value = htg_sch_values.min
+    htg_sch_values.each do |value|
+      vent_day_binary_values << if value > off_value
+                                  1.0
+                                else
+                                  0.0
+                                end
+    end
+    vent_day_binary_values.each_with_index do |binary_value, i|
+      vent_day_sch.addValue(htg_sch_times[i], binary_value)
+    end
+
+    # link vent schedule to guest room air terminals
+    modified_zones = []
+    air_terminals.each do |airterminal|
+      zone_name = airterminal.name.to_s.strip.split[0]
+      if guestroom_occupied_map[building_type].include? zone_name
+        if building_type == 'LargeHotel'
+          airterminal.setAvailabilitySchedule(vent_schrst)
+        elsif building_type == 'SmallHotel'
+          airterminal.setSupplyAirFanOperatingModeSchedule(vent_schrst)
+        end
+        modified_zones << zone_name
+      end
+    end
+  end
+
+  # Reduce thermostat temperature setpoint delay (when switching from occupied to unoccupied ) by 10 mins
+  #
+  # @code_sections [90.1-2019_6.4.3.3.5.1]
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] OpenStudio Model
+  # @param building_type [String] Building type
+  def model_reduce_setback_sch_delay(model, building_type)
+    # Guestrooms are currently only included in the small and large hotel prototypes
+    return true unless (building_type == 'LargeHotel') || (building_type == 'SmallHotel')
+
+    # Guestrooms setback schedule delay modifications are only added to 2019
+    return true unless template == '90.1-2019'
+
+    heating_schrst, cooling_schrst = get_occ_guestroom_setpoint_schedules(model)
+    heating_default_day_sch = heating_schrst.defaultDaySchedule
+    schedule_reduce_reset_delay_10min(heating_default_day_sch, heating_default_day_sch.values.min)
+    cooling_default_day_sch = cooling_schrst.defaultDaySchedule
+    schedule_reduce_reset_delay_10min(cooling_default_day_sch, cooling_default_day_sch.values.max)
+  end
+
+  # Helper method for model_add_guestroom_vent_sch and model_reduce_setback_sch_delay
+  # @author Xuechen (Jerry) Lei, PNNL
+  #
+  def get_occ_guestroom_setpoint_schedules(model)
+    thermostats = model.getThermostatSetpointDualSetpoints.sort
+    thermostats.each do |thermostat|
+      next unless thermostat.name.to_s.include? 'GuestRoom'
+
+      heating_schrst = thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
+      cooling_schrst = thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
+      next unless heating_schrst.name.to_s.include? 'Occ'
+      next unless cooling_schrst.name.to_s.include? 'Occ'
+
+      return heating_schrst, cooling_schrst
+    end
+    return false
+  end
+
+  # Helper method for model_reduce_setback_sch_delay
+  # @author Xuechen (Jerry) Lei, PNNL
+  #
+  def schedule_reduce_reset_delay_10min(sch, off_value)
+    sch_values = sch.values
+    sch_times = sch.times
+    ten_mins = OpenStudio::Time.new(0, 0, 10, 0)
+    new_times = []
+    (0..(sch_values.length - 2)).each do |i|
+      current_time = sch_times[i]
+      current_value = sch_values[i]
+      next_value = sch_values[i + 1]
+      if ((current_value - off_value).abs >= 0.01) && ((next_value - off_value).abs < 0.01) # reduce occupied (current) time by 10 min if next value is off_value
+        new_times << (current_time - ten_mins)
+      else
+        new_times << current_time
+      end
+    end
+    new_times << sch_times[-1]
+
+    # remove old values
+    sch_times.each do |old_time|
+      sch.removeValue(old_time)
+    end
+
+    # add new time
+    (0..(new_times.length - 1)).each do |i|
+      sch.addValue(new_times[i], sch_values[i])
+    end
+  end
+
   # Adds occupancy sensors to certain space types per
   # the PNNL documentation.
   #
