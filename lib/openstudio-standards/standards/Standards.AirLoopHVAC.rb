@@ -56,8 +56,11 @@ class Standard
       air_loop_hvac_apply_vav_damper_action(air_loop_hvac)
 
       # Multizone VAV Optimization
-      # This rule does not apply to two hospital and one outpatient systems (TODO add hospital two systems as exception)
-      unless air_loop_hvac.name.to_s.include? 'Outpatient F1'
+      # This rule does not apply to two hospital and one outpatient systems
+      unless (@instvarbuilding_type == 'Hospital' && (air_loop_hvac.name.to_s.include?('VAV_ER') || air_loop_hvac.name.to_s.include?('VAV_ICU') ||
+             air_loop_hvac.name.to_s.include?('VAV_OR') || air_loop_hvac.name.to_s.include?('VAV_LABS') ||
+             air_loop_hvac.name.to_s.include?('VAV_PATRMS'))) ||
+             (@instvarbuilding_type == 'Outpatient' && air_loop_hvac.name.to_s.include?('Outpatient F1'))
         if air_loop_hvac_multizone_vav_optimization_required?(air_loop_hvac, climate_zone)
           air_loop_hvac_enable_multizone_vav_optimization(air_loop_hvac)
         else
@@ -1798,7 +1801,8 @@ class Standard
     return true
   end
 
-  # Adjust minimum VAV damper positions to the values
+  # Adjust minimum VAV damper positions and set minimum design
+  # system outdoor air flow
   #
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
@@ -2014,6 +2018,7 @@ class Standard
     # object with the calculated min OA flow rate
     sizing_system = air_loop_hvac.sizingSystem
     sizing_system.setDesignOutdoorAirFlowRate(v_ot_adj)
+    sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
     return true
   end

@@ -1,27 +1,6 @@
 class ASHRAE9012019 < ASHRAE901
   # @!group AirLoopHVAC
 
-  # Apply multizone vav outdoor air method and
-  # adjust multizone VAV damper positions
-  # to achieve a system minimum ventilation effectiveness
-  # of 0.6 per PNNL.  Hard-size the resulting min OA
-  # into the sizing:system object.
-  #
-  # return [Bool] returns true if successful, false if not
-  # @todo move building-type-specific code to Prototype classes
-  def air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(air_loop_hvac)
-    # First time adjustment:
-    # Only applies to multi-zone vav systems
-    # exclusion: for Outpatient: (1) both AHU1 and AHU2 in 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004'
-    # (2) AHU1 in 2004-2019
-    # TODO refactor: move building-type-specific code to Prototype classes
-    if air_loop_hvac_multizone_vav_system?(air_loop_hvac) && !(air_loop_hvac.name.to_s.include? 'Outpatient F1')
-      air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
-    end
-
-    return true
-  end
-
   # Determine the limits for the type of economizer present on the AirLoopHVAC, if any.
   # @return [Array<Double>] [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
   def air_loop_hvac_economizer_limits(air_loop_hvac, climate_zone)
@@ -517,6 +496,175 @@ class ASHRAE9012019 < ASHRAE901
 
     return erv_cfm
   end
+
+  # Adjust minimum VAV damper positions and set minimum design
+  # system outdoor air flow following ASHRAE Std. 62.1-2019
+  #
+  # @param (see #economizer_required?)
+  # @return [Bool] Returns true if required, false if not.
+  # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
+  def air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
+    # Do not apply the adjustment to some of the system in
+    # the hospital and outpatient which have their minimum
+    # damper position determined based on AIA 2001 ventilation
+    # requirements
+    if (@instvarbuilding_type == 'Hospital' && (air_loop_hvac.name.to_s.include?('VAV_ER') || air_loop_hvac.name.to_s.include?('VAV_ICU') ||
+                                                air_loop_hvac.name.to_s.include?('VAV_OR') || air_loop_hvac.name.to_s.include?('VAV_LABS') ||
+                                                air_loop_hvac.name.to_s.include?('VAV_PATRMS'))) ||
+       (@instvarbuilding_type == 'Outpatient' && air_loop_hvac.name.to_s.include?('Outpatient F1'))
+
+      return true
+    end
+
+    # Total uncorrected outdoor airflow rate
+    v_ou = 0.0
+    air_loop_hvac.thermalZones.each do |zone|
+      # Vou is the system uncorrected outdoor airflow:
+      # Zone airflow is multiplied by the zone multiplier
+      v_ou += thermal_zone_outdoor_airflow_rate(zone) * zone.multiplier.to_f
+    end
+
+    v_ou_cfm = OpenStudio.convert(v_ou, 'm^3/s', 'cfm').get
+
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: v_ou = #{v_ou_cfm.round} cfm.")
+
+    # Retrieve the sum of the zone minimum primary airflow
+    vpz_min_sum = air_loop_hvac.autosizeSumMinimumHeatingAirFlowRates
+
+    air_loop_hvac.thermalZones.sort.each do |zone|
+      # Breathing zone airflow rate
+      v_bz = thermal_zone_outdoor_airflow_rate(zone)
+
+      # Zone air distribution, assumed 1 per PNNL
+      e_z = 1.0
+
+      # Zone airflow rate
+      v_oz = v_bz / e_z
+
+      # Primary design airflow rate
+      # max of heating and cooling
+      # design air flow rates
+      v_pz = 0.0
+      clg_dsn_flow = zone.autosizedCoolingDesignAirFlowRate
+      if clg_dsn_flow.is_initialized
+        clg_dsn_flow = clg_dsn_flow.get
+        if clg_dsn_flow > v_pz
+          v_pz = clg_dsn_flow
+        end
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: #{zone.name} clg_dsn_flow could not be found.")
+      end
+      htg_dsn_flow = zone.autosizedHeatingDesignAirFlowRate
+      if htg_dsn_flow.is_initialized
+        htg_dsn_flow = htg_dsn_flow.get
+        if htg_dsn_flow > v_pz
+          v_pz = htg_dsn_flow
+        end
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: #{zone.name} htg_dsn_flow could not be found.")
+      end
+
+      # Zone ventilation efficiency calculation is computed
+      # on a per zone basis, the zone primary airflow is
+      # adjusted to removed the zone multiplier
+      v_pz /= zone.multiplier.to_f
+
+      # Set minimum damper position
+      air_loop_hvac_set_minimum_damper_position(zone, [0.01, [1.5 * v_oz / v_pz, 1.0].min].max.round(3))
+    end
+
+    # Occupant diversity (D): Ps / sum(Pz)
+    # Current value is based on school prototypes
+    # which are assumed to have the most diversity
+    occ_diver_d = 0.66
+
+    # From ASHRAE Std 62.1-2019 Section 6.2.5.3
+    if occ_diver_d < 0.6
+      e_v = 0.88 * occ_diver_d + 0.22
+    else
+      e_v = 0.75
+    end
+
+    # Total system outdoor intake flow rate
+    v_ot = v_ou / e_v
+    v_ot_cfm = OpenStudio.convert(v_ot, 'm^3/s', 'cfm').get
+
+    # Get maximum OA fraction schedule
+    oa_ctrl = air_loop_hvac.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir
+    max_oa_frac_sch = oa_ctrl.maximumFractionofOutdoorAirSchedule
+
+    if !max_oa_frac_sch.is_initialized
+      max_oa_frac_sch = OpenStudio::Model::ScheduleConstant.new(air_loop_hvac.model)
+      max_oa_frac_sch.setName("#{air_loop_hvac.name}_MAX_OA_FRAC")
+      max_oa_frac_sch.setValue(1.0)
+      max_oa_frac_sch_type = 'Schedule:Constant'
+      oa_ctrl.setMaximumFractionofOutdoorAirSchedule(max_oa_frac_sch)
+    else
+      if max_oa_frac_sch.to_ScheduleRuleset.is_initialized
+        max_oa_frac_sch = max_oa_frac_sch.to_ScheduleRuleset.get
+        max_oa_frac_sch_type = 'Schedule:Year'
+      elsif max_oa_frac_sch.to_ScheduleConstant.is_initialized
+        max_oa_frac_sch = max_oa_frac_sch.to_ScheduleConstant.get
+        max_oa_frac_sch_type = 'Schedule:Constant'
+      elsif max_oa_frac_sch.to_ScheduleCompact.is_initialized
+        max_oa_frac_sch = max_oa_frac_sch.to_ScheduleCompact.get
+        max_oa_frac_sch_type = 'Schedule:Compact'
+      end
+    end
+
+    return true
+  end
+
+    # Add EMS to "cap" the OA calculated by the
+    # Controller:MechanicalVentilation object
+    # to the design v_ot using the maximum OA
+    # fraction schedule
+
+    # Add EMS sensors
+    # OA mass flow calculated by the Controller:MechanicalVentilation
+    air_loop_hvac_name_ems = "EMS_#{air_loop_hvac.name.to_s.gsub(' ', '_')}"
+    oa_vrp_mass_flow = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'Air System Outdoor Air Mechanical Ventilation Requested Mass Flow Rate')
+    oa_vrp_mass_flow.setKeyName(air_loop_hvac.name.to_s)
+    oa_vrp_mass_flow.setName("#{air_loop_hvac_name_ems}_OA_VRP")
+    # Actual sensed OA mass flow
+    oa_mass_flow = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'Air System Outdoor Air Mass Flow Rate')
+    oa_mass_flow.setKeyName(air_loop_hvac.name.to_s)
+    oa_mass_flow.setName("#{air_loop_hvac_name_ems}_OA")
+    # Actual sensed volumetric OA flow
+    oa_vol_flow = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'System Node Standard Density Volume Flow Rate')
+    oa_vol_flow.setKeyName("#{air_loop_hvac.name} Mixed Air Node")
+    oa_vol_flow.setName("#{air_loop_hvac_name_ems}_SUPPLY_FLOW")
+
+    # Add EMS actuator
+    max_oa_fraction = OpenStudio::Model::EnergyManagementSystemActuator.new(max_oa_frac_sch, max_oa_frac_sch_type, 'Schedule Value')
+    max_oa_fraction.setName("#{air_loop_hvac_name_ems}_MAX_OA_FRAC")
+
+    # Add EMS program
+    max_oa_ems_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(air_loop_hvac.model)
+    max_oa_ems_prog.setName("#{air_loop_hvac.name}_MAX_OA_FRAC")
+    max_oa_ems_prog_body = <<-EMS
+    IF #{air_loop_hvac_name_ems}_OA > #{air_loop_hvac_name_ems}_OA_VRP,
+    SET #{air_loop_hvac_name_ems}_MAX_OA_FRAC = NULL,
+    ELSE,
+    IF #{air_loop_hvac_name_ems}_SUPPLY_FLOW > 0,
+    SET #{air_loop_hvac_name_ems}_MAX_OA_FRAC = #{v_ot} / #{air_loop_hvac_name_ems}_SUPPLY_FLOW,
+    ELSE,
+    SET #{air_loop_hvac_name_ems}_MAX_OA_FRAC = NULL,
+    ENDIF,
+    ENDIF
+    EMS
+    max_oa_ems_prog.setBody(max_oa_ems_prog_body)
+
+    max_oa_ems_prog_manager = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(air_loop_hvac.model)
+    max_oa_ems_prog_manager.setName("SET_#{air_loop_hvac.name.to_s.gsub(' ', '_')}_MAX_OA_FRAC")
+    max_oa_ems_prog_manager.setCallingPoint('InsideHVACSystemIterationLoop')
+    max_oa_ems_prog_manager.addProgram(max_oa_ems_prog)
+
+    # Hard-size the sizing:system
+    # object with the calculated min OA flow rate
+    sizing_system = air_loop_hvac.sizingSystem
+    sizing_system.setDesignOutdoorAirFlowRate(v_ot)
+    sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
   # Add occupant standby controls to air loop
   # When the thermostat schedule is setup or setback
