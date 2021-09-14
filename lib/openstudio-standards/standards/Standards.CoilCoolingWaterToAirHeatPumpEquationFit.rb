@@ -22,15 +22,29 @@ class Standard
   #
   # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
-  def coil_cooling_water_to_air_heat_pump_standard_minimum_cop(coil_cooling_water_to_air_heat_pump, rename = false)
+  def coil_cooling_water_to_air_heat_pump_standard_minimum_cop(coil_cooling_water_to_air_heat_pump, rename = false, computer_room_air_conditioner = false)
     search_criteria = {}
     search_criteria['template'] = template
+    if computer_room_air_conditioner
+      search_criteria['cooling_type'] = 'WaterCooled'
+      search_criteria['heating_type'] = 'All Other'
+      search_criteria['subcategory'] = 'CRAC'
+      cooling_type = search_criteria['cooling_type']
+      heating_type = search_criteria['heating_type']
+      sub_category = search_criteria['subcategory']
+    end
     capacity_w = coil_cooling_water_to_air_heat_pump_find_capacity(coil_cooling_water_to_air_heat_pump)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
+    return nil unless capacity_kbtu_per_hr > 0.0
 
     # Look up the efficiency characteristics
-    coil_props = model_find_object(standards_data['water_source_heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+    if computer_room_air_conditioner
+      equipment_type = 'unitary_acs'
+    else
+      equipment_type = 'water_source_heat_pumps'
+    end
+    coil_props = model_find_object(standards_data[equipment_type], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if coil_props.nil?
@@ -48,6 +62,29 @@ class Standard
       cop = eer_to_cop(min_eer, capacity_w = nil)
       new_comp_name = "#{coil_cooling_water_to_air_heat_pump.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{template}: #{coil_cooling_water_to_air_heat_pump.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+    end
+
+    # If specified as SCOP (water-cooled Computer Room Air Conditioned (CRAC))
+    if computer_room_air_conditioner
+      crac_minimum_scop = coil_props['minimum_scop']
+      unless crac_minimum_scop.nil?
+        # cop = scop / sensible heat ratio
+        # sensible heat ratio = sensible cool capacity / total cool capacity
+        if coil_cooling_water_to_air_heat_pump.ratedSensibleCoolingCapacity.is_initialized
+          crac_sensible_cool = coil_cooling_water_to_air_heat_pump.ratedSensibleCoolingCapacity.get
+          crac_total_cool = coil_cooling_water_to_air_heat_pump.ratedTotalCoolingCapacity.get
+          crac_sensible_cool_ratio = crac_sensible_cool / crac_total_cool
+        elsif coil_cooling_water_to_air_heat_pump.autosizedRatedSensibleCoolingCapacity.is_initialized
+          crac_sensible_cool = coil_cooling_water_to_air_heat_pump.autosizedRatedSensibleCoolingCapacity.get
+          crac_total_cool = coil_cooling_water_to_air_heat_pump.autosizedRatedTotalCoolingCapacity.get
+          crac_sensible_heat_ratio = crac_sensible_cool / crac_total_cool
+        else
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', 'Failed to get autosized sensible cool capacity')
+        end
+        cop = crac_minimum_scop / crac_sensible_heat_ratio
+        cop = cop.round(2)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{coil_cooling_water_to_air_heat_pump.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SCOP = #{crac_minimum_scop}")
+      end
     end
 
     # Rename

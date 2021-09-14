@@ -1593,7 +1593,7 @@ Standard.class_eval do
     if @instvarbuilding_type == 'LargeOffice'
       model.getCoilCoolingWaterToAirHeatPumpEquationFits.sort.each do |coil_cooling_water_to_air_heat_pump|
         if coil_cooling_water_to_air_heat_pump.name.get.downcase.include?('datacenter')
-          cop = coil_cooling_water_to_air_heat_pump_standard_minimum_cop_crac(coil_cooling_water_to_air_heat_pump)
+          cop = coil_cooling_water_to_air_heat_pump_standard_minimum_cop(coil_cooling_water_to_air_heat_pump, rename = false, computer_room_air_conditioner = true)
           if cop.nil?
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "COP for #{coil_cooling_water_to_air_heat_pump.name} is not changed")
           else
