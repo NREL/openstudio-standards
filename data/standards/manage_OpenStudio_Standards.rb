@@ -98,6 +98,8 @@ def unique_properties(sheet_name)
            ['template', 'fluid_type', 'fuel_type', 'condensing', 'condensing_control', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'chillers'
            ['template', 'cooling_type', 'condenser_type', 'compressor_type', 'absorption_type', 'variable_speed_drive', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+         when 'furnaces'
+           ['template', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'heat_rejection'
            ['template', 'equipment_type', 'fan_type', 'start_date', 'end_date']
          when 'water_source_heat_pumps'
@@ -143,7 +145,7 @@ def unique_properties(sheet_name)
          when 'climate_zones'
            ['name', 'standard']
          when 'energy_recovery'
-           ['template', 'climate_zone', 'under_8000_hours']
+           ['template', 'climate_zone', 'under_8000_hours', 'nontransient_dwelling', 'enthalpy_recovery_ratio_design_conditions']
          when 'space_types_lighting_control'
            ['template', 'building_type', 'space_type']
          else
@@ -345,6 +347,7 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
   bool_cols << 'hx'
   bool_cols << 'data_center'
   bool_cols << 'under_8000_hours'
+  bool_cols << 'nontransient_dwelling'
   bool_cols << 'u_value_includes_interior_film_coefficient'
   bool_cols << 'u_value_includes_exterior_film_coefficient'
 

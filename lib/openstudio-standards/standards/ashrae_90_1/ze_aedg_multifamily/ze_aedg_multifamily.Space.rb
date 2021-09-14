@@ -135,7 +135,7 @@ class ZEAEDGMultifamily < ASHRAE901
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end
 
-  # Determine the base infiltration rate at 75 PA.
+  # Determine the base infiltration rate at 75 Pa.
   #
   # @return [Double] the baseline infiltration rate, in cfm/ft^2
   # defaults to no infiltration.
