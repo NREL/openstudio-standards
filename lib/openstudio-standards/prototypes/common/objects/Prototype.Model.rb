@@ -1787,6 +1787,22 @@ Standard.class_eval do
     # Applies the DOE Prototype Building assumption that ERVs use
     # enthalpy wheels and therefore exceed the minimum effectiveness specified by 90.1
     model.getHeatExchangerAirToAirSensibleAndLatents.each { |obj| heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency(obj) }
+
+    # Update COP for large office CRAC
+    # Applies the DOE Prototype Building Model (Large Office only)
+    if @instvarbuilding_type == 'LargeOffice'
+      model.getCoilCoolingWaterToAirHeatPumpEquationFits.sort.each do |coil_cooling_water_to_air_heat_pump|
+        if coil_cooling_water_to_air_heat_pump.name.get.downcase.include?('datacenter')
+          cop = coil_cooling_water_to_air_heat_pump_standard_minimum_cop(coil_cooling_water_to_air_heat_pump, rename = false, computer_room_air_conditioner = true)
+          if cop.nil?
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "COP for #{coil_cooling_water_to_air_heat_pump.name} is not changed")
+          else
+            coil_cooling_water_to_air_heat_pump.setRatedCoolingCoefficientofPerformance(cop)
+          end
+        end
+      end
+    end
+
     return true
   end
 
