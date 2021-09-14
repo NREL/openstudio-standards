@@ -627,7 +627,7 @@ class NECB2011
           end
         end
 
-        spaceinfo[:occ_per_m2] = space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.get.round(3) unless space.spaceType.get.people[0].nil? or space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.empty?
+        spaceinfo[:occ_per_m2] = space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.get.round(3) unless space.spaceType.get.people[0].nil? || space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.empty?
         if space.spaceType.get.lights[0].nil?
           error_warning << "space.spaceType.get.lights[0] is nil for Space:[#{space.name.get}] Space Type:[#{spaceinfo[:space_type_name]}]"
         else

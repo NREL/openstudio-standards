@@ -10,9 +10,9 @@ class NECB2011 < Standard
 
   # This is a helper method to convert arguments that may support 'NECB_Default, and nils to convert to float'
   def convert_arg_to_f(variable:, default:)
-    return variable if variable.instance_of?(Numeric)
+    return variable if variable.kind_of?(Numeric)
     return default if variable.nil? || (variable == 'NECB_Default')
-    return unless variable.instance_of?(String)
+    return unless variable.kind_of?(String)
 
     variable = variable.strip
     return variable.to_f
@@ -428,7 +428,13 @@ class NECB2011 < Standard
     model.getBoilerSteams.each(&:remove)
     model.getPlantLoops.each(&:remove)
     model.getSchedules.each(&:remove)
+    model.getThermalZones.sort.each { |zone| zone.thermostat(&:remove) }
+    model.getSpaces.sort.each { |space| space.designSpecificationOutdoorAir(&:remove) }
+    model.getThermostatSetpointDualSetpoints.each(&:remove)
 
+    scale_x = 1.0
+    scale_y = 1.0
+    scale_z = 1.0
     # Rotate to model if requested
     rotation_degrees = convert_arg_to_f(variable: rotation_degrees, default: 0.0)
     BTAP::Geometry.rotate_building(model: model, degrees: rotation_degrees) unless rotation_degrees == 0.0
@@ -698,9 +704,9 @@ class NECB2011 < Standard
   # this method will determine the vintage of NECB spacetypes the model contains. It will return nil if it can't
   # determine it.
   def determine_spacetype_vintage(model)
-    # this code is the list of available vintages
-    space_type_vintage_list = ['NECB2011', 'NECB2015', 'NECB2017', 'BTAPPRE1980', 'BTAP1980TO2010']
-    # this reorders the list to do the current class first.
+    #this code is the list of available vintages
+    space_type_vintage_list = ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020', 'BTAPPRE1980', 'BTAP1980TO2010']
+    #this reorders the list to do the current class first.
     space_type_vintage_list.insert(0, space_type_vintage_list.delete(self.class.name))
     # Set the space_type
     space_type_vintage = nil

@@ -1,13 +1,10 @@
 require 'openstudio'
-require 'openstudio-standards'
-require 'aws-sdk-s3'
 require 'securerandom'
 require 'optparse'
 require 'yaml'
 require 'git-revision'
-resource_folder = File.join(__dir__, '..', '..', 'measures/btap_results/resources')
-require_relative File.join(__dir__, 'btap_data.rb')
-OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+# resource_folder = File.join(__dir__, '..', '..', 'measures/btap_results/resources')
+# OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 class BTAPDatapoint
   def initialize(input_folder: nil,
@@ -92,7 +89,7 @@ class BTAPDatapoint
       # model = load_osm(@options[:building_type]) # loads skeleton file from path.
       model = @standard.load_building_type_from_library(building_type: @options[:building_type])
       if false == model
-        osm_model_path = File.absolute_path(File.join(input_folder, @options[:building_type] + '.osm'))
+        osm_model_path = File.absolute_path(File.join(input_folder_cache, @options[:building_type] + '.osm'))
         raise("File #{osm_model_path} not found") unless File.exist?(osm_model_path)
 
         model = BTAP::FileIO.load_osm(osm_model_path)
@@ -270,7 +267,9 @@ class BTAPDatapoint
   end
 
   def s3_copy_file_to_s3(bucket_name:, source_file:, target_file:, n: 0)
+    require 'aws-sdk-core'
     require 'aws-sdk-s3'
+    Aws.use_bundled_cert!
     s3_resource = Aws::S3::Resource.new(region: 'ca-central-1')
 
     puts("Copying File to S3. source_file:#{source_file} bucket:#{bucket_name} target_folder:#{target_file}")
