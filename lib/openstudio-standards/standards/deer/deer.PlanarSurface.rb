@@ -10,7 +10,7 @@ class DEER
   # assign it to this surface.
   #
   # 90.1-2007, 90.1-2010, 90.1-2013
-  # @param climate_zone [String] the climate zone
+  # @param climate_zone [String] DEER climate zone
   # @param previous_construction_map [Hash] a hash where the keys are an array of inputs
   # [template, climate_zone, intended_surface_type, standards_construction_type, occ_type]
   # and the values are the constructions.  If supplied, constructions will be pulled

@@ -3,8 +3,9 @@ class Standard
 
   # Prototype SizingSystem object
   #
-  # @param air_loop_hvac [<OpenStudio::Model::AirLoopHVAC>] air loop to set sizing system properties
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param dsgn_temps [Hash] a hash of design temperature lookups from standard_design_sizing_temperatures
+  # @return [OpenStudio::Model::SizingSystem] sizing system object
   def adjust_sizing_system(air_loop_hvac,
                            dsgn_temps,
                            type_of_load_sizing: 'Sensible',
@@ -38,6 +39,11 @@ class Standard
     return sizing_system
   end
 
+  # adjust the outdoor air sizing to the use the ventilation rate procedure
+  # @todo this needs to be changed in both the sizing system and controller mechanical ventilation objects
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @return [Bool] returns true if successful, false if not
   def model_system_outdoor_air_sizing_vrp_method(air_loop_hvac)
     sizing_system = air_loop_hvac.sizingSystem
     # sizing_system.setSystemOutdoorAirMethod("VentilationRateProcedure")

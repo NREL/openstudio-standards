@@ -222,6 +222,11 @@ def compare_objects_field_by_field(true_object, compare_object, alias_hash = Has
     next if field_name.include?('Latent Fraction Schedule Name')
     next if field_name.include?('Water Use Equipment Name')
 
+    # Don't compare field added in OS 3.2 release (temporary)
+    # checking this field in older versions will require different regression models by version
+    next if field_name.include?('Drain Water Heat Exchanger Type')
+    next if field_name.include?('Drain Water Heat Exchanger Destination')
+
     # Don't compare the names of schedule type limits
     # because they appear to be created non-deteministically
     next if field_name.include?('Schedule Type Limits Name')

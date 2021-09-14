@@ -3,9 +3,9 @@ class Standard
 
   # Determine the component infiltration rate for this surface
   #
+  # @param sub_surface [OpenStudio::Model::SubSurface] sub surface object
   # @param type [String] choices are 'baseline' and 'advanced'
-  # @return [Double] infiltration rate
-  #   @units cubic meters per second (m^3/s)
+  # @return [Double] infiltration rate in m^3/s
   def sub_surface_component_infiltration_rate(sub_surface, type)
     comp_infil_rate_m3_per_s = 0.0
 
@@ -73,12 +73,12 @@ class Standard
     return comp_infil_rate_m3_per_s
   end
 
-  # Reduce the area of the subsurface by shrinking it
-  # toward the centroid.
+  # Reduce the area of the subsurface by shrinking it toward the centroid.
   # @author Julien Marrec
   #
-  # @param percent_reduction [Double] the fractional amount
-  # to reduce the area.
+  # @param sub_surface [OpenStudio::Model::SubSurface] sub surface object
+  # @param percent_reduction [Double] the fractional amount to reduce the area
+  # @return [Bool] returns true if successful, false if not
   def sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(sub_surface, percent_reduction)
     mult = 1 - percent_reduction
     scale_factor = mult**0.5
@@ -108,11 +108,11 @@ class Standard
     sub_surface.setVertices(new_vertices)
   end
 
-  # Reduce the area of the subsurface by raising the
-  # sill height.
+  # Reduce the area of the subsurface by raising the sill height.
   #
-  # @param percent_reduction [Double] the fractional amount
-  # to reduce the area.
+  # @param sub_surface [OpenStudio::Model::SubSurface] sub surface object
+  # @param percent_reduction [Double] the fractional amount to reduce the area.
+  # @return [Bool] returns true if successful, false if not
   def sub_surface_reduce_area_by_percent_by_raising_sill(sub_surface, percent_reduction)
     mult = 1 - percent_reduction
 
@@ -159,6 +159,9 @@ class Standard
 
   # Determine if the sub surface is a vertical rectangle,
   # meaning a rectangle where the bottom is parallel to the ground.
+  #
+  # @param sub_surface [OpenStudio::Model::SubSurface] sub surface object
+  # @return [Bool] returns true if the surface is a vertical rectangle, false if not
   def sub_surface_vertical_rectangle?(sub_surface)
     # Get the vertices once
     verts = sub_surface.vertices
@@ -183,14 +186,18 @@ class Standard
     # If here, we have a rectangle
     return true
   end
+
   # This method adds a subsurface (a window or a skylight depending on the surface) to the centroid of a surface.  The
   # shape of the subsurface is the same as the surface but is scaled so the area of the subsurface is the defined
   # fraction of the surface (set by area_fraction).  Note that this only works for surfaces that do not fold into
   # themselves (like an 'L' or a 'V').
-
-  def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction, model)
+  #
+  # @param surface [OpenStudio::Model::Surface] surface object
+  # @param area_fraction [Double] fraction of area of the larger surface
+  # @return [Bool] returns true if successful, false if not
+  def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction)
     # Get rid of all existing subsurfaces.
-    remove_All_Subsurfaces(surface: surface)
+    remove_all_subsurfaces(surface: surface)
     # What is the centroid of the surface.
     surf_cent = surface.centroid
     scale_factor = Math.sqrt(area_fraction)
@@ -213,8 +220,9 @@ class Standard
       # Add the new vertices to an array of vertices.
       new_vertices << new_vertex
     end
+
     # Create a new subsurface with the vertices determined above.
-    new_sub_surface = OpenStudio::Model::SubSurface.new(new_vertices, model)
+    new_sub_surface = OpenStudio::Model::SubSurface.new(new_vertices, surface.model)
     # Put this sub-surface on the surface.
     new_sub_surface.setSurface(surface)
     # Set the name of the subsurface to be the surface name plus the subsurface type (likely either 'fixedwindow' or
@@ -223,6 +231,7 @@ class Standard
     new_sub_surface.setName(new_name)
     # There is now only one surface on the subsurface.  Enforce this
     new_sub_surface.setMultiplier(1)
+    return true
   end
 
   # This method adds a subsurface (a window or a skylight depending on the surface) to the centroid of a surface.  The
@@ -231,20 +240,23 @@ class Standard
   # 'sub_surface_create_centered_subsurface_from_scaled_surface' method because it can handle concave surfaces.
   # However, it takes longer because it uses BTAP::Geometry::Surfaces.make_convex_surfaces which includes many nested
   # loops that cycle through the verticies in a surface.
-  def sub_surface_create_scaled_subsurfaces_from_surface(surface:, area_fraction:, model:, consturction:)
+  #
+  # @param surface [OpenStudio::Model::Surface] surface object
+  # @param area_fraction [Double] fraction of area of the larger surface
+  # @param construction [OpenStudio::Model::Construction] construction to use for the new surface
+  # @return [Bool] returns true if successful, false if not
+  def sub_surface_create_scaled_subsurfaces_from_surface(surface:, area_fraction:, construction:)
     # Set geometry tolerences:
     geometry_tolerence = 12
     # Get rid of all existing subsurfaces.
-    remove_All_Subsurfaces(surface: surface)
+    remove_all_subsurfaces(surface: surface)
     # Return vertices of smaller surfaces that fit inside this surface.  This is done in case the surface is
     # concave.
 
     # Throw an error if the roof is not flat.
     surface.vertices.each do |surf_vert|
       surface.vertices.each do |surf_vert_2|
-        unless surf_vert_2.z.to_f.round(geometry_tolerence) == surf_vert.z.to_f.round(geometry_tolerence)
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Currently skylights can only be added to buildings with non-plenum flat roofs.')
-        end
+        return OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Currently skylights can only be added to buildings with non-plenum flat roofs.  No skylight added to surface #{surface.name}") if surf_vert_2.z.to_f.round(geometry_tolerence) != surf_vert.z.to_f.round(geometry_tolerence)
       end
     end
     new_surfaces = BTAP::Geometry::Surfaces.make_convex_surfaces(surface: surface, tol: geometry_tolerence)
@@ -287,8 +299,15 @@ class Standard
         # Add the new vertices to an array of vertices.
         new_vertices << new_vertex
       end
+      # Check if the new surface/subsurface is too small to model.  If it is then skip it.
+      new_area = BTAP::Geometry::Surfaces.getSurfaceAreafromVertices(vertices: new_vertices)
+      if new_area < 0.0001
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Attempting to create a subsurface in surface #{surface.name} with an area of #{new_area}m2.  This subsurface is too small so will be skipped")
+        next
+      end
+
       # Create a new subsurface with the vertices determined above.
-      new_sub_surface = OpenStudio::Model::SubSurface.new(new_vertices, model)
+      new_sub_surface = OpenStudio::Model::SubSurface.new(new_vertices, surface.model)
       # Put this sub-surface on the surface.
       new_sub_surface.setSurface(surface)
       # Set the name of the subsurface to be the surface name plus the subsurface type (likely either 'fixedwindow' or
@@ -300,16 +319,22 @@ class Standard
       # Set the skylight type to 'Skylight'
       new_sub_surface.setSubSurfaceType('Skylight')
       # Set the skylight construction to whatever was passed (should be the default skylight construction)
-      new_sub_surface.setConstruction(consturction)
+      new_sub_surface.setConstruction(construction)
       new_sub_surface.setName(new_name)
       # There is now only one surface on the subsurface.  Enforce this
       new_sub_surface.setMultiplier(1)
     end
+    return true
   end
 
   # This just uses applies 'setWindowToWallRatio' method from the OpenStudio SDK.  The only addition is that it changes
   # the name of the window to be the surface name plus the subsurface type (always 'fixedwindow').
-  def set_Window_To_Wall_Ratio_set_name(surface:, area_fraction:, construction:)
+  #
+  # @param surface [OpenStudio::Model::Surface] surface object
+  # @param area_fraction [Double] fraction of area of the larger surface
+  # @param construction [OpenStudio::Model::Construction] construction to use for the new surface
+  # @return [Bool] returns true if successful, false if not
+  def set_window_to_wall_ratio_set_name(surface:, area_fraction:, construction:)
     surface.setWindowToWallRatio(area_fraction)
     surface.subSurfaces.sort.each do |sub_surf|
       sub_surf.setSubSurfaceType('FixedWindow')
@@ -317,11 +342,16 @@ class Standard
       new_name = surface.name.to_s + '_' + sub_surf.subSurfaceType.to_s
       sub_surf.setName(new_name)
     end
+    return true
   end
 
-  # This removes all of the subsurfaces from a surface.  Is a preparation for replaceing windows or clearing doors
-  # before adding windows.
-  def remove_All_Subsurfaces(surface:)
+  # This removes all of the subsurfaces from a surface.
+  # Is a preparation for replaceing windows or clearing doors before adding windows.
+  #
+  # @param surface [OpenStudio::Model::Surface] surface object
+  # @return [Bool] returns true if successful, false if not
+  def remove_all_subsurfaces(surface:)
     surface.subSurfaces.sort.each(&:remove)
+    return true
   end
 end

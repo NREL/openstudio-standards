@@ -1,47 +1,82 @@
 # Custom changes for the College prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module College
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+  # hvac adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 
-  def model_custom_internal_load_tweaks(building_type, climate_zone, prototype_input, model)
-    #   SpaceInfiltration "Peak: 0.2016 cfm/sf of above grade exterior wall surface area, adjusted by wind (when fans turn off)
-    # Off Peak: 25% of peak infiltration rate (when fans turn on)
-    # Additional infiltration through building entrance"
-    infil_schedule = model.getScheduleRulesetByName('College INFIL_SCH_PNNL')
-    model.getSpaceTypes.sort.each do |space_type|
-      infil_flow_rates = space_type.getSpaceInfiltrationDesignFlowRates
-      if infil_flow_rates.empty?
-        # create a new infiltration object for the spacetypes without any infiltration defined
-        infil_flow_rate = Openstudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
-        infil_flow_rate.setSpaceInfiltrationDesignFlowRate(0.2016)
-        infil_flow_rate.setSchedule(infil_schedule)
-        infil_flow_rate.setSpaceType(space_type)
+  # add door infiltration
+  #
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
+  def add_door_infiltration(climate_zone, model)
+    return false if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
+
+    entry_space = model.getSpaceByName('CB_ENTRANCE_LOBBY_F1').get
+    infiltration_entrydoor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+    infiltration_entrydoor.setName('entry door Infiltration')
+    infiltration_per_zone_entrydoor = 0
+    if template == '90.1-2004'
+      infiltration_per_zone_entrydoor = 7.678585
+      infiltration_entrydoor.setSchedule(model_add_schedule(model, 'College INFIL_Door_Opening_SCH'))
+    elsif template == '90.1-2007'
+      case climate_zone
+      when 'ASHRAE 169-2006-3A',
+        'ASHRAE 169-2006-3B',
+        'ASHRAE 169-2006-3C',
+        'ASHRAE 169-2006-4A',
+        'ASHRAE 169-2006-4B',
+        'ASHRAE 169-2006-4C'
+        infiltration_per_zone_entrydoor = 5.600600
+        infiltration_entrydoor.setSchedule(model_add_schedule(model, 'College INFIL_Door_Opening_SCH'))
       else
-        infil_flow_rates.each do |rate|
-          rate.setSpaceInfiltrationDesignFlowRate(0.2016)
-          rate.setSchedule(infil_schedule)
-        end
+        infiltration_per_zone_entrydoor = 7.678585
+        infiltration_entrydoor.setSchedule(model_add_schedule(model, 'College INFIL_Door_Opening_SCH'))
+      end
+    elsif template == '90.1-2010' || template == '90.1-2013'
+      case climate_zone
+      when 'ASHRAE 169-2006-3A',
+        'ASHRAE 169-2006-3B',
+        'ASHRAE 169-2006-3C'
+        infiltration_per_zone_entrydoor = 5.600600
+        infiltration_entrydoor.setSchedule(model_add_schedule(model, 'College INFIL_Door_Opening_SCH'))
+      else
+        infiltration_per_zone_entrydoor = 7.678585
+        infiltration_entrydoor.setSchedule(model_add_schedule(model, 'College INFIL_Door_Opening_SCH'))
       end
     end
-
-    building_entrance_lobby = model.getSpaceByName('CB_ Entrance Lobby_F0')
-    lobby_door_leakage_area = Openstudio::Model::SpaceInfiltrationEffectiveLeakageArea.new(model)
-    lobby_door_leakage_area.setEffectiveAirLeakageArea(5.0) # Need modification
-    lobby_door_leakage_area.setSpace(building_entrance_lobby)
-
-    # Plugload:Average power density (W/ft2) See under Zone Summary (MISSING)
-    # Schedule See under Schedules
-    # Zone Control Type: minimum supply air at 30% of the zone design peak supply air
+    infiltration_entrydoor.setDesignFlowRate(infiltration_per_zone_entrydoor)
+    infiltration_entrydoor.setSpace(entry_space)
+    return true
   end
 
+  # swh adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+  # geometry adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 end

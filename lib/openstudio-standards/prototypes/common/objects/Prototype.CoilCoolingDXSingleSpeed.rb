@@ -3,11 +3,14 @@ class Standard
 
   # Prototype CoilCoolingDXSingleSpeed object
   # Enters in default curves for coil by type of coil
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param air_loop_node [<OpenStudio::Model::Node>] the coil will be placed on this node of the air loop
   # @param name [String] the name of the system, or nil in which case it will be defaulted
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param type [String] the type of single speed DX coil to reference the correct curve set
   # @param cop [Double] rated cooling coefficient of performance
+  # @return [OpenStudio::Model::CoilCoolingDXTwoSpeed] the DX cooling coil
   def create_coil_cooling_dx_single_speed(model,
                                           air_loop_node: nil,
                                           name: '1spd DX Clg Coil',
@@ -157,7 +160,7 @@ class Standard
     when 'Window AC'
       # Performance curves
       # From Frigidaire 10.7 EER unit in Winkler et. al. Lab Testing of Window ACs (2013)
-      # NOTE: These coefficients are in SI UNITS
+      # @note These coefficients are in SI UNITS
       cool_cap_ft_coeffs_si = [0.6405, 0.01568, 0.0004531, 0.001615, -0.0001825, 0.00006614]
       cool_eir_ft_coeffs_si = [2.287, -0.1732, 0.004745, 0.01662, 0.000484, -0.001306]
       cool_cap_fflow_coeffs = [0.887, 0.1128, 0]

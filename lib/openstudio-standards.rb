@@ -52,6 +52,9 @@ module OpenstudioStandards
   # NECB2017 Code
   require_relative "#{stds}/necb/NECB2017/necb_2017"
   require_relative "#{stds}/necb/NECB2017/hvac_systems"
+  # NECB2020 Code
+  require_relative "#{stds}/necb/NECB2020/necb_2020"
+  require_relative "#{stds}/necb/NECB2020/building_envelope"
 
   # BTAPPRE1980
   require_relative "#{stds}/necb/BTAPPRE1980/btap_pre1980"
@@ -93,7 +96,9 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/comstock_ashrae_90_1_2013/comstock_ashrae_90_1_2013"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/comstock_ashrae_90_1_2016/comstock_ashrae_90_1_2016"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/comstock_ashrae_90_1_2019/comstock_ashrae_90_1_2019"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017"
   require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily"
 

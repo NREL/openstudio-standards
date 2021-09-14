@@ -29,7 +29,7 @@ class OpenStudio::Model::HVACComponent
   # levels that are based on component capacities, flowrates, etc.
   # @param comp_qty [Integer] the number of individual pieces of equipment
   # represented by this HVAC component
-  # @return [Bool] true if successful, false if not
+  # @return [Bool] returns true if successful, false if not
   def set_component_quantity(comp_qty)
     return self.additionalProperties.setFeature('component_quantity', comp_qty)
   end

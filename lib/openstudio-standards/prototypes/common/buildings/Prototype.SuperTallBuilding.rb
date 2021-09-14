@@ -1,12 +1,18 @@
 # Custom changes for the TallBuilding prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module SuperTallBuilding
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+  # hvac adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
-    # TODO: make additional parameters mutable by the user
-    # the number of floors for each function type is defined in additional_params
+    # @todo make additional parameters mutable by the user
+    #   the number of floors for each function type is defined in additional_params
     additional_params = {
       num_of_floor_retail: 3,
       num_of_floor_office: 34,
@@ -20,9 +26,9 @@ module SuperTallBuilding
     # for tall and super tall buildings, add main (multiple) and booster swh here instead of model_add_swh
     add_swh_tall_bldg(model, prototype_input, additional_params)
 
-    # # update the infiltration coefficients of tall buildings based on Lisa Ng's research (from NIST)
-    # # The set of coefficients are not quite appropriate for tall buildings, leading to super high infiltration rate
-    # # TODO: further infiltration research is needed
+    # update the infiltration coefficients of tall buildings based on Lisa Ng's research (from NIST)
+    # The set of coefficients are not quite appropriate for tall buildings, leading to super high infiltration rate
+    # @todo further infiltration research is needed
     # update_infil_coeff(model)
 
     # apply vertical weather variations to tall buildings
@@ -36,12 +42,15 @@ module SuperTallBuilding
     return true
   end
 
-  # Add elevators to elevator machine room
-  # schedules:
+  # Add elevators to elevator machine room schedules:
   # Large Office BLDG ELEVATORS, OfficeLarge ELEV_LIGHT_FAN_SCH_ADD_DF
   # HotelLarge BLDG_ELEVATORS, HotelLarge ELEV_LIGHT_FAN_SCH_ADD_DF
   # ApartmentMidRise BLDG_ELEVATORS, ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7
   # Retail elevator schedule developed
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param additional_params [Hash] hash of additional parameters
+  # @return [Bool] returns true if successful, false if not
   def add_elevator_system_loads(model, additional_params)
     # get the elevator machine room space from the model
     if model.getSpaceTypeByName('Elevator Machine Room').empty?
@@ -84,8 +93,20 @@ module SuperTallBuilding
                        'ApartmentMidRise BLDG_ELEVATORS', 'ApartmentHighRise ELEV_LIGHT_FAN_SCH_24_7')
     add_elevator_equip(model, elev_mc_room, num_elev_hotel, 'Hotel', motor_power_per_elev, fan_light_power_per_elev,
                        'HotelLarge BLDG_ELEVATORS', 'HotelLarge ELEV_LIGHT_FAN_SCH_24_7')
+    return true
   end
 
+  # adds elevator equipment to space
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param space [OpenStudio::Model::Space] OpenStudio space object
+  # @param num_of_elev [Double] number of elevators
+  # @param function_type [String] function type
+  # @param motor_power_per_elev [Double] elevator motor power in watts
+  # @param fan_light_power_per_elev [Double] elevator fan power in watts
+  # @param elev_power_sch_name [String] schedule to use for the elevator motor
+  # @param elev_fan_light_sch_name [String] schedule to use for the elevator fan
+  # @return [Bool] returns true if successful, false if not
   def add_elevator_equip(model, space, num_of_elev, function_type, motor_power_per_elev, fan_light_power_per_elev,
                          elev_power_sch_name, elev_fan_light_sch_name)
     motor_equip_frac_loss = 0.85
@@ -117,9 +138,15 @@ module SuperTallBuilding
     elevator_fan_sch = model_add_schedule(model, elev_fan_light_sch_name)
     elevator_fan_equipment.setSchedule(elevator_fan_sch)
     elevator_fan_equipment.setSpace(space)
+    return true
   end
 
   # for tall and super tall buildings, add main (multiple) and booster swh in model_custom_hvac_tweaks
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @param additional_params [Hash] hash of additional parameters
+  # @return [Bool] returns true if successful, false if not
   def add_swh_tall_bldg(model, prototype_input, additional_params)
     # get all building stories and rank based on Z-origin
     story_info = {}
@@ -260,9 +287,13 @@ module SuperTallBuilding
                              OpenStudio.convert(prototype_input['laundry_water_use_temperature'], 'F', 'C').get,
                              nil)
     end
+    return true
   end
 
   # update the infiltration coefficients of super tall buildings based on Lisa Ng's research (from NIST)
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def update_infil_coeff(model)
     #      System On    |  System Off
     #  A:  -0.019024771 |  0
@@ -323,22 +354,30 @@ module SuperTallBuilding
         infiltration_hvac_off.setVelocitySquaredTermCoefficient(coeff_d_off)
       end
     end
+    return true
   end
 
   # apply vertical weather variations to tall buildings
   # current method is using the E+ default variation trend by specifying the height of outdoor air nodes
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def apply_vertical_weather_variation(model)
-    # TODO: OA node height is not implemented OpenStudio yet.
-    # TODO: Temporary fix to be done via adding EnergyPlus measure.
+    # @todo OA node height is not implemented OpenStudio yet.
+    # @todo Temporary fix to be done via adding EnergyPlus measure.
     # model.getAirLoopHVACOutdoorAirSystems.each do |oa_system|
     #   # get the outdoor air system outdoor air node
     #   oa_node = oa_system.outdoorAirModelObject.get.to_Node.get
     #   # get the height of the plenum if any, assign to outdoor air node
     #
     # end
+    return true
   end
 
   # HighriseApartment doesn't apply thermostat to corridor spaces
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_thermostat_to_corridor(model)
     thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(model)
     thermostat.setName('HighriseApartment Corridor Thermostat')
@@ -355,8 +394,16 @@ module SuperTallBuilding
         end
       end
     end
+    return true
   end
 
+  # swh adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     # customized swh system is not added here, but in model_custom_hvac_tweaks instead
     # because model_custom_swh_tweaks is performed in Prototype.Model after efficiency assignment. If swh added here, efficiency can't be updated.
@@ -364,8 +411,15 @@ module SuperTallBuilding
     return true
   end
 
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-    # TODO: make additional parameters mutable by the user
+  # geometry adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
+    # @todo make additional parameters mutable by the user
     # the number of floors for each function type is defined in additional_params
     additional_params = {
       num_of_floor_retail: 3,
@@ -777,9 +831,9 @@ module SuperTallBuilding
     add_skylobby_story(model, building_height)
 
     # Relocate the ElevatorMachineRm story
-    top_elevatorMachineRm_story = model.getBuildingStoryByName('ElevatorMachineRm story').get
-    top_elevatorMachineRm_story.setNominalZCoordinate(building_height)
-    top_elevatorMachineRm_story.spaces.each do |space|
+    top_elevator_machine_rm_story = model.getBuildingStoryByName('ElevatorMachineRm story').get
+    top_elevator_machine_rm_story.setNominalZCoordinate(building_height)
+    top_elevator_machine_rm_story.spaces.each do |space|
       space.setZOrigin(building_height)
     end
 
@@ -798,6 +852,11 @@ module SuperTallBuilding
     return true
   end
 
+  # generate input json based on input parameters
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param additional_params [Hash] hash of additional parameters
+  # @return [Json] json file
   def generate_new_json(model, additional_params)
     new_json = []
 
@@ -961,6 +1020,10 @@ module SuperTallBuilding
     return JSON.pretty_generate(new_json)
   end
 
+  # generate multipler list from number of floors
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Array<Double>] mutiplier list
   def get_multiplier_list(num_floors)
     a = (num_floors.to_f / 10).ceil #  a = (25.0/10).ceil => 3
     return num_floors if a == 1
@@ -982,6 +1045,12 @@ module SuperTallBuilding
     return multiplier_list
   end
 
+  # adjust space boundary conditions to adiabatic
+  #
+  # @param space [OpenStudio::Model::Space] OpenStudio space object
+  # @param if_top_story_floor_adiabatic [Bool] flag if top floor is adiabatic
+  # @param if_ground_story_plenum_adiabatic [Bool] flag if ground story plenum is adiabatic
+  # @return [Bool] returns true if successful, false if not
   def update_space_outside_boundary_to_adiabatic(space, if_top_story_floor_adiabatic: false, if_ground_story_plenum_adiabatic: false)
     if (space.name.to_s.include? 'Plenum') && !if_top_story_floor_adiabatic
       space.surfaces.each do |surface|
@@ -1011,8 +1080,21 @@ module SuperTallBuilding
         end
       end
     end
+    return true
   end
 
+  # copies a building story
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param original_story [OpenStudio::Model::BuildingStory] OpenStudio building story object
+  # @param multiplier [Double] multipler for number of stories
+  # @param new_z_origin [Double] new z origin height in meters
+  # @param f_to_c_height [Double] floor to ceiling height in meters
+  # @param f_to_f_height [Double] floor to floor height in meters
+  # @param current_story [OpenStudio::Model::BuildingStory] OpenStudio building story object
+  # @param if_top_story_floor_adiabatic [Bool] flag if top floor is adiabatic
+  # @param if_ground_story_plenum_adiabatic [Bool] flag if ground story plenum is adiabatic
+  # @return [Bool] returns true if successful, false if not
   def deep_copy_story(model, original_story, multiplier, new_z_origin, f_to_c_height, f_to_f_height, current_story, if_top_story_floor_adiabatic: false, if_ground_story_plenum_adiabatic: false)
     # clone the story
     new_story = original_story.clone(model).to_BuildingStory.get
@@ -1057,9 +1139,14 @@ module SuperTallBuilding
         update_space_outside_boundary_to_adiabatic(new_space, if_top_story_floor_adiabatic: if_top_story_floor_adiabatic, if_ground_story_plenum_adiabatic: if_ground_story_plenum_adiabatic)
       end
     end
+    return true
   end
 
   # add skylobby story and relocate all stories above it
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # building_height [Double] building height in meters
+  # @return [Bool] returns true if successful, false if not
   def add_skylobby_story(model, building_height)
     # locate the skylobby story (find the most middle story bottom, add skylobby below it)
     # rank the stories from low to high (not including the elevator machine room, which hasn't assign the nominal Z coordinate)
@@ -1123,5 +1210,6 @@ module SuperTallBuilding
         space.setZOrigin(orin_z_orin + f_to_f_height)
       end
     end
+    return true
   end
 end

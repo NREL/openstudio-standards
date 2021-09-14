@@ -1,6 +1,7 @@
 # IDE files
 /.idea
 /netbeans
+/.vscode
 
 # Developer installation
 /.bundle/

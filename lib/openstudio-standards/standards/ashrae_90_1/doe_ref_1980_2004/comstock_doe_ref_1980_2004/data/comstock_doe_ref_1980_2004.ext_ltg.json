@@ -108,7 +108,7 @@
       "occupancy_setback_reduction": 0.0,
       "base_site_allowance_power": null,
       "base_site_allowance_fraction": 0.05,
-      "parking_areas_and_drives": 0.054533,
+      "parking_areas_and_drives": 0.049749436,
       "walkways_less_than_10ft_wide": 1.0,
       "walkways_10ft_wide_or_greater": 0.2,
       "stairways": 1.0,
