@@ -3,10 +3,11 @@ class DEER
 
   # For LA100 calibration, default to systems being left on
   # Overwritten to be required for DEER2020 and beyond
-  # @return [Bool] true if required, false if not
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @return [Bool] returns true if required, false if not
   def air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac)
     shutoff_required = false
-
     return shutoff_required
   end
 
@@ -14,8 +15,10 @@ class DEER
   # is acceptable per the standard.  Based on the MASControl rules, it appears that
   # only NoEconomizer and FixedDryBulb are allowed.
   #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Bool] Returns true if allowable, if the system has no economizer or no OA system.
-  # Returns false if the economizer type is not allowable.
+  #   Returns false if the economizer type is not allowable.
   def air_loop_hvac_economizer_type_allowable?(air_loop_hvac, climate_zone)
     # EnergyPlus economizer types
     # 'NoEconomizer'
@@ -44,8 +47,10 @@ class DEER
     end
   end
 
-  # Determine the limits for the type of economizer present
-  # on the AirLoopHVAC, if any.
+  # Determine the limits for the type of economizer present on the AirLoopHVAC, if any.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Array<Double>] [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
   def air_loop_hvac_economizer_limits(air_loop_hvac, climate_zone)
     drybulb_limit_f = nil

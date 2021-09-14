@@ -3,18 +3,16 @@ class DOERefPre1980 < ASHRAE901
 
   # Add an elevator the the specified space
   #
-  # @param space [OpenStudio::Model::Space] the space
-  # to assign the elevators to.
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param space [OpenStudio::Model::Space] the space to assign the elevators to.
   # @param number_of_elevators [Integer] the number of elevators
-  # @param elevator_type [String] valid choices are
-  # Traction, Hydraulic
+  # @param elevator_type [String] valid choices are Traction, Hydraulic
   # @param elevator_schedule [String] the name of the elevator schedule
   # @param elevator_fan_schedule [String] the name of the elevator fan schedule
   # @param elevator_lights_schedule [String] the name of the elevator lights schedule
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::ElectricEquipment] the resulting elevator
-  # @todo Inconsistency.  Older vintages don't have lights or fans
-  # in elevators, which is not realistic.
+  # @todo Inconsistency.  Older vintages don't have lights or fans in elevators, which is not realistic.
   def model_add_elevator(model,
                          space,
                          number_of_elevators,
@@ -75,11 +73,13 @@ class DOERefPre1980 < ASHRAE901
     return elevator_equipment
   end
 
-  # Determines the power required by an individual elevator
-  # of a given type.  Values used by the older vintages
-  # are slightly higher than those used by the DOE prototypes.
-  # @param elevator_type [String] valid choices are
-  # Traction, Hydraulic
+  # Determines the power required by an individual elevator of a given type.
+  # Values used by the older vintages are slightly higher than those used by the DOE prototypes.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param elevator_type [String] valid choices are Traction, Hydraulic
+  # @param building_type [string] the building type
+  # @return [Double] elevator lift power in watts
   def model_elevator_lift_power(model, elevator_type, building_type)
     lift_pwr_w = 0
     if elevator_type == 'Traction'

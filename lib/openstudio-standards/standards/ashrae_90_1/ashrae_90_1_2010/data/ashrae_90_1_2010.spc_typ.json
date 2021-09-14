@@ -91,8 +91,8 @@
     {
       "template": "90.1-2010",
       "building_type": "College",
-      "space_type": "College -  Conference",
-      "lighting_primary_space_type": "Conference",
+      "space_type": "College - Art Classroom",
+      "lighting_primary_space_type": "Classroom/lecture/training",
       "lighting_secondary_space_type": "General",
       "manual_continuous_dimming": 0.1,
       "programmable_multilevel_dimming": 0.1,

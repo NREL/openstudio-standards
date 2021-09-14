@@ -2,12 +2,19 @@
 # These are changes that are inconsistent with other prototype
 # building types.
 module RetailStandalone
-  # TODO: The ElectricEquipment schedules are wrong in OpenStudio Standards... It needs to be 'RetailStandalone BLDG_EQUIP_SCH' for 90.1-2010 at least but probably all
-  # TODO: There is an OpenStudio bug where two heat exchangers are on the equipment list and it references the same single heat exchanger for both. This doubles the heat recovery energy.
-  # TODO: The HeatExchangerAirToAir is not calculating correctly. It does not equal the legacy IDF and has higher energy usage due to that.
-  # TODO: Need to determine if WaterHeater can be alone or if we need to 'fake' it.
+  # @todo The ElectricEquipment schedules are wrong in OpenStudio Standards... It needs to be 'RetailStandalone BLDG_EQUIP_SCH' for 90.1-2010 at least but probably all
+  # @todo There is an OpenStudio bug where two heat exchangers are on the equipment list and it references the same single heat exchanger for both. This doubles the heat recovery energy.
+  # @todo The HeatExchangerAirToAir is not calculating correctly. It does not equal the legacy IDF and has higher energy usage due to that.
+  # @todo Need to determine if WaterHeater can be alone or if we need to 'fake' it.
 
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+  # hvac adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # Add the door infiltration for template 2004,2007,2010,2013,2016,2019
@@ -105,15 +112,134 @@ module RetailStandalone
     return true
   end
 
+<<<<<<< HEAD
   def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
     return true
+=======
+  # daylighting adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_daylighting_tweaks(model, building_type, climate_zone, prototype_input)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting daylight sensor positions and fractions')
+
+    adjustments = case climate_zone
+                  when 'ASHRAE 169-2006-6A',
+                       'ASHRAE 169-2006-6B',
+                       'ASHRAE 169-2006-7A',
+                       'ASHRAE 169-2006-8A',
+                       'ASHRAE 169-2013-6A',
+                       'ASHRAE 169-2013-6B',
+                       'ASHRAE 169-2013-7A',
+                       'ASHRAE 169-2013-8A'
+                    [
+                      { '90.1-2010' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
+                                                            'sensor_1_xyz' => [9.144, 24.698, 0] } },
+                        '90.1-2013' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
+                                                            'sensor_1_xyz' => [9.144, 24.698, 0] } },
+                        '90.1-2016' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
+                                                            'sensor_1_xyz' => [9.144, 24.698, 0] } },
+                        '90.1-2019' => { 'Core_Retail' => { 'sensor_1_frac' => 0.1724,
+                                                            'sensor_1_xyz' => [9.144, 24.698, 0] } } }
+                    ]
+                  else
+                    [
+                      { '90.1-2010' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
+                                                            'sensor_2_frac' => 0.25,
+                                                            'sensor_1_xyz' => [14.2, 14.2, 0],
+                                                            'sensor_2_xyz' => [3.4, 14.2, 0] } },
+                        '90.1-2013' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
+                                                            'sensor_2_frac' => 0.25,
+                                                            'sensor_1_xyz' => [14.2, 14.2, 0],
+                                                            'sensor_2_xyz' => [3.4, 14.2, 0] } },
+                        '90.1-2016' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
+                                                            'sensor_2_frac' => 0.25,
+                                                            'sensor_1_xyz' => [14.2, 14.2, 0],
+                                                            'sensor_2_xyz' => [3.4, 14.2, 0] } },
+                        '90.1-2019' => { 'Core_Retail' => { 'sensor_1_frac' => 0.25,
+                                                            'sensor_2_frac' => 0.25,
+                                                            'sensor_1_xyz' => [14.2, 14.2, 0],
+                                                            'sensor_2_xyz' => [3.4, 14.2, 0] } } }
+                    ]
+                  end
+
+    # Adjust daylight sensors in each space
+    model.getSpaces.each do |space|
+      if adjustments[0].keys.include? template
+        if adjustments[0][template].keys.include? space.name.to_s
+          adj = adjustments[0][template][space.name.to_s]
+          next if space.thermalZone.empty?
+
+          zone = space.thermalZone.get
+          next if space.spaceType.empty?
+
+          spc_type = space.spaceType.get
+          next if spc_type.standardsSpaceType.empty?
+
+          stds_spc_type = spc_type.standardsSpaceType.get
+          # Adjust the primary sensor
+          if adj['sensor_1_frac'] && zone.primaryDaylightingControl.is_initialized
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting primary daylight sensor to control #{adj['sensor_1_frac']} of the lighting.")
+            zone.setFractionofZoneControlledbyPrimaryDaylightingControl(adj['sensor_1_frac'])
+            pri_ctrl = zone.primaryDaylightingControl.get
+            if adj['sensor_1_xyz']
+              x = adj['sensor_1_xyz'][0]
+              y = adj['sensor_1_xyz'][1]
+              z = adj['sensor_1_xyz'][2]
+              OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting primary daylight sensor position to [#{x}, #{y}, #{z}].")
+              pri_ctrl.setPositionXCoordinate(x)
+              pri_ctrl.setPositionYCoordinate(y)
+              pri_ctrl.setPositionZCoordinate(z)
+            end
+          end
+          # Adjust the secondary sensor
+          if adj['sensor_2_frac'] && zone.secondaryDaylightingControl.is_initialized
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting secondary daylight sensor to control #{adj['sensor_2_frac']} of the lighting.")
+            zone.setFractionofZoneControlledbySecondaryDaylightingControl(adj['sensor_2_frac'])
+            sec_ctrl = zone.secondaryDaylightingControl.get
+            if adj['sensor_2_xyz']
+              x = adj['sensor_2_xyz'][0]
+              y = adj['sensor_2_xyz'][1]
+              z = adj['sensor_2_xyz'][2]
+              OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting secondary daylight sensor position to [#{x}, #{y}, #{z}].")
+              sec_ctrl.setPositionXCoordinate(x)
+              sec_ctrl.setPositionYCoordinate(y)
+              sec_ctrl.setPositionZCoordinate(z)
+            end
+          elsif zone.secondaryDaylightingControl.is_initialized
+            sec_ctrl = zone.secondaryDaylightingControl.get
+            sec_ctrl.remove
+            zone.resetFractionofZoneControlledbySecondaryDaylightingControl
+            zone.resetSecondaryDaylightingControl
+          end
+        end
+      end
+    end
+>>>>>>> master
   end
 
+  # swh adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+  # geometry adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
     model_set_building_north_axis(model, 0.0)
 

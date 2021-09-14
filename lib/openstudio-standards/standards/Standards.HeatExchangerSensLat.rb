@@ -1,8 +1,10 @@
 class Standard
   # @!group HeatExchangerSensLat
 
-  # Sets the minimum effectiveness of the heat exchanger per
-  # the standard.
+  # Sets the minimum effectiveness of the heat exchanger per the standard.
+  #
+  # @param heat_exchanger_air_to_air_sensible_and_latent [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] the heat exchanger
+  # @return [Bool] returns true if successful, false if not
   def heat_exchanger_air_to_air_sensible_and_latent_apply_effectiveness(heat_exchanger_air_to_air_sensible_and_latent)
     # Assumed to be sensible and latent at all flow
     full_htg_sens_eff, full_htg_lat_eff, part_htg_sens_eff, part_htg_lat_eff, full_cool_sens_eff, full_cool_lat_eff, part_cool_sens_eff, part_cool_lat_eff = heat_exchanger_air_to_air_sensible_and_latent_minimum_effectiveness(heat_exchanger_air_to_air_sensible_and_latent)
@@ -21,9 +23,8 @@ class Standard
     return true
   end
 
-  # Defines the minimum sensible and latent effectiveness of
-  # the heat exchanger.  Assumed to apply to sensible and latent
-  # effectiveness at all flow rates.
+  # Defines the minimum sensible and latent effectiveness of the heat exchanger.
+  # Assumed to apply to sensible and latent effectiveness at all flow rates.
   #
   # @param heat_exchanger_air_to_air_sensible_and_latent [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] the heat exchanger
   def heat_exchanger_air_to_air_sensible_and_latent_minimum_effectiveness(heat_exchanger_air_to_air_sensible_and_latent)
@@ -35,6 +36,7 @@ class Standard
     full_cool_lat_eff = 0.5
     part_cool_sens_eff = 0.5
     part_cool_lat_eff = 0.5
+
     return full_htg_sens_eff, full_htg_lat_eff, part_htg_sens_eff, part_htg_lat_eff, full_cool_sens_eff, full_cool_lat_eff, part_cool_sens_eff, part_cool_lat_eff
   end
 

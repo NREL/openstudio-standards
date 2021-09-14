@@ -2,11 +2,10 @@ class Standard
   # @!group ThermalZone
 
   # Calculates the zone outdoor airflow requirement (Voz)
-  # based on the inputs in the DesignSpecification:OutdoorAir objects
-  # in all spaces in the zone.
+  # based on the inputs in the DesignSpecification:OutdoorAir objects in all spaces in the zone.
   #
-  # @return [Double] the zone outdoor air flow rate
-  #   @units cubic meters per second (m^3/s)
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Double] the zone outdoor air flow rate in cubic meters per second (m^3/s)
   def thermal_zone_outdoor_airflow_rate(thermal_zone)
     tot_oa_flow_rate = 0.0
 
@@ -72,8 +71,8 @@ class Standard
   # Calculates the zone outdoor airflow requirement and
   # divides by the zone area.
   #
-  # @return [Double] the zone outdoor air flow rate per area
-  #   @units cubic meters per second (m^3/s)
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Double] the zone outdoor air flow rate per area in cubic meters per second (m^3/s)
   def thermal_zone_outdoor_airflow_rate_per_area(thermal_zone)
     tot_oa_flow_rate_per_area = 0.0
 
@@ -96,7 +95,8 @@ class Standard
 
   # Convert total minimum OA requirement to a per-area value.
   #
-  # @return [Bool] true if successful, false if not
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Bool] returns true if successful, false if not
   def thermal_zone_convert_oa_req_to_per_area(thermal_zone)
     # For each space in the zone, convert
     # all design OA to per-area
@@ -164,7 +164,7 @@ class Standard
   # with a value of one when occupancy across all spaces is greater than or equal to the occupied_percentage_threshold,
   # and zero all other times.  Otherwise the method will return the weighted fractional occupancy schedule.
   #
-  # @param thermal_zone [<OpenStudio::Model::ThermalZone>] thermal_zone to create occupancy schedule
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
   # @param sch_name [String] the name of the generated occupancy schedule
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
   #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
@@ -220,13 +220,18 @@ class Standard
   #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
   #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule based on threshold_calc_method
   # @param threshold_calc_method [String] customizes behavior of occupied_percentage_threshold
-  # fractional passes raw value through,
-  # normalized_annual_range evaluates each value against the min/max range for the year
-  # normalized_daily_range evaluates each value against the min/max range for the day.
-  # The goal is a dynamic threshold that calibrates each day.
+  #   fractional passes raw value through,
+  #   normalized_annual_range evaluates each value against the min/max range for the year
+  #   normalized_daily_range evaluates each value against the min/max range for the day.
+  #   The goal is a dynamic threshold that calibrates each day.
   # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
   # @todo Speed up this method.  Bottleneck is ScheduleRule.getDaySchedules
   def spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil, threshold_calc_method: 'value')
+    unless !spaces.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', 'Empty spaces array passed to spaces_get_occupancy_schedule method.')
+      return false
+    end
+
     annual_normalized_tol = nil
     if threshold_calc_method == 'normalized_annual_range'
       # run this method without threshold to get annual min and max
@@ -518,7 +523,7 @@ class Standard
         prior_rules.each do |prior_rule|
           # see if they are similar
           next if rules_combined
-          # TODO: update to combine adjacent date ranges vs. just matching date ranges
+          # @todo update to combine adjacent date ranges vs. just matching date ranges
           next if prior_rule.startDate.get != rule.startDate.get
           next if prior_rule.endDate.get != rule.endDate.get
           next if prior_rule.daySchedule.times.to_a != rule.daySchedule.times.to_a
@@ -550,13 +555,12 @@ class Standard
     return sch_ruleset
   end
 
-  # Determine if the thermal zone is residential based on the
-  # space type properties for the spaces in the zone.
-  # If there are both residential and nonresidential spaces
-  # in the zone, the result will be whichever type
-  # has more floor area. In the event that they are equal,
-  # it will be assumed nonresidential.
+  # Determine if the thermal zone is residential based on the space type properties for the spaces in the zone.
+  # If there are both residential and nonresidential spaces in the zone,
+  # the result will be whichever type has more floor area.
+  # In the event that they are equal, it will be assumed nonresidential.
   #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
   # return [Bool] true if residential, false if nonresidential
   def thermal_zone_residential?(thermal_zone)
     # Determine the respective areas
@@ -582,16 +586,17 @@ class Standard
     return is_res
   end
 
-  # Determine if the thermal zone is a Fossil Fuel,
-  # Fossil/Electric Hybrid, and Purchased Heat zone.
+  # Determine if the thermal zone is a Fossil Fuel, Fossil/Electric Hybrid, and Purchased Heat zone.
   # If not, it is an Electric or Other Zone.
   # This is as-defined by 90.1 Appendix G.
   #
-  # return [Bool] true if Fossil Fuel,
-  # Fossil/Electric Hybrid, and Purchased Heat zone,
-  # false if Electric or Other.
-  # To-do: It's not doing it properly right now. If you have a zone with a VRF + a DOAS (via an ATU SingleDUct Uncontrolled)
-  # it'll pick up both natural gas and electricity and classify it as fossil fuel, when I would definitely classify it as electricity
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Bool] true if Fossil Fuel, Fossil/Electric Hybrid, and Purchased Heat zone,
+  #   false if Electric or Other.
+  # @todo It's not doing it properly right now.
+  #   If you have a zone with a VRF + a DOAS (via an ATU SingleDUct Uncontrolled)
+  #   it'll pick up both natural gas and electricity and classify it as fossil fuel,
+  #   when I would definitely classify it as electricity
   def thermal_zone_fossil_hybrid_or_purchased_heat?(thermal_zone)
     is_fossil = false
 
@@ -621,13 +626,13 @@ class Standard
 
   # Determine if the thermal zone's fuel type category.
   # Options are:
-  # fossil, electric, unconditioned
-  # If a customization is passed, additional categories may
-  # be returned.
+  #   fossil, electric, unconditioned
+  # If a customization is passed, additional categories may be returned.
   # If 'Xcel Energy CO EDA', the type fossilandelectric is added.
-  # DistrictHeating is considered a fossil fuel since it is
-  # typically created by natural gas boilers.
+  # DistrictHeating is considered a fossil fuel since it is typically created by natural gas boilers.
   #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @param custom [String] string for custom case statement
   # @return [String] the fuel type category
   def thermal_zone_fossil_or_electric_type(thermal_zone, custom)
     fossil = false
@@ -689,11 +694,10 @@ class Standard
     return fuel_type
   end
 
-  # Determine if the thermal zone is
-  # Fossil/Purchased Heat/Electric Hybrid
+  # Determine if the thermal zone is Fossil/Purchased Heat/Electric Hybrid
   #
-  # return [Bool] true if mixed
-  # Fossil/Electric Hybrid, and Purchased Heat zone
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Bool] true if mixed Fossil/Electric Hybrid, and Purchased Heat zone, false if not
   def thermal_zone_mixed_heating_fuel?(thermal_zone)
     is_mixed = false
 
@@ -749,6 +753,7 @@ class Standard
   # If not part of total floor area, it is not added to the zone floor area
   # Will multiply it by the ZONE MULTIPLIER as well!
   #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
   # @return [Double] the zone net floor area in m^2 (with multiplier taken into account)
   def thermal_zone_floor_area_with_zone_multipliers(thermal_zone)
     area_m2 = 0
@@ -779,14 +784,13 @@ class Standard
     return area_m2
   end
 
-  # Infers the baseline system type based on the equipment
-  # serving the zone and their heating/cooling fuels.
-  # Only does a high-level inference; does not look for the
-  # presence/absence of required controls, etc.
+  # Infers the baseline system type based on the equipment serving the zone and their heating/cooling fuels.
+  # Only does a high-level inference; does not look for the presence/absence of required controls, etc.
   #
-  # @return [String] Possible system types are
-  # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
-  # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [String] system type. Possible system types are:
+  #   PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
+  #   VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
   def thermal_zone_infer_system_type(thermal_zone)
     # Determine the characteristics
     # of the equipment serving the zone
@@ -923,12 +927,13 @@ class Standard
     return sys_type
   end
 
-  # Determines heating status.  If the zone has a thermostat
-  # with a maximum heating setpoint above 5C (41F),
-  # counts as heated.  Plenums are also assumed to be heated.
+  # Determines heating status.
+  # If the zone has a thermostat with a maximum heating setpoint above 5C (41F), counts as heated.
+  # Plenums are also assumed to be heated.
   #
   # @author Andrew Parker, Julien Marrec
-  # @return [Bool] true if heated, false if not
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Bool] returns true if heated, false if not
   def thermal_zone_heated?(thermal_zone)
     temp_f = 41
     temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
@@ -1065,12 +1070,13 @@ class Standard
     return htd
   end
 
-  # Determines cooling status.  If the zone has a thermostat
-  # with a minimum cooling setpoint below 33C (91F),
-  # counts as cooled.  Plenums are also assumed to be cooled.
+  # Determines cooling status.
+  # If the zone has a thermostat with a minimum cooling setpoint below 33C (91F), counts as cooled.
+  # Plenums are also assumed to be cooled.
   #
   # @author Andrew Parker, Julien Marrec
-  # @return [Bool] true if cooled, false if not
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Bool] returns true if cooled, false if not
   def thermal_zone_cooled?(thermal_zone)
     temp_f = 91
     temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
@@ -1199,10 +1205,10 @@ class Standard
     return cld
   end
 
-  # Determine if the thermal zone is a plenum
-  # based on whether a majority of the spaces
-  # in the zone are plenums or not.
-  # @return [Bool] true if majority plenum, false if not
+  # Determine if the thermal zone is a plenum based on whether a majority of the spaces in the zone are plenums or not.
+  #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Bool] returns true if majority plenum, false if not
   def thermal_zone_plenum?(thermal_zone)
     plenum_status = false
 
@@ -1225,9 +1231,9 @@ class Standard
   end
 
   # Determine if this zone is a vestibule.
-  # Zone must be less than 200ft^2 and
-  # also have an infiltration object specified
-  # using Flow/Zone.
+  # Zone must be less than 200 ft^2 and also have an infiltration object specified using Flow/Zone.
+  #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
   # @return [Bool] returns true if vestibule, false if not
   def thermal_zone_vestibule?(thermal_zone)
     is_vest = false
@@ -1249,10 +1255,10 @@ class Standard
     return is_vest
   end
 
-  # Determines whether the zone is conditioned per 90.1,
-  # which is based on heating and cooling loads.
+  # Determines whether the zone is conditioned per 90.1, which is based on heating and cooling loads.
   #
-  # @param climate_zone [String] climate zone
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
   # @todo add logic to detect indirectly-conditioned spaces
   def thermal_zone_conditioning_category(thermal_zone, climate_zone)
@@ -1358,11 +1364,11 @@ class Standard
     return cond_cat
   end
 
-  # Calculate the heating supply temperature based on the
-  # specified delta-T. Delta-T is calculated based on the
-  # highest value found in the heating setpoint schedule.
+  # Calculate the heating supply temperature based on the# specified delta-T.
+  # Delta-T is calculated based on the highest value found in the heating setpoint schedule.
   #
-  # @return [Double] the design heating supply temperature, in C
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Double] the design heating supply temperature, in degrees Celsius
   # @todo Exception: 17F delta-T for labs
   def thermal_zone_prm_baseline_heating_design_supply_temperature(thermal_zone)
     setpoint_c = nil
@@ -1415,11 +1421,11 @@ class Standard
     return sat_c
   end
 
-  # Calculate the cooling supply temperature based on the
-  # specified delta-T. Delta-T is calculated based on the
-  # highest value found in the cooling setpoint schedule.
+  # Calculate the cooling supply temperature based on the specified delta-T.
+  # Delta-T is calculated based on the highest value found in the cooling setpoint schedule.
   #
-  # @return [Double] the design heating supply temperature, in C
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Double] the design heating supply temperature, in degrees Celsius
   # @todo Exception: 17F delta-T for labs
   def thermal_zone_prm_baseline_cooling_design_supply_temperature(thermal_zone)
     setpoint_c = nil
@@ -1472,12 +1478,11 @@ class Standard
     return sat_c
   end
 
-  # Set the design delta-T for zone heating and cooling sizing
-  # supply air temperatures.  This value determines zone
-  # air flows, which will be summed during system
-  # design airflow calculation.
+  # Set the design delta-T for zone heating and cooling sizing supply air temperatures.
+  # This value determines zone air flows, which will be summed during system design airflow calculation.
   #
-  # @return [Bool] true if successful, false if not
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Bool] returns true if successful, false if not
   def thermal_zone_apply_prm_baseline_supply_temperatures(thermal_zone)
     # Skip spaces that aren't heated or cooled
     return true unless thermal_zone_heated?(thermal_zone) || thermal_zone_cooled?(thermal_zone)
@@ -1505,6 +1510,9 @@ class Standard
   # Adds a thermostat that heats the space to 0 F and cools to 120 F.
   # These numbers are outside of the threshold that is considered heated
   # or cooled by thermal_zone_cooled?() and thermal_zone_heated?()
+  #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Bool] returns true if successful, false if not
   def thermal_zone_add_unconditioned_thermostat(thermal_zone)
     # Heated to 0F (below thermal_zone_heated?(thermal_zone)  threshold)
     htg_t_f = 0
@@ -1531,15 +1539,12 @@ class Standard
     return true
   end
 
-  # Determine the design internal load (W) for
-  # this zone without space multipliers.
-  # This include People, Lights, Electric Equipment,
-  # and Gas Equipment in all spaces in this zone.
-  # It assumes 100% of the wattage
-  # is converted to heat, and that the design peak
-  # schedule value is 1 (100%).
+  # Determine the design internal load (W) for this zone without space multipliers.
+  # This include People, Lights, Electric Equipment, and Gas Equipment in all spaces in this zone.
+  # It assumes 100% of the wattage is converted to heat, and that the design peak schedule value is 1 (100%).
   #
-  # @return [Double] the design internal load, in W
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Double] the design internal load, in watts
   def thermal_zone_design_internal_load(thermal_zone)
     load_w = 0.0
 
@@ -1550,9 +1555,9 @@ class Standard
     return load_w
   end
 
-  # Returns the space type that represents a majority
-  # of the floor area.
+  # Returns the space type that represents a majority of the floor area.
   #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
   # @return [Boost::Optional<OpenStudio::Model::SpaceType>] an optional SpaceType
   def thermal_zone_majority_space_type(thermal_zone)
     space_type_to_area = Hash.new(0.0)
@@ -1577,6 +1582,7 @@ class Standard
 
   # Returns the building type that represents the majority of floor area
   #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
   # @return [String] the building type
   def thermal_zone_building_type(thermal_zone)
     # determine areas of each building type
@@ -1611,6 +1617,7 @@ class Standard
   # Determine the thermal zone's occupancy type category.
   # Options are: residential, nonresidential
   #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
   # @return [String] the occupancy type category
   # @todo Add public assembly building types
   def thermal_zone_occupancy_type(thermal_zone)
@@ -1630,7 +1637,9 @@ class Standard
   # Does not account for System requirements like ERV, economizer, etc.
   # Those are accounted for in the AirLoopHVAC method of the same name.
   #
-  # @return [Bool] Returns true if required, false if not.
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] Returns true if required, false if not
   # @todo Add exception logic for 90.1-2013
   #   for cells, sickrooms, labs, barbers, salons, and bowling alleys
   def thermal_zone_demand_control_ventilation_required?(thermal_zone, climate_zone)
@@ -1693,24 +1702,26 @@ class Standard
     return dcv_required
   end
 
-  # Determine the area and occupancy level limits for
-  # demand control ventilation.  No DCV requirements by default.
+  # Determine the area and occupancy level limits for demand control ventilation.
+  # No DCV requirements by default.
   #
-  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone
-  # @return [Array<Double>] the minimum area, in m^2
-  # and the minimum occupancy density in m^2/person.  Returns nil
-  # if there is no requirement.
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Array<Double>] the minimum area, in m^2 and the minimum occupancy density in m^2/person.
+  #   Returns nil if there is no requirement.
   def thermal_zone_demand_control_ventilation_limits(thermal_zone)
     min_area_m2 = nil
     min_area_per_occ = nil
     return [min_area_m2, min_area_per_occ]
   end
 
-  # Add Exhaust Fans based on space type lookup
-  # This measure doesn't look if DCV is needed. Others methods can check if DCV needed and add it
+  # Add Exhaust Fans based on space type lookup.
+  # This measure doesn't look if DCV is needed.
+  # Others methods can check if DCV needed and add it.
   #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @param exhaust_makeup_inputs [Hash] has of makeup exhaust inputs
   # @return [Hash] Hash of newly made exhaust fan objects along with secondary exhaust and zone mixing objects
-  # @todo - Combine availability and fraction flow schedule to make zone mixing schedule
+  # @todo combine availability and fraction flow schedule to make zone mixing schedule
   def thermal_zone_add_exhaust(thermal_zone, exhaust_makeup_inputs = {})
     exhaust_fans = {} # key is primary exhaust value is hash of arrays of secondary objects
 
@@ -1806,7 +1817,7 @@ class Standard
         transfer_air_source_zone_exhaust.addToThermalZone(exhaust_makeup_inputs[makeup_target][:source_zone])
         exhaust_fans[zone_exhaust_fan][:transfer_air_source_zone_exhaust] = transfer_air_source_zone_exhaust
 
-        # TODO: - make zone mixing schedule by combining exhaust availability and fraction flow
+        # @todo make zone mixing schedule by combining exhaust availability and fraction flow
         zone_mixing_schedule = exhaust_schedule
 
         # add zone mixing
@@ -1822,10 +1833,11 @@ class Standard
     return exhaust_fans
   end
 
-  # returns adjacant_zones_with_shared_wall_areas
+  # returns adjacent zones that share a wall with the zone
   #
-  # @param [Bool] same_floor (only valid option for now is true)
-  # @return [Array] adjacent zones
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @param same_floor [Bool] only valid option for now is true
+  # @return [Array<OpenStudio::Model::ThermalZone>] array of adjacent thermal zones
   def thermal_zone_get_adjacent_zones_with_shared_wall_areas(thermal_zone, same_floor = true)
     adjacent_zones = []
 
@@ -1847,17 +1859,25 @@ class Standard
 
   # returns true if DCV is required for exhaust fan for specified tempate
   #
-  # @return [Bool] returns true if DCV is required for exhaust fan for specified tempate
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Bool] returns true if DCV is required for exhaust fan for specified template, false if not
   def thermal_zone_exhaust_fan_dcv_required?(thermal_zone); end
 
   # Add DCV to exhaust fan and if requsted to related objects
   #
-  # @return [Bool] not sure if there is anything to turn here other than if it was sucessful, no new objects made?
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @param change_related_objects [Bool] change related objects
+  # @param zone_mixing_objects [Array<OpenStudio::Model::ZoneMixing>] array of zone mixing objects
+  # @param transfer_air_source_zones [Array<OpenStudio::Model::ThermalZone>] array thermal zones that transfer air
+  # @return [Bool] returns true if successful, false if not
+  # @todo this method is currently empty
   def thermal_zone_add_exhaust_fan_dcv(thermal_zone, change_related_objects = true, zone_mixing_objects = [], transfer_air_source_zones = [])
-    # set flow fraction schedule for all zone exhaust fans and then set zone mixing schedule to the intersection of exhaust avaialability and exhaust fractional schedule
+
+    # set flow fraction schedule for all zone exhaust fans and then set zone mixing schedule to the intersection of exhaust availability and exhaust fractional schedule
 
     # are there associated zone mixing or dummy exhaust objects that need to change when this changes?
-    # How are these ojects identifed?
-    # If this is run directly after thermal_zone_add_exhaust(thermal_zone)  it will return a hash where each key is an exhaust object and hash is a hash of related zone mizing and dummy exhaust from the source zone
+    # How are these objects identified?
+    # If this is run directly after thermal_zone_add_exhaust(thermal_zone)  it will return a hash where each key is an exhaust object and hash is a hash of related zone mixing and dummy exhaust from the source zone
+    return true
   end
 end

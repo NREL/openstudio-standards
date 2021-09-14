@@ -47,7 +47,7 @@ class OpenStudio::Model::AirConditionerVariableRefrigerantFlow
       self.setEvaporativeCondenserPumpRatedPowerConsumption(evap_cnd_pump_power.get)
     end
     
-    # todo: autosizeWaterCondenserVolumeFlowRate
+    # @todo autosizeWaterCondenserVolumeFlowRate
       #self.setWaterCondenserVolumeFlowRate
 
   end

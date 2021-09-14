@@ -1,5 +1,12 @@
 class Standard
-  def model_add_hvac(model, building_type, climate_zone, prototype_input, epw_file)
+  # Adds the prototype HVAC system to the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [String] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_add_hvac(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
 
     # Get the list of HVAC systems, as defined for each building in the Prototype.building_name files
@@ -132,9 +139,9 @@ class Standard
         # Special logic to make a heat pump loop if necessary
         heat_pump_loop = nil
         if system['heating_type'] == 'Water To Air Heat Pump'
-          # @code_sections [90.1-2016_6.5.5.2.1]
+          # @note code_sections [90.1-2016_6.5.5.2.1]
           # change highrise apartment heat rejection fan (< 5hp) from single speed to two speed evaporative fluid cooler
-          # TODO: this is temporary fix, it should be applied to all heat rejection devices smaller than 5hp.
+          # @todo this is temporary fix, it should be applied to all heat rejection devices smaller than 5hp.
           if system['heat_pump_loop_cooling_type'].nil?
             hp_loop_cooling_type = 'EvaporativeFluidCooler'
           else
@@ -486,8 +493,9 @@ class Standard
     return true
   end
 
-  # Determine the typical system type given the inputs.
+  # Determine the typical system type given the inputs
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param area_type [String] Valid choices are residential and nonresidential
   # @param delivery_type [String] Conditioning delivery type. Valid choices are air and hydronic
   # @param heating_source [String] Valid choices are Electricity, NaturalGas, DistrictHeating, DistrictAmbient
@@ -553,6 +561,11 @@ class Standard
 
   private
 
+  # returns the thermal zones served by the system
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param system [Hash] hash of system inputs
+  # @return [Array<OpenStudio::Model::ThermalZone>] system thermal zones
   def model_get_zones_from_spaces_on_system(model, system)
     # Find all zones associated with these spaces
     thermal_zones = []
@@ -574,6 +587,11 @@ class Standard
     return thermal_zones
   end
 
+  # returns the thermal zone that serves as the return plenum
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param system [Hash] hash of system inputs
+  # @return [OpenStudio::Model::ThermalZone] the return plenum thermal zone
   def model_get_return_plenum_from_system(model, system)
     # Find the zone associated with the return plenum space name
     return_plenum = nil

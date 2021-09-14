@@ -3,18 +3,15 @@ class CBES < Standard
 
   # Add an elevator the the specified space
   #
-  # @param space [OpenStudio::Model::Space] the space
-  # to assign the elevators to.
+  # @param space [OpenStudio::Model::Space] the space to assign the elevators to.
   # @param number_of_elevators [Integer] the number of elevators
-  # @param elevator_type [String] valid choices are
-  # Traction, Hydraulic
+  # @param elevator_type [String] valid choices are Traction, Hydraulic
   # @param elevator_schedule [String] the name of the elevator schedule
   # @param elevator_fan_schedule [String] the name of the elevator fan schedule
   # @param elevator_lights_schedule [String] the name of the elevator lights schedule
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::ElectricEquipment] the resulting elevator
-  # @todo Inconsistency.  Older vintages don't have lights or fans
-  # in elevators, which is not realistic.
+  # @todo Inconsistency.  Older vintages don't have lights or fans in elevators, which is not realistic.
   def model_add_elevator(model,
                          space,
                          number_of_elevators,

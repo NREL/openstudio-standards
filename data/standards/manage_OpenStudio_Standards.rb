@@ -181,102 +181,51 @@ def standard_directory_name_from_template(template)
   return directory_name
 end
 
-# Downloads the OpenStudio_Standards.xlsx
-# from Google Drive
+# checks whether your authorization credentials are set up to access the spreadsheets
+# @return [Bool] returns true if api is working, false if not
+def check_google_drive_configuration
+  require 'google_drive'
+  client_config_path = File.join(Dir.home, '.credentials', "client_secret.json")
+  unless File.exists? client_config_path
+    puts "Unable to locate client_secret.json file at #{client_config_path}."
+    return false
+  end
+  puts 'attempting to access spreadsheets...'
+  puts 'if you get an SSL error, disconnect from the VPN and try again'
+  session = GoogleDrive::Session.from_config(client_config_path)
+
+  # Gets list of remote files
+  session.files.each do |file|
+    puts file.title if file.title.include? 'OpenStudio'
+  end
+
+  puts 'Spreadsheets accessed successfully'
+  return true
+end
+
+# Downloads the OpenStudio_Standards.xlsx from Google Drive
 # @note This requires you to have a client_secret.json file saved in your
 # username/.credentials folder.  To get one of these files, please contact
-# andrew.parker@nrel.gov
+# marley.praprost@nrel.gov
 def download_google_spreadsheets(spreadsheet_titles)
-
-  require 'google/api_client'
-  require 'google/api_client/client_secrets'
-  require 'google/api_client/auth/installed_app'
-  require 'google/api_client/auth/storage'
-  require 'google/api_client/auth/storages/file_store'
-  require 'fileutils'
-
-  #APPLICATION_NAME = 'openstudio-standards'
-  #CLIENT_SECRETS_PATH = 'client_secret_857202529887-mlov2utaq9apq699789gh4o1f9u2eipr.apps.googleusercontent.com.json'
-
-  ##
-  # Ensure valid credentials, either by restoring from the saved credentials
-  # files or intitiating an OAuth2 authorization request via InstalledAppFlow.
-  # If authorization is required, the user's default browser will be launched
-  # to approve the request.
-  #
-  # @return [Signet::OAuth2::Client] OAuth2 credentials
-  def authorize(credentials_path, client_secret_path)
-    FileUtils.mkdir_p(File.dirname(credentials_path))
-
-    file_store = Google::APIClient::FileStore.new(credentials_path)
-    storage = Google::APIClient::Storage.new(file_store)
-    auth = storage.authorize
-
-    if auth.nil? || (auth.expired? && auth.refresh_token.nil?)
-      app_info = Google::APIClient::ClientSecrets.load(client_secret_path)
-      flow = Google::APIClient::InstalledAppFlow.new({
-                                                         :client_id => app_info.client_id,
-                                                         :client_secret => app_info.client_secret,
-                                                         :scope => 'https://www.googleapis.com/auth/drive'})
-      auth = flow.authorize(storage)
-      puts "Credentials saved to #{credentials_path}" unless auth.nil?
-    end
-    auth
+  require 'google_drive'
+  client_config_path = File.join(Dir.home, '.credentials', "client_secret.json")
+  unless File.exists? client_config_path
+    puts "Unable to locate client_secret.json file at #{client_config_path}."
+    return false
   end
 
-  ##
-  # Download a file's content
-  #
-  # @param [Google::APIClient] client
-  #   Authorized client instance
-  # @param [Google::APIClient::Schema::Drive::V2::File]
-  #   Drive File instance
-  # @return
-  #   File's content if successful, nil otherwise
-  def download_xlsx_spreadsheet(client, google_spreadsheet, path)
-    file_name = google_spreadsheet.title
-    export_url = google_spreadsheet.export_links['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
-    #export_url = google_spreadsheet.export_links['text/csv']
-    if export_url
-      result = client.execute(:uri => export_url)
-      if result.status == 200
-        File.open(path, "wb") do |f|
-          f.write(result.body)
-        end
-        puts "Successfully downloaded #{file_name} to .xlsx"
-        return true
-      else
-        puts "An error occurred: #{result.data['error']['message']}"
-        return false
-      end
-    else
-      puts "#{file_name} can't be downloaded as an .xlsx file."
-      return false
-    end
-  end
+  session = GoogleDrive::Session.from_config(client_config_path)
 
-  # Initialize the API
-  client_secret_path = File.join(Dir.home, '.credentials', "client_secret.json")
-
-  credentials_path = File.join(Dir.home, '.credentials', "openstudio-standards-google-drive.json")
-  client = Google::APIClient.new(:application_name => 'openstudio-standards')
-  client.authorization = authorize(credentials_path, client_secret_path)
-  drive_api = client.discovered_api('drive', 'v2')
-
-  # List the 100 most recently modified files.
-  results = client.execute!(
-      :api_method => drive_api.files.list,
-      :parameters => {:maxResults => 100})
-  puts "No files found" if results.data.items.empty?
-
-  # Find the OpenStudio_Standards google spreadsheet
-  # and save it.
-  results.data.items.each do |file|
+  # Gets list of remote files
+  session.files.each do |file|
     if spreadsheet_titles.include?(file.title)
       puts "Found #{file.title}"
-      download_xlsx_spreadsheet(client, file, "#{File.dirname(__FILE__)}/#{file.title}.xlsx")
+      file.export_as_file("#{File.dirname(__FILE__)}/#{file.title}.xlsx")
+      puts "Downloaded #{file.title} to #{File.dirname(__FILE__)}/#{file.title}.xlsx"
     end
   end
+  return true
 end
 
 def exclusion_list
@@ -402,7 +351,11 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
       header_row = 2 # Base 0
 
       # Get all data
-      all_data = worksheet.extract_data
+      # extract_data was deprecated in rubyXL
+      # inputting the method here https://github.com/weshatheleopard/rubyXL/issues/201
+      all_data = worksheet.sheet_data.rows.map { |row|
+        row.cells.map { |c| c && c.value() } unless row.nil?
+      }
 
       # Get the header row data
       header_data = all_data[header_row]

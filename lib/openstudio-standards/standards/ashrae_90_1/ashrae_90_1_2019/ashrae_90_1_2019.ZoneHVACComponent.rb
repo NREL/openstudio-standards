@@ -5,6 +5,7 @@ class ASHRAE9012019 < ASHRAE901
   # Required for 90.1-2019 per 6.4.3.9.
   #
   # @ref [References::ASHRAE9012019] 6.4.3.9
+  # @param zone_hvac_component [OpenStudio::Model::ZoneHVACComponent] zone hvac component
   # @return [Bool] returns true if successful, false if not
   def zone_hvac_component_vestibule_heating_control_required?(zone_hvac_component)
     # Ensure that the equipment is assigned to a thermal zone

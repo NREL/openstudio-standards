@@ -1,12 +1,11 @@
 class NECB2011
   def model_add_hvac(model:)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
-    system_fuel_defaults = self.get_canadian_system_defaults_by_weatherfile_name(model)
+    system_fuel_defaults = get_canadian_system_defaults_by_weatherfile_name(model)
     necb_autozone_and_autosystem(model: model, runner: nil, use_ideal_air_loads: false, system_fuel_defaults: system_fuel_defaults)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
     return true
   end
-
 
   # NECB does not change damper positions
   #
@@ -45,7 +44,7 @@ class NECB2011
     dsafr_m3_per_s = air_loop_hvac.model.getAutosizedValue(air_loop_hvac, 'Design Supply Air Flow Rate', 'm3/s')
     min_dsafr_l_per_s = 1500
     unless dsafr_m3_per_s.empty?
-      dsafr_l_per_s = dsafr_m3_per_s.get() * 1000
+      dsafr_l_per_s = dsafr_m3_per_s.get * 1000
       if dsafr_l_per_s > min_dsafr_l_per_s
         economizer_required = true
         puts "economizer_required = true for #{air_loop_hvac.name} because dsafr_l_per_s(#{dsafr_l_per_s}) > 1500"
@@ -90,11 +89,10 @@ class NECB2011
   def air_loop_hvac_apply_economizer_integration(air_loop_hvac, climate_zone)
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return false # No OA system
-    end
+    # No OA system
+    return false if !oa_sys.is_initialized
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
 
     # Apply integrated economizer
@@ -236,10 +234,12 @@ class NECB2011
           oa_flow = oa_flow_per_floor_area * space.floorArea * zone.multiplier # oa flow for the space
           zone_oa += oa_flow # add up oa flow for all spaces to get zone air flow
         end
-      end # space loop
+        # space loop
+      end
       sum_zone_oa += zone_oa # sum of all zone oa flows to get system oa flow
       sum_zone_oa_times_heat_design_t += (zone_oa * heat_design_t) # calculated to get oa flow weighted average of design exhaust temperature
-    end # zone loop
+      # zone loop
+    end
 
     # Calculate average exhaust temperature (oa flow weighted average)
     avg_exhaust_temp = sum_zone_oa_times_heat_design_t / sum_zone_oa
@@ -375,7 +375,7 @@ class NECB2011
     # This will now get data of the erv from the json file instead of hardcoding it. Defaults to NECB2011 erv we have been using.
     erv_name = 'NECB_Default' if erv_name.nil?
     erv_info = @standards_data['tables']['erv']['table'].detect { |item| item['erv_name'] == erv_name }
-    raise("Could not find #{erv_name} in #{self.class.name} class' erv.json file or it's parents. The available ervs are #{@standards_data['tables']['erv']['table'].map{|item| item['erv_name']}}") if erv_info.nil?
+    raise("Could not find #{erv_name} in #{self.class.name} class' erv.json file or it's parents. The available ervs are #{@standards_data['tables']['erv']['table'].map { |item| item['erv_name'] }}") if erv_info.nil?
 
     heat_exchanger_air_to_air_sensible_and_latent.setHeatExchangerType(erv_info['HeatExchangerType'])
     heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(erv_info['SensibleEffectivenessat100HeatingAirFlow'])
@@ -391,11 +391,10 @@ class NECB2011
     heat_exchanger_air_to_air_sensible_and_latent.setEconomizerLockout(erv_info['EconomizerLockout'])
     heat_exchanger_air_to_air_sensible_and_latent.setThresholdTemperature(erv_info['ThresholdTemperature'])
     heat_exchanger_air_to_air_sensible_and_latent.setInitialDefrostTimeFraction(erv_info['InitialDefrostTimeFraction'])
-    update_sys_name(heat_exchanger_air_to_air_sensible_and_latent.airLoopHVAC.get,sys_hr: "erv")
+    update_sys_name(heat_exchanger_air_to_air_sensible_and_latent.airLoopHVAC.get, sys_hr: 'erv')
 
     return true
   end
-
 
   # Determine if demand control ventilation (DCV) is
   # required for this air loop.
@@ -720,7 +719,6 @@ class NECB2011
   #
   # @return [Double] minimum thermal efficiency
   def coil_heating_gas_standard_minimum_thermal_efficiency(coil_heating_gas, rename = false)
-
     # Get the coil properties
     search_criteria = coil_heating_gas_find_search_criteria
     capacity_w = coil_heating_gas_find_capacity(coil_heating_gas)
@@ -803,7 +801,6 @@ class NECB2011
       successfully_set_all_properties = false
     end
 
-
     # Make the plf vs plr curve
     plffplr_curve = model_add_curve(coil_heating_gas.model, coil_props['efffplr'])
     if plffplr_curve
@@ -820,7 +817,6 @@ class NECB2011
     coil_heating_gas.setGasBurnerEfficiency(thermal_eff.to_f)
 
     return successfully_set_all_properties
-
   end
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
@@ -842,7 +838,9 @@ class NECB2011
       oa_system = airloop.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir
     end
-    min_oa_flow_rate, oaf = 0.0,0.0
+    min_oa_flow_rate = 0.0
+    oaf = 0.0
+
     if controller_oa
       min_oa_flow_rate = nil
       if controller_oa.minimumOutdoorAirFlowRate.is_initialized
@@ -881,7 +879,7 @@ class NECB2011
     end
 
     # Set final number of cooling stages and create missing stages if needed
-    for istage in 2..final_num_stages-1
+    for istage in 2..final_num_stages - 1
       new_clg_stage = OpenStudio::Model::CoilCoolingDXMultiSpeedStageData.new(model)
       coil_cooling_dx_multi_speed.addStage(new_clg_stage)
     end
@@ -891,14 +889,14 @@ class NECB2011
     # is maintained above the outside air flow rate
     coil_cooling_dx_multi_speed.stages[0].setGrossRatedTotalCoolingCapacity(stage_cap[0])
     coil_cooling_dx_multi_speed.stages[1].setGrossRatedTotalCoolingCapacity(stage_cap[1])
-    case  coil_cooling_dx_multi_speed.stages.size
+    case coil_cooling_dx_multi_speed.stages.size
     when 2
-      if (oaf > 0.5) then multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate) end
+      if oaf > 0.5 then multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate) end
     when 3
       coil_cooling_dx_multi_speed.stages[2].setGrossRatedTotalCoolingCapacity(stage_cap[2])
       if (oaf > 0.333) && (oaf <= 0.666)
         multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
-      elsif (oaf > 0.666)
+      elsif oaf > 0.666
         multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
         multi_speed_heat_pump.setSpeed2SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
       end
@@ -910,7 +908,7 @@ class NECB2011
       elsif (oaf > 0.5) && (oaf <= 0.75)
         multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
         multi_speed_heat_pump.setSpeed2SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
-      elsif (oaf > 0.75)
+      elsif oaf > 0.75
         multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
         multi_speed_heat_pump.setSpeed2SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
         multi_speed_heat_pump.setSpeed3SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
@@ -1001,8 +999,8 @@ class NECB2011
     # Set the COP values
     cop, new_comp_name = coil_cooling_dx_multi_speed_standard_minimum_cop(coil_cooling_dx_multi_speed)
     unless cop.nil?
-      clg_stages.sort.each do |istage|
-        istage.setGrossRatedCoolingCOP(cop)
+      clg_stages.sort.each do |curr_istage|
+        curr_istage.setGrossRatedCoolingCOP(cop)
       end
     end
     sql_db_vars_map[new_comp_name] = coil_cooling_dx_multi_speed.name.to_s
@@ -1015,7 +1013,6 @@ class NECB2011
     create_ems_to_turn_on_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed_for_night_cycle(multi_speed_heat_pump)
 
     return sql_db_vars_map
-
   end
 
   # Create EMS to turn on "AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed" in response to a call
@@ -1025,48 +1022,48 @@ class NECB2011
     model = multi_speed_heat_pump.model
     avail_manager_name = nil
     if multi_speed_heat_pump.airLoopHVAC.is_initialized
-      if not multi_speed_heat_pump.airLoopHVAC.get.availabilityManagers.empty?
+      if !multi_speed_heat_pump.airLoopHVAC.get.availabilityManagers.empty?
         avail_manager_name = multi_speed_heat_pump.airLoopHVAC.get.availabilityManagers[0].name.to_s
       end
     end
-    if avail_manager_name
-      avail_manager_out_var_name = "Availability Manager Night Cycle Control Status"
-      avail_manager_out_var = OpenStudio::Model::OutputVariable.new(avail_manager_out_var_name, model)
-      avail_manager_out_var.setKeyValue(avail_manager_name)
-      avail_manager_out_var.setReportingFrequency("Timestep")
-      night_cycle_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, avail_manager_out_var)
-      heat_pump_avail_sch = nil
-      if multi_speed_heat_pump.availabilitySchedule.is_initialized
-        heat_pump_avail_sch = multi_speed_heat_pump.availabilitySchedule.get
-      elsif multi_speed_heat_pump.airLoopHVAC.get.availabilitySchedule.is_initialized
-        heat_pump_avail_sch = multi_speed_heat_pump.airLoopHVAC.get.availabilitySchedule.get
-      else
-        heat_pump_avail_sch = OpenStudio::Model::ScheduleConstant.new(model)
-        heat_pump_avail_sch.setValue(1.0)
-      end
-      heat_pump_avail_sch_var = OpenStudio::Model::OutputVariable.new("Schedule Value", model)
-      heat_pump_avail_sch_var.setKeyValue(heat_pump_avail_sch.name.to_s)
-      heat_pump_avail_sch_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, heat_pump_avail_sch_var)
-      updated_heat_pump_avail_sch = OpenStudio::Model::ScheduleConstant.new(model)
-      multi_speed_heat_pump.setAvailabilitySchedule(updated_heat_pump_avail_sch)
-      heat_pump_avail_sch_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(updated_heat_pump_avail_sch, "Schedule:Constant", "Schedule Value")
-      heat_pump_avail_sch_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-      heat_pump_avail_sch_prog.setName("#{multi_speed_heat_pump.name.to_s.gsub(/[ +-.]/,'_')} Availability Schedule Program by Line")
-      heat_pump_avail_sch_prog_body = <<-EMS
-        IF #{heat_pump_avail_sch_sensor.handle} > 0.0 
+    return unless avail_manager_name
+
+    avail_manager_out_var_name = 'Availability Manager Night Cycle Control Status'
+    avail_manager_out_var = OpenStudio::Model::OutputVariable.new(avail_manager_out_var_name, model)
+    avail_manager_out_var.setKeyValue(avail_manager_name)
+    avail_manager_out_var.setReportingFrequency('Timestep')
+    night_cycle_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, avail_manager_out_var)
+    heat_pump_avail_sch = nil
+    if multi_speed_heat_pump.availabilitySchedule.is_initialized
+      heat_pump_avail_sch = multi_speed_heat_pump.availabilitySchedule.get
+    elsif multi_speed_heat_pump.airLoopHVAC.get.availabilitySchedule.is_initialized
+      heat_pump_avail_sch = multi_speed_heat_pump.airLoopHVAC.get.availabilitySchedule.get
+    else
+      heat_pump_avail_sch = OpenStudio::Model::ScheduleConstant.new(model)
+      heat_pump_avail_sch.setValue(1.0)
+    end
+    heat_pump_avail_sch_var = OpenStudio::Model::OutputVariable.new('Schedule Value', model)
+    heat_pump_avail_sch_var.setKeyValue(heat_pump_avail_sch.name.to_s)
+    heat_pump_avail_sch_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, heat_pump_avail_sch_var)
+    updated_heat_pump_avail_sch = OpenStudio::Model::ScheduleConstant.new(model)
+    multi_speed_heat_pump.setAvailabilitySchedule(updated_heat_pump_avail_sch)
+    heat_pump_avail_sch_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(updated_heat_pump_avail_sch, 'Schedule:Constant', 'Schedule Value')
+    heat_pump_avail_sch_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    heat_pump_avail_sch_prog.setName("#{multi_speed_heat_pump.name.to_s.gsub(/[ +-.]/, '_')} Availability Schedule Program by Line")
+    heat_pump_avail_sch_prog_body = <<-EMS
+        IF #{heat_pump_avail_sch_sensor.handle} > 0.0
           SET #{heat_pump_avail_sch_actuator.handle} = #{heat_pump_avail_sch_sensor.handle}
         ELSEIF #{night_cycle_sensor.handle} == 2.0
           SET #{heat_pump_avail_sch_actuator.handle} = 1.0
         ELSE
           SET #{heat_pump_avail_sch_actuator.handle} = 0.0
         ENDIF
-      EMS
-      heat_pump_avail_sch_prog.setBody(heat_pump_avail_sch_prog_body)
-      pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-      pcm.setName("#{heat_pump_avail_sch_prog.name.to_s.gsub(/[ +-.]/,'_')} Calling Manager")
-      pcm.setCallingPoint('InsideHVACSystemIterationLoop')
-      pcm.addProgram(heat_pump_avail_sch_prog)
-    end
+    EMS
+    heat_pump_avail_sch_prog.setBody(heat_pump_avail_sch_prog_body)
+    pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+    pcm.setName("#{heat_pump_avail_sch_prog.name.to_s.gsub(/[ +-.]/, '_')} Calling Manager")
+    pcm.setCallingPoint('InsideHVACSystemIterationLoop')
+    pcm.addProgram(heat_pump_avail_sch_prog)
   end
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
@@ -1090,7 +1087,7 @@ class NECB2011
 
     # Define the criteria to find the properties in the hvac standards data set.
     search_criteria = coil_heating_gas_multi_stage_find_search_criteria(coil_heating_gas_multi_stage)
-    fuel_type = search_criteria["fuel_type"]
+    fuel_type = search_criteria['fuel_type']
     capacity_w = coil_heating_gas_multi_stage_find_capacity(coil_heating_gas_multi_stage)
 
     # Find system design outside air flow rate and fraction
@@ -1099,7 +1096,8 @@ class NECB2011
       oa_system = airloop.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir
     end
-    min_oa_flow_rate, oaf = 0.0,0.0
+    min_oa_flow_rate = 0.0
+    oaf = 0.0
     if controller_oa
       min_oa_flow_rate = nil
       if controller_oa.minimumOutdoorAirFlowRate.is_initialized
@@ -1143,7 +1141,7 @@ class NECB2011
     end
 
     # Set final number of stages and create missing stages if needed
-    for istage in 1..final_num_stages-1
+    for istage in 1..final_num_stages - 1
       new_htg_stage = OpenStudio::Model::CoilHeatingGasMultiStageStageData.new(model)
       coil_heating_gas_multi_stage.addStage(new_htg_stage)
     end
@@ -1152,16 +1150,16 @@ class NECB2011
     # Set final capacities for each of the stages. The air flow rate for each of the stages
     # is maintained above the outside air flow rate
     coil_heating_gas_multi_stage.stages[0].setNominalCapacity(stage_cap[0])
-    case  coil_heating_gas_multi_stage.stages.size
+    case coil_heating_gas_multi_stage.stages.size
     when 2
       coil_heating_gas_multi_stage.stages[1].setNominalCapacity(stage_cap[1])
-      if (oaf > 0.5) then multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate) end
+      if oaf > 0.5 then multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate) end
     when 3
       coil_heating_gas_multi_stage.stages[1].setNominalCapacity(stage_cap[1])
       coil_heating_gas_multi_stage.stages[2].setNominalCapacity(stage_cap[2])
       if (oaf > 0.333) && (oaf <= 0.666)
         multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
-      elsif (oaf > 0.666)
+      elsif oaf > 0.666
         multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
         multi_speed_heat_pump.setSpeed2SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
       end
@@ -1174,7 +1172,7 @@ class NECB2011
       elsif (oaf > 0.5) && (oaf <= 0.75)
         multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
         multi_speed_heat_pump.setSpeed2SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
-      elsif (oaf > 0.75)
+      elsif oaf > 0.75
         multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
         multi_speed_heat_pump.setSpeed2SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
         multi_speed_heat_pump.setSpeed3SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
@@ -1247,7 +1245,6 @@ class NECB2011
     end
 
     return successfully_set_all_properties
-
   end
 
   # Determines the baseline fan impeller efficiency
@@ -1329,10 +1326,10 @@ class NECB2011
     end
 
     search_criteria = {
-        'motor_use' => motor_use,
-        'motor_type' => motor_type,
-        'number_of_poles' => 4.0,
-        'type' => 'Enclosed'
+      'motor_use' => motor_use,
+      'motor_type' => motor_type,
+      'number_of_poles' => 4.0,
+      'type' => 'Enclosed'
     }
 
     # Exception for small fans, including
@@ -1398,9 +1395,9 @@ class NECB2011
 
     # Assuming all pump motors are 4-pole ODP
     search_criteria = {
-        'motor_use' => 'PUMP',
-        'number_of_poles' => 4.0,
-        'type' => 'Enclosed'
+      'motor_use' => 'PUMP',
+      'number_of_poles' => 4.0,
+      'type' => 'Enclosed'
     }
 
     motor_properties = model_find_object(motors, search_criteria, motor_bhp)
@@ -1428,13 +1425,11 @@ class NECB2011
     return [motor_eff, nominal_hp]
   end
 
-
   # Determines whether there is a requirement to have a
   # VSD or some other method to reduce fan power
   # at low part load ratios.
   def fan_variable_volume_part_load_fan_power_limitation?(fan_variable_volume)
     part_load_control_required = false
-
     return part_load_control_required
   end
 
@@ -1451,13 +1446,13 @@ class NECB2011
   end
 
   def model_apply_sizing_parameters(model)
-    model.getSizingParameters.setHeatingSizingFactor(self.get_standards_constant('sizing_factor_max_heating'))
-    model.getSizingParameters.setCoolingSizingFactor(self.get_standards_constant('sizing_factor_max_cooling'))
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{self.get_standards_constant('sizing_factor_max_heating')} for heating and #{self.get_standards_constant('sizing_factor_max_heating')} for cooling.")
+    model.getSizingParameters.setHeatingSizingFactor(get_standards_constant('sizing_factor_max_heating'))
+    model.getSizingParameters.setCoolingSizingFactor(get_standards_constant('sizing_factor_max_cooling'))
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{get_standards_constant('sizing_factor_max_heating')} for heating and #{get_standards_constant('sizing_factor_max_heating')} for cooling.")
   end
 
   def fan_constant_volume_apply_prototype_fan_pressure_rise(fan_constant_volume)
-    fan_constant_volume.setPressureRise(self.get_standards_constant('fan_constant_volume_pressure_rise_value'))
+    fan_constant_volume.setPressureRise(get_standards_constant('fan_constant_volume_pressure_rise_value'))
     return true
   end
 
@@ -1475,11 +1470,11 @@ class NECB2011
   # and whether the fan lives inside a unit heater, PTAC, etc.
   def fan_variable_volume_apply_prototype_fan_pressure_rise(fan_variable_volume)
     # 1000 Pa for supply fan and 458.33 Pa for return fan (accounts for efficiency differences between two fans)
-    if (fan_variable_volume.name.to_s.include?('Supply'))
-      sfan_deltaP = self.get_standards_constant('supply_fan_variable_volume_pressure_rise_value')
+    if fan_variable_volume.name.to_s.include?('Supply')
+      sfan_deltaP = get_standards_constant('supply_fan_variable_volume_pressure_rise_value')
       fan_variable_volume.setPressureRise(sfan_deltaP)
-    elsif (fan_variable_volume.name.to_s.include?('Return'))
-      rfan_deltaP = self.get_standards_constant('return_fan_variable_volume_pressure_rise_value')
+    elsif fan_variable_volume.name.to_s.include?('Return')
+      rfan_deltaP = get_standards_constant('return_fan_variable_volume_pressure_rise_value')
       fan_variable_volume.setPressureRise(rfan_deltaP)
     end
     return true
@@ -1581,7 +1576,7 @@ class NECB2011
   # Helper method to find out which climate zone set contains a specific climate zone.
   # Returns climate zone set name as String if success, nil if not found.
   def model_find_climate_zone_set(model, clim)
-    return "NECB-CNEB ClimatZone 4-8"
+    return 'NECB-CNEB ClimatZone 4-8'
   end
 
   def setup_hw_loop_with_components(model,
@@ -1725,7 +1720,6 @@ class NECB2011
 
     return clg_tower
   end
-  
 
   # This method cycles through the spaces in a thermal zone and then sorts them by story.  The method then cycles
   # through the spaces on a story and then calculates the centroid of the spaces in the thermal zone on that floor.  The
@@ -1746,8 +1740,8 @@ class NECB2011
       # Including regular expressions in the following match for cases where extra characters, which do not belong, are
       # added to either the space type in the model or the space type reference file.
       sp_type_info = @standards_data['space_types'].detect do |data|
-        ((Regexp.new(data['space_type'].to_s.upcase)).match(sp_type.upcase) || (Regexp.new(sp_type.upcase).match(data['space_type'].to_s.upcase)) || (data['space_type'].to_s.upcase == sp_type.upcase)) and
-            data['building_type'].to_s == 'Space Function'
+        (Regexp.new(data['space_type'].to_s.upcase).match(sp_type.upcase) || Regexp.new(sp_type.upcase).match(data['space_type'].to_s.upcase) || (data['space_type'].to_s.upcase == sp_type.upcase)) &&
+          (data['building_type'].to_s == 'Space Function')
       end
       if sp_type_info.nil?
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.thermal_zone_get_centroid_per_floor', "The space type called #{sp_type} could not be found.  Please check that the schedules.json file is available and that the space types are spelled correctly")
@@ -1755,33 +1749,33 @@ class NECB2011
       end
       # Determine if space is heated or cooled via spacetype heating or cooling setpoints also checking if the space is
       # a plenum by checking if there is a hvac system associtated with it
-      if sp_type_info['heating_setpoint_schedule'].nil? then
+      if sp_type_info['heating_setpoint_schedule'].nil?
         heated = FALSE
       else
         heated = TRUE
       end
-      if sp_type_info['cooling_setpoint_schedule'].nil? then
+      if sp_type_info['cooling_setpoint_schedule'].nil?
         cooled = FALSE
       else
         cooled = TRUE
       end
-      if (sp_type_info['necb_hvac_system_selection_type'] == '- undefined -') || /undefined/.match(sp_type_info['necb_hvac_system_selection_type']) then
+      if (sp_type_info['necb_hvac_system_selection_type'] == '- undefined -') || /undefined/.match(sp_type_info['necb_hvac_system_selection_type'])
         not_plenum = FALSE
       else
         not_plenum = TRUE
       end
       # If the spaces are heated or cooled and are not a plenum then continue
-      if (heated || cooled) and not_plenum
+      if (heated || cooled) && not_plenum
         # Get the story name and sit it to none if there is no story name
         story_name = space.buildingStory.get.nameString
         story_name = 'none' if story_name.nil?
         # If this is the first story in the arry then add a new one.
         if stories.empty?
           stories << {
-              story_name: story_name,
-              spaces: [space],
-              centroid: [0, 0, 0],
-              ceiling_area: 0
+            story_name: story_name,
+            spaces: [space],
+            centroid: [0, 0, 0],
+            ceiling_area: 0
           }
           next
         else
@@ -1795,10 +1789,10 @@ class NECB2011
           # If the story is not in the array then add it.
           if i.nil?
             stories << {
-                story_name: story_name,
-                spaces: [space],
-                centroid: [0, 0, 0],
-                ceiling_area: 0
+              story_name: story_name,
+              spaces: [space],
+              centroid: [0, 0, 0],
+              ceiling_area: 0
             }
           else
             # If the story is already in the arry then add the space to the array of spaces for that story
@@ -1854,10 +1848,9 @@ class NECB2011
     return stories
   end
 
-  #Create a new DX cooling coil with NECB curve characteristics
+  # Create a new DX cooling coil with NECB curve characteristics
   def add_onespeed_DX_coil(model, always_on)
-
-    #clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+    # clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
     # clg_cap_f_of_temp = model_add_curve("DXCOOL-NECB2011-REF-CAPFT")
     clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
     clg_cap_f_of_temp.setCoefficient1Constant(0.867905)
@@ -1871,7 +1864,7 @@ class NECB2011
     clg_cap_f_of_temp.setMinimumValueofy(24.0)
     clg_cap_f_of_temp.setMaximumValueofy(46.0)
 
-    #clg_cap_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
+    # clg_cap_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
     clg_cap_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
     clg_cap_f_of_flow.setCoefficient1Constant(1.0)
     clg_cap_f_of_flow.setCoefficient2x(0.0)
@@ -1880,7 +1873,7 @@ class NECB2011
     clg_cap_f_of_flow.setMaximumValueofx(1.0)
 
     # clg_energy_input_ratio_f_of_temp = = model_add_curve(""DXCOOL-NECB2011-REF-COOLEIRFT")
-    #clg_energy_input_ratio_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+    # clg_energy_input_ratio_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
     clg_energy_input_ratio_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
     clg_energy_input_ratio_f_of_temp.setCoefficient1Constant(0.116936)
     clg_energy_input_ratio_f_of_temp.setCoefficient2x(0.0284933)
@@ -1893,7 +1886,7 @@ class NECB2011
     clg_energy_input_ratio_f_of_temp.setMinimumValueofy(24.0)
     clg_energy_input_ratio_f_of_temp.setMaximumValueofy(46.0)
 
-    #clg_energy_input_ratio_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
+    # clg_energy_input_ratio_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
     # clg_energy_input_ratio_f_of_flow = = model_add_curve("DXCOOL-NECB2011-REF-CAPFFLOW")
     clg_energy_input_ratio_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
     clg_energy_input_ratio_f_of_flow.setCoefficient1Constant(1.0)
@@ -1912,14 +1905,13 @@ class NECB2011
     clg_part_load_ratio.setMinimumValueofx(0.7)
     clg_part_load_ratio.setMaximumValueofx(1.0)
 
-
     return OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model,
                                                            always_on,
                                                            clg_cap_f_of_temp,
                                                            clg_cap_f_of_flow,
                                                            clg_energy_input_ratio_f_of_temp,
                                                            clg_energy_input_ratio_f_of_flow,
-                                                           clg_part_load_ratio);
+                                                           clg_part_load_ratio)
   end
 
   # Zonal systems
@@ -1932,16 +1924,16 @@ class NECB2011
       zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
       zone_elec_baseboard.addToThermalZone(zone)
     end
-    if baseboard_type == 'Hot Water'
-      baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
-      # Connect baseboard coil to hot water loop
-      hw_loop.addDemandBranchForComponent(baseboard_coil)
-      zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil)
-      # add zone_baseboard to zone
-      zone_baseboard.addToThermalZone(zone)
-    end
-  end
 
+    return unless baseboard_type == 'Hot Water'
+
+    baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
+    # Connect baseboard coil to hot water loop
+    hw_loop.addDemandBranchForComponent(baseboard_coil)
+    zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil)
+    # add zone_baseboard to zone
+    zone_baseboard.addToThermalZone(zone)
+  end
 
   def add_ptac_dx_cooling(model, zone, zero_outdoor_air)
     # Create a PTAC for each zone:
@@ -1960,7 +1952,7 @@ class NECB2011
     htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_off)
 
     # Set up PTAC DX coil with NECB performance curve characteristics;
-    clg_coil = self.add_onespeed_DX_coil(model, always_on)
+    clg_coil = add_onespeed_DX_coil(model, always_on)
 
     # Set up PTAC constant volume supply fan
     fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
@@ -1973,7 +1965,7 @@ class NECB2011
                                                                          clg_coil)
     ptac.setName("#{zone.name} PTAC")
     if zero_outdoor_air
-      ptac.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded (1.0e-5)
+      ptac.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded 1.0e-5
       ptac.setOutdoorAirFlowRateDuringCoolingOperation(1.0e-5)
       ptac.setOutdoorAirFlowRateDuringHeatingOperation(1.0e-5)
     end
@@ -2007,11 +1999,10 @@ class NECB2011
   end
 
   def create_heating_cooling_on_off_availability_schedule(model)
-    #todo Create a feature to derive start and end heating and cooling seasons from weather file.
-    avail_data = [{start_month: 1, start_day: 1, end_month: 6, end_day: 30, htg_value: 1, clg_value: 0},
-                  {start_month: 7, start_day: 1, end_month: 10, end_day: 31, htg_value: 0, clg_value: 1},
-                  {start_month: 11, start_day: 1, end_month: 12, end_day: 31, htg_value: 1, clg_value: 0}
-    ]
+    # TODO: Create a feature to derive start and end heating and cooling seasons from weather file.
+    avail_data = [{ start_month: 1, start_day: 1, end_month: 6, end_day: 30, htg_value: 1, clg_value: 0 },
+                  { start_month: 7, start_day: 1, end_month: 10, end_day: 31, htg_value: 0, clg_value: 1 },
+                  { start_month: 11, start_day: 1, end_month: 12, end_day: 31, htg_value: 1, clg_value: 0 }]
 
     # Heating coil availability schedule for tpfc
     htg_availability_sch = OpenStudio::Model::ScheduleRuleset.new(model)
@@ -2054,94 +2045,108 @@ class NECB2011
   end
 
   # Method to set the base system name based on the following syntax:
-  # |sys_abbr|sys_oa|sh>?|sc>?|ssf>?|zh>?|zc>?|srf>?|
+  # |sys_abbr|sys_oa|sc>?|sh>?|ssf>?|zh>?|zc>?|srf>?|
   # "sys_abbr" designates the NECB system type ("sys_1, sys_2, ... sys_6")
   # "sys_oa": "mixed" or "doas"
   # "sys_name_pars" is a hash for the remaining system name parts for heat recovery,
   # heating, cooling, supply fan, zone heating, zone cooling, and return fan
-  def assign_base_sys_name(airloop,sys_abbr:,sys_oa:,sys_name_pars:)
+  def assign_base_sys_name(airloop, sys_abbr:, sys_oa:, sys_name_pars:)
     sys_name = "#{sys_abbr}|#{sys_oa}|"
-
-    sys_name_pars.each do |key,value|
+    sys_name_pars.each do |key, value|
       case key.downcase
-      when "sys_hr"
+      when 'sys_hr'
         case value.downcase
-        when "none"
-          sys_name += "shr>none"
+        when 'none'
+          sys_name += 'shr>none'
         end
 
-      when "sys_htg"
+      when 'sys_htg'
         case value.downcase
-        when "none"
-          sys_name += "sh>none"
-        when "electric"
-          sys_name += "sh>c-e"
-        when "hot water"
-          sys_name += "sh>c-hw"
-        when "gas"
-          sys_name += "sh>c-g"
-        when "dx"
-          sys_name += "sh>ashp"
+        when 'none'
+          sys_name += 'sh>none'
+        when 'electric'
+          sys_name += 'sh>c-e'
+        when 'hot water'
+          sys_name += 'sh>c-hw'
+        when 'gas'
+          sys_name += 'sh>c-g'
+        when 'dx'
+          sys_name += 'sh>ashp'
+        when 'ccashp'
+          sys_name += 'sh>ccashp'
+        when 'ashp'
+          sys_name += 'sh>ashp'
         end
 
-      when "sys_clg"
+      when 'sys_clg'
         case value.downcase
-        when "none"
-          sys_name += "sc>none"
-        when "chilled water"
-          sys_name += "sc>c-chw"
-        when "dx"
-          sys_name += "sc>dx"
-          sys_name += "sc>ashp" if sys_name_pars["sys_htg"] == "dx"
+        when 'none'
+          sys_name += 'sc>none'
+        when 'chilled water'
+          sys_name += 'sc>c-chw'
+        when 'dx'
+          if sys_name_pars['sys_htg'] == 'dx'
+            sys_name += 'sc>ashp'
+          else
+            sys_name += 'sc>dx'
+          end
+        when 'ccashp'
+          sys_name += 'sc>ccashp'
+        when 'ashp'
+          sys_name += 'sc>ashp'
         end
 
-      when "sys_sf"
+      when 'sys_sf'
         case value.downcase
-        when "none"
-          sys_name += "ssf>none"
-        when "cv"
-          sys_name += "ssf>cv"
-        when "vv"
-          sys_name += "ssf>vv"
+        when 'none'
+          sys_name += 'ssf>none'
+        when 'cv'
+          sys_name += 'ssf>cv'
+        when 'vv'
+          sys_name += 'ssf>vv'
         end
 
-      when "zone_htg"
+      when 'zone_htg'
         case value.downcase
-        when "none"
-          sys_name += "zh>none"
-        when "electric"
-          sys_name += "zh>b-e"
-        when "hot water"
-          sys_name += "zh>b-hw"
-        when "tpfc"
-          sys_name += "zh>fpfc"
-        when "fpfc"
-          sys_name += "zh>tpfc"
+        when 'none'
+          sys_name += 'zh>none'
+        when 'electric'
+          sys_name += 'zh>b-e'
+        when 'hot water'
+          sys_name += 'zh>b-hw'
+        when 'tpfc'
+          sys_name += 'zh>fpfc'
+        when 'fpfc'
+          sys_name += 'zh>tpfc'
+        when 'pthp'
+          sys_name += 'zh>pthp'
         end
 
-      when "zone_clg"
+      when 'zone_clg'
         case value.downcase
-        when "none"
-          sys_name += "zc>none"
-        when "tpfc"
-          sys_name += "zc>tpfc"
-        when "fpfc"
-          sys_name += "zc>fpfc"
-        when "ptac"
-          sys_name += "zc>ptac"
+        when 'none'
+          sys_name += 'zc>none'
+        when 'tpfc'
+          sys_name += 'zc>tpfc'
+        when 'fpfc'
+          sys_name += 'zc>fpfc'
+        when 'ptac'
+          sys_name += 'zc>ptac'
+        when 'pthp'
+          sys_name += 'zc>pthp'
         end
 
-      when "sys_rf"
+      when 'sys_rf'
         case value.downcase
-        when "none"
-          sys_name += "srf>none"
-        when "cv"
-          sys_name += "srf>cv"
-        when "vv"
-          sys_name += "srf>vv"
+        when 'none'
+          sys_name += 'srf>none'
+        when 'cv'
+          sys_name += 'srf>cv'
+        when 'vv'
+          sys_name += 'srf>vv'
         end
       end
-      sys_name += "|"
+      sys_name += '|'
     end
 
     airloop.setName(sys_name)
@@ -2159,29 +2164,36 @@ class NECB2011
                       zone_htg: nil,
                       zone_clg: nil,
                       sys_rf: nil)
-    name_parts = airloop.name.to_s.split("|").select {|part| !part.empty?}
+    name_parts = airloop.name.to_s.split('|').reject(&:empty?)
     if sys_abbr.is_a? String then name_parts[0] = sys_abbr end
     if sys_oa.is_a? String then name_parts[1] = sys_oa end
-    for i in 0..name_parts.size-1
-      if (name_parts[i].include? "shr>") && (sys_hr.is_a? String)
+    for i in 0..name_parts.size - 1
+      if (name_parts[i].include? 'shr>') && (sys_hr.is_a? String)
         name_parts[i] = "shr>#{sys_hr}"
-      elsif (name_parts[i].include? "sh>") && (sys_htg.is_a? String)
+      elsif (name_parts[i].include? 'sh>') && (sys_htg.is_a? String)
         name_parts[i] = "sh>#{sys_htg}"
-      elsif (name_parts[i].include? "sc>") && (sys_clg.is_a? String)
+      elsif (name_parts[i].include? 'sc>') && (sys_clg.is_a? String)
         name_parts[i] = "sc>#{sys_clg}"
-      elsif (name_parts[i].include? "ssf") && (sys_sf.is_a? String)
+      elsif (name_parts[i].include? 'ssf') && (sys_sf.is_a? String)
         name_parts[i] = "ssf>#{sys_sf}"
-      elsif (name_parts[i].include? "zh>") && (zone_htg.is_a? String)
+      elsif (name_parts[i].include? 'zh>') && (zone_htg.is_a? String)
         name_parts[i] = "zh>#{zone_htg}"
-      elsif (name_parts[i].include? "zc>") && (zone_clg.is_a? String)
+      elsif (name_parts[i].include? 'zc>') && (zone_clg.is_a? String)
         name_parts[i] = "zc>#{zone_clg}"
-      elsif (name_parts[i].include? "srf>") && (sys_rf.is_a? String)
+      elsif (name_parts[i].include? 'srf>') && (sys_rf.is_a? String)
         name_parts[i] = "srf>#{sys_rf}"
       end
     end
-    sys_name = ""
-    name_parts.each {|part| sys_name += "#{part}|"}
-    sys_name = sys_name.chop if (Integer(name_parts.last.strip) rescue false)
+    sys_name = ''
+    name_parts.each { |part| sys_name += "#{part}|" }
+
+    # Check if the last part of the system name is an integer.  If it is, then remove the last part from the system name.
+    check_int = begin
+                  Integer(name_parts.last.strip)
+                rescue StandardError
+                  nil
+                end
+    sys_name = sys_name.chop unless check_int.nil?
 
     airloop.setName(sys_name)
   end

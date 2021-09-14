@@ -7,7 +7,7 @@ class Standard
   #   options are 'floor' and 'ceiling'
   # @param model_occ_hr_start [Double] Starting hour of building occupancy
   # @param model_occ_hr_end [Double] Ending hour of building occupancy
-  # @TODO model_occ_hr_start and model_occ_hr_end from zone occupancy schedules
+  # @todo model_occ_hr_start and model_occ_hr_end from zone occupancy schedules
   # @param proportional_gain [Double] Proportional gain constant (recommended 0.3 or less).
   # @param minimum_operation [Double] Minimum number of hours of operation for radiant system before it shuts off.
   # @param weekend_temperature_reset [Double] Weekend temperature reset for slab temperature setpoint in degree Celsius.

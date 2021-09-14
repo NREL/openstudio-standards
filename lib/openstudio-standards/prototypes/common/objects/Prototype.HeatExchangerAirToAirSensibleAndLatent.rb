@@ -2,12 +2,16 @@ class Standard
   # @!group HeatExchangerAirToAirSensibleAndLatent
 
   # Default fan efficiency assumption for the prm added fan power
+  #
+  # @return [Double] default fan efficiency
   def heat_exchanger_air_to_air_sensible_and_latent_prototype_default_fan_efficiency
     default_fan_efficiency = 0.5
     return default_fan_efficiency
   end
 
   # Sets the motor power to account for the extra fan energy from the increase in fan total static pressure
+  #
+  # @return [Bool] returns true if successful, false if not
   def heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_nominal_electric_power(heat_exchanger_air_to_air_sensible_and_latent)
     # Get the nominal supply air flow rate
     supply_air_flow_m3_per_s = nil
@@ -69,9 +73,11 @@ class Standard
     return true
   end
 
-  # Sets the minimum effectiveness of the heat exchanger per
-  # the DOE prototype assumptions, which assume that an enthalpy wheel is used, which exceeds
-  # the 50% effectiveness minimum actually defined by 90.1.
+  # Sets the minimum effectiveness of the heat exchanger per the DOE prototype assumptions,
+  # which assume that an enthalpy wheel is used, which exceeds the 50% effectiveness minimum actually defined by 90.1.
+  #
+  # @param heat_exchanger_air_to_air_sensible_and_latent [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] hx
+  # @return [Bool] returns true if successful, false if not
   def heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency(heat_exchanger_air_to_air_sensible_and_latent)
     heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(0.7)
     heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100HeatingAirFlow(0.6)

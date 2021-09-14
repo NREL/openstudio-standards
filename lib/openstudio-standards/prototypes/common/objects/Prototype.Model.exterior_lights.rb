@@ -1,9 +1,13 @@
 class Standard
   # Add exterior lighting to the model
   #
-  # @param exterior_lighting_zone_number [Integer] Valid choices are
-  # @return [Hash] the resulting exterior lights
-  # @todo - would be nice to add argument for some building types (SmallHotel, MidriseApartment, PrimarySchool, SecondarySchool, RetailStripmall) if it has interior or exterior circulation.
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param exterior_lighting_zone_number [Integer] exterior lighting zone number, 0-4
+  # @param onsite_parking_fraction [Double] onsite parking fraction, 0-1
+  # @param add_base_site_allowance [Bool] whether to include the base site allowance
+  # @param use_model_for_entries_and_canopies [Bool] use building geometry for number of entries and canopy size
+  # @return [Hash] a hash of OpenStudio::Model::ExteriorLights objects
+  # @todo would be nice to add argument for some building types (SmallHotel, MidriseApartment, PrimarySchool, SecondarySchool, RetailStripmall) if it has interior or exterior circulation.
   def model_add_typical_exterior_lights(model, exterior_lighting_zone_number, onsite_parking_fraction = 1.0, add_base_site_allowance = false, use_model_for_entries_and_canopies = false)
     exterior_lights = {}
     installed_power = 0.0
@@ -243,7 +247,7 @@ class Standard
       installed_power += power * multiplier
     end
 
-    # TODO: - add_base_site_lighting_allowance (non landscaping tradable lighting)
+    # @todo - add_base_site_lighting_allowance (non landscaping tradable lighting)
     # add exterior lights for drive through windows
     if add_base_site_allowance
 
@@ -278,11 +282,14 @@ class Standard
     return exterior_lights
   end
 
-  # get exterior lighting area's, distances, and counts
+  # get exterior lighting areas, distances, and counts
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param space_type_hash [Hash] hash of space types
+  # @param use_model_for_entries_and_canopies [Bool] use building geometry for number of entries and canopy size
   # @return [hash] hash of exterior lighting value types and building type and model specific values
-  # @todo - add code in to determine number of entries and canopy area from model geoemtry
-  # @todo - come up with better logic for entry widths
+  # @todo add code in to determine number of entries and canopy area from model geoemtry
+  # @todo come up with better logic for entry widths
   def model_create_exterior_lighting_area_length_count_hash(model, space_type_hash, use_model_for_entries_and_canopies)
     # populate building_type_hashes from space_type_hash
     building_type_hashes = {}
@@ -365,7 +372,7 @@ class Standard
 
       # calculate door, window, and canopy length properties for exterior lighting
       if use_model_for_entries_and_canopies
-        # TODO: - get number of entries and canopy size from model geometry
+        # @todo get number of entries and canopy size from model geometry
       else
 
         # main entries

@@ -1,8 +1,14 @@
 # Custom changes for the Hospital prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module Hospital
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+  # hvac adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific HVAC adjustments')
 
     # add transformer
@@ -125,6 +131,9 @@ module Hospital
   end
 
   # add extra equipment for kitchen
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_extra_equip_kitchen(model)
     kitchen_space = model.getSpaceByName('Kitchen_Flr_5')
     kitchen_space = kitchen_space.get
@@ -161,8 +170,13 @@ module Hospital
         elec_equip1.setSchedule(model_add_schedule(model, 'Hospital ALWAYS_ON'))
         elec_equip2.setSchedule(model_add_schedule(model, 'Hospital ALWAYS_ON'))
     end
+    return true
   end
 
+  # update water heater ambient conditions
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def update_waterheater_ambient_parameters(model)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('300gal')
@@ -175,15 +189,26 @@ module Hospital
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen_Flr_5 ZN').get)
       end
     end
+    return true
   end
 
+  # swh adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     update_waterheater_ambient_parameters(model)
 
     return true
   end
 
-  # add swh
+  # reset kitchen outdoor air
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def reset_kitchen_oa(model)
     space_kitchen = model.getSpaceByName('Kitchen_Flr_5').get
     ventilation = space_kitchen.designSpecificationOutdoorAir.get
@@ -195,8 +220,13 @@ module Hospital
       when '90.1-2004', '90.1-2007', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         ventilation.setOutdoorAirFlowRate(3.776)
     end
+    return true
   end
 
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
@@ -210,8 +240,15 @@ module Hospital
           exhaust_fan.setPressureRise(125)
         end
     end
+    return true
   end
 
+  # add humidifier
+  #
+  # @param space_name [String] space name
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_humidifier(space_name, hot_water_loop, model)
     space = model.getSpaceByName(space_name).get
     zone = space.thermalZone.get
@@ -252,17 +289,26 @@ module Hospital
         humidity_spm.setControlZone(zone)
       end
     end
+    return true
   end
 
+  # add daylighting controls
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_add_daylighting_controls(model)
     space_names = ['Office1_Flr_5', 'Office3_Flr_5', 'Lobby_Records_Flr_1']
     space_names.each do |space_name|
       space = model.getSpaceByName(space_name).get
       space_add_daylighting_controls(space, false, false)
     end
+    return true
   end
 
   # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_adjust_vav_minimum_damper(model)
     model.getThermalZones.each do |zone|
       air_terminal = zone.airLoopHVACTerminal
@@ -295,8 +341,14 @@ module Hospital
         end
       end
     end
+    return true
   end
 
+  # reset room vav damper minimums
+  #
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
     case template
     when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
@@ -311,11 +363,14 @@ module Hospital
           air_terminal.setMinimumAirFlowFractionSchedule(model_add_schedule(model, 'Hospital OR_MinSA_Sched'))
         end
       end
-    else
-      return true
     end
+    return true
   end
 
+  # certain air handlers do not have an economizer
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_modify_oa_controller(model)
     model.getAirLoopHVACs.sort.each do |air_loop|
       oa_sys = air_loop.airLoopHVACOutdoorAirSystem.get
@@ -325,15 +380,30 @@ module Hospital
           oa_control.setEconomizerControlType('NoEconomizer')
       end
     end
-  end
-
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-    # Set original building North axis
-    model_set_building_north_axis(model, 0.0)
-
     return true
   end
 
+  # geometry adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
+    # Set original building North axis
+    model_set_building_north_axis(model, 0.0)
+    return true
+  end
+
+  # @!group AirTerminalSingleDuctVAVReheat
+  # Set the initial minimum damper position based on OA rate of the space and the template.
+  # Zones with low OA per area get lower initial guesses.
+  # Final position will be adjusted upward as necessary by Standards.AirLoopHVAC.apply_minimum_vav_damper_positions
+  #
+  # @param air_terminal_single_duct_vav_reheat [OpenStudio::Model::AirTerminalSingleDuctVAVReheat] the air terminal object
+  # @param zone_oa_per_area [Double] the zone outdoor air per area in m^3/s*m^2
+  # @return [Bool] returns true if successful, false if not
   def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
     min_damper_position = template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019' ? 0.2 : 0.3
 
@@ -345,7 +415,7 @@ module Hospital
 
   # Type of SAT reset for this building type
   #
-  # @param air_loop_hvac [OpenStudio::model::AirLoopHVAC] Airloop
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @return [String] Returns type of SAT reset
   def air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
     return 'oa'

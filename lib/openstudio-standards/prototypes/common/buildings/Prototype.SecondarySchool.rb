@@ -1,8 +1,14 @@
 # Custom changes for the SecondarySchool prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module SecondarySchool
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+  # hvac adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific HVAC adjustments')
 
     # add transformer
@@ -67,6 +73,9 @@ module SecondarySchool
   end
 
   # add extra equipment for kitchen
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_extra_equip_kitchen(model)
     kitchen_space = model.getSpaceByName('Kitchen_ZN_1_FLR_1')
     kitchen_space = kitchen_space.get
@@ -103,8 +112,13 @@ module SecondarySchool
         elec_equip1.setSchedule(model_add_schedule(model, 'SchoolSecondary ALWAYS_ON'))
         elec_equip2.setSchedule(model_add_schedule(model, 'SchoolSecondary ALWAYS_ON'))
     end
+    return true
   end
 
+  # update water heater ambient conditions
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def update_waterheater_ambient_parameters(model)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('Booster')
@@ -113,25 +127,639 @@ module SecondarySchool
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen_ZN_1_FLR_1 ZN').get)
       end
     end
+    return true
   end
 
+  # swh adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     update_waterheater_ambient_parameters(model)
 
     return true
   end
 
+<<<<<<< HEAD
   def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
+=======
+  # daylighting adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_daylighting_tweaks(model, building_type, climate_zone, prototype_input)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting daylight sensor positions and fractions')
+
+    adjustments = [
+      { '90.1-2010' => { 'Auditorium_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.125,
+                                                         'sensor_2_frac' => 0.125,
+                                                         'sensor_1_xyz' => [9.5006, 21.7328, 0.762],
+                                                         'sensor_2_xyz' => [28.5004, 21.7328, 0.762] },
+                         'Aux_Gym_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.5,
+                                                      'sensor_2_frac' => 0.5,
+                                                      'sensor_1_xyz' => [12, 24, 0],
+                                                      'sensor_2_xyz' => [2, 24, 0] },
+                         'Cafeteria_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.095,
+                                                        'sensor_2_frac' => 0.095,
+                                                        'sensor_1_xyz' => [22.3236, 13, 0.762],
+                                                        'sensor_2_xyz' => [12, 24.3236, 0.762] },
+                         'Corner_Class_1_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.22,
+                                                                   'sensor_2_frac' => 0.22,
+                                                                   'sensor_1_xyz' => [1.6764, 4.5, 0.762],
+                                                                   'sensor_2_xyz' => [5.5, 1.6764, 0.762] },
+                         'Corner_Class_1_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.22,
+                                                                   'sensor_2_frac' => 0.22,
+                                                                   'sensor_1_xyz' => [1.6764, 4.5, 0.762],
+                                                                   'sensor_2_xyz' => [5.5, 1.6764, 0.762] },
+                         'Corner_Class_1_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.22,
+                                                                   'sensor_2_frac' => 0.22,
+                                                                   'sensor_1_xyz' => [1.6764, 4.5, 0.762],
+                                                                   'sensor_2_xyz' => [5.5, 1.6764, 0.762] },
+                         'Corner_Class_1_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.22,
+                                                                   'sensor_2_frac' => 0.22,
+                                                                   'sensor_1_xyz' => [1.6764, 4.5, 0.762],
+                                                                   'sensor_2_xyz' => [5.5, 1.6764, 0.762] },
+                         'Corner_Class_1_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.22,
+                                                                   'sensor_2_frac' => 0.22,
+                                                                   'sensor_1_xyz' => [1.6764, 4.5, 0.762],
+                                                                   'sensor_2_xyz' => [5.5, 1.6764, 0.762] },
+                         'Corner_Class_1_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.22,
+                                                                   'sensor_2_frac' => 0.22,
+                                                                   'sensor_1_xyz' => [1.6764, 4.5, 0.762],
+                                                                   'sensor_2_xyz' => [5.5, 1.6764, 0.762] },
+                         'Corner_Class_2_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.22,
+                                                                   'sensor_2_frac' => 0.22,
+                                                                   'sensor_1_xyz' => [1.6764, 4.5, 0.762],
+                                                                   'sensor_2_xyz' => [5.5, 1.6764, 0.762] },
+                         'Corner_Class_2_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.22,
+                                                                   'sensor_2_frac' => 0.22,
+                                                                   'sensor_1_xyz' => [1.6764, 4.5, 0.762],
+                                                                   'sensor_2_xyz' => [5.5, 1.6764, 0.762] },
+                         'Corner_Class_2_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.22,
+                                                                   'sensor_2_frac' => 0.22,
+                                                                   'sensor_1_xyz' => [1.6764, 4.5, 0.762],
+                                                                   'sensor_2_xyz' => [5.5, 1.6764, 0.762] },
+                         'Corner_Class_2_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.22,
+                                                                   'sensor_2_frac' => 0.22,
+                                                                   'sensor_1_xyz' => [1.6764, 4.5, 0.762],
+                                                                   'sensor_2_xyz' => [5.5, 1.6764, 0.762] },
+                         'Corner_Class_2_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.22,
+                                                                   'sensor_2_frac' => 0.22,
+                                                                   'sensor_1_xyz' => [1.6764, 4.5, 0.762],
+                                                                   'sensor_2_xyz' => [5.5, 1.6764, 0.762] },
+                         'Corner_Class_2_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.22,
+                                                                   'sensor_2_frac' => 0.22,
+                                                                   'sensor_1_xyz' => [1.6764, 4.5, 0.762],
+                                                                   'sensor_2_xyz' => [5.5, 1.6764, 0.762] },
+                         'Gym_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.5,
+                                                  'sensor_2_frac' => 0.5,
+                                                  'sensor_1_xyz' => [19, 24, 0],
+                                                  'sensor_2_xyz' => [2, 24, 0] },
+                         'LIBRARY_MEDIA_CENTER_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.085,
+                                                                   'sensor_2_frac' => 0.085,
+                                                                   'sensor_1_xyz' => [22.3236, 17.5, 0.762],
+                                                                   'sensor_2_xyz' => [12, 33.3236, 0.762] },
+                         'Lobby_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.09,
+                                                    'sensor_2_frac' => 0.09,
+                                                    'sensor_1_xyz' => [3.7338, 1.6764, 0.762],
+                                                    'sensor_2_xyz' => [11.2014, 1.6764, 0.762] },
+                         'Lobby_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.09,
+                                                    'sensor_2_frac' => 0.09,
+                                                    'sensor_1_xyz' => [3.7338, 1.6764, 0.762],
+                                                    'sensor_2_xyz' => [11.2014, 1.6764, 0.762] },
+                         'Mult_Class_1_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.14,
+                                                                 'sensor_2_frac' => 0.14,
+                                                                 'sensor_1_xyz' => [13.2588, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [39.7764, 1.6764, 0.762] },
+                         'Mult_Class_1_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.14,
+                                                                 'sensor_2_frac' => 0.14,
+                                                                 'sensor_1_xyz' => [13.2588, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [39.7764, 1.6764, 0.762] },
+                         'Mult_Class_2_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.14,
+                                                                 'sensor_2_frac' => 0.14,
+                                                                 'sensor_1_xyz' => [13.2588, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [39.7764, 1.6764, 0.762] },
+                         'Mult_Class_2_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.14,
+                                                                 'sensor_2_frac' => 0.14,
+                                                                 'sensor_1_xyz' => [13.2588, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [39.7764, 1.6764, 0.762] },
+                         'Mult_Class_1_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.14,
+                                                                 'sensor_2_frac' => 0.14,
+                                                                 'sensor_1_xyz' => [13.2588, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [39.7764, 1.6764, 0.762] },
+                         'Mult_Class_1_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.14,
+                                                                 'sensor_2_frac' => 0.14,
+                                                                 'sensor_1_xyz' => [13.2588, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [39.7764, 1.6764, 0.762] },
+                         'Mult_Class_2_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.14,
+                                                                 'sensor_2_frac' => 0.14,
+                                                                 'sensor_1_xyz' => [13.2588, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [39.7764, 1.6764, 0.762] },
+                         'Mult_Class_2_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.14,
+                                                                 'sensor_2_frac' => 0.14,
+                                                                 'sensor_1_xyz' => [13.2588, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [39.7764, 1.6764, 0.762] },
+                         'Mult_Class_1_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.14,
+                                                                 'sensor_2_frac' => 0.14,
+                                                                 'sensor_1_xyz' => [13.2588, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [39.7764, 1.6764, 0.762] },
+                         'Mult_Class_1_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.14,
+                                                                 'sensor_2_frac' => 0.14,
+                                                                 'sensor_1_xyz' => [13.2588, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [39.7764, 1.6764, 0.762] },
+                         'Mult_Class_2_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.14,
+                                                                 'sensor_2_frac' => 0.14,
+                                                                 'sensor_1_xyz' => [13.2588, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [39.7764, 1.6764, 0.762] },
+                         'Mult_Class_2_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.14,
+                                                                 'sensor_2_frac' => 0.14,
+                                                                 'sensor_1_xyz' => [13.2588, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [39.7764, 1.6764, 0.762] },
+                         'Offices_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.115,
+                                                      'sensor_2_frac' => 0.115,
+                                                      'sensor_1_xyz' => [18.9982, 1.6764, 0.762],
+                                                      'sensor_2_xyz' => [36.3322, 7.0104, 0.762] },
+                         'Offices_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.115,
+                                                      'sensor_2_frac' => 0.115,
+                                                      'sensor_1_xyz' => [18.9982, 1.6764, 0.762],
+                                                      'sensor_2_xyz' => [36.3322, 7.0104, 0.762] } },
+        '90.1-2013' => { 'Auditorium_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.125,
+                                                         'sensor_2_frac' => 0.125,
+                                                         'sensor_1_xyz' => [9.5006, 21.7328, 0.762],
+                                                         'sensor_2_xyz' => [28.5004, 21.7328, 0.762] },
+                         'Aux_Gym_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.5,
+                                                      'sensor_2_frac' => 0.5,
+                                                      'sensor_1_xyz' => [12, 24, 0],
+                                                      'sensor_2_xyz' => [2, 24, 0] },
+                         'Cafeteria_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.21,
+                                                        'sensor_2_frac' => 0.15,
+                                                        'sensor_1_xyz' => [20.6472, 13, 0.762],
+                                                        'sensor_2_xyz' => [12, 22.6472, 0.762] },
+                         'Corner_Class_1_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_1_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_1_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_1_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_1_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_1_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Gym_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.5,
+                                                  'sensor_2_frac' => 0.5,
+                                                  'sensor_1_xyz' => [19, 24, 0],
+                                                  'sensor_2_xyz' => [2, 24, 0] },
+                         'LIBRARY_MEDIA_CENTER_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.21,
+                                                                   'sensor_2_frac' => 0.11,
+                                                                   'sensor_1_xyz' => [20.6472, 17.5, 0.762],
+                                                                   'sensor_2_xyz' => [12, 31.6472, 0.762] },
+                         'Lobby_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.18,
+                                                    'sensor_2_frac' => 0.18,
+                                                    'sensor_1_xyz' => [7.5, 1.6764, 0.762],
+                                                    'sensor_2_xyz' => [7.5, 3.3528, 0.762] },
+                         'Lobby_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.18,
+                                                    'sensor_2_frac' => 0.18,
+                                                    'sensor_1_xyz' => [7.5, 1.6764, 0.762],
+                                                    'sensor_2_xyz' => [7.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Offices_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.36,
+                                                      'sensor_2_frac' => 0.08,
+                                                      'sensor_1_xyz' => [34.6472, 7.0104, 0.762],
+                                                      'sensor_2_xyz' => [18.9982, 3.3528, 0.762] },
+                         'Offices_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.36,
+                                                      'sensor_2_frac' => 0.08,
+                                                      'sensor_1_xyz' => [34.6472, 7.0104, 0.762],
+                                                      'sensor_2_xyz' => [18.9982, 3.3528, 0.762] } },
+        '90.1-2016' => { 'Auditorium_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.125,
+                                                         'sensor_2_frac' => 0.125,
+                                                         'sensor_1_xyz' => [9.5006, 21.7328, 0.762],
+                                                         'sensor_2_xyz' => [28.5004, 21.7328, 0.762] },
+                         'Aux_Gym_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.5,
+                                                      'sensor_2_frac' => 0.5,
+                                                      'sensor_1_xyz' => [12, 24, 0],
+                                                      'sensor_2_xyz' => [2, 24, 0] },
+                         'Cafeteria_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.21,
+                                                        'sensor_2_frac' => 0.15,
+                                                        'sensor_1_xyz' => [20.6472, 13, 0.762],
+                                                        'sensor_2_xyz' => [12, 22.6472, 0.762] },
+                         'Corner_Class_1_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_1_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_1_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_1_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_1_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_1_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Gym_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.5,
+                                                  'sensor_2_frac' => 0.5,
+                                                  'sensor_1_xyz' => [19, 24, 0],
+                                                  'sensor_2_xyz' => [2, 24, 0] },
+                         'LIBRARY_MEDIA_CENTER_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.21,
+                                                                   'sensor_2_frac' => 0.11,
+                                                                   'sensor_1_xyz' => [20.6472, 17.5, 0.762],
+                                                                   'sensor_2_xyz' => [12, 31.6472, 0.762] },
+                         'Lobby_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.18,
+                                                    'sensor_2_frac' => 0.18,
+                                                    'sensor_1_xyz' => [7.5, 1.6764, 0.762],
+                                                    'sensor_2_xyz' => [7.5, 3.3528, 0.762] },
+                         'Lobby_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.18,
+                                                    'sensor_2_frac' => 0.18,
+                                                    'sensor_1_xyz' => [7.5, 1.6764, 0.762],
+                                                    'sensor_2_xyz' => [7.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Offices_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.36,
+                                                      'sensor_2_frac' => 0.08,
+                                                      'sensor_1_xyz' => [34.6472, 7.0104, 0.762],
+                                                      'sensor_2_xyz' => [18.9982, 3.3528, 0.762] },
+                         'Offices_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.36,
+                                                      'sensor_2_frac' => 0.08,
+                                                      'sensor_1_xyz' => [34.6472, 7.0104, 0.762],
+                                                      'sensor_2_xyz' => [18.9982, 3.3528, 0.762] } },
+        '90.1-2019' => { 'Auditorium_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.125,
+                                                         'sensor_2_frac' => 0.125,
+                                                         'sensor_1_xyz' => [9.5006, 21.7328, 0.762],
+                                                         'sensor_2_xyz' => [28.5004, 21.7328, 0.762] },
+                         'Aux_Gym_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.5,
+                                                      'sensor_2_frac' => 0.5,
+                                                      'sensor_1_xyz' => [12, 24, 0],
+                                                      'sensor_2_xyz' => [2, 24, 0] },
+                         'Cafeteria_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.21,
+                                                        'sensor_2_frac' => 0.15,
+                                                        'sensor_1_xyz' => [20.6472, 13, 0.762],
+                                                        'sensor_2_xyz' => [12, 22.6472, 0.762] },
+                         'Corner_Class_1_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_1_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_1_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_1_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_1_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_1_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Corner_Class_2_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.56,
+                                                                   'sensor_2_frac' => 0.2,
+                                                                   'sensor_1_xyz' => [7.6198, 3.3711, 0.762],
+                                                                   'sensor_2_xyz' => [3.3711, 6.0313, 0.762] },
+                         'Gym_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.5,
+                                                  'sensor_2_frac' => 0.5,
+                                                  'sensor_1_xyz' => [19, 24, 0],
+                                                  'sensor_2_xyz' => [2, 24, 0] },
+                         'LIBRARY_MEDIA_CENTER_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.21,
+                                                                   'sensor_2_frac' => 0.11,
+                                                                   'sensor_1_xyz' => [20.6472, 17.5, 0.762],
+                                                                   'sensor_2_xyz' => [12, 31.6472, 0.762] },
+                         'Lobby_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.18,
+                                                    'sensor_2_frac' => 0.18,
+                                                    'sensor_1_xyz' => [7.5, 1.6764, 0.762],
+                                                    'sensor_2_xyz' => [7.5, 3.3528, 0.762] },
+                         'Lobby_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.18,
+                                                    'sensor_2_frac' => 0.18,
+                                                    'sensor_1_xyz' => [7.5, 1.6764, 0.762],
+                                                    'sensor_2_xyz' => [7.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_1_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_1_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_2_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_2_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_1_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_3_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Mult_Class_2_Pod_3_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.28,
+                                                                 'sensor_2_frac' => 0.28,
+                                                                 'sensor_1_xyz' => [26.5, 1.6764, 0.762],
+                                                                 'sensor_2_xyz' => [26.5, 3.3528, 0.762] },
+                         'Offices_ZN_1_FLR_1 ZN' => { 'sensor_1_frac' => 0.36,
+                                                      'sensor_2_frac' => 0.08,
+                                                      'sensor_1_xyz' => [34.6472, 7.0104, 0.762],
+                                                      'sensor_2_xyz' => [18.9982, 3.3528, 0.762] },
+                         'Offices_ZN_1_FLR_2 ZN' => { 'sensor_1_frac' => 0.36,
+                                                      'sensor_2_frac' => 0.08,
+                                                      'sensor_1_xyz' => [34.6472, 7.0104, 0.762],
+                                                      'sensor_2_xyz' => [18.9982, 3.3528, 0.762] } } }
+    ]
+
+    # Adjust daylight sensors in each space
+    model.getSpaces.each do |space|
+      if adjustments[0].keys.include?(template)
+        if adjustments[0][template].keys.include?(space.name.to_s + ' ZN')
+          adj = adjustments[0][template][space.name.to_s + ' ZN']
+          next if space.thermalZone.empty?
+
+          zone = space.thermalZone.get
+          next if space.spaceType.empty?
+
+          spc_type = space.spaceType.get
+          next if spc_type.standardsSpaceType.empty?
+
+          stds_spc_type = spc_type.standardsSpaceType.get
+          # Adjust the primary sensor
+          if adj['sensor_1_frac'] && zone.primaryDaylightingControl.is_initialized
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting primary daylight sensor to control #{adj['sensor_1_frac']} of the lighting.")
+            zone.setFractionofZoneControlledbyPrimaryDaylightingControl(adj['sensor_1_frac'])
+            pri_ctrl = zone.primaryDaylightingControl.get
+            if adj['sensor_1_xyz']
+              x = adj['sensor_1_xyz'][0]
+              y = adj['sensor_1_xyz'][1]
+              z = adj['sensor_1_xyz'][2]
+              OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting primary daylight sensor position to [#{x}, #{y}, #{z}].")
+              pri_ctrl.setPositionXCoordinate(x)
+              pri_ctrl.setPositionYCoordinate(y)
+              pri_ctrl.setPositionZCoordinate(z)
+            end
+          end
+          # Adjust the secondary sensor
+          if adj['sensor_2_frac'] && zone.secondaryDaylightingControl.is_initialized
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting secondary daylight sensor to control #{adj['sensor_2_frac']} of the lighting.")
+            zone.setFractionofZoneControlledbySecondaryDaylightingControl(adj['sensor_2_frac'])
+            sec_ctrl = zone.secondaryDaylightingControl.get
+            if adj['sensor_2_xyz']
+              x = adj['sensor_2_xyz'][0]
+              y = adj['sensor_2_xyz'][1]
+              z = adj['sensor_2_xyz'][2]
+              OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting secondary daylight sensor position to [#{x}, #{y}, #{z}].")
+              sec_ctrl.setPositionXCoordinate(x)
+              sec_ctrl.setPositionYCoordinate(y)
+              sec_ctrl.setPositionZCoordinate(z)
+            end
+          end
+        end
+      end
+    end
+
+>>>>>>> master
     return true
   end
 
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+  # geometry adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
     model_set_building_north_axis(model, 0.0)
-
     return true
   end
 
+  # @!group AirTerminalSingleDuctVAVReheat
+  # Set the initial minimum damper position based on OA rate of the space and the template.
+  # Zones with low OA per area get lower initial guesses.
+  # Final position will be adjusted upward as necessary by Standards.AirLoopHVAC.apply_minimum_vav_damper_positions
+  #
+  # @param air_terminal_single_duct_vav_reheat [OpenStudio::Model::AirTerminalSingleDuctVAVReheat] the air terminal object
+  # @param zone_oa_per_area [Double] the zone outdoor air per area in m^3/s*m^2
+  # @return [Bool] returns true if successful, false if not
   def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
     min_damper_position = template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019' ? 0.2 : 0.3
 
@@ -143,15 +771,16 @@ module SecondarySchool
 
   # Type of SAT reset for this building type
   #
-  # @param air_loop_hvac [OpenStudio::model::AirLoopHVAC] Airloop
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @return [String] Returns type of SAT reset
   def air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
     return 'oa'
   end
 
   # List transfer air target and source zones, and air aflow (cfm)
-  #
   # code_sections [90.1-2019_6.5.7.1], [90.1-2016_6.5.7.1]
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Hash] target zones (key) and source zones (value) and air flow (value)
   def model_transfer_air_target_and_source_zones(model)
     model_transfer_air_target_and_source_zones_hash = {

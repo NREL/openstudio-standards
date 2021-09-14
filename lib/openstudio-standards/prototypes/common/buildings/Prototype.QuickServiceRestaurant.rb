@@ -1,8 +1,14 @@
 # Custom changes for the QuickServiceRestaurant prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module QuickServiceRestaurant
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+  # hvac adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # add extra equipment for kitchen
@@ -23,83 +29,172 @@ module QuickServiceRestaurant
     return true
   end
 
+<<<<<<< HEAD
   def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
+=======
+  # daylighting adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_daylighting_tweaks(model, building_type, climate_zone, prototype_input)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting daylight sensor positions and fractions')
+
+    adjustments = [
+      { '90.1-2010' => { 'Dining' => { 'sensor_1_frac' => 0.22,
+                                       'sensor_2_frac' => 0.22,
+                                       'sensor_1_xyz' => [1.9812, 1.9812, 0.762],
+                                       'sensor_2_xyz' => [13.2588, 1.9812, 0.762] } },
+        '90.1-2013' => { 'Dining' => { 'sensor_1_frac' => 0.38,
+                                       'sensor_2_frac' => 0.38,
+                                       'sensor_1_xyz' => [2.6548, 2.6548, 0.762],
+                                       'sensor_2_xyz' => [12.588, 2.6548, 0.762] } },
+        '90.1-2016' => { 'Dining' => { 'sensor_1_frac' => 0.38,
+                                       'sensor_2_frac' => 0.38,
+                                       'sensor_1_xyz' => [2.6548, 2.6548, 0.762],
+                                       'sensor_2_xyz' => [12.588, 2.6548, 0.762] } },
+        '90.1-2019' => { 'Dining' => { 'sensor_1_frac' => 0.38,
+                                       'sensor_2_frac' => 0.38,
+                                       'sensor_1_xyz' => [2.6548, 2.6548, 0.762],
+                                       'sensor_2_xyz' => [12.588, 2.6548, 0.762] } } }
+    ]
+
+    # Adjust daylight sensors in each space
+    model.getSpaces.each do |space|
+      if adjustments[0].keys.include? template
+        if adjustments[0][template].keys.include? space.name.to_s
+          adj = adjustments[0][template][space.name.to_s]
+          next if space.thermalZone.empty?
+
+          zone = space.thermalZone.get
+          next if space.spaceType.empty?
+
+          spc_type = space.spaceType.get
+          next if spc_type.standardsSpaceType.empty?
+
+          stds_spc_type = spc_type.standardsSpaceType.get
+          # Adjust the primary sensor
+          if adj['sensor_1_frac'] && zone.primaryDaylightingControl.is_initialized
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting primary daylight sensor to control #{adj['sensor_1_frac']} of the lighting.")
+            zone.setFractionofZoneControlledbyPrimaryDaylightingControl(adj['sensor_1_frac'])
+            pri_ctrl = zone.primaryDaylightingControl.get
+            if adj['sensor_1_xyz']
+              x = adj['sensor_1_xyz'][0]
+              y = adj['sensor_1_xyz'][1]
+              z = adj['sensor_1_xyz'][2]
+              OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting primary daylight sensor position to [#{x}, #{y}, #{z}].")
+              pri_ctrl.setPositionXCoordinate(x)
+              pri_ctrl.setPositionYCoordinate(y)
+              pri_ctrl.setPositionZCoordinate(z)
+            end
+          end
+          # Adjust the secondary sensor
+          if adj['sensor_2_frac'] && zone.secondaryDaylightingControl.is_initialized
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting secondary daylight sensor to control #{adj['sensor_2_frac']} of the lighting.")
+            zone.setFractionofZoneControlledbySecondaryDaylightingControl(adj['sensor_2_frac'])
+            sec_ctrl = zone.secondaryDaylightingControl.get
+            if adj['sensor_2_xyz']
+              x = adj['sensor_2_xyz'][0]
+              y = adj['sensor_2_xyz'][1]
+              z = adj['sensor_2_xyz'][2]
+              OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting secondary daylight sensor position to [#{x}, #{y}, #{z}].")
+              sec_ctrl.setPositionXCoordinate(x)
+              sec_ctrl.setPositionYCoordinate(y)
+              sec_ctrl.setPositionZCoordinate(z)
+            end
+          end
+        end
+      end
+    end
+
+>>>>>>> master
     return true
   end
 
+  # add door infiltration
+  #
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_door_infiltration(climate_zone, model)
     # add extra infiltration for dining room door and attic (there is no attic in 'DOE Ref Pre-1980')
-    unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
-      dining_space = model.getSpaceByName('Dining').get
-      attic_space = model.getSpaceByName('Attic').get
-      infiltration_diningdoor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
-      infiltration_attic = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
-      infiltration_diningdoor.setName('Dining door Infiltration')
-      infiltration_per_zone_diningdoor = 0
-      infiltration_per_zone_attic = 0.0729
-      if template == '90.1-2004'
-        infiltration_per_zone_diningdoor = 0.902834611
-        infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood DOOR_INFIL_SCH'))
-      elsif template == '90.1-2007'
-        case climate_zone
-          when 'ASHRAE 169-2006-0A',
-               'ASHRAE 169-2006-1A',
-               'ASHRAE 169-2006-2A',
-               'ASHRAE 169-2006-2B',
-               'ASHRAE 169-2006-3A',
-               'ASHRAE 169-2006-3B',
-               'ASHRAE 169-2006-3C',
-               'ASHRAE 169-2006-4A',
-               'ASHRAE 169-2006-4B',
-               'ASHRAE 169-2006-4C',
-               'ASHRAE 169-2013-0A',
-               'ASHRAE 169-2013-1A',
-               'ASHRAE 169-2013-2A',
-               'ASHRAE 169-2013-2B',
-               'ASHRAE 169-2013-3A',
-               'ASHRAE 169-2013-3B',
-               'ASHRAE 169-2013-3C',
-               'ASHRAE 169-2013-4A',
-               'ASHRAE 169-2013-4B',
-               'ASHRAE 169-2013-4C'
-            infiltration_per_zone_diningdoor = 0.902834611
-            infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood DOOR_INFIL_SCH'))
-          else
-            infiltration_per_zone_diningdoor = 0.583798439
-            infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood VESTIBULE_DOOR_INFIL_SCH'))
-        end
-      elsif template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
-        case climate_zone
-          when 'ASHRAE 169-2006-0A',
-               'ASHRAE 169-2006-1A',
-               'ASHRAE 169-2006-2A',
-               'ASHRAE 169-2006-2B',
-               'ASHRAE 169-2006-3A',
-               'ASHRAE 169-2006-3B',
-               'ASHRAE 169-2006-3C',
-               'ASHRAE 169-2013-0A',
-               'ASHRAE 169-2013-1A',
-               'ASHRAE 169-2013-2A',
-               'ASHRAE 169-2013-2B',
-               'ASHRAE 169-2013-3A',
-               'ASHRAE 169-2013-3B',
-               'ASHRAE 169-2013-3C',
-            infiltration_per_zone_diningdoor = 0.902834611
-            infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood DOOR_INFIL_SCH'))
-          else
-            infiltration_per_zone_diningdoor = 0.583798439
-            infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood VESTIBULE_DOOR_INFIL_SCH'))
-        end
+    return false if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
+
+    dining_space = model.getSpaceByName('Dining').get
+    attic_space = model.getSpaceByName('Attic').get
+    infiltration_diningdoor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+    infiltration_attic = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+    infiltration_diningdoor.setName('Dining door Infiltration')
+    infiltration_per_zone_diningdoor = 0
+    infiltration_per_zone_attic = 0.0729
+    if template == '90.1-2004'
+      infiltration_per_zone_diningdoor = 0.902834611
+      infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood DOOR_INFIL_SCH'))
+    elsif template == '90.1-2007'
+      case climate_zone
+        when 'ASHRAE 169-2006-0A',
+             'ASHRAE 169-2006-1A',
+             'ASHRAE 169-2006-2A',
+             'ASHRAE 169-2006-2B',
+             'ASHRAE 169-2006-3A',
+             'ASHRAE 169-2006-3B',
+             'ASHRAE 169-2006-3C',
+             'ASHRAE 169-2006-4A',
+             'ASHRAE 169-2006-4B',
+             'ASHRAE 169-2006-4C',
+             'ASHRAE 169-2013-0A',
+             'ASHRAE 169-2013-1A',
+             'ASHRAE 169-2013-2A',
+             'ASHRAE 169-2013-2B',
+             'ASHRAE 169-2013-3A',
+             'ASHRAE 169-2013-3B',
+             'ASHRAE 169-2013-3C',
+             'ASHRAE 169-2013-4A',
+             'ASHRAE 169-2013-4B',
+             'ASHRAE 169-2013-4C'
+          infiltration_per_zone_diningdoor = 0.902834611
+          infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood DOOR_INFIL_SCH'))
+        else
+          infiltration_per_zone_diningdoor = 0.583798439
+          infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood VESTIBULE_DOOR_INFIL_SCH'))
       end
-      infiltration_diningdoor.setDesignFlowRate(infiltration_per_zone_diningdoor)
-      infiltration_diningdoor.setSpace(dining_space)
-      infiltration_attic.setDesignFlowRate(infiltration_per_zone_attic)
-      infiltration_attic.setSchedule(model_add_schedule(model, 'Always On'))
-      infiltration_attic.setSpace(attic_space)
+    elsif template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
+      case climate_zone
+        when 'ASHRAE 169-2006-0A',
+             'ASHRAE 169-2006-1A',
+             'ASHRAE 169-2006-2A',
+             'ASHRAE 169-2006-2B',
+             'ASHRAE 169-2006-3A',
+             'ASHRAE 169-2006-3B',
+             'ASHRAE 169-2006-3C',
+             'ASHRAE 169-2013-0A',
+             'ASHRAE 169-2013-1A',
+             'ASHRAE 169-2013-2A',
+             'ASHRAE 169-2013-2B',
+             'ASHRAE 169-2013-3A',
+             'ASHRAE 169-2013-3B',
+             'ASHRAE 169-2013-3C',
+          infiltration_per_zone_diningdoor = 0.902834611
+          infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood DOOR_INFIL_SCH'))
+        else
+          infiltration_per_zone_diningdoor = 0.583798439
+          infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood VESTIBULE_DOOR_INFIL_SCH'))
+      end
     end
+    infiltration_diningdoor.setDesignFlowRate(infiltration_per_zone_diningdoor)
+    infiltration_diningdoor.setSpace(dining_space)
+    infiltration_attic.setDesignFlowRate(infiltration_per_zone_attic)
+    infiltration_attic.setSchedule(model_add_schedule(model, 'Always On'))
+    infiltration_attic.setSpace(attic_space)
+    return true
   end
 
   # add extra equipment for kitchen
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_extra_equip_kitchen(model)
     kitchen_space = model.getSpaceByName('Kitchen')
     kitchen_space = kitchen_space.get
@@ -146,8 +241,13 @@ module QuickServiceRestaurant
         elec_equip1.setSpaceType(kitchen_space_type)
         elec_equip1.setSchedule(model_add_schedule(model, 'RestaurantFastFood Kitchen_Exhaust_SCH'))
     end
+    return true
   end
 
+  # update zone sizing information
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def update_sizing_zone(model)
     case template
       when '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
@@ -165,8 +265,14 @@ module QuickServiceRestaurant
         zone_sizing.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
         zone_sizing.setCoolingMinimumAirFlowperZoneFloorArea(0)
     end
+    return true
   end
 
+  # adjust cooling setpoint
+  #
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def adjust_clg_setpoint(climate_zone, model)
     ['Dining', 'Kitchen'].each do |space_name|
       space_type_name = model.getSpaceByName(space_name).get.spaceType.get.name.get
@@ -192,11 +298,15 @@ module QuickServiceRestaurant
           end
       end
     end
+    return true
   end
 
   # In order to provide sufficient OSA to replace exhaust flow through kitchen hoods (3,300 cfm),
   # modeled OSA to kitchen is different from OSA determined based on ASHRAE  62.1.
   # It takes into account the available OSA in dining as transfer air.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def reset_kitchen_oa(model)
     space_kitchen = model.getSpaceByName('Kitchen').get
     ventilation = space_kitchen.designSpecificationOutdoorAir.get
@@ -208,8 +318,13 @@ module QuickServiceRestaurant
       when '90.1-2004', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         ventilation.setOutdoorAirFlowRate(0.7312)
     end
+    return true
   end
 
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
@@ -226,13 +341,15 @@ module QuickServiceRestaurant
           exhaust_fan.setPressureRise(0.000001)
         end
     end
+    return true
   end
 
+  # add zone_mixing between kitchen and dining
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def add_zone_mixing(model)
-    # add zone_mixing between kitchen and dining
-    # TODO: remove zone mixing objects,
-    # transfer air is the should be the same for
-    # all stds, exhaust flow varies
+    # @todo remove zone mixing objects, transfer air is the should be the same for all stds, exhaust flow varies
     space_kitchen = model.getSpaceByName('Kitchen').get
     zone_kitchen = space_kitchen.thermalZone.get
     space_dining = model.getSpaceByName('Dining').get
@@ -249,16 +366,30 @@ module QuickServiceRestaurant
     end
     zone_mixing_kitchen.setSourceZone(zone_dining)
     zone_mixing_kitchen.setDeltaTemperature(0)
+    return true
   end
 
+  # swh adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+  # geometry adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
     model_set_building_north_axis(model, 0.0)
-
     return true
   end
 end

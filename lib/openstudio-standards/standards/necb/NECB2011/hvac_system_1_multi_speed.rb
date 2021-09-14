@@ -1,5 +1,4 @@
 class NECB2011
-
   # At this point the only way to implement multi-stage cooling and heating in OS is through the use
   # of object "AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed". This component uses as an argument a control
   # zone and then it responds to a call for heating or cooling for that control zone. This aspect of this
@@ -14,7 +13,7 @@ class NECB2011
                                                         hw_loop:)
 
     # Keep all data and assumptions for both systems on the top here for easy reference.
-    system_data = Hash.new
+    system_data = {}
     system_data[:name] = 'Sys_1_Make-up air unit'
     system_data[:PreheatDesignTemperature] = 7.0
     system_data[:PreheatDesignHumidityRatio] = 0.008
@@ -35,10 +34,10 @@ class NECB2011
     system_data[:TypeofLoadtoSizeOn] = 'VentilationRequirement'
     system_data[:MinimumSystemAirFlowRatio] = 1.0
     system_data[:MinimumOutdoorDryBulbTemperatureforCompressorOperation] = -10.0
-    #Zone data
+    # Zone data
     system_data[:system_supply_air_temperature] = 20.0
     system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
-    system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0 #Examine to see if this is a code or assumption. 13.1 maybe need to check
+    system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0 # Examine to see if this is a code or assumption. 13.1 maybe need to check
     system_data[:ZoneCoolingSizingFactor] = 1.1
     system_data[:ZoneHeatingSizingFactor] = 1.3
 
@@ -107,6 +106,10 @@ class NECB2011
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
       oa_controller.autosizeMinimumOutdoorAirFlowRate
 
+      # Set mechanical ventilation controller outdoor air to ZoneSum (used to be defaulted to ZoneSum but now should be
+      # set explicitly)
+      oa_controller.controllerMechanicalVentilation.setSystemOutdoorAirMethod('ZoneSum')
+
       # oa_system
       oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
 
@@ -123,9 +126,8 @@ class NECB2011
       sat_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), system_data[:system_supply_air_temperature])
       setpoint_mgr = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
       setpoint_mgr.addToNode(mau_air_loop.supplyOutletNode)
-
-    end # Create MAU
-
+      # Create MAU
+    end
 
     zones.each do |zone|
       # Zone sizing temperature
@@ -138,7 +140,7 @@ class NECB2011
       # Set up PTAC heating coil; apply always off schedule
 
       # htg_coil_elec = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
-      zero_outdoor_air = true  # flag to set outside air flow to zero
+      zero_outdoor_air = true # flag to set outside air flow to zero
       add_ptac_dx_cooling(model, zone, zero_outdoor_air)
 
       # add zone baseboards
@@ -149,10 +151,10 @@ class NECB2011
 
         diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
         mau_air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
-
-      end # components for MAU
-    end # of zone loop
-
+        # components for MAU
+      end
+      # of zone loop
+    end
     return true
   end
 end

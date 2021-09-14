@@ -83,7 +83,7 @@ class OpenStudio::Model::ZoneHVACTerminalUnitVariableRefrigerantFlow
   end
   
   
-  # Todo: verify on a fully autosize model that these three are actually named this way in the SQL file
+  # @todo verify on a fully autosize model that these three are actually named this way in the SQL file
   
   # Outdoor Air Flow Rate During Cooling Operation
   def autosizedOutdoorAirFlowRateDuringCoolingOperation

@@ -11,7 +11,7 @@
 class OpenStudio::Model::Model
   
   # Get the heating fuel type of a plant loop
-  # @Todo: If no heating equipment is found, check if there's a heat exchanger,
+  # @todo If no heating equipment is found, check if there's a heat exchanger,
   # or a WaterHeater:Mixed or stratified that is connected to a heating source on the demand side
   def plant_loop_heating_fuels(plant_loop)
     fuels = []
@@ -46,7 +46,8 @@ class OpenStudio::Model::Model
         if component.heaterMaximumCapacity.empty? || component.heaterMaximumCapacity.get != 0
           # If it does, we add the heater Fuel Type
           fuels << component.heaterFuelType
-        end  # @Todo: not sure about whether it should be an elsif or not
+        end
+        # @todo not sure about whether it should be an elsif or not
         # Check the plant loop connection on the source side
         if component.secondaryPlantLoop.is_initialized
           fuels += self.plant_loop_heating_fuels(component.secondaryPlantLoop.get)
@@ -58,7 +59,8 @@ class OpenStudio::Model::Model
         if component.heaterMaximumCapacity.empty? || component.heaterMaximumCapacity.get != 0
           # If it does, we add the heater Fuel Type
           fuels << component.heaterFuelType
-        end # @Todo: not sure about whether it should be an elsif or not
+        end
+        # @todo not sure about whether it should be an elsif or not
         # Check the plant loop connection on the source side
         if component.secondaryPlantLoop.is_initialized
           fuels += self.plant_loop_heating_fuels(component.secondaryPlantLoop.get)
@@ -268,7 +270,7 @@ class OpenStudio::Model::Model
         equipment = equipment.to_AirTerminalSingleDuctConstantVolumeReheat.get
         fuels += self.coil_heating_fuels(equipment.reheatCoil)  
       when 'OS_AirTerminal_SingleDuct_InletSideMixer'
-        # TODO
+        # @todo complete method
       when 'OS_AirTerminal_SingleDuct_ParallelPIUReheat'
         equipment = equipment.to_AirTerminalSingleDuctParallelPIUReheat.get
         fuels += self.coil_heating_fuels(equipment.reheatCoil) 

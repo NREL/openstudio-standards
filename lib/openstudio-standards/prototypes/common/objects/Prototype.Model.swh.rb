@@ -1,5 +1,11 @@
 class Standard
-  def model_add_swh(model, building_type, climate_zone, prototype_input, epw_file)
+  # Add service water heating to the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [String] building type
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_add_swh(model, building_type, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 
     # Add the main service water heating loop, if specified
@@ -38,9 +44,9 @@ class Standard
       end
 
       # Attach the end uses if specified in prototype inputs
-      # TODO remove special logic for large office SWH end uses
-      # TODO remove special logic for stripmall SWH end uses and service water loops
-      # TODO remove special logic for large hotel SWH end uses
+      # @todo remove special logic for large office SWH end uses
+      # @todo remove special logic for stripmall SWH end uses and service water loops
+      # @todo remove special logic for large hotel SWH end uses
       if building_type == 'LargeOffice' && template != 'NECB2011'
 
         # Only the core spaces have service water
@@ -164,9 +170,7 @@ class Standard
         end
 
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{water_fixtures.size} water fixtures to model")
-
       end
-
     end
 
     # Add the booster water heater, if specified
@@ -222,11 +226,12 @@ class Standard
 
   # add typical swh demand and supply to model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param water_heater_fuel [String] water heater fuel. Valid choices are NaturalGas, Electricity, and HeatPump.
   #   If not supplied, a smart default will be determined based on building type.
   # @param pipe_insul_in [Double] thickness of the pipe insulation, in inches.
   # @param circulating [String] whether the (circulating, noncirculating, nil) nil is smart
-  # @return [Array] hot water loops
+  # @return [Array<OpenStudio::Model::PlantLoop>] hot water loops
   # @todo - add in losses from tank and pipe insulation, etc.
   def model_add_typical_swh(model,
                             water_heater_fuel: nil,
@@ -284,7 +289,8 @@ class Standard
         peak_flow_rate_m3_per_s = OpenStudio.convert(peak_flow_rate_gal_per_hr, 'gal/hr', 'm^3/s').get
         use_name = "#{space_type.name} #{num_units} units"
       else
-        # TODO: - add building type or sice specific logic or just assume Gas? (SmallOffice and Warehouse are only non unit prototypes with Electric heating)
+        # @todo add building type or sice specific logic or just assume Gas?
+        #   (SmallOffice and Warehouse are only non unit prototypes with Electric heating)
         water_heater_fuel = 'NaturalGas' if water_heater_fuel.nil?
         num_units = 1
         peak_flow_rate_gal_per_hr = peak_flow_rate_gal_per_hr_per_ft2 * floor_area_ft2
@@ -417,13 +423,13 @@ class Standard
 
     # add non-dedicated system(s) here. Separate systems for water use equipment from different building types
     water_use_equipment_hash.sort.each do |stds_bldg_type, water_use_equipment_array|
-      # TODO: find the water use equipment with the highest temperature
+      # @todo find the water use equipment with the highest temperature
       water_heater_temp_f = 140.0
       water_heater_temp_c = OpenStudio.convert(water_heater_temp_f, 'F', 'C').get
 
       # find pump values
       # Table A.2 in PrototypeModelEnhancements_2014_0.pdf shows 10ft on everything except SecondarySchool which has 11.4ft
-      # TODO: Remove hard-coded building-type-based lookups for circulating vs. non-circulating SWH systems
+      # @todo Remove hard-coded building-type-based lookups for circulating vs. non-circulating SWH systems
       circulating_bldg_types = [
         # DOE building types
         'Office',
@@ -511,11 +517,12 @@ class Standard
   # Use rules from DOE Prototype Building documentation to determine water heater capacity,
   # volume, pipe dump losses, and pipe thermal losses.
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param water_use_equipment_array [Array] array of water use equipment objects that will be using this water heater
   # @param storage_to_cap_ratio_gal_to_kbtu_per_hr [Double] storage volume gal to kBtu/hr of capacity
   # @param htg_eff [Double] water heater thermal efficiency, fraction
   # @param inlet_temp_f [Double] inlet cold water temperature, degrees Fahrenheit
-  # @param target_temp_f [Double] target supply water temperatre from the tank, degrees Fahrenheit
+  # @param target_temp_f [Double] target supply water temperature from the tank, degrees Fahrenheit
   # @return [Hash] hash with values needed to size water heater made with downstream method
   def model_find_water_heater_capacity_volume_and_parasitic(model,
                                                             water_use_equipment_array,

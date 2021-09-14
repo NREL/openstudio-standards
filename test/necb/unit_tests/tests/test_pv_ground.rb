@@ -41,8 +41,8 @@ class NECB_PVground_Tests < Minitest::Test
     ]
     @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
     @primary_heating_fuels = ['DefaultFuel']
-    @pv_ground_types = [true]  #true, false
 
+    @pv_ground_types = ['add_pv_ground']
     pv_ground_total_area_pv_panels_m2 = 'NECB_Default'
     pv_ground_tilt_angle = 'NECB_Default'
     pv_ground_azimuth_angle = 'NECB_Default'
@@ -94,12 +94,12 @@ class NECB_PVground_Tests < Minitest::Test
                                          fdwr_set: -1.0,
                                          srr_set: -1.0)
               standard.apply_auto_zoning(model: model,
-                                sizing_run_dir: Dir.pwd,
+                                sizing_run_dir: @sizing_run_dir,
                                 lights_type: 'NECB_Default',
                                 lights_scale: 1.0)
               standard.apply_systems_and_efficiencies(model: model,
                                              primary_heating_fuel: primary_heating_fuel,
-                                             sizing_run_dir: Dir.pwd,
+                                             sizing_run_dir: @sizing_run_dir,
                                              dcv_type: 'NECB_Default',
                                              ecm_system_name: 'NECB_Default',
                                              erv_package: 'NECB_Default',
@@ -112,7 +112,8 @@ class NECB_PVground_Tests < Minitest::Test
                                              pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
                                              pv_ground_tilt_angle: pv_ground_tilt_angle,
                                              pv_ground_azimuth_angle: pv_ground_azimuth_angle,
-                                             pv_ground_module_description: pv_ground_module_description
+                                             pv_ground_module_description: pv_ground_module_description,
+                                             chiller_type: 'NECB_Default'
               )
 
               # # comment out for regular tests

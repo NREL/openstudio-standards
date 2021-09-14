@@ -122,9 +122,15 @@ end
   # Does nothing unless implmented by the specific standard
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
   end
-  # Does nothing unless implmented by the specific standard
+
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
+    return true
   end
+
   # Does nothing unless implmented by the specific standard
   def model_update_fan_efficiency(model)
   end
@@ -158,11 +164,14 @@ end
     return lookup_name
   end
 
-  # Makes changes to the daylighting sensors that are too
-  # specific to be coded generically.
+  # daylighting adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_daylighting_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 end
@@ -257,8 +266,12 @@ end
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
   end
 
-  # Does nothing unless implmented by the specific standard
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
+    return true
   end
 
   # Does nothing unless implmented by the specific standard
@@ -612,8 +625,12 @@ end
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
   end
 
-  # Does nothing unless implmented by the specific standard
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
+    return true
   end
 
   # Does nothing unless implmented by the specific standard
@@ -629,36 +646,47 @@ end
     return building_type
   end
 
-  # Makes changes to the HVAC systems that are too
-  # specific to be coded generically.
+  # hvac adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 
-  # Makes changes to the SWH systems that are too
-  # specific to be coded generically.
+  # swh adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_swh_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 
-  # Makes changes to the geometry that are too
-  # specific to be coded generically.
+  # geometry adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-
+  def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 
-  # Makes changes to the daylighting sensors that are too
-  # specific to be coded generically.
+  # daylighting adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_daylighting_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 end
@@ -769,8 +797,12 @@ end
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
   end
 
-  # Does nothing unless implmented by the specific standard
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
+    return true
   end
 
   # Does nothing unless implmented by the specific standard
@@ -803,36 +835,47 @@ end
     return lookup_name
   end
 
-  # Makes changes to the HVAC systems that are too
-  # specific to be coded generically.
+  # hvac adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 
-  # Makes changes to the SWH systems that are too
-  # specific to be coded generically.
+  # swh adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_swh_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 
-  # Makes changes to the geometry that are too
-  # specific to be coded generically.
+  # geometry adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-
+  def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 
-  # Makes changes to the daylighting sensors that are too
-  # specific to be coded generically.
+  # daylighting adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_daylighting_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 end
