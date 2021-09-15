@@ -2891,7 +2891,7 @@ Standard.class_eval do
     # Set schedule values
     day_schedules.each do |day_schedule|
       (0..23).each do |hr|
-        next if !time_offset_hash.key?(hr.to_s)
+        next if !time_value_hash.key?(hr.to_s)
 
         t = OpenStudio::Time.new(0, hr, 0, 0)
 
