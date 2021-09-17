@@ -103,7 +103,7 @@ Standard.class_eval do
 
       # 'touch' the weather file - for some odd reason this fixes the simulation not running issue we had on openstudio-server.
       # Removed for until further investigation completed.
-      # FileUtils.touch("#{run_dir}/#{epw_name}")
+      FileUtils.touch("#{run_dir}/#{epw_name}")
 
       cli_path = OpenStudio.getOpenStudioCLI
       cmd = "\"#{cli_path}\" run -w \"#{osw_path}\""
