@@ -399,9 +399,11 @@ class BTAPDatapoint
     end
 
     CSV.open(csv_output, "wb") do |csv|
-      csv << array_of_hashes.first.keys # adds the attributes name on the first line
-      array_of_hashes.each do |hash|
-        csv << hash.values
+      unless array_of_hashes.empty?
+        csv << array_of_hashes.first.keys # adds the attributes name on the first line
+        array_of_hashes.each do |hash|
+          csv << hash.values
+        end
       end
     end
   end
