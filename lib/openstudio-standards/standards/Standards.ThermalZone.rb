@@ -757,15 +757,31 @@ class Standard
   # @return [Double] the zone net floor area in m^2 (with multiplier taken into account)
   def thermal_zone_floor_area_with_zone_multipliers(thermal_zone)
     area_m2 = 0
-    zone_mult = multiplier
-    spaces.each do |space|
+    thermal_zone.spaces.each do |space|
       # If space is not part of floor area, we don't add it
       next unless space.partofTotalFloorArea
 
       area_m2 += space.floorArea
     end
 
-    return area_m2 * zone_mult
+    return area_m2 * thermal_zone.multiplier
+  end
+
+  # Determine the net area of the zone
+  # Loops on each space, and checks if part of total floor area or not
+  # If not part of total floor area, it is not added to the zone floor area
+  #
+  # @return [Double] the zone net floor area in m^2
+  def thermal_zone_floor_area(thermal_zone)
+    area_m2 = 0
+    thermal_zone.spaces.each do |space|
+      # If space is not part of floor area, we don't add it
+      next unless space.partofTotalFloorArea
+
+      area_m2 += space.floorArea
+    end
+
+    return area_m2
   end
 
   # Infers the baseline system type based on the equipment serving the zone and their heating/cooling fuels.
