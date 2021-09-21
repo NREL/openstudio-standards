@@ -1117,7 +1117,7 @@ class Standard
       elsif equip.to_ZoneHVACLowTempRadiantVarFlow.is_initialized
         equip = equip.to_ZoneHVACLowTempRadiantVarFlow.get
         clg_coil = equip.coolingCoil
-        if clg_coil.model.version > OpenStudio::VersionString.new('3.1.0')
+        if equip.model.version > OpenStudio::VersionString.new('3.1.0')
           if clg_coil.is_initialized
             clg_coil = clg_coil.get
           else
