@@ -982,7 +982,14 @@ class Standard
       elsif equip.to_ZoneHVACLowTempRadiantVarFlow.is_initialized
         equip = equip.to_ZoneHVACLowTempRadiantVarFlow.get
         htg_coil = equip.heatingCoil
-        if htg_coil.to_CoilHeatingLowTempRadiantVarFlow.is_initialized
+        if equip.model.version > OpenStudio::VersionString.new('3.1.0')
+          if htg_coil.is_initialized
+            htg_coil = htg_coil.get
+          else
+            htg_coil = nil
+          end
+        end
+        if !htg_coil.nil? && htg_coil.to_CoilHeatingLowTempRadiantVarFlow.is_initialized
           htg_coil = htg_coil.to_CoilHeatingLowTempRadiantVarFlow.get
           if htg_coil.heatingControlTemperatureSchedule.is_initialized
             htg_sch = htg_coil.heatingControlTemperatureSchedule.get
@@ -1117,7 +1124,14 @@ class Standard
       elsif equip.to_ZoneHVACLowTempRadiantVarFlow.is_initialized
         equip = equip.to_ZoneHVACLowTempRadiantVarFlow.get
         clg_coil = equip.coolingCoil
-        if clg_coil.to_CoilCoolingLowTempRadiantVarFlow.is_initialized
+        if equip.model.version > OpenStudio::VersionString.new('3.1.0')
+          if clg_coil.is_initialized
+            clg_coil = clg_coil.get
+          else
+            clg_coil = nil
+          end
+        end
+        if !clg_coil.nil? && clg_coil.to_CoilCoolingLowTempRadiantVarFlow.is_initialized
           clg_coil = clg_coil.to_CoilCoolingLowTempRadiantVarFlow.get
           if clg_coil.coolingControlTemperatureSchedule.is_initialized
             clg_sch = clg_coil.coolingControlTemperatureSchedule.get

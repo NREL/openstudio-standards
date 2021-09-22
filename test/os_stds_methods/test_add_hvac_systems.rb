@@ -242,7 +242,7 @@ class TestAddHVACSystems < Minitest::Test
 
   def test_add_hvac_systems_sz_cooling
     hvac_systems = [
-      {system_type: 'Evaporative Cooler', cool_fuel: 'Electricity', zones: 'cooled_zones', climate_zone: 'ASHRAE 169-2013-2B', unmet_hrs_htg: 6000.0, unmet_hrs_clg: 3000.0}
+      {system_type: 'Evaporative Cooler', cool_fuel: 'Electricity', zones: 'cooled_zones', climate_zone: 'ASHRAE 169-2013-2B', unmet_hrs_htg: 6000.0, unmet_hrs_clg: 3500.0}
     ]
     # @todo debug evaporative cooler performance
     # @todo add more evaporative cooler tests, combine with baseboards
