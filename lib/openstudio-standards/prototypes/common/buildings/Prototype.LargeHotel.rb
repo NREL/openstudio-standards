@@ -135,6 +135,12 @@ module LargeHotel
     # Guestroom vacancy controls
     model_add_guestroom_vacancy_controls(model, 'LargeHotel')
 
+    # Guestroom temperature reset schedule delay reduction from 30 min to 20 min
+    model_reduce_setback_sch_delay(model, 'LargeHotel')
+
+    # Guestroom ventilation availability schedule setup
+    model_add_guestroom_vent_sch(model, 'LargeHotel')
+
     return true
   end
 
@@ -158,12 +164,15 @@ module LargeHotel
         elec_equip_def2.setFractionLatent(0)
         elec_equip_def2.setFractionRadiant(0.25)
         elec_equip_def2.setFractionLost(0)
-        if template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
+        if template == '90.1-2013' || template == '90.1-2016'
           elec_equip_def1.setDesignLevel(457.7)
           elec_equip_def2.setDesignLevel(285)
+        elsif template == '90.1-2019'
+          elec_equip_def1.setDesignLevel(277.5)
+          elec_equip_def2.setDesignLevel(156.7)
         else
-          elec_equip_def1.setDesignLevel(457.7)
-          elec_equip_def2.setDesignLevel(285)
+          elec_equip_def1.setDesignLevel(515.917)
+          elec_equip_def2.setDesignLevel(425.8)
         end
         # Create the electric equipment instance and hook it up to the space type
         elec_equip1 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def1)
