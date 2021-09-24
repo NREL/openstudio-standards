@@ -155,7 +155,7 @@ class Baseline9012013Test2 < Minitest::Test
     
     lpd_test_hash = {}
     lpd_test_hash["L1-ES_apt"] = {"LPD" => 1.34,"Space_Type" => "Apartment"}
-    lpd_test_hash["L1-E_corr"] = {"LPD" => 0.792,"Space_Type" => "Corridor"}
+    lpd_test_hash["L1-E_corr"] = {"LPD" => 0.66,"Space_Type" => "Corridor"}
     lpd_test_hash["L1-W_ret"] = {"LPD" => 1.11,"Space_Type" => "Office"} # Apartment offices have 1.11 W/f^2 extra task lighting according to the DOE prototype buildings
     
       lpd_test_hash.keys.each do |space_name|
@@ -267,12 +267,12 @@ class Baseline9012013Test2 < Minitest::Test
   
     daylighting_test_hash = {}
     # @todo this test is failing on the server but can't figure out why.
-    # daylighting_test_hash["Flr2 Lounge Perimeter 250CD"] = {"PrimaryArea" => 1074.5,"SecondaryArea" => 974.1,"ControlType" => "PrimaryAndSecondary"}
+    daylighting_test_hash["Flr2 Lounge Perimeter 250CD"] = {"PrimaryArea" => 1074.5,"SecondaryArea" => 1338.7,"ControlType" => "PrimaryAndSecondary"}
     # Don't expect daylighting controls in closed offices; assume
     # that spaces would in reality be broken into multiple rooms
     # less than the minimum size to require daylighting controls.
     # daylighting_test_hash["Flr1 Office 130-132 136 138 139"] = {"PrimaryArea" => 340,"SecondaryArea" => 340,"ControlType" => "PrimaryAndSecondary"}
-    daylighting_test_hash["Flr1 Dining 150"] = {"PrimaryArea" => 1725.9,"SecondaryArea" => 1500.4,"ControlType" => "PrimaryAndSecondary"}
+    daylighting_test_hash["Flr1 Dining 150"] = {"PrimaryArea" => 1725.9,"SecondaryArea" => 3682.3,"ControlType" => "PrimaryAndSecondary"}
     # currently the measure is not calculating the expected daylighting areas because window width is getting reduced from proposed to baseline 
     
     daylighting_test_hash.keys.each do |space_name|

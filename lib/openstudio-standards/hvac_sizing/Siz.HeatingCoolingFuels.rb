@@ -297,7 +297,13 @@ class OpenStudio::Model::Model
         fuels += self.coil_heating_fuels(equipment.heatingCoil) 
       when 'OS_ZoneHVAC_LowTemperatureRadiant_VariableFlow'
         equipment = equipment.to_ZoneHVACLowTempRadiantVarFlow.get
-        fuels += self.coil_heating_fuels(equipment.heatingCoil) 
+        if equipment.model.version < OpenStudio::VersionString.new('3.2.0')
+          fuels += self.coil_heating_fuels(equipment.heatingCoil)
+        else
+          if equipment.heatingCoil.is_initialized
+            fuels += self.coil_heating_fuels(equipment.heatingCoil.get)
+          end
+        end
       when 'OS_ZoneHVAC_UnitHeater'
         equipment = equipment.to_ZoneHVACUnitHeater.get
         fuels += self.coil_heating_fuels(equipment.heatingCoil) 
@@ -361,7 +367,13 @@ class OpenStudio::Model::Model
         fuels += self.coil_cooling_fuels(equipment.coolingCoil)
       when 'OS_ZoneHVAC_LowTemperatureRadiant_VariableFlow'
         equipment = equipment.to_ZoneHVACLowTempRadiantVarFlow.get
-        fuels += self.coil_cooling_fuels(equipment.coolingCoil)
+        if equipment.model.version < OpenStudio::VersionString.new('3.2.0')
+          fuels += self.coil_cooling_fuels(equipment.coolingCoil)
+        else
+          if equipment.coolingCoil.is_initialized
+            fuels += self.coil_cooling_fuels(equipment.coolingCoil.get)
+          end
+        end
       when 'OS_Refrigeration_AirChiller'
         fuels << 'Electricity'
       when 'OS_ZoneHVAC_IdealLoadsAirSystem'
