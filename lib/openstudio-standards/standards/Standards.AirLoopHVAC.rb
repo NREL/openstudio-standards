@@ -57,8 +57,10 @@ class Standard
 
       # Multizone VAV Optimization
       # This rule does not apply to two hospital and one outpatient systems
-      # @todo add hospital two systems as exception
-      unless air_loop_hvac.name.to_s.include? 'Outpatient F1'
+      unless (@instvarbuilding_type == 'Hospital' && (air_loop_hvac.name.to_s.include?('VAV_ER') || air_loop_hvac.name.to_s.include?('VAV_ICU') ||
+             air_loop_hvac.name.to_s.include?('VAV_OR') || air_loop_hvac.name.to_s.include?('VAV_LABS') ||
+             air_loop_hvac.name.to_s.include?('VAV_PATRMS'))) ||
+             (@instvarbuilding_type == 'Outpatient' && air_loop_hvac.name.to_s.include?('Outpatient F1'))
         if air_loop_hvac_multizone_vav_optimization_required?(air_loop_hvac, climate_zone)
           air_loop_hvac_enable_multizone_vav_optimization(air_loop_hvac)
         else
@@ -160,6 +162,24 @@ class Standard
         end
       end
       air_loop_hvac_apply_single_zone_controls(air_loop_hvac, climate_zone)
+    end
+
+    # Standby mode occupancy control
+    unless air_loop_hvac.thermalZones.empty?
+      thermal_zones = air_loop_hvac.thermalZones
+
+      standby_mode_spaces = []
+      thermal_zones.sort.each do |thermal_zone|
+        thermal_zone.spaces.sort.each do |space|
+          if space_occupancy_standby_mode_required?(space)
+            standby_mode_spaces << space
+          end
+        end
+      end
+
+      if !standby_mode_spaces.empty?
+        air_loop_hvac_standby_mode_occupancy_control(air_loop_hvac, standby_mode_spaces)
+      end
     end
   end
 
@@ -1133,6 +1153,17 @@ class Standard
     return false
   end
 
+  # Determine if the air loop includes a unitary system
+  #
+  # @return [Bool] returns true if a unitary system is included on the air loop
+  def air_loop_hvac_include_unitary_system?(air_loop_hvac)
+    air_loop_hvac.supplyComponents.each do |comp|
+      return true if comp.to_AirLoopHVACUnitarySystem.is_initialized
+    end
+
+    return false
+  end
+
   # Determine if the system economizer must be integrated or not.
   # Default logic is from 90.1-2004.
   #
@@ -1618,6 +1649,27 @@ class Standard
     return heat_exchanger_type
   end
 
+  def air_loop_hvac_remove_erv(air_loop_hvac)
+    # Get the OA system
+    oa_sys = nil
+    if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+      oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+    else
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV cannot be removed because the system has no OA intake.")
+      return false
+    end
+
+    # Get the existing ERV or create an ERV and add it to the OA system
+    oa_sys.oaComponents.each do |oa_comp|
+      if oa_comp.to_HeatExchangerAirToAirSensibleAndLatent.is_initialized
+        erv = oa_comp.to_HeatExchangerAirToAirSensibleAndLatent.get
+        erv.remove
+      end
+    end
+
+    return true
+  end
+
   # Add an ERV to this airloop
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
@@ -1802,7 +1854,8 @@ class Standard
     return true
   end
 
-  # Adjust minimum VAV damper positions to the values
+  # Adjust minimum VAV damper positions and set minimum design
+  # system outdoor air flow
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @return [Bool] returns true if required, false if not
@@ -2018,6 +2071,7 @@ class Standard
     # object with the calculated min OA flow rate
     sizing_system = air_loop_hvac.sizingSystem
     sizing_system.setDesignOutdoorAirFlowRate(v_ot_adj)
+    sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
     return true
   end
@@ -2751,6 +2805,10 @@ class Standard
                    air_loop_hvac.model.alwaysOnDiscreteSchedule
                  end
 
+    # Create an economizer maximum OA fraction schedule with
+    # a maximum of 70% to reflect damper leakage per PNNL
+    max_oa_sch = set_maximum_fraction_outdoor_air_schedule(air_loop_hvac, oa_control, snc) unless air_loop_hvac_has_simple_transfer_air?(air_loop_hvac)
+
     # Get the supply fan
     if air_loop_hvac.supplyFan.empty?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: No supply fan found, cannot apply DX fan/economizer control.")
@@ -2792,15 +2850,6 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: No heating coil found, cannot apply DX fan/economizer control.")
       return false
     end
-
-    # Create an economizer maximum OA fraction schedule with
-    # a maximum of 70% to reflect damper leakage per PNNL
-    max_oa_sch_name = "#{snc}maxOASch"
-    max_oa_sch = OpenStudio::Model::ScheduleRuleset.new(air_loop_hvac.model)
-    max_oa_sch.setName(max_oa_sch_name)
-    max_oa_sch.defaultDaySchedule.setName("#{max_oa_sch_name}Default")
-    max_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
-    oa_control.setMaximumFractionofOutdoorAirSchedule(max_oa_sch)
 
     ### EMS shared by both programs ###
     # Sensors
@@ -3483,5 +3532,56 @@ class Standard
     end
 
     return dx_clg
+  end
+
+  # Add occupant standby controls to air loop
+  # When the thermostat schedule is setup or setback
+  # the ventilation is shutoff. Currently this is done
+  # by scheduling air terminal dampers (so load can
+  # still be met) and cycling unitary system fans
+  #
+  # @param air_loop_hvac [OpenStudio::model::AirLoopHVAC] OpenStudio AirLoopHVAC object
+  # @param standby_mode_space [Array] List of all spaces required to have standby mode controls
+  # @return [Boolean] true if sucessful, false otherwise
+  def air_loop_hvac_standby_mode_occupancy_control(air_loop_hvac, standby_mode_spaces)
+    return true
+  end
+
+  # Create an economizer maximum OA fraction schedule with
+  # For ASHRAE 90.1 2019, a maximum of 75% to reflect damper leakage per PNNL
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] HVAC air loop object
+  # @param oa_control [OpenStudio::Model::ControllerOutdoorAir] Outdoor air controller object to have this maximum OA fraction schedule
+  # @param snc [String] System name
+  #
+  # @return [OpenStudio::Model::ScheduleRuleset] Generated maximum outdoor air fraction schedule for later use
+  def set_maximum_fraction_outdoor_air_schedule(air_loop_hvac, oa_control, snc)
+    max_oa_sch_name = "#{snc}maxOASch"
+    max_oa_sch = OpenStudio::Model::ScheduleRuleset.new(air_loop_hvac.model)
+    max_oa_sch.setName(max_oa_sch_name)
+    max_oa_sch.defaultDaySchedule.setName("#{max_oa_sch_name}Default")
+    max_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
+    oa_control.setMaximumFractionofOutdoorAirSchedule(max_oa_sch)
+    max_oa_sch
+  end
+
+  # Checks if zones served by the air loop use zone exhaust fan
+  # a simplified approach to model transfer air
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] OpenStudio AirLoopHVAC object
+  # @return [Boolean] true if simple transfer air is modeled, false otherwise
+  def air_loop_hvac_has_simple_transfer_air?(air_loop_hvac)
+    simple_transfer_air = false
+    zones = air_loop_hvac.thermalZones
+    zones_name = []
+    zones.each do |zone|
+      zones_name << zone.name.to_s
+    end
+    air_loop_hvac.model.getFanZoneExhausts.sort.each do |exhaust_fan|
+      if (zones_name.include? exhaust_fan.thermalZone.get.name.to_s) && exhaust_fan.balancedExhaustFractionSchedule.is_initialized
+        simple_transfer_air = true
+      end
+    end
+    return simple_transfer_air
   end
 end
