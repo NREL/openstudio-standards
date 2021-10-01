@@ -418,12 +418,11 @@ class ECMS
   #   -Constant-volume DOAS with air-source heat pump for heating and cooling and electric backup
   #   -Zonal terminal VRF units connected to an outdoor VRF condenser unit
   #   -Zonal electric backup
-  def add_ecm_hs08_ccashp_vrf(
-    model:,
-    system_zones_map:,
-    system_doas_flags:,
-    air_sys_eqpt_type: 'ccashp'
-  )
+  def add_ecm_hs08_ccashp_vrf(model:,
+                              system_zones_map:,
+                              system_doas_flags:,
+                              air_sys_eqpt_type: 'ccashp')
+
     # Add outdoor VRF unit
     outdoor_vrf_unit = add_outdoor_vrf_unit(model: model, ecm_name: 'hs08_ccashp_vrf')
     # Update system doas flags
@@ -562,7 +561,9 @@ class ECMS
 
   # =============================================================================================================================
   # create air system setpoint manager
-  def create_air_sys_spm(model, setpoint_mgr_type, zones)
+  def create_air_sys_spm(model,
+                         setpoint_mgr_type,
+                         zones)
     spm = nil
     case setpoint_mgr_type.downcase
     when 'scheduled'
@@ -619,6 +620,9 @@ class ECMS
       clg_eqpt.addSpeed(clg_eqpt_speed1)
       clg_eqpt.setNominalSpeedLevel(1)
       clg_eqpt.setCrankcaseHeaterCapacity(1.0e-6)
+    when 'coil_chw'
+      clg_eqpt = OpenStudio::Model::CoilCoolingWater.new(model)
+      clg_eqpt.setName('CoilCoolingWater')
     when 'vrf'
       clg_eqpt = OpenStudio::Model::CoilCoolingDXVariableRefrigerantFlow.new(model)
       clg_eqpt.setName('CoilCoolingDXVariableRefrigerantFlow')
@@ -652,6 +656,9 @@ class ECMS
       htg_eqpt.setDefrostStrategy('ReverseCycle')
       htg_eqpt.setDefrostControl('OnDemand')
       htg_eqpt.setCrankcaseHeaterCapacity(1.0e-6)
+    when 'coil_hw'
+      htg_eqpt = OpenStudio::Model::CoilHeatingWater.new(model)
+      htg_eqpt.setName('CoilHeatingWater')
     end
 
     return htg_eqpt
@@ -659,19 +666,17 @@ class ECMS
 
   # =============================================================================================================================
   # add air system with all its components
-  def add_air_system(
-    model:,
-    zones:,
-    sys_abbr:,
-    sys_vent_type:,
-    sys_heat_rec_type:,
-    sys_htg_eqpt_type:,
-    sys_supp_htg_eqpt_type:,
-    sys_clg_eqpt_type:,
-    sys_supp_fan_type:,
-    sys_ret_fan_type:,
-    sys_setpoint_mgr_type:
-  )
+  def add_air_system(model:,
+                     zones:,
+                     sys_abbr:,
+                     sys_vent_type:,
+                     sys_heat_rec_type:,
+                     sys_htg_eqpt_type:,
+                     sys_supp_htg_eqpt_type:,
+                     sys_clg_eqpt_type:,
+                     sys_supp_fan_type:,
+                     sys_ret_fan_type:,
+                     sys_setpoint_mgr_type:)
 
     # create all the needed components and the air loop
     airloop = create_airloop(model, sys_vent_type)
@@ -745,6 +750,9 @@ class ECMS
       htg_eqpt = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
       htg_eqpt.setName('CoilHeatingElectric')
       htg_eqpt.setAvailabilitySchedule(always_off) if zone_htg_eqpt_type == 'ptac_electric_off'
+    when 'fancoil_4pipe'
+      htg_eqpt = OpenStudio::Model::CoilHeatingWater.new(model)
+      htg_eqpt.setName('CoilHeatingWater_FanCoil')
     when 'pthp'
       htg_eqpt = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)
       htg_eqpt.setName('CoilHeatingDXSingleSpeed_PTHP')
@@ -765,6 +773,9 @@ class ECMS
     always_on = model.alwaysOnDiscreteSchedule
     clg_eqpt = nil
     case zone_clg_eqpt_type.downcase
+    when 'fancoil_4pipe'
+      clg_eqpt = OpenStudio::Model::CoilCoolingWater.new(model)
+      clg_eqpt.setName('CoilCoolingWater_FanCoil')
     when 'ptac_electric_off', 'pthp'
       clg_eqpt = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
       clg_eqpt.setName('CoilCoolingDXSingleSpeed_PTHP') if zone_clg_eqpt_type.downcase == 'pthp'
@@ -780,20 +791,22 @@ class ECMS
 
   # =============================================================================================================================
   # create zpne container eqpt
-  def create_zone_container_eqpt(
-    model:,
-    zone_cont_eqpt_type:,
-    zone_htg_eqpt:,
-    zone_supp_htg_eqpt:,
-    zone_clg_eqpt:,
-    zone_fan:,
-    zone_vent_off: true
-  )
+  def create_zone_container_eqpt(model:,
+                                 zone_cont_eqpt_type:,
+                                 zone_htg_eqpt:,
+                                 zone_supp_htg_eqpt:,
+                                 zone_clg_eqpt:,
+                                 zone_fan:,
+                                 zone_vent_off: true)
 
     always_on = model.alwaysOnDiscreteSchedule
     always_off = model.alwaysOffDiscreteSchedule
     zone_eqpt = nil
     case zone_cont_eqpt_type.downcase
+    when 'fancoil_4pipe'
+      zone_eqpt = OpenStudio::Model::ZoneHVACFourPipeFanCoil.new(model, always_on, zone_fan, zone_clg_eqpt, zone_htg_eqpt)
+      zone_eqpt.setName('ZoneHVACFourPipeFanCoil')
+      zone_eqpt.setMaximumOutdoorAirFlowRate(1.0e-6)
     when 'ptac_electric_off'
       zone_eqpt = OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner.new(model, always_on, zone_fan, zone_htg_eqpt, zone_clg_eqpt)
       zone_eqpt.setName('ZoneHVACPackagedTerminalAirConditioner')
@@ -862,7 +875,8 @@ class ECMS
       # for container zonal equipment call method "create_zone_container_equipment"
       this_is_container_comp = false
       if (zone_htg_eqpt_type == 'pthp') || (zone_htg_eqpt_type == 'vrf') ||
-         (zone_htg_eqpt_type.include? 'unitheater') || (zone_htg_eqpt_type.include? 'ptac')
+         (zone_htg_eqpt_type.include? 'unitheater') || (zone_htg_eqpt_type.include? 'ptac') ||
+         (zone_htg_eqpt_type.include? 'fancoil')
         this_is_container_comp = true
         zone_cont_eqpt = create_zone_container_eqpt(model: model,
                                                     zone_cont_eqpt_type: zone_htg_eqpt_type,
@@ -883,6 +897,130 @@ class ECMS
     sys_name_zone_clg_eqpt_type = zone_clg_eqpt_type
     sys_name_zone_clg_eqpt_type = 'ptac' if zone_clg_eqpt_type == 'ptac_electric_off'
     update_sys_name(airloop, zone_htg: sys_name_zone_htg_eqpt_type, zone_clg: sys_name_zone_clg_eqpt_type) if zone_diffuser_type
+  end
+
+  # =============================================================================================================================
+  # add plant loop pump
+  def create_plantloop_pump(model, loop_pump_type)
+
+    pump = nil
+    case loop_pump_type.downcase
+    when "constant_speed"
+      pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+      pump.setName("PumpConstantSpeed")
+    end
+
+    return pump
+  end
+
+  # =============================================================================================================================
+  # add plant loop heating eqpt
+  # created by: kamel.haddad@nrcan-rncan.gc.ca (August 2021)
+  def create_plantloop_htg_eqpt(model, loop_htg_eqpt_type)
+
+    htg_eqpt = nil
+    case loop_htg_eqpt_type.downcase
+    when "heatpump_watertowater_equationfit"
+      htg_eqpt = OpenStudio::Model::HeatPumpWaterToWaterEquationFitHeating.new(model)
+      htg_eqpt.setName("HeatPumpWaterToWaterEquationFitHeating")
+    end
+
+    return htg_eqpt
+  end
+
+  # =============================================================================================================================
+  # add plant loop cooling eqpt
+  def create_plantloop_clg_eqpt(model, loop_clg_eqpt_type)
+
+    clg_eqpt = nil
+    case loop_clg_eqpt_type.downcase
+    when "heatpump_watertowater_equationfit"
+      clg_eqpt = OpenStudio::Model::HeatPumpWaterToWaterEquationFitCooling.new(model)
+      clg_eqpt.setName("HeatPumpWaterToWaterEquationFitCooling")
+    end
+
+    return clg_eqpt
+  end
+
+  # =============================================================================================================================
+  # add plant loop setpoint manager
+  def create_plantloop_spm( model, loop_spm_type, loop_setpoint)
+
+    spm = nil
+    case loop_spm_type.downcase
+    when "scheduled"
+      sch = OpenStudio::Model::ScheduleConstant.new(model)
+      sch.setValue(loop_setpoint)
+      spm = OpenStudio::Model::SetpointManagerScheduled.new(model,sch)
+      spm.setName("SetpointManagerScheduled")
+    when "followgroundtemperature"
+      spm = OpenStudio::Model::SetpointManagerFollowGroundTemperature.new(model)
+      spm.setReferenceGroundTemperatureObjectType("Site:GroundTemperature:Deep")
+    end
+
+    return spm
+  end
+
+  # =============================================================================================================================
+  # add plant loop heat rejection equipment
+  def create_plantloop_heat_rej_eqpt(model, loop_heat_rej_eqpt_type)
+
+    heat_rej_eqpt = nil
+    case loop_heat_rej_eqpt_type.downcase
+    when "vertical_ground_hx"
+      heat_rej_eqpt = OpenStudio::Model::GroundHeatExchangerVertical.new(model)
+      heat_rej_eqpt.setName("GroundHeatExchangerVertical")
+    end
+
+    return heat_rej_eqpt
+  end
+
+  # =============================================================================================================================
+  # add plant loop with all its components
+  def add_plantloop(model:,
+                    loop_htg_eqpt_type:,
+                    loop_clg_eqpt_type:,
+                    loop_heat_rej_eqpt_type:,
+                    loop_pump_type:,
+                    loop_spm_type:,
+                    loop_setpoint:,
+                    loop_temp_diff:)
+
+    # create all the needed components and the plant loop
+    plantloop = OpenStudio::Model::PlantLoop.new(model)
+    spm = create_plantloop_spm(model, loop_spm_type, loop_setpoint)
+    pump = create_plantloop_pump(model, loop_pump_type)
+    htg_eqpt = create_plantloop_htg_eqpt(model, loop_htg_eqpt_type)
+    clg_eqpt = create_plantloop_clg_eqpt(model, loop_clg_eqpt_type)
+    heat_rej_eqpt = create_plantloop_heat_rej_eqpt(model, loop_heat_rej_eqpt_type)
+    if heat_rej_eqpt.nil?
+      if not htg_eqpt.nil?
+        plantloop.sizingPlant.setLoopType('Heating')
+        plantloop.setName("HW PlantLoop")
+        eqpt = htg_eqpt
+      elsif not clg_eqpt.nil?
+        plantloop.sizingPlant.setLoopType('Cooling')
+        plantloop.setName("CHW PlantLoop")
+        eqpt = clg_eqpt
+      end
+    elsif not heat_rej_eqpt.nil?
+      plantloop.sizingPlant.setLoopType('Condenser')
+      plantloop.setName("Condenser PlantLoop")
+      eqpt = heat_rej_eqpt
+    end
+    plantloop.sizingPlant.setDesignLoopExitTemperature(loop_setpoint) if loop_setpoint != 'none'
+    plantloop.sizingPlant.setLoopDesignTemperatureDifference(loop_temp_diff) if loop_temp_diff != 'none'
+    bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+    supply_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+    supply_inlet_node = plantloop.supplyInletNode
+    supply_outlet_node = plantloop.supplyOutletNode
+    pump.addToNode(supply_inlet_node)
+    plantloop.addSupplyBranchForComponent(eqpt)
+    plantloop.addSupplyBranchForComponent(bypass_pipe)
+    supply_outlet_pipe.addToNode(supply_outlet_node)
+    spm.addToNode(supply_outlet_node)
+
+    return plantloop,eqpt
   end
 
   # =============================================================================================================================
@@ -1336,6 +1474,150 @@ class ECMS
   def apply_efficiency_ecm_hs13_ashp_vrf(model)
     # call method for ECM hs08 with ASHP in air system
     apply_efficiency_ecm_hs08_ccashp_vrf(model, air_sys_eqpt_type: 'ashp')
+  end
+
+  # =============================================================================================================================
+  # Define object "SiteGroundTemperatureShallow" and use ground temperatures from weather file at 0.5 m depth
+  def set_undisturbed_ground_surface_temp_objs(model)
+    surface_ground_temp_obj = OpenStudio::Model::SiteGroundTemperatureShallow.new(model)
+    wfile_path = model.getWeatherFile.path.get.to_s
+    statsfile = EnergyPlus::StatFile.new(wfile_path.sub("epw","stat"))
+    surface_ground_temp_obj.setJanuarySurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[0])
+    surface_ground_temp_obj.setFebruarySurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[1])
+    surface_ground_temp_obj.setMarchSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[2])
+    surface_ground_temp_obj.setAprilSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[3])
+    surface_ground_temp_obj.setMaySurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[4])
+    surface_ground_temp_obj.setJuneSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[5])
+    surface_ground_temp_obj.setJulySurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[6])
+    surface_ground_temp_obj.setAugustSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[7])
+    surface_ground_temp_obj.setSeptemberSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[8])
+    surface_ground_temp_obj.setOctoberSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[9])
+    surface_ground_temp_obj.setNovemberSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[10])
+    surface_ground_temp_obj.setDecemberSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[11])
+  end
+
+  # =============================================================================================================================
+  # Define object "SiteGroundTemperatureDeep" and use ground temperatures from weather file at 4.0 m depth
+  def set_undisturbed_ground_deep_temp_objs(model)
+    surface_ground_temp_obj = OpenStudio::Model::SiteGroundTemperatureDeep.new(model)
+    wfile_path = model.getWeatherFile.path.get.to_s
+    statsfile = EnergyPlus::StatFile.new(wfile_path.sub("epw","stat"))
+    surface_ground_temp_obj.setJanuaryDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[0])
+    surface_ground_temp_obj.setFebruaryDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[1])
+    surface_ground_temp_obj.setMarchDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[2])
+    surface_ground_temp_obj.setAprilDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[3])
+    surface_ground_temp_obj.setMayDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[4])
+    surface_ground_temp_obj.setJuneDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[5])
+    surface_ground_temp_obj.setJulyDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[6])
+    surface_ground_temp_obj.setAugustDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[7])
+    surface_ground_temp_obj.setSeptemberDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[8])
+    surface_ground_temp_obj.setOctoberDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[9])
+    surface_ground_temp_obj.setNovemberDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[10])
+    surface_ground_temp_obj.setDecemberDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[11])
+  end
+
+  # =============================================================================================================================
+  # Set ground heat exchanger borehole properties
+  def set_ground_hx_borehole_properties(ground_hx)
+    ground_hx.setBoreHoleRadius(0.055)
+    ground_hx.setPipeThermalConductivity(0.389)
+    ground_hx.setPipeOutDiameter(0.0267)
+    ground_hx.setUTubeDistance(0.0455)
+    ground_hx.setPipeThickness(0.027)
+    ground_hx.setGroutThermalConductivity(1.472)
+    ground_hx.setGroundThermalConductivity(1.5)
+    ground_hx.setGroundThermalHeatCapacity(2343360.0)
+  end
+
+  # =============================================================================================================================
+  # Add equipment for ECM "hs14_cgshp_fancoils"
+  #   -Constant volume DOAS with hydronic htg and clg coils served by central-ground source heat pump
+  #   -Zonal terminal fan coil (4-pipe) connected to central ground-source heat pump
+  def add_ecm_hs14_cgshp_fancoils(model:,
+                                  system_zones_map:,
+                                  system_doas_flags:)
+
+    # Update system doas flags
+    system_doas_flags.keys.each { |sname| system_doas_flags[sname] = true }
+    # use system zones map and generate new air system and zonal equipment
+    systems = []
+    system_zones_map.sort.each do |sys_name, zones|
+      sys_info = air_sys_comps_assumptions(sys_name: sys_name,
+                                           zones: zones,
+                                           system_doas_flags: system_doas_flags)
+      airloop, return_fan = add_air_system(model: model,
+                                           zones: zones,
+                                           sys_abbr: sys_info['sys_abbr'],
+                                           sys_vent_type: sys_info['sys_vent_type'],
+                                           sys_heat_rec_type: sys_info['sys_heat_rec_type'],
+                                           sys_htg_eqpt_type: 'coil_hw',
+                                           sys_supp_htg_eqpt_type: 'none',
+                                           sys_clg_eqpt_type: 'coil_chw',
+                                           sys_supp_fan_type: sys_info['sys_supp_fan_type'],
+                                           sys_ret_fan_type: sys_info['sys_ret_fan_type'],
+                                           sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'])
+
+      # add zone equipment and diffuser
+      zone_htg_eqpt_type = 'fancoil_4pipe'
+      zone_clg_eqpt_type = 'fancoil_4pipe'
+      zone_supp_htg_eqpt_type = 'none'
+      zone_fan_type = 'on_off'
+      add_zone_eqpt(model: model,
+                    airloop: airloop,
+                    zones: zones,
+                    outdoor_unit: nil,
+                    zone_diffuser_type: sys_info['zone_diffuser_type'],
+                    zone_htg_eqpt_type: zone_htg_eqpt_type,
+                    zone_supp_htg_eqpt_type: zone_supp_htg_eqpt_type,
+                    zone_clg_eqpt_type: zone_clg_eqpt_type,
+                    zone_fan_type: zone_fan_type)
+
+      return_fan.addToNode(airloop.returnAirNode.get) if return_fan
+      systems << airloop
+    end
+
+    # add hot-water loop
+    hw_loop,hw_loop_htg_eqpt = add_plantloop(model: model,
+                                             loop_htg_eqpt_type: 'HeatPump_WaterToWater_EquationFit',
+                                             loop_clg_eqpt_type: 'none',
+                                             loop_heat_rej_eqpt_type: 'none',
+                                             loop_pump_type: 'constant_speed',
+                                             loop_spm_type: 'Scheduled',
+                                             loop_setpoint: 50.0,
+                                             loop_temp_diff: 10.0)
+    model.getCoilHeatingWaters.each {|coil| hw_loop.addDemandBranchForComponent(coil)}
+
+    # add chilled-water loop
+    chw_loop,chw_loop_clg_eqpt = add_plantloop(model: model,
+                                               loop_htg_eqpt_type: 'none',
+                                               loop_clg_eqpt_type: 'HeatPump_WaterToWater_EquationFit',
+                                               loop_heat_rej_eqpt_type: 'none',
+                                               loop_pump_type: 'constant_speed',
+                                               loop_spm_type: 'Scheduled',
+                                               loop_setpoint: 7.0,
+                                               loop_temp_diff: 6.0)
+    model.getCoilCoolingWaters.each {|coil| chw_loop.addDemandBranchForComponent(coil)}
+
+    # add ground HX loop
+    heat_rej_loop,heat_rej_loop_eqpt = add_plantloop(model: model,
+                                                     loop_htg_eqpt_type: 'none',
+                                                     loop_clg_eqpt_type: 'none',
+                                                     loop_heat_rej_eqpt_type: 'vertical_ground_hx',
+                                                     loop_pump_type: 'constant_speed',
+                                                     loop_spm_type: 'FollowGroundTemperature',
+                                                     loop_setpoint: 'none',
+                                                     loop_temp_diff: 'none')
+    heat_rej_loop.addDemandBranchForComponent(hw_loop_htg_eqpt)
+    heat_rej_loop.addDemandBranchForComponent(chw_loop_clg_eqpt)
+    set_undisturbed_ground_surface_temp_objs(model)
+    set_undisturbed_ground_deep_temp_objs(model)
+    #set_ground_hx_borehole_properties(heat_rej_loop_eqpt)
+
+    return systems
+  end
+
+  def apply_efficiency_ecm_hs14_cgshp_fancoils(model)
+
   end
 
   # =============================================================================================================================
@@ -2789,6 +3071,7 @@ class ECMS
     model.getCoolingTowerSingleSpeeds.sort.each(&:autosizeFanPoweratDesignAirFlowRate)
   end
 
+# ========================================================================================================================
   def find_chiller_set(chiller_type:, ref_capacity_w:)
     if chiller_type.is_a?(String)
       ##### Find the chiller that has the required capacity
