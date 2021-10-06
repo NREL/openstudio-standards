@@ -162,7 +162,8 @@ class ASHRAE9012019 < ASHRAE901
           sensor_1_window = sorted_skylights[0]
         else
           # Sensor 1 controls toplighted area
-          sensor_1_frac = areas['toplighted_area'] / space_area_m2
+          num_sensors = 2
+          sensor_1_frac = areas['toplighted_area'] / space_area_m2 / num_sensors
           sensor_1_window = sorted_skylights[0]
           sensor_2_frac = sensor_1_frac
           sensor_2_window = sensor_1_window
@@ -180,12 +181,29 @@ class ASHRAE9012019 < ASHRAE901
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end
 
-  # Determine the base infiltration rate at 75 PA.
+  # Determine the base infiltration rate at 75 Pa.
   #
   # @return [Double] the baseline infiltration rate, in cfm/ft^2
   # defaults to no infiltration.
   def space_infiltration_rate_75_pa(space)
     basic_infil_rate_cfm_per_ft2 = 1.0
     return basic_infil_rate_cfm_per_ft2
+  end
+
+  # Provide the type of daylighting control type
+  #
+  # @param [OpenStudio::Model::Space] OpenStudio Space object
+  # return [String] daylighting control type
+  def space_daylighting_control_type(space)
+    return 'ContinuousOff'
+  end
+
+  # Provide the minimum input power fraction for continuous
+  # dimming daylighting control
+  #
+  # @param [OpenStudio::Model::Space] OpenStudio Space object
+  # return [Float] daylighting minimum input power fraction
+  def space_daylighting_minimum_input_power_fraction(space)
+    return 0.2
   end
 end

@@ -105,7 +105,7 @@ class NECB2011
     end
 
     # do a sizing run.
-    if model_run_sizing_run(model, "#{sizing_run_dir}/autozone") == false
+    if model_run_sizing_run(model, "#{sizing_run_dir}/autozone_systems") == false
       raise('autorun sizing run failed!')
     end
 
