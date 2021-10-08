@@ -155,7 +155,8 @@ class BTAPDatapoint
                                        chiller_type: @options[:chiller_type],
                                        output_variables: @options[:output_variables],
                                        output_meters: @options[:output_meters],
-                                       airloop_economizer_type: @options[:airloop_economizer_type])
+                                       airloop_economizer_type: @options[:airloop_economizer_type],
+                                       shw_scale: @options[:shw_scale])
       end
 
       # Save model to to disk.
