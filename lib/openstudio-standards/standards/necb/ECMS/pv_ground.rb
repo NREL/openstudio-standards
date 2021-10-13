@@ -69,7 +69,9 @@ class ECMS
     dc_system_capacity = pv_number_panels * pv_watt
     generator = OpenStudio::Model::GeneratorPVWatts.new(model, dc_system_capacity)
     generator.setModuleType(pv_ground_module_type)
-    generator.setArrayType('OneAxis') # Note: "tilt and azimuth are fixed" for this array type (see E+ I/O Reference). This array type has been chosen as per Mike Lubun's costing spec.
+    # generator.setArrayType('OneAxis') # Note: "tilt and azimuth are fixed" for this array type (see E+ I/O Reference). This array type has been chosen as per Mike Lubun's costing spec.
+    generator.setArrayType('FixedOpenRack') # Note: The 'FixedOpenRack' array type has been used instead of 'OneAxis' since the 'OneAxis' array type did not allow to have a non-zero tilt angle in OpenStudio 3.2.1.
+    # (As per E+ I/O Reference: 'FixedOpenRack' is used for ground mounted arrays, assumes air flows freely around the array.)
     generator.setTiltAngle(pv_ground_tilt_angle)
     generator.setAzimuthAngle(pv_ground_azimuth_angle)
 
@@ -78,11 +80,11 @@ class ECMS
     inverter.setDCToACSizeRatio(1.1) # Note: This is EnergyPlus' default value; This default value has been chosen for ground-mounted PV, assuming no storage as per Mike Lubun's costing spec.
     inverter.setInverterEfficiency(0.96) # Note: This is EnergyPlus' default value; This default value has been chosen as per Mike Lubun's costing spec.
 
-    ##### Get distribution systems and set relevant parameters
-    model.getElectricLoadCenterDistributions.sort.each do |elc_distribution|
-      elc_distribution.setInverter(inverter)
-      elc_distribution.setGeneratorOperationSchemeType('Baseload') # E+ I/O Reference: "The Baseload scheme requests all generators scheduled ON (available) to operate, even if the amount of electric power generated exceeds the total facility electric power demand." This scheme type has been chosen as per Mike Lubun's costing spec.
-    end
+    ##### Add distribution systems, set relevant parameters, and add created generator to it
+    elc_distribution = OpenStudio::Model::ElectricLoadCenterDistribution.new(model)
+    elc_distribution.setInverter(inverter)
+    elc_distribution.setGeneratorOperationSchemeType('Baseload') # E+ I/O Reference: "The Baseload scheme requests all generators scheduled ON (available) to operate, even if the amount of electric power generated exceeds the total facility electric power demand." This scheme type has been chosen as per Mike Lubun's costing spec.
+    elc_distribution.addGenerator(generator)
   end
 
   # Method for calculating footprint of the building model
