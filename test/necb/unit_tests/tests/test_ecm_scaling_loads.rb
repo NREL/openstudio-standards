@@ -63,7 +63,7 @@ class NECB_scaling_loads_Tests < Minitest::Test
 
               # make an empty model
               model = OpenStudio::Model::Model.new
-              #set up basic model.
+              #set up basic model
               standard = Standard.build(template)
 
               #loads osm geometry and spactypes from library.
