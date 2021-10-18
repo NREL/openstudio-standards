@@ -991,7 +991,8 @@ class ECMS
   #   -Electric baseboards
   def add_ecm_hs09_ccashp_baseboard(model:,
                                     system_zones_map:,    # hash of ailoop names as keys and array of zones as values
-                                    system_doas_flags:)   # hash of system names as keys and flag for DOAS as values
+                                    system_doas_flags:,   # hash of system names as keys and flag for DOAS as values
+                                    system_zones_map_option:)
 
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
@@ -1123,10 +1124,20 @@ class ECMS
   #   -Packaged-Terminal air-source heat pumps with electric backup
   def add_ecm_hs11_ashp_pthp(model:,
                              system_zones_map:,
-                             system_doas_flags:)
+                             system_doas_flags:,
+                             system_zones_map_option:)
 
+    # Update system zones map if needed
+    if system_zones_map_option != 'NECB_Default'
+      system_zones_map = update_system_zones_map(model,system_zones_map,system_zones_map_option,'sys_1')
+    else
+      updated_system_zones_map = {}
+      system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..]}"] = zones}
+      system_zones_map = updated_system_zones_map
+    end
     # Update system doas flags
-    system_doas_flags.keys.each { |sname| system_doas_flags[sname] = true }
+    system_doas_flags = {}
+    system_zones_map.keys.each { |sname| system_doas_flags[sname] = true }
     # use system zones map and generate new air system and zonal equipment
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
