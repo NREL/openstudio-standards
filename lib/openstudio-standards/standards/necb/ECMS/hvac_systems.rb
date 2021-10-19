@@ -1264,7 +1264,8 @@ class ECMS
   #   -Electric baseboards
   def add_ecm_hs12_ashp_baseboard(model:,
                                   system_zones_map:,
-                                  system_doas_flags:)
+                                  system_doas_flags:,
+                                  system_zones_map_option:)
 
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
@@ -1394,11 +1395,13 @@ class ECMS
   #   -Zonal VRF terminal units for heating and cooling with electric baseboards
   def add_ecm_hs13_ashp_vrf(model:,
                             system_zones_map:,
-                            system_doas_flags:)
+                            system_doas_flags:,
+                            system_zones_map_option:)
     # call method for ECM hs08 with ASHP in the air system
     add_ecm_hs08_ccashp_vrf(model: model,
                             system_zones_map: system_zones_map,
                             system_doas_flags: system_doas_flags,
+                            system_zones_map_option: system_zones_map_option,
                             air_sys_eqpt_type: 'ashp')
   end
 
