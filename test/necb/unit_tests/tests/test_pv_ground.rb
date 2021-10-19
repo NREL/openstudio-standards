@@ -113,7 +113,8 @@ class NECB_PVground_Tests < Minitest::Test
                                              pv_ground_tilt_angle: pv_ground_tilt_angle,
                                              pv_ground_azimuth_angle: pv_ground_azimuth_angle,
                                              pv_ground_module_description: pv_ground_module_description,
-                                             chiller_type: 'NECB_Default'
+                                             chiller_type: 'NECB_Default',
+                                             shw_scale: nil
               )
 
               # # comment out for regular tests
