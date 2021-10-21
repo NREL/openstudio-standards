@@ -171,7 +171,7 @@ class NECB2011 < Standard
     end
   end
 
-  # This method is a wrapper to create the 16 archetypes easily. # 37 args
+  # This method is a wrapper to create the 16 archetypes easily. # 55 args
   def model_create_prototype_model(template:,
                                    building_type:,
                                    epw_file:,
@@ -183,6 +183,7 @@ class NECB2011 < Standard
                                    lights_scale: 1.0,
                                    daylighting_type: 'NECB_Default',
                                    ecm_system_name: 'NECB_Default',
+                                   system_zones_map_option: 'NECB_Default',
                                    erv_package: 'NECB_Default',
                                    boiler_eff: nil,
                                    unitary_cop: nil,
@@ -237,6 +238,7 @@ class NECB2011 < Standard
                                 lights_scale: lights_scale,
                                 daylighting_type: daylighting_type, # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
                                 ecm_system_name: ecm_system_name,
+                                system_zones_map_option: system_zones_map_option, # (1) 'NECB_Default' (2) 'one_sys_per_floor' (3) 'one_sys_per_bldg'
                                 erv_package: erv_package,
                                 boiler_eff: boiler_eff,
                                 unitary_cop: unitary_cop,
@@ -304,6 +306,7 @@ class NECB2011 < Standard
                            lights_scale: 'NECB_Default',
                            daylighting_type: 'NECB_Default',
                            ecm_system_name: 'NECB_Default',
+                           system_zones_map_option: 'NECB_Default',
                            erv_package: 'NECB_Default',
                            boiler_eff: nil,
                            furnace_eff: nil,
@@ -387,6 +390,7 @@ class NECB2011 < Standard
                                    sizing_run_dir: sizing_run_dir,
                                    dcv_type: dcv_type,
                                    ecm_system_name: ecm_system_name,
+                                   system_zones_map_option: system_zones_map_option,
                                    erv_package: erv_package,
                                    boiler_eff: boiler_eff,
                                    unitary_cop: unitary_cop,
@@ -457,6 +461,7 @@ class NECB2011 < Standard
                                      sizing_run_dir:,
                                      dcv_type: 'NECB_Default',
                                      ecm_system_name: 'NECB_Default',
+                                     system_zones_map_option: 'NECB_Default',
                                      erv_package: 'NECB_Default',
                                      boiler_eff: nil,
                                      furnace_eff: nil,
@@ -485,7 +490,8 @@ class NECB2011 < Standard
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir, shw_scale: shw_scale)
 
     # Apply new ECM system. Overwrite standard as required.
-    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self, primary_heating_fuel: primary_heating_fuel)
+    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self, primary_heating_fuel: primary_heating_fuel, 
+                         system_zones_map_option: system_zones_map_option)
 
     # Apply ERV equipment as required.
     ecm.apply_erv_ecm(model: model, erv_package: erv_package)
