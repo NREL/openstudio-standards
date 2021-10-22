@@ -480,7 +480,7 @@ class ECMS
       system_zones_map = update_system_zones_map(model,system_zones_map,system_zones_map_option,'sys_1')
     else
       updated_system_zones_map = {}
-      system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..]}"] = zones}
+      system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..]}"] = zones}  # doas unit is an NECB sys_1 
       system_zones_map = updated_system_zones_map
     end
     # Add outdoor VRF unit
