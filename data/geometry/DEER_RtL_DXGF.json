@@ -98,5 +98,16 @@
     "space_names": [
       "EL1 West Perim Spc (G.W6)"
     ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "EL1 West Perim Spc (G.W6) Exhaust Fan",
+    "flow_rate": 2.50926908,
+    "operation_schedule": "D_RtL_All_Fan_Yr",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": "DEER Retail Large Kitchen Exhaust Fan Balance Exhaust Fraction Schedule",
+    "space_names": [
+      "EL1 West Perim Spc (G.W6)"
+    ]
   }
 ]

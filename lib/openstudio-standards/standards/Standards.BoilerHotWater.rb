@@ -1,9 +1,9 @@
-
 class Standard
   # @!group BoilerHotWater
 
   # find search criteria
   #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
   # @return [Hash] used for standards_lookup_table(model)
   def boiler_hot_water_find_search_criteria(boiler_hot_water)
     # Define the criteria to find the boiler properties
@@ -18,7 +18,7 @@ class Standard
       fuel_type = 'Gas'
     when 'Electricity'
       fuel_type = 'Electric'
-    when 'FuelOil#1', 'FuelOil#2'
+    when 'FuelOilNo1', 'FuelOilNo2'
       fuel_type = 'Oil'
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, a fuel type of #{fuelType} is not yet supported.  Assuming 'Gas.'")
@@ -36,6 +36,7 @@ class Standard
 
   # Find capacity in W
   #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
   # @return [Double] capacity in W
   def boiler_hot_water_find_capacity(boiler_hot_water)
     capacity_w = nil
@@ -54,6 +55,7 @@ class Standard
 
   # Finds lookup object in standards and return minimum thermal efficiency
   #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
   # @return [Double] minimum thermal efficiency
   def boiler_hot_water_standard_minimum_thermal_efficiency(boiler_hot_water, rename = false)
     # Get the boiler properties
@@ -66,9 +68,7 @@ class Standard
     thermal_eff = nil
 
     # Get the boiler properties
-    blr_props = standards_lookup_table_first(table_name: 'boilers',
-                                             search_criteria: search_criteria,
-                                             capacity: capacity_btu_per_hr)
+    blr_props = model_find_object(standards_data['boilers'], search_criteria, capacity_btu_per_hr)
     unless blr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties, cannot apply efficiency standard.")
       successfully_set_all_properties = false
@@ -111,8 +111,8 @@ class Standard
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] the object to modify
-  # @return [Bool] true if successful, false if not
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
+  # @return [Bool] returns true if successful, false if not
   def boiler_hot_water_apply_efficiency_and_curves(boiler_hot_water)
     successfully_set_all_properties = false
 
@@ -130,11 +130,9 @@ class Standard
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Get the boiler properties
-    blr_props = standards_lookup_table_first(table_name: 'boilers',
-                                             search_criteria: search_criteria,
-                                             capacity: capacity_btu_per_hr)
+    blr_props = model_find_object(standards_data['boilers'], search_criteria, capacity_btu_per_hr)
     unless blr_props
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties with search criteria #{search_criteria}, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end

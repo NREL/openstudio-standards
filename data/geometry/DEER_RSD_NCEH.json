@@ -42,5 +42,27 @@
     "space_names": [
       "EL1 North Perim Spc (G.N4)"
     ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "EL1 WNW Perim Spc (G.WNW3) Exhaust Fan",
+    "flow_rate": 1.891211419,
+    "operation_schedule": "D_RSD_All_Fan_Yr",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": "DEER Sit Down Restaurant Kitchen Exhaust Fan Balance Exhaust Fraction Schedule",
+    "space_names": [
+      "EL1 WNW Perim Spc (G.WNW3)"
+    ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "EL1 North Perim Spc (G.N4) Exhaust Fan",
+    "flow_rate": 0.094483879,
+    "operation_schedule": "D_RSD_All_Fan_Yr",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
+    "space_names": [
+      "EL1 North Perim Spc (G.N4)"
+    ]
   }
 ]

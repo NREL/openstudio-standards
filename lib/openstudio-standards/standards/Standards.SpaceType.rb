@@ -1,12 +1,11 @@
-
 class Standard
   # @!group SpaceType
 
   # Returns standards data for selected space type and template
   #
+  # @param space_type [OpenStudio::Model::SpaceType] space type object
   # @return [hash] hash of internal loads for different load types
   def space_type_get_standards_data(space_type)
-
     standards_building_type = if space_type.standardsBuildingType.is_initialized
                                 space_type.standardsBuildingType.get
                               end
@@ -22,8 +21,7 @@ class Standard
     }
 
     # lookup space type properties
-    space_type_properties = standards_lookup_table_first(table_name: 'space_types',
-                                                         search_criteria: search_criteria)
+    space_type_properties = model_find_object(standards_data['space_types'], search_criteria)
 
     if space_type_properties.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "Space type properties lookup failed: #{search_criteria}.")
@@ -33,10 +31,10 @@ class Standard
     return space_type_properties
   end
 
-  # Sets the color for the space types as shown
-  # in the SketchUp plugin using render by space type.
+  # Sets the color for the space types as shown in the SketchUp plugin using render by space type.
   #
-  # @return [Bool] returns true if successful, false if not.
+  # @param space_type [OpenStudio::Model::SpaceType] space type object
+  # @return [Bool] returns true if successful, false if not
   def space_type_apply_rendering_color(space_type)
     # Get the standards data
     space_type_properties = space_type_get_standards_data(space_type)
@@ -68,11 +66,12 @@ class Standard
   # to have the specified values. This method does not alter any
   # loads directly assigned to spaces.  This method skips plenums.
   #
+  # @param space_type [OpenStudio::Model::SpaceType] space type object
   # @param set_people [Bool] if true, set the people density.
-  # Also, assign reasonable clothing, air velocity, and work efficiency inputs
-  # to allow reasonable thermal comfort metrics to be calculated.
+  #   Also, assign reasonable clothing, air velocity, and work efficiency inputs
+  #   to allow reasonable thermal comfort metrics to be calculated.
   # @param set_lights [Bool] if true, set the lighting density, lighting fraction
-  # to return air, fraction radiant, and fraction visible.
+  #   to return air, fraction radiant, and fraction visible.
   # @param set_electric_equipment [Bool] if true, set the electric equipment density
   # @param set_gas_equipment [Bool] if true, set the gas equipment density
   # @param set_ventilation [Bool] if true, set the ventilation rates (per-person and per-area)
@@ -85,6 +84,7 @@ class Standard
     if space_type.name.get.to_s.downcase.include?('plenum')
       return false
     end
+
     if space_type.standardsSpaceType.is_initialized
       if space_type.standardsSpaceType.get.downcase.include?('plenum')
         return false
@@ -95,7 +95,7 @@ class Standard
     space_type_properties = space_type_get_standards_data(space_type)
 
     # Need to add a check, or it'll crash on space_type_properties['occupancy_per_area'].to_f below
-    if space_type_properties.nil?
+    if space_type_properties.nil? || space_type_properties.empty?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} was not found in the standards data.")
       return false
     end
@@ -120,6 +120,7 @@ class Standard
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -184,10 +185,15 @@ class Standard
     lights_have_info = false
     lighting_per_area = space_type_properties['lighting_per_area'].to_f
     lighting_per_person = space_type_properties['lighting_per_person'].to_f
-    lights_frac_to_return_air = space_type_properties['lighting_fraction_to_return_air'].to_f
-    lights_frac_radiant = space_type_properties['lighting_fraction_radiant'].to_f
-    lights_frac_visible = space_type_properties['lighting_fraction_visible'].to_f
+    lights_frac_to_return_air = space_type_properties['lighting_fraction_to_return_air']
+    lights_frac_radiant = space_type_properties['lighting_fraction_radiant']
+    lights_frac_visible = space_type_properties['lighting_fraction_visible']
     lights_frac_replaceable = space_type_properties['lighting_fraction_replaceable'].to_f
+    lights_frac_linear_fluorescent = space_type_properties['lpd_fraction_linear_fluorescent']
+    lights_frac_compact_fluorescent = space_type_properties['lpd_fraction_compact_fluorescent']
+    lights_frac_high_bay = space_type_properties['lpd_fraction_high_bay']
+    lights_frac_specialty_lighting = space_type_properties['lpd_fraction_specialty_lighting']
+    lights_frac_exit_lighting = space_type_properties['lpd_fraction_exit_lighting']
     lights_have_info = true unless lighting_per_area.zero?
     lights_have_info = true unless lighting_per_person.zero?
 
@@ -201,11 +207,13 @@ class Standard
         instance = OpenStudio::Model::Lights.new(definition)
         instance.setName("#{space_type.name} Lights")
         instance.setSpaceType(space_type)
+        instance.setFractionReplaceable(lights_frac_replaceable)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} had no lights, one has been created.")
         instances << instance
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -213,6 +221,7 @@ class Standard
 
       # Modify the definition of the instance
       space_type.lights.sort.each do |inst|
+        inst.setFractionReplaceable(lights_frac_replaceable)
         definition = inst.lightsDefinition
         unless lighting_per_area.zero?
           occ_sens_lpd_factor = 1.0
@@ -223,18 +232,15 @@ class Standard
           definition.setWattsperPerson(OpenStudio.convert(lighting_per_person.to_f, 'W/person', 'W/person').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set lighting to #{lighting_per_person} W/person.")
         end
-        unless lights_frac_to_return_air.zero?
-          definition.setReturnAirFraction(lights_frac_to_return_air)
-        end
-        unless lights_frac_radiant.zero?
-          definition.setFractionRadiant(lights_frac_radiant)
-        end
-        unless lights_frac_visible.zero?
-          definition.setFractionVisible(lights_frac_visible)
-        end
-        # unless lights_frac_replaceable.zero?
-        #  definition.setFractionReplaceable(lights_frac_replaceable)
-        # end
+        definition.setReturnAirFraction(lights_frac_to_return_air.to_f) if lights_frac_to_return_air
+        definition.setFractionRadiant(lights_frac_radiant.to_f) if lights_frac_radiant
+        definition.setFractionVisible(lights_frac_visible.to_f) if lights_frac_visible
+        # definition.setFractionReplaceable(lights_frac_replaceable) if lights_frac_replaceable
+        definition.additionalProperties.setFeature('lpd_fraction_linear_fluorescent', lights_frac_linear_fluorescent.to_f) if lights_frac_linear_fluorescent
+        definition.additionalProperties.setFeature('lpd_fraction_compact_fluorescent', lights_frac_compact_fluorescent.to_f) if lights_frac_compact_fluorescent
+        definition.additionalProperties.setFeature('lpd_fraction_high_bay', lights_frac_high_bay.to_f) if lights_frac_high_bay
+        definition.additionalProperties.setFeature('lpd_fraction_specialty_lighting', lights_frac_specialty_lighting.to_f) if lights_frac_specialty_lighting
+        definition.additionalProperties.setFeature('lpd_fraction_exit_lighting', lights_frac_exit_lighting.to_f) if lights_frac_exit_lighting
       end
 
       # If additional lights are specified, add those too
@@ -248,6 +254,13 @@ class Standard
         additional_lights_def.setFractionRadiant(lights_frac_radiant)
         additional_lights_def.setFractionVisible(lights_frac_visible)
 
+        # By default, all additional lighting is specialty lighting
+        additional_lights_def.additionalProperties.setFeature('lpd_fraction_linear_fluorescent', 0.0)
+        additional_lights_def.additionalProperties.setFeature('lpd_fraction_compact_fluorescent', 0.0)
+        additional_lights_def.additionalProperties.setFeature('lpd_fraction_high_bay', 0.0)
+        additional_lights_def.additionalProperties.setFeature('lpd_fraction_specialty_lighting', 1.0)
+        additional_lights_def.additionalProperties.setFeature('lpd_fraction_exit_lighting', 0.0)
+
         # Create the lighting instance and hook it up to the space type
         additional_lights = OpenStudio::Model::Lights.new(additional_lights_def)
         additional_lights.setName("#{space_type.name} Additional Lights")
@@ -259,9 +272,9 @@ class Standard
     # Electric Equipment
     elec_equip_have_info = false
     elec_equip_per_area = space_type_properties['electric_equipment_per_area'].to_f
-    elec_equip_frac_latent = space_type_properties['electric_equipment_fraction_latent'].to_f
-    elec_equip_frac_radiant = space_type_properties['electric_equipment_fraction_radiant'].to_f
-    elec_equip_frac_lost = space_type_properties['electric_equipment_fraction_lost'].to_f
+    elec_equip_frac_latent = space_type_properties['electric_equipment_fraction_latent']
+    elec_equip_frac_radiant = space_type_properties['electric_equipment_fraction_radiant']
+    elec_equip_frac_lost = space_type_properties['electric_equipment_fraction_lost']
     elec_equip_have_info = true unless elec_equip_per_area.zero?
 
     if set_electric_equipment && elec_equip_have_info
@@ -279,6 +292,7 @@ class Standard
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -291,15 +305,9 @@ class Standard
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(elec_equip_per_area.to_f, 'W/ft^2', 'W/m^2').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set electric EPD to #{elec_equip_per_area} W/ft^2.")
         end
-        unless elec_equip_frac_latent.zero?
-          definition.setFractionLatent(elec_equip_frac_latent)
-        end
-        unless elec_equip_frac_radiant.zero?
-          definition.setFractionRadiant(elec_equip_frac_radiant)
-        end
-        unless elec_equip_frac_lost.zero?
-          definition.setFractionLost(elec_equip_frac_lost)
-        end
+        definition.setFractionLatent(elec_equip_frac_latent.to_f) if elec_equip_frac_latent
+        definition.setFractionRadiant(elec_equip_frac_radiant.to_f) if elec_equip_frac_radiant
+        definition.setFractionLost(elec_equip_frac_lost.to_f) if elec_equip_frac_lost
       end
 
     end
@@ -307,9 +315,9 @@ class Standard
     # Gas Equipment
     gas_equip_have_info = false
     gas_equip_per_area = space_type_properties['gas_equipment_per_area'].to_f
-    gas_equip_frac_latent = space_type_properties['gas_equipment_fraction_latent'].to_f
-    gas_equip_frac_radiant = space_type_properties['gas_equipment_fraction_radiant'].to_f
-    gas_equip_frac_lost = space_type_properties['gas_equipment_fraction_lost'].to_f
+    gas_equip_frac_latent = space_type_properties['gas_equipment_fraction_latent']
+    gas_equip_frac_radiant = space_type_properties['gas_equipment_fraction_radiant']
+    gas_equip_frac_lost = space_type_properties['gas_equipment_fraction_lost']
     gas_equip_have_info = true unless gas_equip_per_area.zero?
 
     if set_gas_equipment && gas_equip_have_info
@@ -327,6 +335,7 @@ class Standard
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -339,15 +348,9 @@ class Standard
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(gas_equip_per_area.to_f, 'Btu/hr*ft^2', 'W/m^2').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set gas EPD to #{gas_equip_per_area} Btu/hr*ft^2.")
         end
-        unless gas_equip_frac_latent.zero?
-          definition.setFractionLatent(gas_equip_frac_latent)
-        end
-        unless gas_equip_frac_radiant.zero?
-          definition.setFractionRadiant(gas_equip_frac_radiant)
-        end
-        unless gas_equip_frac_lost.zero?
-          definition.setFractionLost(gas_equip_frac_lost)
-        end
+        definition.setFractionLatent(gas_equip_frac_latent.to_f) if gas_equip_frac_latent
+        definition.setFractionRadiant(gas_equip_frac_radiant.to_f) if gas_equip_frac_radiant
+        definition.setFractionLost(gas_equip_frac_lost.to_f) if gas_equip_frac_lost
       end
 
     end
@@ -423,6 +426,7 @@ class Standard
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -431,7 +435,7 @@ class Standard
       # Modify each instance
       space_type.spaceInfiltrationDesignFlowRates.sort.each do |inst|
         unless infiltration_per_area_ext.zero?
-          inst.setFlowperExteriorSurfaceArea(OpenStudio.convert(infiltration_per_area_ext.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
+          inst.setFlowperExteriorSurfaceArea(OpenStudio.convert(infiltration_per_area_ext.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get.round(13))
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{ventilation_ach} per ft^2 exterior surface area.")
         end
         unless infiltration_per_area_ext_wall.zero?
@@ -454,14 +458,15 @@ class Standard
   # This method does not alter any schedules of any internal loads that
   # does not inherit from the default schedule set.
   #
+  # @param space_type [OpenStudio::Model::SpaceType] space type object
   # @param set_people [Bool] if true, set the occupancy and activity schedules
   # @param set_lights [Bool] if true, set the lighting schedule
   # @param set_electric_equipment [Bool] if true, set the electric schedule schedule
   # @param set_gas_equipment [Bool] if true, set the gas equipment density
   # @param set_infiltration [Bool] if true, set the infiltration schedule
   # @param make_thermostat [Bool] if true, makes a thermostat for this space type from the
-  # schedules listed for the space type.  This thermostat is not hooked to any zone by this method,
-  # but may be found and used later.
+  #   schedules listed for the space type.  This thermostat is not hooked to any zone by this method,
+  #   but may be found and used later.
   # @return [Bool] returns true if successful, false if not
   def space_type_apply_internal_load_schedules(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, make_thermostat)
     # Get the standards data
@@ -497,48 +502,39 @@ class Standard
     # Lights
     if set_lights
 
-      apply_lighting_schedule(space_type, space_type_properties,default_sch_set)
+      apply_lighting_schedule(space_type, space_type_properties, default_sch_set)
 
     end
 
-
-
     # Electric Equipment
     if set_electric_equipment
-
       elec_equip_sch = space_type_properties['electric_equipment_schedule']
       unless elec_equip_sch.nil?
         default_sch_set.setElectricEquipmentSchedule(model_add_schedule(space_type.model, elec_equip_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set electric equipment schedule to #{elec_equip_sch}.")
       end
-
     end
 
     # Gas Equipment
     if set_gas_equipment
-
       gas_equip_sch = space_type_properties['gas_equipment_schedule']
       unless gas_equip_sch.nil?
         default_sch_set.setGasEquipmentSchedule(model_add_schedule(space_type.model, gas_equip_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set gas equipment schedule to #{gas_equip_sch}.")
       end
-
     end
 
     # Infiltration
     if set_infiltration
-
       infiltration_sch = space_type_properties['infiltration_schedule']
       unless infiltration_sch.nil?
         default_sch_set.setInfiltrationSchedule(model_add_schedule(space_type.model, infiltration_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration schedule to #{infiltration_sch}.")
       end
-
     end
 
     # Thermostat
     if make_thermostat
-
       thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(space_type.model)
       thermostat.setName("#{space_type.name} Thermostat")
 
@@ -553,24 +549,29 @@ class Standard
         thermostat.setCoolingSetpointTemperatureSchedule(model_add_schedule(space_type.model, cooling_setpoint_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set cooling setpoint schedule to #{cooling_setpoint_sch}.")
       end
-
     end
 
     return true
   end
 
-  def apply_lighting_schedule(space_type, space_type_properties,default_sch_set)
-
+  # applies a lighting schedule to a space type
+  #
+  # @param space_type [OpenStudio::Model::SpaceType] space type object
+  # @param space_type_properties [Hash] hash of space type properties
+  # @param default_sch_set [OpenStudio::Model::DefaultScheduleSet] default schedule set
+  # @return [Bool] returns true if successful, false if not
+  def apply_lighting_schedule(space_type, space_type_properties, default_sch_set)
     lighting_sch = space_type_properties['lighting_schedule']
-    unless lighting_sch.nil?
-      default_sch_set.setLightingSchedule(model_add_schedule(space_type.model, lighting_sch))
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set lighting schedule to #{lighting_sch}.")
-    end
+    return false if lighting_sch.nil?
 
+    default_sch_set.setLightingSchedule(model_add_schedule(space_type.model, lighting_sch))
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set lighting schedule to #{lighting_sch}.")
+    return true
   end
 
   # Returns standards data for selected construction
   #
+  # @param space_type [OpenStudio::Model::SpaceType] space type object
   # @param intended_surface_type [string] the type of surface
   # @param standards_construction_type [string] the type of construction
   # @return [hash] hash of construction properties
@@ -596,7 +597,7 @@ class Standard
     }
 
     # switch to use this but update test in standards and measures to load this outside of the method
-    construction_properties = standards_lookup_table_first(table_name: 'construction_properties', search_criteria: search_criteria)
+    construction_properties = model_find_object(standards_data['construction_properties'], search_criteria)
 
     return construction_properties
   end

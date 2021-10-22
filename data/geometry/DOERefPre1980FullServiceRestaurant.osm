@@ -370,7 +370,7 @@ OS:ShadowCalculation,
 
 OS:Building,
   {da272729-2073-4482-8418-900630e6237a}, !- Handle
-  DOERefPre1980FullServiceRestaurant,     !- Name
+  DOE Reference FullServiceRestaurant,    !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

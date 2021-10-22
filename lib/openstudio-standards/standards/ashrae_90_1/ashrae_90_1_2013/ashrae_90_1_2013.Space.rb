@@ -70,18 +70,43 @@ class ASHRAE9012013 < ASHRAE901
       req_top_ctrl = false
     end
 
+    # Exceptions
+    if space.spaceType.is_initialized
+      case space.spaceType.get.standardsSpaceType.to_s
+      # Retail spaces exception (c) to Section 9.4.1.4
+      # req_sec_ctrl set to true to create a second reference point
+      when 'Core_Retail'
+        req_pri_ctrl = false
+        req_sec_ctrl = true
+      when 'Entry', 'Front_Retail', 'Point_of_Sale'
+        req_pri_ctrl = false
+        req_sec_ctrl = false
+      # Strip mall
+      when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3'
+        req_pri_ctrl = false
+        req_sec_ctrl = false
+      # Residential apartments
+      when 'Apartment', 'Apartment_topfloor_NS', 'Apartment_topfloor_WE'
+        req_top_ctrl = false
+        req_pri_ctrl = false
+        req_sec_ctrl = false
+      end
+    end
+
     return [req_top_ctrl, req_pri_ctrl, req_sec_ctrl]
   end
 
-  # Determine the fraction controlled by each sensor and which
-  # window each sensor should go near.
+  # Determine the fraction controlled by each sensor and which window each sensor should go near.
   #
-  # @param space [OpenStudio::Model::Space] the space with the daylighting
+  # @param space [OpenStudio::Model::Space] space object
+  # @param areas [Hash] a hash of daylighted areas
   # @param sorted_windows [Hash] a hash of windows, sorted by priority
   # @param sorted_skylights [Hash] a hash of skylights, sorted by priority
   # @param req_top_ctrl [Bool] if toplighting controls are required
   # @param req_pri_ctrl [Bool] if primary sidelighting controls are required
   # @param req_sec_ctrl [Bool] if secondary sidelighting controls are required
+  # @return [Array] array of 4 items
+  #   [sensor 1 fraction, sensor 2 fraction, sensor 1 window, sensor 2 window]
   def space_daylighting_fractions_and_windows(space,
                                               areas,
                                               sorted_windows,
@@ -96,6 +121,9 @@ class ASHRAE9012013 < ASHRAE901
 
     # Get the area of the space
     space_area_m2 = space.floorArea
+
+    # get the climate zone
+    climate_zone = model_standards_climate_zone(space.model)
 
     if req_top_ctrl && req_pri_ctrl && req_sec_ctrl
       # Sensor 1 controls toplighted area
@@ -117,11 +145,29 @@ class ASHRAE9012013 < ASHRAE901
       sensor_1_window = sorted_skylights[0]
       # Sensor 2 controls secondary area
       sensor_2_frac = (areas['secondary_sidelighted_area'] / space_area_m2)
-      sensor_2_window = sorted_windows[0]
+      # sorted_skylights[0] assigned to sensor_2_window so a second reference point is added for top daylighting
+      sensor_2_window = sorted_skylights[0]
     elsif req_top_ctrl && !req_pri_ctrl && !req_sec_ctrl
-      # Sensor 1 controls toplighted area
-      sensor_1_frac = areas['toplighted_area'] / space_area_m2
-      sensor_1_window = sorted_skylights[0]
+      case climate_zone
+        when 'ASHRAE 169-2006-6A',
+             'ASHRAE 169-2006-6B',
+             'ASHRAE 169-2006-7A',
+             'ASHRAE 169-2006-8A',
+             'ASHRAE 169-2013-6A',
+             'ASHRAE 169-2013-6B',
+             'ASHRAE 169-2013-7A',
+             'ASHRAE 169-2013-8A'
+          # Sensor 1 controls toplighted area
+          sensor_1_frac = areas['toplighted_area'] / space_area_m2
+          sensor_1_window = sorted_skylights[0]
+        else
+          # Sensor 1 controls toplighted area
+          num_sensors = 2
+          sensor_1_frac = areas['toplighted_area'] / space_area_m2 / num_sensors
+          sensor_1_window = sorted_skylights[0]
+          sensor_2_frac = sensor_1_frac
+          sensor_2_window = sensor_1_window
+      end
     elsif !req_top_ctrl && req_pri_ctrl && !req_sec_ctrl
       # Sensor 1 controls primary area
       sensor_1_frac = areas['primary_sidelighted_area'] / space_area_m2
@@ -135,7 +181,7 @@ class ASHRAE9012013 < ASHRAE901
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end
 
-  # Determine the base infiltration rate at 75 PA.
+  # Determine the base infiltration rate at 75 Pa.
   #
   # @return [Double] the baseline infiltration rate, in cfm/ft^2
   # defaults to no infiltration.

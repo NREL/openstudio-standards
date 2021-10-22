@@ -54,19 +54,33 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  29.135, -3, 6.096,                      !- X,Y,Z Vertex 1 {m}
-  29.135, 0, 6.096,                       !- X,Y,Z Vertex 2 {m}
+  0, 29.27, 6.096,                        !- X,Y,Z Vertex 1 {m}
+  0, 0, 6.096,                            !- X,Y,Z Vertex 2 {m}
   54.27, 0, 6.096,                        !- X,Y,Z Vertex 3 {m}
-  54.27, 29.27, 6.096,                    !- X,Y,Z Vertex 4 {m}
-  0, 29.27, 6.096,                        !- X,Y,Z Vertex 5 {m}
-  0, 0, 6.096,                            !- X,Y,Z Vertex 6 {m}
-  25.135, 0, 6.096,                       !- X,Y,Z Vertex 7 {m}
-  25.135, -3, 6.096;                      !- X,Y,Z Vertex 8 {m}
+  54.27, 29.27, 6.096;                    !- X,Y,Z Vertex 4 {m}
+  
+  
+OS:Surface,
+  {007c4111-77bc-466f-ac9b-021f9a1a4397}, !- Handle
+  Core_Retail_Roof_Protrusion,            !- Name
+  RoofCeiling,                            !- Surface Type
+  ,                                       !- Construction Name
+  {308a9ccd-586a-4231-b605-b35b346c50c8}, !- Space Name
+  Outdoors,                               !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  SunExposed,                             !- Sun Exposure
+  WindExposed,                            !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  25.135, 0, 6.096,                       !- X,Y,Z Vertex 1 {m}
+  25.135, -3, 6.096,                      !- X,Y,Z Vertex 2 {m}
+  29.135, -3, 6.096,                      !- X,Y,Z Vertex 3 {m}
+  29.135, 0, 6.096;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Space,
   {308a9ccd-586a-4231-b605-b35b346c50c8}, !- Handle
   Core_Retail,                            !- Name
-  {0a8b597e-9f16-4842-9dbf-b3e8ff8ce1e5}, !- Space Type Name
+  {7d3c6aba-2055-4f20-bfc8-78099d7b0ee7}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -148,7 +162,7 @@ OS:Surface,
 OS:Space,
   {77c9e620-8800-4f89-addb-d3f75a7e86a8}, !- Handle
   Back_Space,                             !- Name
-  {34e15ad4-259e-4af7-9d47-f9dfb6b78bc5}, !- Space Type Name
+  {c8b0430a-3a5f-47fd-a044-762cf1620a8c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -162,7 +176,7 @@ OS:Space,
 OS:Space,
   {ff444dc8-6aab-41a0-b337-ab0ed7d7956f}, !- Handle
   Front_Retail,                           !- Name
-  {0a8b597e-9f16-4842-9dbf-b3e8ff8ce1e5}, !- Space Type Name
+  {7d3c6aba-2055-4f20-bfc8-78099d7b0ee7}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -210,7 +224,7 @@ OS:Surface,
 OS:Space,
   {f3f2316b-fa00-4041-a540-7f94e0c43ec9}, !- Handle
   Point_Of_Sale,                          !- Name
-  {5cc48ecb-1c08-4905-98b6-5558ffc91046}, !- Space Type Name
+  {cadb85bc-999b-4613-b352-f095a11dbd55}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -224,7 +238,7 @@ OS:Space,
 OS:Space,
   {9509fe22-2b00-4be9-ba86-d4e9003d2d32}, !- Handle
   Front_Entry,                            !- Name
-  {b561fd0f-55af-433e-86cc-3619d4454fba}, !- Space Type Name
+  {76f215e4-02d3-4b16-ac0f-b78cd70f56a8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -239,6 +253,12 @@ OS:ConvergenceLimits,
   {01e133af-031a-422d-87f7-26793ea40ec2}, !- Handle
   1,                                      !- Minimum System Timestep {minutes}
   20;                                     !- Maximum HVAC Iterations
+
+OS:Sizing:Parameters,
+  {45cab5fb-aa10-47f1-9b84-019a1405e296}, !- Handle
+  1.2,                                    !- Heating Sizing Factor
+  1.2,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
 
 OS:Surface,
   {81686f66-944c-4647-a238-0e76788e8058}, !- Handle
@@ -931,7 +951,7 @@ OS:Timestep,
 
 OS:Building,
   {aa071399-e221-47e9-8f4a-f45735eb331f}, !- Handle
-  A90_1_2010RetailStandalone,             !- Name
+  DOE Prototype RetailStandalone,         !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -1547,70 +1567,290 @@ OS:ZoneHVAC:EquipmentList,
   {2457585a-e958-4f6b-8185-1b373f9ce0d5}; !- Thermal Zone
 
 OS:SpaceType,
-  {34e15ad4-259e-4af7-9d47-f9dfb6b78bc5}, !- Handle
+  {c8b0430a-3a5f-47fd-a044-762cf1620a8c}, !- Handle
   Retail Back_Space,                      !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {507a5052-c6fa-4e80-96ea-d8413460cc49}, !- Group Rendering Name
+  {167cc7b7-8eac-4e49-b28e-caa335790466}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Retail,                                 !- Standards Building Type
   Back_Space;                             !- Standards Space Type
 
 OS:Rendering:Color,
-  {507a5052-c6fa-4e80-96ea-d8413460cc49}, !- Handle
+  {167cc7b7-8eac-4e49-b28e-caa335790466}, !- Handle
   Retail Back_Space,                      !- Name
   120,                                    !- Rendering Red Value
   149,                                    !- Rendering Green Value
   230;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {b561fd0f-55af-433e-86cc-3619d4454fba}, !- Handle
+  {76f215e4-02d3-4b16-ac0f-b78cd70f56a8}, !- Handle
   Retail Entry,                           !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {de34b478-3803-4e06-a6b0-94fb668f99b0}, !- Group Rendering Name
+  {0f7e4bc8-2048-478f-affd-4076526a56ae}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Retail,                                 !- Standards Building Type
   Entry;                                  !- Standards Space Type
 
 OS:Rendering:Color,
-  {de34b478-3803-4e06-a6b0-94fb668f99b0}, !- Handle
+  {0f7e4bc8-2048-478f-affd-4076526a56ae}, !- Handle
   Retail Entry,                           !- Name
   169,                                    !- Rendering Red Value
   31,                                     !- Rendering Green Value
   31;                                     !- Rendering Blue Value
 
 OS:SpaceType,
-  {5cc48ecb-1c08-4905-98b6-5558ffc91046}, !- Handle
+  {cadb85bc-999b-4613-b352-f095a11dbd55}, !- Handle
   Retail Point_of_Sale,                   !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {3a0f162a-46fe-45d9-8a9b-011bcdf88e16}, !- Group Rendering Name
+  {d71c19c2-0ea4-4baf-a26a-d5fd227fcca6}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Retail,                                 !- Standards Building Type
   Point_of_Sale;                          !- Standards Space Type
 
 OS:Rendering:Color,
-  {3a0f162a-46fe-45d9-8a9b-011bcdf88e16}, !- Handle
+  {d71c19c2-0ea4-4baf-a26a-d5fd227fcca6}, !- Handle
   Retail Point_of_Sale,                   !- Name
   171,                                    !- Rendering Red Value
   222,                                    !- Rendering Green Value
   78;                                     !- Rendering Blue Value
 
 OS:SpaceType,
-  {0a8b597e-9f16-4842-9dbf-b3e8ff8ce1e5}, !- Handle
+  {7d3c6aba-2055-4f20-bfc8-78099d7b0ee7}, !- Handle
   Retail Retail,                          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {69c18cae-9d2f-4864-9c57-e3dd9c93faac}, !- Group Rendering Name
+  {72a5f3a5-1e45-49c4-b0dc-cf0379012f35}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Retail,                                 !- Standards Building Type
   Retail;                                 !- Standards Space Type
 
 OS:Rendering:Color,
-  {69c18cae-9d2f-4864-9c57-e3dd9c93faac}, !- Handle
+  {72a5f3a5-1e45-49c4-b0dc-cf0379012f35}, !- Handle
   Retail Retail,                          !- Name
   171,                                    !- Rendering Red Value
   222,                                    !- Rendering Green Value
   78;                                     !- Rendering Blue Value
 
+OS:SubSurface,
+  {bc65c732-39af-58a6-accd-c61dc5ff3db1}, !- Handle
+  Core_Retail_Wall_West_2_Door3,          !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {32742d7d-1236-4f0b-ac7b-167c34392994}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  0, 2.538037755411, 2.1336,              !- X,Y,Z Vertex 1 {m}
+  0, 2.538037755411, 0,                   !- X,Y,Z Vertex 2 {m}
+  0, 1.623637755411, 0,                   !- X,Y,Z Vertex 3 {m}
+  0, 1.623637755411, 2.1336;              !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {cd65c732-39ef-28a6-adcd-c21dc5ff3ab1}, !- Handle
+  Core_Retail_Wall_West_2_Door2,          !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {32742d7d-1236-4f0b-ac7b-167c34392994}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  0, 13.841575894014, 2.1336,             !- X,Y,Z Vertex 1 {m}
+  0, 13.841575894014, 0,                  !- X,Y,Z Vertex 2 {m}
+  0, 12.927175894014, 0,                  !- X,Y,Z Vertex 3 {m}
+  0, 12.927175894014, 2.1336;             !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {ca25c732-32ef-23a6-bdcd-b21dc5ff3ad1}, !- Handle
+  Core_Retail_Wall_West_2_Door1,          !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {32742d7d-1236-4f0b-ac7b-167c34392994}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  0, 25.062342286061, 2.1336,             !- X,Y,Z Vertex 1 {m}
+  0, 25.062342286061, 0,                  !- X,Y,Z Vertex 2 {m}
+  0, 24.147942286061, 0,                  !- X,Y,Z Vertex 3 {m}
+  0, 24.147942286061, 2.1336;             !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {ba21c712-12cf-21b6-adcd-a21dc5ff3ac1}, !- Handle
+  Core_Retail_Wall_East_2_Door1,          !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {cef973eb-e048-41ee-a604-ff105a38d5ef}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  54.27, 3.438494104366, 2.1336,          !- X,Y,Z Vertex 1 {m}
+  54.27, 3.438494104366, 0,               !- X,Y,Z Vertex 2 {m}
+  54.27, 4.352894104366, 0,               !- X,Y,Z Vertex 3 {m}
+  54.27, 4.352894104366, 2.1336;          !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {bc11c513-52cf-43b6-adbd-b21dc5ff3ab4}, !- Handle
+  Core_Retail_Wall_East_2_Door2,          !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {cef973eb-e048-41ee-a604-ff105a38d5ef}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  54.27, 13.809396313442, 2.1336,         !- X,Y,Z Vertex 1 {m}
+  54.27, 13.809396313442, 0,              !- X,Y,Z Vertex 2 {m}
+  54.27, 14.723796313442, 0,              !- X,Y,Z Vertex 3 {m}
+  54.27, 14.723796313442, 2.1336;         !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {bc11c633-12af-41e6-afed-b33dc5ef3eb4}, !- Handle
+  Core_Retail_Wall_East_2_Door3,          !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {cef973eb-e048-41ee-a604-ff105a38d5ef}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  54.27, 24.234478195589, 2.1336,         !- X,Y,Z Vertex 1 {m}
+  54.27, 24.234478195589, 0,              !- X,Y,Z Vertex 2 {m}
+  54.27, 25.148878195589, 0,              !- X,Y,Z Vertex 3 {m}
+  54.27, 25.148878195589, 2.1336;         !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {ef11c631-44af-41e4-bced-c33dc5ef3cf1}, !- Handle
+  Back_Space_Wall_North_Door1,            !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {1576edcb-e498-40ae-8360-482c4cbcce1f}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  44.209918073175, 7, 2.1336,             !- X,Y,Z Vertex 1 {m}
+  44.209918073175, 7, 0,                  !- X,Y,Z Vertex 2 {m}
+  43.295518073175, 7, 0,                  !- X,Y,Z Vertex 3 {m}
+  43.295518073175, 7, 2.1336;             !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {ef11f231-24cf-21f3-fced-c43dc4ec4cf1}, !- Handle
+  Back_Space_Wall_North_Door2,            !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {1576edcb-e498-40ae-8360-482c4cbcce1f}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  11.745274671376, 7, 2.1336,             !- X,Y,Z Vertex 1 {m}
+  11.745274671376, 7, 0,                  !- X,Y,Z Vertex 2 {m}
+  10.830874671376, 7, 0,                  !- X,Y,Z Vertex 3 {m}
+  10.830874671376, 7, 2.1336;             !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {cc11c432-54cf-45d1-ddad-d34ac4ff4aa2}, !- Handle
+  Back_Space_Wall_East_RollDoor,          !- Name
+  OverheadDoor,                           !- Sub Surface Type
+  ,                                       !- Construction Name
+  {4ea4b71e-b9bd-48a7-86eb-b14a05f136c0}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  54.27, 2.045406130273, 2.4384,          !- X,Y,Z Vertex 1 {m}
+  54.27, 2.045406130273, 0,               !- X,Y,Z Vertex 2 {m}
+  54.27, 5.093406130273, 0,               !- X,Y,Z Vertex 3 {m}
+  54.27, 5.093406130273, 2.4384;          !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {cd11c412-51af-41d1-dccd-d34ac4ff2cc2}, !- Handle
+  Back_Space_Wall_North_RollDoor1,        !- Name
+  OverheadDoor,                           !- Sub Surface Type
+  ,                                       !- Construction Name
+  {1576edcb-e498-40ae-8360-482c4cbcce1f}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  37.362862950805, 7, 2.4384,             !- X,Y,Z Vertex 1 {m}
+  37.362862950805, 7, 0,                  !- X,Y,Z Vertex 2 {m}
+  34.314862950805, 7, 0,                  !- X,Y,Z Vertex 3 {m}
+  34.314862950805, 7, 2.4384;             !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {cd11a112-21bf-31b3-defd-d34ac4fe2cf1}, !- Handle
+  Back_Space_Wall_North_RollDoor2,        !- Name
+  OverheadDoor,                           !- Sub Surface Type
+  ,                                       !- Construction Name
+  {1576edcb-e498-40ae-8360-482c4cbcce1f}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  28.98058833532, 7, 2.4384,              !- X,Y,Z Vertex 1 {m}
+  28.98058833532, 7, 0,                   !- X,Y,Z Vertex 2 {m}
+  25.932588335319, 7, 0,                  !- X,Y,Z Vertex 3 {m}
+  25.932588335319, 7, 2.4384;             !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {cd23a132-23be-51b5-aefa-d34ac5fe4af1}, !- Handle
+  Back_Space_Wall_North_RollDoor3,        !- Name
+  OverheadDoor,                           !- Sub Surface Type
+  ,                                       !- Construction Name
+  {1576edcb-e498-40ae-8360-482c4cbcce1f}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  20.310400044305, 7, 2.4384,             !- X,Y,Z Vertex 1 {m}
+  20.310400044305, 7, 0,                  !- X,Y,Z Vertex 2 {m}
+  17.262400044305, 7, 0,                  !- X,Y,Z Vertex 3 {m}
+  17.262400044305, 7, 2.4384;             !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {cd23d122-23bd-53d5-aefb-d14ad5fe4af1}, !- Handle
+  Back_Space_Wall_West_RollDoor,          !- Name
+  OverheadDoor,                           !- Sub Surface Type
+  ,                                       !- Construction Name
+  {574d5170-fad7-4d01-b21b-7e3c449e0595}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  0, 4.739790129493, 2.4384,              !- X,Y,Z Vertex 1 {m}
+  0, 4.739790129493, 0,                   !- X,Y,Z Vertex 2 {m}
+  0, 1.691790129493, 0,                   !- X,Y,Z Vertex 3 {m}
+  0, 1.691790129493, 2.4384;              !- X,Y,Z Vertex 4 {m}

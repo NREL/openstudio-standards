@@ -1,0 +1,52 @@
+{
+  "elevators": [
+    {
+      "template": "CBES T24 2008",
+      "building_type": "MediumOffice",
+      "elevator_type": "Hydraulic",
+      "number_of_elevators": 2.0,
+      "elevator_schedule": "Medium Office BLDG ELEVATORS",
+      "elevator_fan_schedule": "OfficeMedium ELEV_LIGHT_FAN_SCH_24_7",
+      "area_per_passenger_elevator": 45000.0,
+      "units_per_passenger_elevator": null,
+      "beds_per_passenger_elevator": null,
+      "area_per_freight_elevator": null,
+      "units_per_freight_elevator": null,
+      "beds_per_freight_elevator": null,
+      "additional_passenger_elevators": null,
+      "notes": "DOE Prototype Buildings"
+    },
+    {
+      "template": "CBES T24 2008",
+      "building_type": "RetailStandalone",
+      "elevator_type": null,
+      "number_of_elevators": null,
+      "elevator_schedule": null,
+      "elevator_fan_schedule": null,
+      "area_per_passenger_elevator": 45000.0,
+      "units_per_passenger_elevator": null,
+      "beds_per_passenger_elevator": null,
+      "area_per_freight_elevator": null,
+      "units_per_freight_elevator": null,
+      "beds_per_freight_elevator": null,
+      "additional_passenger_elevators": null,
+      "notes": "Assuming 45000 ft^2 per elevator as default for building types not in original code"
+    },
+    {
+      "template": "CBES T24 2008",
+      "building_type": "SmallOffice",
+      "elevator_type": null,
+      "number_of_elevators": null,
+      "elevator_schedule": null,
+      "elevator_fan_schedule": null,
+      "area_per_passenger_elevator": 45000.0,
+      "units_per_passenger_elevator": null,
+      "beds_per_passenger_elevator": null,
+      "area_per_freight_elevator": null,
+      "units_per_freight_elevator": null,
+      "beds_per_freight_elevator": null,
+      "additional_passenger_elevators": null,
+      "notes": "DOE Prototype Buildings"
+    }
+  ]
+}

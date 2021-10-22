@@ -32,13 +32,13 @@ class OpenStudio::Model::ZoneHVACTerminalUnitVariableRefrigerantFlow
     
     # Supply Air Flow Rate When No Cooling is Needed
     supply_air_flow_no_cool = self.autosizedSupplyAirFlowRateWhenNoCoolingisNeeded
-    if supply_air_flow_noload.is_initialized
+    if supply_air_flow_no_cool.is_initialized
       self.setSupplyAirFlowRateWhenNoCoolingisNeeded(supply_air_flow_no_cool.get)
     end
     
     # Supply Air Flow Rate When No Heating is Needed
     supply_air_flow_no_heat  = self.autosizedSupplyAirFlowRateWhenNoHeatingisNeeded
-    if supply_air_flow_noload.is_initialized
+    if supply_air_flow_no_heat.is_initialized
       self.setSupplyAirFlowRateWhenNoHeatingisNeeded(supply_air_flow_no_heat.get)
     end
     
@@ -83,7 +83,7 @@ class OpenStudio::Model::ZoneHVACTerminalUnitVariableRefrigerantFlow
   end
   
   
-  # Todo: verify on a fully autosize model that these three are actually named this way in the SQL file
+  # @todo verify on a fully autosize model that these three are actually named this way in the SQL file
   
   # Outdoor Air Flow Rate During Cooling Operation
   def autosizedOutdoorAirFlowRateDuringCoolingOperation

@@ -1,0 +1,32 @@
+{
+  "tables": {
+    "fans": {
+      "data_type": "table",
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "fan_type": "CONSTANT-RETURN",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 9999.0,
+          "fan_total_efficiency": 0.25,
+          "notes": "Total efficiency of 25% from table 5.4.1.A of MNECB Supplemental."
+        },
+        {
+          "fan_type": "EXHAUST",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 9999.0,
+          "fan_total_efficiency": 0.25,
+          "notes": "Using data for return fan from table 5.4.1.A of MNECB Supplemental."
+        }
+      ]
+    }
+  }
+}

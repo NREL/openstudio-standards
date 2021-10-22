@@ -21,4 +21,6 @@ If you are a developer looking to get started, see the {file:docs/DeveloperInfor
 
 If you are a developer that wants to add a Standard/Template, see the {file:docs/AddingAStandard.md Adding a Standard page}.
 
-For an overview of the repository structure, see the {file:docs/CodeStructure.md Code Structure page}.
+For an overview of the repository structure, see the {file:docs/RepositoryStructure.md Repository Structure page}.
+
+For an overview of the code architecture, see the {file:docs/CodeArchitecture.md Code Architecture page}.

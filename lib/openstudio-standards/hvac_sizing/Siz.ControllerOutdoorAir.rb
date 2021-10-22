@@ -44,12 +44,12 @@ class OpenStudio::Model::ControllerOutdoorAir
 
     # Get the airloop connected to this controller
     if airLoopHVACOutdoorAirSystem.empty?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Siz.ControllerOutdoorAir', "#{name} is not connected to an airLoopHVACOutdoorAirSystem, cannot determine autosizedMinimumOutdoorAirFlowRate accuractely.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Siz.ControllerOutdoorAir', "#{name} is not connected to an airLoopHVACOutdoorAirSystem, cannot determine autosizedMinimumOutdoorAirFlowRate accurately.")
       return oa
     end
     oa_sys = airLoopHVACOutdoorAirSystem.get
     if oa_sys.airLoop.empty?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Siz.ControllerOutdoorAir', "#{name}'s airLoopHVACOutdoorAirSystem is not assigned to an AirLoop, cannot determine autosizedMinimumOutdoorAirFlowRate accuractely.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Siz.ControllerOutdoorAir', "#{name}'s airLoopHVACOutdoorAirSystem is not assigned to an AirLoop, cannot determine autosizedMinimumOutdoorAirFlowRate accurately.")
       return oa
     end
     air_loop = oa_sys.airLoop.get

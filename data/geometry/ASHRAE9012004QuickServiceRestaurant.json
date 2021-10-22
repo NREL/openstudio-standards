@@ -1,0 +1,50 @@
+[
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "RestaurantFastFood HVACOperationSchd",
+    "oa_damper_schedule": "RestaurantFastFood MinOA_MotorizedDamper_Sched",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Two Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": null,
+    "space_names": [
+      "Dining",
+      "Kitchen"
+    ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "Kitchen Exhaust Fan",
+    "flow_rate": 1.557427,
+    "operation_schedule": "RestaurantFastFood Hours_of_operation",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": "RestaurantFastFood Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule_2004",
+    "space_names": [
+      "Kitchen"
+    ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "Dining Exhaust Fan",
+    "flow_rate": 0.826233,
+    "operation_schedule": "RestaurantFastFood Hours_of_operation",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
+    "space_names": [
+      "Dining"
+    ]
+  },
+     {
+    "type": "Refrigeration_system",
+    "compressor_type": "Low Temp",
+    "cases": [{
+      "case_type": "Case Quick Service Restaurant",
+      "space_names": ["Kitchen"]}],
+    "walkins": [{
+      "walkin_type": "Walk-In Quick Service Restaurant",
+      "space_names": ["Kitchen"],
+      "number_of_walkins": 1 }],
+    "name": "RefrSystem - Quick Service Restaurant",
+    "space_names": ["Kitchen"]}
+]
+

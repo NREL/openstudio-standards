@@ -716,17 +716,18 @@ module BTAP
 
           new_construction_set =vintage_construction_set.clone(model).to_DefaultConstructionSet.get
           #Set conductances to needed values in construction set if possible.
-          BTAP::Resources::Envelope::ConstructionSets::customize_default_surface_construction_set_rsi!( model, "#{@default_construction_set}-modified",new_construction_set,
-            @ext_wall_rsi, @ext_floor_rsi, @ext_roof_rsi,
-            @ground_wall_rsi, @ground_floor_rsi, @ground_roof_rsi,
-            @fixed_window_rsi, @fixed_wind_solar_trans, @fixed_wind_vis_trans,
-            @operable_window_rsi, @operable_wind_solar_trans, @operable_wind_vis_trans,
-            @door_construction_rsi,
-            @glass_door_rsi,  @glass_door_solar_trans, @glass_door_vis_trans,
-            @overhead_door_rsi,
-            @skylight_rsi,  @skylight_solar_trans, @skylight_vis_trans,
-            @tubular_daylight_dome_rsi,  @tubular_daylight_dome_solar_trans, @tubular_daylight_dome_vis_trans,
-            @tubular_daylight_diffuser_rsi, @tubular_daylight_diffuser_solar_trans, @tubular_daylight_diffuser_vis_trans
+          BTAP::Resources::Envelope::ConstructionSets::customize_default_surface_construction_set_rsi!(
+              model: model, name: "#{@default_construction_set}-modified",default_surface_construction_set: new_construction_set,
+              ext_wall_rsi: @ext_wall_rsi, ext_floor_rsi: @ext_floor_rsi, ext_roof_rsi: @ext_roof_rsi,
+              ground_wall_rsi: @ground_wall_rsi, ground_floor_rsi: @ground_floor_rsi, ground_roof_rsi: @ground_roof_rsi,
+              fixed_window_rsi: @fixed_window_rsi, fixed_wind_solar_trans: @fixed_wind_solar_trans, fixed_wind_vis_trans: @fixed_wind_vis_trans,
+              operable_window_rsi: @operable_window_rsi, operable_wind_solar_trans: @operable_wind_solar_trans, operable_wind_vis_trans: @operable_wind_vis_trans,
+              door_construction_rsi: @door_construction_rsi,
+              glass_door_rsi: @glass_door_rsi,  glass_door_solar_trans: @glass_door_solar_trans, glass_door_vis_trans: @glass_door_vis_trans,
+              overhead_door_rsi: @overhead_door_rsi,
+              skylight_rsi: @skylight_rsi,  skylight_solar_trans: @skylight_solar_trans, skylight_vis_trans: @skylight_vis_trans,
+              tubular_daylight_dome_rsi: @tubular_daylight_dome_rsi,  tubular_daylight_dome_solar_trans: @tubular_daylight_dome_solar_trans, tubular_daylight_dome_vis_trans: @tubular_daylight_dome_vis_trans,
+              tubular_daylight_diffuser_rsi: @tubular_daylight_diffuser_rsi, tubular_daylight_diffuser_solar_trans: @tubular_daylight_diffuser_solar_trans, tubular_daylight_diffuser_vis_trans: @tubular_daylight_diffuser_vis_trans
           )
 
 
@@ -906,12 +907,12 @@ module BTAP
             unless pump_const.plantLoop.empty?
               pump_variable = OpenStudio::Model::PumpVariableSpeed.new(model)
               #pass information from constant speed fan as much as possible.
-              pump_variable.setRatedFlowRate(pump_const.getRatedFlowRate.get)
-              pump_variable.setRatedPumpHead(pump_const.ratedPumpHead())
+              pump_variable.setRatedFlowRate(pump_const.ratedFlowRate)
+              pump_variable.setRatedPumpHead(pump_const.ratedPumpHead)
               pump_variable.setRatedPowerConsumption(pump_const.ratedPowerConsumption.to_f)
-              pump_variable.setMotorEfficiency(pump_const.motorEfficiency().to_f)
-              pump_variable.setPumpControlType( pump_const.pumpControlType )
-              pump_variable.setFractionofMotorInefficienciestoFluidStream(pump_const.fractionofMotorInefficienciestoFluidStream().to_f)
+              pump_variable.setMotorEfficiency(pump_const.motorEfficiency.to_f)
+              pump_variable.setPumpControlType(pump_const.pumpControlType)
+              pump_variable.setFractionofMotorInefficienciestoFluidStream(pump_const.fractionofMotorInefficienciestoFluidStream.to_f)
               pump_variable.autosizeRatedFlowRate if pump_const.isRatedFlowRateAutosized
               pump_variable.autosizeRatedPowerConsumption if pump_const.isRatedPowerConsumptionAutosized
 
@@ -932,7 +933,7 @@ module BTAP
               new_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
               #pass information from constant speed fan as much as possible.
 
-              new_pump.setRatedFlowRate(pump.getRatedFlowRate.get)
+              new_pump.setRatedFlowRate(pump.ratedFlowRate.get)
               new_pump.setRatedPumpHead(pump.ratedPumpHead())
               new_pump.setRatedPowerConsumption(pump.ratedPowerConsumption.to_f)
               new_pump.setMotorEfficiency(pump.motorEfficiency().to_f)
@@ -1071,7 +1072,7 @@ module BTAP
           end
           item.setHeaterFuelType(@shw_heater_fuel_type) unless @shw_heater_fuel_type.nil?
           item.setHeaterThermalEfficiency(@shw_thermal_eff) unless @shw_thermal_eff.nil?
-          log  << item.name.get.to_s << ",#{item.setpointTemperatureSchedule},#{item.heaterFuelType},#{item.getHeaterThermalEfficiency.get}\n"
+          log  << item.name.get.to_s << ",#{item.setpointTemperatureSchedule},#{item.heaterFuelType},#{item.heaterThermalEfficiency}\n"
         end
         return log
       end
@@ -1099,7 +1100,9 @@ module BTAP
               boiler = icomponent.to_BoilerHotWater.get
 
               #set design outlet temp
-              boiler.setDesignWaterOutletTemperature(@hw_boiler_design_water_outlet_temperature) unless @hw_boiler_design_water_outlet_temperature.nil?
+              if model.version < OpenStudio::VersionString.new('3.0.0')
+                boiler.setDesignWaterOutletTemperature(@hw_boiler_design_water_outlet_temperature) unless @hw_boiler_design_water_outlet_temperature.nil?
+              end
               #set fuel type
               boiler.setFuelType(@hw_boiler_fuel_type) unless @hw_boiler_fuel_type.nil?
               #set thermal eff
@@ -1109,7 +1112,9 @@ module BTAP
                 ["ConstantFlow","LeavingSetpointModulated","NotModulated"].include?(@hw_boiler_flow_mode) ? boiler.setBoilerFlowMode(@hw_boiler_flow_mode) : raise("Boiler flow mode #{@hw_boiler_flow_mode} invalid.")
               end
               #set setDesignWaterOutletTemperature
-              boiler.setDesignWaterOutletTemperature(@hotwaterboiler_reset_highsupplytemp) unless @hotwaterboiler_reset_highsupplytemp.nil?
+              if model.version < OpenStudio::VersionString.new('3.0.0')
+                boiler.setDesignWaterOutletTemperature(@hotwaterboiler_reset_highsupplytemp) unless @hotwaterboiler_reset_highsupplytemp.nil?
+              end
               #set EfficiencyCurveTemperatureEvaluationVariable
               unless @hw_boiler_eff_curve_temp_eval_var.nil?
                 ["LeavingBoiler","EnteringBoiler"].include?(@hw_boiler_eff_curve_temp_eval_var) ? boiler.setEfficiencyCurveTemperatureEvaluationVariable(@hw_boiler_eff_curve_temp_eval_var) : raise("EfficiencyCurveTemperatureEvaluationVariable  #{@hw_boiler_eff_curve_temp_eval_var} invalid.")

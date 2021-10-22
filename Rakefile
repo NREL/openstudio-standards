@@ -1,10 +1,11 @@
 require 'bundler/gem_tasks'
 require 'json'
+require 'fileutils'
 begin
   Bundler.setup
 rescue Bundler::BundlerError => e
-  $stderr.puts e.message
-  $stderr.puts 'Run `bundle install` to install missing gems'
+  warn e.message
+  warn 'Run `bundle install` to install missing gems'
   exit e.status_code
 end
 
@@ -20,69 +21,40 @@ namespace :test do
     File.open('test/circleci_tests.json', 'w') do |f|
       f.write(JSON.pretty_generate(full_file_list.to_a))
     end
-
-
-    require_relative './test/helpers/ci_test_generator'
-    CITestGenerator::generate(true, false)
-    # load test files from file.
-    local_full_file_list = FileList.new(File.readlines('test/local_circleci_tests.txt'))
-    # Select only .rb files that exist
-    local_full_file_list.select! {|item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}"))}
-    local_full_file_list.map! {|item| File.absolute_path("test/#{item.strip}")}
-    File.open('test/local_circleci_tests.json', 'w') do |f|
-      f.write(JSON.pretty_generate(local_full_file_list.to_a))
-    end
   else
     puts 'Could not find list of files to test at test/circleci_tests.txt'
     return false
   end
 
-
-  desc 'Run All CircleCI tests locally'
-  Rake::TestTask.new('local-circ-all-tests') do |t|
-    file_list = FileList.new('test/test_run_all_test_locally.rb')
+  desc 'parallel_run_all_tests_locally'
+  Rake::TestTask.new('parallel_run_all_tests_locally') do |t|
+    # Make an empty test/reports directory
+    report_dir = 'test/reports'
+    FileUtils.rm_rf(report_dir) if Dir.exist?(report_dir)
+    Dir.mkdir(report_dir)
+    file_list = FileList.new('test/parallel_run_all_tests_locally.rb')
     t.libs << 'test'
     t.test_files = file_list
     t.verbose = false
   end
 
-  desc 'Run All NECB tests locally'
-  Rake::TestTask.new('local-circ-necb-tests') do |t|
-    file_list = FileList.new('test/test_run_necb_test_locally.rb')
+  desc 'parallel_run_necb_building_regression_tests'
+  Rake::TestTask.new('parallel_run_necb_building_regression_tests_locally') do |t|
+    file_list = FileList.new('test/necb/building_regression_tests/locally_run_tests.rb')
     t.libs << 'test'
     t.test_files = file_list
     t.verbose = false
   end
 
-
-  desc 'Generate CircleCI test files'
-  task :'gen-circ-files' do
-    require_relative './test/helpers/ci_test_generator'
-    CITestGenerator::generate(local_run: false)
-  end
-
-
-  desc 'Run NECB Building regression test'
-  Rake::TestTask.new(:necb_regression_test) do |t|
-    file_list = FileList.new('./test/test_run_necb_regression_locally.rb')
+  desc 'parallel_run_necb_system_tests_tests'
+  Rake::TestTask.new('parallel_run_necb_system_tests_tests_locally') do |t|
+    file_list = FileList.new('test/necb/system_tests/locally_run_tests.rb')
     t.libs << 'test'
     t.test_files = file_list
-    t.verbose = true
+    t.verbose = false
   end
 
-
-  desc 'Run BTAP.perform_qaqc() test'
-  Rake::TestTask.new(:btap_json_test) do |t|
-    file_list = FileList.new('test/necb/test_necb_qaqc.rb')
-    t.libs << 'test'
-    t.test_files = file_list
-    t.verbose = true
-  end
-
-
-
-
-# These tests only available in the CI environment
+  # These tests only available in the CI environment
   if ENV['CI'] == 'true'
 
     desc 'Run CircleCI tests'
@@ -96,6 +68,7 @@ namespace :test do
           f.each_line do |line|
             # Skip comments the CLI may have included
             next unless line.include?('.rb')
+
             # Remove whitespaces
             line = line.strip
             # Ensure the file exists
@@ -115,7 +88,6 @@ namespace :test do
       end
     end
 
-
     desc 'Summarize the test timing'
     task 'times' do |t|
       require 'nokogiri'
@@ -123,7 +95,7 @@ namespace :test do
       files_to_times = {}
       tests_to_times = {}
       Dir['test/reports/*.xml'].each do |xml|
-        doc = File.open(xml) {|f| Nokogiri::XML(f)}
+        doc = File.open(xml) { |f| Nokogiri::XML(f) }
         doc.css('testcase').each do |testcase|
           time = testcase.attr('time').to_f
           file = testcase.attr('file')
@@ -174,34 +146,60 @@ end
 # Tasks to manage the spreadsheet data
 namespace :data do
   require "#{File.dirname(__FILE__)}/data/standards/manage_OpenStudio_Standards.rb"
-  desc 'Download OpenStudio_Standards from Google & export JSONs'
+
+  # OpenStudio Standards spreadsheet names
+  # Order matters: most general/shared must be first,
+  # as data may be overwritten when parsing later spreadsheets.
+  spreadsheets_ashrae = [
+    'OpenStudio_Standards-ashrae_90_1',
+    'OpenStudio_Standards-ashrae_90_1(space_types)'
+  ]
+
+  spreadsheets_deer = [
+    'OpenStudio_Standards-deer',
+    'OpenStudio_Standards-deer(space_types)'
+  ]
+
+  spreadsheets_comstock = [
+    'OpenStudio_Standards-ashrae_90_1',
+    'OpenStudio_Standards-ashrae_90_1-ALL-comstock(space_types)',
+    'OpenStudio_Standards-deer',
+    'OpenStudio_Standards-deer-ALL-comstock(space_types)'
+  ]
+
+  spreadsheets_cbes = [
+    'OpenStudio_Standards-cbes',
+    'OpenStudio_Standards-cbes(space_types)'
+  ]
+
+  spreadsheet_titles = spreadsheets_ashrae + spreadsheets_deer + spreadsheets_comstock + spreadsheets_cbes
+  spreadsheet_titles = spreadsheet_titles.uniq
+
+  desc 'Check Google Drive configuration'
+  task 'apicheck' do
+    check_google_drive_configuration
+  end
+
+  desc 'Download OpenStudio_Standards spreadsheets from Google Drive'
+  task 'download' do
+    download_google_spreadsheets(spreadsheet_titles)
+  end
+
+  desc 'Download OpenStudio_Standards spreadsheets and generate JSONs'
   task 'update' do
-    download_google_spreadsheet
-    export_spreadsheet_to_json
+    download_google_spreadsheets(spreadsheet_titles)
+    export_spreadsheet_to_json(spreadsheet_titles)
   end
 
-  desc 'Export JSONs from OpenStudio_Standards'
+  desc 'Generate JSONs from OpenStudio_Standards spreadsheets'
   task 'update:manual' do
-    export_spreadsheet_to_json
+    export_spreadsheet_to_json(spreadsheet_titles)
   end
 
-=begin
-  desc 'Update RS-Means Database'
-  task 'update:costing' do
-    $LOAD_PATH.unshift File.expand_path('lib', __FILE__)
-    require 'openstudio'
-    require 'openstudio/ruleset/ShowRunnerOutput'
-    # Require local version instead of installed version for developers
-    begin
-      require_relative 'lib/openstudio-standards.rb'
-      puts 'DEVELOPERS OF OPENSTUDIO-STANDARDS: Requiring code directly instead of using installed gem.  This avoids having to run rake install every time you make a change.'
-    rescue LoadError
-      require 'openstudio-standards'
-      puts 'Using installed openstudio-standards gem.'
-    end
-    BTAPCosting.instance
+  desc 'Export JSONs from OpenStudio_Standards to data library'
+  task 'export:jsons' do
+    export_spreadsheet_to_json(spreadsheets_ashrae, dataset_type: 'data_lib')
   end
-=end
 end
 
 # Tasks to export libraries packaged with

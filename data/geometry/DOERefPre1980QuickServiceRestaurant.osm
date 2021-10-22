@@ -337,7 +337,7 @@ OS:Output:Meter,
 
 OS:Building,
   {a9018b0d-1140-480c-ad97-5d7c5ce1e63a}, !- Handle
-  DOERefPre1980QuickServiceRestaurant,    !- Name
+  DOE Reference QuickServiceRestaurant,   !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

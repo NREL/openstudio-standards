@@ -1,6 +1,15 @@
 --main docs/Home.md
 --embed-mixins
---exclude lib/openstudio-standards/prototypes/common/buildings/Prototype.all_buildings.rb
+--exclude lib/openstudio-standards/prototypes/common/buildings/Prototype.*.rb
+--exclude lib/openstudio-standards/utilities/convert_costing_constructions.rb
+--exclude lib/openstudio-standards/prototypes/common/do_not_edit_metaclasses.rb
+--exclude lib/openstudio-standards/weather/Weather.Model.rb
+--exclude lib/openstudio-standards/weather/Weather.stat_file.rb
+--exclude lib/openstudio-standards/utilities/sched_create.rb
+--exclude lib/openstudio-standards/utilities/os_sim_extract.rb
+--exclude lib/openstudio-standards/utilities/hash.rb
+--exclude lib/openstudio-standards/utilities/Add_template_field_to_json.rb
+--exclude lib/openstudio-standards/standards/necb/necb_2011/data/standards_data.rb
 --type-tag ref:"Technical References"
 lib/openstudio-standards/standards/**/*.rb
 lib/openstudio-standards/prototypes/**/*.rb
@@ -12,7 +21,8 @@ docs/Home.md
 docs/UserQuickStartGuide.md
 docs/Features.md
 docs/DeveloperInformation.md
-docs/CodeStructure.md
+docs/RepositoryStructure.md
+docs/CodeArchitecture.md
 docs/AddingAStandard.md
 License.txt
 LGPL-2.1

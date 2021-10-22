@@ -7,7 +7,7 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
     model_name = 'model'
     standard = '90.1-2007'
-    climate_zone = 'ASHRAE 169-2006-5A'
+    climate_zone = 'ASHRAE 169-2013--5A'
     # Use addenda dn (heated only systems)
     custom = '90.1-2007 with addenda dn'
     model = create_baseline_model(model_name, standard, climate_zone, 'MidriseApartment', custom, debug = true, load_existing_model = true)
@@ -74,12 +74,12 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
   def test_jmarrec_model_iterative
 
     # Create the baseline model
-    #model = create_baseline_model('jmarrec', '90.1-2007', 'ASHRAE 169-2006-4A', 'MediumOffice', false)
+    #model = create_baseline_model('jmarrec', '90.1-2007', 'ASHRAE 169-2013--4A', 'MediumOffice', false)
 
     model_name = 'jmarrec'
     standard = '90.1-2007'
     building_vintage = standard
-    climate_zone = 'ASHRAE 169-2006-4A'
+    climate_zone = 'ASHRAE 169-2013--4A'
     building_type = 'MidriseApartment'
 
     debug=true

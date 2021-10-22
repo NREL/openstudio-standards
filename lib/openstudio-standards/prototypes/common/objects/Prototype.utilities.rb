@@ -2,6 +2,9 @@ class Standard
   # @!group utilities
 
   # load a model into OS & version translates, exiting and erroring if a problem is found
+  #
+  # @param model_path_string [String] file path to OpenStudio model file
+  # @return [OpenStudio::Model::Model] OpenStudio model object
   def safe_load_model(model_path_string)
     model_path = OpenStudio::Path.new(model_path_string)
     if OpenStudio.exists(model_path)
@@ -21,6 +24,9 @@ class Standard
   end
 
   # load a sql file, exiting and erroring if a problem is found
+  #
+  # @param sql_path_string [String] file path to sql file
+  # @return [OpenStudio::SqlFile] sql file associated with the model, boolean false if not found
   def safe_load_sql(sql_path_string)
     sql_path = OpenStudio::Path.new(sql_path_string)
     if OpenStudio.exists(sql_path)
@@ -32,6 +38,10 @@ class Standard
     return sql
   end
 
+  # Remove all resource objects in the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
   def strip_model(model)
     # remove all materials
     model.getMaterials.each(&:remove)
@@ -40,7 +50,9 @@ class Standard
     model.getConstructions.each(&:remove)
 
     # remove performance curves
-    model.getCurves.each(&:remove)
+    model.getCurves.each do |curve|
+      model.removeObject(curve.handle)
+    end
 
     # remove all zone equipment
     model.getThermalZones.sort.each do |zone|
@@ -102,6 +114,121 @@ class Standard
     return model
   end
 
+  # Remove all air loops in model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
+  def remove_air_loops(model)
+    model.getAirLoopHVACs.each(&:remove)
+    return model
+  end
+
+  # Remove plant loops in model except those used for service hot water
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
+  def remove_plant_loops(model)
+    plant_loops = model.getPlantLoops
+    plant_loops.each do |plant_loop|
+      shw_use = false
+      plant_loop.demandComponents.each do |component|
+        if component.to_WaterUseConnections.is_initialized || component.to_CoilWaterHeatingDesuperheater.is_initialized
+          shw_use = true
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "#{plant_loop.name} is used for SHW or refrigeration heat reclaim and will not be removed.")
+          break
+        end
+      end
+      plant_loop.remove unless shw_use
+    end
+    return model
+  end
+
+  # Remove all plant loops in model including those used for service hot water
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
+  def remove_all_plant_loops(model)
+    model.getPlantLoops.each(&:remove)
+    return model
+  end
+
+  # Remove VRF units
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
+  def remove_vrf(model)
+    model.getAirConditionerVariableRefrigerantFlows.each(&:remove)
+    model.getZoneHVACTerminalUnitVariableRefrigerantFlows.each(&:remove)
+    return model
+  end
+
+  # Remove zone equipment except for exhaust fans
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
+  def remove_zone_equipment(model)
+    model.getThermalZones.each do |zone|
+      zone.equipment.each do |equipment|
+        if equipment.to_FanZoneExhaust.is_initialized
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "#{equipment.name} is a zone exhaust fan and will not be removed.")
+        else
+          equipment.remove
+        end
+      end
+    end
+    return model
+  end
+
+  # Remove all zone equipment including exhaust fans
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
+  def remove_all_zone_equipment(model)
+    model.getThermalZones.each do |zone|
+      zone.equipment.each(&:remove)
+    end
+    return model
+  end
+
+  # Remove unused performance curves
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
+  def remove_unused_curves(model)
+    model.getCurves.each do |curve|
+      if curve.directUseCount == 0
+        model.removeObject(curve.handle)
+      end
+    end
+    return model
+  end
+
+  # Remove HVAC equipment except for service hot water loops and zone exhaust fans
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
+  def remove_hvac(model)
+    remove_air_loops(model)
+    remove_plant_loops(model)
+    remove_vrf(model)
+    remove_zone_equipment(model)
+    remove_unused_curves(model)
+    return model
+  end
+
+  # Remove all HVAC equipment including service hot water loops and zone exhaust fans
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
+  def remove_all_hvac(model)
+    remove_air_loops(model)
+    remove_all_plant_loops(model)
+    remove_vrf(model)
+    remove_all_zone_equipment(model)
+    remove_unused_curves(model)
+    return model
+  end
+
   # Loads a JSON file containing the space type map into a hash
   #
   # @param hvac_map_file [String] path to JSON file, relative to the /data folder
@@ -118,7 +245,7 @@ class Standard
       hvac_map = JSON.parse(hvac_map_string)
     else
       abs_path = File.join(File.dirname(__FILE__), rel_path_to_hvac_map)
-      hvac_map = JSON.parse(File.read(abs_path))if File.exist?(abs_path)
+      hvac_map = JSON.parse(File.read(abs_path)) if File.exist?(abs_path)
     end
 
     return hvac_map
@@ -133,6 +260,43 @@ class Standard
     cop = -0.0076 * seer * seer + 0.3796 * seer
 
     return cop
+  end
+
+  # Convert from COP to SEER
+  # @ref [References::USDOEPrototypeBuildings]
+  #
+  # @param cop [Double] COP
+  # @return [Double] Seasonal Energy Efficiency Ratio
+  def cop_to_seer_cooling_no_fan(cop)
+    delta = 0.3796**2 - 4.0 * 0.0076 * cop
+    seer = (-delta**0.5 + 0.3796) / (2.0 * 0.0076)
+
+    return seer
+  end
+
+  # Convert from SEER to COP (with fan) for cooling coils
+  # per the method specified in 90.1-2013 Appendix G
+  #
+  # @param seer [Double] seasonal energy efficiency ratio (SEER)
+  # @return [Double] Coefficient of Performance (COP)
+  def seer_to_cop_cooling_with_fan(seer)
+    eer = -0.0182 * seer * seer + 1.1088 * seer
+    cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+
+    return cop
+  end
+
+  # Convert from COP to SEER (with fan) for cooling coils
+  # per the method specified in 90.1-2013 Appendix G
+  #
+  # @param cop [Double] Coefficient of Performance (COP)
+  # @return [Double] seasonal energy efficiency ratio (SEER)
+  def cop_to_seer_cooling_with_fan(cop)
+    eer = cop_to_eer(cop)
+    delta = 1.1088**2 - 4.0 * 0.0182 * eer
+    seer = (1.1088 - delta**0.5) / (2.0 * 0.0182)
+
+    return seer
   end
 
   # Convert from COP_H to COP (no fan) for heat pump heating coils
@@ -161,16 +325,15 @@ class Standard
     return cop
   end
 
-  # Convert from COP to SEER
-  # @ref [References::USDOEPrototypeBuildings]
+  # Convert from HSPF to COP (with fan) for heat pump heating coils
+  # @ref [References::ASHRAE9012013] Appendix G
   #
-  # @param cop [Double] COP
-  # @return [Double] Seasonal Energy Efficiency Ratio
-  def cop_to_seer(cop)
-    delta = 0.3796**2 - 4.0 * 0.0076 * cop
-    seer = (-delta**0.5 + 0.3796) / (2.0 * 0.0076)
+  # @param hspf [Double] heating seasonal performance factor (HSPF)
+  # @return [Double] Coefficient of Performance (COP)
+  def hspf_to_cop_heating_with_fan(hspf)
+    cop = -0.0255 * hspf * hspf + 0.6239 * hspf
 
-    return seer
+    return cop
   end
 
   # Convert from EER to COP
@@ -181,27 +344,17 @@ class Standard
   # @param capacity_w [Double] the heating capacity at AHRI rating conditions, in W
   # @return [Double] Coefficient of Performance (COP)
   def eer_to_cop(eer, capacity_w = nil)
-    cop = nil
-
     if capacity_w.nil?
-
       # The PNNL Method.
-
       # r is the ratio of supply fan power to total equipment power at the rating condition,
-      # assumed to be 0.12 for the reference buildngs per PNNL.
+      # assumed to be 0.12 for the reference buildings per PNNL.
       r = 0.12
-
       cop = (eer / 3.413 + r) / (1 - r)
-
     else
-
       # The 90.1-2013 method
-
       # Convert the capacity to Btu/hr
       capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
-
       cop = 7.84E-8 * eer * capacity_btu_per_hr + 0.338 * eer
-
     end
 
     return cop
@@ -213,20 +366,14 @@ class Standard
   # @param cop [Double] COP
   # @return [Double] Energy Efficiency Ratio (EER)
   def cop_to_eer(cop, capacity_w = nil)
-    eer = nil
-
     if capacity_w.nil?
       # The PNNL Method.
       # r is the ratio of supply fan power to total equipment power at the rating condition,
       # assumed to be 0.12 for the reference buildngs per PNNL.
       r = 0.12
-
       eer = 3.413 * (cop * (1 - r) - r)
-
     else
-
       # The 90.1-2013 method
-
       # Convert the capacity to Btu/hr
       capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
       eer = cop / (7.84E-8 * capacity_btu_per_hr + 0.338)
@@ -296,21 +443,21 @@ class Standard
   # @param intial_pressure_pa [Double] pressure rise at which initial infiltration rate was determined in Pa
   # @param final_pressure_pa [Double] desired pressure rise to adjust infiltration rate to in Pa
   # @param infiltration_coefficient [Double] infiltration coeffiecient
+  # @return [Double] adjusted infiltration rate in m^3/s
   def adjust_infiltration_to_lower_pressure(initial_infiltration_rate_m3_per_s, intial_pressure_pa, final_pressure_pa, infiltration_coefficient = 0.65)
     adjusted_infiltration_rate_m3_per_s = initial_infiltration_rate_m3_per_s * (final_pressure_pa / intial_pressure_pa)**infiltration_coefficient
 
     return adjusted_infiltration_rate_m3_per_s
   end
 
-  # Convert the infiltration rate at a 75 Pa
-  # to an infiltration rate at the typical value for the prototype buildings
+  # Convert the infiltration rate at a 75 Pa to an infiltration rate at the typical value for the prototype buildings
   # per method described here:  http://www.pnl.gov/main/publications/external/technical_reports/PNNL-18898.pdf
   # Gowri K, DW Winiarski, and RE Jarnagin. 2009.
   # Infiltration modeling guidelines for commercial building energy analysis.
   # PNNL-18898, Pacific Northwest National Laboratory, Richland, WA.
   #
   # @param initial_infiltration_rate_m3_per_s [Double] initial infiltration rate in m^3/s
-  # @return [Double]
+  # @return [Double] adjusted infiltration rate in m^3/s
   def adjust_infiltration_to_prototype_building_conditions(initial_infiltration_rate_m3_per_s)
     # Details of these coefficients can be found in paper
     alpha = 0.22 # unitless - terrain adjustment factor
@@ -377,8 +524,9 @@ class Standard
   # @param max_y [Double] the maximum value of independent variable Y that will be used
   # @param min_out [Double] the minimum value of dependent variable Z
   # @param max_out [Double] the maximum value of dependent variable Z
-  def create_curve_biquadratic(coeffs, crv_name, min_x, max_x, min_y, max_y, min_out, max_out)
-    curve = OpenStudio::Model::CurveBiquadratic.new(self)
+  # @return [OpenStudio::Model::CurveBiquadratic] a biquadratic curve
+  def create_curve_biquadratic(model, coeffs, crv_name, min_x, max_x, min_y, max_y, min_out, max_out)
+    curve = OpenStudio::Model::CurveBiquadratic.new(model)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
     curve.setCoefficient2x(coeffs[1])
@@ -407,8 +555,9 @@ class Standard
   # @param max_y [Double] the maximum value of independent variable Y that will be used
   # @param min_out [Double] the minimum value of dependent variable Z
   # @param max_out [Double] the maximum value of dependent variable Z
-  def create_curve_bicubic(coeffs, crv_name, min_x, max_x, min_y, max_y, min_out, max_out)
-    curve = OpenStudio::Model::CurveBicubic.new(self)
+  # @return [OpenStudio::Model::CurveBicubic] a bicubic curve
+  def create_curve_bicubic(model, coeffs, crv_name, min_x, max_x, min_y, max_y, min_out, max_out)
+    curve = OpenStudio::Model::CurveBicubic.new(model)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
     curve.setCoefficient2x(coeffs[1])
@@ -440,9 +589,10 @@ class Standard
   # @param min_out [Double] the minimum value of dependent variable Z
   # @param max_out [Double] the maximum value of dependent variable Z
   # @param is_dimensionless [Bool] if true, the X independent variable is considered unitless
-  # and the resulting output dependent variable is considered unitless
-  def create_curve_quadratic(coeffs, crv_name, min_x, max_x, min_out, max_out, is_dimensionless = false)
-    curve = OpenStudio::Model::CurveQuadratic.new(self)
+  #   and the resulting output dependent variable is considered unitless
+  # @return [OpenStudio::Model::CurveQuadratic] a quadratic curve
+  def create_curve_quadratic(model, coeffs, crv_name, min_x, max_x, min_out, max_out, is_dimensionless = false)
+    curve = OpenStudio::Model::CurveQuadratic.new(model)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
     curve.setCoefficient2x(coeffs[1])
@@ -468,6 +618,7 @@ class Standard
   # @param max_x [Double] the maximum value of independent variable X that will be used
   # @param min_out [Double] the minimum value of dependent variable Z
   # @param max_out [Double] the maximum value of dependent variable Z
+  # @return [OpenStudio::Model::CurveCubic] a cubic curve
   def create_curve_cubic(coeffs, crv_name, min_x, max_x, min_out, max_out)
     curve = OpenStudio::Model::CurveCubic.new(self)
     curve.setName(crv_name)
@@ -492,6 +643,7 @@ class Standard
   # @param max_x [Double] the maximum value of independent variable X that will be used
   # @param min_out [Double] the minimum value of dependent variable Z
   # @param max_out [Double] the maximum value of dependent variable Z
+  # @return [OpenStudio::Model::CurveExponent] an exponent curve
   def create_curve_exponent(coeffs, crv_name, min_x, max_x, min_out, max_out)
     curve = OpenStudio::Model::CurveExponent.new(self)
     curve.setName(crv_name)
@@ -507,6 +659,7 @@ class Standard
 
   # Gives the total R-value of the interior and exterior (if applicable)
   # film coefficients for a particular type of surface.
+  # @ref [References::ASHRAE9012010] A9.4.1 Air Films
   #
   # @param intended_surface_type [String]
   #   Valid choices:  'AtticFloor', 'AtticWall', 'AtticRoof', 'DemisingFloor', 'InteriorFloor', 'InteriorCeiling',
@@ -517,7 +670,6 @@ class Standard
   # @param int_film [Bool] if true, interior film coefficient will be included in result
   # @param ext_film [Bool] if true, exterior film coefficient will be included in result
   # @return [Double] Returns the R-Value of the film coefficients [m^2*K/W]
-  # @ref [References::ASHRAE9012010] A9.4.1 Air Films
   def film_coefficients_r_value(intended_surface_type, int_film, ext_film)
     # Return zero if both interior and exterior are false
     return 0.0 if !int_film && !ext_film
@@ -542,7 +694,7 @@ class Standard
       film_r_si += film_semi_ext_surf_r_si if int_film # Inside
     when 'AtticWall', 'AtticRoof'
       film_r_si += film_ext_surf_r_si if ext_film # Outside
-      film_r_si += film_semi_ext_surf_r_si if int_film# Inside
+      film_r_si += film_semi_ext_surf_r_si if int_film # Inside
     when 'DemisingFloor', 'InteriorFloor'
       film_r_si += film_int_surf_ht_flow_up_r_si if ext_film # Outside
       film_r_si += film_int_surf_ht_flow_dwn_r_si if int_film # Inside
@@ -569,5 +721,254 @@ class Standard
       film_r_si += film_int_surf_ht_flow_up_r_si if int_film # Inside
     end
     return film_r_si
+  end
+
+  # Sets VAV reheat and VAV no reheat terminals on an air loop to control for outdoor air
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param air_loop [<OpenStudio::Model::AirLoopHVAC>] air loop to enable DCV on.
+  #   Default is nil, which will apply to all air loops
+  # @return [OpenStudio::Model::Model] OpenStudio model object
+  def model_set_vav_terminals_to_control_for_outdoor_air(model, air_loop: nil)
+    vav_reheats = model.getAirTerminalSingleDuctVAVReheats
+    vav_no_reheats = model.getAirTerminalSingleDuctVAVNoReheats
+
+    if !air_loop.nil?
+      vav_reheats.each do |vav_reheat|
+        next if vav_reheat.airLoopHVAC.get.name.to_s != air_loop.name.to_s
+
+        vav_reheat.setControlForOutdoorAir(true)
+      end
+      vav_no_reheats.each do |vav_no_reheat|
+        next if vav_no_reheat.airLoopHVAC.get.name.to_s != air_loop.name.to_s
+
+        vav_no_reheat.setControlForOutdoorAir(true)
+      end
+    else # all terminals
+      vav_reheats.each do |vav_reheat|
+        vav_reheat.setControlForOutdoorAir(true)
+      end
+      vav_no_reheats.each do |vav_no_reheat|
+        vav_no_reheat.setControlForOutdoorAir(true)
+      end
+    end
+    return model
+  end
+
+  # renames air loop nodes to readable values
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
+  def rename_air_loop_nodes(model)
+    # rename all hvac components on air loops
+    model.getHVACComponents.sort.each do |component|
+      next if component.to_Node.is_initialized # skip nodes
+
+      unless component.airLoopHVAC.empty?
+        # rename water to air component outlet nodes
+        if component.to_WaterToAirComponent.is_initialized
+          component = component.to_WaterToAirComponent.get
+          unless component.airOutletModelObject.empty?
+            component_outlet_object = component.airOutletModelObject.get
+            next unless component_outlet_object.to_Node.is_initialized
+
+            component_outlet_object.setName("#{component.name} Outlet Air Node")
+          end
+        end
+
+        # rename air to air component nodes
+        if component.to_AirToAirComponent.is_initialized
+          component = component.to_AirToAirComponent.get
+          unless component.primaryAirOutletModelObject.empty?
+            component_outlet_object = component.primaryAirOutletModelObject.get
+            next unless component_outlet_object.to_Node.is_initialized
+
+            component_outlet_object.setName("#{component.name} Primary Outlet Air Node")
+          end
+          unless component.secondaryAirInletModelObject.empty?
+            component_inlet_object = component.secondaryAirInletModelObject.get
+            next unless component_inlet_object.to_Node.is_initialized
+
+            component_inlet_object.setName("#{component.name} Secondary Inlet Air Node")
+          end
+        end
+
+        # rename straight component outlet nodes
+        if component.to_StraightComponent.is_initialized
+          unless component.to_StraightComponent.get.outletModelObject.empty?
+            component_outlet_object = component.to_StraightComponent.get.outletModelObject.get
+            next unless component_outlet_object.to_Node.is_initialized
+
+            component_outlet_object.setName("#{component.name} Outlet Air Node")
+          end
+        end
+      end
+
+      # rename zone hvac component nodes
+      if component.to_ZoneHVACComponent.is_initialized
+        component = component.to_ZoneHVACComponent.get
+        unless component.airInletModelObject.empty?
+          component_inlet_object = component.airInletModelObject.get
+          next unless component_inlet_object.to_Node.is_initialized
+
+          component_inlet_object.setName("#{component.name} Inlet Air Node")
+        end
+        unless component.airOutletModelObject.empty?
+          component_outlet_object = component.airOutletModelObject.get
+          next unless component_outlet_object.to_Node.is_initialized
+
+          component_outlet_object.setName("#{component.name} Outlet Air Node")
+        end
+      end
+    end
+
+    # rename supply side nodes
+    model.getAirLoopHVACs.sort.each do |air_loop|
+      air_loop_name = air_loop.name.to_s
+      air_loop.demandInletNode.setName("#{air_loop_name} Demand Inlet Node")
+      air_loop.demandOutletNode.setName("#{air_loop_name} Demand Outlet Node")
+      air_loop.supplyInletNode.setName("#{air_loop_name} Supply Inlet Node")
+      air_loop.supplyOutletNode.setName("#{air_loop_name} Supply Outlet Node")
+
+      unless air_loop.reliefAirNode.empty?
+        relief_node = air_loop.reliefAirNode.get
+        relief_node.setName("#{air_loop_name} Relief Air Node")
+      end
+
+      unless air_loop.mixedAirNode.empty?
+        mixed_node = air_loop.mixedAirNode.get
+        mixed_node.setName("#{air_loop_name} Mixed Air Node")
+      end
+
+      # rename outdoor air system and nodes
+      unless air_loop.airLoopHVACOutdoorAirSystem.empty?
+        oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
+        unless oa_system.outboardOANode.empty?
+          oa_node = oa_system.outboardOANode.get
+          oa_node.setName("#{air_loop_name} Outdoor Air Node")
+        end
+      end
+    end
+
+    # rename zone air and terminal nodes
+    model.getThermalZones.sort.each do |zone|
+      zone.zoneAirNode.setName("#{zone.name} Zone Air Node")
+
+      unless zone.returnAirModelObject.empty?
+        zone.returnAirModelObject.get.setName("#{zone.name} Return Air Node")
+      end
+
+      unless zone.airLoopHVACTerminal.empty?
+        terminal_unit = zone.airLoopHVACTerminal.get
+        if terminal_unit.to_StraightComponent.is_initialized
+          component = terminal_unit.to_StraightComponent.get
+          component.inletModelObject.get.setName("#{terminal_unit.name} Inlet Air Node")
+        end
+      end
+    end
+
+    # rename zone equipment list objects
+    model.getZoneHVACEquipmentLists.sort.each do |obj|
+      begin
+        zone = obj.thermalZone
+        obj.setName("#{zone.name} Zone HVAC Equipment List")
+      rescue StandardError => e
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Removing ZoneHVACEquipmentList #{obj.name}; missing thermal zone.")
+        obj.remove
+      end
+    end
+
+    return model
+  end
+
+  # renames plant loop nodes to readable values
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
+  def rename_plant_loop_nodes(model)
+    # rename all hvac components on plant loops
+    model.getHVACComponents.sort.each do |component|
+      next if component.to_Node.is_initialized # skip nodes
+
+      unless component.plantLoop.empty?
+        # rename straight component nodes
+        # some inlet or outlet nodes may get renamed again
+        if component.to_StraightComponent.is_initialized
+          unless component.to_StraightComponent.get.inletModelObject.empty?
+            component_inlet_object = component.to_StraightComponent.get.inletModelObject.get
+            next unless component_inlet_object.to_Node.is_initialized
+
+            component_inlet_object.setName("#{component.name} Inlet Water Node")
+          end
+          unless component.to_StraightComponent.get.outletModelObject.empty?
+            component_outlet_object = component.to_StraightComponent.get.outletModelObject.get
+            next unless component_outlet_object.to_Node.is_initialized
+
+            component_outlet_object.setName("#{component.name} Outlet Water Node")
+          end
+        end
+
+        # rename water to air component nodes
+        if component.to_WaterToAirComponent.is_initialized
+          component = component.to_WaterToAirComponent.get
+          unless component.waterInletModelObject.empty?
+            component_inlet_object = component.waterInletModelObject.get
+            next unless component_inlet_object.to_Node.is_initialized
+
+            component_inlet_object.setName("#{component.name} Inlet Water Node")
+          end
+          unless component.waterOutletModelObject.empty?
+            component_outlet_object = component.waterOutletModelObject.get
+            next unless component_outlet_object.to_Node.is_initialized
+
+            component_outlet_object.setName("#{component.name} Outlet Water Node")
+          end
+        end
+
+        # rename water to water component nodes
+        if component.to_WaterToWaterComponent.is_initialized
+          component = component.to_WaterToWaterComponent.get
+          unless component.demandInletModelObject.empty?
+            demand_inlet_object = component.demandInletModelObject.get
+            next unless demand_inlet_object.to_Node.is_initialized
+
+            demand_inlet_object.setName("#{component.name} Demand Inlet Water Node")
+          end
+          unless component.demandOutletModelObject.empty?
+            demand_outlet_object = component.demandOutletModelObject.get
+            next unless demand_outlet_object.to_Node.is_initialized
+
+            demand_outlet_object.setName("#{component.name} Demand Outlet Water Node")
+          end
+          unless component.supplyInletModelObject.empty?
+            supply_inlet_object = component.supplyInletModelObject.get
+            next unless supply_inlet_object.to_Node.is_initialized
+
+            supply_inlet_object.setName("#{component.name} Supply Inlet Water Node")
+          end
+          unless component.supplyOutletModelObject .empty?
+            supply_outlet_object = component.supplyOutletModelObject .get
+            next unless supply_outlet_object.to_Node.is_initialized
+
+            supply_outlet_object.setName("#{component.name} Supply Outlet Water Node")
+          end
+        end
+      end
+    end
+
+    # rename plant nodes
+    model.getPlantLoops.sort.each do |plant_loop|
+      plant_loop_name = plant_loop.name.to_s
+      plant_loop.demandInletNode.setName("#{plant_loop_name} Demand Inlet Node")
+      plant_loop.demandOutletNode.setName("#{plant_loop_name} Demand Outlet Node")
+      plant_loop.supplyInletNode.setName("#{plant_loop_name} Supply Inlet Node")
+      plant_loop.supplyOutletNode.setName("#{plant_loop_name} Supply Outlet Node")
+    end
+
+    return model
+  end
+
+  def true?(obj)
+    obj.to_s.downcase == 'true'
   end
 end

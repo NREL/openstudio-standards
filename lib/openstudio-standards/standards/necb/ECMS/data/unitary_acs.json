@@ -1,0 +1,50 @@
+{
+  "tables": {
+    "unitary_cop_ecm": {
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "name": "Carrier WeatherExpert",
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 19044.8,
+          "minimum_energy_efficiency_ratio": null,
+          "minimum_seasonal_energy_efficiency_ratio": 17.3,
+          "cool_cap_ft": null,
+          "cool_cap_fflow": null,
+          "cool_eir_ft": null,
+          "cool_eir_fflow": null,
+          "cool_plf_fplr": null,
+          "notes": "Carrier WeatherExpert 3-5 Nominal Tons average"
+        },
+        {
+          "name": "Carrier WeatherExpert",
+          "minimum_capacity": 19044.8,
+          "maximum_capacity": 77960.0,
+          "minimum_energy_efficiency_ratio": 13.1,
+          "minimum_seasonal_energy_efficiency_ratio": null,
+          "cool_cap_ft": null,
+          "cool_cap_fflow": null,
+          "cool_eir_ft": null,
+          "cool_eir_fflow": null,
+          "cool_plf_fplr": null,
+          "notes": "Carrier WeatherExpert 6-10 Nominal Tons average"
+        },
+        {
+          "name": "Carrier WeatherExpert",
+          "minimum_capacity": 77960.0,
+          "maximum_capacity": 9999999.0,
+          "minimum_energy_efficiency_ratio": 12.0,
+          "minimum_seasonal_energy_efficiency_ratio": null,
+          "cool_cap_ft": null,
+          "cool_cap_fflow": null,
+          "cool_eir_ft": null,
+          "cool_eir_fflow": null,
+          "cool_plf_fplr": null,
+          "notes": "Carrier WeatherExpert 12.5-23 Tons average"
+        }
+      ]
+    }
+  }
+}

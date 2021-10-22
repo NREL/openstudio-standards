@@ -1,0 +1,18 @@
+{
+  "economizers": [
+    {
+      "template": "DEER 2017",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": 55000.0,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER 2017",
+      "climate_zone": "Any",
+      "data_center": true,
+      "capacity_limit": 55000.0,
+      "notes": "From MASControl2"
+    }
+  ]
+}

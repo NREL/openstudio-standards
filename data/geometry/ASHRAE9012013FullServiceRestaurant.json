@@ -1,0 +1,50 @@
+[
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "RestaurantSitDown HVACOperationSchd",
+    "oa_damper_schedule": "RestaurantSitDown MinOA_MotorizedDamper_Sched",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Two Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": null,
+    "space_names": [
+      "Dining",
+      "Kitchen"
+    ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "Dining Exhaust Fan",
+    "flow_rate": 1.331432,
+    "operation_schedule": "RestaurantSitDown HVACOperationSchd",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
+    "space_names": [
+      "Dining"
+    ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "Kitchen Exhaust Fan",
+    "flow_rate": 2.548516,
+    "operation_schedule": "RestaurantSitDown HVACOperationSchd",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
+    "space_names": [
+      "Kitchen"
+    ]
+  },
+   {
+    "type": "Refrigeration_system",
+    "compressor_type": "Low Temp",
+    "cases": [{
+      "case_type": "Case Full Service Restaurant",
+      "space_names": ["Kitchen"]}],
+    "walkins": [{
+      "walkin_type": "Walk-In Full Service Restaurant",
+      "space_names": ["Kitchen"],
+      "number_of_walkins": 1 }],
+    "name": "RefrSystem - FullServiceRestaurant",
+    "space_names": ["Kitchen"]}
+]
+

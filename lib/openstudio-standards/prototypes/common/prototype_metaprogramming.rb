@@ -4,35 +4,49 @@
 require 'json'
 
 def create_class_array
-  prototype_buildings = [
-      'FullServiceRestaurant',
-      'Hospital',
-      'HighriseApartment',
-      'LargeHotel',
-      'LargeOffice',
-      'MediumOffice',
-      'MidriseApartment',
-      'Outpatient',
-      'PrimarySchool',
-      'QuickServiceRestaurant',
-      'RetailStandalone',
-      'SecondarySchool',
-      'SmallHotel',
-      'SmallOffice',
-      'RetailStripmall',
-      'Warehouse',
-      'SuperMarket'
-  ]
+  prototype_buildings = ['FullServiceRestaurant',
+                         'Hospital',
+                         'HighriseApartment',
+                         'LargeHotel',
+                         'LargeOffice',
+                         'MediumOffice',
+                         'MidriseApartment',
+                         'Outpatient',
+                         'PrimarySchool',
+                         'QuickServiceRestaurant',
+                         'RetailStandalone',
+                         'SecondarySchool',
+                         'SmallHotel',
+                         'SmallOffice',
+                         'RetailStripmall',
+                         'Warehouse',
+                         'SuperMarket',
+                         'SmallDataCenterLowITE',
+                         'SmallDataCenterHighITE',
+                         'LargeDataCenterLowITE',
+                         'LargeDataCenterHighITE',
+                         'SmallOfficeDetailed',
+                         'MediumOfficeDetailed',
+                         'LargeOfficeDetailed',
+                         'Laboratory',
+                         'College',
+                         'CourtHouse',
+                         'TallBuilding',
+                         'SuperTallBuilding']
 
-  templates = ['ASHRAE9012004',
-               'ASHRAE9012007',
-               'ASHRAE9012010',
-               'ASHRAE9012013',
-               'DOERef1980to2004',
-               'DOERefPre1980',
-               'NRELZNEReady2017']
+  templates = {
+    'ASHRAE9012004' => '90.1-2004',
+    'ASHRAE9012007' => '90.1-2007',
+    'ASHRAE9012010' => '90.1-2010',
+    'ASHRAE9012013' => '90.1-2013',
+    'ASHRAE9012016' => '90.1-2016',
+    'ASHRAE9012019' => '90.1-2019',
+    'DOERef1980to2004' => 'DOE Ref 1980-2004',
+    'DOERefPre1980' => 'DOE Ref Pre-1980',
+    'NRELZNEReady2017' => 'NREL ZNE Ready 2017'
+  }
   class_array = []
-  templates.each do |template|
+  templates.each_pair do |template, template_string|
     # Create Prototype base class (May not be needed...)
     # Ex: class NECB2011_Prototype < NECB2011
     class_array << "
@@ -51,7 +65,7 @@ end
   # This class represents a prototypical #{template} #{name}.
   class #{template}#{name} < #{template}
   @@building_type = \"#{name}\"
-  register_standard (\"\#{@@template}_\#{@@building_type}\")
+  register_standard (\"#{template_string}_\#{@@building_type}\")
   attr_accessor :prototype_database
   attr_accessor :prototype_input
   attr_accessor :lookup_building_type
@@ -70,8 +84,8 @@ end
     end
     @lookup_building_type = self.model_get_lookup_name(@@building_type)
     #ideally we should map the data required to a instance variable.
-    @geometry_file = 'geometry/' + self.class.name + '.osm'
-    hvac_map_file =  'geometry/' + self.class.name + '.hvac_map.json'
+    @geometry_file = 'geometry/' + @prototype_input['geometry_osm']
+    hvac_map_file =  'geometry/' + @prototype_input['hvac_json']
     @system_to_space_map = load_hvac_map(hvac_map_file)
     self.set_variables()
   end
@@ -108,9 +122,15 @@ end
   # Does nothing unless implmented by the specific standard
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
   end
-  # Does nothing unless implmented by the specific standard
+
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
+    return true
   end
+
   # Does nothing unless implmented by the specific standard
   def model_update_fan_efficiency(model)
   end
@@ -128,7 +148,11 @@ end
         lookup_name = 'Office'
       when 'LargeOffice'
         lookup_name = 'Office'
-      when 'LargeOfficeDetail'
+      when 'SmallOfficeDetailed'
+        lookup_name = 'Office'
+      when 'MediumOfficeDetailed'
+        lookup_name = 'Office'
+	  when 'LargeOfficeDetailed'
         lookup_name = 'Office'
       when 'RetailStandalone'
         lookup_name = 'Retail'
@@ -138,6 +162,17 @@ end
         lookup_name = 'Office'
     end
     return lookup_name
+  end
+
+  # daylighting adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_daylighting_tweaks(model, building_type, climate_zone, prototype_input)
+    return true
   end
 end
 "
@@ -231,8 +266,12 @@ end
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
   end
 
-  # Does nothing unless implmented by the specific standard
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
+    return true
   end
 
   # Does nothing unless implmented by the specific standard
@@ -244,239 +283,262 @@ end
     end
   end
 
-
   return class_array
 end
 
 def create_deer_class_array
   prototype_buildings = [
-      'Asm',
-      'ECC',
-      'EPr',
-      'ERC',
-      'ESe',
-      'EUn',
-      'Gro',
-      'Hsp',
-      'Nrs',
-      'Htl',
-      'Mtl',
-      'MBT',
-      'MLI',
-      'OfL',
-      'OfS',
-      'RFF',
-      'RSD',
-      'Rt3',
-      'RtL',
-      'RtS',
-      'SCn',
-      'SUn',
-      'WRf',
-      'GHs',
-      'DMo',
-      'MFm',
-      'SFm'
+    'Asm',
+    'ECC',
+    'EPr',
+    'ERC',
+    'ESe',
+    'EUn',
+    'Gro',
+    'Hsp',
+    'Nrs',
+    'Htl',
+    'Mtl',
+    'MBT',
+    'MLI',
+    'OfL',
+    'OfS',
+    'RFF',
+    'RSD',
+    'Rt3',
+    'RtL',
+    'RtS',
+    'SCn',
+    'SUn',
+    'WRf',
+    'GHs',
+    'DMo',
+    'MFm',
+    'SFm'
   ]
 
   # Only a subset of building type and HVAC type combinations are valid
   building_to_hvac_systems = {
-      'Asm' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'ECC' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG',
-          'WLHP'],
-      'EPr' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'WLHP'],
-      'ERC' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'ESe' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG',
-          'WLHP'],
-      'EUn' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG'],
-      'Gro' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'Hsp' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG'],
-      'Nrs' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'FPFC',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG'],
-      'Htl' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG',
-          'WLHP'],
-      'Mtl' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'MBT' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG',
-          'WLHP'],
-      'MFm' => [
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'MLI' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'OfL' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG',
-          'WLHP'],
-      'OfS' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG',
-          'WLHP'],
-      'RFF' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'RSD' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'Rt3' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF',
-          'PVVE',
-          'PVVG',
-          'SVVE',
-          'SVVG',
-          'WLHP'],
-      'RtL' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'RtS' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'SCn' => [
-          'DXEH',
-          'DXGF',
-          'DXHP',
-          'NCEH',
-          'NCGF'],
-      'SUn' => ['Unc'],
-      'WRf' => ['DXGF']
+    'Asm' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'ECC' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG',
+      'WLHP'
+    ],
+    'EPr' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'WLHP'
+    ],
+    'ERC' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'ESe' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG',
+      'WLHP'
+    ],
+    'EUn' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG'
+    ],
+    'Gro' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'Hsp' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG'
+    ],
+    'Nrs' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'FPFC',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG'
+    ],
+    'Htl' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG',
+      'WLHP'
+    ],
+    'Mtl' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'MBT' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG',
+      'WLHP'
+    ],
+    'MFm' => [
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'MLI' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'OfL' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG',
+      'WLHP'
+    ],
+    'OfS' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG',
+      'WLHP'
+    ],
+    'RFF' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'RSD' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'Rt3' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF',
+      'PVVE',
+      'PVVG',
+      'SVVE',
+      'SVVG',
+      'WLHP'
+    ],
+    'RtL' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'RtS' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'SCn' => [
+      'DXEH',
+      'DXGF',
+      'DXHP',
+      'NCEH',
+      'NCGF'
+    ],
+    'SUn' => ['Unc'],
+    'WRf' => ['DXGF']
   }
-  
-  templates = ['DEERPRE1975',
-                'DEER1985',
-                'DEER1996',
-                'DEER2003',
-                'DEER2007',
-                'DEER2011',
-                'DEER2014',
-                'DEER2015',
-                'DEER2017']
+
+  templates = {
+    'DEERPRE1975' => 'DEER Pre-1975',
+    'DEER1985' => 'DEER 1985',
+    'DEER1996' => 'DEER 1996',
+    'DEER2003' => 'DEER 2003',
+    'DEER2007' => 'DEER 2007',
+    'DEER2011' => 'DEER 2011',
+    'DEER2014' => 'DEER 2014',
+    'DEER2015' => 'DEER 2015',
+    'DEER2017' => 'DEER 2017'
+  }
 
   class_array = []
-  templates.each do |template|
+  templates.each_pair do |template, template_string|
     # Create Prototype base class (May not be needed...)
     # Ex: class DEER_Prototype < DEER1985
     class_array << "
@@ -492,13 +554,14 @@ end
     # Example class DEER1985AsmDXGF
     prototype_buildings.each do |building_type|
       next if building_to_hvac_systems[building_type].nil?
+
       building_to_hvac_systems[building_type].each do |hvac_system|
-      class_array << "
+        class_array << "
   # This class represents a prototypical #{template} #{building_type} #{hvac_system}.
   class #{template}#{building_type}#{hvac_system} < #{template}
   @@building_type = \"#{building_type}\"
   @@hvac_system = \"#{hvac_system}\"
-  register_standard (\"\#{@@template}_\#{@@building_type}_\#{@@hvac_system}\")
+  register_standard (\"#{template_string}_\#{@@building_type}_\#{@@hvac_system}\")
   attr_accessor :prototype_database
   attr_accessor :prototype_input
   attr_accessor :lookup_building_type
@@ -562,8 +625,12 @@ end
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
   end
 
-  # Does nothing unless implmented by the specific standard
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
+    return true
   end
 
   # Does nothing unless implmented by the specific standard
@@ -579,19 +646,47 @@ end
     return building_type
   end
 
-  # Makes changes to the HVAC systems that are too
-  # specific to be coded generically.
+  # hvac adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 
-  # Makes changes to the SWH systems that are too
-  # specific to be coded generically.
+  # swh adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_swh_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
+    return true
+  end
+
+  # geometry adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
+    return true
+  end
+
+  # daylighting adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_daylighting_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 end
@@ -604,22 +699,22 @@ end
 
 def create_cbes_class_array
   prototype_buildings = [
-      'MediumOffice',
-      'RetailStandalone',
-      'SmallOffice'
+    'MediumOffice',
+    'RetailStandalone',
+    'SmallOffice'
   ]
 
-  templates = [
-    'CBESPre1978',
-    'CBEST241978',
-    'CBEST241992',
-    'CBEST242001',
-    'CBEST242005',
-    'CBEST242008'
-  ]
+  templates = {
+    'CBESPre1978' => 'CBES Pre-1978',
+    'CBEST241978' => 'CBES T24 1978',
+    'CBEST241992' => 'CBES T24 1992',
+    'CBEST242001' => 'CBES T24 2001',
+    'CBEST242005' => 'CBES T24 2005',
+    'CBEST242008' => 'CBES T24 2008'
+  }
 
   class_array = []
-  templates.each do |template|
+  templates.each_pair do |template, template_string|
     # Create Prototype base class (May not be needed...)
     # Ex: class CBESPre1978_Prototype < CBESPre1978
     class_array << "
@@ -634,11 +729,11 @@ end
     # Create Building Specific classes for each building.
     # Example class CBESPre1978_MediumOffice
     prototype_buildings.each do |building_type|
-        class_array << "
+      class_array << "
   # This class represents a prototypical #{template} #{building_type}.
   class #{template}#{building_type} < #{template}
   @@building_type = \"#{building_type}\"
-  register_standard (\"\#{@@template}_\#{@@building_type}\")
+  register_standard (\"#{template_string}_\#{@@building_type}\")
   attr_accessor :prototype_database
   attr_accessor :prototype_input
   attr_accessor :lookup_building_type
@@ -650,7 +745,7 @@ end
   def initialize
     super()
     @instvarbuilding_type = @@building_type
-    @prototype_input = self.standards_lookup_table_first(table_name: 'prototype_inputs', search_criteria: {'template' => @template,'building_type' => @@building_type})
+    @prototype_input = self.model_find_object(standards_data['prototype_inputs'], {'template' => @template,'building_type' => @@building_type}, nil)
     if @prototype_input.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type}}, cannot create model.\")
       raise(\"Could not find prototype inputs for #{template}#{building_type}, cannot create model.\")
@@ -702,8 +797,12 @@ end
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
   end
 
-  # Does nothing unless implmented by the specific standard
+  # update exhuast fan efficiency
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
+    return true
   end
 
   # Does nothing unless implmented by the specific standard
@@ -724,7 +823,7 @@ end
         lookup_name = 'Office'
       when 'LargeOffice'
         lookup_name = 'Office'
-      when 'LargeOfficeDetail'
+      when 'LargeOfficeDetailed'
         lookup_name = 'Office'
       when 'RetailStandalone'
         lookup_name = 'Retail'
@@ -736,19 +835,47 @@ end
     return lookup_name
   end
 
-  # Makes changes to the HVAC systems that are too
-  # specific to be coded generically.
+  # hvac adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 
-  # Makes changes to the SWH systems that are too
-  # specific to be coded generically.
+  # swh adjustments specific to the prototype model
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
-  def model_custom_swh_tweaks(building_type, climate_zone, prototype_input, model)
+  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
+    return true
+  end
+
+  # geometry adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
+    return true
+  end
+
+  # daylighting adjustments specific to the prototype model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [string] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_daylighting_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 end
@@ -766,7 +893,7 @@ end
 
 def save_meta_classes_to_file
   filepath = "#{File.dirname(__FILE__)}/do_not_edit_metaclasses.rb"
-  File.open(filepath, 'w') {|f| create_class_array.each {|item| f << item}}
+  File.open(filepath, 'w') { |f| create_class_array.each { |item| f << item } }
 end
 
 def remove_meta_class_file

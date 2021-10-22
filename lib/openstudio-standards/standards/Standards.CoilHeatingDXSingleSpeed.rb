@@ -3,9 +3,9 @@ class Standard
 
   include CoilDX
 
-  # Finds capacity in W.  This is the cooling capacity of the
-  # paired DX cooling coil.
+  # Finds capacity in W.  This is the cooling capacity of the paired DX cooling coil.
   #
+  # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
   # @return [Double] capacity in W to be used for find object
   def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed)
     capacity_w = nil
@@ -24,7 +24,8 @@ class Standard
           if unitary.coolingCoil.is_initialized
             clg_coil = unitary.coolingCoil.get
           end
-        end # TODO: Add other unitary systems
+        end
+        # @todo Add other unitary systems
       elsif coil_heating_dx_single_speed.containingZoneHVACComponent.is_initialized
         containing_comp = coil_heating_dx_single_speed.containingZoneHVACComponent.get
         # PTHP
@@ -45,6 +46,7 @@ class Standard
       clg_types.each do |ct|
         coils = air_loop.supplyComponents(ct.to_IddObjectType)
         next if coils.empty?
+
         clg_coil = coils[0]
         break # Stop on first DX cooling coil found
       end
@@ -100,6 +102,8 @@ class Standard
 
   # Finds lookup object in standards and return efficiency
   #
+  # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
+  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
   def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, rename = false)
     # find ac properties
@@ -114,10 +118,7 @@ class Standard
     cop = nil
 
     # find object
-    ac_props = standards_lookup_table_first(table_name: 'heat_pumps_heating',
-                                            search_criteria: search_criteria,
-                                            capacity: capacity_btu_per_hr,
-                                            date: Date.today)
+    ac_props = model_find_object(standards_data['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if ac_props.nil?
@@ -145,7 +146,7 @@ class Standard
     # If specified as HSPF
     unless ac_props['minimum_heating_seasonal_performance_factor'].nil?
       min_hspf = ac_props['minimum_heating_seasonal_performance_factor']
-      cop = hspf_to_cop_heating_no_fan(min_hspf)
+      cop = hspf_to_cop_heating_with_fan(min_hspf)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_hspf.round(1)}HSPF"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; HSPF = #{min_hspf}")
     end
@@ -161,7 +162,7 @@ class Standard
     # If specified as EER
     unless ac_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = ac_props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr, 'kBtu/hr', 'W').get)
+      cop = eer_to_cop(min_eer)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_eer.round(1)}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}:  #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -176,7 +177,9 @@ class Standard
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
+  # @param sql_db_vars_map [Hash] hash map
+  # @return [Hash] hash of coil objects
   def coil_heating_dx_single_speed_apply_efficiency_and_curves(coil_heating_dx_single_speed, sql_db_vars_map)
     successfully_set_all_properties = true
 
@@ -189,10 +192,7 @@ class Standard
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies
-    ac_props = standards_lookup_table_first(table_name: 'heat_pumps_heating',
-                                            search_criteria: search_criteria,
-                                            capacity: capacity_btu_per_hr,
-                                            date: Date.today)
+    ac_props = model_find_object(standards_data['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if ac_props.nil?

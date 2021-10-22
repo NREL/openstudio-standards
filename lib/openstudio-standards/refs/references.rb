@@ -8,8 +8,8 @@
 #   # @ref [References::ASHRAE9012004] section G.3.1, table 3
 #   def some_method()
 #     ...
-module References
 
+module References
   # ASHRAE 90.1-2004
   # @see https://www.techstreet.com/ashrae/standards/ashrae-90-1-2004-i-p?product_id=1199725 Purchase in the ASHRAE Bookstore
   class ASHRAE9012004; end
@@ -30,11 +30,19 @@ module References
   # @see https://www.techstreet.com/ashrae/standards/ashrae-90-1-2016-i-p?product_id=1931793 Purchase in the ASHRAE Bookstore
   class ASHRAE9012016; end
 
+  # ASHRAE 90.1-2019
+  # @see https://www.techstreet.com/ashrae/standards/ashrae-90-1-2019-i-p?product_id=2088527 Purchase in the ASHRAE Bookstore
+  class ASHRAE9012019; end
+
   # NREL ZNE Ready 2017.
   # This is not an actual code or standard, but rather describes what NREL believes
   # to be a reasonable set of assumptions for achieving a building that is Zero Net Energy Ready
   # as of 2017.
   class NRELZNEReady2017; end
+
+  # ZE AEDG Multifamily
+  # This template contains values from the Zero Energy Advanced Energy Design Guide for Multifamily Buildings
+  class ZEAEDGMultifamily; end
 
   # NECB2011
   # @see https://www.nrc-cnrc.gc.ca/eng/publications/codes_centre/2011_national_energy_code_buildings.html Purchase in the NRC Virtual Store
@@ -97,4 +105,17 @@ module References
   # @see http://cbes.lbl.gov/
   class CBES; end
 
+  # University of California Berkeley Center for the Built Environment
+  # These EnergyPlus objects implement a proportional control for a single
+  # thermal zone with a radiant system. The full details of the control
+  # strategy are described in the paper Raftery et al. (2017), "A new control
+  # strategy for high thermal mass radiant systems". The work was supported
+  # by the California Energy Commission (CEC) Electric Program Investment
+  # Charge (EPIC) (EPC-14-009) "Optimizing Radiant Systems for Energy Efficiency
+  # and Comfort", and the Center for the Built Environment, UC Berkeley, California.
+  # For more information please contact the following:
+  # Paul Raftery p.raftery@berkeley.edu
+  # Carlos Duarte cduarte@berkeley.edu
+  # @see https://cbe.berkeley.edu/project/optimizing-radiant-systems-energy-efficiency-comfort/
+  class CBERadiantSystems; end
 end

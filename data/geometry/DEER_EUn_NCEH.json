@@ -241,5 +241,16 @@
     "space_names": [
       "E9 Core Spc (T.C9)"
     ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "E3 North Perim Spc (G.N2) Exhaust Fan",
+    "flow_rate": 5.197274098,
+    "operation_schedule": "D_EUn_All_Fan_Yr",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": "DEER University Kitchen Exhaust Fan Balance Exhaust Fraction Schedule",
+    "space_names": [
+      "E3 North Perim Spc (G.N2)"
+    ]
   }
 ]
