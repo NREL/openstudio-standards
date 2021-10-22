@@ -73,7 +73,9 @@ class ECMS < NECB2011
                    model: model,
                    system_zones_map: map_system_to_zones,
                    system_doas_flags: system_doas_flags,
-                   system_zones_map_option: system_zones_map_option)
+                   system_zones_map_option: system_zones_map_option,
+                   heating_fuel: primary_heating_fuel,
+                   standard: template_standard)
     end
   end
 
