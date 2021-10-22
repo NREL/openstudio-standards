@@ -1,13 +1,11 @@
 class Standard
   # @!group BuildingStory
 
-  # Checks all spaces on this story that are part of the total
-  # floor area to see if they have the same multiplier.
-  # If they do, assume that the multipliers are being used
-  # as a floor multiplier.
+  # Checks all spaces on this story that are part of the total floor area to see if they have the same multiplier.
+  # If they do, assume that the multipliers are being used as a floor multiplier.
   #
-  # @return [Integer] return the floor multiplier for this story,
-  # returning 1 if no floor multiplier.
+  # @param building_story [OpenStudio::Model::BuildingStory] building story object
+  # @return [Integer] return the floor multiplier for this story, returning 1 if no floor multiplier.
   def building_story_floor_multiplier(building_story)
     floor_multiplier = 1
 
@@ -40,10 +38,10 @@ class Standard
   end
 
   # Gets the minimum z-value of the story.
-  # This is considered to be the minimum z value
-  # of any vertex of any surface of any space on the
-  # story, with the exception of plenum spaces.
+  # This is considered to be the minimum z value of any vertex of any surface of any space on the story,
+  # with the exception of plenum spaces.
   #
+  # @param building_story [OpenStudio::Model::BuildingStory] building story object
   # @return [Double] the minimum z-value, in m
   def building_story_minimum_z_value(building_story)
     z_heights = []

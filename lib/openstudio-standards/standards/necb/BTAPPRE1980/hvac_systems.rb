@@ -33,7 +33,7 @@ class BTAPPRE1980
     if (capacity_w / 1000.0) <= 700.0
       # As per MNECB if chiller capacity <= 700 kW the compressor should be reciprocating so change the type here in
       # the name, compressor_type and search_criteria which is where the compressor type is used.
-      search_criteria['compressor_type'] = "Reciprocating"
+      search_criteria['compressor_type'] = 'Reciprocating'
       compressor_type = search_criteria['compressor_type']
       chiller_electric_eir = replace_compressor_name(chiller: chiller_electric_eir, comp_type: compressor_type, chillers: chillers)
       if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
@@ -44,7 +44,7 @@ class BTAPPRE1980
     elsif ((capacity_w / 1000.0) > 700.0) && ((capacity_w / 1000.0) <= 2100.0)
       # As per MNECB if chiller capacity > 700 kW the compressor should be centrifugal so change the type here in
       # the name, compressor_type and search_criteria which is where the compressor type is used.
-      search_criteria['compressor_type'] = "Centrifugal"
+      search_criteria['compressor_type'] = 'Centrifugal'
       compressor_type = search_criteria['compressor_type']
       chiller_electric_eir = replace_compressor_name(chiller: chiller_electric_eir, comp_type: compressor_type, chillers: chillers)
       if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
@@ -53,7 +53,7 @@ class BTAPPRE1980
         chiller_capacity = 0.001
       end
     else
-      search_criteria['compressor_type'] = "Centrifugal"
+      search_criteria['compressor_type'] = 'Centrifugal'
       compressor_type = search_criteria['compressor_type']
       chiller_electric_eir = replace_compressor_name(chiller: chiller_electric_eir, comp_type: compressor_type, chillers: chillers)
       chiller_capacity = capacity_w / 2.0
@@ -160,9 +160,9 @@ class BTAPPRE1980
 
     # Assuming all pump motors are 4-pole ODP
     search_criteria = {
-        'motor_use' => 'PUMP',
-        'number_of_poles' => 4.0,
-        'type' => 'Enclosed'
+      'motor_use' => 'PUMP',
+      'number_of_poles' => 4.0,
+      'type' => 'Enclosed'
     }
 
     motor_properties = model_find_object(motors, search_criteria, motor_bhp)
@@ -193,11 +193,11 @@ class BTAPPRE1980
   end
 
   # Replace the chiller compressor type in the chiller name.
-  def replace_compressor_name(chiller: ,comp_type:, chillers:)
+  def replace_compressor_name(chiller:, comp_type:, chillers:)
     # Get the current name.
     chiller_name = chiller.name.to_s
     # Get the unique compressor types from the chiller table (from the chillers.json file.)
-    chiller_types = chillers.uniq{|chill_param| chill_param['compressor_type']}
+    chiller_types = chillers.uniq { |chill_param| chill_param['compressor_type'] }
     new_name = chiller_name
     # Go through each chiller compressor type from the chiller table and see if it is in the chiller name.  If it is,
     # then replace the old compressor type in the name with the new one.
@@ -222,12 +222,14 @@ class BTAPPRE1980
     # type of plant loop get the combined pump efficiency from pump_data
     pump.plantLoop.get.supplyComponents.each do |comp|
       obj_type = comp.iddObjectType.valueName.to_s
-      break if pump_info = pump_data.find { |pump| pump['components'].find {|component| component.include?(obj_type)}}
+      break if pump_info == pump_data.find { |plant_pump| plant_pump['components'].find { |component| component.include?(obj_type) } }
     end
+
     return if pump_info.nil?
+
     # DesignShaftPowerPerUnitFlowRatePerUnitHead seems to be the inverse of an efficiency so get the inverse efficiency
     # by dividing the motor efficiency from the total pump efficiency.
-    inv_impeller_eff = motor_eff/pump_info['comb_eff'].to_f
+    inv_impeller_eff = motor_eff / pump_info['comb_eff'].to_f
     pump.setDesignShaftPowerPerUnitFlowRatePerUnitHead(inv_impeller_eff)
   end
 
@@ -236,27 +238,28 @@ class BTAPPRE1980
   # I wrote this.  So far it applies fan performance to system 3 return fans and to zone exhaust fans which were added
   # to BTAPPRE1980 and BTAP1980TO2010 since they are not used in NECB2011, NECB2015, or NECB2017.
   def model_apply_existing_building_fan_performance(model:)
-    ret_fans = model.getFanConstantVolumes.select {|ret_fan| ret_fan.endUseSubcategory.to_s == "Return_Fan"}
-    unless ret_fans.empty?
-      fan_type = 'CONSTANT-RETURN'
-      motor_type = 'CONSTANT-RETURN'
-      pressure_rise = 'return_fan_constant_volume_pressure_rise_value'
-      fan_hash = get_fan_chars(fan_type: fan_type, motor_type: motor_type, press_rise: pressure_rise)
-      ret_fans.each do |ret_fan|
-        ret_fan.setPressureRise(fan_hash[:press_rise].to_f)
-        ret_fan.setFanTotalEfficiency(fan_hash[:total_eff].to_f)
-        ret_fan.setMotorEfficiency(fan_hash[:motor_eff].to_f)
-      end
-      exhaust_fans = model.getFanZoneExhausts
-      unless exhaust_fans.empty?
-        fan_type = 'EXHAUST'
-        pressure_rise = 'exhaust_fan_pressure_rise_value'
-        fan_hash = get_fan_chars(fan_type: fan_type, press_rise: pressure_rise)
-        exhaust_fans.sort.each do |exhaust_fan|
-          exhaust_fan.setFanTotalEfficiency(fan_hash[:total_eff])
-          exhaust_fan.setPressureRise(fan_hash[:press_rise])
-        end
-      end
+    ret_fans = model.getFanConstantVolumes.select { |ret_fan| ret_fan.endUseSubcategory.to_s == 'Return_Fan' }
+    return if ret_fans.empty?
+
+    fan_type = 'CONSTANT-RETURN'
+    motor_type = 'CONSTANT-RETURN'
+    pressure_rise = 'return_fan_constant_volume_pressure_rise_value'
+    fan_hash = get_fan_chars(fan_type: fan_type, motor_type: motor_type, press_rise: pressure_rise)
+    ret_fans.each do |ret_fan|
+      ret_fan.setPressureRise(fan_hash[:press_rise].to_f)
+      ret_fan.setFanTotalEfficiency(fan_hash[:total_eff].to_f)
+      ret_fan.setMotorEfficiency(fan_hash[:motor_eff].to_f)
+    end
+    exhaust_fans = model.getFanZoneExhausts
+
+    return if exhaust_fans.empty?
+
+    fan_type = 'EXHAUST'
+    pressure_rise = 'exhaust_fan_pressure_rise_value'
+    fan_hash = get_fan_chars(fan_type: fan_type, press_rise: pressure_rise)
+    exhaust_fans.sort.each do |exhaust_fan|
+      exhaust_fan.setFanTotalEfficiency(fan_hash[:total_eff])
+      exhaust_fan.setPressureRise(fan_hash[:press_rise])
     end
   end
 
@@ -269,32 +272,32 @@ class BTAPPRE1980
   # If the above cannot be found it defaults values (this should not happen).
   # The method return a hash containing the total fan efficiency, motor efficiency and pressure rise.
   def get_fan_chars(fan_type:, motor_type: nil, press_rise:)
-    standards_fan_total_efficiency = @standards_data["fans"].select {|standards_fan| standards_fan["fan_type"] == fan_type}
+    standards_fan_total_efficiency = @standards_data['fans'].select { |standards_fan| standards_fan['fan_type'] == fan_type }
     if standards_fan_total_efficiency.empty?
       fan_total_efficiency = 0.25
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.model_apply_existing_building_fan_characteristics', "Cannot find fan data in standards fans data.  Defaulting total fan efficiency to #{fan_total_efficiency}.")
     else
-      fan_total_efficiency = standards_fan_total_efficiency[0]["fan_total_efficiency"]
+      fan_total_efficiency = standards_fan_total_efficiency[0]['fan_total_efficiency']
     end
     fan_motor_efficiency = nil
     unless motor_type.nil?
-      standards_fan_motor_efficiency = @standards_data["motors"].select {|standards_motor| (standards_motor["motor_use"] == "FAN" && standards_motor["motor_type"] == motor_type)}
+      standards_fan_motor_efficiency = @standards_data['motors'].select { |standards_motor| (standards_motor['motor_use'] == 'FAN' && standards_motor['motor_type'] == motor_type) }
       if standards_fan_motor_efficiency.empty?
         fan_motor_efficiency = 0.385
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.model_apply_existing_building_fan_characteristics', "Cannot find fan motor data in standards fans data.  Defaulting fan moter efficinecy to #{fan_motor_efficiency}.")
       else
-        fan_motor_efficiency = standards_fan_motor_efficiency[0]["nominal_full_load_efficiency"]
+        fan_motor_efficiency = standards_fan_motor_efficiency[0]['nominal_full_load_efficiency']
       end
     end
-    fan_pressure_rise = @standards_data["constants"][press_rise]["value"]
+    fan_pressure_rise = @standards_data['constants'][press_rise]['value']
     if fan_pressure_rise.nil?
       fan_pressure_rise = 150.0
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.model_apply_existing_building_fan_characteristics', "Cannot find fan pressure data in constants data.  Defaulting total fan pressure rise to #{fan_pressure_rise}.")
     end
     return {
-        total_eff: fan_total_efficiency,
-        motor_eff: fan_motor_efficiency,
-        press_rise: fan_pressure_rise
+      total_eff: fan_total_efficiency,
+      motor_eff: fan_motor_efficiency,
+      press_rise: fan_pressure_rise
     }
   end
 
@@ -305,7 +308,7 @@ class BTAPPRE1980
     zone.spaces.sort.each do |space|
       outdoor_air_rate = space.designSpecificationOutdoorAir.get.outdoorAirFlowperFloorArea
       floor_area = space.floorArea
-      outdoor_air += (outdoor_air_rate*floor_area)
+      outdoor_air += (outdoor_air_rate * floor_area)
     end
     exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
     exhaust_fan.setName(name)

@@ -3,6 +3,7 @@ class Standard
 
   # find search criteria
   #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
   # @return [Hash] used for standards_lookup_table(model)
   def boiler_hot_water_find_search_criteria(boiler_hot_water)
     # Define the criteria to find the boiler properties
@@ -35,6 +36,7 @@ class Standard
 
   # Find capacity in W
   #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
   # @return [Double] capacity in W
   def boiler_hot_water_find_capacity(boiler_hot_water)
     capacity_w = nil
@@ -53,6 +55,7 @@ class Standard
 
   # Finds lookup object in standards and return minimum thermal efficiency
   #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
   # @return [Double] minimum thermal efficiency
   def boiler_hot_water_standard_minimum_thermal_efficiency(boiler_hot_water, rename = false)
     # Get the boiler properties
@@ -108,8 +111,8 @@ class Standard
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] the object to modify
-  # @return [Bool] true if successful, false if not
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
+  # @return [Bool] returns true if successful, false if not
   def boiler_hot_water_apply_efficiency_and_curves(boiler_hot_water)
     successfully_set_all_properties = false
 

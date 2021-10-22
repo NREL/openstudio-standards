@@ -3,6 +3,8 @@ class Standard
 
   # Prototype AirConditionerVariableRefrigerantFlow object
   # Enters in default curves for coil by type of coil
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param name [String] the name of the system, or nil in which case it will be defaulted
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param type [String] the type of unit to reference for the correct curve set
@@ -16,6 +18,7 @@ class Standard
   # @param master_zone [<OpenStudio::Model::ThermalZone>] master control zone to switch between heating and cooling
   # @param priority_control_type [String] type of master thermostat priority control type
   #   options are LoadPriority, ZonePriority, ThermostatOffsetPriority, MasterThermostatPriority
+  # @return [OpenStudio::Model::AirConditionerVariableRefrigerantFlow] the vrf unit
   def create_air_conditioner_variable_refrigerant_flow(model,
                                                        name: 'VRF System',
                                                        schedule: nil,

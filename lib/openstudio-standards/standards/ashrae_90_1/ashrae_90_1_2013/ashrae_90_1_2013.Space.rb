@@ -96,15 +96,17 @@ class ASHRAE9012013 < ASHRAE901
     return [req_top_ctrl, req_pri_ctrl, req_sec_ctrl]
   end
 
-  # Determine the fraction controlled by each sensor and which
-  # window each sensor should go near.
+  # Determine the fraction controlled by each sensor and which window each sensor should go near.
   #
-  # @param space [OpenStudio::Model::Space] the space with the daylighting
+  # @param space [OpenStudio::Model::Space] space object
+  # @param areas [Hash] a hash of daylighted areas
   # @param sorted_windows [Hash] a hash of windows, sorted by priority
   # @param sorted_skylights [Hash] a hash of skylights, sorted by priority
   # @param req_top_ctrl [Bool] if toplighting controls are required
   # @param req_pri_ctrl [Bool] if primary sidelighting controls are required
   # @param req_sec_ctrl [Bool] if secondary sidelighting controls are required
+  # @return [Array] array of 4 items
+  #   [sensor 1 fraction, sensor 2 fraction, sensor 1 window, sensor 2 window]
   def space_daylighting_fractions_and_windows(space,
                                               areas,
                                               sorted_windows,
