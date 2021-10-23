@@ -58,25 +58,13 @@ class ECMS < NECB2011
     ecm_std.remove_chw_loops(model)
     ecm_std.remove_cw_loops(model)
 
-    # Rather than go through every add_ecm class to add 'the primary_heating_fuel' argument I added this statement to
-    # only include it when it is used (for now in the add_ecm_remove_airloops_add_zone_baseboards method).
-    if ecm_add_method_name == 'add_ecm_remove_airloops_add_zone_baseboards'
-      ecm_std.send(ecm_add_method_name,
-                   model: model,
-                   system_zones_map: map_system_to_zones,
-                   system_doas_flags: system_doas_flags,
-                   zone_clg_eqpt_type: zone_clg_eqpt_type,
-                   standard: template_standard,
-                   primary_heating_fuel: primary_heating_fuel)
-    else
-      ecm_std.send(ecm_add_method_name,
-                   model: model,
-                   system_zones_map: map_system_to_zones,
-                   system_doas_flags: system_doas_flags,
-                   system_zones_map_option: system_zones_map_option,
-                   heating_fuel: primary_heating_fuel,
-                   standard: template_standard)
-    end
+    ecm_std.send(ecm_add_method_name,
+                 model: model,
+                 system_zones_map: map_system_to_zones,
+                 system_doas_flags: system_doas_flags,
+                 zone_clg_eqpt_type: zone_clg_eqpt_type,
+                 standard: template_standard,
+                 heating_fuel: primary_heating_fuel)
   end
 
   def apply_system_efficiencies_ecm(model:, ecm_system_name: nil)
