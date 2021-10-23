@@ -490,12 +490,14 @@ class ECMS
     # Update system doas flags
     system_doas_flags = {}
     system_zones_map.keys.each { |sname| system_doas_flags[sname] = true }
-    # Get default heating fuel
+    # Set heating fuel
     updated_heating_fuel = heating_fuel
     if heating_fuel == 'DefaultFuel'
       epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
       updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
     end
+    system_fuel_defaults = standard.standards_data['fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == heating_fuel }
+    raise("fuel_type_sets named #{heating_fuel} not found in fuel_type_sets table.") if system_fuel_defaults.nil?
     # use system zones map and generate new air system and zonal equipment
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
@@ -1009,19 +1011,22 @@ class ECMS
                                     heating_fuel:,
                                     standard:)
 
+    # Set heating fuel
+    updated_heating_fuel = heating_fuel
+    if heating_fuel == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
+    end
+    system_fuel_defaults = standard.standards_data['fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == heating_fuel }
+    raise("fuel_type_sets named #{heating_fuel} not found in fuel_type_sets table.") if system_fuel_defaults.nil?
+    # Set supplemental heating for air loop
+    sys_supp_htg_eqpt_type = 'coil_electric'
+    sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
                                            zones: zones,
                                            system_doas_flags: system_doas_flags)
-      # Get default heating fuel
-      updated_heating_fuel = heating_fuel
-      if heating_fuel == 'DefaultFuel'
-        epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-        updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
-      end
-      sys_supp_htg_eqpt_type = 'coil_electric'
-      sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
       # add airloop and its equipment
       airloop, return_fan = add_air_system(
         model: model,
@@ -1154,12 +1159,15 @@ class ECMS
                              standard:,
                              heating_fuel:)
 
-    # Get default heating fuel
+    # Set heating fuel
     updated_heating_fuel = heating_fuel
     if heating_fuel == 'DefaultFuel'
       epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
       updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
     end
+    system_fuel_defaults = standard.standards_data['fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == heating_fuel }
+    raise("fuel_type_sets named #{heating_fuel} not found in fuel_type_sets table.") if system_fuel_defaults.nil?
+    # Set supplemental heaing for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
     sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
     # Update system zones map if needed
@@ -1304,12 +1312,15 @@ class ECMS
                                   standard:,
                                   heating_fuel:)
 
-    # Get default heating fuel
+    # Set heating fuel
     updated_heating_fuel = heating_fuel
     if heating_fuel == 'DefaultFuel'
       epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
       updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
     end
+    system_fuel_defaults = standard.standards_data['fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == heating_fuel }
+    raise("fuel_type_sets named #{heating_fuel} not found in fuel_type_sets table.") if system_fuel_defaults.nil?
+    # Set supplemental heating fuel for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
     sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
     systems = []
@@ -2852,7 +2863,7 @@ class ECMS
   def add_ecm_remove_airloops_add_zone_baseboards(model:,
                                                   system_zones_map:,
                                                   system_doas_flags: nil,
-                                                  zone_clg_eqpt_type: nil,
+                                                  system_zones_map_option:,
                                                   standard:,
                                                   heating_fuel:)
     # Set the primary fuel set to default to to specific fuel type.

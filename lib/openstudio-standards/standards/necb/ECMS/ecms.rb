@@ -46,12 +46,11 @@ class ECMS < NECB2011
     ecm_std = Standard.build('ECMS')
     systems = model.getAirLoopHVACs
     map_system_to_zones, system_doas_flags = ecm_std.get_map_systems_to_zones(systems)
-    zone_clg_eqpt_type = ecm_std.get_zone_clg_eqpt_type(model)
-    # when the ecm is associated with adding a new HVAC system, then remove existing system components and loops
     ecm_add_method_name = "add_ecm_#{ecm_system_name.downcase}"
 
     raise("the method #{ecm_add_method_name} does not exist in the ECM class. Please verify that this should be called.") unless ecm_std.respond_to? ecm_add_method_name
 
+    # when the ecm is associated with adding a new HVAC system, then remove existing system components and loops
     ecm_std.remove_all_zone_eqpt(systems)
     ecm_std.remove_air_loops(model)
     ecm_std.remove_hw_loops(model)
@@ -62,7 +61,7 @@ class ECMS < NECB2011
                  model: model,
                  system_zones_map: map_system_to_zones,
                  system_doas_flags: system_doas_flags,
-                 zone_clg_eqpt_type: zone_clg_eqpt_type,
+                 system_zones_map_option: system_zones_map_option,
                  standard: template_standard,
                  heating_fuel: primary_heating_fuel)
   end
