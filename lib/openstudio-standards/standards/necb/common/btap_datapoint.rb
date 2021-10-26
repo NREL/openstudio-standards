@@ -113,6 +113,7 @@ class BTAPDatapoint
                                        lights_scale: @options[:lights_scale],
                                        daylighting_type: @options[:daylighting_type], # Two options: @options[: (1) 'NECB_Default', (2) 'add_daylighting_controls'
                                        ecm_system_name: @options[:ecm_system_name],
+                                       system_zones_map_option: @options[:system_zones_map_option], # (1) 'NECB_Default' (2) 'one_sys_per_floor' (3) 'one_sys_per_bldg'
                                        erv_package: @options[:erv_package],
                                        boiler_eff: @options[:boiler_eff],
                                        # Inconsistent naming Todo Chris K.
