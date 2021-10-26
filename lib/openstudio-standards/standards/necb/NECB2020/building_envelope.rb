@@ -1,4 +1,6 @@
-class NECB2020# Go through the default construction sets and hard-assigned
+class NECB2020
+
+  # Go through the default construction sets and hard-assigned
   # constructions. Clone the existing constructions and set their
   # intended surface type and standards construction type per
   # the PRM.  For some standards, this will involve making
@@ -53,20 +55,21 @@ class NECB2020# Go through the default construction sets and hard-assigned
         return false
       end
 
+      # hdd required to get correct conductance values from the json file.
+      hdd = get_necb_hdd18(model)
+	  
       # Lambdas are preferred over methods in methods for small utility methods.
       correct_cond = lambda do |conductivity, surface_type|
-        # hdd required in scope for eval function.
-        hdd = get_necb_hdd18(model)
-        return conductivity.nil? || conductivity.to_f <= 0.0 || conductivity =="NECB_Default"  ? eval(model_find_objects(@standards_data['surface_thermal_transmittance'], surface_type)[0]['formula']) : conductivity.to_f
+        return conductivity.nil? || conductivity.to_f <= 0.0 || conductivity == 'NECB_Default' ? eval(model_find_objects(@standards_data['surface_thermal_transmittance'], surface_type)[0]['formula']) : conductivity.to_f
       end
 
       # Converts trans and vis to nil if requesting default.. or casts the string to a float.
       correct_vis_trans = lambda do |value|
-        return value.nil? || value.to_f <= 0.0 || value =="NECB_Default"  ? nil : value.to_f
+        return value.nil? || value.to_f <= 0.0 || value == 'NECB_Default' ? nil : value.to_f
       end
 
       BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set!(model: model,
-                                                                                              name: "#{default_surface_construction_set.name.get} at hdd = #{get_necb_hdd18(model)}",
+                                                                                              name: "#{default_surface_construction_set.name.get} at hdd = #{hdd}",
                                                                                               default_surface_construction_set: default_surface_construction_set,
                                                                                               # ext surfaces
                                                                                               ext_wall_cond: correct_cond.call(ext_wall_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Wall'}),
@@ -104,17 +107,14 @@ class NECB2020# Go through the default construction sets and hard-assigned
                                                                                               tubular_daylight_diffuser_solar_trans: correct_vis_trans.call(tubular_daylight_diffuser_solar_trans),
                                                                                               tubular_daylight_diffuser_vis_trans: correct_vis_trans.call(tubular_daylight_diffuser_vis_trans)
       )
-
-
     end
     # sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
     model.getPlanarSurfaces.sort.each(&:resetConstruction)
     # if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
     BTAP::Resources::Envelope.assign_interior_surface_construction_to_adiabatic_surfaces(model, nil)
     BTAP.runner_register('Info', ' apply_standard_construction_properties was sucessful.', runner)
-
   end
-
+  
   # Set all external subsurfaces (doors, windows, skylights) to NECB values.
   # @author phylroy.lopez@nrcan.gc.ca
   # @param subsurface [String]
