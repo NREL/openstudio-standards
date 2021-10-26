@@ -39,7 +39,7 @@ class ECMS < NECB2011
     @standards_data['curves'] = standards_data['tables']['curves']['table']
   end
 
-  def apply_system_ecm(model:, ecm_system_name: nil, template_standard:, runner: nil, primary_heating_fuel: nil)
+  def apply_system_ecm(model:, ecm_system_name: nil, template_standard:, runner: nil, primary_heating_fuel: nil, system_zones_map_option: 'NECB_Default')
     # Do nothing if nil or other usual suspects.. covering all bases for now.
     return if ecm_system_name.nil? || ecm_system_name == 'none' || ecm_system_name == 'NECB_Default'
 
@@ -72,9 +72,9 @@ class ECMS < NECB2011
       ecm_std.send(ecm_add_method_name,
                    model: model,
                    system_zones_map: map_system_to_zones,
-                   system_doas_flags: system_doas_flags)
+                   system_doas_flags: system_doas_flags,
+                   system_zones_map_option: system_zones_map_option)
     end
-    # ecm_std.add_ecm_hs09_ccashpsys(model:model,system_zones_map:,system_doas_flags:,zone_clg_eqpt_type: nil,standard:,baseboard_flag: true)
   end
 
   def apply_system_efficiencies_ecm(model:, ecm_system_name: nil)

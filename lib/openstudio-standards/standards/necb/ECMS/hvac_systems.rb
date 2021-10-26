@@ -413,6 +413,56 @@ class ECMS
     end
   end
 
+  #=============================================================================================================================
+  # Get building storey for a zone
+  def get_zone_storey(zone)
+    zone_storey = nil
+    zone.model.getBuildingStorys.each do |storey|
+      storey.spaces.each do |space|
+        if space.thermalZone.get.name.to_s == zone.name.to_s
+          zone_storey = storey
+          break
+        end
+      end
+      break if !zone_storey.nil?
+    end
+    return zone_storey
+  end
+
+  #==============================================================================================================================
+  # Get a map of bldg storeys and zones
+  def get_storey_zones_map(system_zones_map)
+    storey_zones_map = {}
+    system_zones_map.each do |sys,zones|
+      zones.each do |zone|
+        storey = get_zone_storey(zone)
+        storey_zones_map[storey.name.to_s] = [] if !storey_zones_map.has_key? storey.name.to_s
+        storey_zones_map[storey.name.to_s] << zone
+      end
+    end
+    return storey_zones_map
+  end
+  
+  #==============================================================================================================================
+  # Update the map between systems and zones
+  def update_system_zones_map(model,system_zones_map,system_zones_map_option,system_key)
+    updated_system_zones_map = {}
+    if system_zones_map_option == 'one_sys_per_bldg'
+      system_zones_map.each do |sname,zones|
+        updated_system_zones_map[system_key] = [] if !updated_system_zones_map.has_key? system_key
+        updated_system_zones_map[system_key] += zones
+      end
+    elsif system_zones_map_option == 'one_sys_per_floor'
+      storey_zones_map = get_storey_zones_map(system_zones_map)
+      storey_zones_map.each do |storey_name,zones|
+        sys_name = "#{system_key}_#{storey_name.gsub(' ','_')}"
+        updated_system_zones_map[sys_name] = [] if !updated_system_zones_map.has_key? sys_name
+        updated_system_zones_map[sys_name] += zones
+      end
+    end
+    return updated_system_zones_map
+  end
+
   # =============================================================================================================================
   # Add equipment for ECM 'hs08_ccashp_vrf':
   #   -Constant-volume DOAS with air-source heat pump for heating and cooling and electric backup
@@ -422,12 +472,22 @@ class ECMS
     model:,
     system_zones_map:,
     system_doas_flags:,
-    air_sys_eqpt_type: 'ccashp'
-  )
+    system_zones_map_option:,
+    air_sys_eqpt_type: 'ccashp')
+
+    # Update system zones map if needed
+    if system_zones_map_option != 'NECB_Default'
+      system_zones_map = update_system_zones_map(model,system_zones_map,system_zones_map_option,'sys_1')
+    else
+      updated_system_zones_map = {}
+      system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..]}"] = zones}  # doas unit is an NECB sys_1 
+      system_zones_map = updated_system_zones_map
+    end
     # Add outdoor VRF unit
     outdoor_vrf_unit = add_outdoor_vrf_unit(model: model, ecm_name: 'hs08_ccashp_vrf')
     # Update system doas flags
-    system_doas_flags.keys.each { |sname| system_doas_flags[sname] = true }
+    system_doas_flags = {}
+    system_zones_map.keys.each { |sname| system_doas_flags[sname] = true }
     # use system zones map and generate new air system and zonal equipment
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
@@ -931,7 +991,8 @@ class ECMS
   #   -Electric baseboards
   def add_ecm_hs09_ccashp_baseboard(model:,
                                     system_zones_map:,    # hash of ailoop names as keys and array of zones as values
-                                    system_doas_flags:)   # hash of system names as keys and flag for DOAS as values
+                                    system_doas_flags:,   # hash of system names as keys and flag for DOAS as values
+                                    system_zones_map_option:)
 
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
@@ -1063,10 +1124,20 @@ class ECMS
   #   -Packaged-Terminal air-source heat pumps with electric backup
   def add_ecm_hs11_ashp_pthp(model:,
                              system_zones_map:,
-                             system_doas_flags:)
+                             system_doas_flags:,
+                             system_zones_map_option:)
 
+    # Update system zones map if needed
+    if system_zones_map_option != 'NECB_Default'
+      system_zones_map = update_system_zones_map(model,system_zones_map,system_zones_map_option,'sys_1')
+    else
+      updated_system_zones_map = {}
+      system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..]}"] = zones}
+      system_zones_map = updated_system_zones_map
+    end
     # Update system doas flags
-    system_doas_flags.keys.each { |sname| system_doas_flags[sname] = true }
+    system_doas_flags = {}
+    system_zones_map.keys.each { |sname| system_doas_flags[sname] = true }
     # use system zones map and generate new air system and zonal equipment
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
@@ -1193,7 +1264,8 @@ class ECMS
   #   -Electric baseboards
   def add_ecm_hs12_ashp_baseboard(model:,
                                   system_zones_map:,
-                                  system_doas_flags:)
+                                  system_doas_flags:,
+                                  system_zones_map_option:)
 
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
@@ -1323,11 +1395,13 @@ class ECMS
   #   -Zonal VRF terminal units for heating and cooling with electric baseboards
   def add_ecm_hs13_ashp_vrf(model:,
                             system_zones_map:,
-                            system_doas_flags:)
+                            system_doas_flags:,
+                            system_zones_map_option:)
     # call method for ECM hs08 with ASHP in the air system
     add_ecm_hs08_ccashp_vrf(model: model,
                             system_zones_map: system_zones_map,
                             system_doas_flags: system_doas_flags,
+                            system_zones_map_option: system_zones_map_option,
                             air_sys_eqpt_type: 'ashp')
   end
 
