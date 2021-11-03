@@ -76,7 +76,7 @@ class ASHRAE9012016 < ASHRAE901
                'ASHRAE 169-2013-1A'
             threshold = 150
           else
-            OpenStudio.logFree(OpenStudio::Warn, "Pump flow control requirement missing for heating water pumps in climate zone: #{climate_zone}.")
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2016.PumpVariableSpeed', "Pump flow control requirement missing for heating water pumps in climate zone: #{climate_zone}.")
         end
       when 'Cooling'
         case climate_zone
@@ -128,10 +128,10 @@ class ASHRAE9012016 < ASHRAE901
                'ASHRAE 169-2013-8B'
             threshold = 10
           else
-            OpenStudio.logFree(OpenStudio::Warn, "Pump flow control requirement missing for chilled water pumps in climate zone: #{climate_zone}.")
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2016.PumpVariableSpeed', "Pump flow control requirement missing for chilled water pumps in climate zone: #{climate_zone}.")
         end
       else
-        OpenStudio.logFree(OpenStudio::Warn, "No pump flow requirement for #{plant_loop_type} plant loops.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2016.PumpVariableSpeed', "No pump flow requirement for #{plant_loop_type} plant loops.")
         return false
     end
 

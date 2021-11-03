@@ -413,6 +413,56 @@ class ECMS
     end
   end
 
+  #=============================================================================================================================
+  # Get building storey for a zone
+  def get_zone_storey(zone)
+    zone_storey = nil
+    zone.model.getBuildingStorys.each do |storey|
+      storey.spaces.each do |space|
+        if space.thermalZone.get.name.to_s == zone.name.to_s
+          zone_storey = storey
+          break
+        end
+      end
+      break if !zone_storey.nil?
+    end
+    return zone_storey
+  end
+
+  #==============================================================================================================================
+  # Get a map of bldg storeys and zones
+  def get_storey_zones_map(system_zones_map)
+    storey_zones_map = {}
+    system_zones_map.each do |sys,zones|
+      zones.each do |zone|
+        storey = get_zone_storey(zone)
+        storey_zones_map[storey.name.to_s] = [] if !storey_zones_map.has_key? storey.name.to_s
+        storey_zones_map[storey.name.to_s] << zone
+      end
+    end
+    return storey_zones_map
+  end
+  
+  #==============================================================================================================================
+  # Update the map between systems and zones
+  def update_system_zones_map(model,system_zones_map,system_zones_map_option,system_key)
+    updated_system_zones_map = {}
+    if system_zones_map_option == 'one_sys_per_bldg'
+      system_zones_map.each do |sname,zones|
+        updated_system_zones_map[system_key] = [] if !updated_system_zones_map.has_key? system_key
+        updated_system_zones_map[system_key] += zones
+      end
+    elsif system_zones_map_option == 'one_sys_per_floor'
+      storey_zones_map = get_storey_zones_map(system_zones_map)
+      storey_zones_map.each do |storey_name,zones|
+        sys_name = "#{system_key}_#{storey_name.gsub(' ','_')}"
+        updated_system_zones_map[sys_name] = [] if !updated_system_zones_map.has_key? sys_name
+        updated_system_zones_map[sys_name] += zones
+      end
+    end
+    return updated_system_zones_map
+  end
+
   # =============================================================================================================================
   # Add equipment for ECM 'hs08_ccashp_vrf':
   #   -Constant-volume DOAS with air-source heat pump for heating and cooling and electric backup
@@ -422,24 +472,45 @@ class ECMS
     model:,
     system_zones_map:,
     system_doas_flags:,
-    air_sys_eqpt_type: 'ccashp'
-  )
+    system_zones_map_option:,
+    heating_fuel:,
+    standard:,
+    air_sys_eqpt_type: 'ccashp')
+
+    # Update system zones map if needed
+    if system_zones_map_option != 'NECB_Default'
+      system_zones_map = update_system_zones_map(model,system_zones_map,system_zones_map_option,'sys_1')
+    else
+      updated_system_zones_map = {}
+      system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..]}"] = zones}  # doas unit is an NECB sys_1 
+      system_zones_map = updated_system_zones_map
+    end
     # Add outdoor VRF unit
     outdoor_vrf_unit = add_outdoor_vrf_unit(model: model, ecm_name: 'hs08_ccashp_vrf')
     # Update system doas flags
-    system_doas_flags.keys.each { |sname| system_doas_flags[sname] = true }
+    system_doas_flags = {}
+    system_zones_map.keys.each { |sname| system_doas_flags[sname] = true }
+    # Set heating fuel
+    updated_heating_fuel = heating_fuel
+    if heating_fuel == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+    end
+    raise("Heating fuel for ECM 'HS08_CCASHP_VRF' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
     # use system zones map and generate new air system and zonal equipment
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
                                            zones: zones,
                                            system_doas_flags: system_doas_flags)
+      sys_supp_htg_eqpt_type = 'coil_electric'
+      sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
       airloop, return_fan = add_air_system(model: model,
                                            zones: zones,
                                            sys_abbr: sys_info['sys_abbr'],
                                            sys_vent_type: sys_info['sys_vent_type'],
                                            sys_heat_rec_type: sys_info['sys_heat_rec_type'],
                                            sys_htg_eqpt_type: air_sys_eqpt_type,
-                                           sys_supp_htg_eqpt_type: 'coil_electric',
+                                           sys_supp_htg_eqpt_type: sys_supp_htg_eqpt_type,
                                            sys_clg_eqpt_type: air_sys_eqpt_type,
                                            sys_supp_fan_type: sys_info['sys_supp_fan_type'],
                                            sys_ret_fan_type: sys_info['sys_ret_fan_type'],
@@ -477,7 +548,7 @@ class ECMS
                     zone_supp_htg_eqpt_type: 'none',
                     zone_clg_eqpt_type: 'vrf',
                     zone_fan_type: 'On_Off')
-      # add electric unit heaters fpr backup
+      # add electric baseboards for backup
       add_zone_eqpt(model: model,
                     airloop: airloop,
                     zones: zones,
@@ -486,7 +557,7 @@ class ECMS
                     zone_htg_eqpt_type: 'baseboard_electric',
                     zone_supp_htg_eqpt_type: 'none',
                     zone_clg_eqpt_type: 'none',
-                    zone_fan_type: 'none') # OS doesn't support onoff fans for unit heaters
+                    zone_fan_type: 'none')
       # Now we can find and apply maximum horizontal and vertical distances between outdoor vrf unit and zones with vrf terminal units
       max_hor_pipe_length, max_vert_pipe_length = get_max_vrf_pipe_lengths(model)
       outdoor_vrf_unit.setEquivalentPipingLengthusedforPipingCorrectionFactorinCoolingMode(max_hor_pipe_length)
@@ -636,6 +707,9 @@ class ECMS
     when 'coil_electric'
       htg_eqpt = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
       htg_eqpt.setName('CoilHeatingElectric')
+    when 'coil_gas'
+      htg_eqpt = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+      htg_eqpt.setName('CoilHeatingGas')
     when 'ashp'
       htg_eqpt = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)
       htg_eqpt.setName('CoilHeatingDXSingleSpeed_ASHP')
@@ -931,14 +1005,27 @@ class ECMS
   #   -Electric baseboards
   def add_ecm_hs09_ccashp_baseboard(model:,
                                     system_zones_map:,    # hash of ailoop names as keys and array of zones as values
-                                    system_doas_flags:)   # hash of system names as keys and flag for DOAS as values
+                                    system_doas_flags:,   # hash of system names as keys and flag for DOAS as values
+                                    system_zones_map_option:,
+                                    heating_fuel:,
+                                    standard:)
 
+    # Set heating fuel
+    updated_heating_fuel = heating_fuel
+    if heating_fuel == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
+    end
+    raise("Heating fuel for ECM 'HS09_CCASHP_Baseboard' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
+    # Set supplemental heating for air loop
+    sys_supp_htg_eqpt_type = 'coil_electric'
+    sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
                                            zones: zones,
                                            system_doas_flags: system_doas_flags)
-      # add air loop and its equipment
+      # add airloop and its equipment
       airloop, return_fan = add_air_system(
         model: model,
         zones: zones,
@@ -946,7 +1033,7 @@ class ECMS
         sys_vent_type: sys_info['sys_vent_type'],
         sys_heat_rec_type: sys_info['sys_heat_rec_type'],
         sys_htg_eqpt_type: 'ccashp',
-        sys_supp_htg_eqpt_type: 'coil_electric',
+        sys_supp_htg_eqpt_type: sys_supp_htg_eqpt_type,
         sys_clg_eqpt_type: 'ccashp',
         sys_supp_fan_type: sys_info['sys_supp_fan_type'],
         sys_ret_fan_type: sys_info['sys_ret_fan_type'],
@@ -1016,6 +1103,8 @@ class ECMS
           htg_dx_coil = icomp.to_CoilHeatingDXVariableSpeed.get
         elsif icomp.to_CoilHeatingElectric.is_initialized
           backup_coil = icomp.to_CoilHeatingElectric.get
+        elsif icomp.to_CoilHeatingGas.is_initialized
+          backup_coil = icomp.to_CoilHeatingGas.get
         elsif icomp.to_FanConstantVolume.is_initialized
           fans << icomp.to_FanConstantVolume.get
         elsif icomp.to_FanVariableVolume.is_initialized
@@ -1063,10 +1152,32 @@ class ECMS
   #   -Packaged-Terminal air-source heat pumps with electric backup
   def add_ecm_hs11_ashp_pthp(model:,
                              system_zones_map:,
-                             system_doas_flags:)
+                             system_doas_flags:,
+                             system_zones_map_option:,
+                             standard:,
+                             heating_fuel:)
 
+    # Set heating fuel
+    updated_heating_fuel = heating_fuel
+    if heating_fuel == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
+    end
+    raise("Heating fuel for ECM 'HS11_ASHP_PTHP' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
+    # Set supplemental heaing for airloop
+    sys_supp_htg_eqpt_type = 'coil_electric'
+    sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
+    # Update system zones map if needed
+    if system_zones_map_option != 'NECB_Default'
+      system_zones_map = update_system_zones_map(model,system_zones_map,system_zones_map_option,'sys_1')
+    else
+      updated_system_zones_map = {}
+      system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..]}"] = zones}
+      system_zones_map = updated_system_zones_map
+    end
     # Update system doas flags
-    system_doas_flags.keys.each { |sname| system_doas_flags[sname] = true }
+    system_doas_flags = {}
+    system_zones_map.keys.each { |sname| system_doas_flags[sname] = true }
     # use system zones map and generate new air system and zonal equipment
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
@@ -1079,7 +1190,7 @@ class ECMS
                                            sys_vent_type: sys_info['sys_vent_type'],
                                            sys_heat_rec_type: sys_info['sys_heat_rec_type'],
                                            sys_htg_eqpt_type: 'ashp',
-                                           sys_supp_htg_eqpt_type: 'coil_electric',
+                                           sys_supp_htg_eqpt_type: sys_supp_htg_eqpt_type,
                                            sys_clg_eqpt_type: 'ashp',
                                            sys_supp_fan_type: sys_info['sys_supp_fan_type'],
                                            sys_ret_fan_type: sys_info['sys_ret_fan_type'],
@@ -1193,8 +1304,21 @@ class ECMS
   #   -Electric baseboards
   def add_ecm_hs12_ashp_baseboard(model:,
                                   system_zones_map:,
-                                  system_doas_flags:)
+                                  system_doas_flags:,
+                                  system_zones_map_option:,
+                                  standard:,
+                                  heating_fuel:)
 
+    # Set heating fuel
+    updated_heating_fuel = heating_fuel
+    if heating_fuel == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
+    end
+    raise("Heating fuel for ECM 'HS12_ASHP_Baseboard' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
+    # Set supplemental heating fuel for airloop
+    sys_supp_htg_eqpt_type = 'coil_electric'
+    sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
@@ -1207,7 +1331,7 @@ class ECMS
                                            sys_vent_type: sys_info['sys_vent_type'],
                                            sys_heat_rec_type: sys_info['sys_heat_rec_type'],
                                            sys_htg_eqpt_type: 'ashp',
-                                           sys_supp_htg_eqpt_type: 'coil_electric',
+                                           sys_supp_htg_eqpt_type: sys_supp_htg_eqpt_type,
                                            sys_clg_eqpt_type: 'ashp',
                                            sys_supp_fan_type: sys_info['sys_supp_fan_type'],
                                            sys_ret_fan_type: sys_info['sys_ret_fan_type'],
@@ -1323,11 +1447,17 @@ class ECMS
   #   -Zonal VRF terminal units for heating and cooling with electric baseboards
   def add_ecm_hs13_ashp_vrf(model:,
                             system_zones_map:,
-                            system_doas_flags:)
+                            system_doas_flags:,
+                            system_zones_map_option:,
+                            standard:,
+                            heating_fuel:)
     # call method for ECM hs08 with ASHP in the air system
     add_ecm_hs08_ccashp_vrf(model: model,
                             system_zones_map: system_zones_map,
                             system_doas_flags: system_doas_flags,
+                            system_zones_map_option: system_zones_map_option,
+                            standard: standard,
+                            heating_fuel: heating_fuel,
                             air_sys_eqpt_type: 'ashp')
   end
 
@@ -2729,19 +2859,19 @@ class ECMS
   def add_ecm_remove_airloops_add_zone_baseboards(model:,
                                                   system_zones_map:,
                                                   system_doas_flags: nil,
-                                                  zone_clg_eqpt_type: nil,
+                                                  system_zones_map_option:,
                                                   standard:,
-                                                  primary_heating_fuel:)
+                                                  heating_fuel:)
     # Set the primary fuel set to default to to specific fuel type.
     standards_info = standard.standards_data
 
-    if primary_heating_fuel == 'DefaultFuel'
+    if heating_fuel == 'DefaultFuel'
       epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-      primary_heating_fuel = standards_info['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+      heating_fuel = standards_info['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
     end
     # Get fuelset.
-    system_fuel_defaults = standards_info['fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == primary_heating_fuel }
-    raise("fuel_type_sets named #{primary_heating_fuel} not found in fuel_type_sets table.") if system_fuel_defaults.nil?
+    system_fuel_defaults = standards_info['fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == heating_fuel }
+    raise("fuel_type_sets named #{heating_fuel} not found in fuel_type_sets table.") if system_fuel_defaults.nil?
 
     # Assign fuel sources.
     boiler_fueltype = system_fuel_defaults['boiler_fueltype']

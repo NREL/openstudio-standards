@@ -113,14 +113,15 @@ class NECB_PVground_Tests < Minitest::Test
                                              pv_ground_tilt_angle: pv_ground_tilt_angle,
                                              pv_ground_azimuth_angle: pv_ground_azimuth_angle,
                                              pv_ground_module_description: pv_ground_module_description,
-                                             chiller_type: 'NECB_Default'
+                                             chiller_type: 'NECB_Default',
+                                             shw_scale: nil
               )
 
               # # comment out for regular tests
               # BTAP::FileIO.save_osm(model, File.join(@output_folder,"#{template}-#{building_type}-pv_ground-#{pv_ground_type}.osm"))
               # puts File.join(@output_folder,"#{template}-#{building_type}-pv_ground-#{pv_ground_type}.osm")
 
-              ##### Gather generators data
+              ##### Gather generators info
               model.getGeneratorPVWattss.sort.each do |generator_PVWatt|
                 dc_system_capacity = generator_PVWatt.dcSystemCapacity()
                 module_type = generator_PVWatt.moduleType()
@@ -130,19 +131,19 @@ class NECB_PVground_Tests < Minitest::Test
                 result["#{generator_PVWatt.name.to_s} - dc_system_capacity"] = dc_system_capacity.to_s
                 result["#{generator_PVWatt.name.to_s} - module_type"] = module_type
                 result["#{generator_PVWatt.name.to_s} - array_type"] = array_type
-                result["#{generator_PVWatt.name.to_s} - tilt_angle"] = tilt_angle.to_s
-                result["#{generator_PVWatt.name.to_s} - azimuth_angle"] = azimuth_angle.to_s
+                result["#{generator_PVWatt.name.to_s} - tilt_angle"] = tilt_angle
+                result["#{generator_PVWatt.name.to_s} - azimuth_angle"] = azimuth_angle
               end
 
-              ##### Gather inverters data
+              ##### Gather inverters info
               model.getElectricLoadCenterInverterPVWattss.sort.each do |inverter_PVWatt|
                 inverter_dc_to_as_size_ratio = inverter_PVWatt.dcToACSizeRatio()
                 inverter_inverter_efficiency = inverter_PVWatt.inverterEfficiency()
-                result["#{inverter_PVWatt.name.to_s} - dc_to_as_size_ratio"] = inverter_dc_to_as_size_ratio.to_s
-                result["#{inverter_PVWatt.name.to_s} - inverter_efficiency"] = inverter_inverter_efficiency.to_s
+                result["#{inverter_PVWatt.name.to_s} - dc_to_as_size_ratio"] = inverter_dc_to_as_size_ratio
+                result["#{inverter_PVWatt.name.to_s} - inverter_efficiency"] = inverter_inverter_efficiency
               end
 
-              ##### Gather distribution systems and set relevant parameters
+              ##### Gather distribution systems info
               model.getElectricLoadCenterDistributions.sort.each  do |elc_distribution|
                 elc_distribution_inverter_name = elc_distribution.inverter.get.name.to_s
                 elc_distribution_generator_operation_scheme_type = elc_distribution.generatorOperationSchemeType()

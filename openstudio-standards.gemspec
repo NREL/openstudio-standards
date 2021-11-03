@@ -5,7 +5,7 @@ require 'openstudio-standards/version'
 Gem::Specification.new do |spec|
   spec.name          = 'openstudio-standards'
   spec.version       = OpenstudioStandards::VERSION
-  spec.authors       = ['Andrew Parker', 'Yixing Chen', 'Mark Adams', 'Kaiyu Sun', 'Mini Maholtra', 'David Goldwasser', 'Phylroy Lopez', 'Maria Mottillo', 'Kamel Haddad', 'Julien Marrec', 'Matt Leach', 'Matt Steen', 'Eric Ringold', 'Daniel Macumber', 'Matthew Dahlhausen']
+  spec.authors       = ['Andrew Parker', 'Yixing Chen', 'Mark Adams', 'Kaiyu Sun', 'Mini Maholtra', 'David Goldwasser', 'Phylroy Lopez', 'Maria Mottillo', 'Kamel Haddad', 'Julien Marrec', 'Matt Leach', 'Matt Steen', 'Eric Ringold', 'Daniel Macumber', 'Matthew Dahlhausen', 'Jian Zhang', 'Doug Maddox', 'Yunyang Ye', 'Xuechen (Jerry) Lei', 'Juan Gonzalez Matamoros', 'Jeremy Lerond']
   spec.email         = ['andrew.parker@nrel.gov']
   spec.homepage = 'http://openstudio.net'
   spec.summary = 'Creates DOE Prototype building models and transforms proposed OpenStudio models to baseline OpenStudio models.'
@@ -32,7 +32,7 @@ Gem::Specification.new do |spec|
   else
     spec.add_development_dependency 'parallel_tests', '~> 3.7.0'
     spec.add_development_dependency 'nokogiri', '~> 1.11'
-    spec.add_development_dependency 'bundler', '~> 2.2'
+    spec.add_development_dependency 'bundler', '~> 2.1.4'
   end
   spec.add_development_dependency 'rake', '~> 12.3.1'
   spec.add_development_dependency 'yard', '~> 0.9'
