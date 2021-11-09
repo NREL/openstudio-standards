@@ -42,6 +42,7 @@ class ECMS < NECB2011
   def apply_system_ecm(model:, ecm_system_name: nil, template_standard:, runner: nil, primary_heating_fuel: nil, system_zones_map_option: 'NECB_Default')
     # Do nothing if nil or other usual suspects.. covering all bases for now.
     return if ecm_system_name.nil? || ecm_system_name == 'none' || ecm_system_name == 'NECB_Default'
+    system_zones_map_option = 'NECB_Default' if system_zones_map_option.nil? || system_zones_map_option == 'none'
 
     ecm_std = Standard.build('ECMS')
     systems = model.getAirLoopHVACs
