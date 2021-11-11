@@ -9,6 +9,27 @@ module College
   # @param prototype_input [Hash] hash of prototype inputs
   # @return [Bool] returns true if successful, false if not
   def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
+
+    model.getSpaces.each do |space|
+      if space.name.get.to_s == 'CB_PUBLIC_ELEVATORS_F1'
+        model_add_elevator(model,
+                           space,
+                           prototype_input['number_of_elevators'],
+                           prototype_input['elevator_type'],
+                           prototype_input['elevator_schedule'],
+                           prototype_input['elevator_fan_schedule'],
+                           prototype_input['elevator_fan_schedule'],
+                           building_type)
+      end
+    end
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
+
+    # add extra infiltration for entry door
+    add_door_infiltration(climate_zone, model)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Added door infiltration')
+  
     return true
   end
 
