@@ -90,6 +90,8 @@
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-4A", []],
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["convert_spaces_from_to", ["OfficeWholeBuilding - Sm Office", "laboratory"]]]],
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", [["remove_transformer", []]]]
+    ],
+    "plant_temp_reset_ctrl": [
+        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", [["remove_transformer", []]]]
     ]
-
 }
