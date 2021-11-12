@@ -15,11 +15,11 @@ class NECB2011
     # > 1:  Do nothing
 
     return if fdwr_set.to_f > 1.0
-    return apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f) if fdwr_set.to_f >= 0.0 && fdwr_set <= 1.0
-    return apply_max_fdwr_nrcan(model: model, fdwr_lim: max_fwdr(hdd).round(3)) if fdwr_set.to_f >= -1.1 && fdwr_set <= -0.9
-    return if fdwr_set.to_f >= -2.1 && fdwr_set <= -1.9
-    return apply_limit_fdwr(model: model, fdwr_lim: (max_fwdr(hdd) * 100.0).round(1)) if fdwr_set.to_f >= -3.1 && fdwr_set <= -2.9
-    return apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f) if fdwr_set < -3.1
+    return apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f) if fdwr_set.to_f >= 0.0 && fdwr_set.to_f <= 1.0
+    return apply_max_fdwr_nrcan(model: model, fdwr_lim: max_fwdr(hdd).round(3)) if fdwr_set.to_f >= -1.1 && fdwr_set.to_f <= -0.9
+    return if fdwr_set.to_f >= -2.1 && fdwr_set.to_f <= -1.9
+    return apply_limit_fdwr(model: model, fdwr_lim: (max_fwdr(hdd) * 100.0).round(1)) if fdwr_set.to_f >= -3.1 && fdwr_set.to_f <= -2.9
+    return apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f) if fdwr_set.to_f < -3.1
   end
 
   def apply_limit_fdwr(model:, fdwr_lim:)
@@ -175,12 +175,12 @@ class NECB2011
     # > 1:  Do nothing
 
     return if srr_set.to_f > 1.0
-    return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f) if srr_set.to_f >= 0.0 && srr_set <= 1.0
+    return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f) if srr_set.to_f >= 0.0 && srr_set.to_f <= 1.0
     # Get the maximum NECB srr
-    return apply_max_srr_nrcan(model: model, srr_lim: get_standards_constant('skylight_to_roof_ratio_max_value').to_f) if srr_set.to_f >= -1.1 && srr_set <= -0.9
-    return if srr_set.to_f >= -2.1 && srr_set <= -1.9
+    return apply_max_srr_nrcan(model: model, srr_lim: get_standards_constant('skylight_to_roof_ratio_max_value').to_f) if srr_set.to_f >= -1.1 && srr_set.to_f <= -0.9
+    return if srr_set.to_f >= -2.1 && srr_set.to_f <= -1.9
     return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f) if srr_set.to_f < -3.1
-    return unless srr_set.to_f >= -3.1 && srr_set <= -2.9
+    return unless srr_set.to_f >= -3.1 && srr_set.to_f <= -2.9
 
     # SRR limit
     srr_lim = get_standards_constant('skylight_to_roof_ratio_max_value') * 100.0
@@ -343,10 +343,10 @@ class NECB2011
         return false
       end
 
+      # hdd required in scope for eval function.
+      hdd = get_necb_hdd18(model)
       # Lambdas are preferred over methods in methods for small utility methods.
       correct_cond = lambda do |conductivity, surface_type|
-        # hdd required in scope for eval function.
-        hdd = get_necb_hdd18(model)
         return conductivity.nil? || conductivity.to_f <= 0.0 || conductivity == 'NECB_Default' ? eval(model_find_objects(@standards_data['surface_thermal_transmittance'], surface_type)[0]['formula']) : conductivity.to_f
       end
 

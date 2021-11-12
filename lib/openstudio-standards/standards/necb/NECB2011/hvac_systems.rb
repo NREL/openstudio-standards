@@ -370,7 +370,7 @@ class NECB2011
 
   # Sets the minimum effectiveness of the heat exchanger per
   # the standard.
-  def heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(heat_exchanger_air_to_air_sensible_and_latent, erv_name = nil)
+  def heat_exchanger_air_to_air_sensible_and_latent_apply_effectiveness(heat_exchanger_air_to_air_sensible_and_latent, erv_name = nil)
     # Assumed to be sensible and latent at all flow
     # This will now get data of the erv from the json file instead of hardcoding it. Defaults to NECB2011 erv we have been using.
     erv_name = 'NECB_Default' if erv_name.nil?
@@ -1026,7 +1026,7 @@ class NECB2011
         avail_manager_name = multi_speed_heat_pump.airLoopHVAC.get.availabilityManagers[0].name.to_s
       end
     end
-    return unless avil_manager_name
+    return unless avail_manager_name
 
     avail_manager_out_var_name = 'Availability Manager Night Cycle Control Status'
     avail_manager_out_var = OpenStudio::Model::OutputVariable.new(avail_manager_out_var_name, model)

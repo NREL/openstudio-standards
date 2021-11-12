@@ -282,6 +282,15 @@ boilers,minimum_thermal_efficiency,%
 boilers,minimum_combustion_efficiency,%
 boilers,efffplr,
 boilers,notes,
+furnaces,template,
+furnaces,minimum_capacity,Btu/hr
+furnaces,maximum_capacity,Btu/hr
+furnaces,start_date,
+furnaces,end_date,
+furnaces,minimum_annual_fuel_utilization_efficiency,AFUE
+furnaces,minimum_thermal_efficiency,%
+furnaces,minimum_combustion_efficiency,%
+furnaces,notes,
 chillers,template,
 chillers,cooling_type,
 chillers,condenser_type,

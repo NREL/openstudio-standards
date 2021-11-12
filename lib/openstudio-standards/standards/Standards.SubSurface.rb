@@ -256,9 +256,7 @@ class Standard
     # Throw an error if the roof is not flat.
     surface.vertices.each do |surf_vert|
       surface.vertices.each do |surf_vert_2|
-        unless surf_vert_2.z.to_f.round(geometry_tolerence) == surf_vert.z.to_f.round(geometry_tolerence)
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Currently skylights can only be added to buildings with non-plenum flat roofs.')
-        end
+        return OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Currently skylights can only be added to buildings with non-plenum flat roofs.  No skylight added to surface #{surface.name}") if surf_vert_2.z.to_f.round(geometry_tolerence) != surf_vert.z.to_f.round(geometry_tolerence)
       end
     end
     new_surfaces = BTAP::Geometry::Surfaces.make_convex_surfaces(surface: surface, tol: geometry_tolerence)
@@ -301,6 +299,13 @@ class Standard
         # Add the new vertices to an array of vertices.
         new_vertices << new_vertex
       end
+      # Check if the new surface/subsurface is too small to model.  If it is then skip it.
+      new_area = BTAP::Geometry::Surfaces.getSurfaceAreafromVertices(vertices: new_vertices)
+      if new_area < 0.0001
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Attempting to create a subsurface in surface #{surface.name} with an area of #{new_area}m2.  This subsurface is too small so will be skipped")
+        next
+      end
+
       # Create a new subsurface with the vertices determined above.
       new_sub_surface = OpenStudio::Model::SubSurface.new(new_vertices, surface.model)
       # Put this sub-surface on the surface.

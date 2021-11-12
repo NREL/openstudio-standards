@@ -1,8 +1,9 @@
 :adv_dx_units: NECB_Default
 :analysis_id: c3ae0124-f685-46a1-8798-433713d702fc
 :analysis_name: test_analysis_para
+:algorithm_type: osm_batch
 :boiler_eff: NECB_Default
-:building_type: LocalFullServiceRestaurant
+:building_type: LocalCompleteModel
 :chiller_type: NECB_Default
 :compute_environment: local
 :datapoint_id: b7603ab9-6597-4ef0-830f-afbe65820746
@@ -42,6 +43,7 @@
 :pv_ground_tilt_angle: NECB_Default
 :pv_ground_total_area_pv_panels_m2: NECB_Default
 :pv_ground_type: NECB_Default
+:airloop_economizer_type: NECB_Default
 :rotation_degrees: NECB_Default
 :run_annual_simulation: true
 :s3_bucket: '834599497928'
@@ -55,4 +57,11 @@
 :template: NECB2017
 :output_variables: [
 {    key: '*',     variable: 'Zone Air Temperature',     frequency: 'hourly'}
+]
+:output_meters: [
+{    name: 'Gas:Facility',     frequency: 'hourly'},
+{    name: 'Electricity:Facility',     frequency: 'hourly'},
+{    name: 'DISTRICTHEATING:FACILITY',     frequency: 'hourly'},
+{    name: 'DISTRICTCOOLING:FACILITY',     frequency: 'hourly'},
+{    name: 'FuelOil#2:Facility',     frequency: 'hourly'}
 ]
