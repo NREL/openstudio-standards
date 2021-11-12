@@ -822,7 +822,7 @@
       "additional_electric_equipment_schedule": null,
       "additional_gas_equipment_schedule": null,
       "occupancy_per_area": 25.0,
-      "occupancy_schedule": "College BLDG_OCC_SCH",
+      "occupancy_schedule": "College BLDG_Cafe_OCC_SCH",
       "occupancy_activity_schedule": "College ACTIVITY_SCH",
       "is_residential": null,
       "ventilation_standard": "ASHRAE 62.1-1999",
