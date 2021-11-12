@@ -400,7 +400,7 @@
       "ventilation_standard": "ASHRAE 62.1-2007",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Corridors and utilities",
-      "ventilation_per_area": 0.12,
+      "ventilation_per_area": 0.06,
       "ventilation_per_person": 0.0,
       "ventilation_air_changes": null,
       "minimum_total_air_changes": null,
