@@ -826,6 +826,8 @@ class AppendixGPRMTests < Minitest::Test
   # Expected outcome
   #@param prototypes_base[Hash] Baseline prototypes
   def check_hw_chw_reset(prototypes_base)
+
+    # check if the numbers are correct
     chw_low_temp = 15.5
     chw_low_temp_reset = 12.2
     chw_high_temp = 26.7
@@ -838,7 +840,15 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_base.each do |prototype, baseline_model|
       building_type, template, climate_zone, mode = prototype
 
-      baseline_model.getSetpointManagerOutdoorAirResets.each do |oa_reset|
+      if baseline_model.getPlantLoops.empty?
+        assert(building_type != "SmallOffice", "No Plant Loop found in the baseline model #{building_type}, #{template}, #{climate_zone}, failure to generate plant loop")
+      end
+
+      # first check if the baseline_model has water loops or not (SHW is not included)
+      baseline_model.getPlantLoops.sort.each do |plant_loop|
+        # Skip the SWH loops
+        next if Standard.new.plant_loop_swh_loop?(plant_loop)
+        baseline_model.getSetpointManagerOutdoorAirResets.each do |oa_reset|
           name = oa_reset.name.to_s
           if name.end_with?("CHW Temp Reset")
             low_temp = oa_reset.outdoorLowTemperature
@@ -859,6 +869,7 @@ class AppendixGPRMTests < Minitest::Test
             high_temp_reset = oa_reset.setpointatOutdoorHighTemperature
             assert(((high_temp_reset - hw_high_temp_reset).abs < 0.1), "Baseline #{building_type}, #{template}, #{climate_zone} has incorrect temperature reset value. The setpoint at outdoor high temperature for the loop #{name} shall be #{hw_high_temp_reset}, but this value is #{high_temp_reset}")
           end
+        end
       end
     end
   end
@@ -1981,7 +1992,7 @@ class AppendixGPRMTests < Minitest::Test
 #      'daylighting_control',
 #      'light_occ_sensor',
 #      'infiltration',
-      'hvac_baseline',
+#      'hvac_baseline',
 #      'hvac_psz_split_from_mz',
         'plant_temp_reset_ctrl',
 #      'sat_ctrl',
