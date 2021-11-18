@@ -335,7 +335,7 @@ class Standard
         end
       end
 
-      # Apply the baseline system temperatures
+      # Apply the baseline system water loop temperature reset control
       model.getPlantLoops.sort.each do |plant_loop|
         # Skip the SWH loops
         next if plant_loop_swh_loop?(plant_loop)
