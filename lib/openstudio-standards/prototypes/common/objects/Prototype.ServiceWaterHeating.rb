@@ -507,8 +507,7 @@ class Standard
       tank.setSourceSideInletHeight(0)
       tank.setSourceSideOutletHeight(0)
     elsif type == 'PumpedCondenser'
-      tank = OpenStudio::Model::WaterHeaterMixed.new(model)
-      hpwh.setTank(tank)
+      tank = hpwh.tank.to_WaterHeaterMixed.get
       tank.setDeadbandTemperatureDifference(3.89)
       tank.setHeaterControlType('Cycle')
       tank.setHeaterMaximumCapacity(electric_backup_capacity)
