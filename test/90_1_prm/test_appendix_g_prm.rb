@@ -2012,7 +2012,7 @@ class AppendixGPRMTests < Minitest::Test
     prototypes = assign_prototypes(prototypes_generated, tests, prototypes_to_generate)
     prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
     # Run tests
-    check_hw_chw_reset(prototypes_base['plant_temp_reset_ctrl'])
+    check_hw_chw_reset(prototypes_base['plant_temp_reset_ctrl']) if tests.include? 'plant_temp_reset_ctrl'
     check_wwr(prototypes_base['wwr']) if tests.include? 'wwr'
     check_srr(prototypes_base['srr']) if tests.include? 'srr'
     check_daylighting_control(prototypes_base['daylighting_control']) if tests.include? 'daylighting_control'
