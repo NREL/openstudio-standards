@@ -2194,9 +2194,13 @@ class Standard
     fan.addToNode(air_loop.supplyInletNode)
 
     # create heating coil
-    create_coil_heating_electric(model,
-                                 air_loop_node: air_loop.supplyInletNode,
-                                 name: "#{air_loop.name} Main Htg Coil")
+    htg_coil = create_coil_heating_electric(model,
+                                            air_loop_node: air_loop.supplyInletNode,
+                                            name: "#{air_loop.name} Main Htg Coil")
+
+    # 2021-11-23
+    # set the setpointmanager for preheat coil if needed.
+    setSetpointManagerForPreheatCoils(model, thermal_zones, htg_coil)
 
     # create cooling coil
     if chilled_water_loop.nil?

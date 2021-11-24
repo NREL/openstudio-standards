@@ -590,4 +590,50 @@ class ASHRAE901PRM < Standard
   def model_get_fan_power_breakdown
     return true
   end
+
+  def setSetpointManagerForPreheatCoils(model, thermalZones, htg_coil)
+    # search for the highest zone setpoint temperature
+    max_heat_setpoint = 0.0
+    coil_name = htg_coil.name.get.to_s
+    thermalZones.each do |zone|
+      tstat = zone.thermostatSetpointDualSetpoint
+      if tstat.is_initialized
+        tstat = tstat.get
+        setpoint_sch = tstat.heatingSetpointTemperatureSchedule
+        if setpoint_sch.is_initialized
+          setpoint_sch = setpoint_sch.get
+          if setpoint_sch.to_ScheduleRuleset.is_initialized
+            setpoint_sch = setpoint_sch.to_ScheduleRuleset.get
+            setpoint_c = schedule_ruleset_annual_min_max_value(setpoint_sch)['max']
+          elsif setpoint_sch.to_ScheduleConstant.is_initialized
+            setpoint_sch = setpoint_sch.to_ScheduleConstant.get
+            setpoint_c = schedule_constant_annual_min_max_value(setpoint_sch)['max']
+          elsif setpoint_sch.to_ScheduleCompact.is_initialized
+            setpoint_sch = setpoint_sch.to_ScheduleCompact.get
+            setpoint_c = schedule_compact_annual_min_max_value(setpoint_sch)['max']
+          end
+          if setpoint_c > max_heat_setpoint
+            max_heat_setpoint = setpoint_c
+          end
+        end
+      end
+    end
+
+    max_heat_setpoint_f = OpenStudio.convert(max_heat_setpoint, 'C', 'F').get
+    preheat_setpoint_f = max_heat_setpoint_f - 20
+    preheat_setpoint_c = OpenStudio.convert(preheat_setpoint_f, 'F', 'C').get
+    # in this situation, we hard set the temperature to be 52 F or 11.1 C
+    # (ASHRAE 90.1 Room heating stepoint temperature is 72 F)
+    preheat_setpoint_c = 11.1 if preheat_setpoint_c == 0.0
+
+
+    # create a new constant schedule and this method will add schedule limit type
+    preheat_coil_sch = model_add_constant_schedule_ruleset(model,
+                                                           preheat_setpoint_c,
+                                                           name = "#{coil_name} Setpoint Temp - #{preheat_setpoint_c.round}F")
+    preheat_coil_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, preheat_coil_sch)
+    preheat_coil_manager.setName("#{coil_name} Preheat Coil Setpoint Manager")
+    preheat_coil_manager.addToNode(htg_coil.outletModelObject.get.to_Node.get)
+    return true
+  end
 end

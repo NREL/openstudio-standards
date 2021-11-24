@@ -7350,4 +7350,11 @@ class Standard
   def air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
     return 'warmest_zone'
   end
+
+  # Template method for implementing the Preheat coil control logic to a heating coil.
+  # ASHRAE 90.1-2019 Appendix G.
+  def setSetpointManagerForPreheatCoils(model, thermalZones, htg_coil)
+    return false
+  end
 end
+
