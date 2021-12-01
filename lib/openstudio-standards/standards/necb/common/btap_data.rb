@@ -408,9 +408,19 @@ class BTAPData
                             'NU' => 'Nunavut' }
     building_type = 'Commercial'
     province = provinces_names_map[model.getWeatherFile.stateProvinceRegion]
-    neb_eplus_fuel_map = { 'Electricity' => 'Electricity',
-                           'Natural Gas' => 'Natural Gas',
-                           'Oil' => 'FuelOilNo2' }
+    neb_eplus_fuel_map = {'Natural Gas' => {eplus_name_x: 'NaturalGas',
+                                            eplus_name_y: 'Annual and Peak Values - Natural Gas',
+                                            eplus_name_z: 'NaturalGas:Facility',
+                                            eplus_name_a: 'Natural Gas Annual Value'},
+                          'Electricity' => {eplus_name_x: 'Electricity',
+                                            eplus_name_y: 'Annual and Peak Values - Electricity',
+                                            eplus_name_z: 'Electricity:Facility',
+                                            eplus_name_a: 'Electricity Annual Value'},
+                          'Oil' => {eplus_name_x: 'FuelOilNo2',
+                                    eplus_name_y: 'Annual and Peak Values - Other',
+                                    eplus_name_z: 'FuelOilNo2:Facility',
+                                    eplus_name_a: 'Annual Value'}
+    }
     economics_data['cost_utility_neb_total_cost_per_m_sq'] = 0.0
     economics_data['cost_utility_ghg_total_kg_per_m_sq'] = 0.0
     # Create a hash of the neb data.
@@ -424,41 +434,20 @@ class BTAPData
       end
       neb_fuel_cost = row['2020']
       fuel_consumption_gj = 0.0
-      if neb_fuel == 'Electricity'
-        sql_command = "SELECT Value FROM tabulardatawithstrings
-          WHERE ReportName='EnergyMeters'
-          AND ReportForString='Entire Facility'
-          AND TableName='Annual and Peak Values - #{ep_fuel}'
-          AND RowName='#{ep_fuel}:Facility'
-          AND ColumnName='#{ep_fuel} Annual Value'
-          AND Units='GJ'"
-        fuel_consumption_gj = model.sqlFile.get.execAndReturnFirstDouble(sql_command).is_initialized ? model.sqlFile.get.execAndReturnFirstDouble(sql_command).get : 0.0
-        elsif neb_fuel == 'Natural Gas'
-          sql_command = "SELECT Value FROM tabulardatawithstrings
-            WHERE ReportName='EnergyMeters'
-            AND ReportForString='Entire Facility'
-            AND TableName='Annual and Peak Values - #{ep_fuel}'
-            AND RowName='NaturalGas:Facility'
-            AND ColumnName='#{ep_fuel} Annual Value'
-            AND Units='GJ'"
-          fuel_consumption_gj = model.sqlFile.get.execAndReturnFirstDouble(sql_command).is_initialized ? model.sqlFile.get.execAndReturnFirstDouble(sql_command).get : 0.0
-        else
-        sql_command = " SELECT Value FROM tabulardatawithstrings
-                        WHERE ReportName='EnergyMeters'
-                        AND ReportForString='Entire Facility'
-                        AND TableName='Annual and Peak Values - Other'
-                        AND RowName='#{ep_fuel}:Facility'
-                        AND ColumnName='Annual Value'
-                        AND Units='GJ'"
-
-        fuel_consumption_gj = model.sqlFile.get.execAndReturnFirstDouble(sql_command).is_initialized ? model.sqlFile.get.execAndReturnFirstDouble(sql_command).get : 0.0
-      end
+      sql_command = "SELECT Value FROM tabulardatawithstrings
+                     WHERE ReportName='EnergyMeters'
+                     AND ReportForString='Entire Facility'
+                     AND TableName='#{ep_fuel[:eplus_name_y]}'
+                     AND RowName='#{ep_fuel[:eplus_name_z]}'
+                     AND ColumnName='#{ep_fuel[:eplus_name_a]}'
+                     AND Units='GJ'"
+      fuel_consumption_gj = model.sqlFile.get.execAndReturnFirstDouble(sql_command).is_initialized ? model.sqlFile.get.execAndReturnFirstDouble(sql_command).get : 0.0
 
       # Determine costs in $$
       economics_data["cost_utility_neb_#{neb_fuel.downcase}_cost_per_m_sq"] = fuel_consumption_gj * neb_fuel_cost.to_f / @conditioned_floor_area_m_sq
       economics_data['cost_utility_neb_total_cost_per_m_sq'] += economics_data["cost_utility_neb_#{neb_fuel.downcase}_cost_per_m_sq"]
       # Determine cost in GHG kg of CO2
-      economics_data["cost_utility_ghg_#{neb_fuel.downcase}_kg_per_m_sq"] = fuel_consumption_gj * get_utility_ghg_kg_per_gj(province: model.getWeatherFile.stateProvinceRegion, fuel_type: ep_fuel) / @conditioned_floor_area_m_sq
+      economics_data["cost_utility_ghg_#{neb_fuel.downcase}_kg_per_m_sq"] = fuel_consumption_gj * get_utility_ghg_kg_per_gj(province: model.getWeatherFile.stateProvinceRegion, fuel_type: ep_fuel[:eplus_name_x]) / @conditioned_floor_area_m_sq
       economics_data['cost_utility_ghg_total_kg_per_m_sq'] += economics_data["cost_utility_ghg_#{neb_fuel.downcase}_kg_per_m_sq"]
     end
     # Commenting out block charge rates for now....
@@ -1657,19 +1646,19 @@ class BTAPData
   def get_utility_ghg_kg_per_gj(province:, fuel_type:)
     ghg_data = [
       # Obtained from Portfolio Manager https://portfoliomanager.energystar.gov/pdf/reference/Emissions.pdf 10/10/2020
-      { "province": 'AB', "fuel_type": 'Natural Gas', "CO2eq Emissions (kg/MBtu)": 53.24, "CO2eq Emissions (g/m3)": 1939.0 },
-      { "province": 'BC', "fuel_type": 'Natural Gas', "CO2eq Emissions (kg/MBtu)": 53.19, "CO2eq Emissions (g/m3)": 1937.0 },
-      { "province": 'MB', "fuel_type": 'Natural Gas', "CO2eq Emissions (kg/MBtu)": 52.09, "CO2eq Emissions (g/m3)": 1897.0 },
-      { "province": 'NB', "fuel_type": 'Natural Gas', "CO2eq Emissions (kg/MBtu)": 52.50, "CO2eq Emissions (g/m3)": 1912.0 },
-      { "province": 'NL', "fuel_type": 'Natural Gas', "CO2eq Emissions (kg/MBtu)": 52.50, "CO2eq Emissions (g/m3)": 1912.0 },
-      { "province": 'NT', "fuel_type": 'Natural Gas', "CO2eq Emissions (kg/MBtu)": 52.50, "CO2eq Emissions (g/m3)": 1912.0 },
-      { "province": 'NS', "fuel_type": 'Natural Gas', "CO2eq Emissions (kg/MBtu)": 52.50, "CO2eq Emissions (g/m3)": 1912.0 },
-      { "province": 'NU', "fuel_type": 'Natural Gas', "CO2eq Emissions (kg/MBtu)": 52.50, "CO2eq Emissions (g/m3)": 1912.0 },
-      { "province": 'ON', "fuel_type": 'Natural Gas', "CO2eq Emissions (kg/MBtu)": 52.14, "CO2eq Emissions (g/m3)": 1912.0 },
-      { "province": 'PE', "fuel_type": 'Natural Gas', "CO2eq Emissions (kg/MBtu)": 52.50, "CO2eq Emissions (g/m3)": 1912.0 },
-      { "province": 'QC', "fuel_type": 'Natural Gas', "CO2eq Emissions (kg/MBtu)": 52.12, "CO2eq Emissions (g/m3)": 1898.0 },
-      { "province": 'SK', "fuel_type": 'Natural Gas', "CO2eq Emissions (kg/MBtu)": 50.53, "CO2eq Emissions (g/m3)": 1840.0 },
-      { "province": 'YT', "fuel_type": 'Natural Gas', "CO2eq Emissions (kg/MBtu)": 52.50, "CO2eq Emissions (g/m3)": 1912.0 },
+      { "province": 'AB', "fuel_type": 'NaturalGas', "CO2eq Emissions (kg/MBtu)": 53.24, "CO2eq Emissions (g/m3)": 1939.0 },
+      { "province": 'BC', "fuel_type": 'NaturalGas', "CO2eq Emissions (kg/MBtu)": 53.19, "CO2eq Emissions (g/m3)": 1937.0 },
+      { "province": 'MB', "fuel_type": 'NaturalGas', "CO2eq Emissions (kg/MBtu)": 52.09, "CO2eq Emissions (g/m3)": 1897.0 },
+      { "province": 'NB', "fuel_type": 'NaturalGas', "CO2eq Emissions (kg/MBtu)": 52.50, "CO2eq Emissions (g/m3)": 1912.0 },
+      { "province": 'NL', "fuel_type": 'NaturalGas', "CO2eq Emissions (kg/MBtu)": 52.50, "CO2eq Emissions (g/m3)": 1912.0 },
+      { "province": 'NT', "fuel_type": 'NaturalGas', "CO2eq Emissions (kg/MBtu)": 52.50, "CO2eq Emissions (g/m3)": 1912.0 },
+      { "province": 'NS', "fuel_type": 'NaturalGas', "CO2eq Emissions (kg/MBtu)": 52.50, "CO2eq Emissions (g/m3)": 1912.0 },
+      { "province": 'NU', "fuel_type": 'NaturalGas', "CO2eq Emissions (kg/MBtu)": 52.50, "CO2eq Emissions (g/m3)": 1912.0 },
+      { "province": 'ON', "fuel_type": 'NaturalGas', "CO2eq Emissions (kg/MBtu)": 52.14, "CO2eq Emissions (g/m3)": 1912.0 },
+      { "province": 'PE', "fuel_type": 'NaturalGas', "CO2eq Emissions (kg/MBtu)": 52.50, "CO2eq Emissions (g/m3)": 1912.0 },
+      { "province": 'QC', "fuel_type": 'NaturalGas', "CO2eq Emissions (kg/MBtu)": 52.12, "CO2eq Emissions (g/m3)": 1898.0 },
+      { "province": 'SK', "fuel_type": 'NaturalGas', "CO2eq Emissions (kg/MBtu)": 50.53, "CO2eq Emissions (g/m3)": 1840.0 },
+      { "province": 'YT', "fuel_type": 'NaturalGas', "CO2eq Emissions (kg/MBtu)": 52.50, "CO2eq Emissions (g/m3)": 1912.0 },
 
       { "province": 'AB', "fuel_type": 'FuelOilNo2', "CO2eq Emissions (kg/MBtu)": 75.13, "CO2eq Emissions (g/m3)": 2763.0 },
       { "province": 'BC', "fuel_type": 'FuelOilNo2', "CO2eq Emissions (kg/MBtu)": 75.13, "CO2eq Emissions (g/m3)": 2763.0 },
