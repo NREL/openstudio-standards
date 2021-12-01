@@ -2129,12 +2129,13 @@ class AppendixGPRMTests < Minitest::Test
 #      'infiltration',
 #      'hvac_baseline',
 #      'hvac_psz_split_from_mz',
-        'plant_temp_reset_ctrl',
+#      'plant_temp_reset_ctrl',
 #      'sat_ctrl',
 #      'number_of_boilers',
 #      'number_of_chillers',
 #      'number_of_cooling_towers',
 #      'hvac_sizing',
+       'preheat_coil_ctrl'
     ]
 
     # Get list of unique prototypes
@@ -2147,6 +2148,7 @@ class AppendixGPRMTests < Minitest::Test
     prototypes = assign_prototypes(prototypes_generated, tests, prototypes_to_generate)
     prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
     # Run tests
+    check_preheat_coil_ctrl(prototypes_base['preheat_coil_ctrl']) if tests.include? 'preheat_coil_ctrl'
     check_hw_chw_reset(prototypes_base['plant_temp_reset_ctrl']) if tests.include? 'plant_temp_reset_ctrl'
     check_wwr(prototypes_base['wwr']) if tests.include? 'wwr'
     check_srr(prototypes_base['srr']) if tests.include? 'srr'
