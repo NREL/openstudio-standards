@@ -7351,10 +7351,10 @@ class Standard
     return 'warmest_zone'
   end
 
-  # Template method for implementing the Preheat coil control logic to a heating coil.
+  # Template method for adding a setpoint manager for a coil control logic to a heating coil.
   # ASHRAE 90.1-2019 Appendix G.
-  def setSetpointManagerForPreheatCoils(model, thermalZones, htg_coil)
-    return false
+  def model_set_spm(model, thermalZones, coil)
+    return true
   end
 end
 

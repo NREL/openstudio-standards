@@ -591,10 +591,10 @@ class ASHRAE901PRM < Standard
     return true
   end
 
-  def setSetpointManagerForPreheatCoils(model, thermalZones, htg_coil)
+  def model_set_spm(model, thermalZones, coil)
     # search for the highest zone setpoint temperature
     max_heat_setpoint = 0.0
-    coil_name = htg_coil.name.get.to_s
+    coil_name = coil.name.get.to_s
     thermalZones.each do |zone|
       tstat = zone.thermostatSetpointDualSetpoint
       if tstat.is_initialized
@@ -630,10 +630,18 @@ class ASHRAE901PRM < Standard
     # create a new constant schedule and this method will add schedule limit type
     preheat_coil_sch = model_add_constant_schedule_ruleset(model,
                                                            preheat_setpoint_c,
-                                                           name = "#{coil_name} Setpoint Temp - #{preheat_setpoint_c.round}F")
+                                                           name = "#{coil_name} Setpoint Temp - #{preheat_setpoint_f.round}F")
     preheat_coil_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, preheat_coil_sch)
     preheat_coil_manager.setName("#{coil_name} Preheat Coil Setpoint Manager")
-    preheat_coil_manager.addToNode(htg_coil.outletModelObject.get.to_Node.get)
+
+    if coil.to_CoilHeatingWater.is_initialized
+      preheat_coil_manager.addToNode(coil.airOutletModelObject.get.to_Node.get)
+    elsif coil.to_CoilHeatingElectric.is_initialized
+      preheat_coil_manager.addToNode(coil.outletModelObject.get.to_Node.get)
+    elsif coil.to_CoilHeatingGas.is_initialized
+      preheat_coil_manager.addToNode(coil.airOutletModelObject.get.to_Node.get)
+    end
+
     return true
   end
 end
