@@ -822,8 +822,95 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # The method takes in the model and switch hot water boilers to district heating
+  # If no water loop, return false
+  # If no hot water boilers in the hot water loop, return false
+  # The method is not verified!!!, use with cautious
+  # @author WX
+  #
+  def create_district_heating(model, arguments)
+    model = BTAP::FileIO.deep_copy(model)
+    # check if the model has water loops
+    if model.getPlantLoops.empty?
+      return model
+    else
+      hw_removed = false
+      model.getPlantLoops.sort.each do |plant_loop|
+        # Skip the SWH loops
+        next if Standard.new.plant_loop_swh_loop?(plant_loop)
+        sizing_plant = plant_loop.sizingPlant
+        loop_type = sizing_plant.loopType
+        if loop_type === "Heating"
+          # remove the heating plant
+          plant_loop.remove
+          hw_removed = true
+        end
+      end
+      if hw_removed
+        # create a new district heating system\
+        std = Standard.build('90.1-PRM-2019')
+        # create hot water loop
+        hot_water_loop = OpenStudio::Model::PlantLoop.new(model)
+        hot_water_loop.setName('Hot Water Loop')
+        dsgn_sup_wtr_temp = 180.0
+        dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
+        dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(20.0, 'R', 'K').get
+        sizing_plant = hot_water_loop.sizingPlant
+        sizing_plant.setLoopType('Heating')
+        sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
+        sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
+        hot_water_loop.setMinimumLoopTemperature(10.0)
+
+        hw_temp_sch = std.model_add_constant_schedule_ruleset(model,
+                                                              dsgn_sup_wtr_temp_c,
+                                                              name = "#{hot_water_loop.name} Temp - #{dsgn_sup_wtr_temp.round(0)}F")
+        hw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, hw_temp_sch)
+        hw_stpt_manager.setName("#{hot_water_loop.name} Setpoint Manager")
+        hw_stpt_manager.addToNode(hot_water_loop.supplyOutletNode)
+
+        # create a variable speed pump - it is for testing purpose, so there is no
+        # need to select a pump based on previous system configuration.
+        hw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
+        hw_pump.setName("#{hot_water_loop.name} Pump")
+        pump_tot_hd_pa = OpenStudio.convert(60, 'ftH_{2}O', 'Pa').get
+        hw_pump.setRatedPumpHead(pump_tot_hd_pa)
+        hw_pump.setMotorEfficiency(0.9)
+        hw_pump.setPumpControlType('Intermittent')
+        hw_pump.addToNode(hot_water_loop.supplyInletNode)
+
+        # build district heating system
+        district_heat = OpenStudio::Model::DistrictHeating.new(model)
+        district_heat.setName("#{hot_water_loop.name} District Heating")
+        district_heat.autosizeNominalCapacity
+        hot_water_loop.addSupplyBranchForComponent(district_heat)
+        # add hot water loop pipes
+        supply_equipment_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+        supply_equipment_bypass_pipe.setName("#{hot_water_loop.name} Supply Equipment Bypass")
+        hot_water_loop.addSupplyBranchForComponent(supply_equipment_bypass_pipe)
+
+        coil_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+        coil_bypass_pipe.setName("#{hot_water_loop.name} Coil Bypass")
+        hot_water_loop.addDemandBranchForComponent(coil_bypass_pipe)
+
+        supply_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+        supply_outlet_pipe.setName("#{hot_water_loop.name} Supply Outlet")
+        supply_outlet_pipe.addToNode(hot_water_loop.supplyOutletNode)
+
+        demand_inlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+        demand_inlet_pipe.setName("#{hot_water_loop.name} Demand Inlet")
+        demand_inlet_pipe.addToNode(hot_water_loop.demandInletNode)
+
+        demand_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+        demand_outlet_pipe.setName("#{hot_water_loop.name} Demand Outlet")
+        demand_outlet_pipe.addToNode(hot_water_loop.demandOutletNode)
+      end
+      return model
+    end
+  end
+
   # Check if the hvac baseline system from 5 to 13 has the HW and CHW reset control
   # Expected outcome
+  # @author WX
   #@param prototypes_base[Hash] Baseline prototypes
   def check_hw_chw_reset(prototypes_base)
 
@@ -1365,6 +1452,54 @@ class AppendixGPRMTests < Minitest::Test
                                   unit_system.coolingCoil.get.to_CoilCoolingWater.is_initialized
     end
     return zone_system_check
+  end
+
+  # Check if preheat coil control for system 5 through 8 are implemented
+  #
+  # @param baseline_base [Hash] Baseline
+  def check_preheat_coil_ctrl(baseline_base)
+    baseline_base.each do |baseline, model_baseline|
+      building_type, template, climate_zone, mod = baseline
+
+      # Concatenate modifier functions and arguments
+      mod_str = mod.flatten.join('_') unless mod.empty?
+      model_baseline.getAirLoopHVACs.each do |airloop|
+        # Baseline system type identified based on airloop HVAC name
+        if airloop.name.to_s.include?('Sys5') ||
+            airloop.name.to_s.include?('Sys6') ||
+            airloop.name.to_s.include?('Sys7') ||
+            airloop.name.to_s.include?('Sys8')
+
+          # Get all Heating Coil in the airloop.
+          airloop.supplyComponents.each do |equip|
+            if equip.to_CoilHeatingWater.is_initialized
+              htg_coil = equip.to_CoilHeatingWater.get
+              heating_coil_outlet_node = htg_coil.airOutletModelObject.get.to_Node.get
+            elsif equip.to_CoilHeatingElectric.is_initialized
+              htg_coil = equip.to_CoilHeatingElectric.get
+              heating_coil_outlet_node = htg_coil.outletModelObject.get
+            elsif equip.to_CoilHeatingGas.is_initialized
+              htg_coil = equip.to_CoilHeatingGas.get
+              heating_coil_outlet_node = htg_coil.airOutletModelObject.get
+            end
+            # get heating coil spm
+            spms = heating_coil_outlet_node.setpointManagers
+
+            # Report if multiple setpoint managers have been assigned to the air loop supply outlet node
+            assert(false, 'Multiple setpoint manager have been assigned to the heating coil outlet node.') unless spms.size == 1
+
+            spms.each do |spm|
+              if spm.to_SetpointManagerScheduled.is_initialized
+                # Get SPM
+                spm_s = spm.to_SetpointManagerScheduled.get
+                schedule_name = spm_s.schedule.get.to_s
+                puts schedule_name
+              end
+            end
+          end
+        end
+      end
+    end
   end
 
   # Check if SAT requirements for system 5 through 8 are implemented
