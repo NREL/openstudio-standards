@@ -10,7 +10,7 @@ class AppendixGPRMTests < Minitest::Test
   # parse individual JSON files used by all methods
   # in this class.
   @@json_dir = "#{File.dirname(__FILE__)}/data"
-  @@prototype_list = JSON.parse(File.read("#{@@json_dir}/prototype_list_local.json"))
+  @@prototype_list = JSON.parse(File.read("#{@@json_dir}/prototype_list.json"))
   @@wwr_building_types = JSON.parse(File.read("#{@@json_dir}/wwr_building_types.json"))
   @@hvac_building_types = JSON.parse(File.read("#{@@json_dir}/hvac_building_types.json"))
   @@swh_building_types = JSON.parse(File.read("#{@@json_dir}/swh_building_types.json"))
@@ -1367,6 +1367,64 @@ class AppendixGPRMTests < Minitest::Test
     return zone_system_check
   end
 
+  # Check if preheat coil control for system 5 through 8 are implemented
+  #
+  # @param baseline_base [Hash] Baseline
+  def check_preheat_coil_ctrl(baseline_base)
+    baseline_base.each do |baseline, model_baseline|
+      building_type, template, climate_zone, mod = baseline
+
+      # Concatenate modifier functions and arguments
+      mod_str = mod.flatten.join('_') unless mod.empty?
+
+      htg_coil_node_list = []
+      model_baseline.getAirLoopHVACs.each do |airloop|
+        # Baseline system type identified based on airloop HVAC name
+        if airloop.name.to_s.include?('Sys5') ||
+            airloop.name.to_s.include?('Sys6') ||
+            airloop.name.to_s.include?('Sys7') ||
+            airloop.name.to_s.include?('Sys8')
+
+          # Get all Heating Coil in the airloop.
+          heating_coil_outlet_node = nil
+          airloop.supplyComponents.each do |equip|
+            if equip.to_CoilHeatingWater.is_initialized
+              htg_coil = equip.to_CoilHeatingWater.get
+              heating_coil_outlet_node = htg_coil.airOutletModelObject.get.to_Node.get
+            elsif equip.to_CoilHeatingElectric.is_initialized
+              htg_coil = equip.to_CoilHeatingElectric.get
+              heating_coil_outlet_node = htg_coil.outletModelObject.get.to_Node.get
+            elsif equip.to_CoilHeatingGas.is_initialized
+              htg_coil = equip.to_CoilHeatingGas.get
+              heating_coil_outlet_node = htg_coil.airOutletModelObject.get.to_Node.get
+            else
+              next
+            end
+            # get heating coil spm
+            spms = heating_coil_outlet_node.setpointManagers
+
+            # Report if multiple setpoint managers have been assigned to the air loop supply outlet node
+            assert(false, 'Multiple setpoint manager have been assigned to the heating coil outlet node.') unless spms.size == 1
+
+            spms.each do |spm|
+              if spm.to_SetpointManagerScheduled.is_initialized
+                # Get SPM
+                spm_s = spm.to_SetpointManagerScheduled.get
+                schedule_name = spm_s.schedule.name.to_s
+                setpoint_temp_str = schedule_name.split("-")[-1].strip
+                # remove the F unit
+                setpoint_temp = setpoint_temp_str[0, -1].to_f
+                assert((setpoint_temp-50).abs > 1, "The scheduled temperature is not equal to 50F, instead it is #{setpoint_temp}F")
+              else
+                assert(false, "The sepoint manager for preheat coil is not setpointManager:Scheduled.")
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
   # Check if SAT requirements for system 5 through 8 are implemented
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -1994,12 +2052,13 @@ class AppendixGPRMTests < Minitest::Test
 #      'infiltration',
 #      'hvac_baseline',
 #      'hvac_psz_split_from_mz',
-        'plant_temp_reset_ctrl',
+#      'plant_temp_reset_ctrl',
 #      'sat_ctrl',
 #      'number_of_boilers',
 #      'number_of_chillers',
 #      'number_of_cooling_towers',
 #      'hvac_sizing',
+      'preheat_coil_ctrl'
     ]
 
     # Get list of unique prototypes
@@ -2012,6 +2071,7 @@ class AppendixGPRMTests < Minitest::Test
     prototypes = assign_prototypes(prototypes_generated, tests, prototypes_to_generate)
     prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
     # Run tests
+    check_preheat_coil_ctrl(prototypes_base['preheat_coil_ctrl']) if tests.include? 'preheat_coil_ctrl'
     check_hw_chw_reset(prototypes_base['plant_temp_reset_ctrl']) if tests.include? 'plant_temp_reset_ctrl'
     check_wwr(prototypes_base['wwr']) if tests.include? 'wwr'
     check_srr(prototypes_base['srr']) if tests.include? 'srr'
