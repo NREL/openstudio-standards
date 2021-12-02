@@ -408,18 +408,18 @@ class BTAPData
                             'NU' => 'Nunavut' }
     building_type = 'Commercial'
     province = provinces_names_map[model.getWeatherFile.stateProvinceRegion]
-    neb_eplus_fuel_map = {'Natural Gas' => {eplus_name_x: 'NaturalGas',
-                                            eplus_name_y: 'Annual and Peak Values - Natural Gas',
-                                            eplus_name_z: 'NaturalGas:Facility',
-                                            eplus_name_a: 'Natural Gas Annual Value'},
-                          'Electricity' => {eplus_name_x: 'Electricity',
-                                            eplus_name_y: 'Annual and Peak Values - Electricity',
-                                            eplus_name_z: 'Electricity:Facility',
-                                            eplus_name_a: 'Electricity Annual Value'},
-                          'Oil' => {eplus_name_x: 'FuelOilNo2',
-                                    eplus_name_y: 'Annual and Peak Values - Other',
-                                    eplus_name_z: 'FuelOilNo2:Facility',
-                                    eplus_name_a: 'Annual Value'}
+    neb_eplus_fuel_map = {'Natural Gas' => {eplus_fuel_name: 'NaturalGas',
+                                            eplus_table_name: 'Annual and Peak Values - Natural Gas',
+                                            eplus_row_name: 'NaturalGas:Facility',
+                                            eplus_column_name: 'Natural Gas Annual Value'},
+                          'Electricity' => {eplus_fuel_name: 'Electricity',
+                                            eplus_table_name: 'Annual and Peak Values - Electricity',
+                                            eplus_row_name: 'Electricity:Facility',
+                                            eplus_column_name: 'Electricity Annual Value'},
+                          'Oil' => {eplus_fuel_name: 'FuelOilNo2',
+                                    eplus_table_name: 'Annual and Peak Values - Other',
+                                    eplus_row_name: 'FuelOilNo2:Facility',
+                                    eplus_column_name: 'Annual Value'}
     }
     economics_data['cost_utility_neb_total_cost_per_m_sq'] = 0.0
     economics_data['cost_utility_ghg_total_kg_per_m_sq'] = 0.0
@@ -437,9 +437,9 @@ class BTAPData
       sql_command = "SELECT Value FROM tabulardatawithstrings
                      WHERE ReportName='EnergyMeters'
                      AND ReportForString='Entire Facility'
-                     AND TableName='#{ep_fuel[:eplus_name_y]}'
-                     AND RowName='#{ep_fuel[:eplus_name_z]}'
-                     AND ColumnName='#{ep_fuel[:eplus_name_a]}'
+                     AND TableName='#{ep_fuel[:eplus_table_name]}'
+                     AND RowName='#{ep_fuel[:eplus_row_name]}'
+                     AND ColumnName='#{ep_fuel[:eplus_column_name]}'
                      AND Units='GJ'"
       fuel_consumption_gj = model.sqlFile.get.execAndReturnFirstDouble(sql_command).is_initialized ? model.sqlFile.get.execAndReturnFirstDouble(sql_command).get : 0.0
 
@@ -447,7 +447,7 @@ class BTAPData
       economics_data["cost_utility_neb_#{neb_fuel.downcase}_cost_per_m_sq"] = fuel_consumption_gj * neb_fuel_cost.to_f / @conditioned_floor_area_m_sq
       economics_data['cost_utility_neb_total_cost_per_m_sq'] += economics_data["cost_utility_neb_#{neb_fuel.downcase}_cost_per_m_sq"]
       # Determine cost in GHG kg of CO2
-      economics_data["cost_utility_ghg_#{neb_fuel.downcase}_kg_per_m_sq"] = fuel_consumption_gj * get_utility_ghg_kg_per_gj(province: model.getWeatherFile.stateProvinceRegion, fuel_type: ep_fuel[:eplus_name_x]) / @conditioned_floor_area_m_sq
+      economics_data["cost_utility_ghg_#{neb_fuel.downcase}_kg_per_m_sq"] = fuel_consumption_gj * get_utility_ghg_kg_per_gj(province: model.getWeatherFile.stateProvinceRegion, fuel_type: ep_fuel[:eplus_fuel_name]) / @conditioned_floor_area_m_sq
       economics_data['cost_utility_ghg_total_kg_per_m_sq'] += economics_data["cost_utility_ghg_#{neb_fuel.downcase}_kg_per_m_sq"]
     end
     # Commenting out block charge rates for now....
