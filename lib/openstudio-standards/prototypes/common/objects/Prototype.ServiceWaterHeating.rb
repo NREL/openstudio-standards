@@ -386,7 +386,7 @@ class Standard
     end
 
     # set heat pump water heater properties
-    hpwh.setEvaporatorAirFlowRate(OpenStudio.convert(181.0, 'ft^3/min', 'm^3/s').get)
+    # hpwh.setEvaporatorAirFlowRate(OpenStudio.convert(181.0, 'ft^3/min', 'm^3/s').get)   # shouldn't be hardsized, should be autocalculated as it varies with the capacity
     hpwh.setFanPlacement('DrawThrough')
     hpwh.setOnCycleParasiticElectricLoad(0.0)
     hpwh.setOffCycleParasiticElectricLoad(0.0)
@@ -446,8 +446,7 @@ class Standard
       coil = hpwh.dXCoil.to_CoilWaterHeatingAirToWaterHeatPumpWrapped.get
       coil.setRatedCondenserWaterTemperature(48.89)
     elsif type == 'PumpedCondenser'
-      coil = OpenStudio::Model::CoilWaterHeatingAirToWaterHeatPump.new(model)
-      hpwh.setDXCoil(coil)
+      coil = hpwh.dXCoil.to_CoilWaterHeatingAirToWaterHeatPump.get
     end
 
     # set coil properties
