@@ -1414,6 +1414,8 @@ class ECMS
           htg_dx_coil = icomp.to_CoilHeatingDXSingleSpeed.get
         elsif icomp.to_CoilHeatingElectric.is_initialized
           backup_coil = icomp.to_CoilHeatingElectric.get
+        elsif icomp.to_CoilHeatingGas.is_initialized
+          backup_coil = icomp.to_CoilHeatingGas.get
         end
       end
       if clg_dx_coil && htg_dx_coil && backup_coil
