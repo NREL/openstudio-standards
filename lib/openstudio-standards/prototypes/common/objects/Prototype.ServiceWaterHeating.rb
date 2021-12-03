@@ -386,7 +386,6 @@ class Standard
     end
 
     # set heat pump water heater properties
-    # hpwh.setEvaporatorAirFlowRate(OpenStudio.convert(181.0, 'ft^3/min', 'm^3/s').get)   # shouldn't be hardsized, should be autocalculated as it varies with the capacity
     hpwh.setFanPlacement('DrawThrough')
     hpwh.setOnCycleParasiticElectricLoad(0.0)
     hpwh.setOffCycleParasiticElectricLoad(0.0)
