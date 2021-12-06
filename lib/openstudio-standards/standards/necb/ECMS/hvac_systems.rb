@@ -309,7 +309,7 @@ class ECMS
 
   # =============================================================================================================================
   # Method to determine whether zone can have terminal vrf equipment. Zones with no vrf terminal equipment are characterized by
-  # transient occupancy such is the case for corridors, stairwells, storage, etc ...
+  # transient occupancy such is the case for corridors, stairwells, storage, ...
   def zone_with_no_vrf_eqpt?(zone)
     space_types_to_skip = {}
     space_types_to_skip['NECB2011'] = ['Atrium - H < 13m',
