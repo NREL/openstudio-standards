@@ -1586,7 +1586,7 @@ class Standard
   #
   # @param space [OpenStudio::Model::Space] space object
   # @param same_floor [Bool] only consider spaces on the same floor
-  # @return [Array<OpenStudio::Model::Space>] sorted array of spaces
+  # @return [Hash] sorted hash with array of spaces and area
   def space_get_adjacent_spaces_with_shared_wall_areas(space, same_floor = true)
     same_floor_spaces = []
     spaces = []
@@ -1621,14 +1621,14 @@ class Standard
     # now sort by areas.
     area_index = []
     array_hash = {}
-    return nil if spaces.size.zero?
+    return array_hash if spaces.size.zero?
 
     # iterate through each surface in the space
     space.surfaces.each do |surface|
       # get the adjacent surface in another space.
       adj_surface = surface.adjacentSurface
       unless adj_surface.empty?
-        # go through each of the adjeacent spaces to find the matching  surface/space.
+        # go through each of the adjacent spaces to find the matching surface/space.
         spaces.each_with_index do |other_space, index|
           next if other_space == space
 

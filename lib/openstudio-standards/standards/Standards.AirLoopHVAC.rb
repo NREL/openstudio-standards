@@ -1712,7 +1712,7 @@ class Standard
     heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_nominal_electric_power(erv)
 
     # add economizer lockout
-    erv.setSupplyAirOutletTemperatureControl(false)
+    erv.setSupplyAirOutletTemperatureControl(true)
     erv.setEconomizerLockout(true)
 
     # add defrost
