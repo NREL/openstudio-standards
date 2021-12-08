@@ -2665,6 +2665,7 @@ class ECMS
     end
     furnace_num = component.name.to_s.gsub(/[^0-9]/, '')
     new_furnace_name = ecm_package_name + " #{furnace_num}"
+    component.setNominalCapacity(component.autosizedNominalCapacity.to_f)
     component.setName(new_furnace_name)
   end
 
