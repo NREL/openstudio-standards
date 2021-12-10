@@ -150,7 +150,7 @@ class ASHRAE901PRM < Standard
   def plant_loop_apply_prm_number_of_chillers(plant_loop_args)
     # Retrieve arguments
     plant_loop = plant_loop_args[0]
-    if sizing_run_dir.length > 1
+    if plant_loop_args.length > 1
       sizing_run_dir = plant_loop_args[1]
     else
       sizing_run_dir = nil

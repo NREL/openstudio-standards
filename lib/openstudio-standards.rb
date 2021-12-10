@@ -174,6 +174,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.CoolingTower"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Fan"
 
   # Model Objects
   require_relative "#{stds}/Standards.AirLoopHVAC"
@@ -267,7 +268,6 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.AirLoopHVAC"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ZoneHVACComponent"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.PlantLoop"
-  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Fan"
   # 90.1-PRM-2019
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019.Model"

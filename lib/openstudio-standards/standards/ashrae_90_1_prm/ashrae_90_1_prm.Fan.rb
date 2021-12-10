@@ -1,7 +1,7 @@
 
 # A variety of fan calculation methods that are the same regardless of fan type.
 # These methods are available to FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
-module Fan
+module ASHRAE901PRMFan
 
   # Determines the minimum fan motor efficiency and nominal size for a given motor bhp.
   # This should be the total brake horsepower with any desired safety factor already included.
