@@ -309,7 +309,7 @@ class ECMS
 
   # =============================================================================================================================
   # Method to determine whether zone can have terminal vrf equipment. Zones with no vrf terminal equipment are characterized by
-  # transient occupancy such is the case for corridors, stairwells, storage, etc ...
+  # transient occupancy such is the case for corridors, stairwells, storage, ...
   def zone_with_no_vrf_eqpt?(zone)
     space_types_to_skip = {}
     space_types_to_skip['NECB2011'] = ['Atrium - H < 13m',
@@ -1123,16 +1123,40 @@ class ECMS
               supply_fan = fan # assume supply fan has higher pressure drop
             end
           end
-          fan_power = supply_fan.autosizedMaximumFlowRate.to_f * max_pd / supply_fan.fanTotalEfficiency.to_f
+          # There is an error in EnergyPlus in the estimated capacity of the coil "CoilCoolingDXVariableSpeed".
+          # Here the capacity reported by OS is adjusted to estimate an appropriate capacity for the cooling coil.
+          # The autosized capacity is corrected for the actual fan flow rate and fan power.
+          if supply_fan.autosizedMaximumFlowRate.is_initialized 
+            fan_max_afr = supply_fan.autosizedMaximumFlowRate.to_f
+          elsif supply_fan.maximumFlowRate.is_initialized
+            fan_max_afr = supply_fan.maximumFlowRate.to_f
+          else
+            raise "Fan flow rate is undefined for fan #{supply_fan.name.to_s}"
+          end
+          if clg_dx_coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.is_initialized
+            clg_dx_coil_afr = clg_dx_coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.to_f
+          elsif clg_dx_coil.ratedAirFlowRateAtSelectedNominalSpeedLevel.is_initialized
+             clg_dx_coil_afr = clg_dx_coil.ratedAirFlowRateAtSelectedNominalSpeedLevel.to_f
+          else
+            raise "Rated air flow rate at selected nominal speed level is undefined for coil #{clg_dx_coil.name.to_s}"
+          end
+          fan_power = fan_max_afr * max_pd / supply_fan.fanTotalEfficiency.to_f
           clg_dx_coil_cap = clg_dx_coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f *
-                            supply_fan.autosizedMaximumFlowRate.to_f / clg_dx_coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.to_f +
-                            fan_power / clg_dx_coil.speeds.last.referenceUnitGrossRatedSensibleHeatRatio.to_f
-        else
+                            fan_max_afr / clg_dx_coil_afr + fan_power / clg_dx_coil.speeds.last.referenceUnitGrossRatedSensibleHeatRatio.to_f
+        elsif clg_dx_coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
           clg_dx_coil_cap = clg_dx_coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
+        else
+          raise "Rated total cooling capacity at selected nominal speed is undefined for coil #{clg_dx_coil.name.to_s}"
         end
         htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, false)
         htg_dx_coil.setName(htg_dx_coil_init_name)
-        backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        if backup_coil.autosizedNominalCapacity.is_initialized
+           backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        elsif backup_coil.nominalCapacity.is_initialized
+           backup_coil_cap = backup_coil.nominalCapacity.to_f
+        else
+          raise "Nominal capacity is undefiled for coil #{backup_coil.name.to_s}"
+        end
         # Set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
         dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
         if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
@@ -1272,12 +1296,20 @@ class ECMS
             clg_dx_coil.setName(clg_dx_coil_init_name)
             if clg_dx_coil.autosizedRatedTotalCoolingCapacity.is_initialized
               clg_dx_coil_cap = clg_dx_coil.autosizedRatedTotalCoolingCapacity.to_f
-            else
+            elsif clg_dx_coil.ratedTotalCoolingCapacity.is_initialized
               clg_dx_coil_cap = clg_dx_coil.ratedTotalCoolingCapacity.to_f
+            else
+              raise "The total cooling capacity is undefined for coil #{clg_dx_coil_cap.name.to_s}"
             end
             htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, true)
             htg_dx_coil.setName(htg_dx_coil_init_name)
-            backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+            if backup_coil.autosizedNominalCapacity.is_initialized
+              backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+            elsif backup_coil.nominalCapacity.is_initialized
+              backup_coil_cap = backup_coil.nominalCapacity.to_f
+            else
+              raise "The nominal capacity is undefined for coil #{backup_coil.name.to_s}"
+            end
             # Set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
             dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
             if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
@@ -1414,6 +1446,8 @@ class ECMS
           htg_dx_coil = icomp.to_CoilHeatingDXSingleSpeed.get
         elsif icomp.to_CoilHeatingElectric.is_initialized
           backup_coil = icomp.to_CoilHeatingElectric.get
+        elsif icomp.to_CoilHeatingGas.is_initialized
+          backup_coil = icomp.to_CoilHeatingGas.get
         end
       end
       if clg_dx_coil && htg_dx_coil && backup_coil
@@ -1422,12 +1456,20 @@ class ECMS
         clg_dx_coil.setName(clg_dx_coil_init_name)
         if clg_dx_coil.autosizedRatedTotalCoolingCapacity.is_initialized
           clg_dx_coil_cap = clg_dx_coil.autosizedRatedTotalCoolingCapacity.to_f
-        else
+        elsif clg_dx_coil.ratedTotalCoolingCapacity.is_initialized
           clg_dx_coil_cap = clg_dx_coil.ratedTotalCoolingCapacity.to_f
+        else
+          raise "Rated total cooling capacity is undefined for coil #{clg_dx_coil.name.to_s}"
         end
         htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, true)
         htg_dx_coil.setName(htg_dx_coil_init_name)
-        backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        if backup_coil.autosizedNominalCapacity.is_initialized
+          backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        elsif backup_coil.nominalCapacity.is_initialized
+          backup_coil_cap = backup_coil.nominalCapacity.to_f
+        else
+          raise "Nominal capacity is undefined for coil #{backup_coil.name.to_s}"
+        end
         # set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
         dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
         if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
@@ -2663,6 +2705,7 @@ class ECMS
     end
     furnace_num = component.name.to_s.gsub(/[^0-9]/, '')
     new_furnace_name = ecm_package_name + " #{furnace_num}"
+    component.setNominalCapacity(component.autosizedNominalCapacity.to_f) if component.autosizedNominalCapacity.is_initialized
     component.setName(new_furnace_name)
   end
 
