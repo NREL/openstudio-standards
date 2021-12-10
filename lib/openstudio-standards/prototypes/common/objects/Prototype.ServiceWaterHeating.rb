@@ -381,12 +381,13 @@ class Standard
       hpwh.setCondenserBottomLocation(h_condbot)
       hpwh.setCondenserTopLocation(h_condtop)
       hpwh.setTankElementControlLogic('MutuallyExclusive')
+      hpwh.autocalculateEvaporatorAirFlowRate
     elsif type == 'PumpedCondenser'
       hpwh.setDeadBandTemperatureDifference(3.89)
+      hpwh.autosizeEvaporatorAirFlowRate
     end
 
     # set heat pump water heater properties
-    hpwh.autocalculateEvaporatorAirFlowRate
     hpwh.setFanPlacement('DrawThrough')
     hpwh.setOnCycleParasiticElectricLoad(0.0)
     hpwh.setOffCycleParasiticElectricLoad(0.0)
@@ -445,8 +446,10 @@ class Standard
     if type == 'WrappedCondenser'
       coil = hpwh.dXCoil.to_CoilWaterHeatingAirToWaterHeatPumpWrapped.get
       coil.setRatedCondenserWaterTemperature(48.89)
+      coil.autocalculateRatedEvaporatorAirFlowRate
     elsif type == 'PumpedCondenser'
       coil = hpwh.dXCoil.to_CoilWaterHeatingAirToWaterHeatPump.get
+      coil.autosizeRatedEvaporatorAirFlowRate
     end
 
     # set coil properties
@@ -456,7 +459,6 @@ class Standard
     coil.setRatedSensibleHeatRatio(shr)
     coil.setRatedEvaporatorInletAirDryBulbTemperature(OpenStudio.convert(67.5, 'F', 'C').get)
     coil.setRatedEvaporatorInletAirWetBulbTemperature(OpenStudio.convert(56.426, 'F', 'C').get)
-    coil.autosizeRatedEvaporatorAirFlowRate
     coil.setEvaporatorFanPowerIncludedinRatedCOP(true)
     coil.setEvaporatorAirTemperatureTypeforCurveObjects('WetBulbTemperature')
     coil.setHeatingCapacityFunctionofTemperatureCurve(hpwh_cap)
