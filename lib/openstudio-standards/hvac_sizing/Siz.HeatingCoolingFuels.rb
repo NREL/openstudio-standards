@@ -265,7 +265,7 @@ class OpenStudio::Model::Model
       case obj_type
       when 'OS_AirLooHVAC_UnitarySystem'
         equipment = equipment.to_AirLoopHVACUnitarySystem.get
-        if eqiupment.heatingCoil.is_initialized
+        if equipment.heatingCoil.is_initialized
           fuels += self.coil_heating_fuels(equipment.heatingCoil.get)
         end
       when 'OS_AirTerminal_SingleDuct_ConstantVolume_FourPipeInduction'
