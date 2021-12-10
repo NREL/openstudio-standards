@@ -914,9 +914,11 @@ class Standard
   # Splits the single chiller used for the initial sizing run
   # into multiple separate chillers based on Appendix G.
   #
-  # @param plant_loop [OpenStudio::Model::PlantLoop] chilled water loop
+  # @param plant_loop_args [Array] chilled water loop (OpenStudio::Model::PlantLoop), sizing run directory
   # @return [Bool] returns true if successful, false if not
-  def plant_loop_apply_prm_number_of_chillers(plant_loop)
+  def plant_loop_apply_prm_number_of_chillers(plant_loop_args)
+    plant_loop = plant_loop_args[0]
+
     # Skip non-cooling plants
     return true unless plant_loop.sizingPlant.loopType == 'Cooling'
 

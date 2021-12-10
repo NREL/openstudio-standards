@@ -294,7 +294,6 @@ module Fan
       return [fan_motor_eff, nominal_hp]
     end
     fan_motor_eff = motor_properties['nominal_full_load_efficiency']
-    #nominal_hp = motor_properties['maximum_capacity'].round(1)
 
     return [fan_motor_eff, nominal_hp]
   end
