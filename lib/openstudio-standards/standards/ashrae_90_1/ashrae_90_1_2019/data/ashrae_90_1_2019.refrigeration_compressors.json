@@ -22,7 +22,7 @@
       "template": "90.1-2019",
       "compressor_name": "Low Temp",
       "compressor_type": "Low Temp",
-      "power_curve": "New_Low_Temp_Comp_Pwr_Curve",
+      "power_curve": "New_Low_Temp_Comp_Pwr_Curve_2019_AWEF",
       "capacity_curve": "New_Low_Temp_Comp_Cap_Curve",
       "rated_capacity": 83897.747496,
       "notes": null

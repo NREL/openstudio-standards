@@ -757,15 +757,31 @@ class Standard
   # @return [Double] the zone net floor area in m^2 (with multiplier taken into account)
   def thermal_zone_floor_area_with_zone_multipliers(thermal_zone)
     area_m2 = 0
-    zone_mult = multiplier
-    spaces.each do |space|
+    thermal_zone.spaces.each do |space|
       # If space is not part of floor area, we don't add it
       next unless space.partofTotalFloorArea
 
       area_m2 += space.floorArea
     end
 
-    return area_m2 * zone_mult
+    return area_m2 * thermal_zone.multiplier
+  end
+
+  # Determine the net area of the zone
+  # Loops on each space, and checks if part of total floor area or not
+  # If not part of total floor area, it is not added to the zone floor area
+  #
+  # @return [Double] the zone net floor area in m^2
+  def thermal_zone_floor_area(thermal_zone)
+    area_m2 = 0
+    thermal_zone.spaces.each do |space|
+      # If space is not part of floor area, we don't add it
+      next unless space.partofTotalFloorArea
+
+      area_m2 += space.floorArea
+    end
+
+    return area_m2
   end
 
   # Infers the baseline system type based on the equipment serving the zone and their heating/cooling fuels.
@@ -966,7 +982,14 @@ class Standard
       elsif equip.to_ZoneHVACLowTempRadiantVarFlow.is_initialized
         equip = equip.to_ZoneHVACLowTempRadiantVarFlow.get
         htg_coil = equip.heatingCoil
-        if htg_coil.to_CoilHeatingLowTempRadiantVarFlow.is_initialized
+        if equip.model.version > OpenStudio::VersionString.new('3.1.0')
+          if htg_coil.is_initialized
+            htg_coil = htg_coil.get
+          else
+            htg_coil = nil
+          end
+        end
+        if !htg_coil.nil? && htg_coil.to_CoilHeatingLowTempRadiantVarFlow.is_initialized
           htg_coil = htg_coil.to_CoilHeatingLowTempRadiantVarFlow.get
           if htg_coil.heatingControlTemperatureSchedule.is_initialized
             htg_sch = htg_coil.heatingControlTemperatureSchedule.get
@@ -1101,7 +1124,14 @@ class Standard
       elsif equip.to_ZoneHVACLowTempRadiantVarFlow.is_initialized
         equip = equip.to_ZoneHVACLowTempRadiantVarFlow.get
         clg_coil = equip.coolingCoil
-        if clg_coil.to_CoilCoolingLowTempRadiantVarFlow.is_initialized
+        if equip.model.version > OpenStudio::VersionString.new('3.1.0')
+          if clg_coil.is_initialized
+            clg_coil = clg_coil.get
+          else
+            clg_coil = nil
+          end
+        end
+        if !clg_coil.nil? && clg_coil.to_CoilCoolingLowTempRadiantVarFlow.is_initialized
           clg_coil = clg_coil.to_CoilCoolingLowTempRadiantVarFlow.get
           if clg_coil.coolingControlTemperatureSchedule.is_initialized
             clg_sch = clg_coil.coolingControlTemperatureSchedule.get

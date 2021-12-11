@@ -1,0 +1,26 @@
+{
+  "furnaces": [
+    {
+      "template": "90.1-2019",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 224999.0,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_annual_fuel_utilization_efficiency": null,
+      "minimum_thermal_efficiency": 0.81,
+      "minimum_combustion_efficiency": null,
+      "notes": "Table 6.8.1-6 for > 225 ktbu/hr\nTable F-4 for < 225 ktbu/hr"
+    },
+    {
+      "template": "90.1-2019",
+      "minimum_capacity": 225000.0,
+      "maximum_capacity": 249999999.0,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_annual_fuel_utilization_efficiency": null,
+      "minimum_thermal_efficiency": 0.8,
+      "minimum_combustion_efficiency": null,
+      "notes": "Table 6.8.1-6 for > 225 ktbu/hr\nTable F-4 for < 225 ktbu/hr"
+    }
+  ]
+}

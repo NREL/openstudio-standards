@@ -428,6 +428,9 @@ class NECB2011 < Standard
     model.getBoilerSteams.each(&:remove)
     model.getPlantLoops.each(&:remove)
     model.getSchedules.each(&:remove)
+    model.getThermalZones.sort.each { |zone| zone.thermostat(&:remove) }
+    model.getSpaces.sort.each { |space| space.designSpecificationOutdoorAir(&:remove) }
+    model.getThermostatSetpointDualSetpoints.each(&:remove)
 
     scale_x = 1.0
     scale_y = 1.0
