@@ -2623,7 +2623,7 @@ class ECMS
     else
       eff_measure_name = eff['name']
     end
-    new_boiler_name = boiler_primacy + eff_measure_name + " #{boiler_size_kbtu_per_hour.round(0)}kBtu/hr #{component.nominalThermalEfficiency} Thermal Eff"
+    new_boiler_name = (boiler_primacy + eff_measure_name + " #{boiler_size_kbtu_per_hour.round(0)}kBtu/hr #{component.nominalThermalEfficiency} Thermal Eff").strip
     component.setName(new_boiler_name)
   end
 
@@ -2704,8 +2704,7 @@ class ECMS
       ecm_package_name = eff['name']
     end
     furnace_num = component.name.to_s.gsub(/[^0-9]/, '')
-    new_furnace_name = ecm_package_name + " #{furnace_num}"
-    component.setNominalCapacity(component.autosizedNominalCapacity.to_f) if component.autosizedNominalCapacity.is_initialized
+    new_furnace_name = (ecm_package_name + " #{furnace_num}").strip
     component.setName(new_furnace_name)
   end
 
@@ -2802,7 +2801,7 @@ class ECMS
     else
       shw_ecm_package_name = eff['name']
     end
-    shw_name = "#{shw_vol_gal} Gal #{shw_ecm_package_name} Water Heater - #{shw_capacity_kBtu_hr}kBtu/hr #{eff['efficiency']} Therm Eff"
+    shw_name = ("#{shw_vol_gal} Gal #{shw_ecm_package_name} Water Heater - #{shw_capacity_kBtu_hr}kBtu/hr #{eff['efficiency']} Therm Eff").strip
     component.setName(shw_name)
   end
 
