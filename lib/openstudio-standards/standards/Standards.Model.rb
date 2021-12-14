@@ -3921,6 +3921,28 @@ class Standard
                                 'building_category' => building_category,
                                 'minimum_percent_of_surface' => minimum_percent_of_surface,
                                 'maximum_percent_of_surface' => maximum_percent_of_surface)
+
+      # 12/14/2021 added to test data pull from sub climate zones for transparent surfaces
+      if !props
+        if climate_zone_set == "ClimateZone 3"
+          # for PRM, climate zone 3 should test on 3A, 3B and 3C for transparent surfaces
+          search_test_set = ["A", "B", "C"]
+          for test in search_test_set
+            props = model_find_object(standards_data['construction_properties'],
+                                      'template' => template,
+                                      'climate_zone_set' => climate_zone_set+test,
+                                      'intended_surface_type' => intended_surface_type,
+                                      'standards_construction_type' => standards_construction_type,
+                                      'building_category' => building_category,
+                                      'minimum_percent_of_surface' => minimum_percent_of_surface,
+                                      'maximum_percent_of_surface' => maximum_percent_of_surface)
+            if props
+              # Found the transparent surfaces, stop the searching.
+              break
+            end
+          end
+        end
+      end
     else
       props = model_find_object(standards_data['construction_properties'],
                                 'template' => template,
