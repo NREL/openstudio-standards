@@ -15,7 +15,8 @@ class Standard
     fan_efficacy_w_per_cfm = 0.35
 
     # Convert efficacy to metric
-    fan_efficacy_w_per_m3_per_s = OpenStudio.convert(fan_efficacy_w_per_cfm, 'm^3/s', 'cfm').get
+    # 1 cfm = 0.0004719 m^3/s
+    fan_efficacy_w_per_m3_per_s = fan_efficacy_w_per_cfm / 0.0004719
 
     # Get the maximum flow rate through the terminal
     max_primary_air_flow_rate = nil
