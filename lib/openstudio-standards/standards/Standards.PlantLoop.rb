@@ -530,33 +530,16 @@ class Standard
   # Get the total cooling capacity for the plant loop
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @param [String] sizing_run_dir
   # @return [Double] total cooling capacity in watts
-  def plant_loop_total_cooling_capacity(plant_loop, sizing_run_dir = Dir.pwd)
+  def plant_loop_total_cooling_capacity(plant_loop)
     # Sum the cooling capacity for all cooling components
     # on the plant loop.
     total_cooling_capacity_w = 0
-    sizing_run_ran = false
-
     plant_loop.supplyComponents.each do |sc|
       # ChillerElectricEIR
       if sc.to_ChillerElectricEIR.is_initialized
         chiller = sc.to_ChillerElectricEIR.get
-
-        # If chiller is autosized, check sizing run results. If sizing run not ran, run it first
-        if chiller.isReferenceCapacityAutosized
-          model = chiller.model
-          sizing_run_ran = model_run_sizing_run(model, "#{sizing_run_dir}/SR_cooling_plant") if !sizing_run_ran
-
-          if sizing_run_ran
-            sizing_run_capacity = model.getAutosizedValueFromEquipmentSummary(chiller, 'Central Plant', 'Nominal Capacity', 'W').get
-            chiller.setReferenceCapacity(sizing_run_capacity)
-            total_cooling_capacity_w += sizing_run_capacity
-          else
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name} capacity of #{chiller.name} is not available due to a sizing run failure, total cooling capacity of plant loop will be incorrect when applying standard.")
-          end
-
-        elsif chiller.referenceCapacity.is_initialized
+        if chiller.referenceCapacity.is_initialized
           total_cooling_capacity_w += chiller.referenceCapacity.get
         elsif chiller.autosizedReferenceCapacity.is_initialized
           total_cooling_capacity_w += chiller.autosizedReferenceCapacity.get
@@ -931,9 +914,11 @@ class Standard
   # Splits the single chiller used for the initial sizing run
   # into multiple separate chillers based on Appendix G.
   #
-  # @param plant_loop [OpenStudio::Model::PlantLoop] chilled water loop
+  # @param plant_loop_args [Array] chilled water loop (OpenStudio::Model::PlantLoop), sizing run directory
   # @return [Bool] returns true if successful, false if not
-  def plant_loop_apply_prm_number_of_chillers(plant_loop, sizing_run_dir = Dir.pwd)
+  def plant_loop_apply_prm_number_of_chillers(plant_loop_args)
+    plant_loop = plant_loop_args[0]
+
     # Skip non-cooling plants
     return true unless plant_loop.sizingPlant.loopType == 'Cooling'
 
@@ -942,11 +927,8 @@ class Standard
     chiller_cooling_type = nil
     chiller_compressor_type = nil
 
-    # Set the equipment to stage sequentially
-    plant_loop.setLoadDistributionScheme('SequentialLoad')
-
     # Determine the capacity of the loop
-    cap_w = plant_loop_total_cooling_capacity(plant_loop, sizing_run_dir)
+    cap_w = plant_loop_total_cooling_capacity(plant_loop)
     cap_tons = OpenStudio.convert(cap_w, 'W', 'ton').get
     if cap_tons <= 300
       num_chillers = 1
@@ -1006,7 +988,6 @@ class Standard
     per_chiller_sizing_factor = (1.0 / num_chillers).round(2)
     # This is unused
     per_chiller_cap_tons = cap_tons / num_chillers
-    per_chiller_cap_w = cap_w / num_chillers
 
     # Set the sizing factor and the chiller type: could do it on the first chiller before cloning it, but renaming warrants looping on chillers anyways
 
@@ -1070,10 +1051,12 @@ class Standard
     final_chillers.each_with_index do |final_chiller, i|
       final_chiller.setName("#{template} #{chiller_cooling_type} #{chiller_compressor_type} Chiller #{i + 1} of #{final_chillers.size}")
       final_chiller.setSizingFactor(per_chiller_sizing_factor)
-      final_chiller.setReferenceCapacity(per_chiller_cap_w)
       final_chiller.setCondenserType(chiller_cooling_type)
     end
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, there are #{final_chillers.size} #{chiller_cooling_type} #{chiller_compressor_type} chillers.")
+
+    # Set the equipment to stage sequentially
+    plant_loop.setLoadDistributionScheme('SequentialLoad')
 
     return true
   end
