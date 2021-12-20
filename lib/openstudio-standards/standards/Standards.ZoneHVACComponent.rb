@@ -44,7 +44,8 @@ class Standard
     fan_efficacy_w_per_cfm = zone_hvac_component_prm_baseline_fan_efficacy
 
     # Convert efficacy to metric
-    fan_efficacy_w_per_m3_per_s = OpenStudio.convert(fan_efficacy_w_per_cfm, 'm^3/s', 'cfm').get
+    # 1 cfm = 0.0004719 m^3/s
+    fan_efficacy_w_per_m3_per_s = fan_efficacy_w_per_cfm / 0.0004719
 
     # Get the fan
     fan = if zone_hvac.supplyAirFan.to_FanConstantVolume.is_initialized
