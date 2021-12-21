@@ -49,6 +49,7 @@ class BTAPData
     @btap_data.merge!(energy_peak_data)
     @btap_data.merge!(utility(model))
     @btap_data.merge!(unmet_hours(model))
+    @btap_data.merge!(outdoor_air_data(model))
 
     # Data in tables...
     @btap_data.merge!('measures_data_table' => measures_data_table(runner)) unless runner.nil?
@@ -1388,6 +1389,27 @@ class BTAPData
     service_water_heating['shw_water_m_cu_per_day_per_occupant'] = service_water_heating['shw_water_m_cu_per_day'] / service_water_heating['shw_total_nominal_occupancy']
     return service_water_heating
   end
+
+  def outdoor_air_data(model)
+    # Store outdoor air data
+    outdoor_air_data = {}
+    total_outdoor_air_mechanical_ventilation_m3 = 0.0
+    model.getAirLoopHVACs.sort.each do |air_loop|
+      air_loop_name = air_loop.name.get.upcase
+      command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='OutdoorAirDetails'
+               AND ReportForString='Entire Facility'
+               AND TableName='Total Outdoor Air by AirLoop'
+               AND RowName='#{air_loop_name}'
+               AND ColumnName='Mechanical Ventilation'
+               AND Units='m3'"
+      total_outdoor_air_mechanical_ventilation_m3 += @sqlite_file.get.execAndReturnFirstDouble(command).to_f
+    end
+    outdoor_air_data['total_outdoor_air_mechanical_ventilation_m3'] = total_outdoor_air_mechanical_ventilation_m3
+    return outdoor_air_data
+  end
+
 
   def sql_data_tables(model)
     puts 'Getting SQL Data into json...'
