@@ -1390,10 +1390,10 @@ class BTAPData
     return service_water_heating
   end
 
-  def outdoor_air_data(model)
+  def outdoor_air_data(model)  #TODO: first normalize this value in a way (e.g. ach); then merge into the nrcan branch
     # Store outdoor air data
-    outdoor_air_data = {}
-    total_outdoor_air_mechanical_ventilation_m3 = 0.0
+    annual_outdoor_air_data = {}
+    annual_total_outdoor_air_mechanical_ventilation_m3 = 0.0
     model.getAirLoopHVACs.sort.each do |air_loop|
       air_loop_name = air_loop.name.get.upcase
       command = "SELECT Value
@@ -1404,10 +1404,10 @@ class BTAPData
                AND RowName='#{air_loop_name}'
                AND ColumnName='Mechanical Ventilation'
                AND Units='m3'"
-      total_outdoor_air_mechanical_ventilation_m3 += @sqlite_file.get.execAndReturnFirstDouble(command).to_f
+      annual_total_outdoor_air_mechanical_ventilation_m3 += @sqlite_file.get.execAndReturnFirstDouble(command).to_f
     end
-    outdoor_air_data['total_outdoor_air_mechanical_ventilation_m3'] = total_outdoor_air_mechanical_ventilation_m3
-    return outdoor_air_data
+    annual_outdoor_air_data['annual_total_outdoor_air_mechanical_ventilation_m3'] = annual_total_outdoor_air_mechanical_ventilation_m3
+    return annual_outdoor_air_data
   end
 
 
