@@ -39,10 +39,10 @@ class ECMS < NECB2011
     @standards_data['curves'] = standards_data['tables']['curves']['table']
   end
 
-  def apply_system_ecm(model:, ecm_system_name: nil, template_standard:, runner: nil, primary_heating_fuel: nil, system_zones_map_option: 'NECB_Default')
+  def apply_system_ecm(model:, ecm_system_name: nil, template_standard:, runner: nil, primary_heating_fuel: nil, ecm_system_zones_map_option: 'NECB_Default')
     # Do nothing if nil or other usual suspects.. covering all bases for now.
     return if ecm_system_name.nil? || ecm_system_name == 'none' || ecm_system_name == 'NECB_Default'
-    system_zones_map_option = 'NECB_Default' if system_zones_map_option.nil? || system_zones_map_option == 'none'
+    ecm_system_zones_map_option = 'NECB_Default' if ecm_system_zones_map_option.nil? || ecm_system_zones_map_option == 'none'
 
     ecm_std = Standard.build('ECMS')
     systems = model.getAirLoopHVACs
@@ -62,7 +62,7 @@ class ECMS < NECB2011
                  model: model,
                  system_zones_map: map_system_to_zones,
                  system_doas_flags: system_doas_flags,
-                 system_zones_map_option: system_zones_map_option,
+                 ecm_system_zones_map_option: ecm_system_zones_map_option,
                  standard: template_standard,
                  heating_fuel: primary_heating_fuel)
   end

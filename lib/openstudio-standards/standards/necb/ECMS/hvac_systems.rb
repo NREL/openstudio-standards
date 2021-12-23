@@ -472,14 +472,14 @@ class ECMS
     model:,
     system_zones_map:,
     system_doas_flags:,
-    system_zones_map_option:,
+    ecm_system_zones_map_option:,
     heating_fuel:,
     standard:,
     air_sys_eqpt_type: 'ccashp')
 
     # Update system zones map if needed
-    if system_zones_map_option != 'NECB_Default'
-      system_zones_map = update_system_zones_map(model,system_zones_map,system_zones_map_option,'sys_1')
+    if ecm_system_zones_map_option != 'NECB_Default'
+      system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1')
     else
       updated_system_zones_map = {}
       system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..]}"] = zones}  # doas unit is an NECB sys_1 
@@ -1006,7 +1006,7 @@ class ECMS
   def add_ecm_hs09_ccashp_baseboard(model:,
                                     system_zones_map:,    # hash of ailoop names as keys and array of zones as values
                                     system_doas_flags:,   # hash of system names as keys and flag for DOAS as values
-                                    system_zones_map_option:,
+                                    ecm_system_zones_map_option:,
                                     heating_fuel:,
                                     standard:)
 
@@ -1177,7 +1177,7 @@ class ECMS
   def add_ecm_hs11_ashp_pthp(model:,
                              system_zones_map:,
                              system_doas_flags:,
-                             system_zones_map_option:,
+                             ecm_system_zones_map_option:,
                              standard:,
                              heating_fuel:)
 
@@ -1192,8 +1192,8 @@ class ECMS
     sys_supp_htg_eqpt_type = 'coil_electric'
     sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
     # Update system zones map if needed
-    if system_zones_map_option != 'NECB_Default'
-      system_zones_map = update_system_zones_map(model,system_zones_map,system_zones_map_option,'sys_1')
+    if ecm_system_zones_map_option != 'NECB_Default'
+      system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1')
     else
       updated_system_zones_map = {}
       system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..]}"] = zones}
@@ -1337,7 +1337,7 @@ class ECMS
   def add_ecm_hs12_ashp_baseboard(model:,
                                   system_zones_map:,
                                   system_doas_flags:,
-                                  system_zones_map_option:,
+                                  ecm_system_zones_map_option:,
                                   standard:,
                                   heating_fuel:)
 
@@ -1490,14 +1490,14 @@ class ECMS
   def add_ecm_hs13_ashp_vrf(model:,
                             system_zones_map:,
                             system_doas_flags:,
-                            system_zones_map_option:,
+                            ecm_system_zones_map_option:,
                             standard:,
                             heating_fuel:)
     # call method for ECM hs08 with ASHP in the air system
     add_ecm_hs08_ccashp_vrf(model: model,
                             system_zones_map: system_zones_map,
                             system_doas_flags: system_doas_flags,
-                            system_zones_map_option: system_zones_map_option,
+                            ecm_system_zones_map_option: ecm_system_zones_map_option,
                             standard: standard,
                             heating_fuel: heating_fuel,
                             air_sys_eqpt_type: 'ashp')
@@ -2901,7 +2901,7 @@ class ECMS
   def add_ecm_remove_airloops_add_zone_baseboards(model:,
                                                   system_zones_map:,
                                                   system_doas_flags: nil,
-                                                  system_zones_map_option:,
+                                                  ecm_system_zones_map_option:,
                                                   standard:,
                                                   heating_fuel:)
     # Set the primary fuel set to default to to specific fuel type.
