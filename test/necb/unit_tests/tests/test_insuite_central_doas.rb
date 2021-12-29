@@ -43,7 +43,7 @@ class NECB_insuite_central_doas_Tests < Minitest::Test
     ]
     @primary_heating_fuels = ['DefaultFuel']
 
-    @doas_types = [
+    @baseline_system_zones_map_options = [ # DOAS system types
       'one_sys_per_dwelling_unit',
       'one_sys_per_bldg'
     ]
@@ -55,7 +55,7 @@ class NECB_insuite_central_doas_Tests < Minitest::Test
       @epw_files.sort.each do |epw_file|
         @building_types.sort.each do |building_type|
           @primary_heating_fuels.sort.each do |primary_heating_fuel|
-            @doas_types.sort.each do |doas_type|
+            @baseline_system_zones_map_options.sort.each do |baseline_system_zones_map_option|
               result = {}
               result['template'] = template
               result['epw_file'] = epw_file
@@ -119,14 +119,14 @@ class NECB_insuite_central_doas_Tests < Minitest::Test
                                                       pv_ground_module_description: nil,
                                                       chiller_type: nil,
                                                       shw_scale: nil,
-                                                      baseline_system_zones_map_option: doas_type
+                                                      baseline_system_zones_map_option: baseline_system_zones_map_option
               )
 
               # # comment out for regular tests
-              BTAP::FileIO.save_osm(model, File.join(@output_folder,"#{template}-#{building_type}-doas-type-#{doas_type}.osm"))
-              puts File.join(@output_folder,"#{template}-#{building_type}-doas-type-#{doas_type}.osm")
+              BTAP::FileIO.save_osm(model, File.join(@output_folder,"#{template}-#{building_type}-doas-type-#{baseline_system_zones_map_option}.osm"))
+              puts File.join(@output_folder,"#{template}-#{building_type}-doas-type-#{baseline_system_zones_map_option}.osm")
 
-              result["doas_type"] = doas_type
+              result["doas_type"] = baseline_system_zones_map_option
 
               ##### Gather info of airloops
               number_of_airloops = 0.0
@@ -141,7 +141,7 @@ class NECB_insuite_central_doas_Tests < Minitest::Test
               ##### then store results into the array that contains all the scenario results.
               @test_results_array << result
 
-            end #@doas_types.sort.each do |doas_type|
+            end #@baseline_system_zones_map_options.sort.each do |baseline_system_zones_map_option|
           end #@primary_heating_fuels.sort.each do |primary_heating_fuel|
         end
       end
