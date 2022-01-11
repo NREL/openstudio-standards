@@ -34,8 +34,10 @@ class BTAPPRE1980
     # zone data
     system_data[:max_system_supply_air_temperature] = 43.0
     system_data[:min_system_supply_air_temperature] = 13.0
-    system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
-    system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
+    system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference] = 11.0
+    system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference] = 21.0
     system_data[:ZoneCoolingSizingFactor] = 1.1
     system_data[:ZoneHeatingSizingFactor] = 1.3
     system_data[:ZoneVAVMinFlowFactorPerFloorArea] = 0.002
@@ -115,8 +117,10 @@ class BTAPPRE1980
         (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).each do |zone|
           # Zone sizing parameters
           sizing_zone = zone.sizingZone
-          sizing_zone.setZoneCoolingDesignSupplyAirTemperature(system_data[:ZoneCoolingDesignSupplyAirTemperature])
-          sizing_zone.setZoneHeatingDesignSupplyAirTemperature(system_data[:ZoneHeatingDesignSupplyAirTemperature])
+          sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod])
+          sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
+          sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
+          sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
           sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
           sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
 
@@ -197,8 +201,10 @@ class BTAPPRE1980
     # zone data
     system_6_data[:max_system_supply_air_temperature] = 43.0
     system_6_data[:min_system_supply_air_temperature] = 13.0
-    system_6_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
-    system_6_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
+    system_6_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_6_data[:ZoneCoolingDesignSupplyAirTemperatureDifference] = 11.0
+    system_6_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_6_data[:ZoneHeatingDesignSupplyAirTemperatureDifference] = 21.0
     system_6_data[:ZoneCoolingSizingFactor] = 1.1
     system_6_data[:ZoneHeatingSizingFactor] = 1.3
     system_6_data[:ZoneVAVMinFlowFactorPerFloorArea] = 0.002
@@ -285,8 +291,10 @@ class BTAPPRE1980
         (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).each do |zone|
           # Zone sizing parameters
           sizing_zone = zone.sizingZone
-          sizing_zone.setZoneCoolingDesignSupplyAirTemperature(system_data[:ZoneCoolingDesignSupplyAirTemperature])
-          sizing_zone.setZoneHeatingDesignSupplyAirTemperature(system_data[:ZoneHeatingDesignSupplyAirTemperature])
+          sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod])
+          sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
+          sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
+          sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
           sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
           sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
 
