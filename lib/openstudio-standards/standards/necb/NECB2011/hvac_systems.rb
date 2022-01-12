@@ -370,7 +370,7 @@ class NECB2011
 
   # Sets the minimum effectiveness of the heat exchanger per
   # the standard.
-  def heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(heat_exchanger_air_to_air_sensible_and_latent, erv_name = nil)
+  def heat_exchanger_air_to_air_sensible_and_latent_apply_effectiveness(heat_exchanger_air_to_air_sensible_and_latent, erv_name = nil)
     # Assumed to be sensible and latent at all flow
     # This will now get data of the erv from the json file instead of hardcoding it. Defaults to NECB2011 erv we have been using.
     erv_name = 'NECB_Default' if erv_name.nil?

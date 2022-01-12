@@ -472,8 +472,8 @@ module BTAP
         end
 
         natural_gas_peak = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM tabulardatawithstrings WHERE ReportName='EnergyMeters'" +
-            " AND ReportForString='Entire Facility' AND TableName='Annual and Peak Values - Gas' AND RowName='Gas:Facility'" +
-            " AND ColumnName='Gas Maximum Value' AND Units='W'")
+            " AND ReportForString='Entire Facility' AND TableName='Annual and Peak Values - Natural Gas' AND RowName='NaturalGas:Facility'" +
+            " AND ColumnName='Natural Gas Maximum Value' AND Units='W'")
         if natural_gas_peak.empty?
           natural_gas_peak = 0.0
         end
