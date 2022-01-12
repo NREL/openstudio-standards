@@ -45,15 +45,27 @@ class Standard
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @return [Bool] returns true if successful, false if not
   def model_system_outdoor_air_sizing_vrp_method(air_loop_hvac)
+    # Do not apply the adjustment to some of the system in
+    # the hospital and outpatient which have their minimum
+    # damper position determined based on AIA 2001 ventilation
+    # requirements
+    if (@instvarbuilding_type == 'Hospital' && (air_loop_hvac.name.to_s.include?('VAV_ER') || air_loop_hvac.name.to_s.include?('VAV_ICU') ||
+       air_loop_hvac.name.to_s.include?('VAV_OR') || air_loop_hvac.name.to_s.include?('VAV_LABS') ||
+       air_loop_hvac.name.to_s.include?('VAV_PATRMS'))) ||
+       (@instvarbuilding_type == 'Outpatient' && air_loop_hvac.name.to_s.include?('Outpatient F1'))
+      return true
+    end
+
     sizing_system = air_loop_hvac.sizingSystem
-    # sizing_system.setSystemOutdoorAirMethod("VentilationRateProcedure")
+    sizing_system.setSystemOutdoorAirMethod('VentilationRateProcedure')
     # Set the minimum zone ventilation efficiency to be 0.6
     air_loop_hvac.thermalZones.sort.each do |zone|
       sizing_zone = zone.sizingZone
-      # It is not yet possible to adjust the minimum zone ventilation efficiency
-      # @todo, update this section when OS allows to adjust minimum zone ventilation efficiency
-      # In EnergyPlus this is done through the DesignSpecification:ZoneAirDistribution object
-      # which is then assigned to a Sizing:Zone object
+      if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.0.0')
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.SizingSystem', "The design minimum zone ventilation efficiency cannot be set for #{sizing_system.name.to_s}. It can only be set OpenStudio 3.0.0 and later.")
+      else
+        sizing_zone.setDesignMinimumZoneVentilationEfficiency(0.6)
+      end
     end
 
     return true

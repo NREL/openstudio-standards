@@ -27,6 +27,6 @@ class ECMS
     return if erv_package.nil? || erv_package == 'none' || erv_package == 'NECB_Default'
 
     # This calls the NECB2011 implementation of the method.
-    model.getHeatExchangerAirToAirSensibleAndLatents.each { |erv| heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(erv, erv_package) }
+    model.getHeatExchangerAirToAirSensibleAndLatents.each { |erv| heat_exchanger_air_to_air_sensible_and_latent_apply_effectiveness(erv, erv_package) }
   end
 end

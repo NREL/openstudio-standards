@@ -171,7 +171,7 @@ class NECB2011 < Standard
     end
   end
 
-  # This method is a wrapper to create the 16 archetypes easily. # 37 args
+  # This method is a wrapper to create the 16 archetypes easily. # 55 args
   def model_create_prototype_model(template:,
                                    building_type:,
                                    epw_file:,
@@ -183,6 +183,7 @@ class NECB2011 < Standard
                                    lights_scale: 1.0,
                                    daylighting_type: 'NECB_Default',
                                    ecm_system_name: 'NECB_Default',
+                                   ecm_system_zones_map_option: 'NECB_Default',
                                    erv_package: 'NECB_Default',
                                    boiler_eff: nil,
                                    unitary_cop: nil,
@@ -223,6 +224,7 @@ class NECB2011 < Standard
                                    oa_scale: nil,
                                    infiltration_scale: nil,
                                    output_variables: nil,
+                                   shw_scale: nil,
                                    output_meters: nil,
                                    airloop_economizer_type: nil)
 
@@ -236,6 +238,7 @@ class NECB2011 < Standard
                                 lights_scale: lights_scale,
                                 daylighting_type: daylighting_type, # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
                                 ecm_system_name: ecm_system_name,
+                                ecm_system_zones_map_option: ecm_system_zones_map_option, # (1) 'NECB_Default' (2) 'one_sys_per_floor' (3) 'one_sys_per_bldg'
                                 erv_package: erv_package,
                                 boiler_eff: boiler_eff,
                                 unitary_cop: unitary_cop,
@@ -259,9 +262,9 @@ class NECB2011 < Standard
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
                                 nv_type: nv_type, # Two options: (1) nil/none/false/'NECB_Default', (2) 'add_nv'
-                                nv_opening_fraction: nv_opening_fraction, # options: (1) nil/none/false (2) 'NECB_Default' (i.e. 0.1)
-                                nv_temp_out_min: nv_temp_out_min, # options: (1) nil/none/false(2) 'NECB_Default' (i.e. 13.0 based on inputs from Michel Tardif re a real school in QC)
-                                nv_delta_temp_in_out: nv_delta_temp_in_out, # options: (1) nil/none/false (2) 'NECB_Default' (i.e. 1.0 based on inputs from Michel Tardif re a real school in QC)
+                                nv_opening_fraction: nv_opening_fraction, # options: (1) nil/none/false (2) 'NECB_Default' (i.e. 0.1), (3) opening fraction of windows, which can be a float number between 0.0 and 1.0
+                                nv_temp_out_min: nv_temp_out_min, # options: (1) nil/none/false(2) 'NECB_Default' (i.e. 13.0 based on inputs from Michel Tardif re a real school in QC), (3) minimum outdoor air temperature (in Celsius) below which natural ventilation is shut down
+                                nv_delta_temp_in_out: nv_delta_temp_in_out, # options: (1) nil/none/false (2) 'NECB_Default' (i.e. 1.0 based on inputs from Michel Tardif re a real school in QC), (3) temperature difference (in Celsius) between the indoor and outdoor air temperatures below which ventilation is shut down
                                 scale_x: scale_x,
                                 scale_y: scale_y,
                                 scale_z: scale_z,
@@ -276,6 +279,7 @@ class NECB2011 < Standard
                                 infiltration_scale: infiltration_scale,
                                 chiller_type: chiller_type, # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) e.g. 'VSD'
                                 output_variables: output_variables,
+                                shw_scale: shw_scale,  # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) a float number larger than 0.0
                                 output_meters: output_meters,
                                 airloop_economizer_type: airloop_economizer_type) # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
 
@@ -302,6 +306,7 @@ class NECB2011 < Standard
                            lights_scale: 'NECB_Default',
                            daylighting_type: 'NECB_Default',
                            ecm_system_name: 'NECB_Default',
+                           ecm_system_zones_map_option: 'NECB_Default',
                            erv_package: 'NECB_Default',
                            boiler_eff: nil,
                            furnace_eff: nil,
@@ -342,6 +347,7 @@ class NECB2011 < Standard
                            oa_scale: nil,
                            infiltration_scale: nil,
                            output_variables: nil,
+                           shw_scale: nil,
                            output_meters: nil,
                            airloop_economizer_type: nil)
 
@@ -384,6 +390,7 @@ class NECB2011 < Standard
                                    sizing_run_dir: sizing_run_dir,
                                    dcv_type: dcv_type,
                                    ecm_system_name: ecm_system_name,
+                                   ecm_system_zones_map_option: ecm_system_zones_map_option,
                                    erv_package: erv_package,
                                    boiler_eff: boiler_eff,
                                    unitary_cop: unitary_cop,
@@ -400,6 +407,7 @@ class NECB2011 < Standard
                                    pv_ground_azimuth_angle: pv_ground_azimuth_angle,
                                    pv_ground_module_description: pv_ground_module_description,
                                    chiller_type: chiller_type,
+                                   shw_scale: shw_scale,
                                    airloop_economizer_type: airloop_economizer_type)
     self.set_output_variables(model: model, output_variables: output_variables)
     self.set_output_meters(model: model, output_meters: output_meters)
@@ -453,6 +461,7 @@ class NECB2011 < Standard
                                      sizing_run_dir:,
                                      dcv_type: 'NECB_Default',
                                      ecm_system_name: 'NECB_Default',
+                                     ecm_system_zones_map_option: 'NECB_Default',
                                      erv_package: 'NECB_Default',
                                      boiler_eff: nil,
                                      furnace_eff: nil,
@@ -469,6 +478,7 @@ class NECB2011 < Standard
                                      pv_ground_azimuth_angle:,
                                      pv_ground_module_description:,
                                      chiller_type: 'NECB_Default',
+                                     shw_scale:,
                                      airloop_economizer_type: nil)
 
     # Create ECM object.
@@ -477,10 +487,11 @@ class NECB2011 < Standard
     # -------- Systems Layout-----------
 
     # Create Default Systems.
-    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
+    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir, shw_scale: shw_scale)
 
     # Apply new ECM system. Overwrite standard as required.
-    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self, primary_heating_fuel: primary_heating_fuel)
+    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self, primary_heating_fuel: primary_heating_fuel, 
+                         ecm_system_zones_map_option: ecm_system_zones_map_option)
 
     # Apply ERV equipment as required.
     ecm.apply_erv_ecm(model: model, erv_package: erv_package)
@@ -525,14 +536,15 @@ class NECB2011 < Standard
 
     # -------Ground-mounted PV panels----------------
     # Apply ground-mounted PV panels as required.
-    return unless pv_ground_type == 'add_pv_ground'
+    if pv_ground_type == 'add_pv_ground'
+      ecm.apply_pv_ground(model: model,
+                          pv_ground_type: pv_ground_type,
+                          pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
+                          pv_ground_tilt_angle: pv_ground_tilt_angle,
+                          pv_ground_azimuth_angle: pv_ground_azimuth_angle,
+                          pv_ground_module_description: pv_ground_module_description)
+    end
 
-    ecm.apply_pv_ground(model: model,
-                        pv_ground_type: pv_ground_type,
-                        pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
-                        pv_ground_tilt_angle: pv_ground_tilt_angle,
-                        pv_ground_azimuth_angle: pv_ground_azimuth_angle,
-                        pv_ground_module_description: pv_ground_module_description)
   end
 
   def apply_loads(model:,
