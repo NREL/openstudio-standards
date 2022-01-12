@@ -4,8 +4,8 @@ require 'fileutils'
 require 'parallel'
 require 'open3'
 
-ProcessorsUsed = (Parallel.processor_count - 1).floor
-
+#ProcessorsUsed = (Parallel.processor_count - 1).floor
+ProcessorsUsed = 20
 
 
 
