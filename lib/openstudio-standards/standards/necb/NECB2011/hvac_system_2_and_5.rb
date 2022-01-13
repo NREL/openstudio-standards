@@ -119,7 +119,7 @@ class NECB2011
 
     # Set up zonal FC (ZoneHVAC,cooling coil, heating coil, fan) in each zone
     zones.each do |zone|
-      # Zone sizing temperature
+      # Zone sizing temperature difference
       sizing_zone = zone.sizingZone
       sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod])
       sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])

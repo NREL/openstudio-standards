@@ -65,7 +65,7 @@ class NECB2011
     air_loop = common_air_loop(model: model, system_data: system_data)
     air_loop.setName("#{system_data[:name]}_#{control_zone.name}")
 
-    # Zone sizing temperature
+    # Zone sizing temperature difference
     sizing_zone = control_zone.sizingZone
     sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod])
     sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])

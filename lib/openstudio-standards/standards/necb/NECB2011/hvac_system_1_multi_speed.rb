@@ -132,7 +132,7 @@ class NECB2011
     end
 
     zones.each do |zone|
-      # Zone sizing temperature
+      # Zone sizing temperature difference
       sizing_zone = zone.sizingZone
       sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod('TemperatureDifference')
       sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(11.0)
