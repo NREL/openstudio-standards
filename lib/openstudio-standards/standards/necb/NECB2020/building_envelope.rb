@@ -55,7 +55,7 @@ class NECB2020
         return false
       end
 
-      # hdd required to get correct conductance values from the json file.
+      # hdd required to get correct conductance values from the json file. 
       hdd = get_necb_hdd18(model)
 	  
       # Lambdas are preferred over methods in methods for small utility methods.
