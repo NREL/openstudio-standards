@@ -188,32 +188,6 @@ class NECB2011
     # set a larger tolerance for unmet hours from default 0.2 to 1.0C
     model.getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
     model.getOutputControlReportingTolerances.setToleranceforTimeCoolingSetpointNotMet(1.0)
-
-    #------------------------------------------------------------------------------------------------------------------------------------
-    ##### Add availability manager to plant loops to turn them off at low and high temperature
-    ##### This has been done due to fatal errors of LargeOffice in Yellowknife fore some ECMs and some inputs
-    model.getPlantLoops.sort.each do |plant_loop|
-      plant_loop_name = plant_loop.name.to_s
-      plant_loop_temperature_min = plant_loop.minimumLoopTemperature
-      plant_loop_temperature_max = plant_loop.maximumLoopTemperature
-      plant_loop_temperature_setpoint_node = plant_loop.loopTemperatureSetpointNode
-
-      # Add AvailabilityManagerLowTemperatureTurnOff
-      if plant_loop_name.include?('Chilled Water Loop') #|| plant_loop_name.include?('Main Service Water Loop')
-        avm_low_temp_turnoff = OpenStudio::Model::AvailabilityManagerLowTemperatureTurnOff.new(model)
-        avm_low_temp_turnoff.setSensorNode(plant_loop_temperature_setpoint_node)
-        avm_low_temp_turnoff.setTemperature(plant_loop_temperature_min)
-        plant_loop.addAvailabilityManager(avm_low_temp_turnoff)
-
-        # Add AvailabilityManagerHighTemperatureTurnOff
-        avm_high_temp_turnoff = OpenStudio::Model::AvailabilityManagerHighTemperatureTurnOff.new(model)
-        avm_high_temp_turnoff.setSensorNode(plant_loop_temperature_setpoint_node)
-        avm_high_temp_turnoff.setTemperature(plant_loop_temperature_max)
-        plant_loop.addAvailabilityManager(avm_high_temp_turnoff)
-      end
-    end
-    #------------------------------------------------------------------------------------------------------------------------------------
-
   end
 
   # Method to store space sizing loads. This is needed because later when the zones are destroyed this information will be lost.

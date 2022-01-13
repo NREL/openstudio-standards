@@ -1643,8 +1643,10 @@ class NECB2011
     sizing_plant.setDesignLoopExitTemperature(7.0)
     sizing_plant.setLoopDesignTemperatureDifference(6.0)
 
-    # pump = OpenStudio::Model::PumpConstantSpeed.new(model)
-    chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+    # Note: pump of 'chilled water loop' has been changed to the variable one as the constant one caused fatal errors for LargeOffice-Yellowknife-NaturalGas for some ECMs and inputs.
+    # Fatal error was: 'CheckForRunawayPlantTemps: Simulation terminated because of run away plant temperatures, too cold' OR '..., too hot' for the PlantLoop of 'Chilled Water Loop'.
+    # Note that the variable speed pump has been already used for 'Hot Water Loop'.
+    chw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
 
     chiller1 = OpenStudio::Model::ChillerElectricEIR.new(model)
     chiller2 = OpenStudio::Model::ChillerElectricEIR.new(model)
