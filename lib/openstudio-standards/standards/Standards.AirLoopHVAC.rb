@@ -489,7 +489,7 @@ class Standard
         fan_pwr_limit_type = 'variable volume'
       elsif comp.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.is_initialized
         fan = comp.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.get.supplyAirFan
-        if fan.to_FanConstantVolume.is_initialized || comp.to_FanOnOff.is_initialized
+        if fan.to_FanConstantVolume.is_initialized || fan.to_FanOnOff.is_initialized
           fan_pwr_limit_type = 'constant volume'
         elsif fan.to_FanVariableVolume.is_initialized
           fan_pwr_limit_type = 'variable volume'
