@@ -51,7 +51,7 @@ class NECB2011
     system_data[:AllOutdoorAirinHeating] = true
     system_data[:TypeofLoadtoSizeOn] = 'VentilationRequirement'
     system_data[:MinimumSystemAirFlowRatio] = 1.0
-    # Zone data
+    # Zone Sizing data
     system_data[:system_supply_air_temperature] = 20.0
     system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
     system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference] = 11.0
