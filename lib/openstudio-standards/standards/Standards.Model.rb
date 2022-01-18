@@ -2524,12 +2524,24 @@ class Standard
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
 
-    props = model_find_object(standards_data['construction_properties'],
-                              'template' => template,
-                              'climate_zone_set' => climate_zone_set,
-                              'intended_surface_type' => intended_surface_type,
-                              'standards_construction_type' => standards_construction_type,
-                              'building_category' => building_category)
+    wwr = model_get_percent_of_surface_range(model, intended_surface_type)
+    if wwr['minimum_percent_of_surface'].nil? && wwr['maximum_percent_of_surface'].nil?
+      props = model_find_object(standards_data['construction_properties'],
+                                'template' => template,
+                                'climate_zone_set' => climate_zone_set,
+                                'intended_surface_type' => intended_surface_type,
+                                'standards_construction_type' => standards_construction_type,
+                                'building_category' => building_category)
+    else
+      props = model_find_object(standards_data['construction_properties'],
+                                'template' => template,
+                                'climate_zone_set' => climate_zone_set,
+                                'intended_surface_type' => intended_surface_type,
+                                'standards_construction_type' => standards_construction_type,
+                                'building_category' => building_category,
+                                'minimum_percent_of_surface' => wwr['minimum_percent_of_surface'],
+                                'maximum_percent_of_surface' => wwr['maximum_percent_of_surface'])
+    end
 
     if !props
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
@@ -5777,6 +5789,15 @@ class Standard
     end
 
     return parametric_inputs
+  end
+
+  # Determine the surface range of a baseline model.
+  # The method calculates the window to wall ratio (assuming all spaces are conditioned)
+  # and select the range based on the calculated window to wall ratio
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param intended_surface_type [String] surface type
+  def model_get_percent_of_surface_range(model, intended_surface_type)
+    return { 'minimum_percent_of_surface' => nil, 'maximum_percent_of_surface' => nil }
   end
 
   # Default SAT reset type
