@@ -147,15 +147,7 @@ class ASHRAE901PRM < Standard
   #
   # @param plant_loop_args [Array] chilled water loop (OpenStudio::Model::PlantLoop), sizing run directory
   # @return [Bool] returns true if successful, false if not
-  def plant_loop_apply_prm_number_of_chillers(plant_loop_args)
-    # Retrieve arguments
-    plant_loop = plant_loop_args[0]
-    if plant_loop_args.length > 1
-      sizing_run_dir = plant_loop_args[1]
-    else
-      sizing_run_dir = nil
-    end
-
+  def plant_loop_apply_prm_number_of_chillers(plant_loop, sizing_run_dir = nil)
     # Skip non-cooling plants
     return true unless plant_loop.sizingPlant.loopType == 'Cooling'
 
