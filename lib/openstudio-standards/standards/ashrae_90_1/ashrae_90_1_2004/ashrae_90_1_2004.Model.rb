@@ -31,8 +31,8 @@ class ASHRAE9012004 < ASHRAE901
     else
       wwr = model_get_window_area_info(model, true)
       if wwr <= 10
-        wwr_range['minimum_percent_of_surface'] = 0
-        wwr_range['maximum_percent_of_surface'] = 10
+        wwr_range['minimum_percent_of_surface'] = 1.0
+        wwr_range['maximum_percent_of_surface'] = 10.0
       elsif wwr <= 20
         wwr_range['minimum_percent_of_surface'] = 10.001
         wwr_range['maximum_percent_of_surface'] = 20
