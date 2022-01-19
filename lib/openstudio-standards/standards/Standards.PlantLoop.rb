@@ -916,8 +916,7 @@ class Standard
   #
   # @param plant_loop_args [Array] chilled water loop (OpenStudio::Model::PlantLoop), sizing run directory
   # @return [Bool] returns true if successful, false if not
-  def plant_loop_apply_prm_number_of_chillers(plant_loop_args)
-    plant_loop = plant_loop_args[0]
+  def plant_loop_apply_prm_number_of_chillers(plant_loop, sizing_run_dir = nil)
 
     # Skip non-cooling plants
     return true unless plant_loop.sizingPlant.loopType == 'Cooling'
