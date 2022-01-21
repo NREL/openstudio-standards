@@ -736,10 +736,6 @@ class AppendixGPRMTests < Minitest::Test
                   end
                 end
                 if value2 < 0
-                  # sched_val (prototype) - sched_val (baseline) * (1.0-space_type_var)
-                  # The rule seems only applied in 2013 ASHRAE PRM, so it should not affect the 2019 because
-                  # The standard use 2004 as baseline. This test case shouldn't raise an exception...?
-                  # AM I UNDERSTAND IT CORRECT??
                   assert(((light_sch[run_id][key][key1][key2] - value2 * (1.0 - space_type_var)).abs < 0.001), "Lighting schedule for the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
                 end
               end
