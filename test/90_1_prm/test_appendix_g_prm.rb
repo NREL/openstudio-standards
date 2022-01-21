@@ -10,7 +10,7 @@ class AppendixGPRMTests < Minitest::Test
   # parse individual JSON files used by all methods
   # in this class.
   @@json_dir = "#{File.dirname(__FILE__)}/data"
-  @@prototype_list = JSON.parse(File.read("#{@@json_dir}/prototype_list_local.json"))
+  @@prototype_list = JSON.parse(File.read("#{@@json_dir}/prototype_list.json"))
   @@wwr_building_types = JSON.parse(File.read("#{@@json_dir}/wwr_building_types.json"))
   @@hvac_building_types = JSON.parse(File.read("#{@@json_dir}/hvac_building_types.json"))
   @@swh_building_types = JSON.parse(File.read("#{@@json_dir}/swh_building_types.json"))
@@ -1377,11 +1377,7 @@ class AppendixGPRMTests < Minitest::Test
       model_baseline.getAirLoopHVACs.each do |airloop|
         # Baseline system type identified based on airloop HVAC name
         system_type = airloop.additionalProperties.getFeatureAsString('baseline_system_type').get
-        if system_type.include?('Sys5') ||
-            system_type.include?('Sys6') ||
-            system_type.include?('Sys7') ||
-            system_type.include?('Sys8')
-
+        if system_type == 'PVAV_Reheat' || system_type == 'PVAV_PFP_Boxes' || system_type == 'VAV_Reheat' || system_type == 'VAV_PFP_Boxes'
           # Get all Heating Coil in the airloop.
           heating_coil_outlet_node = nil
           airloop.supplyComponents.each do |equip|
@@ -1392,8 +1388,8 @@ class AppendixGPRMTests < Minitest::Test
               htg_coil = equip.to_CoilHeatingElectric.get
               heating_coil_outlet_node = htg_coil.outletModelObject.get.to_Node.get
             elsif equip.to_CoilHeatingGas.is_initialized
-              htg_coil = equip.to_CoilHeatingGas.get
-              heating_coil_outlet_node = htg_coil.airOutletModelObject.get.to_Node.get
+              # in this case the test should failed because preheat coil should be either hydronic or eletric
+              assert(false, 'Preheat coil shall only be hydronic or electric coils. Coil type: Natural gas')
             else
               next
             end
@@ -2039,22 +2035,22 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-#      'wwr',
-#      'srr',
-#      'envelope',
-#      'lpd',
-#      'isresidential',
-#      'daylighting_control',
-#      'light_occ_sensor',
-#      'infiltration',
-#      'hvac_baseline',
-#      'hvac_psz_split_from_mz',
-#      'plant_temp_reset_ctrl',
-#      'sat_ctrl',
-#      'number_of_boilers',
-#      'number_of_chillers',
-#      'number_of_cooling_towers',
-#      'hvac_sizing',
+      'wwr',
+      'srr',
+      'envelope',
+      'lpd',
+      'isresidential',
+      'daylighting_control',
+      'light_occ_sensor',
+      'infiltration',
+      'hvac_baseline',
+      'hvac_psz_split_from_mz',
+      'plant_temp_reset_ctrl',
+      'sat_ctrl',
+      'number_of_boilers',
+      'number_of_chillers',
+      'number_of_cooling_towers',
+      'hvac_sizing',
       'preheat_coil_ctrl'
     ]
 

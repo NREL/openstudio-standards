@@ -7354,9 +7354,10 @@ class Standard
   # Template method for adding a setpoint manager for a coil control logic to a heating coil.
   # ASHRAE 90.1-2019 Appendix G.
   #
-  # @param [OpenStudio::Model::Model] openstudio model
-  # @param Array[OpenStudio::Model:ThermalZone] thermal zone array
-  # @param Openstudio Heating Coils
+  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param thermalZones Array([OpenStudio::Model::ThermalZone]) thermal zone array
+  # @param coil Heating Coils
+  # @return [Boolean] true
   def model_set_central_preheat_coil_spm(model, thermalZones, coil)
     return true
   end

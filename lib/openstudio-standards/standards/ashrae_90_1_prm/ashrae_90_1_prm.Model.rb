@@ -591,13 +591,12 @@ class ASHRAE901PRM < Standard
     return true
   end
 
-
   # Template method for adding a setpoint manager for a coil control logic to a heating coil.
   # ASHRAE 90.1-2019 Appendix G.
   #
-  # @param [OpenStudio::Model::Model] openstudio model
-  # @param Array[OpenStudio::Model:ThermalZone] thermal zone array
-  # @param Openstudio Heating Coils
+  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param thermalZones Array([OpenStudio::Model::ThermalZone]) thermal zone array
+  # @param coil Heating Coils
   # @return [Boolean] true
   def model_set_central_preheat_coil_spm(model, thermalZones, coil)
     # search for the highest zone setpoint temperature
@@ -647,6 +646,7 @@ class ASHRAE901PRM < Standard
     elsif coil.to_CoilHeatingElectric.is_initialized
       preheat_coil_manager.addToNode(coil.outletModelObject.get.to_Node.get)
     elsif coil.to_CoilHeatingGas.is_initialized
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.models.CoilHeatingGas', 'Preheat coils in baseline system shall only be electric or hydronic. Current coil type: Natural Gas')
       preheat_coil_manager.addToNode(coil.airOutletModelObject.get.to_Node.get)
     end
 
