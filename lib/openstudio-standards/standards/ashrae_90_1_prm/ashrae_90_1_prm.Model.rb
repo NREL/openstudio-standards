@@ -591,7 +591,15 @@ class ASHRAE901PRM < Standard
     return true
   end
 
-  def model_set_spm(model, thermalZones, coil)
+
+  # Template method for adding a setpoint manager for a coil control logic to a heating coil.
+  # ASHRAE 90.1-2019 Appendix G.
+  #
+  # @param [OpenStudio::Model::Model] openstudio model
+  # @param Array[OpenStudio::Model:ThermalZone] thermal zone array
+  # @param Openstudio Heating Coils
+  # @return [Boolean] true
+  def model_set_central_preheat_coil_spm(model, thermalZones, coil)
     # search for the highest zone setpoint temperature
     max_heat_setpoint = 0.0
     coil_name = coil.name.get.to_s

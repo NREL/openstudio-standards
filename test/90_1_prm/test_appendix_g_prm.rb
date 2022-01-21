@@ -10,7 +10,7 @@ class AppendixGPRMTests < Minitest::Test
   # parse individual JSON files used by all methods
   # in this class.
   @@json_dir = "#{File.dirname(__FILE__)}/data"
-  @@prototype_list = JSON.parse(File.read("#{@@json_dir}/prototype_list.json"))
+  @@prototype_list = JSON.parse(File.read("#{@@json_dir}/prototype_list_local.json"))
   @@wwr_building_types = JSON.parse(File.read("#{@@json_dir}/wwr_building_types.json"))
   @@hvac_building_types = JSON.parse(File.read("#{@@json_dir}/hvac_building_types.json"))
   @@swh_building_types = JSON.parse(File.read("#{@@json_dir}/swh_building_types.json"))
@@ -1376,10 +1376,11 @@ class AppendixGPRMTests < Minitest::Test
       htg_coil_node_list = []
       model_baseline.getAirLoopHVACs.each do |airloop|
         # Baseline system type identified based on airloop HVAC name
-        if airloop.name.to_s.include?('Sys5') ||
-            airloop.name.to_s.include?('Sys6') ||
-            airloop.name.to_s.include?('Sys7') ||
-            airloop.name.to_s.include?('Sys8')
+        system_type = airloop.additionalProperties.getFeatureAsString('baseline_system_type').get
+        if system_type.include?('Sys5') ||
+            system_type.include?('Sys6') ||
+            system_type.include?('Sys7') ||
+            system_type.include?('Sys8')
 
           # Get all Heating Coil in the airloop.
           heating_coil_outlet_node = nil

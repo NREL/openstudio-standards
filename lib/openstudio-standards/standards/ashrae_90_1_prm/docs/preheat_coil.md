@@ -27,14 +27,14 @@ G3.1.3.19: System 5 through 8, The baseline system shall be modeled with a prehe
 ```ruby
 # Template method for adding a setpoint manager for a coil control logic to a heating coil.
 # ASHRAE 90.1-2019 Appendix G.
-def model_set_spm(model, thermalZones, coil)
+def model_set_central_preheat_coil_spm(model, thermalZones, coil)
 	return true
 end
 ```
 This implementation is overriden in the subclass *ashrae_90_1_prm.Model.rb*
 
 ```ruby
-def model_set_spm(model, thermalZones, coil)
+def model_set_central_preheat_coil_spm(model, thermalZones, coil)
 	# below is the sudo code
 	coil_name = coil.name.get.to_s
 

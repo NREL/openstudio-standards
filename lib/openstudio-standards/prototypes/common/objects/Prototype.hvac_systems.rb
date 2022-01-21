@@ -1679,9 +1679,8 @@ class Standard
                                            rated_outlet_air_temperature: dsgn_temps['htg_dsgn_sup_air_temp_c'])
     end
 
-    # 2021-11-23
-    # set the setpointmanager for preheat coil for 2019-PRM stable baseline
-    model_set_spm(model, thermal_zones, htg_coil)
+    # set the setpointmanager for the central/preheat coil if required
+    model_set_central_preheat_coil_spm(model, thermal_zones, htg_coil)
 
     # create cooling coil
     if chilled_water_loop.nil?
@@ -1882,9 +1881,8 @@ class Standard
                                             air_loop_node: air_loop.supplyInletNode,
                                             name: "#{air_loop.name} Htg Coil")
 
-    # 2021-11-23
-    # set the setpointmanager for preheat coil for 2019-PRM stable baseline
-    model_set_spm(model, thermal_zones, htg_coil)
+    # set the setpointmanager for the central/preheat coil if required
+    model_set_central_preheat_coil_spm(model, thermal_zones, htg_coil)
 
     # create cooling coil
     create_coil_cooling_water(model,
@@ -2044,9 +2042,8 @@ class Standard
                                            rated_outlet_air_temperature: dsgn_temps['htg_dsgn_sup_air_temp_c'])
     end
 
-    # 2021-11-23
-    # set the setpointmanager for preheat coil for 2019-PRM stable baseline
-    model_set_spm(model, thermal_zones, htg_coil)
+    # set the setpointmanager for the central/preheat coil if required
+    model_set_central_preheat_coil_spm(model, thermal_zones, htg_coil)
 
     # create cooling coil
     if chilled_water_loop.nil?
@@ -2209,9 +2206,8 @@ class Standard
                                             air_loop_node: air_loop.supplyInletNode,
                                             name: "#{air_loop.name} Main Htg Coil")
 
-    # 2021-11-23
-    # set the setpointmanager for preheat coil for 2019-PRM stable baseline
-    model_set_spm(model, thermal_zones, htg_coil)
+    # set the setpointmanager for the central/preheat coil if required
+    model_set_central_preheat_coil_spm(model, thermal_zones, htg_coil)
 
     # create cooling coil
     if chilled_water_loop.nil?
