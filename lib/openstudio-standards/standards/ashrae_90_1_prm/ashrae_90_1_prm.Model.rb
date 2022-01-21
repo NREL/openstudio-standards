@@ -646,7 +646,7 @@ class ASHRAE901PRM < Standard
     elsif coil.to_CoilHeatingElectric.is_initialized
       preheat_coil_manager.addToNode(coil.outletModelObject.get.to_Node.get)
     elsif coil.to_CoilHeatingGas.is_initialized
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.models.CoilHeatingGas', 'Preheat coils in baseline system shall only be electric or hydronic. Current coil type: Natural Gas')
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.models.CoilHeatingGas', 'Preheat coils in baseline system shall only be electric or hydronic. Current coil type: Natural Gas')
       preheat_coil_manager.addToNode(coil.airOutletModelObject.get.to_Node.get)
     end
 
