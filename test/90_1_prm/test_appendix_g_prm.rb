@@ -729,6 +729,7 @@ class AppendixGPRMTests < Minitest::Test
             if key1 != 'space_type'
               value1.each do |key2, value2|
                 space_type_var = 0
+                # get the lpd for the space type from preset values
                 space_name.each do |key3, value3|
                   if value['space_type'] == key3
                     space_type_var = value3
@@ -814,6 +815,58 @@ class AppendixGPRMTests < Minitest::Test
       # So it is assumed that the baseline space conditioning category shall be the same as the proposed.
       conv_fact = OpenStudio.convert(1, 'm^3/s', 'ft^3/min').to_f / OpenStudio.convert(1, 'm^2', 'ft^2').to_f
       assert((std.model_current_building_envelope_infiltration_at_75pa(model, prototypes_spc_area_calc[prototype]) * conv_fact).round(2) == 1.0, 'The baseline air leakage rate of the building envelope at a fixed building pressure of 75 Pa is different that the requirement (1 cfm/ft2).')
+    end
+  end
+
+  # Check if the hvac baseline system from 5 to 13 has the HW and CHW reset control
+  # Expected outcome
+  #@param prototypes_base[Hash] Baseline prototypes
+  def check_hw_chw_reset(prototypes_base)
+
+    # check if the numbers are correct
+    chw_low_temp = 15.5
+    chw_low_temp_reset = 12.2
+    chw_high_temp = 26.7
+    chw_high_temp_reset = 6.6
+    hw_low_temp = -6.7
+    hw_low_temp_reset = 82.2
+    hw_high_temp = 10.0
+    hw_high_temp_reset = 65.5
+
+    prototypes_base.each do |prototype, baseline_model|
+      building_type, template, climate_zone, mode = prototype
+
+      if baseline_model.getPlantLoops.empty?
+        assert(building_type != "SmallOffice", "No Plant Loop found in the baseline model #{building_type}, #{template}, #{climate_zone}, failure to generate plant loop")
+      end
+
+      # first check if the baseline_model has water loops or not (SHW is not included)
+      baseline_model.getPlantLoops.sort.each do |plant_loop|
+        # Skip the SWH loops
+        next if Standard.new.plant_loop_swh_loop?(plant_loop)
+        baseline_model.getSetpointManagerOutdoorAirResets.each do |oa_reset|
+          name = oa_reset.name.to_s
+          if name.end_with?("CHW Temp Reset")
+            low_temp = oa_reset.outdoorLowTemperature
+            assert(((low_temp - chw_low_temp).abs < 0.1), "Baseline #{building_type}, #{template}, #{climate_zone} has incorrect temperature reset value. The outdoor low temperature for the loop #{name} shall be #{chw_low_temp}, but this value is #{low_temp}")
+            low_temp_reset = oa_reset.setpointatOutdoorLowTemperature
+            assert(((low_temp_reset - chw_low_temp_reset).abs < 0.1), "Baseline #{building_type}, #{template}, #{climate_zone} has incorrect temperature reset value. The setpoint at outdoor low temperature for the loop #{name} shall be #{chw_low_temp_reset}, but this value is #{low_temp_reset}")
+            high_temp = oa_reset.outdoorHighTemperature
+            assert(((high_temp - chw_high_temp).abs < 0.1), "Baseline #{building_type}, #{template}, #{climate_zone} has incorrect temperature reset value. The outdoor high temperature for the loop #{name} shall be #{chw_high_temp}, but this value is #{high_temp}")
+            high_temp_reset = oa_reset.setpointatOutdoorHighTemperature
+            assert(((high_temp_reset - chw_high_temp_reset).abs < 0.1), "Baseline #{building_type}, #{template}, #{climate_zone} has incorrect temperature reset value. The setpoint at outdoor high temperature for the loop #{name} shall be #{chw_high_temp_reset}, but this value is #{high_temp_reset}")
+          elsif name.end_with?("HW Temp Reset")
+            low_temp = oa_reset.outdoorLowTemperature
+            assert(((low_temp - hw_low_temp).abs < 0.1), "Baseline #{building_type}, #{template}, #{climate_zone} has incorrect temperature reset value. The outdoor low temperature for the loop #{name} shall be #{hw_low_temp}, but this value is #{low_temp}")
+            low_temp_reset = oa_reset.setpointatOutdoorLowTemperature
+            assert(((low_temp_reset - hw_low_temp_reset).abs < 0.1), "Baseline #{building_type}, #{template}, #{climate_zone} has incorrect temperature reset value. The setpoint at outdoor low temperature for the loop #{name} shall be #{hw_low_temp_reset}, but this value is #{low_temp_reset}")
+            high_temp = oa_reset.outdoorHighTemperature
+            assert(((high_temp - hw_high_temp).abs < 0.1), "Baseline #{building_type}, #{template}, #{climate_zone} has incorrect temperature reset value. The outdoor high temperature for the loop #{name} shall be #{hw_high_temp}, but this value is #{high_temp}")
+            high_temp_reset = oa_reset.setpointatOutdoorHighTemperature
+            assert(((high_temp_reset - hw_high_temp_reset).abs < 0.1), "Baseline #{building_type}, #{template}, #{climate_zone} has incorrect temperature reset value. The setpoint at outdoor high temperature for the loop #{name} shall be #{hw_high_temp_reset}, but this value is #{high_temp_reset}")
+          end
+        end
+      end
     end
   end
 
@@ -1935,8 +1988,9 @@ class AppendixGPRMTests < Minitest::Test
 #      'daylighting_control',
 #      'light_occ_sensor',
 #      'infiltration',
-      'hvac_baseline',
+#      'hvac_baseline',
 #      'hvac_psz_split_from_mz',
+        'plant_temp_reset_ctrl',
 #      'sat_ctrl',
 #      'number_of_boilers',
 #      'number_of_chillers',
@@ -1953,8 +2007,8 @@ class AppendixGPRMTests < Minitest::Test
     # Assign prototypes and baseline to each test
     prototypes = assign_prototypes(prototypes_generated, tests, prototypes_to_generate)
     prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
-
     # Run tests
+    check_hw_chw_reset(prototypes_base['plant_temp_reset_ctrl']) if tests.include? 'plant_temp_reset_ctrl'
     check_wwr(prototypes_base['wwr']) if tests.include? 'wwr'
     check_srr(prototypes_base['srr']) if tests.include? 'srr'
     check_daylighting_control(prototypes_base['daylighting_control']) if tests.include? 'daylighting_control'

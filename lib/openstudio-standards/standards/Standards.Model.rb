@@ -333,14 +333,14 @@ class Standard
         model.getAirLoopHVACs.sort.each do |air_loop|
           air_loop_hvac_apply_minimum_vav_damper_positions(air_loop, false)
         end
+      end
 
-        # Apply the baseline system temperatures
-        model.getPlantLoops.sort.each do |plant_loop|
-          # Skip the SWH loops
-          next if plant_loop_swh_loop?(plant_loop)
+      # Apply the baseline system water loop temperature reset control
+      model.getPlantLoops.sort.each do |plant_loop|
+        # Skip the SWH loops
+        next if plant_loop_swh_loop?(plant_loop)
 
-          plant_loop_apply_prm_baseline_temperatures(plant_loop)
-        end
+        plant_loop_apply_prm_baseline_temperatures(plant_loop)
       end
 
       # Run sizing run with the HVAC equipment
