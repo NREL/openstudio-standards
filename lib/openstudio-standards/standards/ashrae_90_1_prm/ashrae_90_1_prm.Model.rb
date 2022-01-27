@@ -607,22 +607,10 @@ class ASHRAE901PRM < Standard
       if tstat.is_initialized
         tstat = tstat.get
         setpoint_sch = tstat.heatingSetpointTemperatureSchedule
-        if setpoint_sch.is_initialized
-          setpoint_sch = setpoint_sch.get
-          if setpoint_sch.to_ScheduleRuleset.is_initialized
-            setpoint_sch = setpoint_sch.to_ScheduleRuleset.get
-            setpoint_c = schedule_ruleset_design_day_min_max_value(setpoint_sch, 'heating')['max']
-          elsif setpoint_sch.to_ScheduleConstant.is_initialized
-            setpoint_sch = setpoint_sch.to_ScheduleConstant.get
-            # for constant schedule, there is only one value, so the annual should be equal to design condition.
-            setpoint_c = schedule_constant_annual_min_max_value(setpoint_sch)['max']
-          elsif setpoint_sch.to_ScheduleCompact.is_initialized
-            setpoint_sch = setpoint_sch.to_ScheduleCompact.get
-            setpoint_c = schedule_compact_design_day_min_max_value(setpoint_sch, 'heating')['max']
-          end
-          if setpoint_c > max_heat_setpoint
-            max_heat_setpoint = setpoint_c
-          end
+        setpoint_min_max = search_min_max_value_from_design_day_schedule(setpoint_sch, 'heating')
+        setpoint_c = setpoint_min_max['max']
+        if setpoint_c > max_heat_setpoint
+          max_heat_setpoint = setpoint_c
         end
       end
     end

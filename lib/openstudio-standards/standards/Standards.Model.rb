@@ -7361,5 +7361,30 @@ class Standard
   def model_set_central_preheat_coil_spm(model, thermalZones, coil)
     return true
   end
+
+  # Utility function that returns the min and max value in a design day schedule.
+  #
+  # @param schedule [OpenStudio::Model::Schedule] can be ScheduleCompact, ScheduleRuleset, ScheduleConstant
+  # @param type [String] 'heating' for winter design day, 'cooling' for summer design day
+  # @return [Hash] Hash has two keys, min and max. if failed, return 999.9 for min and max.
+  def search_min_max_value_from_design_day_schedule(schedule, type='heating')
+    if schedule.is_initialized
+      schedule = schedule.get
+      if schedule.to_ScheduleRuleset.is_initialized
+        schedule = schedule.to_ScheduleRuleset.get
+        setpoint_min_max = schedule_ruleset_design_day_min_max_value(schedule, type)
+      elsif schedule.to_ScheduleConstant.is_initialized
+        schedule = schedule.to_ScheduleConstant.get
+        # for constant schedule, there is only one value, so the annual should be equal to design condition.
+        setpoint_min_max = schedule_constant_annual_min_max_value(schedule)
+      elsif schedule.to_ScheduleCompact.is_initialized
+        schedule = schedule.to_ScheduleCompact.get
+        setpoint_min_max = schedule_compact_design_day_min_max_value(schedule, type)
+      end
+      return setpoint_min_max
+    end
+
+    return { 'min' => 999.9, 'max' => 999.9 }
+  end
 end
 
