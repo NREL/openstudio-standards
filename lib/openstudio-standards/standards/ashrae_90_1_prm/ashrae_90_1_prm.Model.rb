@@ -622,7 +622,6 @@ class ASHRAE901PRM < Standard
     # (ASHRAE 90.1 Room heating stepoint temperature is 72 F)
     preheat_setpoint_c = 11.1 if preheat_setpoint_c == 0.0
 
-
     # create a new constant schedule and this method will add schedule limit type
     preheat_coil_sch = model_add_constant_schedule_ruleset(model,
                                                            preheat_setpoint_c,
