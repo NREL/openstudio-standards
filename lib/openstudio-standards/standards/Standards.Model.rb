@@ -3897,36 +3897,23 @@ class Standard
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
 
-    wwr = model_get_percent_of_surface_range(model, intended_surface_type)
-
-    if !wwr_building_type.nil? && (intended_surface_type == 'ExteriorWindow' || intended_surface_type == 'GlassDoor')
-      if wwr_info[wwr_building_type] <= 10
-        wwr['minimum_percent_of_surface'] = 0
-        wwr['maximum_percent_of_surface'] = 10
-      elsif wwr_info[wwr_building_type] <= 20
-        wwr['minimum_percent_of_surface'] = 10.1
-        wwr['maximum_percent_of_surface'] = 20
-      elsif wwr_info[wwr_building_type] <= 30
-        wwr['minimum_percent_of_surface'] = 20.1
-        wwr['maximum_percent_of_surface'] = 30
-      elsif wwr_info[wwr_building_type] <= 40
-        wwr['minimum_percent_of_surface'] = 30.1
-        wwr['maximum_percent_of_surface'] = 40
-      else
-        wwr['minimum_percent_of_surface'] = nil
-        wwr['maximum_percent_of_surface'] = nil
-      end
-    end
-
     search_criteria = { 'template' => template,
                         'climate_zone_set' => climate_zone_set,
                         'intended_surface_type' => intended_surface_type,
                         'standards_construction_type' => standards_construction_type,
                         'building_category' => building_category }
 
-    if !wwr['minimum_percent_of_surface'].nil? && !wwr['maximum_percent_of_surface'].nil?
-      search_criteria['minimum_percent_of_surface'] = wwr['minimum_percent_of_surface']
-      search_criteria['maximum_percent_of_surface'] = wwr['maximum_percent_of_surface']
+    # Check if WWR criteria is needed for the construction search
+    wwr_parameter = { 'intended_surface_type' => intended_surface_type }
+    if wwr_building_type
+      wwr_parameter['wwr_building_type'] = wwr_building_type
+      wwr_parameter['wwr_info'] = wwr_info
+    end
+    wwr_range = model_get_percent_of_surface_range(model, wwr_parameter)
+
+    if !wwr_range['minimum_percent_of_surface'].nil? && !wwr_range['maximum_percent_of_surface'].nil?
+      search_criteria['minimum_percent_of_surface'] = wwr_range['minimum_percent_of_surface']
+      search_criteria['maximum_percent_of_surface'] = wwr_range['maximum_percent_of_surface']
     end
 
     # First search
@@ -5908,6 +5895,7 @@ class Standard
           # update count of ground wall areas
           next if surface.surfaceType != 'Wall'
           next if surface.outsideBoundaryCondition != 'Ground'
+
           # @todo make more flexible for slab/basement model.modeling
 
           story_ground_wall_area += surface.grossArea
@@ -7362,8 +7350,9 @@ class Standard
   # The method calculates the window to wall ratio (assuming all spaces are conditioned)
   # and select the range based on the calculated window to wall ratio
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param intended_surface_type [String] surface type
-  def model_get_percent_of_surface_range(model, intended_surface_type)
+  # @param wwr_parameter [Hash] parameters to choose min and max percent of surfaces,
+  #         could be different set in different standard
+  def model_get_percent_of_surface_range(model, wwr_parameter={})
     return { 'minimum_percent_of_surface' => nil, 'maximum_percent_of_surface' => nil }
   end
 
