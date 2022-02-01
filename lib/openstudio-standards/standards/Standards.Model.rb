@@ -7352,7 +7352,7 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param wwr_parameter [Hash] parameters to choose min and max percent of surfaces,
   #         could be different set in different standard
-  def model_get_percent_of_surface_range(model, wwr_parameter={})
+  def model_get_percent_of_surface_range(model, wwr_parameter = {})
     return { 'minimum_percent_of_surface' => nil, 'maximum_percent_of_surface' => nil }
   end
 
