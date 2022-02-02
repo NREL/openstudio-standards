@@ -79,6 +79,8 @@ class Standard
       # Create a deep copy of the user model if requested
       model = model_deep_copy ? BTAP::FileIO.deep_copy(user_model) : user_model
       model.getBuilding.setName("#{template}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
+      # TODO userdata processing
+      handle_multi_building_area_types(model)
 
       # Rotate building if requested,
       # Site shading isn't rotated
@@ -7373,5 +7375,16 @@ class Standard
   # @return [String] Returns type of SAT reset
   def air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
     return 'warmest_zone'
+  end
+
+  # A template method that handles multiple building area type inputs for PRM baseline creation
+  # The inputs shall come from userdata csv files / json file.
+  # TODO DETERMINE THE RETURN VALUES.
+  # Plan 1. Add the values to space / zone additional properties.
+  # Plan 2. return hash table and pass the value into PRM function
+  # FOR NOW, just return an abitrary integer
+  # @param [Openstudio:model:Model] openstudio model
+  def handle_multi_building_area_types(model)
+    return 42
   end
 end

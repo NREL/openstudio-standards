@@ -137,4 +137,30 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     srr_lim = 3.0
     return srr_lim
   end
+
+  def handle_multi_building_area_types(model)
+    user_building = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
+
+    if user_building && user_building.length >= 1
+      # userdata for each space process
+      user_spaces = @standards_data.key?('userdata_space') ? @standards_data['userdata_space'] : nil
+      if user_spaces && user_spaces.length >= 1
+        user_spaces.each do |user_space|
+          space_name = user_space['name']
+          space_building_type_for_wwr = user_space['building_type_for_wwr']
+          space = model.getSpaceByName(space_name)
+          # TODO reserved for ltg data under this user dataset.
+          if space.empty?
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model, check the inputs in the userdata_space.csv file")
+            return false
+          end
+          space = space.get
+          # add building type for wwr to the space's additional feature
+          space.additionalProperties.setFeature('building_type_for_wwr', space_building_type_for_wwr)
+        end
+      end
+
+    end
+    return true
+  end
 end
