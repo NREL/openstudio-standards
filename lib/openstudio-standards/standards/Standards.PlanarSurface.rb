@@ -146,13 +146,15 @@ class Standard
 
     # for multi-building type - search for the surface wwr type
     surface_std_wwr_type = wwr_building_type
-    space = planar_surface.space.get
-    if space.hasAdditionalProperties && space.additionalProperties.hasFeature('building_type_for_wwr')
-      surface_std_wwr_type = space.additionalProperties.getFeatureAsString('building_type_for_wwr').get
-    end
-
     new_construction = nil
-    type = [template, climate_zone, surf_type, stds_type, occ_type, surface_std_wwr_type]
+    type = [template, climate_zone, surf_type, stds_type, occ_type]
+    if surf_type == 'ExteriorWindow' || surf_type == 'GlassDoor'
+      space = planar_surface.space.get
+      if space.hasAdditionalProperties && space.additionalProperties.hasFeature('building_type_for_wwr')
+        surface_std_wwr_type = space.additionalProperties.getFeatureAsString('building_type_for_wwr').get
+      end
+      type.push(surface_std_wwr_type)
+    end
 
     if previous_construction_map[type]
       new_construction = previous_construction_map[type]
