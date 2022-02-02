@@ -5084,12 +5084,17 @@ class Standard
       # method can however handle models with multiple building
       # area type, if they are specified through each space's
       # space type standards building type.
-      if !wwr_building_type.nil?
-        std_spc_type = wwr_building_type
-      elsif space.spaceType.is_initialized
-        std_spc_type = space.spaceType.get.standardsBuildingType.to_s
+      if space.hasAdditionalProperties && space.additionalProperties.hasFeature('building_type_for_wwr')
+        std_spc_type = space.additionalProperties.getFeatureAsString('building_type_for_wwr').get
       else
         std_spc_type = 'no_space_type'
+        if !wwr_building_type.nil?
+          std_spc_type = wwr_building_type
+        elsif space.spaceType.is_initialized
+          std_spc_type = space.spaceType.get.standardsBuildingType.to_s
+        end
+        # insert space wwr type as additional properties for later search
+        space.additionalProperties.setFeature('building_type_for_wwr', std_spc_type)
       end
 
       # Initialize intermediate variables if space type hasn't
@@ -5248,13 +5253,9 @@ class Standard
       # Reduce the window area if any of the categories necessary
       model.getSpaces.sort.each do |space|
         # Catch spaces without space types
-        if !wwr_building_type.nil?
-          std_spc_type = wwr_building_type
-        elsif space.spaceType.is_initialized
-          std_spc_type = space.spaceType.get.standardsBuildingType.to_s
-        else
-          std_spc_type = 'no_space_type'
-        end
+        std_spc_type = space.additionalProperties.getFeatureAsString('building_type_for_wwr').get
+        # skip process the space unless the space wwr type matched.
+        next unless bat == std_spc_type
 
         # Determine the space category
         # from the previously stored values
