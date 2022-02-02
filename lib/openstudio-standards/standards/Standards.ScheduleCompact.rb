@@ -5,9 +5,9 @@ class Standard
   #
   # @author Weili Xu, PNNL
   # @param schedule_compact [OpenStudio::Model::ScheduleCompact] schedule ruleset object
-  # @param type [String] 'heating' will enable the winter design day search, 'cooling' enables summer design day search
+  # @param type [String] 'winter' will enable the winter design day search, 'summer' enables summer design day search
   # @return [Hash] Hash has two keys, min and max.
-  def schedule_compact_design_day_min_max_value(schedule_compact, type = 'heating')
+  def schedule_compact_design_day_min_max_value(schedule_compact, type = 'winter')
     vals = []
     design_day_flag = false
     prev_str = ''
@@ -26,7 +26,7 @@ class Standard
           # Process a new day schedule, turn the flag off.
           design_day_flag = false
           # in the same line, if there is design day label and matches the type, turn the flag back on.
-          if (prev_str.include?('winterdesignday') && type == 'heating') || (prev_str.include?('summerdesignday') && type == 'cooling') || prev_str.include?('alldays')
+          if prev_str.include?(type) || prev_str.include?('alldays')
             design_day_flag = true
           end
         end

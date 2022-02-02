@@ -119,12 +119,12 @@ class Standard
   #
   # @author Weili Xu, PNNL.
   # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
-  # @param type [String] 'heating' will enable the winter design day search, 'cooling' enables summer design day search
+  # @param type [String] 'winter' will enable the winter design day search, 'summer' enables summer design day search
   # @return [Hash] Hash has two keys, min and max.
-  def schedule_ruleset_design_day_min_max_value(schedule_ruleset, type = 'heating')
-    if type == 'heating'
+  def schedule_ruleset_design_day_min_max_value(schedule_ruleset, type = 'winter')
+    if type == 'winter'
       schedule = schedule_ruleset.winterDesignDaySchedule
-    else
+    elsif type == 'summer'
       schedule = schedule_ruleset.summerDesignDaySchedule
     end
 

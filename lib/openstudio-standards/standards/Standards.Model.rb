@@ -7367,7 +7367,7 @@ class Standard
   # @param schedule [OpenStudio::Model::Schedule] can be ScheduleCompact, ScheduleRuleset, ScheduleConstant
   # @param type [String] 'heating' for winter design day, 'cooling' for summer design day
   # @return [Hash] Hash has two keys, min and max. if failed, return 999.9 for min and max.
-  def search_min_max_value_from_design_day_schedule(schedule, type = 'heating')
+  def search_min_max_value_from_design_day_schedule(schedule, type = 'winter')
     if schedule.is_initialized
       schedule = schedule.get
       if schedule.to_ScheduleRuleset.is_initialized
@@ -7383,7 +7383,7 @@ class Standard
       end
       return setpoint_min_max
     end
-
+    OpenStudio.logFree(OpenStudio::Error, 'openstudio::standards::Schedule', 'Schedule is not exist, or wrong type of schedule (not Ruleset, Compact or Constant), or cannot found the design day schedules. Return 999.9 for min and max')
     return { 'min' => 999.9, 'max' => 999.9 }
   end
 end
