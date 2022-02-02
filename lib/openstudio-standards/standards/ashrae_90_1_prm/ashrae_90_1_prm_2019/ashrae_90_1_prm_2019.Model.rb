@@ -168,7 +168,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
           wwr_range['maximum_percent_of_surface'] = nil
         end
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', 'No wwr_building_type found for ExteriorWindow or GlassDoor')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No wwr_building_type found for ExteriorWindow or GlassDoor')
       end
     end
     return wwr_range
