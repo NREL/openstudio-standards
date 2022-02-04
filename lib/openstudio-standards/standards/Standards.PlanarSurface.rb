@@ -148,7 +148,8 @@ class Standard
     surface_std_wwr_type = wwr_building_type
     new_construction = nil
     type = [template, climate_zone, surf_type, stds_type, occ_type]
-    if surf_type == 'ExteriorWindow' || surf_type == 'GlassDoor'
+    # Only apply the surface_std_wwr_type update when wwr_building_type has Truthy values
+    if !wwr_building_type.nil? && (surf_type == 'ExteriorWindow' || surf_type == 'GlassDoor')
       space = planar_surface.space.get
       if space.hasAdditionalProperties && space.additionalProperties.hasFeature('building_type_for_wwr')
         surface_std_wwr_type = space.additionalProperties.getFeatureAsString('building_type_for_wwr').get

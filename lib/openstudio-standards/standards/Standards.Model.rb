@@ -5065,6 +5065,7 @@ class Standard
   def model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type = nil)
     # Define a Hash that will contain wall and window area for all
     # building area types included in the model
+    # bat = building area type
     bat_win_wall_info = {}
 
     # Store the baseline wwr, only used for 90.1-PRM-2019,
@@ -5189,6 +5190,7 @@ class Standard
 
     # Retrieve WWR info for all Building Area Types included in the model
     # and perform adjustements if
+    # bat = building area type
     bat_win_wall_info.each do |bat, vals|
       # Calculate the WWR of each category
       vals.store('wwr_nr', ((vals['nr_wind_m2'] / vals['nr_wall_m2']) * 100.0).round(1))
