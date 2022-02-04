@@ -138,11 +138,35 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     return srr_lim
   end
 
-  def handle_multi_building_area_types(model)
+  def handle_multi_building_area_types(model, multi_building_data)
     user_building = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
 
     if user_building && user_building.length >= 1
-      # userdata for each space process
+      # HVAC user data process
+      user_thermal_zones = @standards_data.key?('userdata_thermal_zone') ? @standards_data['userdata_thermal_zone'] : nil
+      if user_thermal_zones && user_thermal_zones.length >= 1
+        # add the key to the multi_building_data
+        hvac_type_hash = {}
+        user_thermal_zones.each do |user_thermal_zone|
+          user_thermal_zone_name = user_thermal_zone['name']
+          hvac_building_type = user_thermal_zone['building_type_for_hvac']
+          thermal_zone = model.getThermalZoneByName(user_thermal_zone_name)
+          if thermal_zone.empty?
+            OpenStudio.logFree(OpenStudio::Error, 'OpenStudio::Model::ThermalZone', "Cannot find a thermal zone named #{user_thermal_zone_name} in the model, check your user data inputs")
+            # Skip the processing of this thermal zone.
+            next
+          end
+
+          target_thermal_zone = thermal_zone.get
+          if !hvac_type_hash.key?(hvac_building_type)
+            hvac_type_hash[hvac_building_type] = []
+          end
+          hvac_type_hash[hvac_building_type].push(target_thermal_zone)
+        end
+        multi_building_data['userdata_thermal_zone'] = hvac_type_hash
+      end
+
+      # SPACE user data process
       user_spaces = @standards_data.key?('userdata_space') ? @standards_data['userdata_space'] : nil
       if user_spaces && user_spaces.length >= 1
         user_spaces.each do |user_space|
@@ -151,8 +175,9 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
           space = model.getSpaceByName(space_name)
           # TODO reserved for ltg data under this user dataset.
           if space.empty?
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model, check the inputs in the userdata_space.csv file")
-            return false
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio::model::Model', "No space called #{space_name} was found in the model, check the inputs in the userdata_space.csv file")
+            # skip processing
+            next
           end
           space = space.get
           # add building type for wwr to the space's additional feature
@@ -160,6 +185,29 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         end
       end
 
+      # SWH user data process
+      user_wateruse_equipments = @standards_data.key?('userdata_wateruse_equipment') ? @standards_data['userdata_wateruse_equipment'] : nil
+      if user_wateruse_equipments && user_wateruse_equipments.length >= 1
+        # add the key to the multi_building_data
+        swh_type_hash = {}
+        user_wateruse_equipments.each do |user_wateruse_equipment|
+          user_wateruse_equipment_name = user_wateruse_equipment['name']
+          user_wateruse_equipment_type = user_wateruse_equipment['bulding_type_swh']
+          wateruse_equipment = model.getWaterUseEquipmentByName(user_wateruse_equipment_name)
+          if wateruse_equipment.empty?
+            OpenStudio.logFree(OpenStudio::Warn, 'OpenStudio::Model::WaterUseEquipment', "Cannot find a wateruse:equipment named #{user_wateruse_equipment_name} in the model, check your user data inputs")
+            # Skip the processing of this thermal zone.
+            next
+          end
+
+          target_wateruse_equipment = wateruse_equipment.get
+          if !swh_type_hash.key?(user_wateruse_equipment_type)
+            swh_type_hash[user_wateruse_equipment_type] = []
+          end
+          swh_type_hash[user_wateruse_equipment_type].push(target_wateruse_equipment)
+        end
+        multi_building_data['userdata_wateruse_equipment'] = swh_type_hash
+      end
     end
     return true
   end
