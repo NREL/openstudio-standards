@@ -115,6 +115,42 @@ class Standard
     return annual_flh
   end
 
+  # Returns the min and max value in a design day (heating or cooling) from a ruleset schedule
+  #
+  # @author Weili Xu, PNNL.
+  # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
+  # @param type [String] 'winter' will enable the winter design day search, 'summer' enables summer design day search
+  # @return [Hash] Hash has two keys, min and max.
+  def schedule_ruleset_design_day_min_max_value(schedule_ruleset, type = 'winter')
+    if type == 'winter'
+      schedule = schedule_ruleset.winterDesignDaySchedule
+    elsif type == 'summer'
+      schedule = schedule_ruleset.summerDesignDaySchedule
+    end
+
+    if !schedule
+      OpenStudio.logFree(OpenStudio::Warn, 'OpenStudio::Model::ScheduleRuleset', "#{schedule_ruleset.name} is missing #{type} design day schedule, use default day schedule to process the min max search")
+      schedule = schedule_ruleset.defaultDaySchedule
+    end
+
+    min = nil
+    max = nil
+    schedule.values.each do |value|
+      if min.nil?
+        min = value
+      else
+        min = value if min > value
+      end
+      if max.nil?
+        max = value
+      else
+        max = value if max < value
+      end
+    end
+
+    return { 'min' => min, 'max' => max }
+  end
+
   # Returns the min and max value for this schedule.
   # It doesn't evaluate design days only run-period conditions
   #
