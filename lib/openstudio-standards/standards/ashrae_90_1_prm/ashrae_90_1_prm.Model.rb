@@ -590,4 +590,54 @@ class ASHRAE901PRM < Standard
   def model_get_fan_power_breakdown
     return true
   end
+
+  # Template method for adding a setpoint manager for a coil control logic to a heating coil.
+  # ASHRAE 90.1-2019 Appendix G.
+  #
+  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param thermalZones Array([OpenStudio::Model::ThermalZone]) thermal zone array
+  # @param coil Heating Coils
+  # @return [Boolean] true
+  def model_set_central_preheat_coil_spm(model, thermalZones, coil)
+    # search for the highest zone setpoint temperature
+    max_heat_setpoint = 0.0
+    coil_name = coil.name.get.to_s
+    thermalZones.each do |zone|
+      tstat = zone.thermostatSetpointDualSetpoint
+      if tstat.is_initialized
+        tstat = tstat.get
+        setpoint_sch = tstat.heatingSetpointTemperatureSchedule
+        setpoint_min_max = search_min_max_value_from_design_day_schedule(setpoint_sch, 'heating')
+        setpoint_c = setpoint_min_max['max']
+        if setpoint_c > max_heat_setpoint
+          max_heat_setpoint = setpoint_c
+        end
+      end
+    end
+    # in this situation, we hard set the temperature to be 22 F
+    # (ASHRAE 90.1 Room heating stepoint temperature is 72 F)
+    max_heat_setpoint = 22.2 if max_heat_setpoint == 0.0
+
+    max_heat_setpoint_f = OpenStudio.convert(max_heat_setpoint, 'C', 'F').get
+    preheat_setpoint_f = max_heat_setpoint_f - 20
+    preheat_setpoint_c = OpenStudio.convert(preheat_setpoint_f, 'F', 'C').get
+
+    # create a new constant schedule and this method will add schedule limit type
+    preheat_coil_sch = model_add_constant_schedule_ruleset(model,
+                                                           preheat_setpoint_c,
+                                                           name = "#{coil_name} Setpoint Temp - #{preheat_setpoint_f.round}F")
+    preheat_coil_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, preheat_coil_sch)
+    preheat_coil_manager.setName("#{coil_name} Preheat Coil Setpoint Manager")
+
+    if coil.to_CoilHeatingWater.is_initialized
+      preheat_coil_manager.addToNode(coil.airOutletModelObject.get.to_Node.get)
+    elsif coil.to_CoilHeatingElectric.is_initialized
+      preheat_coil_manager.addToNode(coil.outletModelObject.get.to_Node.get)
+    elsif coil.to_CoilHeatingGas.is_initialized
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.models.CoilHeatingGas', 'Preheat coils in baseline system shall only be electric or hydronic. Current coil type: Natural Gas')
+      preheat_coil_manager.addToNode(coil.airOutletModelObject.get.to_Node.get)
+    end
+
+    return true
+  end
 end

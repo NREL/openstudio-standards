@@ -1660,24 +1660,27 @@ class Standard
     # create heating coil
     if hot_water_loop.nil?
       if heating_type == 'Electricity'
-        create_coil_heating_electric(model,
-                                     air_loop_node: air_loop.supplyInletNode,
-                                     name: "#{air_loop.name} Main Electric Htg Coil")
+        htg_coil = create_coil_heating_electric(model,
+                                                air_loop_node: air_loop.supplyInletNode,
+                                                name: "#{air_loop.name} Main Electric Htg Coil")
       else # default to NaturalGas
-        create_coil_heating_gas(model,
-                                air_loop_node: air_loop.supplyInletNode,
-                                name: "#{air_loop.name} Main Gas Htg Coil")
+        htg_coil = create_coil_heating_gas(model,
+                                           air_loop_node: air_loop.supplyInletNode,
+                                           name: "#{air_loop.name} Main Gas Htg Coil")
       end
     else
-      create_coil_heating_water(model,
-                                hot_water_loop,
-                                air_loop_node: air_loop.supplyInletNode,
-                                name: "#{air_loop.name} Main Htg Coil",
-                                rated_inlet_water_temperature: hw_temp_c,
-                                rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
-                                rated_inlet_air_temperature: dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
-                                rated_outlet_air_temperature: dsgn_temps['htg_dsgn_sup_air_temp_c'])
+      htg_coil = create_coil_heating_water(model,
+                                           hot_water_loop,
+                                           air_loop_node: air_loop.supplyInletNode,
+                                           name: "#{air_loop.name} Main Htg Coil",
+                                           rated_inlet_water_temperature: hw_temp_c,
+                                           rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                           rated_inlet_air_temperature: dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
+                                           rated_outlet_air_temperature: dsgn_temps['htg_dsgn_sup_air_temp_c'])
     end
+
+    # set the setpointmanager for the central/preheat coil if required
+    model_set_central_preheat_coil_spm(model, thermal_zones, htg_coil)
 
     # create cooling coil
     if chilled_water_loop.nil?
@@ -1874,9 +1877,12 @@ class Standard
     fan.addToNode(air_loop.supplyInletNode)
 
     # create heating coil
-    create_coil_heating_electric(model,
-                                 air_loop_node: air_loop.supplyInletNode,
-                                 name: "#{air_loop.name} Htg Coil")
+    htg_coil = create_coil_heating_electric(model,
+                                            air_loop_node: air_loop.supplyInletNode,
+                                            name: "#{air_loop.name} Htg Coil")
+
+    # set the setpointmanager for the central/preheat coil if required
+    model_set_central_preheat_coil_spm(model, thermal_zones, htg_coil)
 
     # create cooling coil
     create_coil_cooling_water(model,
@@ -2018,24 +2024,26 @@ class Standard
     # create heating coil
     if hot_water_loop.nil?
       if heating_type == 'Electricity'
-        create_coil_heating_electric(model,
-                                     air_loop_node: air_loop.supplyInletNode,
-                                     name: "#{air_loop.name} Main Electric Htg Coil")
+        htg_coil = create_coil_heating_electric(model,
+                                                air_loop_node: air_loop.supplyInletNode,
+                                                name: "#{air_loop.name} Main Electric Htg Coil")
       else # default to NaturalGas
-        create_coil_heating_gas(model,
-                                air_loop_node: air_loop.supplyInletNode,
-                                name: "#{air_loop.name} Main Gas Htg Coil")
+        htg_coil = create_coil_heating_gas(model,
+                                           air_loop_node: air_loop.supplyInletNode,
+                                           name: "#{air_loop.name} Main Gas Htg Coil")
       end
     else
-      create_coil_heating_water(model,
-                                hot_water_loop,
-                                air_loop_node: air_loop.supplyInletNode,
-                                name: "#{air_loop.name} Main Htg Coil",
-                                rated_inlet_water_temperature: hw_temp_c,
-                                rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
-                                rated_inlet_air_temperature: dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
-                                rated_outlet_air_temperature: dsgn_temps['htg_dsgn_sup_air_temp_c'])
+      htg_coil = create_coil_heating_water(model, hot_water_loop,
+                                           air_loop_node: air_loop.supplyInletNode,
+                                           name: "#{air_loop.name} Main Htg Coil",
+                                           rated_inlet_water_temperature: hw_temp_c,
+                                           rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                           rated_inlet_air_temperature: dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
+                                           rated_outlet_air_temperature: dsgn_temps['htg_dsgn_sup_air_temp_c'])
     end
+
+    # set the setpointmanager for the central/preheat coil if required
+    model_set_central_preheat_coil_spm(model, thermal_zones, htg_coil)
 
     # create cooling coil
     if chilled_water_loop.nil?
@@ -2194,9 +2202,12 @@ class Standard
     fan.addToNode(air_loop.supplyInletNode)
 
     # create heating coil
-    create_coil_heating_electric(model,
-                                 air_loop_node: air_loop.supplyInletNode,
-                                 name: "#{air_loop.name} Main Htg Coil")
+    htg_coil = create_coil_heating_electric(model,
+                                            air_loop_node: air_loop.supplyInletNode,
+                                            name: "#{air_loop.name} Main Htg Coil")
+
+    # set the setpointmanager for the central/preheat coil if required
+    model_set_central_preheat_coil_spm(model, thermal_zones, htg_coil)
 
     # create cooling coil
     if chilled_water_loop.nil?

@@ -98,5 +98,11 @@
         ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["remove_transformer", []]]],
         ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-4A", [["change_bldg_type",["Assembly"]], ["remove_transformer", []]]],
         ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", [["change_bldg_type",["Assembly"]], ["remove_transformer", []]]]
+    ],
+    "preheat_coil_ctrl": [
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", [["remove_transformer", []]]],
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["remove_transformer", []]]],
+        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", [["remove_transformer", []]]],
+        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["remove_transformer", []]]]
     ]
 }
