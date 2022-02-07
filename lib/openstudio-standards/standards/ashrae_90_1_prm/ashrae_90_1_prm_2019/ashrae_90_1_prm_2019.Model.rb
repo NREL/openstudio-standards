@@ -138,7 +138,11 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     return srr_lim
   end
 
-  def handle_multi_building_area_types(model, multi_building_data)
+  # Analyze HVAC, window-to-wall ratio and SWH building (area) types from user data inputs in the @standard_data library
+  # This function returns True, but the values are stored in the multi-building_data argument.
+  # @param [OpenStudio::Model::Model] openstudio model
+  # @return True
+  def handle_multi_building_area_types(model)
     user_building = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
 
     if user_building && user_building.length >= 1
@@ -158,12 +162,8 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
           end
 
           target_thermal_zone = thermal_zone.get
-          if !hvac_type_hash.key?(hvac_building_type)
-            hvac_type_hash[hvac_building_type] = []
-          end
-          hvac_type_hash[hvac_building_type].push(target_thermal_zone)
+          target_thermal_zone.additionalProperties.setFeature('building_type_for_hvac', hvac_building_type)
         end
-        multi_building_data['userdata_thermal_zone'] = hvac_type_hash
       end
 
       # SPACE user data process
@@ -171,7 +171,6 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       if user_spaces && user_spaces.length >= 1
         user_spaces.each do |user_space|
           space_name = user_space['name']
-          space_building_type_for_wwr = user_space['building_type_for_wwr']
           space = model.getSpaceByName(space_name)
           # TODO reserved for ltg data under this user dataset.
           if space.empty?
@@ -180,6 +179,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
             next
           end
           space = space.get
+          space_building_type_for_wwr = user_space['building_type_for_wwr']
           # add building type for wwr to the space's additional feature
           space.additionalProperties.setFeature('building_type_for_wwr', space_building_type_for_wwr)
         end
@@ -192,7 +192,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         swh_type_hash = {}
         user_wateruse_equipments.each do |user_wateruse_equipment|
           user_wateruse_equipment_name = user_wateruse_equipment['name']
-          user_wateruse_equipment_type = user_wateruse_equipment['bulding_type_swh']
+          user_wateruse_equipment_type = user_wateruse_equipment['bulding_type_for_swh']
           wateruse_equipment = model.getWaterUseEquipmentByName(user_wateruse_equipment_name)
           if wateruse_equipment.empty?
             OpenStudio.logFree(OpenStudio::Warn, 'OpenStudio::Model::WaterUseEquipment', "Cannot find a wateruse:equipment named #{user_wateruse_equipment_name} in the model, check your user data inputs")
@@ -201,12 +201,8 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
           end
 
           target_wateruse_equipment = wateruse_equipment.get
-          if !swh_type_hash.key?(user_wateruse_equipment_type)
-            swh_type_hash[user_wateruse_equipment_type] = []
-          end
-          swh_type_hash[user_wateruse_equipment_type].push(target_wateruse_equipment)
+          target_wateruse_equipment.additionalProperties.setFeature('bulding_type_for_swh', user_wateruse_equipment_type)
         end
-        multi_building_data['userdata_wateruse_equipment'] = swh_type_hash
       end
     end
     return true
