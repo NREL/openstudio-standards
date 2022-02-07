@@ -79,8 +79,8 @@ class Standard
       # Create a deep copy of the user model if requested
       model = model_deep_copy ? BTAP::FileIO.deep_copy(user_model) : user_model
       model.getBuilding.setName("#{template}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
-      # TODO: userdata processing
-      multi_building_data = {}
+
+      # user data process
       handle_multi_building_area_types(model)
 
       # Rotate building if requested,
