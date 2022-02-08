@@ -1002,8 +1002,8 @@ class NECB2011
                        zones: zones)
   end
 
-  # This method will ensure that all dwelling units are assigned to a system 1 or 3. #Sara
-  # There is an option to have a shared AHU or not. #Sara
+  # This method will ensure that all dwelling units are assigned to a system 1 or 3.
+  # There is an option to have a shared AHU or not.
 
   def auto_system_dwelling_units(baseboard_type:,
                                  boiler_fueltype:,
@@ -1017,14 +1017,13 @@ class NECB2011
                                  mau_heating_coil_type:,
                                  mau_type:,
                                  model:,
-                                 baseline_system_zones_map_option:)   #Sara
+                                 baseline_system_zones_map_option:)
 
     system_zones_hash = {}
     # Determine if dwelling units have a shared AHU.  If user entered building stories > 4 then set to true.
-    # dwelling_shared_ahu = model.getBuilding.standardsNumberOfAboveGroundStories.get > 4  # Sara TODO to be deleted
-    if baseline_system_zones_map_option == 'one_sys_per_dwelling_unit' || baseline_system_zones_map_option == 'NECB_Default' || baseline_system_zones_map_option == 'none' || baseline_system_zones_map_option == nil  #Sara
+    if baseline_system_zones_map_option == 'one_sys_per_dwelling_unit'
       dwelling_shared_ahu = false
-    elsif baseline_system_zones_map_option == 'one_sys_per_bldg'
+    elsif baseline_system_zones_map_option == 'one_sys_per_bldg' || baseline_system_zones_map_option == 'NECB_Default' || baseline_system_zones_map_option == 'none' || baseline_system_zones_map_option == nil
       dwelling_shared_ahu = true
     end
     # store dwelling zones into array
