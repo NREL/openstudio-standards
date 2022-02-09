@@ -68,6 +68,9 @@ class Standard
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, debug = false)
+    # user data process
+    handle_multi_building_area_types(user_model)
+
     # Define different orientation from original orientation
     # for each individual baseline models
     degs_from_org = run_all_orients ? [0, 90, 180, 270] : [0]
@@ -79,9 +82,6 @@ class Standard
       # Create a deep copy of the user model if requested
       model = model_deep_copy ? BTAP::FileIO.deep_copy(user_model) : user_model
       model.getBuilding.setName("#{template}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
-
-      # user data process
-      handle_multi_building_area_types(model)
 
       # Rotate building if requested,
       # Site shading isn't rotated

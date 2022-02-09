@@ -140,68 +140,91 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
 
   # Analyze HVAC, window-to-wall ratio and SWH building (area) types from user data inputs in the @standard_data library
   # This function returns True, but the values are stored in the multi-building_data argument.
-  # @param [OpenStudio::Model::Model] openstudio model
+  # The hierarchy for process the building types
+  # 1. Highest: PRM rules - if rules applied against user inputs, the function will use the calculated value to reset the building type
+  # 2. Second: User defined building type in the csv file.
+  # 3. Third: User defined userdata_building.csv file. If an object (e.g. space, thermalzone) are not defined in their correspondent userdata csv file, use the building csv file
+  # 4. Fourth: Dropdown list in the measure GUI. If none presented, use the data from the dropdown list.
+  # NOTE! This function will add building types to OpenStudio objects as an additional features for hierarchy 1-3
+  # The object additional feature is empty when the function determined it uses fourth hierarchy.
+  #
+  # @param [OpenStudio::Model::Model] model
   # @return True
   def handle_multi_building_area_types(model)
-    user_building = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
+    user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
 
-    if user_building && user_building.length >= 1
-      # HVAC user data process
-      user_thermal_zones = @standards_data.key?('userdata_thermal_zone') ? @standards_data['userdata_thermal_zone'] : nil
-      if user_thermal_zones && user_thermal_zones.length >= 1
-        # add the key to the multi_building_data
-        hvac_type_hash = {}
-        user_thermal_zones.each do |user_thermal_zone|
-          user_thermal_zone_name = user_thermal_zone['name']
-          hvac_building_type = user_thermal_zone['building_type_for_hvac']
-          thermal_zone = model.getThermalZoneByName(user_thermal_zone_name)
-          if thermal_zone.empty?
-            OpenStudio.logFree(OpenStudio::Error, 'OpenStudio::Model::ThermalZone', "Cannot find a thermal zone named #{user_thermal_zone_name} in the model, check your user data inputs")
-            # Skip the processing of this thermal zone.
-            next
-          end
-
-          target_thermal_zone = thermal_zone.get
-          target_thermal_zone.additionalProperties.setFeature('building_type_for_hvac', hvac_building_type)
+    # HVAC user data process
+    user_thermal_zones = @standards_data.key?('userdata_thermal_zone') ? @standards_data['userdata_thermal_zone'] : nil
+    if user_thermal_zones && user_thermal_zones.length >= 1
+      # add the key to the multi_building_data
+      user_thermal_zones.each do |user_thermal_zone|
+        user_thermal_zone_name = user_thermal_zone['name']
+        hvac_building_type = user_thermal_zone['building_type_for_hvac']
+        thermal_zone = model.getThermalZoneByName(user_thermal_zone_name)
+        if thermal_zone.empty?
+          OpenStudio.logFree(OpenStudio::Error, 'OpenStudio::Model::ThermalZone', "Cannot find a thermal zone named #{user_thermal_zone_name} in the model, check your user data inputs")
+          # Skip the processing of this thermal zone.
+          next
         end
-      end
 
-      # SPACE user data process
-      user_spaces = @standards_data.key?('userdata_space') ? @standards_data['userdata_space'] : nil
-      if user_spaces && user_spaces.length >= 1
+        target_thermal_zone = thermal_zone.get
+        target_thermal_zone.additionalProperties.setFeature('building_type_for_hvac', hvac_building_type)
+      end
+    end
+
+    # SPACE user data process
+    user_spaces = @standards_data.key?('userdata_space') ? @standards_data['userdata_space'] : nil
+    if user_spaces && user_spaces.length >= 1
+      # Loop spaces
+      model.getSpaces.sort.each do |space|
+        # check for 2nd level hierarchy
+        found_user_data = false
         user_spaces.each do |user_space|
-          space_name = user_space['name']
-          space = model.getSpaceByName(space_name)
-          # TODO reserved for ltg data under this user dataset.
-          if space.empty?
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio::model::Model', "No space called #{space_name} was found in the model, check the inputs in the userdata_space.csv file")
-            # skip processing
-            next
+          if space.name.get == user_space['name'] && !user_space['building_type_for_wwr'].nil?
+            space.additionalProperties.setFeature('building_type_for_wwr', user_space['building_type_for_wwr'])
+            found_user_data = true
           end
-          space = space.get
-          space_building_type_for_wwr = user_space['building_type_for_wwr']
-          # add building type for wwr to the space's additional feature
-          space.additionalProperties.setFeature('building_type_for_wwr', space_building_type_for_wwr)
+        end
+
+        # check for 3nd level hierarchy
+        if !found_user_data && !user_buildings.nil?
+          # get space building type
+          building_name = space.model.building.get.name.get
+
+          user_buildings.each do |user_building|
+            if user_building['name'] == building_name && !user_building['building_type_for_wwr'].nil?
+              space.additionalProperties.setFeature('building_type_for_wwr', user_building['building_type_for_wwr'])
+            end
+          end
         end
       end
+    end
 
-      # SWH user data process
-      user_wateruse_equipments = @standards_data.key?('userdata_wateruse_equipment') ? @standards_data['userdata_wateruse_equipment'] : nil
-      if user_wateruse_equipments && user_wateruse_equipments.length >= 1
+    # SWH user data process
+    user_wateruse_equipments = @standards_data.key?('userdata_wateruse_equipment') ? @standards_data['userdata_wateruse_equipment'] : nil
+    if user_wateruse_equipments && user_wateruse_equipments.length >= 1
+      # loop water use equipment list
+
+      model.getWaterUseEquipments.sort.each do |wateruse_equipment|
+        # check for 2nd level hierarchy
+        found_user_data = false
         # add the key to the multi_building_data
-        swh_type_hash = {}
         user_wateruse_equipments.each do |user_wateruse_equipment|
-          user_wateruse_equipment_name = user_wateruse_equipment['name']
-          user_wateruse_equipment_type = user_wateruse_equipment['bulding_type_for_swh']
-          wateruse_equipment = model.getWaterUseEquipmentByName(user_wateruse_equipment_name)
-          if wateruse_equipment.empty?
-            OpenStudio.logFree(OpenStudio::Warn, 'OpenStudio::Model::WaterUseEquipment', "Cannot find a wateruse:equipment named #{user_wateruse_equipment_name} in the model, check your user data inputs")
-            # Skip the processing of this thermal zone.
-            next
+          if wateruse_equipment.name.get == user_wateruse_equipment['name'] && !user_wateruse_equipment['bulding_type_for_swh'].nil?
+            wateruse_equipment.additionalProperties.setFeature('bulding_type_for_swh', user_wateruse_equipment['bulding_type_for_swh'])
+            found_user_data = true
           end
+        end
 
-          target_wateruse_equipment = wateruse_equipment.get
-          target_wateruse_equipment.additionalProperties.setFeature('bulding_type_for_swh', user_wateruse_equipment_type)
+        # check for 3nd level hierarchy
+        if !found_user_data && !user_buildings.nil?
+          # get space building type
+          building_name = wateruse_equipment.model.building.get.name.get
+          user_buildings.each do |user_building|
+            if user_building['name'] == building_name && !user_building['building_type_for_wwr'].nil?
+              wateruse_equipment.additionalProperties.setFeature('building_type_for_wwr', user_building['building_type_for_wwr'])
+            end
+          end
         end
       end
     end
