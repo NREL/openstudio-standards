@@ -283,7 +283,7 @@ class NECB2011 < Standard
                                 shw_scale: shw_scale,  # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) a float number larger than 0.0
                                 output_meters: output_meters,
                                 airloop_economizer_type: airloop_economizer_type, # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
-                                baseline_system_zones_map_option: baseline_system_zones_map_option  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_dwelling_unit'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg' #TODO Question Does it make sense to set 'NECB_Default''none'/nil as 'one_sys_per_dwelling_unit'?
+                                baseline_system_zones_map_option: baseline_system_zones_map_option  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
                                 )
 
   end
