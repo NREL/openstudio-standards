@@ -149,13 +149,61 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # The object additional feature is empty when the function determined it uses fourth hierarchy.
   #
   # @param [OpenStudio::Model::Model] model
+  # @param [String] default_hvac_building_type (Fourth Hierarchy hvac building type)
+  # @param [String] default_wwr_building_type (Fourth Hierarchy wwr building type)
+  # @param [String] default_swh_building_type (Fourth Hierarchy swh building type)
   # @return True
-  def handle_multi_building_area_types(model)
+  def handle_multi_building_area_types(model, default_hvac_building_type, default_wwr_building_type, default_swh_building_type)
+    # Construct the user_building hashmap
     user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
 
+    # Build up a hvac_building_type : thermal zone hash map
     # HVAC user data process
     user_thermal_zones = @standards_data.key?('userdata_thermal_zone') ? @standards_data['userdata_thermal_zone'] : nil
     if user_thermal_zones && user_thermal_zones.length >= 1
+      # First construct hvac building type -> thermal Zone hash
+      bldg_type_zone_hash = {}
+      model.getThermalZones.sort.each do |thermal_zone|
+        user_thermal_zone_index = user_thermal_zones.index { |user_thermal_zone| user_thermal_zone['name'] == thermal_zone.get.name.get }
+        hvac_building_type = nil
+        if user_thermal_zone_index.nil?
+          # This zone is not in the user data, check 3rd hierarchy
+          if user_buildings && user_buildings.length >= 1
+            building_name = thermal_zone.model.building.get.name.get
+            user_building_index = user_buildings.index { |user_building| user_building['name'] == building_name }
+            if user_building_index.nil?
+              # This zone belongs to a building that is not in the user_buildings, set to 4th hierarchy
+              hvac_building_type = default_hvac_building_type
+            else
+              # Found user_buildings data, set to the 3rd hierarchy
+              hvac_building_type = user_buildings[user_building_index]['building_type_for_hvac']
+            end
+          else
+            # No user_buildings defined. set to 4th hierarchy
+            hvac_building_type = default_hvac_building_type
+          end
+        else
+          # This zone has user data, set to 2nd hierarchy
+          hvac_building_type = user_thermal_zones[user_thermal_zone_index]['building_type_for_hvac']
+        end
+
+        if !bldg_type_zone_hash.key?(hvac_building_type)
+          bldg_type_zone_hash[hvac_building_type] = []
+        end
+        bldg_type_zone_hash[hvac_building_type].append(thermal_zone)
+      end
+
+
+      if model.building.get.conditionedFloorArea.get <= 40000
+        # First get the total conditioned floor area
+        model.getThermalZones.sort.each do |thermal_zone|
+          # In this case, only one primary building hvac type
+          building_name = thermal_zone.model.building.get.name.get
+          thermal_zone.additionalProperties.setFeature('building_type_for_hvac', hvac_building_type)
+
+        end
+      end
+
       # add the key to the multi_building_data
       user_thermal_zones.each do |user_thermal_zone|
         user_thermal_zone_name = user_thermal_zone['name']

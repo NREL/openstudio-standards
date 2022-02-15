@@ -279,6 +279,12 @@ class AppendixGPRMTests < Minitest::Test
     return test_prototypes
   end
 
+  # Change the building name in the model
+  def set_model_building_name(model, arguments)
+    model.getBuilding.setName(arguments)
+    return model
+  end
+
   # Check Window-to-Wall Ratio (WWR) for the baseline models
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -2051,7 +2057,8 @@ class AppendixGPRMTests < Minitest::Test
       'number_of_chillers',
       'number_of_cooling_towers',
       'hvac_sizing',
-      'preheat_coil_ctrl'
+      'preheat_coil_ctrl',
+      'multi_bldg_handling'
     ]
 
     # Get list of unique prototypes

@@ -69,7 +69,7 @@ class Standard
   # @return [Bool] returns true if successful, false if not
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, debug = false)
     # user data process
-    handle_multi_building_area_types(user_model)
+    handle_multi_building_area_types(user_model, hvac_building_type, wwr_building_type, swh_building_type)
 
     # Define different orientation from original orientation
     # for each individual baseline models
@@ -7411,9 +7411,12 @@ class Standard
   # Plan 1. Add the values to space / zone additional properties.
   # Plan 2. return hash table and pass the value into PRM function
   # FOR NOW, just return an abitrary integer
-  # @param [Openstudio:model:Model] openstudio model
+  # @param [Openstudio:model:Model] model
+  # @param [String] default_hvac_building_type
+  # @param [String] default_wwr_building_type
+  # @param [String] default_swh_building_type
   # @return True
-  def handle_multi_building_area_types(model)
+  def handle_multi_building_area_types(model, default_hvac_building_type, default_wwr_building_type, default_swh_building_type)
     return true
   end
 
