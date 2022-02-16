@@ -103,7 +103,6 @@ class Standard
   # @param sql_db_vars_map [Hash] hash map
   # @return [Hash] hash of coil objects
   def coil_cooling_water_to_air_heat_pump_apply_efficiency_and_curves(coil_cooling_water_to_air_heat_pump, sql_db_vars_map)
-    successfully_set_all_properties = true
 
     # Get the search criteria
     search_criteria = {}
@@ -116,8 +115,17 @@ class Standard
 
     # Check to make sure properties were found
     if coil_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{coil_cooling_water_to_air_heat_pump.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
+      # find the maximum capacity in the water source heat pumps
+      wshp_table = standards_data['water_source_heat_pumps']
+      max_capacity_in_table = 0.0
+      wshp_table.each do |row|
+        if row['maximum_capacity'] > max_capacity_in_table
+          max_capacity_in_table = row['maximum_capacity']
+        end
+      end
+      if capacity_btu_per_hr < max_capacity_in_table
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{coil_cooling_water_to_air_heat_pump.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      end
       return sql_db_vars_map
     end
 
