@@ -118,7 +118,8 @@ class NECB_nv_Tests < Minitest::Test
                                                       pv_ground_tilt_angle: nil,
                                                       pv_ground_azimuth_angle: nil,
                                                       pv_ground_module_description: nil,
-                                                      shw_scale: nil
+                                                      shw_scale: nil,
+                                                      baseline_system_zones_map_option: nil
               )
 
               # # comment out for regular tests

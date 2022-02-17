@@ -125,7 +125,8 @@ class NECB_VSDchiller_Tests < Minitest::Test
                                                         pv_ground_azimuth_angle: nil,
                                                         pv_ground_module_description: nil,
                                                         chiller_type: nil,
-                                                        shw_scale: nil
+                                                        shw_scale: nil,
+                                                        baseline_system_zones_map_option: nil
                 )
 
                 ##### Replace capacity of existing chiller with mid of min and max capacity of 'chiller_set'

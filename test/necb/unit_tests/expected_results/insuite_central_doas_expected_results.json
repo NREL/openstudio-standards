@@ -7,8 +7,7 @@
     "doas_type": "one_sys_per_bldg",
     "airloop - 0.0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none|",
     "airloop - 1.0": "sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
-    "airloop - 2.0": "sys_6|mixed|shr>none|sh>c-hw|sc>c-chw|ssf>vv|zh>b-hw|zc>none|srf>vv|",
-    "number_of_airloops": 3.0
+    "number_of_airloops": 2.0
   },
   {
     "template": "NECB2011",
@@ -93,10 +92,10 @@
     "airloop - 74.0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none| 76",
     "airloop - 75.0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none| 77",
     "airloop - 76.0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none| 78",
-    "airloop - 77.0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none| 8",
-    "airloop - 78.0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none| 9",
-    "airloop - 79.0": "sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
-    "airloop - 80.0": "sys_6|mixed|shr>none|sh>c-hw|sc>c-chw|ssf>vv|zh>b-hw|zc>none|srf>vv|",
+    "airloop - 77.0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none| 79",
+    "airloop - 78.0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none| 8",
+    "airloop - 79.0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none| 9",
+    "airloop - 80.0": "sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
     "number_of_airloops": 81.0
   },
   {

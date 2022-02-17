@@ -73,7 +73,11 @@ class NECB_DCV_Tests < Minitest::Test
                 standard.apply_envelope(model: model)
                 standard.apply_fdwr_srr_daylighting(model: model)
                 standard.apply_auto_zoning(model: model, sizing_run_dir: @sizing_run_dir, lights_type: lighting_type, lights_scale: 1.0)
-                standard.apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: @sizing_run_dir, shw_scale: nil) #, dcv_type: dcv_type
+                standard.apply_systems(model: model,
+                                       primary_heating_fuel: primary_heating_fuel,
+                                       sizing_run_dir: @sizing_run_dir,
+                                       shw_scale: nil,
+                                       baseline_system_zones_map_option: nil)
                 standard.apply_standard_efficiencies(model: model, sizing_run_dir: @sizing_run_dir, dcv_type: dcv_type)
                 # model = standard.apply_loop_pump_power(model: model, sizing_run_dir: @sizing_run_dir)
                 # standard.model_add_daylighting_controls(model)

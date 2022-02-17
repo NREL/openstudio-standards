@@ -117,7 +117,8 @@ class NECB_scaling_loads_Tests < Minitest::Test
                                                       pv_ground_azimuth_angle: nil,
                                                       pv_ground_module_description: nil,
                                                       chiller_type: nil,
-                                                      shw_scale: loads_scale
+                                                      shw_scale: loads_scale,
+                                                      baseline_system_zones_map_option: nil
               )
 
               # # comment out for regular tests
