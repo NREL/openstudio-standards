@@ -161,10 +161,12 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # HVAC user data process
     user_thermal_zones = @standards_data.key?('userdata_thermal_zone') ? @standards_data['userdata_thermal_zone'] : nil
     if user_thermal_zones && user_thermal_zones.length >= 1
+      # get climate zone to check the conditioning category
       # First construct hvac building type -> thermal Zone hash
       bldg_type_zone_hash = {}
-      model.getThermalZones.sort.each do |thermal_zone|
-        user_thermal_zone_index = user_thermal_zones.index { |user_thermal_zone| user_thermal_zone['name'] == thermal_zone.get.name.get }
+      bldg_type_zone_area_hash = {}
+      model.getThermalZones.each do |thermal_zone|
+        user_thermal_zone_index = user_thermal_zones.index { |user_thermal_zone| user_thermal_zone['name'] == thermal_zone.name.get }
         hvac_building_type = nil
         if user_thermal_zone_index.nil?
           # This zone is not in the user data, check 3rd hierarchy
@@ -190,33 +192,69 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         if !bldg_type_zone_hash.key?(hvac_building_type)
           bldg_type_zone_hash[hvac_building_type] = []
         end
-        bldg_type_zone_hash[hvac_building_type].append(thermal_zone)
+
+        if !bldg_type_zone_area_hash.key?(hvac_building_type)
+          bldg_type_zone_area_hash[hvac_building_type] = 0.0
+        end
+        # add floor area
+        part_of_floor_area = false
+        thermal_zone.spaces.sort.each do |space|
+          next if !space.partofTotalFloorArea
+          # a space in thermal zone is part of floor area.
+          part_of_floor_area = true
+          bldg_type_zone_area_hash[hvac_building_type] += space.floorArea * space.multiplier
+        end
+        if part_of_floor_area
+          # Only add the thermal_zone if it is part of the floor area
+          bldg_type_zone_hash[hvac_building_type].append(thermal_zone)
+        end
       end
 
+      # total floor area.
+      total_floor_area = 0.0
+      hvac_bldg_type_with_max_floor = nil
+      hvac_bldg_type_max_floor_area = 0.0
+      bldg_type_zone_area_hash.each do |key, value|
+        if value > hvac_bldg_type_max_floor_area
+          hvac_bldg_type_with_max_floor = key
+          hvac_bldg_type_max_floor_area = value
+        end
+        total_floor_area += value
+      end
 
-      if model.building.get.conditionedFloorArea.get <= 40000
-        # First get the total conditioned floor area
+      # reset the thermal zones by go through the hierarchy one logics
+      h1_bldg_type_zone_hash = {}
+      bldg_type_zone_hash.each do |bldg_type, bldg_type_zone|
+        if bldg_type.eql? hvac_bldg_type_with_max_floor
+          # regardless the floor area, the bldg type with largest floor area
+          # will be the primary bldg_type_zone
+          h1_bldg_type_zone_hash[bldg_type] = bldg_type_zone
+        else
+          if OpenStudio.convert(bldg_type_zone_area_hash[bldg_type], 'm^2', 'ft^2').get < 20000
+            # in this case, all thermal zones shall be categorized as the primary bldg_type_zone
+            h1_bldg_type_zone_hash[hvac_bldg_type_with_max_floor].push(*bldg_type_zone)
+          else
+            h1_bldg_type_zone_hash[bldg_type] = bldg_type_zone
+          end
+        end
+      end
+
+      # Process the write the building_type_for_hvac to all thermal zones.
+      if OpenStudio.convert(total_floor_area, 'm^2', 'ft^2').get <= 40000
+        # In this case, the hvac bldg type with maximum floor area will be used as the only HVAC system
         model.getThermalZones.sort.each do |thermal_zone|
           # In this case, only one primary building hvac type
-          building_name = thermal_zone.model.building.get.name.get
-          thermal_zone.additionalProperties.setFeature('building_type_for_hvac', hvac_building_type)
-
+          thermal_zone.additionalProperties.setFeature('building_type_for_hvac', hvac_bldg_type_with_max_floor)
         end
-      end
-
-      # add the key to the multi_building_data
-      user_thermal_zones.each do |user_thermal_zone|
-        user_thermal_zone_name = user_thermal_zone['name']
-        hvac_building_type = user_thermal_zone['building_type_for_hvac']
-        thermal_zone = model.getThermalZoneByName(user_thermal_zone_name)
-        if thermal_zone.empty?
-          OpenStudio.logFree(OpenStudio::Error, 'OpenStudio::Model::ThermalZone', "Cannot find a thermal zone named #{user_thermal_zone_name} in the model, check your user data inputs")
-          # Skip the processing of this thermal zone.
-          next
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The building floor area is less than 40,000 square foot. The hvac building type for all thermal zone is set to #{hvac_bldg_type_with_max_floor}")
+      else
+        # write in hvac building type thermal zones by thermal zone
+        h1_bldg_type_zone_hash.each do |h1_bldg_type, bldg_type_zone_array|
+          bldg_type_zone_array.each do |thermal_zone|
+            thermal_zone.additionalProperties.setFeature('building_type_for_hvac', h1_bldg_type)
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "The building floor area is 40,000 square foot. The hvac building type for all thermal zone is set to #{hvac_bldg_type_with_max_floor}")
+          end
         end
-
-        target_thermal_zone = thermal_zone.get
-        target_thermal_zone.additionalProperties.setFeature('building_type_for_hvac', hvac_building_type)
       end
     end
 
