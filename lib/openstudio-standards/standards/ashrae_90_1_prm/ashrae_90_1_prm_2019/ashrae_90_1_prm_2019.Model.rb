@@ -225,24 +225,23 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
 
       # Reset the thermal zones by going through the hierarchy 1 logics
       h1_bldg_type_zone_hash = {}
+      # Add the thermal zones for the maximum floor (primary system)
+      h1_bldg_type_zone_hash[hvac_bldg_type_with_max_floor] = bldg_type_zone_hash[hvac_bldg_type_with_max_floor]
       bldg_type_zone_hash.each do |bldg_type, bldg_type_zone|
-        if OpenStudio.convert(total_floor_area, 'm^2', 'ft^2').get <= 40000
-          # Building is smaller than 40k sqft, it could only have one hvac_building_type, reset all the thermal zones.
-          h1_bldg_type_zone_hash[hvac_bldg_type_with_max_floor].push(*bldg_type_zone)
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The building floor area is less than 40,000 square foot. Thermal zones under hvac building type #{bldg_type} is reset to #{hvac_bldg_type_with_max_floor}")
-          next
-        end
-        if bldg_type.eql? hvac_bldg_type_with_max_floor
-          # Regardless the floor area, the bldg type with largest floor area
-          # will be the primary bldg_type_zone
-          h1_bldg_type_zone_hash[bldg_type] = bldg_type_zone
-        else
-          if OpenStudio.convert(bldg_type_zone_area_hash[bldg_type], 'm^2', 'ft^2').get < 20000
-            # in this case, all thermal zones shall be categorized as the primary hvac_building_type
+        # loop the rest bldg_types
+        if !bldg_type.eql? hvac_bldg_type_with_max_floor
+          if OpenStudio.convert(total_floor_area, 'm^2', 'ft^2').get <= 40000
+            # Building is smaller than 40k sqft, it could only have one hvac_building_type, reset all the thermal zones.
             h1_bldg_type_zone_hash[hvac_bldg_type_with_max_floor].push(*bldg_type_zone)
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The floor area in hvac building type #{bldg_type} is less than 20,000 square foot. Thermal zones under this hvac building type is reset to #{hvac_bldg_type_with_max_floor}")
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The building floor area is less than 40,000 square foot. Thermal zones under hvac building type #{bldg_type} is reset to #{hvac_bldg_type_with_max_floor}")
           else
-            h1_bldg_type_zone_hash[bldg_type] = bldg_type_zone
+            if OpenStudio.convert(bldg_type_zone_area_hash[bldg_type], 'm^2', 'ft^2').get < 20000
+              # in this case, all thermal zones shall be categorized as the primary hvac_building_type
+              h1_bldg_type_zone_hash[hvac_bldg_type_with_max_floor].push(*bldg_type_zone)
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The floor area in hvac building type #{bldg_type} is less than 20,000 square foot. Thermal zones under this hvac building type is reset to #{hvac_bldg_type_with_max_floor}")
+            else
+              h1_bldg_type_zone_hash[bldg_type] = bldg_type_zone
+            end
           end
         end
       end
