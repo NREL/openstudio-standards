@@ -1,5 +1,5 @@
 class ASHRAE901PRM
-    # @!group FanVariableVolume
-  
-    include ASHRAE901PRMFan
+  # @!group FanVariableVolume
+
+  include ASHRAE901PRMFan
 end

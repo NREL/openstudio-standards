@@ -2060,7 +2060,6 @@ class Standard
   # @return [Bool] returns true if successful, false if not
   # @todo this method is currently empty
   def thermal_zone_add_exhaust_fan_dcv(thermal_zone, change_related_objects = true, zone_mixing_objects = [], transfer_air_source_zones = [])
-
     # set flow fraction schedule for all zone exhaust fans and then set zone mixing schedule to the intersection of exhaust availability and exhaust fractional schedule
 
     # are there associated zone mixing or dummy exhaust objects that need to change when this changes?

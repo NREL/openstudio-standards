@@ -347,7 +347,6 @@ end
 module BTAP
   module Environment
     require_relative 'Weather.stat_file'
-    # rubocop:enable Style/MutableConstant
 
     # this method is used to populate user interfaces if needed from the hash above.
     def self.get_canadian_weather_file_names
@@ -922,7 +921,7 @@ module BTAP
           end
         end
         return heating_design_day_number, cooling_design_day_number
-      end #def get_heating_design_day_number
+      end # def get_heating_design_day_number
 
       # This method calculates dehumidification degree days (DDD)
       # @author sara.gilani@canada.ca
@@ -1003,7 +1002,6 @@ module BTAP
         # puts @filearray
         return ddd
       end # def calculate_humidity_ratio
-
     end # Environment
   end
 end

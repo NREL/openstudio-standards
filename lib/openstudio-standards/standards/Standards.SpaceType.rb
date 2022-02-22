@@ -788,7 +788,6 @@ class Standard
       construction_properties = model_find_object(standards_data['construction_properties'], search_criteria)
     end
 
-
     return construction_properties
   end
 end
