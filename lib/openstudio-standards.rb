@@ -76,7 +76,6 @@ module OpenstudioStandards
   require_relative "#{stds}/necb/common/btap_data.rb"
   require_relative "#{stds}/necb/common/btap_datapoint.rb"
 
-
   # ECM development
   require_relative "#{stds}/necb/ECMS/ecms.rb"
   require_relative "#{stds}/necb/ECMS/erv.rb"

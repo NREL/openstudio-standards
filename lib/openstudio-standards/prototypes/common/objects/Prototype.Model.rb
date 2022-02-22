@@ -2700,7 +2700,6 @@ Standard.class_eval do
   # @param wwr [Boolean]
   # @return [Numeric] Returns window to wall ratio (percentage) or window area.
   def model_get_window_area_info(model, wwr = true)
-
     window_area = 0
     wall_area = 0
 
