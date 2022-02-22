@@ -104,5 +104,8 @@
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["remove_transformer", []]]],
         ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", [["remove_transformer", []]]],
         ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-2A", [["remove_transformer", []]]]
+    ],
+    "multi_bldg_handling": [
+        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-3A", [["set_userdata_path",["userdata_ofs_01"]], ["set_model_building_name","SmallOffice"]]]
     ]
 }
