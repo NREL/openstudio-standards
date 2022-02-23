@@ -10,7 +10,7 @@
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
     ],
     "isresidential": [
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["set_userdata_path",["userdata_ofs_01"]]]]
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", [["set_userdata_path",["userdata_ofs_02"]]]]
     ],
     "envelope": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", []]
