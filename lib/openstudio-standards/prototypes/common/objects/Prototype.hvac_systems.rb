@@ -5480,7 +5480,6 @@ class Standard
       ventilation.setSchedule(availability_schedule)
 
       if ventilation_type == 'Exhaust'
-        ventilation.setDesignFlowRateCalculationMethod('Flow/Zone')
         ventilation.setDesignFlowRate(flow_rate)
         ventilation.setFanPressureRise(31.1361206455786)
         ventilation.setFanTotalEfficiency(0.51)
@@ -5491,7 +5490,6 @@ class Standard
         ventilation.setMaximumIndoorTemperature(100.0)
         ventilation.setDeltaTemperature(-100.0)
       elsif ventilation_type == 'Natural'
-        ventilation.setDesignFlowRateCalculationMethod('Flow/Zone')
         ventilation.setDesignFlowRate(flow_rate)
         ventilation.setFanPressureRise(0.0)
         ventilation.setFanTotalEfficiency(1.0)
@@ -5502,7 +5500,6 @@ class Standard
         ventilation.setMaximumIndoorTemperature(29.4444452244559)
         ventilation.setDeltaTemperature(-100.0)
       elsif ventilation_type == 'Intake'
-        ventilation.setDesignFlowRateCalculationMethod('Flow/Area')
         ventilation.setFlowRateperZoneFloorArea(flow_rate)
         ventilation.setFanPressureRise(49.8)
         ventilation.setFanTotalEfficiency(0.53625)
