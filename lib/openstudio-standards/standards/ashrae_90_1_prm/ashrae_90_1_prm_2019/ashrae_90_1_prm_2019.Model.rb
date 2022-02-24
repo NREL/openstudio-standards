@@ -311,7 +311,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       end
     end
     return true
-    
+  end
   # Determine the surface range of a baseline model.
   # The method calculates the window to wall ratio (assuming all spaces are conditioned)
   # and select the range based on the calculated window to wall ratio
@@ -347,4 +347,4 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     end
     return wwr_range
   end
-end
+  end
