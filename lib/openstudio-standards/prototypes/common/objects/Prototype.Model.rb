@@ -2692,6 +2692,42 @@ Standard.class_eval do
     return true
   end
 
+  # Calculate a model's window or WWR
+  # Disregard space conditioning (assume all spaces are conditioned)
+  # which is true for most of not all prototypes
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param wwr [Boolean]
+  # @return [Numeric] Returns window to wall ratio (percentage) or window area.
+  def model_get_window_area_info(model, wwr = true)
+
+    window_area = 0
+    wall_area = 0
+
+    model.getSpaces.each do |space|
+      # Get zone multipler
+      multiplier = space.thermalZone.get.multiplier
+      space.surfaces.each do |surface|
+        next if surface.surfaceType != 'Wall'
+        next if surface.outsideBoundaryCondition != 'Outdoors'
+
+        # Get wall and window area
+        wall_area += surface.grossArea * multiplier
+        surface.subSurfaces.each do |subsurface|
+          subsurface_type = subsurface.subSurfaceType.to_s.downcase
+          # Do not count doors
+          next unless (subsurface_type.include? 'window') || (subsurface_type.include? 'glass')
+
+          window_area += subsurface.grossArea * subsurface.multiplier * multiplier
+        end
+      end
+    end
+    return window_area / wall_area * 100 if wwr
+
+    # else
+    return window_area
+  end
+
   # Calculate a model's window or WWR for a specific orientation
   # Disregard space conditioning (assume all spaces are conditioned)
   # which is true for most of not all prototypes

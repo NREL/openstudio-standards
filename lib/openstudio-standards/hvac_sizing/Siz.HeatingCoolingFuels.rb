@@ -263,6 +263,11 @@ class OpenStudio::Model::Model
       # Get the object type
       obj_type = equipment.iddObjectType.valueName.to_s
       case obj_type
+      when 'OS_AirLooHVAC_UnitarySystem'
+        equipment = equipment.to_AirLoopHVACUnitarySystem.get
+        if equipment.heatingCoil.is_initialized
+          fuels += self.coil_heating_fuels(equipment.heatingCoil.get)
+        end
       when 'OS_AirTerminal_SingleDuct_ConstantVolume_FourPipeInduction'
         equipment = equipment.to_AirTerminalSingleDuctConstantVolumeFourPipeInduction.get
         fuels += self.coil_heating_fuels(equipment.heatingCoil)
@@ -350,7 +355,12 @@ class OpenStudio::Model::Model
     zone.equipment.each do |equipment|
       # Get the object type
       obj_type = equipment.iddObjectType.valueName.to_s
-      case obj_type    
+      case obj_type
+      when 'OS_AirLoopHVAC_UnitarySystem'
+        equipment = equipment.to_AirLoopHVACUnitarySystem.get
+        if equipment.coolingCoil.is_initialized
+          fuels += self.coil_cooling_fuels(equipment.coolingCoil.get)
+        end
       when 'OS_AirTerminal_SingleDuct_ConstantVolume_CooledBeam'
         equipment = equipment.to_AirTerminalSingleDuctConstantVolumeCooledBeam.get
         fuels += self.coil_cooling_fuels(equipment.coilCoolingCooledBeam)
