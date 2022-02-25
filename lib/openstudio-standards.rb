@@ -55,6 +55,7 @@ module OpenstudioStandards
   # NECB2020 Code
   require_relative "#{stds}/necb/NECB2020/necb_2020"
   require_relative "#{stds}/necb/NECB2020/building_envelope"
+  require_relative "#{stds}/necb/NECB2020/service_water_heating"
 
   # BTAPPRE1980
   require_relative "#{stds}/necb/BTAPPRE1980/btap_pre1980"
