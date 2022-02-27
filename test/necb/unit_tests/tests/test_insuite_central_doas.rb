@@ -126,56 +126,6 @@ class NECB_insuite_central_doas_Tests < Minitest::Test
                                    airloop_economizer_type: nil, # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
                                    baseline_system_zones_map_option: baseline_system_zones_map_option  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
               )
-              # standard.apply_weather_data(model: model, epw_file: epw_file)
-              # standard.apply_loads(model: model,
-              #                      lights_type: 'NECB_Default',
-              #                      lights_scale: 'NECB_Default',
-              #                      occupancy_loads_scale: nil,
-              #                      electrical_loads_scale: nil,
-              #                      oa_scale: nil)
-              # standard.apply_envelope(model: model,
-              #                         ext_wall_cond: nil,
-              #                         ext_floor_cond: nil,
-              #                         ext_roof_cond: nil,
-              #                         ground_wall_cond: nil,
-              #                         ground_floor_cond: nil,
-              #                         ground_roof_cond: nil,
-              #                         door_construction_cond: nil,
-              #                         fixed_window_cond: nil,
-              #                         glass_door_cond: nil,
-              #                         overhead_door_cond: nil,
-              #                         skylight_cond: nil,
-              #                         glass_door_solar_trans: nil,
-              #                         fixed_wind_solar_trans: nil,
-              #                         skylight_solar_trans: nil,
-              #                         infiltration_scale: nil)
-              # standard.apply_fdwr_srr_daylighting(model: model,
-              #                                     fdwr_set: -1.0,
-              #                                     srr_set: -1.0)
-              # standard.apply_auto_zoning(model: model,
-              #                            sizing_run_dir: @sizing_run_dir,
-              #                            lights_type: 'NECB_Default',
-              #                            lights_scale: 'NECB_Default')
-              # standard.apply_systems_and_efficiencies(model: model,
-              #                                         primary_heating_fuel: primary_heating_fuel,
-              #                                         sizing_run_dir: @sizing_run_dir,
-              #                                         dcv_type: 'NECB_Default',
-              #                                         ecm_system_name: 'NECB_Default',
-              #                                         erv_package: 'NECB_Default',
-              #                                         boiler_eff: nil,
-              #                                         unitary_cop: nil,
-              #                                         furnace_eff: nil,
-              #                                         shw_eff: nil,
-              #                                         daylighting_type: 'NECB_Default',
-              #                                         pv_ground_type: nil,
-              #                                         pv_ground_total_area_pv_panels_m2: nil,
-              #                                         pv_ground_tilt_angle: nil,
-              #                                         pv_ground_azimuth_angle: nil,
-              #                                         pv_ground_module_description: nil,
-              #                                         chiller_type: nil,
-              #                                         shw_scale: nil,
-              #                                         baseline_system_zones_map_option: baseline_system_zones_map_option
-              # )
 
               # # comment out for regular tests
               BTAP::FileIO.save_osm(model, File.join(@output_folder,"#{template}-#{building_type}-doas-type-#{baseline_system_zones_map_option}.osm"))
