@@ -119,7 +119,12 @@ class AppendixGPRMTests < Minitest::Test
       # user data JSON files will be created in sub-folder inside @test_dir
       model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
       proto_run_dir = "#{@test_dir}/#{model_name}"
-      json_path = @prototype_creator.convert_userdata_csv_to_json(@user_data_dir, proto_run_dir)
+
+      user_data_dir_local = ''
+      if model_name =~ /set_userdata_path/i
+        user_data_dir_local = @user_data_dir
+      end
+      json_path = @prototype_creator.convert_userdata_csv_to_json(user_data_dir_local, proto_run_dir)
       @prototype_creator.load_userdata_to_standards_database(json_path)
 
       # Convert standardSpaceType string for each space to values expected for prm creation
@@ -1369,6 +1374,21 @@ class AppendixGPRMTests < Minitest::Test
     return zone_system_check
   end
 
+  def check_multi_bldg_handling(baseline_base)
+    baseline_base.each do |baseline, model_baseline|
+      building_type, template, climate_zone, mod = baseline
+      # Get WWR of baseline model
+      wwr_baseline = run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Conditioned Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
+
+      # Check WWR against expected WWR
+      wwr_goal = 100 * @@wwr_values[building_type].to_f
+      assert(wwr_baseline < wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model with user data is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_baseline}, smaller than the WWR goal #{wwr_goal}")
+
+      # TODO adding more tests to check if zones are assigned correctly
+    end
+
+  end
+
   # Check if preheat coil control for system 5 through 8 are implemented
   #
   # @param baseline_base [Hash] Baseline
@@ -2088,5 +2108,6 @@ class AppendixGPRMTests < Minitest::Test
     check_number_of_cooling_towers(prototypes_base['number_of_cooling_towers']) if tests.include? 'number_of_cooling_towers'
     check_hvac_sizing(prototypes_base['hvac_sizing']) if tests.include? 'hvac_sizing'
     check_psz_split_from_mz(prototypes_base['hvac_psz_split_from_mz']) if tests.include? 'hvac_psz_split_from_mz'
+    check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
   end
 end
