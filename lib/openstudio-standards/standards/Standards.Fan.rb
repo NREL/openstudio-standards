@@ -235,8 +235,28 @@ module Fan
   # @return [Array<Double>] minimum motor efficiency (0.0 to 1.0), nominal horsepower
   def fan_standard_minimum_motor_efficiency_and_size(fan, motor_bhp)
     fan_motor_eff = 0.85
-    nominal_hp = motor_bhp
+    fan_motor_bhp = motor_bhp
 
+    if fan.airLoopHVAC.is_initialized
+      # If airloop hvac,calculate the zone multipliers to
+      # readjust the fan power.
+      multiplier = 1
+      thermalZones = fan.airLoopHVAC.get.thermalZones
+      # calculate multiplier
+      multipliers = []
+      thermalZones.each do |thermalZone|
+        multipliers << thermalZone.multiplier
+      end
+      unless multipliers.size.zero?
+        multiplier = (multipliers.inject { |a, e| a + e }.to_f / multipliers.size).to_i
+        if multiplier < 1
+          multiplier = 1
+        end
+      end
+      fan_motor_bhp = motor_bhp / multiplier
+    end
+
+    nominal_hp = fan_motor_bhp
     # Don't attempt to look up motor efficiency
     # for zero-hp fans, which may occur when there is no
     # airflow required for a particular system, typically
@@ -260,7 +280,7 @@ module Fan
     if fan_small_fan?(fan)
       nominal_hp = 0.5
     else
-      motor_properties = model_find_object(motors, search_criteria, motor_bhp)
+      motor_properties = model_find_object(motors, search_criteria, fan_motor_bhp)
       if motor_properties.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
         return [fan_motor_eff, nominal_hp]
