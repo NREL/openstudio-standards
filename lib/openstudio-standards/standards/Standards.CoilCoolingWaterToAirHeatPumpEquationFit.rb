@@ -115,16 +115,14 @@ class Standard
 
     # Check to make sure properties were found
     if coil_props.nil?
-      # find the maximum capacity in the water source heat pumps
-      wshp_table = standards_data['water_source_heat_pumps']
-      max_capacity_in_table = 0.0
-      wshp_table.each do |row|
-        if row['maximum_capacity'] > max_capacity_in_table
-          max_capacity_in_table = row['maximum_capacity']
-        end
-      end
-      if capacity_btu_per_hr < max_capacity_in_table
+      # search again without capacity
+      matching_objects = model_find_objects(standards_data['water_source_heat_pumps'], search_criteria, nil, Date.today)
+      if matching_objects.size.zero?
+        # This proves that the search_criteria has issue finding the correct coil prop
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{coil_cooling_water_to_air_heat_pump.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      else
+        # Issue warning indicate the coil size is may be too large
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "The capacity of the coil: #{coil_cooling_water_to_air_heat_pump.name} maybe too large to be found in the efficiency standard. The coil capacity is #{capacity_btu_per_hr} Btu/hr.")
       end
       return sql_db_vars_map
     end
