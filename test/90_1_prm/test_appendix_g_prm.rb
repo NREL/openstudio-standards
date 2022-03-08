@@ -72,6 +72,9 @@ class AppendixGPRMTests < Minitest::Test
         end
       end
 
+      prototype.append(@user_data_dir)
+      remove_instance_variable(:@user_data_dir)
+
       # Store alternate building type into hash
       if !@bldg_type_alt_now.nil?
         @bldg_type_alt[prototype] = @bldg_type_alt_now
@@ -104,7 +107,7 @@ class AppendixGPRMTests < Minitest::Test
   def generate_baseline(prototypes_generated, id_prototype_mapping)
     baseline_prototypes = {}
     prototypes_generated.each do |id, proposed_model|
-      building_type, template, climate_zone, mod = id_prototype_mapping[id]
+      building_type, template, climate_zone, mod, user_data_dir = id_prototype_mapping[id]
 
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join('_') unless mod.empty?
@@ -119,7 +122,7 @@ class AppendixGPRMTests < Minitest::Test
       # user data JSON files will be created in sub-folder inside @test_dir
       model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
       proto_run_dir = "#{@test_dir}/#{model_name}"
-      json_path = @prototype_creator.convert_userdata_csv_to_json(@user_data_dir, proto_run_dir)
+      json_path = @prototype_creator.convert_userdata_csv_to_json(user_data_dir, proto_run_dir)
       @prototype_creator.load_userdata_to_standards_database(json_path)
 
       # Convert standardSpaceType string for each space to values expected for prm creation
@@ -2035,23 +2038,23 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      'wwr',
-      'srr',
-      'envelope',
-      'lpd',
+      # 'wwr',
+      # 'srr',
+      # 'envelope',
+      # 'lpd',
       'isresidential',
-      'daylighting_control',
-      'light_occ_sensor',
-      'infiltration',
-      'hvac_baseline',
-      'hvac_psz_split_from_mz',
-      'plant_temp_reset_ctrl',
-      'sat_ctrl',
-      'number_of_boilers',
-      'number_of_chillers',
-      'number_of_cooling_towers',
-      'hvac_sizing',
-      'preheat_coil_ctrl'
+      # 'daylighting_control',
+      # 'light_occ_sensor',
+      # 'infiltration',
+      # 'hvac_baseline',
+      # 'hvac_psz_split_from_mz',
+      # 'plant_temp_reset_ctrl',
+      # 'sat_ctrl',
+      # 'number_of_boilers',
+      # 'number_of_chillers',
+      # 'number_of_cooling_towers',
+      # 'hvac_sizing',
+      # 'preheat_coil_ctrl'
     ]
 
     # Get list of unique prototypes
