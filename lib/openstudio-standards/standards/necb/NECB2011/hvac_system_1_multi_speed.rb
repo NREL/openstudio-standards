@@ -36,8 +36,10 @@ class NECB2011
     system_data[:MinimumOutdoorDryBulbTemperatureforCompressorOperation] = -10.0
     # Zone data
     system_data[:system_supply_air_temperature] = 20.0
-    system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
-    system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0 # Examine to see if this is a code or assumption. 13.1 maybe need to check
+    system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference] = 11.0
+    system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference] = 21.0
     system_data[:ZoneCoolingSizingFactor] = 1.1
     system_data[:ZoneHeatingSizingFactor] = 1.3
 
@@ -130,10 +132,12 @@ class NECB2011
     end
 
     zones.each do |zone|
-      # Zone sizing temperature
+      # Zone sizing temperature difference
       sizing_zone = zone.sizingZone
-      sizing_zone.setZoneCoolingDesignSupplyAirTemperature(13.0)
-      sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
+      sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod('TemperatureDifference')
+      sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(11.0)
+      sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod('TemperatureDifference')
+      sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(21.0)
       sizing_zone.setZoneCoolingSizingFactor(1.1)
       sizing_zone.setZoneHeatingSizingFactor(1.3)
 

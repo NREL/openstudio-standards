@@ -113,6 +113,7 @@ class BTAPDatapoint
                                        lights_scale: @options[:lights_scale],
                                        daylighting_type: @options[:daylighting_type], # Two options: @options[: (1) 'NECB_Default', (2) 'add_daylighting_controls'
                                        ecm_system_name: @options[:ecm_system_name],
+                                       ecm_system_zones_map_option: @options[:ecm_system_zones_map_option], # (1) 'NECB_Default' (2) 'one_sys_per_floor' (3) 'one_sys_per_bldg'
                                        erv_package: @options[:erv_package],
                                        boiler_eff: @options[:boiler_eff],
                                        # Inconsistent naming Todo Chris K.
@@ -156,7 +157,8 @@ class BTAPDatapoint
                                        output_variables: @options[:output_variables],
                                        output_meters: @options[:output_meters],
                                        airloop_economizer_type: @options[:airloop_economizer_type],
-                                       shw_scale: @options[:shw_scale])
+                                       shw_scale: @options[:shw_scale],
+                                       baseline_system_zones_map_option: @options[:baseline_system_zones_map_option])
       end
 
       # Save model to to disk.
