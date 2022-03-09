@@ -30,7 +30,7 @@ class AppendixGPRMTests < Minitest::Test
 
     prototypes_to_generate.each do |id, prototype|
       # mod is an array of method intended to modify the model
-      building_type, template, climate_zone, mod = prototype
+      building_type, template, climate_zone, user_data_dir, mod = prototype
 
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join('_') unless mod.empty?
@@ -58,10 +58,6 @@ class AppendixGPRMTests < Minitest::Test
       # Create the prototype
       @prototype_creator = Standard.build("#{template}_#{building_type}")
       model = @prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
-
-      # Initialize userdata folder to empty
-      # Will be set by mod methods below, if appicable
-      @user_data_dir = ''
 
       # Make modification if requested
       @bldg_type_alt_now = nil
@@ -104,7 +100,7 @@ class AppendixGPRMTests < Minitest::Test
   def generate_baseline(prototypes_generated, id_prototype_mapping)
     baseline_prototypes = {}
     prototypes_generated.each do |id, proposed_model|
-      building_type, template, climate_zone, mod = id_prototype_mapping[id]
+      building_type, template, climate_zone, user_data_dir, mod = id_prototype_mapping[id]
 
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join('_') unless mod.empty?
@@ -120,12 +116,10 @@ class AppendixGPRMTests < Minitest::Test
       model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
       proto_run_dir = "#{@test_dir}/#{model_name}"
 
-      user_data_dir_local = ''
-      if model_name =~ /set_userdata_path/i
-        user_data_dir_local = @user_data_dir
+      if not user_data_dir.equal?('no_user_data')
+        json_path = @prototype_creator.convert_userdata_csv_to_json("#{@@json_dir}/#{user_data_dir}", proto_run_dir)
+        @prototype_creator.load_userdata_to_standards_database(json_path)
       end
-      json_path = @prototype_creator.convert_userdata_csv_to_json(user_data_dir_local, proto_run_dir)
-      @prototype_creator.load_userdata_to_standards_database(json_path)
 
       # Convert standardSpaceType string for each space to values expected for prm creation
       lpd_space_types = JSON.parse(File.read("#{@@json_dir}/lpd_space_types.json"))
@@ -295,7 +289,7 @@ class AppendixGPRMTests < Minitest::Test
   # @param prototypes_base [Hash] Baseline prototypes
   def check_wwr(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
-      building_type, template, climate_zone, mod = prototype
+      building_type, template, climate_zone, user_data_dir, mod = prototype
 
       # Get WWR of baseline model
       wwr_baseline = run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Conditioned Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
@@ -311,7 +305,7 @@ class AppendixGPRMTests < Minitest::Test
   # @param prototypes_base [Hash] Baseline prototypes
   def check_srr(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
-      building_type, template, climate_zone, mod = prototype
+      building_type, template, climate_zone, user_data_dir, mod = prototype
 
       # Get srr of baseline model
       srr_baseline = run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Skylight-Roof Ratio', 'Skylight-Roof Ratio', 'Total', '%').to_f
@@ -327,7 +321,7 @@ class AppendixGPRMTests < Minitest::Test
   # @param prototypes_base [Hash] Baseline prototypes
   def check_daylighting_control(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
-      building_type, template, climate_zone, mod = prototype
+      building_type, template, climate_zone, user_data_dir, mod = prototype
       # Check the model include daylighting control objects
       model_baseline.getSpaces.sort.each do |space|
         existing_daylighting_controls = space.daylightingControls
@@ -341,7 +335,7 @@ class AppendixGPRMTests < Minitest::Test
   # @param prototypes_base [Hash] Baseline prototypes
   def check_residential_flag(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
-      building_type, template, climate_zone, mod = prototype
+      building_type, template, climate_zone, user_data_dir, mod = prototype
       # Determine whether any space is residential
       has_res = 'false'
       std = Standard.build("#{template}_#{building_type}")
@@ -363,7 +357,7 @@ class AppendixGPRMTests < Minitest::Test
   # TODO: Add residential and semi-heated spaces lookup
   def check_envelope(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
-      building_type, template, climate_zone, mod = prototype
+      building_type, template, climate_zone, user_data_dir, mod = prototype
 
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join('_') unless mod.empty?
@@ -408,7 +402,7 @@ class AppendixGPRMTests < Minitest::Test
   # @param prototypes_base [Hash] Baseline prototypes
   def check_lpd(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
-      building_type, template, climate_zone, mod = prototype
+      building_type, template, climate_zone, user_data_dir, mod = prototype
 
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join('_') unless mod.empty?
@@ -438,7 +432,7 @@ class AppendixGPRMTests < Minitest::Test
   #
   def check_hvac_sizing(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
-      building_type, template, climate_zone, mod = prototype
+      building_type, template, climate_zone, user_data_dir, mod = prototype
 
       # check sizing parameters (G3.1.2.2)
       sizing_parameters = model_baseline.getSizingParameters
@@ -664,7 +658,7 @@ class AppendixGPRMTests < Minitest::Test
   def check_light_occ_sensor(prototypes, prototypes_base)
     light_sch = {}
     prototypes.each do |prototype, model_proto|
-      building_type, template, climate_zone, mod = prototype
+      building_type, template, climate_zone, user_data_dir, mod = prototype
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
       # Define name of spaces used for verification
       space_name = JSON.parse(File.read("#{@@json_dir}/light_occ_sensor.json"))[run_id]
@@ -887,7 +881,7 @@ class AppendixGPRMTests < Minitest::Test
   # @param prototypes_base [Hash] Baseline prototypes
   def check_hvac(prototypes_base)
     prototypes_base.each do |prototype, model|
-      building_type, template, climate_zone, mod = prototype
+      building_type, template, climate_zone, user_data_dir, mod = prototype
 
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join('_') unless mod.empty?
@@ -1376,7 +1370,7 @@ class AppendixGPRMTests < Minitest::Test
 
   def check_multi_bldg_handling(baseline_base)
     baseline_base.each do |baseline, model_baseline|
-      building_type, template, climate_zone, mod = baseline
+      building_type, template, climate_zone, user_data_dir, mod = baseline
       # Get WWR of baseline model
       wwr_baseline = run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Conditioned Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
 
@@ -1394,7 +1388,7 @@ class AppendixGPRMTests < Minitest::Test
   # @param baseline_base [Hash] Baseline
   def check_preheat_coil_ctrl(baseline_base)
     baseline_base.each do |baseline, model_baseline|
-      building_type, template, climate_zone, mod = baseline
+      building_type, template, climate_zone, user_data_dir, mod = baseline
 
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join('_') unless mod.empty?
@@ -1449,7 +1443,7 @@ class AppendixGPRMTests < Minitest::Test
   # @param prototypes_base [Hash] Baseline prototypes
   def check_sat_ctrl(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
-      building_type, template, climate_zone, mod = prototype
+      building_type, template, climate_zone, user_data_dir, mod = prototype
 
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join('_') unless mod.empty?
@@ -1500,7 +1494,7 @@ class AppendixGPRMTests < Minitest::Test
 
   def check_psz_split_from_mz(prototypes_base)
     prototypes_base.each do |prototype, model|
-      building_type, template, climate_zone, mod = prototype
+      building_type, template, climate_zone, user_data_dir, mod = prototype
 
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join('_') unless mod.empty?
@@ -1817,16 +1811,6 @@ class AppendixGPRMTests < Minitest::Test
   def change_bldg_type(model, arguments)
     bldg_type_new = arguments[0]
     @bldg_type_alt_now = bldg_type_new
-    return model
-  end
-
-  # Set path to userdata folder for one unit test
-  # Located in 90_1_prm/data sub folder
-  # @param model
-  # @arguments  [array] name of userdata sub folder
-  def set_userdata_path(model, arguments)
-    userdata_folder = arguments[0]
-    @user_data_dir = "#{@@json_dir}/#{userdata_folder}"
     return model
   end
 
