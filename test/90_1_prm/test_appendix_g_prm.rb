@@ -694,7 +694,7 @@ class AppendixGPRMTests < Minitest::Test
 
     light_sch_base = {}
     prototypes_base.each do |prototype, model_baseline|
-      building_type, template, climate_zone, mod = prototype
+      building_type, template, climate_zone, user_data_dir, mod = prototype
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
       # Define name of spaces used for verification
       space_name = JSON.parse(File.read("#{@@json_dir}/light_occ_sensor.json"))[run_id]
@@ -779,7 +779,7 @@ class AppendixGPRMTests < Minitest::Test
     # Retrieve space envelope area for input prototypes
     prototypes_spc_area_calc = {}
     prototypes.each do |prototype, model|
-      building_type, template, climate_zone, mod = prototype
+      building_type, template, climate_zone, user_data_dir, mod = prototype
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
 
       # Get space envelope area
@@ -792,7 +792,7 @@ class AppendixGPRMTests < Minitest::Test
     end
 
     prototypes_base.each do |prototype, model|
-      building_type, template, climate_zone, mod = prototype
+      building_type, template, climate_zone, user_data_dir, mod = prototype
 
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join('_') unless mod.empty?
@@ -839,7 +839,7 @@ class AppendixGPRMTests < Minitest::Test
     hw_high_temp_reset = 65.5
 
     prototypes_base.each do |prototype, baseline_model|
-      building_type, template, climate_zone, mode = prototype
+      building_type, template, climate_zone, user_data_dir, mode = prototype
 
       if baseline_model.getPlantLoops.empty?
         assert(building_type != "SmallOffice", "No Plant Loop found in the baseline model #{building_type}, #{template}, #{climate_zone}, failure to generate plant loop")
