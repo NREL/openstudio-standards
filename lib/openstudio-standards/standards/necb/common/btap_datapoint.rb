@@ -100,7 +100,10 @@ class BTAPDatapoint
         @standard.set_output_meters(model: model, output_meters: @options[:output_meters])
         climate_zone = 'NECB HDD Method'
         model.getYearDescription.setDayofWeekforStartDay('Sunday')
-        @standard.model_add_design_days_and_weather_file(model, climate_zone, @options[:epw_file]) # Standards
+        epw_file = @options[:epw_file]
+        local_epw_file_path = File.join(input_folder_cache,@options[:epw_file])
+        local_epw_file_path = OpenStudio::Path.new(local_epw_file_path) if File.exists? local_epw_file_path
+        @standard.model_add_design_days_and_weather_file(model, climate_zone, local_epw_file_path) # Standards
         @standard.model_add_ground_temperatures(model, nil, climate_zone)
       else
         # Otherwise modify osm input with options.

@@ -136,7 +136,11 @@ class Standard
       weather_dir = File.expand_path(File.join(File.dirname(__FILE__), weather_dir))
     end
 
-    weather_file = File.join(weather_dir, weather_file_name)
+    if epw_file.class.name.to_s == "OpenStudio::Path"
+      weather_file = epw_file.to_s
+    else
+      weather_file = File.join(weather_dir, weather_file_name)
+    end
     epw_file = OpenStudio::EpwFile.new(weather_file)
     OpenStudio::Model::WeatherFile.setWeatherFile(model, epw_file).get
 
