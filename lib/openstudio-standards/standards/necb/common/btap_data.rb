@@ -1805,7 +1805,7 @@ class BTAPData
 
     ### Get weather file name
     weather_file = model.weatherFile.get.path.get.to_s
-    weather_file = weather_file.split('/')[-1]
+#    weather_file = weather_file.split('/')[-1]
 
     ### Cooling Degree Days, base 50degF
     cdd10_degree_c_days = BTAP::Environment::WeatherFile.new(weather_file).cdd10
