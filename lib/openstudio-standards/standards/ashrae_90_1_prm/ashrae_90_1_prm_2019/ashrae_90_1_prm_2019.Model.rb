@@ -291,7 +291,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         # 3rd level hierarchy does not apply, Apply 4th level hierarchy
         type_for_wwr = default_wwr_building_type
       end
-      #add wwr type to space:
+      # add wwr type to space:
       space.additionalProperties.setFeature('building_type_for_wwr', type_for_wwr)
     end
     # =============================SWH user data process===========================================
@@ -328,12 +328,13 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         # 3rd hierarchy does not apply, apply 4th hierarchy
         type_for_swh = default_swh_building_type
       end
-      #add swh type to wateruse equipment:
+      # add swh type to wateruse equipment:
       wateruse_equipment.additionalProperties.setFeature('building_type_for_swh', type_for_swh)
     end
 
     return true
   end
+  
   # Determine the surface range of a baseline model.
   # The method calculates the window to wall ratio (assuming all spaces are conditioned)
   # and select the range based on the calculated window to wall ratio
