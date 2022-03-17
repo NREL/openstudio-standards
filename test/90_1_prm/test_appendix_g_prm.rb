@@ -1371,25 +1371,27 @@ class AppendixGPRMTests < Minitest::Test
   def check_multi_bldg_handling(baseline_base)
     baseline_base.each do |baseline, model_baseline|
       building_type, template, climate_zone, user_data_dir, mod = baseline
-      # Get WWR of baseline model
-      wwr_baseline = run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Conditioned Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
-
-      # Check WWR against expected WWR
-      wwr_goal = 100 * @@wwr_values[building_type].to_f
-      assert(wwr_baseline < wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model with user data is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_baseline}, smaller than the WWR goal #{wwr_goal}")
-
+      if building_type == 'SmallOffice'
+        # Get WWR of baseline model
+        wwr_baseline = run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Conditioned Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
+        # Check WWR against expected WWR
+        wwr_goal = 100 * @@wwr_values[building_type].to_f
+        assert(wwr_baseline < wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model with user data is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_baseline}, smaller than the WWR goal #{wwr_goal}")
+      end
       # TODO adding more tests to check if zones are assigned correctly
       if building_type == 'LargeHotel'
         model_baseline.getThermalZones.each do |thermal_zone|
           thermal_zone_name = thermal_zone.name.get
           # assert(thermal_zone.additionalProperties.hasFeature('building_type_for_hvac'), "Baseline zone #{thermal_zone_name} does not have building_type_for_hvac assigned.")
-          bldg_hvac_type = thermal_zone.additionalProperties.getFeatureAsString('building_type_for_hvac').get
-          if /_1 ZN/i =~ thermal_zone_name
-            # first floor hvac type shall be "retail"
-            assert(bldg_hvac_type == 'retail', "Baseline zone #{thermal_zone_name} has incorrect building_type_for_hvac. It should be retail but get #{bldg_hvac_type}")
-          else
-            # other floors hvac type shall be "residential"
-            assert(bldg_hvac_type == 'residential', "Baseline zone #{thermal_zone_name} has incorrect building_type_for_hvac. It should be residential but get #{bldg_hvac_type}")
+          if thermal_zone.additionalProperties.hasFeature('building_type_for_hvac')
+            bldg_hvac_type = thermal_zone.additionalProperties.getFeatureAsString('building_type_for_hvac').get
+            if /_1 ZN/i =~ thermal_zone_name
+              # first floor hvac type shall be "retail"
+              assert(bldg_hvac_type == 'retail', "Baseline zone #{thermal_zone_name} has incorrect building_type_for_hvac. It should be retail but get #{bldg_hvac_type}")
+            else
+              # other floors hvac type shall be "residential"
+              assert(bldg_hvac_type == 'residential', "Baseline zone #{thermal_zone_name} has incorrect building_type_for_hvac. It should be residential but get #{bldg_hvac_type}")
+            end
           end
         end
       end

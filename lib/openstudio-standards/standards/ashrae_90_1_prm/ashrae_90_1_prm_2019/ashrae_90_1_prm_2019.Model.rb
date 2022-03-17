@@ -153,8 +153,9 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # @param [String] default_hvac_building_type (Fourth Hierarchy hvac building type)
   # @param [String] default_wwr_building_type (Fourth Hierarchy wwr building type)
   # @param [String] default_swh_building_type (Fourth Hierarchy swh building type)
+  # @param [Hash] bldg_type_zone_hash An empty hash that maps building type for hvac to a list of thermal zones
   # @return True
-  def handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type)
+  def handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_zone_hash)
     # Construct the user_building hashmap
     user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
 
@@ -162,7 +163,6 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # =============================HVAC user data process===========================================
     user_thermal_zones = @standards_data.key?('userdata_thermal_zone') ? @standards_data['userdata_thermal_zone'] : nil
     # First construct hvac building type -> thermal Zone hash and hvac building type -> floor area
-    bldg_type_zone_hash = {}
     bldg_type_zone_area_hash = {}
     model.getThermalZones.each do |thermal_zone|
       # get climate zone to check the conditioning category
