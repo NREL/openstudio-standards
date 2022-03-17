@@ -102,8 +102,8 @@ class BTAPDatapoint
         model.getYearDescription.setDayofWeekforStartDay('Sunday')
         epw_file = @options[:epw_file]
         local_epw_file_path = File.join(input_folder_cache,@options[:epw_file])
-        local_epw_file_path = OpenStudio::Path.new(local_epw_file_path) if File.exists? local_epw_file_path
-        @standard.model_add_design_days_and_weather_file(model, climate_zone, local_epw_file_path) # Standards
+        epw_file = OpenStudio::Path.new(local_epw_file_path) if File.exists? local_epw_file_path
+        @standard.model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
         @standard.model_add_ground_temperatures(model, nil, climate_zone)
       else
         # Otherwise modify osm input with options.
