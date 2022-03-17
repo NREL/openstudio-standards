@@ -149,167 +149,189 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # The object additional feature is empty when the function determined it uses fourth hierarchy.
   #
   # @param [OpenStudio::Model::Model] model
+  # @param [String] climate_zone
   # @param [String] default_hvac_building_type (Fourth Hierarchy hvac building type)
   # @param [String] default_wwr_building_type (Fourth Hierarchy wwr building type)
   # @param [String] default_swh_building_type (Fourth Hierarchy swh building type)
   # @return True
-  def handle_multi_building_area_types(model, default_hvac_building_type, default_wwr_building_type, default_swh_building_type)
+  def handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type)
     # Construct the user_building hashmap
     user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
 
     # Build up a hvac_building_type : thermal zone hash map
-    # HVAC user data process
+    # =============================HVAC user data process===========================================
     user_thermal_zones = @standards_data.key?('userdata_thermal_zone') ? @standards_data['userdata_thermal_zone'] : nil
-    if user_thermal_zones && user_thermal_zones.length >= 1
+    # First construct hvac building type -> thermal Zone hash and hvac building type -> floor area
+    bldg_type_zone_hash = {}
+    bldg_type_zone_area_hash = {}
+    model.getThermalZones.each do |thermal_zone|
       # get climate zone to check the conditioning category
-      # First construct hvac building type -> thermal Zone hash and hvac building type -> floor area
-      bldg_type_zone_hash = {}
-      bldg_type_zone_area_hash = {}
-      model.getThermalZones.each do |thermal_zone|
+      thermal_zone_condition_category = thermal_zone_conditioning_category(thermal_zone, climate_zone)
+      if thermal_zone_condition_category == 'Semiheated' || thermal_zone_condition_category == 'Unconditioned'
+        next
+      end
+
+      # Check for Second hierarchy
+      hvac_building_type = nil
+      if user_thermal_zones && user_thermal_zones.length >= 1
         user_thermal_zone_index = user_thermal_zones.index { |user_thermal_zone| user_thermal_zone['name'] == thermal_zone.name.get }
-        hvac_building_type = nil
-        if !user_thermal_zone_index.nil?
-          # This zone has user data, set to 2nd hierarchy
+        # make sure the thermal zone has assigned a building_type_for_hvac
+        unless user_thermal_zone_index.nil? || user_thermal_zones[user_thermal_zone_index]['building_type_for_hvac'].nil?
+          # Only thermal zone in the user data and have building_type_for_hvac data will be assigned.
           hvac_building_type = user_thermal_zones[user_thermal_zone_index]['building_type_for_hvac']
+        end
+      end
+      # Second hierarchy does not apply, check Third hierarchy
+      if hvac_building_type.nil? && user_buildings && user_buildings.length >= 1
+        building_name = thermal_zone.model.building.get.name.get
+        user_building_index = user_buildings.index { |user_building| user_building['name'] == building_name }
+        unless user_building_index.nil? || user_buildings[user_building_index]['building_type_for_hvac'].nil?
+          # Only thermal zone in the buildings user data and have building_type_for_hvac data will be assigned.
+          hvac_building_type = user_buildings[user_building_index]['building_type_for_hvac']
+        end
+      end
+      # Third hierarchy does not apply, apply Fourth hierarchy
+      if hvac_building_type.nil?
+        hvac_building_type = default_hvac_building_type
+      end
+      # Add data to the hash map
+      if !bldg_type_zone_hash.key?(hvac_building_type)
+        bldg_type_zone_hash[hvac_building_type] = []
+      end
+      if !bldg_type_zone_area_hash.key?(hvac_building_type)
+        bldg_type_zone_area_hash[hvac_building_type] = 0.0
+      end
+      # calculate floor area for the thermal zone
+      part_of_floor_area = false
+      thermal_zone.spaces.sort.each do |space|
+        next if !space.partofTotalFloorArea
+
+        # a space in thermal zone is part of floor area.
+        part_of_floor_area = true
+        bldg_type_zone_area_hash[hvac_building_type] += space.floorArea * space.multiplier
+      end
+      if part_of_floor_area
+        # Only add the thermal_zone if it is part of the floor area
+        bldg_type_zone_hash[hvac_building_type].append(thermal_zone)
+      end
+    end
+
+    # Calculate the total floor area.
+    # If the max tie, this algorithm will pick the first encountered hvac building type as the maximum.
+    total_floor_area = 0.0
+    hvac_bldg_type_with_max_floor = nil
+    hvac_bldg_type_max_floor_area = 0.0
+    bldg_type_zone_area_hash.each do |key, value|
+      if value > hvac_bldg_type_max_floor_area
+        hvac_bldg_type_with_max_floor = key
+        hvac_bldg_type_max_floor_area = value
+      end
+      total_floor_area += value
+    end
+
+    # Reset the thermal zones by going through the hierarchy 1 logics
+    h1_bldg_type_zone_hash = {}
+    # Add the thermal zones for the maximum floor (primary system)
+    h1_bldg_type_zone_hash[hvac_bldg_type_with_max_floor] = bldg_type_zone_hash[hvac_bldg_type_with_max_floor]
+    bldg_type_zone_hash.each do |bldg_type, bldg_type_zone|
+      # loop the rest bldg_types
+      unless bldg_type.eql? hvac_bldg_type_with_max_floor
+        if OpenStudio.convert(total_floor_area, 'm^2', 'ft^2').get <= 40000
+          # Building is smaller than 40k sqft, it could only have one hvac_building_type, reset all the thermal zones.
+          h1_bldg_type_zone_hash[hvac_bldg_type_with_max_floor].push(*bldg_type_zone)
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The building floor area is less than 40,000 square foot. Thermal zones under hvac building type #{bldg_type} is reset to #{hvac_bldg_type_with_max_floor}")
         else
-          # This zone is not in the user data, check 3rd hierarchy
-          if user_buildings && user_buildings.length >= 1
-            building_name = thermal_zone.model.building.get.name.get
-            user_building_index = user_buildings.index { |user_building| user_building['name'] == building_name }
-            if !user_building_index.nil?
-              # Found the building type in user_buildings, set to the 3rd hierarchy
-              hvac_building_type = user_buildings[user_building_index]['building_type_for_hvac']
-            else
-              # This zone belongs to a building that is not in the user_buildings, set to 4th hierarchy
-              hvac_building_type = default_hvac_building_type
-            end
-          else
-            # No user_buildings defined. set to 4th hierarchy
-            hvac_building_type = default_hvac_building_type
-          end
-        end
-
-        if !bldg_type_zone_hash.key?(hvac_building_type)
-          bldg_type_zone_hash[hvac_building_type] = []
-        end
-        if !bldg_type_zone_area_hash.key?(hvac_building_type)
-          bldg_type_zone_area_hash[hvac_building_type] = 0.0
-        end
-        # calculate floor area for the thermal zone
-        part_of_floor_area = false
-        thermal_zone.spaces.sort.each do |space|
-          next if !space.partofTotalFloorArea
-
-          # a space in thermal zone is part of floor area.
-          part_of_floor_area = true
-          bldg_type_zone_area_hash[hvac_building_type] += space.floorArea * space.multiplier
-        end
-        if part_of_floor_area
-          # Only add the thermal_zone if it is part of the floor area
-          bldg_type_zone_hash[hvac_building_type].append(thermal_zone)
-        end
-      end
-
-      # Calculate the total floor area.
-      # If the max tie, this algorithm will pick the first encountered hvac building type as the maximum.
-      total_floor_area = 0.0
-      hvac_bldg_type_with_max_floor = nil
-      hvac_bldg_type_max_floor_area = 0.0
-      bldg_type_zone_area_hash.each do |key, value|
-        if value > hvac_bldg_type_max_floor_area
-          hvac_bldg_type_with_max_floor = key
-          hvac_bldg_type_max_floor_area = value
-        end
-        total_floor_area += value
-      end
-
-      # Reset the thermal zones by going through the hierarchy 1 logics
-      h1_bldg_type_zone_hash = {}
-      # Add the thermal zones for the maximum floor (primary system)
-      h1_bldg_type_zone_hash[hvac_bldg_type_with_max_floor] = bldg_type_zone_hash[hvac_bldg_type_with_max_floor]
-      bldg_type_zone_hash.each do |bldg_type, bldg_type_zone|
-        # loop the rest bldg_types
-        if !bldg_type.eql? hvac_bldg_type_with_max_floor
-          if OpenStudio.convert(total_floor_area, 'm^2', 'ft^2').get <= 40000
-            # Building is smaller than 40k sqft, it could only have one hvac_building_type, reset all the thermal zones.
+          if OpenStudio.convert(bldg_type_zone_area_hash[bldg_type], 'm^2', 'ft^2').get < 20000
+            # in this case, all thermal zones shall be categorized as the primary hvac_building_type
             h1_bldg_type_zone_hash[hvac_bldg_type_with_max_floor].push(*bldg_type_zone)
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The building floor area is less than 40,000 square foot. Thermal zones under hvac building type #{bldg_type} is reset to #{hvac_bldg_type_with_max_floor}")
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The floor area in hvac building type #{bldg_type} is less than 20,000 square foot. Thermal zones under this hvac building type is reset to #{hvac_bldg_type_with_max_floor}")
           else
-            if OpenStudio.convert(bldg_type_zone_area_hash[bldg_type], 'm^2', 'ft^2').get < 20000
-              # in this case, all thermal zones shall be categorized as the primary hvac_building_type
-              h1_bldg_type_zone_hash[hvac_bldg_type_with_max_floor].push(*bldg_type_zone)
-              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The floor area in hvac building type #{bldg_type} is less than 20,000 square foot. Thermal zones under this hvac building type is reset to #{hvac_bldg_type_with_max_floor}")
-            else
-              h1_bldg_type_zone_hash[bldg_type] = bldg_type_zone
-            end
+            h1_bldg_type_zone_hash[bldg_type] = bldg_type_zone
           end
-        end
-      end
-
-      # Write in hvac building type thermal zones by thermal zone
-      h1_bldg_type_zone_hash.each do |h1_bldg_type, bldg_type_zone_array|
-        bldg_type_zone_array.each do |thermal_zone|
-          thermal_zone.additionalProperties.setFeature('building_type_for_hvac', h1_bldg_type)
         end
       end
     end
 
-    # SPACE user data process
+    # Write in hvac building type thermal zones by thermal zone
+    h1_bldg_type_zone_hash.each do |h1_bldg_type, bldg_type_zone_array|
+      bldg_type_zone_array.each do |thermal_zone|
+        thermal_zone.additionalProperties.setFeature('building_type_for_hvac', h1_bldg_type)
+      end
+    end
+    # =============================SPACE user data process===========================================
     user_spaces = @standards_data.key?('userdata_space') ? @standards_data['userdata_space'] : nil
-    if user_spaces && user_spaces.length >= 1
-      # Loop spaces
-      model.getSpaces.sort.each do |space|
-        # check for 2nd level hierarchy
-        found_user_data = false
+    model.getSpaces.each do |space|
+      type_for_wwr = nil
+      # Check for 2nd level hierarchy
+      if user_spaces && user_spaces.length >= 1
         user_spaces.each do |user_space|
-          if space.name.get == user_space['name'] && !user_space['building_type_for_wwr'].nil?
-            space.additionalProperties.setFeature('building_type_for_wwr', user_space['building_type_for_wwr'])
-            found_user_data = true
-          end
-        end
-
-        # check for 3nd level hierarchy
-        if !found_user_data && !user_buildings.nil?
-          # get space building type
-          building_name = space.model.building.get.name.get
-
-          user_buildings.each do |user_building|
-            if user_building['name'] == building_name && !user_building['building_type_for_wwr'].nil?
-              space.additionalProperties.setFeature('building_type_for_wwr', user_building['building_type_for_wwr'])
+          unless user_space['building_type_for_wwr'].nil?
+            if space.name.get == user_space['name']
+              type_for_wwr = user_space['building_type_for_wwr']
             end
           end
         end
       end
-    end
 
-    # SWH user data process
+      if type_for_wwr.nil?
+        # 2nd Hierarchy does not apply, check for 3rd level hierarchy
+        building_name = space.model.building.get.name.get
+        if user_buildings && user_buildings.length >= 1
+          user_buildings.each do |user_building|
+            unless user_building['building_type_for_wwr'].nil?
+              if user_building['name'] == building_name
+                type_for_wwr = user_building['building_type_for_wwr']
+              end
+            end
+          end
+        end
+      end
+
+      if type_for_wwr.nil?
+        # 3rd level hierarchy does not apply, Apply 4th level hierarchy
+        type_for_wwr = default_wwr_building_type
+      end
+      #add wwr type to space:
+      space.additionalProperties.setFeature('building_type_for_wwr', type_for_wwr)
+    end
+    # =============================SWH user data process===========================================
     user_wateruse_equipments = @standards_data.key?('userdata_wateruse_equipment') ? @standards_data['userdata_wateruse_equipment'] : nil
-    if user_wateruse_equipments && user_wateruse_equipments.length >= 1
-      # loop water use equipment list
-
-      model.getWaterUseEquipments.sort.each do |wateruse_equipment|
-        # check for 2nd level hierarchy
-        found_user_data = false
-        # add the key to the multi_building_data
+    model.getWaterUseEquipments.each do |wateruse_equipment|
+      type_for_swh = nil
+      # Check for 2nd hierarchy
+      if user_wateruse_equipments && user_wateruse_equipments.length >= 1
         user_wateruse_equipments.each do |user_wateruse_equipment|
-          if wateruse_equipment.name.get == user_wateruse_equipment['name'] && !user_wateruse_equipment['bulding_type_for_swh'].nil?
-            wateruse_equipment.additionalProperties.setFeature('bulding_type_for_swh', user_wateruse_equipment['bulding_type_for_swh'])
-            found_user_data = true
-          end
-        end
-
-        # check for 3nd level hierarchy
-        if !found_user_data && !user_buildings.nil?
-          # get space building type
-          building_name = wateruse_equipment.model.building.get.name.get
-          user_buildings.each do |user_building|
-            if user_building['name'] == building_name && !user_building['building_type_for_wwr'].nil?
-              wateruse_equipment.additionalProperties.setFeature('building_type_for_wwr', user_building['building_type_for_wwr'])
+          unless user_wateruse_equipment['building_type_for_swh'].nil?
+            if wateruse_equipment.name.get == user_wateruse_equipment['name']
+              type_for_swh = user_wateruse_equipment['building_type_for_swh']
             end
           end
         end
       end
+
+      if type_for_swh.nil?
+        # 2nd hierarchy does not apply, check for 3rd hierarchy
+        # get space building type
+        building_name = wateruse_equipment.model.building.get.name.get
+        if user_buildings && user_buildings.length >= 1
+          user_buildings.each do |user_building|
+            unless user_building['building_type_for_swh'].nil?
+              if user_building['name'] == building_name
+                type_for_swh = user_building['building_type_for_swh']
+              end
+            end
+          end
+        end
+      end
+
+      if type_for_swh.nil?
+        # 3rd hierarchy does not apply, apply 4th hierarchy
+        type_for_swh = default_swh_building_type
+      end
+      #add swh type to wateruse equipment:
+      wateruse_equipment.additionalProperties.setFeature('building_type_for_swh', type_for_swh)
     end
+
     return true
   end
   # Determine the surface range of a baseline model.
@@ -347,4 +369,4 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     end
     return wwr_range
   end
-  end
+end
