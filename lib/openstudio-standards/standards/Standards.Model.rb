@@ -69,8 +69,8 @@ class Standard
   # @return [Bool] returns true if successful, false if not
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, debug = false)
     # user data process
-    bldg_type_zone_hash = {}
-    handle_multi_building_area_types(user_model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_zone_hash)
+    bldg_type_hvac_zone_hash = {}
+    handle_multi_building_area_types(user_model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
 
     # Define different orientation from original orientation
     # for each individual baseline models
@@ -7406,9 +7406,9 @@ class Standard
   # @param [String] default_hvac_building_type
   # @param [String] default_wwr_building_type
   # @param [String] default_swh_building_type
-  # @param [Hash] bldg_type_zone_hash A hash maps building type for hvac to a list of thermal zones
+  # @param [Hash] bldg_type_hvac_zone_hash A hash maps building type for hvac to a list of thermal zones
   # @return True
-  def handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_zone_hash)
+  def handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     return true
   end
 
