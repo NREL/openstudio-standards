@@ -71,7 +71,8 @@ class Standard
     # user data process
     bldg_type_hvac_zone_hash = {}
     handle_multi_building_area_types(user_model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
-
+    # NOTE - bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
+    
     # Define different orientation from original orientation
     # for each individual baseline models
     degs_from_org = run_all_orients ? [0, 90, 180, 270] : [0]

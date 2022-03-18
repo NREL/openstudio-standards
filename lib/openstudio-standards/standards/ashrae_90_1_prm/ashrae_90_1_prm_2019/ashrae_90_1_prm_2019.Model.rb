@@ -196,16 +196,16 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         hvac_building_type = default_hvac_building_type
       end
       # Add data to the hash map
-      if !bldg_type_zone_hash.key?(hvac_building_type)
+      unless bldg_type_zone_hash.key?(hvac_building_type)
         bldg_type_zone_hash[hvac_building_type] = []
       end
-      if !bldg_type_zone_area_hash.key?(hvac_building_type)
+      unless bldg_type_zone_area_hash.key?(hvac_building_type)
         bldg_type_zone_area_hash[hvac_building_type] = 0.0
       end
       # calculate floor area for the thermal zone
       part_of_floor_area = false
       thermal_zone.spaces.sort.each do |space|
-        next if !space.partofTotalFloorArea
+        next unless space.partofTotalFloorArea
 
         # a space in thermal zone is part of floor area.
         part_of_floor_area = true
@@ -216,49 +216,52 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         bldg_type_zone_hash[hvac_building_type].append(thermal_zone)
       end
     end
-
-    # Calculate the total floor area.
-    # If the max tie, this algorithm will pick the first encountered hvac building type as the maximum.
-    total_floor_area = 0.0
-    hvac_bldg_type_with_max_floor = nil
-    hvac_bldg_type_max_floor_area = 0.0
-    bldg_type_zone_area_hash.each do |key, value|
-      if value > hvac_bldg_type_max_floor_area
-        hvac_bldg_type_with_max_floor = key
-        hvac_bldg_type_max_floor_area = value
+    # Handle an edge case that all zones in the model are unconditioned.
+    unless bldg_type_zone_hash.empty?
+      # Calculate the total floor area.
+      # If the max tie, this algorithm will pick the first encountered hvac building type as the maximum.
+      total_floor_area = 0.0
+      hvac_bldg_type_with_max_floor = nil
+      hvac_bldg_type_max_floor_area = 0.0
+      bldg_type_zone_area_hash.each do |key, value|
+        if value > hvac_bldg_type_max_floor_area
+          hvac_bldg_type_with_max_floor = key
+          hvac_bldg_type_max_floor_area = value
+        end
+        total_floor_area += value
       end
-      total_floor_area += value
-    end
 
-    # Reset the thermal zones by going through the hierarchy 1 logics
-    bldg_type_hvac_zone_hash.clear
-    # Add the thermal zones for the maximum floor (primary system)
-    bldg_type_hvac_zone_hash[hvac_bldg_type_with_max_floor] = bldg_type_zone_hash[hvac_bldg_type_with_max_floor]
-    bldg_type_zone_hash.each do |bldg_type, bldg_type_zone|
-      # loop the rest bldg_types
-      unless bldg_type.eql? hvac_bldg_type_with_max_floor
-        if OpenStudio.convert(total_floor_area, 'm^2', 'ft^2').get <= 40000
-          # Building is smaller than 40k sqft, it could only have one hvac_building_type, reset all the thermal zones.
-          bldg_type_hvac_zone_hash[hvac_bldg_type_with_max_floor].push(*bldg_type_zone)
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The building floor area is less than 40,000 square foot. Thermal zones under hvac building type #{bldg_type} is reset to #{hvac_bldg_type_with_max_floor}")
-        else
-          if OpenStudio.convert(bldg_type_zone_area_hash[bldg_type], 'm^2', 'ft^2').get < 20000
-            # in this case, all thermal zones shall be categorized as the primary hvac_building_type
+      # Reset the thermal zones by going through the hierarchy 1 logics
+      bldg_type_hvac_zone_hash.clear
+      # Add the thermal zones for the maximum floor (primary system)
+      bldg_type_hvac_zone_hash[hvac_bldg_type_with_max_floor] = bldg_type_zone_hash[hvac_bldg_type_with_max_floor]
+      bldg_type_zone_hash.each do |bldg_type, bldg_type_zone|
+        # loop the rest bldg_types
+        unless bldg_type.eql? hvac_bldg_type_with_max_floor
+          if OpenStudio.convert(total_floor_area, 'm^2', 'ft^2').get <= 40000
+            # Building is smaller than 40k sqft, it could only have one hvac_building_type, reset all the thermal zones.
             bldg_type_hvac_zone_hash[hvac_bldg_type_with_max_floor].push(*bldg_type_zone)
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The floor area in hvac building type #{bldg_type} is less than 20,000 square foot. Thermal zones under this hvac building type is reset to #{hvac_bldg_type_with_max_floor}")
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The building floor area is less than 40,000 square foot. Thermal zones under hvac building type #{bldg_type} is reset to #{hvac_bldg_type_with_max_floor}")
           else
-            bldg_type_hvac_zone_hash[bldg_type] = bldg_type_zone
+            if OpenStudio.convert(bldg_type_zone_area_hash[bldg_type], 'm^2', 'ft^2').get < 20000
+              # in this case, all thermal zones shall be categorized as the primary hvac_building_type
+              bldg_type_hvac_zone_hash[hvac_bldg_type_with_max_floor].push(*bldg_type_zone)
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The floor area in hvac building type #{bldg_type} is less than 20,000 square foot. Thermal zones under this hvac building type is reset to #{hvac_bldg_type_with_max_floor}")
+            else
+              bldg_type_hvac_zone_hash[bldg_type] = bldg_type_zone
+            end
           end
+        end
+      end
+
+      # Write in hvac building type thermal zones by thermal zone
+      bldg_type_hvac_zone_hash.each do |h1_bldg_type, bldg_type_zone_array|
+        bldg_type_zone_array.each do |thermal_zone|
+          thermal_zone.additionalProperties.setFeature('building_type_for_hvac', h1_bldg_type)
         end
       end
     end
 
-    # Write in hvac building type thermal zones by thermal zone
-    bldg_type_hvac_zone_hash.each do |h1_bldg_type, bldg_type_zone_array|
-      bldg_type_zone_array.each do |thermal_zone|
-        thermal_zone.additionalProperties.setFeature('building_type_for_hvac', h1_bldg_type)
-      end
-    end
     # =============================SPACE user data process===========================================
     user_spaces = @standards_data.key?('userdata_space') ? @standards_data['userdata_space'] : nil
     model.getSpaces.each do |space|
