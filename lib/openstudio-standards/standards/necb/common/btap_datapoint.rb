@@ -2,7 +2,7 @@ require 'openstudio'
 require 'securerandom'
 require 'optparse'
 require 'yaml'
-# require 'git-revision'
+#require 'git-revision'
 # resource_folder = File.join(__dir__, '..', '..', 'measures/btap_results/resources')
 # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
@@ -113,6 +113,7 @@ class BTAPDatapoint
                                        lights_scale: @options[:lights_scale],
                                        daylighting_type: @options[:daylighting_type], # Two options: @options[: (1) 'NECB_Default', (2) 'add_daylighting_controls'
                                        ecm_system_name: @options[:ecm_system_name],
+                                       ecm_system_zones_map_option: @options[:ecm_system_zones_map_option], # (1) 'NECB_Default' (2) 'one_sys_per_floor' (3) 'one_sys_per_bldg'
                                        erv_package: @options[:erv_package],
                                        boiler_eff: @options[:boiler_eff],
                                        # Inconsistent naming Todo Chris K.
@@ -155,7 +156,9 @@ class BTAPDatapoint
                                        chiller_type: @options[:chiller_type],
                                        output_variables: @options[:output_variables],
                                        output_meters: @options[:output_meters],
-                                       airloop_economizer_type: @options[:airloop_economizer_type])
+                                       airloop_economizer_type: @options[:airloop_economizer_type],
+                                       shw_scale: @options[:shw_scale],
+                                       baseline_system_zones_map_option: @options[:baseline_system_zones_map_option])
       end
 
       # Save model to to disk.
@@ -267,8 +270,8 @@ class BTAPDatapoint
   end
 
   def s3_copy_file_to_s3(bucket_name:, source_file:, target_file:, n: 0)
-    require 'aws-sdk-core'
-    require 'aws-sdk-s3'
+    # require 'aws-sdk-core'
+    # require 'aws-sdk-s3'
     Aws.use_bundled_cert!
     s3_resource = Aws::S3::Resource.new(region: 'ca-central-1')
 

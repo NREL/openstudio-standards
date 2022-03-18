@@ -21543,7 +21543,7 @@ OS:SpaceType,
   {60033ff6-8b3e-4fb2-9f59-6687c207d7be}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Office - enclosed;                      !- Standards Space Type
+  Dwelling Unit(s);                      !- Standards Space Type
 
 OS:Rendering:Color,
   {60033ff6-8b3e-4fb2-9f59-6687c207d7be}, !- Handle
