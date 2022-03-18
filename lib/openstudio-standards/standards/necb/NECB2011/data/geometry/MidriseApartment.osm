@@ -6534,7 +6534,7 @@ OS:SpaceType,
   {63920e9c-4f6e-4c47-a9a8-3f817c62a709}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Conf./meet./multi-purpose;              !- Standards Space Type
+  Dwelling Unit(s);              !- Standards Space Type
 
 OS:Rendering:Color,
   {63920e9c-4f6e-4c47-a9a8-3f817c62a709}, !- Handle

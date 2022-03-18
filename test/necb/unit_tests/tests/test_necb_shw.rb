@@ -84,7 +84,7 @@ class NECB_SHW_tests < Minitest::Test
           # apply swh to the renamed space types (model_add_swh only looks at the name of the space type not what is
           # actually in it).
 
-          standard.model_add_swh(model: model, swh_fueltype: 'DefaultFuel')
+          standard.model_add_swh(model: model, swh_fueltype: 'DefaultFuel', shw_scale: 'NECB_Default')
 
           # Apply measure info if gas
           apply_shw_ecm = false
