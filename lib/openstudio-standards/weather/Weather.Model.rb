@@ -87,7 +87,7 @@ class Standard
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param epw_file [String] the name of the epw file; if blank will default to epw file for the ASHRAE climate zone
   # @return [Bool] returns true if successful, false if not
-  def model_add_design_days_and_weather_file(model, climate_zone, epw_file = '')
+  def model_add_design_days_and_weather_file(model, climate_zone, epw_file = '', weather_dir = nil)
     success = true
     require_relative 'Weather.stat_file'
 
@@ -111,24 +111,25 @@ class Standard
     end
 
     # Define where the weather files lives
-    weather_dir = nil
-    if __dir__[0] == ':' # Running from OpenStudio CLI
-      # load weather file from embedded files
-      epw_string = load_resource_relative("../../../data/weather/#{weather_file_name}")
-      ddy_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.ddy')}")
-      stat_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.stat')}")
+    if weather_dir.nil?
+      if __dir__[0] == ':' # Running from OpenStudio CLI
+        # load weather file from embedded files
+        epw_string = load_resource_relative("../../../data/weather/#{weather_file_name}")
+        ddy_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.ddy')}")
+        stat_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.stat')}")
 
-      # extract to local weather dir
-      weather_dir = File.expand_path(File.join(Dir.pwd, 'extracted_files/weather/'))
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Extracting weather files from OpenStudio CLI to #{weather_dir}")
-      FileUtils.mkdir_p(weather_dir)
-      File.open("#{weather_dir}/#{weather_file_name}", 'wb') { |f| f << epw_string; f.flush }
-      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.ddy')}", 'wb') { |f| f << ddy_string; f.flush }
-      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.stat')}", 'wb') { |f| f << stat_string; f.flush }
-    else
-      # loaded gem from system path
-      top_dir = File.expand_path('../../..', File.dirname(__FILE__))
-      weather_dir = File.expand_path("#{top_dir}/data/weather")
+        # extract to local weather dir
+        weather_dir = File.expand_path(File.join(Dir.pwd, 'extracted_files/weather/'))
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Extracting weather files from OpenStudio CLI to #{weather_dir}")
+        FileUtils.mkdir_p(weather_dir)
+        File.open("#{weather_dir}/#{weather_file_name}", 'wb') { |f| f << epw_string; f.flush }
+        File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.ddy')}", 'wb') { |f| f << ddy_string; f.flush }
+        File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.stat')}", 'wb') { |f| f << stat_string; f.flush }
+      else
+        # loaded gem from system path
+        top_dir = File.expand_path('../../..', File.dirname(__FILE__))
+        weather_dir = File.expand_path("#{top_dir}/data/weather")
+      end
     end
 
     # Add Weather File
@@ -136,11 +137,7 @@ class Standard
       weather_dir = File.expand_path(File.join(File.dirname(__FILE__), weather_dir))
     end
 
-    if epw_file.class.name.to_s == "OpenStudio::Path"
-      weather_file = epw_file.to_s
-    else
-      weather_file = File.join(weather_dir, weather_file_name)
-    end
+    weather_file = File.join(weather_dir, weather_file_name)
     epw_file = OpenStudio::EpwFile.new(weather_file)
     OpenStudio::Model::WeatherFile.setWeatherFile(model, epw_file).get
 
