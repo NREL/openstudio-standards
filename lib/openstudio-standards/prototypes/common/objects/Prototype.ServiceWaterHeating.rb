@@ -381,12 +381,13 @@ class Standard
       hpwh.setCondenserBottomLocation(h_condbot)
       hpwh.setCondenserTopLocation(h_condtop)
       hpwh.setTankElementControlLogic('MutuallyExclusive')
+      hpwh.autocalculateEvaporatorAirFlowRate
     elsif type == 'PumpedCondenser'
       hpwh.setDeadBandTemperatureDifference(3.89)
+      hpwh.autosizeEvaporatorAirFlowRate
     end
 
     # set heat pump water heater properties
-    hpwh.setEvaporatorAirFlowRate(OpenStudio.convert(181.0, 'ft^3/min', 'm^3/s').get)
     hpwh.setFanPlacement('DrawThrough')
     hpwh.setOnCycleParasiticElectricLoad(0.0)
     hpwh.setOffCycleParasiticElectricLoad(0.0)
@@ -445,9 +446,10 @@ class Standard
     if type == 'WrappedCondenser'
       coil = hpwh.dXCoil.to_CoilWaterHeatingAirToWaterHeatPumpWrapped.get
       coil.setRatedCondenserWaterTemperature(48.89)
+      coil.autocalculateRatedEvaporatorAirFlowRate
     elsif type == 'PumpedCondenser'
-      coil = OpenStudio::Model::CoilWaterHeatingAirToWaterHeatPump.new(model)
-      hpwh.setDXCoil(coil)
+      coil = hpwh.dXCoil.to_CoilWaterHeatingAirToWaterHeatPump.get
+      coil.autosizeRatedEvaporatorAirFlowRate
     end
 
     # set coil properties
@@ -457,7 +459,6 @@ class Standard
     coil.setRatedSensibleHeatRatio(shr)
     coil.setRatedEvaporatorInletAirDryBulbTemperature(OpenStudio.convert(67.5, 'F', 'C').get)
     coil.setRatedEvaporatorInletAirWetBulbTemperature(OpenStudio.convert(56.426, 'F', 'C').get)
-    coil.setRatedEvaporatorAirFlowRate(OpenStudio.convert(181.0, 'ft^3/min', 'm^3/s').get)
     coil.setEvaporatorFanPowerIncludedinRatedCOP(true)
     coil.setEvaporatorAirTemperatureTypeforCurveObjects('WetBulbTemperature')
     coil.setHeatingCapacityFunctionofTemperatureCurve(hpwh_cap)
@@ -507,8 +508,7 @@ class Standard
       tank.setSourceSideInletHeight(0)
       tank.setSourceSideOutletHeight(0)
     elsif type == 'PumpedCondenser'
-      tank = OpenStudio::Model::WaterHeaterMixed.new(model)
-      hpwh.setTank(tank)
+      tank = hpwh.tank.to_WaterHeaterMixed.get
       tank.setDeadbandTemperatureDifference(3.89)
       tank.setHeaterControlType('Cycle')
       tank.setHeaterMaximumCapacity(electric_backup_capacity)

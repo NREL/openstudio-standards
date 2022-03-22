@@ -22,6 +22,8 @@ class Standard
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
+    return false unless capacity_btu_per_hr > 0
+
     # Get the boiler properties, if it exists for this template
     return false unless standards_data.include?('furnaces')
 

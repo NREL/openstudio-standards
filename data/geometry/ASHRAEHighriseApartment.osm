@@ -13508,33 +13508,6 @@ OS:Surface,
   0, 7.6196, 3.0478,                      !- X,Y,Z Vertex 3 {m}
   0, 0, 3.0478;                           !- X,Y,Z Vertex 4 {m}
 
-OS:EvaporativeFluidCooler:SingleSpeed,
-  {822282e8-6bd6-41b7-9797-e064cbc36279}, !- Handle
-  Central Tower,                          !- Name
-  ,                                       !- Water Inlet Node Name
-  ,                                       !- Water Outlet Node Name
-  autosize,                               !- Design Air Flow Rate {m3/s}
-  autosize,                               !- Fan Power at Design Air Flow Rate {W}
-  0.002208,                               !- Design Spray Water Flow Rate {m3/s}
-  UFactorTimesAreaAndDesignWaterFlowRate, !- Performance Input Method
-  ,                                       !- Outdoor Air Inlet Node Name
-  ,                                       !- Standard Design Capacity {W}
-  autosize,                               !- U-factor Times Area Value at Design Air Flow Rate {W/K}
-  autosize,                               !- Design Water Flow Rate {m3/s}
-  ,                                       !- User Specified Design Capacity {W}
-  ,                                       !- Design Entering Water Temperature {C}
-  ,                                       !- Design Entering Air Temperature {C}
-  ,                                       !- Design Entering Air Wet-bulb Temperature {C}
-  FanCycling,                             !- Capacity Control
-  1,                                      !- Sizing Factor
-  SaturatedExit,                          !- Evaporation Loss Mode
-  ,                                       !- Evaporation Loss Factor {percent/K}
-  0.008,                                  !- Drift Loss Percent {percent}
-  ConcentrationRatio,                     !- Blowdown Calculation Mode
-  3,                                      !- Blowdown Concentration Ratio
-  ,                                       !- Blowdown Makeup Water Usage Schedule Name
-  ;                                       !- Supply Water Storage Tank Name
-
 OS:SubSurface,
   {169c8dba-3bb7-41bd-b3f8-820f9189483b}, !- Handle
   F4Window11,                             !- Name
