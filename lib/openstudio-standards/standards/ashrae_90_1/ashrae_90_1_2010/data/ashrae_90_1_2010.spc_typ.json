@@ -11270,7 +11270,7 @@
       "ventilation_standard": null,
       "ventilation_primary_space_type": null,
       "ventilation_secondary_space_type": null,
-      "ventilation_per_area": 0.1,
+      "ventilation_per_area": null,
       "ventilation_per_person": null,
       "ventilation_air_changes": null,
       "minimum_total_air_changes": null,
