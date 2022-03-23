@@ -16638,7 +16638,7 @@
       "ventilation_standard": "ASHRAE 62.1-2004",
       "ventilation_primary_space_type": "Food and Beverage Service",
       "ventilation_secondary_space_type": "Cafeteria/fast food dining",
-      "ventilation_per_area": 0.10,
+      "ventilation_per_area": 0.18,
       "ventilation_per_person": 7.5,
       "ventilation_air_changes": null,
       "minimum_total_air_changes": null,
