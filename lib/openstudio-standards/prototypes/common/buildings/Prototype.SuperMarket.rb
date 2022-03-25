@@ -35,7 +35,7 @@ module SuperMarket
       space = model.getSpaceByName(space_name).get
       kitchen_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
       kitchen_definition.setName('kitchen load')
-      kitchen_definition.setDesignLevel(11_674.5)
+      kitchen_definition.setDesignLevel(11674.5)
       kitchen_definition.setFractionLatent(0.25)
       kitchen_definition.setFractionRadiant(0.3)
       kitchen_definition.setFractionLost(0.2)
