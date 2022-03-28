@@ -3984,6 +3984,9 @@ class Standard
 
     # Air loops
     model.getAirLoopHVACs.each(&:remove)
+    if model.version > OpenStudio::VersionString.new('3.1.0')
+      model.getAirLoopHVACDedicatedOutdoorAirSystems.each(&:remove)
+    end
 
     # Zone equipment
     model.getThermalZones.sort.each do |zone|
