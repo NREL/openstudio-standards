@@ -48,6 +48,8 @@ class Standard
 
     if fuel_type.nil? || fuel_type == 'Gas'
       boiler.setFuelType('NaturalGas')
+    elsif fuel_type == 'Propane' || fuel_type == 'PropaneGas'
+      boiler.setFuelType('Propane')
     else
       boiler.setFuelType(fuel_type)
     end

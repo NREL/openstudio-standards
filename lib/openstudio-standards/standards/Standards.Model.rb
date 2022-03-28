@@ -5210,6 +5210,7 @@ class Standard
       electric = true
 
       if htg_fuels.include?('NaturalGas') ||
+         htg_fuels.include?('Propane') ||
          htg_fuels.include?('PropaneGas') ||
          htg_fuels.include?('FuelOilNo1') ||
          htg_fuels.include?('FuelOilNo2') ||
