@@ -143,8 +143,19 @@ class Standard
 
     # Check if the construction type was already created.
     # If yes, use that construction.  If no, make a new one.
+
+    # for multi-building type - search for the surface wwr type
+    surface_std_wwr_type = wwr_building_type
     new_construction = nil
     type = [template, climate_zone, surf_type, stds_type, occ_type]
+    # Only apply the surface_std_wwr_type update when wwr_building_type has Truthy values
+    if !wwr_building_type.nil? && (surf_type == 'ExteriorWindow' || surf_type == 'GlassDoor')
+      space = planar_surface.space.get
+      if space.hasAdditionalProperties && space.additionalProperties.hasFeature('building_type_for_wwr')
+        surface_std_wwr_type = space.additionalProperties.getFeatureAsString('building_type_for_wwr').get
+      end
+      type.push(surface_std_wwr_type)
+    end
 
     if previous_construction_map[type]
       new_construction = previous_construction_map[type]
@@ -154,7 +165,7 @@ class Standard
                                                          surf_type,
                                                          stds_type,
                                                          occ_type,
-                                                         wwr_building_type,
+                                                         surface_std_wwr_type,
                                                          wwr_info)
       if !new_construction == false
         previous_construction_map[type] = new_construction
