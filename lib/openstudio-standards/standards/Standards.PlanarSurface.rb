@@ -92,6 +92,21 @@ class Standard
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards fenestration type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
         return previous_construction_map
       end
+    # Exterior Doors
+    elsif surf_type == 'ExteriorDoor'
+      stds_type = standards_info.standardsConstructionType
+      if stds_type.is_initialized
+        stds_type = stds_type.get
+        case stds_type
+        when 'Rollup', 'NonSwinging'
+          stds_type = 'NonSwinging'
+        else
+          stds_type = 'Swinging'
+        end
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards construction type for exterior door #{planar_surface.name}.  This door will not have the standard applied.")
+        return previous_construction_map
+      end
     # All other surface types
     else
       stds_type = standards_info.standardsConstructionType
