@@ -15,6 +15,75 @@ class ASHRAE901PRM < Standard
     return 0.05
   end
 
+  # Determine if an economizer is required per the PRM.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if required, false if not
+  def air_loop_hvac_prm_baseline_economizer_required?(air_loop_hvac, climate_zone)
+    economizer_required = false
+    baseline_system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
+    # System type 3 through 8 and 11, 12 and 13
+    if ['PSZ_AC', 'SZ_AC', 'PSZ_AC', 'PVAV_Reheat', 'VAV_Reheat', 'SZ_VAV', 'PSZ_HP', 'SZ_CV', 'PSZ_HP', 'PVAV_PFP_Boxes', 'VAV_PFP_Boxes'].include? baseline_system_type
+      case climate_zone
+      when 'ASHRAE 169-2006-2B',
+        'ASHRAE 169-2006-3B',
+        'ASHRAE 169-2006-3C',
+        'ASHRAE 169-2006-4C',
+        'ASHRAE 169-2006-5B',
+        'ASHRAE 169-2006-5C',
+        'ASHRAE 169-2006-6B',
+        'ASHRAE 169-2006-7A',
+        'ASHRAE 169-2006-7B',
+        'ASHRAE 169-2006-8A',
+        'ASHRAE 169-2006-8B',
+        'ASHRAE 169-2006-2B',
+        'ASHRAE 169-2013-3B',
+        'ASHRAE 169-2013-3C',
+        'ASHRAE 169-2013-4C',
+        'ASHRAE 169-2013-5B',
+        'ASHRAE 169-2013-5C',
+        'ASHRAE 169-2013-6B',
+        'ASHRAE 169-2013-7A',
+        'ASHRAE 169-2013-7B',
+        'ASHRAE 169-2013-8A',
+        'ASHRAE 169-2013-8B'
+        economizer_required = true
+      end
+    end
+
+    # System type 3 and 4 in computer rooms are subject to exceptions
+    if baseline_system_type == 'PSZ_AC' || baseline_system_type == 'PSZ_HP'
+      if air_loop_hvac.additionalProperties.hasFeature('zone_group_type')
+        if air_loop_hvac.additionalProperties.getFeatureAsString('zone_group_type').get == 'computer_zones'
+          economizer_required = false
+        end
+      end
+    end
+
+    # Check user_data to remove the economizer requirements for xxx
+    # TODO not correct - need to form the airloop - thermalzone relationship from the beginning.
+    user_airloops_hvac = @standards_data.key?('userdata_airloop_hvac') ? @standards_data['userdata_airloop_hvac'] : nil
+    unless user_airloops_hvac.nil?
+      user_airloops_hvac.each do |user_airloop|
+        if air_loop_hvac.name.get == user_airloop['name']
+          # economizer_exception_for_gas_phase_air_cleaning economizer_exception_for_open_refrigerated_cases
+          if user_airloop.key?('economizer_exception_for_gas_phase_air_cleaning')
+            if user_airloop['economizer_exception_for_gas_phase_air_cleaning'].downcase == 'yes'
+              economizer_required = false
+            end
+          end
+          if user_airloop.key?('economizer_exception_for_open_refrigerated_cases')
+            if user_airloop['economizer_exception_for_open_refrigerated_cases'].downcase == 'yes'
+              economizer_required = false
+            end
+          end
+        end
+      end
+    end
+    return economizer_required
+  end
+
   # Calculate and apply the performance rating method
   # baseline fan power to this air loop based on the
   # system type that it represents.
