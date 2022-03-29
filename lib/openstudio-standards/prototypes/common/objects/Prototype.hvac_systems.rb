@@ -130,15 +130,15 @@ class Standard
       # Boiler
       when 'Electricity', 'Gas', 'NaturalGas', 'Propane', 'PropaneGas', 'FuelOilNo1', 'FuelOilNo2'
         if boiler_lvg_temp_dsgn.nil?
-          lvg_temp_dsgn = dsgn_sup_wtr_temp
+          lvg_temp_dsgn_f = dsgn_sup_wtr_temp
         else
-          lvg_temp_dsgn = boiler_lvg_temp_dsgn
+          lvg_temp_dsgn_f = boiler_lvg_temp_dsgn
         end
 
         if boiler_out_temp_lmt.nil?
-          out_temp_lmt = OpenStudio.convert(203.0, 'F', 'C').get
+          out_temp_lmt_f = 203.0
         else
-          out_temp_lmt = boiler_out_temp_lmt
+          out_temp_lmt_f = boiler_out_temp_lmt
         end
 
         boiler = create_boiler_hot_water(model,
@@ -147,8 +147,8 @@ class Standard
                                          draft_type: boiler_draft_type,
                                          nominal_thermal_efficiency: 0.78,
                                          eff_curve_temp_eval_var: boiler_eff_curve_temp_eval_var,
-                                         lvg_temp_dsgn: lvg_temp_dsgn,
-                                         out_temp_lmt: out_temp_lmt,
+                                         lvg_temp_dsgn_f: lvg_temp_dsgn_f,
+                                         out_temp_lmt_f: out_temp_lmt_f,
                                          max_plr: boiler_max_plr,
                                          sizing_factor: boiler_sizing_factor)
 
@@ -809,7 +809,7 @@ class Standard
                                                   name: "#{heat_pump_water_loop.name} Supplemental Boiler",
                                                   fuel_type: heating_fuel,
                                                   flow_mode: 'ConstantFlow',
-                                                  lvg_temp_dsgn: 86.0,
+                                                  lvg_temp_dsgn_f: 86.0, # 30.0 degrees Celsius
                                                   min_plr: 0.0,
                                                   max_plr: 1.2,
                                                   opt_plr: 1.0)
