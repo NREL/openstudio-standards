@@ -100,7 +100,7 @@ class DEER
       if stds_type.is_initialized
         stds_type = stds_type.get
         case stds_type
-        when 'Rollup', 'NonSwinging'
+        when 'RollUp', 'Rollup', 'NonSwinging', 'Nonswinging'
           stds_type = 'NonSwinging'
         else
           stds_type = 'Swinging'
