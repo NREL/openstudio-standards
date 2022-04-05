@@ -1666,8 +1666,39 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
-  # Set ZoneMultiplier to passed value for all zones
+  # Check if the VAV box minimum flow setpoint are
+  # assigned following the rules in Appendix G
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_vav_min_sp(prototypes_base)
+    standard = Standard.build('90.1-PRM-2019')
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
 
+      model.getAirLoopHVACs.each do |air_loop|
+        air_loop.thermalZones.each do |zone|
+          zone.equipment.each do |equip|
+            if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
+              zone_oa = standard.thermal_zone_outdoor_airflow_rate(zone)
+              vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
+              expected_mdp = [zone_oa / vav_terminal.autosizedMaximumAirFlowRate.get, 0.3].max.round(2)
+              actual_mdp = vav_terminal.constantMinimumAirFlowFraction.get.round(2)
+              assert(expected_mdp == actual_mdp , "Minimum MDP for #{building_type} for #{template} in #{climate_zone} should be #{expected_mdp} but #{actual_mdp} is used in the model.")
+            elsif equip.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized
+              zone_oa = standard.thermal_zone_outdoor_airflow_rate(zone)
+              fp_vav_terminal = equip.to_AirTerminalSingleDuctParallelPIUReheat.get
+              expected_prim_frac = [zone_oa / fp_vav_terminal.autosizedMaximumPrimaryAirFlowRate.get, 0.3].max.round(2)
+              actual_prim_frac = fp_vav_terminal.minimumPrimaryAirFlowFraction.get
+              assert(expected_prim_frac == actual_prim_frac , "Minimum primary air flow fraction for #{building_type} for #{template} in #{climate_zone} should be #{expected_prim_frac} but #{actual_prim_frac} is used in the model.")
+            end
+          end
+        end
+      end
+    end  
+  end
+
+  # Set ZoneMultiplier to passed value for all zones
+  #
   # @param model, arguments[]
   def set_zone_multiplier(model, arguments)
     mult = arguments[0]
@@ -2051,7 +2082,8 @@ class AppendixGPRMTests < Minitest::Test
       'number_of_chillers',
       'number_of_cooling_towers',
       'hvac_sizing',
-      'preheat_coil_ctrl'
+      'preheat_coil_ctrl',
+      'vav_min_sp',
     ]
 
     # Get list of unique prototypes
@@ -2081,5 +2113,6 @@ class AppendixGPRMTests < Minitest::Test
     check_number_of_cooling_towers(prototypes_base['number_of_cooling_towers']) if tests.include? 'number_of_cooling_towers'
     check_hvac_sizing(prototypes_base['hvac_sizing']) if tests.include? 'hvac_sizing'
     check_psz_split_from_mz(prototypes_base['hvac_psz_split_from_mz']) if tests.include? 'hvac_psz_split_from_mz'
+    check_vav_min_sp(prototypes_base['vav_min_sp']) if tests.include? 'vav_min_sp'
   end
 end
