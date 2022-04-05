@@ -68,6 +68,11 @@ class Standard
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, debug = false)
+    # user data process
+    bldg_type_hvac_zone_hash = {}
+    handle_multi_building_area_types(user_model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
+    # NOTE - bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
+    
     # Define different orientation from original orientation
     # for each individual baseline models
     degs_from_org = run_all_orients ? [0, 90, 180, 270] : [0]
@@ -5048,6 +5053,7 @@ class Standard
   def model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type = nil)
     # Define a Hash that will contain wall and window area for all
     # building area types included in the model
+    # bat = building area type
     bat_win_wall_info = {}
 
     # Store the baseline wwr, only used for 90.1-PRM-2019,
@@ -5067,12 +5073,17 @@ class Standard
       # method can however handle models with multiple building
       # area type, if they are specified through each space's
       # space type standards building type.
-      if !wwr_building_type.nil?
-        std_spc_type = wwr_building_type
-      elsif space.spaceType.is_initialized
-        std_spc_type = space.spaceType.get.standardsBuildingType.to_s
+      if space.hasAdditionalProperties && space.additionalProperties.hasFeature('building_type_for_wwr')
+        std_spc_type = space.additionalProperties.getFeatureAsString('building_type_for_wwr').get
       else
         std_spc_type = 'no_space_type'
+        if !wwr_building_type.nil?
+          std_spc_type = wwr_building_type
+        elsif space.spaceType.is_initialized
+          std_spc_type = space.spaceType.get.standardsBuildingType.to_s
+        end
+        # insert space wwr type as additional properties for later search
+        space.additionalProperties.setFeature('building_type_for_wwr', std_spc_type)
       end
 
       # Initialize intermediate variables if space type hasn't
@@ -5167,6 +5178,7 @@ class Standard
 
     # Retrieve WWR info for all Building Area Types included in the model
     # and perform adjustements if
+    # bat = building area type
     bat_win_wall_info.each do |bat, vals|
       # Calculate the WWR of each category
       vals.store('wwr_nr', ((vals['nr_wind_m2'] / vals['nr_wall_m2']) * 100.0).round(1))
@@ -5231,13 +5243,9 @@ class Standard
       # Reduce the window area if any of the categories necessary
       model.getSpaces.sort.each do |space|
         # Catch spaces without space types
-        if !wwr_building_type.nil?
-          std_spc_type = wwr_building_type
-        elsif space.spaceType.is_initialized
-          std_spc_type = space.spaceType.get.standardsBuildingType.to_s
-        else
-          std_spc_type = 'no_space_type'
-        end
+        std_spc_type = space.additionalProperties.getFeatureAsString('building_type_for_wwr').get
+        # skip process the space unless the space wwr type matched.
+        next unless bat == std_spc_type
 
         # Determine the space category
         # from the previously stored values
@@ -7328,6 +7336,31 @@ class Standard
     return lowest_story
   end
 
+  # Utility function that returns the min and max value in a design day schedule.
+  #
+  # @param schedule [OpenStudio::Model::Schedule] can be ScheduleCompact, ScheduleRuleset, ScheduleConstant
+  # @param type [String] 'heating' for winter design day, 'cooling' for summer design day
+  # @return [Hash] Hash has two keys, min and max. if failed, return 999.9 for min and max.
+  def search_min_max_value_from_design_day_schedule(schedule, type = 'winter')
+    if schedule.is_initialized
+      schedule = schedule.get
+      if schedule.to_ScheduleRuleset.is_initialized
+        schedule = schedule.to_ScheduleRuleset.get
+        setpoint_min_max = schedule_ruleset_design_day_min_max_value(schedule, type)
+      elsif schedule.to_ScheduleConstant.is_initialized
+        schedule = schedule.to_ScheduleConstant.get
+        # for constant schedule, there is only one value, so the annual should be equal to design condition.
+        setpoint_min_max = schedule_constant_annual_min_max_value(schedule)
+      elsif schedule.to_ScheduleCompact.is_initialized
+        schedule = schedule.to_ScheduleCompact.get
+        setpoint_min_max = schedule_compact_design_day_min_max_value(schedule, type)
+      end
+      return setpoint_min_max
+    end
+    OpenStudio.logFree(OpenStudio::Error, 'openstudio::standards::Schedule', 'Schedule is not exist, or wrong type of schedule (not Ruleset, Compact or Constant), or cannot found the design day schedules. Return 999.9 for min and max')
+    return { 'min' => 999.9, 'max' => 999.9 }
+  end
+
   # Identifies non mechanically cooled ("nmc") systems, if applicable
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
@@ -7362,6 +7395,22 @@ class Standard
     return 'warmest_zone'
   end
 
+  # A template method that handles multiple building area type inputs for PRM baseline creation
+  # The inputs shall come from userdata csv files / json file.
+  # Plan 1. Add the values to space / zone additional properties.
+  # Plan 2. return hash table and pass the value into PRM function
+  # FOR NOW, just return an abitrary integer
+  # @param [Openstudio:model:Model] model
+  # @param [String] climate_zone
+  # @param [String] default_hvac_building_type
+  # @param [String] default_wwr_building_type
+  # @param [String] default_swh_building_type
+  # @param [Hash] bldg_type_hvac_zone_hash A hash maps building type for hvac to a list of thermal zones
+  # @return True
+  def handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
+    return true
+  end
+
   # Template method for adding a setpoint manager for a coil control logic to a heating coil.
   # ASHRAE 90.1-2019 Appendix G.
   #
@@ -7373,28 +7422,5 @@ class Standard
     return true
   end
 
-  # Utility function that returns the min and max value in a design day schedule.
-  #
-  # @param schedule [OpenStudio::Model::Schedule] can be ScheduleCompact, ScheduleRuleset, ScheduleConstant
-  # @param type [String] 'heating' for winter design day, 'cooling' for summer design day
-  # @return [Hash] Hash has two keys, min and max. if failed, return 999.9 for min and max.
-  def search_min_max_value_from_design_day_schedule(schedule, type = 'winter')
-    if schedule.is_initialized
-      schedule = schedule.get
-      if schedule.to_ScheduleRuleset.is_initialized
-        schedule = schedule.to_ScheduleRuleset.get
-        setpoint_min_max = schedule_ruleset_design_day_min_max_value(schedule, type)
-      elsif schedule.to_ScheduleConstant.is_initialized
-        schedule = schedule.to_ScheduleConstant.get
-        # for constant schedule, there is only one value, so the annual should be equal to design condition.
-        setpoint_min_max = schedule_constant_annual_min_max_value(schedule)
-      elsif schedule.to_ScheduleCompact.is_initialized
-        schedule = schedule.to_ScheduleCompact.get
-        setpoint_min_max = schedule_compact_design_day_min_max_value(schedule, type)
-      end
-      return setpoint_min_max
-    end
-    OpenStudio.logFree(OpenStudio::Error, 'openstudio::standards::Schedule', 'Schedule is not exist, or wrong type of schedule (not Ruleset, Compact or Constant), or cannot found the design day schedules. Return 999.9 for min and max')
-    return { 'min' => 999.9, 'max' => 999.9 }
-  end
+
 end
