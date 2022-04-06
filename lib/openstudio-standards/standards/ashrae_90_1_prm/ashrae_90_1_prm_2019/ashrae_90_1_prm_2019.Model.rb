@@ -350,7 +350,15 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
               unless air_loop_thermal_zone_hash.key?('economizer_exception_for_gas_phase_air_cleaning')
                 air_loop_thermal_zone_hash['economizer_exception_for_gas_phase_air_cleaning'] = []
               end
-              air_loop_thermal_zone_hash['economizer_exception_for_gas_phase_air_cleaning'] << air_loop.thermalZones.get
+              air_loop_thermal_zone_hash['economizer_exception_for_gas_phase_air_cleaning'] | air_loop.thermalZones.get
+            end
+
+            if user_airloop.key?('economizer_exception_for_open_refrigerated_cases') &&
+               user_airloop['economizer_exception_for_open_refrigerated_cases'].downcase == 'yes'
+              unless air_loop_thermal_zone_hash.key?('economizer_exception_for_open_refrigerated_cases')
+                air_loop_thermal_zone_hash['economizer_exception_for_open_refrigerated_cases'] = []
+              end
+              air_loop_thermal_zone_hash['economizer_exception_for_open_refrigerated_cases'] | air_loop.thermalZones.get
             end
           end
         end
