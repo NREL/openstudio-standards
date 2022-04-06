@@ -899,10 +899,6 @@ class AppendixGPRMTests < Minitest::Test
       elsif @bldg_type_alt_now == 'Assembly' && building_type == 'LargeHotel'
         # This is a public assembly > 120 ksf, should be SZ-CV
         check_if_sz_cv(model, climate_zone, 'Assembly < 120,000 sq ft.')
-      elsif building_type == 'Warehouse' && mod_str.nil?
-        # System type should be heating and ventilating
-        # check_if_ht_vent(model, "Warehouse")
-        check_heat_type(model, climate_zone, '??????SZ???????', 'Electric')
       elsif building_type == 'RetailStripmall' && mod_str.nil?
         # System type should be PSZ
         check_if_psz(model, 'RetailStripmall, one story, any area')
@@ -916,11 +912,11 @@ class AppendixGPRMTests < Minitest::Test
         # System type should be PSZ
         check_if_psz(model, 'non-res, one story, < 25 ksf')
         check_heat_type(model, climate_zone, 'SZ', 'HeatPump')
-      elsif building_type == 'PrimarySchool' && mod_str.nil?
+      elsif building_type == 'PrimarySchool' && mod_str == 'remove_transformer'
         # System type should be PVAV, some zones may be on PSZ systems
         check_if_pvav(model, 'nonres > 25,000 sq ft, < 150 ksf , 1 story')
         check_heat_type(model, climate_zone, 'MZ', 'Electric')
-      elsif building_type == 'SecondarySchool' && mod_str.nil?
+      elsif building_type == 'SecondarySchool' && mod_str == 'remove_transformer'
         # System type should be VAV/chiller
         check_if_vav_chiller(model, 'nonres > 150 ksf , 1 to 3 stories')
         check_heat_type(model, climate_zone, 'MZ', 'Electric')
@@ -936,7 +932,7 @@ class AppendixGPRMTests < Minitest::Test
         # nonresidential, 4 to 5 stories, <= 150 ksf --> PVAV
         # System type should be PVAV with 10 zones, area is 27,515 sf
         check_if_pvav(model, 'other nonres > 4 to 5 stories, <= 150 ksf')
-      elsif building_type == 'PrimarySchool' && mod_str == 'set_zone_multiplier_4'
+      elsif building_type == 'PrimarySchool' && mod_str.include?('set_zone_multiplier_4')
         # nonresidential, 4 to 5 stories, > 150 ksf --> VAV/chiller
         # System type should be PVAV with 10 zones, area is 22,012 sf
         check_if_vav_chiller(model, 'other nonres > 4 to 5 stories, > 150 ksf')
