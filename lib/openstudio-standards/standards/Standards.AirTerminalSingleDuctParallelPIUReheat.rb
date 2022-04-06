@@ -75,7 +75,7 @@ class Standard
   def air_terminal_single_duct_parallel_piu_reheat_apply_minimum_primary_airflow_fraction(air_terminal_single_duct_parallel_piu_reheat, zone_min_oa = nil)
     # Minimum primary air flow
     min_primary_airflow_frac = air_terminal_single_duct_parallel_reheat_piu_minimum_primary_airflow_fraction(air_terminal_single_duct_parallel_piu_reheat)
-    air_terminal_single_duct_parallel_piu_reheat.setMinimumPrimaryAirFlowFraction(min_damper_position)
+    air_terminal_single_duct_parallel_piu_reheat.setMinimumPrimaryAirFlowFraction(min_primary_airflow_frac)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirTerminalSingleDuctParallelPIUReheat', "For #{air_terminal_single_duct_parallel_piu_reheat.name}: set minimum primary air flow fraction to #{min_primary_airflow_frac}.")
 
     # Minimum OA flow rate
