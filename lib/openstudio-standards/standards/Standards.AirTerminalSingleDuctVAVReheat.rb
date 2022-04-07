@@ -20,10 +20,11 @@ class Standard
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirTerminalSingleDuctVAVReheat', "For #{air_terminal_single_duct_vav_reheat.name}: set minimum damper position to #{min_damper_position}.")
 
     # Minimum OA flow rate
-    # If specified, set the MDP as the larger of the two
+    # If specified, will also add this limit
+    # and the larger of the two will be used
+    # for sizing.
     unless zone_min_oa.nil?
-      min_oa_damp_position = [zone_min_oa / air_terminal_single_duct_vav_reheat.autosizedMaximumAirFlowRate.get, min_damper_position].max
-      air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_oa_damp_position)
+      air_terminal_single_duct_vav_reheat.setFixedMinimumAirFlowRate(zone_min_oa)
     end
 
     return true
