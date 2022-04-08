@@ -32,7 +32,9 @@ class Standard
   end
 
   def interior_lighting_get_prm_data(space_type)
-    standards_space_type = if space_type.standardsSpaceType.is_initialized
+    standards_space_type = if space_type.is_a? String
+                             space_type
+                           elsif space_type.standardsSpaceType.is_initialized
                              space_type.standardsSpaceType.get
                            end
 
@@ -216,8 +218,7 @@ class Standard
     lights_frac_high_bay = space_type_properties['lpd_fraction_high_bay']
     lights_frac_specialty_lighting = space_type_properties['lpd_fraction_specialty_lighting']
     lights_frac_exit_lighting = space_type_properties['lpd_fraction_exit_lighting']
-    lights_have_info = true unless lighting_per_area.zero?
-    lights_have_info = true unless lighting_per_person.zero?
+    lights_have_info = true unless lighting_per_area.zero? && lighting_per_person.zero?
 
     if set_lights && lights_have_info
 
@@ -593,8 +594,28 @@ class Standard
       space_type.lights.sort.each do |lgts|
         # modify day schedule
         sptypname = space_type.name.get.to_s
-        lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
-          day_rule = week_rule.daySchedule
+        if lgts.schedule.is_initialized
+          lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
+            day_rule = week_rule.daySchedule
+            day_rule_name = day_rule.name.to_s
+            if !dayschedule_name_check.include?(day_rule_name)
+              dayschedule_name_check << day_rule_name
+              times = day_rule.times()
+              # remove the effect of occupancy sensors
+              times.each do |time|
+                old_value = day_rule.getValue(time)
+                day_rule.removeValue(time)
+                new_value = old_value / (1.0 - space_type_properties['occup_sensor_savings'].to_f)
+                if new_value > 1
+                  day_rule.addValue(time, 1.0)
+                else
+                  day_rule.addValue(time, new_value)
+                end
+              end
+            end
+          end
+          # modify default schedule
+          day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
           day_rule_name = day_rule.name.to_s
           if !dayschedule_name_check.include?(day_rule_name)
             dayschedule_name_check << day_rule_name
@@ -609,24 +630,6 @@ class Standard
               else
                 day_rule.addValue(time, new_value)
               end
-            end
-          end
-        end
-        # modify default schedule
-        day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
-        day_rule_name = day_rule.name.to_s
-        if !dayschedule_name_check.include?(day_rule_name)
-          dayschedule_name_check << day_rule_name
-          times = day_rule.times()
-          # remove the effect of occupancy sensors
-          times.each do |time|
-            old_value = day_rule.getValue(time)
-            day_rule.removeValue(time)
-            new_value = old_value / (1.0 - space_type_properties['occup_sensor_savings'].to_f)
-            if new_value > 1
-              day_rule.addValue(time, 1.0)
-            else
-              day_rule.addValue(time, new_value)
             end
           end
         end
