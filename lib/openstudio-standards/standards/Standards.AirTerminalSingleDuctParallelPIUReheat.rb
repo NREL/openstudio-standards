@@ -14,6 +14,11 @@ class Standard
     min_flow_frac = 0.3
     fan_efficacy_w_per_cfm = 0.35
 
+    # Set the fan on flow fraction
+    unless air_terminal_single_duct_parallel_piu_reheat_fan_on_flow_fraction.nil?
+      air_terminal_single_duct_parallel_piu_reheat.setFanOnFlowFraction(air_terminal_single_duct_parallel_piu_reheat_fan_on_flow_fraction)
+    end
+
     # Convert efficacy to metric
     # 1 cfm = 0.0004719 m^3/s
     fan_efficacy_w_per_m3_per_s = fan_efficacy_w_per_cfm / 0.0004719
@@ -57,5 +62,12 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirTerminalSingleDuctParallelPIUReheat', "For #{air_terminal_single_duct_parallel_piu_reheat.name}: fan efficacy set to #{fan_efficacy_new_w_per_cfm.round(2)} W/cfm.")
 
     return true
+  end
+
+  # Return the fan on flow fraction for a parallel PIU terminal
+  #
+  # @return [Float] returns nil or a float representing the fraction
+  def air_terminal_single_duct_parallel_piu_reheat_fan_on_flow_fraction
+    return nil
   end
 end
