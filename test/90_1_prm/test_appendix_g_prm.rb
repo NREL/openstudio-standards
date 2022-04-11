@@ -953,10 +953,12 @@ class AppendixGPRMTests < Minitest::Test
         check_if_vav_chiller(model, ' other nonres > 6 stories')
         check_terminal_type(model, energy_type, mod_str)
       elsif @bldg_type_alt_now == 'Hospital' && building_type == 'SmallOffice'
+        energy_type = 'Electric' # Table G3.1.1-3 Note 4
         # Hospital < 25 ksf is PVAV; different rule than non-res
         check_if_pvav(model, 'hospital, floor area < 25 ksf.')
         check_terminal_type(model, energy_type, mod_str)
       elsif building_type == 'Hospital' && mod_str.nil?
+        energy_type = 'Electric' # Table G3.1.1-3 Note 4
         # System type should be VAV/chiller, area is 241 ksf
         check_if_vav_chiller(model, 'hospital > 4 to 5 stories, > 150 ksf')
         check_heat_type(model, climate_zone, 'MZ', energy_type)
