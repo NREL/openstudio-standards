@@ -146,18 +146,12 @@ class Standard
         set_gas_equipment = false
         set_ventilation = false
         set_infiltration = false
-        if /prm/i =~ template
-          space_type_apply_int_loads_prm(space_type, model)
-        else
-          space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
-        end
+        # For PRM, it only applies lights for now.
+        space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
       end
-
       # Modify the lighting schedule to handle lighting occupancy sensors
       # Modify the upper limit value of fractional schedule to avoid the fatal error caused by schedule value higher than 1
-      if /prm/i =~ template
-        space_type_light_sch_change(model)
-      end
+      space_type_light_sch_change(model)
 
       # Calculate infiltration as per 90.1 PRM rules
       model_apply_infiltration_standard(model, climate_zone) if /prm/i =~ template

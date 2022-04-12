@@ -586,55 +586,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   def space_type_light_sch_change(model)
-    # set schedule for lighting
-    dayschedule_name_check = []
-    model.getSpaceTypes.sort.each do |space_type|
-      # Get the standards data
-      space_type_properties = interior_lighting_get_prm_data(space_type)
-      space_type.lights.sort.each do |lgts|
-        # modify day schedule
-        sptypname = space_type.name.get.to_s
-        if lgts.schedule.is_initialized
-          lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
-            day_rule = week_rule.daySchedule
-            day_rule_name = day_rule.name.to_s
-            if !dayschedule_name_check.include?(day_rule_name)
-              dayschedule_name_check << day_rule_name
-              times = day_rule.times()
-              # remove the effect of occupancy sensors
-              times.each do |time|
-                old_value = day_rule.getValue(time)
-                day_rule.removeValue(time)
-                new_value = old_value / (1.0 - space_type_properties['occup_sensor_savings'].to_f)
-                if new_value > 1
-                  day_rule.addValue(time, 1.0)
-                else
-                  day_rule.addValue(time, new_value)
-                end
-              end
-            end
-          end
-          # modify default schedule
-          day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
-          day_rule_name = day_rule.name.to_s
-          if !dayschedule_name_check.include?(day_rule_name)
-            dayschedule_name_check << day_rule_name
-            times = day_rule.times()
-            # remove the effect of occupancy sensors
-            times.each do |time|
-              old_value = day_rule.getValue(time)
-              day_rule.removeValue(time)
-              new_value = old_value / (1.0 - space_type_properties['occup_sensor_savings'].to_f)
-              if new_value > 1
-                day_rule.addValue(time, 1.0)
-              else
-                day_rule.addValue(time, new_value)
-              end
-            end
-          end
-        end
-      end
-    end
+    return true
   end
 
   # Sets the schedules for the selected internal loads to typical schedules.
