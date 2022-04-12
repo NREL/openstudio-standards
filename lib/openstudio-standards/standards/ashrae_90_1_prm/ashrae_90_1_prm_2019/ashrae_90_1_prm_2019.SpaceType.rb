@@ -105,8 +105,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         definition = inst.lightsDefinition
         unless lighting_per_area.zero?
           new_definition = definition.clone.to_LightsDefinition.get
-          occ_sens_lpd_factor = 1.0
-          new_definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f * occ_sens_lpd_factor, 'W/ft^2', 'W/m^2').get)
+          new_definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
           inst.setLightsDefinition(new_definition)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set LPD to #{lighting_per_area} W/ft^2.")
         end
