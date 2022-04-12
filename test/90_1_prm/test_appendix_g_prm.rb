@@ -913,7 +913,7 @@ class AppendixGPRMTests < Minitest::Test
       elsif building_type == 'RetailStripmall' && mod_str == 'set_zone_multiplier_3'
         # System type should be PVAV with 10 zones
         check_if_pvav(model, 'retail > 25,000 sq ft, 3 stories')
-        check_terminal_type(model, energy_type, mod_str)
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'SmallOffice' && mod_str.nil?
         # System type should be PSZ
         check_if_psz(model, 'non-res, one story, < 25 ksf')
@@ -922,12 +922,12 @@ class AppendixGPRMTests < Minitest::Test
         # System type should be PVAV, some zones may be on PSZ systems
         check_if_pvav(model, 'nonres > 25,000 sq ft, < 150 ksf , 1 story')
         check_heat_type(model, climate_zone, 'MZ', energy_type)
-        check_terminal_type(model, energy_type, mod_str)
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'SecondarySchool' && mod_str == 'remove_transformer'
         # System type should be VAV/chiller
         check_if_vav_chiller(model, 'nonres > 150 ksf , 1 to 3 stories')
         check_heat_type(model, climate_zone, 'MZ', energy_type)
-        check_terminal_type(model, energy_type, mod_str)
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'MediumOffice' && mod_str == 'remove_transformer_return_relief_fan'
         # Check if baseline has return and relief fan and if fan power
         # distribution is correct
@@ -936,33 +936,33 @@ class AppendixGPRMTests < Minitest::Test
         # nonresidential, 4 to 5 stories, <= 25 ksf --> PVAV
         # System type should be PVAV with 10 zones, area is 22,012 sf
         check_if_pvav(model, 'other nonres > 4 to 5 stories, <= 25 ksf')
-        check_terminal_type(model, energy_type, mod_str)
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier_5'
         # nonresidential, 4 to 5 stories, <= 150 ksf --> PVAV
         # System type should be PVAV with 10 zones, area is 27,515 sf
         check_if_pvav(model, 'other nonres > 4 to 5 stories, <= 150 ksf')
-        check_terminal_type(model, energy_type, mod_str)
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'PrimarySchool' && mod_str.include?('set_zone_multiplier_4')
         # nonresidential, 4 to 5 stories, > 150 ksf --> VAV/chiller
         # System type should be PVAV with 10 zones, area is 22,012 sf
         check_if_vav_chiller(model, 'other nonres > 4 to 5 stories, > 150 ksf')
-        check_terminal_type(model, energy_type, mod_str)
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier_6'
         # 6+ stories, any floor area --> VAV/chiller
         # This test has floor area 33,018 sf
         check_if_vav_chiller(model, ' other nonres > 6 stories')
-        check_terminal_type(model, energy_type, mod_str)
+        check_terminal_type(model, energy_type, run_id)
       elsif @bldg_type_alt_now == 'Hospital' && building_type == 'SmallOffice'
-        energy_type = 'Electric' # Table G3.1.1-3 Note 4
+        energy_type = 'Fuel' # Table G3.1.1-3 Note 4
         # Hospital < 25 ksf is PVAV; different rule than non-res
         check_if_pvav(model, 'hospital, floor area < 25 ksf.')
-        check_terminal_type(model, energy_type, mod_str)
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'Hospital' && mod_str.nil?
-        energy_type = 'Electric' # Table G3.1.1-3 Note 4
+        energy_type = 'Fuel' # Table G3.1.1-3 Note 4
         # System type should be VAV/chiller, area is 241 ksf
         check_if_vav_chiller(model, 'hospital > 4 to 5 stories, > 150 ksf')
         check_heat_type(model, climate_zone, 'MZ', energy_type)
-        check_terminal_type(model, energy_type, mod_str)
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'Warehouse'
         # System type should be system 9, 10 but with no mechanical cooling
         check_if_heat_only(model, climate_zone, building_type)
