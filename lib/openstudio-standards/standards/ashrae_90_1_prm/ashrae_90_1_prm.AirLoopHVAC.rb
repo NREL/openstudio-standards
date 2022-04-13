@@ -61,25 +61,23 @@ class ASHRAE901PRM < Standard
       end
     end
 
-    # Check user_data to remove the economizer requirements for xxx
-    # TODO not correct - need to form the airloop - thermalzone relationship from the beginning.
-    user_airloops_hvac = @standards_data.key?('userdata_airloop_hvac') ? @standards_data['userdata_airloop_hvac'] : nil
-    unless user_airloops_hvac.nil?
-      user_airloops_hvac.each do |user_airloop|
-        if air_loop_hvac.name.get == user_airloop['name']
-          # economizer_exception_for_gas_phase_air_cleaning economizer_exception_for_open_refrigerated_cases
-          if user_airloop.key?('economizer_exception_for_gas_phase_air_cleaning')
-            if user_airloop['economizer_exception_for_gas_phase_air_cleaning'].downcase == 'yes'
-              economizer_required = false
-            end
-          end
-          if user_airloop.key?('economizer_exception_for_open_refrigerated_cases')
-            if user_airloop['economizer_exception_for_open_refrigerated_cases'].downcase == 'yes'
-              economizer_required = false
-            end
-          end
-        end
+    # Check user_data in the zones
+    # As discussed for now, if a zone under the air loop hvac system has economizer exception
+    # The HVAC economizer should not be required.
+    # Another ticket may need to add to create a separate HVAC air loop for
+    # a subset of zones that have gas phase air cleaning exception
+    gas_phase_exception = false
+    open_refrigeration_exception = false
+    air_loop_hvac.thermalZones.get.each do |thermal_zone|
+      if thermal_zone.additionalProperties.hasFeature('economizer_exception_for_gas_phase_air_cleaning')
+        gas_phase_exception = true
       end
+      if thermal_zone.additionalProperties.hasFeature('economizer_exception_for_open_refrigerated_cases')
+        open_refrigeration_exception = true
+      end
+    end
+    if gas_phase_exception || open_refrigeration_exception
+      economizer_required = false
     end
     return economizer_required
   end
