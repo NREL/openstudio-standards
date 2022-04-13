@@ -205,7 +205,7 @@
   },
   {
     "type": "Refrigeration_system",
-    "compressor_type": "SupmearMarket Low Temp",
+    "compressor_type": "SuperMarket Low Temp",
     "cases": [
       {
         "case_type": "SuperMarket Ice Cream Reach-Ins",
@@ -236,7 +236,7 @@
   },
   {
     "type": "Refrigeration_system",
-    "compressor_type": "SupmearMarket Low Temp",
+    "compressor_type": "SuperMarket Low Temp",
     "cases": [
       {
         "case_type": "SuperMarket Frozen Food Reach-Ins",
@@ -261,7 +261,7 @@
   },
   {
     "type": "Refrigeration_system",
-    "compressor_type": "SupmearMarket Med Temp",
+    "compressor_type": "SuperMarket Med Temp",
     "cases": [
       {
         "case_type": "SuperMarket Deli Cases",
@@ -317,7 +317,7 @@
   },
   {
     "type": "Refrigeration_system",
-    "compressor_type": "SupmearMarket Med Temp",
+    "compressor_type": "SuperMarket Med Temp",
     "cases": [
       {
         "case_type": "SuperMarket Beverage Cases",
