@@ -24,7 +24,7 @@ class ASHRAE901PRM < Standard
     economizer_required = false
     baseline_system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
     # System type 3 through 8 and 11, 12 and 13
-    if ['PSZ_AC', 'SZ_AC', 'PSZ_AC', 'PVAV_Reheat', 'VAV_Reheat', 'SZ_VAV', 'PSZ_HP', 'SZ_CV', 'PSZ_HP', 'PVAV_PFP_Boxes', 'VAV_PFP_Boxes'].include? baseline_system_type
+    if ['SZ_AC', 'PSZ_AC', 'PVAV_Reheat', 'VAV_Reheat', 'SZ_VAV', 'PSZ_HP', 'SZ_CV', 'PSZ_HP', 'PVAV_PFP_Boxes', 'VAV_PFP_Boxes'].include? baseline_system_type
       case climate_zone
       when 'ASHRAE 169-2006-2B',
         'ASHRAE 169-2006-3B',
@@ -37,7 +37,7 @@ class ASHRAE901PRM < Standard
         'ASHRAE 169-2006-7B',
         'ASHRAE 169-2006-8A',
         'ASHRAE 169-2006-8B',
-        'ASHRAE 169-2006-2B',
+        'ASHRAE 169-2013-2B',
         'ASHRAE 169-2013-3B',
         'ASHRAE 169-2013-3C',
         'ASHRAE 169-2013-4C',
