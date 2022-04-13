@@ -1701,6 +1701,10 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  def check_economizer_exception(prototypes_base)
+    return true
+  end
+
   # Set ZoneMultiplier to passed value for all zones
 
   # @param model, arguments[]
@@ -2078,6 +2082,7 @@ class AppendixGPRMTests < Minitest::Test
       'hvac_sizing',
       'preheat_coil_ctrl',
       'multi_bldg_handling'
+      'economizer_exception'
     ]
 
     # Get list of unique prototypes
@@ -2108,5 +2113,6 @@ class AppendixGPRMTests < Minitest::Test
     check_hvac_sizing(prototypes_base['hvac_sizing']) if tests.include? 'hvac_sizing'
     check_psz_split_from_mz(prototypes_base['hvac_psz_split_from_mz']) if tests.include? 'hvac_psz_split_from_mz'
     check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
+    check_economizer_exception(prototypes_base['economizer_exception']) if tests.include? 'economizer_exception'
   end
 end

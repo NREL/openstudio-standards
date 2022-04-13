@@ -347,7 +347,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
             # gas phase air cleaning is system base - add proposed hvac system name to zones
             if user_airloop.key?('economizer_exception_for_gas_phase_air_cleaning') &&
                user_airloop['economizer_exception_for_gas_phase_air_cleaning'].downcase == 'yes'
-              air_loop.thermalZones.get.each do |thermal_zone|
+              air_loop.thermalZones.each do |thermal_zone|
                 thermal_zone.additionalProperties.setFeature('economizer_exception_for_gas_phase_air_cleaning', air_loop_name)
               end
             end
@@ -355,7 +355,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
             # Open refrigerated cases is zone based - add yes or no to zones
             if user_airloop.key?('economizer_exception_for_open_refrigerated_cases') &&
                user_airloop['economizer_exception_for_open_refrigerated_cases'].downcase == 'yes'
-              air_loop.thermalZones.get.each do |thermal_zone|
+              air_loop.thermalZones.each do |thermal_zone|
                 thermal_zone.additionalProperties.setFeature('economizer_exception_for_open_refrigerated_cases', 'yes')
               end
             end

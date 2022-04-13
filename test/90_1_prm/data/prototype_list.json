@@ -108,5 +108,8 @@
     "multi_bldg_handling": [
         ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-3A", "userdata_ofs_01",[["set_model_building_name","SmallOffice"]]],
         ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_ofs_03",[["set_model_building_name", "LargeHotel"], ["remove_transformer", []]]]
+    ],
+    "economizer_exception": [
+        ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_econ_except_01",[["remove_transformer", []]]]
     ]
 }

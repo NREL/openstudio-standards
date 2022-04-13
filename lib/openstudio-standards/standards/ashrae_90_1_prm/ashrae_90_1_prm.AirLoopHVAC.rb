@@ -68,7 +68,7 @@ class ASHRAE901PRM < Standard
     # a subset of zones that have gas phase air cleaning exception
     gas_phase_exception = false
     open_refrigeration_exception = false
-    air_loop_hvac.thermalZones.get.each do |thermal_zone|
+    air_loop_hvac.thermalZones.each do |thermal_zone|
       if thermal_zone.additionalProperties.hasFeature('economizer_exception_for_gas_phase_air_cleaning')
         gas_phase_exception = true
       end
