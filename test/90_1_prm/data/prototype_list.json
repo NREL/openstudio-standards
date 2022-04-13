@@ -108,5 +108,17 @@
     "multi_bldg_handling": [
         ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-3A", "userdata_ofs_01",[["set_model_building_name","SmallOffice"]]],
         ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_ofs_03",[["set_model_building_name", "LargeHotel"], ["remove_transformer", []]]]
+    ],
+    "dcv": [
+//        ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "no_user_data",[["remove_transformer", []]]]
+//        ["SecondarySchool", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
+//        ["MidriseApartment", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[]],
+        ["LargeHotel", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]]
+//        ["RetailStripmall", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[]],
+//        ["RetailStandalone", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[]],
+//        ["Warehouse", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[]],
+//        ["MediumOffice", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
+//        ["SmallOffice", "90.1-2019", "ASHRAE 169-2013-4A", "no_user_data",[]],
+//        ["LargeOffice", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]]
     ]
 }

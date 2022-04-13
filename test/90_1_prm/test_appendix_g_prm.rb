@@ -116,7 +116,7 @@ class AppendixGPRMTests < Minitest::Test
       model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
       proto_run_dir = "#{@test_dir}/#{model_name}"
 
-      if not user_data_dir.equal?('no_user_data')
+      if not user_data_dir == 'no_user_data'
         json_path = @prototype_creator.convert_userdata_csv_to_json("#{@@json_dir}/#{user_data_dir}", proto_run_dir)
         @prototype_creator.load_userdata_to_standards_database(json_path)
       end
@@ -649,6 +649,12 @@ class AppendixGPRMTests < Minitest::Test
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space load #{load.name} has schedule type of ScheduleConstant. Nothing to be done for ScheduleConstant")
         next
       end
+    end
+  end
+
+  def check_dcv(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      puts "placeholder for now" # TODO: JXL
     end
   end
 
@@ -2060,24 +2066,25 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      'wwr',
-      'srr',
-      'envelope',
-      'lpd',
-      'isresidential',
-      'daylighting_control',
-      'light_occ_sensor',
-      'infiltration',
-      'hvac_baseline',
-      'hvac_psz_split_from_mz',
-      'plant_temp_reset_ctrl',
-      'sat_ctrl',
-      'number_of_boilers',
-      'number_of_chillers',
-      'number_of_cooling_towers',
-      'hvac_sizing',
-      'preheat_coil_ctrl',
-      'multi_bldg_handling'
+      # 'wwr',
+      # 'srr',
+      # 'envelope',
+      # 'lpd',
+      # 'isresidential',
+      # 'daylighting_control',
+      # 'light_occ_sensor',
+      # 'infiltration',
+      # 'hvac_baseline',
+      # 'hvac_psz_split_from_mz',
+      # 'plant_temp_reset_ctrl',
+      # 'sat_ctrl',
+      # 'number_of_boilers',
+      # 'number_of_chillers',
+      # 'number_of_cooling_towers',
+      # 'hvac_sizing',
+      # 'preheat_coil_ctrl',
+      # 'multi_bldg_handling',
+      'dcv'
     ]
 
     # Get list of unique prototypes
@@ -2108,5 +2115,6 @@ class AppendixGPRMTests < Minitest::Test
     check_hvac_sizing(prototypes_base['hvac_sizing']) if tests.include? 'hvac_sizing'
     check_psz_split_from_mz(prototypes_base['hvac_psz_split_from_mz']) if tests.include? 'hvac_psz_split_from_mz'
     check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
+    check_dcv(prototypes_base['multi_bldg_handling']) if tests.include? 'dcv'
   end
 end

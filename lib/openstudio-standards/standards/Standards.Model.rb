@@ -237,6 +237,8 @@ class Standard
         end
       end
 
+      model_check_dcv_existence(model)
+
       # Remove all HVAC from model, excluding service water heating
       model_remove_prm_hvac(model)
 
@@ -7421,6 +7423,10 @@ class Standard
   # @param coil Heating Coils
   # @return [Boolean] true
   def model_set_central_preheat_coil_spm(model, thermalZones, coil)
+    return true
+  end
+
+  def model_check_dcv_existence(model)
     return true
   end
 

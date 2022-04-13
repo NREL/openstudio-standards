@@ -640,4 +640,49 @@ class ASHRAE901PRM < Standard
 
     return true
   end
+
+  def model_check_dcv_existence(model)
+
+    # mark all dcv true zones
+    model.getAirLoopHVACs.each do |air_loop_hvac|
+      next unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+
+      oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+      controller_oa = oa_system.getControllerOutdoorAir
+      controller_mv = controller_oa.controllerMechanicalVentilation
+      next unless controller_mv.demandControlledVentilation == true
+
+      air_loop_hvac.thermalZones.each do |thermal_zone|
+        zone_dcv = false
+        thermal_zone.spaces.each do |space|
+          dsn_oa = space.designSpecificationOutdoorAir
+          next if dsn_oa.empty?
+
+          dsn_oa = dsn_oa.get
+          next if dsn_oa.outdoorAirMethod == 'Maximum'
+
+          if dsn_oa.outdoorAirFlowperPerson > 0
+            # only in this case the thermal zone is considered to be implemented with DCV
+            zone_dcv = true
+          end
+        end
+
+        if zone_dcv == true
+          zone.additionalProperties.setFeature('zone DCV implemented in user model', true)
+        end
+      end
+    end
+
+    model.getThermalZones.each do |zone|
+      next if zone.additionalProperties.hasFeature('zone DCV implemented in user model')
+
+      zone.additionalProperties.setFeature('zone DCV implemented in user model', false)
+    end
+
+    model.getThermalZones.each do |zone|
+      puts zone.additionalProperties.hasFeature('zone DCV implemented in user model')
+    end
+
+    return true
+  end
 end
