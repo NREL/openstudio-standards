@@ -1250,9 +1250,6 @@ class AppendixGPRMTests < Minitest::Test
             expected_results = true if energy_source == 'Electric'
             terminal = equip.to_AirTerminalSingleDuctParallelPIUReheat.get
             assert(expected_results, "Fan powered boxes are not expected for #{mod_str}.")
-            # check primary flow fraction
-            min_pri_flow_frac = terminal.minimumPrimaryAirFlowFraction.get
-            assert(min_pri_flow_frac == 0.3, "The FPB minimum primary air flow fraction is #{min_pri_flow_frac} instead of 0.3 for #{mod_str}.")
             # check secondary flow fraction
             check_secondary_flow_fraction(terminal, mod_str)
           end

@@ -63,7 +63,14 @@ class Standard
     return true
   end
 
-  # Return the fan on flow fraction for a parallel PIU terminal
+  # Return the fan on flow fraction for a parallel PIU terminal.
+  #
+  # When returning nil, the fan on flow fraction will be set to
+  # be autosize in the EnergyPlus model; OpenStudio assumes that
+  # the default is "autosize". When autosized, this input is set
+  # to be the same as the minimum primary air flow fraction which
+  # means that the secondary fan will be on when the primary air
+  # flow is at the minimum flow fraction.
   #
   # @return [Float] returns nil or a float representing the fraction
   def air_terminal_single_duct_parallel_piu_reheat_fan_on_flow_fraction
