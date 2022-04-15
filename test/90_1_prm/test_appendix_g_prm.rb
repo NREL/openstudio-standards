@@ -1717,31 +1717,31 @@ class AppendixGPRMTests < Minitest::Test
         if supply_fan.fanPowerCoefficient1.is_initialized
           expected_coefficient = 0.0013
           coefficient = supply_fan.fanPowerCoefficient1.get
-          assert((coefficient - expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+          assert((coefficient - expected_coefficient).abs < 0.0001, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
         end
         # coefficient 2
         if supply_fan.fanPowerCoefficient2.is_initialized
           expected_coefficient = 0.1470
           coefficient = supply_fan.fanPowerCoefficient2.get
-          assert((coefficient - expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+          assert((coefficient - expected_coefficient).abs < 0.0001, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
         end
         # coefficient 3
         if supply_fan.fanPowerCoefficient4.is_initialized
           expected_coefficient = 0.9506
           coefficient = supply_fan.fanPowerCoefficient3.get
-          assert((coefficient - expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+          assert((coefficient - expected_coefficient).abs < 0.0001, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
         end
         # coefficient 4
         if supply_fan.fanPowerCoefficient4.is_initialized
           expected_coefficient = -0.0998
           coefficient = supply_fan.fanPowerCoefficient4.get
-          assert((coefficient - expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+          assert((coefficient - expected_coefficient).abs < 0.0001, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
         end
         # coefficient 5
         if supply_fan.fanPowerCoefficient5.is_initialized
           expected_coefficient = 0
           coefficient = supply_fan.fanPowerCoefficient5.get
-          assert((coefficient - expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+          assert((coefficient - expected_coefficient).abs < 0.0001, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
         end
       end  
     end

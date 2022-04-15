@@ -29,13 +29,9 @@
         ["Warehouse", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data",[]]
     ],
     "vav_fan_curve": [
-        ["Outpatient", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data",[]],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
-        ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
-        ["Hospital", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
-        ["LargeOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
-        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
-        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]]     
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-4A", "no_user_data",[["remove_transformer", []]]],
+        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "no_user_data",[["remove_transformer", []]]]     
     ],
     "hvac_baseline": [
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []], ["return_relief_fan", []]]],
