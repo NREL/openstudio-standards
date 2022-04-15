@@ -2010,7 +2010,7 @@ class Standard
       if existing_sch.is_initialized
         existing_sch = existing_sch.get
         existing_day_sch_vals = existing_sch.defaultDaySchedule.values
-        if existing_day_sch_vals.size == 1 && existing_day_sch_vals[0] == value
+        if existing_day_sch_vals.size == 1 && (existing_day_sch_vals[0] - value).abs < 1.0e-6
           return existing_sch
         end
       end
