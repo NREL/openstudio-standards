@@ -95,7 +95,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       end
     end
     # All space is explored.
-    # Now rewrite the space type in each space
+    # Now rewrite the space type in each space - might need to change the logic
     space_type.spaces.each do |space|
       space_name = space.name.get
       new_space_type = space_type.clone.to_SpaceType.get
