@@ -5931,6 +5931,7 @@ class Standard
         if air_loop_heating_type == 'Water'
           hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                            hot_water_loop_type: hot_water_loop_type)
+          heating_type = 'Water'
         else
           hot_water_loop = nil
         end
