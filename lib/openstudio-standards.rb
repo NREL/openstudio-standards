@@ -265,6 +265,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Model"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Space"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.AirLoopHVAC"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.AirTerminalSingleDuctVAVReheat"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ZoneHVACComponent"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.PlantLoop"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanConstantVolume"

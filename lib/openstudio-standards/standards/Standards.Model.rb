@@ -327,13 +327,6 @@ class Standard
         air_loop_hvac_apply_prm_baseline_controls(air_loop, climate_zone)
       end
 
-      if /prm/i !~ template
-        # Apply the minimum damper positions, assuming no DDC control of VAV terminals
-        model.getAirLoopHVACs.sort.each do |air_loop|
-          air_loop_hvac_apply_minimum_vav_damper_positions(air_loop, false)
-        end
-      end
-
       # Apply the baseline system water loop temperature reset control
       model.getPlantLoops.sort.each do |plant_loop|
         # Skip the SWH loops
@@ -345,6 +338,11 @@ class Standard
       # Run sizing run with the HVAC equipment
       if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
         return false
+      end
+
+      # Apply the minimum damper positions, assuming no DDC control of VAV terminals
+      model.getAirLoopHVACs.sort.each do |air_loop|
+        air_loop_hvac_apply_minimum_vav_damper_positions(air_loop, false)
       end
 
       if /prm/i !~ template
