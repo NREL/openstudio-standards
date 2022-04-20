@@ -194,6 +194,12 @@ class Standard
     # Economizers
     if air_loop_hvac_prm_baseline_economizer_required?(air_loop_hvac, climate_zone)
       air_loop_hvac_apply_prm_baseline_economizer(air_loop_hvac, climate_zone)
+    else
+      # Make sure if economizer is not required then the OA controller should have No Economizer
+      oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
+      if oa_sys.is_initialized
+        oa_sys.get.getControllerOutdoorAir.setEconomizerControlType('NoEconomizer')
+      end
     end
 
     # Multizone VAV Systems

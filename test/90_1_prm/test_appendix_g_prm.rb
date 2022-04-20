@@ -1701,7 +1701,26 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
-  def check_economizer_exception(prototypes_base)
+  def check_economizer_exception(baseline_base)
+    baseline_base.each do |baseline, baseline_model|
+      building_type, template, climate_zone, user_data_dir, mod = baseline
+      baseline_model.getAirLoopHVACs.each do |air_loop|
+        economizer_activated_target = false
+        air_loop_name = air_loop.name.get
+        baseline_system_type = air_loop.additionalProperties.getFeatureAsString("baseline_system_type")
+        if ['Building Story 3 VAV_PFP_Boxes (Sys8)', 'DataCenter_basement_ZN_6 ZN PSZ-VAV' ,'Basement Story 0 VAV_PFP_Boxes (Sys8)'].include?(air_loop_name) and climate_zone.end_with?("2B")
+          economizer_activated_target = true
+        end
+
+        economizer_activated_model = false
+        oa_sys = air_loop.airLoopHVACOutdoorAirSystem
+        if oa_sys.is_initialized
+          economizer_activated_model = true unless oa_sys.get.getControllerOutdoorAir.getEconomizerControlType == 'NoEconomizer'
+        end
+        assert(economizer_activated_model == economizer_activated_target,
+               "#{building_type}_#{template} is in #{climate_zone}. Air loop #{air_loop.name.get} system type is #{baseline_system_type}. The target economizer flag should be #{economizer_activated_target} but get #{economizer_activated_model}")
+      end
+    end
     return true
   end
 

@@ -111,6 +111,7 @@
     ],
     "economizer_exception": [
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_econ_except_01",[["remove_transformer", []]]],
-        ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_econ_except_01",[["remove_transformer", []]]]
+        ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
+        ["Warehouse", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_cooling_coils", []]]]
     ]
 }
