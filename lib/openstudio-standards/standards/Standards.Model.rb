@@ -298,7 +298,7 @@ class Standard
         model.getAirLoopHVACs.each do |air_loop|
           air_loop_name = air_loop.name.get
           unless air_loop_name_array.include?(air_loop_name)
-            air_loop.additionalProperties.setFeature('zone_group_type', sys_group['zone_group_type'])
+            air_loop.additionalProperties.setFeature('zone_group_type', sys_group['zone_group_type'] || 'None')
             air_loop_name_array << air_loop_name
           end
         end
