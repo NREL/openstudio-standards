@@ -899,10 +899,6 @@ class AppendixGPRMTests < Minitest::Test
       elsif @bldg_type_alt_now == 'Assembly' && building_type == 'LargeHotel'
         # This is a public assembly > 120 ksf, should be SZ-CV
         check_if_sz_cv(model, climate_zone, 'Assembly < 120,000 sq ft.')
-      elsif building_type == 'Warehouse' && mod_str.nil?
-        # System type should be heating and ventilating
-        # check_if_ht_vent(model, "Warehouse")
-        check_heat_type(model, climate_zone, '??????SZ???????', 'Electric')
       elsif building_type == 'RetailStripmall' && mod_str.nil?
         # System type should be PSZ
         check_if_psz(model, 'RetailStripmall, one story, any area')
@@ -916,11 +912,11 @@ class AppendixGPRMTests < Minitest::Test
         # System type should be PSZ
         check_if_psz(model, 'non-res, one story, < 25 ksf')
         check_heat_type(model, climate_zone, 'SZ', 'HeatPump')
-      elsif building_type == 'PrimarySchool' && mod_str.nil?
+      elsif building_type == 'PrimarySchool' && mod_str == 'remove_transformer'
         # System type should be PVAV, some zones may be on PSZ systems
         check_if_pvav(model, 'nonres > 25,000 sq ft, < 150 ksf , 1 story')
         check_heat_type(model, climate_zone, 'MZ', 'Electric')
-      elsif building_type == 'SecondarySchool' && mod_str.nil?
+      elsif building_type == 'SecondarySchool' && mod_str == 'remove_transformer'
         # System type should be VAV/chiller
         check_if_vav_chiller(model, 'nonres > 150 ksf , 1 to 3 stories')
         check_heat_type(model, climate_zone, 'MZ', 'Electric')
@@ -936,7 +932,7 @@ class AppendixGPRMTests < Minitest::Test
         # nonresidential, 4 to 5 stories, <= 150 ksf --> PVAV
         # System type should be PVAV with 10 zones, area is 27,515 sf
         check_if_pvav(model, 'other nonres > 4 to 5 stories, <= 150 ksf')
-      elsif building_type == 'PrimarySchool' && mod_str == 'set_zone_multiplier_4'
+      elsif building_type == 'PrimarySchool' && mod_str.include?('set_zone_multiplier_4')
         # nonresidential, 4 to 5 stories, > 150 ksf --> VAV/chiller
         # System type should be PVAV with 10 zones, area is 22,012 sf
         check_if_vav_chiller(model, 'other nonres > 4 to 5 stories, > 150 ksf')
@@ -1701,8 +1697,6 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
-
-  
  # Check if coefficients of part-load power curve is correct per G3.1.3.15
   def check_variable_speed_fan_power(prototypes_base)
     prototypes_base.each do |prototype, model|
@@ -1747,10 +1741,40 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # Check if the VAV box minimum flow setpoint are
+  # assigned following the rules in Appendix G
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_vav_min_sp(prototypes_base)
+    standard = Standard.build('90.1-PRM-2019')
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+
+      model.getAirLoopHVACs.each do |air_loop|
+        air_loop.thermalZones.each do |zone|
+          zone.equipment.each do |equip|
+            if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
+              zone_oa = standard.thermal_zone_outdoor_airflow_rate(zone)
+              vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
+              expected_mdp = [zone_oa / vav_terminal.autosizedMaximumAirFlowRate.get, 0.3].max.round(2)
+              actual_mdp = vav_terminal.constantMinimumAirFlowFraction.get.round(2)
+              assert(expected_mdp == actual_mdp , "Minimum MDP for #{building_type} for #{template} in #{climate_zone} should be #{expected_mdp} but #{actual_mdp} is used in the model.")
+            elsif equip.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized
+              zone_oa = standard.thermal_zone_outdoor_airflow_rate(zone)
+              fp_vav_terminal = equip.to_AirTerminalSingleDuctParallelPIUReheat.get
+              expected_prim_frac = [zone_oa / fp_vav_terminal.autosizedMaximumPrimaryAirFlowRate.get, 0.3].max.round(2)
+              actual_prim_frac = fp_vav_terminal.minimumPrimaryAirFlowFraction.get
+              assert(expected_prim_frac == actual_prim_frac , "Minimum primary air flow fraction for #{building_type} for #{template} in #{climate_zone} should be #{expected_prim_frac} but #{actual_prim_frac} is used in the model.")
+            end
+          end
+        end
+      end
+    end  
+  end
 
 
   # Set ZoneMultiplier to passed value for all zones
-
+  #
   # @param model, arguments[]
   def set_zone_multiplier(model, arguments)
     mult = arguments[0]
@@ -2126,6 +2150,7 @@ class AppendixGPRMTests < Minitest::Test
       'number_of_cooling_towers',
       'hvac_sizing',
       'preheat_coil_ctrl',
+      'vav_min_sp',
       'multi_bldg_handling'
     ]
 
@@ -2157,6 +2182,7 @@ class AppendixGPRMTests < Minitest::Test
     check_number_of_cooling_towers(prototypes_base['number_of_cooling_towers']) if tests.include? 'number_of_cooling_towers'
     check_hvac_sizing(prototypes_base['hvac_sizing']) if tests.include? 'hvac_sizing'
     check_psz_split_from_mz(prototypes_base['hvac_psz_split_from_mz']) if tests.include? 'hvac_psz_split_from_mz'
+    check_vav_min_sp(prototypes_base['vav_min_sp']) if tests.include? 'vav_min_sp'
     check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
   end
 end
