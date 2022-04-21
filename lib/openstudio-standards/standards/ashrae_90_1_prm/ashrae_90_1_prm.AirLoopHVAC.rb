@@ -15,6 +15,63 @@ class ASHRAE901PRM < Standard
     return 0.05
   end
 
+  # Determine the economizer type and limits for the the PRM
+  # Defaults to 90.1-2007 logic.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Array<Double>] [economizer_type, drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
+  def air_loop_hvac_prm_economizer_type_and_limits(air_loop_hvac, climate_zone)
+    economizer_type = 'NoEconomizer'
+    drybulb_limit_f = nil
+    enthalpy_limit_btu_per_lb = nil
+    dewpoint_limit_f = nil
+
+    case climate_zone
+    when 'ASHRAE 169-2006-0B',
+      'ASHRAE 169-2006-1B',
+      'ASHRAE 169-2006-2B',
+      'ASHRAE 169-2006-3B',
+      'ASHRAE 169-2006-3C',
+      'ASHRAE 169-2006-4B',
+      'ASHRAE 169-2006-4C',
+      'ASHRAE 169-2006-5B',
+      'ASHRAE 169-2006-5C',
+      'ASHRAE 169-2006-6B',
+      'ASHRAE 169-2006-7A',
+      'ASHRAE 169-2006-7B',
+      'ASHRAE 169-2006-8A',
+      'ASHRAE 169-2006-8B',
+      'ASHRAE 169-2013-0B',
+      'ASHRAE 169-2013-1B',
+      'ASHRAE 169-2013-2B',
+      'ASHRAE 169-2013-3B',
+      'ASHRAE 169-2013-3C',
+      'ASHRAE 169-2013-4B',
+      'ASHRAE 169-2013-4C',
+      'ASHRAE 169-2013-5B',
+      'ASHRAE 169-2013-5C',
+      'ASHRAE 169-2013-6B',
+      'ASHRAE 169-2013-7A',
+      'ASHRAE 169-2013-7B',
+      'ASHRAE 169-2013-8A',
+      'ASHRAE 169-2013-8B'
+      economizer_type = 'FixedDryBulb'
+      drybulb_limit_f = 75
+    when 'ASHRAE 169-2006-5A',
+      'ASHRAE 169-2006-6A',
+      'ASHRAE 169-2013-5A',
+      'ASHRAE 169-2013-6A',
+      economizer_type = 'FixedDryBulb'
+      drybulb_limit_f = 70
+    else
+      economizer_type = 'FixedDryBulb'
+      drybulb_limit_f = 65
+    end
+
+    return [economizer_type, drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
+  end
+
   # Determine if an economizer is required per the PRM.
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop

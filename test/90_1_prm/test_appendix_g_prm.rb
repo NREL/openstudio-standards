@@ -10,7 +10,7 @@ class AppendixGPRMTests < Minitest::Test
   # parse individual JSON files used by all methods
   # in this class.
   @@json_dir = "#{File.dirname(__FILE__)}/data"
-  @@prototype_list = JSON.parse(File.read("#{@@json_dir}/prototype_list.json"))
+  @@prototype_list = JSON.parse(File.read("#{@@json_dir}/prototype_list_local.json"))
   @@wwr_building_types = JSON.parse(File.read("#{@@json_dir}/wwr_building_types.json"))
   @@hvac_building_types = JSON.parse(File.read("#{@@json_dir}/hvac_building_types.json"))
   @@swh_building_types = JSON.parse(File.read("#{@@json_dir}/swh_building_types.json"))
@@ -1702,6 +1702,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, user_data_dir, mod = baseline
       baseline_model.getAirLoopHVACs.each do |air_loop|
         economizer_activated_target = false
+        temperature_hihglimit_target = 23.89
         air_loop_name = air_loop.name.get
         baseline_system_type = air_loop.additionalProperties.getFeatureAsString("baseline_system_type")
         if ['Building Story 3 VAV_PFP_Boxes (Sys8)', 'DataCenter_basement_ZN_6 ZN PSZ-VAV' ,'Basement Story 0 VAV_PFP_Boxes (Sys8)'].include?(air_loop_name) and climate_zone.end_with?("2B")
@@ -1709,12 +1710,17 @@ class AppendixGPRMTests < Minitest::Test
         end
 
         economizer_activated_model = false
+        temperature_highlimit_model = 23.89
         oa_sys = air_loop.airLoopHVACOutdoorAirSystem
         if oa_sys.is_initialized
           economizer_activated_model = true unless oa_sys.get.getControllerOutdoorAir.getEconomizerControlType == 'NoEconomizer'
+          temperature_shutoff_model = oa_sys.get.getControllerOutdoorAir.getEconomizerMaximumLimitDryBulbTemperature.get
         end
+
         assert(economizer_activated_model == economizer_activated_target,
                "#{building_type}_#{template} is in #{climate_zone}. Air loop #{air_loop.name.get} system type is #{baseline_system_type}. The target economizer flag should be #{economizer_activated_target} but get #{economizer_activated_model}")
+        assert(temperature_highlimit_model - temperature_hihglimit_target <= 0.01,
+               "#{building_type}_#{template} is in #{climate_zone}. Air loop #{air_loop.name.get} system type is #{baseline_system_type}. The target economizer temperature high limit setpoint is #{temperature_hihglimit_target} but get #{temperature_highlimit_model}")
       end
     end
     return true
@@ -2110,25 +2116,25 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      'wwr',
-      'srr',
-      'envelope',
-      'lpd',
-      'isresidential',
-      'daylighting_control',
-      'light_occ_sensor',
-      'infiltration',
-      'hvac_baseline',
-      'hvac_psz_split_from_mz',
-      'plant_temp_reset_ctrl',
-      'sat_ctrl',
-      'number_of_boilers',
-      'number_of_chillers',
-      'number_of_cooling_towers',
-      'hvac_sizing',
-      'preheat_coil_ctrl',
-      'vav_min_sp',
-      'multi_bldg_handling',
+      #'wwr',
+      #'srr',
+      #'envelope',
+      #'lpd',
+      #'isresidential',
+      #'daylighting_control',
+      #'light_occ_sensor',
+      #'infiltration',
+      #'hvac_baseline',
+      #'hvac_psz_split_from_mz',
+      #'plant_temp_reset_ctrl',
+      #'sat_ctrl',
+      #'number_of_boilers',
+      #'number_of_chillers',
+      #'number_of_cooling_towers',
+      #'hvac_sizing',
+      #'preheat_coil_ctrl',
+      #'vav_min_sp',
+      #'multi_bldg_handling',
       'economizer_exception'
     ]
 
