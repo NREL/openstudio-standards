@@ -3036,7 +3036,7 @@ class Standard
     legacy_results_hash['total_energy_by_end_use'] = {}
 
     # Get the legacy simulation results
-    legacy_values = model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, 'annual', lkp_template)
+    legacy_values = model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, 'annual', lkp_template: lkp_template)
     if legacy_values.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find legacy idf results for #{search_criteria}")
       return legacy_results_hash
