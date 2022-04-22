@@ -63,35 +63,47 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       if user_spacetypes && user_spacetypes.length >= 1
         # if space type has user data
         user_space_type_index = user_spacetypes.index { |user_spacetype| user_spacetype['name'] == space_type.name.get }
-        user_space_type = user_spacetypes[user_space_type_index]
-        # If multiple LPD value exist - then enforce space-space_type one on one relationship
-        if has_multi_lpd_values_user_data(user_space_type, space_type)
-          space_to_space_type_apply_lighting(user_spaces, user_spacetypes, space_type)
+        if user_space_type_index.nil?
+          # cannot find a matched user_spacetype to space_type, use space_type to set LPD
+          set_lpd_on_space_type(space_type, user_spaces, user_spacetypes)
         else
-          # Process the user_space type data - at this point, we are sure there is no lighting per length
-          # So all the LPD should be identical by space
-          # Loop because we need to assign the occupancy control credit to each space for
-          # Schedule processing.
-          space_type_lighting_per_area = 0.0
-          space_type.spaces.each do |space|
-            space_lighting_per_area = calculate_lpd_from_userdata(user_space_type, space)
-            space_type_lighting_per_area = space_lighting_per_area
+          user_space_type = user_spacetypes[user_space_type_index]
+          # If multiple LPD value exist - then enforce space-space_type one on one relationship
+          if has_multi_lpd_values_user_data(user_space_type, space_type)
+            space_to_space_type_apply_lighting(user_spaces, user_spacetypes, space_type)
+          else
+            # Process the user_space type data - at this point, we are sure there is no lighting per length
+            # So all the LPD should be identical by space
+            # Loop because we need to assign the occupancy control credit to each space for
+            # Schedule processing.
+            space_type_lighting_per_area = 0.0
+            space_type.spaces.each do |space|
+              space_lighting_per_area = calculate_lpd_from_userdata(user_space_type, space)
+              space_type_lighting_per_area = space_lighting_per_area
+            end
+            space_type.lights[0].lightsDefinition.setWattsperSpaceFloorArea(OpenStudio.convert(space_type_lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
           end
-          space_type.lights[0].lightsDefinition.setWattsperSpaceFloorArea(OpenStudio.convert(space_type_lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
         end
       else
-        if has_multi_lpd_values_space_type(space_type)
-          space_to_space_type_apply_lighting(user_spaces, user_spacetypes, space_type)
-        else
-          # use default - loop through space to assign occupancy credit to each space.
-          space_type_lighting_per_area = 0.0
-          space_type.spaces.each do |space|
-            space_lighting_per_area = calculate_lpd_by_space(space_type, space)
-            space_type_lighting_per_area = space_lighting_per_area
-          end
-          space_type.lights[0].lightsDefinition.setWattsperSpaceFloorArea(OpenStudio.convert(space_type_lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
-        end
+        # no user data, set space_type LPD
+        set_lpd_on_space_type(space_type, user_spaces, user_spacetypes)
       end
+    end
+  end
+
+  # Function to tset LPD on default space type
+  def set_lpd_on_space_type(space_type, user_spaces, user_spacetypes)
+    if has_multi_lpd_values_space_type(space_type)
+      # If multiple LPD value exist - then enforce space-space_type one on one relationship
+      space_to_space_type_apply_lighting(user_spaces, user_spacetypes, space_type)
+    else
+      # use default - loop through space to assign occupancy credit to each space.
+      space_type_lighting_per_area = 0.0
+      space_type.spaces.each do |space|
+        space_lighting_per_area = calculate_lpd_by_space(space_type, space)
+        space_type_lighting_per_area = space_lighting_per_area
+      end
+      space_type.lights[0].lightsDefinition.setWattsperSpaceFloorArea(OpenStudio.convert(space_type_lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
     end
   end
 
@@ -279,7 +291,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       # Space height
       space_volume = space.volume
       space_area = space.floorArea
-      space_height = space_volume / space_area
+      space_height = OpenStudio.convert(space_volume / space_area, 'm', 'ft').get
       # calculate the new lpd values
       space_lighting_per_area = lighting_per_length * space_height + lighting_per_area
     end
@@ -295,6 +307,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     lighting_per_length = space_type_properties['w/ft'].to_f
     return space_type.spaces.size > 1 && lighting_per_length > 0
   end
+
   # Function checks whether there are multi lpd values in the space type from user's data
   # multi-lpd value means lighting per area > 0 and lighting_per_length > 0
   def has_multi_lpd_values_user_data(user_data, space_type)
@@ -365,7 +378,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         # Space height
         space_volume = space.volume
         space_area = space.floorArea
-        space_height = space_volume / space_area
+        space_height = OpenStudio.convert(space_volume / space_area, 'm', 'ft').get
         # calculate and add new lpd values
         user_space_type_lighting_area = (lighting_per_length * space_height +
           lighting_per_area) * sub_space_type_frac
