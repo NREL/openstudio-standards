@@ -10,7 +10,7 @@ class AppendixGPRMTests < Minitest::Test
   # parse individual JSON files used by all methods
   # in this class.
   @@json_dir = "#{File.dirname(__FILE__)}/data"
-  @@prototype_list = JSON.parse(File.read("#{@@json_dir}/prototype_list_local.json"))
+  @@prototype_list = JSON.parse(File.read("#{@@json_dir}/prototype_list.json"))
   @@wwr_building_types = JSON.parse(File.read("#{@@json_dir}/wwr_building_types.json"))
   @@hvac_building_types = JSON.parse(File.read("#{@@json_dir}/hvac_building_types.json"))
   @@swh_building_types = JSON.parse(File.read("#{@@json_dir}/swh_building_types.json"))
@@ -2116,25 +2116,25 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      #'wwr',
-      #'srr',
-      #'envelope',
-      #'lpd',
-      #'isresidential',
-      #'daylighting_control',
-      #'light_occ_sensor',
-      #'infiltration',
-      #'hvac_baseline',
-      #'hvac_psz_split_from_mz',
-      #'plant_temp_reset_ctrl',
-      #'sat_ctrl',
-      #'number_of_boilers',
-      #'number_of_chillers',
-      #'number_of_cooling_towers',
-      #'hvac_sizing',
-      #'preheat_coil_ctrl',
-      #'vav_min_sp',
-      #'multi_bldg_handling',
+      'wwr',
+      'srr',
+      'envelope',
+      'lpd',
+      'isresidential',
+      'daylighting_control',
+      'light_occ_sensor',
+      'infiltration',
+      'hvac_baseline',
+      'hvac_psz_split_from_mz',
+      'plant_temp_reset_ctrl',
+      'sat_ctrl',
+      'number_of_boilers',
+      'number_of_chillers',
+      'number_of_cooling_towers',
+      'hvac_sizing',
+      'preheat_coil_ctrl',
+      'vav_min_sp',
+      'multi_bldg_handling',
       'economizer_exception'
     ]
 
