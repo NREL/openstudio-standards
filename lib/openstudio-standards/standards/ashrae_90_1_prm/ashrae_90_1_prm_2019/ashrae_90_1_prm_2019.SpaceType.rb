@@ -180,22 +180,24 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # set schedule for lighting
     schedule_hash = {}
     model.getSpaces.each do |space|
-      ltg = space.spaceType.get.lights[0]
-      if ltg.schedule.is_initialized
-        ltg_schedule = ltg.schedule.get
-        ltg_schedule_name = ltg_schedule.name
-        occupancy_sensor_credit = space.additionalProperties.getFeatureAsDouble('occ_control_credit')
-        new_ltg_schedule_name = "#{ltg_schedule_name}_%.4f" % occupancy_sensor_credit
-        if schedule_hash.key?(new_ltg_schedule_name)
-          # In this case, there is a schedule created, can retrieve the schedule object and reset in this space type
-          schedule_rule = schedule_hash[new_ltg_schedule_name]
-          ltg.setSchedule(schedule_rule)
-        else
-          # In this case, create a new schedule
-          # 1. Clone the existing schedule
-          new_rule_set_schedule = copy_ltg_schedule(ltg_schedule, occupancy_sensor_credit, model)
-          if ltg.setSchedule(new_rule_set_schedule)
-            schedule_hash[new_ltg_schedule_name] = new_rule_set_schedule
+      unless space.spaceType.get.lights.length == 0
+        ltg = space.spaceType.get.lights[0]
+        if ltg.schedule.is_initialized
+          ltg_schedule = ltg.schedule.get
+          ltg_schedule_name = ltg_schedule.name
+          occupancy_sensor_credit = space.additionalProperties.getFeatureAsDouble('occ_control_credit')
+          new_ltg_schedule_name = "#{ltg_schedule_name}_%.4f" % occupancy_sensor_credit
+          if schedule_hash.key?(new_ltg_schedule_name)
+            # In this case, there is a schedule created, can retrieve the schedule object and reset in this space type
+            schedule_rule = schedule_hash[new_ltg_schedule_name]
+            ltg.setSchedule(schedule_rule)
+          else
+            # In this case, create a new schedule
+            # 1. Clone the existing schedule
+            new_rule_set_schedule = copy_ltg_schedule(ltg_schedule, occupancy_sensor_credit, model)
+            if ltg.setSchedule(new_rule_set_schedule)
+              schedule_hash[new_ltg_schedule_name] = new_rule_set_schedule
+            end
           end
         end
       end

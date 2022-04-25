@@ -748,29 +748,31 @@ class AppendixGPRMTests < Minitest::Test
       model_baseline.getSpaceTypes.sort.each do |space_type|
         light_sch_model_base = {}
         space_type.lights.sort.each do |lgts|
-          light_sch_model_lgts_base = {}
-          light_sch_model_lgts_base['space_type'] = space_type.standardsSpaceType.to_s
+          if lgts.schedule.get.to_ScheduleRuleset.is_initialized
+            light_sch_model_lgts_base = {}
+            light_sch_model_lgts_base['space_type'] = space_type.standardsSpaceType.to_s
 
-          # get default schedule
-          day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
-          times = day_rule.times()
-          light_sch_model_default_rule = {}
-          times.each do |time|
-            light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
-          end
-          light_sch_model_lgts_base['default schedule'] = light_sch_model_default_rule
-
-          # get daily schedule
-          lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
-            light_sch_model_week_rule_base = {}
-            day_rule = week_rule.daySchedule
+            # get default schedule
+            day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
             times = day_rule.times()
+            light_sch_model_default_rule = {}
             times.each do |time|
-              light_sch_model_week_rule_base[time.to_s] = day_rule.getValue(time)
+              light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
             end
-            light_sch_model_lgts_base[week_rule.name.to_s] = light_sch_model_week_rule_base
+            light_sch_model_lgts_base['default schedule'] = light_sch_model_default_rule
+
+            # get daily schedule
+            lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
+              light_sch_model_week_rule_base = {}
+              day_rule = week_rule.daySchedule
+              times = day_rule.times()
+              times.each do |time|
+                light_sch_model_week_rule_base[time.to_s] = day_rule.getValue(time)
+              end
+              light_sch_model_lgts_base[week_rule.name.to_s] = light_sch_model_week_rule_base
+            end
+            light_sch_model_base[lgts.name.to_s] = light_sch_model_lgts_base
           end
-          light_sch_model_base[lgts.name.to_s] = light_sch_model_lgts_base
         end
 
         # Check light schedule against expected light schedule
