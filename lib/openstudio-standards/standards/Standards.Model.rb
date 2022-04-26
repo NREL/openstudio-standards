@@ -70,7 +70,7 @@ class Standard
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, debug = false)
     # user data process
     bldg_type_hvac_zone_hash = {}
-    handle_multi_building_area_types(user_model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
+    handle_user_input_data(user_model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
     # NOTE - bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
     # Define different orientation from original orientation
     # for each individual baseline models
@@ -7411,11 +7411,10 @@ class Standard
     return 'warmest_zone'
   end
 
-  # A template method that handles multiple building area type inputs for PRM baseline creation
-  # The inputs shall come from userdata csv files / json file.
-  # Plan 1. Add the values to space / zone additional properties.
-  # Plan 2. return hash table and pass the value into PRM function
-  # FOR NOW, just return an abitrary integer
+  # A template method that handles the loading of user input data from multiple sources
+  # include data source from:
+  # 1. user data csv files
+  # 2. data from measure and OpenStudio interface
   # @param [Openstudio:model:Model] model
   # @param [String] climate_zone
   # @param [String] default_hvac_building_type
@@ -7423,7 +7422,7 @@ class Standard
   # @param [String] default_swh_building_type
   # @param [Hash] bldg_type_hvac_zone_hash A hash maps building type for hvac to a list of thermal zones
   # @return True
-  def handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
+  def handle_user_input_data(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     return true
   end
 

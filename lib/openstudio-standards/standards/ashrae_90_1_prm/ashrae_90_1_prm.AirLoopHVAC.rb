@@ -26,47 +26,14 @@ class ASHRAE901PRM < Standard
     drybulb_limit_f = nil
     enthalpy_limit_btu_per_lb = nil
     dewpoint_limit_f = nil
+    climate_zone_code = climate_zone.split('-')[-1]
 
-    case climate_zone
-    when 'ASHRAE 169-2006-0B',
-      'ASHRAE 169-2006-1B',
-      'ASHRAE 169-2006-2B',
-      'ASHRAE 169-2006-3B',
-      'ASHRAE 169-2006-3C',
-      'ASHRAE 169-2006-4B',
-      'ASHRAE 169-2006-4C',
-      'ASHRAE 169-2006-5B',
-      'ASHRAE 169-2006-5C',
-      'ASHRAE 169-2006-6B',
-      'ASHRAE 169-2006-7A',
-      'ASHRAE 169-2006-7B',
-      'ASHRAE 169-2006-8A',
-      'ASHRAE 169-2006-8B',
-      'ASHRAE 169-2013-0B',
-      'ASHRAE 169-2013-1B',
-      'ASHRAE 169-2013-2B',
-      'ASHRAE 169-2013-3B',
-      'ASHRAE 169-2013-3C',
-      'ASHRAE 169-2013-4B',
-      'ASHRAE 169-2013-4C',
-      'ASHRAE 169-2013-5B',
-      'ASHRAE 169-2013-5C',
-      'ASHRAE 169-2013-6B',
-      'ASHRAE 169-2013-7A',
-      'ASHRAE 169-2013-7B',
-      'ASHRAE 169-2013-8A',
-      'ASHRAE 169-2013-8B'
+    if ['0B', '1B', '2B', '3B', '3C', '4B', '4C', '5B', '5C', '6B', '7A', '7B', '8A', '8B'].include? climate_zone_code
       economizer_type = 'FixedDryBulb'
       drybulb_limit_f = 75
-    when 'ASHRAE 169-2006-5A',
-      'ASHRAE 169-2006-6A',
-      'ASHRAE 169-2013-5A',
-      'ASHRAE 169-2013-6A',
+    elsif ['5A', '6A'].include? climate_zone_code
       economizer_type = 'FixedDryBulb'
       drybulb_limit_f = 70
-    else
-      economizer_type = 'FixedDryBulb'
-      drybulb_limit_f = 65
     end
 
     return [economizer_type, drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
@@ -80,31 +47,10 @@ class ASHRAE901PRM < Standard
   def air_loop_hvac_prm_baseline_economizer_required?(air_loop_hvac, climate_zone)
     economizer_required = false
     baseline_system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
+    climate_zone_code = climate_zone.split('-')[-1]
     # System type 3 through 8 and 11, 12 and 13
     if ['SZ_AC', 'PSZ_AC', 'PVAV_Reheat', 'VAV_Reheat', 'SZ_VAV', 'PSZ_HP', 'SZ_CV', 'PSZ_HP', 'PVAV_PFP_Boxes', 'VAV_PFP_Boxes'].include? baseline_system_type
-      case climate_zone
-      when 'ASHRAE 169-2006-2B',
-        'ASHRAE 169-2006-3B',
-        'ASHRAE 169-2006-3C',
-        'ASHRAE 169-2006-4C',
-        'ASHRAE 169-2006-5B',
-        'ASHRAE 169-2006-5C',
-        'ASHRAE 169-2006-6B',
-        'ASHRAE 169-2006-7A',
-        'ASHRAE 169-2006-7B',
-        'ASHRAE 169-2006-8A',
-        'ASHRAE 169-2006-8B',
-        'ASHRAE 169-2013-2B',
-        'ASHRAE 169-2013-3B',
-        'ASHRAE 169-2013-3C',
-        'ASHRAE 169-2013-4C',
-        'ASHRAE 169-2013-5B',
-        'ASHRAE 169-2013-5C',
-        'ASHRAE 169-2013-6B',
-        'ASHRAE 169-2013-7A',
-        'ASHRAE 169-2013-7B',
-        'ASHRAE 169-2013-8A',
-        'ASHRAE 169-2013-8B'
+      unless ['0A', '0B', '1A', '1B', '2A', '3A', '4A'].include? climate_zone_code
         economizer_required = true
       end
     end
@@ -119,10 +65,6 @@ class ASHRAE901PRM < Standard
     end
 
     # Check user_data in the zones
-    # As discussed for now, if a zone under the air loop hvac system has economizer exception
-    # The HVAC economizer should not be required.
-    # Another ticket may need to add to create a separate HVAC air loop for
-    # a subset of zones that have gas phase air cleaning exception
     gas_phase_exception = false
     open_refrigeration_exception = false
     air_loop_hvac.thermalZones.each do |thermal_zone|
