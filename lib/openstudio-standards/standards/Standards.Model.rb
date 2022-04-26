@@ -419,6 +419,9 @@ class Standard
       # Delete all the unused resource objects
       model_remove_unused_resource_objects(model)
 
+      # Add reporting tolerances
+      model_add_reporting_tolerances(model)
+
       # @todo: turn off self shading
       # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
       # It won't be taken into account, while it should: only self shading from the building itself should be turned off but to my knowledge there isn't a way to do this in E+
@@ -7422,5 +7425,18 @@ class Standard
     return true
   end
 
+  # Add reporting tolerances. Default values are based on the suggestions from the PRM-RM.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio Model
+  # @param heating_tolerance_deg_f [Float] Tolerance for time heating setpoint not met in degree F
+  # @param cooling_tolerance_deg_f [Float] Tolerance for time cooling setpoint not met in degree F
+  def model_add_reporting_tolerances(model, heating_tolerance_deg_f: 1.0, cooling_tolerance_deg_f: 1.0)
+    reporting_tolerances = model.getOutputControlReportingTolerances
+    heating_tolerance_deg_c = OpenStudio.convert(heating_tolerance_deg_f, 'R', 'K').get
+    cooling_tolerance_deg_c = OpenStudio.convert(cooling_tolerance_deg_f, 'R', 'K').get
+    reporting_tolerances.setToleranceforTimeHeatingSetpointNotMet(heating_tolerance_deg_c)
+    reporting_tolerances.setToleranceforTimeCoolingSetpointNotMet(cooling_tolerance_deg_c)
 
+    return true
+  end
 end
