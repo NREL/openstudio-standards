@@ -28,6 +28,11 @@
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", []],
         ["Warehouse", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", []]
     ],
+    "vav_fan_curve": [
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-4A", "no_user_data",[["remove_transformer", []]]],
+        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "no_user_data",[["remove_transformer", []]]]     
+    ],
     "hvac_baseline": [
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["remove_transformer", []], ["return_relief_fan", []]]],
         ["Warehouse", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data", [["remove_cooling_coils", []]]],
