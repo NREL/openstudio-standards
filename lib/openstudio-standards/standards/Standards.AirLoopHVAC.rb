@@ -3246,11 +3246,26 @@ class Standard
     return 0.15
   end
 
+  # Determine if the air loop serves parallel PIU air terminals
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  def air_loop_hvac_has_parallel_piu_air_terminals?(air_loop_hvac)
+    has_parallel_piu_terminals = false
+    air_loop_hvac.thermalZones.each do |zone|
+      zone.equipment.each do |equipment|
+        # Get the object type
+        obj_type = equipment.iddObjectType.valueName.to_s
+        if obj_type == 'OS_AirTerminal_SingleDuct_ParallelPIU_Reheat'
+          return true
+        end
+      end
+    end
+
+    return has_parallel_piu_terminals
+  end
+
   # Shut off the system during unoccupied periods.
   # During these times, systems will cycle on briefly if temperature drifts below setpoint.
-  # For systems with fan-powered terminals, the whole system (not just the terminal fans) will cycle on.
-  # Terminal-only night cycling is not used because the terminals cannot provide cooling,
-  # so terminal-only night cycling leads to excessive unmet cooling hours during unoccupied periods.
   # If the system already has a schedule other than Always-On, no change will be made.
   # If the system has an Always-On schedule assigned, a new schedule will be created.
   # In this case, occupied is defined as the total percent occupancy for the loop for all zones served.
@@ -3260,7 +3275,25 @@ class Standard
   # @return [Bool] returns true if successful, false if not
   def air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = 0.05)
     # Set the system to night cycle
+    # The fan of a parallel PIU terminal are set to only cycle during heating operation
+    # This is achieved using the CycleOnAnyCoolingOrHeatingZone; During cooling operation
+    # the load is met by running the central system which stays off during heating
+    # operation
     air_loop_hvac.setNightCycleControlType('CycleOnAny')
+    if air_loop_hvac_has_parallel_piu_air_terminals?(air_loop_hvac)
+      avail_mgrs = air_loop_hvac.availabilityManagers
+      if !avail_mgrs.nil?
+        avail_mgrs.each do |avail_mgr|
+          if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
+            avail_mgr_nc = avail_mgr.to_AvailabilityManagerNightCycle.get
+            avail_mgr_nc.setControlType('CycleOnAnyCoolingOrHeatingZone')
+            zones = air_loop_hvac.thermalZones
+            avail_mgr_nc.setCoolingControlThermalZones(zones)
+            avail_mgr_nc.setHeatingZoneFansOnlyThermalZones(zones)
+          end
+        end
+      end
+    end
 
     model = air_loop_hvac.model
     # Check if schedule was stored in an additionalProperties field of the air loop
