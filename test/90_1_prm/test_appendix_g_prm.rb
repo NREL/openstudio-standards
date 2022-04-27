@@ -1770,13 +1770,15 @@ class AppendixGPRMTests < Minitest::Test
         oa_sys = air_loop.airLoopHVACOutdoorAirSystem
         if oa_sys.is_initialized
           economizer_activated_model = true unless oa_sys.get.getControllerOutdoorAir.getEconomizerControlType == 'NoEconomizer'
-          temperature_shutoff_model = oa_sys.get.getControllerOutdoorAir.getEconomizerMaximumLimitDryBulbTemperature.get
+          if economizer_activated_model
+            temperature_highlimit_model = oa_sys.get.getControllerOutdoorAir.getEconomizerMaximumLimitDryBulbTemperature.get
+          end
         end
 
         assert(economizer_activated_model == economizer_activated_target,
                "#{building_type}_#{template} is in #{climate_zone}. Air loop #{air_loop.name.get} system type is #{baseline_system_type}. The target economizer flag should be #{economizer_activated_target} but get #{economizer_activated_model}")
-        assert(temperature_highlimit_model - temperature_hihglimit_target <= 0.01,
-               "#{building_type}_#{template} is in #{climate_zone}. Air loop #{air_loop.name.get} system type is #{baseline_system_type}. The target economizer temperature high limit setpoint is #{temperature_hihglimit_target} but get #{temperature_highlimit_model}")
+        assert(temperature_highlimit_model - temperature_highlimit_target <= 0.01,
+               "#{building_type}_#{template} is in #{climate_zone}. Air loop #{air_loop.name.get} system type is #{baseline_system_type}. The target economizer temperature high limit setpoint is #{temperature_highlimit_target} but get #{temperature_highlimit_model}")
       end
     end
     return true
