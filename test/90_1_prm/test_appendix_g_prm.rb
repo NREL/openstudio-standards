@@ -1753,6 +1753,39 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+
+  def check_economizer_exception(baseline_base)
+    baseline_base.each do |baseline, baseline_model|
+      building_type, template, climate_zone, user_data_dir, mod = baseline
+      baseline_model.getAirLoopHVACs.each do |air_loop|
+        economizer_activated_target = false
+        temperature_highlimit_target = 23.89
+        air_loop_name = air_loop.name.get
+        baseline_system_type = air_loop.additionalProperties.getFeatureAsString("baseline_system_type")
+        if ['Building Story 3 VAV_PFP_Boxes (Sys8)', 'DataCenter_basement_ZN_6 ZN PSZ-VAV' ,'Basement Story 0 VAV_PFP_Boxes (Sys8)'].include?(air_loop_name) and climate_zone.end_with?("2B")
+          economizer_activated_target = true
+        end
+
+        economizer_activated_model = false
+        temperature_highlimit_model = 23.89
+        oa_sys = air_loop.airLoopHVACOutdoorAirSystem
+        if oa_sys.is_initialized
+          economizer_activated_model = true unless oa_sys.get.getControllerOutdoorAir.getEconomizerControlType == 'NoEconomizer'
+          if economizer_activated_model
+            temperature_highlimit_model = oa_sys.get.getControllerOutdoorAir.getEconomizerMaximumLimitDryBulbTemperature.get
+          end
+        end
+
+        assert(economizer_activated_model == economizer_activated_target,
+               "#{building_type}_#{template} is in #{climate_zone}. Air loop #{air_loop.name.get} system type is #{baseline_system_type}. The target economizer flag should be #{economizer_activated_target} but get #{economizer_activated_model}")
+        assert(temperature_highlimit_model - temperature_highlimit_target <= 0.01,
+               "#{building_type}_#{template} is in #{climate_zone}. Air loop #{air_loop.name.get} system type is #{baseline_system_type}. The target economizer temperature high limit setpoint is #{temperature_highlimit_target} but get #{temperature_highlimit_model}")
+      end
+    end
+    return true
+  end
+
+  # Set ZoneMultiplier to passed value for all zones
  # Check if coefficients of part-load power curve is correct per G3.1.3.15
   def check_variable_speed_fan_power(prototypes_base)
     prototypes_base.each do |prototype, model|
@@ -1805,7 +1838,6 @@ class AppendixGPRMTests < Minitest::Test
     standard = Standard.build('90.1-PRM-2019')
     prototypes_base.each do |prototype, model|
       building_type, template, climate_zone, mod = prototype
-
       model.getAirLoopHVACs.each do |air_loop|
         air_loop.thermalZones.each do |zone|
           zone.equipment.each do |equip|
@@ -2207,7 +2239,8 @@ class AppendixGPRMTests < Minitest::Test
       'hvac_sizing',
       'preheat_coil_ctrl',
       'vav_min_sp',
-      'multi_bldg_handling'
+      'multi_bldg_handling',
+      'economizer_exception'
     ]
 
     # Get list of unique prototypes
@@ -2240,5 +2273,6 @@ class AppendixGPRMTests < Minitest::Test
     check_psz_split_from_mz(prototypes_base['hvac_psz_split_from_mz']) if tests.include? 'hvac_psz_split_from_mz'
     check_vav_min_sp(prototypes_base['vav_min_sp']) if tests.include? 'vav_min_sp'
     check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
+    check_economizer_exception(prototypes_base['economizer_exception']) if tests.include? 'economizer_exception'
   end
 end

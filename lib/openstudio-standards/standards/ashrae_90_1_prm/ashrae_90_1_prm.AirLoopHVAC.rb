@@ -15,6 +15,72 @@ class ASHRAE901PRM < Standard
     return 0.05
   end
 
+  # Determine the economizer type and limits for the the PRM
+  # Defaults to 90.1-2007 logic.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Array<Double>] [economizer_type, drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
+  def air_loop_hvac_prm_economizer_type_and_limits(air_loop_hvac, climate_zone)
+    economizer_type = 'NoEconomizer'
+    drybulb_limit_f = nil
+    enthalpy_limit_btu_per_lb = nil
+    dewpoint_limit_f = nil
+    climate_zone_code = climate_zone.split('-')[-1]
+
+    if ['0B', '1B', '2B', '3B', '3C', '4B', '4C', '5B', '5C', '6B', '7A', '7B', '8A', '8B'].include? climate_zone_code
+      economizer_type = 'FixedDryBulb'
+      drybulb_limit_f = 75
+    elsif ['5A', '6A'].include? climate_zone_code
+      economizer_type = 'FixedDryBulb'
+      drybulb_limit_f = 70
+    end
+
+    return [economizer_type, drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
+  end
+
+  # Determine if an economizer is required per the PRM.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if required, false if not
+  def air_loop_hvac_prm_baseline_economizer_required?(air_loop_hvac, climate_zone)
+    economizer_required = false
+    baseline_system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
+    climate_zone_code = climate_zone.split('-')[-1]
+    # System type 3 through 8 and 11, 12 and 13
+    if ['SZ_AC', 'PSZ_AC', 'PVAV_Reheat', 'VAV_Reheat', 'SZ_VAV', 'PSZ_HP', 'SZ_CV', 'PSZ_HP', 'PVAV_PFP_Boxes', 'VAV_PFP_Boxes'].include? baseline_system_type
+      unless ['0A', '0B', '1A', '1B', '2A', '3A', '4A'].include? climate_zone_code
+        economizer_required = true
+      end
+    end
+
+    # System type 3 and 4 in computer rooms are subject to exceptions
+    if baseline_system_type == 'PSZ_AC' || baseline_system_type == 'PSZ_HP'
+      if air_loop_hvac.additionalProperties.hasFeature('zone_group_type')
+        if air_loop_hvac.additionalProperties.getFeatureAsString('zone_group_type').get == 'computer_zones'
+          economizer_required = false
+        end
+      end
+    end
+
+    # Check user_data in the zones
+    gas_phase_exception = false
+    open_refrigeration_exception = false
+    air_loop_hvac.thermalZones.each do |thermal_zone|
+      if thermal_zone.additionalProperties.hasFeature('economizer_exception_for_gas_phase_air_cleaning')
+        gas_phase_exception = true
+      end
+      if thermal_zone.additionalProperties.hasFeature('economizer_exception_for_open_refrigerated_cases')
+        open_refrigeration_exception = true
+      end
+    end
+    if gas_phase_exception || open_refrigeration_exception
+      economizer_required = false
+    end
+    return economizer_required
+  end
+
   # Calculate and apply the performance rating method
   # baseline fan power to this air loop based on the
   # system type that it represents.
