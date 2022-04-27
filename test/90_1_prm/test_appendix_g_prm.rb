@@ -1753,6 +1753,7 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+
   def check_economizer_exception(baseline_base)
     baseline_base.each do |baseline, baseline_model|
       building_type, template, climate_zone, user_data_dir, mod = baseline
@@ -1785,6 +1786,50 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   # Set ZoneMultiplier to passed value for all zones
+ # Check if coefficients of part-load power curve is correct per G3.1.3.15
+  def check_variable_speed_fan_power(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      model.getFanVariableVolumes.each do |supply_fan|
+        supply_fan_name = supply_fan.name.get.to_s
+
+      
+        # check fan curves
+        # Skip single-zone VAV fans
+        next if supply_fan.airLoopHVAC.get.thermalZones.size == 1
+        # coefficient 1
+        if supply_fan.fanPowerCoefficient1.is_initialized
+          expected_coefficient = 0.0013
+          coefficient = supply_fan.fanPowerCoefficient1.get
+          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+        end
+        # coefficient 2
+        if supply_fan.fanPowerCoefficient2.is_initialized
+          expected_coefficient = 0.1470
+          coefficient = supply_fan.fanPowerCoefficient2.get
+          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+        end
+        # coefficient 3
+        if supply_fan.fanPowerCoefficient4.is_initialized
+          expected_coefficient = 0.9506
+          coefficient = supply_fan.fanPowerCoefficient3.get
+          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+        end
+        # coefficient 4
+        if supply_fan.fanPowerCoefficient4.is_initialized
+          expected_coefficient = -0.0998
+          coefficient = supply_fan.fanPowerCoefficient4.get
+          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+        end
+        # coefficient 5
+        if supply_fan.fanPowerCoefficient5.is_initialized
+          expected_coefficient = 0
+          coefficient = supply_fan.fanPowerCoefficient5.get
+          assert((coefficient - expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+        end
+      end  
+    end
+  end
+
   # Check if the VAV box minimum flow setpoint are
   # assigned following the rules in Appendix G
   #
@@ -1814,6 +1859,7 @@ class AppendixGPRMTests < Minitest::Test
       end
     end  
   end
+
 
   # Set ZoneMultiplier to passed value for all zones
   #
@@ -2182,6 +2228,7 @@ class AppendixGPRMTests < Minitest::Test
       'daylighting_control',
       'light_occ_sensor',
       'infiltration',
+      'vav_fan_curve',
       'hvac_baseline',
       'hvac_psz_split_from_mz',
       'plant_temp_reset_ctrl',
@@ -2216,6 +2263,7 @@ class AppendixGPRMTests < Minitest::Test
     check_lpd(prototypes_base['lpd']) if tests.include? 'lpd'
     check_light_occ_sensor(prototypes['light_occ_sensor'], prototypes_base['light_occ_sensor']) if tests.include? 'light_occ_sensor'
     check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if tests.include? 'infiltration'
+    check_variable_speed_fan_power(prototypes_base['vav_fan_curve']) if tests.include? 'vav_fan_curve'
     check_hvac(prototypes_base['hvac_baseline']) if tests.include? 'hvac_baseline'
     check_sat_ctrl(prototypes_base['sat_ctrl']) if tests.include? 'sat_ctrl'
     check_number_of_boilers(prototypes_base['number_of_boilers']) if tests.include? 'number_of_boilers'
