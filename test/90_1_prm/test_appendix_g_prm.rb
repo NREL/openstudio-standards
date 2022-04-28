@@ -935,6 +935,11 @@ class AppendixGPRMTests < Minitest::Test
 
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
       @bldg_type_alt_now = @bldg_type_alt[prototype]
+      if ['0A', '0B', '1A', '1B', '2A', '2B', '3A'].include?(climate_zone.sub("ASHRAE 169-2013-", ""))
+        energy_type = 'Electric' 
+      else 
+        energy_type = 'Fuel'
+      end
 
       if building_type == 'MidriseApartment' && mod_str.nil?
         # Residential model should be ptac or pthp, depending on climate
@@ -955,6 +960,7 @@ class AppendixGPRMTests < Minitest::Test
       elsif building_type == 'RetailStripmall' && mod_str == 'set_zone_multiplier_3'
         # System type should be PVAV with 10 zones
         check_if_pvav(model, 'retail > 25,000 sq ft, 3 stories')
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'SmallOffice' && mod_str.nil?
         # System type should be PSZ
         check_if_psz(model, 'non-res, one story, < 25 ksf')
@@ -962,11 +968,13 @@ class AppendixGPRMTests < Minitest::Test
       elsif building_type == 'PrimarySchool' && mod_str == 'remove_transformer'
         # System type should be PVAV, some zones may be on PSZ systems
         check_if_pvav(model, 'nonres > 25,000 sq ft, < 150 ksf , 1 story')
-        check_heat_type(model, climate_zone, 'MZ', 'Electric')
+        check_heat_type(model, climate_zone, 'MZ', energy_type)
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'SecondarySchool' && mod_str == 'remove_transformer'
         # System type should be VAV/chiller
         check_if_vav_chiller(model, 'nonres > 150 ksf , 1 to 3 stories')
-        check_heat_type(model, climate_zone, 'MZ', 'Electric')
+        check_heat_type(model, climate_zone, 'MZ', energy_type)
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'MediumOffice' && mod_str == 'remove_transformer_return_relief_fan'
         # Check if baseline has return and relief fan and if fan power
         # distribution is correct
@@ -975,25 +983,33 @@ class AppendixGPRMTests < Minitest::Test
         # nonresidential, 4 to 5 stories, <= 25 ksf --> PVAV
         # System type should be PVAV with 10 zones, area is 22,012 sf
         check_if_pvav(model, 'other nonres > 4 to 5 stories, <= 25 ksf')
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier_5'
         # nonresidential, 4 to 5 stories, <= 150 ksf --> PVAV
         # System type should be PVAV with 10 zones, area is 27,515 sf
         check_if_pvav(model, 'other nonres > 4 to 5 stories, <= 150 ksf')
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'PrimarySchool' && mod_str.include?('set_zone_multiplier_4')
         # nonresidential, 4 to 5 stories, > 150 ksf --> VAV/chiller
         # System type should be PVAV with 10 zones, area is 22,012 sf
         check_if_vav_chiller(model, 'other nonres > 4 to 5 stories, > 150 ksf')
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier_6'
         # 6+ stories, any floor area --> VAV/chiller
         # This test has floor area 33,018 sf
         check_if_vav_chiller(model, ' other nonres > 6 stories')
+        check_terminal_type(model, energy_type, run_id)
       elsif @bldg_type_alt_now == 'Hospital' && building_type == 'SmallOffice'
+        energy_type = 'Fuel' # Table G3.1.1-3 Note 4
         # Hospital < 25 ksf is PVAV; different rule than non-res
         check_if_pvav(model, 'hospital, floor area < 25 ksf.')
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'Hospital' && mod_str.nil?
+        energy_type = 'Fuel' # Table G3.1.1-3 Note 4
         # System type should be VAV/chiller, area is 241 ksf
         check_if_vav_chiller(model, 'hospital > 4 to 5 stories, > 150 ksf')
-        check_heat_type(model, climate_zone, 'MZ', 'Fuel')
+        check_heat_type(model, climate_zone, 'MZ', energy_type)
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'Warehouse'
         # System type should be system 9, 10 but with no mechanical cooling
         check_if_heat_only(model, climate_zone, building_type)
@@ -1264,6 +1280,46 @@ class AppendixGPRMTests < Minitest::Test
       fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
       assert(fan_power_ip.round(2) == 0.35, "Fan power for terminal fan in #{sub_text} is #{fan_power_ip.round(1)} instead of 0.35.")
     end
+  end
+
+  # Check if model uses standard VAV boxes of FP boxes
+  # @param model [OpenStudio::Model::Model] OpenStudio model
+  # @param energy_source [String] Energy source used for heating
+  def check_terminal_type(model, energy_source, mod_str)
+    model.getAirLoopHVACs.each do |airloop|
+      airloop.thermalZones.each do |zone|
+        zone.equipment.each do |equip|
+          expected_results = false
+          if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
+            expected_results = true if energy_source != 'Electric'
+            assert(expected_results, "Standard VAV boxes are not expected for #{mod_str}.")
+          elsif equip.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized
+            expected_results = true if energy_source == 'Electric'
+            terminal = equip.to_AirTerminalSingleDuctParallelPIUReheat.get
+            assert(expected_results, "Fan powered boxes are not expected for #{mod_str}.")
+            # check secondary flow fraction
+            check_secondary_flow_fraction(terminal, mod_str)
+          end
+        end
+      end
+    end
+  end
+
+  # Check the model's secondary flow fraction
+  # @param model [OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat] Parallel PIU terminal
+  def check_secondary_flow_fraction(terminal, mod_str)
+    if terminal.maximumSecondaryAirFlowRate.is_initialized
+      secondary_flow = terminal.maximumSecondaryAirFlowRate.get.to_f
+    else
+      secondary_flow = terminal.autosizedMaximumSecondaryAirFlowRate.get.to_f
+    end
+    if terminal.maximumPrimaryAirFlowRate.is_initialized
+      primary_flow = terminal.maximumSecondaryAirFlowRate.get.to_f
+    else
+      primary_flow = terminal.autosizedMaximumPrimaryAirFlowRate.get.to_f
+    end
+    secondary_flow_frac = secondary_flow / primary_flow
+    assert(secondary_flow_frac.round(2) == 0.5, "Expected secondary flow fraction should be 0.5 but #{secondary_flow_frac} is used for #{mod_str}.")
   end
 
   # Check if baseline system type is PTAC or PTHP
@@ -1744,6 +1800,83 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+
+  def check_economizer_exception(baseline_base)
+    baseline_base.each do |baseline, baseline_model|
+      building_type, template, climate_zone, user_data_dir, mod = baseline
+      baseline_model.getAirLoopHVACs.each do |air_loop|
+        economizer_activated_target = false
+        temperature_highlimit_target = 23.89
+        air_loop_name = air_loop.name.get
+        baseline_system_type = air_loop.additionalProperties.getFeatureAsString("baseline_system_type")
+        if ['Building Story 3 VAV_PFP_Boxes (Sys8)', 'DataCenter_basement_ZN_6 ZN PSZ-VAV' ,'Basement Story 0 VAV_PFP_Boxes (Sys8)'].include?(air_loop_name) and climate_zone.end_with?("2B")
+          economizer_activated_target = true
+        end
+
+        economizer_activated_model = false
+        temperature_highlimit_model = 23.89
+        oa_sys = air_loop.airLoopHVACOutdoorAirSystem
+        if oa_sys.is_initialized
+          economizer_activated_model = true unless oa_sys.get.getControllerOutdoorAir.getEconomizerControlType == 'NoEconomizer'
+          if economizer_activated_model
+            temperature_highlimit_model = oa_sys.get.getControllerOutdoorAir.getEconomizerMaximumLimitDryBulbTemperature.get
+          end
+        end
+
+        assert(economizer_activated_model == economizer_activated_target,
+               "#{building_type}_#{template} is in #{climate_zone}. Air loop #{air_loop.name.get} system type is #{baseline_system_type}. The target economizer flag should be #{economizer_activated_target} but get #{economizer_activated_model}")
+        assert(temperature_highlimit_model - temperature_highlimit_target <= 0.01,
+               "#{building_type}_#{template} is in #{climate_zone}. Air loop #{air_loop.name.get} system type is #{baseline_system_type}. The target economizer temperature high limit setpoint is #{temperature_highlimit_target} but get #{temperature_highlimit_model}")
+      end
+    end
+    return true
+  end
+
+  # Set ZoneMultiplier to passed value for all zones
+ # Check if coefficients of part-load power curve is correct per G3.1.3.15
+  def check_variable_speed_fan_power(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      model.getFanVariableVolumes.each do |supply_fan|
+        supply_fan_name = supply_fan.name.get.to_s
+
+      
+        # check fan curves
+        # Skip single-zone VAV fans
+        next if supply_fan.airLoopHVAC.get.thermalZones.size == 1
+        # coefficient 1
+        if supply_fan.fanPowerCoefficient1.is_initialized
+          expected_coefficient = 0.0013
+          coefficient = supply_fan.fanPowerCoefficient1.get
+          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+        end
+        # coefficient 2
+        if supply_fan.fanPowerCoefficient2.is_initialized
+          expected_coefficient = 0.1470
+          coefficient = supply_fan.fanPowerCoefficient2.get
+          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+        end
+        # coefficient 3
+        if supply_fan.fanPowerCoefficient4.is_initialized
+          expected_coefficient = 0.9506
+          coefficient = supply_fan.fanPowerCoefficient3.get
+          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+        end
+        # coefficient 4
+        if supply_fan.fanPowerCoefficient4.is_initialized
+          expected_coefficient = -0.0998
+          coefficient = supply_fan.fanPowerCoefficient4.get
+          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+        end
+        # coefficient 5
+        if supply_fan.fanPowerCoefficient5.is_initialized
+          expected_coefficient = 0
+          coefficient = supply_fan.fanPowerCoefficient5.get
+          assert((coefficient - expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+        end
+      end  
+    end
+  end
+
   # Check if the VAV box minimum flow setpoint are
   # assigned following the rules in Appendix G
   #
@@ -1752,7 +1885,6 @@ class AppendixGPRMTests < Minitest::Test
     standard = Standard.build('90.1-PRM-2019')
     prototypes_base.each do |prototype, model|
       building_type, template, climate_zone, mod = prototype
-
       model.getAirLoopHVACs.each do |air_loop|
         air_loop.thermalZones.each do |zone|
           zone.equipment.each do |equip|
@@ -1774,6 +1906,7 @@ class AppendixGPRMTests < Minitest::Test
       end
     end  
   end
+
 
   # Set ZoneMultiplier to passed value for all zones
   #
@@ -2142,6 +2275,7 @@ class AppendixGPRMTests < Minitest::Test
       'daylighting_control',
       'light_occ_sensor',
       'infiltration',
+      'vav_fan_curve',
       'hvac_baseline',
       'hvac_psz_split_from_mz',
       'plant_temp_reset_ctrl',
@@ -2152,7 +2286,8 @@ class AppendixGPRMTests < Minitest::Test
       'hvac_sizing',
       'preheat_coil_ctrl',
       'vav_min_sp',
-      'multi_bldg_handling'
+      'multi_bldg_handling',
+      'economizer_exception'
     ]
 
     # Get list of unique prototypes
@@ -2175,6 +2310,7 @@ class AppendixGPRMTests < Minitest::Test
     check_lpd(prototypes_base['lpd']) if tests.include? 'lpd'
     check_light_occ_sensor(prototypes['light_occ_sensor'], prototypes_base['light_occ_sensor']) if tests.include? 'light_occ_sensor'
     check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if tests.include? 'infiltration'
+    check_variable_speed_fan_power(prototypes_base['vav_fan_curve']) if tests.include? 'vav_fan_curve'
     check_hvac(prototypes_base['hvac_baseline']) if tests.include? 'hvac_baseline'
     check_sat_ctrl(prototypes_base['sat_ctrl']) if tests.include? 'sat_ctrl'
     check_number_of_boilers(prototypes_base['number_of_boilers']) if tests.include? 'number_of_boilers'
@@ -2185,5 +2321,6 @@ class AppendixGPRMTests < Minitest::Test
     check_vav_min_sp(prototypes_base['vav_min_sp']) if tests.include? 'vav_min_sp'
     check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
     check_multi_lpd_handling(prototypes_base['lpd_userdata_handling']) if tests.include? 'lpd_userdata_handling'
+    check_economizer_exception(prototypes_base['economizer_exception']) if tests.include? 'economizer_exception'
   end
 end

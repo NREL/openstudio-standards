@@ -467,10 +467,10 @@ class OpenStudio::Model::Model
         heat_type = self.coil_heat_type(equipment.reheatCoil)  
       when 'OS_AirTerminal_SingleDuct_InletSideMixer'
         # TODO
-      when 'OS_AirTerminal_SingleDuct_ParallelPIUReheat'
+      when 'OS_AirTerminal_SingleDuct_ParallelPIU_Reheat'
         equipment = equipment.to_AirTerminalSingleDuctParallelPIUReheat.get
         heat_type = self.coil_heat_type(equipment.reheatCoil) 
-      when 'OS_AirTerminal_SingleDuct_SeriesPIUReheat'
+      when 'OS_AirTerminal_SingleDuct_SeriesPIU_Reheat'
         equipment = equipment.to_AirTerminalSingleDuctSeriesPIUReheat.get
         heat_type = self.coil_heat_type(equipment.reheatCoil) 
       when 'OS_AirTerminal_SingleDuct_VAVHeatAndCool_Reheat'
@@ -628,10 +628,10 @@ class OpenStudio::Model::Model
         fuels += self.coil_heating_fuels(equipment.reheatCoil)  
       when 'OS_AirTerminal_SingleDuct_InletSideMixer'
         # @todo complete method
-      when 'OS_AirTerminal_SingleDuct_ParallelPIUReheat'
+      when 'OS_AirTerminal_SingleDuct_ParallelPIU_Reheat'
         equipment = equipment.to_AirTerminalSingleDuctParallelPIUReheat.get
         fuels += self.coil_heating_fuels(equipment.reheatCoil) 
-      when 'OS_AirTerminal_SingleDuct_SeriesPIUReheat'
+      when 'OS_AirTerminal_SingleDuct_SeriesPIU_Reheat'
         equipment = equipment.to_AirTerminalSingleDuctSeriesPIUReheat.get
         fuels += self.coil_heating_fuels(equipment.reheatCoil) 
       when 'OS_AirTerminal_SingleDuct_VAVHeatAndCool_Reheat'

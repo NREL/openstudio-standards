@@ -28,6 +28,11 @@
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", []],
         ["Warehouse", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", []]
     ],
+    "vav_fan_curve": [
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-4A", "no_user_data",[["remove_transformer", []]]],
+        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "no_user_data",[["remove_transformer", []]]]     
+    ],
     "hvac_baseline": [
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["remove_transformer", []], ["return_relief_fan", []]]],
         ["Warehouse", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data", [["remove_cooling_coils", []]]],
@@ -107,8 +112,9 @@
         ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["remove_transformer", []]]]
     ],
     "multi_bldg_handling": [
-        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-3A", "userdata_ofs_01", [["set_model_building_name","SmallOffice"]]],
-        ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_ofs_03", [["set_model_building_name", "LargeHotel"], ["remove_transformer", []]]]],
+        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-3A", "userdata_ofs_01",[["set_model_building_name","SmallOffice"]]],
+        ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_ofs_03",[["set_model_building_name", "LargeHotel"], ["remove_transformer", []]]]
+    ],
     "vav_min_sp": [
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["remove_transformer", []]]],
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "no_user_data", [["remove_transformer", []]]]
@@ -117,5 +123,10 @@
         ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_lpd_01",[["remove_transformer", []]]],
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data",[]],
         ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_lpd_02",[["remove_transformer", []]]]
+    ],
+    "economizer_exception": [
+        ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_econ_except_01",[["remove_transformer", []]]],
+        ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
+        ["Warehouse", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_cooling_coils", []]]]
     ]
 }

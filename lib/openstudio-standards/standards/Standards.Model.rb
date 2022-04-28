@@ -70,9 +70,8 @@ class Standard
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, debug = false)
     # user data process
     bldg_type_hvac_zone_hash = {}
-    handle_multi_building_area_types(user_model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
+    handle_user_input_data(user_model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
     # NOTE - bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
-    
     # Define different orientation from original orientation
     # for each individual baseline models
     degs_from_org = run_all_orients ? [0, 90, 180, 270] : [0]
@@ -246,6 +245,7 @@ class Standard
 
       # Determine the baseline HVAC system type for each of the groups of zones and add that system type.
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
+      air_loop_name_array = []
       sys_groups.each do |sys_group|
         # Determine the primary baseline system type
         if /prm/i !~ template
@@ -289,15 +289,21 @@ class Standard
                                       system_type[3],
                                       sys_group['zones'],
                                       zone_fan_scheds)
-
-        # Add system type reference to all airloops
-        model.getAirLoopHVACs.sort.each do |air_loop|
-          if air_loop.thermalZones[0].additionalProperties.hasFeature('baseline_system_type')
-            sys_type = air_loop.thermalZones[0].additionalProperties.getFeatureAsString('baseline_system_type').get
-            air_loop.additionalProperties.setFeature('baseline_system_type', sys_type)
-          else
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Thermal zone #{air_loop.thermalZones[0].name} is not associated to a particular system type.")
+        model.getAirLoopHVACs.each do |air_loop|
+          air_loop_name = air_loop.name.get
+          unless air_loop_name_array.include?(air_loop_name)
+            air_loop.additionalProperties.setFeature('zone_group_type', sys_group['zone_group_type'] || 'None')
+            air_loop_name_array << air_loop_name
           end
+        end
+      end
+      # Add system type reference to all airloops
+      model.getAirLoopHVACs.sort.each do |air_loop|
+        if air_loop.thermalZones[0].additionalProperties.hasFeature('baseline_system_type')
+          sys_type = air_loop.thermalZones[0].additionalProperties.getFeatureAsString('baseline_system_type').get
+          air_loop.additionalProperties.setFeature('baseline_system_type', sys_type)
+        else
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Thermal zone #{air_loop.thermalZones[0].name} is not associated to a particular system type.")
         end
       end
 
@@ -412,6 +418,9 @@ class Standard
 
       # Delete all the unused resource objects
       model_remove_unused_resource_objects(model)
+
+      # Add reporting tolerances
+      model_add_reporting_tolerances(model)
 
       # @todo: turn off self shading
       # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
@@ -1031,6 +1040,7 @@ class Standard
       htd_only_group = {}
       htd_only_group['occ'] = 'heated-only storage'
       htd_only_group['fuel'] = 'any'
+      htd_only_group['zone_group_type'] = 'heated_only_zones'
       area_m2 = 0
       heated_only_zones.each do |zone|
         area_m2 += zone.floorArea * zone.multiplier
@@ -1045,6 +1055,7 @@ class Standard
       district_cooled_group = {}
       district_cooled_group['occ'] = hvac_building_type
       district_cooled_group['fuel'] = 'districtcooling'
+      district_cooled_group['zone_group_type'] = 'district_cooled_zones'
       area_m2 = 0
       district_cooled_zones.each do |zone|
         area_m2 += zone.floorArea * zone.multiplier
@@ -1060,8 +1071,8 @@ class Standard
     unless heated_cooled_zones.empty?
       heated_cooled_group = {}
       heated_cooled_group['occ'] = hvac_building_type
-
       heated_cooled_group['fuel'] = 'any'
+      heated_cooled_group['zone_group_type'] = 'heated_cooled_zones'
       area_m2 = 0
       heated_cooled_zones.each do |zone|
         area_m2 += zone.floorArea * zone.multiplier
@@ -1078,6 +1089,7 @@ class Standard
       lab_group = {}
       lab_group['occ'] = hvac_building_type
       lab_group['fuel'] = 'any'
+      lab_group['zone_group_type'] = 'lab_zones'
       area_m2 = 0
       lab_zones.each do |zone|
         area_m2 += zone.floorArea * zone.multiplier
@@ -1094,6 +1106,7 @@ class Standard
       comp_room_svav_group = {}
       comp_room_svav_group['occ'] = 'computer room szvav'
       comp_room_svav_group['fuel'] = 'any'
+      comp_room_svav_group['zone_group_type'] = 'computer_zones'
       area_m2 = 0
       comp_room_svav_zones.each do |zone|
         area_m2 += zone.floorArea * zone.multiplier
@@ -1110,6 +1123,7 @@ class Standard
       comp_room_psz_group = {}
       comp_room_psz_group['occ'] = 'computer room psz'
       comp_room_psz_group['fuel'] = 'any'
+      comp_room_psz_group['zone_group_type'] = 'computer_zones'
       area_m2 = 0
       comp_room_psz_zones.each do |zone|
         area_m2 += zone.floorArea * zone.multiplier
@@ -1126,6 +1140,7 @@ class Standard
       dist_comp_room_svav_group = {}
       dist_comp_room_svav_group['occ'] = hvac_building_type
       dist_comp_room_svav_group['fuel'] = 'districtcooling'
+      dist_comp_room_svav_group['zone_group_type'] = 'computer_zones'
       area_m2 = 0
       dist_comp_room_svav_zones.each do |zone|
         area_m2 += zone.floorArea * zone.multiplier
@@ -1142,6 +1157,7 @@ class Standard
       dist_comp_room_psz_group = {}
       dist_comp_room_psz_group['occ'] = hvac_building_type
       dist_comp_room_psz_group['fuel'] = 'districtcooling'
+      dist_comp_room_psz_group['zone_group_type'] = 'computer_zones'
       area_m2 = 0
       dist_comp_room_psz_zones.each do |zone|
       end
@@ -7389,11 +7405,10 @@ class Standard
     return 'warmest_zone'
   end
 
-  # A template method that handles multiple building area type inputs for PRM baseline creation
-  # The inputs shall come from userdata csv files / json file.
-  # Plan 1. Add the values to space / zone additional properties.
-  # Plan 2. return hash table and pass the value into PRM function
-  # FOR NOW, just return an abitrary integer
+  # A template method that handles the loading of user input data from multiple sources
+  # include data source from:
+  # 1. user data csv files
+  # 2. data from measure and OpenStudio interface
   # @param [Openstudio:model:Model] model
   # @param [String] climate_zone
   # @param [String] default_hvac_building_type
@@ -7401,7 +7416,7 @@ class Standard
   # @param [String] default_swh_building_type
   # @param [Hash] bldg_type_hvac_zone_hash A hash maps building type for hvac to a list of thermal zones
   # @return True
-  def handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
+  def handle_user_input_data(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     return true
   end
 
@@ -7416,5 +7431,18 @@ class Standard
     return true
   end
 
+  # Add reporting tolerances. Default values are based on the suggestions from the PRM-RM.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio Model
+  # @param heating_tolerance_deg_f [Float] Tolerance for time heating setpoint not met in degree F
+  # @param cooling_tolerance_deg_f [Float] Tolerance for time cooling setpoint not met in degree F
+  def model_add_reporting_tolerances(model, heating_tolerance_deg_f: 1.0, cooling_tolerance_deg_f: 1.0)
+    reporting_tolerances = model.getOutputControlReportingTolerances
+    heating_tolerance_deg_c = OpenStudio.convert(heating_tolerance_deg_f, 'R', 'K').get
+    cooling_tolerance_deg_c = OpenStudio.convert(cooling_tolerance_deg_f, 'R', 'K').get
+    reporting_tolerances.setToleranceforTimeHeatingSetpointNotMet(heating_tolerance_deg_c)
+    reporting_tolerances.setToleranceforTimeCoolingSetpointNotMet(cooling_tolerance_deg_c)
 
+    return true
+  end
 end
