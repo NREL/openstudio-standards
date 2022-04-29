@@ -1,7 +1,6 @@
 {
     "wwr": [
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", []],
-        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["remove_transformer", []]]]
+        ["MidriseApartment", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data", [["add_piping_insulation", []]]]
     ],
     "srr": [
         ["RetailStandalone", "90.1-2010", "ASHRAE 169-2013-2A", "no_user_data", [["increase_skylight_size", [10]]]]

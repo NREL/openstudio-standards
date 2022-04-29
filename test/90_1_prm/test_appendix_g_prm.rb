@@ -2214,6 +2214,19 @@ class AppendixGPRMTests < Minitest::Test
     return model
   end
 
+  # Add piping insulation to service heating water systems
+
+  def add_piping_insulation(model, arguments)
+    std = Standard.build('90.1-PRM-2019')
+    model.getPlantLoops.each do |plantloop|
+      if std.plant_loop_swh_loop?(plantloop)
+        std.model_add_piping_losses_to_swh_system(model, plantloop, true)
+      end
+    end
+
+    return model
+  end
+
   # Run test suite for the ASHRAE 90.1 appendix G Performance
   # Rating Method (PRM) baseline automation implementation
   # in openstudio-standards.
