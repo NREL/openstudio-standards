@@ -2287,8 +2287,8 @@ class AppendixGPRMTests < Minitest::Test
       'preheat_coil_ctrl',
       'vav_min_sp',
       'multi_bldg_handling',
-      'economizer_exception'
-      'lpd_userdata_handling',
+      'economizer_exception',
+      'lpd_userdata_handling'
     ]
 
     # Get list of unique prototypes
