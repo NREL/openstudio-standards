@@ -2288,6 +2288,7 @@ class AppendixGPRMTests < Minitest::Test
       'vav_min_sp',
       'multi_bldg_handling',
       'economizer_exception'
+      'lpd_userdata_handling',
     ]
 
     # Get list of unique prototypes

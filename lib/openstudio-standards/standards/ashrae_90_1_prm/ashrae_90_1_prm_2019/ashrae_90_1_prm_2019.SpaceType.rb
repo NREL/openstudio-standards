@@ -56,12 +56,13 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # Get userdata from userdata_space and userdata_spacetype
     user_spaces = @standards_data.key?('userdata_space') ? @standards_data['userdata_space'] : nil
     user_spacetypes = @standards_data.key?('userdata_spacetype') ? @standards_data['userdata_spacetype'] : nil
-    if user_spaces && user_spaces.length >= 1
+    if user_spaces && user_spaces.length >= 1 && has_user_lpd_values(user_spaces)
+      # if space type has user data & data has lighting data for user space
       # call this function to enforce space-space_type one on one relationship
       space_to_space_type_apply_lighting(user_spaces, user_spacetypes, space_type)
     else
-      if user_spacetypes && user_spacetypes.length >= 1
-        # if space type has user data
+      if user_spacetypes && user_spacetypes.length >= 1 && has_user_lpd_values(user_spacetypes)
+        # if space type has user data & data has lighting data for user space type
         user_space_type_index = user_spacetypes.index { |user_spacetype| user_spacetype['name'] == space_type.name.get }
         if user_space_type_index.nil?
           # cannot find a matched user_spacetype to space_type, use space_type to set LPD
@@ -122,8 +123,10 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         user_space_index = user_spaces.index { |user_space| user_space['name'] == space.name.get }
         unless user_space_index.nil?
           user_space_data = user_spaces[user_space_index]
-          space_lighting_per_area = calculate_lpd_from_userdata(user_space_data, space)
-          space_lighting_per_area_hash[space.name.get] = space_lighting_per_area
+          if user_space_data.key?('num_std_ltg_types') && user_space_data['num_std_ltg_types'].to_f > 0
+            space_lighting_per_area = calculate_lpd_from_userdata(user_space_data, space)
+            space_lighting_per_area_hash[space.name.get] = space_lighting_per_area
+          end
         end
       end
     end
@@ -133,12 +136,14 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       user_space_type_index = user_spacetypes.index { |user_spacetype| user_spacetype['name'] == space_type.name.get }
       unless user_space_type_index.nil?
         user_space_type_data = user_spacetypes[user_space_type_index]
-        space_type.spaces.each do |space|
-          # unless the space is in the hash, we will add lighting per area to the space
-          space_name = space.name.get
-          unless space_lighting_per_area_hash.key?(space_name)
-            space_lighting_per_area = calculate_lpd_from_userdata(user_space_type_data, space)
-            space_lighting_per_area_hash[space_name] = space_lighting_per_area
+        if user_space_type_data.key?('num_std_ltg_types') && user_space_type_data['num_std_ltg_types'].to_f > 0
+          space_type.spaces.each do |space|
+            # unless the space is in the hash, we will add lighting per area to the space
+            space_name = space.name.get
+            unless space_lighting_per_area_hash.key?(space_name)
+              space_lighting_per_area = calculate_lpd_from_userdata(user_space_type_data, space)
+              space_lighting_per_area_hash[space_name] = space_lighting_per_area
+            end
           end
         end
       end
@@ -180,7 +185,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # set schedule for lighting
     schedule_hash = {}
     model.getSpaces.each do |space|
-      unless space.spaceType.get.lights.length == 0
+      unless space.spaceType.get.lights.empty?
         ltg = space.spaceType.get.lights[0]
         if ltg.schedule.is_initialized
           ltg_schedule = ltg.schedule.get
@@ -302,6 +307,16 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     return space_lighting_per_area
   end
 
+  # Function checks whether the user data contains lighting data
+  def has_user_lpd_values(user_space_data)
+    user_space_data.each do |user_data|
+      if user_data.key?('num_std_ltg_types') && user_data['num_std_ltg_types'].to_f > 0
+        return true
+      end
+    end
+    return false
+  end
+
   # Function checks whether there are multi lpd values in the space type
   # multi-lpd value means there are multiple spaces and the lighting_per_length > 0
   def has_multi_lpd_values_space_type(space_type)
@@ -390,7 +405,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       occupancy_control_credit_sum += occ_control_reduction_factor * user_space_type_lighting_area * sub_space_type_frac
     end
     # add calculated occupancy control credit for later ltg schedule adjustment
-    space.additionalProperties.setFeature('occ_control_credit', occupancy_control_credit_sum / space_lighting_per_area)
+    space.additionalProperties.setFeature('occ_control_credit', space_lighting_per_area > 0 ? occupancy_control_credit_sum / space_lighting_per_area : occupancy_control_credit_sum)
     return space_lighting_per_area
   end
 end
