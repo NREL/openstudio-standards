@@ -657,6 +657,8 @@ class ASHRAE901PRM < Standard
     handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     # load user data from proposed model
     handle_airloop_user_input_data(model)
+    # load zone HVAC user data from proposed model
+    handle_zone_hvac_user_input_data(model)
   end
 
   # A function to load airloop data from userdata csv files
@@ -671,17 +673,37 @@ class ASHRAE901PRM < Standard
         user_airloops.each do |user_airloop|
           if air_loop_name == user_airloop['name']
             # gas phase air cleaning is system base - add proposed hvac system name to zones
-            if user_airloop.key?('economizer_exception_for_gas_phase_air_cleaning') &&
-               user_airloop['economizer_exception_for_gas_phase_air_cleaning'].downcase == 'yes'
-              air_loop.thermalZones.each do |thermal_zone|
-                thermal_zone.additionalProperties.setFeature('economizer_exception_for_gas_phase_air_cleaning', air_loop_name)
-              end
+            if user_airloop.key?('economizer_exception_for_gas_phase_air_cleaning') && !user_airloop['economizer_exception_for_gas_phase_air_cleaning'].nil?
+              if user_airloop['economizer_exception_for_gas_phase_air_cleaning'].downcase == 'yes'
+                air_loop.thermalZones.each do |thermal_zone|
+                  thermal_zone.additionalProperties.setFeature('economizer_exception_for_gas_phase_air_cleaning', air_loop_name)
+                end
+             end
             end
             # Open refrigerated cases is zone based - add yes or no to zones
-            if user_airloop.key?('economizer_exception_for_open_refrigerated_cases') &&
-               user_airloop['economizer_exception_for_open_refrigerated_cases'].downcase == 'yes'
-              air_loop.thermalZones.each do |thermal_zone|
-                thermal_zone.additionalProperties.setFeature('economizer_exception_for_open_refrigerated_cases', 'yes')
+            if user_airloop.key?('economizer_exception_for_open_refrigerated_cases') && !user_airloop['economizer_exception_for_open_refrigerated_cases'].nil?
+              if user_airloop['economizer_exception_for_open_refrigerated_cases'].downcase == 'yes'
+                air_loop.thermalZones.each do |thermal_zone|
+                  thermal_zone.additionalProperties.setFeature('economizer_exception_for_open_refrigerated_cases', 'yes')
+                end
+             end
+            end
+            # Fan power credits
+            user_airloop.keys.each do |info_key|
+              if info_key.include?('fan_power_credit')
+                if !user_airloop[info_key].to_s.empty?
+                  if info_key.include?('has_')
+                    if user_airloop[info_key].downcase == 'yes'
+                      air_loop.thermalZones.each do |thermal_zone|
+                        thermal_zone.additionalProperties.setFeature(info_key, 'yes')
+                      end
+                    end
+                  else
+                    air_loop.thermalZones.each do |thermal_zones|
+                      thermal_zone.additionalProperties.setFeature(info_key, user_airloop[info_key].to_s)
+                    end
+                  end
+                end
               end
             end
           end
@@ -888,5 +910,72 @@ class ASHRAE901PRM < Standard
       wateruse_equipment.additionalProperties.setFeature('building_type_for_swh', type_for_swh)
     end
     return true
+  end
+
+  # Retrieve zone HVAC user specified compliance inputs from CSV file
+  #
+  # @param [OpenStudio::Model::Model] OpenStudio model object
+  def handle_zone_hvac_user_input_data(model)
+    user_zone_hvac = @standards_data.key?('userdata_zone_hvac') ? @standards_data['userdata_zone_hvac'] : nil
+    return unless !user_zone_hvac.empty?
+
+    zone_hvac_equipment = model.getZoneHVACComponents
+    if zone_hvac_equipment.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', 'No zone HVAC equipment is present in the proposed model, user provided information cannot be used to generate the baseline building model.')
+      return
+    end
+
+    user_zone_hvac.each do |zone_hvac_eqp_info|
+      user_defined_zone_hvac_obj_name = zone_hvac_eqp_info['name']
+      user_defined_zone_hvac_obj_type_name = zone_hvac_eqp_info['zone_hvac_object_type_name']
+
+      # Check that the object type name do exist
+      begin
+        user_defined_zone_hvac_obj_type_name_idd = user_defined_zone_hvac_obj_type_name.to_IddObjectType
+      rescue StandardError => e
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', "#{user_defined_zone_hvac_obj_type_name}, provided in the user zone HVAC user data, is not a valid OpenStudio model object.")
+      end
+
+      # Retrieve zone HVAC object(s) by name
+      zone_hvac_eqp = model.getZoneHVACComponentsByName(user_defined_zone_hvac_obj_name, false)
+
+      # If multiple object have the same name
+      if zone_hvac_eqp.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', "The #{user_defined_zone_hvac_obj_type_name} object named #{user_defined_zone_hvac_obj_name} provided in the user zone HVAC user data could not be found in the model.")
+      elsif zone_hvac_eqp.length == 1
+        zone_hvac_eqp = zone_hvac_eqp[0]
+        zone_hvac_eqp_idd = zone_hvac_eqp.iddObjectType.to_s
+        if zone_hvac_eqp_idd != user_defined_zone_hvac_obj_type_name
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', "The object type name provided in the zone HVAC user data (#{user_defined_zone_hvac_obj_type_name}) does not match with the one in the model: #{zone_hvac_eqp_idd}.")
+        end
+      else
+        zone_hvac_eqp.each do |eqp|
+          zone_hvac_eqp_idd = eqp.iddObjectType
+          if zone_hvac_eqp_idd == user_defined_zone_hvac_obj_type_name
+            zone_hvac_eqp = eqp
+            break
+          end
+        end
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', "A #{user_defined_zone_hvac_obj_type_name} object named #{user_defined_zone_hvac_obj_name} (as specified in the user zone HVAC data) could not be found in the model.")
+      end
+
+      if zone_hvac_eqp.thermalZone.is_initialized
+        thermal_zone = zone_hvac_eqp.thermalZone.get
+
+        zone_hvac_eqp_info.keys.each do |info_key|
+          if info_key.include?('fan_power_credit')
+            if !zone_hvac_eqp_info[info_key].to_s.empty?
+              if info_key.include?('has_')
+                if zone_hvac_eqp_info[info_key].downcase == 'yes'
+                  thermal_zone.additionalProperties.setFeature(info_key, 'yes')
+                end
+              else
+                thermal_zone.additionalProperties.setFeature(info_key, zone_hvac_eqp_info[info_key].to_s)
+              end
+            end
+          end
+        end
+      end
+    end
   end
 end
