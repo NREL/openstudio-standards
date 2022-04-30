@@ -1,6 +1,7 @@
 {
     "wwr": [
-        ["MidriseApartment", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data", [["add_piping_insulation", []]]]
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", []],
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["remove_transformer", []]]]
     ],
     "srr": [
         ["RetailStandalone", "90.1-2010", "ASHRAE 169-2013-2A", "no_user_data", [["increase_skylight_size", [10]]]]
@@ -31,6 +32,10 @@
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-4A", "no_user_data",[["remove_transformer", []]]],
         ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "no_user_data",[["remove_transformer", []]]]     
+    ],
+    "pipe_insulation": [
+        
+        ["MidriseApartment", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data", [["add_piping_insulation", []]]]
     ],
     "hvac_baseline": [
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["remove_transformer", []], ["return_relief_fan", []]]],

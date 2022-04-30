@@ -242,12 +242,12 @@ class Standard
       # Remove all EMS objects from the model
       model_remove_prm_ems_objects(model)
 
-      # if /prm/i !~ template
+      
 
         # Modify the service water heating loops per the baseline rules
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
         model_apply_baseline_swh_loops(model, building_type)
-      # end
+      
 
       # Determine the baseline HVAC system type for each of the groups of zones and add that system type.
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')

@@ -895,7 +895,6 @@ class ASHRAE901PRM < Standard
   # @param model [OpenStudio::Model::Model] the model
   # @param building_type [String] the building type
   # @return [Bool] returns true if successful, false if not
-  # @author Julien Marrec
   def model_apply_baseline_swh_loops(model, building_type)
     model.getPlantLoops.sort.each do |plant_loop|
       # Skip non service water heating loops
