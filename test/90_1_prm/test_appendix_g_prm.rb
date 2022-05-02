@@ -1220,7 +1220,7 @@ class AppendixGPRMTests < Minitest::Test
       fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
       fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
       fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
-      assert(fan_bhp_ip.round(5) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_power_ip.round(1)} instead of 0.0013.")
+      assert(fan_bhp_ip.round(4) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_power_ip.round(4)} instead of 0.0013.")
       fan_bhp_ip *= OpenStudio.convert(std.fan_design_air_flow(fan), 'm^3/s', 'cfm').get
       if fan_bhp_ip <= 20.0 && fan_bhp_ip > 15.0
         assert(fan.motorEfficiency == 0.91, "Fan motor efficiency for #{fan.name} in #{sub_text} is #{fan.motorEfficiency}, 0.91 is expected.")
