@@ -1871,7 +1871,7 @@ class AppendixGPRMTests < Minitest::Test
           fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
           fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
           fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
-          assert(fan_bhp_ip.round(4) == 0.0015, "Fan power for #{fan.name.to_s} fan in #{building_type} #{template} #{climate_zone} #{mod} is #{fan_bhp_ip.round(4)} instead of 0.0015.")
+          assert(fan_bhp_ip.round(4) == 0.0017, "Fan power for #{fan.name.to_s} fan in #{building_type} #{template} #{climate_zone} #{mod} is #{fan_bhp_ip.round(4)} instead of 0.0015.")
         end
       end
 
@@ -1886,6 +1886,27 @@ class AppendixGPRMTests < Minitest::Test
         end
       end
     end
+  end
+
+  # Add a AirLoopHVACDedicatedOutdoorAirSystem in the model
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param arguments [Array] Not used
+  def add_ahu_doas(model, arguments)
+    # Create new objects
+    oa_ctrl = OpenStudio::Model::ControllerOutdoorAir.new(model)
+    oa_sys = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_ctrl)
+    ahu_doas = OpenStudio::Model::AirLoopHVACDedicatedOutdoorAirSystem.new(oa_sys)
+    ahu_doas.setName('AHU_DOAS')
+    fan = OpenStudio::Model::FanSystemModel.new(model)
+
+    # Assign fan and air loops
+    fan.addToNode(oa_sys.outboardOANode.get)
+    model.getAirLoopHVACs.each do |air_loop|
+      ahu_doas.addAirLoop(air_loop)
+    end
+
+    return model
   end
 
   # Change cooling thermostat to 24C

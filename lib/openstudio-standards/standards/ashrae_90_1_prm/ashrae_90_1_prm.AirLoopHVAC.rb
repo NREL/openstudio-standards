@@ -373,7 +373,12 @@ class ASHRAE901PRM < Standard
       # is the "System with central electric
       # resistance heat" for system 6 and 8
       if system_type == 'PVAV_PFP_Boxes' || system_type == 'VAV_PFP_Boxes'
-        zone.additionalProperties.setFeature('has_fan_power_deduction_system_with_central_electric_resistance_heat', 'true')
+        if zone.additionalProperties.hasFeature('has_fan_power_deduction_system_with_central_electric_resistance_heat')
+          current_value = zone.additionalProperties.getFeatureAsDouble('has_fan_power_deduction_system_with_central_electric_resistance_heat')
+          zone.additionalProperties.setFeature('has_fan_power_deduction_system_with_central_electric_resistance_heat', current_value + 1.0)
+        else
+          zone.additionalProperties.setFeature('has_fan_power_deduction_system_with_central_electric_resistance_heat', 1.0)
+        end
       end
 
       # Determine fan power adjustment

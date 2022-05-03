@@ -657,16 +657,17 @@ class ASHRAE901PRM < Standard
     handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     # load user data from proposed model
     handle_airloop_user_input_data(model)
+    # load air loop DOAS user data from the proposed model
+    handle_airloop_doas_user_input_data(model)
     # load zone HVAC user data from proposed model
     handle_zone_hvac_user_input_data(model)
   end
 
   # A function to load airloop data from userdata csv files
-  # @param [OpenStudio::Model::Model] model
+  # @param [OpenStudio::Model::Model] OpenStudio model object
   def handle_airloop_user_input_data(model)
     # ============================Process airloop info ============================================
     user_airloops = @standards_data.key?('userdata_airloop_hvac') ? @standards_data['userdata_airloop_hvac'] : nil
-    # TODO: for now, it just work with economizer exceptions
     model.getAirLoopHVACs.each do |air_loop|
       air_loop_name = air_loop.name.get
       if user_airloops && user_airloops.length > 1
@@ -678,7 +679,7 @@ class ASHRAE901PRM < Standard
                 air_loop.thermalZones.each do |thermal_zone|
                   thermal_zone.additionalProperties.setFeature('economizer_exception_for_gas_phase_air_cleaning', air_loop_name)
                 end
-             end
+              end
             end
             # Open refrigerated cases is zone based - add yes or no to zones
             if user_airloop.key?('economizer_exception_for_open_refrigerated_cases') && !user_airloop['economizer_exception_for_open_refrigerated_cases'].nil?
@@ -686,7 +687,7 @@ class ASHRAE901PRM < Standard
                 air_loop.thermalZones.each do |thermal_zone|
                   thermal_zone.additionalProperties.setFeature('economizer_exception_for_open_refrigerated_cases', 'yes')
                 end
-             end
+              end
             end
             # Fan power credits
             user_airloop.keys.each do |info_key|
@@ -695,12 +696,78 @@ class ASHRAE901PRM < Standard
                   if info_key.include?('has_')
                     if user_airloop[info_key].downcase == 'yes'
                       air_loop.thermalZones.each do |thermal_zone|
-                        thermal_zone.additionalProperties.setFeature(info_key, 'yes')
+                        if thermal_zone.additionalProperties.hasFeature(info_key)
+                          current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
+                          thermal_zone.additionalProperties.setFeature(info_key, current_value + 1.0)
+                        else
+                          thermal_zone.additionalProperties.setFeature(info_key, 1.0)
+                        end
                       end
                     end
                   else
                     air_loop.thermalZones.each do |thermal_zones|
-                      thermal_zone.additionalProperties.setFeature(info_key, user_airloop[info_key].to_s)
+                      if thermal_zone.additionalProperties.hasFeature(info_key)
+                        current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
+                        thermal_zone.additionalProperties.setFeature(info_key, current_value + user_airloop_doas[info_key])
+                      else
+                        thermal_zone.additionalProperties.setFeature(info_key, user_airloop_doas[info_key])
+                      end
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
+  # A function to load airloop DOAS data from userdata csv files
+  # @param [OpenStudio::Model::Model] OpenStudio model object
+  def handle_airloop_doas_user_input_data(model)
+    # Get user data
+    user_airloop_doass = @standards_data.key?('userdata_airloop_hvac_doas') ? @standards_data['userdata_airloop_hvac_doas'] : nil
+
+    # Parse user data
+    if user_airloop_doass && user_airloop_doass.length >= 1
+      user_airloop_doass.each do |user_airloop_doas|
+        # Get AirLoopHVACDedicatedOutdoorAirSystem
+        air_loop_doas = model.getAirLoopHVACDedicatedOutdoorAirSystemByName(user_airloop_doas['name'])
+        if !air_loop_doas.is_initialized
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_prm.Model', "The AirLoopHVACDedicatedOutdoorAirSystem named #{user_airloop_doass['name']} mentioned in the userdata_airloop_hvac_doas was not found in the model, user specified data associated with it will be ignored.")
+          next
+        else
+          air_loop_doas = air_loop_doas.get
+        end
+
+        # Parse fan power credits data
+        user_airloop_doas.keys.each do |info_key|
+          if info_key.include?('fan_power_credit')
+            if !user_airloop_doas[info_key].to_s.empty?
+              # Case 1: Yes/no
+              if info_key.include?('has_')
+                if user_airloop_doas[info_key].downcase == 'yes'
+                  air_loop_doas.airLoops.each do |air_loop|
+                    air_loop.thermalZones.each do |thermal_zone|
+                      if thermal_zone.additionalProperties.hasFeature(info_key)
+                        current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
+                        thermal_zone.additionalProperties.setFeature(info_key, current_value + 1.0)
+                      else
+                        thermal_zone.additionalProperties.setFeature(info_key, 1.0)
+                      end
+                    end
+                  end
+                end
+              else
+                # Case 2: user provided value
+                air_loop_doas.airLoops.each do |air_loop|
+                  air_loop.thermalZones.each do |thermal_zones|
+                    if thermal_zone.additionalProperties.hasFeature(info_key)
+                      current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
+                      thermal_zone.additionalProperties.setFeature(info_key, current_value + user_airloop_doas[info_key])
+                    else
+                      thermal_zone.additionalProperties.setFeature(info_key, user_airloop_doas[info_key])
                     end
                   end
                 end
@@ -966,11 +1033,19 @@ class ASHRAE901PRM < Standard
           if info_key.include?('fan_power_credit')
             if !zone_hvac_eqp_info[info_key].to_s.empty?
               if info_key.include?('has_')
-                if zone_hvac_eqp_info[info_key].downcase == 'yes'
-                  thermal_zone.additionalProperties.setFeature(info_key, 'yes')
+                if thermal_zone.additionalProperties.hasFeature(info_key)
+                  current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
+                  thermal_zone.additionalProperties.setFeature(info_key, current_value + 1.0)
+                else
+                  thermal_zone.additionalProperties.setFeature(info_key, 1.0)
                 end
               else
-                thermal_zone.additionalProperties.setFeature(info_key, zone_hvac_eqp_info[info_key].to_s)
+                if thermal_zone.additionalProperties.hasFeature(info_key)
+                  current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
+                  thermal_zone.additionalProperties.setFeature(info_key, current_value + user_airloop_doas[info_key])
+                else
+                  thermal_zone.additionalProperties.setFeature(info_key, user_airloop_doas[info_key])
+                end
               end
             end
           end
