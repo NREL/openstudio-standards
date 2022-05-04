@@ -256,4 +256,65 @@ class ASHRAE901PRM < Standard
 
     return allowable_fan_bhp
   end
+
+  def baseline_nonexception_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
+    dcv_airloop_user_exception = false # TODO: JXL retrieve user data input here
+    # check airloop exception flag at zones level, the airloop exception flag is considered true only if all zones are true
+    # TODO: JXL add code here
+    return false if dcv_airloop_user_exception
+
+    # check the following conditions at airloop level
+    # has air economizer OR design outdoor airflow > 3000 cfm
+
+    has_economizer = air_loop_hvac_economizer?(air_loop_hvac) # TODO: JXL double check this method
+
+    # code block below is from superclass
+    if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+      oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+      controller_oa = oa_system.getControllerOutdoorAir
+      if controller_oa.minimumOutdoorAirFlowRate.is_initialized
+        oa_flow_m3_per_s = controller_oa.minimumOutdoorAirFlowRate.get
+      elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
+        oa_flow_m3_per_s = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
+      end
+    else
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, DCV not applicable because it has no OA intake.")
+      return false
+    end
+    oa_flow_cfm = OpenStudio.convert(oa_flow_m3_per_s, 'm^3/s', 'cfm').get
+
+    return true if has_economizer || (oa_flow_cfm > 3000)
+
+    any_zones_req_dcv = false
+    air_loop_hvac.thermalZones.sort.each do |zone|
+      if thermal_zone_demand_control_ventilation_required?(zone)
+        any_zones_req_dcv = true
+        break
+      end
+    end
+    return true if any_zones_req_dcv
+
+    return false
+  end
+
+  def thermal_zone_nonexception_demand_control_ventilation_required?(thermal_zone)
+    dcv_zone_user_exception = false # TODO: JXL retrieve user data input here
+    return false if dcv_zone_user_exception
+
+    # check the following conditions at zone level
+    # zone > 500 sqft AND design occ > 25 ppl/ksqft
+
+    # below checks for 500 sqft minimum and 25 ppl/ksqft
+    area_served_m2 = 0
+    num_people = 0
+    thermal_zone.spaces.each do |space|
+      area_served_m2 += space.floorArea
+      num_people += space.numberOfPeople
+    end
+    area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
+    occ_per_1000_ft2 = num_people / area_served_ft2 * 1000
+
+    return true if (area_served_ft2 > 500) && (occ_per_1000_ft2 > 25)
+    return false
+  end
 end

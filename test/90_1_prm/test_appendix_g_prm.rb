@@ -2060,6 +2060,26 @@ class AppendixGPRMTests < Minitest::Test
     return model
   end
 
+  def enable_airloop_dcv(model, arguments)
+    model.getAirLoopHVACs.sort.each do |air_loop_hvac|
+      # following logic is adopted from Standard.air_loop_hvac_enable_demand_control_ventilation
+      controller_oa = nil
+      controller_mv = nil
+      if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+        oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+        controller_oa = oa_system.getControllerOutdoorAir
+        controller_mv = controller_oa.controllerMechanicalVentilation
+      end
+      # Change the min flow rate in the controller outdoor air
+      controller_oa.setMinimumOutdoorAirFlowRate(0.0)
+
+      # Enable DCV in the controller mechanical ventilation
+      controller_mv.setDemandControlledVentilation(true)
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Enabled DCV.")
+    end
+    return model
+  end
+
   # Run test suite for the ASHRAE 90.1 appendix G Performance
   # Rating Method (PRM) baseline automation implementation
   # in openstudio-standards.

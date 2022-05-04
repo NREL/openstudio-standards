@@ -237,7 +237,9 @@ class Standard
         end
       end
 
-      model_check_dcv_existence(model)
+      model_mark_zone_dcv_existence(model)
+      model_add_dcv_user_exception_properties(model)
+      model_add_dcv_requirement_properties(model)
 
       # Remove all HVAC from model, excluding service water heating
       model_remove_prm_hvac(model)
@@ -415,6 +417,12 @@ class Standard
         model_apply_hvac_efficiency_standard(model, climate_zone)
 
       end
+
+      model_add_user_dcv_exception(model)
+
+      model_set_baseline_demand_control_ventilation(model, climate_zone)
+
+      model_check_dcv_alignment(model, climate_zone)
 
       # Fix EMS references.
       # Temporary workaround for OS issue #2598
@@ -7426,9 +7434,19 @@ class Standard
     return true
   end
 
-  def model_check_dcv_existence(model)
+  def model_mark_zone_dcv_existence(model)
     return true
   end
 
+  def model_add_dcv_user_exception_properties(model)
+    return true
+  end
 
+  def model_add_dcv_requirement_properties(model)
+    return true
+  end
+
+  def model_set_baseline_demand_control_ventilation(model, climate_zone)
+    return true
+  end
 end
