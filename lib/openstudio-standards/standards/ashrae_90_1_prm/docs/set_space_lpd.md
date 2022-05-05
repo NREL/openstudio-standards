@@ -2,27 +2,27 @@ Set lighting power density for each space by standard space category.
 
 # ASHRAE 90.1-2019
 - G3.1 (6) Baseline: Interior lighting power in the baseline building design shall be determined using the values in Table G3.7
-- G3.1 (6) Baseline: Lighting shall be modeled having the automatic shutoff controls in buildings > 5000 ft2 (2500 m2) and occupancy sensors in employee lunch break rooms, conference/meeting rooms, and classrooms (not including shop classrooms, laboratory classrooms, and preschool through 12th-grade classrooms). These controls shall be reflected in the baseline building design lighting schedules. No additional automatic lighting controls, e.g., automatic controls for daylight utilization and occupancy sensors in space types not listed above, shall be modeled in the baseline building design.
+- G3.1 (6) Baseline: Lighting shall be modeled by having the automatic shutoff controls in buildings > 5000 ft2 (2500 m2) and occupancy sensors in employee lunch break rooms, conference/meeting rooms, and classrooms (not including shop classrooms, laboratory classrooms, and preschool through 12th-grade classrooms). These controls shall be reflected in the baseline building design lighting schedules. No additional automatic lighting controls, e.g., automatic controls for daylight utilization and occupancy sensors in space types not listed above, shall be modeled in the baseline building design.
 
 # Code Requirement Interpretation
 The requirement aim to determine the interior lighting power density according to the Table G3.7.
 For spaces mixed multiple space types, weighted LPD is calculated and the occupancy sensor reduction is weighted by the lighting power density of the space.
 
 # Implementation Methodology
-The method to assign interior lighting power density for a single-type space is straightforward. However, when the space is a mixed-type, the lighting power density and occupancy sensor reduction are calculated follow the example below. 
+The method of assigning interior lighting power density for a single-type space is straightforward. However, when the space is a mixed-type, the lighting power density and occupancy sensor reduction are calculated in the example below.
 
 Example:
 
-| Space     | num_std_ltg_types | std_ltg_type01 | std_ltg_type_frac01 | std_ltg_type02 | std_ltg_type_frac02 |
-|-----------|-------------------|----------|----------|----------|----------|
-| Perimeter_ZN_2    | 2                 | retail - whole building |0.8|retail dressing room|0.2|
+| Space               | num_std_ltg_types | std_ltg_type01            | std_ltg_type_frac01 | std_ltg_type02        | std_ltg_type_frac02 |
+|---------------------|-------------------|---------------------------|---------------------|-----------------------|---------------------|
+| Perimeter_ZN_2      | 2                 | retail - whole building   | 0.8                 | retail dressing room  | 0.2                 |
 
 Where:
 
-| Space Type     | lighting per area (W/ft2) | occupancy sensor reduction |
-|-----------|-------------------|----------|
-|retail - whole building |1.5|0.1|
-|retail dressing room|0.89|0.1|
+| Space Type                | lighting per area (W/ft2) | occupancy sensor reduction |
+|---------------------------|---------------------------|----------------------------|
+| retail - whole building   | 1.5                       | 0.1                        |
+| retail dressing room      | 0.89                      | 0.1                        |
 
 The lighting power density of Perimeter_ZN_2 shall be determined as:
 
@@ -69,5 +69,5 @@ The `Office WholeBuilding - Sm Office` is the space type used by `Perimeter_ZN_1
 - User data folder: *N/A*
 - Summary:
 
-`Office` as the standard space type for all spaces except `Attic`. Therefore, in this test case, we are expecting LPD to be 10.7639 for spaces `Perimeter_ZN_1` through `Perimeter_ZN_5` except `Attic`.
+`Office` is used as the standard space type for all spaces except `Attic`. Therefore, in this test case, we are expecting LPD to be 10.7639 for spaces `Perimeter_ZN_1` through `Perimeter_ZN_5` except `Attic`.
 
