@@ -286,14 +286,8 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     lighting_per_area = space_type_properties['w/ft^2'].to_f
     lighting_per_length = space_type_properties['w/ft'].to_f
     manon_or_partauto = space_type_properties['manon_or_partauto'].to_i
-    # Adjust the occupancy control sensor reduction factor from dataset
-    occ_control_reduction_factor = 0.0
-    if manon_or_partauto == 1
-      occ_control_reduction_factor = space_type_properties['occup_sensor_savings'].to_f
-    else
-      occ_control_reduction_factor = space_type_properties['occup_sensor_auto_on_svgs'].to_f
-    end
     lights_have_info = true unless lighting_per_area.zero? && lighting_per_length.zero?
+
     if lights_have_info
       # Space height
       space_volume = space.volume
@@ -301,6 +295,14 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       space_height = OpenStudio.convert(space_volume / space_area, 'm', 'ft').get
       # calculate the new lpd values
       space_lighting_per_area = lighting_per_length * space_height + lighting_per_area
+    end
+
+    # Adjust the occupancy control sensor reduction factor from dataset
+    occ_control_reduction_factor = 0.0
+    if manon_or_partauto == 1
+      occ_control_reduction_factor = space_type_properties['occup_sensor_savings'].to_f
+    else
+      occ_control_reduction_factor = space_type_properties['occup_sensor_auto_on_svgs'].to_f
     end
     # add calculated occupancy control credit for later ltg schedule adjustment
     space.additionalProperties.setFeature('occ_control_credit', occ_control_reduction_factor)
@@ -383,13 +385,6 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       manon_or_partauto = sub_space_type_properties['manon_or_partauto'].to_i
       # the lighting power density of this space area
       user_space_type_lighting_area = 0.0
-      # Adjust the occupancy control sensor reduction factor from dataset
-      occ_control_reduction_factor = 0.0
-      if manon_or_partauto == 1
-        occ_control_reduction_factor = sub_space_type_properties['occup_sensor_savings'].to_f
-      else
-        occ_control_reduction_factor = sub_space_type_properties['occup_sensor_auto_on_svgs'].to_f
-      end
 
       if lights_have_info
         # Space height
@@ -401,10 +396,18 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
           lighting_per_area) * sub_space_type_frac
         space_lighting_per_area += user_space_type_lighting_area
       end
+      # Adjust the occupancy control sensor reduction factor from dataset
+      occ_control_reduction_factor = 0.0
+      if manon_or_partauto == 1
+        occ_control_reduction_factor = sub_space_type_properties['occup_sensor_savings'].to_f
+      else
+        occ_control_reduction_factor = sub_space_type_properties['occup_sensor_auto_on_svgs'].to_f
+      end
       # Now calculate the occupancy control credit factor (weighted by frac_lpd)
       occupancy_control_credit_sum += occ_control_reduction_factor * user_space_type_lighting_area
     end
     # add calculated occupancy control credit for later ltg schedule adjustment
+    # If space_lighting_per_area = 0, it means there is no lights_have_info, and subsequently, the occupancy_control_credit_sum should be 0
     space.additionalProperties.setFeature('occ_control_credit', space_lighting_per_area > 0 ? occupancy_control_credit_sum / space_lighting_per_area : occupancy_control_credit_sum)
     return space_lighting_per_area
   end
