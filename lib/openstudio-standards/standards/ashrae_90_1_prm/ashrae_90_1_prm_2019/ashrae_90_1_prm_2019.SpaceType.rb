@@ -402,7 +402,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         space_lighting_per_area += user_space_type_lighting_area
       end
       # Now calculate the occupancy control credit factor (weighted by frac_lpd)
-      occupancy_control_credit_sum += occ_control_reduction_factor * user_space_type_lighting_area * sub_space_type_frac
+      occupancy_control_credit_sum += occ_control_reduction_factor * user_space_type_lighting_area
     end
     # add calculated occupancy control credit for later ltg schedule adjustment
     space.additionalProperties.setFeature('occ_control_credit', space_lighting_per_area > 0 ? occupancy_control_credit_sum / space_lighting_per_area : occupancy_control_credit_sum)
