@@ -287,6 +287,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     lighting_per_length = space_type_properties['w/ft'].to_f
     manon_or_partauto = space_type_properties['manon_or_partauto'].to_i
     lights_have_info = true unless lighting_per_area.zero? && lighting_per_length.zero?
+    occ_control_reduction_factor = 0.0
 
     if lights_have_info
       # Space height
@@ -295,14 +296,13 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       space_height = OpenStudio.convert(space_volume / space_area, 'm', 'ft').get
       # calculate the new lpd values
       space_lighting_per_area = lighting_per_length * space_height + lighting_per_area
-    end
 
-    # Adjust the occupancy control sensor reduction factor from dataset
-    occ_control_reduction_factor = 0.0
-    if manon_or_partauto == 1
-      occ_control_reduction_factor = space_type_properties['occup_sensor_savings'].to_f
-    else
-      occ_control_reduction_factor = space_type_properties['occup_sensor_auto_on_svgs'].to_f
+      # Adjust the occupancy control sensor reduction factor from dataset
+      if manon_or_partauto == 1
+        occ_control_reduction_factor = space_type_properties['occup_sensor_savings'].to_f
+      else
+        occ_control_reduction_factor = space_type_properties['occup_sensor_auto_on_svgs'].to_f
+      end
     end
     # add calculated occupancy control credit for later ltg schedule adjustment
     space.additionalProperties.setFeature('occ_control_credit', occ_control_reduction_factor)
@@ -328,22 +328,19 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   end
 
   # Function checks whether there are multi lpd values in the space type from user's data
+  # The sum of each space fraction in the user_data is assumed to be 1.0
   # multi-lpd value means lighting per area > 0 and lighting_per_length > 0
   def has_multi_lpd_values_user_data(user_data, space_type)
     num_std_ltg_types = user_data['num_std_ltg_types'].to_i
-    frac_sum = 0.0 # prevent the total fraction over 1.0
     std_ltg_index = 0 # loop index
     # Loop through standard lighting type in a space
     sum_lighting_per_area = 0
     sum_lighting_per_length = 0
-    while std_ltg_index < num_std_ltg_types && frac_sum <= 1.0
+    while std_ltg_index < num_std_ltg_types
       # Retrieve data from user_data
       type_key = 'std_ltg_type%02d' % (std_ltg_index + 1)
-      frac_key = 'std_ltg_type_frac%02d' % (std_ltg_index + 1)
       sub_space_type = user_data[type_key]
-      sub_space_type_frac = user_data[frac_key].to_f
       # Adjust while loop condition factors
-      frac_sum += sub_space_type_frac
       std_ltg_index += 1
       # get interior lighting data
       sub_space_type_properties = interior_lighting_get_prm_data(sub_space_type)
@@ -357,23 +354,22 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # Calculate the lighting power density per area based on user data (space_based)
   # The function will calculate the LPD based on the space type (STRING)
   # It considers lighting per area, lighting per length as well as occupancy factors in the database.
+  # The sum of each space fraction in the user_data is assumed to be 1.0
   # @param user_data [Hash] user data from the user csv
   # @param space [OpenStudio::Model::Space]
   def calculate_lpd_from_userdata(user_data, space)
     num_std_ltg_types = user_data['num_std_ltg_types'].to_i
     space_lighting_per_area = 0.0
     occupancy_control_credit_sum = 0.0
-    frac_sum = 0.0 # prevent the total fraction over 1.0
     std_ltg_index = 0 # loop index
     # Loop through standard lighting type in a space
-    while std_ltg_index < num_std_ltg_types && frac_sum <= 1.0
+    while std_ltg_index < num_std_ltg_types
       # Retrieve data from user_data
       type_key = 'std_ltg_type%02d' % (std_ltg_index + 1)
       frac_key = 'std_ltg_type_frac%02d' % (std_ltg_index + 1)
       sub_space_type = user_data[type_key]
       sub_space_type_frac = user_data[frac_key].to_f
       # Adjust while loop condition factors
-      frac_sum += sub_space_type_frac
       std_ltg_index += 1
       # get interior lighting data
       sub_space_type_properties = interior_lighting_get_prm_data(sub_space_type)
@@ -383,8 +379,6 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       lighting_per_length = sub_space_type_properties['w/ft'].to_f
       lights_have_info = true unless lighting_per_area.zero? && lighting_per_length.zero?
       manon_or_partauto = sub_space_type_properties['manon_or_partauto'].to_i
-      # the lighting power density of this space area
-      user_space_type_lighting_area = 0.0
 
       if lights_have_info
         # Space height
@@ -392,19 +386,20 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         space_area = space.floorArea
         space_height = OpenStudio.convert(space_volume / space_area, 'm', 'ft').get
         # calculate and add new lpd values
-        user_space_type_lighting_area = (lighting_per_length * space_height +
+        user_space_type_lighting_per_area = (lighting_per_length * space_height +
           lighting_per_area) * sub_space_type_frac
-        space_lighting_per_area += user_space_type_lighting_area
+        space_lighting_per_area += user_space_type_lighting_per_area
+
+        # Adjust the occupancy control sensor reduction factor from dataset
+        occ_control_reduction_factor = 0.0
+        if manon_or_partauto == 1
+          occ_control_reduction_factor = sub_space_type_properties['occup_sensor_savings'].to_f
+        else
+          occ_control_reduction_factor = sub_space_type_properties['occup_sensor_auto_on_svgs'].to_f
+        end
+        # Now calculate the occupancy control credit factor (weighted by frac_lpd)
+        occupancy_control_credit_sum += occ_control_reduction_factor * user_space_type_lighting_per_area
       end
-      # Adjust the occupancy control sensor reduction factor from dataset
-      occ_control_reduction_factor = 0.0
-      if manon_or_partauto == 1
-        occ_control_reduction_factor = sub_space_type_properties['occup_sensor_savings'].to_f
-      else
-        occ_control_reduction_factor = sub_space_type_properties['occup_sensor_auto_on_svgs'].to_f
-      end
-      # Now calculate the occupancy control credit factor (weighted by frac_lpd)
-      occupancy_control_credit_sum += occ_control_reduction_factor * user_space_type_lighting_area
     end
     # add calculated occupancy control credit for later ltg schedule adjustment
     # If space_lighting_per_area = 0, it means there is no lights_have_info, and subsequently, the occupancy_control_credit_sum should be 0
