@@ -1,3 +1,4 @@
+
 class ASHRAE901PRM2019 < ASHRAE901PRM
   # @!group SpaceType
 
