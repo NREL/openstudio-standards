@@ -309,7 +309,7 @@ class ECMS
 
   # =============================================================================================================================
   # Method to determine whether zone can have terminal vrf equipment. Zones with no vrf terminal equipment are characterized by
-  # transient occupancy such is the case for corridors, stairwells, storage, etc ...
+  # transient occupancy such is the case for corridors, stairwells, storage, ...
   def zone_with_no_vrf_eqpt?(zone)
     space_types_to_skip = {}
     space_types_to_skip['NECB2011'] = ['Atrium - H < 13m',
@@ -472,14 +472,14 @@ class ECMS
     model:,
     system_zones_map:,
     system_doas_flags:,
-    system_zones_map_option:,
+    ecm_system_zones_map_option:,
     heating_fuel:,
     standard:,
     air_sys_eqpt_type: 'ccashp')
 
     # Update system zones map if needed
-    if system_zones_map_option != 'NECB_Default'
-      system_zones_map = update_system_zones_map(model,system_zones_map,system_zones_map_option,'sys_1')
+    if ecm_system_zones_map_option != 'NECB_Default'
+      system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1')
     else
       updated_system_zones_map = {}
       system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..]}"] = zones}  # doas unit is an NECB sys_1 
@@ -1006,7 +1006,7 @@ class ECMS
   def add_ecm_hs09_ccashp_baseboard(model:,
                                     system_zones_map:,    # hash of ailoop names as keys and array of zones as values
                                     system_doas_flags:,   # hash of system names as keys and flag for DOAS as values
-                                    system_zones_map_option:,
+                                    ecm_system_zones_map_option:,
                                     heating_fuel:,
                                     standard:)
 
@@ -1123,16 +1123,40 @@ class ECMS
               supply_fan = fan # assume supply fan has higher pressure drop
             end
           end
-          fan_power = supply_fan.autosizedMaximumFlowRate.to_f * max_pd / supply_fan.fanTotalEfficiency.to_f
+          # There is an error in EnergyPlus in the estimated capacity of the coil "CoilCoolingDXVariableSpeed".
+          # Here the capacity reported by OS is adjusted to estimate an appropriate capacity for the cooling coil.
+          # The autosized capacity is corrected for the actual fan flow rate and fan power.
+          if supply_fan.autosizedMaximumFlowRate.is_initialized 
+            fan_max_afr = supply_fan.autosizedMaximumFlowRate.to_f
+          elsif supply_fan.maximumFlowRate.is_initialized
+            fan_max_afr = supply_fan.maximumFlowRate.to_f
+          else
+            raise "Fan flow rate is undefined for fan #{supply_fan.name.to_s}"
+          end
+          if clg_dx_coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.is_initialized
+            clg_dx_coil_afr = clg_dx_coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.to_f
+          elsif clg_dx_coil.ratedAirFlowRateAtSelectedNominalSpeedLevel.is_initialized
+             clg_dx_coil_afr = clg_dx_coil.ratedAirFlowRateAtSelectedNominalSpeedLevel.to_f
+          else
+            raise "Rated air flow rate at selected nominal speed level is undefined for coil #{clg_dx_coil.name.to_s}"
+          end
+          fan_power = fan_max_afr * max_pd / supply_fan.fanTotalEfficiency.to_f
           clg_dx_coil_cap = clg_dx_coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f *
-                            supply_fan.autosizedMaximumFlowRate.to_f / clg_dx_coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.to_f +
-                            fan_power / clg_dx_coil.speeds.last.referenceUnitGrossRatedSensibleHeatRatio.to_f
-        else
+                            fan_max_afr / clg_dx_coil_afr + fan_power / clg_dx_coil.speeds.last.referenceUnitGrossRatedSensibleHeatRatio.to_f
+        elsif clg_dx_coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
           clg_dx_coil_cap = clg_dx_coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
+        else
+          raise "Rated total cooling capacity at selected nominal speed is undefined for coil #{clg_dx_coil.name.to_s}"
         end
         htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, false)
         htg_dx_coil.setName(htg_dx_coil_init_name)
-        backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        if backup_coil.autosizedNominalCapacity.is_initialized
+           backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        elsif backup_coil.nominalCapacity.is_initialized
+           backup_coil_cap = backup_coil.nominalCapacity.to_f
+        else
+          raise "Nominal capacity is undefiled for coil #{backup_coil.name.to_s}"
+        end
         # Set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
         dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
         if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
@@ -1153,7 +1177,7 @@ class ECMS
   def add_ecm_hs11_ashp_pthp(model:,
                              system_zones_map:,
                              system_doas_flags:,
-                             system_zones_map_option:,
+                             ecm_system_zones_map_option:,
                              standard:,
                              heating_fuel:)
 
@@ -1168,8 +1192,8 @@ class ECMS
     sys_supp_htg_eqpt_type = 'coil_electric'
     sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
     # Update system zones map if needed
-    if system_zones_map_option != 'NECB_Default'
-      system_zones_map = update_system_zones_map(model,system_zones_map,system_zones_map_option,'sys_1')
+    if ecm_system_zones_map_option != 'NECB_Default'
+      system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1')
     else
       updated_system_zones_map = {}
       system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..]}"] = zones}
@@ -1272,12 +1296,20 @@ class ECMS
             clg_dx_coil.setName(clg_dx_coil_init_name)
             if clg_dx_coil.autosizedRatedTotalCoolingCapacity.is_initialized
               clg_dx_coil_cap = clg_dx_coil.autosizedRatedTotalCoolingCapacity.to_f
-            else
+            elsif clg_dx_coil.ratedTotalCoolingCapacity.is_initialized
               clg_dx_coil_cap = clg_dx_coil.ratedTotalCoolingCapacity.to_f
+            else
+              raise "The total cooling capacity is undefined for coil #{clg_dx_coil_cap.name.to_s}"
             end
             htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, true)
             htg_dx_coil.setName(htg_dx_coil_init_name)
-            backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+            if backup_coil.autosizedNominalCapacity.is_initialized
+              backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+            elsif backup_coil.nominalCapacity.is_initialized
+              backup_coil_cap = backup_coil.nominalCapacity.to_f
+            else
+              raise "The nominal capacity is undefined for coil #{backup_coil.name.to_s}"
+            end
             # Set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
             dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
             if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
@@ -1305,7 +1337,7 @@ class ECMS
   def add_ecm_hs12_ashp_baseboard(model:,
                                   system_zones_map:,
                                   system_doas_flags:,
-                                  system_zones_map_option:,
+                                  ecm_system_zones_map_option:,
                                   standard:,
                                   heating_fuel:)
 
@@ -1414,6 +1446,8 @@ class ECMS
           htg_dx_coil = icomp.to_CoilHeatingDXSingleSpeed.get
         elsif icomp.to_CoilHeatingElectric.is_initialized
           backup_coil = icomp.to_CoilHeatingElectric.get
+        elsif icomp.to_CoilHeatingGas.is_initialized
+          backup_coil = icomp.to_CoilHeatingGas.get
         end
       end
       if clg_dx_coil && htg_dx_coil && backup_coil
@@ -1422,12 +1456,20 @@ class ECMS
         clg_dx_coil.setName(clg_dx_coil_init_name)
         if clg_dx_coil.autosizedRatedTotalCoolingCapacity.is_initialized
           clg_dx_coil_cap = clg_dx_coil.autosizedRatedTotalCoolingCapacity.to_f
-        else
+        elsif clg_dx_coil.ratedTotalCoolingCapacity.is_initialized
           clg_dx_coil_cap = clg_dx_coil.ratedTotalCoolingCapacity.to_f
+        else
+          raise "Rated total cooling capacity is undefined for coil #{clg_dx_coil.name.to_s}"
         end
         htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, true)
         htg_dx_coil.setName(htg_dx_coil_init_name)
-        backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        if backup_coil.autosizedNominalCapacity.is_initialized
+          backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        elsif backup_coil.nominalCapacity.is_initialized
+          backup_coil_cap = backup_coil.nominalCapacity.to_f
+        else
+          raise "Nominal capacity is undefined for coil #{backup_coil.name.to_s}"
+        end
         # set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
         dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
         if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
@@ -1448,14 +1490,14 @@ class ECMS
   def add_ecm_hs13_ashp_vrf(model:,
                             system_zones_map:,
                             system_doas_flags:,
-                            system_zones_map_option:,
+                            ecm_system_zones_map_option:,
                             standard:,
                             heating_fuel:)
     # call method for ECM hs08 with ASHP in the air system
     add_ecm_hs08_ccashp_vrf(model: model,
                             system_zones_map: system_zones_map,
                             system_doas_flags: system_doas_flags,
-                            system_zones_map_option: system_zones_map_option,
+                            ecm_system_zones_map_option: ecm_system_zones_map_option,
                             standard: standard,
                             heating_fuel: heating_fuel,
                             air_sys_eqpt_type: 'ashp')
@@ -2581,7 +2623,7 @@ class ECMS
     else
       eff_measure_name = eff['name']
     end
-    new_boiler_name = boiler_primacy + eff_measure_name + " #{boiler_size_kbtu_per_hour.round(0)}kBtu/hr #{component.nominalThermalEfficiency} Thermal Eff"
+    new_boiler_name = (boiler_primacy + eff_measure_name + " #{boiler_size_kbtu_per_hour.round(0)}kBtu/hr #{component.nominalThermalEfficiency} Thermal Eff").strip
     component.setName(new_boiler_name)
   end
 
@@ -2662,7 +2704,7 @@ class ECMS
       ecm_package_name = eff['name']
     end
     furnace_num = component.name.to_s.gsub(/[^0-9]/, '')
-    new_furnace_name = ecm_package_name + " #{furnace_num}"
+    new_furnace_name = (ecm_package_name + " #{furnace_num}").strip
     component.setName(new_furnace_name)
   end
 
@@ -2759,7 +2801,7 @@ class ECMS
     else
       shw_ecm_package_name = eff['name']
     end
-    shw_name = "#{shw_vol_gal} Gal #{shw_ecm_package_name} Water Heater - #{shw_capacity_kBtu_hr}kBtu/hr #{eff['efficiency']} Therm Eff"
+    shw_name = ("#{shw_vol_gal} Gal #{shw_ecm_package_name} Water Heater - #{shw_capacity_kBtu_hr}kBtu/hr #{eff['efficiency']} Therm Eff").strip
     component.setName(shw_name)
   end
 
@@ -2859,7 +2901,7 @@ class ECMS
   def add_ecm_remove_airloops_add_zone_baseboards(model:,
                                                   system_zones_map:,
                                                   system_doas_flags: nil,
-                                                  system_zones_map_option:,
+                                                  ecm_system_zones_map_option:,
                                                   standard:,
                                                   heating_fuel:)
     # Set the primary fuel set to default to to specific fuel type.

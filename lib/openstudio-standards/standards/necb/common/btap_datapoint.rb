@@ -100,7 +100,11 @@ class BTAPDatapoint
         @standard.set_output_meters(model: model, output_meters: @options[:output_meters])
         climate_zone = 'NECB HDD Method'
         model.getYearDescription.setDayofWeekforStartDay('Sunday')
-        @standard.model_add_design_days_and_weather_file(model, climate_zone, @options[:epw_file]) # Standards
+        epw_file = @options[:epw_file]
+        epw_dir = nil
+        local_epw_file_path = File.join(input_folder_cache,@options[:epw_file])
+        epw_dir = input_folder_cache if File.exists? local_epw_file_path
+        @standard.model_add_design_days_and_weather_file(model, climate_zone, epw_file, epw_dir) # Standards
         @standard.model_add_ground_temperatures(model, nil, climate_zone)
       else
         # Otherwise modify osm input with options.
@@ -113,7 +117,7 @@ class BTAPDatapoint
                                        lights_scale: @options[:lights_scale],
                                        daylighting_type: @options[:daylighting_type], # Two options: @options[: (1) 'NECB_Default', (2) 'add_daylighting_controls'
                                        ecm_system_name: @options[:ecm_system_name],
-                                       system_zones_map_option: @options[:system_zones_map_option], # (1) 'NECB_Default' (2) 'one_sys_per_floor' (3) 'one_sys_per_bldg'
+                                       ecm_system_zones_map_option: @options[:ecm_system_zones_map_option], # (1) 'NECB_Default' (2) 'one_sys_per_floor' (3) 'one_sys_per_bldg'
                                        erv_package: @options[:erv_package],
                                        boiler_eff: @options[:boiler_eff],
                                        # Inconsistent naming Todo Chris K.
@@ -157,7 +161,8 @@ class BTAPDatapoint
                                        output_variables: @options[:output_variables],
                                        output_meters: @options[:output_meters],
                                        airloop_economizer_type: @options[:airloop_economizer_type],
-                                       shw_scale: @options[:shw_scale])
+                                       shw_scale: @options[:shw_scale],
+                                       baseline_system_zones_map_option: @options[:baseline_system_zones_map_option])
       end
 
       # Save model to to disk.

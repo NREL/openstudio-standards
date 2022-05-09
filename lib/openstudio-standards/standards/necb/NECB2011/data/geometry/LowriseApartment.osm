@@ -2823,7 +2823,7 @@ OS:SpaceType,
   {c3c1b82a-ee66-447a-8f58-beab7b9bef09}, !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Space Function,                         !- Standards Building Type
-  Conf./meet./multi-purpose;              !- Standards Space Type
+  Dwelling Unit(s);              !- Standards Space Type
 
 OS:Rendering:Color,
   {63920e9c-4f6e-4c47-a9a8-3f817c62a709}, !- Handle
