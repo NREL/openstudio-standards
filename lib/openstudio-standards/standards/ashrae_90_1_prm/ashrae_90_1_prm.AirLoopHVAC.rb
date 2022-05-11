@@ -257,10 +257,9 @@ class ASHRAE901PRM < Standard
     return allowable_fan_bhp
   end
 
-  def baseline_nonexception_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
-    dcv_airloop_user_exception = false # TODO: JXL retrieve user data input here
-    # check airloop exception flag at zones level, the airloop exception flag is considered true only if all zones are true
-    # TODO: JXL add code here
+  def user_model_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
+    # all zones in the same airloop in user model are set with the same value, so use the first zone under the loop
+    dcv_airloop_user_exception = air_loop_hvac.thermalZones[0].additionalProperties.getFeatureAsBoolean('airloop user specified DCV exception').get
     return false if dcv_airloop_user_exception
 
     # check the following conditions at airloop level
@@ -287,7 +286,7 @@ class ASHRAE901PRM < Standard
 
     any_zones_req_dcv = false
     air_loop_hvac.thermalZones.sort.each do |zone|
-      if thermal_zone_demand_control_ventilation_required?(zone)
+      if user_model_zone_demand_control_ventilation_required?(zone)
         any_zones_req_dcv = true
         break
       end
@@ -297,8 +296,8 @@ class ASHRAE901PRM < Standard
     return false
   end
 
-  def thermal_zone_nonexception_demand_control_ventilation_required?(thermal_zone)
-    dcv_zone_user_exception = false # TODO: JXL retrieve user data input here
+  def user_model_zone_demand_control_ventilation_required?(thermal_zone)
+    dcv_zone_user_exception = thermal_zone.additionalProperties.getFeatureAsBoolean('zone user specified DCV exception').get
     return false if dcv_zone_user_exception
 
     # check the following conditions at zone level
@@ -315,6 +314,7 @@ class ASHRAE901PRM < Standard
     occ_per_1000_ft2 = num_people / area_served_ft2 * 1000
 
     return true if (area_served_ft2 > 500) && (occ_per_1000_ft2 > 25)
+
     return false
   end
 end

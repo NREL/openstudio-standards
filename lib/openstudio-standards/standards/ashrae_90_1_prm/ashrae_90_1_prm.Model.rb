@@ -641,6 +641,9 @@ class ASHRAE901PRM < Standard
     return true
   end
 
+  # Add zone additional property "zone DCV implemented in user model":
+  #   - 'true' if zone OA flow requirement is specified as per person & airloop supporting this zone has DCV enabled
+  #   - 'false' otherwise
   def model_mark_zone_dcv_existence(model)
     model.getAirLoopHVACs.each do |air_loop_hvac|
       next unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
@@ -687,9 +690,23 @@ class ASHRAE901PRM < Standard
     return true
   end
 
+  # read user data and add to zone additional properties
+  # "airloop user specified DCV exception"
+  # "one user specified DCV exception"
   def model_add_dcv_user_exception_properties(model)
     model.getAirLoopHVACs.each do |air_loop_hvac|
-      dcv_airloop_user_exception = false # TODO: place holder, to be replaced with user data reading
+      dcv_airloop_user_exception = false
+      # TODO: JXL check `model_find_object` search with insensitive case
+      if standards_data.key?('userdata_airloop_hvac')
+        standards_data['userdata_airloop_hvac'].each do |row|
+          next unless row['name'].to_s.downcase.strip == air_loop_hvac.name.to_s.downcase.strip
+
+          if row['dcv_exception_airloop'].to_s.upcase.strip == 'TRUE'
+            dcv_airloop_user_exception = true
+            break
+          end
+        end
+      end
       air_loop_hvac.thermalZones.each do |thermal_zone|
         if dcv_airloop_user_exception
           thermal_zone.additionalProperties.setFeature('airloop user specified DCV exception', true)
@@ -700,7 +717,17 @@ class ASHRAE901PRM < Standard
     # zone level exception tagging is put outside of airloop because it directly reads from user data and
     # a zone not under an airloop in user model may be in an airloop in baseline
     model.getThermalZones.each do |thermal_zone|
-      dcv_zone_user_exception = false # TODO: place holder, to be replaced with user data reading
+      dcv_zone_user_exception = false
+      if standards_data.key?('userdata_thermal_zone')
+        standards_data['userdata_thermal_zone'].each do |row|
+          next unless row['name'].to_s.downcase.strip == thermal_zone.name.to_s.downcase.strip
+
+          if row['dcv_exception_thermal_zone'].to_s.upcase.strip == 'TRUE'
+            dcv_zone_user_exception = true
+            break
+          end
+        end
+      end
       if dcv_zone_user_exception
         thermal_zone.additionalProperties.setFeature('zone user specified DCV exception', true)
       end
@@ -720,41 +747,47 @@ class ASHRAE901PRM < Standard
     end
   end
 
+  # add zone additional property "airloop dcv required by 901"
+  # - "true" if the airloop supporting this zone is required by 90.1 (non-exception requirement + user provided exception flag) to have DCV regarding user model
+  # - "false" otherwise
+  # add zone additional property "zone dcv required by 901"
+  # - "true" if the zone is required by 90.1(non-exception requirement + user provided exception flag) to have DCV regarding user model
+  # - 'flase' otherwise
   def model_add_dcv_requirement_properties(model)
     # TODO: JXL this method uses existing dcv requirement checking from OSSTD, double check to make sure they align
     model.getAirLoopHVACs.each do |air_loop_hvac|
-      if baseline_nonexception_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
+      if user_model_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
         air_loop_hvac.thermalZones.each do |thermal_zone|
           thermal_zone.additionalProperties.setFeature('airloop dcv required by 901', true)
 
           # the zone level dcv requirement can only be true if it is in an airloop that is required to have DCV
-          if thermal_zone_nonexception_demand_control_ventilation_required?(thermal_zone)
+          if user_model_zone_demand_control_ventilation_required?(thermal_zone)
             thermal_zone.additionalProperties.setFeature('zone dcv required by 901', true)
           end
         end
       end
 
-    # mark unmarked zones
-    model.getThermalZones.each do |zone|
-      next if zone.additionalProperties.hasFeature('airloop dcv required by 901')
+      # mark unmarked zones
+      model.getThermalZones.each do |zone|
+        next if zone.additionalProperties.hasFeature('airloop dcv required by 901')
 
-      zone.additionalProperties.setFeature('airloop dcv required by 901', false)
-    end
+        zone.additionalProperties.setFeature('airloop dcv required by 901', false)
+      end
 
-    model.getThermalZones.each do |zone|
-      next if zone.additionalProperties.hasFeature('zone dcv required by 901')
+      model.getThermalZones.each do |zone|
+        next if zone.additionalProperties.hasFeature('zone dcv required by 901')
 
-      zone.additionalProperties.setFeature('zone dcv required by 901', false)
-    end
+        zone.additionalProperties.setFeature('zone dcv required by 901', false)
+      end
     end
   end
 
   def model_set_baseline_demand_control_ventilation(model, climate_zone)
     model.getAirLoopHVACs.each do |air_loop_hvac|
-      if baseline_nonexception_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
+      if user_model_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
         air_loop_hvac_enable_demand_control_ventilation(air_loop_hvac, climate_zone) # TODO: JXL check about climate zone argument
         air_loop_hvac.thermalZones.sort.each do |zone|
-          unless thermal_zone_nonexception_demand_control_ventilation_required?(zone)
+          unless user_model_zone_demand_control_ventilation_required?(zone)
             thermal_zone_convert_oa_req_to_per_area(zone)
           end
         end
