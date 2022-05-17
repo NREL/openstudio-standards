@@ -32,6 +32,10 @@ class AppendixGPRMTests < Minitest::Test
       # mod is an array of method intended to modify the model
       building_type, template, climate_zone, user_data_dir, mod = prototype
 
+      climate_zone_code = climate_zone.split('-')[-1]
+      assert(building_type != 'LargeOffice' || ['0A', '0B', '1A', '1B', '2A', '2B'].include?(climate_zone_code), "Baseline model cannot be generated for #{building_type} in climate zone: #{climate_zone}. Due to a known problem with sizing of heating system for data center (which has zero heating load), the large office model fails in mild to cold climates (CZ 3 and higher). Use climate zone 0, 1 or 2 instead")
+
+
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join('_') unless mod.empty?
 
