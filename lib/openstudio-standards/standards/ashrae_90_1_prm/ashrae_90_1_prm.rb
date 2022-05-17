@@ -36,8 +36,11 @@ class ASHRAE901PRM < Standard
         csv_file_name = File.basename(csv_full_name, File.extname(csv_full_name))
         if json_objs.key?(csv_file_name)
           # Load csv file into array of hashes
-          json_rows = CSV.foreach(csv_full_name, headers: true).map(&:to_h)
+          json_rows = CSV.foreach(csv_full_name, headers: true).map { |row| user_data_preprocessor(row) }
           next if json_rows.empty?
+
+          # validate the user_data in json_rows
+          user_data_validation(csv_full_name, json_rows)
 
           # remove file extension
           file_name = File.basename(csv_full_name, File.extname(csv_full_name))
@@ -84,6 +87,37 @@ class ASHRAE901PRM < Standard
           OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.standard', "Overriding #{key} with #{File.basename(file)}")
         end
         @standards_data[key] = objs
+      end
+    end
+  end
+
+  # Perform user data preprocessing
+  # @param [CSV::ROW] row 2D array for each row.
+  def user_data_preprocessor(row)
+    new_array = []
+
+    # Strip the strings in the value
+    row.each do |sub_array|
+      new_array << sub_array.collect { |e| e ? e.strip : e }
+    end
+    # Future expansion can added to here.
+    # Convert the 2d array to hash
+    return new_array.to_h
+  end
+
+  # Perform user data validation
+  def user_data_validation(object_name, user_data)
+    # 1. Check Space Type and Space LPD total % = 1.0
+    if /space/ =~ object_name
+      user_data.each do |lpd_row|
+        num_ltg_type = lpd_row['num_std_ltg_types']
+        total_ltg_percent = 0.0
+        std_ltg_index = 0
+        while std_ltg_index < num_ltg_type
+          frac_key = 'std_ltg_type_frac%02d' % (std_ltg_index + 1)
+          total_ltg_percent += lpd_row[frac_key]
+        end
+        assert(abs(total_ltg_percent - 1.0) > 0.001, `The fraction of user defined lighting types in Space/SpaceType: #{lpd_row['name']} does not add up to 1.0. The calculated fraction is #{total_ltg_percent}%.`)
       end
     end
   end
