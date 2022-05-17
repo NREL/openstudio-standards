@@ -46,7 +46,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # Define model name and run folder if it doesn't already exist,
       # if it does, remove it and re-create it.
-      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
+      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod_str}"
       run_dir = "#{@test_dir}/#{model_name}"
       if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
@@ -113,7 +113,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # user data CSV files are in @user_data_dir, if appicable
       # user data JSON files will be created in sub-folder inside @test_dir
-      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
+      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod_str}"
       proto_run_dir = "#{@test_dir}/#{model_name}"
 
       if not user_data_dir.equal?('no_user_data')
@@ -187,7 +187,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # Load newly generated baseline model
       @test_dir = "#{File.dirname(__FILE__)}/output"
-      model_baseline_file_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-Baseline/final.osm" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}-Baseline/final.osm"
+      model_baseline_file_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod_str}-Baseline/final.osm"
       model_baseline = OpenStudio::Model::Model.load("#{@test_dir}/#{model_baseline_file_name}")
       model_baseline = model_baseline.get
 
@@ -397,6 +397,51 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # Implement multiple LPD handling from userdata by space, space type and default space_type
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_multi_lpd_handling(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+      if user_data_dir == 'no_user_data'
+        sub_prototypes_base = {}
+        sub_prototypes_base[prototype] = model_baseline
+        check_lpd(sub_prototypes_base)
+      else
+        if user_data_dir == 'userdata_lpd_01'
+          space_name_to_lpd_target = {}
+          space_name_to_lpd_target['Attic'] =15.06948107
+          space_name_to_lpd_target['Perimeter_ZN_2'] =14.83267494
+          space_name_to_lpd_target['Perimeter_ZN_1'] =15.26323154
+          space_name_to_lpd_target['Perimeter_ZN_4'] =12.91669806
+
+          model_baseline.getSpaces.each do |space|
+            space_name = space.name.get
+            target_lpd = 10.7639
+            if space_name_to_lpd_target.key?(space_name)
+              target_lpd = space_name_to_lpd_target[space_name]
+            end
+            model_lpd = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea.get
+            assert((target_lpd - model_lpd).abs < 0.001, "Baseline LPD for the #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of the #{space_name} is #{target_lpd} but should be #{model_lpd}.")
+          end
+        elsif user_data_dir == 'userdata_lpd_02'
+          space_name_to_lpd_target = {}
+          space_name_to_lpd_target['Attic'] = 0.0
+
+          model_baseline.getSpaces.each do |space|
+            space_name = space.name.get
+            target_lpd = 12.2452724
+            if space_name_to_lpd_target.key?(space_name)
+              target_lpd = space_name_to_lpd_target[space_name]
+            end
+            model_lpd = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea.get
+            assert((target_lpd - model_lpd).abs < 0.001, "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of the #{space_name} is #{target_lpd} but should be #{model_lpd}.")
+          end
+        end
+      end
+    end
+  end
+
   # Check LPD requirements lookups
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -420,7 +465,7 @@ class AppendixGPRMTests < Minitest::Test
       # Check LPD against expected LPD
       space_name.each do |key, value|
         value_si = OpenStudio.convert(value, 'W/ft^2', 'W/m^2').get
-        assert(((lpd_baseline[key] - value_si).abs < 0.001), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{lpd_baseline[key]} but should be #{value_si}.")
+        assert(((lpd_baseline[key] - value_si).abs < 0.001), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The LPD of the #{key} is #{lpd_baseline[key]} but should be #{value_si}.")
       end
     end
   end
@@ -703,29 +748,31 @@ class AppendixGPRMTests < Minitest::Test
       model_baseline.getSpaceTypes.sort.each do |space_type|
         light_sch_model_base = {}
         space_type.lights.sort.each do |lgts|
-          light_sch_model_lgts_base = {}
-          light_sch_model_lgts_base['space_type'] = space_type.standardsSpaceType.to_s
+          if lgts.schedule.get.to_ScheduleRuleset.is_initialized
+            light_sch_model_lgts_base = {}
+            light_sch_model_lgts_base['space_type'] = space_type.standardsSpaceType.to_s
 
-          # get default schedule
-          day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
-          times = day_rule.times()
-          light_sch_model_default_rule = {}
-          times.each do |time|
-            light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
-          end
-          light_sch_model_lgts_base['default schedule'] = light_sch_model_default_rule
-
-          # get daily schedule
-          lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
-            light_sch_model_week_rule_base = {}
-            day_rule = week_rule.daySchedule
+            # get default schedule
+            day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
             times = day_rule.times()
+            light_sch_model_default_rule = {}
             times.each do |time|
-              light_sch_model_week_rule_base[time.to_s] = day_rule.getValue(time)
+              light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
             end
-            light_sch_model_lgts_base[week_rule.name.to_s] = light_sch_model_week_rule_base
+            light_sch_model_lgts_base['default schedule'] = light_sch_model_default_rule
+
+            # get daily schedule
+            lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
+              light_sch_model_week_rule_base = {}
+              day_rule = week_rule.daySchedule
+              times = day_rule.times()
+              times.each do |time|
+                light_sch_model_week_rule_base[time.to_s] = day_rule.getValue(time)
+              end
+              light_sch_model_lgts_base[week_rule.name.to_s] = light_sch_model_week_rule_base
+            end
+            light_sch_model_base[lgts.name.to_s] = light_sch_model_lgts_base
           end
-          light_sch_model_base[lgts.name.to_s] = light_sch_model_lgts_base
         end
 
         # Check light schedule against expected light schedule
@@ -2240,7 +2287,8 @@ class AppendixGPRMTests < Minitest::Test
       'preheat_coil_ctrl',
       'vav_min_sp',
       'multi_bldg_handling',
-      'economizer_exception'
+      'economizer_exception',
+      'lpd_userdata_handling'
     ]
 
     # Get list of unique prototypes
@@ -2273,6 +2321,7 @@ class AppendixGPRMTests < Minitest::Test
     check_psz_split_from_mz(prototypes_base['hvac_psz_split_from_mz']) if tests.include? 'hvac_psz_split_from_mz'
     check_vav_min_sp(prototypes_base['vav_min_sp']) if tests.include? 'vav_min_sp'
     check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
+    check_multi_lpd_handling(prototypes_base['lpd_userdata_handling']) if tests.include? 'lpd_userdata_handling'
     check_economizer_exception(prototypes_base['economizer_exception']) if tests.include? 'economizer_exception'
   end
 end
