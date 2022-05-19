@@ -100,24 +100,61 @@ class ASHRAE901PRM < Standard
     row.each do |sub_array|
       new_array << sub_array.collect { |e| e ? e.strip : e }
     end
-    # Future expansion can added to here.
+    # TODO: Future expansion can added to here.
     # Convert the 2d array to hash
     return new_array.to_h
   end
 
   # Perform user data validation
   def user_data_validation(object_name, user_data)
-    # 1. Check Space Type and Space LPD total % = 1.0
+    # 1. Check user_spacetype and user_space LPD total % = 1.0
     if /space/ =~ object_name
       user_data.each do |lpd_row|
         num_ltg_type = lpd_row['num_std_ltg_types']
         total_ltg_percent = 0.0
         std_ltg_index = 0
         while std_ltg_index < num_ltg_type
-          frac_key = 'std_ltg_type_frac%02d' % (std_ltg_index + 1)
+          frac_key = format('std_ltg_type_frac%02d', (std_ltg_index + 1))
           total_ltg_percent += lpd_row[frac_key]
         end
         assert(abs(total_ltg_percent - 1.0) > 0.001, `The fraction of user defined lighting types in Space/SpaceType: #{lpd_row['name']} does not add up to 1.0. The calculated fraction is #{total_ltg_percent}%.`)
+      end
+    end
+    # 2. Check Electric Equipment data
+    if object_name == 'user_electric_equipment'
+      user_data.each do |electric_row|
+        if electric_row['motor_horsepower'].nil? || electric_row['motor_efficiency'].nil? || electric_row['motor_is_exempt'].nil?
+          assert(electric_row['motor_horsepower'].nil? && electric_row['motor_efficiency'].nil? && electric_row['motor_is_exempt'].nil?,
+                 `One or more motor data is not available for electric equipment #{electric_row['name']}. motor_horsepower: #{electric_row['motor_horsepower']}; motor_efficiency: #{electric_row['motor_efficiency']}; motor_is_exempt: #{electric_row['motor_is_exempt']}`)
+        else
+          # check for data type
+          assert(electric_row['motor_horsepower'].to_f == 0.0, `Motor #{electric_row['name']}'s horsepower data is either 0.0 or unavailable. Check the inputs.`)
+          assert(electric_row['motor_efficiency'].to_f == 0.0, `Motor #{electric_row['name']}'s efficiency data is either 0.0 or unavailable. Check the inputs.`)
+          assert(electric_row['motor_is_exempt'].casecmp?('yes') || electric_row['motor_is_exempt'].casecmp?('no'), `Motor #{electric_row['name']} is exempt data should be either Yes or No. But get data #{electric_row['motor_is_exempt']}`)
+        end
+        # We may need to do the same for refrigeration and elevator?
+        # Check elevator
+        if electric_row['elevator_weight_of_car'].nil? || electric_row['elevator_rated_load'].nil? || electric_row['elevator_counter_weight_of_car'].nil? || electric_row['elevator_speed_of_car'].nil? || electric_row['elevator_number_of_stories'].nil?
+          assert(electric_row['elevator_weight_of_car'].nil? && electric_row['elevator_rated_load'].nil? && electric_row['elevator_counter_weight_of_car'].nil? && electric_row['elevator_speed_of_car'].nil? && electric_row['elevator_number_of_stories'].nil?,
+                 `One or more elevator data is not available for electric equipment #{electric_row['name']}. elevator_weight_of_car: #{electric_row['elevator_weight_of_car']}; elevator_rated_load: #{electric_row['elevator_rated_load']}; elevator_counter_weight_of_car: #{electric_row['elevator_counter_weight_of_car']}; elevator_speed_of_car: #{electric_row['elevator_speed_of_car']}; elevator_number_of_stories: #{'elevator_number_of_stories'}`)
+        else
+          # check for data type
+          assert(electric_row['elevator_weight_of_car'].to_f == 0.0, `Elevator #{electric_row['name']}'s weight of car data is either 0.0 or unavailable. Check the inputs.`)
+          assert(electric_row['elevator_rated_load'].to_f == 0.0, `Elevator #{electric_row['name']}'s rated load data is either 0.0 or unavailable. Check the inputs.`)
+          assert(electric_row['elevator_counter_weight_of_car'].to_f == 0.0, `Elevator #{electric_row['name']}'s counter weight of car data is either 0.0 or unavailable. Check the inputs.`)
+          assert(electric_row['elevator_speed_of_car'].to_f == 0.0, `Elevator #{electric_row['name']}'s speed of car data is either 0.0 or unavailable. Check the inputs.`)
+          assert(electric_row['elevator_number_of_stories'].to_i <= 1, `Elevator #{electric_row['name']}'s serves number of stories data is either smaller or equal to 1 or unavailable. Check the inputs.`)
+        end
+        # Check refrigeration
+        if electric_row['refrigeration_equipment_class'].nil? || electric_row['refrigeration_equipment_volume'].nil? || electric_row['refrigeration_equipment_total_display_area'].nil?
+          assert(electric_row['refrigeration_equipment_class'].nil? && electric_row['refrigeration_equipment_volume'].nil? && electric_row['refrigeration_equipment_total_display_area'].nil?,
+                 `One or more refrigeration data is not available for electric equipment #{electric_row['name']}. refrigeration_equipment_class: #{electric_row['refrigeration_equipment_class']}; refrigeration_equipment_volume: #{electric_row['refrigeration_equipment_volume']}; refrigeration_equipment_total_display_area: #{electric_row['refrigeration_equipment_total_display_area']}`)
+        else
+          # Check data type
+          # The equipment class shall be verified at the implementation level
+          assert(electric_row['refrigeration_equipment_volume'].to_f == 0.0, `Refrigeration #{electric_row['name']}'s equipment volume data is either 0.0 or unavailable. Check the inputs.`)
+          assert(electric_row['refrigeration_equipment_total_display_area'].to_f == 0.0, `Refrigeration #{electric_row['name']}'s total display area data is either 0.0 or unavailable. Check the inputs.`)
+        end
       end
     end
   end
