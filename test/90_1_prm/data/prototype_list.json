@@ -31,7 +31,7 @@
     "vav_fan_curve": [
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-4A", "no_user_data",[["remove_transformer", []]]],
-        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "no_user_data",[["remove_transformer", []]]]     
+        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "no_user_data",[["remove_transformer", []]]]
     ],
     "hvac_baseline": [
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["remove_transformer", []], ["return_relief_fan", []]]],
@@ -72,6 +72,9 @@
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data", [["remove_transformer", []]]]
     ],
     "number_of_chillers": [
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["set_zone_multiplier", [20]], ["remove_transformer", []]]]
+    ],
+    "number_of_chillers1": [
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["set_zone_multiplier", [3]], ["remove_transformer", []]]],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["set_zone_multiplier", [6]], ["remove_transformer", []]]],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["set_zone_multiplier", [7]], ["remove_transformer", []]]],
@@ -123,5 +126,12 @@
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_econ_except_01",[["remove_transformer", []]]],
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
         ["Warehouse", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_cooling_coils", []]]]
+    ],
+    "hvac_efficiency": [
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", []],
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-8A", "no_user_data", [["remove_transformer", []]]],
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["remove_transformer", []]]],
+        ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-8A", "no_user_data", [["set_zone_multiplier",[4]],["remove_transformer", []]]],
+        ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]]
     ]
 }

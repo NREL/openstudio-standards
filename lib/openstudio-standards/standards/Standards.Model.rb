@@ -410,13 +410,10 @@ class Standard
 
       end
 
-      if /prm/i !~ template
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Prescriptive HVAC Controls and Equipment Efficiencies ***')
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Prescriptive HVAC Controls and Equipment Efficiencies ***')
 
-        # Apply the HVAC efficiency standard
-        model_apply_hvac_efficiency_standard(model, climate_zone)
-
-      end
+      # Apply the HVAC efficiency standard
+      model_apply_hvac_efficiency_standard(model, climate_zone)
 
       # Fix EMS references.
       # Temporary workaround for OS issue #2598
