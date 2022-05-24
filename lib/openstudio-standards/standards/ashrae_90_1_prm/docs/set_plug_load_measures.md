@@ -51,3 +51,23 @@ The above logic is implemented in the `space_type_apply_internal_loads` in the a
 Sub-logics are implemented in the `update_power_equipment_credits` function, which is called by `space_type_apply_internal_loads`
 
 ## Test Case Documentation
+### Test case 1:
+- Prototype: Small Office
+- User data folder: */userdata_pe_01*
+- Summary:
+This case will test whether *fraction_of_controlled_receptacles* is read correctly for an electric equipment (*Office WholeBuilding - Sm Office Elec Equip*).
+Expected output: the baseline schedule is 5% higher than proposed schedule for the electric equipment: *Office WholeBuilding - Sm Office Elec Equip*.
+
+### Test case 2:
+- Prototype: Small Office
+- User data folder: */userdata_pe_02*
+- Summary:
+This case will test whether *receptacle_power_savings*  is read correctly for an electric equipment (*Office WholeBuilding - Sm Office Elec Equip*).
+Expected output: the baseline schedule is 15% higher than proposed schedule for the electric equipment: *Office WholeBuilding - Sm Office Elec Equip*.
+
+### Test case 3
+- Prototype: Small Office
+- User data folder: */userdata_pe_03*
+- Summary:
+This case will test whether *motor_horsepower*, *motor_efficiency* and *motor_is_exempt* are read correctly for an electric equipment (*Office WholeBuilding - Sm Office Elec Equip*).
+Expected output: the electric equipment in the baseline shall have three additional properties *motor_horsepower = 10.0*, *motor_efficiency = 0.72* and *motor_is_exempt = No* 

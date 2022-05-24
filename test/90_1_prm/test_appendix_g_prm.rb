@@ -401,6 +401,40 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  def check_power_equipment_handling(prototypes_base)
+    prototypes_base.each do |prototype_base, baseline_model|
+      base_building_type, base_template, base_climate_Zone, base_user_data_dir, base_mod = prototype_base
+      # user_data_dir match to identify matched propose and baseline
+      if base_user_data_dir == 'userdata_pe_01'
+        # test case 1, apply 5% RPC (0.5 * 0.1) to Office WholeBuilding -Sm Offie Elec Equip
+        base_electric_equipment_schedules = baseline_model.getElectricEquipments[0].schedule.get.to_ScheduleRuleset.get.scheduleRules
+
+        base_electric_equipment_schedules.each do |schedule_rule|
+          receptacle_power_credits = schedule_rule.name.get.split('_')[1].to_f
+          assert((0.05 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.05 (5%) but get #{receptacle_power_credits}")
+        end
+      elsif base_user_data_dir == 'userdata_pe_02'
+        # test case 2, apply 15% RPC (0.15) to Office WholeBuilding -Sm Offie Elec Equip
+        base_electric_equipment_schedules = baseline_model.getElectricEquipments[0].schedule.get.to_ScheduleRuleset.get.scheduleRules
+
+        base_electric_equipment_schedules.each do |schedule_rule|
+          receptacle_power_credits = schedule_rule.name.get.split('_')[1].to_f
+          assert((0.15 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.15 (15%) but get #{receptacle_power_credits}")
+        end
+      elsif base_user_data_dir == 'userdata_pe_03'
+        # test case 3, record motor horsepower, efficiency and whether it is exempt
+        base_electric_equipment = baseline_model.getElectricEquipments[0]
+        base_electric_equipment_ap = base_electric_equipment.additionalProperties
+        assert(base_electric_equipment_ap.hasFeature('motor_horsepower') && base_electric_equipment_ap.getFeatureAsDouble('motor_horsepower').get == 10.0,
+               "motor_horsepower data is missing or incorrect. The motor_horsepower for test case 3 shall be 10.0")
+        assert(base_electric_equipment_ap.hasFeature('motor_efficiency') && base_electric_equipment_ap.getFeatureAsDouble('motor_efficiency').get == 0.72,
+               "motor_efficiency data is missing or incorrect. The motor_efficiency for test case 3 shall be 0.72")
+        assert(base_electric_equipment_ap.hasFeature('motor_is_exempt') && base_electric_equipment_ap.getFeatureAsString('motor_is_exempt').get == 'No',
+               "motor_is_exempt data is missing or incorrect. The motor_is_exempt for test case 3 shall be No")
+      end
+    end
+  end
+
   # Implement multiple LPD handling from userdata by space, space type and default space_type
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -2327,5 +2361,6 @@ class AppendixGPRMTests < Minitest::Test
     check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
     check_multi_lpd_handling(prototypes_base['lpd_userdata_handling']) if tests.include? 'lpd_userdata_handling'
     check_economizer_exception(prototypes_base['economizer_exception']) if tests.include? 'economizer_exception'
+    check_power_equipment_handling(prototypes_base['pe_userdata_handling']) if tests.include? 'pe_userdata_handling'
   end
 end

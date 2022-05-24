@@ -47,8 +47,9 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         space_type_electric_equipments = space_type.electricEquipment
         space_type_electric_equipments.each do |sp_electric_equipment|
           electric_equipment_name = sp_electric_equipment.name.get
-          select_user_electric_equipment = user_electric_equipment_data.select { |elec| elec['name'].casecmp(electric_equipment_name) == 0 }
-          unless select_user_electric_equipment.empty?
+          select_user_electric_equipment_array = user_electric_equipment_data.select { |elec| elec['name'].casecmp(electric_equipment_name) == 0 }
+          unless select_user_electric_equipment_array.empty?
+            select_user_electric_equipment = select_user_electric_equipment_array[0]
             # Check if the plug load represents a motor (check if motorhorsepower exist), if so, record the motor HP and efficiency.
             if !select_user_electric_equipment['motor_horsepower'].nil?
               # Pre-processing will ensure these three user data are added correctly (float, float, boolean)
@@ -72,8 +73,9 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         space_type_gas_equipments = space_type.gasEquipment
         space_type_gas_equipments.each do |sp_gas_equipment|
           gas_equipment_name = sp_gas_equipment.name.get
-          select_user_gas_equipment = user_gas_equipment_data.select { |gas| gas['name'].casecmp(gas_equipment_name) == 0 }
-          unless select_user_gas_equipment.empty?
+          select_user_gas_equipment_array = user_gas_equipment_data.select { |gas| gas['name'].casecmp(gas_equipment_name) == 0 }
+          unless select_user_gas_equipment_array.empty?
+            select_user_gas_equipment = select_user_gas_equipment_array[0]
             # Update the gas equipment occupancy credit (if it has)
             update_power_equipment_credits(sp_gas_equipment, select_user_gas_equipment, power_schedule_hash, space_type.model)
           end
@@ -141,16 +143,14 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
 
   end
 
-  def update_power_equipment_credits(power_equipment, user_power_equipment_data, schedule_hash, model)
+  def update_power_equipment_credits(power_equipment, user_power_equipment, schedule_hash, model)
     receptacle_power_credits = 0.0
-    # find a matching user power equipment
-    user_power_equipment = user_power_equipment_data[0]
     # Check fraction_of_controlled_receptacles or receptacle_power_savings exist
-    if user_power_equipment.key?('fraction_of_controlled_receptacles')
+    if user_power_equipment.key?('fraction_of_controlled_receptacles') && !user_power_equipment['fraction_of_controlled_receptacles'].nil?
       rc = user_power_equipment['fraction_of_controlled_receptacles'].to_f
       # receptacle power credits = percent of all controlled receptacles * 10%
       receptacle_power_credits = rc * 0.1
-    elsif user_power_equipment.key?('receptacle_power_savings')
+    elsif user_power_equipment.key?('receptacle_power_savings') && !user_power_equipment['receptacle_power_savings'].nil?
       receptacle_power_credits = user_power_equipment['receptacle_power_savings'].to_f
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ElectricEquipment', "#{power_equipment.name.get} has a user specified receptacle power saving credit #{receptacle_power_credits}. The modeler needs to make sure the credit is approved by a rating authority per Table G3.1 section 12.")
     end

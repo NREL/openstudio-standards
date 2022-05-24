@@ -128,5 +128,10 @@
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_econ_except_01",[["remove_transformer", []]]],
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
         ["Warehouse", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_cooling_coils", []]]]
+    ],
+    "pe_userdata_handling":[
+        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_pe_01",[["remove_transformer", []]]],
+        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_pe_02",[["remove_transformer", []]]],
+        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_pe_03",[["remove_transformer", []]]]
     ]
 }
