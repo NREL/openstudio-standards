@@ -110,8 +110,8 @@ class ASHRAE901PRM < Standard
     # 1. Check user_spacetype and user_space LPD total % = 1.0
     if /space/ =~ object_name
       user_data.each do |lpd_row|
-        unless lpd_row['num_std_ltg_types'].nil?
-          num_ltg_type = lpd_row['num_std_ltg_types']
+        unless lpd_row['num_std_ltg_types'].to_i == 0
+          num_ltg_type = lpd_row['num_std_ltg_types'].to_i
           total_ltg_percent = 0.0
           std_ltg_index = 0
           while std_ltg_index < num_ltg_type
