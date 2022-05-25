@@ -782,20 +782,71 @@ class ASHRAE901PRM < Standard
     end
   end
 
+
+  # based on previously added flag, raise warning if DCV is required but not implemented in zones, in which case
+  # baseline generation will be terminated
+  def model_raise_user_model_dcv_errors(model)
+    model.getThermalZones.each do |thermal_zone|
+      if thermal_zone.additionalProperties.getFeatureAsBoolean('zone dcv required by 901').get &&
+         thermal_zone.additionalProperties.getFeatureAsBoolean('airloop dcv required by 901').get &&
+         !thermal_zone.additionalProperties.getFeatureAsBoolean('zone DCV implemented in user model')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "For thermal zone #{thermal_zone.name}, ASHRAE 90.1 2019 6.4.3.8 requires this zone to have demand control ventilation, but it was not implemented in the user model, Appendix G baseline generation should be terminated!")
+      end
+    end
+  end
+
+  # Check if zones in the baseline model (to be created) should have DCV based on 90.1 2019 G3.1.2.5. Zone additional
+  # property 'apxg no need to have DCV' added
+  def model_add_apxg_dcv_properties(model)
+    model.getAirLoopHVACs.each do |air_loop_hvac|
+      if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+        oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+        controller_oa = oa_system.getControllerOutdoorAir
+        if controller_oa.minimumOutdoorAirFlowRate.is_initialized
+          oa_flow_m3_per_s = controller_oa.minimumOutdoorAirFlowRate.get
+        elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
+          oa_flow_m3_per_s = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
+        end
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, DCV not applicable because it has no OA intake.")
+        return false
+      end
+      oa_flow_cfm = OpenStudio.convert(oa_flow_m3_per_s, 'm^3/s', 'cfm').get
+      if oa_flow_cfm <= 3000
+        air_loop_hvac.thermalZones.each do |thermal_zone|
+          thermal_zone.additionalProperties.setFeature('apxg no need to have DCV', true)
+        end
+      else # oa_flow_cfg > 3000, check zone people density
+        air_loop_hvac.thermalZones.each do |thermal_zone|
+          area_served_m2 = 0
+          num_people = 0
+          thermal_zone.spaces.each do |space|
+            area_served_m2 += space.floorArea
+            num_people += space.numberOfPeople
+          end
+          area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
+          occ_per_1000_ft2 = num_people / area_served_ft2 * 1000
+          if occ_per_1000_ft2 <= 100
+            thermal_zone.additionalProperties.setFeature('apxg no need to have DCV', true)
+          else
+            thermal_zone.additionalProperties.setFeature('apxg no need to have DCV', false)
+          end
+        end
+      end
+    end
+    # if a zone does not have this additional property, it means it was not served by airloop.
+  end
+
   def model_set_baseline_demand_control_ventilation(model, climate_zone)
     model.getAirLoopHVACs.each do |air_loop_hvac|
-      if user_model_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
-        air_loop_hvac_enable_demand_control_ventilation(air_loop_hvac, climate_zone) # TODO: JXL check about climate zone argument
-        air_loop_hvac.thermalZones.sort.each do |zone|
-          unless user_model_zone_demand_control_ventilation_required?(zone)
+      if baseline_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
+        air_loop_hvac_enable_demand_control_ventilation(air_loop_hvac, climate_zone)
+        air_loop_hvac.thermalZone.sort.each do |zone|
+          unless baseline_thermal_zone_demand_control_ventilation_required?(zone)
             thermal_zone_convert_oa_req_to_per_area(zone)
           end
         end
       end
     end
   end
-
-  # def model_check_dcv_alignment(model, climate_zone)
-  #   puts 1
-  # end
 end

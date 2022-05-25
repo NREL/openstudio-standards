@@ -282,7 +282,7 @@ class ASHRAE901PRM < Standard
     end
     oa_flow_cfm = OpenStudio.convert(oa_flow_m3_per_s, 'm^3/s', 'cfm').get
 
-    return true if has_economizer || (oa_flow_cfm > 3000)
+    # return true if has_economizer || (oa_flow_cfm > 3000) #
 
     any_zones_req_dcv = false
     air_loop_hvac.thermalZones.sort.each do |zone|
@@ -291,7 +291,9 @@ class ASHRAE901PRM < Standard
         break
       end
     end
-    return true if any_zones_req_dcv
+
+    # TODO: JXL this is different from existing implementation, confirm with Doug / Jian
+    return true if any_zones_req_dcv && (has_economizer || (oa_flow_cfm > 3000))
 
     return false
   end
@@ -315,6 +317,29 @@ class ASHRAE901PRM < Standard
 
     return true if (area_served_ft2 > 500) && (occ_per_1000_ft2 > 25)
 
+    return false
+  end
+
+  def baseline_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
+    any_zone_req_dcv = false
+    air_loop_hvac.thermalZones.each do |zone|
+      if baseline_thermal_zone_demand_control_ventilation_required?(zone)
+        any_zone_req_dcv = true
+      end
+    end
+    return any_zone_req_dcv # baseline airloop needs dcv if any zone it serves needs dcv
+  end
+
+  def baseline_thermal_zone_demand_control_ventilation_required?(thermal_zone)
+    # zone needs dcv if user model has dcv and baseline does not meet apxg exception
+    if thermal_zone.additionalProperties.hasFeature("apxg no need to have DCV")
+      # meaning it was served by an airloop in the user model, does not mean much here, conditional as a safeguard
+      # in case it was not served by an airloop in the user model
+      if !thermal_zone.additionalProperties.getFeatureAsBoolean("apxg no need to have DCV").get && # does not meet apxg exception (need to have dcv if user model has it
+        thermal_zone.additionalProperties.getFeatureAsBoolean("zone DCV implemented in user model").get
+        return true
+      end
+    end
     return false
   end
 end
