@@ -116,7 +116,7 @@ class ASHRAE901PRM < Standard
           std_ltg_index = 0
           while std_ltg_index < num_ltg_type
             frac_key = format('std_ltg_type_frac%02d', (std_ltg_index + 1))
-            total_ltg_percent += lpd_row[frac_key]
+            total_ltg_percent += lpd_row[frac_key].to_f
           end
           assert(abs(total_ltg_percent - 1.0) > 0.001, `The fraction of user defined lighting types in Space/SpaceType: #{lpd_row['name']} does not add up to 1.0. The calculated fraction is #{total_ltg_percent}%.`)
         end
