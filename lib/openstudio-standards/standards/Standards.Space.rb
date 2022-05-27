@@ -1601,6 +1601,26 @@ class Standard
       return 'Unconditioned'
     end
 
+    # Return air plenums are indirectly conditioned spaces according to the
+    # 90.1-2019 Performance Rating Method Reference Manual
+    # #
+    # Additionally, Section 2 of ASHRAE 90.1 states that indirectly
+    # conditioned spaces are unconditioned spaces that are adjacent to
+    # heated or cooled spaced and provided that air from these spaces is
+    # intentionally transferred into the space at a rate exceeding 3 ach
+    # which most if not all return air plenum do.
+    space.model.getAirLoopHVACReturnPlenums.each do |return_air_plenum|
+      if return_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
+        # Determine if residential
+        res = thermal_zone_residential?(zone.get) ? true : false
+
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{zone.get.name} is (indirectly) conditioned.")
+        cond_cat = res ? 'ResConditioned' : 'NonResConditioned'
+
+        return cond_cat
+      end
+    end
+
     # Get the category from the zone, this methods does NOT detect indirectly
     # conditioned spaces
     cond_cat = thermal_zone_conditioning_category(zone.get, climate_zone)
