@@ -74,7 +74,7 @@ class Standard
     # NOTE - bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
     # Define different orientation from original orientation
     # for each individual baseline models
-    degs_from_org = run_all_orients ? [0, 90, 180, 270] : [0]
+    degs_from_org = run_all_orientations(run_all_orients, user_model) ? [0, 90, 180, 270] : [0]
 
     # Create baseline model for each orientation
     degs_from_org.each do |degs|
@@ -7429,6 +7429,15 @@ class Standard
   # @return [Boolean] true
   def model_set_central_preheat_coil_spm(model, thermalZones, coil)
     return true
+  end
+
+  # Check whether the baseline model generation needs to run all four orientations
+  # The default shall be true
+  #
+  # @param [Boolean] run_all_orients: user inputs to indicate whether it is required to run all orientations
+  # @param [OpenStudio::Model::Model] Openstudio model
+  def run_all_orientations(run_all_orients, user_model)
+    return run_all_orients
   end
 
   # Add reporting tolerances. Default values are based on the suggestions from the PRM-RM.

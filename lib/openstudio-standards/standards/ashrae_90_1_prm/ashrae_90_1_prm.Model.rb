@@ -889,4 +889,69 @@ class ASHRAE901PRM < Standard
     end
     return true
   end
+
+  # Check whether the baseline model generation needs to run all four orientations
+  # The default shall be true
+  #
+  # @param [Boolean] run_all_orients: user inputs to indicate whether it is required to run all orientations
+  # @param [OpenStudio::Model::Model] Openstudio model
+  def run_all_orientations(run_all_orients, user_model)
+    # Step 0, assign the default value
+    run_orients_flag = run_all_orients
+    # Step 1 check orientation variations - priority 2
+    fenestration_area_hash = get_model_fenestration_area_by_orientation(user_model)
+    fenestration_area_hash.each do |orientation, fenestration_area|
+      fenestration_area_hash.each do |other_orientation, other_fenestration_area|
+        next unless orientation != other_orientation
+
+        variance = (other_fenestration_area - fenestration_area) / fenestration_area
+        if variance.abs > 0.05
+          # if greater then 0.05
+          run_orients_flag = true
+        end
+      end
+    end
+    # Step 2 read user data - priority 1 - user data will override the priority 2
+    user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
+    if user_buildings
+      building_name = user_model.building.get.name.get
+      user_building_index = user_buildings.index { |user_building| user_building['name'] == building_name }
+      unless user_building_index.nil? || user_buildings[user_building_index]['is_exempt_from_rotations'].nil?
+        # user data exempt the rotation, No indicates true for running orients.
+        run_orients_flag = user_buildings[user_building_index]['is_exempt_from_rotations'].casecmp('No') == 0
+      end
+    end
+    return run_orients_flag
+  end
+
+  def get_model_fenestration_area_by_orientation(user_model)
+    # First index is wall, second index is window
+    fenestration_area_hash = {
+      'N' => 0.0,
+      'S' => 0.0,
+      'E' => 0.0,
+      'W' => 0.0
+    }
+    user_model.getSpaces.each do |space|
+      space_cond_type = space_conditioning_category(space)
+      next if space_cond_type == 'Unconditioned'
+
+      # Get zone multiplier
+      multiplier = space.thermalZone.get.multiplier
+      space.surfaces.each do |surface|
+        next if surface.surfaceType != 'Wall'
+        next if surface.outsideBoundaryCondition != 'Outdoors'
+
+        orientation = surface_cardinal_direction(surface)
+        surface.subSurfaces.each do |subsurface|
+          subsurface_type = subsurface.subSurfaceType.to_s.downcase
+          # Do not count doors
+          next unless (subsurface_type.include? 'window') || (subsurface_type.include? 'glass')
+
+          fenestration_area_hash[orientation] += subsurface.grossArea * subsurface.multiplier * multiplier
+        end
+      end
+    end
+    return fenestration_area_hash
+  end
 end

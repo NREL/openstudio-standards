@@ -128,5 +128,10 @@
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_econ_except_01",[["remove_transformer", []]]],
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
         ["Warehouse", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_cooling_coils", []]]]
+    ],
+    "building_rotation_check": [
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", []],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["change_wwr_model", [0.4, 0.4, 0.4, 0.4]]]],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_bro_01", [["change_wwr_model", [0.4, 0.4, 0.6, 0.6]]]]
     ]
 }
