@@ -1590,6 +1590,9 @@ class Standard
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
   # @todo add logic to detect indirectly-conditioned spaces based on air transfer
   def space_conditioning_category(space)
+    # Return space conditioning category if already assigned as an additional properties
+    return space.additionalProperties.getFeatureAsString('space_conditioning_category').get if space.additionalProperties.hasFeature('space_conditioning_category')
+
     # Get climate zone
     climate_zone = model_standards_climate_zone(space.model)
 

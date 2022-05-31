@@ -122,6 +122,15 @@ class Standard
         if model_run_sizing_run(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
           return false
         end
+
+        # Set baseline model space conditioning category based on proposed model
+        model.getSpaces.each do |space|
+          # Get conditioning category at the space level
+          space_conditioning_category = space_conditioning_category(space)
+
+          # Set space conditioning category
+          space.additionalProperties.setFeature('space_conditioning_category', space_conditioning_category)
+        end
       end
 
       # Remove external shading devices
