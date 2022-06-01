@@ -274,6 +274,8 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanZoneExhaust"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ThermalZone"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.SpaceType"
+
   # 90.1-PRM-2019
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019.Model"

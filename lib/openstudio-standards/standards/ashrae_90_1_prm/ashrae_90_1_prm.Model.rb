@@ -708,9 +708,9 @@ class ASHRAE901PRM < Standard
                     air_loop.thermalZones.each do |thermal_zones|
                       if thermal_zone.additionalProperties.hasFeature(info_key)
                         current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
-                        thermal_zone.additionalProperties.setFeature(info_key, current_value + user_airloop_doas[info_key])
+                        thermal_zone.additionalProperties.setFeature(info_key, current_value + user_airloop[info_key])
                       else
-                        thermal_zone.additionalProperties.setFeature(info_key, user_airloop_doas[info_key])
+                        thermal_zone.additionalProperties.setFeature(info_key, user_airloop[info_key])
                       end
                     end
                   end
@@ -1042,9 +1042,9 @@ class ASHRAE901PRM < Standard
               else
                 if thermal_zone.additionalProperties.hasFeature(info_key)
                   current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
-                  thermal_zone.additionalProperties.setFeature(info_key, current_value + user_airloop_doas[info_key])
+                  thermal_zone.additionalProperties.setFeature(info_key, current_value + zone_hvac_eqp_info[info_key])
                 else
-                  thermal_zone.additionalProperties.setFeature(info_key, user_airloop_doas[info_key])
+                  thermal_zone.additionalProperties.setFeature(info_key, zone_hvac_eqp_info[info_key])
                 end
               end
             end
