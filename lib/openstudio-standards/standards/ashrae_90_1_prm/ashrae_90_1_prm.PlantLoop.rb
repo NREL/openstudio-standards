@@ -284,6 +284,7 @@ class ASHRAE901PRM < Standard
     final_chillers.each_with_index do |final_chiller, i|
       final_chiller.setName("#{template} #{chiller_cooling_type} #{chiller_compressor_type} Chiller #{i + 1} of #{final_chillers.size}")
       final_chiller.setSizingFactor(per_chiller_sizing_factor)
+      final_chiller.setReferenceCapacity(per_chiller_cap_w)
       final_chiller.setCondenserType(chiller_cooling_type)
       final_chiller.additionalProperties.setFeature('compressor_type', chiller_compressor_type)
     end
