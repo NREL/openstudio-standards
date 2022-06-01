@@ -210,11 +210,10 @@ class Standard
       end
 
       # Set the construction properties of all the surfaces in the model
-      if /prm/i !~ template
-        model_apply_standard_constructions(model, climate_zone)
-      else
-        model_apply_standard_constructions(model, climate_zone, wwr_building_type, wwr_info)
-      end
+      model_apply_constructions(model, climate_zone, wwr_building_type, wwr_info)
+
+      # Update ground temperature profile (for F/C-factor construction objects)
+      model_update_ground_temperature_profile(model, climate_zone)
 
       # Identify non-mechanically cooled systems if necessary
       model_identify_non_mechanically_cooled_systems(model)
@@ -3723,7 +3722,7 @@ class Standard
   # @param construction_props [Hash] hash of construction properties
   # @return [OpenStudio::Model::Construction] construction object
   # @todo make return an OptionalConstruction
-  def model_add_construction(model, construction_name, construction_props = nil)
+  def model_add_construction(model, construction_name, construction_props = nil, surface = nil)
     # First check model and return construction if it already exists
     model.getConstructions.sort.each do |construction|
       if construction.name.get.to_s == construction_name
@@ -3735,10 +3734,10 @@ class Standard
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Adding construction: #{construction_name}")
 
     # Get the object data
-    if /prm/i !~ template
-      data = model_find_object(standards_data['constructions'], 'name' => construction_name)
-    else
+    if standards_data.keys.include?('prm_constructions')
       data = model_find_object(standards_data['prm_constructions'], 'name' => construction_name)
+    else
+      data = model_find_object(standards_data['constructions'], 'name' => construction_name)
     end
 
     unless data
@@ -3747,7 +3746,22 @@ class Standard
     end
 
     # Make a new construction and set the standards details
-    construction = OpenStudio::Model::Construction.new(model)
+    if data['intended_surface_type'] == 'GroundContactFloor' && !surface.nil?
+      construction = OpenStudio::Model::FFactorGroundFloorConstruction.new(model)
+    elsif data['intended_surface_type'] == 'GroundContactWall' && !surface.nil?
+      construction = OpenStudio::Model::CFactorUndergroundWallConstruction.new(model)
+    else
+      construction = OpenStudio::Model::Construction.new(model)
+      # Add the material layers to the construction
+      layers = OpenStudio::Model::MaterialVector.new
+      data['materials'].each do |material_name|
+        material = model_add_material(model, material_name)
+        if material
+          layers << material
+        end
+      end
+      construction.setLayers(layers)
+    end
     construction.setName(construction_name)
     standards_info = construction.standardsInformation
 
@@ -3760,16 +3774,6 @@ class Standard
     standards_info.setStandardsConstructionType(standards_construction_type)
 
     # @todo could put construction rendering color in the spreadsheet
-
-    # Add the material layers to the construction
-    layers = OpenStudio::Model::MaterialVector.new
-    data['materials'].each do |material_name|
-      material = model_add_material(model, material_name)
-      if material
-        layers << material
-      end
-    end
-    construction.setLayers(layers)
 
     # Modify the R value of the insulation to hit the specified U-value, C-Factor, or F-Factor.
     # Doesn't currently operate on glazing constructions
@@ -3807,19 +3811,27 @@ class Standard
         end
 
       elsif target_f_factor_ip && data['intended_surface_type'] == 'GroundContactFloor'
-
-        # Set the F-Factor (only applies to slabs on grade)
-        # @todo figure out what the prototype buildings did about ground heat transfer
-        # construction_set_slab_f_factor(construction, target_f_factor_ip.to_f, data['insulation_layer'])
-        construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
-
-      elsif target_c_factor_ip && data['intended_surface_type'] == 'GroundContactWall'
-
-        # Set the C-Factor (only applies to underground walls)
-        # @todo figure out what the prototype buildings did about ground heat transfer
-        # construction_set_underground_wall_c_factor(construction, target_c_factor_ip.to_f, data['insulation_layer'])
-        construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
-
+        # F-factor objects are unique to each surface, so a surface needs to be passed
+        # If not surface is passed, use the older approach to model ground contact floors
+        if surface.nil?
+          # Set the F-Factor (only applies to slabs on grade)
+          # @todo figure out what the prototype buildings did about ground heat transfer
+          # construction_set_slab_f_factor(construction, target_f_factor_ip.to_f, data['insulation_layer'])
+          construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
+        else
+          construction_set_surface_slab_f_factor(construction, target_f_factor_ip, surface)
+        end
+      elsif target_c_factor_ip && (data['intended_surface_type'] == 'GroundContactWall' || data['intended_surface_type'] == 'GroundContactRoof')
+        # C-factor objects are unique to each surface, so a surface needs to be passed
+        # If not surface is passed, use the older approach to model ground contact walls
+        if surface.nil?
+          # Set the C-Factor (only applies to underground walls)
+          # @todo figure out what the prototype buildings did about ground heat transfer
+          # construction_set_underground_wall_c_factor(construction, target_c_factor_ip.to_f, data['insulation_layer'])
+          construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
+        else
+          construction_set_surface_underground_wall_c_factor(construction, target_c_factor_ip, surface)
+        end
       end
 
       # If the construction is fenestration,
@@ -3910,8 +3922,11 @@ class Standard
   # @param intended_surface_type [String] intended surface type
   # @param standards_construction_type [String] standards construction type
   # @param building_category [String] building category
+  # @param wwr_building_type [String] building type used to determine WWR for the PRM baseline model
+  # @param wwr_info [Hash] @Todo - check what this is used for
+  # @param surface [OpenStudio::Model::Surface] OpenStudio surface object, only used for surface specific construction, e.g F/C-factor constructions
   # @return [OpenStudio::Model::Construction] construction object
-  def model_find_and_add_construction(model, climate_zone_set, intended_surface_type, standards_construction_type, building_category, wwr_building_type = nil, wwr_info = {})
+  def model_find_and_add_construction(model, climate_zone_set, intended_surface_type, standards_construction_type, building_category, wwr_building_type = nil, wwr_info = {}, surface = nil)
     # Get the construction properties,
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
@@ -3953,8 +3968,6 @@ class Standard
       almost_adiabatic = OpenStudio::Model::MasslessOpaqueMaterial.new(model, 'Smooth', 500)
       construction.insertLayer(0, almost_adiabatic)
       return construction
-      # else
-      # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
     end
 
     # Make sure that a construction is specified
@@ -3967,7 +3980,7 @@ class Standard
     end
 
     # Add the construction, modifying properties as necessary
-    construction = model_add_construction(model, props['construction'], props)
+    construction = model_add_construction(model, props['construction'], props, surface)
 
     return construction
   end
@@ -4840,6 +4853,17 @@ class Standard
     # Surface
     # Outdoors
     # Ground
+    # Foundation
+    # GroundFCfactorMethod
+    # OtherSideCoefficients
+    # OtherSideConditionsModel
+    # GroundSlabPreprocessorAverage
+    # GroundSlabPreprocessorCore
+    # GroundSlabPreprocessorPerimeter
+    # GroundBasementPreprocessorAverageWall
+    # GroundBasementPreprocessorAverageFloor
+    # GroundBasementPreprocessorUpperWall
+    # GroundBasementPreprocessorLowerWall
 
     # Possible surface types are
     # AtticFloor
@@ -4899,6 +4923,31 @@ class Standard
     types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
     types_to_modify << ['Ground', 'GroundContactWall', 'Mass']
 
+    # Foundation
+    types_to_modify << ['Foundation', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['Foundation', 'GroundContactWall', 'Mass']
+
+    # F/C-Factor methods
+    types_to_modify << ['GroundFCfactorMethod', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundFCfactorMethod', 'GroundContactWall', 'Mass']
+
+    # Other side coefficients
+    types_to_modify << ['OtherSideCoefficients', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['OtherSideConditionsModel', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['OtherSideCoefficients', 'GroundContactWall', 'Mass']
+    types_to_modify << ['OtherSideConditionsModel', 'GroundContactWall', 'Mass']
+
+    # Slab preprocessor
+    types_to_modify << ['GroundSlabPreprocessorAverage', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundSlabPreprocessorCore', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundSlabPreprocessorPerimeter', 'GroundContactFloor', 'Unheated']
+
+    # Basement preprocessor
+    types_to_modify << ['GroundBasementPreprocessorAverageWall', 'GroundContactWall', 'Mass']
+    types_to_modify << ['GroundBasementPreprocessorAverageFloor', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundBasementPreprocessorUpperWall', 'GroundContactWall', 'Mass']
+    types_to_modify << ['GroundBasementPreprocessorLowerWall', 'GroundContactWall', 'Mass']
+
     # Modify all constructions of each type
     types_to_modify.each do |boundary_cond, surf_type, const_type|
       constructions = model_find_constructions(model, boundary_cond, surf_type)
@@ -4927,6 +4976,17 @@ class Standard
     # Surface
     # Outdoors
     # Ground
+    # Foundation
+    # GroundFCfactorMethod
+    # OtherSideCoefficients
+    # OtherSideConditionsModel
+    # GroundSlabPreprocessorAverage
+    # GroundSlabPreprocessorCore
+    # GroundSlabPreprocessorPerimeter
+    # GroundBasementPreprocessorAverageWall
+    # GroundBasementPreprocessorAverageFloor
+    # GroundBasementPreprocessorUpperWall
+    # GroundBasementPreprocessorLowerWall
 
     # Possible surface types are
     # Floor
@@ -4951,21 +5011,61 @@ class Standard
     types_to_modify << ['Outdoors', 'GlassDoor']
     types_to_modify << ['Outdoors', 'OverheadDoor']
     types_to_modify << ['Outdoors', 'Skylight']
+    types_to_modify << ['Surface', 'Floor']
+    types_to_modify << ['Surface', 'Wall']
+    types_to_modify << ['Surface', 'RoofCeiling']
+    types_to_modify << ['Surface', 'FixedWindow']
+    types_to_modify << ['Surface', 'OperableWindow']
+    types_to_modify << ['Surface', 'Door']
+    types_to_modify << ['Surface', 'GlassDoor']
+    types_to_modify << ['Surface', 'OverheadDoor']
     types_to_modify << ['Ground', 'Floor']
     types_to_modify << ['Ground', 'Wall']
+    types_to_modify << ['Foundation', 'Wall']
+    types_to_modify << ['GroundFCfactorMethod', 'Wall']
+    types_to_modify << ['OtherSideCoefficients', 'Wall']
+    types_to_modify << ['OtherSideConditionsModel', 'Wall']
+    types_to_modify << ['GroundBasementPreprocessorAverageWall', 'Wall']
+    types_to_modify << ['GroundBasementPreprocessorUpperWall', 'Wall']
+    types_to_modify << ['GroundBasementPreprocessorLowerWall', 'Wall']
+    types_to_modify << ['Foundation', 'Floor']
+    types_to_modify << ['GroundFCfactorMethod', 'Floor']
+    types_to_modify << ['OtherSideCoefficients', 'Floor']
+    types_to_modify << ['OtherSideConditionsModel', 'Floor']
+    types_to_modify << ['GroundSlabPreprocessorAverage', 'Floor']
+    types_to_modify << ['GroundSlabPreprocessorCore', 'Floor']
+    types_to_modify << ['GroundSlabPreprocessorPerimeter', 'Floor']
 
     # Find just those surfaces
     surfaces_to_modify = []
     surface_category = {}
+    org_surface_boundary_conditions = {}
     types_to_modify.each do |boundary_condition, surface_type|
       # Surfaces
       model.getSurfaces.sort.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
         next unless surf.surfaceType == surface_type
 
+        # Check if surface is adjacent to an unenclosed or unconditioned space (e.g. attic or parking garage)
+        if surf.outsideBoundaryCondition == 'Surface'
+          adj_space = surf.adjacentSurface.get.space.get
+          adj_space_cond_type = space_conditioning_category(adj_space)
+          if adj_space_cond_type == 'Unconditioned'
+            # Get adjacent surface
+            adjacent_surf = surf.adjacentSurface.get
+
+            # Store original boundary condition type
+            org_surface_boundary_conditions[surf.name.to_s] = adjacent_surf
+
+            # Temporary change the surface's boundary condition to 'Outdoors' so it can be assigned a baseline construction
+            surf.setOutsideBoundaryCondition('Outdoors')
+            adjacent_surf.setOutsideBoundaryCondition('Outdoors')
+          end
+        end
+
         if boundary_condition == 'Outdoors'
           surface_category[surf] = 'ExteriorSurface'
-        elsif boundary_condition == 'Ground'
+        elsif ['Ground', 'Foundation', 'GroundFCfactorMethod', 'OtherSideCoefficients', 'OtherSideConditionsModel', 'GroundSlabPreprocessorAverage', 'GroundSlabPreprocessorCore', 'GroundSlabPreprocessorPerimeter', 'GroundBasementPreprocessorAverageWall', 'GroundBasementPreprocessorAverageFloor', 'GroundBasementPreprocessorUpperWall', 'GroundBasementPreprocessorLowerWall'].include?(boundary_condition)
           surface_category[surf] = 'GroundSurface'
         else
           surface_category[surf] = 'NA'
@@ -4986,7 +5086,17 @@ class Standard
     # Modify these surfaces
     prev_created_consts = {}
     surfaces_to_modify.sort.each do |surf|
-      prev_created_consts = planar_surface_apply_standard_construction(surf, climate_zone, prev_created_consts, wwr_building_type, wwr_info, surface_category[surf])
+      # Get space conditioning
+      space = surf.space.get
+      space_cond_type = space_conditioning_category(space)
+
+      # Do not modify constructions for unconditioned spaces
+      prev_created_consts = planar_surface_apply_standard_construction(surf, climate_zone, prev_created_consts, wwr_building_type, wwr_info, surface_category[surf]) unless space_cond_type == 'Unconditioned'
+
+      # Reset boundary conditions to original if they were temporary modified
+      if org_surface_boundary_conditions.include?(surf.name.to_s)
+        surf.setAdjacentSurface(org_surface_boundary_conditions[surf.name.to_s])
+      end
     end
 
     # List the unique array of constructions
@@ -7448,6 +7558,50 @@ class Standard
     cooling_tolerance_deg_c = OpenStudio.convert(cooling_tolerance_deg_f, 'R', 'K').get
     reporting_tolerances.setToleranceforTimeHeatingSetpointNotMet(heating_tolerance_deg_c)
     reporting_tolerances.setToleranceforTimeCoolingSetpointNotMet(cooling_tolerance_deg_c)
+
+    return true
+  end
+
+  # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
+  #
+  # @return [Bool] true if successful, false if not
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if successful, false if not
+  def model_apply_constructions(model, climate_zone, wwr_building_type, wwr_info)
+    model_apply_standard_constructions(model, climate_zone, wwr_building_type = nil, wwr_info = {})
+
+    return true
+  end
+
+  # Update ground temperature profile based on the weather file specified in the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if successful, false if not
+  def model_update_ground_temperature_profile(model, climate_zone)
+    # Remove existing FCFactor temperature profile
+    model.getSiteGroundTemperatureFCfactorMethod.remove
+
+    # Get path to weather file specified in the model
+    weather_file_path = model.getWeatherFile.path.get.to_s
+
+    # Look for stat file corresponding to the weather file
+    stat_file_path = weather_file_path.sub('.epw', '.stat').to_s
+    if !File.exist? stat_file_path
+      # When the stat file corresponding with the weather file in the model is missing,
+      # use the weather file that represent the climate zone
+      climate_zone_weather_file_map = model_get_climate_zone_weather_file_map
+      weather_file = climate_zone_weather_file_map[climate_zone]
+      stat_file_path = model_get_weather_file(weather_file).sub('.epw', '.stat').to_s
+    end
+
+    ground_temp = OpenStudio::Model::SiteGroundTemperatureFCfactorMethod.new(model)
+    ground_temperatures = model_get_monthly_ground_temps_from_stat_file(stat_file_path)
+    unless ground_temperatures.empty?
+      # set the site ground temperature building surface
+      ground_temp.setAllMonthlyTemperatures(ground_temperatures)
+    end
 
     return true
   end

@@ -5,7 +5,7 @@ class Standard
   # the standards intended surface type, the standards construction type,
   # the climate zone, and the occupancy type,
   # create a construction that meets those properties and assign it to this surface.
-  # 90.1-2007, 90.1-2010, 90.1-2013
+  # 90.1-2007, 90.1-2010, 90.1-2013, 90.1-PRM-2019
   #
   # @param planar_surface [Openstudio::Model:PlanarSurface] surface object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
@@ -157,7 +157,7 @@ class Standard
       type.push(surface_std_wwr_type)
     end
 
-    if previous_construction_map[type]
+    if previous_construction_map[type] && !previous_construction_map[type].iddObjectType.valueName.to_s.include?('factorGround')
       new_construction = previous_construction_map[type]
     else
       new_construction = model_find_and_add_construction(planar_surface.model,
@@ -166,7 +166,8 @@ class Standard
                                                          stds_type,
                                                          occ_type,
                                                          surface_std_wwr_type,
-                                                         wwr_info)
+                                                         wwr_info,
+                                                         planar_surface)
       if !new_construction == false
         previous_construction_map[type] = new_construction
       end

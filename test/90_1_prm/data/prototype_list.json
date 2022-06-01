@@ -123,5 +123,12 @@
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_econ_except_01",[["remove_transformer", []]]],
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
         ["Warehouse", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_cooling_coils", []]]]
+    ],
+    "unenclosed_spaces": [
+        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "no_user_data",[["change_weather_file", []]]]
+    ],
+    "f_c_factors": [
+        ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data", [["remove_transformer", []]]],
+        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "no_user_data",[["change_weather_file", []]]]
     ]
 }

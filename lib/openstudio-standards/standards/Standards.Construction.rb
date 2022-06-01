@@ -278,6 +278,39 @@ class Standard
     return true
   end
 
+  # Set the surface specific F-factor parameters of a construction
+  #
+  # @param construction [OpenStudio::Model::FFactorGroundFloorConstruction] OpenStudio F-factor construction object
+  # @param target_f_factor_ip [Float] Targeted F-Factor in IP units
+  # @param surface [OpenStudio::Model::Surface] OpenStudio surface object
+  # @return [Bool] returns true if successful, false if not
+  def construction_set_surface_slab_f_factor(construction, target_f_factor_ip, surface)
+    # Get space associated with surface
+    space = surface.space.get
+
+    # Find this space's exposed floor area and perimeter. NOTE: this assumes only only floor per space.
+    perimeter, area = model_get_f_floor_geometry(space)
+
+    if area == 0
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Area for #{surface.name} was calculated to be 0 m2, slab f-factor cannot be set.")
+      return false
+    end
+
+    # Change construction name
+    construction.setName("#{construction.name}_#{surface.name}_#{target_f_factor_ip}")
+
+    # Set properties
+    f_factor_si = target_f_factor_ip * OpenStudio.convert(1.0, 'Btu/ft*h*R', 'W/m*K').get
+    construction.setFFactor(f_factor_si)
+    construction.setArea(area)
+    construction.setPerimeterExposed(perimeter)
+
+    # Set surface outside boundary condition
+    surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
+
+    return true
+  end
+
   # Set the C-Factor of an underground wall to a specified value.
   # Assumes continuous exterior insulation and modifies
   # the insulation layer according to the values from 90.1-2004
@@ -299,6 +332,38 @@ class Standard
     construction.setName("#{construction.name} C-#{target_c_factor_ip.round(3)}")
 
     return true
+  end
+
+  # Set the surface specific C-factor parameters of a construction
+  #
+  # @param construction [OpenStudio::Model::CFactorUndergroundWallConstruction] OpenStudio C-factor construction object
+  # @param target_c_factor_ip [Float] Targeted C-Factor in IP units
+  # @param surface [OpenStudio::Model::Surface] OpenStudio surface object
+  # @return [Bool] returns true if successful, false if not
+  def construction_set_surface_underground_wall_c_factor(construction, target_c_factor_ip, surface)
+    # Get space associated with surface
+    space = surface.space.get
+
+    # Get height of the first below grade wall in this space.
+    below_grade_wall_height = model_get_space_below_grade_wall_height(space)
+
+    if below_grade_wall_height == 0
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Below grade wall height for #{surface.name} was calculated to be 0 m2, below grade wall c-factor cannot be set.")
+      return false
+    end
+
+    # Change construction name
+    construction.setName("#{construction.name}_#{surface.name}_#{target_c_factor_ip}")
+
+    # Set properties
+    c_factor_si = target_c_factor_ip * OpenStudio.convert(1.0, 'Btu/ft^2*h*R', 'W/m^2*K').get
+    construction.setCFactor(c_factor_si)
+    construction.setHeight(below_grade_wall_height)
+
+    # Set surface outside boundary condition
+    if !surface.nil?
+      surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
+    end
   end
 
   # Get the SHGC as calculated by EnergyPlus.

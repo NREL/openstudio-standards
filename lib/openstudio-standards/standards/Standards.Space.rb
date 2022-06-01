@@ -1434,11 +1434,8 @@ class Standard
 
       # Conditioned space OR semi-heated space <-> exterior
       # Conditioned space OR semi-heated space <-> ground
-      #
-      # isGroundSurface does not check for Foundation outside boundary condition
       if surface.outsideBoundaryCondition == 'Outdoors' ||
-         surface.isGroundSurface ||
-         surface.outsideBoundaryCondition == 'Foundation'
+         surface.isGroundSurface
         surf_cnt = true
       end
 
