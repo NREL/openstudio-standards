@@ -347,18 +347,15 @@ class AppendixGPRMTests < Minitest::Test
       if mod.empty?
         # test case 1 - rotation
         assert(rotated == true, 'Small Office with default WWR shall rotate orientations, but it didnt')
+      elsif user_data_dir == 'userdata_default_test'
+        # test case 2 - true
+        assert(rotated == true, 'Small Office with updated WWR (0.4, 0.4, 0.6, 0.6) shall rotate orientations, but it didnt')
       end
 
       if user_data_dir == 'userdata_bro_01'
         # test case 3 - rotation
         assert(rotated == false, 'Small Office with updated WWR (0.4, 0.4, 0.6, 0.6) and user data (exempt from rotation) do not need to rotate')
       end
-
-      if user_data_dir == 'no_user_data'
-        # test case 3 - rotation
-        assert(rotated == true, 'Small Office with updated WWR (0.4, 0.4, 0.6, 0.6) shall rotate orientations, but it didnt')
-      end
-
     end
   end
 
@@ -435,7 +432,7 @@ class AppendixGPRMTests < Minitest::Test
   def check_multi_lpd_handling(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
       building_type, template, climate_zone, user_data_dir, mod = prototype
-      if user_data_dir == 'no_user_data'
+      if user_data_dir == 'userdata_default_test'
         sub_prototypes_base = {}
         sub_prototypes_base[prototype] = model_baseline
         check_lpd(sub_prototypes_base)
