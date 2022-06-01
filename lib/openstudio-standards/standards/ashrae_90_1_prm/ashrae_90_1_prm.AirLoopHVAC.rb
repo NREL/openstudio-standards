@@ -97,9 +97,6 @@ class ASHRAE901PRM < Standard
     # Get system type associated with air loop
     system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
 
-    # Get the fan limitation pressure drop adjustment bhp
-    fan_pwr_adjustment_bhp = air_loop_hvac_fan_power_limitation_pressure_drop_adjustment_brake_horsepower(air_loop_hvac)
-
     # Find out if air loop represents a non mechanically cooled system
     is_nmc = false
     is_nmc = true if air_loop_hvac.additionalProperties.hasFeature('non_mechanically_cooled')
@@ -123,7 +120,7 @@ class ASHRAE901PRM < Standard
        system_type == 'SZ_CV'
 
       # Calculate the allowable fan motor bhp for the air loop
-      allowable_fan_bhp = air_loop_hvac_allowable_system_brake_horsepower(air_loop_hvac) + fan_pwr_adjustment_bhp
+      allowable_fan_bhp = air_loop_hvac_allowable_system_brake_horsepower(air_loop_hvac)
 
       # Divide the allowable power based
       # individual zone air flow
@@ -345,5 +342,49 @@ class ASHRAE901PRM < Standard
     end
 
     return true
+  end
+
+  # Determine the fan power limitation pressure drop adjustment
+  # Per Table 6.5.3.1-2 (90.1-2019)
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @return [Double] fan power limitation pressure drop adjustment, in units of horsepower
+  def air_loop_hvac_fan_power_limitation_pressure_drop_adjustment_brake_horsepower(air_loop_hvac)
+    # Calculate Fan Power Limitation Pressure Drop Adjustment
+    fan_pwr_adjustment_bhp = 0
+
+    # Retrieve climate zone
+    climate_zone = air_loop_hvac.model.getClimateZones.getClimateZone(0)
+
+    # Check if energy recovery is required
+    is_energy_recovery_required = air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
+
+    system_type = ''
+    # Get baseline system type if applicable
+    if air_loop_hvac.additionalProperties.hasFeature('baseline_system_type')
+      system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').to_s
+    end
+
+    air_loop_hvac.thermalZones.each do |zone|
+      # Take fan power deductions into account;
+      # Deductions are calculated based on the
+      # baseline model design.
+      # The only deduction that's applicable
+      # is the "System with central electric
+      # resistance heat" for system 6 and 8
+      if system_type == 'PVAV_PFP_Boxes' || system_type == 'VAV_PFP_Boxes'
+        if zone.additionalProperties.hasFeature('has_fan_power_deduction_system_with_central_electric_resistance_heat')
+          current_value = zone.additionalProperties.getFeatureAsDouble('has_fan_power_deduction_system_with_central_electric_resistance_heat')
+          zone.additionalProperties.setFeature('has_fan_power_deduction_system_with_central_electric_resistance_heat', current_value + 1.0)
+        else
+          zone.additionalProperties.setFeature('has_fan_power_deduction_system_with_central_electric_resistance_heat', 1.0)
+        end
+      end
+
+      # Determine fan power adjustment
+      fan_pwr_adjustment_bhp += thermal_zone_get_fan_power_limitations(zone, is_energy_recovery_required)
+    end
+
+    return fan_pwr_adjustment_bhp
   end
 end
