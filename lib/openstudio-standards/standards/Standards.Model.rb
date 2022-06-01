@@ -4853,17 +4853,6 @@ class Standard
     # Surface
     # Outdoors
     # Ground
-    # Foundation
-    # GroundFCfactorMethod
-    # OtherSideCoefficients
-    # OtherSideConditionsModel
-    # GroundSlabPreprocessorAverage
-    # GroundSlabPreprocessorCore
-    # GroundSlabPreprocessorPerimeter
-    # GroundBasementPreprocessorAverageWall
-    # GroundBasementPreprocessorAverageFloor
-    # GroundBasementPreprocessorUpperWall
-    # GroundBasementPreprocessorLowerWall
 
     # Possible surface types are
     # AtticFloor
@@ -4923,31 +4912,6 @@ class Standard
     types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
     types_to_modify << ['Ground', 'GroundContactWall', 'Mass']
 
-    # Foundation
-    types_to_modify << ['Foundation', 'GroundContactFloor', 'Unheated']
-    types_to_modify << ['Foundation', 'GroundContactWall', 'Mass']
-
-    # F/C-Factor methods
-    types_to_modify << ['GroundFCfactorMethod', 'GroundContactFloor', 'Unheated']
-    types_to_modify << ['GroundFCfactorMethod', 'GroundContactWall', 'Mass']
-
-    # Other side coefficients
-    types_to_modify << ['OtherSideCoefficients', 'GroundContactFloor', 'Unheated']
-    types_to_modify << ['OtherSideConditionsModel', 'GroundContactFloor', 'Unheated']
-    types_to_modify << ['OtherSideCoefficients', 'GroundContactWall', 'Mass']
-    types_to_modify << ['OtherSideConditionsModel', 'GroundContactWall', 'Mass']
-
-    # Slab preprocessor
-    types_to_modify << ['GroundSlabPreprocessorAverage', 'GroundContactFloor', 'Unheated']
-    types_to_modify << ['GroundSlabPreprocessorCore', 'GroundContactFloor', 'Unheated']
-    types_to_modify << ['GroundSlabPreprocessorPerimeter', 'GroundContactFloor', 'Unheated']
-
-    # Basement preprocessor
-    types_to_modify << ['GroundBasementPreprocessorAverageWall', 'GroundContactWall', 'Mass']
-    types_to_modify << ['GroundBasementPreprocessorAverageFloor', 'GroundContactFloor', 'Unheated']
-    types_to_modify << ['GroundBasementPreprocessorUpperWall', 'GroundContactWall', 'Mass']
-    types_to_modify << ['GroundBasementPreprocessorLowerWall', 'GroundContactWall', 'Mass']
-
     # Modify all constructions of each type
     types_to_modify.each do |boundary_cond, surf_type, const_type|
       constructions = model_find_constructions(model, boundary_cond, surf_type)
@@ -4976,17 +4940,6 @@ class Standard
     # Surface
     # Outdoors
     # Ground
-    # Foundation
-    # GroundFCfactorMethod
-    # OtherSideCoefficients
-    # OtherSideConditionsModel
-    # GroundSlabPreprocessorAverage
-    # GroundSlabPreprocessorCore
-    # GroundSlabPreprocessorPerimeter
-    # GroundBasementPreprocessorAverageWall
-    # GroundBasementPreprocessorAverageFloor
-    # GroundBasementPreprocessorUpperWall
-    # GroundBasementPreprocessorLowerWall
 
     # Possible surface types are
     # Floor
@@ -5011,61 +4964,21 @@ class Standard
     types_to_modify << ['Outdoors', 'GlassDoor']
     types_to_modify << ['Outdoors', 'OverheadDoor']
     types_to_modify << ['Outdoors', 'Skylight']
-    types_to_modify << ['Surface', 'Floor']
-    types_to_modify << ['Surface', 'Wall']
-    types_to_modify << ['Surface', 'RoofCeiling']
-    types_to_modify << ['Surface', 'FixedWindow']
-    types_to_modify << ['Surface', 'OperableWindow']
-    types_to_modify << ['Surface', 'Door']
-    types_to_modify << ['Surface', 'GlassDoor']
-    types_to_modify << ['Surface', 'OverheadDoor']
     types_to_modify << ['Ground', 'Floor']
     types_to_modify << ['Ground', 'Wall']
-    types_to_modify << ['Foundation', 'Wall']
-    types_to_modify << ['GroundFCfactorMethod', 'Wall']
-    types_to_modify << ['OtherSideCoefficients', 'Wall']
-    types_to_modify << ['OtherSideConditionsModel', 'Wall']
-    types_to_modify << ['GroundBasementPreprocessorAverageWall', 'Wall']
-    types_to_modify << ['GroundBasementPreprocessorUpperWall', 'Wall']
-    types_to_modify << ['GroundBasementPreprocessorLowerWall', 'Wall']
-    types_to_modify << ['Foundation', 'Floor']
-    types_to_modify << ['GroundFCfactorMethod', 'Floor']
-    types_to_modify << ['OtherSideCoefficients', 'Floor']
-    types_to_modify << ['OtherSideConditionsModel', 'Floor']
-    types_to_modify << ['GroundSlabPreprocessorAverage', 'Floor']
-    types_to_modify << ['GroundSlabPreprocessorCore', 'Floor']
-    types_to_modify << ['GroundSlabPreprocessorPerimeter', 'Floor']
 
     # Find just those surfaces
     surfaces_to_modify = []
     surface_category = {}
-    org_surface_boundary_conditions = {}
     types_to_modify.each do |boundary_condition, surface_type|
       # Surfaces
       model.getSurfaces.sort.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
         next unless surf.surfaceType == surface_type
 
-        # Check if surface is adjacent to an unenclosed or unconditioned space (e.g. attic or parking garage)
-        if surf.outsideBoundaryCondition == 'Surface'
-          adj_space = surf.adjacentSurface.get.space.get
-          adj_space_cond_type = space_conditioning_category(adj_space)
-          if adj_space_cond_type == 'Unconditioned'
-            # Get adjacent surface
-            adjacent_surf = surf.adjacentSurface.get
-
-            # Store original boundary condition type
-            org_surface_boundary_conditions[surf.name.to_s] = adjacent_surf
-
-            # Temporary change the surface's boundary condition to 'Outdoors' so it can be assigned a baseline construction
-            surf.setOutsideBoundaryCondition('Outdoors')
-            adjacent_surf.setOutsideBoundaryCondition('Outdoors')
-          end
-        end
-
         if boundary_condition == 'Outdoors'
           surface_category[surf] = 'ExteriorSurface'
-        elsif ['Ground', 'Foundation', 'GroundFCfactorMethod', 'OtherSideCoefficients', 'OtherSideConditionsModel', 'GroundSlabPreprocessorAverage', 'GroundSlabPreprocessorCore', 'GroundSlabPreprocessorPerimeter', 'GroundBasementPreprocessorAverageWall', 'GroundBasementPreprocessorAverageFloor', 'GroundBasementPreprocessorUpperWall', 'GroundBasementPreprocessorLowerWall'].include?(boundary_condition)
+        elsif boundary_condition == 'Ground'
           surface_category[surf] = 'GroundSurface'
         else
           surface_category[surf] = 'NA'
@@ -5086,17 +4999,7 @@ class Standard
     # Modify these surfaces
     prev_created_consts = {}
     surfaces_to_modify.sort.each do |surf|
-      # Get space conditioning
-      space = surf.space.get
-      space_cond_type = space_conditioning_category(space)
-
-      # Do not modify constructions for unconditioned spaces
-      prev_created_consts = planar_surface_apply_standard_construction(surf, climate_zone, prev_created_consts, wwr_building_type, wwr_info, surface_category[surf]) unless space_cond_type == 'Unconditioned'
-
-      # Reset boundary conditions to original if they were temporary modified
-      if org_surface_boundary_conditions.include?(surf.name.to_s)
-        surf.setAdjacentSurface(org_surface_boundary_conditions[surf.name.to_s])
-      end
+      prev_created_consts = planar_surface_apply_standard_construction(surf, climate_zone, prev_created_consts, wwr_building_type, wwr_info, surface_category[surf])
     end
 
     # List the unique array of constructions
@@ -7580,6 +7483,17 @@ class Standard
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Bool] returns true if successful, false if not
   def model_update_ground_temperature_profile(model, climate_zone)
+    # Check if the ground temperature profile is needed
+    surfaces_with_fc_factor_boundary = false
+    model.getSurfaces.each do |surface|
+      if surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod'
+        surfaces_with_fc_factor_boundary = true
+        break
+      end
+    end
+
+    return false unless surfaces_with_fc_factor_boundary
+
     # Remove existing FCFactor temperature profile
     model.getSiteGroundTemperatureFCfactorMethod.remove
 
