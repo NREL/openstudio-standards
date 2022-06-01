@@ -5101,6 +5101,8 @@ class Standard
       if !bat_win_wall_info.key?(std_spc_type)
         bat_win_wall_info[std_spc_type] = {}
         bat = bat_win_wall_info[std_spc_type]
+        bat_win_wall_only_info[std_spc_type] = {}
+        bat_only = bat_win_wall_only_info[std_spc_type]
 
         # Loop through all spaces in the model, and
         # per the PNNL PRM Reference Manual, find the areas
@@ -5114,6 +5116,7 @@ class Standard
         bat.store('sh_wind_m2', 0)
         bat.store('total_wall_m2', 0.001)
         bat.store('total_subsurface_m2', 0.0)
+        bat.store('total_wall_with_fene_m2', 0.001)
       else
         bat = bat_win_wall_info[std_spc_type]
       end
@@ -5121,6 +5124,7 @@ class Standard
       # Loop through all surfaces in this space
       wall_area_m2 = 0
       wind_area_m2 = 0
+      wall_only_area_m2 = 0
       space.surfaces.sort.each do |surface|
         # Skip non-outdoor surfaces
         next unless surface.outsideBoundaryCondition == 'Outdoors'
@@ -5133,6 +5137,8 @@ class Standard
         surface.subSurfaces.sort.each do |ss|
           next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
 
+          # Only add wall surfaces when the wall actually have windows
+          wall_only_area_m2 += surface.grossArea * space.multiplier
           wind_area_m2 += ss.netArea * space.multiplier
         end
       end
@@ -5184,6 +5190,9 @@ class Standard
           bat['sh_wall_m2'] += wall_area_m2
           bat['sh_wind_m2'] += wind_area_m2
       end
+      bat['total_wall_with_fene_m2'] += wall_only_area_m2
+      bat['total_subsurface_m2'] += wind_area_m2
+      bat['total_wall_m2'] += wall_area_m2
     end
 
     # Retrieve WWR info for all Building Area Types included in the model
@@ -5286,19 +5295,25 @@ class Standard
           # Skip non-walls
           next unless surface.surfaceType.casecmp('wall').zero?
 
+          # Reduce the size of the window
+          # If a vertical rectangle, raise sill height to avoid
+          # impacting daylighting areas, otherwise
+          # reduce toward centroid.
+          #
+          # For 90.1-PRM-2019 a.k.a "stable baseline" we always
+          # want to adjust by shrinking toward centroid since
+          # daylighting control isn't modeled
+          red = get_wwr_reduction_ratio(mult,
+                                        surface: surface,
+                                        wwr_targt: wwr_lim,
+                                        total_wall_m2: bat['total_wall_m2'],
+                                        total_wall_with_fene_m2: bat['total_wall_with_fene_m2'],
+                                        total_fene_m2: bat['total_fene_m2'])
+
           # Subsurfaces in this surface
           surface.subSurfaces.sort.each do |ss|
             next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
 
-            # Reduce the size of the window
-            # If a vertical rectangle, raise sill height to avoid
-            # impacting daylighting areas, otherwise
-            # reduce toward centroid.
-            #
-            # For 90.1-PRM-2019 a.k.a "stable baseline" we always
-            # want to adjust by shrinking toward centroid since
-            # daylighting control isn't modeled
-            red = 1.0 - mult
             if sub_surface_vertical_rectangle?(ss) && template != '90.1-PRM-2019'
               sub_surface_reduce_area_by_percent_by_raising_sill(ss, red)
             else
@@ -7403,6 +7418,24 @@ class Standard
   # @return [String] Returns type of SAT reset
   def air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
     return 'warmest_zone'
+  end
+
+  # Calculate the window to wall ratio reduction factor
+  #
+  # @param multiplier [Float] multiplier of the wwr
+  # @param surface [Openstudio::Model::Surface]
+  # @param wwr_target [Float] target window to wall ratio
+  # @param total_wall_m2 [Float] total wall area of the category in m2.
+  # @param total_wall_with_fene_m2 [Float] total wall area of the category with fenestrations in m2.
+  # @param total_fene_m2 [Float] total fenestration area
+  # @return [Float] reduction factor
+  def get_wwr_reduction_ratio(multiplier,
+                              surface: nil,
+                              wwr_targt: nil,
+                              total_wall_m2: nil,
+                              total_wall_with_fene_m2: nil,
+                              total_fene_m2: nil)
+    return 1.0 - multiplier
   end
 
   # A template method that handles the loading of user input data from multiple sources

@@ -889,4 +889,37 @@ class ASHRAE901PRM < Standard
     end
     return true
   end
+
+  # Calculate the window to wall ratio reduction factor
+  #
+  # @param multiplier [Float] multiplier of the wwr
+  # @param surface [Openstudio::Model::Surface]
+  # @param wwr_target [Float] target window to wall ratio
+  # @param total_wall_m2 [Float] total wall area of the category in m2.
+  # @param total_wall_with_fene_m2 [Float] total wall area of the category with fenestrations in m2.
+  # @param total_fene_m2 [Float] total fenestration area
+  # @return [Float] reduction factor
+  def get_wwr_reduction_ratio(multiplier,
+                              surface: nil,
+                              wwr_targt: nil,
+                              total_wall_m2: nil,
+                              total_wall_with_fene_m2: nil,
+                              total_fene_m2: nil)
+    reduction_ratio = 0.0
+
+    if multiplier < 1.0
+      # Case when reduction is required
+      reduction_ratio = 1.0 - multiplier
+    else
+      # Case when increase is required
+      exist_max_wwr = total_wall_with_fene_m2 * 0.9 / total_wall_m2
+      if exist_max_wwr < wwr_targt
+        # In this case, it is required to add vertical fenestrations to other surfaces
+        if surface.subSurfaces.length() > 0
+          # surface has fenestration
+          return 0.9
+        end
+      end
+    end
+  end
 end
