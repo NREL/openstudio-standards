@@ -1174,4 +1174,47 @@ class ASHRAE901PRM < Standard
 
     return true
   end
+
+  # Update ground temperature profile based on the weather file specified in the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if successful, false if not
+  def model_update_ground_temperature_profile(model, climate_zone)
+    # Check if the ground temperature profile is needed
+    surfaces_with_fc_factor_boundary = false
+    model.getSurfaces.each do |surface|
+      if surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod'
+        surfaces_with_fc_factor_boundary = true
+        break
+      end
+    end
+
+    return false unless surfaces_with_fc_factor_boundary
+
+    # Remove existing FCFactor temperature profile
+    model.getSiteGroundTemperatureFCfactorMethod.remove
+
+    # Get path to weather file specified in the model
+    weather_file_path = model.getWeatherFile.path.get.to_s
+
+    # Look for stat file corresponding to the weather file
+    stat_file_path = weather_file_path.sub('.epw', '.stat').to_s
+    if !File.exist? stat_file_path
+      # When the stat file corresponding with the weather file in the model is missing,
+      # use the weather file that represent the climate zone
+      climate_zone_weather_file_map = model_get_climate_zone_weather_file_map
+      weather_file = climate_zone_weather_file_map[climate_zone]
+      stat_file_path = model_get_weather_file(weather_file).sub('.epw', '.stat').to_s
+    end
+
+    ground_temp = OpenStudio::Model::SiteGroundTemperatureFCfactorMethod.new(model)
+    ground_temperatures = model_get_monthly_ground_temps_from_stat_file(stat_file_path)
+    unless ground_temperatures.empty?
+      # set the site ground temperature building surface
+      ground_temp.setAllMonthlyTemperatures(ground_temperatures)
+    end
+
+    return true
+  end
 end
