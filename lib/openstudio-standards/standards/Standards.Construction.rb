@@ -361,9 +361,7 @@ class Standard
     construction.setHeight(below_grade_wall_height)
 
     # Set surface outside boundary condition
-    if !surface.nil?
-      surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
-    end
+    surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
   end
 
   # Get the SHGC as calculated by EnergyPlus.
