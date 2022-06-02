@@ -2079,7 +2079,6 @@ class AppendixGPRMTests < Minitest::Test
       building_dir_rel_north = model.getBuilding.northAxis
       surface_abs_azimuth = surface_azimuth_rel_space + space_dir_rel_north + building_dir_rel_north
       surface_abs_azimuth -= 360.0 until surface_abs_azimuth < 360.0
-
       unless ss.subSurfaces.empty?
         orig_construction = ss.subSurfaces[0].construction.get
         ss.subSurfaces.sort.each(&:remove)
