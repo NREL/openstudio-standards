@@ -2480,11 +2480,8 @@ class AppendixGPRMTests < Minitest::Test
     check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
     check_multi_lpd_handling(prototypes_base['lpd_userdata_handling']) if tests.include? 'lpd_userdata_handling'
     check_economizer_exception(prototypes_base['economizer_exception']) if tests.include? 'economizer_exception'
-<<<<<<< HEAD
     check_unenclosed_spaces(prototypes_base['unenclosed_spaces']) if tests.include? 'unenclosed_spaces'
     check_f_c_factors(prototypes_base['f_c_factors']) if tests.include? 'f_c_factors'
-=======
     check_fan_power_credits(prototypes_base['fan_power_credits']) if tests.include? 'fan_power_credits'
->>>>>>> AppendixG_DEv
   end
 end
