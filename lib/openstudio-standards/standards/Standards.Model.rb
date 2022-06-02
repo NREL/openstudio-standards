@@ -5508,6 +5508,9 @@ class Standard
     # Outdoor VRF units (not in zone, not in loops)
     model.getAirConditionerVariableRefrigerantFlows.each(&:remove)
 
+    # Air loop dedicated outdoor air systems
+    model.getAirLoopHVACDedicatedOutdoorAirSystems.each(&:remove)
+
     return true
   end
 
