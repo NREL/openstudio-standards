@@ -1,7 +1,7 @@
 # This class holds methods that apply NECB2020 rules.
 
 # Notes for adding new version of NECB:
-#  Essentially all you need to do is copy this file to a new folder and update the class name (only the initialize and load_standards_database_new methods ae required, 
+#  Essentially all you need to do is copy this file to a new folder and update the class name (only the initialize and load_standards_database_new methods are required, 
 #  everything else will be inherited. Only add methods, json files and other rb files if the content/functionality has changed. Do not forget to update the class name in the rb files!
 #  The spacetypes and led lighting json files are required (in the data folder) as they have the NECB version hardcoded (which requires updating).
 #  However there are a few other files to update:
