@@ -1916,6 +1916,57 @@ class NECB2011
                                                            clg_part_load_ratio)
   end
 
+  def add_onespeed_htg_DX_coil(model, sch)
+
+  
+    htg_cap_f_of_temp = OpenStudio::Model::CurveCubic.new(model)
+    htg_cap_f_of_temp.setCoefficient1Constant(0.729009)
+    htg_cap_f_of_temp.setCoefficient2x(0.0319275)
+    htg_cap_f_of_temp.setCoefficient3xPOW2(0.000136404)
+    htg_cap_f_of_temp.setCoefficient4xPOW3(-8.748e-06)
+    htg_cap_f_of_temp.setMinimumValueofx(-20.0)
+    htg_cap_f_of_temp.setMaximumValueofx(20.0)
+  
+    htg_cap_f_of_flow = OpenStudio::Model::CurveCubic.new(model)
+    htg_cap_f_of_flow.setCoefficient1Constant(0.84)
+    htg_cap_f_of_flow.setCoefficient2x(0.16)
+    htg_cap_f_of_flow.setCoefficient3xPOW2(0.0)
+    htg_cap_f_of_flow.setCoefficient4xPOW3(0.0)
+    htg_cap_f_of_flow.setMinimumValueofx(0.5)
+    htg_cap_f_of_flow.setMaximumValueofx(1.5)
+
+    htg_energy_input_ratio_f_of_temp = OpenStudio::Model::CurveCubic.new(model)
+    htg_energy_input_ratio_f_of_temp.setCoefficient1Constant(1.2183)
+    htg_energy_input_ratio_f_of_temp.setCoefficient2x(-0.03612)
+    htg_energy_input_ratio_f_of_temp.setCoefficient3xPOW2(0.00142)
+    htg_energy_input_ratio_f_of_temp setCoefficient4xPOW3(-2.68e-05)
+    htg_energy_input_ratio_f_of_temp.setMinimumValueofx(-20.0)
+    htg_energy_input_ratio_f_of_temp.setMaximumValueofx(20.0)
+
+    htg_energy_input_ratio_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
+    htg_energy_input_ratio_f_of_flow.setCoefficient1Constant(1.3824)
+    htg_energy_input_ratio_f_of_flow.setCoefficient2x(-0.4336)
+    htg_energy_input_ratio_f_of_flow.setCoefficient3xPOW2(0.0512)
+    htg_energy_input_ratio_f_of_flow.setMinimumValueofx(0.0)
+    htg_energy_input_ratio_f_of_flow.setMaximumValueofx(1.0)
+  
+    htg_part_load_ratio = OpenStudio::Model::CurveCubic.new(model)
+    htg_part_load_ratio.setCoefficient1Constant(0.3696)
+    htg_part_load_ratio.setCoefficient2x(2.3362)
+    htg_part_load_ratio.setCoefficient3xPOW2(-2.9577)
+    htg_part_load_ratio.setCoefficient4xPOW3(1.2596)
+    htg_part_load_ratio.setMinimumValueofx(0.7)
+    htg_part_load_ratio.setMaximumValueofx(1.0)
+
+    return OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model,
+                                                           sch,
+                                                           htg_cap_f_of_temp,
+                                                           htg_cap_f_of_flow,
+                                                           htg_energy_input_ratio_f_of_temp,
+                                                           htg_energy_input_ratio_f_of_flow,
+                                                           htg_part_load_ratio)
+  end
+
   # Zonal systems
   def add_zone_baseboards(baseboard_type:,
                           hw_loop:,

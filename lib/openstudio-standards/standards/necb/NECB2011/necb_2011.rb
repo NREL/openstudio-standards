@@ -177,6 +177,7 @@ class NECB2011 < Standard
                                    epw_file:,
                                    debug: false,
                                    sizing_run_dir: Dir.pwd,
+                                   reference_hp:nil,
                                    primary_heating_fuel: 'DefaultFuel',
                                    dcv_type: 'NECB_Default',
                                    lights_type: 'NECB_Default',
@@ -233,6 +234,7 @@ class NECB2011 < Standard
     return model_apply_standard(model: model,
                                 epw_file: epw_file,
                                 sizing_run_dir: sizing_run_dir,
+                                reference_hp:reference_hp,
                                 primary_heating_fuel: primary_heating_fuel,
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
                                 lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
@@ -303,6 +305,7 @@ class NECB2011 < Standard
   def model_apply_standard(model:,
                            epw_file:,
                            sizing_run_dir: Dir.pwd,
+                           reference_hp: nil,
                            primary_heating_fuel: 'DefaultFuel',
                            dcv_type: 'NECB_Default',
                            lights_type: 'NECB_Default',
@@ -464,6 +467,7 @@ class NECB2011 < Standard
   def apply_systems_and_efficiencies(model:,
                                      primary_heating_fuel:,
                                      sizing_run_dir:,
+                                     reference_hp: nil,
                                      dcv_type: 'NECB_Default',
                                      ecm_system_name: 'NECB_Default',
                                      ecm_system_zones_map_option: 'NECB_Default',

@@ -60,7 +60,7 @@ class NECB2011
     system_data[:ZoneCoolingSizingFactor] = 1.1
     system_data[:ZoneHeatingSizingFactor] = 1.3
 
-    # System Type 1: PTAC with no heating (unitary AC)
+    # System Type 1: PTAC with no heating (unitary AC) 
     # Zone baseboards, electric or hot water depending on argument baseboard_type
     # baseboard_type choices are "Hot Water" or "Electric"
     # PSZ to represent make-up air unit (if present)
@@ -74,6 +74,7 @@ class NECB2011
     # mau_heating_coil_type choices are "Hot Water", "Electric"
     # boiler_fueltype choices match OS choices for Boiler component fuel type, i.e.
     # "NaturalGas","Electricity","PropaneGas","FuelOilNo1","FuelOilNo2","Coal","Diesel","Gasoline","OtherFuel1"
+    # System Type 1 - NECB 8.4.4.13 Heat Pump: CAV Packaged rooftop heat pump with zone baseboard (electric or hot water depending on argument baseboard_type)
 
     # Some system parameters are set after system is set up; by applying method 'apply_hvac_efficiency_standard'
 
@@ -89,11 +90,11 @@ class NECB2011
       # MAU Heating type selection.
       if mau_heating_coil_type == 'Electric' # electric coil
         mau_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-      end
-
-      if mau_heating_coil_type == 'Hot Water'
+      elsif  mau_heating_coil_type == 'Hot Water'
         mau_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
         hw_loop.addDemandBranchForComponent(mau_htg_coil)
+      elsif mau_heating_coil_type == 'DX'
+        mau_htg_coil = add_onespeed_htg_DX_coil(model, always_on)
       end
 
       # Set up Single Speed DX coil with
@@ -119,12 +120,19 @@ class NECB2011
       oa_system.addToNode(supply_inlet_node)
 
       # Add a setpoint manager to control the supply air temperature
-      sat_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      sat_sch.setName('Makeup-Air Unit Supply Air Temp')
-      sat_sch.defaultDaySchedule.setName('Makeup Air Unit Supply Air Temp Default')
-      sat_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), system_data[:system_supply_air_temperature])
-      setpoint_mgr = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
-      setpoint_mgr.addToNode(mau_air_loop.supplyOutletNode)
+      if reference_hp
+        setpoint_mgr = OpenStudio::Model::SetpointManagerMultiZoneHeatingAverage.new(model)
+        setpoint_mgr.setMinimumSetpointTemperature(13)
+        setpoint_mgr.setMaximumSetpointTemperature(40)
+        setpoint_mgr.addToNode(mau_air_loop.supplyOutletNode)
+      else
+        sat_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+        sat_sch.setName('Makeup-Air Unit Supply Air Temp')
+        sat_sch.defaultDaySchedule.setName('Makeup Air Unit Supply Air Temp Default')
+        sat_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), system_data[:system_supply_air_temperature])
+        setpoint_mgr = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
+        setpoint_mgr.addToNode(mau_air_loop.supplyOutletNode)
+      end
     end
 
     zones.each do |zone|
@@ -150,7 +158,9 @@ class NECB2011
 
       # htg_coil_elec = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
       zero_outdoor_air = true # flag to set outside air flow to 0.0
-      add_ptac_dx_cooling(model, zone, zero_outdoor_air)
+      unless reference_hp
+        add_ptac_dx_cooling(model, zone, zero_outdoor_air)
+      end
 
       # add zone baseboards
       add_zone_baseboards(baseboard_type: baseboard_type,
@@ -173,7 +183,11 @@ class NECB2011
       sys_name_pars['sys_htg'] = mau_heating_coil_type
       sys_name_pars['sys_sf'] = 'cv'
       sys_name_pars['zone_htg'] = baseboard_type
-      sys_name_pars['zone_clg'] = 'ptac'
+      if reference_hp
+        sys_name_pars['zone_clg'] = 'none'
+      else
+        sys_name_pars['zone_clg'] = 'ptac'
+      end
       sys_name_pars['sys_rf'] = 'none'
       assign_base_sys_name(mau_air_loop,
                            sys_abbr: 'sys_1',
