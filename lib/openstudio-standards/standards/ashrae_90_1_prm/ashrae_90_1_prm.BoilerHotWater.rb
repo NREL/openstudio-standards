@@ -19,24 +19,6 @@ class ASHRAE901PRM < Standard
     return search_criteria
   end
 
-  # Find capacity in W
-  #
-  # @return [Double] capacity in W
-  def boiler_hot_water_find_capacity(boiler_hot_water)
-    capacity_w = nil
-    if boiler_hot_water.nominalCapacity.is_initialized
-      capacity_w = boiler_hot_water.nominalCapacity.get
-    elsif boiler_hot_water.autosizedNominalCapacity.is_initialized
-      capacity_w = boiler_hot_water.autosizedNominalCapacity.get
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name} capacity is not available, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
-    end
-
-    return capacity_w
-  end
-
   # Finds lookup object in standards and return minimum thermal efficiency
   #
   # @return [Double] minimum thermal efficiency

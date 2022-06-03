@@ -32,22 +32,6 @@ class ASHRAE901PRM < Standard
     return search_criteria
   end
 
-  # Finds capacity in W
-  #
-  # @return [Double] capacity in W to be used for find object
-  def chiller_electric_eir_find_capacity(chiller_electric_eir)
-    if chiller_electric_eir.referenceCapacity.is_initialized
-      capacity_w = chiller_electric_eir.referenceCapacity.get
-    elsif chiller_electric_eir.autosizedReferenceCapacity.is_initialized
-      capacity_w = chiller_electric_eir.autosizedReferenceCapacity.get
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name} capacity is not available, cannot apply efficiency standard.")
-      return false
-    end
-
-    return capacity_w
-  end
-
   # Finds lookup object in standards and return full load efficiency
   #
   # @return [Double] full load efficiency (COP)
