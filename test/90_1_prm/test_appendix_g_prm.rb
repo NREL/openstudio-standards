@@ -432,7 +432,7 @@ class AppendixGPRMTests < Minitest::Test
   def check_multi_lpd_handling(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
       building_type, template, climate_zone, user_data_dir, mod = prototype
-      if user_data_dir == 'userdata_default_test'
+      if user_data_dir == 'no_user_data'
         sub_prototypes_base = {}
         sub_prototypes_base[prototype] = model_baseline
         check_lpd(sub_prototypes_base)
