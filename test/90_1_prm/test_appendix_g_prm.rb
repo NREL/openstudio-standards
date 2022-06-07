@@ -32,6 +32,10 @@ class AppendixGPRMTests < Minitest::Test
       # mod is an array of method intended to modify the model
       building_type, template, climate_zone, user_data_dir, mod = prototype
 
+      climate_zone_code = climate_zone.split('-')[-1]
+      assert(building_type != 'LargeOffice' || ['0A', '0B', '1A', '1B', '2A', '2B'].include?(climate_zone_code), "Baseline model cannot be generated for #{building_type} in climate zone: #{climate_zone}. Due to a known problem with sizing of heating system for data center (which has zero heating load), the large office model fails in mild to cold climates (CZ 3 and higher). Use climate zone 0, 1 or 2 instead")
+
+
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join('_') unless mod.empty?
 
@@ -46,7 +50,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # Define model name and run folder if it doesn't already exist,
       # if it does, remove it and re-create it.
-      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
+      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod_str}"
       run_dir = "#{@test_dir}/#{model_name}"
       if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
@@ -113,7 +117,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # user data CSV files are in @user_data_dir, if appicable
       # user data JSON files will be created in sub-folder inside @test_dir
-      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
+      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod_str}"
       proto_run_dir = "#{@test_dir}/#{model_name}"
 
       if not user_data_dir.equal?('no_user_data')
@@ -187,7 +191,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # Load newly generated baseline model
       @test_dir = "#{File.dirname(__FILE__)}/output"
-      model_baseline_file_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-Baseline/final.osm" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}-Baseline/final.osm"
+      model_baseline_file_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod_str}-Baseline/final.osm"
       model_baseline = OpenStudio::Model::Model.load("#{@test_dir}/#{model_baseline_file_name}")
       model_baseline = model_baseline.get
 
@@ -397,6 +401,51 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # Implement multiple LPD handling from userdata by space, space type and default space_type
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_multi_lpd_handling(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+      if user_data_dir == 'no_user_data'
+        sub_prototypes_base = {}
+        sub_prototypes_base[prototype] = model_baseline
+        check_lpd(sub_prototypes_base)
+      else
+        if user_data_dir == 'userdata_lpd_01'
+          space_name_to_lpd_target = {}
+          space_name_to_lpd_target['Attic'] =15.06948107
+          space_name_to_lpd_target['Perimeter_ZN_2'] =14.83267494
+          space_name_to_lpd_target['Perimeter_ZN_1'] =15.26323154
+          space_name_to_lpd_target['Perimeter_ZN_4'] =12.91669806
+
+          model_baseline.getSpaces.each do |space|
+            space_name = space.name.get
+            target_lpd = 10.7639
+            if space_name_to_lpd_target.key?(space_name)
+              target_lpd = space_name_to_lpd_target[space_name]
+            end
+            model_lpd = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea.get
+            assert((target_lpd - model_lpd).abs < 0.001, "Baseline LPD for the #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of the #{space_name} is #{target_lpd} but should be #{model_lpd}.")
+          end
+        elsif user_data_dir == 'userdata_lpd_02'
+          space_name_to_lpd_target = {}
+          space_name_to_lpd_target['Attic'] = 0.0
+
+          model_baseline.getSpaces.each do |space|
+            space_name = space.name.get
+            target_lpd = 12.2452724
+            if space_name_to_lpd_target.key?(space_name)
+              target_lpd = space_name_to_lpd_target[space_name]
+            end
+            model_lpd = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea.get
+            assert((target_lpd - model_lpd).abs < 0.001, "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of the #{space_name} is #{target_lpd} but should be #{model_lpd}.")
+          end
+        end
+      end
+    end
+  end
+
   # Check LPD requirements lookups
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -420,7 +469,7 @@ class AppendixGPRMTests < Minitest::Test
       # Check LPD against expected LPD
       space_name.each do |key, value|
         value_si = OpenStudio.convert(value, 'W/ft^2', 'W/m^2').get
-        assert(((lpd_baseline[key] - value_si).abs < 0.001), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{lpd_baseline[key]} but should be #{value_si}.")
+        assert(((lpd_baseline[key] - value_si).abs < 0.001), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The LPD of the #{key} is #{lpd_baseline[key]} but should be #{value_si}.")
       end
     end
   end
@@ -703,29 +752,31 @@ class AppendixGPRMTests < Minitest::Test
       model_baseline.getSpaceTypes.sort.each do |space_type|
         light_sch_model_base = {}
         space_type.lights.sort.each do |lgts|
-          light_sch_model_lgts_base = {}
-          light_sch_model_lgts_base['space_type'] = space_type.standardsSpaceType.to_s
+          if lgts.schedule.get.to_ScheduleRuleset.is_initialized
+            light_sch_model_lgts_base = {}
+            light_sch_model_lgts_base['space_type'] = space_type.standardsSpaceType.to_s
 
-          # get default schedule
-          day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
-          times = day_rule.times()
-          light_sch_model_default_rule = {}
-          times.each do |time|
-            light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
-          end
-          light_sch_model_lgts_base['default schedule'] = light_sch_model_default_rule
-
-          # get daily schedule
-          lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
-            light_sch_model_week_rule_base = {}
-            day_rule = week_rule.daySchedule
+            # get default schedule
+            day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
             times = day_rule.times()
+            light_sch_model_default_rule = {}
             times.each do |time|
-              light_sch_model_week_rule_base[time.to_s] = day_rule.getValue(time)
+              light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
             end
-            light_sch_model_lgts_base[week_rule.name.to_s] = light_sch_model_week_rule_base
+            light_sch_model_lgts_base['default schedule'] = light_sch_model_default_rule
+
+            # get daily schedule
+            lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
+              light_sch_model_week_rule_base = {}
+              day_rule = week_rule.daySchedule
+              times = day_rule.times()
+              times.each do |time|
+                light_sch_model_week_rule_base[time.to_s] = day_rule.getValue(time)
+              end
+              light_sch_model_lgts_base[week_rule.name.to_s] = light_sch_model_week_rule_base
+            end
+            light_sch_model_base[lgts.name.to_s] = light_sch_model_lgts_base
           end
-          light_sch_model_base[lgts.name.to_s] = light_sch_model_lgts_base
         end
 
         # Check light schedule against expected light schedule
@@ -1134,7 +1185,7 @@ class AppendixGPRMTests < Minitest::Test
       fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
       fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
       fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
-      assert(fan_bhp_ip.round(5) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_power_ip.round(1)} instead of 0.0013.")
+      assert(fan_bhp_ip.round(4) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_bhp_ip.round(4)} instead of 0.0013.")
       fan_bhp_ip *= OpenStudio.convert(std.fan_design_air_flow(fan), 'm^3/s', 'cfm').get
       if fan_bhp_ip <= 20.0 && fan_bhp_ip > 15.0
         assert(fan.motorEfficiency == 0.91, "Fan motor efficiency for #{fan.name} in #{sub_text} is #{fan.motorEfficiency}, 0.91 is expected.")
@@ -1220,7 +1271,7 @@ class AppendixGPRMTests < Minitest::Test
       fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
       fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
       fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
-      assert(fan_bhp_ip.round(5) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_power_ip.round(1)} instead of 0.0013.")
+      assert(fan_bhp_ip.round(4) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_power_ip.round(4)} instead of 0.0013.")
       fan_bhp_ip *= OpenStudio.convert(std.fan_design_air_flow(fan), 'm^3/s', 'cfm').get
       if fan_bhp_ip <= 20.0 && fan_bhp_ip > 15.0
         assert(fan.motorEfficiency == 0.91, "Fan motor efficiency for #{fan.name} in #{sub_text} is #{fan.motorEfficiency}, 0.91 is expected.")
@@ -1753,7 +1804,6 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
-
   def check_economizer_exception(baseline_base)
     baseline_base.each do |baseline, baseline_model|
       building_type, template, climate_zone, user_data_dir, mod = baseline
@@ -1786,13 +1836,11 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   # Set ZoneMultiplier to passed value for all zones
- # Check if coefficients of part-load power curve is correct per G3.1.3.15
+  # Check if coefficients of part-load power curve is correct per G3.1.3.15
   def check_variable_speed_fan_power(prototypes_base)
     prototypes_base.each do |prototype, model|
       model.getFanVariableVolumes.each do |supply_fan|
         supply_fan_name = supply_fan.name.get.to_s
-
-      
         # check fan curves
         # Skip single-zone VAV fans
         next if supply_fan.airLoopHVAC.get.thermalZones.size == 1
@@ -1857,9 +1905,75 @@ class AppendixGPRMTests < Minitest::Test
           end
         end
       end
-    end  
+    end
   end
 
+  # Check fan power credits calculations
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_fan_power_credits(prototypes_base)
+    standard = Standard.build('90.1-PRM-2019')
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+      std = Standard.build('90.1-PRM-2019')
+
+      if building_type == 'SmallOffice'
+        model.getFanVariableVolumes.sort.each do |fan|
+          fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
+          fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
+          fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
+          assert(fan_bhp_ip.round(4) == 0.0017, "Fan power for #{fan.name.to_s} fan in #{building_type} #{template} #{climate_zone} #{mod} is #{fan_bhp_ip.round(4)} instead of 0.0017.")
+        end
+      end
+
+      if building_type == 'RetailStandalone'
+        model.getFanOnOffs.sort.each do |fan|
+          if fan.name.to_s.include?('Front_Entry ZN')
+            fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
+            fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
+            fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
+            assert(fan_bhp_ip.round(4) == 0.0012, "Fan power for  #{fan.name.to_s} fan in #{building_type} #{template} #{climate_zone} #{mod} is #{fan_bhp_ip.round(4)} instead of 0.0012.")
+          end
+        end
+      end
+    end
+  end
+
+  # Add a AirLoopHVACDedicatedOutdoorAirSystem in the model
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param arguments [Array] Not used
+  def add_ahu_doas(model, arguments)
+    # Create new objects
+    oa_ctrl = OpenStudio::Model::ControllerOutdoorAir.new(model)
+    oa_sys = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_ctrl)
+    ahu_doas = OpenStudio::Model::AirLoopHVACDedicatedOutdoorAirSystem.new(oa_sys)
+    ahu_doas.setName('AHU_DOAS')
+    fan = OpenStudio::Model::FanSystemModel.new(model)
+
+    # Assign fan and air loops
+    fan.addToNode(oa_sys.outboardOANode.get)
+    model.getAirLoopHVACs.each do |air_loop|
+      ahu_doas.addAirLoop(air_loop)
+    end
+
+    return model
+  end
+
+  # Change cooling thermostat to 24C
+  # This is used to converted a heated only zone to heated and cooled
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param arguments [Array] Not used
+  def change_clg_therm(model, arguments)
+    std = Standard.build("90.1-2019")
+    thermal_zone = model.getThermalZoneByName(arguments[0]).get    
+    tstat = thermal_zone.thermostat.get
+    tstat = tstat.to_ThermostatSetpointDualSetpoint.get
+    tstat.setCoolingSetpointTemperatureSchedule(std.model_add_constant_schedule_ruleset(model, 24, name = "#{thermal_zone.name.to_s} Cooling Schedule."))
+    
+    return model
+  end
 
   # Set ZoneMultiplier to passed value for all zones
   #
@@ -2590,7 +2704,9 @@ class AppendixGPRMTests < Minitest::Test
       'vav_min_sp',
       'multi_bldg_handling',
       'economizer_exception',
-      'hvac_efficiency'
+      'hvac_efficiency',
+      'fan_power_credits',
+      'lpd_userdata_handling'
     ]
 
     # Get list of unique prototypes
@@ -2623,7 +2739,9 @@ class AppendixGPRMTests < Minitest::Test
     check_psz_split_from_mz(prototypes_base['hvac_psz_split_from_mz']) if tests.include? 'hvac_psz_split_from_mz'
     check_vav_min_sp(prototypes_base['vav_min_sp']) if tests.include? 'vav_min_sp'
     check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
+    check_multi_lpd_handling(prototypes_base['lpd_userdata_handling']) if tests.include? 'lpd_userdata_handling'
     check_economizer_exception(prototypes_base['economizer_exception']) if tests.include? 'economizer_exception'
     check_hvac_efficiency(prototypes_base['hvac_efficiency']) if tests.include? 'hvac_efficiency'
+    check_fan_power_credits(prototypes_base['fan_power_credits']) if tests.include? 'fan_power_credits'
   end
 end
