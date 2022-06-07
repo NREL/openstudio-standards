@@ -1,6 +1,6 @@
 # A variety of cooling tower methods that are the same regardless of type.
 # These methods are available to CoolingTowerSingleSpeed, CoolingTowerTwoSpeed, and CoolingTowerVariableSpeed
-module CoolingTower
+module ASHRAEPRMCoolingTower
   # @!group CoolingTower
 
   # Set the cooling tower fan power such that the tower
