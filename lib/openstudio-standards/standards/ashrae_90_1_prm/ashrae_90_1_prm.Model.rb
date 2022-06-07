@@ -1064,12 +1064,11 @@ class ASHRAE901PRM < Standard
   # @param total_fene_m2 [Float] total fenestration area
   # @return [Float] reduction factor
   def get_wwr_reduction_ratio(multiplier,
-                              surface: nil,
-                              wwr_targt: nil,
+                              surface_wwr: nil,
+                              wwr_target: nil,
                               total_wall_m2: nil,
                               total_wall_with_fene_m2: nil,
                               total_fene_m2: nil)
-    reduction_ratio = 0.0
 
     if multiplier < 1.0
       # Case when reduction is required
@@ -1077,13 +1076,46 @@ class ASHRAE901PRM < Standard
     else
       # Case when increase is required
       exist_max_wwr = total_wall_with_fene_m2 * 0.9 / total_wall_m2
-      if exist_max_wwr < wwr_targt
+      if exist_max_wwr < wwr_target
         # In this case, it is required to add vertical fenestrations to other surfaces
-        unless surface.subSurfaces.empty?
-          # surface has fenestration
-          return 0.9
+        if surface_wwr == 0.0
+          # delta_fenestration_surface_area / delta_wall_surface_area + 1.0 = increase_ratio for a surface with no windows.
+          reduction_ratio = (wwr_target * total_wall_m2 - exist_max_wwr * total_wall_m2) / (total_wall_m2 - total_wall_with_fene_m2) + 1.0
+        else
+          # surface has fenestration - expand it to 90% WWR
+          reduction_ratio = 0.9 / surface_wwr
+        end
+      else
+        # multiplier will be negative number thus resulting in > 1 reduction_ratio
+        if surface_wwr == 0.0
+          # 1.0 means remain the original form
+          reduction_ratio = 1.0
+        else
+          reduction_ratio = multiplier
         end
       end
+    end
+    return reduction_ratio
+  end
+
+  def model_adjust_fenestration_in_a_surface(surface, reduction)
+    if reduction < 1.0
+      surface.subSurfaces.sort.each do |ss|
+        next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
+
+        sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, reduction)
+      end
+    else
+      # case increase the window
+      surface_wwr = get_wwr_of_a_surface(surface)
+      if surface_wwr == 0.0
+        # In this case, we are adding fenestration
+        wwr_adjusted = reduction - 1.0
+      else
+        wwr_adjusted = surface_wwr * reduction
+      end
+      # remove all existing windows and set the window to wall ratio to the calculated new WWR
+      surface.setWindowToWallRatio(wwr_adjusted, 0.0, true)
     end
   end
 end

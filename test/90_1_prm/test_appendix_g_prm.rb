@@ -300,7 +300,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # Check WWR against expected WWR
       wwr_goal = 100 * @@wwr_values[building_type].to_f
-      assert((wwr_baseline - wwr_goal).abs < 0.1, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+      assert(((wwr_baseline - wwr_goal)/wwr_goal).abs < 0.01, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
     end
   end
 
@@ -2093,6 +2093,73 @@ class AppendixGPRMTests < Minitest::Test
         zone_exhaust_fan.addToThermalZone(thermal_zone)
       end
     end
+  end
+
+  # Change fenestration area in a model
+  # This function will remove the fenestration in all orientations and add new windows by defined WWR
+  #
+  # @param [OpenStudio::Model::Model] model
+  # @param [Float] window to wall ratio
+  def change_wwr_model(model, arguments)
+    target_wwr_north = arguments[0]
+    target_wwr_south = arguments[1]
+    target_wwr_east = arguments[2]
+    target_wwr_west = arguments[3]
+
+    model.getSurfaces.each do |ss|
+      # determine orientation
+      space = ss.space.get
+      # Get model object
+      model = ss.model
+      # Calculate azimuth
+      surface_azimuth_rel_space = OpenStudio.convert(ss.azimuth, 'rad', 'deg').get
+      space_dir_rel_north = space.directionofRelativeNorth
+      building_dir_rel_north = model.getBuilding.northAxis
+      surface_abs_azimuth = surface_azimuth_rel_space + space_dir_rel_north + building_dir_rel_north
+      surface_abs_azimuth -= 360.0 until surface_abs_azimuth < 360.0
+      unless ss.subSurfaces.empty?
+        orig_construction = ss.subSurfaces[0].construction.get
+        ss.subSurfaces.sort.each(&:remove)
+        # Determine the surface's cardinal direction
+        if surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45
+          if target_wwr_north == 0.0
+            ss.setWindowToWallRatio(target_wwr_north, 0.6,true)
+          else
+            new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
+            new_window.setConstruction(orig_construction)
+          end
+        elsif surface_abs_azimuth > 315 && surface_abs_azimuth <= 360
+          if target_wwr_north == 0.0
+            ss.setWindowToWallRatio(target_wwr_north, 0.6, true)
+          else
+            new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
+            new_window.setConstruction(orig_construction)
+          end
+        elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135
+          if target_wwr_east == 0.0
+            ss.setWindowToWallRatio(target_wwr_east, 0.6, true)
+          else
+            new_window = ss.setWindowToWallRatio(target_wwr_east, 0.6, true).get
+            new_window.setConstruction(orig_construction)
+          end
+        elsif surface_abs_azimuth > 135 && surface_abs_azimuth <= 225
+          if target_wwr_south == 0.0
+            ss.setWindowToWallRatio(target_wwr_south, 0.6, true)
+          else
+            new_window = ss.setWindowToWallRatio(target_wwr_south, 0.6, true).get
+            new_window.setConstruction(orig_construction)
+          end
+        elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315
+          if target_wwr_west
+            ss.setWindowToWallRatio(target_wwr_west, 0.6, true)
+          else
+            new_window = ss.setWindowToWallRatio(target_wwr_west, 0.6, true).get
+            new_window.setConstruction(orig_construction)
+          end
+        end
+      end
+    end
+    return model
   end
 
   # Change model to different building type

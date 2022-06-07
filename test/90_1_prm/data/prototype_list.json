@@ -1,6 +1,8 @@
 {
     "wwr": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", []],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["change_wwr_model", [0.1, 0.1, 0.1, 0.1]]]],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["change_wwr_model", [0.0, 0.0, 0.0, 0.1]]]],
         ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["remove_transformer", []]]]
     ],
     "srr": [

@@ -5101,22 +5101,21 @@ class Standard
       if !bat_win_wall_info.key?(std_spc_type)
         bat_win_wall_info[std_spc_type] = {}
         bat = bat_win_wall_info[std_spc_type]
-        bat_win_wall_only_info[std_spc_type] = {}
-        bat_only = bat_win_wall_only_info[std_spc_type]
 
         # Loop through all spaces in the model, and
         # per the PNNL PRM Reference Manual, find the areas
         # of each space conditioning category (res, nonres, semi-heated)
         # separately.  Include space multipliers.
         bat.store('nr_wall_m2', 0.001) # Avoids divide by zero errors later
+        bat.store('nr_fene_only_wall_m2', 0.001)
         bat.store('nr_wind_m2', 0)
         bat.store('res_wall_m2', 0.001)
+        bat.store('res_fene_only_wall_m2', 0.001)
         bat.store('res_wind_m2', 0)
         bat.store('sh_wall_m2', 0.001)
+        bat.store('sh_fene_only_wall_m2', 0.001)
         bat.store('sh_wind_m2', 0)
         bat.store('total_wall_m2', 0.001)
-        bat.store('total_subsurface_m2', 0.0)
-        bat.store('total_wall_with_fene_m2', 0.001)
       else
         bat = bat_win_wall_info[std_spc_type]
       end
@@ -5133,13 +5132,15 @@ class Standard
 
         # This wall's gross area (including window area)
         wall_area_m2 += surface.grossArea * space.multiplier
-        # Subsurfaces in this surface
-        surface.subSurfaces.sort.each do |ss|
-          next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
-
-          # Only add wall surfaces when the wall actually have windows
+        unless surface.subSurfaces.empty?
           wall_only_area_m2 += surface.grossArea * space.multiplier
-          wind_area_m2 += ss.netArea * space.multiplier
+          # Subsurfaces in this surface
+          surface.subSurfaces.sort.each do |ss|
+            next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
+
+            # Only add wall surfaces when the wall actually have windows
+            wind_area_m2 += ss.netArea * space.multiplier
+          end
         end
       end
 
@@ -5182,17 +5183,17 @@ class Standard
           next # Skip unconditioned spaces
         when 'NonResConditioned'
           bat['nr_wall_m2'] += wall_area_m2
+          bat['nr_fene_only_wall_m2'] += wall_only_area_m2
           bat['nr_wind_m2'] += wind_area_m2
         when 'ResConditioned'
           bat['res_wall_m2'] += wall_area_m2
+          bat['res_fene_only_wall_m2'] += wall_only_area_m2
           bat['res_wind_m2'] += wind_area_m2
         when 'Semiheated'
           bat['sh_wall_m2'] += wall_area_m2
+          bat['sh_fene_only_wall_m2'] += wall_only_area_m2
           bat['sh_wind_m2'] += wind_area_m2
       end
-      bat['total_wall_with_fene_m2'] += wall_only_area_m2
-      bat['total_subsurface_m2'] += wind_area_m2
-      bat['total_wall_m2'] += wall_area_m2
     end
 
     # Retrieve WWR info for all Building Area Types included in the model
@@ -5275,17 +5276,20 @@ class Standard
           when 'Unconditioned'
             next # Skip unconditioned spaces
           when 'NonResConditioned'
-            next unless vals['red_nr']
-
             mult = vals['mult_nr_red']
+            total_wall_area = vals['nr_wall_m2']
+            total_wall_with_fene = vals['nr_fene_only_wall_m2']
+            total_fene = vals['nr_wind_m2']
           when 'ResConditioned'
-            next unless vals['red_res']
-
             mult = vals['mult_res_red']
+            total_wall_area = vals['res_wall_m2']
+            total_wall_with_fene = vals['res_fene_only_wall_m2']
+            total_fene = vals['res_wind_m2']
           when 'Semiheated'
-            next unless vals['red_sh']
-
             mult = vals['mult_sh_red']
+            total_wall_area = vals['sh_wall_m2']
+            total_wall_with_fene = vals['sh_fene_only_wall_m2']
+            total_fene = vals['sh_wind_m2']
         end
 
         # Loop through all surfaces in this space
@@ -5304,22 +5308,13 @@ class Standard
           # want to adjust by shrinking toward centroid since
           # daylighting control isn't modeled
           red = get_wwr_reduction_ratio(mult,
-                                        surface: surface,
-                                        wwr_targt: wwr_lim,
-                                        total_wall_m2: bat['total_wall_m2'],
-                                        total_wall_with_fene_m2: bat['total_wall_with_fene_m2'],
-                                        total_fene_m2: bat['total_fene_m2'])
+                                        surface_wwr: get_wwr_of_a_surface(surface),
+                                        wwr_target: wwr_lim / 100, # need to revise it to decimals
+                                        total_wall_m2: total_wall_area,
+                                        total_wall_with_fene_m2: total_wall_with_fene,
+                                        total_fene_m2: total_fene)
 
-          # Subsurfaces in this surface
-          surface.subSurfaces.sort.each do |ss|
-            next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
-
-            if sub_surface_vertical_rectangle?(ss) && template != '90.1-PRM-2019'
-              sub_surface_reduce_area_by_percent_by_raising_sill(ss, red)
-            else
-              sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
-            end
-          end
+          model_adjust_fenestration_in_a_surface(surface, red)
         end
       end
     end
@@ -6695,6 +6690,29 @@ class Standard
 
   private
 
+
+  # Adjust the fenestration area to the values specified by the reduction value in a surface
+  #
+  # @param surface [OpenStudio::Model:Surface] openstudio surface object
+  # @param reduction [Float] ratio of adjustments
+  # @return [Bool] return true if successful, false if not
+  def model_adjust_fenestration_in_a_surface(surface, reduction)
+    # Subsurfaces in this surface
+    # Default case only handles reduction
+    if reduction < 1.0
+      surface.subSurfaces.sort.each do |ss|
+        next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
+
+        if sub_surface_vertical_rectangle?(ss)
+          sub_surface_reduce_area_by_percent_by_raising_sill(ss, reduction)
+        else
+          sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, reduction)
+        end
+      end
+    end
+    return true
+  end
+
   # Helper method to fill in hourly values
   #
   # @param model [OpenStudio::Model::Model] the model
@@ -7423,18 +7441,33 @@ class Standard
     return 'warmest_zone'
   end
 
+  # Calculate the wwr of a surface
+  #
+  # @param surface [OpenStudio::Model::Surface]
+  # @return [Float] window to wall ratio of a surface
+  def get_wwr_of_a_surface(surface)
+    surface_area = surface.grossArea
+    surface_fene_area = 0.0
+    surface.subSurfaces.sort.each do |ss|
+      next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
+
+      surface_fene_area += ss.netArea
+    end
+    return surface_fene_area / surface_area
+  end
+
   # Calculate the window to wall ratio reduction factor
   #
   # @param multiplier [Float] multiplier of the wwr
-  # @param surface [Openstudio::Model::Surface]
+  # @param surface_wwr [Float] the surface window to wall ratio
   # @param wwr_target [Float] target window to wall ratio
   # @param total_wall_m2 [Float] total wall area of the category in m2.
   # @param total_wall_with_fene_m2 [Float] total wall area of the category with fenestrations in m2.
   # @param total_fene_m2 [Float] total fenestration area
   # @return [Float] reduction factor
   def get_wwr_reduction_ratio(multiplier,
-                              surface: nil,
-                              wwr_targt: nil,
+                              surface_wwr: nil,
+                              wwr_target: nil,
                               total_wall_m2: nil,
                               total_wall_with_fene_m2: nil,
                               total_fene_m2: nil)
