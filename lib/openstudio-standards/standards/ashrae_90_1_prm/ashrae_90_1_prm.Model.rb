@@ -1115,7 +1115,7 @@ class ASHRAE901PRM < Standard
         wwr_adjusted = surface_wwr * reduction
       end
       # remove all existing windows and set the window to wall ratio to the calculated new WWR
-      surface.setWindowToWallRatio(wwr_adjusted, 0.0, true)
+      surface.setWindowToWallRatio(wwr_adjusted, 0.6, true)
     end
   end
 end
