@@ -1210,7 +1210,7 @@ class AppendixGPRMTests < Minitest::Test
       fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
       fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
       fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
-      assert(fan_bhp_ip.round(5) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_power_ip.round(1)} instead of 0.0013.")
+      assert(fan_bhp_ip.round(4) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_bhp_ip.round(4)} instead of 0.0013.")
       fan_bhp_ip *= OpenStudio.convert(std.fan_design_air_flow(fan), 'm^3/s', 'cfm').get
       if fan_bhp_ip <= 20.0 && fan_bhp_ip > 15.0
         assert(fan.motorEfficiency == 0.91, "Fan motor efficiency for #{fan.name} in #{sub_text} is #{fan.motorEfficiency}, 0.91 is expected.")
@@ -1296,7 +1296,7 @@ class AppendixGPRMTests < Minitest::Test
       fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
       fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
       fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
-      assert(fan_bhp_ip.round(5) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_power_ip.round(1)} instead of 0.0013.")
+      assert(fan_bhp_ip.round(4) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_power_ip.round(4)} instead of 0.0013.")
       fan_bhp_ip *= OpenStudio.convert(std.fan_design_air_flow(fan), 'm^3/s', 'cfm').get
       if fan_bhp_ip <= 20.0 && fan_bhp_ip > 15.0
         assert(fan.motorEfficiency == 0.91, "Fan motor efficiency for #{fan.name} in #{sub_text} is #{fan.motorEfficiency}, 0.91 is expected.")
@@ -1829,7 +1829,6 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
-
   def check_economizer_exception(baseline_base)
     baseline_base.each do |baseline, baseline_model|
       building_type, template, climate_zone, user_data_dir, mod = baseline
@@ -1862,13 +1861,11 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   # Set ZoneMultiplier to passed value for all zones
- # Check if coefficients of part-load power curve is correct per G3.1.3.15
+  # Check if coefficients of part-load power curve is correct per G3.1.3.15
   def check_variable_speed_fan_power(prototypes_base)
     prototypes_base.each do |prototype, model|
       model.getFanVariableVolumes.each do |supply_fan|
         supply_fan_name = supply_fan.name.get.to_s
-
-      
         # check fan curves
         # Skip single-zone VAV fans
         next if supply_fan.airLoopHVAC.get.thermalZones.size == 1
@@ -1933,9 +1930,75 @@ class AppendixGPRMTests < Minitest::Test
           end
         end
       end
-    end  
+    end
   end
 
+  # Check fan power credits calculations
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_fan_power_credits(prototypes_base)
+    standard = Standard.build('90.1-PRM-2019')
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+      std = Standard.build('90.1-PRM-2019')
+
+      if building_type == 'SmallOffice'
+        model.getFanVariableVolumes.sort.each do |fan|
+          fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
+          fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
+          fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
+          assert(fan_bhp_ip.round(4) == 0.0017, "Fan power for #{fan.name.to_s} fan in #{building_type} #{template} #{climate_zone} #{mod} is #{fan_bhp_ip.round(4)} instead of 0.0017.")
+        end
+      end
+
+      if building_type == 'RetailStandalone'
+        model.getFanOnOffs.sort.each do |fan|
+          if fan.name.to_s.include?('Front_Entry ZN')
+            fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
+            fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
+            fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
+            assert(fan_bhp_ip.round(4) == 0.0012, "Fan power for  #{fan.name.to_s} fan in #{building_type} #{template} #{climate_zone} #{mod} is #{fan_bhp_ip.round(4)} instead of 0.0012.")
+          end
+        end
+      end
+    end
+  end
+
+  # Add a AirLoopHVACDedicatedOutdoorAirSystem in the model
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param arguments [Array] Not used
+  def add_ahu_doas(model, arguments)
+    # Create new objects
+    oa_ctrl = OpenStudio::Model::ControllerOutdoorAir.new(model)
+    oa_sys = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_ctrl)
+    ahu_doas = OpenStudio::Model::AirLoopHVACDedicatedOutdoorAirSystem.new(oa_sys)
+    ahu_doas.setName('AHU_DOAS')
+    fan = OpenStudio::Model::FanSystemModel.new(model)
+
+    # Assign fan and air loops
+    fan.addToNode(oa_sys.outboardOANode.get)
+    model.getAirLoopHVACs.each do |air_loop|
+      ahu_doas.addAirLoop(air_loop)
+    end
+
+    return model
+  end
+
+  # Change cooling thermostat to 24C
+  # This is used to converted a heated only zone to heated and cooled
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param arguments [Array] Not used
+  def change_clg_therm(model, arguments)
+    std = Standard.build("90.1-2019")
+    thermal_zone = model.getThermalZoneByName(arguments[0]).get    
+    tstat = thermal_zone.thermostat.get
+    tstat = tstat.to_ThermostatSetpointDualSetpoint.get
+    tstat.setCoolingSetpointTemperatureSchedule(std.model_add_constant_schedule_ruleset(model, 24, name = "#{thermal_zone.name.to_s} Cooling Schedule."))
+    
+    return model
+  end
 
   # Set ZoneMultiplier to passed value for all zones
   #
@@ -2365,7 +2428,8 @@ class AppendixGPRMTests < Minitest::Test
       'multi_bldg_handling',
       'economizer_exception',
       'lpd_userdata_handling',
-      'building_rotation_check'
+      'building_rotation_check',
+      'fan_power_credits'
     ]
 
     # Get list of unique prototypes
@@ -2401,5 +2465,6 @@ class AppendixGPRMTests < Minitest::Test
     check_multi_lpd_handling(prototypes_base['lpd_userdata_handling']) if tests.include? 'lpd_userdata_handling'
     check_economizer_exception(prototypes_base['economizer_exception']) if tests.include? 'economizer_exception'
     check_building_rotation_exception(prototypes_base['building_rotation_check']) if tests.include? 'building_rotation_check'
+    check_fan_power_credits(prototypes_base['fan_power_credits']) if tests.include? 'fan_power_credits'
   end
 end
