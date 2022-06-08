@@ -380,6 +380,7 @@ class ASHRAE901PRM < Standard
     end
 
     return [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
+  end
 
   # Determine the fan power limitation pressure drop adjustment
   # Per Table 6.5.3.1-2 (90.1-2019)
