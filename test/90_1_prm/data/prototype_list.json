@@ -110,7 +110,7 @@
         ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_ofs_03",[["set_model_building_name", "LargeHotel"], ["remove_transformer", []]]]
     ],
     "dcv": [
-        ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "dcv_userdata_primaryschool",[["remove_transformer", []], ["enable_airloop_dcv", []]]]
+        ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "dcv_userdata_primaryschool",[["remove_transformer", []], ["enable_airloop_dcv", ["Cafeteria_ZN_1_FLR_1 ZN PSZ-AC_2-7"]], ["remove_zone_oa_per_person_spec",["Offices_ZN_1_FLR_1 ZN"]]]]
 //        ["SecondarySchool", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
 //        ["MidriseApartment", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[]],
 //        ["LargeHotel", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []], ["enable_airloop_dcv", []]]],

@@ -654,8 +654,76 @@ class AppendixGPRMTests < Minitest::Test
 
   def check_dcv(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
-      puts "placeholder for now" # TODO: JXL
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+      # cafeteria Cafeteria_ZN_1_FLR_1 ZN
+      cafe_zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
+      cafe_airloop = cafe_zone.airLoopHVAC.get
+      assert(!dcv_is_on(cafe_zone, cafe_airloop))
+
+      # office Offices_ZN_1_FLR_1 ZN
+      office_zone = model_baseline.getThermalZoneByName('Offices_ZN_1_FLR_1 ZN').get
+      office_airloop = office_zone.airLoopHVAC.get
+      assert(!dcv_is_on(office_zone, office_airloop))
     end
+  end
+
+  def dcv_is_on(thermal_zone, air_loop_hvac)
+
+    # check air loop level DCV enabled
+    return false unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+    oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+    controller_oa = oa_system.getControllerOutdoorAir
+    controller_mv = controller_oa.controllerMechanicalVentilation
+    return false unless controller_mv.demandControlledVentilation == true
+
+    # check zone OA flow per person > 0
+    zone_dcv = false
+    thermal_zone.spaces.each do |space|
+      dsn_oa = space.designSpecificationOutdoorAir
+      next if dsn_oa.empty?
+
+      dsn_oa = dsn_oa.get
+      next if dsn_oa.outdoorAirMethod == 'Maximum'
+
+      if dsn_oa.outdoorAirFlowperPerson > 0
+        # only in this case the thermal zone is considered to be implemented with DCV
+        zone_dcv = true
+      end
+    end
+
+    return zone_dcv
+  end
+
+  def remove_zone_oa_per_person_spec(model, arguments)
+    std = Standard.build('90.1-PRM-2019')
+    # argument contains a list of zone names to remove oa per person specification
+    arguments.each do |zone_name|
+      thermal_zone = model.getThermalZoneByName(zone_name).get
+      std.thermal_zone_convert_oa_req_to_per_area(thermal_zone)
+    end
+    return model
+  end
+
+  def enable_airloop_dcv(model, arguments)
+    # arguments contains a list of air loop names to enable dcv
+    arguments.each do |air_loop_name|
+      air_loop_hvac = model.getAirLoopHVACByName(air_loop_name).get
+      # following logic is adopted from Standard.air_loop_hvac_enable_demand_control_ventilation
+      controller_oa = nil
+      controller_mv = nil
+      if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+        oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+        controller_oa = oa_system.getControllerOutdoorAir
+        controller_mv = controller_oa.controllerMechanicalVentilation
+      end
+      # Change the min flow rate in the controller outdoor air
+      controller_oa.setMinimumOutdoorAirFlowRate(0.0)
+
+      # Enable DCV in the controller mechanical ventilation
+      controller_mv.setDemandControlledVentilation(true)
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Enabled DCV.")
+    end
+    return model
   end
 
   # Check lighting occ sensor
@@ -2060,26 +2128,6 @@ class AppendixGPRMTests < Minitest::Test
     return model
   end
 
-  def enable_airloop_dcv(model, arguments)
-    model.getAirLoopHVACs.sort.each do |air_loop_hvac|
-      # following logic is adopted from Standard.air_loop_hvac_enable_demand_control_ventilation
-      controller_oa = nil
-      controller_mv = nil
-      if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
-        oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
-        controller_oa = oa_system.getControllerOutdoorAir
-        controller_mv = controller_oa.controllerMechanicalVentilation
-      end
-      # Change the min flow rate in the controller outdoor air
-      controller_oa.setMinimumOutdoorAirFlowRate(0.0)
-
-      # Enable DCV in the controller mechanical ventilation
-      controller_mv.setDemandControlledVentilation(true)
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Enabled DCV.")
-    end
-    return model
-  end
-
   # Run test suite for the ASHRAE 90.1 appendix G Performance
   # Rating Method (PRM) baseline automation implementation
   # in openstudio-standards.
@@ -2135,6 +2183,6 @@ class AppendixGPRMTests < Minitest::Test
     check_hvac_sizing(prototypes_base['hvac_sizing']) if tests.include? 'hvac_sizing'
     check_psz_split_from_mz(prototypes_base['hvac_psz_split_from_mz']) if tests.include? 'hvac_psz_split_from_mz'
     check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
-    check_dcv(prototypes_base['multi_bldg_handling']) if tests.include? 'dcv'
+    check_dcv(prototypes_base['dcv']) if tests.include? 'dcv'
   end
 end

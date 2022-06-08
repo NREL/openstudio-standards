@@ -766,19 +766,19 @@ class ASHRAE901PRM < Standard
           end
         end
       end
+    end
 
-      # mark unmarked zones
-      model.getThermalZones.each do |zone|
-        next if zone.additionalProperties.hasFeature('airloop dcv required by 901')
+    # mark unmarked zones
+    model.getThermalZones.each do |zone|
+      next if zone.additionalProperties.hasFeature('airloop dcv required by 901')
 
-        zone.additionalProperties.setFeature('airloop dcv required by 901', false)
-      end
+      zone.additionalProperties.setFeature('airloop dcv required by 901', false)
+    end
 
-      model.getThermalZones.each do |zone|
-        next if zone.additionalProperties.hasFeature('zone dcv required by 901')
+    model.getThermalZones.each do |zone|
+      next if zone.additionalProperties.hasFeature('zone dcv required by 901')
 
-        zone.additionalProperties.setFeature('zone dcv required by 901', false)
-      end
+      zone.additionalProperties.setFeature('zone dcv required by 901', false)
     end
   end
 
