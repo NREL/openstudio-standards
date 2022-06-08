@@ -1,5 +1,6 @@
 class NECB2011
   def add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model:,
+                                                                   reference_hp:,
                                                                    zones:,
                                                                    heating_coil_type:,
                                                                    baseboard_type:,
@@ -78,10 +79,11 @@ class NECB2011
 
     if heating_coil_type == 'Electric' # electric coil
       htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-    end
-
-    if heating_coil_type == 'Gas'
+    elsif heating_coil_type == 'Gas'
       htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+    elsif heating_coil_type == 'DX'
+      htg_coil = add_onespeed_htg_DX_coil(model, always_on)
+      htg_coil.setName('CoilHeatingDXSingleSpeed_dx')
     end
 
     # TO DO: other fuel-fired heating coil types? (not available in OpenStudio/E+ - may need to play with efficiency to mimic other fuel types)

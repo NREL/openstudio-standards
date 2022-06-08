@@ -1939,7 +1939,7 @@ class NECB2011
     htg_energy_input_ratio_f_of_temp.setCoefficient1Constant(1.2183)
     htg_energy_input_ratio_f_of_temp.setCoefficient2x(-0.03612)
     htg_energy_input_ratio_f_of_temp.setCoefficient3xPOW2(0.00142)
-    htg_energy_input_ratio_f_of_temp setCoefficient4xPOW3(-2.68e-05)
+    htg_energy_input_ratio_f_of_temp.setCoefficient4xPOW3(-2.68e-05)
     htg_energy_input_ratio_f_of_temp.setMinimumValueofx(-20.0)
     htg_energy_input_ratio_f_of_temp.setMaximumValueofx(20.0)
 
@@ -1957,14 +1957,17 @@ class NECB2011
     htg_part_load_ratio.setCoefficient4xPOW3(1.2596)
     htg_part_load_ratio.setMinimumValueofx(0.7)
     htg_part_load_ratio.setMaximumValueofx(1.0)
+     
+    dx_htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model,
+                                                                  sch,
+                                                                  htg_cap_f_of_temp,
+                                                                  htg_cap_f_of_flow,
+                                                                  htg_energy_input_ratio_f_of_temp,
+                                                                  htg_energy_input_ratio_f_of_flow,
+                                                                  htg_part_load_ratio)
+    dx_htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(-10)
 
-    return OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model,
-                                                           sch,
-                                                           htg_cap_f_of_temp,
-                                                           htg_cap_f_of_flow,
-                                                           htg_energy_input_ratio_f_of_temp,
-                                                           htg_energy_input_ratio_f_of_flow,
-                                                           htg_part_load_ratio)
+    return dx_htg_coil                                                           
   end
 
   # Zonal systems

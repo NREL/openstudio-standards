@@ -147,9 +147,21 @@ class NECB2011
     when 'Gas'
       htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
     when 'DX'
-      htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)
-      supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-      htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(system_data[:MinimumOutdoorDryBulbTemperatureforCompressorOperation])
+      #create main DX heating coil
+      htg_coil = add_onespeed_htg_DX_coil(model, always_on)
+      htg_coil.setName('CoilHeatingDXSingleSpeed_dx')
+      #create supplemental heating coil based on default regional fuel type
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      primary_heating_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+      
+      if primary_heating_fuel == 'NaturalGas'
+        supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+      elsif primary_heating_fuel == 'Electricity' or  primary_heating_fuel == 'FuelOilNo2'
+        supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+      else #hot water coils is an option in the future
+        raise('Invalid fuel type selected for heat pump supplemental coil')
+      end
+
       sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneDXHeatingSizingFactor])
       sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneDXCoolingSizingFactor])
     else

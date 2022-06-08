@@ -95,6 +95,7 @@ class NECB2011
         hw_loop.addDemandBranchForComponent(mau_htg_coil)
       elsif mau_heating_coil_type == 'DX'
         mau_htg_coil = add_onespeed_htg_DX_coil(model, always_on)
+        mau_htg_coil.setName('CoilHeatingDXSingleSpeed_dx')
       end
 
       # Set up Single Speed DX coil with

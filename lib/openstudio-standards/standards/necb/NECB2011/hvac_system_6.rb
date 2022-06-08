@@ -311,4 +311,119 @@ class NECB2011
     # puts "end add_sys6_multi_zone_built_up_with_baseboard_heating"
     return true
   end
+
+  def add_sys6_multi_zone_reference_hp_with_baseboard_heating(model:,
+                                                              zones:,
+                                                              heating_coil_type:,
+                                                              baseboard_type:,
+                                                              hw_loop:)
+
+    #system data
+    system_data = {}
+    system_data[:name] = 'Sys_6_VAV with Reheat'
+    system_data[:CentralCoolingDesignSupplyAirTemperature] = 13.0
+    system_data[:CentralHeatingDesignSupplyAirTemperature] = 13.1
+    system_data[:AllOutdoorAirinCooling] = false
+    system_data[:AllOutdoorAirinHeating] = false
+
+    # zone data
+    system_data[:system_supply_air_temperature] = 13.0
+    system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference] = 11.0
+    system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference] = 21.0
+    system_data[:ZoneCoolingSizingFactor] = 1.1
+    system_data[:ZoneHeatingSizingFactor] = 1.3
+
+    always_on = model.alwaysOnDiscreteSchedule
+
+    model.getBuildingStorys.sort.each do |story|
+      unless (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).empty?
+
+        air_loop = common_air_loop(model: model, system_data: system_data)
+        air_loop.setName('Sys_6_CAV')
+
+        supply_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
+        supply_fan.setName('Sys6 Supply Fan')
+        return_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
+        return_fan.setName('Sys6 Return Fan')
+
+        htg_coil = add_onespeed_htg_DX_coil(model, always_on)
+        htg_coil.setName('CoilHeatingDXSingleSpeed_dx')
+
+        clg_coil = add_onespeed_DX_coil(model, always_on)
+        clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
+
+        oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
+        oa_controller.autosizeMinimumOutdoorAirFlowRate
+
+        # Set mechanical ventilation controller outdoor air to ZoneSum (used to be defaulted to ZoneSum but now should be
+        # set explicitly)
+        oa_controller.controllerMechanicalVentilation.setSystemOutdoorAirMethod('ZoneSum')
+
+        oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
+
+        # Add the components to the air loop
+        # in order from closest to zone to furthest from zone
+        supply_inlet_node = air_loop.supplyInletNode
+        supply_outlet_node = air_loop.supplyOutletNode
+        supply_fan.addToNode(supply_inlet_node)
+        htg_coil.addToNode(supply_inlet_node)
+        clg_coil.addToNode(supply_inlet_node)
+        oa_system.addToNode(supply_inlet_node)
+        returnAirNode = oa_system.returnAirModelObject.get.to_Node.get
+        return_fan.addToNode(returnAirNode)
+
+        # Add a setpoint manager to control the
+        # supply air to a constant temperature
+        sat_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+        sat_sch.setName('Supply Air Temp')
+        sat_sch.defaultDaySchedule.setName('Supply Air Temp Default')
+        sat_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), system_data[:system_supply_air_temperature])
+        sat_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
+        sat_stpt_manager.addToNode(supply_outlet_node)
+        
+        # Make CAV terminals for each zone on this story that is in intersection with the zones array.
+        (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).each do |zone|
+          # Zone sizing parameters
+          sizing_zone = zone.sizingZone
+          sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod])
+          sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
+          sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
+          sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
+          sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
+          sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
+
+          cav_terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
+          air_loop.addBranchForZone(zone, cav_terminal.to_StraightComponent)
+          # NECB2011 minimum zone airflow setting
+          vav_terminal.setFixedMinimumAirFlowRate(system_data[:ZoneVAVMinFlowFactorPerFloorArea] * zone.floorArea)
+          vav_terminal.setMaximumReheatAirTemperature(system_data[:ZoneVAVMaxReheatTemp])
+          vav_terminal.setDamperHeatingAction(system_data[:ZoneVAVDamperAction])
+
+          # Set zone baseboards
+          add_zone_baseboards(model: model,
+                              zone: zone,
+                              baseboard_type: baseboard_type,
+                              hw_loop: hw_loop)
+        end
+        sys_name_pars = {}
+        sys_name_pars['sys_hr'] = 'none'
+        sys_name_pars['sys_htg'] = heating_coil_type
+        sys_name_pars['sys_clg'] = 'dx'
+        sys_name_pars['sys_sf'] = 'cv'
+        sys_name_pars['zone_htg'] = baseboard_type
+        sys_name_pars['zone_clg'] = 'none'
+        sys_name_pars['sys_rf'] = 'cv'
+        assign_base_sys_name(air_loop,
+                             sys_abbr: 'sys_6',
+                             sys_oa: 'mixed',
+                             sys_name_pars: sys_name_pars)                
+
+      end
+    end
+
+    
+
+  end
 end
