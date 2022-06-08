@@ -1057,7 +1057,8 @@ class ASHRAE901PRM < Standard
   # Calculate the window to wall ratio reduction factor
   #
   # @param multiplier [Float] multiplier of the wwr
-  # @param surface [Openstudio::Model::Surface]
+  # @param surface_wwr [Float] the surface window to wall ratio
+  # @param wwr_building_type[String] building type for wwr
   # @param wwr_target [Float] target window to wall ratio
   # @param total_wall_m2 [Float] total wall area of the category in m2.
   # @param total_wall_with_fene_m2 [Float] total wall area of the category with fenestrations in m2.
@@ -1065,6 +1066,7 @@ class ASHRAE901PRM < Standard
   # @return [Float] reduction factor
   def get_wwr_reduction_ratio(multiplier,
                               surface_wwr: nil,
+                              wwr_building_type: 'All others',
                               wwr_target: nil,
                               total_wall_m2: nil,
                               total_wall_with_fene_m2: nil,
@@ -1074,24 +1076,29 @@ class ASHRAE901PRM < Standard
       # Case when reduction is required
       reduction_ratio = 1.0 - multiplier
     else
-      # Case when increase is required
-      exist_max_wwr = total_wall_with_fene_m2 * 0.9 / total_wall_m2
-      if exist_max_wwr < wwr_target
-        # In this case, it is required to add vertical fenestrations to other surfaces
-        if surface_wwr == 0.0
-          # delta_fenestration_surface_area / delta_wall_surface_area + 1.0 = increase_ratio for a surface with no windows.
-          reduction_ratio = (wwr_target * total_wall_m2 - exist_max_wwr * total_wall_m2) / (total_wall_m2 - total_wall_with_fene_m2) + 1.0
-        else
-          # surface has fenestration - expand it to 90% WWR
-          reduction_ratio = 0.9 / surface_wwr
-        end
+      if wwr_building_type.casecmp?('all others')
+        # In this case, do not change the window to wall ratio
+        reduction_ratio = 1.0
       else
-        # multiplier will be negative number thus resulting in > 1 reduction_ratio
-        if surface_wwr == 0.0
-          # 1.0 means remain the original form
-          reduction_ratio = 1.0
+        # Case when increase is required
+        exist_max_wwr = total_wall_with_fene_m2 * 0.9 / total_wall_m2
+        if exist_max_wwr < wwr_target
+          # In this case, it is required to add vertical fenestrations to other surfaces
+          if surface_wwr == 0.0
+            # delta_fenestration_surface_area / delta_wall_surface_area + 1.0 = increase_ratio for a surface with no windows.
+            reduction_ratio = (wwr_target * total_wall_m2 - exist_max_wwr * total_wall_m2) / (total_wall_m2 - total_wall_with_fene_m2) + 1.0
+          else
+            # surface has fenestration - expand it to 90% WWR
+            reduction_ratio = 0.9 / surface_wwr
+          end
         else
-          reduction_ratio = multiplier
+          # multiplier will be negative number thus resulting in > 1 reduction_ratio
+          if surface_wwr == 0.0
+            # 1.0 means remain the original form
+            reduction_ratio = 1.0
+          else
+            reduction_ratio = multiplier
+          end
         end
       end
     end

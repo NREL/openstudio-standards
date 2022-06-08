@@ -300,7 +300,11 @@ class AppendixGPRMTests < Minitest::Test
 
       # Check WWR against expected WWR
       wwr_goal = 100 * @@wwr_values[building_type].to_f
-      assert(((wwr_baseline - wwr_goal)/wwr_goal).abs < 0.01, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+      if building_type == 'MidriseApartment' && climate_zone == 'ASHRAE 169-2013-3A'
+        assert(((wwr_baseline - 40.0)/40.0).abs < 0.01, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+      else
+        assert(((wwr_baseline - wwr_goal)/wwr_goal).abs < 0.01, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+      end
     end
   end
 

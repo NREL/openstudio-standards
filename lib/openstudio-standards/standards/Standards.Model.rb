@@ -5252,7 +5252,7 @@ class Standard
       vals['red_res'] = vals['wwr_res'] > wwr_lim
       vals['red_sh'] = vals['wwr_sh'] > wwr_lim
 
-      # Stop here unless windows need reducing or increasing if
+      # Stop here unless windows need reducing or increasing or if
       # following the stable baseline approach
       return true, base_wwr unless (vals['red_nr'] || vals['red_res'] || vals['red_sh']) || template == '90.1-PRM-2019'
 
@@ -5318,6 +5318,7 @@ class Standard
           # daylighting control isn't modeled
           red = get_wwr_reduction_ratio(mult,
                                         surface_wwr: get_wwr_of_a_surface(surface),
+                                        wwr_building_type: bat,
                                         wwr_target: wwr_lim / 100, # need to revise it to decimals
                                         total_wall_m2: total_wall_area,
                                         total_wall_with_fene_m2: total_wall_with_fene,
@@ -7469,6 +7470,7 @@ class Standard
   #
   # @param multiplier [Float] multiplier of the wwr
   # @param surface_wwr [Float] the surface window to wall ratio
+  # @param wwr_building_type[String] building type for wwr
   # @param wwr_target [Float] target window to wall ratio
   # @param total_wall_m2 [Float] total wall area of the category in m2.
   # @param total_wall_with_fene_m2 [Float] total wall area of the category with fenestrations in m2.
@@ -7476,6 +7478,7 @@ class Standard
   # @return [Float] reduction factor
   def get_wwr_reduction_ratio(multiplier,
                               surface_wwr: nil,
+                              wwr_building_type: 'All others',
                               wwr_target: nil,
                               total_wall_m2: nil,
                               total_wall_with_fene_m2: nil,
