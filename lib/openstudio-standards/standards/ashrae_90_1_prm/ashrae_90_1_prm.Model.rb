@@ -1116,13 +1116,14 @@ class ASHRAE901PRM < Standard
   end
 
   def model_adjust_fenestration_in_a_surface(surface, reduction)
+    # do nothing for cases when reduction == 1.0
     if reduction < 1.0
       surface.subSurfaces.sort.each do |ss|
         next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
 
         sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, reduction)
       end
-    else
+    elsif reduction > 1.0
       # case increase the window
       surface_wwr = get_wwr_of_a_surface(surface)
       if surface_wwr == 0.0
