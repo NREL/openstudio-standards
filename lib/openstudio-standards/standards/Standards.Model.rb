@@ -7480,7 +7480,6 @@ class Standard
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Bool] returns true if successful, false if not
   def model_update_ground_temperature_profile(model, climate_zone)
-
     return true
   end
 end

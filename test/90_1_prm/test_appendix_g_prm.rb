@@ -370,6 +370,7 @@ class AppendixGPRMTests < Minitest::Test
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
 
       opaque_exterior_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['opaque_exterior_name']
+      opaque_interior_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['opaque_interior_name']
       exterior_fenestration_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['exterior_fenestration_name']
       exterior_door_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['exterior_door_name']
 
@@ -379,6 +380,14 @@ class AppendixGPRMTests < Minitest::Test
       opaque_exterior_name.each do |val|
         u_value_baseline[val[0]] = run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Exterior', val[0], 'U-Factor with Film', 'W/m2-K').to_f
         construction_baseline[val[0]] = run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Exterior', val[0], 'Construction', '').to_s
+      end
+      # @todo: we've identified an issue with the r-value for air film in EnergyPlus for semi-exterior surfaces:
+      # https://github.com/NREL/EnergyPlus/issues/9470
+      # todos were added in film_coefficients_r_value() since this is just a reporting issue, we're checking the
+      # no film u-value for opaque interior surfaces
+      opaque_interior_name.each do |val|
+        u_value_baseline[val[0]] = run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Interior', val[0], 'U-Factor no Film', 'W/m2-K').to_f
+        construction_baseline[val[0]] = run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Interior', val[0], 'Construction', '').to_s
       end
       exterior_fenestration_name.each do |val|
         u_value_baseline[val[0]] = run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Exterior Fenestration', val[0], 'Glass U-Factor', 'W/m2-K').to_f
@@ -390,10 +399,10 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # Check U-value against expected U-value
-      u_value_goal = opaque_exterior_name + exterior_fenestration_name + exterior_door_name
+      u_value_goal = opaque_exterior_name + opaque_interior_name + exterior_fenestration_name + exterior_door_name
       u_value_goal.each do |key, value|
         value_si = OpenStudio.convert(value, 'Btu/ft^2*hr*R', 'W/m^2*K').get
-        assert(((u_value_baseline[key] - value_si).abs < 0.001 || (u_value_baseline[key] - 5.835).abs < 0.01), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si}.")
+        assert(((u_value_baseline[key] - value_si).abs < 0.001 || (u_value_baseline[key] - 5.835).abs < 0.01), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si.round(3)}.")
         if key != 'PERIMETER_ZN_3_WALL_NORTH_DOOR1'
           assert((construction_baseline[key].include? 'PRM'), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
         end
@@ -2444,8 +2453,8 @@ class AppendixGPRMTests < Minitest::Test
       'economizer_exception',
       'unenclosed_spaces',
       'f_c_factors',
-      'fan_power_credits',
-      'lpd_userdata_handling',
+#      'fan_power_credits',
+#      'lpd_userdata_handling',
     ]
 
     # Get list of unique prototypes
