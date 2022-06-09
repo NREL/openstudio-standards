@@ -1587,6 +1587,9 @@ class Standard
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
   # @todo add logic to detect indirectly-conditioned spaces based on air transfer
   def space_conditioning_category(space)
+    # Return space conditioning category if already assigned as an additional properties
+    return space.additionalProperties.getFeatureAsString('space_conditioning_category').get if space.additionalProperties.hasFeature('space_conditioning_category')
+
     # Get climate zone
     climate_zone = model_standards_climate_zone(space.model)
 
@@ -1596,6 +1599,26 @@ class Standard
     # Assume unconditioned if not assigned to a zone
     if zone.empty?
       return 'Unconditioned'
+    end
+
+    # Return air plenums are indirectly conditioned spaces according to the
+    # 90.1-2019 Performance Rating Method Reference Manual
+    # #
+    # Additionally, Section 2 of ASHRAE 90.1 states that indirectly
+    # conditioned spaces are unconditioned spaces that are adjacent to
+    # heated or cooled spaced and provided that air from these spaces is
+    # intentionally transferred into the space at a rate exceeding 3 ach
+    # which most if not all return air plenum do.
+    space.model.getAirLoopHVACReturnPlenums.each do |return_air_plenum|
+      if return_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
+        # Determine if residential
+        res = thermal_zone_residential?(zone.get) ? true : false
+
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{zone.get.name} is (indirectly) conditioned.")
+        cond_cat = res ? 'ResConditioned' : 'NonResConditioned'
+
+        return cond_cat
+      end
     end
 
     # Get the category from the zone, this methods does NOT detect indirectly
