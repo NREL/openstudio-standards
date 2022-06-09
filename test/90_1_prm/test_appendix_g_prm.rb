@@ -338,6 +338,7 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_base.each do |prototype, model_baseline|
       building_type, template, climate_zone, user_data_dir, mod = prototype
       @test_dir = "#{File.dirname(__FILE__)}/output"
+      mod_str = mod.flatten.join('_') unless mod.empty?
       model_baseline_file_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final.osm"
       model_baseline_file_name_90 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final_90.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_90.osm"
       model_baseline_file_name_180 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final_180.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_180.osm"
@@ -347,14 +348,11 @@ class AppendixGPRMTests < Minitest::Test
       if mod.empty?
         # test case 1 - rotation
         assert(rotated == true, 'Small Office with default WWR shall rotate orientations, but it didnt')
-      elsif user_data_dir == 'userdata_default_test'
+      elsif mod == 'change_wwr_model_0.4_0.4_0.4_0.4'
         # test case 2 - true
-        assert(rotated == true, 'Small Office with updated WWR (0.4, 0.4, 0.6, 0.6) shall rotate orientations, but it didnt')
-      end
-
-      if user_data_dir == 'userdata_bro_01'
-        # test case 3 - rotation
-        assert(rotated == false, 'Small Office with updated WWR (0.4, 0.4, 0.6, 0.6) and user data (exempt from rotation) do not need to rotate')
+        assert(rotated == true, 'Small Office with updated WWR (0.4, 0.4, 0.4, 0.4) shall rotate orientations, but it didnt')
+      elsif mod == 'change_wwr_model_0.4_0.4_0.6_0.6'
+        assert(rotated == false, 'Small Office with updated WWR (0.4, 0.4, 0.6, 0.6) do not need to rotate, but it did rotate')
       end
     end
   end
@@ -2142,25 +2140,32 @@ class AppendixGPRMTests < Minitest::Test
       building_dir_rel_north = model.getBuilding.northAxis
       surface_abs_azimuth = surface_azimuth_rel_space + space_dir_rel_north + building_dir_rel_north
       surface_abs_azimuth -= 360.0 until surface_abs_azimuth < 360.0
+
       unless ss.subSurfaces.empty?
-        orig_construction = ss.subSurfaces[0].construction.get
+        # get subsurface construction
+        orig_construction = nil
+        ss.subSurfaces.sort.each do |sub|
+          next unless sub.subSurfaceType == 'FixedWindow' || sub.subSurfaceType=='OperableWindow'
+          orig_construction = sub.construction.get
+          end
+        # remove all existing surfaces
         ss.subSurfaces.sort.each(&:remove)
         # Determine the surface's cardinal direction
         if surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45
           new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
-          new_window.setConstruction(orig_construction)
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
         elsif surface_abs_azimuth > 315 && surface_abs_azimuth <= 360
           new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
-          new_window.setConstruction(orig_construction)
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
         elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135
           new_window = ss.setWindowToWallRatio(target_wwr_east, 0.6, true).get
-          new_window.setConstruction(orig_construction)
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
         elsif surface_abs_azimuth > 135 && surface_abs_azimuth <= 225
           new_window = ss.setWindowToWallRatio(target_wwr_south, 0.6, true).get
-          new_window.setConstruction(orig_construction)
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
         elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315
           new_window = ss.setWindowToWallRatio(target_wwr_west, 0.6, true).get
-          new_window.setConstruction(orig_construction)
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
         end
       end
     end

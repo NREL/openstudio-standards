@@ -130,9 +130,9 @@
         ["Warehouse", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test",[["remove_cooling_coils", []]]]
     ],
     "building_rotation_check": [
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", []],
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["change_wwr_model", [0.4, 0.4, 0.4, 0.4]]]],
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_bro_01", [["change_wwr_model", [0.4, 0.4, 0.6, 0.6]]]]
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_bro_01", []],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_bro_01", [["change_wwr_model", [0.4, 0.4, 0.6, 0.6]]]],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_bro_01", [["change_wwr_model", [0.4, 0.4, 0.4, 0.4]]]]
     ],
     "fan_power_credits": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_merv13to15_airloop_doas", [["add_ahu_doas",[]],["set_zone_multiplier",[4]]]],

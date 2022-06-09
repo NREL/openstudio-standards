@@ -1004,7 +1004,7 @@ class ASHRAE901PRM < Standard
     user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
     if user_buildings
       building_name = user_model.building.get.name.get
-      user_building_index = user_buildings.index { |user_building| user_building['name'] == building_name }
+      user_building_index = user_buildings.index { |user_building| building_name.include? user_building['name'] }
       unless user_building_index.nil? || user_buildings[user_building_index]['is_exempt_from_rotations'].nil?
         # user data exempt the rotation, No indicates true for running orients.
         run_orients_flag = user_buildings[user_building_index]['is_exempt_from_rotations'].casecmp('No') == 0
