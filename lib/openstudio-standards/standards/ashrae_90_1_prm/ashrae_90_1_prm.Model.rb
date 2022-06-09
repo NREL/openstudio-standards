@@ -1054,6 +1054,21 @@ class ASHRAE901PRM < Standard
     end
   end
 
+  # For 2019, it is required to adjusted wwr based on building categories for all other types
+  #
+  # @param wwr_limit [Float] wwr_limit
+  # @param bat [String] building category
+  # @param wwr_list [Array] list of wwr that contains different building categories - residential, nonresidential and semiheated
+  # @return wwr_limit [Float] return adjusted wwr_limit
+  def adjust_wwr_based_on_bat(wwr_limit, bat, wwr_list)
+    if bat.casecmp?('all others')
+      wwr = wwr_list.max
+      return [wwr_limit, wwr].min
+    else
+      return wwr_limit
+    end
+  end
+
   # Calculate the window to wall ratio reduction factor
   #
   # @param multiplier [Float] multiplier of the wwr
@@ -1076,29 +1091,24 @@ class ASHRAE901PRM < Standard
       # Case when reduction is required
       reduction_ratio = 1.0 - multiplier
     else
-      if wwr_building_type.casecmp?('all others')
-        # In this case, do not change the window to wall ratio
-        reduction_ratio = 1.0
-      else
-        # Case when increase is required
-        exist_max_wwr = total_wall_with_fene_m2 * 0.9 / total_wall_m2
-        if exist_max_wwr < wwr_target
-          # In this case, it is required to add vertical fenestrations to other surfaces
-          if surface_wwr == 0.0
-            # delta_fenestration_surface_area / delta_wall_surface_area + 1.0 = increase_ratio for a surface with no windows.
-            reduction_ratio = (wwr_target * total_wall_m2 - exist_max_wwr * total_wall_m2) / (total_wall_m2 - total_wall_with_fene_m2) + 1.0
-          else
-            # surface has fenestration - expand it to 90% WWR
-            reduction_ratio = 0.9 / surface_wwr
-          end
+      # Case when increase is required
+      exist_max_wwr = total_wall_with_fene_m2 * 0.9 / total_wall_m2 
+      if exist_max_wwr < wwr_target
+        # In this case, it is required to add vertical fenestrations to other surfaces
+        if surface_wwr == 0.0
+          # delta_fenestration_surface_area / delta_wall_surface_area + 1.0 = increase_ratio for a surface with no windows.
+          reduction_ratio = (wwr_target * total_wall_m2 - exist_max_wwr * total_wall_m2) / (total_wall_m2 - total_wall_with_fene_m2) + 1.0
         else
-          # multiplier will be negative number thus resulting in > 1 reduction_ratio
-          if surface_wwr == 0.0
-            # 1.0 means remain the original form
-            reduction_ratio = 1.0
-          else
-            reduction_ratio = multiplier
-          end
+          # surface has fenestration - expand it to 90% WWR
+          reduction_ratio = 0.9 / surface_wwr
+        end
+      else
+        # multiplier will be negative number thus resulting in > 1 reduction_ratio
+        if surface_wwr == 0.0
+          # 1.0 means remain the original form
+          reduction_ratio = 1.0
+        else
+          reduction_ratio = multiplier
         end
       end
     end
@@ -1122,6 +1132,10 @@ class ASHRAE901PRM < Standard
         wwr_adjusted = surface_wwr * reduction
       end
       # remove all existing windows and set the window to wall ratio to the calculated new WWR
+      # Remove all sub-surfaces - NOTE: it seems setWindowToWallRatio does not remove doors in the surface
+      # So this line of code ensures all subsurfaces are removed before setting a new WWR
+      surface.subSurfaces.sort.each(&:remove)
+      # Apply default construction to the subsurface - the standard construction will be applied later.
       surface.setWindowToWallRatio(wwr_adjusted, 0.6, true)
     end
   end
