@@ -139,7 +139,7 @@ class Standard
 
       # Reduce the WWR and SRR, if necessary
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adjusting Window and Skylight Ratios ***')
-      sucess, wwr_info = model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type)
+      success, wwr_info = model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type)
       model_apply_prm_baseline_skylight_to_roof_ratio(model)
 
       # Assign building stories to spaces in the building where stories are not yet assigned.
@@ -5247,6 +5247,8 @@ class Standard
         wwr_lim = 40.0
       end
 
+      wwr_lim = adjust_wwr_based_on_bat(wwr_lim, bat, [vals['wwr_nr'], vals['wwr_res'], vals['wwr_sh']])
+
       # Check against WWR limit
       vals['red_nr'] = vals['wwr_nr'] > wwr_lim
       vals['red_res'] = vals['wwr_res'] > wwr_lim
@@ -6700,6 +6702,15 @@ class Standard
 
   private
 
+  # For 2019, it is required to adjusted wwr based on building categories for all other types
+  #
+  # @param wwr_limit [Float] wwr_limit
+  # @param bat [String] building category
+  # @param wwr_list [Array] list of wwr that contains different building categories - residential, nonresidential and semiheated
+  # @return wwr_limit [Float] return adjusted wwr_limit
+  def adjust_wwr_based_on_bat(wwr_limit, bat, wwr_list)
+    return wwr_limit
+  end
 
   # Adjust the fenestration area to the values specified by the reduction value in a surface
   #
