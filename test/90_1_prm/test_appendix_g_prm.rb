@@ -2803,8 +2803,8 @@ class AppendixGPRMTests < Minitest::Test
       'hvac_efficiency',
       'unenclosed_spaces',
       'f_c_factors',
-#      'fan_power_credits',
-#      'lpd_userdata_handling',
+      'fan_power_credits',
+      'lpd_userdata_handling',
     ]
 
     # Get list of unique prototypes
