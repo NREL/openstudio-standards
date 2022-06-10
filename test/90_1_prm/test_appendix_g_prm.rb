@@ -2453,8 +2453,8 @@ class AppendixGPRMTests < Minitest::Test
       'economizer_exception',
       'unenclosed_spaces',
       'f_c_factors',
-#      'fan_power_credits',
-#      'lpd_userdata_handling',
+      'fan_power_credits',
+      'lpd_userdata_handling',
     ]
 
     # Get list of unique prototypes
