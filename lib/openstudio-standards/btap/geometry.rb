@@ -3752,7 +3752,7 @@ module BTAP
         if point_b1[:x] == point_b2[:x]
           xcross = point_b2[:x]
           # If the line is horizontal you cannot find the y intercept
-        elsif point_b1[:y] == point_b2[:x]
+        elsif (point_b1[:y] == point_b2[:y])
           raise("This line is horizontal so no y intercept can be found.")
           # Otherwise determine the line coefficients and get the intercept
         else

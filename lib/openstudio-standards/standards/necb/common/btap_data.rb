@@ -432,7 +432,7 @@ class BTAPData
           (data['province'] == province) &&
           (data['fuel_type'] == neb_fuel)
       end
-      neb_fuel_cost = row['2020']
+      neb_fuel_cost = row['2021']
       fuel_consumption_gj = 0.0
       sql_command = "SELECT Value FROM tabulardatawithstrings
                      WHERE ReportName='EnergyMeters'
