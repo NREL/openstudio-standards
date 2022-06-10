@@ -135,6 +135,12 @@
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["remove_transformer", []]]],
         ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-8A", "no_user_data", [["set_zone_multiplier",[4]],["remove_transformer", []]]],
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]]
+    "unenclosed_spaces": [
+        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "no_user_data",[["change_weather_file", []]]]
+    ],
+    "f_c_factors": [
+        ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data", [["remove_transformer", []]]],
+        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "no_user_data",[["change_weather_file", []]]]
     ],
     "fan_power_credits": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_merv13to15_airloop_doas", [["add_ahu_doas",[]],["set_zone_multiplier",[4]]]],

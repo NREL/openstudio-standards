@@ -689,10 +689,10 @@ class Standard
     case intended_surface_type
     when 'AtticFloor'
       film_r_si += film_int_surf_ht_flow_up_r_si if ext_film # Outside
-      film_r_si += film_semi_ext_surf_r_si if int_film # Inside
+      film_r_si += film_semi_ext_surf_r_si if int_film # Inside @todo: this is only true if the attic is ventilated, interior film should be used otheriwse
     when 'AtticWall', 'AtticRoof'
       film_r_si += film_ext_surf_r_si if ext_film # Outside
-      film_r_si += film_semi_ext_surf_r_si if int_film # Inside
+      film_r_si += film_semi_ext_surf_r_si if int_film # Inside @todo: this is only true if the attic is ventilated, interior film should be used otherwise
     when 'DemisingFloor', 'InteriorFloor'
       film_r_si += film_int_surf_ht_flow_up_r_si if ext_film # Outside
       film_r_si += film_int_surf_ht_flow_dwn_r_si if int_film # Inside
