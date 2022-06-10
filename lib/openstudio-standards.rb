@@ -281,6 +281,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.BoilerHotWater"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ChillerElectricEIR"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoolingTower"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoolingTowerVariableSpeed"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ThermalZone"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.SpaceType"
 
