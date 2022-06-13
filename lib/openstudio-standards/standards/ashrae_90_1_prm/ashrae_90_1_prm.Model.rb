@@ -347,6 +347,279 @@ class ASHRAE901PRM < Standard
     return tot_infil_m3_per_s
   end
 
+  # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
+  #
+  # @return [Bool] true if successful, false if not
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if successful, false if not
+  def model_apply_standard_constructions(model, climate_zone, wwr_building_type = nil, wwr_info = {})
+    types_to_modify = []
+
+    # Possible boundary conditions are
+    # Adiabatic
+    # Surface
+    # Outdoors
+    # Ground
+    # Foundation
+    # GroundFCfactorMethod
+    # OtherSideCoefficients
+    # OtherSideConditionsModel
+    # GroundSlabPreprocessorAverage
+    # GroundSlabPreprocessorCore
+    # GroundSlabPreprocessorPerimeter
+    # GroundBasementPreprocessorAverageWall
+    # GroundBasementPreprocessorAverageFloor
+    # GroundBasementPreprocessorUpperWall
+    # GroundBasementPreprocessorLowerWall
+
+    # Possible surface types are
+    # Floor
+    # Wall
+    # RoofCeiling
+    # FixedWindow
+    # OperableWindow
+    # Door
+    # GlassDoor
+    # OverheadDoor
+    # Skylight
+    # TubularDaylightDome
+    # TubularDaylightDiffuser
+
+    # Create an array of surface types
+    types_to_modify << ['Outdoors', 'Floor']
+    types_to_modify << ['Outdoors', 'Wall']
+    types_to_modify << ['Outdoors', 'RoofCeiling']
+    types_to_modify << ['Outdoors', 'FixedWindow']
+    types_to_modify << ['Outdoors', 'OperableWindow']
+    types_to_modify << ['Outdoors', 'Door']
+    types_to_modify << ['Outdoors', 'GlassDoor']
+    types_to_modify << ['Outdoors', 'OverheadDoor']
+    types_to_modify << ['Outdoors', 'Skylight']
+    types_to_modify << ['Surface', 'Floor']
+    types_to_modify << ['Surface', 'Wall']
+    types_to_modify << ['Surface', 'RoofCeiling']
+    types_to_modify << ['Surface', 'FixedWindow']
+    types_to_modify << ['Surface', 'OperableWindow']
+    types_to_modify << ['Surface', 'Door']
+    types_to_modify << ['Surface', 'GlassDoor']
+    types_to_modify << ['Surface', 'OverheadDoor']
+    types_to_modify << ['Ground', 'Floor']
+    types_to_modify << ['Ground', 'Wall']
+    types_to_modify << ['Foundation', 'Wall']
+    types_to_modify << ['GroundFCfactorMethod', 'Wall']
+    types_to_modify << ['OtherSideCoefficients', 'Wall']
+    types_to_modify << ['OtherSideConditionsModel', 'Wall']
+    types_to_modify << ['GroundBasementPreprocessorAverageWall', 'Wall']
+    types_to_modify << ['GroundBasementPreprocessorUpperWall', 'Wall']
+    types_to_modify << ['GroundBasementPreprocessorLowerWall', 'Wall']
+    types_to_modify << ['Foundation', 'Floor']
+    types_to_modify << ['GroundFCfactorMethod', 'Floor']
+    types_to_modify << ['OtherSideCoefficients', 'Floor']
+    types_to_modify << ['OtherSideConditionsModel', 'Floor']
+    types_to_modify << ['GroundSlabPreprocessorAverage', 'Floor']
+    types_to_modify << ['GroundSlabPreprocessorCore', 'Floor']
+    types_to_modify << ['GroundSlabPreprocessorPerimeter', 'Floor']
+
+    # Find just those surfaces
+    surfaces_to_modify = []
+    surface_category = {}
+    org_surface_boundary_conditions = {}
+    types_to_modify.each do |boundary_condition, surface_type|
+      # Surfaces
+      model.getSurfaces.sort.each do |surf|
+        next unless surf.outsideBoundaryCondition == boundary_condition
+        next unless surf.surfaceType == surface_type
+
+        # Check if surface is adjacent to an unenclosed or unconditioned space (e.g. attic or parking garage)
+        if surf.outsideBoundaryCondition == 'Surface'
+          adj_space = surf.adjacentSurface.get.space.get
+          adj_space_cond_type = space_conditioning_category(adj_space)
+          if adj_space_cond_type == 'Unconditioned'
+            # Get adjacent surface
+            adjacent_surf = surf.adjacentSurface.get
+
+            # Store original boundary condition type
+            org_surface_boundary_conditions[surf.name.to_s] = adjacent_surf
+
+            # Temporary change the surface's boundary condition to 'Outdoors' so it can be assigned a baseline construction
+            surf.setOutsideBoundaryCondition('Outdoors')
+            adjacent_surf.setOutsideBoundaryCondition('Outdoors')
+          end
+        end
+
+        if boundary_condition == 'Outdoors'
+          surface_category[surf] = 'ExteriorSurface'
+        elsif ['Ground', 'Foundation', 'GroundFCfactorMethod', 'OtherSideCoefficients', 'OtherSideConditionsModel', 'GroundSlabPreprocessorAverage', 'GroundSlabPreprocessorCore', 'GroundSlabPreprocessorPerimeter', 'GroundBasementPreprocessorAverageWall', 'GroundBasementPreprocessorAverageFloor', 'GroundBasementPreprocessorUpperWall', 'GroundBasementPreprocessorLowerWall'].include?(boundary_condition)
+          surface_category[surf] = 'GroundSurface'
+        else
+          surface_category[surf] = 'NA'
+        end
+        surfaces_to_modify << surf
+      end
+
+      # SubSurfaces
+      model.getSubSurfaces.sort.each do |surf|
+        next unless surf.outsideBoundaryCondition == boundary_condition
+        next unless surf.subSurfaceType == surface_type
+
+        surface_category[surf] = 'ExteriorSubSurface'
+        surfaces_to_modify << surf
+      end
+    end
+
+    # Modify these surfaces
+    prev_created_consts = {}
+    surfaces_to_modify.sort.each do |surf|
+      # Get space conditioning
+      space = surf.space.get
+      space_cond_type = space_conditioning_category(space)
+
+      # Do not modify constructions for unconditioned spaces
+      prev_created_consts = planar_surface_apply_standard_construction(surf, climate_zone, prev_created_consts, wwr_building_type, wwr_info, surface_category[surf]) unless space_cond_type == 'Unconditioned'
+
+      # Reset boundary conditions to original if they were temporary modified
+      if org_surface_boundary_conditions.include?(surf.name.to_s)
+        surf.setAdjacentSurface(org_surface_boundary_conditions[surf.name.to_s])
+      end
+    end
+
+    # List the unique array of constructions
+    if prev_created_consts.size.zero?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'None of the constructions in your proposed model have both Intended Surface Type and Standards Construction Type')
+    else
+      prev_created_consts.each do |surf_type, construction|
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{surf_type.join(' ')}, applied #{construction.name}.")
+      end
+    end
+
+    return true
+  end
+
+  # Go through the default construction sets and hard-assigned constructions.
+  # Clone the existing constructions and set their intended surface type and standards construction type per the PRM.
+  # For some standards, this will involve making modifications.  For others, it will not.
+  #
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
+  def model_apply_prm_construction_types(model)
+    types_to_modify = []
+
+    # Possible boundary conditions are
+    # Adiabatic
+    # Surface
+    # Outdoors
+    # Ground
+    # Foundation
+    # GroundFCfactorMethod
+    # OtherSideCoefficients
+    # OtherSideConditionsModel
+    # GroundSlabPreprocessorAverage
+    # GroundSlabPreprocessorCore
+    # GroundSlabPreprocessorPerimeter
+    # GroundBasementPreprocessorAverageWall
+    # GroundBasementPreprocessorAverageFloor
+    # GroundBasementPreprocessorUpperWall
+    # GroundBasementPreprocessorLowerWall
+
+    # Possible surface types are
+    # AtticFloor
+    # AtticWall
+    # AtticRoof
+    # DemisingFloor
+    # DemisingWall
+    # DemisingRoof
+    # ExteriorFloor
+    # ExteriorWall
+    # ExteriorRoof
+    # ExteriorWindow
+    # ExteriorDoor
+    # GlassDoor
+    # GroundContactFloor
+    # GroundContactWall
+    # GroundContactRoof
+    # InteriorFloor
+    # InteriorWall
+    # InteriorCeiling
+    # InteriorPartition
+    # InteriorWindow
+    # InteriorDoor
+    # OverheadDoor
+    # Skylight
+    # TubularDaylightDome
+    # TubularDaylightDiffuser
+
+    # Possible standards construction types
+    # Mass
+    # SteelFramed
+    # WoodFramed
+    # IEAD
+    # View
+    # Daylight
+    # Swinging
+    # NonSwinging
+    # Heated
+    # Unheated
+    # RollUp
+    # Sliding
+    # Metal
+    # Nonmetal framing (all)
+    # Metal framing (curtainwall/storefront)
+    # Metal framing (entrance door)
+    # Metal framing (all other)
+    # Metal Building
+    # Attic and Other
+    # Glass with Curb
+    # Plastic with Curb
+    # Without Curb
+
+    # Create an array of types
+    types_to_modify << ['Outdoors', 'ExteriorWall', 'SteelFramed']
+    types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
+    types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
+    types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['Ground', 'GroundContactWall', 'Mass']
+
+    # Foundation
+    types_to_modify << ['Foundation', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['Foundation', 'GroundContactWall', 'Mass']
+
+    # F/C-Factor methods
+    types_to_modify << ['GroundFCfactorMethod', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundFCfactorMethod', 'GroundContactWall', 'Mass']
+
+    # Other side coefficients
+    types_to_modify << ['OtherSideCoefficients', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['OtherSideConditionsModel', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['OtherSideCoefficients', 'GroundContactWall', 'Mass']
+    types_to_modify << ['OtherSideConditionsModel', 'GroundContactWall', 'Mass']
+
+    # Slab preprocessor
+    types_to_modify << ['GroundSlabPreprocessorAverage', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundSlabPreprocessorCore', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundSlabPreprocessorPerimeter', 'GroundContactFloor', 'Unheated']
+
+    # Basement preprocessor
+    types_to_modify << ['GroundBasementPreprocessorAverageWall', 'GroundContactWall', 'Mass']
+    types_to_modify << ['GroundBasementPreprocessorAverageFloor', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundBasementPreprocessorUpperWall', 'GroundContactWall', 'Mass']
+    types_to_modify << ['GroundBasementPreprocessorLowerWall', 'GroundContactWall', 'Mass']
+
+    # Modify all constructions of each type
+    types_to_modify.each do |boundary_cond, surf_type, const_type|
+      constructions = model_find_constructions(model, boundary_cond, surf_type)
+
+      constructions.sort.each do |const|
+        standards_info = const.standardsInformation
+        standards_info.setIntendedSurfaceType(surf_type)
+        standards_info.setStandardsConstructionType(const_type)
+      end
+    end
+
+    return true
+  end
+
   # Reduces the SRR to the values specified by the PRM. SRR reduction will be done by shrinking vertices toward the centroid.
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
@@ -976,6 +1249,61 @@ class ASHRAE901PRM < Standard
       # add swh type to wateruse equipment:
       wateruse_equipment.additionalProperties.setFeature('building_type_for_swh', type_for_swh)
     end
+    return true
+  end
+
+  # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
+  #
+  # @return [Bool] true if successful, false if not
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if successful, false if not
+  def model_apply_constructions(model, climate_zone, wwr_building_type, wwr_info)
+    model_apply_standard_constructions(model, climate_zone, wwr_building_type, wwr_info)
+
+    return true
+  end
+
+  # Update ground temperature profile based on the weather file specified in the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if successful, false if not
+  def model_update_ground_temperature_profile(model, climate_zone)
+    # Check if the ground temperature profile is needed
+    surfaces_with_fc_factor_boundary = false
+    model.getSurfaces.each do |surface|
+      if surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod'
+        surfaces_with_fc_factor_boundary = true
+        break
+      end
+    end
+
+    return false unless surfaces_with_fc_factor_boundary
+
+    # Remove existing FCFactor temperature profile
+    model.getSiteGroundTemperatureFCfactorMethod.remove
+
+    # Get path to weather file specified in the model
+    weather_file_path = model.getWeatherFile.path.get.to_s
+
+    # Look for stat file corresponding to the weather file
+    stat_file_path = weather_file_path.sub('.epw', '.stat').to_s
+    if !File.exist? stat_file_path
+      # When the stat file corresponding with the weather file in the model is missing,
+      # use the weather file that represent the climate zone
+      climate_zone_weather_file_map = model_get_climate_zone_weather_file_map
+      weather_file = climate_zone_weather_file_map[climate_zone]
+      stat_file_path = model_get_weather_file(weather_file).sub('.epw', '.stat').to_s
+    end
+
+    ground_temp = OpenStudio::Model::SiteGroundTemperatureFCfactorMethod.new(model)
+    ground_temperatures = model_get_monthly_ground_temps_from_stat_file(stat_file_path)
+    unless ground_temperatures.empty?
+      # set the site ground temperature building surface
+      ground_temp.setAllMonthlyTemperatures(ground_temperatures)
+    end
+
     return true
   end
 
