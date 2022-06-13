@@ -7488,7 +7488,7 @@ class Standard
       end
 
       # Assume that the primary heating and cooling (PHC) system
-      # is last in the heating and cooling order
+      # is last in the heating and cooling order (ignore DOAS)
       #
       # Get the heating and cooling PHC components
       heating_equipment = zone.equipmentInHeatingOrder[-1]
