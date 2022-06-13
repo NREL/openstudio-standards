@@ -1622,7 +1622,7 @@ class Standard
     end
     # Following the same assumptions,  we designate supply air plenums
     # as indirectly conditioned as well
-    space.model.getAirLoopHVACAirLoopHVACSupplyPlenums.each do |supply_air_plenum|
+    space.model.getAirLoopHVACSupplyPlenums.each do |supply_air_plenum|
       if supply_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
         # Determine if residential
         res = thermal_zone_residential?(zone.get) ? true : false
