@@ -132,5 +132,9 @@
     "fan_power_credits": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_merv13to15_airloop_doas", [["add_ahu_doas",[]],["set_zone_multiplier",[4]]]],
         ["RetailStandalone", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_merv13to15_zonehvac", [["change_bldg_type",["Assembly"]], ["set_zone_multiplier", [50]], ["change_clg_therm", ["Front_Entry ZN"]]]]
+    ],
+    "return_air_type": [
+        ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "no_user_data", [["remove_transformer", []]]]
     ]
 }

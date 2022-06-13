@@ -1939,6 +1939,23 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # Verify if return air plenums are generated
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_return_air_type(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+
+      if building_type == 'LargeOffice'
+        assert(model.getAirLoopHVACReturnPlenums.length == 3, "The expected return air plenums in the large office baseline model have not been created.")
+      end
+
+      if building_type == 'PrimarySchool'
+        assert(model.getAirLoopHVACReturnPlenums.length == 0, "Return air plenums are being modeled in the primary school baseline model, they are not expected.")
+      end
+    end
+  end
+
   # Add a AirLoopHVACDedicatedOutdoorAirSystem in the model
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
@@ -2356,7 +2373,8 @@ class AppendixGPRMTests < Minitest::Test
       'multi_bldg_handling',
       'economizer_exception',
       'fan_power_credits',
-      'lpd_userdata_handling'
+      'lpd_userdata_handling',
+      'return_air_type',
     ]
 
     # Get list of unique prototypes
@@ -2392,5 +2410,6 @@ class AppendixGPRMTests < Minitest::Test
     check_multi_lpd_handling(prototypes_base['lpd_userdata_handling']) if tests.include? 'lpd_userdata_handling'
     check_economizer_exception(prototypes_base['economizer_exception']) if tests.include? 'economizer_exception'
     check_fan_power_credits(prototypes_base['fan_power_credits']) if tests.include? 'fan_power_credits'
+    check_return_air_type(prototypes_base['return_air_type']) if tests.include? 'return_air_type'
   end
 end
