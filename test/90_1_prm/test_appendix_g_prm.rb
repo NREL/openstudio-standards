@@ -2755,6 +2755,7 @@ class AppendixGPRMTests < Minitest::Test
         end
       end
     end
+  end
 
   # Change the weather used in the model
   #
