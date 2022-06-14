@@ -44,7 +44,6 @@ class ASHRAE901PRM < Standard
   end
 
   # A helper method to convert from combustion efficiency to thermal efficiency
-  # @ref [References::USDOEPrototypeBuildings] Boiler Addendum 90.1-04an
   #
   # @param combustion_eff [Double] Combustion efficiency (%)
   # @return [Double] Thermal efficiency (%)
