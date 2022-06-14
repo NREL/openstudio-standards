@@ -274,7 +274,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
           ltg_schedule = ltg.schedule.get
           ltg_schedule_name = ltg_schedule.name
           occupancy_sensor_credit = space.additionalProperties.getFeatureAsDouble('occ_control_credit')
-          new_ltg_schedule_name = "#{ltg_schedule_name}_%.4f" % occupancy_sensor_credit
+          new_ltg_schedule_name = format("#{ltg_schedule_name}_%.4f", occupancy_sensor_credit)
           if schedule_hash.key?(new_ltg_schedule_name)
             # In this case, there is a schedule created, can retrieve the schedule object and reset in this space type
             schedule_rule = schedule_hash[new_ltg_schedule_name]
@@ -311,7 +311,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
 
       # create a new day rule - copy and apply the ajustment factor
       new_day_rule = OpenStudio::Model::ScheduleDay.new(model)
-      new_day_rule.setName("#{day_rule.name.get}_%.4f" % adjustment_factor)
+      new_day_rule.setName(format("#{day_rule.name.get}_%.4f", adjustment_factor))
       new_day_rule.setScheduleTypeLimits(schedule_type_limit)
 
       # process day rule
@@ -329,7 +329,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
 
       # create week rule schedule
       new_week_rule = OpenStudio::Model::ScheduleRule.new(ruleset, new_day_rule)
-      new_week_rule.setName("#{week_rule.name.get}_%.4f" % adjustment_factor)
+      new_week_rule.setName(format("#{week_rule.name.get}_%.4f", adjustment_factor))
       new_week_rule.setApplySunday(week_rule.applySunday)
       new_week_rule.setApplyMonday(week_rule.applyMonday)
       new_week_rule.setApplyTuesday(week_rule.applyTuesday)
@@ -420,7 +420,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     sum_lighting_per_length = 0
     while std_ltg_index < num_std_ltg_types
       # Retrieve data from user_data
-      type_key = 'std_ltg_type%02d' % (std_ltg_index + 1)
+      type_key = format('std_ltg_type%02d', (std_ltg_index + 1))
       sub_space_type = user_data[type_key]
       # Adjust while loop condition factors
       std_ltg_index += 1
@@ -447,8 +447,8 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # Loop through standard lighting type in a space
     while std_ltg_index < num_std_ltg_types
       # Retrieve data from user_data
-      type_key = 'std_ltg_type%02d' % (std_ltg_index + 1)
-      frac_key = 'std_ltg_type_frac%02d' % (std_ltg_index + 1)
+      type_key = format('std_ltg_type%02d', (std_ltg_index + 1))
+      frac_key = format('std_ltg_type_frac%02d', (std_ltg_index + 1))
       sub_space_type = user_data[type_key]
       sub_space_type_frac = user_data[frac_key].to_f
       # Adjust while loop condition factors
