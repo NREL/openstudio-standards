@@ -3,6 +3,7 @@ class ASHRAE901PRM < Standard
 
   # Finds the search criteria
   #
+  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
   # @return [hash] has for search criteria to be used for find object
   def chiller_electric_eir_find_search_criteria(chiller_electric_eir)
     search_criteria = {}
@@ -34,7 +35,8 @@ class ASHRAE901PRM < Standard
 
   # Finds lookup object in standards and return full load efficiency
   #
-  # @return [Double] full load efficiency (COP)
+  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
+  # @return [Double] full load efficiency (COP), [Double] capacity in tons, [Double] kw/ton
   def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
     # Get the chiller properties
     search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
@@ -57,8 +59,9 @@ class ASHRAE901PRM < Standard
     return cop, capacity_tons, kw_per_ton
   end
 
-  # Applies the standard efficiency ratings and typical performance curves to this object.
+  # Applies the standard efficiency ratings to this object.
   #
+  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
   # @return [Bool] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir)
     # Set the efficiency value

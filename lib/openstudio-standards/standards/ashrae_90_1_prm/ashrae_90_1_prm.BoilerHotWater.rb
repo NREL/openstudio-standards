@@ -3,6 +3,7 @@ class ASHRAE901PRM < Standard
 
   # find search criteria
   #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
   # @return [Hash] used for standards_lookup_table(model)
   def boiler_hot_water_find_search_criteria(boiler_hot_water)
     # Define the criteria to find the boiler properties
@@ -21,6 +22,8 @@ class ASHRAE901PRM < Standard
 
   # Finds lookup object in standards and return minimum thermal efficiency
   #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
+  # @param rename [Bool] returns true if successful, false if not
   # @return [Double] minimum thermal efficiency
   def boiler_hot_water_standard_minimum_thermal_efficiency(boiler_hot_water, rename = false)
     # Get the boiler properties
@@ -71,9 +74,9 @@ class ASHRAE901PRM < Standard
     return thermal_eff
   end
 
-  # Applies the standard efficiency ratings and typical performance curves to this object.
+  # Applies the standard efficiency ratings to this object.
   #
-  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] the object to modify
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
   # @return [Bool] true if successful, false if not
   def boiler_hot_water_apply_efficiency_and_curves(boiler_hot_water)
     # Get the minimum efficiency standards

@@ -1,14 +1,15 @@
 # A variety of DX coil methods that are the same regardless of coil type.
 # These methods are available to:
-# CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+# CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilHeatingDXSingleSpeed
 module ASHRAEPRMCoilDX
   # @!group CoilDX
 
-  # Finds the subcategory.  Possible choices are:
-  # Single Package, Split System, PTAC, or PTHP
+  # Finds the subcategory.
   #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object
+  # @param capacity [Double] capacity in btu/hr
+  # @param sys_type [String] HVAC system type
   # @return [String] the coil_dx_subcategory(coil_dx)
-  # @todo Add add split system vs single package to model object
   def coil_dx_subcategory(coil_dx, capacity, sys_type)
     sub_category = ''
 
@@ -45,6 +46,9 @@ module ASHRAEPRMCoilDX
 
   # Finds the search criteria
   #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object
+  # @param capacity [Double] capacity in btu/hr
+  # @param sys_type [String] HVAC system type
   # @return [hash] has for search criteria to be used for find object
   def coil_dx_find_search_criteria(coil_dx, capacity, sys_type)
     search_criteria = {}

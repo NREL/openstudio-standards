@@ -5,6 +5,8 @@ class ASHRAE901PRM < Standard
 
   # Finds capacity in W
   #
+  # @param coil_cooling_dx_two_speed [OpenStudio::Model::CoilCoolingDXTwoSpeed] coil cooling dx two speed object
+  # @param sys_type [String] HVAC system type
   # @return [Double] capacity in W to be used for find object
   def coil_cooling_dx_two_speed_find_capacity(coil_cooling_dx_two_speed, sys_type)
     capacity_w = nil
@@ -39,6 +41,9 @@ class ASHRAE901PRM < Standard
 
   # Finds lookup object in standards and return efficiency
   #
+  # @param coil_cooling_dx_two_speed [OpenStudio::Model::CoilCoolingDXTwoSpeed] coil cooling dx two speed object
+  # @param sys_type [String] HVAC system type
+  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
   def coil_cooling_dx_two_speed_standard_minimum_cop(coil_cooling_dx_two_speed, sys_type, rename = false)
     # find properties
@@ -74,9 +79,12 @@ class ASHRAE901PRM < Standard
     return cop
   end
 
-  # Applies the standard efficiency ratings and typical performance curves to this object.
+  # Applies the standard efficiency ratings to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @param coil_cooling_dx_two_speed [OpenStudio::Model::CoilCoolingDXTwoSpeed] coil cooling dx two speed object
+  # @param sql_db_vars_map [Hash] hash map
+  # @param sys_type [String] HVAC system type
+  # @return [Hash] hash of coil objects
   def coil_cooling_dx_two_speed_apply_efficiency_and_curves(coil_cooling_dx_two_speed, sql_db_vars_map, sys_type)
     # Preserve the original name
     orig_name = coil_cooling_dx_two_speed.name.to_s

@@ -3,6 +3,8 @@ class ASHRAE901PRM < Standard
 
   # find search criteria
   #
+  # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] coil heating gas object
+  # @param sys_type [String] HVAC system type
   # @return [Hash] used for standards_lookup_table(model)
   def coil_heating_gas_find_search_criteria(coil_heating_gas, sys_type)
     # Define the criteria to find the furnace properties
@@ -23,7 +25,8 @@ class ASHRAE901PRM < Standard
 
   # find furnace capacity
   #
-  # @return [Hash] used for standards_lookup_table(model)
+  # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] coil heating gas object
+  # @return [Double] capacity in W to be used for find object
   def coil_heating_gas_find_capacity(coil_heating_gas)
     # Get the coil capacity
     capacity_w = nil
@@ -51,6 +54,9 @@ class ASHRAE901PRM < Standard
 
   # Finds lookup object in standards and return minimum thermal efficiency
   #
+  # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] coil heating gas object
+  # @param sys_type [String] HVAC system type
+  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] minimum thermal efficiency
   def coil_heating_gas_standard_minimum_thermal_efficiency(coil_heating_gas, sys_type, rename = false)
 
@@ -108,7 +114,10 @@ class ASHRAE901PRM < Standard
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] coil heating gas object
+  # @param sql_db_vars_map [Hash] hash map
+  # @param sys_type [String] HVAC system type
+  # @return [Hash] hash of coil objects
   def coil_heating_gas_apply_efficiency_and_curves(coil_heating_gas, sql_db_vars_map, sys_type)
     # Thermal efficiency
     thermal_eff = coil_heating_gas_standard_minimum_thermal_efficiency(coil_heating_gas, sys_type)

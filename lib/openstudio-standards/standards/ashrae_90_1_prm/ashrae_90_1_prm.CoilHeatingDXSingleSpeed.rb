@@ -3,9 +3,10 @@ class ASHRAE901PRM < Standard
 
   include ASHRAEPRMCoilDX
 
-  # Finds capacity in W.  This is the cooling capacity of the
-  # paired DX cooling coil.
+  # Finds capacity in W. This is the cooling capacity of the paired DX cooling coil.
   #
+  # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
+  # @param sys_type [String] HVAC system type
   # @return [Double] capacity in W to be used for find object
   def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, sys_type)
     capacity_w = nil
@@ -49,9 +50,7 @@ class ASHRAE901PRM < Standard
       end
     end
 
-    # If no paired cooling coil was found,
-    # throw an error and fall back to the heating capacity
-    # of the DX heating coil
+    # If no paired cooling coil was found, throw an error and fall back to the heating capacity of the DX heating coil
     if clg_coil.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, the paired DX cooling coil could not be found to determine capacity. Efficiency will incorrectly be based on DX coil's heating capacity.")
       if coil_heating_dx_single_speed.ratedTotalHeatingCapacity.is_initialized
@@ -96,6 +95,9 @@ class ASHRAE901PRM < Standard
 
   # Finds lookup object in standards and return efficiency
   #
+  # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
+  # @param sys_type [String] HVAC system type
+  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
   def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, sys_type, rename = false)
     # find ac properties
@@ -128,7 +130,10 @@ class ASHRAE901PRM < Standard
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
+  # @param sql_db_vars_map [Hash] hash map
+  # @param sys_type [String] HVAC system type
+  # @return [Hash] hash of coil objects
   def coil_heating_dx_single_speed_apply_efficiency_and_curves(coil_heating_dx_single_speed, sql_db_vars_map, sys_type)
     # Preserve the original name
     orig_name = coil_heating_dx_single_speed.name.to_s
