@@ -7577,7 +7577,7 @@ class Standard
 
             if zone_return_air_type.keys.include?('plenum')
               if zone_return_air_type['plenum'].keys.include?(plenum)
-                zone_return_air_type['plenum'][plenum] = zone_design_air_flow
+                zone_return_air_type['plenum'][plenum] += zone_design_air_flow
               end
             else
               zone_return_air_type['plenum'] = { plenum => zone_design_air_flow }
