@@ -3828,4 +3828,30 @@ class Standard
     end
     return simple_transfer_air
   end
+
+  # Determine if the air loop has a return air plenum
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] OpenStudio AirLoopHVAC object
+  # @return [OpenStudio::Model::ThermalZone] OpenStudio thermal zone object of the return air plenum zone
+  #                                          when an air loop uses a return air plenum, nil otherwise
+  def air_loop_hvac_return_air_plenum(air_loop_hvac)
+    # Get return air node
+    return_air_node = air_loop_hvac.demandOutletNode
+
+    # Check if node is connected to a return plenum object
+    air_loop_hvac.model.getAirLoopHVACReturnPlenums.each do |return_plenum|
+      air_loop_hvac.model.getAirLoopHVACZoneMixers.each do |zone_air_mixer|
+        inlets = zone_air_mixer.inletModelObjects
+        inlets.each do |inlet|
+          if inlet.to_Node.get == return_plenum.outletModelObject.get.to_Node.get
+            if zone_air_mixer.outletModelObject.get.to_Node.get == return_air_node
+              return return_plenum.thermalZone.get
+            end
+          end
+        end
+      end
+    end
+
+    return nil
+  end
 end
