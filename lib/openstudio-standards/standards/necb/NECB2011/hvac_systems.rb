@@ -2253,4 +2253,166 @@ class NECB2011
 
     airloop.setName(sys_name)
   end
+
+  def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed)
+    # Set Rated heating capacity = 50% cooling coil capacity at -8.3 C outdoor [8.4.4.13 (2)(c)]
+
+    if @reference_hp #NECB reference heat pump rules apply
+      # grab paired cooling coil
+      if coil_heating_dx_single_speed.airLoopHVAC.empty?
+        
+        if coil_heating_dx_single_speed.containingHVACComponent.is_initialized
+          
+          containing_comp = coil_heating_dx_single_speed.containingHVACComponent.get
+          if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
+            clg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.coolingCoil
+          elsif containing_comp.to_AirLoopHVACUnitarySystem.is_initialized
+            unitary = containing_comp.to_AirLoopHVACUnitarySystem.get
+            if unitary.coolingCoil.is_initialized
+              clg_coil = unitary.coolingCoil.get
+            end
+          end
+          # @todo Add other unitary systems
+        elsif coil_heating_dx_single_speed.containingZoneHVACComponent.is_initialized
+          containing_comp = coil_heating_dx_single_speed.containingZoneHVACComponent.get
+          # PTHP
+          if containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+            pthp = containing_comp.to_ZoneHVACPackagedTerminalHeatPump.get
+            clg_coil = containing_comp.to_ZoneHVACPackagedTerminalHeatPump.get.coolingCoil
+          end
+        end
+      elsif coil_heating_dx_single_speed.airLoopHVAC.is_initialized
+        air_loop = coil_heating_dx_single_speed.airLoopHVAC.get
+        # Check for the presence of any other type of cooling coil
+        clg_types = ['OS:Coil:Cooling:DX:SingleSpeed',
+                    'OS:Coil:Cooling:DX:TwoSpeed',
+                    'OS:Coil:Cooling:DX:MultiSpeed']
+        clg_types.each do |ct|
+          coils = air_loop.supplyComponents(ct.to_IddObjectType)
+          next if coils.empty?
+          clg_coil = coils[0]
+          puts "coils = air_loop.supplyComponents(ct.to_IddObjectType) #{}"
+          break # Stop on first DX cooling coil found
+        end
+      end
+
+      # Paired cooling coil parameters
+      clg_coil = clg_coil.to_CoilCoolingDXSingleSpeed.get
+      capacity_w = coil_cooling_dx_single_speed_find_capacity(clg_coil)
+      indoor_wb = 19.4 #rated indoor wb
+      outdoor_db = -8.3 # outdoor db
+
+      # heating capacity = capacity factor (function of temp) from biquadratic curve
+      # with curve limits on minimum y/outdoor db (no extrapolation)
+      cooling_cap_f_temp_curve = clg_coil.totalCoolingCapacityFunctionOfTemperatureCurve
+      cooling_cap_f_temp_factor_min_y = cooling_cap_f_temp_curve.evaluate(indoor_wb,outdoor_db)
+      htg_cap_w_min_y = capacity_w*0.5*cooling_cap_f_temp_factor_min_y
+      
+      # heating capacity = capacity factor (function of temp) from biquadratic curve 
+      # without curve limits on minimum y/outdoor db (extrapolate)
+      cooling_cap_f_temp_const = 0.867905
+      cooling_cap_f_temp_x = 0.0142459
+      cooling_cap_f_temp_x2 = 0.00055436
+      cooling_cap_f_temp_y = -0.0075575
+      cooling_cap_f_temp_y2 = 3.3e-05 
+      cooling_cap_f_temp_xy = -0.0001918
+      cooling_cap_f_temp_factor_no_min_y = cooling_cap_f_temp_const + cooling_cap_f_temp_x*indoor_wb + cooling_cap_f_temp_x2*indoor_wb**2 + 
+      cooling_cap_f_temp_y*outdoor_db + cooling_cap_f_temp_y2*outdoor_db**2 + cooling_cap_f_temp_xy*indoor_wb*outdoor_db
+      htg_cap_w_no_min_y = capacity_w*0.5*cooling_cap_f_temp_factor_no_min_y
+
+      puts "capacity_w #{capacity_w}"
+      puts "cooling_cap_f_temp_factor_no_min_y #{cooling_cap_f_temp_factor_no_min_y}"
+      puts "cooling_cap_f_temp_factor_min_y #{cooling_cap_f_temp_factor_min_y}"
+      puts "htg_cap_w_no_min_y #{htg_cap_w_no_min_y}"
+      puts "htg_cap_w_min_y #{htg_cap_w_min_y}"
+
+      # use actual factor from -8.3 to compute rated heating capacity unless it's < 0
+      if cooling_cap_f_temp_factor_no_min_y>0
+        htg_cap_w = htg_cap_w_no_min_y
+      else
+        htg_cap_w = htg_cap_w_min_y
+      end
+
+      # Hardsize rated capacity of heating coil
+      coil_heating_dx_single_speed.setRatedTotalHeatingCapacity(htg_cap_w)
+
+      return htg_cap_w
+    else # Do not follow NECB reference HP rule; proceed as usual
+      return super
+    end
+  end
+  
+  # NECB reference heat pump system
+  # heating type rules need to be flexible to account for 
+  # 1.  DX htg/cooling + gas supplement htg
+  # 2.  Potential lack of AirLoopHVACUnitaryHeatPumpAirToAir or AirLoopHVACUnitarySystem  
+  def coil_dx_heating_type(coil_dx)
+    supp_htg_type = nil
+    if @reference_hp 
+      if coil_dx.airLoopHVAC.empty?
+        if coil_dx.containingHVACComponent.is_initialized
+          containing_comp = coil_dx.containingHVACComponent.get
+          if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
+            supp_htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplementalHeatingCoil
+            if supp_htg_coil.to_CoilHeatingElectric.is_initialized
+              supp_htg_type = 'Electric Resistance or None'
+            elsif supp_htg_coil.to_CoilHeatingGas.is_initialized or supp_htg_coil.to_CoilHeatingWater.is_initialized
+              supp_htg_type = 'All Other' 
+            else # None
+              supp_htg_type = 'Electric Resistance or None'
+            end
+          else 
+            # For other virtual wrapper, use method in Standard.DXCoil
+            # Or add future wrappers here
+            return super 
+          end
+        end
+
+      elsif coil_dx.airLoopHVAC.is_initialized # Heat pumps without a wrapper (lone DX coils in the air loop)
+        airloop = coil_dx.airLoopHVAC.get
+        num_of_DX_Coils = 0
+        num_of_supp_coils = 0 
+        supp_htg_type = ''
+        # Go through and determine number of each type of coils in air loop to determine supp_htg_type
+        airloop.supplyComponents.each do |supply_component| 
+          if supply_component.to_CoilHeatingDXSingleSpeed.is_initialized or supply_component.to_CoilHeatingDXMultiSpeed.is_initialized
+            supply_component.to_CoilHeatingDXVariableSpeed.is_initialized
+            num_of_DX_Coils = num_of_DX_Coils + 1
+          elsif supply_component.to_CoilCoolingDXSingleSpeed.is_initialized or supply_component.to_CoilCoolingDXTwoSpeed.is_initialized or
+            supply_component.to_CoilCoolingDXTwoSpeed.is_initialized or supply_component.to_CoilCoolingDXVariableSpeed.is_initialized or 
+            supply_component.to_CoilCoolingDXMultiSpeed.is_initialized or
+            supply_component.to_CoilCoolingDXCurveFitPerformance.is_initialized or
+            supply_component.to_CoilCoolingDXTwoStageWithHumidityControlMode.is_initialized
+            num_of_DX_Coils = num_of_DX_Coils + 1
+          elsif supply_component.to_CoilHeatingGas.is_initialized or supply_component.to_CoilHeatingGasMultiStage.is_initialized or 
+            supply_component.to_CoilHeatingWater.is_initialized
+            num_of_supp_coils = num_of_supp_coils + 1
+            supp_htg_type = 'All Other' 
+          elsif supply_component.to_CoilHeatingElectric.is_initialized 
+            num_of_supp_coils = num_of_supp_coils + 1        
+            supp_htg_type = 'Electric Resistance or None'
+          end
+        end
+
+        #Two possible heat pump configuration
+        if num_of_DX_Coils == 2 && num_of_supp_coils == 1 #Scenario 1: 1 DX htg + 1 DX clg + 1 Non-DX htg coil 
+          puts "scenario 1 supp_htg_type #{supp_htg_type}"
+          return supp_htg_type # return supplmental heating type
+        else #Scenario 2: num_of_DX_Coils < 2 or num_of_supp_coils = 0; 
+          puts "scenario 2 supp_htg_type #{supp_htg_type}"
+          puts "num_of_DX_Coils #{num_of_DX_Coils}"
+          puts "num_of_supp_coils #{num_of_supp_coils}"
+          return supp_htg_type = 'Electric Resistance or None' 
+        end
+
+
+
+      end
+    else # Does not follow NECB reference HP rules
+      return super 
+    end
+
+
+  
+  end
 end

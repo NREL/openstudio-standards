@@ -35,6 +35,8 @@ class NECB2011
     system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
     system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference] = 21.0
     system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
+    system_data[:ZoneDXCoolingSizingFactor] = 1.0
+    system_data[:ZoneDXHeatingSizingFactor] = 1.3
     system_data[:ZoneCoolingSizingFactor] = 1.1
     system_data[:ZoneHeatingSizingFactor] = 1.3
 
@@ -72,10 +74,24 @@ class NECB2011
     sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
     sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
     sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
-    sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
-    sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
+    if reference_hp
+      sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneDXCoolingSizingFactor])
+      sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneDXHeatingSizingFactor])
+    else
+      sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
+      sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
+    end
 
-    fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
+    if reference_hp
+      # AirLoopHVACUnitaryHeatPumpAirToAir needs FanOnOff in order for the fan to turn off during off hours
+      fan = OpenStudio::Model::FanOnOff.new(model, always_on)
+    else
+      fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
+    end
+    
+    # Set up DX coil with NECB performance curve characteristics;
+    clg_coil = add_onespeed_DX_coil(model, always_on)
+    clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
 
     if heating_coil_type == 'Electric' # electric coil
       htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
@@ -87,11 +103,6 @@ class NECB2011
     end
 
     # TO DO: other fuel-fired heating coil types? (not available in OpenStudio/E+ - may need to play with efficiency to mimic other fuel types)
-
-    # Set up DX coil with NECB performance curve characteristics;
-
-    clg_coil = add_onespeed_DX_coil(model, always_on)
-    clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
 
     # oa_controller
     oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -107,11 +118,29 @@ class NECB2011
     # Add the components to the air loop
     # in order from closest to zone to furthest from zone
     supply_inlet_node = air_loop.supplyInletNode
-    fan.addToNode(supply_inlet_node)
-    htg_coil.addToNode(supply_inlet_node)
-    clg_coil.addToNode(supply_inlet_node)
+    if reference_hp
+      #create supplemental heating coil based on default regional fuel type
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      primary_heating_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+      if primary_heating_fuel == 'NaturalGas'
+        supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+      elsif primary_heating_fuel == 'Electricity' or  primary_heating_fuel == 'FuelOilNo2'
+        supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+      else #hot water coils is an option in the future
+        raise('Invalid fuel type selected for heat pump supplemental coil')
+      end
+      air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAir.new(model, always_on, fan, htg_coil, clg_coil, supplemental_htg_coil)
+      air_to_air_heatpump.setName("#{control_zone.name} ASHP")
+      air_to_air_heatpump.setControllingZone(control_zone)
+      air_to_air_heatpump.setSupplyAirFanOperatingModeSchedule(always_on)
+      air_to_air_heatpump.addToNode(supply_inlet_node)
+    else    
+      fan.addToNode(supply_inlet_node)
+      htg_coil.addToNode(supply_inlet_node)
+      clg_coil.addToNode(supply_inlet_node)
+      
+    end
     oa_system.addToNode(supply_inlet_node)
-
     # Add a setpoint manager single zone reheat to control the
     # supply air temperature based on the needs of this zone
     setpoint_mgr_single_zone_reheat = OpenStudio::Model::SetpointManagerSingleZoneReheat.new(model)
@@ -141,8 +170,13 @@ class NECB2011
       sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
-      sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
-      sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
+      if reference_hp
+        sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneDXCoolingSizingFactor])
+        sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneDXHeatingSizingFactor])
+      else
+        sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
+        sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
+      end
       # Create a diffuser and attach the zone/diffuser pair to the air loop
       # diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model,always_on)
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)

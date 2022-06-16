@@ -905,6 +905,7 @@ class NECB2011
       when 1
         group_similar_zones_together(sys_zones).each do |curr_zones|
           mau_air_loop = add_sys1_unitary_ac_baseboard_heating(model: model,
+                                                               reference_hp:reference_hp,
                                                                zones: curr_zones,
                                                                mau_type: mau_type,
                                                                mau_heating_coil_type: mau_heating_coil_type,
@@ -924,6 +925,7 @@ class NECB2011
       when 3
         group_similar_zones_together(sys_zones).each do |curr_zones|
           add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
+                                                                                reference_hp:reference_hp,
                                                                                 zones: curr_zones,
                                                                                 heating_coil_type: heating_coil_type_sys3,
                                                                                 baseboard_type: baseboard_type,
@@ -1070,6 +1072,7 @@ class NECB2011
       when 1
         if dwelling_shared_ahu
           add_sys1_unitary_ac_baseboard_heating(model: model,
+                                                reference_hp:reference_hp,
                                                 zones: sys_zones,
                                                 mau_type: mau_type,
                                                 mau_heating_coil_type: mau_heating_coil_type,
@@ -1080,6 +1083,7 @@ class NECB2011
           # Create a separate air loop for each unit.
           sys_zones.each do |zone|
             add_sys1_unitary_ac_baseboard_heating(model: model,
+                                                  reference_hp:reference_hp,
                                                   zones: [zone],
                                                   mau_type: mau_type,
                                                   mau_heating_coil_type: mau_heating_coil_type,
@@ -1092,6 +1096,7 @@ class NECB2011
       when 3
         if dwelling_shared_ahu
           add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
+                                                                                reference_hp:reference_hp,
                                                                                 zones: sys_zones,
                                                                                 heating_coil_type: heating_coil_type_sys3,
                                                                                 baseboard_type: baseboard_type,
@@ -1101,6 +1106,7 @@ class NECB2011
           # Create a separate air loop for each unit.
           sys_zones.each do |zone|
             add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
+                                                                                  reference_hp:reference_hp,
                                                                                   zones: [zone],
                                                                                   heating_coil_type: heating_coil_type_sys3,
                                                                                   baseboard_type: baseboard_type,

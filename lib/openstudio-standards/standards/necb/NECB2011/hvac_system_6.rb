@@ -332,8 +332,9 @@ class NECB2011
     system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference] = 11.0
     system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
     system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference] = 21.0
-    system_data[:ZoneCoolingSizingFactor] = 1.1
-    system_data[:ZoneHeatingSizingFactor] = 1.3
+    system_data[:ZoneDXCoolingSizingFactor] = 1.0
+    system_data[:ZoneDXHeatingSizingFactor] = 1.3
+
 
     always_on = model.alwaysOnDiscreteSchedule
 
@@ -360,7 +361,6 @@ class NECB2011
         # Set mechanical ventilation controller outdoor air to ZoneSum (used to be defaulted to ZoneSum but now should be
         # set explicitly)
         oa_controller.controllerMechanicalVentilation.setSystemOutdoorAirMethod('ZoneSum')
-
         oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
 
         # Add the components to the air loop
@@ -391,15 +391,21 @@ class NECB2011
           sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
           sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
           sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
-          sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
-          sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
+          sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneDXCoolingSizingFactor])
+          sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneDXHeatingSizingFactor])
 
-          cav_terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
-          air_loop.addBranchForZone(zone, cav_terminal.to_StraightComponent)
-          # NECB2011 minimum zone airflow setting
-          vav_terminal.setFixedMinimumAirFlowRate(system_data[:ZoneVAVMinFlowFactorPerFloorArea] * zone.floorArea)
-          vav_terminal.setMaximumReheatAirTemperature(system_data[:ZoneVAVMaxReheatTemp])
-          vav_terminal.setDamperHeatingAction(system_data[:ZoneVAVDamperAction])
+          # Create CAV RH (RH based on region's default fuel type)
+          epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+          primary_heating_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+          if primary_heating_fuel == 'NaturalGas'
+            rh_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+          elsif primary_heating_fuel == 'Electricity' or  primary_heating_fuel == 'FuelOilNo2'
+            rh_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+          else #hot water coils is an option in the future
+            raise('Invalid fuel type selected for heat pump supplemental coil')
+          end
+          cav_rh_terminal = OpenStudio::Model::AirTerminalSingleDuctConstantVolumeReheat.new(model, always_on, rh_coil)
+          air_loop.addBranchForZone(zone, cav_rh_terminal.to_StraightComponent)
 
           # Set zone baseboards
           add_zone_baseboards(model: model,

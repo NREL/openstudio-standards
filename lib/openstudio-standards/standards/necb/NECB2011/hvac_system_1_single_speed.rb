@@ -1,5 +1,6 @@
 class NECB2011
   def add_sys1_unitary_ac_baseboard_heating(model:,
+                                            reference_hp:,
                                             zones:,
                                             mau_type:,
                                             mau_heating_coil_type:,
@@ -15,6 +16,7 @@ class NECB2011
                                                         hw_loop: hw_loop)
     else
       add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
+                                                         reference_hp:reference_hp,
                                                          zones: zones,
                                                          mau_type: mau_type,
                                                          mau_heating_coil_type: mau_heating_coil_type,
@@ -24,6 +26,7 @@ class NECB2011
   end
 
   def add_sys1_unitary_ac_baseboard_heating_single_speed(model:,
+                                                         reference_hp:,
                                                          zones:,
                                                          mau_type:,
                                                          mau_heating_coil_type:,
@@ -57,6 +60,8 @@ class NECB2011
     system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference] = 11.0
     system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
     system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference] = 21.0
+    system_data[:ZoneDXCoolingSizingFactor] = 1.0
+    system_data[:ZoneDXHeatingSizingFactor] = 1.3
     system_data[:ZoneCoolingSizingFactor] = 1.1
     system_data[:ZoneHeatingSizingFactor] = 1.3
 
@@ -74,7 +79,9 @@ class NECB2011
     # mau_heating_coil_type choices are "Hot Water", "Electric"
     # boiler_fueltype choices match OS choices for Boiler component fuel type, i.e.
     # "NaturalGas","Electricity","PropaneGas","FuelOilNo1","FuelOilNo2","Coal","Diesel","Gasoline","OtherFuel1"
-    # System Type 1 - NECB 8.4.4.13 Heat Pump: CAV Packaged rooftop heat pump with zone baseboard (electric or hot water depending on argument baseboard_type)
+    
+    # If reference_hp = true, NECB 8.4.4.13 Heat Pump System Type 1: CAV Packaged rooftop heat pump with 
+    # zone baseboard (electric or hot water depending on argument baseboard_type)
 
     # Some system parameters are set after system is set up; by applying method 'apply_hvac_efficiency_standard'
 
@@ -84,9 +91,19 @@ class NECB2011
     # Create MAU
     # TO DO: MAU sizing, characteristics (fan operation schedules, temperature setpoints, outdoor air, etc)
 
+    # Set up Single Speed DX coil with
+    mau_clg_coil = add_onespeed_DX_coil(model, always_on)
+    mau_clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
+
     if mau_type == true
       mau_air_loop = common_air_loop(model: model, system_data: system_data)
-      mau_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
+
+      if reference_hp
+        # AirLoopHVACUnitaryHeatPumpAirToAir needs FanOnOff in order for the fan to turn off during off hours
+        mau_fan = OpenStudio::Model::FanOnOff.new(model, always_on)        
+      else
+        mau_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
+      end
       # MAU Heating type selection.
       if mau_heating_coil_type == 'Electric' # electric coil
         mau_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
@@ -97,10 +114,6 @@ class NECB2011
         mau_htg_coil = add_onespeed_htg_DX_coil(model, always_on)
         mau_htg_coil.setName('CoilHeatingDXSingleSpeed_dx')
       end
-
-      # Set up Single Speed DX coil with
-      mau_clg_coil = add_onespeed_DX_coil(model, always_on)
-      mau_clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
 
       # Set up OA system
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -115,11 +128,32 @@ class NECB2011
       # Add the components to the air loop
       # in order from closest to zone to furthest from zone
       supply_inlet_node = mau_air_loop.supplyInletNode
-      mau_fan.addToNode(supply_inlet_node)
-      mau_htg_coil.addToNode(supply_inlet_node)
-      mau_clg_coil.addToNode(supply_inlet_node)
-      oa_system.addToNode(supply_inlet_node)
 
+      # Reference HP requires slight changes to default MAU heating
+      if reference_hp
+        # Create supplemental heating coil based on default regional fuel type
+        epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+        primary_heating_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+        if primary_heating_fuel == 'NaturalGas'
+          supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+        elsif primary_heating_fuel == 'Electricity' or  primary_heating_fuel == 'FuelOilNo2'
+          supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+        else #hot water coils is an option in the future
+          raise('Invalid fuel type selected for heat pump supplemental coil')
+        end
+        air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAir.new(model, always_on, mau_fan, mau_htg_coil, mau_clg_coil, supplemental_htg_coil)
+        air_to_air_heatpump.setName("#{control_zone.name} ASHP")
+        air_to_air_heatpump.setControllingZone(control_zone)
+        air_to_air_heatpump.setSupplyAirFanOperatingModeSchedule(always_on)
+        air_to_air_heatpump.addToNode(supply_inlet_node)
+      else
+        mau_fan.addToNode(supply_inlet_node)
+        mau_htg_coil.addToNode(supply_inlet_node)
+        mau_clg_coil.addToNode(supply_inlet_node)
+        
+      end
+      oa_system.addToNode(supply_inlet_node)
+      
       # Add a setpoint manager to control the supply air temperature
       if reference_hp
         setpoint_mgr = OpenStudio::Model::SetpointManagerMultiZoneHeatingAverage.new(model)
@@ -143,8 +177,14 @@ class NECB2011
       sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
-      sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
-      sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
+      # Different sizing factors for reference HP capacity
+      if reference_hp
+        sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneDXCoolingSizingFactor])
+        sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneDXHeatingSizingFactor])
+      else
+        sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
+        sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
+      end
 
       # Create a PTAC for each zone:
       # PTAC DX Cooling with electric heating coil; electric heating coil is always off
@@ -159,6 +199,7 @@ class NECB2011
 
       # htg_coil_elec = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
       zero_outdoor_air = true # flag to set outside air flow to 0.0
+      # Reference HP system does not use PTAC
       unless reference_hp
         add_ptac_dx_cooling(model, zone, zero_outdoor_air)
       end
