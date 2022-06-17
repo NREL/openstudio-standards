@@ -378,9 +378,13 @@ class NECB2011
         # supply air to a constant temperature
         sat_sch = OpenStudio::Model::ScheduleRuleset.new(model)
         sat_sch.setName('Supply Air Temp')
-        sat_sch.defaultDaySchedule.setName('Supply Air Temp Default')
-        sat_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), system_data[:system_supply_air_temperature])
-        sat_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
+        #sat_sch.defaultDaySchedule.setName('Supply Air Temp Default')
+        #sat_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), system_data[:system_supply_air_temperature])
+        #sat_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
+        sat_stpt_manager = OpenStudio::Model::SetpointManagerWarmest.new(model)
+        sat_stpt_manager.setControlVariable("Temperature")
+        sat_stpt_manager.setMinimumSetpointTemperature(13)
+        sat_stpt_manager.setMaximumSetpointTemperature(24)
         sat_stpt_manager.addToNode(supply_outlet_node)
         
         # Make CAV terminals for each zone on this story that is in intersection with the zones array.
