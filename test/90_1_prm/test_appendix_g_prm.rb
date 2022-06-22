@@ -726,7 +726,7 @@ class AppendixGPRMTests < Minitest::Test
           zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
           airloop = zone.airLoopHVAC.get
           # TODO JXL check error and terminate
-          assert(dcv_is_on(zone, airloop))
+          assert(!dcv_is_on(zone, airloop))
 
         when 4
           # test case 4:

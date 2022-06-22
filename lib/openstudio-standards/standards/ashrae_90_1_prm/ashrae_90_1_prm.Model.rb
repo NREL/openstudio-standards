@@ -789,7 +789,7 @@ class ASHRAE901PRM < Standard
     model.getThermalZones.each do |thermal_zone|
       if thermal_zone.additionalProperties.getFeatureAsBoolean('zone dcv required by 901').get &&
          thermal_zone.additionalProperties.getFeatureAsBoolean('airloop dcv required by 901').get &&
-         !thermal_zone.additionalProperties.getFeatureAsBoolean('zone DCV implemented in user model')
+         !thermal_zone.additionalProperties.getFeatureAsBoolean('zone DCV implemented in user model').get
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "For thermal zone #{thermal_zone.name}, ASHRAE 90.1 2019 6.4.3.8 requires this zone to have demand control ventilation, but it was not implemented in the user model, Appendix G baseline generation should be terminated!")
       end
     end
