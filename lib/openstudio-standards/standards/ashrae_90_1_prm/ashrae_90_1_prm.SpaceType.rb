@@ -107,21 +107,22 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # The function will check whether this electric equipment is motor, refrigeration, elevator or generic electric equipment
   # and decide actions based on the equipment types
   #
-  # @param user_data [Hash] user data
+  # @param user_equip_data [Hash] user equipment data
   # @param power_equipment [OpenStudio::Model::ElectricEquipment] equipment
   # @param power_schedule_hash [Hash] equipment operation schedule hash
   # @param space_type [OpenStudio::Model:SpaceType] space type
-  def calculate_electric_value_by_userdata(user_data, power_equipment, power_schedule_hash, space_type)
+  # @param user_space_data [Hash] user space data
+  def calculate_electric_value_by_userdata(user_equip_data, power_equipment, power_schedule_hash, space_type, user_space_data=nil)
     # Check if the plug load represents a motor (check if motorhorsepower exist), if so, record the motor HP and efficiency.
-    if !user_data['motor_horsepower'].nil?
+    if !user_equip_data['motor_horsepower'].nil?
       # Pre-processing will ensure these three user data are added correctly (float, float, boolean)
-      power_equipment.additionalProperties.setFeature('motor_horsepower', user_data['motor_horsepower'].to_f)
-      power_equipment.additionalProperties.setFeature('motor_efficiency', user_data['motor_efficiency'].to_f)
-      power_equipment.additionalProperties.setFeature('motor_is_exempt', user_data['motor_is_exempt'])
-    elsif !(user_data['fraction_of_controlled_receptacles'].nil? && user_data['receptacle_power_savings'].nil?)
+      power_equipment.additionalProperties.setFeature('motor_horsepower', user_equip_data['motor_horsepower'].to_f)
+      power_equipment.additionalProperties.setFeature('motor_efficiency', user_equip_data['motor_efficiency'].to_f)
+      power_equipment.additionalProperties.setFeature('motor_is_exempt', user_equip_data['motor_is_exempt'])
+    elsif !(user_equip_data['fraction_of_controlled_receptacles'].nil? && user_equip_data['receptacle_power_savings'].nil?)
       # If not a motor - update.
       # Update the electric equipment occupancy credit (if it has)
-      update_power_equipment_credits(power_equipment, user_data, power_schedule_hash, space_type.model, user_data)
+      update_power_equipment_credits(power_equipment, user_equip_data, power_schedule_hash, space_type.model, user_space_data)
     else
       # The electric equipment is either an elevator or refrigeration
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ElectricEquipment', "#{power_equipment.name} is an elevator or refrigeration according to the user data provided. Skip receptacle power credit.")
@@ -140,7 +141,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         select_user_electric_equipment_array = user_electric_equipment_data.select { |elec| elec['name'].casecmp(electric_equipment_name) == 0 }
         unless select_user_electric_equipment_array.empty?
           select_user_electric_equipment = select_user_electric_equipment_array[0]
-          update_power_equipment_credits(sp_electric_equipment, select_user_electric_equipment, power_schedule_hash, space_type, nil)
+          calculate_electric_value_by_userdata(select_user_electric_equipment, sp_electric_equipment, power_schedule_hash, space_type, nil)
         end
       end
     elsif user_gas_equipment_data && user_gas_equipment_data.length >= 1
@@ -194,7 +195,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
           select_user_electric_equipment_array = user_electric_equipment_data.select { |elec| elec['name'].casecmp(electric_equipment_name) == 0 }
           unless select_user_electric_equipment_array.empty?
             select_user_electric_equipment = select_user_electric_equipment_array[0]
-            calculate_electric_value_by_userdata(user_space_data, select_user_electric_equipment, power_schedule_hash, space_type)
+            calculate_electric_value_by_userdata(select_user_electric_equipment, sp_electric_equipment, power_schedule_hash, space_type, user_space_data)
           end
         end
       end
