@@ -110,15 +110,11 @@
         ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_ofs_03",[["set_model_building_name", "LargeHotel"], ["remove_transformer", []]]]
     ],
     "dcv": [
-        ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "dcv_userdata_primaryschool",[["remove_transformer", []], ["enable_airloop_dcv", ["Cafeteria_ZN_1_FLR_1 ZN PSZ-AC_2-7"]], ["remove_zone_oa_per_person_spec",["Offices_ZN_1_FLR_1 ZN"]]]]
-//        ["SecondarySchool", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
-//        ["MidriseApartment", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[]],
-//        ["LargeHotel", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []], ["enable_airloop_dcv", []]]],
-//        ["RetailStripmall", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[]],
-//        ["RetailStandalone", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[]],
-//        ["Warehouse", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[]],
-//        ["MediumOffice", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]],
-//        ["SmallOffice", "90.1-2019", "ASHRAE 169-2013-4A", "no_user_data",[]],
-//        ["LargeOffice", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data",[["remove_transformer", []]]]
+        ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "no_user_data", [["remove_transformer", []], ["change_zone_num_ppl", ["Cafeteria_ZN_1_FLR_1 ZN", 400]], ["enable_airloop_dcv", ["Cafeteria_ZN_1_FLR_1 ZN PSZ-AC_2-7"]], ["mark_test_case_no", [1, 8]]]],
+        ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "dcv_userdata_cafeteria_zone_exception", [["remove_transformer", []], ["change_zone_num_ppl", ["Cafeteria_ZN_1_FLR_1 ZN", 400]], ["enable_airloop_dcv", ["Cafeteria_ZN_1_FLR_1 ZN PSZ-AC_2-7"]], ["mark_test_case_no", [2]]]],
+        ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "no_user_data", [["remove_transformer", []], ["change_zone_num_ppl", ["Cafeteria_ZN_1_FLR_1 ZN", 400]], ["enable_airloop_dcv", ["Kitchen_ZN_1_FLR_1 ZN PSZ-AC_1-6"]], ["mark_test_case_no", [3, 7]]]],
+        ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "dcv_userdata_cafeteria_airloop_exception", [["remove_transformer", []], ["change_zone_num_ppl", ["Cafeteria_ZN_1_FLR_1 ZN", 400]], ["mark_test_case_no", [4]]]],
+        ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "no_user_data", [["remove_transformer", []], ["enable_airloop_dcv", ["Cafeteria_ZN_1_FLR_1 ZN PSZ-AC_2-7"]], ["mark_test_case_no", [5]]]],
+        ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "dcv_userdata_cafeteria_zone_exception", [["remove_transformer", []], ["mark_test_case_no", [6]]]]
     ]
 }
