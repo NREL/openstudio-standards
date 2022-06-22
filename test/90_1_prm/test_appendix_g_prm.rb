@@ -334,6 +334,29 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  def check_building_rotation_exception(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+      @test_dir = "#{File.dirname(__FILE__)}/output"
+      mod_str = mod.flatten.join('_') unless mod.empty?
+      model_baseline_file_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final.osm"
+      model_baseline_file_name_90 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final_90.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_90.osm"
+      model_baseline_file_name_180 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final_180.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_180.osm"
+      model_baseline_file_name_270 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final_270.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_270.osm"
+      rotated = File.exist?("#{@test_dir}/#{model_baseline_file_name}") && File.exist?("#{@test_dir}/#{model_baseline_file_name_90}") &&  File.exist?("#{@test_dir}/#{model_baseline_file_name_180}") &&  File.exist?("#{@test_dir}/#{model_baseline_file_name_270}")
+
+      if mod.empty?
+        # test case 1 - rotation
+        assert(rotated == true, 'Small Office with default WWR shall rotate orientations, but it didnt')
+      elsif mod == 'change_wwr_model_0.4_0.4_0.4_0.4'
+        # test case 2 - true
+        assert(rotated == true, 'Small Office with updated WWR (0.4, 0.4, 0.4, 0.4) shall rotate orientations, but it didnt')
+      elsif mod == 'change_wwr_model_0.4_0.4_0.6_0.6'
+        assert(rotated == false, 'Small Office with updated WWR (0.4, 0.4, 0.6, 0.6) do not need to rotate, but it did rotate')
+      end
+    end
+  end
+
   # Check if the IsResidential flag used by the PRM works as intended (i.e. should be false for commercial spaces)
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -2053,6 +2076,23 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # Verify if return air plenums are generated
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_return_air_type(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+
+      if building_type == 'LargeOffice'
+        assert(model.getAirLoopHVACReturnPlenums.length == 3, "The expected return air plenums in the large office baseline model have not been created.")
+      end
+
+      if building_type == 'PrimarySchool'
+        assert(model.getAirLoopHVACReturnPlenums.length == 0, "Return air plenums are being modeled in the primary school baseline model, they are not expected.")
+      end
+    end
+  end
+
   # Add a AirLoopHVACDedicatedOutdoorAirSystem in the model
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
@@ -2207,6 +2247,60 @@ class AppendixGPRMTests < Minitest::Test
         zone_exhaust_fan.addToThermalZone(thermal_zone)
       end
     end
+  end
+
+  # Change fenestration area in a model
+  # This function will remove the fenestration in all orientations and add new windows by defined WWR
+  #
+  # @param [OpenStudio::Model::Model] model
+  # @param [Float] window to wall ratio
+  def change_wwr_model(model, arguments)
+    target_wwr_north = arguments[0]
+    target_wwr_south = arguments[1]
+    target_wwr_east = arguments[2]
+    target_wwr_west = arguments[3]
+
+    model.getSurfaces.each do |ss|
+      # determine orientation
+      space = ss.space.get
+      # Get model object
+      model = ss.model
+      # Calculate azimuth
+      surface_azimuth_rel_space = OpenStudio.convert(ss.azimuth, 'rad', 'deg').get
+      space_dir_rel_north = space.directionofRelativeNorth
+      building_dir_rel_north = model.getBuilding.northAxis
+      surface_abs_azimuth = surface_azimuth_rel_space + space_dir_rel_north + building_dir_rel_north
+      surface_abs_azimuth -= 360.0 until surface_abs_azimuth < 360.0
+
+      unless ss.subSurfaces.empty?
+        # get subsurface construction
+        orig_construction = nil
+        ss.subSurfaces.sort.each do |sub|
+          next unless sub.subSurfaceType == 'FixedWindow' || sub.subSurfaceType=='OperableWindow'
+          orig_construction = sub.construction.get
+          end
+        # remove all existing surfaces
+        ss.subSurfaces.sort.each(&:remove)
+        # Determine the surface's cardinal direction
+        if surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45
+          new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+        elsif surface_abs_azimuth > 315 && surface_abs_azimuth <= 360
+          new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+        elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135
+          new_window = ss.setWindowToWallRatio(target_wwr_east, 0.6, true).get
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+        elsif surface_abs_azimuth > 135 && surface_abs_azimuth <= 225
+          new_window = ss.setWindowToWallRatio(target_wwr_south, 0.6, true).get
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+        elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315
+          new_window = ss.setWindowToWallRatio(target_wwr_west, 0.6, true).get
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+        end
+      end
+    end
+    return model
   end
 
   # Change model to different building type
@@ -2489,6 +2583,7 @@ class AppendixGPRMTests < Minitest::Test
       'f_c_factors',
       'fan_power_credits',
       'lpd_userdata_handling',
+      'building_rotation_check',
       'pe_userdata_handling'
     ]
 
@@ -2525,8 +2620,10 @@ class AppendixGPRMTests < Minitest::Test
     check_multi_lpd_handling(prototypes_base['lpd_userdata_handling']) if tests.include? 'lpd_userdata_handling'
     check_economizer_exception(prototypes_base['economizer_exception']) if tests.include? 'economizer_exception'
     check_power_equipment_handling(prototypes_base['pe_userdata_handling']) if tests.include? 'pe_userdata_handling'
+    check_building_rotation_exception(prototypes_base['building_rotation_check']) if tests.include? 'building_rotation_check'
     check_unenclosed_spaces(prototypes_base['unenclosed_spaces']) if tests.include? 'unenclosed_spaces'
     check_f_c_factors(prototypes_base['f_c_factors']) if tests.include? 'f_c_factors'
     check_fan_power_credits(prototypes_base['fan_power_credits']) if tests.include? 'fan_power_credits'
+    check_return_air_type(prototypes_base['return_air_type']) if tests.include? 'return_air_type'
   end
 end
