@@ -33,56 +33,6 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       end
     end
 
-    # Step 1: Set electric / gas equipment
-    exception_list = ['office - enclosed <= 250 sf', 'conference/meeting/multipurpose', 'copy/print',
-                      'lounge/breakroom - all other', 'lounge/breakroom - healthcare facility', 'classroom/lecture/training - all other',
-                      'classroom/lecture/training - preschool to 12th', 'office - open']
-    unless exception_list.include? space_type.standardsSpaceType.get.downcase
-      # if included in the list, skip the processing, else:
-      # save schedules in a hash in case it is needed for new electric equipment
-      power_schedule_hash = {}
-      # check electric equipment first
-      user_electric_equipment_data = @standards_data.key?('userdata_electric_equipment') ? @standards_data['userdata_electric_equipment'] : nil
-      if user_electric_equipment_data && user_electric_equipment_data.length >= 1
-        space_type_electric_equipments = space_type.electricEquipment
-        space_type_electric_equipments.each do |sp_electric_equipment|
-          electric_equipment_name = sp_electric_equipment.name.get
-          select_user_electric_equipment_array = user_electric_equipment_data.select { |elec| elec['name'].casecmp(electric_equipment_name) == 0 }
-          unless select_user_electric_equipment_array.empty?
-            select_user_electric_equipment = select_user_electric_equipment_array[0]
-            # Check if the plug load represents a motor (check if motorhorsepower exist), if so, record the motor HP and efficiency.
-            if !select_user_electric_equipment['motor_horsepower'].nil?
-              # Pre-processing will ensure these three user data are added correctly (float, float, boolean)
-              sp_electric_equipment.additionalProperties.setFeature('motor_horsepower', select_user_electric_equipment['motor_horsepower'].to_f)
-              sp_electric_equipment.additionalProperties.setFeature('motor_efficiency', select_user_electric_equipment['motor_efficiency'].to_f)
-              sp_electric_equipment.additionalProperties.setFeature('motor_is_exempt', select_user_electric_equipment['motor_is_exempt'])
-            elsif !(select_user_electric_equipment['fraction_of_controlled_receptacles'].nil? && select_user_electric_equipment['receptacle_power_savings'].nil?)
-              # If not a motor - update.
-              # Update the electric equipment occupancy credit (if it has)
-              update_power_equipment_credits(sp_electric_equipment, select_user_electric_equipment, power_schedule_hash, space_type.model)
-            else
-              # The electric equipment is either an elevator or refrigeration
-              OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ElectricEquipment', "#{sp_electric_equipment.name} is an elevator or refrigeration according to the user data provided. Skip receptacle power credit.")
-            end
-          end
-        end
-      end
-      # check gas equipment
-      user_gas_equipment_data = @standards_data.key?('userdata_gas_equipment') ? @standards_data['userdata_gas_equipment'] : nil
-      if user_gas_equipment_data && user_gas_equipment_data.length >= 1
-        space_type_gas_equipments = space_type.gasEquipment
-        space_type_gas_equipments.each do |sp_gas_equipment|
-          gas_equipment_name = sp_gas_equipment.name.get
-          select_user_gas_equipment_array = user_gas_equipment_data.select { |gas| gas['name'].casecmp(gas_equipment_name) == 0 }
-          unless select_user_gas_equipment_array.empty?
-            select_user_gas_equipment = select_user_gas_equipment_array[0]
-            # Update the gas equipment occupancy credit (if it has)
-            update_power_equipment_credits(sp_gas_equipment, select_user_gas_equipment, power_schedule_hash, space_type.model)
-          end
-        end
-      end
-    end
-
     # Pre-process the light instances in the space type
     # Remove all instances but leave one in the space type
     instances = space_type.lights.sort
@@ -109,7 +59,11 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     if user_spaces && user_spaces.length >= 1 && has_user_lpd_values(user_spaces)
       # if space type has user data & data has lighting data for user space
       # call this function to enforce space-space_type one on one relationship
-      space_to_space_type_apply_lighting(user_spaces, user_spacetypes, space_type)
+      new_space_array = space_to_space_type_apply_lighting(user_spaces, user_spacetypes, space_type)
+      # process power equipment with new spaces.
+      space_to_space_type_apply_power_equipment(user_spaces, user_spacetypes, new_space_array)
+      # remove the old space
+      space_type.remove
     else
       if user_spacetypes && user_spacetypes.length >= 1 && has_user_lpd_values(user_spacetypes)
         # if space type has user data & data has lighting data for user space type
@@ -117,11 +71,14 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         if user_space_type_index.nil?
           # cannot find a matched user_spacetype to space_type, use space_type to set LPD
           set_lpd_on_space_type(space_type, user_spaces, user_spacetypes)
+          space_type_apply_power_equipment(space_type)
         else
           user_space_type = user_spacetypes[user_space_type_index]
           # If multiple LPD value exist - then enforce space-space_type one on one relationship
           if has_multi_lpd_values_user_data(user_space_type, space_type)
-            space_to_space_type_apply_lighting(user_spaces, user_spacetypes, space_type)
+            new_space_array = space_to_space_type_apply_lighting(user_spaces, user_spacetypes, space_type)
+            space_to_space_type_apply_power_equipment(user_spaces, user_spacetypes, new_space_array)
+            space_type.remove
           else
             # Process the user_space type data - at this point, we are sure there is no lighting per length
             # So all the LPD should be identical by space
@@ -134,16 +91,153 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
             end
             space_type.lights[0].lightsDefinition.setWattsperSpaceFloorArea(OpenStudio.convert(space_type_lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
           end
+          # process power equipment
+          space_type_apply_power_equipment(space_type)
         end
       else
         # no user data, set space_type LPD
         set_lpd_on_space_type(space_type, user_spaces, user_spacetypes)
+        # process power equipment
+        space_type_apply_power_equipment(space_type)
       end
     end
-
   end
 
-  def update_power_equipment_credits(power_equipment, user_power_equipment, schedule_hash, model)
+  # A function to calculate electric value for an electric equipment.
+  # The function will check whether this electric equipment is motor, refrigeration, elevator or generic electric equipment
+  # and decide actions based on the equipment types
+  #
+  # @param user_data [Hash] user data
+  # @param power_equipment [OpenStudio::Model::ElectricEquipment] equipment
+  # @param power_schedule_hash [Hash] equipment operation schedule hash
+  # @param space_type [OpenStudio::Model:SpaceType] space type
+  def calculate_electric_value_by_userdata(user_data, power_equipment, power_schedule_hash, space_type)
+    # Check if the plug load represents a motor (check if motorhorsepower exist), if so, record the motor HP and efficiency.
+    if !user_data['motor_horsepower'].nil?
+      # Pre-processing will ensure these three user data are added correctly (float, float, boolean)
+      power_equipment.additionalProperties.setFeature('motor_horsepower', user_data['motor_horsepower'].to_f)
+      power_equipment.additionalProperties.setFeature('motor_efficiency', user_data['motor_efficiency'].to_f)
+      power_equipment.additionalProperties.setFeature('motor_is_exempt', user_data['motor_is_exempt'])
+    elsif !(user_data['fraction_of_controlled_receptacles'].nil? && user_data['receptacle_power_savings'].nil?)
+      # If not a motor - update.
+      # Update the electric equipment occupancy credit (if it has)
+      update_power_equipment_credits(power_equipment, user_data, power_schedule_hash, space_type.model, user_data)
+    else
+      # The electric equipment is either an elevator or refrigeration
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ElectricEquipment', "#{power_equipment.name} is an elevator or refrigeration according to the user data provided. Skip receptacle power credit.")
+    end
+  end
+
+  def space_type_apply_power_equipment(space_type)
+    # save schedules in a hash in case it is needed for new electric equipment
+    power_schedule_hash = {}
+    user_electric_equipment_data = @standards_data.key?('userdata_electric_equipment') ? @standards_data['userdata_electric_equipment'] : nil
+    user_gas_equipment_data = @standards_data.key?('userdata_gas_equipment') ? @standards_data['userdata_gas_equipment'] : nil
+    if user_electric_equipment_data && user_electric_equipment_data.length >= 1
+      space_type_electric_equipments = space_type.electricEquipment
+      space_type_electric_equipments.each do |sp_electric_equipment|
+        electric_equipment_name = sp_electric_equipment.name.get
+        select_user_electric_equipment_array = user_electric_equipment_data.select { |elec| elec['name'].casecmp(electric_equipment_name) == 0 }
+        unless select_user_electric_equipment_array.empty?
+          select_user_electric_equipment = select_user_electric_equipment_array[0]
+          update_power_equipment_credits(sp_electric_equipment, select_user_electric_equipment, power_schedule_hash, space_type, nil)
+        end
+      end
+    elsif user_gas_equipment_data && user_gas_equipment_data.length >= 1
+      space_type_gas_equipments = space_type.gasEquipment
+      space_type_gas_equipments.each do |sp_gas_equipment|
+        gas_equipment_name = sp_gas_equipment.name.get
+        select_user_gas_equipment_array = user_gas_equipment_data.select { |gas| gas['name'].casecmp(gas_equipment_name) == 0 }
+        unless select_user_gas_equipment_array.empty?
+          select_user_gas_equipment = select_user_gas_equipment_array[0]
+          # Update the gas equipment occupancy credit (if it has)
+          update_power_equipment_credits(sp_gas_equipment, select_user_gas_equipment, power_schedule_hash, space_type.model, nil)
+        end
+      end
+    end
+  end
+
+  # Apply space to space type power equipment adjustment.
+  # NOTE! this function shall only be used if the space to space type is one to one relationship.
+  # This function can process both electric equipment and gas equipment
+  # and this function will process user data from electric equipment and gas equipment user data
+  #
+  # @param user_spacetypes [Hash] spacetype user data
+  # @param user_spaces [Hash] space user data
+  # @param space_array [OpenStudio::Model:Space] list of spaces need for process
+  def space_to_space_type_apply_power_equipment(user_spacetypes, user_spaces, space_array)
+    # Step 1: Set electric / gas equipment
+    # save schedules in a hash in case it is needed for new electric equipment
+    power_schedule_hash = {}
+    # check if electric equipment data is available.
+    user_electric_equipment_data = @standards_data.key?('userdata_electric_equipment') ? @standards_data['userdata_electric_equipment'] : nil
+    user_gas_equipment_data = @standards_data.key?('userdata_gas_equipment') ? @standards_data['userdata_gas_equipment'] : nil
+    if user_electric_equipment_data && user_electric_equipment_data.length >= 1
+      space_array.each do |space|
+        # Each space has a unique space type
+        space_type = space.spaceType.get
+        user_spacestypes_index = user_spacetypes.index { |user_spacetype| user_spacetype['name'] == space_type.name.get }
+        user_space_index = user_spaces.index { |user_space| user_space['name'] == space.name.get }
+        # Initialize with standard space_type
+        user_space_data = space_type.name.get
+        unless user_spacestypes_index.nil?
+          # override with user space type if specified
+          user_space_data = user_spacetypes[user_spacestypes_index]
+        end
+        unless user_space_index.nil?
+          # override with user space if specified
+          user_space_data = user_spaces[user_space_index]
+        end
+        space_type_electric_equipments = space_type.electricEquipment
+        space_type_electric_equipments.each do |sp_electric_equipment|
+          electric_equipment_name = sp_electric_equipment.name.get
+          select_user_electric_equipment_array = user_electric_equipment_data.select { |elec| elec['name'].casecmp(electric_equipment_name) == 0 }
+          unless select_user_electric_equipment_array.empty?
+            select_user_electric_equipment = select_user_electric_equipment_array[0]
+            calculate_electric_value_by_userdata(user_space_data, select_user_electric_equipment, power_schedule_hash, space_type)
+          end
+        end
+      end
+    elsif user_gas_equipment_data && user_gas_equipment_data.length >= 1
+      space_array.each do |space|
+        space_type = space.spaceType.get
+        user_spacestypes_index = user_spacetypes.index { |user_spacetype| user_spacetype['name'] == space_type.name.get }
+        user_space_index = user_spaces.index { |user_space| user_space['name'] == space.name.get }
+        user_space_data = space_type.name.get
+        unless user_spacestypes_index.nil?
+          user_space_data = user_spacetypes[user_spacestypes_index]
+        end
+        unless user_space_index.nil?
+          user_space_data = user_spaces[user_space_index]
+        end
+        space_type_gas_equipments = space_type.gasEquipment
+        space_type_gas_equipments.each do |sp_gas_equipment|
+          gas_equipment_name = sp_gas_equipment.name.get
+          select_user_gas_equipment_array = user_gas_equipment_data.select { |gas| gas['name'].casecmp(gas_equipment_name) == 0 }
+          unless select_user_gas_equipment_array.empty?
+            select_user_gas_equipment = select_user_gas_equipment_array[0]
+            # Update the gas equipment occupancy credit (if it has)
+            update_power_equipment_credits(sp_gas_equipment, select_user_gas_equipment, power_schedule_hash, space_type.model, user_space_data)
+          end
+        end
+      end
+    end
+  end
+
+  # Function update a power equipment schedule based on user data.
+  # This function works with both electric equipment and gas equipment and applies the ruleset on power equipment
+  # The function process user data including the fraction of controlled receptacles and receptacle power savings.
+  #
+  # @parma power_equipment [OpenStudio::Model::ElectricEquipment] or [OpenStudio::Model:GasEquipment]
+  # @param user_power_equipment [Hash] user data for the power equipment
+  # @param schedule_hash [Hash] power equipment operation schedules in a hash
+  # @param space_type [OpenStudio::Model:SpaceType] space type
+  # @param user_data [Hash] user space data
+  def update_power_equipment_credits(power_equipment, user_power_equipment, schedule_hash, space_type, user_data = nil)
+    exception_list = ['office - enclosed <= 250 sf', 'conference/meeting/multipurpose', 'copy/print',
+                      'lounge/breakroom - all other', 'lounge/breakroom - healthcare facility', 'classroom/lecture/training - all other',
+                      'classroom/lecture/training - preschool to 12th', 'office - open']
+
     receptacle_power_credits = 0.0
     # Check fraction_of_controlled_receptacles or receptacle_power_savings exist
     if user_power_equipment.key?('fraction_of_controlled_receptacles') && !user_power_equipment['fraction_of_controlled_receptacles'].nil?
@@ -154,6 +248,34 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       receptacle_power_credits = user_power_equipment['receptacle_power_savings'].to_f
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ElectricEquipment', "#{power_equipment.name.get} has a user specified receptacle power saving credit #{receptacle_power_credits}. The modeler needs to make sure the credit is approved by a rating authority per Table G3.1 section 12.")
     end
+
+    # process user space data
+    if user_data
+      if user_data.key?('num_std_ltg_types') && user_data['num_std_ltg_types'].to_f > 0
+        adjusted_receptacle_power_credits = 0.0
+        num_std_space_types = user_data['num_std_ltg_types'].to_i
+        std_space_index = 0 # loop index
+        # Loop through standard lighting type in a space
+        while std_space_index < num_std_space_types
+          # Retrieve data from user_data
+          type_key = format('std_ltg_type%02d', (std_space_index + 1))
+          frac_key = format('std_ltg_type_frac%02d', (std_space_index + 1))
+          sub_space_type = user_data[type_key]
+          next if exception_list.include?(sub_space_type)
+
+          adjusted_receptacle_power_credits = user_data[frac_key].to_f * receptacle_power_credits
+          # Adjust while loop condition factors
+          std_ltg_index += 1
+        end
+        receptacle_power_credits = adjusted_receptacle_power_credits
+      end
+    else
+      if exception_list.include?(space_type.name.get)
+        # the space type is in the exception list, no credit to the space type
+        receptacle_power_credits = 0.0
+      end
+    end
+
     # Step 2: check if need to adjust the electric equipment schedule. - apply credit if needed.
     if receptacle_power_credits > 0.0
       # get current schedule
@@ -167,7 +289,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       else
         # In this case, create a new schedule
         # 1. Clone the existing schedule
-        new_rule_set_schedule = deep_copy_schedule(new_power_schedule_name, power_schedule, receptacle_power_credits, model)
+        new_rule_set_schedule = deep_copy_schedule(new_power_schedule_name, power_schedule, receptacle_power_credits, space_type.model)
         if power_equipment.setSchedule(new_rule_set_schedule)
           schedule_hash[new_power_schedule_name] = new_rule_set_schedule
         end
@@ -243,6 +365,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     end
     # All space is explored.
     # Now rewrite the space type in each space - might need to change the logic
+    space_array = []
     space_type.spaces.each do |space|
       space_name = space.name.get
       new_space_type = space_type.clone.to_SpaceType.get
@@ -257,8 +380,9 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set LPD to #{lighting_per_area} W/ft^2.")
         end
       end
+      space_array.push(space)
     end
-    space_type.remove
+    return space_array
   end
 
   # Modify the lighting schedules for Appendix G PRM for 2016 and later
@@ -293,7 +417,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   end
 
   def deep_copy_schedule(new_schedule_name, schedule, adjustment_factor, model)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.ScheduleRuleset', "Creating a new lighting schedule that applies occupancy sensor adjustment factor: #{adjustment_factor} based on #{schedule.name.get} schedule" )
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.ScheduleRuleset', "Creating a new lighting schedule that applies occupancy sensor adjustment factor: #{adjustment_factor} based on #{schedule.name.get} schedule")
     ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
     ruleset.setName(new_schedule_name)
 
