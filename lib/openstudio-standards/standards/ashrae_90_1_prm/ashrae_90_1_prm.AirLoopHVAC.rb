@@ -269,13 +269,14 @@ class ASHRAE901PRM < Standard
 
     # code block below is from superclass
     if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
-      oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
-      controller_oa = oa_system.getControllerOutdoorAir
-      if controller_oa.minimumOutdoorAirFlowRate.is_initialized
-        oa_flow_m3_per_s = controller_oa.minimumOutdoorAirFlowRate.get
-      elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
-        oa_flow_m3_per_s = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
-      end
+      oa_flow_m3_per_s = get_airloop_hvac_design_oa_from_sql(air_loop_hvac)
+      # oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+      # controller_oa = oa_system.getControllerOutdoorAir
+      # if controller_oa.minimumOutdoorAirFlowRate.is_initialized
+      #   oa_flow_m3_per_s = controller_oa.minimumOutdoorAirFlowRate.get
+      # elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
+      #   oa_flow_m3_per_s = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
+      # end
     else
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, DCV not applicable because it has no OA intake.")
       return false
@@ -341,5 +342,17 @@ class ASHRAE901PRM < Standard
       end
     end
     return false
+  end
+
+  def get_airloop_hvac_design_oa_from_sql(air_loop_hvac)
+    return false unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+
+    cooling_oa = air_loop_hvac.model.sqlFile().get().execAndReturnFirstDouble(
+      "SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName = 'System Ventilation Requirements for Cooling' AND ColumnName LIKE 'Outdoor Air Intake Flow%Vot' AND RowName='#{air_loop_hvac.name.to_s.upcase}'"
+    )
+    heating_oa = air_loop_hvac.model.sqlFile().get().execAndReturnFirstDouble(
+      "SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName = 'System Ventilation Requirements for Heating' AND ColumnName LIKE 'Outdoor Air Intake Flow%Vot' AND RowName='#{air_loop_hvac.name.to_s.upcase}'"
+    )
+    return [cooling_oa.to_f, heating_oa.to_f].max
   end
 end

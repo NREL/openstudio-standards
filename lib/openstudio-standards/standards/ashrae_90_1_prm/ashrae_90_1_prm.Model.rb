@@ -800,13 +800,14 @@ class ASHRAE901PRM < Standard
   def model_add_apxg_dcv_properties(model)
     model.getAirLoopHVACs.each do |air_loop_hvac|
       if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
-        oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
-        controller_oa = oa_system.getControllerOutdoorAir
-        if controller_oa.minimumOutdoorAirFlowRate.is_initialized
-          oa_flow_m3_per_s = controller_oa.minimumOutdoorAirFlowRate.get
-        elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
-          oa_flow_m3_per_s = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
-        end
+        oa_flow_m3_per_s = get_airloop_hvac_design_oa_from_sql(air_loop_hvac)
+        # oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+        # controller_oa = oa_system.getControllerOutdoorAir
+        # if controller_oa.minimumOutdoorAirFlowRate.is_initialized
+        #   oa_flow_m3_per_s = controller_oa.minimumOutdoorAirFlowRate.get
+        # elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
+        #   oa_flow_m3_per_s = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
+        # end
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, DCV not applicable because it has no OA intake.")
         return false
@@ -841,7 +842,7 @@ class ASHRAE901PRM < Standard
     model.getAirLoopHVACs.each do |air_loop_hvac|
       if baseline_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
         air_loop_hvac_enable_demand_control_ventilation(air_loop_hvac, climate_zone)
-        air_loop_hvac.thermalZone.sort.each do |zone|
+        air_loop_hvac.thermalZones.sort.each do |zone|
           unless baseline_thermal_zone_demand_control_ventilation_required?(zone)
             thermal_zone_convert_oa_req_to_per_area(zone)
           end
