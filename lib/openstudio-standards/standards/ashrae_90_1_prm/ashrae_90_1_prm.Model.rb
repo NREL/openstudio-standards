@@ -783,10 +783,16 @@ class ASHRAE901PRM < Standard
   end
 
 
-  # based on previously added flag, raise warning if DCV is required but not implemented in zones, in which case
-  # baseline generation will be terminated
+  # based on previously added flag, raise error if DCV is required but not implemented in zones, in which case
+  # baseline generation will be terminated; raise warning if DCV is not required but implemented, and continue baseline
+  # generation
   def model_raise_user_model_dcv_errors(model)
     model.getThermalZones.each do |thermal_zone|
+      if thermal_zone.additionalProperties.getFeatureAsBoolean('zone DCV implemented in user model').get &&
+        (!thermal_zone.additionalProperties.getFeatureAsBoolean('zone dcv required by 901').get ||
+          !thermal_zone.additionalProperties.getFeatureAsBoolean('airloop dcv required by 901').get)
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "For thermal zone #{thermal_zone.name}, ASHRAE 90.1 2019 6.4.3.8 does NOT require this zone to have demand control ventilation, but it was implemented in the user model, Appendix G baseline generation will continue!")
+      end
       if thermal_zone.additionalProperties.getFeatureAsBoolean('zone dcv required by 901').get &&
          thermal_zone.additionalProperties.getFeatureAsBoolean('airloop dcv required by 901').get &&
          !thermal_zone.additionalProperties.getFeatureAsBoolean('zone DCV implemented in user model').get
