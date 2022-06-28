@@ -32,8 +32,8 @@ class Standard
   # @return [Bool] returns true if successful, false if not
 
   # Method used for 90.1-2016 and onward
-  def model_create_prm_stable_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = true, debug = false)
-    model_create_prm_any_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, true, custom, sizing_run_dir, run_all_orients, debug)
+  def model_create_prm_stable_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = true, unmet_load_hours_check = true, debug = false)
+    model_create_prm_any_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, true, custom, sizing_run_dir, run_all_orients, unmet_load_hours_check, debug)
   end
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
@@ -46,7 +46,7 @@ class Standard
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param debug [Boolean] If true, will report out more detailed debugging output
   def model_create_prm_baseline_building(model, building_type, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
-    model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', false, custom, sizing_run_dir, false, debug)
+    model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', false, custom, sizing_run_dir, false, false, debug)
   end
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
@@ -67,11 +67,24 @@ class Standard
   # @param run_all_orients [Boolean] indicate weather a baseline model should be created for all 4 orientations: same as user model, +90 deg, +180 deg, +270 deg
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
-  def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, debug = false)
-    # user data process
+  def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+    # Check proposed model unmet load hours
+    if unmet_load_hours_check
+      # Run proposed model
+      if model_run_simulation_and_log_errors(user_model, run_dir = "#{sizing_run_dir}/PROP")
+        umlh = model_get_unmet_load_hours(user_model)
+        if umlh > 300
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created.")
+          raise "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created."
+        end
+      end
+    end
+
+    # User data process
+    # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
     bldg_type_hvac_zone_hash = {}
     handle_user_input_data(user_model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
-    # NOTE - bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
+
     # Define different orientation from original orientation
     # for each individual baseline models
     degs_from_org = run_all_orientations(run_all_orients, user_model) ? [0, 90, 180, 270] : [0]
@@ -122,7 +135,7 @@ class Standard
         end
 
         # Run the sizing run
-        if model_run_sizing_run(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
+        if model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
           return false
         end
 
@@ -456,6 +469,56 @@ class Standard
       idf = forward_translator.translateModel(model)
       idf_path = OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.idf")
       idf.save(idf_path, true)
+
+      # Check unmet load hours
+      if unmet_load_hours_check
+        loop do
+          model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}") == false
+          # If UMLH are greater than the threshold allowed by Appendix G,
+          # increase zone air flow and load as per the recommendation in
+          # the PRM-RM; Note that the PRM-RM only suggest to increase
+          # air zone air flow, but the zone sizing factor in EnergyPlus
+          # increase both air flow and load.
+          if model_get_unmet_load_hours(model) > 300
+            model.getThermalZones.each do |thermal_zone|
+              clg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Cooling')
+              if clg_umlh > 150
+                if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
+                  sizing_factor = thermal_zone.sizingZone.zoneCoolingSizingFactor.get * 1.1
+                else
+                  sizing_factor = 1.1
+                end
+                thermal_zone.sizingZone.setZoneCoolingSizingFactor(sizing_factor)
+              elsif clg_umlh > 50
+                if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
+                  sizing_factor = thermal_zone.sizingZone.zoneCoolingSizingFactor.get * 1.05
+                else
+                  sizing_factor = 1.05
+                end
+                thermal_zone.sizingZone.setZoneCoolingSizingFactor(sizing_factor)
+              end
+              htg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Heating')
+              if htg_umlh > 150
+                if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized
+                  sizing_factor = thermal_zone.sizingZone.zoneHeatingSizingFactor.get * 1.1
+                else
+                  sizing_factor = 1.1
+                end
+                thermal_zone.sizingZone.setZoneHeatingSizingFactor(sizing_factor)
+              elsif htg_umlh > 50
+                if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized
+                  sizing_factor = thermal_zone.sizingZone.zoneHeatingSizingFactor.get * 1.05
+                else
+                  sizing_factor = 1.05
+                end
+                thermal_zone.sizingZone.setZoneHeatingSizingFactor(sizing_factor)
+              end
+            end
+          else
+            break
+          end
+        end
+      end
     end
     return true
   end
@@ -6714,6 +6777,46 @@ class Standard
     return parametric_schedules
   end
 
+  # Get the total unmet load hours during occupancy of a model that has been simulated
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Float] returns the number of total unmet load hours during occupancy in a simulated model
+  def model_get_unmet_load_hours(model)
+    result = OpenStudio::OptionalDouble.new
+    sql = model.sqlFile
+    if sql.is_initialized
+      sql = sql.get
+      query = "SELECT Value
+              FROM tabulardatawithstrings
+              WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
+              AND ReportForString='Entire Facility'
+              AND TableName='Comfort and Setpoint Not Met Summary'
+              AND ColumnName='Facility'
+              AND RowName='Time Setpoint Not Met During Occupied Heating'
+              AND Units='Hours'"
+      val = sql.execAndReturnFirstDouble(query)
+      if val.is_initialized
+        result = OpenStudio::OptionalDouble.new(val.get).to_f
+      end
+      query = "SELECT Value
+              FROM tabulardatawithstrings
+              WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
+              AND ReportForString='Entire Facility'
+              AND TableName='Comfort and Setpoint Not Met Summary'
+              AND ColumnName='Facility'
+              AND RowName='Time Setpoint Not Met During Occupied Cooling'
+              AND Units='Hours'"
+      val = sql.execAndReturnFirstDouble(query)
+      if val.is_initialized
+        result += OpenStudio::OptionalDouble.new(val.get).to_f
+      end
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has no sql file containing results, cannot lookup data.')
+    end
+
+    return result
+  end
+
   private
 
   # Helper method to fill in hourly values
@@ -6852,7 +6955,7 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio Model object
   # @param degs [Integer] Degress of rotation from original position
   #
-  # @return [OpenStudio::Model::Model] OpenStudio Model objecty
+  # @return [OpenStudio::Model::Model] OpenStudio Model object
   def model_rotate(model, degs)
     building = model.getBuilding
     org_north_axis = building.northAxis
