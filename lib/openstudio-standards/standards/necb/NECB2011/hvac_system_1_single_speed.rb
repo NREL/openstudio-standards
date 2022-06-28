@@ -52,7 +52,11 @@ class NECB2011
     system_data[:CentralHeatingDesignSupplyAirTemperature] = 43.0
     system_data[:AllOutdoorAirinCooling] = true
     system_data[:AllOutdoorAirinHeating] = true
-    system_data[:TypeofLoadtoSizeOn] = 'VentilationRequirement'
+    if reference_hp
+      system_data[:TypeofLoadtoSizeOn] = 'Total'
+    else
+      system_data[:TypeofLoadtoSizeOn] = 'VentilationRequirement'
+    end
     system_data[:MinimumSystemAirFlowRatio] = 1.0
     # Zone Sizing data
     system_data[:system_supply_air_temperature] = 20.0
@@ -98,12 +102,12 @@ class NECB2011
     if mau_type == true
       mau_air_loop = common_air_loop(model: model, system_data: system_data)
 
-      if reference_hp
+      #if reference_hp
         # AirLoopHVACUnitaryHeatPumpAirToAir needs FanOnOff in order for the fan to turn off during off hours
-        mau_fan = OpenStudio::Model::FanOnOff.new(model, always_on)        
-      else
+      #  mau_fan = OpenStudio::Model::FanOnOff.new(model, always_on)        
+      #else
         mau_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
-      end
+      #end
       # MAU Heating type selection.
       if mau_heating_coil_type == 'Electric' # electric coil
         mau_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
@@ -130,35 +134,35 @@ class NECB2011
       supply_inlet_node = mau_air_loop.supplyInletNode
 
       # Reference HP requires slight changes to default MAU heating
-      if reference_hp
+      #if reference_hp
         # Create supplemental heating coil based on default regional fuel type
-        epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-        primary_heating_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
-        if primary_heating_fuel == 'NaturalGas'
-          supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
-        elsif primary_heating_fuel == 'Electricity' or  primary_heating_fuel == 'FuelOilNo2'
-          supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-        else #hot water coils is an option in the future
-          raise('Invalid fuel type selected for heat pump supplemental coil')
-        end
-        air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAir.new(model, always_on, mau_fan, mau_htg_coil, mau_clg_coil, supplemental_htg_coil)
-        air_to_air_heatpump.setName("#{control_zone.name} ASHP")
-        air_to_air_heatpump.setControllingZone(control_zone)
-        air_to_air_heatpump.setSupplyAirFanOperatingModeSchedule(always_on)
-        air_to_air_heatpump.addToNode(supply_inlet_node)
-      else
+        #epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+        #primary_heating_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+        #if primary_heating_fuel == 'NaturalGas'
+        #  supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+        #elsif primary_heating_fuel == 'Electricity' or  primary_heating_fuel == 'FuelOilNo2'
+        #  supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+        #else #hot water coils is an option in the future
+        #  raise('Invalid fuel type selected for heat pump supplemental coil')
+        #end
+        #air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAir.new(model, always_on, mau_fan, mau_htg_coil, mau_clg_coil, supplemental_htg_coil)
+        #air_to_air_heatpump.setName("#{control_zone.name} ASHP")
+        #air_to_air_heatpump.setControllingZone(control_zone)
+        #air_to_air_heatpump.setSupplyAirFanOperatingModeSchedule(always_on)
+        #air_to_air_heatpump.addToNode(supply_inlet_node)
+      #else
         mau_fan.addToNode(supply_inlet_node)
         mau_htg_coil.addToNode(supply_inlet_node)
         mau_clg_coil.addToNode(supply_inlet_node)
         
-      end
+      #end
       oa_system.addToNode(supply_inlet_node)
       
       # Add a setpoint manager to control the supply air temperature
       if reference_hp
-        setpoint_mgr = OpenStudio::Model::SetpointManagerMultiZoneHeatingAverage.new(model)
+        setpoint_mgr = OpenStudio::Model::SetpointManagerWarmest.new(model)
         setpoint_mgr.setMinimumSetpointTemperature(13)
-        setpoint_mgr.setMaximumSetpointTemperature(40)
+        setpoint_mgr.setMaximumSetpointTemperature(20)
         setpoint_mgr.addToNode(mau_air_loop.supplyOutletNode)
       else
         sat_sch = OpenStudio::Model::ScheduleRuleset.new(model)
@@ -211,7 +215,21 @@ class NECB2011
                           zone: zone)
 
       #  # Create a diffuser and attach the zone/diffuser pair to the MAU air loop, if applicable
-      if mau_type == true
+      
+      if reference_hp 
+        # Create CAV RH (RH based on region's default fuel type)
+        epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+        primary_heating_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+        if primary_heating_fuel == 'NaturalGas'
+          rh_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+        elsif primary_heating_fuel == 'Electricity' or  primary_heating_fuel == 'FuelOilNo2'
+          rh_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+        else #hot water coils is an option in the future
+          raise('Invalid fuel type selected for heat pump supplemental coil')
+        end
+        cav_rh_terminal = OpenStudio::Model::AirTerminalSingleDuctConstantVolumeReheat.new(model, always_on, rh_coil)
+        mau_air_loop.addBranchForZone(zone, cav_rh_terminal.to_StraightComponent)
+      elsif mau_type == true
         diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
         mau_air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
         # components for MAU

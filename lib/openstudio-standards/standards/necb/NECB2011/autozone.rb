@@ -1048,9 +1048,9 @@ class NECB2011
 
     system_zones_hash = {}
     # Determine if dwelling units have a shared AHU.  If user entered building stories > 4 then set to true.
-    if baseline_system_zones_map_option == 'one_sys_per_dwelling_unit'
+    if baseline_system_zones_map_option == 'one_sys_per_dwelling_unit' 
       dwelling_shared_ahu = false
-    elsif baseline_system_zones_map_option == 'one_sys_per_bldg' || baseline_system_zones_map_option == 'NECB_Default' || baseline_system_zones_map_option == 'none' || baseline_system_zones_map_option == nil || reference_hp
+    elsif baseline_system_zones_map_option == 'one_sys_per_bldg' || baseline_system_zones_map_otion == 'NECB_Default' || baseline_system_zones_map_option == 'none' || baseline_system_zones_map_option == nil || reference_hp
       dwelling_shared_ahu = true
     end
     # store dwelling zones into array
