@@ -32,6 +32,10 @@ class AppendixGPRMTests < Minitest::Test
       # mod is an array of method intended to modify the model
       building_type, template, climate_zone, user_data_dir, mod = prototype
 
+      climate_zone_code = climate_zone.split('-')[-1]
+      assert(building_type != 'LargeOffice' || ['0A', '0B', '1A', '1B', '2A', '2B'].include?(climate_zone_code), "Baseline model cannot be generated for #{building_type} in climate zone: #{climate_zone}. Due to a known problem with sizing of heating system for data center (which has zero heating load), the large office model fails in mild to cold climates (CZ 3 and higher). Use climate zone 0, 1 or 2 instead")
+
+
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join('_') unless mod.empty?
 
@@ -46,7 +50,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # Define model name and run folder if it doesn't already exist,
       # if it does, remove it and re-create it.
-      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
+      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod_str}"
       run_dir = "#{@test_dir}/#{model_name}"
       if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
@@ -113,7 +117,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # user data CSV files are in @user_data_dir, if appicable
       # user data JSON files will be created in sub-folder inside @test_dir
-      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}"
+      model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod_str}"
       proto_run_dir = "#{@test_dir}/#{model_name}"
 
       if not user_data_dir == 'no_user_data'
@@ -187,7 +191,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # Load newly generated baseline model
       @test_dir = "#{File.dirname(__FILE__)}/output"
-      model_baseline_file_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-Baseline/final.osm" : "#{building_type}-#{template}-#{climate_zone}-#{mod_str}-Baseline/final.osm"
+      model_baseline_file_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod_str}-Baseline/final.osm"
       model_baseline = OpenStudio::Model::Model.load("#{@test_dir}/#{model_baseline_file_name}")
       model_baseline = model_baseline.get
 
@@ -330,6 +334,29 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  def check_building_rotation_exception(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+      @test_dir = "#{File.dirname(__FILE__)}/output"
+      mod_str = mod.flatten.join('_') unless mod.empty?
+      model_baseline_file_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final.osm"
+      model_baseline_file_name_90 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final_90.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_90.osm"
+      model_baseline_file_name_180 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final_180.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_180.osm"
+      model_baseline_file_name_270 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final_270.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_270.osm"
+      rotated = File.exist?("#{@test_dir}/#{model_baseline_file_name}") && File.exist?("#{@test_dir}/#{model_baseline_file_name_90}") &&  File.exist?("#{@test_dir}/#{model_baseline_file_name_180}") &&  File.exist?("#{@test_dir}/#{model_baseline_file_name_270}")
+
+      if mod.empty?
+        # test case 1 - rotation
+        assert(rotated == true, 'Small Office with default WWR shall rotate orientations, but it didnt')
+      elsif mod == 'change_wwr_model_0.4_0.4_0.4_0.4'
+        # test case 2 - true
+        assert(rotated == true, 'Small Office with updated WWR (0.4, 0.4, 0.4, 0.4) shall rotate orientations, but it didnt')
+      elsif mod == 'change_wwr_model_0.4_0.4_0.6_0.6'
+        assert(rotated == false, 'Small Office with updated WWR (0.4, 0.4, 0.6, 0.6) do not need to rotate, but it did rotate')
+      end
+    end
+  end
+
   # Check if the IsResidential flag used by the PRM works as intended (i.e. should be false for commercial spaces)
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -366,6 +393,7 @@ class AppendixGPRMTests < Minitest::Test
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
 
       opaque_exterior_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['opaque_exterior_name']
+      opaque_interior_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['opaque_interior_name']
       exterior_fenestration_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['exterior_fenestration_name']
       exterior_door_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['exterior_door_name']
 
@@ -375,6 +403,14 @@ class AppendixGPRMTests < Minitest::Test
       opaque_exterior_name.each do |val|
         u_value_baseline[val[0]] = run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Exterior', val[0], 'U-Factor with Film', 'W/m2-K').to_f
         construction_baseline[val[0]] = run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Exterior', val[0], 'Construction', '').to_s
+      end
+      # @todo: we've identified an issue with the r-value for air film in EnergyPlus for semi-exterior surfaces:
+      # https://github.com/NREL/EnergyPlus/issues/9470
+      # todos were added in film_coefficients_r_value() since this is just a reporting issue, we're checking the
+      # no film u-value for opaque interior surfaces
+      opaque_interior_name.each do |val|
+        u_value_baseline[val[0]] = run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Interior', val[0], 'U-Factor no Film', 'W/m2-K').to_f
+        construction_baseline[val[0]] = run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Interior', val[0], 'Construction', '').to_s
       end
       exterior_fenestration_name.each do |val|
         u_value_baseline[val[0]] = run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Exterior Fenestration', val[0], 'Glass U-Factor', 'W/m2-K').to_f
@@ -386,12 +422,57 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # Check U-value against expected U-value
-      u_value_goal = opaque_exterior_name + exterior_fenestration_name + exterior_door_name
+      u_value_goal = opaque_exterior_name + opaque_interior_name + exterior_fenestration_name + exterior_door_name
       u_value_goal.each do |key, value|
         value_si = OpenStudio.convert(value, 'Btu/ft^2*hr*R', 'W/m^2*K').get
-        assert(((u_value_baseline[key] - value_si).abs < 0.001 || (u_value_baseline[key] - 5.835).abs < 0.01), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si}.")
+        assert(((u_value_baseline[key] - value_si).abs < 0.001 || (u_value_baseline[key] - 5.835).abs < 0.01), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si.round(3)}.")
         if key != 'PERIMETER_ZN_3_WALL_NORTH_DOOR1'
           assert((construction_baseline[key].include? 'PRM'), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
+        end
+      end
+    end
+  end
+
+  # Implement multiple LPD handling from userdata by space, space type and default space_type
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_multi_lpd_handling(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+      if user_data_dir == 'no_user_data'
+        sub_prototypes_base = {}
+        sub_prototypes_base[prototype] = model_baseline
+        check_lpd(sub_prototypes_base)
+      else
+        if user_data_dir == 'userdata_lpd_01'
+          space_name_to_lpd_target = {}
+          space_name_to_lpd_target['Attic'] =15.06948107
+          space_name_to_lpd_target['Perimeter_ZN_2'] =14.83267494
+          space_name_to_lpd_target['Perimeter_ZN_1'] =15.26323154
+          space_name_to_lpd_target['Perimeter_ZN_4'] =12.91669806
+
+          model_baseline.getSpaces.each do |space|
+            space_name = space.name.get
+            target_lpd = 10.7639
+            if space_name_to_lpd_target.key?(space_name)
+              target_lpd = space_name_to_lpd_target[space_name]
+            end
+            model_lpd = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea.get
+            assert((target_lpd - model_lpd).abs < 0.001, "Baseline LPD for the #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of the #{space_name} is #{target_lpd} but should be #{model_lpd}.")
+          end
+        elsif user_data_dir == 'userdata_lpd_02'
+          space_name_to_lpd_target = {}
+          space_name_to_lpd_target['Attic'] = 0.0
+
+          model_baseline.getSpaces.each do |space|
+            space_name = space.name.get
+            target_lpd = 12.2452724
+            if space_name_to_lpd_target.key?(space_name)
+              target_lpd = space_name_to_lpd_target[space_name]
+            end
+            model_lpd = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea.get
+            assert((target_lpd - model_lpd).abs < 0.001, "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of the #{space_name} is #{target_lpd} but should be #{model_lpd}.")
+          end
         end
       end
     end
@@ -420,7 +501,7 @@ class AppendixGPRMTests < Minitest::Test
       # Check LPD against expected LPD
       space_name.each do |key, value|
         value_si = OpenStudio.convert(value, 'W/ft^2', 'W/m^2').get
-        assert(((lpd_baseline[key] - value_si).abs < 0.001), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{lpd_baseline[key]} but should be #{value_si}.")
+        assert(((lpd_baseline[key] - value_si).abs < 0.001), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The LPD of the #{key} is #{lpd_baseline[key]} but should be #{value_si}.")
       end
     end
   end
@@ -951,29 +1032,31 @@ class AppendixGPRMTests < Minitest::Test
       model_baseline.getSpaceTypes.sort.each do |space_type|
         light_sch_model_base = {}
         space_type.lights.sort.each do |lgts|
-          light_sch_model_lgts_base = {}
-          light_sch_model_lgts_base['space_type'] = space_type.standardsSpaceType.to_s
+          if lgts.schedule.get.to_ScheduleRuleset.is_initialized
+            light_sch_model_lgts_base = {}
+            light_sch_model_lgts_base['space_type'] = space_type.standardsSpaceType.to_s
 
-          # get default schedule
-          day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
-          times = day_rule.times()
-          light_sch_model_default_rule = {}
-          times.each do |time|
-            light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
-          end
-          light_sch_model_lgts_base['default schedule'] = light_sch_model_default_rule
-
-          # get daily schedule
-          lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
-            light_sch_model_week_rule_base = {}
-            day_rule = week_rule.daySchedule
+            # get default schedule
+            day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
             times = day_rule.times()
+            light_sch_model_default_rule = {}
             times.each do |time|
-              light_sch_model_week_rule_base[time.to_s] = day_rule.getValue(time)
+              light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
             end
-            light_sch_model_lgts_base[week_rule.name.to_s] = light_sch_model_week_rule_base
+            light_sch_model_lgts_base['default schedule'] = light_sch_model_default_rule
+
+            # get daily schedule
+            lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
+              light_sch_model_week_rule_base = {}
+              day_rule = week_rule.daySchedule
+              times = day_rule.times()
+              times.each do |time|
+                light_sch_model_week_rule_base[time.to_s] = day_rule.getValue(time)
+              end
+              light_sch_model_lgts_base[week_rule.name.to_s] = light_sch_model_week_rule_base
+            end
+            light_sch_model_base[lgts.name.to_s] = light_sch_model_lgts_base
           end
-          light_sch_model_base[lgts.name.to_s] = light_sch_model_lgts_base
         end
 
         # Check light schedule against expected light schedule
@@ -1136,6 +1219,11 @@ class AppendixGPRMTests < Minitest::Test
 
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
       @bldg_type_alt_now = @bldg_type_alt[prototype]
+      if ['0A', '0B', '1A', '1B', '2A', '2B', '3A'].include?(climate_zone.sub("ASHRAE 169-2013-", ""))
+        energy_type = 'Electric' 
+      else 
+        energy_type = 'Fuel'
+      end
 
       if building_type == 'MidriseApartment' && mod_str.nil?
         # Residential model should be ptac or pthp, depending on climate
@@ -1147,10 +1235,6 @@ class AppendixGPRMTests < Minitest::Test
       elsif @bldg_type_alt_now == 'Assembly' && building_type == 'LargeHotel'
         # This is a public assembly > 120 ksf, should be SZ-CV
         check_if_sz_cv(model, climate_zone, 'Assembly < 120,000 sq ft.')
-      elsif building_type == 'Warehouse' && mod_str.nil?
-        # System type should be heating and ventilating
-        # check_if_ht_vent(model, "Warehouse")
-        check_heat_type(model, climate_zone, '??????SZ???????', 'Electric')
       elsif building_type == 'RetailStripmall' && mod_str.nil?
         # System type should be PSZ
         check_if_psz(model, 'RetailStripmall, one story, any area')
@@ -1160,18 +1244,21 @@ class AppendixGPRMTests < Minitest::Test
       elsif building_type == 'RetailStripmall' && mod_str == 'set_zone_multiplier_3'
         # System type should be PVAV with 10 zones
         check_if_pvav(model, 'retail > 25,000 sq ft, 3 stories')
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'SmallOffice' && mod_str.nil?
         # System type should be PSZ
         check_if_psz(model, 'non-res, one story, < 25 ksf')
         check_heat_type(model, climate_zone, 'SZ', 'HeatPump')
-      elsif building_type == 'PrimarySchool' && mod_str.nil?
+      elsif building_type == 'PrimarySchool' && mod_str == 'remove_transformer'
         # System type should be PVAV, some zones may be on PSZ systems
         check_if_pvav(model, 'nonres > 25,000 sq ft, < 150 ksf , 1 story')
-        check_heat_type(model, climate_zone, 'MZ', 'Electric')
-      elsif building_type == 'SecondarySchool' && mod_str.nil?
+        check_heat_type(model, climate_zone, 'MZ', energy_type)
+        check_terminal_type(model, energy_type, run_id)
+      elsif building_type == 'SecondarySchool' && mod_str == 'remove_transformer'
         # System type should be VAV/chiller
         check_if_vav_chiller(model, 'nonres > 150 ksf , 1 to 3 stories')
-        check_heat_type(model, climate_zone, 'MZ', 'Electric')
+        check_heat_type(model, climate_zone, 'MZ', energy_type)
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'MediumOffice' && mod_str == 'remove_transformer_return_relief_fan'
         # Check if baseline has return and relief fan and if fan power
         # distribution is correct
@@ -1180,25 +1267,33 @@ class AppendixGPRMTests < Minitest::Test
         # nonresidential, 4 to 5 stories, <= 25 ksf --> PVAV
         # System type should be PVAV with 10 zones, area is 22,012 sf
         check_if_pvav(model, 'other nonres > 4 to 5 stories, <= 25 ksf')
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier_5'
         # nonresidential, 4 to 5 stories, <= 150 ksf --> PVAV
         # System type should be PVAV with 10 zones, area is 27,515 sf
         check_if_pvav(model, 'other nonres > 4 to 5 stories, <= 150 ksf')
-      elsif building_type == 'PrimarySchool' && mod_str == 'set_zone_multiplier_4'
+        check_terminal_type(model, energy_type, run_id)
+      elsif building_type == 'PrimarySchool' && mod_str.include?('set_zone_multiplier_4')
         # nonresidential, 4 to 5 stories, > 150 ksf --> VAV/chiller
         # System type should be PVAV with 10 zones, area is 22,012 sf
         check_if_vav_chiller(model, 'other nonres > 4 to 5 stories, > 150 ksf')
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'SmallOffice' && mod_str == 'set_zone_multiplier_6'
         # 6+ stories, any floor area --> VAV/chiller
         # This test has floor area 33,018 sf
         check_if_vav_chiller(model, ' other nonres > 6 stories')
+        check_terminal_type(model, energy_type, run_id)
       elsif @bldg_type_alt_now == 'Hospital' && building_type == 'SmallOffice'
+        energy_type = 'Fuel' # Table G3.1.1-3 Note 4
         # Hospital < 25 ksf is PVAV; different rule than non-res
         check_if_pvav(model, 'hospital, floor area < 25 ksf.')
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'Hospital' && mod_str.nil?
+        energy_type = 'Fuel' # Table G3.1.1-3 Note 4
         # System type should be VAV/chiller, area is 241 ksf
         check_if_vav_chiller(model, 'hospital > 4 to 5 stories, > 150 ksf')
-        check_heat_type(model, climate_zone, 'MZ', 'Fuel')
+        check_heat_type(model, climate_zone, 'MZ', energy_type)
+        check_terminal_type(model, energy_type, run_id)
       elsif building_type == 'Warehouse'
         # System type should be system 9, 10 but with no mechanical cooling
         check_if_heat_only(model, climate_zone, building_type)
@@ -1370,7 +1465,7 @@ class AppendixGPRMTests < Minitest::Test
       fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
       fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
       fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
-      assert(fan_bhp_ip.round(5) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_power_ip.round(1)} instead of 0.0013.")
+      assert(fan_bhp_ip.round(4) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_bhp_ip.round(4)} instead of 0.0013.")
       fan_bhp_ip *= OpenStudio.convert(std.fan_design_air_flow(fan), 'm^3/s', 'cfm').get
       if fan_bhp_ip <= 20.0 && fan_bhp_ip > 15.0
         assert(fan.motorEfficiency == 0.91, "Fan motor efficiency for #{fan.name} in #{sub_text} is #{fan.motorEfficiency}, 0.91 is expected.")
@@ -1456,7 +1551,7 @@ class AppendixGPRMTests < Minitest::Test
       fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
       fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
       fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
-      assert(fan_bhp_ip.round(5) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_power_ip.round(1)} instead of 0.0013.")
+      assert(fan_bhp_ip.round(4) == 0.0013, "Fan power for central fan in #{sub_text} is #{fan_power_ip.round(4)} instead of 0.0013.")
       fan_bhp_ip *= OpenStudio.convert(std.fan_design_air_flow(fan), 'm^3/s', 'cfm').get
       if fan_bhp_ip <= 20.0 && fan_bhp_ip > 15.0
         assert(fan.motorEfficiency == 0.91, "Fan motor efficiency for #{fan.name} in #{sub_text} is #{fan.motorEfficiency}, 0.91 is expected.")
@@ -1469,6 +1564,46 @@ class AppendixGPRMTests < Minitest::Test
       fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
       assert(fan_power_ip.round(2) == 0.35, "Fan power for terminal fan in #{sub_text} is #{fan_power_ip.round(1)} instead of 0.35.")
     end
+  end
+
+  # Check if model uses standard VAV boxes of FP boxes
+  # @param model [OpenStudio::Model::Model] OpenStudio model
+  # @param energy_source [String] Energy source used for heating
+  def check_terminal_type(model, energy_source, mod_str)
+    model.getAirLoopHVACs.each do |airloop|
+      airloop.thermalZones.each do |zone|
+        zone.equipment.each do |equip|
+          expected_results = false
+          if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
+            expected_results = true if energy_source != 'Electric'
+            assert(expected_results, "Standard VAV boxes are not expected for #{mod_str}.")
+          elsif equip.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized
+            expected_results = true if energy_source == 'Electric'
+            terminal = equip.to_AirTerminalSingleDuctParallelPIUReheat.get
+            assert(expected_results, "Fan powered boxes are not expected for #{mod_str}.")
+            # check secondary flow fraction
+            check_secondary_flow_fraction(terminal, mod_str)
+          end
+        end
+      end
+    end
+  end
+
+  # Check the model's secondary flow fraction
+  # @param model [OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat] Parallel PIU terminal
+  def check_secondary_flow_fraction(terminal, mod_str)
+    if terminal.maximumSecondaryAirFlowRate.is_initialized
+      secondary_flow = terminal.maximumSecondaryAirFlowRate.get.to_f
+    else
+      secondary_flow = terminal.autosizedMaximumSecondaryAirFlowRate.get.to_f
+    end
+    if terminal.maximumPrimaryAirFlowRate.is_initialized
+      primary_flow = terminal.maximumSecondaryAirFlowRate.get.to_f
+    else
+      primary_flow = terminal.autosizedMaximumPrimaryAirFlowRate.get.to_f
+    end
+    secondary_flow_frac = secondary_flow / primary_flow
+    assert(secondary_flow_frac.round(2) == 0.5, "Expected secondary flow fraction should be 0.5 but #{secondary_flow_frac} is used for #{mod_str}.")
   end
 
   # Check if baseline system type is PTAC or PTHP
@@ -1949,8 +2084,267 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
-  # Set ZoneMultiplier to passed value for all zones
+  def check_economizer_exception(baseline_base)
+    baseline_base.each do |baseline, baseline_model|
+      building_type, template, climate_zone, user_data_dir, mod = baseline
+      baseline_model.getAirLoopHVACs.each do |air_loop|
+        economizer_activated_target = false
+        temperature_highlimit_target = 23.89
+        air_loop_name = air_loop.name.get
+        baseline_system_type = air_loop.additionalProperties.getFeatureAsString("baseline_system_type")
+        if ['Building Story 3 VAV_PFP_Boxes (Sys8)', 'DataCenter_basement_ZN_6 ZN PSZ-VAV' ,'Basement Story 0 VAV_PFP_Boxes (Sys8)'].include?(air_loop_name) and climate_zone.end_with?("2B")
+          economizer_activated_target = true
+        end
 
+        economizer_activated_model = false
+        temperature_highlimit_model = 23.89
+        oa_sys = air_loop.airLoopHVACOutdoorAirSystem
+        if oa_sys.is_initialized
+          economizer_activated_model = true unless oa_sys.get.getControllerOutdoorAir.getEconomizerControlType == 'NoEconomizer'
+          if economizer_activated_model
+            temperature_highlimit_model = oa_sys.get.getControllerOutdoorAir.getEconomizerMaximumLimitDryBulbTemperature.get
+          end
+        end
+
+        assert(economizer_activated_model == economizer_activated_target,
+               "#{building_type}_#{template} is in #{climate_zone}. Air loop #{air_loop.name.get} system type is #{baseline_system_type}. The target economizer flag should be #{economizer_activated_target} but get #{economizer_activated_model}")
+        assert(temperature_highlimit_model - temperature_highlimit_target <= 0.01,
+               "#{building_type}_#{template} is in #{climate_zone}. Air loop #{air_loop.name.get} system type is #{baseline_system_type}. The target economizer temperature high limit setpoint is #{temperature_highlimit_target} but get #{temperature_highlimit_model}")
+      end
+    end
+    return true
+  end
+
+  def check_unenclosed_spaces(baseline_base)
+    baseline_base.each do |baseline, baseline_model|
+      building_type, template, climate_zone, user_data_dir, mod = baseline
+      if building_type == 'SmallOffice'
+        cons_name = baseline_model.getSurfaceByName('Core_ZN_ceiling').get.construction.get.name.to_s
+        assert(cons_name == 'PRM IEAD Roof R-15.87', "The #{building_type} baseline model created for check_unenclosed_spaces() does not contain the expected constructions for surface adjacent to an unconditioned space. Expected: PRM IEAD Roof R-15.87; In the model #{cons_name}.")
+        cons_name = baseline_model.getSurfaceByName('Core_ZN_ceiling').get.construction.get.name.to_s
+        assert(cons_name == 'PRM IEAD Roof R-15.87', "The #{building_type} baseline model created for check_unenclosed_spaces() does not contain the expected constructions for surface adjacent to an unconditioned space. Expected: PRM IEAD Roof R-15.87; In the model #{cons_name}.")
+      end
+    end
+    return true
+  end
+
+  def check_f_c_factors(baseline_base)
+    baseline_base.each do |baseline, baseline_model|
+      building_type, template, climate_zone, user_data_dir, mod = baseline
+      # Check that the appropriate ground temperature profile object has been added to the model
+      assert(!baseline_model.getSiteGroundTemperatureFCfactorMethod.nil?, "No FCfactorMethod ground temperature profile were found in the #{building_type} baseline model.")
+
+      if building_type == 'LargeOffice'
+        # Check ground temperature profile temperatures
+        assert(baseline_model.getSiteGroundTemperatureFCfactorMethod.januaryGroundTemperature.to_f.round(1) == 24.2, "Wrong temperature in the FCfactorMethod ground temperature profile for the  #{building_type} baseline model.")
+        assert(baseline_model.getSiteGroundTemperatureFCfactorMethod.julyGroundTemperature.to_f.round(1) == 21.2, "Wrong temperature in the FCfactorMethod ground temperature profile for the  #{building_type} baseline model.")
+
+        # F-factor
+        # Check outside boundary condition
+        surface = baseline_model.getSurfaceByName('Basement_Floor').get
+        assert(surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct outside boundary condition for the slab on grade.")
+        # Check construction type
+        construction = surface.construction.get.to_FFactorGroundFloorConstruction.get
+        assert(construction.iddObjectType.valueName.to_s == 'OS_Construction_FfactorGroundFloor', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct construction type for the slab on grade.")
+        # Check F-factor abd other params
+        assert(construction.fFactor.round(2) == 1.26, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct F-factor type for the slab on grade.")
+        assert(construction.area.round(2) == 2779.43, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct area for the slab on grade.")
+        assert(construction.perimeterExposed == 0, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct exposed perimeter for the slab on grade.")
+        # C-factor
+        # Check outside boundary condition
+        surface = baseline_model.getSurfaceByName('Basement_Wall_East').get
+        assert(surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct outside boundary condition for the basement walls.")
+        # Check construction type
+        construction = surface.construction.get.to_CFactorUndergroundWallConstruction.get
+        assert(construction.iddObjectType.valueName.to_s == 'OS_Construction_CfactorUndergroundWall', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct construction type for the basement walls.")
+        # Check F-factor abd other params
+        assert(construction.cFactor.round(2) == 6.47, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct C-factor type for the basement walls.")
+        assert(construction.height.round(2) == 2.44, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct height for the basement walls.")
+      elsif building_type == 'SmallOffice'
+        # F-factor
+        # Check outside boundary condition
+        surface = baseline_model.getSurfaceByName('Core_ZN_floor').get
+        assert(surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct outside boundary condition for the core slab on grade.")
+        # Check construction type
+        construction = surface.construction.get.to_FFactorGroundFloorConstruction.get
+        assert(construction.iddObjectType.valueName.to_s == 'OS_Construction_FfactorGroundFloor', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct construction type for the core slab on grade.")
+        # Check F-factor abd other params
+        assert(construction.fFactor.round(2) == 1.26, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct F-factor type for the core slab on grade.")
+        assert(construction.area.round(2) == 149.66, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct area for the core slab on grade.")
+        assert(construction.perimeterExposed == 0, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct exposed perimeter for the core slab on grade.")
+        # Check outside boundary condition
+        surface = baseline_model.getSurfaceByName('Perimeter_ZN_1_floor').get
+        assert(surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct outside boundary condition for the perimeter slab on grade.")
+        # Check construction type
+        construction = surface.construction.get.to_FFactorGroundFloorConstruction.get
+        assert(construction.iddObjectType.valueName.to_s == 'OS_Construction_FfactorGroundFloor', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct construction type for the perimeter slab on grade.")
+        # Check F-factor abd other params
+        assert(construction.fFactor.round(2) == 1.26, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct F-factor type for the perimeter slab on grade.")
+        assert(construction.area.round(2) == 113.45, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct area for the perimeter slab on grade.")
+        assert(construction.perimeterExposed.round(2) == 27.69, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct exposed perimeter for the perimeter slab on grade.")
+      end
+    end
+  end
+
+  # Set ZoneMultiplier to passed value for all zones
+  # Check if coefficients of part-load power curve is correct per G3.1.3.15
+  def check_variable_speed_fan_power(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      model.getFanVariableVolumes.each do |supply_fan|
+        supply_fan_name = supply_fan.name.get.to_s
+        # check fan curves
+        # Skip single-zone VAV fans
+        next if supply_fan.airLoopHVAC.get.thermalZones.size == 1
+        # coefficient 1
+        if supply_fan.fanPowerCoefficient1.is_initialized
+          expected_coefficient = 0.0013
+          coefficient = supply_fan.fanPowerCoefficient1.get
+          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+        end
+        # coefficient 2
+        if supply_fan.fanPowerCoefficient2.is_initialized
+          expected_coefficient = 0.1470
+          coefficient = supply_fan.fanPowerCoefficient2.get
+          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+        end
+        # coefficient 3
+        if supply_fan.fanPowerCoefficient4.is_initialized
+          expected_coefficient = 0.9506
+          coefficient = supply_fan.fanPowerCoefficient3.get
+          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+        end
+        # coefficient 4
+        if supply_fan.fanPowerCoefficient4.is_initialized
+          expected_coefficient = -0.0998
+          coefficient = supply_fan.fanPowerCoefficient4.get
+          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+        end
+        # coefficient 5
+        if supply_fan.fanPowerCoefficient5.is_initialized
+          expected_coefficient = 0
+          coefficient = supply_fan.fanPowerCoefficient5.get
+          assert((coefficient - expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+        end
+      end  
+    end
+  end
+
+  # Check if the VAV box minimum flow setpoint are
+  # assigned following the rules in Appendix G
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_vav_min_sp(prototypes_base)
+    standard = Standard.build('90.1-PRM-2019')
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+      model.getAirLoopHVACs.each do |air_loop|
+        air_loop.thermalZones.each do |zone|
+          zone.equipment.each do |equip|
+            if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
+              zone_oa = standard.thermal_zone_outdoor_airflow_rate(zone)
+              vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
+              expected_mdp = [zone_oa / vav_terminal.autosizedMaximumAirFlowRate.get, 0.3].max.round(2)
+              actual_mdp = vav_terminal.constantMinimumAirFlowFraction.get.round(2)
+              assert(expected_mdp == actual_mdp , "Minimum MDP for #{building_type} for #{template} in #{climate_zone} should be #{expected_mdp} but #{actual_mdp} is used in the model.")
+            elsif equip.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized
+              zone_oa = standard.thermal_zone_outdoor_airflow_rate(zone)
+              fp_vav_terminal = equip.to_AirTerminalSingleDuctParallelPIUReheat.get
+              expected_prim_frac = [zone_oa / fp_vav_terminal.autosizedMaximumPrimaryAirFlowRate.get, 0.3].max.round(2)
+              actual_prim_frac = fp_vav_terminal.minimumPrimaryAirFlowFraction.get
+              assert(expected_prim_frac == actual_prim_frac , "Minimum primary air flow fraction for #{building_type} for #{template} in #{climate_zone} should be #{expected_prim_frac} but #{actual_prim_frac} is used in the model.")
+            end
+          end
+        end
+      end
+    end
+  end
+
+  # Check fan power credits calculations
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_fan_power_credits(prototypes_base)
+    standard = Standard.build('90.1-PRM-2019')
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+      std = Standard.build('90.1-PRM-2019')
+
+      if building_type == 'SmallOffice'
+        model.getFanVariableVolumes.sort.each do |fan|
+          fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
+          fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
+          fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
+          assert(fan_bhp_ip.round(4) == 0.0017, "Fan power for #{fan.name.to_s} fan in #{building_type} #{template} #{climate_zone} #{mod} is #{fan_bhp_ip.round(4)} instead of 0.0017.")
+        end
+      end
+
+      if building_type == 'RetailStandalone'
+        model.getFanOnOffs.sort.each do |fan|
+          if fan.name.to_s.include?('Front_Entry ZN')
+            fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
+            fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
+            fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
+            assert(fan_bhp_ip.round(4) == 0.0012, "Fan power for  #{fan.name.to_s} fan in #{building_type} #{template} #{climate_zone} #{mod} is #{fan_bhp_ip.round(4)} instead of 0.0012.")
+          end
+        end
+      end
+    end
+  end
+
+  # Verify if return air plenums are generated
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_return_air_type(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+
+      if building_type == 'LargeOffice'
+        assert(model.getAirLoopHVACReturnPlenums.length == 3, "The expected return air plenums in the large office baseline model have not been created.")
+      end
+
+      if building_type == 'PrimarySchool'
+        assert(model.getAirLoopHVACReturnPlenums.length == 0, "Return air plenums are being modeled in the primary school baseline model, they are not expected.")
+      end
+    end
+  end
+
+  # Add a AirLoopHVACDedicatedOutdoorAirSystem in the model
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param arguments [Array] Not used
+  def add_ahu_doas(model, arguments)
+    # Create new objects
+    oa_ctrl = OpenStudio::Model::ControllerOutdoorAir.new(model)
+    oa_sys = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_ctrl)
+    ahu_doas = OpenStudio::Model::AirLoopHVACDedicatedOutdoorAirSystem.new(oa_sys)
+    ahu_doas.setName('AHU_DOAS')
+    fan = OpenStudio::Model::FanSystemModel.new(model)
+
+    # Assign fan and air loops
+    fan.addToNode(oa_sys.outboardOANode.get)
+    model.getAirLoopHVACs.each do |air_loop|
+      ahu_doas.addAirLoop(air_loop)
+    end
+
+    return model
+  end
+
+  # Change cooling thermostat to 24C
+  # This is used to converted a heated only zone to heated and cooled
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param arguments [Array] Not used
+  def change_clg_therm(model, arguments)
+    std = Standard.build("90.1-2019")
+    thermal_zone = model.getThermalZoneByName(arguments[0]).get    
+    tstat = thermal_zone.thermostat.get
+    tstat = tstat.to_ThermostatSetpointDualSetpoint.get
+    tstat.setCoolingSetpointTemperatureSchedule(std.model_add_constant_schedule_ruleset(model, 24, name = "#{thermal_zone.name.to_s} Cooling Schedule."))
+    
+    return model
+  end
+
+  # Set ZoneMultiplier to passed value for all zones
+  #
   # @param model, arguments[]
   def set_zone_multiplier(model, arguments)
     mult = arguments[0]
@@ -2067,6 +2461,60 @@ class AppendixGPRMTests < Minitest::Test
         zone_exhaust_fan.addToThermalZone(thermal_zone)
       end
     end
+  end
+
+  # Change fenestration area in a model
+  # This function will remove the fenestration in all orientations and add new windows by defined WWR
+  #
+  # @param [OpenStudio::Model::Model] model
+  # @param [Float] window to wall ratio
+  def change_wwr_model(model, arguments)
+    target_wwr_north = arguments[0]
+    target_wwr_south = arguments[1]
+    target_wwr_east = arguments[2]
+    target_wwr_west = arguments[3]
+
+    model.getSurfaces.each do |ss|
+      # determine orientation
+      space = ss.space.get
+      # Get model object
+      model = ss.model
+      # Calculate azimuth
+      surface_azimuth_rel_space = OpenStudio.convert(ss.azimuth, 'rad', 'deg').get
+      space_dir_rel_north = space.directionofRelativeNorth
+      building_dir_rel_north = model.getBuilding.northAxis
+      surface_abs_azimuth = surface_azimuth_rel_space + space_dir_rel_north + building_dir_rel_north
+      surface_abs_azimuth -= 360.0 until surface_abs_azimuth < 360.0
+
+      unless ss.subSurfaces.empty?
+        # get subsurface construction
+        orig_construction = nil
+        ss.subSurfaces.sort.each do |sub|
+          next unless sub.subSurfaceType == 'FixedWindow' || sub.subSurfaceType=='OperableWindow'
+          orig_construction = sub.construction.get
+          end
+        # remove all existing surfaces
+        ss.subSurfaces.sort.each(&:remove)
+        # Determine the surface's cardinal direction
+        if surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45
+          new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+        elsif surface_abs_azimuth > 315 && surface_abs_azimuth <= 360
+          new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+        elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135
+          new_window = ss.setWindowToWallRatio(target_wwr_east, 0.6, true).get
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+        elsif surface_abs_azimuth > 135 && surface_abs_azimuth <= 225
+          new_window = ss.setWindowToWallRatio(target_wwr_south, 0.6, true).get
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+        elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315
+          new_window = ss.setWindowToWallRatio(target_wwr_west, 0.6, true).get
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+        end
+      end
+    end
+    return model
   end
 
   # Change model to different building type
@@ -2302,30 +2750,50 @@ class AppendixGPRMTests < Minitest::Test
     return model
   end
 
+  # Change the weather used in the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param arguments [Array] List of arguments
+  # return [OpenStudio::Model::Model] OpenStudio model object
+  def change_weather_file(model, arguments)
+    # Define new weather file
+    weather_file = File.join(@@json_dir, "USA_VA_Arlington-Ronald.Reagan.Washington.Natl.AP.724050_TMY3.epw")
+    epw_file = OpenStudio::EpwFile.new(weather_file)
+
+    # Assign new weather file
+    OpenStudio::Model::WeatherFile.setWeatherFile(model, epw_file).get
+
+    return model
+  end
+
   # Run test suite for the ASHRAE 90.1 appendix G Performance
   # Rating Method (PRM) baseline automation implementation
   # in openstudio-standards.
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      # 'wwr',
-      # 'srr',
-      # 'envelope',
-      # 'lpd',
-      # 'isresidential',
-      # 'daylighting_control',
-      # 'light_occ_sensor',
-      # 'infiltration',
-      # 'hvac_baseline',
-      # 'hvac_psz_split_from_mz',
-      # 'plant_temp_reset_ctrl',
-      # 'sat_ctrl',
-      # 'number_of_boilers',
-      # 'number_of_chillers',
-      # 'number_of_cooling_towers',
-      # 'hvac_sizing',
-      # 'preheat_coil_ctrl',
-      # 'multi_bldg_handling',
+      'wwr',
+      'srr',
+      'envelope',
+      'lpd',
+      'isresidential',
+      'daylighting_control',
+      'light_occ_sensor',
+      'infiltration',
+      'vav_fan_curve',
+      'hvac_baseline',
+      'hvac_psz_split_from_mz',
+      'plant_temp_reset_ctrl',
+      'sat_ctrl',
+      'number_of_boilers',
+      'number_of_chillers',
+      'number_of_cooling_towers',
+      'hvac_sizing',
+      'preheat_coil_ctrl',
+      'vav_min_sp',
+      'multi_bldg_handling',
+      'economizer_exception',
+      'building_rotation_check',
       'dcv'
     ]
 
@@ -2349,6 +2817,7 @@ class AppendixGPRMTests < Minitest::Test
     check_lpd(prototypes_base['lpd']) if tests.include? 'lpd'
     check_light_occ_sensor(prototypes['light_occ_sensor'], prototypes_base['light_occ_sensor']) if tests.include? 'light_occ_sensor'
     check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if tests.include? 'infiltration'
+    check_variable_speed_fan_power(prototypes_base['vav_fan_curve']) if tests.include? 'vav_fan_curve'
     check_hvac(prototypes_base['hvac_baseline']) if tests.include? 'hvac_baseline'
     check_sat_ctrl(prototypes_base['sat_ctrl']) if tests.include? 'sat_ctrl'
     check_number_of_boilers(prototypes_base['number_of_boilers']) if tests.include? 'number_of_boilers'
@@ -2356,7 +2825,15 @@ class AppendixGPRMTests < Minitest::Test
     check_number_of_cooling_towers(prototypes_base['number_of_cooling_towers']) if tests.include? 'number_of_cooling_towers'
     check_hvac_sizing(prototypes_base['hvac_sizing']) if tests.include? 'hvac_sizing'
     check_psz_split_from_mz(prototypes_base['hvac_psz_split_from_mz']) if tests.include? 'hvac_psz_split_from_mz'
+    check_vav_min_sp(prototypes_base['vav_min_sp']) if tests.include? 'vav_min_sp'
     check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
+    check_multi_lpd_handling(prototypes_base['lpd_userdata_handling']) if tests.include? 'lpd_userdata_handling'
+    check_economizer_exception(prototypes_base['economizer_exception']) if tests.include? 'economizer_exception'
+    check_building_rotation_exception(prototypes_base['building_rotation_check']) if tests.include? 'building_rotation_check'
+    check_unenclosed_spaces(prototypes_base['unenclosed_spaces']) if tests.include? 'unenclosed_spaces'
+    check_f_c_factors(prototypes_base['f_c_factors']) if tests.include? 'f_c_factors'
+    check_fan_power_credits(prototypes_base['fan_power_credits']) if tests.include? 'fan_power_credits'
+    check_return_air_type(prototypes_base['return_air_type']) if tests.include? 'return_air_type'
     check_dcv(prototypes_base['dcv']) if tests.include? 'dcv'
   end
 end

@@ -265,12 +265,18 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Model"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Space"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.AirLoopHVAC"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.AirTerminalSingleDuctParallelPIUReheat"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.AirTerminalSingleDuctVAVReheat"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ZoneHVACComponent"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.PlantLoop"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanConstantVolume"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanOnOff"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanZoneExhaust"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.PlanarSurface"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ThermalZone"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.SpaceType"
+
   # 90.1-PRM-2019
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019.Model"

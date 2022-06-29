@@ -70,12 +70,11 @@ class Standard
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, debug = false)
     # user data process
     bldg_type_hvac_zone_hash = {}
-    handle_multi_building_area_types(user_model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
+    handle_user_input_data(user_model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
     # NOTE - bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
-    
     # Define different orientation from original orientation
     # for each individual baseline models
-    degs_from_org = run_all_orients ? [0, 90, 180, 270] : [0]
+    degs_from_org = run_all_orientations(run_all_orients, user_model) ? [0, 90, 180, 270] : [0]
 
     # Create baseline model for each orientation
     degs_from_org.each do |degs|
@@ -90,8 +89,10 @@ class Standard
       model_rotate(model, degs) unless degs == 0
 
       # Perform a sizing run of the proposed model.
-      # Intent is to get individual space load to determine each space's
-      # conditioning type: conditioned, unconditioned, semiheated.
+      #
+      # Among others, one of the goal is to get individual
+      # space load to determine each space's conditioning
+      # type: conditioned, unconditioned, semiheated.
       if model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
         # Set up some special reports to be used for baseline system selection later
         # Zone return air flows
@@ -120,9 +121,23 @@ class Standard
           output.setReportingFrequency(frequency)
         end
 
+        # Run the sizing run
         if model_run_sizing_run(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
           return false
         end
+
+        # Set baseline model space conditioning category based on proposed model
+        model.getSpaces.each do |space|
+          # Get conditioning category at the space level
+          space_conditioning_category = space_conditioning_category(space)
+
+          # Set space conditioning category
+          space.additionalProperties.setFeature('space_conditioning_category', space_conditioning_category)
+        end
+
+        # The following should be done after a sizing run of the proposed model
+        # because the proposed model zone design air flow is needed
+        model_identify_return_air_type(model)
       end
 
       # Remove external shading devices
@@ -146,18 +161,12 @@ class Standard
         set_gas_equipment = false
         set_ventilation = false
         set_infiltration = false
-        if /prm/i =~ template
-          space_type_apply_int_loads_prm(space_type, model)
-        else
-          space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
-        end
+        # For PRM, it only applies lights for now.
+        space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
       end
-
       # Modify the lighting schedule to handle lighting occupancy sensors
       # Modify the upper limit value of fractional schedule to avoid the fatal error caused by schedule value higher than 1
-      if /prm/i =~ template
-        space_type_light_sch_change(model)
-      end
+      space_type_light_sch_change(model)
 
       # Calculate infiltration as per 90.1 PRM rules
       model_apply_infiltration_standard(model, climate_zone) if /prm/i =~ template
@@ -211,11 +220,10 @@ class Standard
       end
 
       # Set the construction properties of all the surfaces in the model
-      if /prm/i !~ template
-        model_apply_standard_constructions(model, climate_zone)
-      else
-        model_apply_standard_constructions(model, climate_zone, wwr_building_type, wwr_info)
-      end
+      model_apply_constructions(model, climate_zone, wwr_building_type, wwr_info)
+
+      # Update ground temperature profile (for F/C-factor construction objects)
+      model_update_ground_temperature_profile(model, climate_zone)
 
       # Identify non-mechanically cooled systems if necessary
       model_identify_non_mechanically_cooled_systems(model)
@@ -259,6 +267,7 @@ class Standard
 
       # Determine the baseline HVAC system type for each of the groups of zones and add that system type.
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
+      air_loop_name_array = []
       sys_groups.each do |sys_group|
         # Determine the primary baseline system type
         if /prm/i !~ template
@@ -302,20 +311,33 @@ class Standard
                                       system_type[3],
                                       sys_group['zones'],
                                       zone_fan_scheds)
+        model.getAirLoopHVACs.each do |air_loop|
+          air_loop_name = air_loop.name.get
+          unless air_loop_name_array.include?(air_loop_name)
+            air_loop.additionalProperties.setFeature('zone_group_type', sys_group['zone_group_type'] || 'None')
+            air_loop_name_array << air_loop_name
+          end
 
-        # Add system type reference to all airloops
-        model.getAirLoopHVACs.sort.each do |air_loop|
-          if air_loop.thermalZones[0].additionalProperties.hasFeature('baseline_system_type')
-            sys_type = air_loop.thermalZones[0].additionalProperties.getFeatureAsString('baseline_system_type').get
-            air_loop.additionalProperties.setFeature('baseline_system_type', sys_type)
-          else
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Thermal zone #{air_loop.thermalZones[0].name} is not associated to a particular system type.")
+          # Determine return air type
+          plenum, return_air_type = model_determine_baseline_return_air_type(model, system_type[0], air_loop.thermalZones)
+          air_loop.thermalZones.sort.each do |zone|
+            # Set up return air plenum
+            zone.setReturnPlenum(model.getThermalZoneByName(plenum).get) if return_air_type == 'return_plenum'
           end
         end
       end
+      # Add system type reference to all air loops
+      model.getAirLoopHVACs.sort.each do |air_loop|
+        if air_loop.thermalZones[0].additionalProperties.hasFeature('baseline_system_type')
+          sys_type = air_loop.thermalZones[0].additionalProperties.getFeatureAsString('baseline_system_type').get
+          air_loop.additionalProperties.setFeature('baseline_system_type', sys_type)
+        else
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Thermal zone #{air_loop.thermalZones[0].name} is not associated to a particular system type.")
+        end
+      end
 
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Sizing Settings ***')
       # Set the zone sizing SAT for each zone in the model
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Sizing Settings ***')
       model.getThermalZones.each do |zone|
         thermal_zone_apply_prm_baseline_supply_temperatures(zone) # prm template conditionals added in the methods
       end
@@ -340,13 +362,6 @@ class Standard
         air_loop_hvac_apply_prm_baseline_controls(air_loop, climate_zone)
       end
 
-      if /prm/i !~ template
-        # Apply the minimum damper positions, assuming no DDC control of VAV terminals
-        model.getAirLoopHVACs.sort.each do |air_loop|
-          air_loop_hvac_apply_minimum_vav_damper_positions(air_loop, false)
-        end
-      end
-
       # Apply the baseline system water loop temperature reset control
       model.getPlantLoops.sort.each do |plant_loop|
         # Skip the SWH loops
@@ -358,6 +373,11 @@ class Standard
       # Run sizing run with the HVAC equipment
       if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
         return false
+      end
+
+      # Apply the minimum damper positions, assuming no DDC control of VAV terminals
+      model.getAirLoopHVACs.sort.each do |air_loop|
+        air_loop_hvac_apply_minimum_vav_damper_positions(air_loop, false)
       end
 
       if /prm/i !~ template
@@ -430,6 +450,9 @@ class Standard
 
       # Delete all the unused resource objects
       model_remove_unused_resource_objects(model)
+
+      # Add reporting tolerances
+      model_add_reporting_tolerances(model)
 
       # @todo: turn off self shading
       # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
@@ -1049,6 +1072,7 @@ class Standard
       htd_only_group = {}
       htd_only_group['occ'] = 'heated-only storage'
       htd_only_group['fuel'] = 'any'
+      htd_only_group['zone_group_type'] = 'heated_only_zones'
       area_m2 = 0
       heated_only_zones.each do |zone|
         area_m2 += zone.floorArea * zone.multiplier
@@ -1063,6 +1087,7 @@ class Standard
       district_cooled_group = {}
       district_cooled_group['occ'] = hvac_building_type
       district_cooled_group['fuel'] = 'districtcooling'
+      district_cooled_group['zone_group_type'] = 'district_cooled_zones'
       area_m2 = 0
       district_cooled_zones.each do |zone|
         area_m2 += zone.floorArea * zone.multiplier
@@ -1078,8 +1103,8 @@ class Standard
     unless heated_cooled_zones.empty?
       heated_cooled_group = {}
       heated_cooled_group['occ'] = hvac_building_type
-
       heated_cooled_group['fuel'] = 'any'
+      heated_cooled_group['zone_group_type'] = 'heated_cooled_zones'
       area_m2 = 0
       heated_cooled_zones.each do |zone|
         area_m2 += zone.floorArea * zone.multiplier
@@ -1096,6 +1121,7 @@ class Standard
       lab_group = {}
       lab_group['occ'] = hvac_building_type
       lab_group['fuel'] = 'any'
+      lab_group['zone_group_type'] = 'lab_zones'
       area_m2 = 0
       lab_zones.each do |zone|
         area_m2 += zone.floorArea * zone.multiplier
@@ -1112,6 +1138,7 @@ class Standard
       comp_room_svav_group = {}
       comp_room_svav_group['occ'] = 'computer room szvav'
       comp_room_svav_group['fuel'] = 'any'
+      comp_room_svav_group['zone_group_type'] = 'computer_zones'
       area_m2 = 0
       comp_room_svav_zones.each do |zone|
         area_m2 += zone.floorArea * zone.multiplier
@@ -1128,6 +1155,7 @@ class Standard
       comp_room_psz_group = {}
       comp_room_psz_group['occ'] = 'computer room psz'
       comp_room_psz_group['fuel'] = 'any'
+      comp_room_psz_group['zone_group_type'] = 'computer_zones'
       area_m2 = 0
       comp_room_psz_zones.each do |zone|
         area_m2 += zone.floorArea * zone.multiplier
@@ -1144,6 +1172,7 @@ class Standard
       dist_comp_room_svav_group = {}
       dist_comp_room_svav_group['occ'] = hvac_building_type
       dist_comp_room_svav_group['fuel'] = 'districtcooling'
+      dist_comp_room_svav_group['zone_group_type'] = 'computer_zones'
       area_m2 = 0
       dist_comp_room_svav_zones.each do |zone|
         area_m2 += zone.floorArea * zone.multiplier
@@ -1160,6 +1189,7 @@ class Standard
       dist_comp_room_psz_group = {}
       dist_comp_room_psz_group['occ'] = hvac_building_type
       dist_comp_room_psz_group['fuel'] = 'districtcooling'
+      dist_comp_room_psz_group['zone_group_type'] = 'computer_zones'
       area_m2 = 0
       dist_comp_room_psz_zones.each do |zone|
       end
@@ -3719,7 +3749,7 @@ class Standard
   # @param construction_props [Hash] hash of construction properties
   # @return [OpenStudio::Model::Construction] construction object
   # @todo make return an OptionalConstruction
-  def model_add_construction(model, construction_name, construction_props = nil)
+  def model_add_construction(model, construction_name, construction_props = nil, surface = nil)
     # First check model and return construction if it already exists
     model.getConstructions.sort.each do |construction|
       if construction.name.get.to_s == construction_name
@@ -3731,10 +3761,10 @@ class Standard
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Adding construction: #{construction_name}")
 
     # Get the object data
-    if /prm/i !~ template
-      data = model_find_object(standards_data['constructions'], 'name' => construction_name)
-    else
+    if standards_data.keys.include?('prm_constructions')
       data = model_find_object(standards_data['prm_constructions'], 'name' => construction_name)
+    else
+      data = model_find_object(standards_data['constructions'], 'name' => construction_name)
     end
 
     unless data
@@ -3743,7 +3773,22 @@ class Standard
     end
 
     # Make a new construction and set the standards details
-    construction = OpenStudio::Model::Construction.new(model)
+    if data['intended_surface_type'] == 'GroundContactFloor' && !surface.nil?
+      construction = OpenStudio::Model::FFactorGroundFloorConstruction.new(model)
+    elsif data['intended_surface_type'] == 'GroundContactWall' && !surface.nil?
+      construction = OpenStudio::Model::CFactorUndergroundWallConstruction.new(model)
+    else
+      construction = OpenStudio::Model::Construction.new(model)
+      # Add the material layers to the construction
+      layers = OpenStudio::Model::MaterialVector.new
+      data['materials'].each do |material_name|
+        material = model_add_material(model, material_name)
+        if material
+          layers << material
+        end
+      end
+      construction.setLayers(layers)
+    end
     construction.setName(construction_name)
     standards_info = construction.standardsInformation
 
@@ -3756,16 +3801,6 @@ class Standard
     standards_info.setStandardsConstructionType(standards_construction_type)
 
     # @todo could put construction rendering color in the spreadsheet
-
-    # Add the material layers to the construction
-    layers = OpenStudio::Model::MaterialVector.new
-    data['materials'].each do |material_name|
-      material = model_add_material(model, material_name)
-      if material
-        layers << material
-      end
-    end
-    construction.setLayers(layers)
 
     # Modify the R value of the insulation to hit the specified U-value, C-Factor, or F-Factor.
     # Doesn't currently operate on glazing constructions
@@ -3803,19 +3838,27 @@ class Standard
         end
 
       elsif target_f_factor_ip && data['intended_surface_type'] == 'GroundContactFloor'
-
-        # Set the F-Factor (only applies to slabs on grade)
-        # @todo figure out what the prototype buildings did about ground heat transfer
-        # construction_set_slab_f_factor(construction, target_f_factor_ip.to_f, data['insulation_layer'])
-        construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
-
-      elsif target_c_factor_ip && data['intended_surface_type'] == 'GroundContactWall'
-
-        # Set the C-Factor (only applies to underground walls)
-        # @todo figure out what the prototype buildings did about ground heat transfer
-        # construction_set_underground_wall_c_factor(construction, target_c_factor_ip.to_f, data['insulation_layer'])
-        construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
-
+        # F-factor objects are unique to each surface, so a surface needs to be passed
+        # If not surface is passed, use the older approach to model ground contact floors
+        if surface.nil?
+          # Set the F-Factor (only applies to slabs on grade)
+          # @todo figure out what the prototype buildings did about ground heat transfer
+          # construction_set_slab_f_factor(construction, target_f_factor_ip.to_f, data['insulation_layer'])
+          construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
+        else
+          construction_set_surface_slab_f_factor(construction, target_f_factor_ip, surface)
+        end
+      elsif target_c_factor_ip && (data['intended_surface_type'] == 'GroundContactWall' || data['intended_surface_type'] == 'GroundContactRoof')
+        # C-factor objects are unique to each surface, so a surface needs to be passed
+        # If not surface is passed, use the older approach to model ground contact walls
+        if surface.nil?
+          # Set the C-Factor (only applies to underground walls)
+          # @todo figure out what the prototype buildings did about ground heat transfer
+          # construction_set_underground_wall_c_factor(construction, target_c_factor_ip.to_f, data['insulation_layer'])
+          construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
+        else
+          construction_set_surface_underground_wall_c_factor(construction, target_c_factor_ip, surface)
+        end
       end
 
       # If the construction is fenestration,
@@ -3906,8 +3949,11 @@ class Standard
   # @param intended_surface_type [String] intended surface type
   # @param standards_construction_type [String] standards construction type
   # @param building_category [String] building category
+  # @param wwr_building_type [String] building type used to determine WWR for the PRM baseline model
+  # @param wwr_info [Hash] @Todo - check what this is used for
+  # @param surface [OpenStudio::Model::Surface] OpenStudio surface object, only used for surface specific construction, e.g F/C-factor constructions
   # @return [OpenStudio::Model::Construction] construction object
-  def model_find_and_add_construction(model, climate_zone_set, intended_surface_type, standards_construction_type, building_category, wwr_building_type = nil, wwr_info = {})
+  def model_find_and_add_construction(model, climate_zone_set, intended_surface_type, standards_construction_type, building_category, wwr_building_type = nil, wwr_info = {}, surface = nil)
     # Get the construction properties,
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
@@ -3949,8 +3995,6 @@ class Standard
       almost_adiabatic = OpenStudio::Model::MasslessOpaqueMaterial.new(model, 'Smooth', 500)
       construction.insertLayer(0, almost_adiabatic)
       return construction
-      # else
-      # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
     end
 
     # Make sure that a construction is specified
@@ -3963,7 +4007,7 @@ class Standard
     end
 
     # Add the construction, modifying properties as necessary
-    construction = model_add_construction(model, props['construction'], props)
+    construction = model_add_construction(model, props['construction'], props, surface)
 
     return construction
   end
@@ -5509,6 +5553,9 @@ class Standard
 
     # Outdoor VRF units (not in zone, not in loops)
     model.getAirConditionerVariableRefrigerantFlows.each(&:remove)
+
+    # Air loop dedicated outdoor air systems
+    model.getAirLoopHVACDedicatedOutdoorAirSystems.each(&:remove)
 
     return true
   end
@@ -7407,11 +7454,10 @@ class Standard
     return 'warmest_zone'
   end
 
-  # A template method that handles multiple building area type inputs for PRM baseline creation
-  # The inputs shall come from userdata csv files / json file.
-  # Plan 1. Add the values to space / zone additional properties.
-  # Plan 2. return hash table and pass the value into PRM function
-  # FOR NOW, just return an abitrary integer
+  # A template method that handles the loading of user input data from multiple sources
+  # include data source from:
+  # 1. user data csv files
+  # 2. data from measure and OpenStudio interface
   # @param [Openstudio:model:Model] model
   # @param [String] climate_zone
   # @param [String] default_hvac_building_type
@@ -7419,7 +7465,7 @@ class Standard
   # @param [String] default_swh_building_type
   # @param [Hash] bldg_type_hvac_zone_hash A hash maps building type for hvac to a list of thermal zones
   # @return True
-  def handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
+  def handle_user_input_data(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     return true
   end
 
@@ -7440,6 +7486,14 @@ class Standard
   # @param model [OpenStudio::Model::Model] Openstudio model
   def model_mark_zone_dcv_existence(model)
     return true
+  end
+  # Check whether the baseline model generation needs to run all four orientations
+  # The default shall be true
+  #
+  # @param [Boolean] run_all_orients: user inputs to indicate whether it is required to run all orientations
+  # @param [OpenStudio::Model::Model] Openstudio model
+  def run_all_orientations(run_all_orients, user_model)
+    return run_all_orients
   end
 
   # Template method for reading user data and adding to zone additional properties
@@ -7480,6 +7534,183 @@ class Standard
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::Model::Model] Openstudio model
   def model_set_baseline_demand_control_ventilation(model, climate_zone)
+    return true
+  end
+  # Identify the return air type associated with each thermal zone
+  #
+  # @param model [OpenStudio::Model::Model] Openstudio model object
+  def model_identify_return_air_type(model)
+    # air-loop based system
+    model.getThermalZones.each do |zone|
+      # Conditioning category won't include indirectly conditioned thermal zones
+      cond_cat = thermal_zone_conditioning_category(zone, model_standards_climate_zone(model))
+
+      # Initialize the return air type
+      return_air_type = nil
+
+      # The thermal zone is conditioned by zonal system
+      if (cond_cat != 'Unconditioned') && zone.airLoopHVACs.empty?
+        return_air_type = 'ducted_return_or_direct_to_unit'
+      end
+
+      # Assume that the primary heating and cooling (PHC) system
+      # is last in the heating and cooling order (ignore DOAS)
+      #
+      # Get the heating and cooling PHC components
+      heating_equipment = zone.equipmentInHeatingOrder[-1]
+      cooling_equipment = zone.equipmentInCoolingOrder[-1]
+      if heating_equipment.nil? && cooling_equipment.nil?
+        next
+      end
+
+      unless heating_equipment.nil?
+        if heating_equipment.to_ZoneHVACComponent.is_initialized
+          heating_equipment_type = 'ZoneHVACComponent'
+        elsif heating_equipment.to_StraightComponent.is_initialized
+          heating_equipment_type = 'StraightComponent'
+        end
+      end
+      unless cooling_equipment.nil?
+        if cooling_equipment.to_ZoneHVACComponent.is_initialized
+          cooling_equipment_type = 'ZoneHVACComponent'
+        elsif cooling_equipment.to_StraightComponent.is_initialized
+          cooling_equipment_type = 'StraightComponent'
+        end
+      end
+
+      # Determine return configuration
+      if (heating_equipment_type == 'ZoneHVACComponent') && (cooling_equipment_type == 'ZoneHVACComponent')
+        return_air_type = 'ducted_return_or_direct_to_unit'
+      else
+        # Check heating air loop first
+        unless heating_equipment.nil?
+          if heating_equipment.to_StraightComponent.is_initialized
+            air_loop = heating_equipment.to_StraightComponent.get.airLoopHVAC.get
+            return_plenum = air_loop_hvac_return_air_plenum(air_loop)
+            return_air_type = return_plenum.nil? ? 'ducted_return_or_direct_to_unit' : 'return_plenum'
+            return_plenum = return_plenum.nil? ? nil : return_plenum.name.to_s
+          end
+        end
+
+        # Check cooling air loop second; Assume that return air plenum is the dominant case
+        unless cooling_equipment.nil?
+          if (return_air_type != 'return_plenum') && cooling_equipment.to_StraightComponent.is_initialized
+            air_loop = cooling_equipment.to_StraightComponent.get.airLoopHVAC.get
+            return_plenum = air_loop_hvac_return_air_plenum(air_loop)
+            return_air_type = return_plenum.nil? ? 'ducted_return_or_direct_to_unit' : 'return_plenum'
+            return_plenum = return_plenum.nil? ? nil : return_plenum.name.to_s
+          end
+        end
+      end
+
+      # Catch all
+      if return_air_type.nil?
+        return_air_type = 'ducted_return_or_direct_to_unit'
+      end
+
+      zone.additionalProperties.setFeature('return_air_type', return_air_type)
+      zone.additionalProperties.setFeature('plenum', return_plenum) unless return_plenum.nil?
+      zone.additionalProperties.setFeature('proposed_model_zone_design_air_flow', zone.designAirFlowRate.to_f)
+    end
+  end
+
+  # Determine the baseline return air type associated with each zone
+  #
+  # @param model [OpenStudio::Model::model] OpenStudio model object
+  # @param baseline_system_type [String] Baseline system type name
+  # @param zones [Array] List of zone associated with a system
+  # @return [Array] Array of length 2, the first item is the name
+  #                 of the plenum zone and the second the return air type
+  def model_determine_baseline_return_air_type(model, baseline_system_type, zones)
+    return ['', 'ducted_return_or_direct_to_unit'] unless ['PSZ_AC', 'PSZ_HP', 'PVAV_Reheat', 'PVAV_PFP_Boxes', 'VAV_Reheat', 'VAV_PFP_Boxes', 'SZ_VAV', 'SZ_CV'].include?(baseline_system_type)
+
+    zone_return_air_type = {}
+    zones.each do |zone|
+      if zone.additionalProperties.hasFeature('proposed_model_zone_design_air_flow')
+        zone_design_air_flow = zone.additionalProperties.getFeatureAsDouble('proposed_model_zone_design_air_flow').get
+
+        if zone.additionalProperties.hasFeature('return_air_type')
+          return_air_type = zone.additionalProperties.getFeatureAsString('return_air_type').get
+
+          if zone_return_air_type.keys.include?(return_air_type)
+            zone_return_air_type[return_air_type] += zone_design_air_flow
+          else
+            zone_return_air_type[return_air_type] = zone_design_air_flow
+          end
+
+          if zone.additionalProperties.hasFeature('plenum')
+            plenum = zone.additionalProperties.getFeatureAsString('plenum').get
+
+            if zone_return_air_type.keys.include?('plenum')
+              if zone_return_air_type['plenum'].keys.include?(plenum)
+                zone_return_air_type['plenum'][plenum] += zone_design_air_flow
+              end
+            else
+              zone_return_air_type['plenum'] = { plenum => zone_design_air_flow }
+            end
+          end
+        end
+      end
+    end
+
+    # Find dominant zone return air type and plenum zone
+    # if the return air type is return air plenum
+    return_air_types = zone_return_air_type.keys - ['plenum']
+    return_air_types_score = 0
+    return_air_type = nil
+    plenum_score = 0
+    plenum = nil
+    return_air_types.each do |return_type|
+      if zone_return_air_type[return_type] > return_air_types_score
+        return_air_type = return_type
+        return_air_types_score = zone_return_air_type[return_type]
+      end
+      if return_air_type == 'return_plenum'
+        zone_return_air_type['plenum'].keys.each do |p|
+          if zone_return_air_type['plenum'][p] > plenum_score
+            plenum = p
+            plenum_score = zone_return_air_type['plenum'][p]
+          end
+        end
+      end
+    end
+
+    return plenum, return_air_type
+  end
+
+  # Add reporting tolerances. Default values are based on the suggestions from the PRM-RM.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio Model
+  # @param heating_tolerance_deg_f [Float] Tolerance for time heating setpoint not met in degree F
+  # @param cooling_tolerance_deg_f [Float] Tolerance for time cooling setpoint not met in degree F
+  def model_add_reporting_tolerances(model, heating_tolerance_deg_f: 1.0, cooling_tolerance_deg_f: 1.0)
+    reporting_tolerances = model.getOutputControlReportingTolerances
+    heating_tolerance_deg_c = OpenStudio.convert(heating_tolerance_deg_f, 'R', 'K').get
+    cooling_tolerance_deg_c = OpenStudio.convert(cooling_tolerance_deg_f, 'R', 'K').get
+    reporting_tolerances.setToleranceforTimeHeatingSetpointNotMet(heating_tolerance_deg_c)
+    reporting_tolerances.setToleranceforTimeCoolingSetpointNotMet(cooling_tolerance_deg_c)
+
+    return true
+  end
+
+  # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
+  #
+  # @return [Bool] true if successful, false if not
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if successful, false if not
+  def model_apply_constructions(model, climate_zone, wwr_building_type, wwr_info)
+    model_apply_standard_constructions(model, climate_zone, wwr_building_type = nil, wwr_info = {})
+
+    return true
+  end
+
+  # Update ground temperature profile based on the weather file specified in the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if successful, false if not
+  def model_update_ground_temperature_profile(model, climate_zone)
     return true
   end
 end

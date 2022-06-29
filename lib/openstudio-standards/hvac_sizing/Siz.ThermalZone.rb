@@ -207,8 +207,14 @@ class OpenStudio::Model::ThermalZone
       val = sql.execAndReturnVectorOfString(query).get
 
       if !val.empty?
-        clg_id = val[0]
-        htg_id = val[1]
+        # no heating or cooling load; flow assumed to be the same
+        if val.length == 1
+          clg_id = val[0]
+          htg_id = clg_id
+        else
+          clg_id = val[0]
+          htg_id = val[1]
+        end
         htg_des_air_flow_rate = 0
         clg_des_air_flow_rate = 0
         

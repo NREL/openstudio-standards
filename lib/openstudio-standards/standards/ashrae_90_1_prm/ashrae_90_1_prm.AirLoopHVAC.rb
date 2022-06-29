@@ -15,6 +15,72 @@ class ASHRAE901PRM < Standard
     return 0.05
   end
 
+  # Determine the economizer type and limits for the the PRM
+  # Defaults to 90.1-2007 logic.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Array<Double>] [economizer_type, drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
+  def air_loop_hvac_prm_economizer_type_and_limits(air_loop_hvac, climate_zone)
+    economizer_type = 'NoEconomizer'
+    drybulb_limit_f = nil
+    enthalpy_limit_btu_per_lb = nil
+    dewpoint_limit_f = nil
+    climate_zone_code = climate_zone.split('-')[-1]
+
+    if ['0B', '1B', '2B', '3B', '3C', '4B', '4C', '5B', '5C', '6B', '7A', '7B', '8A', '8B'].include? climate_zone_code
+      economizer_type = 'FixedDryBulb'
+      drybulb_limit_f = 75
+    elsif ['5A', '6A'].include? climate_zone_code
+      economizer_type = 'FixedDryBulb'
+      drybulb_limit_f = 70
+    end
+
+    return [economizer_type, drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
+  end
+
+  # Determine if an economizer is required per the PRM.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if required, false if not
+  def air_loop_hvac_prm_baseline_economizer_required?(air_loop_hvac, climate_zone)
+    economizer_required = false
+    baseline_system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
+    climate_zone_code = climate_zone.split('-')[-1]
+    # System type 3 through 8 and 11, 12 and 13
+    if ['SZ_AC', 'PSZ_AC', 'PVAV_Reheat', 'VAV_Reheat', 'SZ_VAV', 'PSZ_HP', 'SZ_CV', 'PSZ_HP', 'PVAV_PFP_Boxes', 'VAV_PFP_Boxes'].include? baseline_system_type
+      unless ['0A', '0B', '1A', '1B', '2A', '3A', '4A'].include? climate_zone_code
+        economizer_required = true
+      end
+    end
+
+    # System type 3 and 4 in computer rooms are subject to exceptions
+    if baseline_system_type == 'PSZ_AC' || baseline_system_type == 'PSZ_HP'
+      if air_loop_hvac.additionalProperties.hasFeature('zone_group_type')
+        if air_loop_hvac.additionalProperties.getFeatureAsString('zone_group_type').get == 'computer_zones'
+          economizer_required = false
+        end
+      end
+    end
+
+    # Check user_data in the zones
+    gas_phase_exception = false
+    open_refrigeration_exception = false
+    air_loop_hvac.thermalZones.each do |thermal_zone|
+      if thermal_zone.additionalProperties.hasFeature('economizer_exception_for_gas_phase_air_cleaning')
+        gas_phase_exception = true
+      end
+      if thermal_zone.additionalProperties.hasFeature('economizer_exception_for_open_refrigerated_cases')
+        open_refrigeration_exception = true
+      end
+    end
+    if gas_phase_exception || open_refrigeration_exception
+      economizer_required = false
+    end
+    return economizer_required
+  end
+
   # Calculate and apply the performance rating method
   # baseline fan power to this air loop based on the
   # system type that it represents.
@@ -30,9 +96,6 @@ class ASHRAE901PRM < Standard
   def air_loop_hvac_apply_prm_baseline_fan_power(air_loop_hvac)
     # Get system type associated with air loop
     system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
-
-    # Get the fan limitation pressure drop adjustment bhp
-    fan_pwr_adjustment_bhp = air_loop_hvac_fan_power_limitation_pressure_drop_adjustment_brake_horsepower(air_loop_hvac)
 
     # Find out if air loop represents a non mechanically cooled system
     is_nmc = false
@@ -57,7 +120,7 @@ class ASHRAE901PRM < Standard
        system_type == 'SZ_CV'
 
       # Calculate the allowable fan motor bhp for the air loop
-      allowable_fan_bhp = air_loop_hvac_allowable_system_brake_horsepower(air_loop_hvac) + fan_pwr_adjustment_bhp
+      allowable_fan_bhp = air_loop_hvac_allowable_system_brake_horsepower(air_loop_hvac)
 
       # Divide the allowable power based
       # individual zone air flow
@@ -365,5 +428,73 @@ class ASHRAE901PRM < Standard
       "SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName = 'System Ventilation Requirements for Heating' AND ColumnName LIKE 'Outdoor Air Intake Flow%Vot' AND RowName='#{air_loop_hvac.name.to_s.upcase}'"
     )
     return [cooling_oa.to_f, heating_oa.to_f].max
+  end
+
+  # Set the minimum VAV damper positions.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param has_ddc [Bool] if true, will assume that there is DDC control of vav terminals.
+  #   If false, assumes otherwise.
+  # @return [Bool] returns true if successful, false if not
+  def air_loop_hvac_apply_minimum_vav_damper_positions(air_loop_hvac, has_ddc = true)
+    air_loop_hvac.thermalZones.each do |zone|
+      zone.equipment.each do |equip|
+        if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
+          zone_oa = thermal_zone_outdoor_airflow_rate(zone)
+          vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
+          air_terminal_single_duct_vav_reheat_apply_minimum_damper_position(vav_terminal, zone_oa, has_ddc)
+        elsif equip.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized
+          zone_oa = thermal_zone_outdoor_airflow_rate(zone)
+          fp_vav_terminal = equip.to_AirTerminalSingleDuctParallelPIUReheat.get
+          air_terminal_single_duct_parallel_piu_reheat_apply_minimum_primary_airflow_fraction(fp_vav_terminal, zone_oa)
+        end
+      end
+    end
+
+    return true
+  end
+
+  # Determine the fan power limitation pressure drop adjustment
+  # Per Table 6.5.3.1-2 (90.1-2019)
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @return [Double] fan power limitation pressure drop adjustment, in units of horsepower
+  def air_loop_hvac_fan_power_limitation_pressure_drop_adjustment_brake_horsepower(air_loop_hvac)
+    # Calculate Fan Power Limitation Pressure Drop Adjustment
+    fan_pwr_adjustment_bhp = 0
+
+    # Retrieve climate zone
+    climate_zone = air_loop_hvac.model.getClimateZones.getClimateZone(0)
+
+    # Check if energy recovery is required
+    is_energy_recovery_required = air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
+
+    system_type = ''
+    # Get baseline system type if applicable
+    if air_loop_hvac.additionalProperties.hasFeature('baseline_system_type')
+      system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').to_s
+    end
+
+    air_loop_hvac.thermalZones.each do |zone|
+      # Take fan power deductions into account;
+      # Deductions are calculated based on the
+      # baseline model design.
+      # The only deduction that's applicable
+      # is the "System with central electric
+      # resistance heat" for system 6 and 8
+      if system_type == 'PVAV_PFP_Boxes' || system_type == 'VAV_PFP_Boxes'
+        if zone.additionalProperties.hasFeature('has_fan_power_deduction_system_with_central_electric_resistance_heat')
+          current_value = zone.additionalProperties.getFeatureAsDouble('has_fan_power_deduction_system_with_central_electric_resistance_heat')
+          zone.additionalProperties.setFeature('has_fan_power_deduction_system_with_central_electric_resistance_heat', current_value + 1.0)
+        else
+          zone.additionalProperties.setFeature('has_fan_power_deduction_system_with_central_electric_resistance_heat', 1.0)
+        end
+      end
+
+      # Determine fan power adjustment
+      fan_pwr_adjustment_bhp += thermal_zone_get_fan_power_limitations(zone, is_energy_recovery_required)
+    end
+
+    return fan_pwr_adjustment_bhp
   end
 end

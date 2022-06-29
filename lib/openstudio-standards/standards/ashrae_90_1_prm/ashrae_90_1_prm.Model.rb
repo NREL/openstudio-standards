@@ -347,6 +347,279 @@ class ASHRAE901PRM < Standard
     return tot_infil_m3_per_s
   end
 
+  # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
+  #
+  # @return [Bool] true if successful, false if not
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if successful, false if not
+  def model_apply_standard_constructions(model, climate_zone, wwr_building_type = nil, wwr_info = {})
+    types_to_modify = []
+
+    # Possible boundary conditions are
+    # Adiabatic
+    # Surface
+    # Outdoors
+    # Ground
+    # Foundation
+    # GroundFCfactorMethod
+    # OtherSideCoefficients
+    # OtherSideConditionsModel
+    # GroundSlabPreprocessorAverage
+    # GroundSlabPreprocessorCore
+    # GroundSlabPreprocessorPerimeter
+    # GroundBasementPreprocessorAverageWall
+    # GroundBasementPreprocessorAverageFloor
+    # GroundBasementPreprocessorUpperWall
+    # GroundBasementPreprocessorLowerWall
+
+    # Possible surface types are
+    # Floor
+    # Wall
+    # RoofCeiling
+    # FixedWindow
+    # OperableWindow
+    # Door
+    # GlassDoor
+    # OverheadDoor
+    # Skylight
+    # TubularDaylightDome
+    # TubularDaylightDiffuser
+
+    # Create an array of surface types
+    types_to_modify << ['Outdoors', 'Floor']
+    types_to_modify << ['Outdoors', 'Wall']
+    types_to_modify << ['Outdoors', 'RoofCeiling']
+    types_to_modify << ['Outdoors', 'FixedWindow']
+    types_to_modify << ['Outdoors', 'OperableWindow']
+    types_to_modify << ['Outdoors', 'Door']
+    types_to_modify << ['Outdoors', 'GlassDoor']
+    types_to_modify << ['Outdoors', 'OverheadDoor']
+    types_to_modify << ['Outdoors', 'Skylight']
+    types_to_modify << ['Surface', 'Floor']
+    types_to_modify << ['Surface', 'Wall']
+    types_to_modify << ['Surface', 'RoofCeiling']
+    types_to_modify << ['Surface', 'FixedWindow']
+    types_to_modify << ['Surface', 'OperableWindow']
+    types_to_modify << ['Surface', 'Door']
+    types_to_modify << ['Surface', 'GlassDoor']
+    types_to_modify << ['Surface', 'OverheadDoor']
+    types_to_modify << ['Ground', 'Floor']
+    types_to_modify << ['Ground', 'Wall']
+    types_to_modify << ['Foundation', 'Wall']
+    types_to_modify << ['GroundFCfactorMethod', 'Wall']
+    types_to_modify << ['OtherSideCoefficients', 'Wall']
+    types_to_modify << ['OtherSideConditionsModel', 'Wall']
+    types_to_modify << ['GroundBasementPreprocessorAverageWall', 'Wall']
+    types_to_modify << ['GroundBasementPreprocessorUpperWall', 'Wall']
+    types_to_modify << ['GroundBasementPreprocessorLowerWall', 'Wall']
+    types_to_modify << ['Foundation', 'Floor']
+    types_to_modify << ['GroundFCfactorMethod', 'Floor']
+    types_to_modify << ['OtherSideCoefficients', 'Floor']
+    types_to_modify << ['OtherSideConditionsModel', 'Floor']
+    types_to_modify << ['GroundSlabPreprocessorAverage', 'Floor']
+    types_to_modify << ['GroundSlabPreprocessorCore', 'Floor']
+    types_to_modify << ['GroundSlabPreprocessorPerimeter', 'Floor']
+
+    # Find just those surfaces
+    surfaces_to_modify = []
+    surface_category = {}
+    org_surface_boundary_conditions = {}
+    types_to_modify.each do |boundary_condition, surface_type|
+      # Surfaces
+      model.getSurfaces.sort.each do |surf|
+        next unless surf.outsideBoundaryCondition == boundary_condition
+        next unless surf.surfaceType == surface_type
+
+        # Check if surface is adjacent to an unenclosed or unconditioned space (e.g. attic or parking garage)
+        if surf.outsideBoundaryCondition == 'Surface'
+          adj_space = surf.adjacentSurface.get.space.get
+          adj_space_cond_type = space_conditioning_category(adj_space)
+          if adj_space_cond_type == 'Unconditioned'
+            # Get adjacent surface
+            adjacent_surf = surf.adjacentSurface.get
+
+            # Store original boundary condition type
+            org_surface_boundary_conditions[surf.name.to_s] = adjacent_surf
+
+            # Temporary change the surface's boundary condition to 'Outdoors' so it can be assigned a baseline construction
+            surf.setOutsideBoundaryCondition('Outdoors')
+            adjacent_surf.setOutsideBoundaryCondition('Outdoors')
+          end
+        end
+
+        if boundary_condition == 'Outdoors'
+          surface_category[surf] = 'ExteriorSurface'
+        elsif ['Ground', 'Foundation', 'GroundFCfactorMethod', 'OtherSideCoefficients', 'OtherSideConditionsModel', 'GroundSlabPreprocessorAverage', 'GroundSlabPreprocessorCore', 'GroundSlabPreprocessorPerimeter', 'GroundBasementPreprocessorAverageWall', 'GroundBasementPreprocessorAverageFloor', 'GroundBasementPreprocessorUpperWall', 'GroundBasementPreprocessorLowerWall'].include?(boundary_condition)
+          surface_category[surf] = 'GroundSurface'
+        else
+          surface_category[surf] = 'NA'
+        end
+        surfaces_to_modify << surf
+      end
+
+      # SubSurfaces
+      model.getSubSurfaces.sort.each do |surf|
+        next unless surf.outsideBoundaryCondition == boundary_condition
+        next unless surf.subSurfaceType == surface_type
+
+        surface_category[surf] = 'ExteriorSubSurface'
+        surfaces_to_modify << surf
+      end
+    end
+
+    # Modify these surfaces
+    prev_created_consts = {}
+    surfaces_to_modify.sort.each do |surf|
+      # Get space conditioning
+      space = surf.space.get
+      space_cond_type = space_conditioning_category(space)
+
+      # Do not modify constructions for unconditioned spaces
+      prev_created_consts = planar_surface_apply_standard_construction(surf, climate_zone, prev_created_consts, wwr_building_type, wwr_info, surface_category[surf]) unless space_cond_type == 'Unconditioned'
+
+      # Reset boundary conditions to original if they were temporary modified
+      if org_surface_boundary_conditions.include?(surf.name.to_s)
+        surf.setAdjacentSurface(org_surface_boundary_conditions[surf.name.to_s])
+      end
+    end
+
+    # List the unique array of constructions
+    if prev_created_consts.size.zero?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'None of the constructions in your proposed model have both Intended Surface Type and Standards Construction Type')
+    else
+      prev_created_consts.each do |surf_type, construction|
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{surf_type.join(' ')}, applied #{construction.name}.")
+      end
+    end
+
+    return true
+  end
+
+  # Go through the default construction sets and hard-assigned constructions.
+  # Clone the existing constructions and set their intended surface type and standards construction type per the PRM.
+  # For some standards, this will involve making modifications.  For others, it will not.
+  #
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
+  def model_apply_prm_construction_types(model)
+    types_to_modify = []
+
+    # Possible boundary conditions are
+    # Adiabatic
+    # Surface
+    # Outdoors
+    # Ground
+    # Foundation
+    # GroundFCfactorMethod
+    # OtherSideCoefficients
+    # OtherSideConditionsModel
+    # GroundSlabPreprocessorAverage
+    # GroundSlabPreprocessorCore
+    # GroundSlabPreprocessorPerimeter
+    # GroundBasementPreprocessorAverageWall
+    # GroundBasementPreprocessorAverageFloor
+    # GroundBasementPreprocessorUpperWall
+    # GroundBasementPreprocessorLowerWall
+
+    # Possible surface types are
+    # AtticFloor
+    # AtticWall
+    # AtticRoof
+    # DemisingFloor
+    # DemisingWall
+    # DemisingRoof
+    # ExteriorFloor
+    # ExteriorWall
+    # ExteriorRoof
+    # ExteriorWindow
+    # ExteriorDoor
+    # GlassDoor
+    # GroundContactFloor
+    # GroundContactWall
+    # GroundContactRoof
+    # InteriorFloor
+    # InteriorWall
+    # InteriorCeiling
+    # InteriorPartition
+    # InteriorWindow
+    # InteriorDoor
+    # OverheadDoor
+    # Skylight
+    # TubularDaylightDome
+    # TubularDaylightDiffuser
+
+    # Possible standards construction types
+    # Mass
+    # SteelFramed
+    # WoodFramed
+    # IEAD
+    # View
+    # Daylight
+    # Swinging
+    # NonSwinging
+    # Heated
+    # Unheated
+    # RollUp
+    # Sliding
+    # Metal
+    # Nonmetal framing (all)
+    # Metal framing (curtainwall/storefront)
+    # Metal framing (entrance door)
+    # Metal framing (all other)
+    # Metal Building
+    # Attic and Other
+    # Glass with Curb
+    # Plastic with Curb
+    # Without Curb
+
+    # Create an array of types
+    types_to_modify << ['Outdoors', 'ExteriorWall', 'SteelFramed']
+    types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
+    types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
+    types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['Ground', 'GroundContactWall', 'Mass']
+
+    # Foundation
+    types_to_modify << ['Foundation', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['Foundation', 'GroundContactWall', 'Mass']
+
+    # F/C-Factor methods
+    types_to_modify << ['GroundFCfactorMethod', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundFCfactorMethod', 'GroundContactWall', 'Mass']
+
+    # Other side coefficients
+    types_to_modify << ['OtherSideCoefficients', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['OtherSideConditionsModel', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['OtherSideCoefficients', 'GroundContactWall', 'Mass']
+    types_to_modify << ['OtherSideConditionsModel', 'GroundContactWall', 'Mass']
+
+    # Slab preprocessor
+    types_to_modify << ['GroundSlabPreprocessorAverage', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundSlabPreprocessorCore', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundSlabPreprocessorPerimeter', 'GroundContactFloor', 'Unheated']
+
+    # Basement preprocessor
+    types_to_modify << ['GroundBasementPreprocessorAverageWall', 'GroundContactWall', 'Mass']
+    types_to_modify << ['GroundBasementPreprocessorAverageFloor', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundBasementPreprocessorUpperWall', 'GroundContactWall', 'Mass']
+    types_to_modify << ['GroundBasementPreprocessorLowerWall', 'GroundContactWall', 'Mass']
+
+    # Modify all constructions of each type
+    types_to_modify.each do |boundary_cond, surf_type, const_type|
+      constructions = model_find_constructions(model, boundary_cond, surf_type)
+
+      constructions.sort.each do |const|
+        standards_info = const.standardsInformation
+        standards_info.setIntendedSurfaceType(surf_type)
+        standards_info.setStandardsConstructionType(const_type)
+      end
+    end
+
+    return true
+  end
+
   # Reduces the SRR to the values specified by the PRM. SRR reduction will be done by shrinking vertices toward the centroid.
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
@@ -854,6 +1127,539 @@ class ASHRAE901PRM < Standard
         air_loop_hvac.thermalZones.sort.each do |zone|
           unless baseline_thermal_zone_demand_control_ventilation_required?(zone)
             thermal_zone_convert_oa_req_to_per_area(zone)
+          end
+        end
+      end
+    end
+  end
+
+  # A template method that handles the loading of user input data from multiple sources
+  # include data source from:
+  # 1. user data csv files
+  # 2. data from measure and OpenStudio interface
+  # @param [Openstudio:model:Model] model
+  # @param [String] climate_zone
+  # @param [String] default_hvac_building_type
+  # @param [String] default_wwr_building_type
+  # @param [String] default_swh_building_type
+  # @param [Hash] bldg_type_hvac_zone_hash A hash maps building type for hvac to a list of thermal zones
+  # @return True
+  def handle_user_input_data(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
+    # load the multiple building area types from user data
+    handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
+    # load user data from proposed model
+    handle_airloop_user_input_data(model)
+    # load air loop DOAS user data from the proposed model
+    handle_airloop_doas_user_input_data(model)
+    # load zone HVAC user data from proposed model
+    handle_zone_hvac_user_input_data(model)
+  end
+
+  # A function to load airloop data from userdata csv files
+  # @param [OpenStudio::Model::Model] OpenStudio model object
+  def handle_airloop_user_input_data(model)
+    # ============================Process airloop info ============================================
+    user_airloops = @standards_data.key?('userdata_airloop_hvac') ? @standards_data['userdata_airloop_hvac'] : nil
+    model.getAirLoopHVACs.each do |air_loop|
+      air_loop_name = air_loop.name.get
+      if user_airloops && user_airloops.length > 1
+        user_airloops.each do |user_airloop|
+          if air_loop_name == user_airloop['name']
+            # gas phase air cleaning is system base - add proposed hvac system name to zones
+            if user_airloop.key?('economizer_exception_for_gas_phase_air_cleaning') && !user_airloop['economizer_exception_for_gas_phase_air_cleaning'].nil?
+              if user_airloop['economizer_exception_for_gas_phase_air_cleaning'].downcase == 'yes'
+                air_loop.thermalZones.each do |thermal_zone|
+                  thermal_zone.additionalProperties.setFeature('economizer_exception_for_gas_phase_air_cleaning', air_loop_name)
+                end
+              end
+            end
+            # Open refrigerated cases is zone based - add yes or no to zones
+            if user_airloop.key?('economizer_exception_for_open_refrigerated_cases') && !user_airloop['economizer_exception_for_open_refrigerated_cases'].nil?
+              if user_airloop['economizer_exception_for_open_refrigerated_cases'].downcase == 'yes'
+                air_loop.thermalZones.each do |thermal_zone|
+                  thermal_zone.additionalProperties.setFeature('economizer_exception_for_open_refrigerated_cases', 'yes')
+                end
+              end
+            end
+            # Fan power credits
+            user_airloop.keys.each do |info_key|
+              if info_key.include?('fan_power_credit')
+                if !user_airloop[info_key].to_s.empty?
+                  if info_key.include?('has_')
+                    if user_airloop[info_key].downcase == 'yes'
+                      air_loop.thermalZones.each do |thermal_zone|
+                        if thermal_zone.additionalProperties.hasFeature(info_key)
+                          current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
+                          thermal_zone.additionalProperties.setFeature(info_key, current_value + 1.0)
+                        else
+                          thermal_zone.additionalProperties.setFeature(info_key, 1.0)
+                        end
+                      end
+                    end
+                  else
+                    air_loop.thermalZones.each do |thermal_zones|
+                      if thermal_zone.additionalProperties.hasFeature(info_key)
+                        current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
+                        thermal_zone.additionalProperties.setFeature(info_key, current_value + user_airloop[info_key])
+                      else
+                        thermal_zone.additionalProperties.setFeature(info_key, user_airloop[info_key])
+                      end
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
+  # A function to load airloop DOAS data from userdata csv files
+  # @param [OpenStudio::Model::Model] OpenStudio model object
+  def handle_airloop_doas_user_input_data(model)
+    # Get user data
+    user_airloop_doass = @standards_data.key?('userdata_airloop_hvac_doas') ? @standards_data['userdata_airloop_hvac_doas'] : nil
+
+    # Parse user data
+    if user_airloop_doass && user_airloop_doass.length >= 1
+      user_airloop_doass.each do |user_airloop_doas|
+        # Get AirLoopHVACDedicatedOutdoorAirSystem
+        air_loop_doas = model.getAirLoopHVACDedicatedOutdoorAirSystemByName(user_airloop_doas['name'])
+        if !air_loop_doas.is_initialized
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_prm.Model', "The AirLoopHVACDedicatedOutdoorAirSystem named #{user_airloop_doass['name']} mentioned in the userdata_airloop_hvac_doas was not found in the model, user specified data associated with it will be ignored.")
+          next
+        else
+          air_loop_doas = air_loop_doas.get
+        end
+
+        # Parse fan power credits data
+        user_airloop_doas.keys.each do |info_key|
+          if info_key.include?('fan_power_credit')
+            if !user_airloop_doas[info_key].to_s.empty?
+              # Case 1: Yes/no
+              if info_key.include?('has_')
+                if user_airloop_doas[info_key].downcase == 'yes'
+                  air_loop_doas.airLoops.each do |air_loop|
+                    air_loop.thermalZones.each do |thermal_zone|
+                      if thermal_zone.additionalProperties.hasFeature(info_key)
+                        current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
+                        thermal_zone.additionalProperties.setFeature(info_key, current_value + 1.0)
+                      else
+                        thermal_zone.additionalProperties.setFeature(info_key, 1.0)
+                      end
+                    end
+                  end
+                end
+              else
+                # Case 2: user provided value
+                air_loop_doas.airLoops.each do |air_loop|
+                  air_loop.thermalZones.each do |thermal_zones|
+                    if thermal_zone.additionalProperties.hasFeature(info_key)
+                      current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
+                      thermal_zone.additionalProperties.setFeature(info_key, current_value + user_airloop_doas[info_key])
+                    else
+                      thermal_zone.additionalProperties.setFeature(info_key, user_airloop_doas[info_key])
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
+  # Analyze HVAC, window-to-wall ratio and SWH building (area) types from user data inputs in the @standard_data library
+  # This function returns True, but the values are stored in the multi-building_data argument.
+  # The hierarchy for process the building types
+  # 1. Highest: PRM rules - if rules applied against user inputs, the function will use the calculated value to reset the building type
+  # 2. Second: User defined building type in the csv file.
+  # 3. Third: User defined userdata_building.csv file. If an object (e.g. space, thermalzone) are not defined in their correspondent userdata csv file, use the building csv file
+  # 4. Fourth: Dropdown list in the measure GUI. If none presented, use the data from the dropdown list.
+  # NOTE! This function will add building types to OpenStudio objects as an additional features for hierarchy 1-3
+  # The object additional feature is empty when the function determined it uses fourth hierarchy.
+  #
+  # @param [OpenStudio::Model::Model] model
+  # @param [String] climate_zone
+  # @param [String] default_hvac_building_type (Fourth Hierarchy hvac building type)
+  # @param [String] default_wwr_building_type (Fourth Hierarchy wwr building type)
+  # @param [String] default_swh_building_type (Fourth Hierarchy swh building type)
+  # @param [Hash] bldg_type_zone_hash An empty hash that maps building type for hvac to a list of thermal zones
+  # @return True
+  def handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
+    # Construct the user_building hashmap
+    user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
+
+    # Build up a hvac_building_type : thermal zone hash map
+    # =============================HVAC user data process===========================================
+    user_thermal_zones = @standards_data.key?('userdata_thermal_zone') ? @standards_data['userdata_thermal_zone'] : nil
+    # First construct hvac building type -> thermal Zone hash and hvac building type -> floor area
+    bldg_type_zone_hash = {}
+    bldg_type_zone_area_hash = {}
+    model.getThermalZones.each do |thermal_zone|
+      # get climate zone to check the conditioning category
+      thermal_zone_condition_category = thermal_zone_conditioning_category(thermal_zone, climate_zone)
+      if thermal_zone_condition_category == 'Semiheated' || thermal_zone_condition_category == 'Unconditioned'
+        next
+      end
+
+      # Check for Second hierarchy
+      hvac_building_type = nil
+      if user_thermal_zones && user_thermal_zones.length >= 1
+        user_thermal_zone_index = user_thermal_zones.index { |user_thermal_zone| user_thermal_zone['name'] == thermal_zone.name.get }
+        # make sure the thermal zone has assigned a building_type_for_hvac
+        unless user_thermal_zone_index.nil? || user_thermal_zones[user_thermal_zone_index]['building_type_for_hvac'].nil?
+          # Only thermal zone in the user data and have building_type_for_hvac data will be assigned.
+          hvac_building_type = user_thermal_zones[user_thermal_zone_index]['building_type_for_hvac']
+        end
+      end
+      # Second hierarchy does not apply, check Third hierarchy
+      if hvac_building_type.nil? && user_buildings && user_buildings.length >= 1
+        building_name = thermal_zone.model.building.get.name.get
+        user_building_index = user_buildings.index { |user_building| user_building['name'] == building_name }
+        unless user_building_index.nil? || user_buildings[user_building_index]['building_type_for_hvac'].nil?
+          # Only thermal zone in the buildings user data and have building_type_for_hvac data will be assigned.
+          hvac_building_type = user_buildings[user_building_index]['building_type_for_hvac']
+        end
+      end
+      # Third hierarchy does not apply, apply Fourth hierarchy
+      if hvac_building_type.nil?
+        hvac_building_type = default_hvac_building_type
+      end
+      # Add data to the hash map
+      unless bldg_type_zone_hash.key?(hvac_building_type)
+        bldg_type_zone_hash[hvac_building_type] = []
+      end
+      unless bldg_type_zone_area_hash.key?(hvac_building_type)
+        bldg_type_zone_area_hash[hvac_building_type] = 0.0
+      end
+      # calculate floor area for the thermal zone
+      part_of_floor_area = false
+      thermal_zone.spaces.sort.each do |space|
+        next unless space.partofTotalFloorArea
+
+        # a space in thermal zone is part of floor area.
+        part_of_floor_area = true
+        bldg_type_zone_area_hash[hvac_building_type] += space.floorArea * space.multiplier
+      end
+      if part_of_floor_area
+        # Only add the thermal_zone if it is part of the floor area
+        bldg_type_zone_hash[hvac_building_type].append(thermal_zone)
+      end
+    end
+    # Handle an edge case that all zones in the model are unconditioned.
+    unless bldg_type_zone_hash.empty?
+      # Calculate the total floor area.
+      # If the max tie, this algorithm will pick the first encountered hvac building type as the maximum.
+      total_floor_area = 0.0
+      hvac_bldg_type_with_max_floor = nil
+      hvac_bldg_type_max_floor_area = 0.0
+      bldg_type_zone_area_hash.each do |key, value|
+        if value > hvac_bldg_type_max_floor_area
+          hvac_bldg_type_with_max_floor = key
+          hvac_bldg_type_max_floor_area = value
+        end
+        total_floor_area += value
+      end
+
+      # Reset the thermal zones by going through the hierarchy 1 logics
+      bldg_type_hvac_zone_hash.clear
+      # Add the thermal zones for the maximum floor (primary system)
+      bldg_type_hvac_zone_hash[hvac_bldg_type_with_max_floor] = bldg_type_zone_hash[hvac_bldg_type_with_max_floor]
+      bldg_type_zone_hash.each do |bldg_type, bldg_type_zone|
+        # loop the rest bldg_types
+        unless bldg_type.eql? hvac_bldg_type_with_max_floor
+          if OpenStudio.convert(total_floor_area, 'm^2', 'ft^2').get <= 40000
+            # Building is smaller than 40k sqft, it could only have one hvac_building_type, reset all the thermal zones.
+            bldg_type_hvac_zone_hash[hvac_bldg_type_with_max_floor].push(*bldg_type_zone)
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The building floor area is less than 40,000 square foot. Thermal zones under hvac building type #{bldg_type} is reset to #{hvac_bldg_type_with_max_floor}")
+          else
+            if OpenStudio.convert(bldg_type_zone_area_hash[bldg_type], 'm^2', 'ft^2').get < 20000
+              # in this case, all thermal zones shall be categorized as the primary hvac_building_type
+              bldg_type_hvac_zone_hash[hvac_bldg_type_with_max_floor].push(*bldg_type_zone)
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The floor area in hvac building type #{bldg_type} is less than 20,000 square foot. Thermal zones under this hvac building type is reset to #{hvac_bldg_type_with_max_floor}")
+            else
+              bldg_type_hvac_zone_hash[bldg_type] = bldg_type_zone
+            end
+          end
+        end
+      end
+
+      # Write in hvac building type thermal zones by thermal zone
+      bldg_type_hvac_zone_hash.each do |h1_bldg_type, bldg_type_zone_array|
+        bldg_type_zone_array.each do |thermal_zone|
+          thermal_zone.additionalProperties.setFeature('building_type_for_hvac', h1_bldg_type)
+        end
+      end
+    end
+
+    # =============================SPACE user data process===========================================
+    user_spaces = @standards_data.key?('userdata_space') ? @standards_data['userdata_space'] : nil
+    model.getSpaces.each do |space|
+      type_for_wwr = nil
+      # Check for 2nd level hierarchy
+      if user_spaces && user_spaces.length >= 1
+        user_spaces.each do |user_space|
+          unless user_space['building_type_for_wwr'].nil?
+            if space.name.get == user_space['name']
+              type_for_wwr = user_space['building_type_for_wwr']
+            end
+          end
+        end
+      end
+
+      if type_for_wwr.nil?
+        # 2nd Hierarchy does not apply, check for 3rd level hierarchy
+        building_name = space.model.building.get.name.get
+        if user_buildings && user_buildings.length >= 1
+          user_buildings.each do |user_building|
+            unless user_building['building_type_for_wwr'].nil?
+              if user_building['name'] == building_name
+                type_for_wwr = user_building['building_type_for_wwr']
+              end
+            end
+          end
+        end
+      end
+
+      if type_for_wwr.nil?
+        # 3rd level hierarchy does not apply, Apply 4th level hierarchy
+        type_for_wwr = default_wwr_building_type
+      end
+      # add wwr type to space:
+      space.additionalProperties.setFeature('building_type_for_wwr', type_for_wwr)
+    end
+    # =============================SWH user data process===========================================
+    user_wateruse_equipments = @standards_data.key?('userdata_wateruse_equipment') ? @standards_data['userdata_wateruse_equipment'] : nil
+    model.getWaterUseEquipments.each do |wateruse_equipment|
+      type_for_swh = nil
+      # Check for 2nd hierarchy
+      if user_wateruse_equipments && user_wateruse_equipments.length >= 1
+        user_wateruse_equipments.each do |user_wateruse_equipment|
+          unless user_wateruse_equipment['building_type_for_swh'].nil?
+            if wateruse_equipment.name.get == user_wateruse_equipment['name']
+              type_for_swh = user_wateruse_equipment['building_type_for_swh']
+            end
+          end
+        end
+      end
+
+      if type_for_swh.nil?
+        # 2nd hierarchy does not apply, check for 3rd hierarchy
+        # get space building type
+        building_name = wateruse_equipment.model.building.get.name.get
+        if user_buildings && user_buildings.length >= 1
+          user_buildings.each do |user_building|
+            unless user_building['building_type_for_swh'].nil?
+              if user_building['name'] == building_name
+                type_for_swh = user_building['building_type_for_swh']
+              end
+            end
+          end
+        end
+      end
+
+      if type_for_swh.nil?
+        # 3rd hierarchy does not apply, apply 4th hierarchy
+        type_for_swh = default_swh_building_type
+      end
+      # add swh type to wateruse equipment:
+      wateruse_equipment.additionalProperties.setFeature('building_type_for_swh', type_for_swh)
+    end
+    return true
+  end
+
+  # Check whether the baseline model generation needs to run all four orientations
+  # The default shall be true
+  #
+  # @param [Boolean] run_all_orients: user inputs to indicate whether it is required to run all orientations
+  # @param [OpenStudio::Model::Model] Openstudio model
+  def run_all_orientations(run_all_orients, user_model)
+    # Step 0, assign the default value
+    run_orients_flag = run_all_orients
+    # Step 1 check orientation variations - priority 2
+    fenestration_area_hash = get_model_fenestration_area_by_orientation(user_model)
+    fenestration_area_hash.each do |orientation, fenestration_area|
+      fenestration_area_hash.each do |other_orientation, other_fenestration_area|
+        next unless orientation != other_orientation
+
+        variance = (other_fenestration_area - fenestration_area) / fenestration_area
+        if variance.abs > 0.05
+          # if greater then 0.05
+          run_orients_flag = true
+        end
+      end
+    end
+    # Step 2 read user data - priority 1 - user data will override the priority 2
+    user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
+    if user_buildings
+      building_name = user_model.building.get.name.get
+      user_building_index = user_buildings.index { |user_building| building_name.include? user_building['name'] }
+      unless user_building_index.nil? || user_buildings[user_building_index]['is_exempt_from_rotations'].nil?
+        # user data exempt the rotation, No indicates true for running orients.
+        run_orients_flag = user_buildings[user_building_index]['is_exempt_from_rotations'].casecmp('No') == 0
+      end
+    end
+    return run_orients_flag
+  end
+
+  def get_model_fenestration_area_by_orientation(user_model)
+    # First index is wall, second index is window
+    fenestration_area_hash = {
+      'N' => 0.0,
+      'S' => 0.0,
+      'E' => 0.0,
+      'W' => 0.0
+    }
+    user_model.getSpaces.each do |space|
+      space_cond_type = space_conditioning_category(space)
+      next if space_cond_type == 'Unconditioned'
+
+      # Get zone multiplier
+      multiplier = space.thermalZone.get.multiplier
+      space.surfaces.each do |surface|
+        next if surface.surfaceType != 'Wall'
+        next if surface.outsideBoundaryCondition != 'Outdoors'
+
+        orientation = surface_cardinal_direction(surface)
+        surface.subSurfaces.each do |subsurface|
+          subsurface_type = subsurface.subSurfaceType.to_s.downcase
+          # Do not count doors
+          next unless (subsurface_type.include? 'window') || (subsurface_type.include? 'glass')
+
+          fenestration_area_hash[orientation] += subsurface.grossArea * subsurface.multiplier * multiplier
+        end
+      end
+    end
+    return fenestration_area_hash
+  end
+
+  # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
+  #
+  # @return [Bool] true if successful, false if not
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if successful, false if not
+  def model_apply_constructions(model, climate_zone, wwr_building_type, wwr_info)
+    model_apply_standard_constructions(model, climate_zone, wwr_building_type, wwr_info)
+
+    return true
+  end
+
+  # Update ground temperature profile based on the weather file specified in the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if successful, false if not
+  def model_update_ground_temperature_profile(model, climate_zone)
+    # Check if the ground temperature profile is needed
+    surfaces_with_fc_factor_boundary = false
+    model.getSurfaces.each do |surface|
+      if surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod'
+        surfaces_with_fc_factor_boundary = true
+        break
+      end
+    end
+
+    return false unless surfaces_with_fc_factor_boundary
+
+    # Remove existing FCFactor temperature profile
+    model.getSiteGroundTemperatureFCfactorMethod.remove
+
+    # Get path to weather file specified in the model
+    weather_file_path = model.getWeatherFile.path.get.to_s
+
+    # Look for stat file corresponding to the weather file
+    stat_file_path = weather_file_path.sub('.epw', '.stat').to_s
+    if !File.exist? stat_file_path
+      # When the stat file corresponding with the weather file in the model is missing,
+      # use the weather file that represent the climate zone
+      climate_zone_weather_file_map = model_get_climate_zone_weather_file_map
+      weather_file = climate_zone_weather_file_map[climate_zone]
+      stat_file_path = model_get_weather_file(weather_file).sub('.epw', '.stat').to_s
+    end
+
+    ground_temp = OpenStudio::Model::SiteGroundTemperatureFCfactorMethod.new(model)
+    ground_temperatures = model_get_monthly_ground_temps_from_stat_file(stat_file_path)
+    unless ground_temperatures.empty?
+      # set the site ground temperature building surface
+      ground_temp.setAllMonthlyTemperatures(ground_temperatures)
+    end
+
+    return true
+  end
+
+  # Retrieve zone HVAC user specified compliance inputs from CSV file
+  #
+  # @param [OpenStudio::Model::Model] OpenStudio model object
+  def handle_zone_hvac_user_input_data(model)
+    user_zone_hvac = @standards_data.key?('userdata_zone_hvac') ? @standards_data['userdata_zone_hvac'] : nil
+    return unless !user_zone_hvac.empty?
+
+    zone_hvac_equipment = model.getZoneHVACComponents
+    if zone_hvac_equipment.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', 'No zone HVAC equipment is present in the proposed model, user provided information cannot be used to generate the baseline building model.')
+      return
+    end
+
+    user_zone_hvac.each do |zone_hvac_eqp_info|
+      user_defined_zone_hvac_obj_name = zone_hvac_eqp_info['name']
+      user_defined_zone_hvac_obj_type_name = zone_hvac_eqp_info['zone_hvac_object_type_name']
+
+      # Check that the object type name do exist
+      begin
+        user_defined_zone_hvac_obj_type_name_idd = user_defined_zone_hvac_obj_type_name.to_IddObjectType
+      rescue StandardError => e
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', "#{user_defined_zone_hvac_obj_type_name}, provided in the user zone HVAC user data, is not a valid OpenStudio model object.")
+      end
+
+      # Retrieve zone HVAC object(s) by name
+      zone_hvac_eqp = model.getZoneHVACComponentsByName(user_defined_zone_hvac_obj_name, false)
+
+      # If multiple object have the same name
+      if zone_hvac_eqp.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', "The #{user_defined_zone_hvac_obj_type_name} object named #{user_defined_zone_hvac_obj_name} provided in the user zone HVAC user data could not be found in the model.")
+      elsif zone_hvac_eqp.length == 1
+        zone_hvac_eqp = zone_hvac_eqp[0]
+        zone_hvac_eqp_idd = zone_hvac_eqp.iddObjectType.to_s
+        if zone_hvac_eqp_idd != user_defined_zone_hvac_obj_type_name
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', "The object type name provided in the zone HVAC user data (#{user_defined_zone_hvac_obj_type_name}) does not match with the one in the model: #{zone_hvac_eqp_idd}.")
+        end
+      else
+        zone_hvac_eqp.each do |eqp|
+          zone_hvac_eqp_idd = eqp.iddObjectType
+          if zone_hvac_eqp_idd == user_defined_zone_hvac_obj_type_name
+            zone_hvac_eqp = eqp
+            break
+          end
+        end
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', "A #{user_defined_zone_hvac_obj_type_name} object named #{user_defined_zone_hvac_obj_name} (as specified in the user zone HVAC data) could not be found in the model.")
+      end
+
+      if zone_hvac_eqp.thermalZone.is_initialized
+        thermal_zone = zone_hvac_eqp.thermalZone.get
+
+        zone_hvac_eqp_info.keys.each do |info_key|
+          if info_key.include?('fan_power_credit')
+            if !zone_hvac_eqp_info[info_key].to_s.empty?
+              if info_key.include?('has_')
+                if thermal_zone.additionalProperties.hasFeature(info_key)
+                  current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
+                  thermal_zone.additionalProperties.setFeature(info_key, current_value + 1.0)
+                else
+                  thermal_zone.additionalProperties.setFeature(info_key, 1.0)
+                end
+              else
+                if thermal_zone.additionalProperties.hasFeature(info_key)
+                  current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
+                  thermal_zone.additionalProperties.setFeature(info_key, current_value + zone_hvac_eqp_info[info_key])
+                else
+                  thermal_zone.additionalProperties.setFeature(info_key, zone_hvac_eqp_info[info_key])
+                end
+              end
+            end
           end
         end
       end
