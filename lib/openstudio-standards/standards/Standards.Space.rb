@@ -321,7 +321,7 @@ class Standard
               min_y_val = vertex.y
             end
             # Max y value
-            if vertex.y > max_x_val
+            if vertex.y > max_y_val
               max_y_val = vertex.y
             end
           end
