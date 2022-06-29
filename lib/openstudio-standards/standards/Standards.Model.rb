@@ -472,6 +472,7 @@ class Standard
 
       # Check unmet load hours
       if unmet_load_hours_check
+        nb_adjustments = 0
         loop do
           model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}") == false
           # If UMLH are greater than the threshold allowed by Appendix G,
@@ -480,38 +481,54 @@ class Standard
           # air zone air flow, but the zone sizing factor in EnergyPlus
           # increase both air flow and load.
           if model_get_unmet_load_hours(model) > 300
+            # Limit the number of zone sizing factor adjustment to 8
+            unless nb_adjustments < 8
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "After 8 rounds of zone sizing factor adjustments the unmet load hours for the baseline model (#{degs} degree of rotation) still exceed 300 hours. Please open an issue on GitHub (https://github.com/NREL/openstudio-standards/issues) and share your user model with the developers.")
+              break
+            end
             model.getThermalZones.each do |thermal_zone|
+              # Cooling adjustments
               clg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Cooling')
-              if clg_umlh > 150
+              if clg_umlh > 50
+                # Get zone cooling sizing factor
                 if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
-                  sizing_factor = thermal_zone.sizingZone.zoneCoolingSizingFactor.get * 1.1
+                  sizing_factor = thermal_zone.sizingZone.zoneCoolingSizingFactor.get
                 else
-                  sizing_factor = 1.1
+                  sizing_factor = 1.0
                 end
-                thermal_zone.sizingZone.setZoneCoolingSizingFactor(sizing_factor)
-              elsif clg_umlh > 50
-                if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
-                  sizing_factor = thermal_zone.sizingZone.zoneCoolingSizingFactor.get * 1.05
-                else
-                  sizing_factor = 1.05
+
+                # Make adjustment to zone cooling sizing factor
+                # Do not adjust factors greater or equal to 2
+                if sizing_factor < 2.0
+                  if clg_umlh > 150
+                    sizing_factor *= 1.1
+                  elsif clg_umlh > 50
+                    sizing_factor *= 1.05
+                  end
+                  thermal_zone.sizingZone.setZoneCoolingSizingFactor(sizing_factor)
                 end
-                thermal_zone.sizingZone.setZoneCoolingSizingFactor(sizing_factor)
               end
+
+              # Heating adjustments
               htg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Heating')
-              if htg_umlh > 150
+              if htg_umlh > 50
+                # Get zone cooling sizing factor
                 if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized
-                  sizing_factor = thermal_zone.sizingZone.zoneHeatingSizingFactor.get * 1.1
+                  sizing_factor = thermal_zone.sizingZone.zoneHeatingSizingFactor.get
                 else
-                  sizing_factor = 1.1
+                  sizing_factor = 1.0
                 end
-                thermal_zone.sizingZone.setZoneHeatingSizingFactor(sizing_factor)
-              elsif htg_umlh > 50
-                if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized
-                  sizing_factor = thermal_zone.sizingZone.zoneHeatingSizingFactor.get * 1.05
-                else
-                  sizing_factor = 1.05
+
+                # Make adjustment to zone heating sizing factor
+                # Do not adjust factors greater or equal to 2
+                if sizing_factor < 2.0
+                  if htg_umlh > 150
+                    sizing_factor *= 1.1
+                  elsif htg_umlh > 50
+                    sizing_factor *= 1.05
+                  end
+                  thermal_zone.sizingZone.setZoneHeatingSizingFactor(sizing_factor)
                 end
-                thermal_zone.sizingZone.setZoneHeatingSizingFactor(sizing_factor)
               end
             end
           else
