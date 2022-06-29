@@ -706,7 +706,7 @@ class AppendixGPRMTests < Minitest::Test
           #     - at the zone level, zone oa spec per person 0.003539605824
           zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
           airloop = zone.airLoopHVAC.get
-          # TODO JXL check warning
+          # check warning
           assert(dcv_is_on(zone, airloop))
 
         when 3
@@ -725,7 +725,7 @@ class AppendixGPRMTests < Minitest::Test
           #     - at the zone level [through remove_zone_oa_per_person_spec modifier] (optional)
           zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
           airloop = zone.airLoopHVAC.get
-          # TODO JXL check error and terminate
+          # check error and terminate
           assert(!dcv_is_on(zone, airloop))
 
         when 4
@@ -798,7 +798,7 @@ class AppendixGPRMTests < Minitest::Test
           #     - at the zone level, zone oa spec per person 0.003539605824
           zone = model_baseline.getThermalZoneByName('Kitchen_ZN_1_FLR_1 ZN').get
           airloop = zone.airLoopHVAC.get
-          # TODO:JXL check for warning
+          # check warning
           assert(!dcv_is_on(zone, airloop))
 
         when 8
@@ -822,16 +822,6 @@ class AppendixGPRMTests < Minitest::Test
           assert(false, "ERROR! #{tc_id} not a valid test case id for check_dcv")
         end
       end
-
-      # # cafeteria Cafeteria_ZN_1_FLR_1 ZN
-      # cafe_zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
-      # cafe_airloop = cafe_zone.airLoopHVAC.get
-      # assert(!dcv_is_on(cafe_zone, cafe_airloop))
-      #
-      # # office Offices_ZN_1_FLR_1 ZN
-      # office_zone = model_baseline.getThermalZoneByName('Offices_ZN_1_FLR_1 ZN').get
-      # office_airloop = office_zone.airLoopHVAC.get
-      # assert(!dcv_is_on(office_zone, office_airloop))
     end
 
   end

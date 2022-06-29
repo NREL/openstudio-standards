@@ -684,12 +684,6 @@ class ASHRAE901PRM < Standard
       zone.additionalProperties.setFeature('zone DCV implemented in user model', false)
     end
 
-    model.getThermalZones.each do |zone| # TODO: JXL delete this block, this is for testing
-      puts zone.name
-      puts zone.additionalProperties.getFeatureAsBoolean('zone DCV implemented in user model').get
-      # puts zone.additionalProperties.getFeatureAsBoolean('user specified DCV exception').get
-    end
-
     return true
   end
 
@@ -820,13 +814,6 @@ class ASHRAE901PRM < Standard
     model.getAirLoopHVACs.each do |air_loop_hvac|
       if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
         oa_flow_m3_per_s = get_airloop_hvac_design_oa_from_sql(air_loop_hvac)
-        # oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
-        # controller_oa = oa_system.getControllerOutdoorAir
-        # if controller_oa.minimumOutdoorAirFlowRate.is_initialized
-        #   oa_flow_m3_per_s = controller_oa.minimumOutdoorAirFlowRate.get
-        # elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
-        #   oa_flow_m3_per_s = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
-        # end
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, DCV not applicable because it has no OA intake.")
         return false

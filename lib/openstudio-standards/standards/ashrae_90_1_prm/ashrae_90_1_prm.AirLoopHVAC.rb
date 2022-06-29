@@ -270,25 +270,15 @@ class ASHRAE901PRM < Standard
     # check the following conditions at airloop level
     # has air economizer OR design outdoor airflow > 3000 cfm
 
-    has_economizer = air_loop_hvac_economizer?(air_loop_hvac) # TODO: JXL double check this method
+    has_economizer = air_loop_hvac_economizer?(air_loop_hvac)
 
-    # code block below is from superclass
     if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
       oa_flow_m3_per_s = get_airloop_hvac_design_oa_from_sql(air_loop_hvac)
-      # oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
-      # controller_oa = oa_system.getControllerOutdoorAir
-      # if controller_oa.minimumOutdoorAirFlowRate.is_initialized
-      #   oa_flow_m3_per_s = controller_oa.minimumOutdoorAirFlowRate.get
-      # elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
-      #   oa_flow_m3_per_s = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
-      # end
     else
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, DCV not applicable because it has no OA intake.")
       return false
     end
     oa_flow_cfm = OpenStudio.convert(oa_flow_m3_per_s, 'm^3/s', 'cfm').get
-
-    # return true if has_economizer || (oa_flow_cfm > 3000) #
 
     any_zones_req_dcv = false
     air_loop_hvac.thermalZones.sort.each do |zone|
@@ -298,7 +288,6 @@ class ASHRAE901PRM < Standard
       end
     end
 
-    # TODO: JXL this is different from existing implementation, confirm with Doug / Jian
     return true if any_zones_req_dcv && (has_economizer || (oa_flow_cfm > 3000))
 
     return false
@@ -315,7 +304,6 @@ class ASHRAE901PRM < Standard
     # check the following conditions at zone level
     # zone > 500 sqft AND design occ > 25 ppl/ksqft
 
-    # below checks for 500 sqft minimum and 25 ppl/ksqft
     area_served_m2 = 0
     num_people = 0
     thermal_zone.spaces.each do |space|
