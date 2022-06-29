@@ -237,6 +237,7 @@ class Standard
         end
       end
 
+      # Compute and marke DCV related information before deleting proposed model HVAC systems
       model_mark_zone_dcv_existence(model)
       model_add_dcv_user_exception_properties(model)
       model_add_dcv_requirement_properties(model)
@@ -420,8 +421,7 @@ class Standard
 
       end
 
-      model_set_apxg_dcv_flag(model)
-
+      # Set baseline DCV system
       model_set_baseline_demand_control_ventilation(model, climate_zone)
 
       # Fix EMS references.
@@ -7434,30 +7434,51 @@ class Standard
     return true
   end
 
+  # Template method for adding zone additional property "zone DCV implemented in user model"
+  #
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] Openstudio model
   def model_mark_zone_dcv_existence(model)
     return true
   end
 
+  # Template method for reading user data and adding to zone additional properties
+  #
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] Openstudio model
   def model_add_dcv_user_exception_properties(model)
     return true
   end
 
+  # Template method for raising user model DCV warning and errors
+  #
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] Openstudio model
   def model_raise_user_model_dcv_errors(model)
     return true
   end
 
+  # Template method for adding zone additional property "airloop dcv required by 901" and "zone dcv required by 901"
+  #
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] Openstudio model
   def model_add_dcv_requirement_properties(model)
     return true
   end
 
+  # Template method for checking if zones in the baseline model should have DCV based on 90.1 2019 G3.1.2.5.
+  # Zone additional property 'apxg no need to have DCV' added
+  #
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] Openstudio model
   def model_add_apxg_dcv_properties(model)
     return true
   end
 
-  def model_set_apxg_dcv_flag(model)
-    return true
-  end
-
+  # Template method for setting DCV in baseline HVAC system if required
+  #
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] Openstudio model
   def model_set_baseline_demand_control_ventilation(model, climate_zone)
     return true
   end

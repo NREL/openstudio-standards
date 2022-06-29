@@ -257,6 +257,11 @@ class ASHRAE901PRM < Standard
     return allowable_fan_bhp
   end
 
+  # Check if an air loop in user model needs to have DCV per air loop related requiremends in ASHRAE 90.1-2019 6.4.3.8
+  #
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @return [Boolean] flag of whether air loop in user model is required to have DCV
   def user_model_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
     # all zones in the same airloop in user model are set with the same value, so use the first zone under the loop
     dcv_airloop_user_exception = air_loop_hvac.thermalZones[0].additionalProperties.getFeatureAsBoolean('airloop user specified DCV exception').get
@@ -299,6 +304,10 @@ class ASHRAE901PRM < Standard
     return false
   end
 
+  # Check if a zone in user model needs to have DCV per zone related requiremends in ASHRAE 90.1-2019 6.4.3.8
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone
+  # @return [Boolean] flag of whether thermal zone in user model is required to have DCV
   def user_model_zone_demand_control_ventilation_required?(thermal_zone)
     dcv_zone_user_exception = thermal_zone.additionalProperties.getFeatureAsBoolean('zone user specified DCV exception').get
     return false if dcv_zone_user_exception
@@ -321,6 +330,11 @@ class ASHRAE901PRM < Standard
     return false
   end
 
+  # Check if the air loop in baseline model needs to have DCV
+  #
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @return [Boolean] flag of whether the air loop in baseline is required to have DCV
   def baseline_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
     any_zone_req_dcv = false
     air_loop_hvac.thermalZones.each do |zone|
@@ -331,6 +345,11 @@ class ASHRAE901PRM < Standard
     return any_zone_req_dcv # baseline airloop needs dcv if any zone it serves needs dcv
   end
 
+  # Check if the thermal zone in baseline model needs to have DCV
+  #
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone
+  # @return [Boolean] flag of whether thermal zone in baseline is required to have DCV
   def baseline_thermal_zone_demand_control_ventilation_required?(thermal_zone)
     # zone needs dcv if user model has dcv and baseline does not meet apxg exception
     if thermal_zone.additionalProperties.hasFeature("apxg no need to have DCV")
@@ -344,6 +363,10 @@ class ASHRAE901PRM < Standard
     return false
   end
 
+  # Get the air loop HVAC design outdoor air flow rate by reading Standard 62.1 Summary from the sizing sql
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @return [Float] Design outdoor air flow rate (m^3/s)
   def get_airloop_hvac_design_oa_from_sql(air_loop_hvac)
     return false unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
 
