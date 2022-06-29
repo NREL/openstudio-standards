@@ -51,7 +51,7 @@ class ASHRAE901PRM < Standard
         end
       end
       unless user_data_validation_outcome
-        raise 'Error found in the user data. Check output log to see detail error messages'
+        terminate_prm_write_log('Error found in the user data. Check output log to see detail error messages', OpenStudio::Error, "#{project_path}/prm.log", false)
       end
     end
 
