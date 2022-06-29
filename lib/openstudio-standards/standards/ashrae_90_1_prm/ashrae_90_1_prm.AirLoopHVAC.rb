@@ -344,7 +344,7 @@ class ASHRAE901PRM < Standard
       # meaning it was served by an airloop in the user model, does not mean much here, conditional as a safeguard
       # in case it was not served by an airloop in the user model
       if !thermal_zone.additionalProperties.getFeatureAsBoolean("apxg no need to have DCV").get && # does not meet apxg exception (need to have dcv if user model has it
-        thermal_zone.additionalProperties.getFeatureAsBoolean("zone DCV implemented in user model").get
+         thermal_zone.additionalProperties.getFeatureAsBoolean("zone DCV implemented in user model").get
         return true
       end
     end
@@ -358,10 +358,10 @@ class ASHRAE901PRM < Standard
   def get_airloop_hvac_design_oa_from_sql(air_loop_hvac)
     return false unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
 
-    cooling_oa = air_loop_hvac.model.sqlFile().get().execAndReturnFirstDouble(
+    cooling_oa = air_loop_hvac.model.sqlFile.get.execAndReturnFirstDouble(
       "SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName = 'System Ventilation Requirements for Cooling' AND ColumnName LIKE 'Outdoor Air Intake Flow%Vot' AND RowName='#{air_loop_hvac.name.to_s.upcase}'"
     )
-    heating_oa = air_loop_hvac.model.sqlFile().get().execAndReturnFirstDouble(
+    heating_oa = air_loop_hvac.model.sqlFile.get.execAndReturnFirstDouble(
       "SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName = 'System Ventilation Requirements for Heating' AND ColumnName LIKE 'Outdoor Air Intake Flow%Vot' AND RowName='#{air_loop_hvac.name.to_s.upcase}'"
     )
     return [cooling_oa.to_f, heating_oa.to_f].max

@@ -667,7 +667,7 @@ class AppendixGPRMTests < Minitest::Test
         end
       end
       if tc_ids.nil?
-        assert(false, "mark_test_case_no mod not set, cannot proceed with DCV test check_dcv")
+        assert(false, 'mark_test_case_no mod not set, cannot proceed with DCV test check_dcv')
       end
 
       tc_ids.each do |tc_id|
@@ -823,13 +823,12 @@ class AppendixGPRMTests < Minitest::Test
         end
       end
     end
-
   end
 
   def dcv_is_on(thermal_zone, air_loop_hvac)
-
     # check air loop level DCV enabled
     return false unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+
     oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
     controller_oa = oa_system.getControllerOutdoorAir
     controller_mv = controller_oa.controllerMechanicalVentilation
