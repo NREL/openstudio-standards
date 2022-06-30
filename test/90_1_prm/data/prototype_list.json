@@ -33,6 +33,10 @@
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test",[["remove_transformer", []]]],
         ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test",[["remove_transformer", []]]]
     ],
+    "pipe_insulation": [
+        
+        ["QuickServiceRestaurant", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data", [["add_piping_insulation", []]]]
+    ],
     "hvac_baseline": [
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []], ["return_relief_fan", []]]],
         ["Warehouse", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_cooling_coils", []]]],
