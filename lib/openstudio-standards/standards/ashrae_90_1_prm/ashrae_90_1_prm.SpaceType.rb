@@ -122,7 +122,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     elsif !(user_equip_data['fraction_of_controlled_receptacles'].nil? && user_equip_data['receptacle_power_savings'].nil?)
       # If not a motor - update.
       # Update the electric equipment occupancy credit (if it has)
-      update_power_equipment_credits(power_equipment, user_equip_data, power_schedule_hash, space_type.model, user_space_data)
+      update_power_equipment_credits(power_equipment, user_equip_data, power_schedule_hash, space_type, user_space_data)
     else
       # The electric equipment is either an elevator or refrigeration
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ElectricEquipment', "#{power_equipment.name} is an elevator or refrigeration according to the user data provided. Skip receptacle power credit.")
