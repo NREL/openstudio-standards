@@ -61,7 +61,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       # call this function to enforce space-space_type one on one relationship
       new_space_array = space_to_space_type_apply_lighting(user_spaces, user_spacetypes, space_type)
       # process power equipment with new spaces.
-      space_to_space_type_apply_power_equipment(user_spaces, user_spacetypes, new_space_array)
+      space_to_space_type_apply_power_equipment(user_spacetypes, user_spaces, new_space_array)
       # remove the old space
       space_type.remove
     else
@@ -77,7 +77,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
           # If multiple LPD value exist - then enforce space-space_type one on one relationship
           if has_multi_lpd_values_user_data(user_space_type, space_type)
             new_space_array = space_to_space_type_apply_lighting(user_spaces, user_spacetypes, space_type)
-            space_to_space_type_apply_power_equipment(user_spaces, user_spacetypes, new_space_array)
+            space_to_space_type_apply_power_equipment(user_spacetypes, user_spaces, new_space_array)
             space_type.remove
           else
             # Process the user_space type data - at this point, we are sure there is no lighting per length
@@ -177,7 +177,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       space_array.each do |space|
         # Each space has a unique space type
         space_type = space.spaceType.get
-        user_spacestypes_index = user_spacetypes.index { |user_spacetype| user_spacetype['name'] == space_type.name.get }
+        user_spacestypes_index = user_spacetypes.index { |user_spacetype| /#{user_spacetype['name']}/i =~ space_type.name.get }
         user_space_index = user_spaces.index { |user_space| user_space['name'] == space.name.get }
         # Initialize with standard space_type
         user_space_data = space_type.name.get
@@ -192,7 +192,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         space_type_electric_equipments = space_type.electricEquipment
         space_type_electric_equipments.each do |sp_electric_equipment|
           electric_equipment_name = sp_electric_equipment.name.get
-          select_user_electric_equipment_array = user_electric_equipment_data.select { |elec| elec['name'].casecmp(electric_equipment_name) == 0 }
+          select_user_electric_equipment_array = user_electric_equipment_data.select { |elec| /#{elec['name']}/i =~ electric_equipment_name }
           unless select_user_electric_equipment_array.empty?
             select_user_electric_equipment = select_user_electric_equipment_array[0]
             calculate_electric_value_by_userdata(select_user_electric_equipment, sp_electric_equipment, power_schedule_hash, space_type, user_space_data)
@@ -251,27 +251,27 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     end
 
     # process user space data
-    if user_data
+    if user_data.is_a?(Hash)
       if user_data.key?('num_std_ltg_types') && user_data['num_std_ltg_types'].to_f > 0
         adjusted_receptacle_power_credits = 0.0
         num_std_space_types = user_data['num_std_ltg_types'].to_i
         std_space_index = 0 # loop index
         # Loop through standard lighting type in a space
         while std_space_index < num_std_space_types
+          std_space_index += 1
           # Retrieve data from user_data
-          type_key = format('std_ltg_type%02d', (std_space_index + 1))
-          frac_key = format('std_ltg_type_frac%02d', (std_space_index + 1))
+          type_key = format('std_ltg_type%02d', std_space_index)
+          frac_key = format('std_ltg_type_frac%02d', std_space_index)
           sub_space_type = user_data[type_key]
           next if exception_list.include?(sub_space_type)
 
-          adjusted_receptacle_power_credits = user_data[frac_key].to_f * receptacle_power_credits
+          adjusted_receptacle_power_credits += user_data[frac_key].to_f * receptacle_power_credits
           # Adjust while loop condition factors
-          std_ltg_index += 1
         end
         receptacle_power_credits = adjusted_receptacle_power_credits
       end
-    else
-      if exception_list.include?(space_type.name.get)
+    elsif user_data.is_a?(String)
+      if exception_list.include?(space_type.standardsSpaceType.get)
         # the space type is in the exception list, no credit to the space type
         receptacle_power_credits = 0.0
       end

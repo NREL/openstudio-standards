@@ -71,3 +71,10 @@ Expected output: the baseline schedule is 15% higher than proposed schedule for 
 - Summary:
 This case will test whether *motor_horsepower*, *motor_efficiency* and *motor_is_exempt* are read correctly for an electric equipment (*Office WholeBuilding - Sm Office Elec Equip*).
 Expected output: the electric equipment in the baseline shall have three additional properties *motor_horsepower = 10.0*, *motor_efficiency = 0.72* and *motor_is_exempt = No* 
+
+
+### Test case 4
+- Prototype: Small Office
+- User data folder: */userdata_pe_04*
+- Summary:
+This case added space and space type to the user data. For equipment **Office WholeBuilding - Sm Office Elec Equip 4**, the receptacle credit was set to 0.05 however, it is then adjusted to 0.025 because one of the space type (conference/meeting/multipurpose) is on the exception list.

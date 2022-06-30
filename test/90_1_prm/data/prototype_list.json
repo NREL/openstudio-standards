@@ -137,7 +137,8 @@
     "pe_userdata_handling":[
         ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_pe_01",[["remove_transformer", []]]],
         ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_pe_02",[["remove_transformer", []]]],
-        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_pe_03",[["remove_transformer", []]]]
+        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_pe_03",[["remove_transformer", []]]],
+        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_pe_04",[["remove_transformer", []]]]
     ],
     "unenclosed_spaces": [
         ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_default_test",[["change_weather_file", []]]]
