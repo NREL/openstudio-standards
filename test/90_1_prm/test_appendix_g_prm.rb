@@ -464,10 +464,16 @@ class AppendixGPRMTests < Minitest::Test
         assert(base_electric_equipment_ap.hasFeature('motor_is_exempt') && base_electric_equipment_ap.getFeatureAsString('motor_is_exempt').get == 'No',
                "motor_is_exempt data is missing or incorrect. The motor_is_exempt for test case 3 shall be No")
       elsif base_user_data_dir == 'userdata_pe_04'
-        base_electric_equipment_schedules = baseline_model.getElectricEquipments[4].schedule.get.to_ScheduleRuleset.get.scheduleRules
-        base_electric_equipment_schedules.each do |schedule_rule|
-          receptacle_power_credits = schedule_rule.name.get.split('_')[1].to_f
-          assert((0.025 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.025 (5%) but get #{receptacle_power_credits}")
+        baseline_equipments = baseline_model.getElectricEquipments
+        baseline_equipments.each do |equipment|
+          baseline_equipment_name = equipment.name.get
+          if baseline_equipment_name == 'Office WholeBuilding - Sm Office Elec Equip 4'
+            base_electric_equipment_schedules = equipment.schedule.get.to_ScheduleRuleset.get.scheduleRules
+            base_electric_equipment_schedules.each do |schedule_rule|
+              receptacle_power_credits = schedule_rule.name.get.split('_')[1].to_f
+              assert((0.025 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.025 (5%) but get #{receptacle_power_credits}")
+            end
+          end
         end
       end
     end
