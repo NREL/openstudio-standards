@@ -42,9 +42,9 @@ end
 # @param log_level [OpenStudio::LogLevel] log level, eg. OpenStudio::Info
 # @param log_path [String] the log file directory
 # @param debug [Boolean] debug mode
-def terminate_prm_write_log(msg, log_level, log_path, debug = false)
-  OpenStudio.logFree(log_level, 'openstudio.prm', msg)
-  log_messages_to_file_prm(log_path, debug)
+def terminate_prm_write_log(msg, log_path, debug = false)
+  OpenStudio.logFree(OpenStudio::ERROR, 'prm.log', msg)
+  log_messages_to_file_prm("#{log_path}/prm.log", debug)
   raise msg
 end
 
@@ -59,7 +59,7 @@ def log_messages_to_file_prm(file_path, debug = false)
   File.open(file_path, 'w') do |file|
     $OPENSTUDIO_LOG.logMessages.each do |msg|
       # only apply to prm
-      if msg.logChannel.casecmp? 'openstudio.prm'
+      if msg.logChannel.casecmp? 'prm.log'
         # Report the message in the correct way
         if msg.logLevel == OpenStudio::Info
           s = "[#{msg.logChannel}] INFO  #{msg.logMessage}"

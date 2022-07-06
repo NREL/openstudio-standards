@@ -457,8 +457,8 @@ class Standard
       idf_path = OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.idf")
       idf.save(idf_path, true)
     end
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prm', 'This message is used as test for log message function')
-    log_messages_to_file_prm("#{sizing_run_dir}/prm.log", false)
+    OpenStudio.logFree(OpenStudio::Info, 'prm.log', 'This message is used as test for log message function')
+    log_messages_to_file_prm(sizing_run_dir, false)
     return true
   end
 
