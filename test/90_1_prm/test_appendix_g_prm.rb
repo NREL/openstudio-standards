@@ -2502,6 +2502,18 @@ class AppendixGPRMTests < Minitest::Test
     return model
   end
 
+  # Add piping insulation to service heating water systems
+  def add_piping_insulation(model, arguments)
+    std = Standard.build('90.1-PRM-2019')
+    model.getPlantLoops.each do |plantloop|
+      if std.plant_loop_swh_loop?(plantloop)
+        std.model_add_piping_losses_to_swh_system(model, plantloop, true)
+      end
+    end
+
+    return model
+  end
+
   # Change the weather used in the model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -2516,6 +2528,29 @@ class AppendixGPRMTests < Minitest::Test
     OpenStudio::Model::WeatherFile.setWeatherFile(model, epw_file).get
 
     return model
+  end
+
+  # Check that no pipe insulation is modeled in the baseline models
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_pipe_insulation(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+      # Check if the model include PipeIndoor or PipeOutdoor objects
+      model_baseline.getPlantLoops.each do |plant_loop| 
+        existing_pipe_insulation = ''
+        a = plant_loop.supplyComponents
+        b = plant_loop.demandComponents
+        plantloopComponents = a += b
+        plantloopComponents.each do |component|
+          # Get the object type
+          obj_type = component.iddObjectType.valueName.to_s
+          next if !['OS_Pipe_Indoor', 'OS_Pipe_Outdoor'].include?(obj_type)
+          existing_pipe_insulation = existing_pipe_insulation
+        end
+        assert(existing_pipe_insulation.empty?, "The baseline model for the #{building_type}-#{template} in #{climate_zone} has no pipe insulation.")
+      end
+    end
   end
 
   # Run test suite for the ASHRAE 90.1 appendix G Performance
@@ -2533,6 +2568,7 @@ class AppendixGPRMTests < Minitest::Test
       'light_occ_sensor',
       'infiltration',
       'vav_fan_curve',
+      'pipe_insulation',
       'hvac_baseline',
       'hvac_psz_split_from_mz',
       'plant_temp_reset_ctrl',
@@ -2569,6 +2605,7 @@ class AppendixGPRMTests < Minitest::Test
     check_light_occ_sensor(prototypes['light_occ_sensor'], prototypes_base['light_occ_sensor']) if tests.include? 'light_occ_sensor'
     check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if tests.include? 'infiltration'
     check_variable_speed_fan_power(prototypes_base['vav_fan_curve']) if tests.include? 'vav_fan_curve'
+    check_pipe_insulation(prototypes_base['pipe_insulation']) if tests.include? 'pipe_insulation'
     check_hvac(prototypes_base['hvac_baseline']) if tests.include? 'hvac_baseline'
     check_sat_ctrl(prototypes_base['sat_ctrl']) if tests.include? 'sat_ctrl'
     check_number_of_boilers(prototypes_base['number_of_boilers']) if tests.include? 'number_of_boilers'
