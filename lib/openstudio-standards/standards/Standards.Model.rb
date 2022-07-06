@@ -5125,6 +5125,7 @@ class Standard
         bat.store('sh_fene_only_wall_m2', 0.001)
         bat.store('sh_wind_m2', 0)
         bat.store('total_wall_m2', 0.001)
+        bat.store('total_plenum_m2', 0.001)
       else
         bat = bat_win_wall_info[std_spc_type]
       end
@@ -5203,6 +5204,11 @@ class Standard
           bat['sh_fene_only_wall_m2'] += wall_only_area_m2
           bat['sh_wind_m2'] += wind_area_m2
       end
+
+      # If the space is plenum, add the total wall area to the plenum
+      # If plenum - if there is wind_area_m2, then the plenum was designed to have openings, then we do not count these areas
+      # Else, we count these area in the total_plenum_m2 for later process.
+      bat['total_plenum_m2'] += wall_area_m2
     end
 
     # Retrieve WWR info for all Building Area Types included in the model
@@ -5277,6 +5283,8 @@ class Standard
         std_spc_type = space.additionalProperties.getFeatureAsString('building_type_for_wwr').get
         # skip process the space unless the space wwr type matched.
         next unless bat == std_spc_type
+        # supply and return plenum is now conditioned space but should be excluded from window adjustment
+        next if space_plenum? (space)
 
         # Determine the space category
         # from the previously stored values
