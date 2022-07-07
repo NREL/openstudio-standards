@@ -74,7 +74,7 @@ class Standard
     # NOTE - bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
     # Define different orientation from original orientation
     # for each individual baseline models
-    degs_from_org = run_all_orients ? [0, 90, 180, 270] : [0]
+    degs_from_org = run_all_orientations(run_all_orients, user_model) ? [0, 90, 180, 270] : [0]
 
     # Create baseline model for each orientation
     degs_from_org.each do |degs|
@@ -89,8 +89,10 @@ class Standard
       model_rotate(model, degs) unless degs == 0
 
       # Perform a sizing run of the proposed model.
-      # Intent is to get individual space load to determine each space's
-      # conditioning type: conditioned, unconditioned, semiheated.
+      #
+      # Among others, one of the goal is to get individual
+      # space load to determine each space's conditioning
+      # type: conditioned, unconditioned, semiheated.
       if model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
         # Set up some special reports to be used for baseline system selection later
         # Zone return air flows
@@ -119,6 +121,7 @@ class Standard
           output.setReportingFrequency(frequency)
         end
 
+        # Run the sizing run
         if model_run_sizing_run(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
           return false
         end
@@ -131,6 +134,10 @@ class Standard
           # Set space conditioning category
           space.additionalProperties.setFeature('space_conditioning_category', space_conditioning_category)
         end
+
+        # The following should be done after a sizing run of the proposed model
+        # because the proposed model zone design air flow is needed
+        model_identify_return_air_type(model)
       end
 
       # Remove external shading devices
@@ -244,12 +251,12 @@ class Standard
       # Remove all EMS objects from the model
       model_remove_prm_ems_objects(model)
 
-      if /prm/i !~ template
+      
 
         # Modify the service water heating loops per the baseline rules
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
         model_apply_baseline_swh_loops(model, building_type)
-      end
+      
 
       # Determine the baseline HVAC system type for each of the groups of zones and add that system type.
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
@@ -303,9 +310,16 @@ class Standard
             air_loop.additionalProperties.setFeature('zone_group_type', sys_group['zone_group_type'] || 'None')
             air_loop_name_array << air_loop_name
           end
+
+          # Determine return air type
+          plenum, return_air_type = model_determine_baseline_return_air_type(model, system_type[0], air_loop.thermalZones)
+          air_loop.thermalZones.sort.each do |zone|
+            # Set up return air plenum
+            zone.setReturnPlenum(model.getThermalZoneByName(plenum).get) if return_air_type == 'return_plenum'
+          end
         end
       end
-      # Add system type reference to all airloops
+      # Add system type reference to all air loops
       model.getAirLoopHVACs.sort.each do |air_loop|
         if air_loop.thermalZones[0].additionalProperties.hasFeature('baseline_system_type')
           sys_type = air_loop.thermalZones[0].additionalProperties.getFeatureAsString('baseline_system_type').get
@@ -315,8 +329,8 @@ class Standard
         end
       end
 
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Sizing Settings ***')
       # Set the zone sizing SAT for each zone in the model
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Sizing Settings ***')
       model.getThermalZones.each do |zone|
         thermal_zone_apply_prm_baseline_supply_temperatures(zone) # prm template conditionals added in the methods
       end
@@ -7455,6 +7469,157 @@ class Standard
   # @return [Boolean] true
   def model_set_central_preheat_coil_spm(model, thermalZones, coil)
     return true
+  end
+
+  # Check whether the baseline model generation needs to run all four orientations
+  # The default shall be true
+  #
+  # @param [Boolean] run_all_orients: user inputs to indicate whether it is required to run all orientations
+  # @param [OpenStudio::Model::Model] Openstudio model
+  def run_all_orientations(run_all_orients, user_model)
+    return run_all_orients
+  end
+
+  # Identify the return air type associated with each thermal zone
+  #
+  # @param model [OpenStudio::Model::Model] Openstudio model object
+  def model_identify_return_air_type(model)
+    # air-loop based system
+    model.getThermalZones.each do |zone|
+      # Conditioning category won't include indirectly conditioned thermal zones
+      cond_cat = thermal_zone_conditioning_category(zone, model_standards_climate_zone(model))
+
+      # Initialize the return air type
+      return_air_type = nil
+
+      # The thermal zone is conditioned by zonal system
+      if (cond_cat != 'Unconditioned') && zone.airLoopHVACs.empty?
+        return_air_type = 'ducted_return_or_direct_to_unit'
+      end
+
+      # Assume that the primary heating and cooling (PHC) system
+      # is last in the heating and cooling order (ignore DOAS)
+      #
+      # Get the heating and cooling PHC components
+      heating_equipment = zone.equipmentInHeatingOrder[-1]
+      cooling_equipment = zone.equipmentInCoolingOrder[-1]
+      if heating_equipment.nil? && cooling_equipment.nil?
+        next
+      end
+
+      unless heating_equipment.nil?
+        if heating_equipment.to_ZoneHVACComponent.is_initialized
+          heating_equipment_type = 'ZoneHVACComponent'
+        elsif heating_equipment.to_StraightComponent.is_initialized
+          heating_equipment_type = 'StraightComponent'
+        end
+      end
+      unless cooling_equipment.nil?
+        if cooling_equipment.to_ZoneHVACComponent.is_initialized
+          cooling_equipment_type = 'ZoneHVACComponent'
+        elsif cooling_equipment.to_StraightComponent.is_initialized
+          cooling_equipment_type = 'StraightComponent'
+        end
+      end
+
+      # Determine return configuration
+      if (heating_equipment_type == 'ZoneHVACComponent') && (cooling_equipment_type == 'ZoneHVACComponent')
+        return_air_type = 'ducted_return_or_direct_to_unit'
+      else
+        # Check heating air loop first
+        unless heating_equipment.nil?
+          if heating_equipment.to_StraightComponent.is_initialized
+            air_loop = heating_equipment.to_StraightComponent.get.airLoopHVAC.get
+            return_plenum = air_loop_hvac_return_air_plenum(air_loop)
+            return_air_type = return_plenum.nil? ? 'ducted_return_or_direct_to_unit' : 'return_plenum'
+            return_plenum = return_plenum.nil? ? nil : return_plenum.name.to_s
+          end
+        end
+
+        # Check cooling air loop second; Assume that return air plenum is the dominant case
+        unless cooling_equipment.nil?
+          if (return_air_type != 'return_plenum') && cooling_equipment.to_StraightComponent.is_initialized
+            air_loop = cooling_equipment.to_StraightComponent.get.airLoopHVAC.get
+            return_plenum = air_loop_hvac_return_air_plenum(air_loop)
+            return_air_type = return_plenum.nil? ? 'ducted_return_or_direct_to_unit' : 'return_plenum'
+            return_plenum = return_plenum.nil? ? nil : return_plenum.name.to_s
+          end
+        end
+      end
+
+      # Catch all
+      if return_air_type.nil?
+        return_air_type = 'ducted_return_or_direct_to_unit'
+      end
+
+      zone.additionalProperties.setFeature('return_air_type', return_air_type)
+      zone.additionalProperties.setFeature('plenum', return_plenum) unless return_plenum.nil?
+      zone.additionalProperties.setFeature('proposed_model_zone_design_air_flow', zone.designAirFlowRate.to_f)
+    end
+  end
+
+  # Determine the baseline return air type associated with each zone
+  #
+  # @param model [OpenStudio::Model::model] OpenStudio model object
+  # @param baseline_system_type [String] Baseline system type name
+  # @param zones [Array] List of zone associated with a system
+  # @return [Array] Array of length 2, the first item is the name
+  #                 of the plenum zone and the second the return air type
+  def model_determine_baseline_return_air_type(model, baseline_system_type, zones)
+    return ['', 'ducted_return_or_direct_to_unit'] unless ['PSZ_AC', 'PSZ_HP', 'PVAV_Reheat', 'PVAV_PFP_Boxes', 'VAV_Reheat', 'VAV_PFP_Boxes', 'SZ_VAV', 'SZ_CV'].include?(baseline_system_type)
+
+    zone_return_air_type = {}
+    zones.each do |zone|
+      if zone.additionalProperties.hasFeature('proposed_model_zone_design_air_flow')
+        zone_design_air_flow = zone.additionalProperties.getFeatureAsDouble('proposed_model_zone_design_air_flow').get
+
+        if zone.additionalProperties.hasFeature('return_air_type')
+          return_air_type = zone.additionalProperties.getFeatureAsString('return_air_type').get
+
+          if zone_return_air_type.keys.include?(return_air_type)
+            zone_return_air_type[return_air_type] += zone_design_air_flow
+          else
+            zone_return_air_type[return_air_type] = zone_design_air_flow
+          end
+
+          if zone.additionalProperties.hasFeature('plenum')
+            plenum = zone.additionalProperties.getFeatureAsString('plenum').get
+
+            if zone_return_air_type.keys.include?('plenum')
+              if zone_return_air_type['plenum'].keys.include?(plenum)
+                zone_return_air_type['plenum'][plenum] += zone_design_air_flow
+              end
+            else
+              zone_return_air_type['plenum'] = { plenum => zone_design_air_flow }
+            end
+          end
+        end
+      end
+    end
+
+    # Find dominant zone return air type and plenum zone
+    # if the return air type is return air plenum
+    return_air_types = zone_return_air_type.keys - ['plenum']
+    return_air_types_score = 0
+    return_air_type = nil
+    plenum_score = 0
+    plenum = nil
+    return_air_types.each do |return_type|
+      if zone_return_air_type[return_type] > return_air_types_score
+        return_air_type = return_type
+        return_air_types_score = zone_return_air_type[return_type]
+      end
+      if return_air_type == 'return_plenum'
+        zone_return_air_type['plenum'].keys.each do |p|
+          if zone_return_air_type['plenum'][p] > plenum_score
+            plenum = p
+            plenum_score = zone_return_air_type['plenum'][p]
+          end
+        end
+      end
+    end
+
+    return plenum, return_air_type
   end
 
   # Add reporting tolerances. Default values are based on the suggestions from the PRM-RM.

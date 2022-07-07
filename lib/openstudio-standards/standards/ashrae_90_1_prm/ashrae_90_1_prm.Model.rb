@@ -1373,6 +1373,182 @@ class ASHRAE901PRM < Standard
     return true
   end
 
+  # Modify the existing service water heating loops to match the baseline required heating type.
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @param building_type [String] the building type
+  # @return [Bool] returns true if successful, false if not
+  def model_apply_baseline_swh_loops(model, building_type)
+    model.getPlantLoops.sort.each do |plant_loop|
+      # Skip non service water heating loops
+      next unless plant_loop_swh_loop?(plant_loop)
+
+      # Rename the loop to avoid accidentally hooking up the HVAC systems to this loop later.
+      plant_loop.setName('Service Water Heating Loop')
+
+      htg_fuels, combination_system, storage_capacity, total_heating_capacity = plant_loop_swh_system_type(plant_loop)
+
+      # htg_fuels.size == 0 shoudln't happen
+
+      electric = true
+
+      if htg_fuels.include?('NaturalGas') ||
+          htg_fuels.include?('PropaneGas') ||
+          htg_fuels.include?('FuelOilNo1') ||
+          htg_fuels.include?('FuelOilNo2') ||
+          htg_fuels.include?('Coal') ||
+          htg_fuels.include?('Diesel') ||
+          htg_fuels.include?('Gasoline')
+        electric = false
+      end
+
+      # Per Table G3.1 11.e, if the baseline system was a combination of heating and service water heating,
+      # delete all heating equipment and recreate a WaterHeater:Mixed.
+
+      if combination_system
+        a = plant_loop.supplyComponents
+        b = plant_loop.demandComponents
+        plantloopComponents = a += b
+        plantloopComponents.each do |component|
+          # Get the object type
+          obj_type = component.iddObjectType.valueName.to_s
+          next if ['OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'].include?(obj_type)
+
+          component.remove
+        end
+
+        water_heater = OpenStudio::Model::WaterHeaterMixed.new(model)
+        water_heater.setName('Baseline Water Heater')
+        water_heater.setHeaterMaximumCapacity(total_heating_capacity)
+        water_heater.setTankVolume(storage_capacity)
+        plant_loop.addSupplyBranchForComponent(water_heater)
+
+        if electric
+          # G3.1.11.b: If electric, WaterHeater:Mixed with electric resistance
+          water_heater.setHeaterFuelType('Electricity')
+          water_heater.setHeaterThermalEfficiency(1.0)
+        else
+          # @todo for now, just get the first fuel that isn't Electricity
+          # A better way would be to count the capacities associated
+          # with each fuel type and use the preponderant one
+          fuels = htg_fuels - ['Electricity']
+          fossil_fuel_type = fuels[0]
+          water_heater.setHeaterFuelType(fossil_fuel_type)
+          water_heater.setHeaterThermalEfficiency(0.8)
+        end
+        # If it's not a combination heating and service water heating system
+        # just change the fuel type of all water heaters on the system
+        # to electric resistance if it's electric
+      else
+        # Per Table G3.1 11.i, piping losses was deleted
+
+        a = plant_loop.supplyComponents
+        b = plant_loop.demandComponents
+        plantloopComponents = a += b
+        plantloopComponents.each do |component|
+          # Get the object type
+          obj_type = component.iddObjectType.valueName.to_s
+          next if !['OS_Pipe_Indoor', 'OS_Pipe_Outdoor'].include?(obj_type)
+          pipe = component.to_PipeIndoor.get
+          node = pipe.to_StraightComponent.get.outletModelObject.get.to_Node.get
+
+          node_name = node.name.get
+          pipe_name = pipe.name.get
+
+          # Add Pipe_Adiabatic
+          newpipe = OpenStudio::Model::PipeAdiabatic.new(model)
+          newpipe.setName(pipe_name)
+          newpipe.addToNode(node)
+          component.remove
+        end
+
+
+        if electric
+          plant_loop.supplyComponents.each do |component|
+            next unless component.to_WaterHeaterMixed.is_initialized
+
+            water_heater = component.to_WaterHeaterMixed.get
+            # G3.1.11.b: If electric, WaterHeater:Mixed with electric resistance
+            water_heater.setHeaterFuelType('Electricity')
+            water_heater.setHeaterThermalEfficiency(1.0)
+          end
+        end
+      end
+    end
+
+    # Set the water heater fuel types if it's 90.1-2013
+    model.getWaterHeaterMixeds.sort.each do |water_heater|
+      water_heater_mixed_apply_prm_baseline_fuel_type(water_heater, building_type)
+    end
+
+    return true
+  end
+
+  # Check whether the baseline model generation needs to run all four orientations
+  # The default shall be true
+  #
+  # @param [Boolean] run_all_orients: user inputs to indicate whether it is required to run all orientations
+  # @param [OpenStudio::Model::Model] Openstudio model
+  def run_all_orientations(run_all_orients, user_model)
+    # Step 0, assign the default value
+    run_orients_flag = run_all_orients
+    # Step 1 check orientation variations - priority 2
+    fenestration_area_hash = get_model_fenestration_area_by_orientation(user_model)
+    fenestration_area_hash.each do |orientation, fenestration_area|
+      fenestration_area_hash.each do |other_orientation, other_fenestration_area|
+        next unless orientation != other_orientation
+
+        variance = (other_fenestration_area - fenestration_area) / fenestration_area
+        if variance.abs > 0.05
+          # if greater then 0.05
+          run_orients_flag = true
+        end
+      end
+    end
+    # Step 2 read user data - priority 1 - user data will override the priority 2
+    user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
+    if user_buildings
+      building_name = user_model.building.get.name.get
+      user_building_index = user_buildings.index { |user_building| building_name.include? user_building['name'] }
+      unless user_building_index.nil? || user_buildings[user_building_index]['is_exempt_from_rotations'].nil?
+        # user data exempt the rotation, No indicates true for running orients.
+        run_orients_flag = user_buildings[user_building_index]['is_exempt_from_rotations'].casecmp('No') == 0
+      end
+    end
+    return run_orients_flag
+  end
+
+  def get_model_fenestration_area_by_orientation(user_model)
+    # First index is wall, second index is window
+    fenestration_area_hash = {
+      'N' => 0.0,
+      'S' => 0.0,
+      'E' => 0.0,
+      'W' => 0.0
+    }
+    user_model.getSpaces.each do |space|
+      space_cond_type = space_conditioning_category(space)
+      next if space_cond_type == 'Unconditioned'
+
+      # Get zone multiplier
+      multiplier = space.thermalZone.get.multiplier
+      space.surfaces.each do |surface|
+        next if surface.surfaceType != 'Wall'
+        next if surface.outsideBoundaryCondition != 'Outdoors'
+
+        orientation = surface_cardinal_direction(surface)
+        surface.subSurfaces.each do |subsurface|
+          subsurface_type = subsurface.subSurfaceType.to_s.downcase
+          # Do not count doors
+          next unless (subsurface_type.include? 'window') || (subsurface_type.include? 'glass')
+
+          fenestration_area_hash[orientation] += subsurface.grossArea * subsurface.multiplier * multiplier
+        end
+      end
+    end
+    return fenestration_area_hash
+  end
+
   # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
   #
   # @return [Bool] true if successful, false if not

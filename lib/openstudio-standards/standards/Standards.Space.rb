@@ -1614,7 +1614,20 @@ class Standard
         # Determine if residential
         res = thermal_zone_residential?(zone.get) ? true : false
 
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{zone.get.name} is (indirectly) conditioned.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{zone.get.name} is (indirectly) conditioned (return air plenum).")
+        cond_cat = res ? 'ResConditioned' : 'NonResConditioned'
+
+        return cond_cat
+      end
+    end
+    # Following the same assumptions,  we designate supply air plenums
+    # as indirectly conditioned as well
+    space.model.getAirLoopHVACSupplyPlenums.each do |supply_air_plenum|
+      if supply_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
+        # Determine if residential
+        res = thermal_zone_residential?(zone.get) ? true : false
+
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{zone.get.name} is (indirectly) conditioned (supply air plenum).")
         cond_cat = res ? 'ResConditioned' : 'NonResConditioned'
 
         return cond_cat
