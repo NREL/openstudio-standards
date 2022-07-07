@@ -2447,7 +2447,7 @@ class AppendixGPRMTests < Minitest::Test
               clg_coil.setRatedTotalCoolingCapacity(capacity_cool_w)
             end
           end
-          std.model_apply_hvac_efficiency_standard(model_ptac, 'ClimateZone 2')
+          std.model_apply_hvac_efficiency_standard(model_ptac)
           assert((model_ptac.getCoilCoolingDXSingleSpeeds[0].ratedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX single coil (PTAC).')
         end
       end
@@ -2488,7 +2488,7 @@ class AppendixGPRMTests < Minitest::Test
                 htg_coil.setRatedTotalHeatingCapacity(capacity_heat_w)
               end
             end
-            std.model_apply_hvac_efficiency_standard(model_pthp, 'ClimateZone 2')
+            std.model_apply_hvac_efficiency_standard(model_pthp)
             assert((model_pthp.getCoilCoolingDXSingleSpeeds[0].ratedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX single coil (PTHP).')
             assert((model_pthp.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for heating DX single coil (PTHP).')
           end
@@ -2503,13 +2503,13 @@ class AppendixGPRMTests < Minitest::Test
     capacity_cop_cool = {10000=>3.0,
                          300000=>3.5}
     capacity_cop_heat = {10000=>0.8,
-                         300000=>0.78}
+                         300000=>0.793}
     capacity_cop_cool.each do |key_cool, value_cool|
       capacity_cop_heat.each do |key_heat, value_heat|
         std = Standard.build('90.1-PRM-2019')
         prototypes_base.each do |prototype, model_base|
           building_type, template, climate_zone, user_data_dir, mod = prototype
-          if building_type == 'SmallOffice' && climate_zone == 'ASHRAE 169-2013-2A'
+          if building_type == 'SmallOffice' && climate_zone == 'ASHRAE 169-2013-8A'
             # Create a deep copy of the proposed model
             model_psz_ac = BTAP::FileIO.deep_copy(model_base)
             # Remove all HVAC from model, excluding service water heating
@@ -2541,7 +2541,7 @@ class AppendixGPRMTests < Minitest::Test
             model_psz_ac.getFanOnOffs.each do |fan_on_off|
               fan_on_off.setMaximumFlowRate(0.01)
             end
-            std.model_apply_hvac_efficiency_standard(model_psz_ac, 'ClimateZone 2')
+            std.model_apply_hvac_efficiency_standard(model_psz_ac)
             assert((model_psz_ac.getCoilCoolingDXSingleSpeeds[0].ratedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX single coil (PSZ-AC).')
             assert((model_psz_ac.getCoilHeatingGass[0].gasBurnerEfficiency.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for heating gas coil (PSZ-AC).')
           end
@@ -2573,7 +2573,7 @@ class AppendixGPRMTests < Minitest::Test
             model_psz_hp.getCoilHeatingDXSingleSpeeds.sort.each do |htg_coil|
               htg_coil.setRatedTotalHeatingCapacity(capacity_heat_w)
             end
-            std.model_apply_hvac_efficiency_standard(model_psz_hp, 'ClimateZone 2')
+            std.model_apply_hvac_efficiency_standard(model_psz_hp)
             assert((model_psz_hp.getCoilCoolingDXSingleSpeeds[0].ratedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX single coil (PSZ-HP).')
             assert((model_psz_hp.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for heating DX single coil (PSZ-HP).')
           end
@@ -2606,7 +2606,7 @@ class AppendixGPRMTests < Minitest::Test
             model_pvav_reheat.getBoilerHotWaters.sort.each do |boiler|
               boiler.setNominalCapacity(capacity_heat_w)
             end
-            std.model_apply_hvac_efficiency_standard(model_pvav_reheat, 'ClimateZone 8')
+            std.model_apply_hvac_efficiency_standard(model_pvav_reheat)
             assert((model_pvav_reheat.getCoilCoolingDXTwoSpeeds[0].ratedHighSpeedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX two speed coil (PVAV_Reheat).')
             assert((model_pvav_reheat.getCoilCoolingDXTwoSpeeds[0].ratedLowSpeedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX two speed coil (PVAV_Reheat).')
             assert((model_pvav_reheat.getBoilerHotWaters[0].nominalThermalEfficiency.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for boiler (PVAV_Reheat).')
@@ -2634,7 +2634,7 @@ class AppendixGPRMTests < Minitest::Test
               clg_coil.setRatedHighSpeedTotalCoolingCapacity(capacity_cool_w)
               clg_coil.setRatedLowSpeedTotalCoolingCapacity(capacity_cool_w)
             end
-            std.model_apply_hvac_efficiency_standard(model_pvav_pfp_boxes, 'ClimateZone 2')
+            std.model_apply_hvac_efficiency_standard(model_pvav_pfp_boxes)
             assert((model_pvav_pfp_boxes.getCoilCoolingDXTwoSpeeds[0].ratedHighSpeedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX two speed coil (PVAV_PFP_Boxes).')
             assert((model_pvav_pfp_boxes.getCoilCoolingDXTwoSpeeds[0].ratedLowSpeedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX two speed coil (PVAV_PFP_Boxes).')
           end
@@ -2666,7 +2666,7 @@ class AppendixGPRMTests < Minitest::Test
             model_vav_reheat.getBoilerHotWaters.sort.each do |boiler|
               boiler.setNominalCapacity(capacity_heat_w)
             end
-            std.model_apply_hvac_efficiency_standard(model_vav_reheat, 'ClimateZone 8')
+            std.model_apply_hvac_efficiency_standard(model_vav_reheat)
             assert((model_vav_reheat.getChillerElectricEIRs[0].referenceCOP.to_f - 3.517 / value_cool).abs < 0.001, 'Error in efficiency setting for chiller (VAV_Reheat).')
             assert((model_vav_reheat.getBoilerHotWaters[0].nominalThermalEfficiency.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for boiler (VAV_Reheat).')
           end
@@ -2690,7 +2690,7 @@ class AppendixGPRMTests < Minitest::Test
         fan_motor_eff = 0.924
         fan_motor_actual_power_hp = fan_bhp / fan_motor_eff
         fan_motor_actual_power_w = fan_motor_actual_power_hp * 745.7
-        std.model_apply_hvac_efficiency_standard(model_vav_reheat_coolingtower, 'ClimateZone 8')
+        std.model_apply_hvac_efficiency_standard(model_vav_reheat_coolingtower)
         assert((model_vav_reheat_coolingtower.getCoolingTowerVariableSpeeds[0].designFanPower.to_f - fan_motor_actual_power_w).abs < 0.001, 'Error in setting for cooling tower heat rejection (VAV_Reheat).')
       end
     end
@@ -2712,7 +2712,7 @@ class AppendixGPRMTests < Minitest::Test
           model_vav_pfp.getChillerElectricEIRs.sort.each do |chiller|
             chiller.setReferenceCapacity(capacity_cool_w)
           end
-          std.model_apply_hvac_efficiency_standard(model_vav_pfp, 'ClimateZone 2')
+          std.model_apply_hvac_efficiency_standard(model_vav_pfp)
           assert((model_vav_pfp.getChillerElectricEIRs[0].referenceCOP.to_f - 3.517 / value_cool).abs < 0.001, 'Error in efficiency setting for chiller (VAV_Reheat).')
         end
       end
@@ -2721,7 +2721,7 @@ class AppendixGPRMTests < Minitest::Test
     # No.9 Gas_Furnace
     # heating: CoilHeatingGas
     # hash = {capacity:cop}
-    capacity_cop_heat = {10000=>0.78}
+    capacity_cop_heat = {10000=>0.793}
     capacity_cop_heat.each do |key_heat, value_heat|
       std = Standard.build('90.1-PRM-2019')
       prototypes_base.each do |prototype, model_base|
@@ -2750,7 +2750,7 @@ class AppendixGPRMTests < Minitest::Test
           model_gas_furnace.getFanConstantVolumes.each do |fan_constant_volume|
             fan_constant_volume.setMaximumFlowRate(0.01)
           end
-          std.model_apply_hvac_efficiency_standard(model_gas_furnace, 'ClimateZone 2')
+          std.model_apply_hvac_efficiency_standard(model_gas_furnace)
           assert((model_gas_furnace.getCoilHeatingGass[0].gasBurnerEfficiency.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for gas furnace (Gas Furnace).')
         end
       end

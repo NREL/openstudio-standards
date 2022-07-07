@@ -130,6 +130,7 @@
         ["Warehouse", "90.1-2004", "ASHRAE 169-2013-2A", "no_user_data",[["remove_cooling_coils", []]]]
     ],
     "hvac_efficiency": [
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-8A", "no_user_data", []],
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", []],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-8A", "no_user_data", [["remove_transformer", []]]],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "no_user_data", [["remove_transformer", []]]],

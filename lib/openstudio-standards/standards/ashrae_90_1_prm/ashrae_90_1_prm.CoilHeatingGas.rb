@@ -43,14 +43,6 @@ class ASHRAE901PRM < Standard
     return capacity_w
   end
 
-  # A helper method to convert from combustion efficiency to thermal efficiency
-  #
-  # @param combustion_eff [Double] Combustion efficiency (%)
-  # @return [Double] Thermal efficiency (%)
-  def combustion_eff_to_thermal_eff(combustion_eff)
-    return combustion_eff - 0.02
-  end
-
   # Finds lookup object in standards and return minimum thermal efficiency
   #
   # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] coil heating gas object
