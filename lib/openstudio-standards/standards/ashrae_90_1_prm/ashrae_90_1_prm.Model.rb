@@ -1460,7 +1460,7 @@ class ASHRAE901PRM < Standard
     # Generate baseline log to a specific file directory
     # @param file_directory [String] file directory
     def generate_baseline_log(file_directory)
-      log_messages_to_file_prm(file_directory, false)
+      log_messages_to_file_prm("#{file_directory}/prm.log", false)
     end
 
     # Remove existing FCFactor temperature profile
