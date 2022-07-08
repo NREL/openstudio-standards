@@ -1456,12 +1456,6 @@ class ASHRAE901PRM < Standard
     end
 
     return false unless surfaces_with_fc_factor_boundary
-  end
-    # Generate baseline log to a specific file directory
-    # @param file_directory [String] file directory
-  def generate_baseline_log(file_directory)
-    log_messages_to_file_prm("#{file_directory}/prm.log", false)
-  end
 
     # Remove existing FCFactor temperature profile
     model.getSiteGroundTemperatureFCfactorMethod.remove
@@ -1487,6 +1481,12 @@ class ASHRAE901PRM < Standard
     end
 
     return true
+  end
+
+  # Generate baseline log to a specific file directory
+  # @param file_directory [String] file directory
+  def generate_baseline_log(file_directory)
+    log_messages_to_file_prm("#{file_directory}/prm.log", false)
   end
 
   # Retrieve zone HVAC user specified compliance inputs from CSV file
