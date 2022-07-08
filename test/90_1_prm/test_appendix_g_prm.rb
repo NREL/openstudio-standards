@@ -2849,6 +2849,7 @@ class AppendixGPRMTests < Minitest::Test
         end
       end
     end
+  end
 
   # Add piping insulation to service heating water systems
   def add_piping_insulation(model, arguments)
