@@ -453,7 +453,11 @@ class Standard
       idf_path = OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.idf")
       idf.save(idf_path, true)
     end
-    generate_baseline_log(sizing_run_dir)
+
+    if debug
+      generate_baseline_log(sizing_run_dir)
+    end
+
     return true
   end
 
