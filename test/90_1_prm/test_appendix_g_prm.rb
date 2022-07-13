@@ -179,12 +179,14 @@ class AppendixGPRMTests < Minitest::Test
         hvac_building_type = @bldg_type_alt[id_prototype_mapping[id]]
       end
 
+      unmet_load_hours = (mod_str == 'unmet_load_hours') ? true : false
+
       # Create baseline model
       model_baseline = @prototype_creator.model_create_prm_stable_baseline_building(model, building_type, climate_zone,
                                                                                     @@hvac_building_types[hvac_building_type],
                                                                                     @@wwr_building_types[building_type],
                                                                                     @@swh_building_types[building_type],
-                                                                                    nil, run_dir_baseline, false, false)
+                                                                                    nil, run_dir_baseline, false, unmet_load_hours, false)
 
       # Check if baseline could be created
       assert(model_baseline, "Baseline model could not be generated for #{building_type}, #{template}, #{climate_zone}.")
@@ -1342,7 +1344,8 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   # Check the model's secondary flow fraction
-  # @param model [OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat] Parallel PIU terminal
+  # @param terminal [OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat] Parallel PIU terminal
+  # @param mod_str [String] Run description
   def check_secondary_flow_fraction(terminal, mod_str)
     if terminal.maximumSecondaryAirFlowRate.is_initialized
       secondary_flow = terminal.maximumSecondaryAirFlowRate.get.to_f
@@ -2059,6 +2062,27 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # Check model unmet load hours
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_unmet_load_hours(prototypes_base)
+    standard = Standard.build('90.1-PRM-2019')
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+
+      assert(standard.model_get_unmet_load_hours(model) < 300, "The #{building_type} prototype building model has more than 300 unmet load hours.")
+    end
+  end
+
+  # Placeholder method to indicate that we want to check unmet
+  # load hours
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param arguments [Array] Not used
+  def unmet_load_hours(model, arguments)
+    return model
+  end
+
   # Add a AirLoopHVACDedicatedOutdoorAirSystem in the model
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
@@ -2582,6 +2606,7 @@ class AppendixGPRMTests < Minitest::Test
       'multi_bldg_handling',
       'economizer_exception',
       'building_rotation_check',
+      'unmet_load_hours',
     ]
 
     # Get list of unique prototypes
@@ -2622,5 +2647,6 @@ class AppendixGPRMTests < Minitest::Test
     check_f_c_factors(prototypes_base['f_c_factors']) if tests.include? 'f_c_factors'
     check_fan_power_credits(prototypes_base['fan_power_credits']) if tests.include? 'fan_power_credits'
     check_return_air_type(prototypes_base['return_air_type']) if tests.include? 'return_air_type'
+    check_unmet_load_hours(prototypes_base['unmet_load_hours']) if tests.include? 'unmet_load_hours'
   end
 end
