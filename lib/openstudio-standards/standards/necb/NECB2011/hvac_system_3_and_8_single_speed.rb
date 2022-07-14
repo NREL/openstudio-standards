@@ -1,6 +1,5 @@
 class NECB2011
   def add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model:,
-                                                                            reference_hp:,
                                                                             zones:,
                                                                             heating_coil_type:,
                                                                             baseboard_type:,
@@ -16,7 +15,6 @@ class NECB2011
                                                                                         new_auto_zoner: new_auto_zoner)
     else
       add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-                                                                                         reference_hp:reference_hp,
                                                                                          zones: zones,
                                                                                          heating_coil_type: heating_coil_type,
                                                                                          baseboard_type: baseboard_type,
@@ -28,7 +26,6 @@ class NECB2011
   # Some tests still require a simple way to set up a system without sizing.. so we are keeping the auto_zoner flag for this  method.
   #
   def add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model:,
-                                                                                         reference_hp:,
                                                                                          zones:,
                                                                                          heating_coil_type:,
                                                                                          baseboard_type:,
@@ -74,7 +71,6 @@ class NECB2011
 
       # Add Air Loop
       air_loop = add_system_3_and_8_airloop(heating_coil_type,
-                                            reference_hp,
                                             model,
                                             system_data,
                                             determine_control_zone(zones))
@@ -85,7 +81,7 @@ class NECB2011
         sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
         sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
         sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
-        if reference_hp
+        if @reference_hp
           sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneDXCoolingSizingFactor])
           sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneDXHeatingSizingFactor])
         else
@@ -100,7 +96,7 @@ class NECB2011
       end
     else
       zones.each do |zone|
-        air_loop = add_system_3_and_8_airloop(heating_coil_type, reference_hp, model, system_data, zone)
+        air_loop = add_system_3_and_8_airloop(heating_coil_type, model, system_data, zone)
         add_sys3_and_8_zone_equip(air_loop,
                                   baseboard_type,
                                   hw_loop,
@@ -123,7 +119,7 @@ class NECB2011
     return true
   end
 
-  def add_system_3_and_8_airloop(heating_coil_type, reference_hp, model, system_data, control_zone)
+  def add_system_3_and_8_airloop(heating_coil_type, model, system_data, control_zone)
     # System Type 3: PSZ-AC
     # This measure creates:
     # -a constant volume packaged single-zone A/C unit
@@ -145,7 +141,7 @@ class NECB2011
     sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
     sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
     sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
-    if reference_hp
+    if @reference_hp
       sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneDXCoolingSizingFactor])
       sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneDXHeatingSizingFactor])
     else
@@ -153,7 +149,7 @@ class NECB2011
       sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
     end
 
-    if reference_hp
+    if @reference_hp
       #AirLoopHVACUnitaryHeatPumpAirToAir needs FanOnOff in order for the fan to turn off during off hours
       fan = OpenStudio::Model::FanOnOff.new(model, always_on)
     else      
@@ -197,7 +193,7 @@ class NECB2011
     # Add the components to the air loop
     # in order from closest to zone to furthest from zone
     supply_inlet_node = air_loop.supplyInletNode
-    if reference_hp
+    if @reference_hp
 
       #create supplemental heating coil based on default regional fuel type
       epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)

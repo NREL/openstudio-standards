@@ -3,12 +3,13 @@
 class NECB2011 < Standard
   @template = new.class.name
   register_standard(@template)
-  @reference_hp
   attr_reader :template
   attr_accessor :standards_data
   attr_accessor :space_type_map
   attr_accessor :space_multiplier_map
-
+  attr_accessor :reference_hp
+  @reference_hp = false
+  
   # This is a helper method to convert arguments that may support 'NECB_Default, and nils to convert to float'
   def convert_arg_to_f(variable:, default:)
     return variable if variable.kind_of?(Numeric)
@@ -230,12 +231,11 @@ class NECB2011 < Standard
                                    output_meters: nil,
                                    airloop_economizer_type: nil,
                                    baseline_system_zones_map_option: nil)
-
+    @reference_hp = reference_hp
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 epw_file: epw_file,
                                 sizing_run_dir: sizing_run_dir,
-                                reference_hp:reference_hp,
                                 primary_heating_fuel: primary_heating_fuel,
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
                                 lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
@@ -306,7 +306,6 @@ class NECB2011 < Standard
   def model_apply_standard(model:,
                            epw_file:,
                            sizing_run_dir: Dir.pwd,
-                           reference_hp: nil,
                            primary_heating_fuel: 'DefaultFuel',
                            dcv_type: 'NECB_Default',
                            lights_type: 'NECB_Default',
@@ -358,7 +357,6 @@ class NECB2011 < Standard
                            output_meters: nil,
                            airloop_economizer_type: nil,
                            baseline_system_zones_map_option: nil)
-    @reference_hp = reference_hp
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
@@ -396,7 +394,6 @@ class NECB2011 < Standard
     apply_systems_and_efficiencies(model: model,
                                    primary_heating_fuel: primary_heating_fuel,
                                    sizing_run_dir: sizing_run_dir,
-                                   reference_hp:reference_hp,
                                    dcv_type: dcv_type,
                                    ecm_system_name: ecm_system_name,
                                    ecm_system_zones_map_option: ecm_system_zones_map_option,
@@ -469,7 +466,6 @@ class NECB2011 < Standard
   def apply_systems_and_efficiencies(model:,
                                      primary_heating_fuel:,
                                      sizing_run_dir:,
-                                     reference_hp: nil,
                                      dcv_type: 'NECB_Default',
                                      ecm_system_name: 'NECB_Default',
                                      ecm_system_zones_map_option: 'NECB_Default',
@@ -499,7 +495,7 @@ class NECB2011 < Standard
     # -------- Systems Layout-----------
 
     # Create Default Systems.
-    apply_systems(model: model, reference_hp:reference_hp, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir, shw_scale: shw_scale,
+    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir, shw_scale: shw_scale,
                   baseline_system_zones_map_option: baseline_system_zones_map_option)
 
     # Apply new ECM system. Overwrite standard as required.

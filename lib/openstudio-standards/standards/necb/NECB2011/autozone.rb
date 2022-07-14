@@ -93,7 +93,7 @@ class NECB2011
 
   # Organizes Zones and assigns them to appropriate systems according to NECB 2011-17 systems spacetype rules in Sec 8.
   # requires requires fuel type to be assigned for each system aspect. Defaults to gas hydronic.
-  def apply_systems(model:, reference_hp:, primary_heating_fuel:, sizing_run_dir:, shw_scale:, baseline_system_zones_map_option:)
+  def apply_systems(model:, primary_heating_fuel:, sizing_run_dir:, shw_scale:, baseline_system_zones_map_option:)
     raise('validation of model failed.') unless validate_initial_model(model)
 
     # Check to see if model is using another vintage of spacetypes. If so overwrite the @standards for the object with the
@@ -127,7 +127,7 @@ class NECB2011
     mau_type = system_fuel_defaults['mau_type']
     mau_cooling_type = system_fuel_defaults['mau_cooling_type']
     chiller_type = system_fuel_defaults['chiller_type']
-    if reference_hp # heating coils must be DX if NECB reference HP HVAC is selected
+    if @reference_hp # heating coils must be DX if NECB reference HP HVAC is selected
       mau_heating_coil_type = 'DX'
       heating_coil_type_sys3 = 'DX'
       heating_coil_type_sys4 = 'DX'
@@ -149,7 +149,6 @@ class NECB2011
                                           model)
     # Rule that all dwelling units have their own zone and system.
     auto_system_dwelling_units(model: model,
-                               reference_hp:reference_hp,
                                baseboard_type: baseboard_type,
                                boiler_fueltype: boiler_fueltype,
                                chiller_type: chiller_type,
@@ -165,26 +164,22 @@ class NECB2011
 
     # Assign a single system 4 for all wet spaces.. and assign the control zone to the one with the largest load.
     auto_system_wet_spaces(baseboard_type: baseboard_type,
-                           reference_hp:reference_hp,
                            boiler_fueltype: boiler_fueltype,
                            heating_coil_type_sys4: heating_coil_type_sys4,
                            model: model)
 
     # Assign a single system 4 for all storage spaces.. and assign the control zone to the one with the largest load.
     auto_system_storage_spaces(baseboard_type: baseboard_type,
-                               reference_hp:reference_hp,
                                boiler_fueltype: boiler_fueltype,
                                heating_coil_type_sys4: heating_coil_type_sys4,
                                model: model)
 
     # Assign the wild spaces to a single system 4 system with a control zone with the largest load.
     auto_system_wild_spaces(baseboard_type: baseboard_type,
-                            reference_hp:reference_hp,
                             heating_coil_type_sys4: heating_coil_type_sys4,
                             model: model)
     # do the regular assignment for the rest and group where possible.
     auto_system_all_other_spaces(model: model,
-                                 reference_hp:reference_hp,
                                  baseboard_type: baseboard_type,
                                  boiler_fueltype: boiler_fueltype,
                                  chiller_type: chiller_type,
@@ -876,7 +871,6 @@ class NECB2011
   # similar loads on the same airloops and set control zones where possible for single zone systems and will create monolithic
   # system 6 multizones where possible.
   def create_necb_system(baseboard_type:,
-                         reference_hp:,
                          boiler_fueltype:,
                          chiller_type:,
                          fan_type:,
@@ -905,7 +899,6 @@ class NECB2011
       when 1
         group_similar_zones_together(sys_zones).each do |curr_zones|
           mau_air_loop = add_sys1_unitary_ac_baseboard_heating(model: model,
-                                                               reference_hp:reference_hp,
                                                                zones: curr_zones,
                                                                mau_type: mau_type,
                                                                mau_heating_coil_type: mau_heating_coil_type,
@@ -925,7 +918,6 @@ class NECB2011
       when 3
         group_similar_zones_together(sys_zones).each do |curr_zones|
           add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
-                                                                                reference_hp:reference_hp,
                                                                                 zones: curr_zones,
                                                                                 heating_coil_type: heating_coil_type_sys3,
                                                                                 baseboard_type: baseboard_type,
@@ -935,7 +927,6 @@ class NECB2011
       when 4
         group_similar_zones_together(sys_zones).each do |curr_zones|
           add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-                                                                       reference_hp:reference_hp,
                                                                        zones: curr_zones,
                                                                        heating_coil_type: heating_coil_type_sys4,
                                                                        baseboard_type: baseboard_type,
@@ -957,7 +948,7 @@ class NECB2011
                                   hw_loop: @hw_loop)
         end
       when 6
-        if reference_hp 
+        if @reference_hp 
           add_sys6_multi_zone_reference_hp_with_baseboard_heating(model: model,
                                                                   zones: sys_zones,
                                                                   heating_coil_type: heating_coil_type_sys6,
@@ -987,7 +978,6 @@ class NECB2011
 
   # This method will deal with all non wet, non-wild, and non-dwelling units thermal zones.
   def auto_system_all_other_spaces(baseboard_type:,
-                                   reference_hp:,
                                    boiler_fueltype:,
                                    chiller_type:,
                                    fan_type:,
@@ -1013,7 +1003,6 @@ class NECB2011
 
     # since dwelling units are all zoned 1:1 to space:zone we simply add the zone to the appropriate btap system.
     create_necb_system(baseboard_type: baseboard_type,
-                       reference_hp:reference_hp,
                        boiler_fueltype: boiler_fueltype,
                        chiller_type: chiller_type,
                        fan_type: fan_type,
@@ -1032,7 +1021,6 @@ class NECB2011
   # There is an option to have a shared AHU or not.
 
   def auto_system_dwelling_units(baseboard_type:,
-                                 reference_hp:,
                                  boiler_fueltype:,
                                  chiller_type:,
                                  fan_type:,
@@ -1050,7 +1038,7 @@ class NECB2011
     # Determine if dwelling units have a shared AHU.  If user entered building stories > 4 then set to true.
     if baseline_system_zones_map_option == 'one_sys_per_dwelling_unit'
       dwelling_shared_ahu = false
-    elsif baseline_system_zones_map_option == 'one_sys_per_bldg' || baseline_system_zones_map_option == 'NECB_Default' || baseline_system_zones_map_option == 'none' || baseline_system_zones_map_option == nil || reference_hp
+    elsif baseline_system_zones_map_option == 'one_sys_per_bldg' || baseline_system_zones_map_option == 'NECB_Default' || baseline_system_zones_map_option == 'none' || baseline_system_zones_map_option == nil || @reference_hp
       dwelling_shared_ahu = true
     end
     # store dwelling zones into array
@@ -1072,7 +1060,6 @@ class NECB2011
       when 1
         if dwelling_shared_ahu
           add_sys1_unitary_ac_baseboard_heating(model: model,
-                                                reference_hp:reference_hp,
                                                 zones: sys_zones,
                                                 mau_type: mau_type,
                                                 mau_heating_coil_type: mau_heating_coil_type,
@@ -1083,7 +1070,6 @@ class NECB2011
           # Create a separate air loop for each unit.
           sys_zones.each do |zone|
             add_sys1_unitary_ac_baseboard_heating(model: model,
-                                                  reference_hp:reference_hp,
                                                   zones: [zone],
                                                   mau_type: mau_type,
                                                   mau_heating_coil_type: mau_heating_coil_type,
@@ -1096,7 +1082,6 @@ class NECB2011
       when 3
         if dwelling_shared_ahu
           add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
-                                                                                reference_hp:reference_hp,
                                                                                 zones: sys_zones,
                                                                                 heating_coil_type: heating_coil_type_sys3,
                                                                                 baseboard_type: baseboard_type,
@@ -1106,7 +1091,6 @@ class NECB2011
           # Create a separate air loop for each unit.
           sys_zones.each do |zone|
             add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
-                                                                                  reference_hp:reference_hp,
                                                                                   zones: [zone],
                                                                                   heating_coil_type: heating_coil_type_sys3,
                                                                                   baseboard_type: baseboard_type,
@@ -1120,7 +1104,6 @@ class NECB2011
 
   # All wet spaces will be on their own system 4 AHU.
   def auto_system_wet_spaces(baseboard_type:,
-                             reference_hp:,
                              boiler_fueltype:,
                              heating_coil_type_sys4:,
                              model:)
@@ -1133,7 +1116,6 @@ class NECB2011
     return if wet_tz.empty?
 
     add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-                                                                 reference_hp:reference_hp,
                                                                  zones: wet_tz,
                                                                  heating_coil_type: heating_coil_type_sys4,
                                                                  baseboard_type: baseboard_type,
@@ -1148,7 +1130,6 @@ class NECB2011
 
   # All wet spaces will be on their own system 4 AHU.
   def auto_system_storage_spaces(baseboard_type:,
-                                 reference_hp:,
                                  boiler_fueltype:,
                                  heating_coil_type_sys4:,
                                  model:)
@@ -1162,7 +1143,6 @@ class NECB2011
 
     # create a system 4 for the  zones.
     add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-                                                                 reference_hp:reference_hp,
                                                                  zones: tz,
                                                                  heating_coil_type: heating_coil_type_sys4,
                                                                  baseboard_type: baseboard_type,
@@ -1177,7 +1157,6 @@ class NECB2011
 
   # All wild spaces will be on a single system 4 ahu with the largests heating load zone being the control zone.
   def auto_system_wild_spaces(baseboard_type:,
-                              reference_hp:,
                               heating_coil_type_sys4:,
                               model:)
 
@@ -1190,7 +1169,6 @@ class NECB2011
 
     # create a system 4 for the wild zones.
     add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-                                                                 reference_hp:reference_hp,
                                                                  zones: zones,
                                                                  heating_coil_type: heating_coil_type_sys4,
                                                                  baseboard_type: baseboard_type,
