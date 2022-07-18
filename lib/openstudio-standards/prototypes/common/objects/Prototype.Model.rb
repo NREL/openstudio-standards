@@ -597,7 +597,7 @@ Standard.class_eval do
       next unless surface.surfaceType == 'Wall'
 
       boundary_condition = surface.outsideBoundaryCondition
-      next unless boundary_condition == 'OtherSideCoefficients' || boundary_condition == 'Ground'
+      next unless boundary_condition == 'OtherSideCoefficients' || boundary_condition.to_s.downcase.include?('ground')
 
       # calculate wall height as difference of maximum and minimum z values, assuming square, vertical walls
       z_values = []
@@ -677,7 +677,7 @@ Standard.class_eval do
 
     # Find space's floors
     space.surfaces.each do |surface|
-      if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground'
+      if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition.to_s.downcase.include?('ground')
         floors << surface
       end
     end

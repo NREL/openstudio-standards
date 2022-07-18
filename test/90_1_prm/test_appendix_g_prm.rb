@@ -179,12 +179,14 @@ class AppendixGPRMTests < Minitest::Test
         hvac_building_type = @bldg_type_alt[id_prototype_mapping[id]]
       end
 
+      unmet_load_hours = (mod_str == 'unmet_load_hours') ? true : false
+
       # Create baseline model
       model_baseline = @prototype_creator.model_create_prm_stable_baseline_building(model, building_type, climate_zone,
                                                                                     @@hvac_building_types[hvac_building_type],
                                                                                     @@wwr_building_types[building_type],
                                                                                     @@swh_building_types[building_type],
-                                                                                    nil, run_dir_baseline, false, false)
+                                                                                    nil, run_dir_baseline, false, unmet_load_hours, false)
 
       # Check if baseline could be created
       assert(model_baseline, "Baseline model could not be generated for #{building_type}, #{template}, #{climate_zone}.")
@@ -338,6 +340,29 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  def check_building_rotation_exception(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+      @test_dir = "#{File.dirname(__FILE__)}/output"
+      mod_str = mod.flatten.join('_') unless mod.empty?
+      model_baseline_file_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final.osm"
+      model_baseline_file_name_90 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final_90.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_90.osm"
+      model_baseline_file_name_180 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final_180.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_180.osm"
+      model_baseline_file_name_270 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final_270.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_270.osm"
+      rotated = File.exist?("#{@test_dir}/#{model_baseline_file_name}") && File.exist?("#{@test_dir}/#{model_baseline_file_name_90}") &&  File.exist?("#{@test_dir}/#{model_baseline_file_name_180}") &&  File.exist?("#{@test_dir}/#{model_baseline_file_name_270}")
+
+      if mod.empty?
+        # test case 1 - rotation
+        assert(rotated == true, 'Small Office with default WWR shall rotate orientations, but it didnt')
+      elsif mod == 'change_wwr_model_0.4_0.4_0.4_0.4'
+        # test case 2 - true
+        assert(rotated == true, 'Small Office with updated WWR (0.4, 0.4, 0.4, 0.4) shall rotate orientations, but it didnt')
+      elsif mod == 'change_wwr_model_0.4_0.4_0.6_0.6'
+        assert(rotated == false, 'Small Office with updated WWR (0.4, 0.4, 0.6, 0.6) do not need to rotate, but it did rotate')
+      end
+    end
+  end
+
   # Check if the IsResidential flag used by the PRM works as intended (i.e. should be false for commercial spaces)
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -374,6 +399,7 @@ class AppendixGPRMTests < Minitest::Test
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
 
       opaque_exterior_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['opaque_exterior_name']
+      opaque_interior_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['opaque_interior_name']
       exterior_fenestration_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['exterior_fenestration_name']
       exterior_door_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['exterior_door_name']
 
@@ -383,6 +409,14 @@ class AppendixGPRMTests < Minitest::Test
       opaque_exterior_name.each do |val|
         u_value_baseline[val[0]] = run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Exterior', val[0], 'U-Factor with Film', 'W/m2-K').to_f
         construction_baseline[val[0]] = run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Exterior', val[0], 'Construction', '').to_s
+      end
+      # @todo: we've identified an issue with the r-value for air film in EnergyPlus for semi-exterior surfaces:
+      # https://github.com/NREL/EnergyPlus/issues/9470
+      # todos were added in film_coefficients_r_value() since this is just a reporting issue, we're checking the
+      # no film u-value for opaque interior surfaces
+      opaque_interior_name.each do |val|
+        u_value_baseline[val[0]] = run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Interior', val[0], 'U-Factor no Film', 'W/m2-K').to_f
+        construction_baseline[val[0]] = run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Interior', val[0], 'Construction', '').to_s
       end
       exterior_fenestration_name.each do |val|
         u_value_baseline[val[0]] = run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Exterior Fenestration', val[0], 'Glass U-Factor', 'W/m2-K').to_f
@@ -394,10 +428,10 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # Check U-value against expected U-value
-      u_value_goal = opaque_exterior_name + exterior_fenestration_name + exterior_door_name
+      u_value_goal = opaque_exterior_name + opaque_interior_name + exterior_fenestration_name + exterior_door_name
       u_value_goal.each do |key, value|
         value_si = OpenStudio.convert(value, 'Btu/ft^2*hr*R', 'W/m^2*K').get
-        assert(((u_value_baseline[key] - value_si).abs < 0.001 || (u_value_baseline[key] - 5.835).abs < 0.01), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si}.")
+        assert(((u_value_baseline[key] - value_si).abs < 0.001 || (u_value_baseline[key] - 5.835).abs < 0.01), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si.round(3)}.")
         if key != 'PERIMETER_ZN_3_WALL_NORTH_DOOR1'
           assert((construction_baseline[key].include? 'PRM'), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
         end
@@ -1314,7 +1348,8 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   # Check the model's secondary flow fraction
-  # @param model [OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat] Parallel PIU terminal
+  # @param terminal [OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat] Parallel PIU terminal
+  # @param mod_str [String] Run description
   def check_secondary_flow_fraction(terminal, mod_str)
     if terminal.maximumSecondaryAirFlowRate.is_initialized
       secondary_flow = terminal.maximumSecondaryAirFlowRate.get.to_f
@@ -1839,6 +1874,77 @@ class AppendixGPRMTests < Minitest::Test
     return true
   end
 
+  def check_unenclosed_spaces(baseline_base)
+    baseline_base.each do |baseline, baseline_model|
+      building_type, template, climate_zone, user_data_dir, mod = baseline
+      if building_type == 'SmallOffice'
+        cons_name = baseline_model.getSurfaceByName('Core_ZN_ceiling').get.construction.get.name.to_s
+        assert(cons_name == 'PRM IEAD Roof R-15.87', "The #{building_type} baseline model created for check_unenclosed_spaces() does not contain the expected constructions for surface adjacent to an unconditioned space. Expected: PRM IEAD Roof R-15.87; In the model #{cons_name}.")
+        cons_name = baseline_model.getSurfaceByName('Core_ZN_ceiling').get.construction.get.name.to_s
+        assert(cons_name == 'PRM IEAD Roof R-15.87', "The #{building_type} baseline model created for check_unenclosed_spaces() does not contain the expected constructions for surface adjacent to an unconditioned space. Expected: PRM IEAD Roof R-15.87; In the model #{cons_name}.")
+      end
+    end
+    return true
+  end
+
+  def check_f_c_factors(baseline_base)
+    baseline_base.each do |baseline, baseline_model|
+      building_type, template, climate_zone, user_data_dir, mod = baseline
+      # Check that the appropriate ground temperature profile object has been added to the model
+      assert(!baseline_model.getSiteGroundTemperatureFCfactorMethod.nil?, "No FCfactorMethod ground temperature profile were found in the #{building_type} baseline model.")
+
+      if building_type == 'LargeOffice'
+        # Check ground temperature profile temperatures
+        assert(baseline_model.getSiteGroundTemperatureFCfactorMethod.januaryGroundTemperature.to_f.round(1) == 24.2, "Wrong temperature in the FCfactorMethod ground temperature profile for the  #{building_type} baseline model.")
+        assert(baseline_model.getSiteGroundTemperatureFCfactorMethod.julyGroundTemperature.to_f.round(1) == 21.2, "Wrong temperature in the FCfactorMethod ground temperature profile for the  #{building_type} baseline model.")
+
+        # F-factor
+        # Check outside boundary condition
+        surface = baseline_model.getSurfaceByName('Basement_Floor').get
+        assert(surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct outside boundary condition for the slab on grade.")
+        # Check construction type
+        construction = surface.construction.get.to_FFactorGroundFloorConstruction.get
+        assert(construction.iddObjectType.valueName.to_s == 'OS_Construction_FfactorGroundFloor', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct construction type for the slab on grade.")
+        # Check F-factor abd other params
+        assert(construction.fFactor.round(2) == 1.26, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct F-factor type for the slab on grade.")
+        assert(construction.area.round(2) == 2779.43, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct area for the slab on grade.")
+        assert(construction.perimeterExposed == 0, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct exposed perimeter for the slab on grade.")
+        # C-factor
+        # Check outside boundary condition
+        surface = baseline_model.getSurfaceByName('Basement_Wall_East').get
+        assert(surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct outside boundary condition for the basement walls.")
+        # Check construction type
+        construction = surface.construction.get.to_CFactorUndergroundWallConstruction.get
+        assert(construction.iddObjectType.valueName.to_s == 'OS_Construction_CfactorUndergroundWall', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct construction type for the basement walls.")
+        # Check F-factor abd other params
+        assert(construction.cFactor.round(2) == 6.47, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct C-factor type for the basement walls.")
+        assert(construction.height.round(2) == 2.44, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct height for the basement walls.")
+      elsif building_type == 'SmallOffice'
+        # F-factor
+        # Check outside boundary condition
+        surface = baseline_model.getSurfaceByName('Core_ZN_floor').get
+        assert(surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct outside boundary condition for the core slab on grade.")
+        # Check construction type
+        construction = surface.construction.get.to_FFactorGroundFloorConstruction.get
+        assert(construction.iddObjectType.valueName.to_s == 'OS_Construction_FfactorGroundFloor', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct construction type for the core slab on grade.")
+        # Check F-factor abd other params
+        assert(construction.fFactor.round(2) == 1.26, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct F-factor type for the core slab on grade.")
+        assert(construction.area.round(2) == 149.66, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct area for the core slab on grade.")
+        assert(construction.perimeterExposed == 0, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct exposed perimeter for the core slab on grade.")
+        # Check outside boundary condition
+        surface = baseline_model.getSurfaceByName('Perimeter_ZN_1_floor').get
+        assert(surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct outside boundary condition for the perimeter slab on grade.")
+        # Check construction type
+        construction = surface.construction.get.to_FFactorGroundFloorConstruction.get
+        assert(construction.iddObjectType.valueName.to_s == 'OS_Construction_FfactorGroundFloor', "The #{building_type} baseline model created for check_f_c_factors() does not use the correct construction type for the perimeter slab on grade.")
+        # Check F-factor abd other params
+        assert(construction.fFactor.round(2) == 1.26, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct F-factor type for the perimeter slab on grade.")
+        assert(construction.area.round(2) == 113.45, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct area for the perimeter slab on grade.")
+        assert(construction.perimeterExposed.round(2) == 27.69, "The #{building_type} baseline model created for check_f_c_factors() does not use the correct exposed perimeter for the perimeter slab on grade.")
+      end
+    end
+  end
+
   # Set ZoneMultiplier to passed value for all zones
   # Check if coefficients of part-load power curve is correct per G3.1.3.15
   def check_variable_speed_fan_power(prototypes_base)
@@ -1941,6 +2047,44 @@ class AppendixGPRMTests < Minitest::Test
         end
       end
     end
+  end
+
+  # Verify if return air plenums are generated
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_return_air_type(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+
+      if building_type == 'LargeOffice'
+        assert(model.getAirLoopHVACReturnPlenums.length == 3, "The expected return air plenums in the large office baseline model have not been created.")
+      end
+
+      if building_type == 'PrimarySchool'
+        assert(model.getAirLoopHVACReturnPlenums.length == 0, "Return air plenums are being modeled in the primary school baseline model, they are not expected.")
+      end
+    end
+  end
+
+  # Check model unmet load hours
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_unmet_load_hours(prototypes_base)
+    standard = Standard.build('90.1-PRM-2019')
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+
+      assert(standard.model_get_unmet_load_hours(model) < 300, "The #{building_type} prototype building model has more than 300 unmet load hours.")
+    end
+  end
+
+  # Placeholder method to indicate that we want to check unmet
+  # load hours
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param arguments [Array] Not used
+  def unmet_load_hours(model, arguments)
+    return model
   end
 
   # Add a AirLoopHVACDedicatedOutdoorAirSystem in the model
@@ -2121,45 +2265,32 @@ class AppendixGPRMTests < Minitest::Test
       building_dir_rel_north = model.getBuilding.northAxis
       surface_abs_azimuth = surface_azimuth_rel_space + space_dir_rel_north + building_dir_rel_north
       surface_abs_azimuth -= 360.0 until surface_abs_azimuth < 360.0
+
       unless ss.subSurfaces.empty?
-        orig_construction = ss.subSurfaces[0].construction.get
+        # get subsurface construction
+        orig_construction = nil
+        ss.subSurfaces.sort.each do |sub|
+          next unless sub.subSurfaceType == 'FixedWindow' || sub.subSurfaceType=='OperableWindow'
+          orig_construction = sub.construction.get
+          end
+        # remove all existing surfaces
         ss.subSurfaces.sort.each(&:remove)
         # Determine the surface's cardinal direction
         if surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45
-          if target_wwr_north == 0.0
-            ss.setWindowToWallRatio(target_wwr_north, 0.6,true)
-          else
-            new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
-            new_window.setConstruction(orig_construction)
-          end
+          new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
         elsif surface_abs_azimuth > 315 && surface_abs_azimuth <= 360
-          if target_wwr_north == 0.0
-            ss.setWindowToWallRatio(target_wwr_north, 0.6, true)
-          else
-            new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
-            new_window.setConstruction(orig_construction)
-          end
+          new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
         elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135
-          if target_wwr_east == 0.0
-            ss.setWindowToWallRatio(target_wwr_east, 0.6, true)
-          else
-            new_window = ss.setWindowToWallRatio(target_wwr_east, 0.6, true).get
-            new_window.setConstruction(orig_construction)
-          end
+          new_window = ss.setWindowToWallRatio(target_wwr_east, 0.6, true).get
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
         elsif surface_abs_azimuth > 135 && surface_abs_azimuth <= 225
-          if target_wwr_south == 0.0
-            ss.setWindowToWallRatio(target_wwr_south, 0.6, true)
-          else
-            new_window = ss.setWindowToWallRatio(target_wwr_south, 0.6, true).get
-            new_window.setConstruction(orig_construction)
-          end
+          new_window = ss.setWindowToWallRatio(target_wwr_south, 0.6, true).get
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
         elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315
-          if target_wwr_west
-            ss.setWindowToWallRatio(target_wwr_west, 0.6, true)
-          else
-            new_window = ss.setWindowToWallRatio(target_wwr_west, 0.6, true).get
-            new_window.setConstruction(orig_construction)
-          end
+          new_window = ss.setWindowToWallRatio(target_wwr_west, 0.6, true).get
+          new_window.setConstruction(orig_construction) unless orig_construction.nil?
         end
       end
     end
@@ -2399,6 +2530,57 @@ class AppendixGPRMTests < Minitest::Test
     return model
   end
 
+  # Add piping insulation to service heating water systems
+  def add_piping_insulation(model, arguments)
+    std = Standard.build('90.1-PRM-2019')
+    model.getPlantLoops.each do |plantloop|
+      if std.plant_loop_swh_loop?(plantloop)
+        std.model_add_piping_losses_to_swh_system(model, plantloop, true)
+      end
+    end
+
+    return model
+  end
+
+  # Change the weather used in the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param arguments [Array] List of arguments
+  # return [OpenStudio::Model::Model] OpenStudio model object
+  def change_weather_file(model, arguments)
+    # Define new weather file
+    weather_file = File.join(@@json_dir, "USA_VA_Arlington-Ronald.Reagan.Washington.Natl.AP.724050_TMY3.epw")
+    epw_file = OpenStudio::EpwFile.new(weather_file)
+
+    # Assign new weather file
+    OpenStudio::Model::WeatherFile.setWeatherFile(model, epw_file).get
+
+    return model
+  end
+
+  # Check that no pipe insulation is modeled in the baseline models
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_pipe_insulation(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+      # Check if the model include PipeIndoor or PipeOutdoor objects
+      model_baseline.getPlantLoops.each do |plant_loop| 
+        existing_pipe_insulation = ''
+        a = plant_loop.supplyComponents
+        b = plant_loop.demandComponents
+        plantloopComponents = a += b
+        plantloopComponents.each do |component|
+          # Get the object type
+          obj_type = component.iddObjectType.valueName.to_s
+          next if !['OS_Pipe_Indoor', 'OS_Pipe_Outdoor'].include?(obj_type)
+          existing_pipe_insulation = existing_pipe_insulation
+        end
+        assert(existing_pipe_insulation.empty?, "The baseline model for the #{building_type}-#{template} in #{climate_zone} has no pipe insulation.")
+      end
+    end
+  end
+
   # Run test suite for the ASHRAE 90.1 appendix G Performance
   # Rating Method (PRM) baseline automation implementation
   # in openstudio-standards.
@@ -2414,6 +2596,7 @@ class AppendixGPRMTests < Minitest::Test
       'light_occ_sensor',
       'infiltration',
       'vav_fan_curve',
+      'pipe_insulation',
       'hvac_baseline',
       'hvac_psz_split_from_mz',
       'plant_temp_reset_ctrl',
@@ -2426,8 +2609,8 @@ class AppendixGPRMTests < Minitest::Test
       'vav_min_sp',
       'multi_bldg_handling',
       'economizer_exception',
-      'fan_power_credits',
-      'lpd_userdata_handling'
+      'building_rotation_check',
+      'unmet_load_hours',
     ]
 
     # Get list of unique prototypes
@@ -2451,6 +2634,7 @@ class AppendixGPRMTests < Minitest::Test
     check_light_occ_sensor(prototypes['light_occ_sensor'], prototypes_base['light_occ_sensor']) if tests.include? 'light_occ_sensor'
     check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if tests.include? 'infiltration'
     check_variable_speed_fan_power(prototypes_base['vav_fan_curve']) if tests.include? 'vav_fan_curve'
+    check_pipe_insulation(prototypes_base['pipe_insulation']) if tests.include? 'pipe_insulation'
     check_hvac(prototypes_base['hvac_baseline']) if tests.include? 'hvac_baseline'
     check_sat_ctrl(prototypes_base['sat_ctrl']) if tests.include? 'sat_ctrl'
     check_number_of_boilers(prototypes_base['number_of_boilers']) if tests.include? 'number_of_boilers'
@@ -2462,6 +2646,11 @@ class AppendixGPRMTests < Minitest::Test
     check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
     check_multi_lpd_handling(prototypes_base['lpd_userdata_handling']) if tests.include? 'lpd_userdata_handling'
     check_economizer_exception(prototypes_base['economizer_exception']) if tests.include? 'economizer_exception'
+    check_building_rotation_exception(prototypes_base['building_rotation_check']) if tests.include? 'building_rotation_check'
+    check_unenclosed_spaces(prototypes_base['unenclosed_spaces']) if tests.include? 'unenclosed_spaces'
+    check_f_c_factors(prototypes_base['f_c_factors']) if tests.include? 'f_c_factors'
     check_fan_power_credits(prototypes_base['fan_power_credits']) if tests.include? 'fan_power_credits'
+    check_return_air_type(prototypes_base['return_air_type']) if tests.include? 'return_air_type'
+    check_unmet_load_hours(prototypes_base['unmet_load_hours']) if tests.include? 'unmet_load_hours'
   end
 end

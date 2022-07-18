@@ -423,7 +423,7 @@ class Standard
         # For this case the U-Factor is retrieved from previous sizing run
         u_factor = construction_calculated_fenestration_u_factor_w_frame(subsurface.construction.get)
       else
-        # DEM: replace with direct query: u_factor = subsurface.uFactor.get
+        # replace with direct query: u_factor = subsurface.uFactor.get
         glass_u_factor_query = "SELECT Value
                   FROM tabulardatawithstrings
                   WHERE ReportName='EnvelopeSummary'
