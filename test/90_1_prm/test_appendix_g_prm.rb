@@ -16,7 +16,9 @@ class AppendixGPRMTests < Minitest::Test
   @@swh_building_types = JSON.parse(File.read("#{@@json_dir}/swh_building_types.json"))
   @@wwr_values = JSON.parse(File.read("#{@@json_dir}/wwr_values.json"))
   @@hasres_values = JSON.parse(File.read("#{@@json_dir}/hasres_values.json"))
-
+  # Global variable to ...
+  # Make sure to turn it to false so CI will not fail for time out.
+  GENERATE_PRM_LOG = false
   # Generate one of the ASHRAE 90.1 prototype model included in openstudio-standards.
   #
   # @param prototypes_to_generate [Array] List of prototypes to generate, see prototype_list.json to see the structure of the list
@@ -184,7 +186,7 @@ class AppendixGPRMTests < Minitest::Test
                                                                                     @@hvac_building_types[hvac_building_type],
                                                                                     @@wwr_building_types[building_type],
                                                                                     @@swh_building_types[building_type],
-                                                                                    nil, run_dir_baseline, false, false)
+                                                                                    nil, run_dir_baseline, false, GENERATE_PRM_LOG)
 
       # Check if baseline could be created
       assert(model_baseline, "Baseline model could not be generated for #{building_type}, #{template}, #{climate_zone}.")
