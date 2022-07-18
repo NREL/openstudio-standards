@@ -1587,21 +1587,22 @@ class ASHRAE901PRM < Standard
                               surface_wwr: nil,
                               wwr_building_type: 'All others',
                               wwr_target: nil,
-                              total_wall_m2: nil,
-                              total_wall_with_fene_m2: nil,
-                              total_fene_m2: nil)
+                              total_wall_m2: 0.0,
+                              total_wall_with_fene_m2: 0.0,
+                              total_fene_m2: 0.0,
+                              total_plenum_wall_m2: 0.0)
 
     if multiplier < 1.0
       # Case when reduction is required
       reduction_ratio = 1.0 - multiplier
     else
       # Case when increase is required
-      exist_max_wwr = total_wall_with_fene_m2 * 0.9 / total_wall_m2 
+      exist_max_wwr = total_wall_with_fene_m2 * 0.9 / total_wall_m2
       if exist_max_wwr < wwr_target
-        # In this case, it is required to add vertical fenestrations to other surfaces
+        # In this case, it is required to add vertical fenestration to other surfaces
         if surface_wwr == 0.0
           # delta_fenestration_surface_area / delta_wall_surface_area + 1.0 = increase_ratio for a surface with no windows.
-          reduction_ratio = (wwr_target * total_wall_m2 - exist_max_wwr * total_wall_m2) / (total_wall_m2 - total_wall_with_fene_m2) + 1.0
+          reduction_ratio = (wwr_target - exist_max_wwr) * total_wall_m2 / (total_wall_m2 - total_wall_with_fene_m2 - total_plenum_wall_m2) + 1.0
         else
           # surface has fenestration - expand it to 90% WWR
           reduction_ratio = 0.9 / surface_wwr

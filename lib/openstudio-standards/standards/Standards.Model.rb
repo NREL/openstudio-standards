@@ -5224,13 +5224,16 @@ class Standard
         # separately.  Include space multipliers.
         bat.store('nr_wall_m2', 0.001) # Avoids divide by zero errors later
         bat.store('nr_fene_only_wall_m2', 0.001)
+        bat.store('nr_plenum_wall_m2', 0.001)
         bat.store('nr_wind_m2', 0)
         bat.store('res_wall_m2', 0.001)
         bat.store('res_fene_only_wall_m2', 0.001)
         bat.store('res_wind_m2', 0)
+        bat.store('res_plenum_wall_m2', 0.001)
         bat.store('sh_wall_m2', 0.001)
         bat.store('sh_fene_only_wall_m2', 0.001)
         bat.store('sh_wind_m2', 0)
+        bat.store('sh_plenum_wall_m2', 0.001)
         bat.store('total_wall_m2', 0.001)
         bat.store('total_plenum_m2', 0.001)
       else
@@ -5294,28 +5297,26 @@ class Standard
       end
       space_cats[space] = cat
 
-      # Add to the correct category
+      # Add to the correct category is_space_plenum?
       case cat
         when 'Unconditioned'
           next # Skip unconditioned spaces
         when 'NonResConditioned'
+          is_space_plenum?(space) ? bat['nr_plenum_wall_m2'] += wall_area_m2 : bat['nr_plenum_wall_m2'] += 0.0
           bat['nr_wall_m2'] += wall_area_m2
           bat['nr_fene_only_wall_m2'] += wall_only_area_m2
           bat['nr_wind_m2'] += wind_area_m2
         when 'ResConditioned'
+          is_space_plenum?(space) ? bat['res_plenum_wall_m2'] += wall_area_m2 : bat['res_plenum_wall_m2'] += 0.0
           bat['res_wall_m2'] += wall_area_m2
           bat['res_fene_only_wall_m2'] += wall_only_area_m2
           bat['res_wind_m2'] += wind_area_m2
         when 'Semiheated'
+          is_space_plenum?(space) ? bat['sh_plenum_wall_m2'] += wall_area_m2 : bat['sh_plenum_wall_m2'] += 0.0
           bat['sh_wall_m2'] += wall_area_m2
           bat['sh_fene_only_wall_m2'] += wall_only_area_m2
           bat['sh_wind_m2'] += wind_area_m2
       end
-
-      # If the space is plenum, add the total wall area to the plenum
-      # If plenum - if there is wind_area_m2, then the plenum was designed to have openings, then we do not count these areas
-      # Else, we count these area in the total_plenum_m2 for later process.
-      bat['total_plenum_m2'] += wall_area_m2
     end
 
     # Retrieve WWR info for all Building Area Types included in the model
@@ -5391,7 +5392,7 @@ class Standard
         # skip process the space unless the space wwr type matched.
         next unless bat == std_spc_type
         # supply and return plenum is now conditioned space but should be excluded from window adjustment
-        next if space_plenum? (space)
+        next if is_space_plenum? space
 
         # Determine the space category
         # from the previously stored values
@@ -5405,16 +5406,19 @@ class Standard
             mult = vals['mult_nr_red']
             total_wall_area = vals['nr_wall_m2']
             total_wall_with_fene = vals['nr_fene_only_wall_m2']
+            total_plenum_wall_area = vals['nr_plenum_wall_m2']
             total_fene = vals['nr_wind_m2']
           when 'ResConditioned'
             mult = vals['mult_res_red']
             total_wall_area = vals['res_wall_m2']
             total_wall_with_fene = vals['res_fene_only_wall_m2']
+            total_plenum_wall_area = vals['res_plenum_wall_m2']
             total_fene = vals['res_wind_m2']
           when 'Semiheated'
             mult = vals['mult_sh_red']
             total_wall_area = vals['sh_wall_m2']
             total_wall_with_fene = vals['sh_fene_only_wall_m2']
+            total_plenum_wall_area = vals['sh_plenum_wall_m2']
             total_fene = vals['sh_wind_m2']
         end
 
@@ -5439,7 +5443,8 @@ class Standard
                                         wwr_target: wwr_lim / 100, # need to revise it to decimals
                                         total_wall_m2: total_wall_area,
                                         total_wall_with_fene_m2: total_wall_with_fene,
-                                        total_fene_m2: total_fene)
+                                        total_fene_m2: total_fene,
+                                        total_plenum_wall_m2: total_plenum_wall_area)
 
           model_adjust_fenestration_in_a_surface(surface, red)
         end
@@ -6855,6 +6860,31 @@ class Standard
     return result
   end
 
+  # A function to check whether a space is a return / supply plenum.
+  # This function only works on spaces that is categorized as return or supply air plenum
+  # For zones works as plenum but not correctly categorized in the OS will not be identified by this function
+  # @param [OpenStudio::Model::Space] space
+  # @return boolean true if it is plenum, else false.
+  def is_space_plenum?(space)
+    # Get the zone this space is inside
+    zone = space.thermalZone
+    # the zone is a return air plenum
+    space.model.getAirLoopHVACReturnPlenums.each do |return_air_plenum|
+      if return_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
+        # Determine if residential
+        return true
+      end
+    end
+    # the zone is a supply plenum
+    space.model.getAirLoopHVACSupplyPlenums.each do |supply_air_plenum|
+      if supply_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
+        return true
+      end
+    end
+    # None match, return false
+    return false
+  end
+
   private
 
   # For 2019, it is required to adjusted wwr based on building categories for all other types
@@ -7641,14 +7671,16 @@ class Standard
   # @param total_wall_m2 [Float] total wall area of the category in m2.
   # @param total_wall_with_fene_m2 [Float] total wall area of the category with fenestrations in m2.
   # @param total_fene_m2 [Float] total fenestration area
+  # @param total_plenum_wall_m2 [Float] total sqaure meter of a plenum
   # @return [Float] reduction factor
   def get_wwr_reduction_ratio(multiplier,
                               surface_wwr: nil,
                               wwr_building_type: 'All others',
                               wwr_target: nil,
-                              total_wall_m2: nil,
-                              total_wall_with_fene_m2: nil,
-                              total_fene_m2: nil)
+                              total_wall_m2: 0.0,
+                              total_wall_with_fene_m2: 0.0,
+                              total_fene_m2: 0.0,
+                              total_plenum_wall_m2: 0.0)
     return 1.0 - multiplier
   end
 
