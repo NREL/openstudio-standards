@@ -1,0 +1,20 @@
+Unmet Load Hours (UMLH)
+
+# ASHRAE 90.1-2019
+Unmet load hours for the proposed design or baseline building design shall not exceed 300 (of the 8760 hours simulated). Alternatively, unmet load hours exceeding these limits shall be permitted to be accepted upon approval of the rating authority, provided that sufficient justification is given indicating that the accuracy of the simulation is not significantly compromised by these unmet loads. 
+
+# ASHRAE 90.1-2019 PRM Reference Manual
+If the automatic oversizing percentage is not sufficient to meet demands, then UMLH are evaluated at the building level by looking at the UMLH for each thermal zone being modeled. The first step would be to determine if the UMLH are high (>300) for the proposed building design as well as the baseline building. If that is the case, the issue is usually related to fan operation, HVAC availability, and occupancy schedules where the HVAC system has an incorrectly specified schedule that makes it unavailable during occupied hours. Optimal start controls, if a part of the building design, can also help eliminate UMLH during startup times. Since the same schedules are used for the baseline design, UMLH are seen in the baseline building as well. Other user inputs that could cause UMLH include incorrectly specified zone minimum airflows, which could result in unmet heating load hours. In this case, the software should notify the user and ask the user to verify schedules of operation. If a space is being conditioned via transfer air, it might be that the temperature of the transfer air is not sufficient to meet space conditioning requirements. 
+* If this is not the case and UMLH are seen only with the baseline design, the user or software tool is required to incrementally increase system airflows and equipment capacities, following the steps outlined below.
+  * In the case where UMLH for cooling are a bigger problem, the equipment in the baseline building model is resized by first increasing the design airflow of all zones with significant UMLH (greater than 150 for an individual zone) by 10%, increasing the design airflow of all zones with some UMLH (between 50 and 150) by 5%. Then, the equipment capacity for the system(s) serving the affected zones is increased to handle the increased zone loads. For the central plant, the chiller(s) and towers are resized proportionally to handle the increased system loads.
+  * In the case where UMLH for heating are a bigger problem, the same procedure is followed, with zone airflows resized first, then heating secondary equipment capacity and then boiler capacity as necessary. The capacity of the boiler or furnace shall be increased in proportion to capacities of coils required to meet the increased airflows at the baseline supply air. For heat pumps, the capacity of the coil is increased so that the additional load is not met by auxiliary heat.
+
+# Implementation
+The user model unmet load hours are checked as the first step of the baseline generation process. If the number is greater than 300, an error is published and the process is stopped. This requires the user to address the UMLH in the user/proposed model prior to generating the baseline model(s) which can be take some time.
+
+At the end of the process, each baseline model's UMLH are checked. if the number is greater than 300, the process go through each zone and adjust the zone sizing factor by either increasing it by 5% or 10% for zones having respectively UMLH between 50 and 150 and greater than 150. Then, the model is re-ran and the check/adjustments are performed again until the number of UMLH is below 300. 
+
+# Key Ruby Methods 
+## New
+* `model_get_unmet_load_hours`: get the total unmet load hours during occupancy of a model that has been simulated
+* `thermal_zone_get_unmet_load_hours`: determine the number of unmet load hours during occupancy for a thermal zone
