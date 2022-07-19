@@ -263,13 +263,9 @@ class Standard
 
       # Remove all EMS objects from the model
       model_remove_prm_ems_objects(model)
-
-      
-
-        # Modify the service water heating loops per the baseline rules
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
-        model_apply_baseline_swh_loops(model, building_type)
-      
+      # Modify the service water heating loops per the baseline rules
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
+      model_apply_baseline_swh_loops(model, building_type)
 
       # Determine the baseline HVAC system type for each of the groups of zones and add that system type.
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
@@ -537,6 +533,11 @@ class Standard
         end
       end
     end
+
+    if debug
+      generate_baseline_log(sizing_run_dir)
+    end
+
     return true
   end
 
@@ -7765,6 +7766,12 @@ class Standard
   def model_apply_constructions(model, climate_zone, wwr_building_type, wwr_info)
     model_apply_standard_constructions(model, climate_zone, wwr_building_type = nil, wwr_info = {})
 
+    return true
+  end
+
+  # Generate baseline log to a specific file directory
+  # @param file_directory [String] file directory
+  def generate_baseline_log(file_directory)
     return true
   end
 

@@ -35,7 +35,7 @@
     ],
     "pipe_insulation": [
         
-        ["QuickServiceRestaurant", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data", [["add_piping_insulation", []]]]
+        ["QuickServiceRestaurant", "90.1-2019", "ASHRAE 169-2013-2A", "userdata_default_test", [["add_piping_insulation", []]]]
     ],
     "hvac_baseline": [
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []], ["return_relief_fan", []]]],
