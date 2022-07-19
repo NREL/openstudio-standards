@@ -2276,19 +2276,19 @@ class AppendixGPRMTests < Minitest::Test
         # remove all existing surfaces
         ss.subSurfaces.sort.each(&:remove)
         # Determine the surface's cardinal direction
-        if surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45
+        if surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45 && target_wwr_north > 0.0
           new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
           new_window.setConstruction(orig_construction) unless orig_construction.nil?
-        elsif surface_abs_azimuth > 315 && surface_abs_azimuth <= 360
+        elsif surface_abs_azimuth > 315 && surface_abs_azimuth <= 360 && target_wwr_north > 0.0
           new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
           new_window.setConstruction(orig_construction) unless orig_construction.nil?
-        elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135
+        elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135 && target_wwr_east > 0.0
           new_window = ss.setWindowToWallRatio(target_wwr_east, 0.6, true).get
           new_window.setConstruction(orig_construction) unless orig_construction.nil?
-        elsif surface_abs_azimuth > 135 && surface_abs_azimuth <= 225
+        elsif surface_abs_azimuth > 135 && surface_abs_azimuth <= 225 && target_wwr_south > 0.0
           new_window = ss.setWindowToWallRatio(target_wwr_south, 0.6, true).get
           new_window.setConstruction(orig_construction) unless orig_construction.nil?
-        elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315
+        elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315 && target_wwr_west > 0.0
           new_window = ss.setWindowToWallRatio(target_wwr_west, 0.6, true).get
           new_window.setConstruction(orig_construction) unless orig_construction.nil?
         end
