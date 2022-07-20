@@ -15396,7 +15396,7 @@
       "lpd_fraction_high_bay": 0.0,
       "lpd_fraction_specialty_lighting": 0.0437,
       "lpd_fraction_exit_lighting": 0.0229,
-      "lighting_schedule": null,
+      "lighting_schedule": "HotelSmall AlwaysOff",
       "compact_fluorescent_lighting_schedule": null,
       "high_bay_lighting_schedule": null,
       "specialty_lighting_schedule": null,
