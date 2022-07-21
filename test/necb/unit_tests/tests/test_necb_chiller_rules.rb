@@ -19,6 +19,9 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
 
   # Test to validate the chiller COP generated against expected values stored in the file:
   # 'compliance_chiller_cop_expected_results.csv
+  # For NECB 2020 testing, for all chiller types except the centrifugal chillers, I don't think we can ever get to the last row of NECB2020 code of capacities more than 2110 kw, as it will be divided into 2 chillers,
+  # each chiller will have 1055 kW and that would move it to the upper row of NECB2020 code and COP will be always 5.633 not 6.018 (Mariana)
+  # Consequently i've updated the expected results for all chiller types except the centrifugal chillers that are more then 2110 kW (7,200,000 btu/hr) to be 5.633 not 6.018
   def test_NECB_chiller_cop
     output_folder = File.join(@top_output_folder, __method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
@@ -55,39 +58,17 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
       chiller_type_cap['Reciprocating'] = []
       chiller_type_cap['Scroll'] = []
       chiller_type_cap['Centrifugal'] = []
+
       chiller_type_min_cap.each do |type, min_caps|
-        puts " type #{type}  min_caps #{min_caps}"
-        if min_caps.size == 1
-          chiller_type_cap[type] << 10000.0
-        else
-          chiller_type_cap[type] << 0.5 * (OpenStudio.convert(chiller_type_min_cap[type][0].to_f, 'Btu/hr', 'W').to_f + OpenStudio.convert(chiller_type_min_cap[type][1].to_f, 'Btu/h', 'W').to_f)
-          puts " 1-  chiller_type_cap[type] #{chiller_type_cap[type]}  chiller_type_min_cap[type][0]  #{chiller_type_min_cap[type][0]}"
-          if min_caps.size == 2
-            chiller_type_cap[type] << (OpenStudio.convert(chiller_type_min_cap[type][1].to_f, 'Btu/hr', 'W').to_f + 10000.0)
-            puts " 2-  chiller_type_cap[type] #{chiller_type_cap[type]}  chiller_type_min_cap[type][1]  #{chiller_type_min_cap[type][1]}"
-          else
-            chiller_type_cap[type] << 0.5 * (OpenStudio.convert(chiller_type_min_cap[type][1].to_f, 'Btu/hr', 'W').to_f + OpenStudio.convert(chiller_type_min_cap[type][2].to_f, 'Btu/hr', 'W').to_f)
-            puts " 3- chiller_type_cap[type] #{chiller_type_cap[type]}  chiller_type_min_cap[type][1]  #{chiller_type_min_cap[type][1]}"
-            if min_caps.size == 3
-              chiller_type_cap[type] << (OpenStudio.convert(chiller_type_min_cap[type][2].to_f, 'Btu/hr', 'W').to_f + 10000.0)
-              puts " 4-  chiller_type_cap[type] #{chiller_type_cap[type]}  chiller_type_min_cap[type][2]  #{chiller_type_min_cap[type][2]}"
-            else
-              chiller_type_cap[type] << 0.5 * (OpenStudio.convert(chiller_type_min_cap[type][2].to_f, 'Btu/hr', 'W').to_f + OpenStudio.convert(chiller_type_min_cap[type][3].to_f, 'Btu/hr', 'W').to_f)
-              puts " 5-  chiller_type_cap[type] #{chiller_type_cap[type]}  chiller_type_min_cap[type][2]  #{chiller_type_min_cap[type][2]}"
-              chiller_type_cap[type] << (OpenStudio.convert(chiller_type_min_cap[type][3].to_f, 'Btu/hr', 'W').to_f + 10000.0)
-              puts " 6-  chiller_type_cap[type] #{chiller_type_cap[type]}  chiller_type_min_cap[type][3]  #{chiller_type_min_cap[type][3]}"
-              if min_caps.size == 4
-                chiller_type_cap[type] << (OpenStudio.convert(chiller_type_min_cap[type][3].to_f, 'Btu/hr', 'W').to_f + 10000.0)
-                puts " 6- 666666 chiller_type_cap[type] #{chiller_type_cap[type]}  chiller_type_min_cap[type][3]  #{chiller_type_min_cap[type][3]}"
-              else
-                chiller_type_cap[type] << 0.5 * (OpenStudio.convert(chiller_type_min_cap[type][3].to_f, 'Btu/hr', 'W').to_f + OpenStudio.convert(chiller_type_min_cap[type][4].to_f, 'Btu/hr', 'W').to_f)
-                puts " 7-  chiller_type_cap[type] #{chiller_type_cap[type]}  chiller_type_min_cap[type][3]  #{chiller_type_min_cap[type][3]}"
-                chiller_type_cap[type] << (OpenStudio.convert(chiller_type_min_cap[type][4].to_f, 'Btu/hr', 'W').to_f + 10000.0)
-                puts "  8- chiller_type_cap[type] #{chiller_type_cap[type]}  chiller_type_min_cap[type][4]  #{chiller_type_min_cap[type][4]}"
-              end
-            end
-          end
+        last_cap = 0.0 # Get last minimum capacity
+        min_caps.each_cons(2) do |min1, min2|
+          min1_w = (OpenStudio.convert(min1.to_f, 'Btu/hr', 'W')).to_f
+          min2_w = (OpenStudio.convert(min2.to_f, 'Btu/hr', 'W')).to_f
+          ave = (min1_w + min2_w) / 2
+          chiller_type_cap[type] << ave + 10000
+          last_cap = min2_w
         end
+        chiller_type_cap[type] << last_cap + 10000
       end
 
       # Generate the osm files for all relevant cases to generate the test data for system 2
@@ -141,8 +122,6 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
       chiller_types.each do |type|
         for int in 0..chiller_type_cap[type].size - 1
           output_line_text = "#{type},#{chiller_type_min_cap[type][int]},#{chiller_type_max_cap[type][int]},#{actual_chiller_cop[type][int]}\n"
-          puts" int #{int}  type #{type} "
-          puts" chiller_type_cap[type].size #{chiller_type_cap[type].size}"
           chiller_res_file_output_text += output_line_text
         end
       end
@@ -158,7 +137,6 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
     end
   end
 
-=begin
   # Test to validate the number of chillers used and their capacities depending on total cooling capacity.
   # NECB2011 rule for number of chillers is:
   # "if capacity <= 2100 kW ---> one chiller
@@ -325,7 +303,6 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
     assert(b_result,
            "Chiller performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
   end
-=end
 
   def run_simulations(output_folder)
     if FULL_SIMULATIONS == true
