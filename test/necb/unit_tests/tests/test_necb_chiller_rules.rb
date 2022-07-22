@@ -19,14 +19,14 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
 
   # Test to validate the chiller COP generated against expected values stored in the file:
   # 'compliance_chiller_cop_expected_results.csv
-  # For NECB 2020 testing, for all chiller types except the centrifugal chillers, I don't think we can ever get to the last row of NECB2020 code of capacities more than 2110 kw, as it will be divided into 2 chillers,
+  # For NECB 2020 testing, for all chiller types except the centrifugal chillers, I don't think we can test the last row of NECB2020 code of capacities more than 2110 kw, as it will be divided into 2 chillers,
   # each chiller will have 1055 kW and that would move it to the upper row of NECB2020 code and COP will be always 5.633 not 6.018 (Mariana)
   # Consequently i've updated the expected results for all chiller types except the centrifugal chillers that are more then 2110 kW (7,200,000 btu/hr) to be 5.633 not 6.018
   def test_NECB_chiller_cop
     output_folder = File.join(@top_output_folder, __method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    templates = ['NECB2020']
+    templates = ['NECB2011', 'NECB2020']
     templates.each do |template|
       standard = Standard.build(template)
       chiller_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_chiller_cop_expected_results.csv")
@@ -59,14 +59,15 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
       chiller_type_cap['Scroll'] = []
       chiller_type_cap['Centrifugal'] = []
 
+      # Create a Loop to set the capacity test values
       chiller_type_min_cap.each do |type, min_caps|
         last_cap = 0.0 # Get last minimum capacity
-        min_caps.each_cons(2) do |min1, min2|
-          min1_w = (OpenStudio.convert(min1.to_f, 'Btu/hr', 'W')).to_f
-          min2_w = (OpenStudio.convert(min2.to_f, 'Btu/hr', 'W')).to_f
-          ave = (min1_w + min2_w) / 2
-          chiller_type_cap[type] << ave + 10000
-          last_cap = min2_w
+        min_caps.each_cons(2) do |min, max|
+          min_w = (OpenStudio.convert(min.to_f, 'Btu/hr', 'W')).to_f
+          max_w = (OpenStudio.convert(max.to_f, 'Btu/hr', 'W')).to_f
+          ave = (min_w + max_w) / 2
+          chiller_type_cap[type] << ave
+          last_cap = max_w
         end
         chiller_type_cap[type] << last_cap + 10000
       end
