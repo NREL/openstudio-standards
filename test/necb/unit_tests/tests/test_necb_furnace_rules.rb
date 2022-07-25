@@ -30,7 +30,7 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
     stage_types = ['single','multi']
     model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    templates = ['NECB2011', 'NECB2015']
+    templates = ['NECB2011', 'NECB2015', 'NECB2020']
     templates.each do |template|
       standard = Standard.build(template)
       furnace_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_furnace_efficiencies_expected_results.csv")
