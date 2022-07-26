@@ -2328,6 +2328,5 @@ class ASHRAE901PRM < Standard
     return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs }
   end
 
-
 end
 
