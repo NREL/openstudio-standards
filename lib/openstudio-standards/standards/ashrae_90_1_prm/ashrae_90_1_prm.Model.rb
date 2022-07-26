@@ -1574,7 +1574,7 @@ class ASHRAE901PRM < Standard
 
     bldg_groups = []
 
-    bldg_type_hvac_zone_hash.keys.each do |hvac_building_type, zones_in_building_type|
+    bldg_type_hvac_zone_hash.each do |hvac_building_type, zones_in_building_type|
 
       # Get all groups for this hvac building type
       new_groups = get_baseline_system_groups_for_one_building_type(model, hvac_building_type, zones_in_building_type)
@@ -1601,7 +1601,7 @@ class ASHRAE901PRM < Standard
   # with keys area_ft2, type, fuel, and zones (an array of zones)
   def get_baseline_system_groups_for_one_building_type(model, hvac_building_type, zones_in_building_type)
     # Build zones hash of [zone, zone area, occupancy type, building type, fuel]
-    zones = model_zones_with_occ_and_fuel_type(model, custom)
+    zones = model_zones_with_occ_and_fuel_type(model, 'custom', zones_in_building_type)
 
     # Ensure that there is at least one conditioned zone
     if zones.size.zero?
@@ -1961,7 +1961,7 @@ class ASHRAE901PRM < Standard
   # @param district_heat_zones [hash] of zone name => true for has district heat, false for has not
   # @return [String] The system type.  Possibilities are PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
   #   VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
-  def model_prm_stable_baseline_system_type(model, climate_zone, sys_group, custom, hvac_building_type, district_heat_zones)
+  def model_prm_baseline_system_type(model, climate_zone, sys_group, custom, hvac_building_type, district_heat_zones)
 
     area_type = sys_group['occ']
     fuel_type = sys_group['fuel']

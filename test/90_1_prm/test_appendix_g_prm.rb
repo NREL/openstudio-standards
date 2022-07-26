@@ -1527,11 +1527,31 @@ class AppendixGPRMTests < Minitest::Test
           if thermal_zone.additionalProperties.hasFeature('building_type_for_hvac')
             bldg_hvac_type = thermal_zone.additionalProperties.getFeatureAsString('building_type_for_hvac').get
             if /_1 ZN/i =~ thermal_zone_name
-              # first floor hvac type shall be "retail"
+              # first floor hvac bldg type shall be "retail"
               assert(bldg_hvac_type == 'retail', "Baseline zone #{thermal_zone_name} has incorrect building_type_for_hvac. It should be retail but get #{bldg_hvac_type}")
+              # first floor hvac should be PSZ
+              air_loop = thermal_zone.airLoopHVAC.get
+              air_loop_comps = air_loop.supplyComponents
+              unitary_sys_idx = air_loop_comps.index {|comp| comp.iddObjectType.valueName.to_s == 'OS_AirLoopHVAC_UnitarySystem'}
+              unitary_sys = air_loop_comps[unitary_sys_idx].to_AirLoopHVACUnitarySystem.get
+              has_dx_cool_coil = unitary_sys.coolingCoil.get.to_CoilCoolingDXSingleSpeed.is_initialized
+              assert(has_dx_cool_coil, "Baseline zone #{thermal_zone_name} has incorrect HVAC type for building type for hvac test. It should be PSZ")
+              zone_system_check = true if has_dx_cool_coil
             else
               # other floors hvac type shall be "residential"
               assert(bldg_hvac_type == 'residential', "Baseline zone #{thermal_zone_name} has incorrect building_type_for_hvac. It should be residential but get #{bldg_hvac_type}")
+
+              # Check if packaged terminal unit
+              has_ptu = false
+              thermal_zone.equipment.each do |equip|
+                next unless equip.to_HVACComponent.is_initialized
+                equip = equip.to_HVACComponent.get
+                if equip.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized || equip.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+                  has_ptu = true
+                end        
+              end
+              assert(has_ptu, "Baseline zone #{thermal_zone_name} has incorrect HVAC type during building_type_for_hvac test. It should be a packaged terminal unit")
+
             end
           end
         end
