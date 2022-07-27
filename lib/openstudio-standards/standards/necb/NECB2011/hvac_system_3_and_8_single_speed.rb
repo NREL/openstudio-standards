@@ -156,9 +156,14 @@ class NECB2011
       fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
     end
 
-    # Set up DX coil with NECB performance curve characteristics;
-    clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
-    clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
+    # Set up DX coil 
+    if @reference_hp #NECB curve characteristics
+      clg_coil = add_onespeed_DX_coil(model, always_on)
+      clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
+    else
+      clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model) #sets default OS curve (but will be replaced with NECB curves later)
+      clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
+    end
     
     case heating_coil_type
     when 'Electric' # electric coil
