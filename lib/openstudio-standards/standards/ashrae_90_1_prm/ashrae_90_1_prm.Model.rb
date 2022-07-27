@@ -1612,7 +1612,7 @@ class ASHRAE901PRM < Standard
   # with keys area_ft2, type, fuel, and zones (an array of zones)
   def get_baseline_system_groups_for_one_building_type(model, hvac_building_type, zones_in_building_type)
     # Build zones hash of [zone, zone area, occupancy type, building type, fuel]
-    zones = model_zones_with_occ_and_fuel_type(model, custom)
+    zones = model_zones_with_occ_and_fuel_type(model, 'custom')
 
     # Ensure that there is at least one conditioned zone
     if zones.size.zero?
@@ -1972,7 +1972,7 @@ class ASHRAE901PRM < Standard
   # @param district_heat_zones [hash] of zone name => true for has district heat, false for has not
   # @return [String] The system type.  Possibilities are PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
   #   VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
-  def model_prm_stable_baseline_system_type(model, climate_zone, sys_group, custom, hvac_building_type, district_heat_zones)
+  def model_prm_baseline_system_type(model, climate_zone, sys_group, custom, hvac_building_type, district_heat_zones)
 
     area_type = sys_group['occ']
     fuel_type = sys_group['fuel']
@@ -2109,8 +2109,6 @@ class ASHRAE901PRM < Standard
   # @param pri_zones [Array<String>] names of zones served by the multizone system
   # @param system_name [String] name of air loop
   def model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
-    # Exit if not stable baseline
-    return if /prm/i !~ template
 
     # Create fan schedule for multizone system
     fan_8760 = []
@@ -2156,7 +2154,7 @@ class ASHRAE901PRM < Standard
   # @param zone_fan_scheds [Hash] hash of zoneName:8760FanSchedPerZone
   # @return [Hash] A hash of two arrays of ThermalZones,
   # where the keys are 'primary' and 'secondary'
-  def model_diff_primary_secondary_zones(model, zones, zone_fan_scheds)
+  def model_differentiate_primary_secondary_thermal_zones(model, zones, zone_fan_scheds)
     pri_zones = []
     sec_zones = []
     pri_zone_names = []

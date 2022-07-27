@@ -204,7 +204,9 @@ class Standard
       # Add or remove daylighting controls to each space
       # Add daylighting controls for 90.1-2013 and prior
       # Remove daylighting control for 90.1-PRM-2019 and onward
-      space_set_baseline_daylighting_controls(space, false, false)
+      model.getSpaces.sort.each do |space|
+        space_set_baseline_daylighting_controls(space, false, false)
+      end
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
 

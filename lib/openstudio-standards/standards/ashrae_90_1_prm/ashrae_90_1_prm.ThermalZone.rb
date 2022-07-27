@@ -153,7 +153,7 @@ class ASHRAE901PRM < Standard
   # Identify if zone has district energy for occ_and_fuel_type method
   # @param themal_zone
   # @return [string] with applicable DistrictHeating and/or DistrictCooling 
-  def get_zone_fuels_for_occ_and_fuel_type(thermal_zone)
+  def get_zone_fuels_for_occ_and_fuel_type(zone)
     zone_fuels = ''
     htg_fuels = zone.heating_fuels
     if htg_fuels.include?('DistrictHeating')
@@ -163,7 +163,7 @@ class ASHRAE901PRM < Standard
     if clg_fuels.include?('DistrictCooling')
       zone_fuels += 'DistrictCooling'
     end
-    return = zone_fuels
+    return zone_fuels
   end
 
 
