@@ -864,6 +864,127 @@ class ASHRAE901PRM < Standard
     return true
   end
 
+  # Applies the HVAC parts of the template to all objects in the model using the the template specified in the model.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param apply_controls [Bool] toggle whether to apply air loop and plant loop controls
+  # @param sql_db_vars_map [Hash] hash map
+  # @return [Bool] returns true if successful, false if not
+  def model_apply_hvac_efficiency_standard(model, apply_controls: true, sql_db_vars_map: nil)
+    sql_db_vars_map = {} if sql_db_vars_map.nil?
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Started applying HVAC efficiency standards for #{template} template.")
+
+    # TODO: The fan and pump efficiency will be done by another task.
+    # Fans
+    # model.getFanVariableVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
+    # model.getFanConstantVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
+    # model.getFanOnOffs.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
+    # model.getFanZoneExhausts.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
+
+    # Pumps
+    # model.getPumpConstantSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
+    # model.getPumpVariableSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
+    # model.getHeaderedPumpsConstantSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
+    # model.getHeaderedPumpsVariableSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
+
+    # Zone level systems/components
+    model.getThermalZones.each do |zone|
+      if zone.additionalProperties.getFeatureAsString('baseline_system_type').is_initialized
+        sys_type = zone.additionalProperties.getFeatureAsString('baseline_system_type').get
+      end
+      zone.equipment.each do |zone_equipment|
+        if zone_equipment.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+          ptac = zone_equipment.to_ZoneHVACPackagedTerminalAirConditioner.get
+          cooling_coil = ptac.coolingCoil
+          sql_db_vars_map = set_coil_cooling_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
+        elsif zone_equipment.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+          pthp = zone_equipment.to_ZoneHVACPackagedTerminalHeatPump.get
+          cooling_coil = pthp.coolingCoil
+          heating_coil = pthp.heatingCoil
+          sql_db_vars_map = set_coil_cooling_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
+          sql_db_vars_map = set_coil_heating_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
+        elsif zone_equipment.to_ZoneHVACUnitHeater.is_initialized
+          unit_heater = zone_equipment.to_ZoneHVACUnitHeater.get
+          heating_coil = unit_heater.heatingCoil
+          sql_db_vars_map = set_coil_heating_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
+        end
+      end
+    end
+
+    # Airloop HVAC level components
+    model.getAirLoopHVACs.sort.each do |air_loop|
+      sys_type = air_loop.additionalProperties.getFeatureAsString('baseline_system_type').get
+      air_loop.components.each do |icomponent|
+        if icomponent.to_AirLoopHVACUnitarySystem.is_initialized
+          unitary_system = icomponent.to_AirLoopHVACUnitarySystem.get
+          if unitary_system.coolingCoil.is_initialized
+            cooling_coil = unitary_system.coolingCoil.get
+            sql_db_vars_map = set_coil_cooling_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
+          end
+          if unitary_system.heatingCoil.is_initialized
+            heating_coil = unitary_system.heatingCoil.get
+            sql_db_vars_map = set_coil_heating_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
+          end
+        elsif icomponent.to_CoilCoolingDXSingleSpeed.is_initialized
+          cooling_coil = icomponent.to_CoilCoolingDXSingleSpeed.get
+          sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
+        elsif icomponent.to_CoilCoolingDXTwoSpeed.is_initialized
+          cooling_coil = icomponent.to_CoilCoolingDXTwoSpeed.get
+          sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
+        elsif icomponent.to_CoilHeatingDXSingleSpeed.is_initialized
+          heating_coil = icomponent.to_CoilHeatingDXSingleSpeed.get
+          sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
+        elsif icomponent.to_CoilHeatingGas.is_initialized
+          heating_coil = icomponent.to_CoilHeatingGas.get
+          sql_db_vars_map = coil_heating_gas_apply_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
+        end
+      end
+    end
+
+    # Chillers
+    model.getChillerElectricEIRs.sort.each { |obj| chiller_electric_eir_apply_efficiency_and_curves(obj) }
+
+    # Boilers
+    model.getBoilerHotWaters.sort.each { |obj| boiler_hot_water_apply_efficiency_and_curves(obj) }
+
+    # Cooling Towers
+    model.getCoolingTowerVariableSpeeds.sort.each { |obj| cooling_tower_variable_speed_apply_efficiency_and_curves(obj) }
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Finished applying HVAC efficiency standards for #{template} template.")
+    return true
+  end
+
+  def set_coil_cooling_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
+
+    if cooling_coil.to_CoilCoolingDXSingleSpeed.is_initialized
+      # single speed coil
+      sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(cooling_coil.to_CoilCoolingDXSingleSpeed.get, sql_db_vars_map, sys_type)
+    elsif cooling_coil.to_CoilCoolingDXTwoSpeed.is_initialized
+      # two speed coil
+      sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(cooling_coil.to_CoilCoolingDXTwoSpeed.get, sql_db_vars_map, sys_type)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "#{cooling_coil.name} is not single speed or two speed DX cooling coil. Nothing to be done for efficiency")
+    end
+
+    return sql_db_vars_map
+  end
+
+  def set_coil_heating_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
+
+    if heating_coil.to_CoilHeatingDXSingleSpeed.is_initialized
+      # single speed coil
+      sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(heating_coil.to_CoilHeatingDXSingleSpeed.get, sql_db_vars_map, sys_type)
+    elsif heating_coil.to_CoilHeatingGas.is_initialized
+      # single speed coil
+      sql_db_vars_map = coil_heating_gas_apply_efficiency_and_curves(heating_coil.to_CoilHeatingGas.get, sql_db_vars_map, sys_type)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "#{heating_coil.name} is not single speed DX heating coil. Nothing to be done for efficiency")
+    end
+
+    return sql_db_vars_map
+  end
+
   # Template method for adding a setpoint manager for a coil control logic to a heating coil.
   # ASHRAE 90.1-2019 Appendix G.
   #
