@@ -1141,8 +1141,16 @@ class ASHRAE901PRM < Standard
         bldg_type_zone_hash[hvac_building_type].append(thermal_zone)
       end
     end
-    # Handle an edge case that all zones in the model are unconditioned.
-    unless bldg_type_zone_hash.empty?
+
+    if bldg_type_zone_hash.empty?
+      # Build hash with all zones assigned to default hvac building type
+      zone_array = []
+      model.getThermalZones.each do |thermal_zone|
+        zone_array.append(thermal_zone)
+        thermal_zone.additionalProperties.setFeature('building_type_for_hvac', default_hvac_building_type)
+      end
+      bldg_type_hvac_zone_hash[default_hvac_building_type] = zone_array
+    else  
       # Calculate the total floor area.
       # If the max tie, this algorithm will pick the first encountered hvac building type as the maximum.
       total_floor_area = 0.0
