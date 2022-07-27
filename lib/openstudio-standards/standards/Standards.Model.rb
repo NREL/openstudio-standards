@@ -182,7 +182,7 @@ class Standard
       space_type_light_sch_change(model)
 
       # Calculate infiltration as per 90.1 PRM rules
-      baseline_apply_infiltration_standard(model, climate_zone)
+      model_baseline_apply_infiltration_standard(model, climate_zone)
 
       # If any of the lights are missing schedules, assign an always-off schedule to those lights.
       # This is assumed to be the user's intent in the proposed model.
@@ -221,7 +221,7 @@ class Standard
       sys_groups = model_prm_baseline_system_groups(model, custom, bldg_type_hvac_zone_hash)
 
       # Also get hash of zoneName:boolean to record which zones have district heating, if any
-      district_heat_zones = get_district_heating_zones(model)
+      district_heat_zones = model_get_district_heating_zones(model)
 
       # Store occupancy and fan operation schedules for each zone before deleting HVAC objects
       zone_fan_scheds = get_fan_schedule_for_each_zone(model)
@@ -591,7 +591,7 @@ class Standard
   # @param model [OpenStudio::model::Model] OpenStudio model object
   #
   def model_apply_prm_baseline_sizing_schedule(model)
-    return
+    return true
   end
 
   # Categorize zones by occupancy type and fuel type, where the types depend on the standard.
@@ -644,20 +644,12 @@ class Standard
       # Fuel type
       # for 2013 and prior, baseline fuel = proposed fuel
       # for 2016 and later, use fuel to identify zones with district energy
-      zn_hash['fuel'] = get_zone_fuels_for_occ_and_fuel_type(zone)
+      zn_hash['fuel'] = thermal_zone_get_zone_fuels_for_occ_and_fuel_type(zone)
 
       zones << zn_hash
     end
 
     return zones
-  end
-
-  # for 2013 and prior, baseline fuel = proposed fuel
-  # @param themal_zone
-  # @return [string] with applicable DistrictHeating and/or DistrictCooling 
-  def get_zone_fuels_for_occ_and_fuel_type(zone)
-    zone_fuels = thermal_zone_fossil_or_electric_type(zone, 'custom')
-    return zone_fuels
   end
 
 
@@ -925,7 +917,7 @@ class Standard
 
   # Before deleting proposed HVAC components, determine for each zone if it has district heating
   # @return [Hash] of boolean with zone name as key
-  def get_district_heating_zones(model)
+  def model_get_district_heating_zones(model)
     has_district_hash = {}
     model.getThermalZones.sort.each do |zone|
       has_district_hash['building'] = false
@@ -1143,7 +1135,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @param sys_group [data structure] Data structure defining list of zones for a single hvac building type
+  # @param sys_group [hash] Hash defining a group of zones that have the same Appendix G system type
   # @param custom [String] custom fuel type
   # @return [String] The system type.  Possibilities are PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
   #   VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
@@ -2356,8 +2348,8 @@ class Standard
 
   # For backward compatibility, infiltration standard not used for 2013 and earlier
    # @return [Bool] true if successful, false if not
-  def baseline_apply_infiltration_standard(model, climate_zone)
-    return
+  def model_baseline_apply_infiltration_standard(model, climate_zone)
+    return true
   end
 
   # Apply the air leakage requirements to the model, as described in PNNL section 5.2.1.6.

@@ -124,7 +124,7 @@ class ASHRAE901PRM < Standard
   # space and removes the SpaceType-level infiltration objects.
   #
   # @return [Bool] true if successful, false if not
-  def baseline_apply_infiltration_standard(model, climate_zone)
+  def model_baseline_apply_infiltration_standard(model, climate_zone)
     # Model shouldn't use SpaceInfiltrationEffectiveLeakageArea
     # Excerpt from the EnergyPlus Input/Output reference manual:
     #     "This model is based on work by Sherman and Grimsrud (1980)
@@ -799,7 +799,7 @@ class ASHRAE901PRM < Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Bool] returns true if successful, false if not
   def model_apply_multizone_vav_outdoor_air_sizing(model)
-    return
+    return true
   end
 
 
@@ -1974,7 +1974,7 @@ class ASHRAE901PRM < Standard
   #
   # @note Select system type from data table base on key parameters
   # @param climate_zone [string] id code for the climate
-  # @param sys_group [data structure] Data structure defining list of zones for a single hvac building type
+  # @param sys_group [hash] Hash defining a group of zones that have the same Appendix G system type
   # @param custom [string] included here for backwards compatibility (not used here)
   # @param hvac_building_type [String] Chosen by user via measure interface or user data files
   # @param district_heat_zones [hash] of zone name => true for has district heat, false for has not
