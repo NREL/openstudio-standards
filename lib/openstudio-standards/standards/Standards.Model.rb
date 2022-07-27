@@ -656,7 +656,7 @@ class Standard
   # @param themal_zone
   # @return [string] with applicable DistrictHeating and/or DistrictCooling 
   def get_zone_fuels_for_occ_and_fuel_type(zone)
-    zone_fuels = thermal_zone_fossil_or_electric_type(zone, custom)
+    zone_fuels = thermal_zone_fossil_or_electric_type(zone, 'custom')
     return zone_fuels
   end
 
@@ -932,7 +932,7 @@ class Standard
       htg_fuels = zone.heating_fuels
       if htg_fuels.include?('DistrictHeating')
         has_district_hash[zone.name] = true
-        has_district_has['building'] = true
+        has_district_hash['building'] = true
       else
         has_district_hash[zone.name] = false
       end
