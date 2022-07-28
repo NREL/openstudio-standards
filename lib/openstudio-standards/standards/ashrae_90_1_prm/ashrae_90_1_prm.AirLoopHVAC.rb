@@ -344,6 +344,44 @@ class ASHRAE901PRM < Standard
     return true
   end
 
+  # Determine the limits for the type of economizer present on the AirLoopHVAC, if any.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Array<Double>] [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
+  def air_loop_hvac_economizer_limits(air_loop_hvac, climate_zone)
+    drybulb_limit_f = nil
+    enthalpy_limit_btu_per_lb = nil
+    dewpoint_limit_f = nil
+
+    # Get the OA system and OA controller
+    oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
+    return [nil, nil, nil] unless oa_sys.is_initialized
+
+    oa_sys = oa_sys.get
+    oa_control = oa_sys.getControllerOutdoorAir
+    economizer_type = oa_control.getEconomizerControlType
+
+    case economizer_type
+    when 'NoEconomizer'
+      return [nil, nil, nil]
+    when 'FixedDryBulb'
+      search_criteria = {
+          'template' => template,
+          'climate_zone' => climate_zone
+      }
+      econ_limits = model_find_object(standards_data['prm_economizers'], search_criteria)
+      drybulb_limit_f = econ_limits['fixed_dry_bulb_high_limit_shutoff_temp']
+    when 'FixedEnthalpy'
+      enthalpy_limit_btu_per_lb = 28
+    when 'FixedDewPointAndDryBulb'
+      drybulb_limit_f = 75
+      dewpoint_limit_f = 55
+    end
+
+    return [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
+  end
+
   # Determine the fan power limitation pressure drop adjustment
   # Per Table 6.5.3.1-2 (90.1-2019)
   #
