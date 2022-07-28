@@ -182,7 +182,7 @@ class Standard
       space_type_light_sch_change(model)
 
       # Calculate infiltration as per 90.1 PRM rules
-      model_apply_infiltration_standard(model, climate_zone) if /prm/i =~ template
+      model_baseline_apply_infiltration_standard(model, climate_zone)
 
       # If any of the lights are missing schedules, assign an always-off schedule to those lights.
       # This is assumed to be the user's intent in the proposed model.
@@ -205,11 +205,7 @@ class Standard
       # Add daylighting controls for 90.1-2013 and prior
       # Remove daylighting control for 90.1-PRM-2019 and onward
       model.getSpaces.sort.each do |space|
-        if /prm/i =~ template
-          space_remove_daylighting_controls(space)
-        else
-          added = space_add_daylighting_controls(space, false, false)
-        end
+        space_set_baseline_daylighting_controls(space, false, false)
       end
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
@@ -225,7 +221,7 @@ class Standard
       sys_groups = model_prm_baseline_system_groups(model, custom, bldg_type_hvac_zone_hash)
 
       # Also get hash of zoneName:boolean to record which zones have district heating, if any
-      district_heat_zones = get_district_heating_zones(model)
+      district_heat_zones = model_get_district_heating_zones(model)
 
       # Store occupancy and fan operation schedules for each zone before deleting HVAC objects
       zone_fan_scheds = get_fan_schedule_for_each_zone(model)
@@ -329,10 +325,8 @@ class Standard
         air_loop_hvac_apply_prm_sizing_temperatures(air_loop)
       end
 
-      if /prm/i =~ template
-        # Set internal load sizing run schedules
-        model_apply_prm_baseline_sizing_schedule(model)
-      end
+      # Set internal load sizing run schedules
+      model_apply_prm_baseline_sizing_schedule(model)
 
       # Set the heating and cooling sizing parameters
       model_apply_prm_sizing_parameters(model)
@@ -362,12 +356,9 @@ class Standard
         air_loop_hvac_apply_minimum_vav_damper_positions(air_loop, false)
       end
 
-      if /prm/i !~ template
-        # If there are any multi-zone systems, reset damper positions to achieve a 60% ventilation effectiveness minimum for the system
-        # following the ventilation rate procedure from 62.1
-        model_apply_multizone_vav_outdoor_air_sizing(model)
-
-      end
+      # If there are any multi-zone systems, reset damper positions to achieve a 60% ventilation effectiveness minimum for the system
+      # following the ventilation rate procedure from 62.1
+      model_apply_multizone_vav_outdoor_air_sizing(model)
 
       # Set the baseline fan power for all air loops
       model.getAirLoopHVACs.sort.each do |air_loop|
@@ -594,6 +585,16 @@ class Standard
     return num_stories
   end
 
+
+  # Add design day schedule objects for space loads, 
+  # not used for 2013 and earlier
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  #
+  def model_apply_prm_baseline_sizing_schedule(model)
+    return true
+  end
+
   # Categorize zones by occupancy type and fuel type, where the types depend on the standard.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -642,27 +643,16 @@ class Standard
       zn_hash['bldg_type'] = thermal_zone_building_type(zone)
 
       # Fuel type
-      if /prm/i !~ template
-        # for 2013 and prior, baseline fuel = proposed fuel
-        zn_hash['fuel'] = thermal_zone_fossil_or_electric_type(zone, custom)
-      else
-        # for 2016 and later, use fuel to identify zones with district energy
-        zone_fuels = ''
-        htg_fuels = zone.heating_fuels
-        if htg_fuels.include?('DistrictHeating')
-          zone_fuels = 'DistrictHeating'
-        end
-        clg_fuels = zone.cooling_fuels
-        if clg_fuels.include?('DistrictCooling')
-          zone_fuels += 'DistrictCooling'
-        end
-        zn_hash['fuel'] = zone_fuels
-      end
+      # for 2013 and prior, baseline fuel = proposed fuel
+      # for 2016 and later, use fuel to identify zones with district energy
+      zn_hash['fuel'] = thermal_zone_get_zone_fuels_for_occ_and_fuel_type(zone)
+
       zones << zn_hash
     end
 
     return zones
   end
+
 
   # Determine the dominant and exceptional areas of the building based on fuel types and occupancy types.
   #
@@ -928,14 +918,14 @@ class Standard
 
   # Before deleting proposed HVAC components, determine for each zone if it has district heating
   # @return [Hash] of boolean with zone name as key
-  def get_district_heating_zones(model)
+  def model_get_district_heating_zones(model)
     has_district_hash = {}
     model.getThermalZones.sort.each do |zone|
       has_district_hash['building'] = false
       htg_fuels = zone.heating_fuels
       if htg_fuels.include?('DistrictHeating')
         has_district_hash[zone.name] = true
-        has_district_has['building'] = true
+        has_district_hash['building'] = true
       else
         has_district_hash[zone.name] = false
       end
@@ -1146,7 +1136,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @param sys_group [data structure] Data structure defining list of zones for a single hvac building type
+  # @param sys_group [hash] Hash defining a group of zones that have the same Appendix G system type
   # @param custom [String] custom fuel type
   # @return [String] The system type.  Possibilities are PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
   #   VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
@@ -1973,20 +1963,6 @@ class Standard
     return array_of_zones
   end
 
-  # Determine which of the zones should be served by the primary HVAC system
-  # and which should be isolated to PSZ systems
-  # Call secondary method depending on code (template)version
-  #
-  # @return [Hash] A hash of two arrays of ThermalZones,
-  # where the keys are 'primary' and 'secondary'
-  def model_differentiate_primary_secondary_thermal_zones(model, zones, zone_fan_scheds)
-    if /prm/i =~ template
-      pri_sec_zone_lists = model_diff_primary_secondary_zones_stable_baseline(model, zones, zone_fan_scheds)
-    else
-      pri_sec_zone_lists = model_differentiate_primary_secondary_thermal_zones_pre2016(model, zones)
-    end
-    return pri_sec_zone_lists
-  end
 
   # Determine which of the zones should be served by the primary HVAC system.
   # First, eliminate zones that differ by more# than 40 full load hours per week.
@@ -1999,7 +1975,7 @@ class Standard
   # @param zones [Array<OpenStudio::Model::ThermalZone>] an array of zones
   # @return [Hash] A hash of two arrays of ThermalZones,
   # where the keys are 'primary' and 'secondary'
-  def model_differentiate_primary_secondary_thermal_zones_pre2016(model, zones)
+  def model_differentiate_primary_secondary_thermal_zones(model, zones, zone_fan_scheds = nil)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Determining which zones are served by the primary vs. secondary HVAC system.')
 
     # Determine the operational hours (proxy is annual
@@ -2115,186 +2091,6 @@ class Standard
     return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs }
   end
 
-  # For a multizone system, identify any zones to isolate to separate PSZ systems
-  # isolated zones are on the 'secondary' list
-  # This version of the method applies to standard years 2016 and later (stable baseline)
-  # @author Doug Maddox, PNNL
-  # @param model
-  # @param zones [Array<Object>]
-  # @param zone_fan_scheds [Hash] hash of zoneName:8760FanSchedPerZone
-  # @return [Hash] A hash of two arrays of ThermalZones,
-  # where the keys are 'primary' and 'secondary'
-  def model_diff_primary_secondary_zones_stable_baseline(model, zones, zone_fan_scheds)
-    pri_zones = []
-    sec_zones = []
-    pri_zone_names = []
-    sec_zone_names = []
-    zone_op_hrs = {} # hash of zoneName: 8760 array of operating hours
-
-    # If there is only one zone, then set that as primary
-    if zones.size == 1
-      zones.each do |zone|
-        pri_zones << zone
-        pri_zone_names << zone.name.get.to_s
-        zone_name = zone.name.get.to_s
-        if zone_fan_scheds.key?(zone_name)
-          zone_fan_sched = zone_fan_scheds[zone_name]
-        else
-          zone_fan_sched = nil
-        end
-        zone_op_hrs[zone.name.get.to_s] = thermal_zone_get_annual_operating_hours(model, zone, zone_fan_sched)
-      end
-      # Report out the primary vs. secondary zones
-      unless sec_zone_names.empty?
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
-      end
-
-      return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs }
-    end
-
-    zone_eflh = {} # hash of zoneName: eflh for zone
-    zone_max_load = {}  # hash of zoneName: coincident max internal load
-    load_limit = 10     # differ by 10 Btu/hr-sf or more
-    eflh_limit = 40     # differ by more than 40 EFLH/week from average of other zones
-    zone_area = {} # hash of zoneName:area
-
-    # Get coincident peak internal load for each zone
-    zones.each do |zone|
-      zone_name = zone.name.get.to_s
-      if zone_fan_scheds.key?(zone_name)
-        zone_fan_sched = zone_fan_scheds[zone_name]
-      else
-        zone_fan_sched = nil
-      end
-      zone_op_hrs[zone_name] = thermal_zone_get_annual_operating_hours(model, zone, zone_fan_sched)
-      zone_eflh[zone_name] = thermal_zone_occupancy_eflh(zone, zone_op_hrs[zone_name])
-      zone_max_load_w = thermal_zone_peak_internal_load(model, zone)
-      zone_max_load_w_m2 = zone_max_load_w / zone.floorArea
-      zone_max_load[zone_name] = OpenStudio.convert(zone_max_load_w_m2, 'W/m^2', 'Btu/hr*ft^2').get
-      zone_area[zone_name] = zone.floorArea
-    end
-
-    # Eliminate all zones for which both max load and EFLH exceed limits
-    zones.each do |zone|
-      zone_name = zone.name.get.to_s
-      max_load = zone_max_load[zone_name]
-      avg_max_load = get_wtd_avg_of_other_zones(zone_max_load, zone_area, zone_name)
-      max_load_diff = (max_load - avg_max_load).abs
-      avg_eflh = get_avg_of_other_zones(zone_eflh, zone_name)
-      eflh_diff = (avg_eflh - zone_eflh[zone_name]).abs
-
-      if max_load_diff >= load_limit && eflh_diff > eflh_limit
-        # Add zone to secondary list, and remove from hashes
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Zone moved to PSZ due to load AND eflh: #{zone_name}; load limit = #{load_limit}, eflh_limit = #{eflh_limit}")
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "load diff = #{max_load_diff}, this zone load = #{max_load}, avg zone load = #{avg_max_load}")
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "eflh diff = #{eflh_diff}, this zone load = #{zone_eflh[zone_name]}, avg zone eflh = #{avg_eflh}")
-
-        sec_zones << zone
-        sec_zone_names << zone_name
-        zone_eflh.delete(zone_name)
-        zone_max_load.delete(zone_name)
-      end
-    end
-
-    # Eliminate worst zone where EFLH exceeds limit
-    # Repeat until all zones are within limit
-    num_zones = zone_eflh.size
-    avg_eflh_save = 0
-    max_zone_name = ''
-    max_eflh_diff = 0
-    max_zone = nil
-    (1..num_zones).each do |izone|
-      # This loop is to iterate to eliminate one zone at a time
-      max_eflh_diff = 0
-      zones.each do |zone|
-        # This loop finds the worst remaining zone to eliminate if above threshold
-        zone_name = zone.name.get.to_s
-        next if !zone_eflh.key?(zone_name)
-
-        avg_eflh = get_avg_of_other_zones(zone_eflh, zone_name)
-        eflh_diff = (avg_eflh - zone_eflh[zone_name]).abs
-        if eflh_diff > max_eflh_diff
-          max_eflh_diff = eflh_diff
-          max_zone_name = zone_name
-          max_zone = zone
-          avg_eflh_save = avg_eflh
-        end
-      end
-      if max_eflh_diff > eflh_limit
-        # Move the max Zone to the secondary list
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Zone moved to PSZ due to eflh: #{max_zone_name}; limit = #{eflh_limit}")
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "eflh diff = #{max_eflh_diff}, this zone load = #{zone_eflh[max_zone_name]}, avg zone eflh = #{avg_eflh_save}")
-        sec_zones << max_zone
-        sec_zone_names << max_zone_name
-        zone_eflh.delete(max_zone_name)
-        zone_max_load.delete(max_zone_name)
-      else
-        # All zones are now within the limit, exit the iteration
-        break
-      end
-    end
-
-    # Eliminate worst zone where max load exceeds limit and repeat until all pass
-    num_zones = zone_eflh.size
-    highest_max_load_diff = -1
-    highest_zone = nil
-    highest_zone_name = ''
-    highest_max_load = 0
-    avg_max_load_save = 0
-
-    (1..num_zones).each do |izone|
-      # This loop is to iterate to eliminate one zone at a time
-      highest_max_load_diff = 0
-      zones.each do |zone|
-        # This loop finds the worst remaining zone to eliminate if above threshold
-        zone_name = zone.name.get.to_s
-        next if !zone_max_load.key?(zone_name)
-
-        max_load = zone_max_load[zone_name]
-        avg_max_load = get_wtd_avg_of_other_zones(zone_max_load, zone_area, zone_name)
-        max_load_diff = (max_load - avg_max_load).abs
-        if max_load_diff >= highest_max_load_diff
-          highest_max_load_diff = max_load_diff
-          highest_zone_name = zone_name
-          highest_zone = zone
-          highest_max_load = max_load
-          avg_max_load_save = avg_max_load
-        end
-      end
-      if highest_max_load_diff > load_limit
-        # Move the max Zone to the secondary list
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Zone moved to PSZ due to load: #{highest_zone_name}; load limit = #{load_limit}")
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "load diff = #{highest_max_load_diff}, this zone load = #{highest_max_load}, avg zone load = #{avg_max_load_save}")
-        sec_zones << highest_zone
-        sec_zone_names << highest_zone_name
-        zone_eflh.delete(highest_zone_name)
-        zone_max_load.delete(highest_zone_name)
-      else
-        # All zones are now within the limit, exit the iteration
-        break
-      end
-    end
-
-    # Place remaining zones in multizone system list
-    zone_eflh.each_key do |key|
-      zones.each do |zone|
-        if key == zone.name.get.to_s
-          pri_zones << zone
-          pri_zone_names << key
-        end
-      end
-    end
-
-    # Report out the primary vs. secondary zones
-    unless pri_zone_names.empty?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Primary system zones = #{pri_zone_names.join(', ')}.")
-    end
-    unless sec_zone_names.empty?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
-    end
-
-    return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs }
-  end
 
   # For a multizone system, get straight average of hash values excluding the reference zone
   # @author Doug Maddox, PNNL
@@ -2342,42 +2138,9 @@ class Standard
   # @param pri_zones [Array<String>] names of zones served by the multizone system
   # @param system_name [String] name of air loop
   def model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
-    # Exit if not stable baseline
-    return if /prm/i !~ template
+    # Not applicable if not stable baseline
+    return
 
-    # Create fan schedule for multizone system
-    fan_8760 = []
-    # If any zone is on for an hour, then the system fan must be on for that hour
-    pri_zones.each do |zone|
-      zone_name = zone.name.get.to_s
-      if fan_8760.empty?
-        fan_8760 = zone_op_hrs[zone_name]
-      else
-        (0..fan_8760.size - 1).each do |ihr|
-          if zone_op_hrs[zone_name][ihr] > 0
-            fan_8760[ihr] = 1
-          end
-        end
-      end
-    end
-
-    # Convert 8760 array to schedule ruleset
-    fan_sch_limits = model.getScheduleTypeLimitsByName('fan schedule limits for prm')
-    if fan_sch_limits.empty?
-      fan_sch_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-      fan_sch_limits.setName('fan schedule limits for prm')
-      fan_sch_limits.setNumericType('DISCRETE')
-      fan_sch_limits.setUnitType('Dimensionless')
-      fan_sch_limits.setLowerLimitValue(0)
-      fan_sch_limits.setUpperLimitValue(1)
-    else
-      fan_sch_limits = fan_sch_limits.get
-    end
-    sch_name = system_name + ' ' + 'fan schedule'
-    make_ruleset_sched_from_8760(model, fan_8760, sch_name, fan_sch_limits)
-
-    air_loop = model.getAirLoopHVACByName(system_name).get
-    air_loop.additionalProperties.setFeature('fan_sched_name', sch_name)
   end
 
   # Group an array of zones into multiple arrays, one for each story in the building.
@@ -2581,6 +2344,12 @@ class Standard
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding daylighting controls.')
+    return true
+  end
+
+  # For backward compatibility, infiltration standard not used for 2013 and earlier
+   # @return [Bool] true if successful, false if not
+  def model_baseline_apply_infiltration_standard(model, climate_zone)
     return true
   end
 
