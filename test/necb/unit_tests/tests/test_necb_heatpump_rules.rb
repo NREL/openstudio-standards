@@ -25,7 +25,7 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
 
-    templates = ['NECB2011', 'NECB2015', 'BTAPPRE1980']
+    templates = ['NECB2011', 'NECB2015', 'NECB2020', 'BTAPPRE1980']
     templates.each do |template|
 
       heatpump_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_efficiencies_expected_results.csv")
@@ -95,7 +95,7 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
         assert_equal(true, result, "test_heatpump_efficiency: Failure in Standards for #{name}")
       end
 
-      # Generate table of test heat pump efficiencies
+      # Generate table of test heat pump heating efficiencies
       actual_heatpump_eff = []
       output_line_text = ''
       for int in 0..num_cap_intv - 1
