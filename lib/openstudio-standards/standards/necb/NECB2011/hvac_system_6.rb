@@ -126,6 +126,12 @@ class NECB2011
             reheat_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
           end
 
+          # Set zone baseboards
+          add_zone_baseboards(model: model,
+                              zone: zone,
+                              baseboard_type: baseboard_type,
+                              hw_loop: hw_loop)
+
           vav_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, always_on, reheat_coil)
           air_loop.addBranchForZone(zone, vav_terminal.to_StraightComponent)
           # NECB2011 minimum zone airflow setting
@@ -133,11 +139,6 @@ class NECB2011
           vav_terminal.setMaximumReheatAirTemperature(system_data[:ZoneVAVMaxReheatTemp])
           vav_terminal.setDamperHeatingAction(system_data[:ZoneVAVDamperAction])
 
-          # Set zone baseboards
-          add_zone_baseboards(model: model,
-                              zone: zone,
-                              baseboard_type: baseboard_type,
-                              hw_loop: hw_loop)
         end
         sys_name_pars = {}
         sys_name_pars['sys_hr'] = 'none'
