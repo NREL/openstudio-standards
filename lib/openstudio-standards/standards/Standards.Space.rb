@@ -802,6 +802,16 @@ class Standard
     return false
   end
 
+  # Default for 2013 and earlier is to Add daylighting controls (sidelighting and toplighting) per the template
+  # @param space [OpenStudio::Model::Space] the space with daylighting
+  # @param remove_existing_controls [Bool] if true, will remove existing controls then add new ones
+  # @param draw_daylight_areas_for_debugging [Bool] If this argument is set to true,
+  # @return [boolean] true if successful
+  def space_set_baseline_daylighting_controls(space, remove_existing = false, draw_areas_for_debug = false)
+    added = space_add_daylighting_controls(space, remove_existing, draw_areas_for_debug)
+    return added
+  end
+
   # Adds daylighting controls (sidelighting and toplighting) per the template
   # @note This method is super complicated because of all the polygon/geometry math required.
   #   and therefore may not return perfect results.  However, it works well in most tested
@@ -813,9 +823,7 @@ class Standard
   #   daylight areas will be added to the model as surfaces for visual debugging.
   #   Yellow = toplighted area, Red = primary sidelighted area,
   #   Blue = secondary sidelighted area, Light Blue = floor
-  # @return [Hash] returns a hash of resulting areas (m^2).
-  #   Hash keys are: 'toplighted_area', 'primary_sidelighted_area',
-  #   'secondary_sidelighted_area', 'total_window_area', 'total_skylight_area'
+  # @return [boolean] true if successful
   # @todo add a list of valid choices for template argument
   # @todo add exception for retail spaces
   # @todo add exception 2 for skylights with VT < 0.4

@@ -624,6 +624,15 @@ class Standard
     return is_fossil
   end
 
+  # for 2013 and prior, baseline fuel = proposed fuel
+  # @param themal_zone
+  # @return [string] with applicable DistrictHeating and/or DistrictCooling 
+  def thermal_zone_get_zone_fuels_for_occ_and_fuel_type(zone)
+    zone_fuels = thermal_zone_fossil_or_electric_type(zone, '')
+    return zone_fuels
+  end
+
+
   # Determine if the thermal zone's fuel type category.
   # Options are:
   #   fossil, electric, unconditioned
@@ -2076,5 +2085,33 @@ class Standard
   # Specify supply to room delta for laboratory spaces based on 90.1 Appendix G Exception to G3.1.2.8.1 (implementation in PRM subclass)
   def thermal_zone_prm_lab_delta_t(thermal_zone)
     return nil
+  end
+
+  # Determine the number of unmet load hours during occupancy for a thermal zone
+  #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+  # @param umlh_type [String] Type of unmet load hours, either 'Cooling' or 'Heating'
+  def thermal_zone_get_unmet_load_hours(thermal_zone, umlh_type)
+    umlh = OpenStudio::OptionalDouble.new
+    sql = thermal_zone.model.sqlFile
+    if sql.is_initialized
+      sql = sql.get
+      query = "SELECT Value
+              FROM tabulardatawithstrings
+              WHERE ReportName='SystemSummary'
+              AND ReportForString='Entire Facility'
+              AND TableName='Time Setpoint Not Met'
+              AND ColumnName='During Occupied #{umlh_type.capitalize}'
+              AND RowName='#{thermal_zone.name.to_s.upcase}'
+              AND Units='hr'"
+      val = sql.execAndReturnFirstDouble(query)
+      if val.is_initialized
+        umlh = OpenStudio::OptionalDouble.new(val.get)
+      end
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has no sql file containing results, cannot lookup data.')
+    end
+
+    return umlh.to_f
   end
 end
