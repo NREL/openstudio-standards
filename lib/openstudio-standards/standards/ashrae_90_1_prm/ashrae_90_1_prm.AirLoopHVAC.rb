@@ -12,7 +12,8 @@ class ASHRAE901PRM < Standard
 
   # Default occupancy fraction threshold for determining if the spaces on the air loop are occupied
   def air_loop_hvac_unoccupied_threshold
-    return 0.05
+    # Use 10% based on PRM-RM
+    return 0.10
   end
 
   # Determine the economizer type and limits for the the PRM
@@ -425,4 +426,7 @@ class ASHRAE901PRM < Standard
 
     return fan_pwr_adjustment_bhp
   end
+
+
+  
 end

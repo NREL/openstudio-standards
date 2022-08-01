@@ -881,10 +881,23 @@ class ASHRAE901PRM < Standard
   # @param apply_controls [Bool] toggle whether to apply air loop and plant loop controls
   # @param sql_db_vars_map [Hash] hash map
   # @return [Bool] returns true if successful, false if not
-  def model_apply_hvac_efficiency_standard(model, apply_controls: true, sql_db_vars_map: nil)
+  def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true, sql_db_vars_map: nil)
     sql_db_vars_map = {} if sql_db_vars_map.nil?
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Started applying HVAC efficiency standards for #{template} template.")
+
+    # Air Loop Controls
+    if apply_controls.nil? || apply_controls == true
+      model.getAirLoopHVACs.sort.each { |obj| air_loop_hvac_apply_standard_controls(obj, climate_zone) }
+    end
+
+    # Plant Loop Controls
+    if apply_controls.nil? || apply_controls == true
+      model.getPlantLoops.sort.each { |obj| plant_loop_apply_standard_controls(obj, climate_zone) }
+    end
+
+    # Zone HVAC Controls
+    model.getZoneHVACComponents.sort.each { |obj| zone_hvac_component_apply_standard_controls(obj) }
 
     # TODO: The fan and pump efficiency will be done by another task.
     # Fans
