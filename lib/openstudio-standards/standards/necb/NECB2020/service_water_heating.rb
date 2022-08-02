@@ -46,7 +46,7 @@ class NECB2020
     # Calculate the energy factor (EF)
     # From PNNL http://www.energycodes.gov/sites/default/files/documents/PrototypeModelEnhancements_2014_0.pdf
     # Appendix A: Service Water Heating
-	# and modified by PCF 1630 as noted below.
+    # and modified by PCF 1630 as noted below.
     water_heater_eff = nil
     ua_btu_per_hr_per_f = nil
     sl_btu_per_hr = nil
@@ -77,19 +77,21 @@ class NECB2020
       if capacity_btu_per_hr <= 75_000
         # Fixed water heater thermal efficiency per PNNL
         water_heater_eff = 0.82
-		
         # Calculate the minimum Energy Factor (EF) (This was introduced in PCF 1630)
         if volume_l < 68
-          uef = 0.5982 - 0.0005 * volume_l
+          uef = 0.3456 - 0.00053 * volume_l
           ef = 1.0005 * uef + 0.0019
         elsif volume_l >= 68 and volume_l < 193
-          uef = 0.6483 - 0.00045 * volume_l
+          uef = 0.5982 - 0.0005 * volume_l
           ef = 1.0005 * uef + 0.0019
         elsif volume_l >= 193 and volume_l < 284
+          uef = 0.6483 - 0.00045 * volume_l
+          ef = 1.0005 * uef + 0.0019
+        elsif volume_l >= 284
           uef = 0.692 - 0.00034 * volume_l
           ef = 1.0005 * uef + 0.0019
         end
-		
+
         # Calculate the Recovery Efficiency (RE)
         # based on a fixed capacity of 75,000 Btu/hr
         # and a fixed volume of 40 gallons by solving
@@ -97,21 +99,21 @@ class NECB2020
         # ua = (1/.95-1/re)/(67.5*(24/41094-1/(re*cap)))
         # 0.82 = (ua*67.5+cap*re)/cap
         cap = 75_000.0
-        re = (Math.sqrt(6724 * ef**2 * cap**2 + 40_409_100 * ef**2 * cap - 28_080_900 * ef * cap + 29_318_000_625 * ef**2 - 58_636_001_250 * ef + 29_318_000_625) + 82 * ef * cap + 171_225 * ef - 171_225) / (200 * ef * cap)
-        
-		# Calculate the skin loss coefficient (UA)
+        re = (Math.sqrt(6724 * ef ** 2 * cap ** 2 + 40_409_100 * ef ** 2 * cap - 28_080_900 * ef * cap + 29_318_000_625 * ef ** 2 - 58_636_001_250 * ef + 29_318_000_625) + 82 * ef * cap + 171_225 * ef - 171_225) / (200 * ef * cap)
+
+        # Calculate the skin loss coefficient (UA)
         # based on the actual capacity.
         ua_btu_per_hr_per_f = (water_heater_eff - re) * capacity_btu_per_hr / 67.5
-		
-      # This capacity band was introduced in PCF 1630
+
+        # This capacity band was introduced in PCF 1630
       elsif capacity_btu_per_hr > 75_000 and capacity_btu_per_hr < 103977 and volume_l < 454
         water_heater_eff = 0.82
         uef = 0.8107 - 0.00021 * volume_l
         ef = 1.0005 * uef + 0.0019
         cap = 103977
-        re = (Math.sqrt(6724 * ef**2 * cap**2 + 40_409_100 * ef**2 * cap - 28_080_900 * ef * cap + 29_318_000_625 * ef**2 - 58_636_001_250 * ef + 29_318_000_625) + 82 * ef * cap + 171_225 * ef - 171_225) / (200 * ef * cap)
-        
-		# Calculate the skin loss coefficient (UA)
+        re = (Math.sqrt(6724 * ef ** 2 * cap ** 2 + 40_409_100 * ef ** 2 * cap - 28_080_900 * ef * cap + 29_318_000_625 * ef ** 2 - 58_636_001_250 * ef + 29_318_000_625) + 82 * ef * cap + 171_225 * ef - 171_225) / (200 * ef * cap)
+
+        # Calculate the skin loss coefficient (UA)
         # based on the actual capacity.
         ua_btu_per_hr_per_f = (water_heater_eff - re) * capacity_btu_per_hr / 67.5
       else
