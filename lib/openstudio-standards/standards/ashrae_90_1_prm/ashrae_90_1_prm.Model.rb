@@ -1577,6 +1577,7 @@ class ASHRAE901PRM < Standard
   #
   # @param multiplier [Float] multiplier of the wwr
   # @param surface_wwr [Float] the surface window to wall ratio
+  # @param surface_dr [Float] the surface door to wall ratio
   # @param wwr_building_type[String] building type for wwr
   # @param wwr_target [Float] target window to wall ratio
   # @param total_wall_m2 [Float] total wall area of the category in m2.
@@ -1584,10 +1585,11 @@ class ASHRAE901PRM < Standard
   # @param total_fene_m2 [Float] total fenestration area
   # @return [Float] reduction factor
   def get_wwr_reduction_ratio(multiplier,
-                              surface_wwr: nil,
+                              surface_wwr: 0.0,
+                              surface_dr: 0.0,
                               wwr_building_type: 'All others',
                               wwr_target: nil,
-                              total_wall_m2: 0.0,
+                              total_wall_m2: 0.0, # prevent 0.0 division
                               total_wall_with_fene_m2: 0.0,
                               total_fene_m2: 0.0,
                               total_plenum_wall_m2: 0.0)
@@ -1596,16 +1598,26 @@ class ASHRAE901PRM < Standard
       # Case when reduction is required
       reduction_ratio = 1.0 - multiplier
     else
-      # Case when increase is required
-      exist_max_wwr = total_wall_with_fene_m2 * 0.9 / total_wall_m2
+      # Case when increase is required - takes the door area into consideration.
+      # The target is to increase each surface to maximum 90% WWR deduct the total door area.
+      total_dr = 0.0
+      exist_max_wwr = 0.0
+      if total_wall_m2 > 0 then exist_max_wwr = total_wall_with_fene_m2 * 0.9 / total_wall_m2 end
       if exist_max_wwr < wwr_target
         # In this case, it is required to add vertical fenestration to other surfaces
         if surface_wwr == 0.0
           # delta_fenestration_surface_area / delta_wall_surface_area + 1.0 = increase_ratio for a surface with no windows.
+          # ASSUMPTION!! assume adding windows to surface with no windows will never be window_m2 + door_m2 > surface_m2.
           reduction_ratio = (wwr_target - exist_max_wwr) * total_wall_m2 / (total_wall_m2 - total_wall_with_fene_m2 - total_plenum_wall_m2) + 1.0
         else
-          # surface has fenestration - expand it to 90% WWR
-          reduction_ratio = 0.9 / surface_wwr
+          # surface has fenestration - expand it to 90% WWR or surface area minus door area, whichever is smaller.
+          if (1.0 - surface_dr) < 0.9
+            # A negative reduction ratio as a flat to main function that this reduction ratio is adjusted by doors
+            # and it is needed to adjust the WWR of the no fenestration surfaces to meet the lost
+            reduction_ratio = (surface_dr - 1.0) / surface_wwr
+          else
+            reduction_ratio = 0.9 / surface_wwr
+          end
         end
       else
         # multiplier will be negative number thus resulting in > 1 reduction_ratio
@@ -1620,7 +1632,13 @@ class ASHRAE901PRM < Standard
     return reduction_ratio
   end
 
-  def model_adjust_fenestration_in_a_surface(surface, reduction)
+  # Adjust the fenestration area to the values specified by the reduction value in a surface
+  #
+  # @param surface [OpenStudio::Model:Surface] openstudio surface object
+  # @param reduction [Float] ratio of adjustments
+  # @param model [OpenStudio::Model::Model] openstudio model
+  # @return [Bool] return true if successful, false if not
+  def model_adjust_fenestration_in_a_surface(surface, reduction, model)
     # do nothing for cases when reduction == 1.0
     if reduction < 1.0
       surface.subSurfaces.sort.each do |ss|
@@ -1634,15 +1652,58 @@ class ASHRAE901PRM < Standard
       if surface_wwr == 0.0
         # In this case, we are adding fenestration
         wwr_adjusted = reduction - 1.0
+        # add the value to additional properties in case of readjusting WWR for doors
+        surface.additionalProperties.setFeature('added_wwr', wwr_adjusted)
       else
         wwr_adjusted = surface_wwr * reduction
       end
+      # Save doors to a temp list
+      door_list = []
+      surface.subSurfaces.sort.each do |sub|
+        if sub.subSurfaceType == 'Door'
+          door = {}
+          door['name'] = sub.name.get
+          door['vertices'] = sub.vertices
+          door['construction'] = sub.construction.get
+          door_list << door
+        end
+      end
       # remove all existing windows and set the window to wall ratio to the calculated new WWR
-      # Remove all sub-surfaces - NOTE: it seems setWindowToWallRatio does not remove doors in the surface
-      # So this line of code ensures all subsurfaces are removed before setting a new WWR
+      # Remove all sub-surfaces including doors
       surface.subSurfaces.sort.each(&:remove)
       # Apply default construction to the subsurface - the standard construction will be applied later.
       surface.setWindowToWallRatio(wwr_adjusted, 0.6, true)
+      # add door back.
+      unless door_list.empty?
+        door_list.each do |door|
+          os_door = OpenStudio::Model::SubSurface.new(door['vertices'], model)
+          os_door.setName(door['name'])
+          os_door.setConstruction(door['construction'])
+          os_door.setSurface(surface)
+        end
+      end
+    end
+  end
+
+  # Readjusted the WWR for surfaces previously has no windows to meet the
+  # overall WWR requirement.
+  # This function shall only be called if the maximum WWR value for surfaces with fenestration is lower than 90% due to
+  # accommodating the total door surface areas
+  #
+  # @param residual_ratio: [Float] the ratio of residual surfaces among the total wall surface area with no fenestrations
+  # @param space [OpenStudio::Model:Space] a space
+  # @param model [OpenStudio::Model::Model] openstudio model
+  # @return [Bool] return true if successful, false if not
+  def readjust_surface_wwr(residual_ratio, space, model)
+    # In this loop, we will focus on the surfaces with newly added a fenestration.
+    space.surfaces.sort.each do |surface|
+      next unless surface.additionalProperties.hasFeature('added_wwr')
+
+      added_wwr = surface.additionalProperties.getFeatureAsDouble('added_wwr').to_f
+      # The full calculation of adjustment is:
+      # ((residual_ratio * surface_area + added_wwr * surface_area) / surface_area ) / added_wwr
+      adjustment_ratio = residual_ratio / added_wwr + 1.0
+      model_adjust_fenestration_in_a_surface(surface, adjustment_ratio, model)
     end
   end
 end

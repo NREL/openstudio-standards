@@ -5244,6 +5244,7 @@ class Standard
       wall_area_m2 = 0
       wind_area_m2 = 0
       wall_only_area_m2 = 0
+      num_wall_no_fene = 0
       space.surfaces.sort.each do |surface|
         # Skip non-outdoor surfaces
         next unless surface.outsideBoundaryCondition == 'Outdoors'
@@ -5253,14 +5254,15 @@ class Standard
         # This wall's gross area (including window area)
         wall_area_m2 += surface.grossArea * space.multiplier
         unless surface.subSurfaces.empty?
-          wall_only_area_m2 += surface.grossArea * space.multiplier
           # Subsurfaces in this surface
           surface.subSurfaces.sort.each do |ss|
             next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
-
-            # Only add wall surfaces when the wall actually have windows
-            wind_area_m2 += ss.netArea * space.multiplier
+              # Only add wall surfaces when the wall actually have windows
+              wind_area_m2 += ss.netArea * space.multiplier
           end
+        end
+        if wind_area_m2 > 0.0
+          wall_only_area_m2 += surface.grossArea * space.multiplier
         end
       end
 
@@ -5422,6 +5424,8 @@ class Standard
             total_fene = vals['sh_wind_m2']
         end
 
+        # used for counting how many window area is left for doors
+        residual_fene = 0.0
         # Loop through all surfaces in this space
         space.surfaces.sort.each do |surface|
           # Skip non-outdoor surfaces
@@ -5437,16 +5441,29 @@ class Standard
           # For 90.1-PRM-2019 a.k.a "stable baseline" we always
           # want to adjust by shrinking toward centroid since
           # daylighting control isn't modeled
+          surface_wwr = get_wwr_of_a_surface(surface)
           red = get_wwr_reduction_ratio(mult,
-                                        surface_wwr: get_wwr_of_a_surface(surface),
+                                        surface_wwr: surface_wwr,
+                                        surface_dr: get_door_ratio_of_a_surface(surface),
                                         wwr_building_type: bat,
-                                        wwr_target: wwr_lim / 100, # need to revise it to decimals
+                                        wwr_target: wwr_lim / 100, # divide by 100 to revise it to decimals
                                         total_wall_m2: total_wall_area,
                                         total_wall_with_fene_m2: total_wall_with_fene,
                                         total_fene_m2: total_fene,
                                         total_plenum_wall_m2: total_plenum_wall_area)
 
-          model_adjust_fenestration_in_a_surface(surface, red)
+          if red < 0.0
+            # surface with fenestration to its maximum but adjusted by door areas when need to add windows in surfaces no fenestration
+            # turn negative to positive to get the correct adjustment factor.
+            red = -red
+            residual_fene += (0.9 - red * surface_wwr) * surface.grossArea
+          end
+          model_adjust_fenestration_in_a_surface(surface, red, model)
+        end
+
+        if residual_fene > 0.0
+          residual_ratio = residual_fene / (total_wall_area - total_wall_with_fene)
+          readjust_surface_wwr(residual_ratio, space, model)
         end
       end
     end
@@ -6901,8 +6918,9 @@ class Standard
   #
   # @param surface [OpenStudio::Model:Surface] openstudio surface object
   # @param reduction [Float] ratio of adjustments
+  # @param model [OpenStudio::Model::Model] openstudio model
   # @return [Bool] return true if successful, false if not
-  def model_adjust_fenestration_in_a_surface(surface, reduction)
+  def model_adjust_fenestration_in_a_surface(surface, reduction, model)
     # Subsurfaces in this surface
     # Default case only handles reduction
     if reduction < 1.0
@@ -6916,6 +6934,19 @@ class Standard
         end
       end
     end
+    return true
+  end
+
+  # Readjusted the WWR for surfaces previously has no windows to meet the
+  # overall WWR requirement.
+  # This function shall only be called if the maximum WWR value for surfaces with fenestration is lower than 90% due to
+  # accommodating the total door surface areas
+  #
+  # @param residual_ratio: [Float] the ratio of residual surfaces among the total wall surface area with no fenestrations
+  # @param space [OpenStudio::Model:Space] a space
+  # @param model [OpenStudio::Model::Model] openstudio model
+  # @return [Bool] return true if successful, false if not
+  def readjust_surface_wwr(residual_ratio, space, model)
     return true
   end
 
@@ -7662,10 +7693,26 @@ class Standard
     return surface_fene_area / surface_area
   end
 
+  # Calculate the door ratio of a surface
+  #
+  # @param surface [OpenStudio::Model::Surface]
+  # @return [Float] window to wall ratio of a surface
+  def get_door_ratio_of_a_surface(surface)
+    surface_area = surface.grossArea
+    surface_door_area = 0.0
+    surface.subSurfaces.sort.each do |ss|
+      next unless ss.subSurfaceType == 'Door'
+
+      surface_door_area += ss.netArea
+    end
+    return surface_door_area / surface_area
+  end
+
   # Calculate the window to wall ratio reduction factor
   #
   # @param multiplier [Float] multiplier of the wwr
   # @param surface_wwr [Float] the surface window to wall ratio
+  # @param surface_dr [Float] the surface door to wall ratio
   # @param wwr_building_type[String] building type for wwr
   # @param wwr_target [Float] target window to wall ratio
   # @param total_wall_m2 [Float] total wall area of the category in m2.
@@ -7674,9 +7721,10 @@ class Standard
   # @param total_plenum_wall_m2 [Float] total sqaure meter of a plenum
   # @return [Float] reduction factor
   def get_wwr_reduction_ratio(multiplier,
-                              surface_wwr: nil,
+                              surface_wwr: 0.0,
+                              surface_dr: 0.0,
                               wwr_building_type: 'All others',
-                              wwr_target: nil,
+                              wwr_target: 0.0,
                               total_wall_m2: 0.0,
                               total_wall_with_fene_m2: 0.0,
                               total_fene_m2: 0.0,

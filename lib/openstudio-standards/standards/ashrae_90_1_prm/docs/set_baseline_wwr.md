@@ -5,7 +5,7 @@ Set window to wall ratio in the baseline model
 - G3.1 (5) Baseline c: Where a building has multiple building area types, each type shall use the values in the table. 
 - G3.1 (5) Baseline c: The vertical fenestration shall be distributed on each face of the building in the same proportion as in the proposed design. 
 - G3.1 (5) Baseline c: For building areas not shown in Table G3.1.1-1, vertical fenestration areas for new building and additions shall equal that in the proposed design or 40% of gross above-grade wall area, whichever is smaller, and shall be distributed on each face of the building in the same proportions in the proposed design.
-- G3.1 (5) Baseline c ([addendum_l](https://www.ashrae.org/file%20library/technical%20resources/standards%20and%20guidelines/standards%20addenda/90_1_2019_l_20201030.pdf)): If this would cause the combined vertical fenestration and opaque door area on a given face to exceed the gross above-grade wall area on that face, then the vertical fenestration area on other faces shall be increased in proportion to the gross above-grade wall area of these faces such that the total baseline building vertical fenestration area is equal to that calculated following Table G3.1.1.-1.
+- G3.1 (5) Baseline c: ([addendum_l](https://www.ashrae.org/file%20library/technical%20resources/standards%20and%20guidelines/standards%20addenda/90_1_2019_l_20201030.pdf)): If this would cause the combined vertical fenestration and opaque door area on a given face to exceed the gross above-grade wall area on that face, then the vertical fenestration area on other faces shall be increased in proportion to the gross above-grade wall area of these faces such that the total baseline building vertical fenestration area is equal to that calculated following Table G3.1.1.-1.
 - G3.1 (5) Baseline c: The fenestration area for an existing building shall equal the existing fenestration area prior to the proposed work and shall be distributed on each face of the building in the same proportions as the existing building.
 
 # Code Requirement Interpretation
@@ -50,6 +50,13 @@ Set window to wall ratio in the baseline model
 The function `get_wwr_reduction_ratio` implements the logic for calculating the reduction ratio `reduction_ratio` and `model_adjust_fenestration_in_a_surface` implements the logics to adjust the window to wall ratio for a surface
 
 The implementation of both functions can be found in the `ashrae_90_1_prm.Model.rb`
+
+## Notes:
+The function works well with cases where WWR reduction is needed. For WWR increase to meet Table G3.1.1-1 values, the function's limitation is listed below:
+1. The function will remove all windows in the surface then add a new window to meet the required WWR.
+2. The function will keep the existing doors but there could be cases the location of door overlaps with the new window.
+
+In addition, when increasing the WWR requires adding windows to surfaces with no windows, the function will not adding any windows to spaces tagged as plenum and used as a AirLoopSupplyPlenum or AirLoopReturnPlenum. 
 
 ## Test Case Documentation
 
