@@ -64,7 +64,128 @@ In addition, when increasing the WWR requires adding windows to surfaces with no
 - Prototype: Small Office
 - User data folder: */userdata_default_test*
 - Summary:
-The Small Office prototype has 
+
+The target WWR is 19% and the test prototype has WWR of 21.20%. 
+
+A regular WWR reduction shall be applied in this case to set the WWR in the baseline model to 19%.
+
+### Test case 2:
+- Prototype: Small Office - WWR adjusted.
+- User data folder: */userdata_default_test*
+- Summary:
+- 
+  Test prototype:
+
+|                       | Total  | North | East  | South | West  |
+|-----------------------|--------|-------|-------|-------|-------|
+| Wall Area (m2)        | 281.51 | 84.45 | 56.30 | 84.45 | 56.30 |
+| Window Area (m2)      | 28.15  | 8.44  | 5.63  | 8.44  | 5.63  |
+| Window-Wall Ratio (%) | 10%    | 10%   | 10%   | 10%   | 10%   |  
+
+The target WWR is 19%. The test prototype has WWR of 10% (10% for every surface).
+
+A regular WWR increase shall be applied in this case to set the WWR in the baseline model to 19% for every surface.
+
+Baseline:
+
+|                       | Total  | North | East  | South | West  |
+|-----------------------|--------|-------|-------|-------|-------|
+| Wall Area (m2)        | 281.51 | 84.45 | 56.30 | 84.45 | 56.30 |
+| Window Area (m2)      | 53.49  | 16.05 | 10.70 | 16.05 | 10.70 |
+| Window-Wall Ratio (%) | 19%    | 19%   | 19%   | 19%   | 19%   |  
+
+### Test case 3:
+- Prototype: Small Office - WWR adjusted.
+- User data folder: */userdata_default_test*
+- Summary:
+
+Test prototype:
+
+|                       | Total  | North | East  | South | West  |
+|-----------------------|--------|-------|-------|-------|-------|
+| Wall Area (m2)        | 281.51 | 84.45 | 56.30 | 84.45 | 56.30 |
+| Window Area (m2)      | 5.63   | 0.0   | 0.0   | 0.0   | 5.63  |
+| Window-Wall Ratio (%) | 2%     | 0%    | 0%    | 0%    | 10%   |  
+
+In this case, the WWR shall be increased to 19% however, the maximum WWR by expanding windows in West facade only is 17.7%, about 1.3% smaller than the required by the code.
+The function shall increase the rest facades proportionally to meet the overall 19% WWR target.
+
+Baseline:
+
+|                       | Total  | North | East  | South | West  |
+|-----------------------|--------|-------|-------|-------|-------|
+| Wall Area (m2)        | 281.51 | 84.45 | 56.30 | 84.45 | 56.30 |
+| Window Area (m2)      | 53.49  | 1.06  | 0.7   | 1.06  | 50.67 |
+| Window-Wall Ratio (%) | 19%    | 1.25% | 1.25% | 1.25% | 90%   |  
+
+### Test Case 4
+- Prototype: Mid Apartment
+- User data folder: */userdata_default_test*
+- Summary:
+
+Test prototype:
+
+|                       | Total   | North  | East   | South  | West   |
+|-----------------------|---------|--------|--------|--------|--------|
+| Wall Area (m2)        | 1542.06 | 564.80 | 206.23 | 564.80 | 206.23 |
+| Window Area (m2)      | 306.92  | 112.97 | 43.82  | 112.97 | 37.16  |
+| Window-Wall Ratio (%) | 19.9%   | 20%    | 21.25% | 20%    | 18.02% |  
+
+The test prototype WWR is 19.9%. Based on code, Mid-apartment shall be `Other` building window to wall ratio type so in the baseline, it should have 40% WWR or its proposed design whichever is smaller.
+
+Baseline:
+
+|                       | Total   | North  | East   | South  | West   |
+|-----------------------|---------|--------|--------|--------|--------|
+| Wall Area (m2)        | 1542.06 | 564.80 | 206.23 | 564.80 | 206.23 |
+| Window Area (m2)      | 308.41  | 112.97 | 44.74  | 113.54 | 37.16  |
+| Window-Wall Ratio (%) | 20%     | 20%    | 21.7%  | 20.1%  | 18.02% |  
+
+In this case, a 0.1% tolerance is applied.
+
+### Test Case 5
+- Prototype: Mid Apartment - WWR adjusted
+- User data folder: */userdata_default_test*
+- Summary:
+
+Test prototype:
+
+|                       | Total   | North  | East   | South  | West   |
+|-----------------------|---------|--------|--------|--------|--------|
+| Wall Area (m2)        | 1542.06 | 564.80 | 206.23 | 564.80 | 206.23 |
+| Window Area (m2)      | 750.59  | 282.40 | 92.90  | 282.40 | 92.90  |
+| Window-Wall Ratio (%) | 50%     | 50%    | 50%    | 50%    | 50%    |  
+
+The test prototype WWR is 50%. Based on code, Mid-apartment shall be `Other` building window to wall ratio type so in the baseline, it should have 40% WWR or its proposed design whichever is smaller.
+
+Baseline:
+
+|                       | Total   | North  | East   | South  | West   |
+|-----------------------|---------|--------|--------|--------|--------|
+| Wall Area (m2)        | 1542.06 | 564.80 | 206.23 | 564.80 | 206.23 |
+| Window Area (m2)      | 616.84  | 225.92 | 87.02  | 229.58 | 74.32  |
+| Window-Wall Ratio (%) | 40%     | 40%    | 42.20% | 40.65% | 36.04% |  
 
 
-        
+### Test Case 6
+- Prototype: Medium Office - WWR adjusted
+- User data folder: */userdata_default_test*
+- Summary:
+
+Test prototype:
+
+|                       | Total   | North  | East   | South  | West   |
+|-----------------------|---------|--------|--------|--------|--------|
+| Wall Area (m2)        | 1977.67 | 593.30 | 395.53 | 593.30 | 395.53 |
+| Window Area (m2)      | 27.38   | 0.0    | 27.38  | 0.0    | 0.0    |
+| Window-Wall Ratio (%) | 1.38%   | 0%     | 6.92%  | 0%     | 0%     |  
+
+The test prototype has WWR of 1.38%. The target WWR is 31%. The building has plenums so this test case shall increase the window to wall ratio to 31% by adding more windows to the rest facades and in the meantime, avoids adding new windows to the plenum surfaces
+
+Baseline:
+
+|                       | Total   | North  | East   | South  | West   |
+|-----------------------|---------|--------|--------|--------|--------|
+| Wall Area (m2)        | 1977.67 | 593.30 | 395.53 | 593.30 | 395.53 |
+| Window Area (m2)      | 613.08  | 137.48 | 246.45 | 137.49 | 91.66  |
+| Window-Wall Ratio (%) | 31%     | 23.17% | 62.31% | 23.17% | 23.17% | 
