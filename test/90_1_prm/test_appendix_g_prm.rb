@@ -2976,6 +2976,31 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # Check exterior lighting via userdata
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_exterior_lighting(prototypes_base)
+
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+
+      if building_type == 'RetailStandalone'
+        model.getExteriorLightss.each do |exterior_lights|
+          ext_lights_def = exterior_lights.exteriorLightsDefinition
+          if exterior_lights.name.get == "NonDimming Exterior Lights Def"
+            design_power = ext_lights_def.designLevel.round(0)
+            assert( design_power == 700, "The exterior lighting for 'NonDimming Exterior Lights Def' in #{building_type}-#{template} has incorrect power. Found: #{design_power}; expected 700.")
+          end
+          if exterior_lights.name.get == "Occ Sensing Exterior Lights Def"
+            design_power = ext_lights_def.designLevel.round(0)
+            assert(design_power == 4328, "The exterior lighting for 'Occ Sensing Exterior Lights Def' #{building_type}-#{template} has incorrect power. Found: #{design_power}; expected 4328.")
+          end
+        end
+
+      end
+    end
+  end
+
   # Run test suite for the ASHRAE 90.1 appendix G Performance
   # Rating Method (PRM) baseline automation implementation
   # in openstudio-standards.
@@ -3012,6 +3037,7 @@ class AppendixGPRMTests < Minitest::Test
       'building_rotation_check',
       'pe_userdata_handling',
       'unmet_load_hours',
+      'exterior_lighting',
     ]
 
     # Get list of unique prototypes
@@ -3055,5 +3081,6 @@ class AppendixGPRMTests < Minitest::Test
     check_fan_power_credits(prototypes_base['fan_power_credits']) if tests.include? 'fan_power_credits'
     check_return_air_type(prototypes_base['return_air_type']) if tests.include? 'return_air_type'
     check_unmet_load_hours(prototypes_base['unmet_load_hours']) if tests.include? 'unmet_load_hours'
+    check_exterior_lighting(prototypes_base['exterior_lighting']) if tests.include? 'exterior_lighting'
   end
 end

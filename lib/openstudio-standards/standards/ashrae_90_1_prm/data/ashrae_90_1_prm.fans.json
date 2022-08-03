@@ -157,6 +157,18 @@
       "notes": null
     },
     {
+      "name": "PSZ_VAV_System_Fan",
+      "type": "VariableVolume",
+      "pressure_rise": 2.5,
+      "fan_efficiency": 0.54,
+      "motor_efficiency": 0.9,
+      "motor_in_airstream_fraction": 1.0,
+      "fan_power_minimum_flow_rate_fraction": 0.0,
+      "fan_power_minimum_flow_rate_input_method": "Fraction",
+      "fan_curve": "Multi Zone VAV with VSD and fixed SP setpoint",
+      "notes": null
+    },
+    {
       "name": "PTAC_CAV_Fan",
       "type": "ConstantVolume",
       "pressure_rise": 1.33,
@@ -272,18 +284,6 @@
       "motor_efficiency": 0.9,
       "motor_in_airstream_fraction": 1.0,
       "fan_power_minimum_flow_rate_fraction": 0.25,
-      "fan_power_minimum_flow_rate_input_method": "Fraction",
-      "fan_curve": "Multi Zone VAV with VSD and fixed SP setpoint",
-      "notes": null
-    },
-    {
-      "name": "PSZ_VAV_System_Fan",
-      "type": "VariableVolume",
-      "pressure_rise": 2.5,
-      "fan_efficiency": 0.54,
-      "motor_efficiency": 0.9,
-      "motor_in_airstream_fraction": 1.0,
-      "fan_power_minimum_flow_rate_fraction": 0.0,
       "fan_power_minimum_flow_rate_input_method": "Fraction",
       "fan_curve": "Multi Zone VAV with VSD and fixed SP setpoint",
       "notes": null
