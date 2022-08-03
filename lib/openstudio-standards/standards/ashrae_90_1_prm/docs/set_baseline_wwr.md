@@ -62,8 +62,9 @@ In addition, when increasing the WWR requires adding windows to surfaces with no
 
 ### Test case 1:
 - Prototype: Small Office
-- User data folder: */userdata_lpd_01*
+- User data folder: */userdata_default_test*
 - Summary:
+The Small Office prototype has 
 
 
         
