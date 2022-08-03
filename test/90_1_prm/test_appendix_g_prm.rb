@@ -868,7 +868,7 @@ class AppendixGPRMTests < Minitest::Test
           #   - DCV should NOT be in the user model (zone ppl density < 25 ppl/ksqft)
           #   - DCV should NOT be in the baseline model (air loop oa flow < 3000 cfm || zone ppl density < 100 ppl/ksqft)
           #   - DCV is implemented in user model
-          # expected result: baseline implements DCV but prompts warning (user model has DCV but meet exception)
+          # expected result: no DCV in baseline model
           # test case setting:
           #   - Kitchen
           #   - user model air loop oa flow 528 cfm
@@ -879,7 +879,6 @@ class AppendixGPRMTests < Minitest::Test
           #     - at the zone level, zone oa spec per person 0.003539605824
           zone = model_baseline.getThermalZoneByName('Kitchen_ZN_1_FLR_1 ZN').get
           airloop = zone.airLoopHVAC.get
-          # check warning
           assert(!dcv_is_on(zone, airloop))
 
         when 8
@@ -2772,28 +2771,28 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      'wwr',
-      'srr',
-      'envelope',
-      'lpd',
-      'isresidential',
-      'daylighting_control',
-      'light_occ_sensor',
-      'infiltration',
-      'vav_fan_curve',
-      'hvac_baseline',
-      'hvac_psz_split_from_mz',
-      'plant_temp_reset_ctrl',
-      'sat_ctrl',
-      'number_of_boilers',
-      'number_of_chillers',
-      'number_of_cooling_towers',
-      'hvac_sizing',
-      'preheat_coil_ctrl',
-      'vav_min_sp',
-      'multi_bldg_handling',
-      'economizer_exception',
-      'building_rotation_check',
+      # 'wwr',
+      # 'srr',
+      # 'envelope',
+      # 'lpd',
+      # 'isresidential',
+      # 'daylighting_control',
+      # 'light_occ_sensor',
+      # 'infiltration',
+      # 'vav_fan_curve',
+      # 'hvac_baseline',
+      # 'hvac_psz_split_from_mz',
+      # 'plant_temp_reset_ctrl',
+      # 'sat_ctrl',
+      # 'number_of_boilers',
+      # 'number_of_chillers',
+      # 'number_of_cooling_towers',
+      # 'hvac_sizing',
+      # 'preheat_coil_ctrl',
+      # 'vav_min_sp',
+      # 'multi_bldg_handling',
+      # 'economizer_exception',
+      # 'building_rotation_check',
       'dcv'
     ]
 
