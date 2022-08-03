@@ -165,11 +165,11 @@ class ASHRAE901PRM < Standard
     if cap_tons <= 300
       num_chillers = 1
       chiller_cooling_type = 'WaterCooled'
-      chiller_compressor_type = 'Rotary Screw'
+      chiller_compressor_type = 'Rotary Screw and Scroll'
     elsif cap_tons > 300 && cap_tons < 600
       num_chillers = 2
       chiller_cooling_type = 'WaterCooled'
-      chiller_compressor_type = 'Rotary Screw'
+      chiller_compressor_type = 'Rotary Screw and Scroll'
     else
       # Max capacity of a single chiller
       max_cap_ton = 800.0
@@ -286,6 +286,7 @@ class ASHRAE901PRM < Standard
       final_chiller.setSizingFactor(per_chiller_sizing_factor)
       final_chiller.setReferenceCapacity(per_chiller_cap_w)
       final_chiller.setCondenserType(chiller_cooling_type)
+      final_chiller.additionalProperties.setFeature('compressor_type', chiller_compressor_type)
     end
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, there are #{final_chillers.size} #{chiller_cooling_type} #{chiller_compressor_type} chillers.")
 

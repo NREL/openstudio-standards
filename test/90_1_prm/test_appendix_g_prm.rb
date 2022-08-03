@@ -16,7 +16,9 @@ class AppendixGPRMTests < Minitest::Test
   @@swh_building_types = JSON.parse(File.read("#{@@json_dir}/swh_building_types.json"))
   @@wwr_values = JSON.parse(File.read("#{@@json_dir}/wwr_values.json"))
   @@hasres_values = JSON.parse(File.read("#{@@json_dir}/hasres_values.json"))
-
+  # Global variable to ...
+  # Make sure to turn it to false so CI will not fail for time out.
+  GENERATE_PRM_LOG = false
   # Generate one of the ASHRAE 90.1 prototype model included in openstudio-standards.
   #
   # @param prototypes_to_generate [Array] List of prototypes to generate, see prototype_list.json to see the structure of the list
@@ -186,7 +188,8 @@ class AppendixGPRMTests < Minitest::Test
                                                                                     @@hvac_building_types[hvac_building_type],
                                                                                     @@wwr_building_types[building_type],
                                                                                     @@swh_building_types[building_type],
-                                                                                    nil, run_dir_baseline, false, unmet_load_hours, false)
+                                                                                    nil, run_dir_baseline, false, GENERATE_PRM_LOG)
+
 
       # Check if baseline could be created
       assert(model_baseline, "Baseline model could not be generated for #{building_type}, #{template}, #{climate_zone}.")
@@ -434,6 +437,52 @@ class AppendixGPRMTests < Minitest::Test
         assert(((u_value_baseline[key] - value_si).abs < 0.001 || (u_value_baseline[key] - 5.835).abs < 0.01), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si.round(3)}.")
         if key != 'PERIMETER_ZN_3_WALL_NORTH_DOOR1'
           assert((construction_baseline[key].include? 'PRM'), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
+        end
+      end
+    end
+  end
+
+  def check_power_equipment_handling(prototypes_base)
+    prototypes_base.each do |prototype_base, baseline_model|
+      base_building_type, base_template, base_climate_Zone, base_user_data_dir, base_mod = prototype_base
+      # user_data_dir match to identify matched propose and baseline
+      if base_user_data_dir == 'userdata_pe_01'
+        # test case 1, apply 5% RPC (0.5 * 0.1) to Office WholeBuilding -Sm Offie Elec Equip
+        base_electric_equipment_schedules = baseline_model.getElectricEquipments[0].schedule.get.to_ScheduleRuleset.get.scheduleRules
+
+        base_electric_equipment_schedules.each do |schedule_rule|
+          receptacle_power_credits = schedule_rule.name.get.split('_')[1].to_f
+          assert((0.05 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.05 (5%) but get #{receptacle_power_credits}")
+        end
+      elsif base_user_data_dir == 'userdata_pe_02'
+        # test case 2, apply 15% RPC (0.15) to Office WholeBuilding -Sm Offie Elec Equip
+        base_electric_equipment_schedules = baseline_model.getElectricEquipments[0].schedule.get.to_ScheduleRuleset.get.scheduleRules
+
+        base_electric_equipment_schedules.each do |schedule_rule|
+          receptacle_power_credits = schedule_rule.name.get.split('_')[1].to_f
+          assert((0.15 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.15 (15%) but get #{receptacle_power_credits}")
+        end
+      elsif base_user_data_dir == 'userdata_pe_03'
+        # test case 3, record motor horsepower, efficiency and whether it is exempt
+        base_electric_equipment = baseline_model.getElectricEquipments[0]
+        base_electric_equipment_ap = base_electric_equipment.additionalProperties
+        assert(base_electric_equipment_ap.hasFeature('motor_horsepower') && base_electric_equipment_ap.getFeatureAsDouble('motor_horsepower').get == 10.0,
+               "motor_horsepower data is missing or incorrect. The motor_horsepower for test case 3 shall be 10.0")
+        assert(base_electric_equipment_ap.hasFeature('motor_efficiency') && base_electric_equipment_ap.getFeatureAsDouble('motor_efficiency').get == 0.72,
+               "motor_efficiency data is missing or incorrect. The motor_efficiency for test case 3 shall be 0.72")
+        assert(base_electric_equipment_ap.hasFeature('motor_is_exempt') && base_electric_equipment_ap.getFeatureAsString('motor_is_exempt').get == 'No',
+               "motor_is_exempt data is missing or incorrect. The motor_is_exempt for test case 3 shall be No")
+      elsif base_user_data_dir == 'userdata_pe_04'
+        baseline_equipments = baseline_model.getElectricEquipments
+        baseline_equipments.each do |equipment|
+          baseline_equipment_name = equipment.name.get
+          if baseline_equipment_name == 'Office WholeBuilding - Sm Office Elec Equip 4'
+            base_electric_equipment_schedules = equipment.schedule.get.to_ScheduleRuleset.get.scheduleRules
+            base_electric_equipment_schedules.each do |schedule_rule|
+              receptacle_power_credits = schedule_rule.name.get.split('_')[1].to_f
+              assert((0.025 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.025 (5%) but get #{receptacle_power_credits}")
+            end
+          end
         end
       end
     end
@@ -2548,6 +2597,355 @@ class AppendixGPRMTests < Minitest::Test
     return model
   end
 
+  # Check hvac baseline system efficiencies
+  def check_hvac_efficiency(prototypes_base)
+    # No.1 PTAC
+    # cooling: CoilCoolingDXSingleSpeed
+    # heating: CoilHeatingWater
+    # hash = {capacity:cop}
+    capacity_cop_cool = {100000=>3.1}
+    capacity_cop_cool.each do |key_cool, value_cool|
+      std = Standard.build('90.1-PRM-2019')
+      prototypes_base.each do |prototype, model_base|
+        building_type, template, climate_zone, user_data_dir, mod = prototype
+        if building_type == 'SmallOffice' && climate_zone == 'ASHRAE 169-2013-2A'
+          # Create a deep copy of the proposed model
+          model_ptac = BTAP::FileIO.deep_copy(model_base)
+          # Remove all HVAC from model, excluding service water heating
+          std.model_remove_prm_hvac(model_ptac)
+          hot_water_loop = std.model_add_hw_loop(model_ptac, 'DistrictHeating')
+          model_ptac.getPumpVariableSpeeds.each do |pump|
+            pump.setRatedFlowRate(100)
+          end
+          zones = model_ptac.getThermalZones
+          zones.each do |zone|
+            zone.additionalProperties.setFeature('baseline_system_type', 'PTAC')
+          end
+          std.model_add_ptac(model_ptac,
+                             zones,
+                             cooling_type: 'Single Speed DX AC',
+                             heating_type: 'Water',
+                             hot_water_loop: hot_water_loop,
+                             fan_type: 'ConstantVolume')
+          zones.each do |zone|
+            zone.equipment.each do |zone_equipment|
+              ptac = zone_equipment.to_ZoneHVACPackagedTerminalAirConditioner.get
+              ptac.supplyAirFan.to_FanConstantVolume.get.setMaximumFlowRate(100)
+              clg_coil = ptac.coolingCoil.to_CoilCoolingDXSingleSpeed.get
+              capacity_cool_w = OpenStudio.convert(key_cool, 'Btu/hr', 'W'). get
+              clg_coil.setRatedTotalCoolingCapacity(capacity_cool_w)
+            end
+          end
+          std.model_apply_hvac_efficiency_standard(model_ptac)
+          assert((model_ptac.getCoilCoolingDXSingleSpeeds[0].ratedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX single coil (PTAC).')
+        end
+      end
+    end
+
+    # No.2 PTHP
+    # cooling: CoilCoolingDXSingleSpeed
+    # heating: CoilHeatingDXSingleSpeed
+    # hash = {capacity:cop}
+    capacity_cop_cool = {100000=>3.1}
+    capacity_eff_heat = {100000=>3.1}
+    capacity_cop_cool.each do |key_cool, value_cool|
+      capacity_eff_heat.each do |key_heat, value_heat|
+        std = Standard.build('90.1-PRM-2019')
+        prototypes_base.each do |prototype, model_base|
+          building_type, template, climate_zone, user_data_dir, mod = prototype
+          if building_type == 'SmallOffice' && climate_zone == 'ASHRAE 169-2013-2A'
+            # Create a deep copy of the proposed model
+            model_pthp = BTAP::FileIO.deep_copy(model_base)
+            # Remove all HVAC from model, excluding service water heating
+            std.model_remove_prm_hvac(model_pthp)
+            zones = model_pthp.getThermalZones
+            zones.each do |zone|
+              zone.additionalProperties.setFeature('baseline_system_type', 'PTHP')
+            end
+            std.model_add_pthp(model_pthp,
+                               zones,
+                               fan_type: 'ConstantVolume')
+            zones.each do |zone|
+              zone.equipment.each do |zone_equipment|
+                pthp = zone_equipment.to_ZoneHVACPackagedTerminalHeatPump.get
+                pthp.supplyAirFan.to_FanConstantVolume.get.setMaximumFlowRate(100)
+                clg_coil = pthp.coolingCoil.to_CoilCoolingDXSingleSpeed.get
+                capacity_cool_w = OpenStudio.convert(key_cool, 'Btu/hr', 'W'). get
+                clg_coil.setRatedTotalCoolingCapacity(capacity_cool_w)
+                htg_coil = pthp.heatingCoil.to_CoilHeatingDXSingleSpeed.get
+                capacity_heat_w = OpenStudio.convert(key_heat, 'Btu/hr', 'W'). get
+                htg_coil.setRatedTotalHeatingCapacity(capacity_heat_w)
+              end
+            end
+            std.model_apply_hvac_efficiency_standard(model_pthp)
+            assert((model_pthp.getCoilCoolingDXSingleSpeeds[0].ratedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX single coil (PTHP).')
+            assert((model_pthp.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for heating DX single coil (PTHP).')
+          end
+        end
+      end
+    end
+
+    # No.3 PSZ_AC
+    # cooling: CoilCoolingDXSingleSpeed
+    # heating: CoilHeatingGas
+    # hash = {capacity:cop}
+    capacity_cop_cool = {10000=>3.0,
+                         300000=>3.5}
+    capacity_cop_heat = {10000=>0.8,
+                         300000=>0.793}
+    capacity_cop_cool.each do |key_cool, value_cool|
+      capacity_cop_heat.each do |key_heat, value_heat|
+        std = Standard.build('90.1-PRM-2019')
+        prototypes_base.each do |prototype, model_base|
+          building_type, template, climate_zone, user_data_dir, mod = prototype
+          if building_type == 'SmallOffice' && climate_zone == 'ASHRAE 169-2013-8A'
+            # Create a deep copy of the proposed model
+            model_psz_ac = BTAP::FileIO.deep_copy(model_base)
+            # Remove all HVAC from model, excluding service water heating
+            std.model_remove_prm_hvac(model_psz_ac)
+            # Remove all EMS objects from the model
+            std.model_remove_prm_ems_objects(model_psz_ac)
+            zones = model_psz_ac.getThermalZones
+            std.model_add_psz_ac(model_psz_ac,
+                                 zones,
+                                 cooling_type: 'Single Speed DX AC',
+                                 chilled_water_loop: nil,
+                                 heating_type: 'Gas',
+                                 supplemental_heating_type: nil,
+                                 hot_water_loop: nil,
+                                 fan_location: 'DrawThrough',
+                                 fan_type: 'ConstantVolume')
+            capacity_cool_w = OpenStudio.convert(key_cool, 'Btu/hr', 'W'). get
+            model_psz_ac.getCoilCoolingDXSingleSpeeds.sort.each do |clg_coil|
+              clg_coil.setRatedTotalCoolingCapacity(capacity_cool_w)
+            end
+            capacity_heat_w = OpenStudio.convert(key_heat, 'Btu/hr', 'W'). get
+            model_psz_ac.getCoilHeatingGass.sort.each do |htg_coil|
+              htg_coil.setNominalCapacity(capacity_heat_w)
+            end
+            model_psz_ac.getAirLoopHVACs.each do |air_loop_hvac|
+              air_loop_hvac.additionalProperties.setFeature('baseline_system_type', 'PSZ_AC')
+              air_loop_hvac.setDesignSupplyAirFlowRate(0.01)
+            end
+            model_psz_ac.getFanOnOffs.each do |fan_on_off|
+              fan_on_off.setMaximumFlowRate(0.01)
+            end
+            std.model_apply_hvac_efficiency_standard(model_psz_ac)
+            assert((model_psz_ac.getCoilCoolingDXSingleSpeeds[0].ratedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX single coil (PSZ-AC).')
+            assert((model_psz_ac.getCoilHeatingGass[0].gasBurnerEfficiency.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for heating gas coil (PSZ-AC).')
+          end
+        end
+      end
+    end
+
+    # No.4 PSZ_HP
+    # cooling: CoilCoolingDXSingleSpeed
+    # heating: CoilHeatingDXSingleSpeed
+    # hash = {capacity:cop}
+    capacity_cop_cool = {10000=>3.0,
+                         300000=>3.1}
+    capacity_cop_heat = {10000=>3.4,
+                         300000=>3.4}
+    capacity_cop_cool.each do |key_cool, value_cool|
+      capacity_cop_heat.each do |key_heat, value_heat|
+        std = Standard.build('90.1-PRM-2019')
+        prototypes_base.each do |prototype, model_base|
+          building_type, template, climate_zone, user_data_dir, mod = prototype
+          if building_type == 'SmallOffice' && climate_zone == 'ASHRAE 169-2013-2A'
+            # Create a deep copy of the proposed model
+            model_psz_hp = BTAP::FileIO.deep_copy(model_base)
+            capacity_cool_w = OpenStudio.convert(key_cool, 'Btu/hr', 'W'). get
+            model_psz_hp.getCoilCoolingDXSingleSpeeds.sort.each do |clg_coil|
+              clg_coil.setRatedTotalCoolingCapacity(capacity_cool_w)
+            end
+            capacity_heat_w = OpenStudio.convert(key_heat, 'Btu/hr', 'W'). get
+            model_psz_hp.getCoilHeatingDXSingleSpeeds.sort.each do |htg_coil|
+              htg_coil.setRatedTotalHeatingCapacity(capacity_heat_w)
+            end
+            std.model_apply_hvac_efficiency_standard(model_psz_hp)
+            assert((model_psz_hp.getCoilCoolingDXSingleSpeeds[0].ratedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX single coil (PSZ-HP).')
+            assert((model_psz_hp.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for heating DX single coil (PSZ-HP).')
+          end
+        end
+      end
+    end
+
+    # No.5 PVAV_Reheat
+    # cooling: CoilCoolingDXTwoSpeed
+    # heating: Boiler
+    # hash = {capacity:cop}
+    capacity_cop_cool = {10000=>3.0,
+                         300000=>3.5}
+    boiler_capacity_eff = {100000=>0.8,
+                           1000000=>0.75}
+    capacity_cop_cool.each do |key_cool, value_cool|
+      boiler_capacity_eff.each do |key_heat, value_heat|
+        std = Standard.build('90.1-PRM-2019')
+        prototypes_base.each do |prototype, model_base|
+          building_type, template, climate_zone, user_data_dir, mod = prototype
+          if building_type == 'MediumOffice' && template == "90.1-2013" && climate_zone == 'ASHRAE 169-2013-8A'
+            # Create a deep copy of the proposed model
+            model_pvav_reheat = BTAP::FileIO.deep_copy(model_base)
+            capacity_cool_w = OpenStudio.convert(key_cool, 'Btu/hr', 'W'). get
+            model_pvav_reheat.getCoilCoolingDXTwoSpeeds.sort.each do |clg_coil|
+              clg_coil.setRatedHighSpeedTotalCoolingCapacity(capacity_cool_w)
+              clg_coil.setRatedLowSpeedTotalCoolingCapacity(capacity_cool_w)
+            end
+            capacity_heat_w = OpenStudio.convert(key_heat, 'Btu/hr', 'W'). get
+            model_pvav_reheat.getBoilerHotWaters.sort.each do |boiler|
+              boiler.setNominalCapacity(capacity_heat_w)
+            end
+            std.model_apply_hvac_efficiency_standard(model_pvav_reheat)
+            assert((model_pvav_reheat.getCoilCoolingDXTwoSpeeds[0].ratedHighSpeedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX two speed coil (PVAV_Reheat).')
+            assert((model_pvav_reheat.getCoilCoolingDXTwoSpeeds[0].ratedLowSpeedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX two speed coil (PVAV_Reheat).')
+            assert((model_pvav_reheat.getBoilerHotWaters[0].nominalThermalEfficiency.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for boiler (PVAV_Reheat).')
+          end
+        end
+      end
+    end
+
+    # No.6 PVAV_PFP_Boxes
+    # cooling: CoilCoolingDXTwoSpeed
+    # heating: CoilHeatingElectric
+    # hash = {capacity:cop}
+    capacity_cop_cool = {10000=>3.0,
+                         300000=>3.5}
+    capacity_cop_cool.each do |key_cool, value_cool|
+      boiler_capacity_eff.each do |key_heat, value_heat|
+        std = Standard.build('90.1-PRM-2019')
+        prototypes_base.each do |prototype, model_base|
+          building_type, template, climate_zone, user_data_dir, mod = prototype
+          if building_type == 'MediumOffice' && template == "90.1-2013" && climate_zone == 'ASHRAE 169-2013-2A'
+            # Create a deep copy of the proposed model
+            model_pvav_pfp_boxes = BTAP::FileIO.deep_copy(model_base)
+            capacity_cool_w = OpenStudio.convert(key_cool, 'Btu/hr', 'W'). get
+            model_pvav_pfp_boxes.getCoilCoolingDXTwoSpeeds.sort.each do |clg_coil|
+              clg_coil.setRatedHighSpeedTotalCoolingCapacity(capacity_cool_w)
+              clg_coil.setRatedLowSpeedTotalCoolingCapacity(capacity_cool_w)
+            end
+            std.model_apply_hvac_efficiency_standard(model_pvav_pfp_boxes)
+            assert((model_pvav_pfp_boxes.getCoilCoolingDXTwoSpeeds[0].ratedHighSpeedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX two speed coil (PVAV_PFP_Boxes).')
+            assert((model_pvav_pfp_boxes.getCoilCoolingDXTwoSpeeds[0].ratedLowSpeedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX two speed coil (PVAV_PFP_Boxes).')
+          end
+        end
+      end
+    end
+
+    # No.7 VAV_Reheat
+    # cooling: Chiller/CoolingTower
+    # heating: Boiler
+    # hash = {capacity:cop}
+    chiller_capacity_eff = {100=>0.79,
+                            200=>0.718}
+    boiler_capacity_eff = {100000=>0.8,
+                           1000000=>0.75}
+    chiller_capacity_eff.each do |key_cool, value_cool|
+      boiler_capacity_eff.each do |key_heat, value_heat|
+        std = Standard.build('90.1-PRM-2019')
+        prototypes_base.each do |prototype, model_base|
+          building_type, template, climate_zone, user_data_dir, mod = prototype
+          if building_type == 'MediumOffice' && template == '90.1-2004'
+            # Create a deep copy of the proposed model
+            model_vav_reheat = BTAP::FileIO.deep_copy(model_base)
+            capacity_cool_w = OpenStudio.convert(key_cool, 'ton', 'W'). get
+            model_vav_reheat.getChillerElectricEIRs.sort.each do |chiller|
+              chiller.setReferenceCapacity(capacity_cool_w)
+            end
+            capacity_heat_w = OpenStudio.convert(key_heat, 'Btu/hr', 'W'). get
+            model_vav_reheat.getBoilerHotWaters.sort.each do |boiler|
+              boiler.setNominalCapacity(capacity_heat_w)
+            end
+            std.model_apply_hvac_efficiency_standard(model_vav_reheat)
+            assert((model_vav_reheat.getChillerElectricEIRs[0].referenceCOP.to_f - 3.517 / value_cool).abs < 0.001, 'Error in efficiency setting for chiller (VAV_Reheat).')
+            assert((model_vav_reheat.getBoilerHotWaters[0].nominalThermalEfficiency.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for boiler (VAV_Reheat).')
+          end
+        end
+      end
+    end
+
+    # check cooling tower heat rejection
+    std = Standard.build('90.1-PRM-2019')
+    prototypes_base.each do |prototype, model_base|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+      if building_type == 'MediumOffice' && template == '90.1-2004'
+        # Create a deep copy of the proposed model
+        model_vav_reheat_coolingtower = BTAP::FileIO.deep_copy(model_base)
+        design_water_flow_gpm = 1000
+        design_water_flow_m3_per_s = OpenStudio.convert(design_water_flow_gpm, 'gal/min', 'm^3/s').get
+        model_vav_reheat_coolingtower.getCoolingTowerVariableSpeeds[0].setDesignWaterFlowRate(design_water_flow_m3_per_s)
+        design_water_flow_gpm = OpenStudio.convert(design_water_flow_m3_per_s, 'm^3/s', 'gal/min').get
+        fan_motor_nameplate_hp = design_water_flow_gpm / 38.2
+        fan_bhp = 0.9 * fan_motor_nameplate_hp
+        fan_motor_eff = 0.924
+        fan_motor_actual_power_hp = fan_bhp / fan_motor_eff
+        fan_motor_actual_power_w = fan_motor_actual_power_hp * 745.7
+        std.model_apply_hvac_efficiency_standard(model_vav_reheat_coolingtower)
+        assert((model_vav_reheat_coolingtower.getCoolingTowerVariableSpeeds[0].designFanPower.to_f - fan_motor_actual_power_w).abs < 0.001, 'Error in setting for cooling tower heat rejection (VAV_Reheat).')
+      end
+    end
+
+    # No.8 VAV_PFP_Boxes
+    # cooling: Chiller/CoolingTower
+    # heating: Boiler
+    # hash = {capacity:cop}
+    chiller_capacity_eff = {100=>0.703,
+                            200=>0.634}
+    chiller_capacity_eff.each do |key_cool, value_cool|
+      std = Standard.build('90.1-PRM-2019')
+      prototypes_base.each do |prototype, model_base|
+        building_type, template, climate_zone, user_data_dir, mod = prototype
+        if building_type == 'LargeOffice' && template == '90.1-2004'
+          # Create a deep copy of the proposed model
+          model_vav_pfp = BTAP::FileIO.deep_copy(model_base)
+          capacity_cool_w = OpenStudio.convert(key_cool, 'ton', 'W'). get
+          model_vav_pfp.getChillerElectricEIRs.sort.each do |chiller|
+            chiller.setReferenceCapacity(capacity_cool_w)
+          end
+          std.model_apply_hvac_efficiency_standard(model_vav_pfp)
+          assert((model_vav_pfp.getChillerElectricEIRs[0].referenceCOP.to_f - 3.517 / value_cool).abs < 0.001, 'Error in efficiency setting for chiller (VAV_Reheat).')
+        end
+      end
+    end
+
+    # No.9 Gas_Furnace
+    # heating: CoilHeatingGas
+    # hash = {capacity:cop}
+    capacity_cop_heat = {10000=>0.793}
+    capacity_cop_heat.each do |key_heat, value_heat|
+      std = Standard.build('90.1-PRM-2019')
+      prototypes_base.each do |prototype, model_base|
+        building_type, template, climate_zone, user_data_dir, mod = prototype
+        if building_type == 'SmallOffice' && climate_zone == 'ASHRAE 169-2013-2A'
+          # Create a deep copy of the proposed model
+          model_gas_furnace = BTAP::FileIO.deep_copy(model_base)
+          # Remove all HVAC from model, excluding service water heating
+          std.model_remove_prm_hvac(model_gas_furnace)
+          # Remove all EMS objects from the model
+          std.model_remove_prm_ems_objects(model_gas_furnace)
+          zones = model_gas_furnace.getThermalZones
+          zones.each do |zone|
+            zone.additionalProperties.setFeature('baseline_system_type', 'Gas_Furnace')
+          end
+          std.model_add_unitheater(model_gas_furnace,
+                                   zones,
+                                   fan_control_type: 'ConstantVolume',
+                                   fan_pressure_rise: 0.2,
+                                   heating_type: 'Gas',
+                                   hot_water_loop: nil)
+          capacity_heat_w = OpenStudio.convert(key_heat, 'Btu/hr', 'W'). get
+          model_gas_furnace.getCoilHeatingGass.sort.each do |htg_coil|
+            htg_coil.setNominalCapacity(capacity_heat_w)
+          end
+          model_gas_furnace.getFanConstantVolumes.each do |fan_constant_volume|
+            fan_constant_volume.setMaximumFlowRate(0.01)
+          end
+          std.model_apply_hvac_efficiency_standard(model_gas_furnace)
+          assert((model_gas_furnace.getCoilHeatingGass[0].gasBurnerEfficiency.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for gas furnace (Gas Furnace).')
+        end
+      end
+    end
+  end
+
   # Add piping insulation to service heating water systems
   def add_piping_insulation(model, arguments)
     std = Standard.build('90.1-PRM-2019')
@@ -2574,6 +2972,7 @@ class AppendixGPRMTests < Minitest::Test
     OpenStudio::Model::WeatherFile.setWeatherFile(model, epw_file).get
 
     return model
+
   end
 
   # Check that no pipe insulation is modeled in the baseline models
@@ -2627,7 +3026,13 @@ class AppendixGPRMTests < Minitest::Test
       'vav_min_sp',
       'multi_bldg_handling',
       'economizer_exception',
+      'hvac_efficiency',
+      'unenclosed_spaces',
+      'f_c_factors',
+      'fan_power_credits',
+      'lpd_userdata_handling',
       'building_rotation_check',
+      'pe_userdata_handling',
       'unmet_load_hours',
     ]
 
@@ -2664,6 +3069,8 @@ class AppendixGPRMTests < Minitest::Test
     check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
     check_multi_lpd_handling(prototypes_base['lpd_userdata_handling']) if tests.include? 'lpd_userdata_handling'
     check_economizer_exception(prototypes_base['economizer_exception']) if tests.include? 'economizer_exception'
+    check_power_equipment_handling(prototypes_base['pe_userdata_handling']) if tests.include? 'pe_userdata_handling'
+    check_hvac_efficiency(prototypes_base['hvac_efficiency']) if tests.include? 'hvac_efficiency'
     check_building_rotation_exception(prototypes_base['building_rotation_check']) if tests.include? 'building_rotation_check'
     check_unenclosed_spaces(prototypes_base['unenclosed_spaces']) if tests.include? 'unenclosed_spaces'
     check_f_c_factors(prototypes_base['f_c_factors']) if tests.include? 'f_c_factors'

@@ -38,7 +38,7 @@
     ],
     "pipe_insulation": [
         
-        ["QuickServiceRestaurant", "90.1-2019", "ASHRAE 169-2013-2A", "no_user_data", [["add_piping_insulation", []]]]
+        ["QuickServiceRestaurant", "90.1-2019", "ASHRAE 169-2013-2A", "userdata_default_test", [["add_piping_insulation", []]]]
     ],
     "hvac_baseline": [
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []], ["return_relief_fan", []]]],
@@ -140,6 +140,20 @@
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_bro_01", []],
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_bro_01", [["change_wwr_model", [0.4, 0.4, 0.6, 0.6]]]],
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_bro_01", [["change_wwr_model", [0.4, 0.4, 0.4, 0.4]]]]
+    ],
+    "pe_userdata_handling":[
+        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_pe_01",[["remove_transformer", []]]],
+        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_pe_02",[["remove_transformer", []]]],
+        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_pe_03",[["remove_transformer", []]]],
+        ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_pe_04",[["remove_transformer", []]]]
+    ],
+    "hvac_efficiency": [
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-8A", "userdata_default_test", []],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", []],
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-8A", "userdata_default_test", [["remove_transformer", []]]],
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]],
+        ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-8A", "userdata_default_test", [["set_zone_multiplier",[4]],["remove_transformer", []]]],
+        ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test",[["remove_transformer", []]]]
     ],
     "unenclosed_spaces": [
         ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_default_test",[["change_weather_file", []]]]
