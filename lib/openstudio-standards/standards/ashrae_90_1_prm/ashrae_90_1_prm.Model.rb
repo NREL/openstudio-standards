@@ -1,6 +1,7 @@
 class ASHRAE901PRM < Standard
   # @!group Model
 
+
   # Determines the area of the building above which point
   # the non-dominant area type gets it's own HVAC system type.
   # @return [Double] the minimum area (m^2)
@@ -123,7 +124,7 @@ class ASHRAE901PRM < Standard
   # space and removes the SpaceType-level infiltration objects.
   #
   # @return [Bool] true if successful, false if not
-  def model_apply_infiltration_standard(model, climate_zone)
+  def model_baseline_apply_infiltration_standard(model, climate_zone)
     # Model shouldn't use SpaceInfiltrationEffectiveLeakageArea
     # Excerpt from the EnergyPlus Input/Output reference manual:
     #     "This model is based on work by Sherman and Grimsrud (1980)
@@ -792,6 +793,16 @@ class ASHRAE901PRM < Standard
     end
   end
 
+  # Applies the multi-zone VAV outdoor air sizing requirements to all applicable air loops in the model.
+  # @note This is not applicable to the stable baseline; hence no action in this method
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
+  def model_apply_multizone_vav_outdoor_air_sizing(model)
+    return true
+  end
+
+
   # Identifies non mechanically cooled ("nmc") systems, if applicable
   #
   # TODO: Zone-level evaporative cooler is not currently supported by
@@ -862,6 +873,127 @@ class ASHRAE901PRM < Standard
   # @return [Boolean] true if necessary, false otherwise
   def model_get_fan_power_breakdown
     return true
+  end
+
+  # Applies the HVAC parts of the template to all objects in the model using the the template specified in the model.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param apply_controls [Bool] toggle whether to apply air loop and plant loop controls
+  # @param sql_db_vars_map [Hash] hash map
+  # @return [Bool] returns true if successful, false if not
+  def model_apply_hvac_efficiency_standard(model, apply_controls: true, sql_db_vars_map: nil)
+    sql_db_vars_map = {} if sql_db_vars_map.nil?
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Started applying HVAC efficiency standards for #{template} template.")
+
+    # TODO: The fan and pump efficiency will be done by another task.
+    # Fans
+    # model.getFanVariableVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
+    # model.getFanConstantVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
+    # model.getFanOnOffs.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
+    # model.getFanZoneExhausts.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
+
+    # Pumps
+    # model.getPumpConstantSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
+    # model.getPumpVariableSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
+    # model.getHeaderedPumpsConstantSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
+    # model.getHeaderedPumpsVariableSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
+
+    # Zone level systems/components
+    model.getThermalZones.each do |zone|
+      if zone.additionalProperties.getFeatureAsString('baseline_system_type').is_initialized
+        sys_type = zone.additionalProperties.getFeatureAsString('baseline_system_type').get
+      end
+      zone.equipment.each do |zone_equipment|
+        if zone_equipment.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+          ptac = zone_equipment.to_ZoneHVACPackagedTerminalAirConditioner.get
+          cooling_coil = ptac.coolingCoil
+          sql_db_vars_map = set_coil_cooling_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
+        elsif zone_equipment.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+          pthp = zone_equipment.to_ZoneHVACPackagedTerminalHeatPump.get
+          cooling_coil = pthp.coolingCoil
+          heating_coil = pthp.heatingCoil
+          sql_db_vars_map = set_coil_cooling_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
+          sql_db_vars_map = set_coil_heating_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
+        elsif zone_equipment.to_ZoneHVACUnitHeater.is_initialized
+          unit_heater = zone_equipment.to_ZoneHVACUnitHeater.get
+          heating_coil = unit_heater.heatingCoil
+          sql_db_vars_map = set_coil_heating_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
+        end
+      end
+    end
+
+    # Airloop HVAC level components
+    model.getAirLoopHVACs.sort.each do |air_loop|
+      sys_type = air_loop.additionalProperties.getFeatureAsString('baseline_system_type').get
+      air_loop.components.each do |icomponent|
+        if icomponent.to_AirLoopHVACUnitarySystem.is_initialized
+          unitary_system = icomponent.to_AirLoopHVACUnitarySystem.get
+          if unitary_system.coolingCoil.is_initialized
+            cooling_coil = unitary_system.coolingCoil.get
+            sql_db_vars_map = set_coil_cooling_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
+          end
+          if unitary_system.heatingCoil.is_initialized
+            heating_coil = unitary_system.heatingCoil.get
+            sql_db_vars_map = set_coil_heating_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
+          end
+        elsif icomponent.to_CoilCoolingDXSingleSpeed.is_initialized
+          cooling_coil = icomponent.to_CoilCoolingDXSingleSpeed.get
+          sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
+        elsif icomponent.to_CoilCoolingDXTwoSpeed.is_initialized
+          cooling_coil = icomponent.to_CoilCoolingDXTwoSpeed.get
+          sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
+        elsif icomponent.to_CoilHeatingDXSingleSpeed.is_initialized
+          heating_coil = icomponent.to_CoilHeatingDXSingleSpeed.get
+          sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
+        elsif icomponent.to_CoilHeatingGas.is_initialized
+          heating_coil = icomponent.to_CoilHeatingGas.get
+          sql_db_vars_map = coil_heating_gas_apply_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
+        end
+      end
+    end
+
+    # Chillers
+    model.getChillerElectricEIRs.sort.each { |obj| chiller_electric_eir_apply_efficiency_and_curves(obj) }
+
+    # Boilers
+    model.getBoilerHotWaters.sort.each { |obj| boiler_hot_water_apply_efficiency_and_curves(obj) }
+
+    # Cooling Towers
+    model.getCoolingTowerVariableSpeeds.sort.each { |obj| cooling_tower_variable_speed_apply_efficiency_and_curves(obj) }
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Finished applying HVAC efficiency standards for #{template} template.")
+    return true
+  end
+
+  def set_coil_cooling_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
+
+    if cooling_coil.to_CoilCoolingDXSingleSpeed.is_initialized
+      # single speed coil
+      sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(cooling_coil.to_CoilCoolingDXSingleSpeed.get, sql_db_vars_map, sys_type)
+    elsif cooling_coil.to_CoilCoolingDXTwoSpeed.is_initialized
+      # two speed coil
+      sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(cooling_coil.to_CoilCoolingDXTwoSpeed.get, sql_db_vars_map, sys_type)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "#{cooling_coil.name} is not single speed or two speed DX cooling coil. Nothing to be done for efficiency")
+    end
+
+    return sql_db_vars_map
+  end
+
+  def set_coil_heating_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
+
+    if heating_coil.to_CoilHeatingDXSingleSpeed.is_initialized
+      # single speed coil
+      sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(heating_coil.to_CoilHeatingDXSingleSpeed.get, sql_db_vars_map, sys_type)
+    elsif heating_coil.to_CoilHeatingGas.is_initialized
+      # single speed coil
+      sql_db_vars_map = coil_heating_gas_apply_efficiency_and_curves(heating_coil.to_CoilHeatingGas.get, sql_db_vars_map, sys_type)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "#{heating_coil.name} is not single speed DX heating coil. Nothing to be done for efficiency")
+    end
+
+    return sql_db_vars_map
   end
 
   # Template method for adding a setpoint manager for a coil control logic to a heating coil.
@@ -1355,8 +1487,16 @@ class ASHRAE901PRM < Standard
         bldg_type_zone_hash[hvac_building_type].append(thermal_zone)
       end
     end
-    # Handle an edge case that all zones in the model are unconditioned.
-    unless bldg_type_zone_hash.empty?
+
+    if bldg_type_zone_hash.empty?
+      # Build hash with all zones assigned to default hvac building type
+      zone_array = []
+      model.getThermalZones.each do |thermal_zone|
+        zone_array.append(thermal_zone)
+        thermal_zone.additionalProperties.setFeature('building_type_for_hvac', default_hvac_building_type)
+      end
+      bldg_type_hvac_zone_hash[default_hvac_building_type] = zone_array
+    else  
       # Calculate the total floor area.
       # If the max tie, this algorithm will pick the first encountered hvac building type as the maximum.
       total_floor_area = 0.0
@@ -1474,6 +1614,117 @@ class ASHRAE901PRM < Standard
       # add swh type to wateruse equipment:
       wateruse_equipment.additionalProperties.setFeature('building_type_for_swh', type_for_swh)
     end
+    return true
+  end
+
+  # Modify the existing service water heating loops to match the baseline required heating type.
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @param building_type [String] the building type
+  # @return [Bool] returns true if successful, false if not
+  def model_apply_baseline_swh_loops(model, building_type)
+    model.getPlantLoops.sort.each do |plant_loop|
+      # Skip non service water heating loops
+      next unless plant_loop_swh_loop?(plant_loop)
+
+      # Rename the loop to avoid accidentally hooking up the HVAC systems to this loop later.
+      plant_loop.setName('Service Water Heating Loop')
+
+      htg_fuels, combination_system, storage_capacity, total_heating_capacity = plant_loop_swh_system_type(plant_loop)
+
+      # htg_fuels.size == 0 shoudln't happen
+
+      electric = true
+
+      if htg_fuels.include?('NaturalGas') ||
+          htg_fuels.include?('PropaneGas') ||
+          htg_fuels.include?('FuelOilNo1') ||
+          htg_fuels.include?('FuelOilNo2') ||
+          htg_fuels.include?('Coal') ||
+          htg_fuels.include?('Diesel') ||
+          htg_fuels.include?('Gasoline')
+        electric = false
+      end
+
+      # Per Table G3.1 11.e, if the baseline system was a combination of heating and service water heating,
+      # delete all heating equipment and recreate a WaterHeater:Mixed.
+
+      if combination_system
+        a = plant_loop.supplyComponents
+        b = plant_loop.demandComponents
+        plantloopComponents = a += b
+        plantloopComponents.each do |component|
+          # Get the object type
+          obj_type = component.iddObjectType.valueName.to_s
+          next if ['OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'].include?(obj_type)
+
+          component.remove
+        end
+
+        water_heater = OpenStudio::Model::WaterHeaterMixed.new(model)
+        water_heater.setName('Baseline Water Heater')
+        water_heater.setHeaterMaximumCapacity(total_heating_capacity)
+        water_heater.setTankVolume(storage_capacity)
+        plant_loop.addSupplyBranchForComponent(water_heater)
+
+        if electric
+          # G3.1.11.b: If electric, WaterHeater:Mixed with electric resistance
+          water_heater.setHeaterFuelType('Electricity')
+          water_heater.setHeaterThermalEfficiency(1.0)
+        else
+          # @todo for now, just get the first fuel that isn't Electricity
+          # A better way would be to count the capacities associated
+          # with each fuel type and use the preponderant one
+          fuels = htg_fuels - ['Electricity']
+          fossil_fuel_type = fuels[0]
+          water_heater.setHeaterFuelType(fossil_fuel_type)
+          water_heater.setHeaterThermalEfficiency(0.8)
+        end
+        # If it's not a combination heating and service water heating system
+        # just change the fuel type of all water heaters on the system
+        # to electric resistance if it's electric
+      else
+        # Per Table G3.1 11.i, piping losses was deleted
+
+        a = plant_loop.supplyComponents
+        b = plant_loop.demandComponents
+        plantloopComponents = a += b
+        plantloopComponents.each do |component|
+          # Get the object type
+          obj_type = component.iddObjectType.valueName.to_s
+          next if !['OS_Pipe_Indoor', 'OS_Pipe_Outdoor'].include?(obj_type)
+          pipe = component.to_PipeIndoor.get
+          node = pipe.to_StraightComponent.get.outletModelObject.get.to_Node.get
+
+          node_name = node.name.get
+          pipe_name = pipe.name.get
+
+          # Add Pipe_Adiabatic
+          newpipe = OpenStudio::Model::PipeAdiabatic.new(model)
+          newpipe.setName(pipe_name)
+          newpipe.addToNode(node)
+          component.remove
+        end
+
+
+        if electric
+          plant_loop.supplyComponents.each do |component|
+            next unless component.to_WaterHeaterMixed.is_initialized
+
+            water_heater = component.to_WaterHeaterMixed.get
+            # G3.1.11.b: If electric, WaterHeater:Mixed with electric resistance
+            water_heater.setHeaterFuelType('Electricity')
+            water_heater.setHeaterThermalEfficiency(1.0)
+          end
+        end
+      end
+    end
+
+    # Set the water heater fuel types if it's 90.1-2013
+    model.getWaterHeaterMixeds.sort.each do |water_heater|
+      water_heater_mixed_apply_prm_baseline_fuel_type(water_heater, building_type)
+    end
+
     return true
   end
 
@@ -1597,6 +1848,12 @@ class ASHRAE901PRM < Standard
     return true
   end
 
+  # Generate baseline log to a specific file directory
+  # @param file_directory [String] file directory
+  def generate_baseline_log(file_directory)
+    log_messages_to_file_prm("#{file_directory}/prm.log", false)
+  end
+
   # Retrieve zone HVAC user specified compliance inputs from CSV file
   #
   # @param [OpenStudio::Model::Model] OpenStudio model object
@@ -1671,4 +1928,757 @@ class ASHRAE901PRM < Standard
       end
     end
   end
+
+  # Assign spaces to system groups based on building area type
+  # Get zone groups separately for each hvac building type
+  # @param custom [String] identifier for custom programs, not used here, but included for backwards compatibility
+  # @param bldg_type_hvac_zone_hash [Hash of bldg_type:list of zone objects] association of zones to each hvac building type
+  # @return [Array<Hash>] an array of hashes of area information,
+  # with keys area_ft2, type, fuel, and zones (an array of zones)
+  def model_prm_baseline_system_groups(model, custom, bldg_type_hvac_zone_hash)
+
+    bldg_groups = []
+
+    bldg_type_hvac_zone_hash.keys.each do |hvac_building_type, zones_in_building_type|
+
+      # Get all groups for this hvac building type
+      new_groups = get_baseline_system_groups_for_one_building_type(model, hvac_building_type, zones_in_building_type)
+
+      # Add the groups for this hvac building type to the full list
+      new_groups.each do |group|
+        bldg_groups << group
+      end
+    end
+
+    return bldg_groups
+  end
+
+
+  
+  # Assign spaces to system groups for one hvac building type
+  # One group contains all zones associated with one HVAC type
+  # Separate groups are made for laboratories, computer rooms, district cooled zones, heated-only zones, or hybrids of these
+  # Groups may include zones from multiple floors; separating by floor is handled later
+  # For stable baseline, heating type is based on climate, not proposed heating type
+  # Isolate zones that have heating-only or district (purchased) heat or chilled water
+  # @param bldg_type_hvac_zone_hash [Hash of bldg_type:list of zone objects] association of zones to each hvac building type
+  # @return [Array<Hash>] an array of hashes of area information,
+  # with keys area_ft2, type, fuel, and zones (an array of zones)
+  def get_baseline_system_groups_for_one_building_type(model, hvac_building_type, zones_in_building_type)
+    # Build zones hash of [zone, zone area, occupancy type, building type, fuel]
+    zones = model_zones_with_occ_and_fuel_type(model, 'custom')
+
+    # Ensure that there is at least one conditioned zone
+    if zones.size.zero?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
+      return []
+    end
+
+    # Consider special rules for computer rooms
+    # need load of all
+
+    # Get cooling load of all computer rooms to establish system types
+    comp_room_loads = {}
+    bldg_comp_room_load = 0
+    zones.each do |zn|
+      zone_load = 0.0
+      has_computer_room = false
+      # First check if any space in zone has a computer room
+      zn['zone'].spaces.each do |space|
+        if space.spaceType.get.standardsSpaceType.get == 'computer room'
+          has_computer_room = true
+          break
+        end
+      end
+      if has_computer_room
+        # Collect load for entire zone
+        zone_load_w = zn['zone'].coolingDesignLoad.to_f
+        zone_load_w *= zn['zone'].floorArea * zn['zone'].multiplier
+        zone_load = OpenStudio.convert(zone_load_w, 'W', 'Btu/hr').get
+      end
+      comp_room_loads[zn['zone'].name.get] = zone_load
+      bldg_comp_room_load += zone_load
+    end
+
+    # Lab zones are grouped separately if total lab exhaust in building > 15000 cfm
+    # Make list of zone objects that contain laboratory spaces
+    lab_zones = []
+    has_lab_spaces = {}
+    model.getThermalZones.sort.each do |zone|
+      # Check if this zone includes laboratory space
+      zone.spaces.each do |space|
+        spacetype = space.spaceType.get.standardsSpaceType.get
+        has_lab_spaces[zone.name.get] = false
+        if space.spaceType.get.standardsSpaceType.get == 'laboratory'
+          lab_zones << zone
+          has_lab_spaces[zone.name.get] = true
+          break
+        end
+      end
+    end
+
+    lab_exhaust_si = 0
+    lab_relief_si = 0
+    if !lab_zones.empty?
+      # Build a hash of return_node:zone_name
+      node_list = {}
+      zone_return_flow_si = Hash.new(0)
+      var_name = 'System Node Standard Density Volume Flow Rate'
+      frequency = 'hourly'
+      model.getThermalZones.each do |zone|
+        port_list = zone.returnPortList
+        port_list_objects = port_list.modelObjects
+        port_list_objects.each do |node|
+          node_name = node.nameString
+          node_list[node_name] = zone.name.get
+        end
+        zone_return_flow_si[zone.name.get] = 0
+      end
+
+      # Get return air flow for each zone (even non-lab zones are needed)
+      # Take from hourly reports created during sizing run
+      node_list.each do |node_name, zone_name|
+        sql = model.sqlFile
+        if sql.is_initialized
+          sql = sql.get
+          query = "SELECT ReportDataDictionaryIndex FROM ReportDataDictionary WHERE KeyValue = '#{node_name}' COLLATE NOCASE"
+          val = sql.execAndReturnFirstDouble(query)
+          query = "SELECT MAX(Value) FROM ReportData WHERE ReportDataDictionaryIndex = '#{val.get}'"
+          val = sql.execAndReturnFirstDouble(query)
+          if val.is_initialized
+            result = OpenStudio::OptionalDouble.new(val.get)
+          end
+          zone_return_flow_si[zone_name] += result.to_f
+        end
+      end
+
+      # Calc ratio of Air Loop relief to sum of zone return for each air loop
+      # and store in zone hash
+
+      # For each air loop, get relief air flow and calculate lab exhaust from the central air handler
+      # Take from hourly reports created during sizing run
+      zone_relief_flow_si = {}
+      model.getAirLoopHVACs.sort.each do |air_loop_hvac|
+        # First get relief air flow from sizing run sql file
+        relief_node = air_loop_hvac.reliefAirNode.get
+        node_name = relief_node.nameString
+        relief_flow_si = 0
+        relief_fraction = 0
+        sql = model.sqlFile
+        if sql.is_initialized
+          sql = sql.get
+          query = "SELECT ReportDataDictionaryIndex FROM ReportDataDictionary WHERE KeyValue = '#{node_name}' COLLATE NOCASE"
+          val = sql.execAndReturnFirstDouble(query)
+          query = "SELECT MAX(Value) FROM ReportData WHERE ReportDataDictionaryIndex = '#{val.get}'"
+          val = sql.execAndReturnFirstDouble(query)
+          if val.is_initialized
+            result = OpenStudio::OptionalDouble.new(val.get)
+          end
+          relief_flow_si = result.to_f
+        end
+
+        # Get total flow of zones on this air loop
+        total_zone_return_si = 0
+        air_loop_hvac.thermalZones.each do |zone|
+          total_zone_return_si += zone_return_flow_si[zone.name.get]
+        end
+
+        relief_fraction = relief_flow_si / total_zone_return_si unless total_zone_return_si == 0
+
+        # For each zone calc total effective exhaust
+        air_loop_hvac.thermalZones.each do |zone|
+          zone_relief_flow_si[zone.name.get] = relief_fraction * zone_return_flow_si[zone.name.get]
+        end
+      end
+
+      # Now check for exhaust driven by zone exhaust fans
+      lab_zones.each do |zone|
+        zone.equipment.each do |zone_equipment|
+          # Get tally of exhaust fan flow
+          if zone_equipment.to_FanZoneExhaust.is_initialized
+            zone_exh_fan = zone_equipment.to_FanZoneExhaust.get
+            # Check if any spaces in this zone are laboratory
+            lab_exhaust_si += zone_exh_fan.maximumFlowRate.get
+          end
+        end
+
+        # Also account for outdoor air exhausted from this zone via return/relief
+        lab_relief_si += zone_relief_flow_si[zone.name.get]
+      end
+    end
+
+    lab_exhaust_si += lab_relief_si
+    lab_exhaust_cfm = OpenStudio.convert(lab_exhaust_si, 'm^3/s', 'cfm').get
+
+    # Isolate computer rooms onto separate groups
+    # Computer rooms may need to be split to two groups, depending on load
+    # Isolate heated-only and destrict cooling zones onto separate groups
+    # District heating does not require separate group
+    final_groups = []
+    # Initialize arrays of zone objects by category
+    heated_only_zones = []
+    heated_cooled_zones = []
+    district_cooled_zones = []
+    comp_room_svav_zones = []
+    comp_room_psz_zones = []
+    dist_comp_room_svav_zones = []
+    dist_comp_room_psz_zones = []
+    lab_zones = []
+
+    total_area_ft2 = 0
+    zones.each do |zn|
+      if thermal_zone_heated?(zn['zone']) && !thermal_zone_cooled?(zn['zone'])
+        heated_only_zones << zn['zone']
+      elsif comp_room_loads[zn['zone'].name.get] > 0
+        # This is a computer room zone
+        if bldg_comp_room_load > 3_000_000 || comp_room_loads[zn['zone'].name.get] > 600_000
+          # System 11
+          if zn['fuel'].include?('DistrictCooling')
+            dist_comp_room_svav_zones << zn['zone']
+          else
+            comp_room_svav_zones << zn['zone']
+          end
+        else
+          # PSZ
+          if zn['fuel'].include?('DistrictCooling')
+            dist_comp_room_psz_zones << zn['zone']
+          else
+            comp_room_psz_zones << zn['zone']
+          end
+        end
+
+      elsif has_lab_spaces[zn['zone'].name.get] && lab_exhaust_cfm > 15_000
+        lab_zones << zn['zone']
+      elsif zn['fuel'].include?('DistrictCooling')
+        district_cooled_zones << zn['zone']
+      else
+        heated_cooled_zones << zn['zone']
+      end
+      # Collect total floor area of all zones for this building area type
+      area_m2 = zn['zone'].floorArea * zn['zone'].multiplier
+      total_area_ft2 += OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+    end
+
+    # Build final_groups array
+    unless heated_only_zones.empty?
+      htd_only_group = {}
+      htd_only_group['occ'] = 'heated-only storage'
+      htd_only_group['fuel'] = 'any'
+      htd_only_group['zone_group_type'] = 'heated_only_zones'
+      area_m2 = 0
+      heated_only_zones.each do |zone|
+        area_m2 += zone.floorArea * zone.multiplier
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      htd_only_group['group_area_ft2'] = area_ft2
+      htd_only_group['building_area_type_ft2'] = total_area_ft2
+      htd_only_group['zones'] = heated_only_zones
+      final_groups << htd_only_group
+    end
+    unless district_cooled_zones.empty?
+      district_cooled_group = {}
+      district_cooled_group['occ'] = hvac_building_type
+      district_cooled_group['fuel'] = 'districtcooling'
+      district_cooled_group['zone_group_type'] = 'district_cooled_zones'
+      area_m2 = 0
+      district_cooled_zones.each do |zone|
+        area_m2 += zone.floorArea * zone.multiplier
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      district_cooled_group['group_area_ft2'] = area_ft2
+      district_cooled_group['building_area_type_ft2'] = total_area_ft2
+      district_cooled_group['zones'] = district_cooled_zones
+      # store info if any zone has district, fuel, or electric heating
+      district_cooled_group['fuel'] = get_group_heat_types(model, district_cooled_zones)
+      final_groups << district_cooled_group
+    end
+    unless heated_cooled_zones.empty?
+      heated_cooled_group = {}
+      heated_cooled_group['occ'] = hvac_building_type
+      heated_cooled_group['fuel'] = 'any'
+      heated_cooled_group['zone_group_type'] = 'heated_cooled_zones'
+      area_m2 = 0
+      heated_cooled_zones.each do |zone|
+        area_m2 += zone.floorArea * zone.multiplier
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      heated_cooled_group['group_area_ft2'] = area_ft2
+      heated_cooled_group['building_area_type_ft2'] = total_area_ft2
+      heated_cooled_group['zones'] = heated_cooled_zones
+      # store info if any zone has district, fuel, or electric heating
+      heated_cooled_group['fuel'] = get_group_heat_types(model, heated_cooled_zones)
+      final_groups << heated_cooled_group
+    end
+    unless lab_zones.empty?
+      lab_group = {}
+      lab_group['occ'] = hvac_building_type
+      lab_group['fuel'] = 'any'
+      lab_group['zone_group_type'] = 'lab_zones'
+      area_m2 = 0
+      lab_zones.each do |zone|
+        area_m2 += zone.floorArea * zone.multiplier
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      lab_group['group_area_ft2'] = area_ft2
+      lab_group['building_area_type_ft2'] = total_area_ft2
+      lab_group['zones'] = lab_zones
+      # store info if any zone has district, fuel, or electric heating
+      lab_group['fuel'] = get_group_heat_types(model, lab_zones)
+      final_groups << lab_group
+    end
+    unless comp_room_svav_zones.empty?
+      comp_room_svav_group = {}
+      comp_room_svav_group['occ'] = 'computer room szvav'
+      comp_room_svav_group['fuel'] = 'any'
+      comp_room_svav_group['zone_group_type'] = 'computer_zones'
+      area_m2 = 0
+      comp_room_svav_zones.each do |zone|
+        area_m2 += zone.floorArea * zone.multiplier
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      comp_room_svav_group['group_area_ft2'] = area_ft2
+      comp_room_svav_group['building_area_type_ft2'] = total_area_ft2
+      comp_room_svav_group['zones'] = comp_room_svav_zones
+      # store info if any zone has district, fuel, or electric heating
+      comp_room_svav_group['fuel'] = get_group_heat_types(model, comp_room_svav_zones)
+      final_groups << comp_room_svav_group
+    end
+    unless comp_room_psz_zones.empty?
+      comp_room_psz_group = {}
+      comp_room_psz_group['occ'] = 'computer room psz'
+      comp_room_psz_group['fuel'] = 'any'
+      comp_room_psz_group['zone_group_type'] = 'computer_zones'
+      area_m2 = 0
+      comp_room_psz_zones.each do |zone|
+        area_m2 += zone.floorArea * zone.multiplier
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      comp_room_psz_group['group_area_ft2'] = area_ft2
+      comp_room_psz_group['building_area_type_ft2'] = total_area_ft2
+      comp_room_psz_group['zones'] = comp_room_psz_zones
+      # store info if any zone has district, fuel, or electric heating
+      comp_room_psz_group['fuel'] = get_group_heat_types(model, comp_room_psz_zones)
+      final_groups << comp_room_psz_group
+    end
+    unless dist_comp_room_svav_zones.empty?
+      dist_comp_room_svav_group = {}
+      dist_comp_room_svav_group['occ'] = hvac_building_type
+      dist_comp_room_svav_group['fuel'] = 'districtcooling'
+      dist_comp_room_svav_group['zone_group_type'] = 'computer_zones'
+      area_m2 = 0
+      dist_comp_room_svav_zones.each do |zone|
+        area_m2 += zone.floorArea * zone.multiplier
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      dist_comp_room_svav_group['group_area_ft2'] = area_ft2
+      dist_comp_room_svav_group['building_area_type_ft2'] = total_area_ft2
+      dist_comp_room_svav_group['zones'] = dist_comp_room_svav_zones
+      # store info if any zone has district, fuel, or electric heating
+      dist_comp_room_svav_group['fuel'] = get_group_heat_types(model, dist_comp_room_svav_zones)
+      final_groups << dist_comp_room_svav_group
+    end
+    unless dist_comp_room_psz_zones.empty?
+      dist_comp_room_psz_group = {}
+      dist_comp_room_psz_group['occ'] = hvac_building_type
+      dist_comp_room_psz_group['fuel'] = 'districtcooling'
+      dist_comp_room_psz_group['zone_group_type'] = 'computer_zones'
+      area_m2 = 0
+      dist_comp_room_psz_zones.each do |zone|
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      dist_comp_room_psz_group['group_area_ft2'] = area_ft2
+      dist_comp_room_psz_group['building_area_type_ft2'] = total_area_ft2
+      dist_comp_room_psz_group['zones'] = dist_comp_room_psz_zones
+      # store info if any zone has district, fuel, or electric heating
+      dist_comp_room_psz_group['fuel'] = get_group_heat_types(model, dist_comp_room_psz_zones)
+      final_groups << dist_comp_room_psz_group
+    end
+
+    ngrps = final_groups.count
+    # Determine the number of stories spanned by each group and report out info.
+    final_groups.each do |group|
+      # Determine the number of stories this group spans
+      num_stories = model_num_stories_spanned(model, group['zones'])
+      group['stories'] = num_stories
+      # Report out the final grouping
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: occ = #{group['occ']}, fuel = #{group['fuel']}, area = #{group['group_area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
+      group['zones'].sort.each_slice(5) do |zone_list|
+        zone_names = []
+        zone_list.each do |zone|
+          zone_names << zone.name.get.to_s
+        end
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
+      end
+    end
+
+    return final_groups
+  end
+
+  # Alternate method for 2016 and later stable baseline
+  # Limits for each building area type are taken from data table
+  # Heating fuel is based on climate zone, unless district heat is in proposed
+  #
+  # @note Select system type from data table base on key parameters
+  # @param climate_zone [string] id code for the climate
+  # @param sys_group [hash] Hash defining a group of zones that have the same Appendix G system type
+  # @param custom [string] included here for backwards compatibility (not used here)
+  # @param hvac_building_type [String] Chosen by user via measure interface or user data files
+  # @param district_heat_zones [hash] of zone name => true for has district heat, false for has not
+  # @return [String] The system type.  Possibilities are PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
+  #   VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
+  def model_prm_baseline_system_type(model, climate_zone, sys_group, custom, hvac_building_type, district_heat_zones)
+
+    area_type = sys_group['occ']
+    fuel_type = sys_group['fuel']
+    area_ft2 = sys_group['building_area_type_ft2']
+    num_stories = sys_group['stories']
+    zones = sys_group['zones']
+
+    #             [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
+    system_type = [nil, nil, nil, nil]
+
+    # Find matching record from prm baseline hvac table
+    # First filter by number of stories
+    iStoryGroup = 0
+    props = {}
+    0.upto(9) do |i|
+      iStoryGroup += 1
+      props = model_find_object(standards_data['prm_baseline_hvac'],
+                                'template' => template,
+                                'hvac_building_type' => area_type,
+                                'flrs_range_group' => iStoryGroup,
+                                'area_range_group' => 1)
+
+      if !props
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
+      end
+      if num_stories <= props['bldg_flrs_max']
+        # Story Group Is found
+        break
+      end
+    end
+
+    # Next filter by floor area
+    iAreaGroup = 0
+    baseine_is_found = false
+    loop do
+      iAreaGroup += 1
+      props = model_find_object(standards_data['prm_baseline_hvac'],
+                                'template' => template,
+                                'hvac_building_type' => area_type,
+                                'flrs_range_group' => iStoryGroup,
+                                'area_range_group' => iAreaGroup)
+
+      if !props
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
+      end
+      below_max = false
+      above_min = false
+      # check if actual building floor area is within range for this area group
+      if props['max_area_qual'] == 'LT'
+        if area_ft2 < props['bldg_area_max']
+          below_max = true
+        end
+      elsif props['max_area_qual'] == 'LE'
+        if area_ft2 <= props['bldg_area_max']
+          below_max = true
+        end
+      end
+      if props['min_area_qual'] == 'GT'
+        if area_ft2 > props['bldg_area_min']
+          above_min = true
+        end
+      elsif props['min_area_qual'] == 'GE'
+        if area_ft2 >= props['bldg_area_min']
+          above_min = true
+        end
+      end
+      if (above_min == true) && (below_max == true)
+        baseline_is_found = true
+        break
+      end
+      if iAreaGroup > 9
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
+        break
+      end
+    end
+
+    heat_type = find_prm_heat_type(hvac_building_type, climate_zone)
+
+    # hash to relate apx G systype categories to sys types for model
+    sys_hash = {}
+    if heat_type == 'fuel'
+      sys_hash['PTAC'] = 'PTAC'
+      sys_hash['PSZ'] = 'PSZ_AC'
+      sys_hash['SZ-CV'] = 'SZ_CV'
+      sys_hash['Heating and ventilation'] = 'Gas_Furnace'
+      sys_hash['PSZ-AC'] = 'PSZ_AC'
+      sys_hash['Packaged VAV'] = 'PVAV_Reheat'
+      sys_hash['VAV'] = 'VAV_Reheat'
+      sys_hash['Unconditioned'] = 'None'
+      sys_hash['SZ-VAV'] = 'SZ_VAV'
+    else
+      sys_hash['PTAC'] = 'PTHP'
+      sys_hash['PSZ'] = 'PSZ_HP'
+      sys_hash['SZ-CV'] = 'SZ_CV'
+      sys_hash['Heating and ventilation'] = 'Electric_Furnace'
+      sys_hash['PSZ-AC'] = 'PSZ_HP'
+      sys_hash['Packaged VAV'] = 'PVAV_PFP_Boxes'
+      sys_hash['VAV'] = 'VAV_PFP_Boxes'
+      sys_hash['Unconditioned'] = 'None'
+      sys_hash['SZ-VAV'] = 'SZ_VAV'
+    end
+
+    model_sys_type = sys_hash[props['system_type']]
+
+    if /districtheating/i =~ fuel_type
+      central_heat = 'DistrictHeating'
+    elsif heat_type =~ /fuel/i
+      central_heat = 'NaturalGas'
+    else
+      central_heat = 'Electricity'
+    end
+    if /districtheating/i =~ fuel_type && /elec/i !~ fuel_type && /fuel/i !~ fuel_type
+      # if no zone has fuel or elect, set default to district for zones
+      zone_heat = 'DistrictHeating'
+    elsif heat_type =~ /fuel/i
+      zone_heat = 'NaturalGas'
+    else
+      zone_heat = 'Electricity'
+    end
+    if /districtcooling/i =~ fuel_type
+      cool_type = 'DistrictCooling'
+    elsif props['system_type'] =~ /Heating and ventilation/i || props['system_type'] =~ /unconditioned/i
+      cool_type = nil
+    end
+
+    system_type = [model_sys_type, central_heat, zone_heat, cool_type]
+    return system_type
+  end
+
+  # For a multizone system, create the fan schedule based on zone occupancy/fan schedules
+  # @author Doug Maddox, PNNL
+  # @param model
+  # @param zone_fan_scheds [Hash] of hash of zoneName:8760FanSchedPerZone
+  # @param pri_zones [Array<String>] names of zones served by the multizone system
+  # @param system_name [String] name of air loop
+  def model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
+
+    # Create fan schedule for multizone system
+    fan_8760 = []
+    # If any zone is on for an hour, then the system fan must be on for that hour
+    pri_zones.each do |zone|
+      zone_name = zone.name.get.to_s
+      if fan_8760.empty?
+        fan_8760 = zone_op_hrs[zone_name]
+      else
+        (0..fan_8760.size - 1).each do |ihr|
+          if zone_op_hrs[zone_name][ihr] > 0
+            fan_8760[ihr] = 1
+          end
+        end
+      end
+    end
+
+    # Convert 8760 array to schedule ruleset
+    fan_sch_limits = model.getScheduleTypeLimitsByName('fan schedule limits for prm')
+    if fan_sch_limits.empty?
+      fan_sch_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+      fan_sch_limits.setName('fan schedule limits for prm')
+      fan_sch_limits.setNumericType('DISCRETE')
+      fan_sch_limits.setUnitType('Dimensionless')
+      fan_sch_limits.setLowerLimitValue(0)
+      fan_sch_limits.setUpperLimitValue(1)
+    else
+      fan_sch_limits = fan_sch_limits.get
+    end
+    sch_name = system_name + ' ' + 'fan schedule'
+    make_ruleset_sched_from_8760(model, fan_8760, sch_name, fan_sch_limits)
+
+    air_loop = model.getAirLoopHVACByName(system_name).get
+    air_loop.additionalProperties.setFeature('fan_sched_name', sch_name)
+  end
+
+  # For a multizone system, identify any zones to isolate to separate PSZ systems
+  # isolated zones are on the 'secondary' list
+  # This version of the method applies to standard years 2016 and later (stable baseline)
+  # @author Doug Maddox, PNNL
+  # @param model
+  # @param zones [Array<Object>]
+  # @param zone_fan_scheds [Hash] hash of zoneName:8760FanSchedPerZone
+  # @return [Hash] A hash of two arrays of ThermalZones,
+  # where the keys are 'primary' and 'secondary'
+  def model_differentiate_primary_secondary_thermal_zones(model, zones, zone_fan_scheds)
+    pri_zones = []
+    sec_zones = []
+    pri_zone_names = []
+    sec_zone_names = []
+    zone_op_hrs = {} # hash of zoneName: 8760 array of operating hours
+
+    # If there is only one zone, then set that as primary
+    if zones.size == 1
+      zones.each do |zone|
+        pri_zones << zone
+        pri_zone_names << zone.name.get.to_s
+        zone_name = zone.name.get.to_s
+        if zone_fan_scheds.key?(zone_name)
+          zone_fan_sched = zone_fan_scheds[zone_name]
+        else
+          zone_fan_sched = nil
+        end
+        zone_op_hrs[zone.name.get.to_s] = thermal_zone_get_annual_operating_hours(model, zone, zone_fan_sched)
+      end
+      # Report out the primary vs. secondary zones
+      unless sec_zone_names.empty?
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
+      end
+
+      return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs }
+    end
+
+    zone_eflh = {} # hash of zoneName: eflh for zone
+    zone_max_load = {}  # hash of zoneName: coincident max internal load
+    load_limit = 10     # differ by 10 Btu/hr-sf or more
+    eflh_limit = 40     # differ by more than 40 EFLH/week from average of other zones
+    zone_area = {} # hash of zoneName:area
+
+    # Get coincident peak internal load for each zone
+    zones.each do |zone|
+      zone_name = zone.name.get.to_s
+      if zone_fan_scheds.key?(zone_name)
+        zone_fan_sched = zone_fan_scheds[zone_name]
+      else
+        zone_fan_sched = nil
+      end
+      zone_op_hrs[zone_name] = thermal_zone_get_annual_operating_hours(model, zone, zone_fan_sched)
+      zone_eflh[zone_name] = thermal_zone_occupancy_eflh(zone, zone_op_hrs[zone_name])
+      zone_max_load_w = thermal_zone_peak_internal_load(model, zone)
+      zone_max_load_w_m2 = zone_max_load_w / zone.floorArea
+      zone_max_load[zone_name] = OpenStudio.convert(zone_max_load_w_m2, 'W/m^2', 'Btu/hr*ft^2').get
+      zone_area[zone_name] = zone.floorArea
+    end
+
+    # Eliminate all zones for which both max load and EFLH exceed limits
+    zones.each do |zone|
+      zone_name = zone.name.get.to_s
+      max_load = zone_max_load[zone_name]
+      avg_max_load = get_wtd_avg_of_other_zones(zone_max_load, zone_area, zone_name)
+      max_load_diff = (max_load - avg_max_load).abs
+      avg_eflh = get_avg_of_other_zones(zone_eflh, zone_name)
+      eflh_diff = (avg_eflh - zone_eflh[zone_name]).abs
+
+      if max_load_diff >= load_limit && eflh_diff > eflh_limit
+        # Add zone to secondary list, and remove from hashes
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Zone moved to PSZ due to load AND eflh: #{zone_name}; load limit = #{load_limit}, eflh_limit = #{eflh_limit}")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "load diff = #{max_load_diff}, this zone load = #{max_load}, avg zone load = #{avg_max_load}")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "eflh diff = #{eflh_diff}, this zone load = #{zone_eflh[zone_name]}, avg zone eflh = #{avg_eflh}")
+
+        sec_zones << zone
+        sec_zone_names << zone_name
+        zone_eflh.delete(zone_name)
+        zone_max_load.delete(zone_name)
+      end
+    end
+
+    # Eliminate worst zone where EFLH exceeds limit
+    # Repeat until all zones are within limit
+    num_zones = zone_eflh.size
+    avg_eflh_save = 0
+    max_zone_name = ''
+    max_eflh_diff = 0
+    max_zone = nil
+    (1..num_zones).each do |izone|
+      # This loop is to iterate to eliminate one zone at a time
+      max_eflh_diff = 0
+      zones.each do |zone|
+        # This loop finds the worst remaining zone to eliminate if above threshold
+        zone_name = zone.name.get.to_s
+        next if !zone_eflh.key?(zone_name)
+
+        avg_eflh = get_avg_of_other_zones(zone_eflh, zone_name)
+        eflh_diff = (avg_eflh - zone_eflh[zone_name]).abs
+        if eflh_diff > max_eflh_diff
+          max_eflh_diff = eflh_diff
+          max_zone_name = zone_name
+          max_zone = zone
+          avg_eflh_save = avg_eflh
+        end
+      end
+      if max_eflh_diff > eflh_limit
+        # Move the max Zone to the secondary list
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Zone moved to PSZ due to eflh: #{max_zone_name}; limit = #{eflh_limit}")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "eflh diff = #{max_eflh_diff}, this zone load = #{zone_eflh[max_zone_name]}, avg zone eflh = #{avg_eflh_save}")
+        sec_zones << max_zone
+        sec_zone_names << max_zone_name
+        zone_eflh.delete(max_zone_name)
+        zone_max_load.delete(max_zone_name)
+      else
+        # All zones are now within the limit, exit the iteration
+        break
+      end
+    end
+
+    # Eliminate worst zone where max load exceeds limit and repeat until all pass
+    num_zones = zone_eflh.size
+    highest_max_load_diff = -1
+    highest_zone = nil
+    highest_zone_name = ''
+    highest_max_load = 0
+    avg_max_load_save = 0
+
+    (1..num_zones).each do |izone|
+      # This loop is to iterate to eliminate one zone at a time
+      highest_max_load_diff = 0
+      zones.each do |zone|
+        # This loop finds the worst remaining zone to eliminate if above threshold
+        zone_name = zone.name.get.to_s
+        next if !zone_max_load.key?(zone_name)
+
+        max_load = zone_max_load[zone_name]
+        avg_max_load = get_wtd_avg_of_other_zones(zone_max_load, zone_area, zone_name)
+        max_load_diff = (max_load - avg_max_load).abs
+        if max_load_diff >= highest_max_load_diff
+          highest_max_load_diff = max_load_diff
+          highest_zone_name = zone_name
+          highest_zone = zone
+          highest_max_load = max_load
+          avg_max_load_save = avg_max_load
+        end
+      end
+      if highest_max_load_diff > load_limit
+        # Move the max Zone to the secondary list
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Zone moved to PSZ due to load: #{highest_zone_name}; load limit = #{load_limit}")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "load diff = #{highest_max_load_diff}, this zone load = #{highest_max_load}, avg zone load = #{avg_max_load_save}")
+        sec_zones << highest_zone
+        sec_zone_names << highest_zone_name
+        zone_eflh.delete(highest_zone_name)
+        zone_max_load.delete(highest_zone_name)
+      else
+        # All zones are now within the limit, exit the iteration
+        break
+      end
+    end
+
+    # Place remaining zones in multizone system list
+    zone_eflh.each_key do |key|
+      zones.each do |zone|
+        if key == zone.name.get.to_s
+          pri_zones << zone
+          pri_zone_names << key
+        end
+      end
+    end
+
+    # Report out the primary vs. secondary zones
+    unless pri_zone_names.empty?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Primary system zones = #{pri_zone_names.join(', ')}.")
+    end
+    unless sec_zone_names.empty?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
+    end
+
+    return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs }
+  end
+
 end
+

@@ -149,4 +149,22 @@ class ASHRAE901PRM < Standard
     # assuming that all supply air passes through all devices
     return fan_pwr_adjustment_in_wc * dsn_zone_air_flow_cfm / 4131
   end
+
+  # Identify if zone has district energy for occ_and_fuel_type method
+  # @param themal_zone
+  # @return [string] with applicable DistrictHeating and/or DistrictCooling 
+  def thermal_zone_get_zone_fuels_for_occ_and_fuel_type(zone)
+    zone_fuels = ''
+    htg_fuels = zone.heating_fuels
+    if htg_fuels.include?('DistrictHeating')
+      zone_fuels = 'DistrictHeating'
+    end
+    clg_fuels = zone.cooling_fuels
+    if clg_fuels.include?('DistrictCooling')
+      zone_fuels += 'DistrictCooling'
+    end
+    return zone_fuels
+  end
+
+
 end
