@@ -1063,11 +1063,17 @@ class ASHRAE901PRM < Standard
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::Model::Model] Openstudio model
   def model_raise_user_model_dcv_errors(model)
+    #TODO JXL add log msgs to PRM logger
     model.getThermalZones.each do |thermal_zone|
       if thermal_zone.additionalProperties.getFeatureAsBoolean('zone DCV implemented in user model').get &&
          (!thermal_zone.additionalProperties.getFeatureAsBoolean('zone dcv required by 901').get ||
            !thermal_zone.additionalProperties.getFeatureAsBoolean('airloop dcv required by 901').get)
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "For thermal zone #{thermal_zone.name}, ASHRAE 90.1 2019 6.4.3.8 does NOT require this zone to have demand control ventilation, but it was implemented in the user model, Appendix G baseline generation will continue!")
+        if thermal_zone.additionalProperties.hasFeature('apxg no need to have DCV')
+          if !thermal_zone.additionalProperties.getFeatureAsBoolean('apxg no need to have DCV').get
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Moreover, for thermal zone #{thermal_zone.name}, Appendix G baseline model will have DCV based on ASHRAE 90.1 2019 G3.1.2.5")
+          end
+        end
       end
       if thermal_zone.additionalProperties.getFeatureAsBoolean('zone dcv required by 901').get &&
          thermal_zone.additionalProperties.getFeatureAsBoolean('airloop dcv required by 901').get &&

@@ -249,8 +249,8 @@ class Standard
       model_mark_zone_dcv_existence(model)
       model_add_dcv_user_exception_properties(model)
       model_add_dcv_requirement_properties(model)
-      model_raise_user_model_dcv_errors(model)
       model_add_apxg_dcv_properties(model)
+      model_raise_user_model_dcv_errors(model)
 
       # Remove all HVAC from model, excluding service water heating
       model_remove_prm_hvac(model)
