@@ -154,58 +154,6 @@ class Standard
       # Site shading isn't rotated
       model_rotate(model, degs) unless degs == 0
 
-      # Perform a sizing run of the proposed model.
-      #
-      # Among others, one of the goal is to get individual
-      # space load to determine each space's conditioning
-      # type: conditioned, unconditioned, semiheated.
-      if model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
-        # Set up some special reports to be used for baseline system selection later
-        # Zone return air flows
-        node_list = []
-        var_name = 'System Node Standard Density Volume Flow Rate'
-        frequency = 'hourly'
-        model.getThermalZones.each do |zone|
-          port_list = zone.returnPortList
-          port_list_objects = port_list.modelObjects
-          port_list_objects.each do |node|
-            node_name = node.nameString
-            node_list << node_name
-            output = OpenStudio::Model::OutputVariable.new(var_name, model)
-            output.setKeyValue(node_name)
-            output.setReportingFrequency(frequency)
-          end
-        end
-
-        # air loop relief air flows
-        var_name = 'System Node Standard Density Volume Flow Rate'
-        frequency = 'hourly'
-        model.getAirLoopHVACs.sort.each do |air_loop_hvac|
-          relief_node = air_loop_hvac.reliefAirNode.get
-          output = OpenStudio::Model::OutputVariable.new(var_name, model)
-          output.setKeyValue(relief_node.nameString)
-          output.setReportingFrequency(frequency)
-        end
-
-        # Run the sizing run
-        if !model.sqlFile.is_initialized && model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
-          return false
-        end
-
-        # Set baseline model space conditioning category based on proposed model
-        model.getSpaces.each do |space|
-          # Get conditioning category at the space level
-          space_conditioning_category = space_conditioning_category(space)
-
-          # Set space conditioning category
-          space.additionalProperties.setFeature('space_conditioning_category', space_conditioning_category)
-        end
-
-        # The following should be done after a sizing run of the proposed model
-        # because the proposed model zone design air flow is needed
-        model_identify_return_air_type(model)
-      end
-
       # Remove external shading devices
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Removing External Shading Devices ***')
       model_remove_external_shading_devices(model)
