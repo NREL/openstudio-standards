@@ -1,5 +1,4 @@
 require_relative '../helpers/minitest_helper'
-require_relative '../helpers/create_doe_prototype_helper'
 
 # Test suite for the ASHRAE 90.1 appendix G Performance
 # Rating Method (PRM) baseline automation implementation
@@ -19,6 +18,28 @@ class AppendixGPRMTests < Minitest::Test
   # Global variable to ...
   # Make sure to turn it to false so CI will not fail for time out.
   GENERATE_PRM_LOG = false
+
+  def prm_test_helper(test_string, require_prototype=true, require_baseline=true)
+    # Get list of unique prototypes
+    prototypes_to_generate = get_prototype_to_generate(test_string, @@prototype_list)
+    # Generate all unique prototypes
+    prototypes_generated = generate_prototypes(prototypes_to_generate)
+    # Create all unique baseline
+    prototypes_baseline_generated = generate_baseline(prototypes_generated, prototypes_to_generate)
+
+    model_hash = {}
+    if require_prototype
+      prototypes = assign_prototypes(prototypes_generated, [test_string], prototypes_to_generate)
+      model_hash['prototype'] = prototypes[test_string]
+    end
+    if require_baseline
+      # Assign prototypes and baseline to each test
+      prototypes_base = assign_prototypes(prototypes_baseline_generated, [test_string], prototypes_to_generate)
+      model_hash['baseline'] = prototypes_base[test_string]
+    end
+    return model_hash
+  end
+
   # Generate one of the ASHRAE 90.1 prototype model included in openstudio-standards.
   #
   # @param prototypes_to_generate [Array] List of prototypes to generate, see prototype_list.json to see the structure of the list
@@ -3223,86 +3244,163 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
-  # Run test suite for the ASHRAE 90.1 appendix G Performance
-  # Rating Method (PRM) baseline automation implementation
-  # in openstudio-standards.
-  def test_create_prototype_baseline_building
-    # Select test to run
-    tests = [
-      'wwr',
-      'srr',
-      'envelope',
-      'lpd',
-      'isresidential',
-      'daylighting_control',
-      'light_occ_sensor',
-      'infiltration',
-      'vav_fan_curve',
-      'pipe_insulation',
-      'hvac_baseline',
-      'hvac_psz_split_from_mz',
-      'plant_temp_reset_ctrl',
-      'sat_ctrl',
-      'number_of_boilers',
-      'number_of_chillers',
-      'number_of_cooling_towers',
-      'hvac_sizing',
-      'preheat_coil_ctrl',
-      'vav_min_sp',
-      'multi_bldg_handling',
-      'economizer_exception',
-      'hvac_efficiency',
-      'unenclosed_spaces',
-      'f_c_factors',
-      'fan_power_credits',
-      'lpd_userdata_handling',
-      'building_rotation_check',
-      'pe_userdata_handling',
-      'unmet_load_hours',
-      'dcv'
-    ]
+  def test_wwr
+    model_hash = prm_test_helper('wwr', require_prototype=false, require_baseline=true)
+    check_wwr(model_hash['baseline'])
+  end
 
-    # Get list of unique prototypes
-    prototypes_to_generate = get_prototype_to_generate(tests, @@prototype_list)
-    # Generate all unique prototypes
-    prototypes_generated = generate_prototypes(prototypes_to_generate)
-    # Create all unique baseline
-    prototypes_baseline_generated = generate_baseline(prototypes_generated, prototypes_to_generate)
-    # Assign prototypes and baseline to each test
-    prototypes = assign_prototypes(prototypes_generated, tests, prototypes_to_generate)
-    prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
-    # Run tests
-    check_preheat_coil_ctrl(prototypes_base['preheat_coil_ctrl']) if tests.include? 'preheat_coil_ctrl'
-    check_hw_chw_reset(prototypes_base['plant_temp_reset_ctrl']) if tests.include? 'plant_temp_reset_ctrl'
-    check_wwr(prototypes_base['wwr']) if tests.include? 'wwr'
-    check_srr(prototypes_base['srr']) if tests.include? 'srr'
-    check_daylighting_control(prototypes_base['daylighting_control']) if tests.include? 'daylighting_control'
-    check_residential_flag(prototypes_base['isresidential']) if tests.include? 'isresidential'
-    check_envelope(prototypes_base['envelope']) if tests.include? 'envelope'
-    check_lpd(prototypes_base['lpd']) if tests.include? 'lpd'
-    check_light_occ_sensor(prototypes['light_occ_sensor'], prototypes_base['light_occ_sensor']) if tests.include? 'light_occ_sensor'
-    check_infiltration(prototypes['infiltration'], prototypes_base['infiltration']) if tests.include? 'infiltration'
-    check_variable_speed_fan_power(prototypes_base['vav_fan_curve']) if tests.include? 'vav_fan_curve'
-    check_pipe_insulation(prototypes_base['pipe_insulation']) if tests.include? 'pipe_insulation'
-    check_hvac(prototypes_base['hvac_baseline']) if tests.include? 'hvac_baseline'
-    check_sat_ctrl(prototypes_base['sat_ctrl']) if tests.include? 'sat_ctrl'
-    check_number_of_boilers(prototypes_base['number_of_boilers']) if tests.include? 'number_of_boilers'
-    check_number_of_chillers(prototypes_base['number_of_chillers']) if tests.include? 'number_of_chillers'
-    check_number_of_cooling_towers(prototypes_base['number_of_cooling_towers']) if tests.include? 'number_of_cooling_towers'
-    check_hvac_sizing(prototypes_base['hvac_sizing']) if tests.include? 'hvac_sizing'
-    check_psz_split_from_mz(prototypes_base['hvac_psz_split_from_mz']) if tests.include? 'hvac_psz_split_from_mz'
-    check_vav_min_sp(prototypes_base['vav_min_sp']) if tests.include? 'vav_min_sp'
-    check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
-    check_multi_lpd_handling(prototypes_base['lpd_userdata_handling']) if tests.include? 'lpd_userdata_handling'
-    check_economizer_exception(prototypes_base['economizer_exception']) if tests.include? 'economizer_exception'
-    check_power_equipment_handling(prototypes_base['pe_userdata_handling']) if tests.include? 'pe_userdata_handling'
-    check_hvac_efficiency(prototypes_base['hvac_efficiency']) if tests.include? 'hvac_efficiency'
-    check_building_rotation_exception(prototypes_base['building_rotation_check']) if tests.include? 'building_rotation_check'
-    check_unenclosed_spaces(prototypes_base['unenclosed_spaces']) if tests.include? 'unenclosed_spaces'
-    check_f_c_factors(prototypes_base['f_c_factors']) if tests.include? 'f_c_factors'
-    check_fan_power_credits(prototypes_base['fan_power_credits']) if tests.include? 'fan_power_credits'
-    check_return_air_type(prototypes_base['return_air_type']) if tests.include? 'return_air_type'
-    check_unmet_load_hours(prototypes_base['unmet_load_hours']) if tests.include? 'unmet_load_hours'
-    check_dcv(prototypes_base['dcv']) if tests.include? 'dcv'
+  def test_srr
+    model_hash = prm_test_helper('srr', require_prototype=false, require_baseline=true)
+    check_srr(model_hash['baseline'])
+  end
+
+  def test_envelope
+    model_hash = prm_test_helper('envelope', require_prototype=false, require_baseline=true)
+    check_envelope(model_hash['baseline'])
+  end
+
+  def test_lpd
+    model_hash = prm_test_helper('lpd', require_prototype=false, require_baseline=true)
+    check_lpd(model_hash['baseline'])
+  end
+
+  def test_isresidential
+    model_hash = prm_test_helper('isresidential', require_prototype=false, require_baseline=true)
+    check_residential_flag(model_hash['baseline'])
+  end
+
+  def test_daylighting_control
+    model_hash = prm_test_helper('daylighting_control', require_prototype=false, require_baseline=true)
+    check_daylighting_control(model_hash['baseline'])
+  end
+
+  def test_light_occ_sensor
+    model_hash = prm_test_helper('light_occ_sensor', require_prototype=true, require_baseline=true)
+    check_light_occ_sensor(model_hash['prototype'], model_hash['baseline'])
+  end
+
+  def test_infiltration
+    model_hash = prm_test_helper('infiltration', require_prototype=true, require_baseline=true)
+    check_infiltration(model_hash['prototype'], model_hash['baseline'])
+  end
+
+  def test_vav_fan_curve
+    model_hash = prm_test_helper('vav_fan_curve', require_prototype=false, require_baseline=true)
+    check_variable_speed_fan_power(model_hash['baseline'])
+  end
+
+  def test_pipe_insulation
+    model_hash = prm_test_helper('pipe_insulation', require_prototype=false, require_baseline=true)
+    check_pipe_insulation(model_hash['baseline'])
+  end
+
+  def test_hvac_baseline
+    model_hash = prm_test_helper('hvac_baseline', require_prototype=false, require_baseline=true)
+    check_hvac(model_hash['baseline'])
+  end
+
+  def test_hvac_psz_split_from_mz
+    model_hash = prm_test_helper('hvac_psz_split_from_mz', require_prototype=false, require_baseline=true)
+    check_psz_split_from_mz(model_hash['baseline'])
+  end
+
+  def test_plant_temp_reset_ctrl
+    model_hash = prm_test_helper('plant_temp_reset_ctrl', require_prototype=false, require_baseline=true)
+    check_hw_chw_reset(model_hash['baseline'])
+  end
+
+  def test_sat_ctrl
+    model_hash = prm_test_helper('sat_ctrl', require_prototype=false, require_baseline=true)
+    check_sat_ctrl(model_hash['baseline'])
+  end
+
+  def test_number_of_boilers
+    model_hash = prm_test_helper('number_of_boilers', require_prototype=false, require_baseline=true)
+    check_number_of_boilers(model_hash['baseline'])
+  end
+
+  def test_number_of_chillers
+    model_hash = prm_test_helper('number_of_chillers', require_prototype=false, require_baseline=true)
+    check_number_of_chillers(model_hash['baseline'])
+  end
+
+  def test_number_of_cooling_towers
+    model_hash = prm_test_helper('number_of_cooling_towers', require_prototype=false, require_baseline=true)
+    check_number_of_cooling_towers(model_hash['baseline']) if tests.include? 'number_of_cooling_towers'
+  end
+
+  def test_hvac_sizing
+    model_hash = prm_test_helper('hvac_sizing', require_prototype=false, require_baseline=true)
+    check_hvac_sizing(model_hash['baseline'])
+  end
+
+  def test_preheat_coil_ctrl
+    model_hash = prm_test_helper('preheat_coil_ctrl', require_prototype=false, require_baseline=true)
+    check_preheat_coil_ctrl(model_hash['baseline'])
+  end
+
+  def test_vav_min_sp
+    model_hash = prm_test_helper('vav_min_sp', require_prototype=false, require_baseline=true)
+    check_vav_min_sp(model_hash['baseline'])
+  end
+
+  def test_multi_bldg_handling
+    model_hash = prm_test_helper('multi_bldg_handling', require_prototype=false, require_baseline=true)
+    check_multi_bldg_handling(model_hash['baseline'])
+  end
+
+  def test_economizer_exception
+    model_hash = prm_test_helper('economizer_exception', require_prototype=false, require_baseline=true)
+    check_economizer_exception(model_hash['baseline'])
+  end
+
+  def test_hvac_efficiency
+    model_hash = prm_test_helper('hvac_efficiency', require_prototype=false, require_baseline=true)
+    check_hvac_efficiency(model_hash['baseline'])
+  end
+
+  def test_unenclosed_spaces
+    model_hash = prm_test_helper('unenclosed_spaces', require_prototype=false, require_baseline=true)
+    check_unenclosed_spaces(model_hash['baseline'])
+  end
+
+  def test_f_c_factors
+    model_hash = prm_test_helper('f_c_factors', require_prototype=false, require_baseline=true)
+    check_f_c_factors(model_hash['baseline'])
+  end
+
+  def test_fan_power_credits
+    model_hash = prm_test_helper('fan_power_credits', require_prototype=false, require_baseline=true)
+    check_fan_power_credits(model_hash['baseline']) if tests.include? 'fan_power_credits'
+  end
+
+  def test_lpd_userdata_handling
+    model_hash = prm_test_helper('lpd_userdata_handling', require_prototype=false, require_baseline=true)
+    check_multi_lpd_handling(model_hash['baseline'])
+  end
+
+  def test_building_rotation_check
+    model_hash = prm_test_helper('building_rotation_check', require_prototype=false, require_baseline=true)
+    check_building_rotation_exception(model_hash['baseline'])
+  end
+
+  def test_pe_userdata_handling
+    model_hash = prm_test_helper('pe_userdata_handling', require_prototype=false, require_baseline=true)
+    check_power_equipment_handling(model_hash['baseline'])
+  end
+
+  def test_unmet_load_hours
+    model_hash = prm_test_helper('unmet_load_hours', require_prototype=false, require_baseline=true)
+    check_unmet_load_hours(model_hash['baseline'])
+  end
+
+  def test_dcv
+    model_hash = prm_test_helper('dcv', require_prototype=false, require_baseline=true)
+    check_dcv(model_hash['baseline'])
+  end
+
+  def test_return_air_type
+    model_hash = prm_test_helper('return_air_type', require_prototype=false, require_baseline=true)
+    check_return_air_type(model_hash['baseline'])
   end
 end
