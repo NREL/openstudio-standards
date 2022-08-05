@@ -105,7 +105,7 @@ class Standard
         port_list_objects.each do |node|
           node_name = node.nameString
           node_list << node_name
-          output = OpenStudio::Model::OutputVariable.new(var_name, model)
+          output = OpenStudio::Model::OutputVariable.new(var_name, user_model)
           output.setKeyValue(node_name)
           output.setReportingFrequency(frequency)
         end
@@ -122,7 +122,7 @@ class Standard
       end
 
       # Run the sizing run
-      if !user_model.sqlFile.is_initialized && model_run_simulation_and_log_errors(user_model, "#{sizing_run_dir}/SR_PROP") == false
+      if !user_model.sqlFile.is_initialized && model_run_sizing_run(user_model, "#{sizing_run_dir}/SR_PROP") == false
         return false
       end
 
