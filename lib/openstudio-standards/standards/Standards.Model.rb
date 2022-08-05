@@ -87,6 +87,10 @@ class Standard
 
     # Define different orientation from original orientation
     # for each individual baseline models
+    # Need to run proposed model sizing simulation if no sql data is available
+    unless user_model.sqlFile.is_initialized
+      model_run_sizing_run(user_model, "#{sizing_run_dir}/SRORT")
+    end
     degs_from_org = run_all_orientations(run_all_orients, user_model) ? [0, 90, 180, 270] : [0]
 
     # Create baseline model for each orientation
@@ -135,7 +139,7 @@ class Standard
         end
 
         # Run the sizing run
-        if model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
+        if !model.sqlFile.is_initialized && model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
           return false
         end
 
