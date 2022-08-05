@@ -122,7 +122,7 @@ class AppendixGPRMTests < Minitest::Test
       model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod_str}"
       proto_run_dir = "#{@test_dir}/#{model_name}"
 
-      if not user_data_dir.equal?('no_user_data')
+      if not user_data_dir == 'no_user_data'
         json_path = @prototype_creator.convert_userdata_csv_to_json("#{@@json_dir}/#{user_data_dir}", proto_run_dir)
         @prototype_creator.load_userdata_to_standards_database(json_path)
       end
@@ -786,6 +786,253 @@ class AppendixGPRMTests < Minitest::Test
         next
       end
     end
+  end
+
+  def check_dcv(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, user_data_dir, mods = prototype
+
+      # to simplify testing procedures, for all test cases below, the following are true
+      #   - zone area is larger than 500 sqft
+      #   - air loop has economizer
+
+      tc_ids = nil
+      mods.each do |mod|
+        if mod[0] == 'mark_test_case_no'
+          tc_ids = mod[1]
+        end
+      end
+      if tc_ids.nil?
+        assert(false, 'mark_test_case_no mod not set, cannot proceed with DCV test check_dcv')
+      end
+
+      tc_ids.each do |tc_id|
+        case tc_id
+        when 1
+          # test case 1:
+          #   - DCV should be in the user model (zone ppl density > 25 ppl/ksqft, no user exception)
+          #   - DCV should be in the baseline (air loop oa flow > 3000 cfm && zone ppl density > 100 ppl/ksqft)
+          #   - DCV is implemented in user model
+          # expected result: baseline implements DCV
+          # test case setting:
+          #   - Cafeteria
+          #   - user model air loop oa flow 3153 cfm
+          #   - no user data needed
+          #   - zone ppl density 101 [through ppl density modifier]
+          #   - DCV implemented in the user model
+          #     - at the airloop level [through modifier]
+          #     - at the zone level, zone oa spec per person 0.003539605824
+          zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          assert(dcv_is_on(zone, airloop))
+
+        when 2
+          # test case 2:
+          #   - DCV should not be in the user model (zone ppl density > 25 ppl/ksqft, but has ZONE user exception)
+          #   - DCV should be in the baseline (air loop oa flow > 3000 cfm && zone ppl density > 100 ppl/ksqft)
+          #   - DCV is implemented in user model
+          # expected result: baseline implements DCV but prompts warning (user model has DCV but meet exception)
+          # test case setting:
+          #   - Cafeteria
+          #   - user model air loop oa flow 3153 cfm
+          #   - zone ppl density 101 [through ppl density modifier]
+          #   - user data specifies ZONE DCV exception is true
+          #   - DCV implemented in the user model
+          #     - at the airloop level [through modifier]
+          #     - at the zone level, zone oa spec per person 0.003539605824
+          zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          # check warning
+          assert(dcv_is_on(zone, airloop))
+
+        when 3
+          # test case 3:
+          #   - DCV should be in the user model (zone ppl density > 25 ppl/ksqft, no user exception)
+          #   - DCV should be in the baseline model (air loop oa flow > 3000 cfm && zone ppl density > 100 ppl/ksqft)
+          #   - DCV is NOT implemented in user model
+          # expected result: error and terminate
+          # test case setting:
+          #   - Cafeteria
+          #   - user model air loop oa flow 3153 cfm
+          #   - zone ppl density 101 [through ppl density modifier]
+          #   - no user data
+          #   - DCV not implemented in the user model
+          #     - at the airloop level by default
+          #     - at the zone level [through remove_zone_oa_per_person_spec modifier] (optional)
+          zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          # check error and terminate
+          assert(!dcv_is_on(zone, airloop))
+
+        when 4
+          # test case 4:
+          #   - DCV should not be in the user model (zone ppl density > 25 ppl/ksqft, but has AIR LOOP user exception)
+          #   - DCV should be in the baseline model (air loop oa flow > 3000 cfm && zone ppl density > 100 ppl/ksqft)
+          #   - DCV is NOT implemented in user model
+          # expected result: no DCV in baseline model
+          # test case setting:
+          #   - Cafeteria
+          #   - user model air loop oa flow 3153 cfm
+          #   - zone ppl density 101 [through ppl density modifier]
+          #   - user data specifies AIR LOOP DCV exception is true
+          #   - DCV not implemented in the user model
+          #     - at the airloop level by default
+          #     - at the zone level [through remove_zone_oa_per_person_spec modifier] (optional)
+          zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          assert(!dcv_is_on(zone, airloop))
+
+        when 5
+          # test 5
+          #   - DCV should be in the user model (zone ppl density > 25 ppl/ksqft, no user exception)
+          #   - DCV should NOT be in the baseline model (air loop oa flow < 3000 cfm || zone ppl density < 100 ppl/ksqft)
+          #   - DCV is implmented in user model
+          # expected result: no DCV in baseline model
+          # test case setting:
+          #   - Cafeteria
+          #   - user model air loop oa flow 3153 cfm
+          #   - zone ppl density 99.99
+          #   - no user exception
+          #   - DCV implemented in the user model
+          #     - at the airloop level [through modifier]
+          #     - at the zone level, zone oa spec per person 0.003539605824
+          zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          assert(!dcv_is_on(zone, airloop))
+
+        when 6
+          # test 6
+          #   - DCV should NOT be in the user model (zone ppl density > 25 ppl/ksqft, but has ZONE user exception)
+          #   - DCV should NOT be in the baseline model (air loop oa flow < 3000 cfm || zone ppl density < 100 ppl/ksqft)
+          #   - DCV is NOT implemented in user model
+          # expected result: NO DCV in baseline model
+          # test case setting:
+          #   - Cafeteria
+          #   - user model air loop oa flow 3153 cfm
+          #   - zone ppl density 99.99
+          #   - user data specifies ZONE DCV exception is true
+          #   - DCV NOT implemented in the user model
+          #     - at the airloop level by default
+          #     - at the zone level [through remove_zone_oa_per_person_spec modifier] (optional)
+          zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          assert(!dcv_is_on(zone, airloop))
+
+        when 7
+          # test 7
+          #   - DCV should NOT be in the user model (zone ppl density < 25 ppl/ksqft)
+          #   - DCV should NOT be in the baseline model (air loop oa flow < 3000 cfm || zone ppl density < 100 ppl/ksqft)
+          #   - DCV is implemented in user model
+          # expected result: no DCV in baseline model
+          # test case setting:
+          #   - Kitchen
+          #   - user model air loop oa flow 528 cfm
+          #   - zone ppl density 14.93
+          #   - no user exception
+          #   - DCV implemented in the user model
+          #     - at the airloop level [through modifier]
+          #     - at the zone level, zone oa spec per person 0.003539605824
+          zone = model_baseline.getThermalZoneByName('Kitchen_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          assert(!dcv_is_on(zone, airloop))
+
+        when 8
+          # test 8
+          #   - DCV should NOT be in the user model (zone ppl denstiy < 25 ppl/ksqft)
+          #   - DCV should NOT be in the baseline model (air loop oa flow < 3000 cfm || zone ppl density < 100 ppl/ksqft)
+          #   - DCV is NOT implemented in user model
+          # expected result: no DCV in baseline model
+          # test case setting:
+          #   - Kitchen
+          #   - user model air loop oa flow 528 cfm
+          #   - zone ppl density 14.93
+          #   - no user exception
+          #   - DCV not implemented in the user model
+          #     - at the airloop level by default
+          #     - at the zone level [through remove_zone_oa_per_person_spec modifier] (optional)
+          zone = model_baseline.getThermalZoneByName('Kitchen_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          assert(!dcv_is_on(zone, airloop))
+        else
+          assert(false, "ERROR! #{tc_id} not a valid test case id for check_dcv")
+        end
+      end
+    end
+  end
+
+  def dcv_is_on(thermal_zone, air_loop_hvac)
+    # check air loop level DCV enabled
+    return false unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+
+    oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+    controller_oa = oa_system.getControllerOutdoorAir
+    controller_mv = controller_oa.controllerMechanicalVentilation
+    return false unless controller_mv.demandControlledVentilation == true
+
+    # check zone OA flow per person > 0
+    zone_dcv = false
+    thermal_zone.spaces.each do |space|
+      dsn_oa = space.designSpecificationOutdoorAir
+      next if dsn_oa.empty?
+
+      dsn_oa = dsn_oa.get
+      next if dsn_oa.outdoorAirMethod == 'Maximum'
+
+      if dsn_oa.outdoorAirFlowperPerson > 0
+        # only in this case the thermal zone is considered to be implemented with DCV
+        zone_dcv = true
+      end
+    end
+
+    return zone_dcv
+  end
+
+  def mark_test_case_no(model, arguments)
+    # arguments should be a list of test case identifiers
+    arguments
+    return model
+  end
+
+  def remove_zone_oa_per_person_spec(model, arguments)
+    std = Standard.build('90.1-PRM-2019')
+    # argument contains a list of zone names to remove oa per person specification
+    arguments.each do |zone_name|
+      thermal_zone = model.getThermalZoneByName(zone_name).get
+      std.thermal_zone_convert_oa_req_to_per_area(thermal_zone)
+    end
+    return model
+  end
+
+  def enable_airloop_dcv(model, arguments)
+    # arguments contains a list of air loop names to enable dcv
+    arguments.each do |air_loop_name|
+      air_loop_hvac = model.getAirLoopHVACByName(air_loop_name).get
+      # following logic is adopted from Standard.air_loop_hvac_enable_demand_control_ventilation
+      controller_oa = nil
+      controller_mv = nil
+      if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+        oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+        controller_oa = oa_system.getControllerOutdoorAir
+        controller_mv = controller_oa.controllerMechanicalVentilation
+      end
+      # Change the min flow rate in the controller outdoor air
+      controller_oa.setMinimumOutdoorAirFlowRate(0.0)
+
+      # Enable DCV in the controller mechanical ventilation
+      controller_mv.setDemandControlledVentilation(true)
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Enabled DCV.")
+    end
+    return model
+  end
+
+  def change_zone_num_ppl(model, arguments)
+    # arguments contains an array with two elements, of which the first element is thermal zone name,
+    # the second element is the number of people this zone is modified to
+    zone_name, num_ppl = arguments
+    thermal_zone = model.getThermalZoneByName(zone_name).get
+    space0 = thermal_zone.spaces[0] # assume only change number of people in the first space
+    space0.setNumberOfPeople(num_ppl)
+    return model
   end
 
   # Check lighting occ sensor
@@ -3034,6 +3281,7 @@ class AppendixGPRMTests < Minitest::Test
       'building_rotation_check',
       'pe_userdata_handling',
       'unmet_load_hours',
+      'dcv'
     ]
 
     # Get list of unique prototypes
@@ -3077,5 +3325,6 @@ class AppendixGPRMTests < Minitest::Test
     check_fan_power_credits(prototypes_base['fan_power_credits']) if tests.include? 'fan_power_credits'
     check_return_air_type(prototypes_base['return_air_type']) if tests.include? 'return_air_type'
     check_unmet_load_hours(prototypes_base['unmet_load_hours']) if tests.include? 'unmet_load_hours'
+    check_dcv(prototypes_base['dcv']) if tests.include? 'dcv'
   end
 end
