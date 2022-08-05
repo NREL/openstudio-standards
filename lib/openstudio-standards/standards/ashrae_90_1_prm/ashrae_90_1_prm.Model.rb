@@ -1859,7 +1859,7 @@ class ASHRAE901PRM < Standard
   # @param [OpenStudio::Model::Model] OpenStudio model object
   def handle_zone_hvac_user_input_data(model)
     user_zone_hvac = @standards_data.key?('userdata_zone_hvac') ? @standards_data['userdata_zone_hvac'] : nil
-    return unless !user_zone_hvac.empty?
+    return unless user_zone_hvac && !user_zone_hvac.empty?
 
     zone_hvac_equipment = model.getZoneHVACComponents
     if zone_hvac_equipment.empty?
