@@ -157,6 +157,7 @@ class BTAPData
     building_data['cost_equipment_heating_and_cooling_total_cost_per_m_sq'] = (cost_result['totals']['heating_and_cooling']) / @conditioned_floor_area_m_sq
     building_data['cost_equipment_shw_total_cost_per_m_sq'] = (cost_result['totals']['shw']) / @conditioned_floor_area_m_sq
     building_data['cost_equipment_ventilation_total_cost_per_m_sq'] = (cost_result['totals']['ventilation']) / @conditioned_floor_area_m_sq
+    building_data['cost_equipment_renewables_total_cost_per_m_sq'] = (cost_result['totals']['renewables']) / @conditioned_floor_area_m_sq
     building_data['cost_equipment_total_cost_per_m_sq'] = (cost_result['totals']['grand_total']) / @conditioned_floor_area_m_sq
     # building_data.merge!(cost_result['envelope'].select{|k,v| k!='construction_costs' && k!='total_envelope_cost'})
     # building_data.merge!(cost_result['shw'].select{|k,v| k!='shw_total'})
