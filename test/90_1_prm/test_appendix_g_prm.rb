@@ -3259,7 +3259,8 @@ class AppendixGPRMTests < Minitest::Test
       'building_rotation_check',
       'pe_userdata_handling',
       'unmet_load_hours',
-      'dcv'
+      'dcv',
+      'exterior_lighting',
     ]
 
     # Get list of unique prototypes
@@ -3304,5 +3305,6 @@ class AppendixGPRMTests < Minitest::Test
     check_return_air_type(prototypes_base['return_air_type']) if tests.include? 'return_air_type'
     check_unmet_load_hours(prototypes_base['unmet_load_hours']) if tests.include? 'unmet_load_hours'
     check_dcv(prototypes_base['dcv']) if tests.include? 'dcv'
+    check_exterior_lighting(prototypes_base['exterior_lighting']) if tests.include? 'exterior_lighting'
   end
 end
