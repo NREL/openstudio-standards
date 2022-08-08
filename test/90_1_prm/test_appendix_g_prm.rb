@@ -122,7 +122,7 @@ class AppendixGPRMTests < Minitest::Test
       model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod_str}"
       proto_run_dir = "#{@test_dir}/#{model_name}"
 
-      if not user_data_dir.equal?('no_user_data')
+      if not user_data_dir == 'no_user_data'
         json_path = @prototype_creator.convert_userdata_csv_to_json("#{@@json_dir}/#{user_data_dir}", proto_run_dir)
         @prototype_creator.load_userdata_to_standards_database(json_path)
       end
