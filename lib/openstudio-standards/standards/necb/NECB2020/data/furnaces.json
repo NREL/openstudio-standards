@@ -18,7 +18,7 @@
           "minimum_thermal_efficiency": null,
           "minimum_combustion_efficiency": null,
           "efffplr": "FURNACE-EFFPLR-NECB2011",
-          "notes": "From NECB 2020"
+          "notes": "From NECB 2020 Table 5.2.12.1.-O"
         },
         {
           "fluid_type": "Air",
@@ -26,14 +26,14 @@
           "condensing": null,
           "condensing_control": null,
           "minimum_capacity": 225202.0,
-          "maximum_capacity": 3992210.0,
+          "maximum_capacity": 399221.0,
           "start_date": "9/9/1919",
           "end_date": "2999-09-09T00:00:00+00:00",
           "minimum_annual_fuel_utilization_efficiency": null,
           "minimum_thermal_efficiency": 0.81,
           "minimum_combustion_efficiency": null,
           "efffplr": "FURNACE-EFFPLR-NECB2011",
-          "notes": "From NECB 2020"
+          "notes": "From NECB 2020 Table 5.2.12.1.-O"
         }
       ]
     }
