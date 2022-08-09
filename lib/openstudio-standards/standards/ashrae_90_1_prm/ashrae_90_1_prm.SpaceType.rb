@@ -82,7 +82,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
 
         # Remove all other lights objects that have not been identified as unregulated
         if i == 1
-          ref_name = space_type.getFeatureAsString('regulated_lights_name').to_s
+          ref_name = space_type.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
           OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Multiple lights objects found in user model for #{space_type.name}. Baseline schedule will be determined from #{ref_name}")
         end
 
