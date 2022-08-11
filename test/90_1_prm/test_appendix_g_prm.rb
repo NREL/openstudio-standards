@@ -122,7 +122,7 @@ class AppendixGPRMTests < Minitest::Test
       model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod_str}"
       proto_run_dir = "#{@test_dir}/#{model_name}"
 
-      if not user_data_dir.equal?('no_user_data')
+      if not user_data_dir == 'no_user_data'
         json_path = @prototype_creator.convert_userdata_csv_to_json("#{@@json_dir}/#{user_data_dir}", proto_run_dir)
         @prototype_creator.load_userdata_to_standards_database(json_path)
       end
@@ -438,6 +438,52 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  def check_power_equipment_handling(prototypes_base)
+    prototypes_base.each do |prototype_base, baseline_model|
+      base_building_type, base_template, base_climate_Zone, base_user_data_dir, base_mod = prototype_base
+      # user_data_dir match to identify matched propose and baseline
+      if base_user_data_dir == 'userdata_pe_01'
+        # test case 1, apply 5% RPC (0.5 * 0.1) to Office WholeBuilding -Sm Offie Elec Equip
+        base_electric_equipment_schedules = baseline_model.getElectricEquipments[0].schedule.get.to_ScheduleRuleset.get.scheduleRules
+
+        base_electric_equipment_schedules.each do |schedule_rule|
+          receptacle_power_credits = schedule_rule.name.get.split('_')[1].to_f
+          assert((0.05 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.05 (5%) but get #{receptacle_power_credits}")
+        end
+      elsif base_user_data_dir == 'userdata_pe_02'
+        # test case 2, apply 15% RPC (0.15) to Office WholeBuilding -Sm Offie Elec Equip
+        base_electric_equipment_schedules = baseline_model.getElectricEquipments[0].schedule.get.to_ScheduleRuleset.get.scheduleRules
+
+        base_electric_equipment_schedules.each do |schedule_rule|
+          receptacle_power_credits = schedule_rule.name.get.split('_')[1].to_f
+          assert((0.15 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.15 (15%) but get #{receptacle_power_credits}")
+        end
+      elsif base_user_data_dir == 'userdata_pe_03'
+        # test case 3, record motor horsepower, efficiency and whether it is exempt
+        base_electric_equipment = baseline_model.getElectricEquipments[0]
+        base_electric_equipment_ap = base_electric_equipment.additionalProperties
+        assert(base_electric_equipment_ap.hasFeature('motor_horsepower') && base_electric_equipment_ap.getFeatureAsDouble('motor_horsepower').get == 10.0,
+               "motor_horsepower data is missing or incorrect. The motor_horsepower for test case 3 shall be 10.0")
+        assert(base_electric_equipment_ap.hasFeature('motor_efficiency') && base_electric_equipment_ap.getFeatureAsDouble('motor_efficiency').get == 0.72,
+               "motor_efficiency data is missing or incorrect. The motor_efficiency for test case 3 shall be 0.72")
+        assert(base_electric_equipment_ap.hasFeature('motor_is_exempt') && base_electric_equipment_ap.getFeatureAsString('motor_is_exempt').get == 'No',
+               "motor_is_exempt data is missing or incorrect. The motor_is_exempt for test case 3 shall be No")
+      elsif base_user_data_dir == 'userdata_pe_04'
+        baseline_equipments = baseline_model.getElectricEquipments
+        baseline_equipments.each do |equipment|
+          baseline_equipment_name = equipment.name.get
+          if baseline_equipment_name == 'Office WholeBuilding - Sm Office Elec Equip 4'
+            base_electric_equipment_schedules = equipment.schedule.get.to_ScheduleRuleset.get.scheduleRules
+            base_electric_equipment_schedules.each do |schedule_rule|
+              receptacle_power_credits = schedule_rule.name.get.split('_')[1].to_f
+              assert((0.025 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.025 (5%) but get #{receptacle_power_credits}")
+            end
+          end
+        end
+      end
+    end
+  end
+
   # Implement multiple LPD handling from userdata by space, space type and default space_type
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -462,7 +508,10 @@ class AppendixGPRMTests < Minitest::Test
             if space_name_to_lpd_target.key?(space_name)
               target_lpd = space_name_to_lpd_target[space_name]
             end
-            model_lpd = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea.get
+            lights_name = space.spaceType.get.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
+            lights_obj = model_baseline.getLightsByName(lights_name).get
+            model_lpd = lights_obj.lightsDefinition.wattsperSpaceFloorArea.get
+            # model_lpd = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea.get
             assert((target_lpd - model_lpd).abs < 0.001, "Baseline LPD for the #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of the #{space_name} is #{target_lpd} but should be #{model_lpd}.")
           end
         elsif user_data_dir == 'userdata_lpd_02'
@@ -475,7 +524,9 @@ class AppendixGPRMTests < Minitest::Test
             if space_name_to_lpd_target.key?(space_name)
               target_lpd = space_name_to_lpd_target[space_name]
             end
-            model_lpd = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea.get
+            lights_name = space.spaceType.get.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
+            lights_obj = model_baseline.getLightsByName(lights_name).get
+            model_lpd = lights_obj.lightsDefinition.wattsperSpaceFloorArea.get
             assert((target_lpd - model_lpd).abs < 0.001, "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of the #{space_name} is #{target_lpd} but should be #{model_lpd}.")
           end
         end
@@ -507,6 +558,76 @@ class AppendixGPRMTests < Minitest::Test
       space_name.each do |key, value|
         value_si = OpenStudio.convert(value, 'W/ft^2', 'W/m^2').get
         assert(((lpd_baseline[key] - value_si).abs < 0.001), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The LPD of the #{key} is #{lpd_baseline[key]} but should be #{value_si}.")
+      end
+    end
+  end
+
+  # Check exterior lighting via userdata
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_exterior_lighting(prototypes_base)
+
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+
+      if building_type == 'RetailStandalone'
+        model.getExteriorLightss.each do |exterior_lights|
+          ext_lights_def = exterior_lights.exteriorLightsDefinition
+          if exterior_lights.name.get == "NonDimming Exterior Lights Def"
+            design_power = ext_lights_def.designLevel.round(0)
+            assert( design_power == 700, "The exterior lighting for 'NonDimming Exterior Lights Def' in #{building_type}-#{template} has incorrect power. Found: #{design_power}; expected 700.")
+          end
+          if exterior_lights.name.get == "Occ Sensing Exterior Lights Def"
+            design_power = ext_lights_def.designLevel.round(0)
+            assert(design_power == 4328, "The exterior lighting for 'Occ Sensing Exterior Lights Def' #{building_type}-#{template} has incorrect power. Found: #{design_power}; expected 4328.")
+          end
+        end
+
+      end
+    end
+  end
+
+
+  def check_lighting_exceptions(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+
+      if building_type == 'RetailStripmall'
+        # check if nonregulate lights objects still exist
+        found_obj_1 = false
+        found_obj_2 = false
+        model.getLightss.each do |lights|
+          lights_def = lights.lightsDefinition
+          actual_w_area = lights_def.wattsperSpaceFloorArea.to_f
+          # Check if non-regulated lights objects have been removed
+          if lights.name.get == "StripMall Strip mall - type 1 Additional Lights"
+            found_obj_1 = true
+          end
+          if lights.name.get == "StripMall Strip mall - type 2 Additional Lights"
+            found_obj_2 = true
+          end
+
+          # Check power level of regulated lights objects
+          if lights.name.get == "StripMall Strip mall - type 1 Lights"
+            expected_w_area = 16.1458656250646
+            assert( expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
+          end
+          if lights.name.get == "StripMall Strip mall - type 1 Lights"
+            expected_w_area = 16.1458656250646
+            assert( expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
+          end
+          if lights.name.get == "StripMall Strip mall - type 2 Lights"
+            expected_w_area = 16.1458656250646
+            assert( expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
+          end
+          if lights.name.get == "StripMall Strip mall - type 3 Lights"
+            expected_w_area = 16.1458656250646
+            assert( expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
+          end
+
+        end
+        assert( found_obj_1 == true, "The retail display lighting exception user data for in #{building_type}-#{template} has failed to preserve the lights object.")
+        assert( found_obj_2 == true, "The unregulated lighting exception user data for in #{building_type}-#{template} has failed to preserve the lights object.")
       end
     end
   end
@@ -736,6 +857,253 @@ class AppendixGPRMTests < Minitest::Test
         next
       end
     end
+  end
+
+  def check_dcv(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, user_data_dir, mods = prototype
+
+      # to simplify testing procedures, for all test cases below, the following are true
+      #   - zone area is larger than 500 sqft
+      #   - air loop has economizer
+
+      tc_ids = nil
+      mods.each do |mod|
+        if mod[0] == 'mark_test_case_no'
+          tc_ids = mod[1]
+        end
+      end
+      if tc_ids.nil?
+        assert(false, 'mark_test_case_no mod not set, cannot proceed with DCV test check_dcv')
+      end
+
+      tc_ids.each do |tc_id|
+        case tc_id
+        when 1
+          # test case 1:
+          #   - DCV should be in the user model (zone ppl density > 25 ppl/ksqft, no user exception)
+          #   - DCV should be in the baseline (air loop oa flow > 3000 cfm && zone ppl density > 100 ppl/ksqft)
+          #   - DCV is implemented in user model
+          # expected result: baseline implements DCV
+          # test case setting:
+          #   - Cafeteria
+          #   - user model air loop oa flow 3153 cfm
+          #   - no user data needed
+          #   - zone ppl density 101 [through ppl density modifier]
+          #   - DCV implemented in the user model
+          #     - at the airloop level [through modifier]
+          #     - at the zone level, zone oa spec per person 0.003539605824
+          zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          assert(dcv_is_on(zone, airloop))
+
+        when 2
+          # test case 2:
+          #   - DCV should not be in the user model (zone ppl density > 25 ppl/ksqft, but has ZONE user exception)
+          #   - DCV should be in the baseline (air loop oa flow > 3000 cfm && zone ppl density > 100 ppl/ksqft)
+          #   - DCV is implemented in user model
+          # expected result: baseline implements DCV but prompts warning (user model has DCV but meet exception)
+          # test case setting:
+          #   - Cafeteria
+          #   - user model air loop oa flow 3153 cfm
+          #   - zone ppl density 101 [through ppl density modifier]
+          #   - user data specifies ZONE DCV exception is true
+          #   - DCV implemented in the user model
+          #     - at the airloop level [through modifier]
+          #     - at the zone level, zone oa spec per person 0.003539605824
+          zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          # check warning
+          assert(dcv_is_on(zone, airloop))
+
+        when 3
+          # test case 3:
+          #   - DCV should be in the user model (zone ppl density > 25 ppl/ksqft, no user exception)
+          #   - DCV should be in the baseline model (air loop oa flow > 3000 cfm && zone ppl density > 100 ppl/ksqft)
+          #   - DCV is NOT implemented in user model
+          # expected result: error and terminate
+          # test case setting:
+          #   - Cafeteria
+          #   - user model air loop oa flow 3153 cfm
+          #   - zone ppl density 101 [through ppl density modifier]
+          #   - no user data
+          #   - DCV not implemented in the user model
+          #     - at the airloop level by default
+          #     - at the zone level [through remove_zone_oa_per_person_spec modifier] (optional)
+          zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          # check error and terminate
+          assert(!dcv_is_on(zone, airloop))
+
+        when 4
+          # test case 4:
+          #   - DCV should not be in the user model (zone ppl density > 25 ppl/ksqft, but has AIR LOOP user exception)
+          #   - DCV should be in the baseline model (air loop oa flow > 3000 cfm && zone ppl density > 100 ppl/ksqft)
+          #   - DCV is NOT implemented in user model
+          # expected result: no DCV in baseline model
+          # test case setting:
+          #   - Cafeteria
+          #   - user model air loop oa flow 3153 cfm
+          #   - zone ppl density 101 [through ppl density modifier]
+          #   - user data specifies AIR LOOP DCV exception is true
+          #   - DCV not implemented in the user model
+          #     - at the airloop level by default
+          #     - at the zone level [through remove_zone_oa_per_person_spec modifier] (optional)
+          zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          assert(!dcv_is_on(zone, airloop))
+
+        when 5
+          # test 5
+          #   - DCV should be in the user model (zone ppl density > 25 ppl/ksqft, no user exception)
+          #   - DCV should NOT be in the baseline model (air loop oa flow < 3000 cfm || zone ppl density < 100 ppl/ksqft)
+          #   - DCV is implmented in user model
+          # expected result: no DCV in baseline model
+          # test case setting:
+          #   - Cafeteria
+          #   - user model air loop oa flow 3153 cfm
+          #   - zone ppl density 99.99
+          #   - no user exception
+          #   - DCV implemented in the user model
+          #     - at the airloop level [through modifier]
+          #     - at the zone level, zone oa spec per person 0.003539605824
+          zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          assert(!dcv_is_on(zone, airloop))
+
+        when 6
+          # test 6
+          #   - DCV should NOT be in the user model (zone ppl density > 25 ppl/ksqft, but has ZONE user exception)
+          #   - DCV should NOT be in the baseline model (air loop oa flow < 3000 cfm || zone ppl density < 100 ppl/ksqft)
+          #   - DCV is NOT implemented in user model
+          # expected result: NO DCV in baseline model
+          # test case setting:
+          #   - Cafeteria
+          #   - user model air loop oa flow 3153 cfm
+          #   - zone ppl density 99.99
+          #   - user data specifies ZONE DCV exception is true
+          #   - DCV NOT implemented in the user model
+          #     - at the airloop level by default
+          #     - at the zone level [through remove_zone_oa_per_person_spec modifier] (optional)
+          zone = model_baseline.getThermalZoneByName('Cafeteria_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          assert(!dcv_is_on(zone, airloop))
+
+        when 7
+          # test 7
+          #   - DCV should NOT be in the user model (zone ppl density < 25 ppl/ksqft)
+          #   - DCV should NOT be in the baseline model (air loop oa flow < 3000 cfm || zone ppl density < 100 ppl/ksqft)
+          #   - DCV is implemented in user model
+          # expected result: no DCV in baseline model
+          # test case setting:
+          #   - Kitchen
+          #   - user model air loop oa flow 528 cfm
+          #   - zone ppl density 14.93
+          #   - no user exception
+          #   - DCV implemented in the user model
+          #     - at the airloop level [through modifier]
+          #     - at the zone level, zone oa spec per person 0.003539605824
+          zone = model_baseline.getThermalZoneByName('Kitchen_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          assert(!dcv_is_on(zone, airloop))
+
+        when 8
+          # test 8
+          #   - DCV should NOT be in the user model (zone ppl denstiy < 25 ppl/ksqft)
+          #   - DCV should NOT be in the baseline model (air loop oa flow < 3000 cfm || zone ppl density < 100 ppl/ksqft)
+          #   - DCV is NOT implemented in user model
+          # expected result: no DCV in baseline model
+          # test case setting:
+          #   - Kitchen
+          #   - user model air loop oa flow 528 cfm
+          #   - zone ppl density 14.93
+          #   - no user exception
+          #   - DCV not implemented in the user model
+          #     - at the airloop level by default
+          #     - at the zone level [through remove_zone_oa_per_person_spec modifier] (optional)
+          zone = model_baseline.getThermalZoneByName('Kitchen_ZN_1_FLR_1 ZN').get
+          airloop = zone.airLoopHVAC.get
+          assert(!dcv_is_on(zone, airloop))
+        else
+          assert(false, "ERROR! #{tc_id} not a valid test case id for check_dcv")
+        end
+      end
+    end
+  end
+
+  def dcv_is_on(thermal_zone, air_loop_hvac)
+    # check air loop level DCV enabled
+    return false unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+
+    oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+    controller_oa = oa_system.getControllerOutdoorAir
+    controller_mv = controller_oa.controllerMechanicalVentilation
+    return false unless controller_mv.demandControlledVentilation == true
+
+    # check zone OA flow per person > 0
+    zone_dcv = false
+    thermal_zone.spaces.each do |space|
+      dsn_oa = space.designSpecificationOutdoorAir
+      next if dsn_oa.empty?
+
+      dsn_oa = dsn_oa.get
+      next if dsn_oa.outdoorAirMethod == 'Maximum'
+
+      if dsn_oa.outdoorAirFlowperPerson > 0
+        # only in this case the thermal zone is considered to be implemented with DCV
+        zone_dcv = true
+      end
+    end
+
+    return zone_dcv
+  end
+
+  def mark_test_case_no(model, arguments)
+    # arguments should be a list of test case identifiers
+    arguments
+    return model
+  end
+
+  def remove_zone_oa_per_person_spec(model, arguments)
+    std = Standard.build('90.1-PRM-2019')
+    # argument contains a list of zone names to remove oa per person specification
+    arguments.each do |zone_name|
+      thermal_zone = model.getThermalZoneByName(zone_name).get
+      std.thermal_zone_convert_oa_req_to_per_area(thermal_zone)
+    end
+    return model
+  end
+
+  def enable_airloop_dcv(model, arguments)
+    # arguments contains a list of air loop names to enable dcv
+    arguments.each do |air_loop_name|
+      air_loop_hvac = model.getAirLoopHVACByName(air_loop_name).get
+      # following logic is adopted from Standard.air_loop_hvac_enable_demand_control_ventilation
+      controller_oa = nil
+      controller_mv = nil
+      if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+        oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+        controller_oa = oa_system.getControllerOutdoorAir
+        controller_mv = controller_oa.controllerMechanicalVentilation
+      end
+      # Change the min flow rate in the controller outdoor air
+      controller_oa.setMinimumOutdoorAirFlowRate(0.0)
+
+      # Enable DCV in the controller mechanical ventilation
+      controller_mv.setDemandControlledVentilation(true)
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Enabled DCV.")
+    end
+    return model
+  end
+
+  def change_zone_num_ppl(model, arguments)
+    # arguments contains an array with two elements, of which the first element is thermal zone name,
+    # the second element is the number of people this zone is modified to
+    zone_name, num_ppl = arguments
+    thermal_zone = model.getThermalZoneByName(zone_name).get
+    space0 = thermal_zone.spaces[0] # assume only change number of people in the first space
+    space0.setNumberOfPeople(num_ppl)
+    return model
   end
 
   # Check lighting occ sensor
@@ -2964,7 +3332,11 @@ class AppendixGPRMTests < Minitest::Test
       'fan_power_credits',
       'lpd_userdata_handling',
       'building_rotation_check',
+      'pe_userdata_handling',
       'unmet_load_hours',
+      'dcv',
+      'exterior_lighting',
+      'lighting_exceptions',
     ]
 
     # Get list of unique prototypes
@@ -3000,6 +3372,7 @@ class AppendixGPRMTests < Minitest::Test
     check_multi_bldg_handling(prototypes_base['multi_bldg_handling']) if tests.include? 'multi_bldg_handling'
     check_multi_lpd_handling(prototypes_base['lpd_userdata_handling']) if tests.include? 'lpd_userdata_handling'
     check_economizer_exception(prototypes_base['economizer_exception']) if tests.include? 'economizer_exception'
+    check_power_equipment_handling(prototypes_base['pe_userdata_handling']) if tests.include? 'pe_userdata_handling'
     check_hvac_efficiency(prototypes_base['hvac_efficiency']) if tests.include? 'hvac_efficiency'
     check_building_rotation_exception(prototypes_base['building_rotation_check']) if tests.include? 'building_rotation_check'
     check_unenclosed_spaces(prototypes_base['unenclosed_spaces']) if tests.include? 'unenclosed_spaces'
@@ -3007,5 +3380,8 @@ class AppendixGPRMTests < Minitest::Test
     check_fan_power_credits(prototypes_base['fan_power_credits']) if tests.include? 'fan_power_credits'
     check_return_air_type(prototypes_base['return_air_type']) if tests.include? 'return_air_type'
     check_unmet_load_hours(prototypes_base['unmet_load_hours']) if tests.include? 'unmet_load_hours'
+    check_dcv(prototypes_base['dcv']) if tests.include? 'dcv'
+    check_exterior_lighting(prototypes_base['exterior_lighting']) if tests.include? 'exterior_lighting'
+    check_lighting_exceptions(prototypes_base['lighting_exceptions']) if tests.include? 'lighting_exceptions'
   end
 end
