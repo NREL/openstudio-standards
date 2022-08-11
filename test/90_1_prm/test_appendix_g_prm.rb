@@ -565,7 +565,7 @@ class AppendixGPRMTests < Minitest::Test
   # Check exterior lighting via userdata
   #
   # @param prototypes_base [Hash] Baseline prototypes
-  def check_exterior_lighting()
+  def check_exterior_lighting(prototypes_base)
 
     prototypes_base.each do |prototype, model|
       building_type, template, climate_zone, mod = prototype
@@ -577,7 +577,7 @@ class AppendixGPRMTests < Minitest::Test
             design_power = ext_lights_def.designLevel.round(0)
             assert( design_power == 700, "The exterior lighting for 'NonDimming Exterior Lights Def' in #{building_type}-#{template} has incorrect power. Found: #{design_power}; expected 700.")
           end
-          if exterprototypes_baseior_lights.name.get == "Occ Sensing Exterior Lights Def"
+          if exterior_lights.name.get == "Occ Sensing Exterior Lights Def"
             design_power = ext_lights_def.designLevel.round(0)
             assert(design_power == 4328, "The exterior lighting for 'Occ Sensing Exterior Lights Def' #{building_type}-#{template} has incorrect power. Found: #{design_power}; expected 4328.")
           end
