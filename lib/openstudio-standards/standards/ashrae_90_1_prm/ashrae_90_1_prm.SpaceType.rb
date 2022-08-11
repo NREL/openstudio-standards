@@ -419,6 +419,8 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       space.setSpaceType(new_space_type)
       lighting_per_area = space_lighting_per_area_hash[space_name]
       new_space_type.lights.each do |inst|
+        lights_name = inst.name.get
+        new_space_type.additionalProperties.setFeature('regulated_lights_name', lights_name)
         definition = inst.lightsDefinition
         unless lighting_per_area.zero?
           new_definition = definition.clone.to_LightsDefinition.get

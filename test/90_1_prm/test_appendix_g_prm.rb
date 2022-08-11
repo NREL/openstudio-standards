@@ -508,7 +508,7 @@ class AppendixGPRMTests < Minitest::Test
             if space_name_to_lpd_target.key?(space_name)
               target_lpd = space_name_to_lpd_target[space_name]
             end
-            lights_name = space.space_type.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
+            lights_name = space.spaceType.get.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
             lights_obj = model_baseline.getLightsByName(lights_name).get
             model_lpd = lights_obj.lightsDefinition.wattsperSpaceFloorArea.get
             # model_lpd = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea.get
@@ -524,7 +524,7 @@ class AppendixGPRMTests < Minitest::Test
             if space_name_to_lpd_target.key?(space_name)
               target_lpd = space_name_to_lpd_target[space_name]
             end
-            lights_name = space.space_type.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
+            lights_name = space.spaceType.get.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
             lights_obj = model_baseline.getLightsByName(lights_name).get
             model_lpd = lights_obj.lightsDefinition.wattsperSpaceFloorArea.get
             assert((target_lpd - model_lpd).abs < 0.001, "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of the #{space_name} is #{target_lpd} but should be #{model_lpd}.")
