@@ -18,7 +18,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # @param set_gas_equipment [Bool] if true, set the gas equipment density
   # @param set_ventilation [Bool] if true, set the ventilation rates (per-person and per-area)
   # @param set_infiltration [Bool] if true, set the infiltration rates
-  # @return [Bool] returns true if successful, false if not 
+  # @return [Bool] returns true if successful, false if not
   def space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
     # Skip plenums
     # Check if the space type name
