@@ -159,6 +159,8 @@
   "RetailEntry": "lobby - all other",
   "RetailPoint_of_Sale": "sales",
   "RetailRetail": "sales",
+  "RetailCore_Retail": "sales",
+  "RetailFront_Retail": "sales",
   "SecondarySchoolAuditorium": "audience seating - auditorium",
   "SecondarySchoolCafeteria": "dining - all other",
   "SecondarySchoolClassroom": "classroom/lecture/training - preschool to 12th",
