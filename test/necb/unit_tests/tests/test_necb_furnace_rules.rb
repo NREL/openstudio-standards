@@ -30,14 +30,13 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
 
     # Generate the osm files for all relevant cases to generate the test data for single and multi stages
     stage_types = ['single', 'multi']
-    furnace_res_file_output_text = "Fuel,Min Capacity (Btu per hr),Max Capacity (Btu per hr),Tested Capacity (Btu per hr),Stage Type,Annual Fuel Utilization Efficiency (AFUE),Thermal Efficiency,Combustion Efficiency\n"
 
     model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    #templates = ['NECB2011', 'NECB2015', 'NECB2020']
-    templates = ['NECB2020']
+    templates = ['NECB2011', 'NECB2015', 'NECB2020']
     templates.each do |template|
       standard = Standard.build(template)
+      furnace_res_file_output_text = "Fuel,Min Capacity (kW),Max Capacity (kW),Tested Capacity (kW),Stage Type,Number of Stages,Annual Fuel Utilization Efficiency (AFUE),Thermal Efficiency,Combustion Efficiency\n"
       furnace_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_furnace_efficiencies_expected_results.csv")
 
       # Initialize hashes for storing expected furnace efficiency data from file
@@ -54,9 +53,9 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
       # read the file for the expected furnace efficiency values for different fuels and equipment capacity ranges
       CSV.foreach(furnace_expected_result_file, headers: true) do |data|
         if data['Stage Type'] == 'single' # So it won't double the minimum capacities by adding the multi stage too
-          fuel_type_min_cap[data['Fuel']] << data['Min Capacity (Btu per hr)']
+          fuel_type_min_cap[data['Fuel']] << data['Min Capacity (kW)']
         end
-        fuel_type_max_cap[data['Fuel']] << data['Max Capacity (Btu per hr)']
+        fuel_type_max_cap[data['Fuel']] << data['Max Capacity (kW)']
         if data['Annual Fuel Utilization Efficiency (AFUE)'].to_f > 0.0
           efficiency_type[data['Fuel']] << 'Annual Fuel Utilization Efficiency (AFUE)'
         elsif data['Thermal Efficiency'].to_f > 0.0
@@ -65,7 +64,6 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
           efficiency_type[data['Fuel']] << 'Combustion Efficiency'
         end
       end
-
       # Use the expected furnace efficiency data to generate suitable equipment capacities for the test to cover all
       # the relevant equipment capacity ranges
       fuel_type_cap = {}
@@ -74,27 +72,27 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
           fuel_type_cap[fuel] = []
         end
         if cap.size == 1
-          fuel_type_cap[fuel] << 10000.0
+          fuel_type_cap[fuel] << 50.0
         else
-          fuel_type_cap[fuel] << 0.5 * (OpenStudio.convert(fuel_type_min_cap[fuel][0].to_f, 'Btu/hr', 'W').to_f + OpenStudio.convert(fuel_type_min_cap[fuel][1].to_f, 'Btu/h', 'W').to_f)
+          fuel_type_cap[fuel] << 0.5 * (fuel_type_min_cap[fuel][0].to_f + fuel_type_min_cap[fuel][1].to_f)
           if cap.size == 2
-            fuel_type_cap[fuel] << (OpenStudio.convert(fuel_type_min_cap[fuel][1].to_f, 'Btu/hr', 'W').to_f + 10000.0)
+            fuel_type_cap[fuel] << (fuel_type_min_cap[fuel][1].to_f + 10.0)
           else
-            fuel_type_cap[fuel] << 0.5 * (OpenStudio.convert(fuel_type_min_cap[fuel][1].to_f, 'Btu/hr', 'W').to_f + OpenStudio.convert(fuel_type_min_cap[fuel][2].to_f, 'Btu/hr', 'W').to_f)
-            fuel_type_cap[fuel] << (fuel_type_min_cap[fuel][2].to_f + 10000.0)
+            fuel_type_cap[fuel] << 0.5 * (fuel_type_min_cap[fuel][1].to_f + fuel_type_min_cap[fuel][2].to_f)
+            fuel_type_cap[fuel] << (fuel_type_min_cap[fuel][2].to_f + 10.0)
           end
         end
       end
-
       stage_types.each do |stage_type|
         index = 0
+        n_stages = 0
         actual_furnace_thermal_eff = {}
         actual_furnace_thermal_eff['Electric'] = []
         actual_furnace_thermal_eff['NaturalGas'] = []
         heating_coil_types.each do |heating_coil_type|
           test_stage_index = 0
           fuel_type_cap[heating_coil_type].each do |furnace_cap|
-            name = "#{template}_sys3_Furnace-#{heating_coil_type}_stages-#{stage_type}_cap-#{furnace_cap.to_int}W_Baseboard-#{baseboard_types[index]}"
+            name = "#{template}_sys3_Furnace-#{heating_coil_type}_stages-#{stage_type}_cap-#{furnace_cap.to_int}kW_Baseboard-#{baseboard_types[index]}"
             puts "***************************************#{name}*******************************************************\n"
             model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
             BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
@@ -124,10 +122,10 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
             # Save the model after btap hvac.
             BTAP::FileIO.save_osm(model, "#{output_folder}/#{template}/#{name}.hvacrb")
             if stage_type == 'single'
-              model.getCoilHeatingGass.each { |coil| coil.setNominalCapacity(furnace_cap) }
+              model.getCoilHeatingGass.each { |coil| coil.setNominalCapacity(furnace_cap * 1000) }
             elsif stage_type == 'multi'
               model.getCoilHeatingGasMultiStages.each do |coil|
-                stage_cap = furnace_cap
+                stage_cap = furnace_cap * 1000
                 coil.stages.each do |istage|
                   istage.setNominalCapacity(stage_cap)
                   stage_cap += 10.0
@@ -166,8 +164,16 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
         actual_furnace_eff['NaturalGas'] = []
         heating_coil_types.each do |heating_coil_type|
           output_line_text = ''
+
           for int in 0..fuel_type_cap[heating_coil_type].size - 1
-            output_line_text += "#{heating_coil_type},#{fuel_type_min_cap[heating_coil_type][int]},#{(fuel_type_max_cap[heating_coil_type][int])},#{OpenStudio.convert(fuel_type_cap[heating_coil_type][int].to_f, 'W', 'Btu/hr')},#{stage_type},"
+           # Get the number of stages
+            if stage_type == "single"
+              num_stages = 1
+            else
+              num_stages = ((fuel_type_cap[heating_coil_type][int]) / (66.0) + 0.5).round
+            end
+            output_line_text += "#{heating_coil_type},#{fuel_type_min_cap[heating_coil_type][int]},#{(fuel_type_max_cap[heating_coil_type][int])},#{fuel_type_cap[heating_coil_type][int]},#{stage_type},#{num_stages},"
+
             if efficiency_type[heating_coil_type][int] == 'Annual Fuel Utilization Efficiency (AFUE)'
               actual_furnace_eff[heating_coil_type][int] = (standard.thermal_eff_to_afue(actual_furnace_thermal_eff[heating_coil_type][int]) + 0.0001).round(3)
               output_line_text += "#{actual_furnace_eff[heating_coil_type][int]},,\n"
@@ -182,15 +188,15 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
           furnace_res_file_output_text += output_line_text
 
         end
-        # Write actual results file
-        test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_furnace_efficiencies_test_results.csv")
-        File.open(test_result_file, 'w') { |f| f.write(furnace_res_file_output_text) }
-        # Test that the values are correct by doing a file compare.
-        expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_furnace_efficiencies_expected_results.csv")
-        b_result = FileUtils.compare_file(expected_result_file, test_result_file)
-        #  assert(b_result,
-        #       "test_furnace_efficiency: Furnace efficiencies test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
       end
+      # Write actual results file
+      test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_furnace_efficiencies_test_results.csv")
+      File.open(test_result_file, 'w') { |f| f.write(furnace_res_file_output_text) }
+      # Test that the values are correct by doing a file compare.
+      expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_furnace_efficiencies_expected_results.csv")
+      b_result = FileUtils.compare_file(expected_result_file, test_result_file)
+      assert(b_result,
+             "test_furnace_efficiency: Furnace efficiencies test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
     end
   end
 

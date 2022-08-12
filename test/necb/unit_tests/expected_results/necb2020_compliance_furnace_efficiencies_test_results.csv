@@ -1,7 +1,0 @@
-Fuel,Min Capacity (Btu per hr),Max Capacity (Btu per hr),Tested Capacity (Btu per hr),Stage Type,Annual Fuel Utilization Efficiency (AFUE),Thermal Efficiency,Combustion Efficiency
-Electric,0,9999999,34121.4,single,,1.0,
-NaturalGas,0,225201,112601,single,0.95,,
-NaturalGas,225202,399221,259323,single,,0.81,
-Electric,0,9999999,34121.4,multi,,1.0,
-NaturalGas,0,225201,112601,multi,0.95,,
-NaturalGas,225202,399221,259323,multi,,0.8,
