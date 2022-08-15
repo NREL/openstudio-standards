@@ -18,7 +18,7 @@ class AppendixGPRMTests < Minitest::Test
   # Global variable to ...
   # Make sure to turn it to false so CI will not fail for time out.
   GENERATE_PRM_LOG = false
-  MAX_PATH_CHAR = 210 #210 characters max
+  MAX_PATH_CHAR = 260 #260 characters max
 
   def prm_test_helper(test_string, require_prototype=true, require_baseline=true)
     # Get list of unique prototypes
