@@ -362,15 +362,15 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
-  def check_building_rotation_exception(prototypes_base)
+  def check_building_rotation_exception(prototypes_base, test_string)
     prototypes_base.each do |prototype, model_baseline|
       building_type, template, climate_zone, user_data_dir, mod = prototype
       @test_dir = "#{File.dirname(__FILE__)}/output"
       mod_str = mod.flatten.join('_') unless mod.empty?
-      model_baseline_file_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final.osm"
-      model_baseline_file_name_90 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final_90.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_90.osm"
-      model_baseline_file_name_180 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final_180.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_180.osm"
-      model_baseline_file_name_270 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-Baseline/final_270.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_270.osm"
+      model_baseline_file_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{test_string}-#{user_data_dir}-Baseline/final.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final.osm"
+      model_baseline_file_name_90 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{test_string}-#{user_data_dir}-Baseline/final_90.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_90.osm"
+      model_baseline_file_name_180 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{test_string}-#{user_data_dir}-Baseline/final_180.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_180.osm"
+      model_baseline_file_name_270 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{test_string}-#{user_data_dir}-Baseline/final_270.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/final_270.osm"
       rotated = File.exist?("#{@test_dir}/#{model_baseline_file_name}") && File.exist?("#{@test_dir}/#{model_baseline_file_name_90}") &&  File.exist?("#{@test_dir}/#{model_baseline_file_name_180}") &&  File.exist?("#{@test_dir}/#{model_baseline_file_name_270}")
 
       if mod.empty?
@@ -3459,7 +3459,7 @@ class AppendixGPRMTests < Minitest::Test
 
   def test_building_rotation_check
     model_hash = prm_test_helper('building_rotation_check', require_prototype=false, require_baseline=true)
-    check_building_rotation_exception(model_hash['baseline'])
+    check_building_rotation_exception(model_hash['baseline'], 'building_rotation_check')
   end
 
   def test_pe_userdata_handling
@@ -3480,6 +3480,11 @@ class AppendixGPRMTests < Minitest::Test
   def test_return_air_type
     model_hash = prm_test_helper('return_air_type', require_prototype=false, require_baseline=true)
     check_return_air_type(model_hash['baseline'])
+  end
+
+  def test_lighting_exceptions
+    model_hash = prm_test_helper('lighting_exceptions', require_prototype=false, require_baseline=true)
+    check_lighting_exceptions(model_hash['baseline'])
   end
 
 end
