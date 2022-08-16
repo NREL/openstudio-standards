@@ -134,7 +134,7 @@ class Standard
         end
 
         # Run the sizing run
-        if model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/SR_PROP") == false
+        if model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
           return false
         end
 
