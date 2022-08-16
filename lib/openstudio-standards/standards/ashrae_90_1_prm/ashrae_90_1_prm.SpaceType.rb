@@ -33,22 +33,60 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       end
     end
 
+    # Save information about lighting exceptions before removing extra lights objects
+    # First get list of all lights objects that are exempt
+    regulated_lights = []
+    unregulated_lights = []
+    user_lights = @standards_data.key?('userdata_lights') ? @standards_data['userdata_lights'] : nil
+    if user_lights && user_lights.length >= 1
+      user_lights.each do |user_data|
+        lights_name = user_data['name']
+        lights_obj = space_type.model.getLightsByName(lights_name).get
+
+        if user_data['has_retail_display_exception'].to_s.downcase == 'yes' || user_data['has_unregulated_exception'].to_s.downcase == 'yes'
+          # If either exception is applicable
+          # Put this one on the unregulated list
+          unregulated_lights.push(lights_name)
+        end
+      end
+    end
+
+    # Get all lights objects that are not exempt
+    space_type.lights.sort.each do |lights_obj|
+      lights_name = lights_obj.name.get
+      if !unregulated_lights.include? lights_name 
+        regulated_lights << lights_obj
+      end
+    end
+
     # Pre-process the light instances in the space type
-    # Remove all instances but leave one in the space type
-    instances = space_type.lights.sort
-    if instances.size.zero?
+    # Remove all regulated instances but leave one in the space type
+    if regulated_lights.size.zero?
       definition = OpenStudio::Model::LightsDefinition.new(space_type.model)
       definition.setName("#{space_type.name} Lights Definition")
       instance = OpenStudio::Model::Lights.new(definition)
-      instance.setName("#{space_type.name} Lights")
+      lights_name = "#{space_type.name} Lights"
+      instance.setName(lights_name)
       instance.setSpaceType(space_type)
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} had no lights, one has been created.")
-      instances << instance
-    elsif instances.size > 1
-      instances.each_with_index do |inst, i|
-        next if i.zero?
+      space_type.additionalProperties.setFeature('regulated_lights_name', lights_name)
+      regulated_lights << instance
+    else
+      regulated_lights.each_with_index do |inst, i|
+        if i.zero?
+          # Save the name of the first instance to use as the baseline lights object
+          lights_name = inst.name.get
+          space_type.additionalProperties.setFeature('regulated_lights_name', lights_name)
+          next
+        end
 
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
+        # Remove all other lights objects that have not been identified as unregulated
+        if i == 1
+          ref_name = space_type.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Multiple lights objects found in user model for #{space_type.name}. Baseline schedule will be determined from #{ref_name}")
+        end
+
+        OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Removed lighting object #{inst.name} from #{space_type.name}. ")
         inst.remove
       end
     end
@@ -89,7 +127,11 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
               space_lighting_per_area = calculate_lpd_from_userdata(user_space_type, space)
               space_type_lighting_per_area = space_lighting_per_area
             end
-            space_type.lights[0].lightsDefinition.setWattsperSpaceFloorArea(OpenStudio.convert(space_type_lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
+            if space_type.hasAdditionalProperties && space_type.additionalProperties.hasFeature('regulated_lights_name')
+              lights_name = space_type.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
+              lights_obj = space_type.model.getLightsByName(lights_name).get
+              lights_obj.lightsDefinition.setWattsperSpaceFloorArea(OpenStudio.convert(space_type_lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
+            end  
           end
           # process power equipment
           space_type_apply_power_equipment(space_type)
@@ -310,7 +352,11 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         space_lighting_per_area = calculate_lpd_by_space(space_type, space)
         space_type_lighting_per_area = space_lighting_per_area
       end
-      space_type.lights[0].lightsDefinition.setWattsperSpaceFloorArea(OpenStudio.convert(space_type_lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
+      if space_type.hasAdditionalProperties && space_type.additionalProperties.hasFeature('regulated_lights_name')
+        lights_name = space_type.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
+        lights_obj = space_type.model.getLightsByName(lights_name).get
+        lights_obj.lightsDefinition.setWattsperSpaceFloorArea(OpenStudio.convert(space_type_lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
+      end 
     end
   end
 
@@ -373,6 +419,8 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       space.setSpaceType(new_space_type)
       lighting_per_area = space_lighting_per_area_hash[space_name]
       new_space_type.lights.each do |inst|
+        lights_name = inst.name.get
+        new_space_type.additionalProperties.setFeature('regulated_lights_name', lights_name)
         definition = inst.lightsDefinition
         unless lighting_per_area.zero?
           new_definition = definition.clone.to_LightsDefinition.get
@@ -393,8 +441,10 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # set schedule for lighting
     schedule_hash = {}
     model.getSpaces.each do |space|
-      unless space.spaceType.get.lights.empty?
-        ltg = space.spaceType.get.lights[0]
+      space_type = space.spaceType.get
+      if space_type.hasAdditionalProperties && space_type.additionalProperties.hasFeature('regulated_lights_name')
+        lights_name = space_type.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
+        ltg = space_type.model.getLightsByName(lights_name).get
         if ltg.schedule.is_initialized
           ltg_schedule = ltg.schedule.get
           ltg_schedule_name = ltg_schedule.name

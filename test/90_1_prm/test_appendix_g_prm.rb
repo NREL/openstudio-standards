@@ -531,7 +531,10 @@ class AppendixGPRMTests < Minitest::Test
             if space_name_to_lpd_target.key?(space_name)
               target_lpd = space_name_to_lpd_target[space_name]
             end
-            model_lpd = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea.get
+            lights_name = space.spaceType.get.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
+            lights_obj = model_baseline.getLightsByName(lights_name).get
+            model_lpd = lights_obj.lightsDefinition.wattsperSpaceFloorArea.get
+            # model_lpd = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea.get
             assert((target_lpd - model_lpd).abs < 0.001, "Baseline LPD for the #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of the #{space_name} is #{target_lpd} but should be #{model_lpd}.")
           end
         elsif user_data_dir == 'userdata_lpd_02'
@@ -544,7 +547,9 @@ class AppendixGPRMTests < Minitest::Test
             if space_name_to_lpd_target.key?(space_name)
               target_lpd = space_name_to_lpd_target[space_name]
             end
-            model_lpd = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea.get
+            lights_name = space.spaceType.get.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
+            lights_obj = model_baseline.getLightsByName(lights_name).get
+            model_lpd = lights_obj.lightsDefinition.wattsperSpaceFloorArea.get
             assert((target_lpd - model_lpd).abs < 0.001, "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of the #{space_name} is #{target_lpd} but should be #{model_lpd}.")
           end
         end
@@ -576,6 +581,76 @@ class AppendixGPRMTests < Minitest::Test
       space_name.each do |key, value|
         value_si = OpenStudio.convert(value, 'W/ft^2', 'W/m^2').get
         assert(((lpd_baseline[key] - value_si).abs < 0.001), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The LPD of the #{key} is #{lpd_baseline[key]} but should be #{value_si}.")
+      end
+    end
+  end
+
+  # Check exterior lighting via userdata
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_exterior_lighting(prototypes_base)
+
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+
+      if building_type == 'RetailStandalone'
+        model.getExteriorLightss.each do |exterior_lights|
+          ext_lights_def = exterior_lights.exteriorLightsDefinition
+          if exterior_lights.name.get == "NonDimming Exterior Lights Def"
+            design_power = ext_lights_def.designLevel.round(0)
+            assert( design_power == 700, "The exterior lighting for 'NonDimming Exterior Lights Def' in #{building_type}-#{template} has incorrect power. Found: #{design_power}; expected 700.")
+          end
+          if exterior_lights.name.get == "Occ Sensing Exterior Lights Def"
+            design_power = ext_lights_def.designLevel.round(0)
+            assert(design_power == 4328, "The exterior lighting for 'Occ Sensing Exterior Lights Def' #{building_type}-#{template} has incorrect power. Found: #{design_power}; expected 4328.")
+          end
+        end
+
+      end
+    end
+  end
+
+
+  def check_lighting_exceptions(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+
+      if building_type == 'RetailStripmall'
+        # check if nonregulate lights objects still exist
+        found_obj_1 = false
+        found_obj_2 = false
+        model.getLightss.each do |lights|
+          lights_def = lights.lightsDefinition
+          actual_w_area = lights_def.wattsperSpaceFloorArea.to_f
+          # Check if non-regulated lights objects have been removed
+          if lights.name.get == "StripMall Strip mall - type 1 Additional Lights"
+            found_obj_1 = true
+          end
+          if lights.name.get == "StripMall Strip mall - type 2 Additional Lights"
+            found_obj_2 = true
+          end
+
+          # Check power level of regulated lights objects
+          if lights.name.get == "StripMall Strip mall - type 1 Lights"
+            expected_w_area = 16.1458656250646
+            assert( expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
+          end
+          if lights.name.get == "StripMall Strip mall - type 1 Lights"
+            expected_w_area = 16.1458656250646
+            assert( expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
+          end
+          if lights.name.get == "StripMall Strip mall - type 2 Lights"
+            expected_w_area = 16.1458656250646
+            assert( expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
+          end
+          if lights.name.get == "StripMall Strip mall - type 3 Lights"
+            expected_w_area = 16.1458656250646
+            assert( expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
+          end
+
+        end
+        assert( found_obj_1 == true, "The retail display lighting exception user data for in #{building_type}-#{template} has failed to preserve the lights object.")
+        assert( found_obj_2 == true, "The unregulated lighting exception user data for in #{building_type}-#{template} has failed to preserve the lights object.")
       end
     end
   end
@@ -3249,6 +3324,7 @@ class AppendixGPRMTests < Minitest::Test
   def test_wwr
     model_hash = prm_test_helper('wwr', require_prototype=false, require_baseline=true)
     check_wwr(model_hash['baseline'])
+
   end
 
   def test_srr
