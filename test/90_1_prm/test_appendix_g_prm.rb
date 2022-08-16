@@ -3338,7 +3338,7 @@ class AppendixGPRMTests < Minitest::Test
 
   def test_number_of_cooling_towers
     model_hash = prm_test_helper('number_of_cooling_towers', require_prototype=false, require_baseline=true)
-    check_number_of_cooling_towers(model_hash['baseline']) if tests.include? 'number_of_cooling_towers'
+    check_number_of_cooling_towers(model_hash['baseline'])
   end
 
   def test_hvac_sizing
