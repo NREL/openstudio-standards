@@ -105,7 +105,7 @@ class Standard
       # Among others, one of the goal is to get individual
       # space load to determine each space's conditioning
       # type: conditioned, unconditioned, semiheated.
-      if model_create_prm_baseline_building_requires_proposed_model_sizing_run(user_model)
+      if model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
         # Set up some special reports to be used for baseline system selection later
         # Zone return air flows
         node_list = []
@@ -134,7 +134,7 @@ class Standard
         end
 
         # Run the sizing run
-        if !model.sqlFile.is_initialized && model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/SR_PROP") == false
+        if model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/SR_PROP") == false
           return false
         end
 
