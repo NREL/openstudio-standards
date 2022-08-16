@@ -84,7 +84,9 @@ class Standard
     # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
     bldg_type_hvac_zone_hash = {}
     handle_user_input_data(user_model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
-
+    # Define different orientation from original orientation
+    # for each individual baseline models
+    # Need to run proposed model sizing simulation if no sql data is available
     degs_from_org = run_all_orientations(run_all_orients, user_model) ? [0, 90, 180, 270] : [0]
 
     # Create baseline model for each orientation
@@ -98,9 +100,6 @@ class Standard
       # Rotate building if requested,
       # Site shading isn't rotated
       model_rotate(model, degs) unless degs == 0
-      # Define different orientation from original orientation
-      # for each individual baseline models
-      # Need to run proposed model sizing simulation if no sql data is available
       # Perform a sizing run of the proposed model.
       #
       # Among others, one of the goal is to get individual
@@ -112,13 +111,13 @@ class Standard
         node_list = []
         var_name = 'System Node Standard Density Volume Flow Rate'
         frequency = 'hourly'
-        user_model.getThermalZones.each do |zone|
+        model.getThermalZones.each do |zone|
           port_list = zone.returnPortList
           port_list_objects = port_list.modelObjects
           port_list_objects.each do |node|
             node_name = node.nameString
             node_list << node_name
-            output = OpenStudio::Model::OutputVariable.new(var_name, user_model)
+            output = OpenStudio::Model::OutputVariable.new(var_name, model)
             output.setKeyValue(node_name)
             output.setReportingFrequency(frequency)
           end
@@ -127,20 +126,20 @@ class Standard
         # air loop relief air flows
         var_name = 'System Node Standard Density Volume Flow Rate'
         frequency = 'hourly'
-        user_model.getAirLoopHVACs.sort.each do |air_loop_hvac|
+        model.getAirLoopHVACs.sort.each do |air_loop_hvac|
           relief_node = air_loop_hvac.reliefAirNode.get
-          output = OpenStudio::Model::OutputVariable.new(var_name, user_model)
+          output = OpenStudio::Model::OutputVariable.new(var_name, model)
           output.setKeyValue(relief_node.nameString)
           output.setReportingFrequency(frequency)
         end
 
         # Run the sizing run
-        if !user_model.sqlFile.is_initialized && model_run_simulation_and_log_errors(user_model, "#{sizing_run_dir}/SR_PROP") == false
+        if !model.sqlFile.is_initialized && model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/SR_PROP") == false
           return false
         end
 
         # Set baseline model space conditioning category based on proposed model
-        user_model.getSpaces.each do |space|
+        model.getSpaces.each do |space|
           # Get conditioning category at the space level
           space_conditioning_category = space_conditioning_category(space)
 
@@ -150,7 +149,7 @@ class Standard
 
         # The following should be done after a sizing run of the proposed model
         # because the proposed model zone design air flow is needed
-        model_identify_return_air_type(user_model)
+        model_identify_return_air_type(model)
       end
       # Remove external shading devices
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Removing External Shading Devices ***')
