@@ -1302,6 +1302,7 @@ class BTAPData
      'energy_eui_natural_gas_gj_per_m_sq',
      'energy_eui_pumps_gj_per_m_sq',
      'energy_eui_total_gj_per_m_sq',
+     'energy_eui_heat recovery_gj_per_m_sq',
      'energy_eui_water systems_gj_per_m_sq'].each { |end_use| data[end_use] = 0.0 }
     # Get E+ End use table from sql
     table = get_sql_table_to_json(@model, 'AnnualBuildingUtilityPerformanceSummary', 'Entire Facility', 'End Uses')['table']
