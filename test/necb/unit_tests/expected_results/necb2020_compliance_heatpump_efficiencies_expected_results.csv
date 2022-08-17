@@ -1,6 +1,6 @@
-Min Capacity (Btu per hr),Max Capacity (Btu per hr),Energy Efficiency Ratio (EER)
-0,64830,9.7
-64831,136485,9.5
-136486,238849,9.1
-238850,760907,8.5
-760908,9999999,5.9
+Min Capacity (Btu per hr),Max Capacity (Btu per hr),Test Capacity (Btu per hr),COP
+0,64830,9500,3.3
+64831,136485,29500,3.3
+136486,238849,55000,3.2
+238850,760907,146500,3.2
+760908,9999999,770908,3.2
