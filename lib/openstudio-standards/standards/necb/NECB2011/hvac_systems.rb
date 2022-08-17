@@ -21,9 +21,10 @@ class NECB2011
   # @return [Bool] returns true if an economizer is required, false if not
   def air_loop_hvac_economizer_required?(air_loop_hvac)
     economizer_required = false
-
+    
     # need a better way to determine if an economizer is needed.
-    return economizer_required if air_loop_hvac.name.to_s.include? 'Outpatient F1'
+    return economizer_required if ((air_loop_hvac.name.to_s.include? 'Outpatient F1' ) || 
+                                   (air_loop_hvac.sizingSystem.typeofLoadtoSizeOn.to_s == "VentilationRequirement"))
 
     # A big number of btu per hr as the minimum requirement
     infinity_btu_per_hr = 999_999_999_999
@@ -1643,8 +1644,10 @@ class NECB2011
     sizing_plant.setDesignLoopExitTemperature(7.0)
     sizing_plant.setLoopDesignTemperatureDifference(6.0)
 
-    # pump = OpenStudio::Model::PumpConstantSpeed.new(model)
-    chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+    # Note: pump of 'chilled water loop' has been changed to the variable one as the constant one caused fatal errors for LargeOffice-Yellowknife-NaturalGas for some ECMs and inputs.
+    # Fatal error was: 'CheckForRunawayPlantTemps: Simulation terminated because of run away plant temperatures, too cold' OR '..., too hot' for the PlantLoop of 'Chilled Water Loop'.
+    # Note that the variable speed pump has been already used for 'Hot Water Loop'.
+    chw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
 
     chiller1 = OpenStudio::Model::ChillerElectricEIR.new(model)
     chiller2 = OpenStudio::Model::ChillerElectricEIR.new(model)

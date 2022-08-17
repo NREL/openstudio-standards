@@ -76,19 +76,24 @@ begin
         cooling_sizing_factor_set_correctly = true
         if diff > tol then cooling_sizing_factor_set_correctly = false end
         assert(cooling_sizing_factor_set_correctly, "test_airloop_sizing_rules_vav: Cooling sizing factor does not match necb requirement #{name}")
-        # check supply temperatures
-        heating_sizing_temp = sizing_zone.zoneHeatingDesignSupplyAirTemperature
-        cooling_sizing_temp = sizing_zone.zoneCoolingDesignSupplyAirTemperature
-        necb_heating_sizing_temp = 43.0
-        necb_cooling_sizing_temp = 13.0
-        diff = (heating_sizing_temp.to_f - necb_heating_sizing_temp).abs / necb_heating_sizing_temp
-        heating_sizing_temp_set_correctly = true
-        if diff > tol then heating_sizing_temp_set_correctly = false end
-        assert(heating_sizing_temp_set_correctly, "test_airloop_sizing_rules_vav: Heating sizing supply temperature does not match necb requirement #{name}")
-        diff = (heating_sizing_temp.to_f - necb_heating_sizing_temp).abs / necb_heating_sizing_temp
-        cooling_sizing_temp_set_correctly = true
-        if diff > tol then cooling_sizing_temp_set_correctly = false end
-        assert(cooling_sizing_temp_set_correctly, "test_airloop_sizing_rules_vav: Cooling sizing supply temperature does not match necb requirement #{name}")
+        # check supply temperature diffs and method
+        necb_design_supply_temp_input_method = 'TemperatureDifference'
+        design_clg_supply_temp_input_method = sizing_zone.zoneCoolingDesignSupplyAirTemperatureInputMethod.to_s
+        assert(necb_design_supply_temp_input_method==design_clg_supply_temp_input_method, "test_airloop_sizing_rules: Cooling design supply air temp input method does not match necb requirement")
+        design_htg_supply_temp_input_method = sizing_zone.zoneHeatingDesignSupplyAirTemperatureInputMethod.to_s
+        assert(necb_design_supply_temp_input_method==design_htg_supply_temp_input_method, "test_airloop_sizing_rules: Heating design supply air temp input method does not match necb")
+        heating_sizing_temp_diff = sizing_zone.zoneHeatingDesignSupplyAirTemperatureDifference
+        cooling_sizing_temp_diff = sizing_zone.zoneCoolingDesignSupplyAirTemperatureDifference
+        necb_heating_sizing_temp_diff = 21.0
+        necb_cooling_sizing_temp_diff = 11.0
+        diff = (heating_sizing_temp_diff.to_f - necb_heating_sizing_temp_diff).abs / necb_heating_sizing_temp_diff
+        heating_sizing_temp_diff_set_correctly = true
+        if diff > tol then heating_sizing_temp_diff_set_correctly = false end
+        assert(heating_sizing_temp_diff_set_correctly, "test_airloop_sizing_rules_vav: Heating sizing supply temperature difference does not match necb requirement #{name}")
+        diff = (heating_sizing_temp_diff.to_f - necb_heating_sizing_temp_diff).abs / necb_heating_sizing_temp_diff
+        cooling_sizing_temp_diff_set_correctly = true
+        if diff > tol then cooling_sizing_temp_diff_set_correctly = false end
+        assert(cooling_sizing_temp_diff_set_correctly, "test_airloop_sizing_rules_vav: Cooling sizing supply temperature difference does not match necb requirement #{name}")
         tot_floor_area += izone.floorArea
       end
       #necb_min_flow_rate = 0.002 * tot_floor_area
@@ -164,18 +169,18 @@ begin
         if diff > tol then cooling_sizing_factor_set_correctly = false end
         assert(cooling_sizing_factor_set_correctly, "test_airloop_sizing_rules_heatpump: Cooling sizing factor does not match necb requirement #{name} got #{cooling_sizing_factor} expected #{necb_cooling_sizing_factor}")
         # check supply temperatures
-        heating_sizing_temp = sizing_zone.zoneHeatingDesignSupplyAirTemperature
-        cooling_sizing_temp = sizing_zone.zoneCoolingDesignSupplyAirTemperature
-        necb_heating_sizing_temp = 43.0
-        necb_cooling_sizing_temp = 13.0
-        diff = (heating_sizing_temp.to_f - necb_heating_sizing_temp).abs / necb_heating_sizing_temp
-        heating_sizing_temp_set_correctly = true
-        if diff > tol then heating_sizing_temp_set_correctly = false end
-        assert(heating_sizing_temp_set_correctly, "test_airloop_sizing_rules_heatpump: Heating sizing supply temperature does not match necb requirement #{name}")
-        diff = (heating_sizing_temp.to_f - necb_heating_sizing_temp).abs / necb_heating_sizing_temp
-        cooling_sizing_temp_set_correctly = true
-        if diff > tol then cooling_sizing_temp_set_correctly = false end
-        assert(cooling_sizing_temp_set_correctly, "test_airloop_sizing_rules_heatpump: Cooling sizing supply temperature does not match necb requirement #{name}")
+        heating_sizing_temp_diff = sizing_zone.zoneHeatingDesignSupplyAirTemperatureDifference
+        cooling_sizing_temp_diff = sizing_zone.zoneCoolingDesignSupplyAirTemperatureDifference
+        necb_heating_sizing_temp_diff = 21.0
+        necb_cooling_sizing_temp_diff = 11.0
+        diff = (heating_sizing_temp_diff.to_f - necb_heating_sizing_temp_diff).abs / necb_heating_sizing_temp_diff
+        heating_sizing_temp_diff_set_correctly = true
+        if diff > tol then heating_sizing_temp_diff_set_correctly = false end
+        assert(heating_sizing_temp_diff_set_correctly, "test_airloop_sizing_rules_heatpump: Heating sizing supply temperature difference does not match necb requirement #{name}")
+        diff = (heating_sizing_temp_diff.to_f - necb_heating_sizing_temp_diff).abs / necb_heating_sizing_temp_diff
+        cooling_sizing_temp_diff_set_correctly = true
+        if diff > tol then cooling_sizing_temp_diff_set_correctly = false end
+        assert(cooling_sizing_temp_diff_set_correctly, "test_airloop_sizing_rules_heatpump: Cooling sizing supply temperature difference does not match necb requirement #{name}")
         tot_floor_area += izone.floorArea
       end
     end

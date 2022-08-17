@@ -2524,12 +2524,28 @@ class Standard
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
 
-    props = model_find_object(standards_data['construction_properties'],
-                              'template' => template,
-                              'climate_zone_set' => climate_zone_set,
-                              'intended_surface_type' => intended_surface_type,
-                              'standards_construction_type' => standards_construction_type,
-                              'building_category' => building_category)
+    wwr = model_get_percent_of_surface_range(model, intended_surface_type)
+
+    search_criteria = { 'template' => template,
+                        'climate_zone_set' => climate_zone_set,
+                        'intended_surface_type' => intended_surface_type,
+                        'standards_construction_type' => standards_construction_type,
+                        'building_category' => building_category }
+
+    if !wwr['minimum_percent_of_surface'].nil? && !wwr['maximum_percent_of_surface'].nil?
+      search_criteria['minimum_percent_of_surface'] = wwr['minimum_percent_of_surface']
+      search_criteria['maximum_percent_of_surface'] = wwr['maximum_percent_of_surface']
+    end
+
+    # First search
+    props = model_find_object(standards_data['construction_properties'], search_criteria)
+
+    if !props
+      # Second search: In case need to use climate zone (e.g: 3) instead of sub-climate zone (e.g: 3A) for search
+      climate_zone = climate_zone_set[0..-2]
+      search_criteria['climate_zone_set'] = climate_zone
+      props = model_find_object(standards_data['construction_properties'], search_criteria)
+    end
 
     if !props
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
@@ -3602,6 +3618,12 @@ class Standard
     # switch to use this but update test in standards and measures to load this outside of the method
     construction_properties = model_find_object(standards_data['construction_properties'], search_criteria)
 
+    if !construction_properties
+      # Search again use climate zone (e.g. 3) instead of sub-climate zone (3A)
+      search_criteria['climate_zone_set'] = climate_zone_set[0..-2]
+      construction_properties = model_find_object(standards_data['construction_properties'], search_criteria)
+    end
+
     return construction_properties
   end
 
@@ -4290,7 +4312,7 @@ class Standard
   # @param possible_climate_zone_sets [Array] climate zone sets
   # @return [String] climate zone ses
   def model_get_climate_zone_set_from_list(model, possible_climate_zone_sets)
-    climate_zone_set = possible_climate_zone_sets.min
+    climate_zone_set = possible_climate_zone_sets.max
     return climate_zone_set
   end
 
@@ -5777,6 +5799,15 @@ class Standard
     end
 
     return parametric_inputs
+  end
+
+  # Determine the surface range of a baseline model.
+  # The method calculates the window to wall ratio (assuming all spaces are conditioned)
+  # and select the range based on the calculated window to wall ratio
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param intended_surface_type [String] surface type
+  def model_get_percent_of_surface_range(model, intended_surface_type)
+    return { 'minimum_percent_of_surface' => nil, 'maximum_percent_of_surface' => nil }
   end
 
   # Default SAT reset type
