@@ -1912,7 +1912,7 @@ class AppendixGPRMTests < Minitest::Test
         wwr_baseline = run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Conditioned Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
         # Check WWR against expected WWR
         wwr_goal = 100 * @@wwr_values[building_type].to_f
-        assert(wwr_baseline < wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model with user data is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_baseline}, smaller than the WWR goal #{wwr_goal}")
+        assert(wwr_baseline > wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model with user data is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be greater than the WWR goal #{wwr_goal}")
       end
       # TODO adding more tests to check if zones are assigned correctly
       if building_type == 'LargeHotel'
