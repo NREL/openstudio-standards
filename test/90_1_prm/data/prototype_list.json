@@ -23,6 +23,12 @@
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", []],
         ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", []]
     ],
+    "exterior_lighting": [
+        ["RetailStandalone", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_ext_ltg", []]
+    ],
+    "lighting_exceptions": [
+        ["RetailStripmall", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_ltg_exceptions", []]
+    ],
     "light_occ_sensor": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test",""],
         ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test",""]

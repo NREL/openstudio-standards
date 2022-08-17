@@ -181,6 +181,8 @@ class Standard
       # Modify the upper limit value of fractional schedule to avoid the fatal error caused by schedule value higher than 1
       space_type_light_sch_change(model)
 
+      model_apply_baseline_exterior_lighting(model)
+
       # Calculate infiltration as per 90.1 PRM rules
       model_baseline_apply_infiltration_standard(model, climate_zone)
 
@@ -4886,6 +4888,15 @@ class Standard
     srr_lim = 5.0
     return srr_lim
   end
+
+  # Apply baseline values to exterior lights objects
+  # Only implemented for stable baseline
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  def model_apply_baseline_exterior_lighting(model)
+    return false
+  end
+
 
   # Remove all HVAC that will be replaced during the performance rating method baseline generation.
   # This does not include plant loops that serve WaterUse:Equipment or Fan:ZoneExhaust
