@@ -139,6 +139,9 @@
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test",[["remove_transformer", []]]],
         ["Warehouse", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test",[["remove_cooling_coils", []]]]
     ],
+    "night_cycle_exception": [
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_nitcyc_excep", [["remove_transformer", []]]]
+    ],
     "building_rotation_check": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_bro_01", []],
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_bro_01", [["change_wwr_model", [0.4, 0.4, 0.6, 0.6]]]],

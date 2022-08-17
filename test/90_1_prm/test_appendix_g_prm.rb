@@ -632,6 +632,20 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  def check_nightcycle_exception(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+
+      if building_type == 'MediumOffice'
+        # check for night cycle on lower level
+        thermal_zone = model.getThermalZoneByName('Core_bottom ZN').get
+        air_loop = thermal_zone.airLoopHVAC.get
+        fan_schedule_name = air_loop.availabilitySchedule.name.get
+        assert( fan_schedule_name.include?("Always"), "Night cycle exception failed for #{building_type}-#{template}.")
+      end
+    end
+  end
+
   #
   # testing method for PRM 2019 baseline HVAC sizing, specific testing objectives are commented inline
   #
@@ -3304,6 +3318,7 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
+=begin
       'wwr',
       'srr',
       'envelope',
@@ -3337,6 +3352,8 @@ class AppendixGPRMTests < Minitest::Test
       'dcv',
       'exterior_lighting',
       'lighting_exceptions',
+=end
+      'night_cycle_exception',
     ]
 
     # Get list of unique prototypes
@@ -3383,5 +3400,6 @@ class AppendixGPRMTests < Minitest::Test
     check_dcv(prototypes_base['dcv']) if tests.include? 'dcv'
     check_exterior_lighting(prototypes_base['exterior_lighting']) if tests.include? 'exterior_lighting'
     check_lighting_exceptions(prototypes_base['lighting_exceptions']) if tests.include? 'lighting_exceptions'
+    check_nightcycle_exception(prototypes_base['night_cycle_exception']) if tests.include? 'night_cycle_exception'
   end
 end

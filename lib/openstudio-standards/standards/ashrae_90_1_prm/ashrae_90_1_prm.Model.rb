@@ -1379,6 +1379,9 @@ class ASHRAE901PRM < Standard
     handle_airloop_doas_user_input_data(model)
     # load zone HVAC user data from proposed model
     handle_zone_hvac_user_input_data(model)
+    # load thermal zone user data from proposed model
+    handle_thermal_zone_user_input_data(model)
+
   end
 
   # A function to load airloop data from userdata csv files
@@ -1496,6 +1499,42 @@ class ASHRAE901PRM < Standard
       end
     end
   end
+
+  # A function to load thermal zone data from userdata csv files
+  # @param [OpenStudio::Model::Model] OpenStudio model object
+  def handle_thermal_zone_user_input_data(model)
+
+    model.getThermalZones.each do |thermal_zone|
+      nightcycle_exception = false
+      if standards_data.key?('userdata_thermal_zone')
+        standards_data['userdata_thermal_zone'].each do |row|
+          next unless row['name'].to_s.downcase.strip == thermal_zone.name.to_s.downcase.strip
+          if row['has_health_safety_night_cycle_exception'].to_s.upcase.strip == 'TRUE'
+            nightcycle_exception = true
+            break
+          end
+        end
+      end
+      if nightcycle_exception
+        thermal_zone.additionalProperties.setFeature('has_health_safety_night_cycle_exception', true)
+      end
+    end
+
+    # mark unmarked zones
+    model.getThermalZones.each do |zone|
+      next if zone.additionalProperties.hasFeature('has_health_safety_night_cycle_exception')
+      zone.additionalProperties.setFeature('has_health_safety_night_cycle_exception', false)
+    end
+
+    model.getThermalZones.each do |zone|
+      next if zone.additionalProperties.hasFeature('has_health_safety_night_cycle_exception')
+      zone.additionalProperties.setFeature('has_health_safety_night_cycle_exception', false)
+    end
+
+  end
+
+
+
 
   # Analyze HVAC, window-to-wall ratio and SWH building (area) types from user data inputs in the @standard_data library
   # This function returns True, but the values are stored in the multi-building_data argument.
@@ -2216,6 +2255,7 @@ class ASHRAE901PRM < Standard
     total_area_ft2 = 0
     zones.each do |zn|
       if thermal_zone_heated?(zn['zone']) && !thermal_zone_cooled?(zn['zone'])
+        # this will occur when there is no cooling tstat, or when min cooling setpoint is above 91 F
         heated_only_zones << zn['zone']
       elsif comp_room_loads[zn['zone'].name.get] > 0
         # This is a computer room zone

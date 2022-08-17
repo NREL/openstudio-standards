@@ -75,7 +75,8 @@ class Standard
           plr_req = fan_variable_volume_part_load_fan_power_limitation?(fan)
           # Part Load Fan Pressure Control
           if plr_req
-            fan_variable_volume_set_control_type(fan, 'Multi Zone VAV with VSD and SP Setpoint Reset')
+            vsd_curve_type = air_loop_hvac_set_vsd_curve_type
+            fan_variable_volume_set_control_type(fan, vsd_curve_type)
           # No Part Load Fan Pressure Control
           else
             fan_variable_volume_set_control_type(fan, 'Multi Zone VAV with discharge dampers')
@@ -355,6 +356,12 @@ class Standard
 
     return true
   end
+
+  # Set default fan curve to be VSD with static pressure reset
+
+  def air_loop_hvac_set_vsd_curve_type
+    return 'Multi Zone VAV with VSD and SP Setpoint Reset'
+  end  
 
   # Calculate and apply the performance rating method baseline fan power to this air loop.
   # Fan motor efficiency will be set, and then fan pressure rise adjusted so that the

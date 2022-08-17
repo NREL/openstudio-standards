@@ -4,7 +4,7 @@ class ASHRAE901PRM < Standard
   # Determine the fan power limitation pressure drop adjustment
   # Per Table 6.5.3.1-2 (90.1-2019)
   #
-  # @param themal_zone
+  # @param thermal_zone
   def thermal_zone_get_fan_power_limitations(thermal_zone, is_energy_recovery_required)
     fan_pwr_adjustment_in_wc = 0
     # Get autosized zone design supply air flow rate
