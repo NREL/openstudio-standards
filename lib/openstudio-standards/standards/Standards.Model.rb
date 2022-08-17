@@ -84,9 +84,9 @@ class Standard
     # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
     bldg_type_hvac_zone_hash = {}
     handle_user_input_data(user_model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
-
     # Define different orientation from original orientation
     # for each individual baseline models
+    # Need to run proposed model sizing simulation if no sql data is available
     degs_from_org = run_all_orientations(run_all_orients, user_model) ? [0, 90, 180, 270] : [0]
 
     # Create baseline model for each orientation
@@ -100,7 +100,6 @@ class Standard
       # Rotate building if requested,
       # Site shading isn't rotated
       model_rotate(model, degs) unless degs == 0
-
       # Perform a sizing run of the proposed model.
       #
       # Among others, one of the goal is to get individual
@@ -152,7 +151,6 @@ class Standard
         # because the proposed model zone design air flow is needed
         model_identify_return_air_type(model)
       end
-
       # Remove external shading devices
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Removing External Shading Devices ***')
       model_remove_external_shading_devices(model)
