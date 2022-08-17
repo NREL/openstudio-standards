@@ -1526,11 +1526,6 @@ class ASHRAE901PRM < Standard
       zone.additionalProperties.setFeature('has_health_safety_night_cycle_exception', false)
     end
 
-    model.getThermalZones.each do |zone|
-      next if zone.additionalProperties.hasFeature('has_health_safety_night_cycle_exception')
-      zone.additionalProperties.setFeature('has_health_safety_night_cycle_exception', false)
-    end
-
   end
 
 
