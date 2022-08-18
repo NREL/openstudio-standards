@@ -53,7 +53,7 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
 
       # Generate the osm files for all relevant cases to generate the test data for system 3
       actual_heatpump_cop = []
-      heatpump_res_file_output_text = "Min Capacity (kW),Max Capacity (kW),Test Capacity (kW),COP\n"
+      heatpump_res_file_output_text = "Min Capacity (kW),Max Capacity (kW),Test Capacity (kW),COP (no fan),COP-H\n"
       boiler_fueltype = 'Electricity'
       baseboard_type = 'Hot Water'
       heating_coil_type = 'DX'
@@ -97,10 +97,11 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
       output_line_text = ''
       for i in 0..num_cap_intv - 1
         # Convert from  COP  to COP_H for heat pump heating coils
+        # COP from code is converted to remove fan heat gain following ASHRAE 90.1:2013 section 11.5.2.c
         # As the OpenStudio model has the COP (no fan), so it's converted back in the unit test to compare it to the code
         capacity_btu_per_hr = OpenStudio.convert(test_caps[i].to_f, 'kW', 'Btu/hr').get
         actual_heatpump_copH = actual_heatpump_cop[i] / (1.48E-7 * capacity_btu_per_hr + 1.062)
-        output_line_text += "#{min_caps[i]},#{max_caps[i]},#{test_caps[i]},#{actual_heatpump_copH.round(1)}\n"
+        output_line_text += "#{min_caps[i]},#{max_caps[i]},#{test_caps[i]},#{actual_heatpump_cop[i].round(1)},#{actual_heatpump_copH.round(1)}\n"
       end
       heatpump_res_file_output_text += output_line_text
 
