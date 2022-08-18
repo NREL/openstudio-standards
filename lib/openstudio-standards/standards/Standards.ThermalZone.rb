@@ -1636,6 +1636,7 @@ class Standard
     zone_ppl_sch = Array.new(8760, 0)     # merged people schedule for zone
     zone_op_sch = Array.new(8760, 0)      # intersection of fan and people scheds
 
+    unoccupied_threshold = air_loop_hvac_unoccupied_threshold
     # Need composite occupant schedule for spaces in the zone
     zone.spaces.each do |space|
       space_ppl_sch = space_occupancy_annual_array(model, space)

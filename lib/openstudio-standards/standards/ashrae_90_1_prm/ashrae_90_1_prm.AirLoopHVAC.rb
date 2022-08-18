@@ -119,6 +119,16 @@ class ASHRAE901PRM < Standard
     return 0.10
   end
 
+  # Determine if the system economizer must be integrated or not.
+  # Always required for stable baseline if there is an economizer
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if required, false if not
+  def air_loop_hvac_integrated_economizer_required?(air_loop_hvac, climate_zone)
+    return true
+  end
+
   # Determine the economizer type and limits for the the PRM
   # Defaults to 90.1-2007 logic.
   #
@@ -587,12 +597,15 @@ class ASHRAE901PRM < Standard
     when 'NoEconomizer'
       return [nil, nil, nil]
     when 'FixedDryBulb'
+      climate_zone_code = climate_zone.split('-')[-1]
+      climate_zone_code = 7 if ['7A', '7B'].include? climate_zone_code
+      climate_zone_code = 8 if ['8A', '8B'].include? climate_zone_code
       search_criteria = {
           'template' => template,
-          'climate_zone' => climate_zone
+          'climate_id' => climate_zone_code
       }
       econ_limits = model_find_object(standards_data['prm_economizers'], search_criteria)
-      drybulb_limit_f = econ_limits['fixed_dry_bulb_high_limit_shutoff_temp']
+      drybulb_limit_f = econ_limits['high_limit_shutoff']
     when 'FixedEnthalpy'
       enthalpy_limit_btu_per_lb = 28
     when 'FixedDewPointAndDryBulb'

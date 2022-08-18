@@ -70,11 +70,11 @@ class Standard
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
     # Check proposed model unmet load hours
     if unmet_load_hours_check
-      # Run proposed model
+      # Run proposed model; need annual simulation to get unmet load hours
       if model_run_simulation_and_log_errors(user_model, run_dir = "#{sizing_run_dir}/PROP")
         umlh = model_get_unmet_load_hours(user_model)
         if umlh > 300
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created.")
+          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created.")
           raise "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created."
         end
       end
@@ -134,10 +134,13 @@ class Standard
         end
 
         # Run the sizing run
-        if model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
+        #if model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
+        #  return false
+        #end
+        if model_run_sizing_run(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
           return false
         end
-
+  
         # Set baseline model space conditioning category based on proposed model
         model.getSpaces.each do |space|
           # Get conditioning category at the space level
