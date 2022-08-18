@@ -157,7 +157,6 @@ class ASHRAE901PRM < Standard
     chiller_compressor_type = nil
 
     # Set the equipment to stage sequentially
-    #plant_loop.setLoadDistributionScheme('SequentialLoad')
     plant_loop.setLoadDistributionScheme('SequentialUniformPLR')
 
     # Determine the capacity of the loop
