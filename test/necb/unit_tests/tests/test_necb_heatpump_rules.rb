@@ -51,7 +51,7 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
       end
       test_caps << (min_caps[num_cap_intv - 1].to_f + 10.0)
 
-     # Generate the osm files for all relevant cases to generate the test data for system 3
+      # Generate the osm files for all relevant cases to generate the test data for system 3
       actual_heatpump_cop = []
       heatpump_res_file_output_text = "Min Capacity (kW),Max Capacity (kW),Test Capacity (kW),COP\n"
       boiler_fueltype = 'Electricity'
@@ -96,7 +96,11 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
       # Generate table of test heat pump heating efficiencies
       output_line_text = ''
       for i in 0..num_cap_intv - 1
-        output_line_text += "#{min_caps[i]},#{max_caps[i]},#{test_caps[i]},#{actual_heatpump_cop[i].round(1)}\n"
+        # Convert from  COP  to COP_H for heat pump heating coils
+        # As the OpenStudio model has the COP (no fan), so it's converted back in the unit test to compare it to the code
+        capacity_btu_per_hr = OpenStudio.convert(test_caps[i].to_f, 'kW', 'Btu/hr').get
+        actual_heatpump_copH = actual_heatpump_cop[i] / (1.48E-7 * capacity_btu_per_hr + 1.062)
+        output_line_text += "#{min_caps[i]},#{max_caps[i]},#{test_caps[i]},#{actual_heatpump_copH.round(1)}\n"
       end
       heatpump_res_file_output_text += output_line_text
 
@@ -217,8 +221,9 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
       standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
       # Apply the HVAC efficiency standard
       standard.model_apply_hvac_efficiency_standard(model, climate_zone)
-      # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
 
+      # Find the minimum COP and rename with efficiency rating
+      #cop = coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, true)
       # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
 
       return true
