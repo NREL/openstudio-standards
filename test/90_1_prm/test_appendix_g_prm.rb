@@ -1766,12 +1766,14 @@ class AppendixGPRMTests < Minitest::Test
       secondary_flow = terminal.autosizedMaximumSecondaryAirFlowRate.get.to_f
     end
     if terminal.maximumPrimaryAirFlowRate.is_initialized
-      primary_flow = terminal.maximumSecondaryAirFlowRate.get.to_f
+      primary_flow = terminal.maximumPrimaryAirFlowRate.get.to_f
     else
       primary_flow = terminal.autosizedMaximumPrimaryAirFlowRate.get.to_f
     end
     secondary_flow_frac = secondary_flow / primary_flow
-    assert(secondary_flow_frac.round(2) == 0.5, "Expected secondary flow fraction should be 0.5 but #{secondary_flow_frac} is used for #{mod_str}.")
+    err = (secondary_flow_frac - 0.5).abs
+    # need to allow some tolerance due to secondary flow getting set before final sizing run
+    assert(err < 0.03, "Expected secondary flow fraction should be 0.5 but #{secondary_flow_frac} is used for #{mod_str}.")
   end
 
   # Check if baseline system type is PTAC or PTHP
