@@ -2803,5 +2803,39 @@ class ASHRAE901PRM < Standard
     return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs }
   end
 
+
+  # This method is a catch-all run at the end of create-baseline to make final adjustements to HVAC capacities 
+  # to account for recent model changes
+
+  # @author Doug Maddox, PNNL
+  # @param model
+
+  def model_refine_size_dependant_values(model)
+
+    model.getAirLoopHVACs.sort.each do |air_loop_hvac|
+
+      # Reset secondary design secondary flow rate based on updated primary flow
+      air_loop_hvac.demandComponents.each do |dc|
+        next if dc.to_AirTerminalSingleDuctParallelPIUReheat.empty?
+  
+        pfp_term = dc.to_AirTerminalSingleDuctParallelPIUReheat.get
+        sec_flow_frac = 0.5
+  
+        # Get the maximum flow rate through the terminal
+        max_primary_air_flow_rate = nil
+        if pfp_term.autosizedMaximumPrimaryAirFlowRate.is_initialized
+          max_primary_air_flow_rate = pfp_term.autosizedMaximumPrimaryAirFlowRate.get
+        elsif pfp_term.maximumPrimaryAirFlowRate.is_initialized
+          max_primary_air_flow_rate = pfp_term.maximumPrimaryAirFlowRate.get
+        end
+  
+        max_sec_flow_rate_m3_per_s = max_primary_air_flow_rate * sec_flow_frac
+        pfp_term.setMaximumSecondaryAirFlowRate(max_sec_flow_rate_m3_per_s)
+      end
+    end
+    return true
+  end
+
 end
+
 

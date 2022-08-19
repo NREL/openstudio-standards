@@ -425,6 +425,13 @@ class Standard
       # Set baseline DCV system
       model_set_baseline_demand_control_ventilation(model, climate_zone)
 
+      # Final sizing run to refine size-dependent values
+      if model_run_sizing_run(model, "#{sizing_run_dir}/SR3") == false
+        return false
+      end
+
+      model_refine_size_dependant_values(model)
+
       # Fix EMS references.
       # Temporary workaround for OS issue #2598
       model_temp_fix_ems_references(model)
@@ -6244,6 +6251,10 @@ class Standard
       end
     end
 
+    return true
+  end
+
+  def model_refine_size_dependant_values(model)
     return true
   end
 

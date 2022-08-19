@@ -3405,8 +3405,28 @@ class AppendixGPRMTests < Minitest::Test
     check_pipe_insulation(model_hash['baseline'])
   end
 
-  def test_hvac_baseline
-    model_hash = prm_test_helper('hvac_baseline', require_prototype=false, require_baseline=true)
+  def test_hvac_baseline_01
+    model_hash = prm_test_helper('hvac_baseline_01', require_prototype=false, require_baseline=true)
+    check_hvac(model_hash['baseline'])
+  end
+
+  def test_hvac_baseline_02
+    model_hash = prm_test_helper('hvac_baseline_02', require_prototype=false, require_baseline=true)
+    check_hvac(model_hash['baseline'])
+  end
+
+  def test_hvac_baseline_03
+    model_hash = prm_test_helper('hvac_baseline_03', require_prototype=false, require_baseline=true)
+    check_hvac(model_hash['baseline'])
+  end
+
+  def test_hvac_baseline_04
+    model_hash = prm_test_helper('hvac_baseline_04', require_prototype=false, require_baseline=true)
+    check_hvac(model_hash['baseline'])
+  end
+
+  def test_hvac_baseline_05
+    model_hash = prm_test_helper('hvac_baseline_05', require_prototype=false, require_baseline=true)
     check_hvac(model_hash['baseline'])
   end
 
