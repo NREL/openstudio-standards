@@ -1,6 +1,7 @@
 require_relative '../libs.rb'
 class BTAP_CLI_Test < Minitest::Test
   def test_cli
+    # Set folders
     input_folder = File.join(__dir__, '..', 'input')
     input_folder_cache = File.join(__dir__, '..', 'input_cache')
     output_folder = File.join(__dir__, '..', 'output')
