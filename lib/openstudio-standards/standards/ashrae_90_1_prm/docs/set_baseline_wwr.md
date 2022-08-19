@@ -56,7 +56,7 @@ The function works well with cases where WWR reduction is needed. For WWR increa
 1. The function will remove all windows in the surface then add a new window to meet the required WWR.
 2. The function will keep the existing doors but there could be cases the location of door overlaps with the new window.
 
-In addition, when increasing the WWR requires adding windows to surfaces with no windows, the function will not adding any windows to spaces tagged as plenum and used as a AirLoopSupplyPlenum or AirLoopReturnPlenum. 
+In addition, when increasing the WWR requires adding windows to surfaces with no windows, the function will not adding any windows to spaces tagged as plenum and/or used as a AirLoopSupplyPlenum or AirLoopReturnPlenum. 
 
 ## Test Case Documentation
 

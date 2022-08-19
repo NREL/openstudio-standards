@@ -2930,6 +2930,32 @@ class Standard
     return overlap_area
   end
 
+
+  # A function to check whether a space is a return / supply plenum.
+  # This function only works on spaces that is categorized as return or supply air plenum
+  # For zones works as plenum but not correctly categorized in the OS will not be identified by this function
+  # @param [OpenStudio::Model::Space] space
+  # @return boolean true if it is plenum, else false.
+  def space_is_plenum(space)
+    # Get the zone this space is inside
+    zone = space.thermalZone
+    # the zone is a return air plenum
+    space.model.getAirLoopHVACReturnPlenums.each do |return_air_plenum|
+      if return_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
+        # Determine if residential
+        return true
+      end
+    end
+    # the zone is a supply plenum
+    space.model.getAirLoopHVACSupplyPlenums.each do |supply_air_plenum|
+      if supply_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
+        return true
+      end
+    end
+    # None match, return false
+    return false
+  end
+
   # Determine if a space should be modeled with an occupancy standby mode
   #
   # @param space [OpenStudio::Model::Space] OpenStudio Space object
