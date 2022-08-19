@@ -1,6 +1,6 @@
 class ECMS
   # This method will set the properties of the ERV. Must be run after the standard efficiency is complete as this will overwrite
-  # those values. See data/erv.json to view/add different erv packages.
+  # those values. See data/erv.json to view/add different erv packages available.
   def apply_erv_ecm_efficiency(model:, erv_package: nil)
     # If erv is nil.. do nothing.
     return if erv_package.nil? || erv_package == 'none' || erv_package == 'NECB_Default'
