@@ -400,17 +400,14 @@ class Standard
         return false
       end
 
-      if /prm/i !~ template
-        # Set the pumping control strategy and power
-        # Must be done after sizing components
-        model.getPlantLoops.sort.each do |plant_loop|
-          # Skip the SWH loops
-          next if plant_loop_swh_loop?(plant_loop)
+      # Set the pumping control strategy and power
+      # Must be done after sizing components
+      model.getPlantLoops.sort.each do |plant_loop|
+        # Skip the SWH loops
+        next if plant_loop_swh_loop?(plant_loop)
 
-          plant_loop_apply_prm_baseline_pump_power(plant_loop)
-          plant_loop_apply_prm_baseline_pumping_type(plant_loop)
-        end
-
+        plant_loop_apply_prm_baseline_pump_power(plant_loop)
+        plant_loop_apply_prm_baseline_pumping_type(plant_loop)
       end
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Prescriptive HVAC Controls and Equipment Efficiencies ***')
