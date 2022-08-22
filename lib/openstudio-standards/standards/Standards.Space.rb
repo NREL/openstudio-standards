@@ -2932,8 +2932,7 @@ class Standard
 
 
   # A function to check whether a space is a return / supply plenum.
-  # This function only works on spaces that is categorized as return or supply air plenum
-  # For zones works as plenum but not correctly categorized in the OS will not be identified by this function
+  # This function only works on spaces used as a AirLoopSupplyPlenum or AirLoopReturnPlenum
   # @param [OpenStudio::Model::Space] space
   # @return boolean true if it is plenum, else false.
   def space_is_plenum(space)

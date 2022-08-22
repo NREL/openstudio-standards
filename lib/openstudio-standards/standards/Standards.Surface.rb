@@ -486,4 +486,57 @@ class Standard
       return 'W'
     end
   end
+
+  # Calculate the wwr of a surface
+  #
+  # @param surface [OpenStudio::Model::Surface]
+  # @return [Float] window to wall ratio of a surface
+  def surface_get_wwr_of_a_surface(surface)
+    surface_area = surface.grossArea
+    surface_fene_area = 0.0
+    surface.subSurfaces.sort.each do |ss|
+      next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
+
+      surface_fene_area += ss.netArea
+    end
+    return surface_fene_area / surface_area
+  end
+
+  # Adjust the fenestration area to the values specified by the reduction value in a surface
+  #
+  # @param surface [OpenStudio::Model:Surface] openstudio surface object
+  # @param reduction [Float] ratio of adjustments
+  # @param model [OpenStudio::Model::Model] openstudio model
+  # @return [Bool] return true if successful, false if not
+  def surface_adjust_fenestration_in_a_surface(surface, reduction, model)
+    # Subsurfaces in this surface
+    # Default case only handles reduction
+    if reduction < 1.0
+      surface.subSurfaces.sort.each do |ss|
+        next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
+
+        if sub_surface_vertical_rectangle?(ss)
+          sub_surface_reduce_area_by_percent_by_raising_sill(ss, reduction)
+        else
+          sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, reduction)
+        end
+      end
+    end
+    return true
+  end
+
+  # Calculate the door ratio of a surface
+  #
+  # @param surface [OpenStudio::Model::Surface]
+  # @return [Float] window to wall ratio of a surface
+  def surface_get_door_ratio_of_a_surface(surface)
+    surface_area = surface.grossArea
+    surface_door_area = 0.0
+    surface.subSurfaces.sort.each do |ss|
+      next unless ss.subSurfaceType == 'Door'
+
+      surface_door_area += ss.netArea
+    end
+    return surface_door_area / surface_area
+  end
 end

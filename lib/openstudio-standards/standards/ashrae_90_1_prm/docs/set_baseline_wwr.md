@@ -47,7 +47,7 @@ Set window to wall ratio in the baseline model
               - Set a new window to wall ratio to the surface `surface.setWindowToWallRatio(surface_wwr * multiplier)`
 
 ## Key Ruby Methods
-The function `get_wwr_reduction_ratio` implements the logic for calculating the reduction ratio `reduction_ratio` and `model_adjust_fenestration_in_a_surface` implements the logics to adjust the window to wall ratio for a surface
+The function `get_wwr_reduction_ratio` implements the logic for calculating the reduction ratio `reduction_ratio` and `surface_adjust_fenestration_in_a_surface` implements the logics to adjust the window to wall ratio for a surface
 
 The implementation of both functions can be found in the `ashrae_90_1_prm.Model.rb`
 
