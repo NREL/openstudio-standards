@@ -2003,20 +2003,42 @@ class ASHRAE901PRM < Standard
       end
     end
   end
+
+  # This function checks whether it is required to adjust the window to wall ratio based on the model WWR and wwr limit.
+  # @param wwr_limit [Float] return wwr_limit
+  # @param wwr_list [Array] list of wwr of zone conditioning category in a building area type category - residential, nonresidential and semiheated
+  # @return require_adjustment [Boolean] True, require adjustment, false not require adjustment.
+  def model_does_require_wwr_adjustment?(wwr_limit, wwr_list)
+    # 90.1 PRM routine requires
+    return true
+  end
   
   # For 2019, it is required to adjusted wwr based on building categories for all other types
   #
-  # @param wwr_limit [Float] wwr_limit
   # @param bat [String] building category
-  # @param wwr_list [Array] list of wwr that contains different building categories - residential, nonresidential and semiheated
+  # @param wwr_list [Array] list of zone conditioning category-based WWR - residential, nonresidential and semiheated
   # @return wwr_limit [Float] return adjusted wwr_limit
-  def model_adjust_wwr_based_on_bat(wwr_limit, bat, wwr_list)
-    if bat.casecmp?('all others')
+  def model_get_bat_wwr_target(bat, wwr_list)
+    wwr_limit = 40.0
+    # Lookup WWR target from stable baseline table
+    wwr_lib = standards_data['prm_wwr_bldg_type']
+    search_criteria = {
+      'template' => template,
+      'wwr_building_type' => bat
+    }
+    wwr_limit_bat = model_find_object(wwr_lib, search_criteria)
+    # If building type isn't found, assume that it's
+    # the same as 'All Others'
+    if wwr_limit_bat.nil? || bat.casecmp?('all others')
       wwr = wwr_list.max
-      return [wwr_limit, wwr].min
+      # All others type
+      # use the min of 40% and the max wwr in the ZCC-wwr list.
+      wwr_limit = [wwr_limit, wwr].min
     else
-      return wwr_limit
+      # Matched type: use WWR from database.
+      wwr_limit = wwr_limit_bat['wwr'] * 100.0
     end
+    return wwr_limit
   end
 
   # Calculate the window to wall ratio reduction factor

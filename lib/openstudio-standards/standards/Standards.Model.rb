@@ -4616,34 +4616,15 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Semiheated = #{vals['wwr_sh'].round}%; window = #{vals['sh_wind_ft2'].round} ft2, wall = #{vals['sh_wall_ft2'].round} ft2.")
 
       # WWR limit or target
-      if template == '90.1-PRM-2019'
-        # Lookup WWR target from stable baseline table
-        wwr_lib = standards_data['prm_wwr_bldg_type']
-        search_criteria = {
-          'template' => template,
-          'wwr_building_type' => bat
-        }
-        # If building type isn't found, assume that it's
-        # the same as 'All Others'
-        if model_find_object(wwr_lib, search_criteria).nil?
-          wwr_lim = 40.0
-        else
-          wwr_lim = model_find_object(wwr_lib, search_criteria)['wwr'] * 100.0
-        end
-      else
-        wwr_lim = 40.0
-      end
-
-      wwr_lim = model_adjust_wwr_based_on_bat(wwr_lim, bat, [vals['wwr_nr'], vals['wwr_res'], vals['wwr_sh']])
+      wwr_lim = model_get_bat_wwr_target(bat, [vals['wwr_nr'], vals['wwr_res'], vals['wwr_sh']])
 
       # Check against WWR limit
       vals['red_nr'] = vals['wwr_nr'] > wwr_lim
       vals['red_res'] = vals['wwr_res'] > wwr_lim
       vals['red_sh'] = vals['wwr_sh'] > wwr_lim
 
-      # Stop here unless windows need reducing or increasing or if
-      # following the stable baseline approach
-      return true, base_wwr unless (vals['red_nr'] || vals['red_res'] || vals['red_sh']) || template == '90.1-PRM-2019'
+      # Stop here unless windows need reducing or increasing
+      return true, base_wwr unless model_does_require_wwr_adjustment?(wwr_lim, [vals['wwr_nr'], vals['wwr_res'], vals['wwr_sh']])
 
       # Determine the factors by which to reduce the window area
       vals['mult_nr_red'] = wwr_lim / vals['wwr_nr']
@@ -6157,14 +6138,25 @@ class Standard
 
   private
 
+  # This function checks whether it is required to adjust the window to wall ratio based on the model WWR and wwr limit.
+  # @param wwr_limit [Float] return wwr_limit
+  # @param wwr_list [Array] list of wwr of zone conditioning category in a building area type category - residential, nonresidential and semiheated
+  # @return require_adjustment [Boolean] True, require adjustment, false not require adjustment.
+  def model_does_require_wwr_adjustment?(wwr_limit, wwr_list)
+    require_adjustment = false
+    wwr_list.each do |wwr|
+      require_adjustment = true unless wwr > wwr_limit
+    end
+    return require_adjustment
+  end
+
   # The function is used for codes that requires to adjusted wwr based on building categories for all other types
   #
-  # @param wwr_limit [Float] wwr_limit
   # @param bat [String] building area type category
-  # @param wwr_list [Array] list of wwr that contains different building categories - residential, nonresidential and semiheated
+  # @param wwr_list [Array] list of wwr of zone conditioning category in a building area type category - residential, nonresidential and semiheated
   # @return wwr_limit [Float] return adjusted wwr_limit
-  def model_adjust_wwr_based_on_bat(wwr_limit, bat, wwr_list)
-    return wwr_limit
+  def model_get_bat_wwr_target(bat, wwr_list)
+    return 40.0
   end
 
   # Readjusted the WWR for surfaces previously has no windows to meet the
