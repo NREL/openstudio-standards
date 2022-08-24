@@ -129,5 +129,4 @@ class ASHRAE901PRM < Standard
     # Use 10% based on PRM-RM
     return 0.10
   end
-
 end

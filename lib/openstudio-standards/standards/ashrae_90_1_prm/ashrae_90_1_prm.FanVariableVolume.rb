@@ -10,9 +10,7 @@ class ASHRAE901PRM
   # @return [Double] the limit, in horsepower. Return nil for no limit by default.
   # @todo AddRef
   def fan_variable_volume_part_load_fan_power_limitation_hp_limit(fan_variable_volume)
-    hp_limit = 0
+    hp_limit = nil
     return hp_limit
   end
-
-  
 end

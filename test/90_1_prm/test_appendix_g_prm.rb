@@ -1773,7 +1773,7 @@ class AppendixGPRMTests < Minitest::Test
     secondary_flow_frac = secondary_flow / primary_flow
     err = (secondary_flow_frac - 0.5).abs
     # need to allow some tolerance due to secondary flow getting set before final sizing run
-    assert(err < 0.03, "Expected secondary flow fraction should be 0.5 but #{secondary_flow_frac} is used for #{mod_str}.")
+    assert(err < 0.01, "Expected secondary flow fraction should be 0.5 but #{secondary_flow_frac} is used for #{mod_str}.")
   end
 
   # Check if baseline system type is PTAC or PTHP

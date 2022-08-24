@@ -134,13 +134,10 @@ class Standard
         end
 
         # Run the sizing run
-        #if model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
-        #  return false
-        #end
         if model_run_sizing_run(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
           return false
         end
-  
+
         # Set baseline model space conditioning category based on proposed model
         model.getSpaces.each do |space|
           # Get conditioning category at the space level
@@ -425,11 +422,7 @@ class Standard
       # Set baseline DCV system
       model_set_baseline_demand_control_ventilation(model, climate_zone)
 
-      # Final sizing run to refine size-dependent values
-      if model_run_sizing_run(model, "#{sizing_run_dir}/SR3") == false
-        return false
-      end
-
+      # Final sizing run and adjustements to values that need refinement
       model_refine_size_dependant_values(model)
 
       # Fix EMS references.
@@ -602,8 +595,7 @@ class Standard
     return num_stories
   end
 
-
-  # Add design day schedule objects for space loads, 
+  # Add design day schedule objects for space loads,
   # not used for 2013 and earlier
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::model::Model] OpenStudio model object
@@ -616,7 +608,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param custom [String] custom fuel type
-  # @param applicable_zones [list of zone objects] 
+  # @param applicable_zones [list of zone objects]
   # @return [Array<Hash>] an array of hashes, one for each zone,
   #   with the keys 'zone', 'type' (occ type), 'fuel', and 'area'
   def model_zones_with_occ_and_fuel_type(model, custom, applicable_zones = nil)
@@ -669,7 +661,6 @@ class Standard
 
     return zones
   end
-
 
   # Determine the dominant and exceptional areas of the building based on fuel types and occupancy types.
   #
@@ -1276,7 +1267,6 @@ class Standard
   def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom = nil)
     return fuel_type # Don't change fuel type for most templates
   end
-
 
   # Determine whether heating type is fuel or electric
   # @param hvac_building_type [String] Key for lookup of baseline system type
@@ -1980,7 +1970,6 @@ class Standard
     return array_of_zones
   end
 
-
   # Determine which of the zones should be served by the primary HVAC system.
   # First, eliminate zones that differ by more# than 40 full load hours per week.
   # In this case, lighting schedule is used as the proxy for operation instead
@@ -2108,7 +2097,6 @@ class Standard
     return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs }
   end
 
-
   # For a multizone system, get straight average of hash values excluding the reference zone
   # @author Doug Maddox, PNNL
   # @param value_hash [Hash<String>] of zoneName:Value
@@ -2157,7 +2145,6 @@ class Standard
   def model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
     # Not applicable if not stable baseline
     return
-
   end
 
   # Group an array of zones into multiple arrays, one for each story in the building.
@@ -2365,7 +2352,7 @@ class Standard
   end
 
   # For backward compatibility, infiltration standard not used for 2013 and earlier
-   # @return [Bool] true if successful, false if not
+  # @return [Bool] true if successful, false if not
   def model_baseline_apply_infiltration_standard(model, climate_zone)
     return true
   end
@@ -4859,7 +4846,6 @@ class Standard
     return false
   end
 
-
   # Remove all HVAC that will be replaced during the performance rating method baseline generation.
   # This does not include plant loops that serve WaterUse:Equipment or Fan:ZoneExhaust
   #
@@ -6254,6 +6240,10 @@ class Standard
     return true
   end
 
+  # This method is a catch-all run at the end of create-baseline to make final adjustements to HVAC capacities
+  # to account for recent model changes
+  # @author Doug Maddox, PNNL
+  # @param model
   def model_refine_size_dependant_values(model)
     return true
   end
@@ -6888,6 +6878,7 @@ class Standard
   def model_mark_zone_dcv_existence(model)
     return true
   end
+
   # Check whether the baseline model generation needs to run all four orientations
   # The default shall be true
   #
@@ -6937,6 +6928,7 @@ class Standard
   def model_set_baseline_demand_control_ventilation(model, climate_zone)
     return true
   end
+
   # Identify the return air type associated with each thermal zone
   #
   # @param model [OpenStudio::Model::Model] Openstudio model object

@@ -626,12 +626,11 @@ class Standard
 
   # for 2013 and prior, baseline fuel = proposed fuel
   # @param themal_zone
-  # @return [string] with applicable DistrictHeating and/or DistrictCooling 
+  # @return [string] with applicable DistrictHeating and/or DistrictCooling
   def thermal_zone_get_zone_fuels_for_occ_and_fuel_type(zone)
     zone_fuels = thermal_zone_fossil_or_electric_type(zone, '')
     return zone_fuels
   end
-
 
   # Determine if the thermal zone's fuel type category.
   # Options are:
@@ -1314,13 +1313,13 @@ class Standard
     elsif ['3A', '3B'].include? climate_zone_code
       htg_lim_btu_per_ft2 = 9
       stable_htg_lim_btu_per_ft2 = 10
-    elsif '3C' == climate_zone_code
+    elsif climate_zone_code == '3C'
       htg_lim_btu_per_ft2 = 7
       stable_htg_lim_btu_per_ft2 = 10
     elsif ['4A', '4B'].include? climate_zone_code
       htg_lim_btu_per_ft2 = 10
       stable_htg_lim_btu_per_ft2 = 15
-    elsif '4C' == climate_zone_code
+    elsif climate_zone_code == '4C'
       htg_lim_btu_per_ft2 = 8
       stable_htg_lim_btu_per_ft2 = 15
     elsif ['5A', '5B', '5C'].include? climate_zone_code
@@ -1335,8 +1334,6 @@ class Standard
     elsif ['8A', '8B'].include? climate_zone_code
       htg_lim_btu_per_ft2 = 19
       stable_htg_lim_btu_per_ft2 = 25
-    else
-      # bad climate zone
     end
 
     # for older code versions use stable baseline value as primary target

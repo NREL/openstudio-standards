@@ -358,10 +358,10 @@ class Standard
   end
 
   # Set default fan curve to be VSD with static pressure reset
-
+  # @return [string] name of appropriate curve for this code version
   def air_loop_hvac_set_vsd_curve_type
     return 'Multi Zone VAV with VSD and SP Setpoint Reset'
-  end  
+  end
 
   # Calculate and apply the performance rating method baseline fan power to this air loop.
   # Fan motor efficiency will be set, and then fan pressure rise adjusted so that the

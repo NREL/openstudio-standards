@@ -45,6 +45,7 @@ class ASHRAE901PRM < Standard
       clg_types.each do |ct|
         coils = air_loop.supplyComponents(ct.to_IddObjectType)
         next if coils.empty?
+
         clg_coil = coils[0]
         break # Stop on first DX cooling coil found
       end

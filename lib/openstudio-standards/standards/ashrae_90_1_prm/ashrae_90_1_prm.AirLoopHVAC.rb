@@ -12,7 +12,6 @@ class ASHRAE901PRM < Standard
   # @param min_occ_pct [Double] the fractional value below which the system will be considered unoccupied.
   # @return [Bool] returns true if successful, false if not
   def air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = 0.05)
-
     if air_loop_hvac.additionalProperties.hasFeature('zone_group_type')
       zone_group_type = air_loop_hvac.additionalProperties.getFeatureAsString('zone_group_type').get
     else
@@ -33,7 +32,6 @@ class ASHRAE901PRM < Standard
         return false if exception == true
       end
     end
-
 
     # Set the system to night cycle
     # The fan of a parallel PIU terminal are set to only cycle during heating operation
@@ -111,7 +109,6 @@ class ASHRAE901PRM < Standard
     damper_action = 'Single Maximum'
     return damper_action
   end
-
 
   # Default occupancy fraction threshold for determining if the spaces on the air loop are occupied
   def air_loop_hvac_unoccupied_threshold
@@ -196,11 +193,10 @@ class ASHRAE901PRM < Standard
   end
 
   # Set fan curve for stable baseline to be VSD with fixed static pressure setpoint
-
+  # @return [string] name of appropriate curve for this code version
   def air_loop_hvac_set_vsd_curve_type
     return 'Multi Zone VAV with VSD and Fixed SP Setpoint'
-  end  
-
+  end
 
   # Calculate and apply the performance rating method
   # baseline fan power to this air loop based on the
@@ -524,11 +520,11 @@ class ASHRAE901PRM < Standard
   # @return [Boolean] flag of whether thermal zone in baseline is required to have DCV
   def baseline_thermal_zone_demand_control_ventilation_required?(thermal_zone)
     # zone needs dcv if user model has dcv and baseline does not meet apxg exception
-    if thermal_zone.additionalProperties.hasFeature("apxg no need to have DCV")
+    if thermal_zone.additionalProperties.hasFeature('apxg no need to have DCV')
       # meaning it was served by an airloop in the user model, does not mean much here, conditional as a safeguard
       # in case it was not served by an airloop in the user model
-      if !thermal_zone.additionalProperties.getFeatureAsBoolean("apxg no need to have DCV").get && # does not meet apxg exception (need to have dcv if user model has it
-         thermal_zone.additionalProperties.getFeatureAsBoolean("zone DCV implemented in user model").get
+      if !thermal_zone.additionalProperties.getFeatureAsBoolean('apxg no need to have DCV').get && # does not meet apxg exception (need to have dcv if user model has it
+         thermal_zone.additionalProperties.getFeatureAsBoolean('zone DCV implemented in user model').get
         return true
       end
     end
@@ -601,8 +597,8 @@ class ASHRAE901PRM < Standard
       climate_zone_code = 7 if ['7A', '7B'].include? climate_zone_code
       climate_zone_code = 8 if ['8A', '8B'].include? climate_zone_code
       search_criteria = {
-          'template' => template,
-          'climate_id' => climate_zone_code
+        'template' => template,
+        'climate_id' => climate_zone_code
       }
       econ_limits = model_find_object(standards_data['prm_economizers'], search_criteria)
       drybulb_limit_f = econ_limits['high_limit_shutoff']
@@ -659,7 +655,4 @@ class ASHRAE901PRM < Standard
 
     return fan_pwr_adjustment_bhp
   end
-
-
-  
 end

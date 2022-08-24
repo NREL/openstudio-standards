@@ -54,7 +54,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # Get all lights objects that are not exempt
     space_type.lights.sort.each do |lights_obj|
       lights_name = lights_obj.name.get
-      if !unregulated_lights.include? lights_name 
+      if !unregulated_lights.include? lights_name
         regulated_lights << lights_obj
       end
     end
@@ -131,7 +131,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
               lights_name = space_type.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
               lights_obj = space_type.model.getLightsByName(lights_name).get
               lights_obj.lightsDefinition.setWattsperSpaceFloorArea(OpenStudio.convert(space_type_lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
-            end  
+            end
           end
           # process power equipment
           space_type_apply_power_equipment(space_type)
@@ -154,7 +154,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # @param power_schedule_hash [Hash] equipment operation schedule hash
   # @param space_type [OpenStudio::Model:SpaceType] space type
   # @param user_space_data [Hash] user space data
-  def calculate_electric_value_by_userdata(user_equip_data, power_equipment, power_schedule_hash, space_type, user_space_data=nil)
+  def calculate_electric_value_by_userdata(user_equip_data, power_equipment, power_schedule_hash, space_type, user_space_data = nil)
     # Check if the plug load represents a motor (check if motorhorsepower exist), if so, record the motor HP and efficiency.
     if !user_equip_data['motor_horsepower'].nil?
       # Pre-processing will ensure these three user data are added correctly (float, float, boolean)
@@ -324,7 +324,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       # get current schedule
       power_schedule = power_equipment.schedule.get
       power_schedule_name = power_schedule.name.get
-      new_power_schedule_name = "#{power_schedule_name}_%.4f" % receptacle_power_credits
+      new_power_schedule_name = format("#{power_schedule_name}_%.4f", receptacle_power_credits)
       if schedule_hash.key?(new_power_schedule_name)
         # In this case, there is a schedule created, can retrieve the schedule object and reset in this space type.
         schedule_rule = schedule_hash[new_power_schedule_name]
@@ -356,7 +356,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         lights_name = space_type.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
         lights_obj = space_type.model.getLightsByName(lights_name).get
         lights_obj.lightsDefinition.setWattsperSpaceFloorArea(OpenStudio.convert(space_type_lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
-      end 
+      end
     end
   end
 

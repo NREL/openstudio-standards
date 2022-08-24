@@ -947,7 +947,7 @@ module BTAP
                                                                     c5 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**3 +
                                                                     c6 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**4 +
                                                                     c7 * Math.log((line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k), Math.exp(1)) # 2.718281828459
-              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = (Math.exp(1))**(line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR].to_f)
+              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = Math.exp(1)**line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR].to_f
             else # if line[DRY_BULB_TEMPERATURE].to_f > 0.0
               line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = c8 / (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k) +
                                                                     c9 +
@@ -955,7 +955,7 @@ module BTAP
                                                                     c11 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**2 +
                                                                     c12 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**3 +
                                                                     c13 * Math.log((line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k), Math.exp(1))
-              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = (Math.exp(1))**(line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR].to_f)
+              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = Math.exp(1)**line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR].to_f
             end
 
             # Step 2: calculate pw (PARTIAL_PRESSURE_OF_WATER_VAPOR), [Pascal]
