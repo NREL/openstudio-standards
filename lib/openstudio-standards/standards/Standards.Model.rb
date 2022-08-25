@@ -423,7 +423,7 @@ class Standard
       model_set_baseline_demand_control_ventilation(model, climate_zone)
 
       # Final sizing run and adjustements to values that need refinement
-      model_refine_size_dependant_values(model)
+      model_refine_size_dependent_values(model, sizing_run_dir)
 
       # Fix EMS references.
       # Temporary workaround for OS issue #2598
@@ -6244,7 +6244,7 @@ class Standard
   # to account for recent model changes
   # @author Doug Maddox, PNNL
   # @param model
-  def model_refine_size_dependant_values(model)
+  def model_refine_size_dependent_values(model)
     return true
   end
 

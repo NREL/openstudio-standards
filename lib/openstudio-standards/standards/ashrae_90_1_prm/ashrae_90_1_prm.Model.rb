@@ -2790,7 +2790,7 @@ class ASHRAE901PRM < Standard
   # @author Doug Maddox, PNNL
   # @param model
   # @return [Bool] true if successful, false if not
-  def model_refine_size_dependant_values(model)
+  def model_refine_size_dependent_values(model, sizing_run_dir)
  
     # Final sizing run before refining size-dependent values
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR3") == false
