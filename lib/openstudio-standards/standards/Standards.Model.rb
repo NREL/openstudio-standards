@@ -157,7 +157,7 @@ class Standard
 
       # Reduce the WWR and SRR, if necessary
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adjusting Window and Skylight Ratios ***')
-      sucess, wwr_info = model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type)
+      success, wwr_info = model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type)
       model_apply_prm_baseline_skylight_to_roof_ratio(model)
 
       # Assign building stories to spaces in the building where stories are not yet assigned.
@@ -4494,13 +4494,19 @@ class Standard
         # of each space conditioning category (res, nonres, semi-heated)
         # separately.  Include space multipliers.
         bat.store('nr_wall_m2', 0.001) # Avoids divide by zero errors later
+        bat.store('nr_fene_only_wall_m2', 0.001)
+        bat.store('nr_plenum_wall_m2', 0.001)
         bat.store('nr_wind_m2', 0)
         bat.store('res_wall_m2', 0.001)
+        bat.store('res_fene_only_wall_m2', 0.001)
         bat.store('res_wind_m2', 0)
+        bat.store('res_plenum_wall_m2', 0.001)
         bat.store('sh_wall_m2', 0.001)
+        bat.store('sh_fene_only_wall_m2', 0.001)
         bat.store('sh_wind_m2', 0)
+        bat.store('sh_plenum_wall_m2', 0.001)
         bat.store('total_wall_m2', 0.001)
-        bat.store('total_subsurface_m2', 0.0)
+        bat.store('total_plenum_m2', 0.001)
       else
         bat = bat_win_wall_info[std_spc_type]
       end
@@ -4508,6 +4514,8 @@ class Standard
       # Loop through all surfaces in this space
       wall_area_m2 = 0
       wind_area_m2 = 0
+      # save wall area from walls that have fenestrations (subsurfaces)
+      wall_only_area_m2 = 0
       space.surfaces.sort.each do |surface|
         # Skip non-outdoor surfaces
         next unless surface.outsideBoundaryCondition == 'Outdoors'
@@ -4516,11 +4524,16 @@ class Standard
 
         # This wall's gross area (including window area)
         wall_area_m2 += surface.grossArea * space.multiplier
-        # Subsurfaces in this surface
-        surface.subSurfaces.sort.each do |ss|
-          next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
-
-          wind_area_m2 += ss.netArea * space.multiplier
+        unless surface.subSurfaces.empty?
+          # Subsurfaces in this surface
+          surface.subSurfaces.sort.each do |ss|
+            next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
+              # Only add wall surfaces when the wall actually have windows
+              wind_area_m2 += ss.netArea * space.multiplier
+          end
+        end
+        if wind_area_m2 > 0.0
+          wall_only_area_m2 += surface.grossArea * space.multiplier
         end
       end
 
@@ -4557,18 +4570,24 @@ class Standard
       end
       space_cats[space] = cat
 
-      # Add to the correct category
+      # Add to the correct category is_space_plenum?
       case cat
         when 'Unconditioned'
           next # Skip unconditioned spaces
         when 'NonResConditioned'
+          space_is_plenum(space) ? bat['nr_plenum_wall_m2'] += wall_area_m2 : bat['nr_plenum_wall_m2'] += 0.0
           bat['nr_wall_m2'] += wall_area_m2
+          bat['nr_fene_only_wall_m2'] += wall_only_area_m2
           bat['nr_wind_m2'] += wind_area_m2
         when 'ResConditioned'
+          space_is_plenum(space) ? bat['res_plenum_wall_m2'] += wall_area_m2 : bat['res_plenum_wall_m2'] += 0.0
           bat['res_wall_m2'] += wall_area_m2
+          bat['res_fene_only_wall_m2'] += wall_only_area_m2
           bat['res_wind_m2'] += wind_area_m2
         when 'Semiheated'
+          space_is_plenum(space) ? bat['sh_plenum_wall_m2'] += wall_area_m2 : bat['sh_plenum_wall_m2'] += 0.0
           bat['sh_wall_m2'] += wall_area_m2
+          bat['sh_fene_only_wall_m2'] += wall_only_area_m2
           bat['sh_wind_m2'] += wind_area_m2
       end
     end
@@ -4597,32 +4616,15 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Semiheated = #{vals['wwr_sh'].round}%; window = #{vals['sh_wind_ft2'].round} ft2, wall = #{vals['sh_wall_ft2'].round} ft2.")
 
       # WWR limit or target
-      if template == '90.1-PRM-2019'
-        # Lookup WWR target from stable baseline table
-        wwr_lib = standards_data['prm_wwr_bldg_type']
-        search_criteria = {
-          'template' => template,
-          'wwr_building_type' => bat
-        }
-        # If building type isn't found, assume that it's
-        # the same as 'All Others'
-        if model_find_object(wwr_lib, search_criteria).nil?
-          wwr_lim = 40.0
-        else
-          wwr_lim = model_find_object(wwr_lib, search_criteria)['wwr'] * 100.0
-        end
-      else
-        wwr_lim = 40.0
-      end
+      wwr_lim = model_get_bat_wwr_target(bat, [vals['wwr_nr'], vals['wwr_res'], vals['wwr_sh']])
 
       # Check against WWR limit
       vals['red_nr'] = vals['wwr_nr'] > wwr_lim
       vals['red_res'] = vals['wwr_res'] > wwr_lim
       vals['red_sh'] = vals['wwr_sh'] > wwr_lim
 
-      # Stop here unless windows need reducing or increasing if
-      # following the stable baseline approach
-      return true, base_wwr unless (vals['red_nr'] || vals['red_res'] || vals['red_sh']) || template == '90.1-PRM-2019'
+      # Stop here unless windows need reducing or increasing
+      return true, base_wwr unless model_does_require_wwr_adjustment?(wwr_lim, [vals['wwr_nr'], vals['wwr_res'], vals['wwr_sh']])
 
       # Determine the factors by which to reduce the window area
       vals['mult_nr_red'] = wwr_lim / vals['wwr_nr']
@@ -4643,6 +4645,8 @@ class Standard
         std_spc_type = space.additionalProperties.getFeatureAsString('building_type_for_wwr').get
         # skip process the space unless the space wwr type matched.
         next unless bat == std_spc_type
+        # supply and return plenum is now conditioned space but should be excluded from window adjustment
+        next if space_is_plenum(space)
 
         # Determine the space category
         # from the previously stored values
@@ -4653,19 +4657,27 @@ class Standard
           when 'Unconditioned'
             next # Skip unconditioned spaces
           when 'NonResConditioned'
-            next unless vals['red_nr']
-
             mult = vals['mult_nr_red']
+            total_wall_area = vals['nr_wall_m2']
+            total_wall_with_fene_area = vals['nr_fene_only_wall_m2']
+            total_plenum_wall_area = vals['nr_plenum_wall_m2']
+            total_fene_area = vals['nr_wind_m2']
           when 'ResConditioned'
-            next unless vals['red_res']
-
             mult = vals['mult_res_red']
+            total_wall_area = vals['res_wall_m2']
+            total_wall_with_fene_area = vals['res_fene_only_wall_m2']
+            total_plenum_wall_area = vals['res_plenum_wall_m2']
+            total_fene_area = vals['res_wind_m2']
           when 'Semiheated'
-            next unless vals['red_sh']
-
             mult = vals['mult_sh_red']
+            total_wall_area = vals['sh_wall_m2']
+            total_wall_with_fene_area = vals['sh_fene_only_wall_m2']
+            total_plenum_wall_area = vals['sh_plenum_wall_m2']
+            total_fene_area = vals['sh_wind_m2']
         end
 
+        # used for counting how many window area is left for doors
+        residual_fene = 0.0
         # Loop through all surfaces in this space
         space.surfaces.sort.each do |surface|
           # Skip non-outdoor surfaces
@@ -4673,25 +4685,35 @@ class Standard
           # Skip non-walls
           next unless surface.surfaceType.casecmp('wall').zero?
 
-          # Subsurfaces in this surface
-          surface.subSurfaces.sort.each do |ss|
-            next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
+          # Reduce the size of the window
+          # If a vertical rectangle, raise sill height to avoid
+          # impacting daylighting areas, otherwise
+          # reduce toward centroid.
+          #
+          # daylighting control isn't modeled
+          surface_wwr = surface_get_wwr_of_a_surface(surface)
+          red = model_get_wwr_reduction_ratio(mult,
+                                        surface_wwr: surface_wwr,
+                                        surface_dr: surface_get_door_ratio_of_a_surface(surface),
+                                        wwr_building_type: bat,
+                                        wwr_target: wwr_lim / 100, # divide by 100 to revise it to decimals
+                                        total_wall_m2: total_wall_area,
+                                        total_wall_with_fene_m2: total_wall_with_fene_area,
+                                        total_fene_m2: total_fene_area,
+                                        total_plenum_wall_m2: total_plenum_wall_area)
 
-            # Reduce the size of the window
-            # If a vertical rectangle, raise sill height to avoid
-            # impacting daylighting areas, otherwise
-            # reduce toward centroid.
-            #
-            # For 90.1-PRM-2019 a.k.a "stable baseline" we always
-            # want to adjust by shrinking toward centroid since
-            # daylighting control isn't modeled
-            red = 1.0 - mult
-            if sub_surface_vertical_rectangle?(ss) && template != '90.1-PRM-2019'
-              sub_surface_reduce_area_by_percent_by_raising_sill(ss, red)
-            else
-              sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
-            end
+          if red < 0.0
+            # surface with fenestration to its maximum but adjusted by door areas when need to add windows in surfaces no fenestration
+            # turn negative to positive to get the correct adjustment factor.
+            red = -red
+            residual_fene += (0.9 - red * surface_wwr) * surface.grossArea
           end
+          surface_adjust_fenestration_in_a_surface(surface, red, model)
+        end
+
+        if residual_fene > 0.0
+          residual_ratio = residual_fene / (total_wall_area - total_wall_with_fene_area)
+          model_readjust_surface_wwr(residual_ratio, space, model)
         end
       end
     end
@@ -6116,6 +6138,40 @@ class Standard
 
   private
 
+  # This function checks whether it is required to adjust the window to wall ratio based on the model WWR and wwr limit.
+  # @param wwr_limit [Float] return wwr_limit
+  # @param wwr_list [Array] list of wwr of zone conditioning category in a building area type category - residential, nonresidential and semiheated
+  # @return require_adjustment [Boolean] True, require adjustment, false not require adjustment.
+  def model_does_require_wwr_adjustment?(wwr_limit, wwr_list)
+    require_adjustment = false
+    wwr_list.each do |wwr|
+      require_adjustment = true unless wwr > wwr_limit
+    end
+    return require_adjustment
+  end
+
+  # The function is used for codes that requires to adjusted wwr based on building categories for all other types
+  #
+  # @param bat [String] building area type category
+  # @param wwr_list [Array] list of wwr of zone conditioning category in a building area type category - residential, nonresidential and semiheated
+  # @return wwr_limit [Float] return adjusted wwr_limit
+  def model_get_bat_wwr_target(bat, wwr_list)
+    return 40.0
+  end
+
+  # Readjusted the WWR for surfaces previously has no windows to meet the
+  # overall WWR requirement.
+  # This function shall only be called if the maximum WWR value for surfaces with fenestration is lower than 90% due to
+  # accommodating the total door surface areas
+  #
+  # @param residual_ratio: [Float] the ratio of residual surfaces among the total wall surface area with no fenestrations
+  # @param space [OpenStudio::Model:Space] a space
+  # @param model [OpenStudio::Model::Model] openstudio model
+  # @return [Bool] return true if successful, false if not
+  def model_readjust_surface_wwr(residual_ratio, space, model)
+    return true
+  end
+
   # Helper method to fill in hourly values
   #
   # @param model [OpenStudio::Model::Model] the model
@@ -6842,6 +6898,31 @@ class Standard
   # @return [String] Returns type of SAT reset
   def air_loop_hvac_supply_air_temperature_reset_type(air_loop_hvac)
     return 'warmest_zone'
+  end
+
+
+  # Calculate the window to wall ratio reduction factor
+  #
+  # @param multiplier [Float] multiplier of the wwr
+  # @param surface_wwr [Float] the surface window to wall ratio
+  # @param surface_dr [Float] the surface door to wall ratio
+  # @param wwr_building_type[String] building type for wwr
+  # @param wwr_target [Float] target window to wall ratio
+  # @param total_wall_m2 [Float] total wall area of the category in m2.
+  # @param total_wall_with_fene_m2 [Float] total wall area of the category with fenestrations in m2.
+  # @param total_fene_m2 [Float] total fenestration area
+  # @param total_plenum_wall_m2 [Float] total sqaure meter of a plenum
+  # @return [Float] reduction factor
+  def model_get_wwr_reduction_ratio(multiplier,
+                              surface_wwr: 0.0,
+                              surface_dr: 0.0,
+                              wwr_building_type: 'All others',
+                              wwr_target: 0.0,
+                              total_wall_m2: 0.0,
+                              total_wall_with_fene_m2: 0.0,
+                              total_fene_m2: 0.0,
+                              total_plenum_wall_m2: 0.0)
+    return 1.0 - multiplier
   end
 
   # A template method that handles the loading of user input data from multiple sources

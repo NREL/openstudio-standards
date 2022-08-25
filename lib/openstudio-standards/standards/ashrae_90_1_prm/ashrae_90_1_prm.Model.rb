@@ -2004,6 +2004,124 @@ class ASHRAE901PRM < Standard
     end
   end
 
+  # This function checks whether it is required to adjust the window to wall ratio based on the model WWR and wwr limit.
+  # @param wwr_limit [Float] return wwr_limit
+  # @param wwr_list [Array] list of wwr of zone conditioning category in a building area type category - residential, nonresidential and semiheated
+  # @return require_adjustment [Boolean] True, require adjustment, false not require adjustment.
+  def model_does_require_wwr_adjustment?(wwr_limit, wwr_list)
+    # 90.1 PRM routine requires
+    return true
+  end
+  
+  # For 2019, it is required to adjusted wwr based on building categories for all other types
+  #
+  # @param bat [String] building category
+  # @param wwr_list [Array] list of zone conditioning category-based WWR - residential, nonresidential and semiheated
+  # @return wwr_limit [Float] return adjusted wwr_limit
+  def model_get_bat_wwr_target(bat, wwr_list)
+    wwr_limit = 40.0
+    # Lookup WWR target from stable baseline table
+    wwr_lib = standards_data['prm_wwr_bldg_type']
+    search_criteria = {
+      'template' => template,
+      'wwr_building_type' => bat
+    }
+    wwr_limit_bat = model_find_object(wwr_lib, search_criteria)
+    # If building type isn't found, assume that it's
+    # the same as 'All Others'
+    if wwr_limit_bat.nil? || bat.casecmp?('all others')
+      wwr = wwr_list.max
+      # All others type
+      # use the min of 40% and the max wwr in the ZCC-wwr list.
+      wwr_limit = [wwr_limit, wwr].min
+    else
+      # Matched type: use WWR from database.
+      wwr_limit = wwr_limit_bat['wwr'] * 100.0
+    end
+    return wwr_limit
+  end
+
+  # Calculate the window to wall ratio reduction factor
+  #
+  # @param multiplier [Float] multiplier of the wwr
+  # @param surface_wwr [Float] the surface window to wall ratio
+  # @param surface_dr [Float] the surface door to wall ratio
+  # @param wwr_building_type[String] building type for wwr
+  # @param wwr_target [Float] target window to wall ratio
+  # @param total_wall_m2 [Float] total wall area of the category in m2.
+  # @param total_wall_with_fene_m2 [Float] total wall area of the category with fenestrations in m2.
+  # @param total_fene_m2 [Float] total fenestration area
+  # @return [Float] reduction factor
+  def model_get_wwr_reduction_ratio(multiplier,
+                              surface_wwr: 0.0,
+                              surface_dr: 0.0,
+                              wwr_building_type: 'All others',
+                              wwr_target: nil,
+                              total_wall_m2: 0.0, # prevent 0.0 division
+                              total_wall_with_fene_m2: 0.0,
+                              total_fene_m2: 0.0,
+                              total_plenum_wall_m2: 0.0)
+
+    if multiplier < 1.0
+      # Case when reduction is required
+      reduction_ratio = 1.0 - multiplier
+    else
+      # Case when increase is required - takes the door area into consideration.
+      # The target is to increase each surface to maximum 90% WWR deduct the total door area.
+      total_dr = 0.0
+      exist_max_wwr = 0.0
+      if total_wall_m2 > 0 then exist_max_wwr = total_wall_with_fene_m2 * 0.9 / total_wall_m2 end
+      if exist_max_wwr < wwr_target
+        # In this case, it is required to add vertical fenestration to other surfaces
+        if surface_wwr == 0.0
+          # delta_fenestration_surface_area / delta_wall_surface_area + 1.0 = increase_ratio for a surface with no windows.
+          # ASSUMPTION!! assume adding windows to surface with no windows will never be window_m2 + door_m2 > surface_m2.
+          reduction_ratio = (wwr_target - exist_max_wwr) * total_wall_m2 / (total_wall_m2 - total_wall_with_fene_m2 - total_plenum_wall_m2) + 1.0
+        else
+          # surface has fenestration - expand it to 90% WWR or surface area minus door area, whichever is smaller.
+          if (1.0 - surface_dr) < 0.9
+            # A negative reduction ratio as a flat to main function that this reduction ratio is adjusted by doors
+            # and it is needed to adjust the WWR of the no fenestration surfaces to meet the lost
+            reduction_ratio = (surface_dr - 1.0) / surface_wwr
+          else
+            reduction_ratio = 0.9 / surface_wwr
+          end
+        end
+      else
+        # multiplier will be negative number thus resulting in > 1 reduction_ratio
+        if surface_wwr == 0.0
+          # 1.0 means remain the original form
+          reduction_ratio = 1.0
+        else
+          reduction_ratio = multiplier
+        end
+      end
+    end
+    return reduction_ratio
+  end
+
+  # Readjusted the WWR for surfaces previously has no windows to meet the
+  # overall WWR requirement.
+  # This function shall only be called if the maximum WWR value for surfaces with fenestration is lower than 90% due to
+  # accommodating the total door surface areas
+  #
+  # @param residual_ratio: [Float] the ratio of residual surfaces among the total wall surface area with no fenestrations
+  # @param space [OpenStudio::Model:Space] a space
+  # @param model [OpenStudio::Model::Model] openstudio model
+  # @return [Bool] return true if successful, false if not
+  def model_readjust_surface_wwr(residual_ratio, space, model)
+    # In this loop, we will focus on the surfaces with newly added a fenestration.
+    space.surfaces.sort.each do |surface|
+      next unless surface.additionalProperties.hasFeature('added_wwr')
+
+      added_wwr = surface.additionalProperties.getFeatureAsDouble('added_wwr').to_f
+      # The full calculation of adjustment is:
+      # ((residual_ratio * surface_area + added_wwr * surface_area) / surface_area ) / added_wwr
+      adjustment_ratio = residual_ratio / added_wwr + 1.0
+      surface_adjust_fenestration_in_a_surface(surface, adjustment_ratio, model)
+    end
+  end
+
   # Assign spaces to system groups based on building area type
   # Get zone groups separately for each hvac building type
   # @param custom [String] identifier for custom programs, not used here, but included for backwards compatibility
@@ -2754,6 +2872,5 @@ class ASHRAE901PRM < Standard
 
     return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs }
   end
-
 end
 
