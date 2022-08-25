@@ -84,6 +84,8 @@ class BTAPData
     phius_performance_indicators(model)
     # The below method calculates energy performance indicators (i.e. TEDI and MEUI) as per BC Energy Step Code
     bc_energy_step_code_performance_indicators
+    # calculate net present value #Sara
+    net_present_value(cost_result) unless cost_result.nil?
 
     measure_metrics(qaqc)
     @btap_data
@@ -163,6 +165,80 @@ class BTAPData
     # building_data.merge!(cost_result['shw'].select{|k,v| k!='shw_total'})
     # building_data.merge!(flatten_mix(cost_result['ventilation'].select{|k,v| k=='mech_to_roof'.to_sym}))
     return building_data
+  end
+
+  def net_present_value(cost_result)  #Sara
+    puts "@btap_data are #{@btap_data}"
+    npv_start_year=2020
+    npv_end_year=2050
+    discount_rate=0.03
+
+    @neb_prices_csv_file_name = "#{File.dirname(__FILE__)}/neb_end_use_prices.csv"
+    puts "neb_prices are, #{@neb_prices_csv_file_name}"
+    #Create a hash of the neb data.
+    neb_data = CSV.parse(File.read(@neb_prices_csv_file_name), headers: true, converters: :numeric).map(&:to_h)
+    puts "neb_data are, #{neb_data}"
+
+    # Find which province the proposed building is located in
+    provinces_names_map = { 'QC' => 'Quebec',
+                            'NL' => 'Newfoundland and Labrador',
+                            'NS' => 'Nova Scotia',
+                            'PE' => 'Prince Edward Island',
+                            'ON' => 'Ontario',
+                            'MB' => 'Manitoba',
+                            'SK' => 'Saskatchewan',
+                            'AB' => 'Alberta',
+                            'BC' => 'British Columbia',
+                            'YT' => 'Yukon',
+                            'NT' => 'Northwest Territories',
+                            'NB' => 'New Brunswick',
+                            'NU' => 'Nunavut' }
+    building_type = 'Commercial'
+    geography_data = climate_data
+    puts "geography_data is #{geography_data['location_state_province_region']}"
+    province = provinces_names_map[geography_data['location_state_province_region']]
+    puts "province is #{province}"
+
+    # Get energy end-use prices (CER data from https://apps.cer-rec.gc.ca/ftrppndc/dflt.aspx?GoCTemplateCulture=en-CA)
+
+    # Note: If there is on-site energy generation (e.g. PV), it should be considered in the calculation of EUI for the calculation of energy use cost and NPV.
+    # To do so, it has been assumed that on-site energy generation is only for electricity.
+    # Electricity EUI of proposed building is re-calculated for NPV. It will be: ['energy_eui_electricity_gj_per_m_sq' - ('total_site_eui_gj_per_m_sq' - 'net_site_eui_gj_per_m_sq')]
+    # Note that if there is no on-site energy generation, 'total_site_eui_gj_per_m_sq' and 'net_site_eui_gj_per_m_sq' will be equal.
+    # Note: 'total_site_eui_gj_per_m_sq' is the gross energy consumed by the building (REF: https://unmethours.com/question/25416/what-is-the-difference-between-site-energy-and-source-energy/)
+    # Note: 'net_site_eui_gj_per_m_sq' is the final energy consumed by the building after accounting for on-site energy generations (e.g. PV) (REF: https://unmethours.com/question/25416/what-is-the-difference-between-site-energy-and-source-energy/)
+
+    # calculate npv of electricity
+    eui_electricity = @btap_data['energy_eui_electricity_gj_per_m_sq'] - (@btap_data['total_site_eui_gj_per_m_sq'] - @btap_data['net_site_eui_gj_per_m_sq'])
+    puts "eui_electricity is #{eui_electricity}"
+    npv_elec = @btap_data['cost_equipment_total_cost_per_m_sq'] # initilaize value of npv_elec
+    row = neb_data.detect do |data|
+      (data['building_type'] == building_type) &&
+        (data['province'] == province) &&
+        (data['fuel_type'] == 'Electricity')
+    end
+    year_index = 1.0
+    for year in npv_start_year..npv_end_year
+      puts "year, #{year}, #{row[year.to_s]}"
+      npv_elec += (eui_electricity * row[year.to_s]) / (1+discount_rate)**year_index
+      year_index += 1.0
+    end
+    puts "npv_elec is #{npv_elec}"
+
+    # calculate npv of natural gas
+    # npv_ngas = #TODO
+
+    # calculate npv of oil
+    # npv_fueloil =  #TODO
+
+    # calculate total npv
+    # npv_total = #TODO
+
+    @btap_data.merge!('npv_elec' => npv_elec)
+    # @btap_data.merge!('npv_ngas' => npv_ngas)
+    # @btap_data.merge!('npv_fueloil' => npv_fueloil)
+    # @btap_data.merge!('npv_total' => npv_total)
+
   end
 
   def envelope(model)
