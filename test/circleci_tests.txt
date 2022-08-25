@@ -44,6 +44,7 @@ doe_prototype/test_warehouse.rb
 doe_prototype/test_performance.rb
 doe_prototype/test_regression.rb
 doe_prototype/test_college.rb
+doe_prototype_test_courthouse.rb
 
 doe_prototype/test_add_c_factor_wall.rb
 doe_prototype/test_add_elevators.rb

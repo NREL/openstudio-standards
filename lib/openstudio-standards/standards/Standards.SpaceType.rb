@@ -584,7 +584,7 @@ class Standard
                         end
 
     # get climate_zone_set
-    climate_zone = model_get_building_climate_zone_and_building_type(space_type.model)['climate_zone']
+    climate_zone = model_get_building_properties(space_type.model)['climate_zone']
     climate_zone_set = model_find_climate_zone_set(space_type.model, climate_zone)
 
     # populate search hash
