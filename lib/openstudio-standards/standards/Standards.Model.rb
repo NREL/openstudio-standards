@@ -6244,7 +6244,7 @@ class Standard
   # to account for recent model changes
   # @author Doug Maddox, PNNL
   # @param model
-  def model_refine_size_dependent_values(model)
+  def model_refine_size_dependent_values(model, sizing_run_dir)
     return true
   end
 
