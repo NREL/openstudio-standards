@@ -328,7 +328,11 @@ class AppendixGPRMTests < Minitest::Test
 
       # Check WWR against expected WWR
       wwr_goal = 100 * @@wwr_values[building_type].to_f
-      assert((wwr_baseline - wwr_goal).abs < 0.1, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+      if building_type == 'MidriseApartment' && climate_zone == 'ASHRAE 169-2013-3A'
+        assert(((wwr_baseline - 40.0)/40.0).abs < 0.01, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+      else
+        assert(((wwr_baseline - wwr_goal)/wwr_goal).abs < 0.01, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+      end
     end
   end
 
@@ -1929,7 +1933,7 @@ class AppendixGPRMTests < Minitest::Test
         wwr_baseline = run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Conditioned Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
         # Check WWR against expected WWR
         wwr_goal = 100 * @@wwr_values[building_type].to_f
-        assert(wwr_baseline < wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model with user data is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_baseline}, smaller than the WWR goal #{wwr_goal}")
+        assert(wwr_baseline > wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model with user data is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be greater than the WWR goal #{wwr_goal}")
       end
       # TODO adding more tests to check if zones are assigned correctly
       if building_type == 'LargeHotel'
@@ -2682,34 +2686,52 @@ class AppendixGPRMTests < Minitest::Test
       unless ss.subSurfaces.empty?
         # get subsurface construction
         orig_construction = nil
+        door_list = []
         ss.subSurfaces.sort.each do |sub|
-          next unless sub.subSurfaceType == 'FixedWindow' || sub.subSurfaceType=='OperableWindow'
-          orig_construction = sub.construction.get
+          if sub.subSurfaceType == 'Door'
+            door = {}
+            door['name'] = sub.name.get
+            door['vertices'] = sub.vertices()
+            door['construction'] = sub.construction.get
+            door_list << door
+          else
+            orig_construction = sub.construction.get
           end
+        end
         # remove all existing surfaces
         ss.subSurfaces.sort.each(&:remove)
         # Determine the surface's cardinal direction
         if surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45
-          new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
-          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+          helper_add_window_to_wwr_with_door(target_wwr_north, ss, orig_construction, door_list, model)
         elsif surface_abs_azimuth > 315 && surface_abs_azimuth <= 360
-          new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
-          new_window.setConstruction(orig_construction) unless orig_construction.nil?
-        elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135
-          new_window = ss.setWindowToWallRatio(target_wwr_east, 0.6, true).get
-          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+          helper_add_window_to_wwr_with_door(target_wwr_north, ss, orig_construction, door_list, model)
+        elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135 &&
+          helper_add_window_to_wwr_with_door(target_wwr_east, ss, orig_construction, door_list, model)
         elsif surface_abs_azimuth > 135 && surface_abs_azimuth <= 225
-          new_window = ss.setWindowToWallRatio(target_wwr_south, 0.6, true).get
-          new_window.setConstruction(orig_construction) unless orig_construction.nil?
-        elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315
-          new_window = ss.setWindowToWallRatio(target_wwr_west, 0.6, true).get
-          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+          helper_add_window_to_wwr_with_door(target_wwr_south, ss, orig_construction, door_list, model)
+        elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315 && target_wwr_west > 0.0
+          helper_add_window_to_wwr_with_door(target_wwr_west, ss, orig_construction, door_list, model)
         end
       end
     end
     return model
   end
 
+  def helper_add_window_to_wwr_with_door(target_wwr, surface, construction, door_list, model)
+    if target_wwr > 0.0
+      new_window = surface.setWindowToWallRatio(target_wwr, 0.6, true).get
+      new_window.setConstruction(construction) unless construction.nil?
+    end
+    # add door back.
+    unless door_list.empty?
+      door_list.each do |door|
+        os_door = OpenStudio::Model::SubSurface.new(door['vertices'], model)
+        os_door.setName(door['name'])
+        os_door.setConstruction(door['construction'])
+        os_door.setSurface(surface)
+      end
+    end
+  end
   # Change model to different building type
   # @param model, arguments => new building type
   def change_bldg_type(model, arguments)

@@ -1,7 +1,11 @@
 {
     "wwr": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", []],
-        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]]
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["change_wwr_model", [0.1, 0.1, 0.1, 0.1]]]],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["change_wwr_model", [0.0, 0.0, 0.0, 0.1]]]],
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]],
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-3A", "userdata_default_test", [["remove_transformer", []], ["change_wwr_model", [0.5, 0.5, 0.5, 0.5]]]],
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test",[["remove_transformer", []], ["change_wwr_model", [0.0, 0.0, 0.1, 0.0]]]]
     ],
     "srr": [
         ["RetailStandalone", "90.1-2010", "ASHRAE 169-2013-2A", "userdata_default_test", [["increase_skylight_size", [10]]]]
