@@ -85,7 +85,7 @@ class BTAPData
     # The below method calculates energy performance indicators (i.e. TEDI and MEUI) as per BC Energy Step Code
     bc_energy_step_code_performance_indicators
     # calculate net present value #Sara
-    net_present_value(cost_result) unless cost_result.nil?
+    net_present_value(cost_result) unless cost_result.nil?  #TODO: Question: is it ok to have this method here
 
     measure_metrics(qaqc)
     @btap_data
