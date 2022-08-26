@@ -1,7 +1,6 @@
 class ASHRAE901PRM < Standard
   # @!group Model
 
-
   # Determines the area of the building above which point
   # the non-dominant area type gets it's own HVAC system type.
   # @return [Double] the minimum area (m^2)
@@ -707,19 +706,17 @@ class ASHRAE901PRM < Standard
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
   def model_apply_baseline_exterior_lighting(model)
-
-
     user_ext_lights = @standards_data.key?('userdata_exterior_lights') ? @standards_data['userdata_exterior_lights'] : nil
-    return false if user_ext_lights.nil? 
+    return false if user_ext_lights.nil?
 
-    non_tradeable_cats = ["nontradeable_general", "building_facades_area", "building_facades_perim", "automated_teller_machines_per_location", "automated_teller_machines_per_machine", "entries_and_gates", "loading_areas_for_emergency_vehicles", "drive_through_windows_and_doors", "parking_near_24_hour_entrances", "roadway_parking"]
+    non_tradeable_cats = ['nontradeable_general', 'building_facades_area', 'building_facades_perim', 'automated_teller_machines_per_location', 'automated_teller_machines_per_machine', 'entries_and_gates', 'loading_areas_for_emergency_vehicles', 'drive_through_windows_and_doors', 'parking_near_24_hour_entrances', 'roadway_parking']
     search_criteria = {
       'template' => template
     }
 
     ext_ltg_baseline_values = standards_lookup_table_first(table_name: 'prm_exterior_lighting', search_criteria: search_criteria)
-  
-    user_ext_lights.each do |user_data|  
+
+    user_ext_lights.each do |user_data|
       lights_name = user_data['name']
 
       # model.getExteriorLightss.each do |exterior_lights|
@@ -738,13 +735,13 @@ class ASHRAE901PRM < Standard
       ext_ltg_cats = {}
       num_cats = user_data['num_ext_lights_subcats'].to_i
       (1..num_cats).each do |icat|
-        cat_key = format('end_use_subcategory_%02d', (icat))
+        cat_key = format('end_use_subcategory_%02d', icat)
         subcat = user_data[cat_key]
         if non_tradeable_cats.include?(subcat)
           num_notrade += 1
         else
           num_trade += 1
-          meas_val_key = format('end_use_measurement_value_%02d', (icat))
+          meas_val_key = format('end_use_measurement_value_%02d', icat)
           meas_val = user_data[meas_val_key]
           ext_ltg_cats[subcat] = meas_val.to_f
         end
@@ -772,9 +769,7 @@ class ASHRAE901PRM < Standard
       ext_lights_obj.setMultiplier(1)
       ext_lights_def = ext_lights_obj.exteriorLightsDefinition
       ext_lights_def.setDesignLevel(ext_ltg_pwr)
-
     end
-
   end
 
   # Add design day schedule objects for space loads, for PRM 2019 baseline models
@@ -877,7 +872,6 @@ class ASHRAE901PRM < Standard
     return true
   end
 
-
   # Identifies non mechanically cooled ("nmc") systems, if applicable
   #
   # TODO: Zone-level evaporative cooler is not currently supported by
@@ -956,10 +950,23 @@ class ASHRAE901PRM < Standard
   # @param apply_controls [Bool] toggle whether to apply air loop and plant loop controls
   # @param sql_db_vars_map [Hash] hash map
   # @return [Bool] returns true if successful, false if not
-  def model_apply_hvac_efficiency_standard(model, apply_controls: true, sql_db_vars_map: nil)
+  def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true, sql_db_vars_map: nil)
     sql_db_vars_map = {} if sql_db_vars_map.nil?
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Started applying HVAC efficiency standards for #{template} template.")
+
+    # Air Loop Controls
+    if apply_controls.nil? || apply_controls == true
+      model.getAirLoopHVACs.sort.each { |obj| air_loop_hvac_apply_standard_controls(obj, climate_zone) }
+    end
+
+    # Plant Loop Controls
+    if apply_controls.nil? || apply_controls == true
+      model.getPlantLoops.sort.each { |obj| plant_loop_apply_standard_controls(obj, climate_zone) }
+    end
+
+    # Zone HVAC Controls
+    model.getZoneHVACComponents.sort.each { |obj| zone_hvac_component_apply_standard_controls(obj) }
 
     # TODO: The fan and pump efficiency will be done by another task.
     # Fans
@@ -1042,7 +1049,6 @@ class ASHRAE901PRM < Standard
   end
 
   def set_coil_cooling_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
-
     if cooling_coil.to_CoilCoolingDXSingleSpeed.is_initialized
       # single speed coil
       sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(cooling_coil.to_CoilCoolingDXSingleSpeed.get, sql_db_vars_map, sys_type)
@@ -1057,7 +1063,6 @@ class ASHRAE901PRM < Standard
   end
 
   def set_coil_heating_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
-
     if heating_coil.to_CoilHeatingDXSingleSpeed.is_initialized
       # single speed coil
       sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(heating_coil.to_CoilHeatingDXSingleSpeed.get, sql_db_vars_map, sys_type)
@@ -1270,7 +1275,7 @@ class ASHRAE901PRM < Standard
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::Model::Model] Openstudio model
   def model_raise_user_model_dcv_errors(model)
-    #TODO JXL add log msgs to PRM logger
+    # TODO: JXL add log msgs to PRM logger
     model.getThermalZones.each do |thermal_zone|
       if thermal_zone.additionalProperties.getFeatureAsBoolean('zone DCV implemented in user model').get &&
          (!thermal_zone.additionalProperties.getFeatureAsBoolean('zone dcv required by 901').get ||
@@ -1366,6 +1371,8 @@ class ASHRAE901PRM < Standard
     handle_airloop_doas_user_input_data(model)
     # load zone HVAC user data from proposed model
     handle_zone_hvac_user_input_data(model)
+    # load thermal zone user data from proposed model
+    handle_thermal_zone_user_input_data(model)
   end
 
   # A function to load airloop data from userdata csv files
@@ -1484,6 +1491,34 @@ class ASHRAE901PRM < Standard
     end
   end
 
+  # A function to load thermal zone data from userdata csv files
+  # @param [OpenStudio::Model::Model] OpenStudio model object
+  def handle_thermal_zone_user_input_data(model)
+    model.getThermalZones.each do |thermal_zone|
+      nightcycle_exception = false
+      if standards_data.key?('userdata_thermal_zone')
+        standards_data['userdata_thermal_zone'].each do |row|
+          next unless row['name'].to_s.downcase.strip == thermal_zone.name.to_s.downcase.strip
+
+          if row['has_health_safety_night_cycle_exception'].to_s.upcase.strip == 'TRUE'
+            nightcycle_exception = true
+            break
+          end
+        end
+      end
+      if nightcycle_exception
+        thermal_zone.additionalProperties.setFeature('has_health_safety_night_cycle_exception', true)
+      end
+    end
+
+    # mark unmarked zones
+    model.getThermalZones.each do |zone|
+      next if zone.additionalProperties.hasFeature('has_health_safety_night_cycle_exception')
+
+      zone.additionalProperties.setFeature('has_health_safety_night_cycle_exception', false)
+    end
+  end
+
   # Analyze HVAC, window-to-wall ratio and SWH building (area) types from user data inputs in the @standard_data library
   # This function returns True, but the values are stored in the multi-building_data argument.
   # The hierarchy for process the building types
@@ -1571,7 +1606,7 @@ class ASHRAE901PRM < Standard
         thermal_zone.additionalProperties.setFeature('building_type_for_hvac', default_hvac_building_type)
       end
       bldg_type_hvac_zone_hash[default_hvac_building_type] = zone_array
-    else  
+    else
       # Calculate the total floor area.
       # If the max tie, this algorithm will pick the first encountered hvac building type as the maximum.
       total_floor_area = 0.0
@@ -1712,12 +1747,12 @@ class ASHRAE901PRM < Standard
       electric = true
 
       if htg_fuels.include?('NaturalGas') ||
-          htg_fuels.include?('PropaneGas') ||
-          htg_fuels.include?('FuelOilNo1') ||
-          htg_fuels.include?('FuelOilNo2') ||
-          htg_fuels.include?('Coal') ||
-          htg_fuels.include?('Diesel') ||
-          htg_fuels.include?('Gasoline')
+         htg_fuels.include?('PropaneGas') ||
+         htg_fuels.include?('FuelOilNo1') ||
+         htg_fuels.include?('FuelOilNo2') ||
+         htg_fuels.include?('Coal') ||
+         htg_fuels.include?('Diesel') ||
+         htg_fuels.include?('Gasoline')
         electric = false
       end
 
@@ -1768,6 +1803,7 @@ class ASHRAE901PRM < Standard
           # Get the object type
           obj_type = component.iddObjectType.valueName.to_s
           next if !['OS_Pipe_Indoor', 'OS_Pipe_Outdoor'].include?(obj_type)
+
           pipe = component.to_PipeIndoor.get
           node = pipe.to_StraightComponent.get.outletModelObject.get.to_Node.get
 
@@ -1780,7 +1816,6 @@ class ASHRAE901PRM < Standard
           newpipe.addToNode(node)
           component.remove
         end
-
 
         if electric
           plant_loop.supplyComponents.each do |component|
@@ -2129,11 +2164,9 @@ class ASHRAE901PRM < Standard
   # @return [Array<Hash>] an array of hashes of area information,
   # with keys area_ft2, type, fuel, and zones (an array of zones)
   def model_prm_baseline_system_groups(model, custom, bldg_type_hvac_zone_hash)
-
     bldg_groups = []
 
     bldg_type_hvac_zone_hash.keys.each do |hvac_building_type, zones_in_building_type|
-
       # Get all groups for this hvac building type
       new_groups = get_baseline_system_groups_for_one_building_type(model, hvac_building_type, zones_in_building_type)
 
@@ -2146,8 +2179,6 @@ class ASHRAE901PRM < Standard
     return bldg_groups
   end
 
-
-  
   # Assign spaces to system groups for one hvac building type
   # One group contains all zones associated with one HVAC type
   # Separate groups are made for laboratories, computer rooms, district cooled zones, heated-only zones, or hybrids of these
@@ -2321,6 +2352,7 @@ class ASHRAE901PRM < Standard
     total_area_ft2 = 0
     zones.each do |zn|
       if thermal_zone_heated?(zn['zone']) && !thermal_zone_cooled?(zn['zone'])
+        # this will occur when there is no cooling tstat, or when min cooling setpoint is above 91 F
         heated_only_zones << zn['zone']
       elsif comp_room_loads[zn['zone'].name.get] > 0
         # This is a computer room zone
@@ -2520,7 +2552,6 @@ class ASHRAE901PRM < Standard
   # @return [String] The system type.  Possibilities are PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
   #   VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
   def model_prm_baseline_system_type(model, climate_zone, sys_group, custom, hvac_building_type, district_heat_zones)
-
     area_type = sys_group['occ']
     fuel_type = sys_group['fuel']
     area_ft2 = sys_group['building_area_type_ft2']
@@ -2656,7 +2687,6 @@ class ASHRAE901PRM < Standard
   # @param pri_zones [Array<String>] names of zones served by the multizone system
   # @param system_name [String] name of air loop
   def model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
-
     # Create fan schedule for multizone system
     fan_8760 = []
     # If any zone is on for an hour, then the system fan must be on for that hour
@@ -2872,5 +2902,39 @@ class ASHRAE901PRM < Standard
 
     return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs }
   end
-end
 
+  # This method is a catch-all run at the end of create-baseline to make final adjustements to HVAC capacities
+  # to account for recent model changes
+  # @author Doug Maddox, PNNL
+  # @param model
+  # @return [Bool] true if successful, false if not
+  def model_refine_size_dependent_values(model, sizing_run_dir)
+ 
+    # Final sizing run before refining size-dependent values
+    if model_run_sizing_run(model, "#{sizing_run_dir}/SR3") == false
+      return false
+    end
+
+    model.getAirLoopHVACs.sort.each do |air_loop_hvac|
+      # Reset secondary design secondary flow rate based on updated primary flow
+      air_loop_hvac.demandComponents.each do |dc|
+        next if dc.to_AirTerminalSingleDuctParallelPIUReheat.empty?
+
+        pfp_term = dc.to_AirTerminalSingleDuctParallelPIUReheat.get
+        sec_flow_frac = 0.5
+
+        # Get the maximum flow rate through the terminal
+        max_primary_air_flow_rate = nil
+        if pfp_term.autosizedMaximumPrimaryAirFlowRate.is_initialized
+          max_primary_air_flow_rate = pfp_term.autosizedMaximumPrimaryAirFlowRate.get
+        elsif pfp_term.maximumPrimaryAirFlowRate.is_initialized
+          max_primary_air_flow_rate = pfp_term.maximumPrimaryAirFlowRate.get
+        end
+
+        max_sec_flow_rate_m3_per_s = max_primary_air_flow_rate * sec_flow_frac
+        pfp_term.setMaximumSecondaryAirFlowRate(max_sec_flow_rate_m3_per_s)
+      end
+    end
+    return true
+  end
+end

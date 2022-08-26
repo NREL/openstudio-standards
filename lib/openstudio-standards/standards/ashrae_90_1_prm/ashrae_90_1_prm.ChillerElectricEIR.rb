@@ -44,6 +44,7 @@ class ASHRAE901PRM < Standard
     unless capacity_w
       return nil
     end
+
     capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
     chlr_props = model_find_object(standards_data['chillers'], search_criteria, capacity_tons, Date.today)
 
@@ -81,4 +82,3 @@ class ASHRAE901PRM < Standard
     return successfully_set_all_properties
   end
 end
-

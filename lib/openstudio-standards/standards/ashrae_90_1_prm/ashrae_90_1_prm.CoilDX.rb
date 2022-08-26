@@ -69,4 +69,3 @@ module ASHRAEPRMCoilDX
     return search_criteria
   end
 end
-

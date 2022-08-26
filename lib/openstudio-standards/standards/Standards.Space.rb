@@ -1822,6 +1822,7 @@ class Standard
       end
     end
 
+    unoccupied_threshold = air_loop_hvac_unoccupied_threshold
     people_objs.each do |people|
       occ_sch = people.numberofPeopleSchedule
       if occ_sch.is_initialized
@@ -1830,7 +1831,7 @@ class Standard
         # Flag = 1 if any schedule shows occupancy for a given hour
         if !occ_sch_values.nil?
           (0..8759).each do |ihr|
-            ppl_values[ihr] = 1 if occ_sch_values[ihr] > 0
+            ppl_values[ihr] = 1 if occ_sch_values[ihr] >= unoccupied_threshold
           end
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retrieve people schedule for #{space.name}.  Assuming #{w_per_person}W/person.")

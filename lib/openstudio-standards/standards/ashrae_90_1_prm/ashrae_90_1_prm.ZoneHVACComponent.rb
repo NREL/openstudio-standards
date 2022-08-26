@@ -121,4 +121,12 @@ class ASHRAE901PRM < Standard
     end
     return true
   end
+
+  # Default occupancy fraction threshold for determining if the spaces served by the zone hvac are occupied
+  #
+  # @return [Double] unoccupied threshold
+  def zone_hvac_unoccupied_threshold
+    # Use 10% based on PRM-RM
+    return 0.10
+  end
 end

@@ -1,6 +1,96 @@
 class ASHRAE901PRM < Standard
   # @!group AirLoopHVAC
 
+  # Shut off the system during unoccupied periods.
+  # During these times, systems will cycle on briefly if temperature drifts below setpoint.
+  # If the system already has a schedule other than Always-On, no change will be made.
+  # If the system has an Always-On schedule assigned, a new schedule will be created.
+  # In this case, occupied is defined as the total percent occupancy for the loop for all zones served.
+  # For stable baseline, schedule is Always-On for computer rooms and when health and safety exception is used
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param min_occ_pct [Double] the fractional value below which the system will be considered unoccupied.
+  # @return [Bool] returns true if successful, false if not
+  def air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = 0.05)
+    if air_loop_hvac.additionalProperties.hasFeature('zone_group_type')
+      zone_group_type = air_loop_hvac.additionalProperties.getFeatureAsString('zone_group_type').get
+    else
+      zone_group_type = 'None'
+    end
+
+    if zone_group_type == 'computer_zones'
+      # Computer rooms are exempt from night cycle control
+      return false
+    end
+
+    # Check for user data exceptions for night cycling
+    # If any zone has the exception, then system will not cycle
+    health_safety_exception = false
+    air_loop_hvac.thermalZones.each do |thermal_zone|
+      if thermal_zone.additionalProperties.hasFeature('has_health_safety_night_cycle_exception')
+        exception = thermal_zone.additionalProperties.getFeatureAsBoolean('has_health_safety_night_cycle_exception').get
+        return false if exception == true
+      end
+    end
+
+    # Set the system to night cycle
+    # The fan of a parallel PIU terminal are set to only cycle during heating operation
+    # This is achieved using the CycleOnAnyCoolingOrHeatingZone; During cooling operation
+    # the load is met by running the central system which stays off during heating
+    # operation
+    air_loop_hvac.setNightCycleControlType('CycleOnAny')
+    if air_loop_hvac_has_parallel_piu_air_terminals?(air_loop_hvac)
+      avail_mgrs = air_loop_hvac.availabilityManagers
+      if !avail_mgrs.nil?
+        avail_mgrs.each do |avail_mgr|
+          if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
+            avail_mgr_nc = avail_mgr.to_AvailabilityManagerNightCycle.get
+            avail_mgr_nc.setControlType('CycleOnAnyCoolingOrHeatingZone')
+            zones = air_loop_hvac.thermalZones
+            avail_mgr_nc.setCoolingControlThermalZones(zones)
+            avail_mgr_nc.setHeatingZoneFansOnlyThermalZones(zones)
+          end
+        end
+      end
+    end
+
+    model = air_loop_hvac.model
+    # Check if schedule was stored in an additionalProperties field of the air loop
+    air_loop_name = air_loop_hvac.name
+    if air_loop_hvac.hasAdditionalProperties
+      if air_loop_hvac.additionalProperties.hasFeature('fan_sched_name')
+        fan_sched_name = air_loop_hvac.additionalProperties.getFeatureAsString('fan_sched_name').get
+        fan_sched = model.getScheduleRulesetByName(fan_sched_name).get
+        air_loop_hvac.setAvailabilitySchedule(fan_sched)
+        return true
+      end
+    end
+
+    # Check if already using a schedule other than always on
+    avail_sch = air_loop_hvac.availabilitySchedule
+    unless avail_sch == air_loop_hvac.model.alwaysOnDiscreteSchedule
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Availability schedule is already set to #{avail_sch.name}.  Will assume this includes unoccupied shut down; no changes will be made.")
+      return true
+    end
+
+    # Get the airloop occupancy schedule
+    loop_occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: min_occ_pct)
+    flh = schedule_ruleset_annual_equivalent_full_load_hrs(loop_occ_sch)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Annual occupied hours = #{flh.round} hr/yr, assuming a #{min_occ_pct} occupancy threshold.  This schedule will be used as the HVAC operation schedule.")
+
+    # Set HVAC availability schedule to follow occupancy
+    air_loop_hvac.setAvailabilitySchedule(loop_occ_sch)
+    air_loop_hvac.supplyComponents.each do |comp|
+      if comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
+        comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.setSupplyAirFanOperatingModeSchedule(loop_occ_sch)
+      elsif comp.to_AirLoopHVACUnitarySystem.is_initialized
+        comp.to_AirLoopHVACUnitarySystem.get.setSupplyAirFanOperatingModeSchedule(loop_occ_sch)
+      end
+    end
+
+    return true
+  end
+
   # Determine if the system is a multizone VAV system
   #
   # @return [Bool] Returns true if required, false if not.
@@ -10,9 +100,41 @@ class ASHRAE901PRM < Standard
     return false
   end
 
+  # Determine if multizone vav optimization is required.
+  # Not required for stable baseline.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if required, false if not
+  def air_loop_hvac_multizone_vav_optimization_required?(air_loop_hvac, climate_zone)
+    multizone_opt_required = false
+    return multizone_opt_required
+  end
+
+  # Determine whether the VAV damper control is single maximum or dual maximum control.
+  # Defaults to Single Maximum for stable baseline.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @return [String] the damper control type: Single Maximum, Dual Maximum
+  def air_loop_hvac_vav_damper_action(air_loop_hvac)
+    damper_action = 'Single Maximum'
+    return damper_action
+  end
+
   # Default occupancy fraction threshold for determining if the spaces on the air loop are occupied
   def air_loop_hvac_unoccupied_threshold
-    return 0.05
+    # Use 10% based on PRM-RM
+    return 0.10
+  end
+
+  # Determine if the system economizer must be integrated or not.
+  # Always required for stable baseline if there is an economizer
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if required, false if not
+  def air_loop_hvac_integrated_economizer_required?(air_loop_hvac, climate_zone)
+    return true
   end
 
   # Determine the economizer type and limits for the the PRM
@@ -79,6 +201,12 @@ class ASHRAE901PRM < Standard
       economizer_required = false
     end
     return economizer_required
+  end
+
+  # Set fan curve for stable baseline to be VSD with fixed static pressure setpoint
+  # @return [string] name of appropriate curve for this code version
+  def air_loop_hvac_set_vsd_curve_type
+    return 'Multi Zone VAV with VSD and Fixed SP Setpoint'
   end
 
   # Calculate and apply the performance rating method
@@ -403,11 +531,11 @@ class ASHRAE901PRM < Standard
   # @return [Boolean] flag of whether thermal zone in baseline is required to have DCV
   def baseline_thermal_zone_demand_control_ventilation_required?(thermal_zone)
     # zone needs dcv if user model has dcv and baseline does not meet apxg exception
-    if thermal_zone.additionalProperties.hasFeature("apxg no need to have DCV")
+    if thermal_zone.additionalProperties.hasFeature('apxg no need to have DCV')
       # meaning it was served by an airloop in the user model, does not mean much here, conditional as a safeguard
       # in case it was not served by an airloop in the user model
-      if !thermal_zone.additionalProperties.getFeatureAsBoolean("apxg no need to have DCV").get && # does not meet apxg exception (need to have dcv if user model has it
-         thermal_zone.additionalProperties.getFeatureAsBoolean("zone DCV implemented in user model").get
+      if !thermal_zone.additionalProperties.getFeatureAsBoolean('apxg no need to have DCV').get && # does not meet apxg exception (need to have dcv if user model has it
+         thermal_zone.additionalProperties.getFeatureAsBoolean('zone DCV implemented in user model').get
         return true
       end
     end
@@ -476,12 +604,15 @@ class ASHRAE901PRM < Standard
     when 'NoEconomizer'
       return [nil, nil, nil]
     when 'FixedDryBulb'
+      climate_zone_code = climate_zone.split('-')[-1]
+      climate_zone_code = 7 if ['7A', '7B'].include? climate_zone_code
+      climate_zone_code = 8 if ['8A', '8B'].include? climate_zone_code
       search_criteria = {
-          'template' => template,
-          'climate_zone' => climate_zone
+        'template' => template,
+        'climate_id' => climate_zone_code
       }
       econ_limits = model_find_object(standards_data['prm_economizers'], search_criteria)
-      drybulb_limit_f = econ_limits['fixed_dry_bulb_high_limit_shutoff_temp']
+      drybulb_limit_f = econ_limits['high_limit_shutoff']
     when 'FixedEnthalpy'
       enthalpy_limit_btu_per_lb = 28
     when 'FixedDewPointAndDryBulb'

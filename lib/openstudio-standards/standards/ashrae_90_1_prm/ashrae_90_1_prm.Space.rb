@@ -103,5 +103,4 @@ class ASHRAE901PRM < Standard
     removed = space_remove_daylighting_controls(space)
     return removed
   end
-
 end

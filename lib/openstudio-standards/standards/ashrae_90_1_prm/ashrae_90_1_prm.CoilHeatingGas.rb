@@ -50,7 +50,6 @@ class ASHRAE901PRM < Standard
   # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] minimum thermal efficiency
   def coil_heating_gas_standard_minimum_thermal_efficiency(coil_heating_gas, sys_type, rename = false)
-
     # Get the coil properties
     search_criteria = coil_heating_gas_find_search_criteria(coil_heating_gas, sys_type)
     capacity_w = coil_heating_gas_find_capacity(coil_heating_gas)
