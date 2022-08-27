@@ -6,7 +6,8 @@ class BTAPData
   attr_accessor :btap_data
 
   def initialize(model:, runner: nil, cost_result:, baseline_cost_equipment_total_cost_per_m_sq: -1.0,
-                 baseline_cost_utility_neb_total_cost_per_m_sq: -1.0, baseline_energy_eui_total_gj_per_m_sq: -1.0, qaqc:)
+                 baseline_cost_utility_neb_total_cost_per_m_sq: -1.0, baseline_energy_eui_total_gj_per_m_sq: -1.0, qaqc:,
+                 npv_start_year:, npv_end_year:, npv_discount_rate:)
     @model = model
     @error_warning = []
     # sets sql file.
@@ -84,8 +85,8 @@ class BTAPData
     phius_performance_indicators(model)
     # The below method calculates energy performance indicators (i.e. TEDI and MEUI) as per BC Energy Step Code
     bc_energy_step_code_performance_indicators
-    # calculate net present value #Sara
-    net_present_value(cost_result) unless cost_result.nil?  #TODO: Question: is it ok to have this method here
+    # calculate net present value
+    net_present_value(npv_start_year, npv_end_year, npv_discount_rate) unless cost_result.nil?
 
     measure_metrics(qaqc)
     @btap_data
@@ -167,10 +168,33 @@ class BTAPData
     return building_data
   end
 
-  def net_present_value(cost_result)  #Sara
-    npv_start_year=2020 #TODO Question: should we have a user input for it, or just a default value?
-    npv_end_year=2050   #TODO Question: same question
-    discount_rate=0.03  #TODO Question: same question
+  def net_present_value(npv_start_year, npv_end_year, npv_discount_rate)
+
+    ##### Convert a string to a float
+    if npv_start_year.instance_of?(String) && npv_start_year != 'NECB_Default'
+      npv_start_year = npv_start_year.to_f
+    end
+    if npv_end_year.instance_of?(String) && npv_end_year != 'NECB_Default'
+      npv_end_year = npv_end_year.to_f
+    end
+    if npv_discount_rate.instance_of?(String) && npv_discount_rate != 'NECB_Default'
+      npv_discount_rate = npv_discount_rate.to_f
+    end
+
+
+    ##### Set default npv_start_year as 2022, npv_end_year as 2041, npv_discount_rate as 3%
+    if npv_start_year == 'NECB_Default'
+      npv_start_year = 2022
+    end
+    if npv_end_year == 'NECB_Default'
+      npv_end_year = 2041
+    end
+    if npv_discount_rate == 'NECB_Default'
+      npv_discount_rate = 0.03
+    end
+    puts "npv_start_year is #{npv_start_year}"
+    puts "npv_end_year is #{npv_end_year}"
+    puts "npv_discount_rate is #{npv_discount_rate}"
 
     # Get energy end-use prices (CER data from https://apps.cer-rec.gc.ca/ftrppndc/dflt.aspx?GoCTemplateCulture=en-CA)
     @neb_prices_csv_file_name = "#{File.dirname(__FILE__)}/neb_end_use_prices.csv"
@@ -220,7 +244,7 @@ class BTAPData
     if eui_elec > 0.0
       for year in npv_start_year..npv_end_year
         # puts "year, #{year}, #{row[year.to_s]}, year_index, #{year_index}"
-        npv_elec += (eui_elec * row[year.to_s]) / (1+discount_rate)**year_index
+        npv_elec += (eui_elec * row[year.to_s]) / (1+npv_discount_rate)**year_index
         year_index += 1.0
       end
     end
@@ -234,7 +258,7 @@ class BTAPData
     npv_ngas = 0.0
     year_index = 1.0
     for year in npv_start_year..npv_end_year
-      npv_ngas += (eui_ngas * row[year.to_s]) / (1+discount_rate)**year_index
+      npv_ngas += (eui_ngas * row[year.to_s]) / (1+npv_discount_rate)**year_index
       year_index += 1.0
     end
     # puts "npv_ngas is #{npv_ngas}"
@@ -247,7 +271,7 @@ class BTAPData
     npv_oil = 0.0
     year_index = 1.0
     for year in npv_start_year..npv_end_year
-      npv_oil += (eui_oil * row[year.to_s]) / (1+discount_rate)**year_index
+      npv_oil += (eui_oil * row[year.to_s]) / (1+npv_discount_rate)**year_index
       year_index += 1.0
     end
     # puts "npv_oil is #{npv_oil}"
