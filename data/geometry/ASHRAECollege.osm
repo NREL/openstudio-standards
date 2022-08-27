@@ -20392,7 +20392,7 @@ OS:Surface,
 
 OS:ThermalZone,
   {00a8fdc1-f805-4d1c-b2a8-a5bd609f0d8c}, !- Handle
-  CB_FACULTY_OFFICE_5_F4,                 !- Name
+  TZ_CB_FACULTY_OFFICE_5_F4,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -20479,7 +20479,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {c4ce9171-9ba1-450a-9e88-7e5721926dcf}, !- Handle
-  CB_STUDENTS_RESTROOMS_1_F1,             !- Name
+  TZ_CB_STUDENTS_RESTROOMS_1_F1,          !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -20566,7 +20566,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {6379cd55-5ab8-4bd8-a128-a88848e9152e}, !- Handle
-  CB_LIBRARY_MEDIA_CENTER_F1,             !- Name
+  TZ_CB_LIBRARY_MEDIA_CENTER_F1,          !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -20653,7 +20653,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {232b0e90-d000-4dea-b6ab-c92470fa09c2}, !- Handle
-  CB_LAB_1_F4,                            !- Name
+  TZ_CB_LAB_1_F4,                         !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -20740,7 +20740,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {591010d8-a912-44bb-afe1-281f249f26a1}, !- Handle
-  CB_SECONDARY_STAIRS_1_F2,               !- Name
+  TZ_CB_SECONDARY_STAIRS_1_F2,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -20827,7 +20827,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {74d1db39-6cf7-4a8f-afbc-1c99a4ec5ecb}, !- Handle
-  CB_OFFICES_ENCLOSED_2_F1,               !- Name
+  TZ_CB_OFFICES_ENCLOSED_2_F1,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -20914,7 +20914,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {8fd373d8-fed6-4ac2-83f8-9eb549022ea5}, !- Handle
-  CB_SECONDARY_STAIRS_1_F1,               !- Name
+  TZ_CB_SECONDARY_STAIRS_1_F1,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -21001,7 +21001,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {21f24fde-40a0-4892-97b3-4238ab45aac9}, !- Handle
-  CB_LECTURE_ROOM_2_F1,                   !- Name
+  TZ_CB_LECTURE_ROOM_2_F1,                !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -21088,7 +21088,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {3dbf9cec-f9a0-4a5e-82eb-22f3264e04bf}, !- Handle
-  CB_CORRIDOR&#10_F1,                     !- Name
+  TZ_CB_CORRIDOR 10_F1,                  !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -21175,7 +21175,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {bbee2bbe-afe4-4cb1-b206-ff0032505c2c}, !- Handle
-  CB_CLASSROOM_2_F4,                      !- Name
+  TZ_CB_CLASSROOM_2_F4,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -21262,7 +21262,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {a5e720df-293f-4af2-867a-be65acd38b7f}, !- Handle
-  CB_CAFE_STUDY_LOUNGE_F1,                !- Name
+  TZ_CB_CAFE_STUDY_LOUNGE_F1,             !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -21349,7 +21349,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {785fa8d1-cfe7-4b08-a7b9-b2b5515c5df7}, !- Handle
-  CB_SECONDARY_STAIRS_2_F1,               !- Name
+  TZ_CB_SECONDARY_STAIRS_2_F1,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -21436,7 +21436,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {6ebd23c6-7bea-40ac-b2c7-d9db1495f6ed}, !- Handle
-  CB_CLASSROOM_1_F2,                      !- Name
+  TZ_CB_CLASSROOM_1_F2,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -21523,7 +21523,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {2640333a-f81b-4114-87df-53bf074c9a17}, !- Handle
-  CB_MAIN_STAIRS_F1,                      !- Name
+  TZ_CB_MAIN_STAIRS_F1,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -21610,7 +21610,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {08137d0a-da1d-4bf8-8d0d-68a957a3f7b1}, !- Handle
-  CB_STORAGE_F1,                          !- Name
+  TZ_CB_STORAGE_F1,                       !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -21697,7 +21697,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {e8e196af-d1df-46ac-ab7c-440b49c8daae}, !- Handle
-  CB_STUDIO_1_F2,                         !- Name
+  TZ_CB_STUDIO_1_F2,                      !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -21784,7 +21784,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {00dd73da-0fc8-4818-8ca3-bd916881210a}, !- Handle
-  CB_CLASSROOM_8_F2,                      !- Name
+  TZ_CB_CLASSROOM_8_F2,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -21871,7 +21871,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {65db1e22-ea3f-4b97-8e70-acab3e214e07}, !- Handle
-  CB_MAIN_STAIRS_F2,                      !- Name
+  TZ_CB_MAIN_STAIRS_F2,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -21958,7 +21958,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {eff97f1f-7612-44dc-9115-10b6f52c37b1}, !- Handle
-  CB_FACULTY_RESTROOMS_2_F4,              !- Name
+  TZ_CB_FACULTY_RESTROOMS_2_F4,           !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -22045,7 +22045,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {922d2a18-2cc9-43b0-9adb-2267fa142275}, !- Handle
-  CB_UTILITY_F1,                          !- Name
+  TZ_CB_UTILITY_F1,                       !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -22132,7 +22132,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {40aa963d-a078-4f51-9087-16a7946dd0c6}, !- Handle
-  CB_CONFERENCE_ROOM_F1,                  !- Name
+  TZ_CB_CONFERENCE_ROOM_F1,               !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -22219,7 +22219,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {55279167-d6ef-4443-b206-cca6b51404f0}, !- Handle
-  CB_OFFICES_OPEN_F1,                     !- Name
+  TZ_CB_OFFICES_OPEN_F1,                  !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -22306,7 +22306,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {bf7a3a1b-a947-4ea2-9e36-5dc9cf6920b0}, !- Handle
-  CB_FACULTY_OFFICE_1_F4,                 !- Name
+  TZ_CB_FACULTY_OFFICE_1_F4,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -22393,7 +22393,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {1b042aed-4fd2-4b13-9550-615da87fab07}, !- Handle
-  CB_STAFF_RESTROOMS_2_F1,                !- Name
+  TZ_CB_STAFF_RESTROOMS_2_F1,             !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -22480,7 +22480,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {d90ca898-e2ff-43f6-a56c-36428be95f22}, !- Handle
-  CB_STUDENTS_RESTROOMS_2_F1,             !- Name
+  TZ_CB_STUDENTS_RESTROOMS_2_F1,          !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -22567,7 +22567,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {c5950394-e4fd-4a2e-9ef1-3ad198da69e6}, !- Handle
-  CB_PUBLIC_ELEVATORS_F2,                 !- Name
+  TZ_CB_PUBLIC_ELEVATORS_F2,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -22654,7 +22654,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {d636c304-772b-4b7d-9c7e-5c99aff52482}, !- Handle
-  CB_LECTURE_ROOM_1_F1,                   !- Name
+  TZ_CB_LECTURE_ROOM_1_F1,                !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -22741,7 +22741,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {9d4111c8-4f30-4622-807e-1cf774ba7c3d}, !- Handle
-  CB_CLASSROOM_5_F4,                      !- Name
+  TZ_CB_CLASSROOM_5_F4,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -22828,7 +22828,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {8405f149-bbc5-4f8a-b9fe-79166b8cff56}, !- Handle
-  CB_FACULTY_OFFICE_1_F3,                 !- Name
+  TZ_CB_FACULTY_OFFICE_1_F3,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -22915,7 +22915,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {a72add5a-0a19-4bc5-be50-e02efe2c3469}, !- Handle
-  CB_OFFICES_ENCLOSED_1_F1,               !- Name
+  TZ_CB_OFFICES_ENCLOSED_1_F1,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -23002,7 +23002,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {4ea2f559-90da-4161-9510-73f206d70c59}, !- Handle
-  CB_OFFICES_ENCLOSED_5_F1,               !- Name
+  TZ_CB_OFFICES_ENCLOSED_5_F1,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -23090,7 +23090,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {447f8b60-9853-4540-a194-f36bde9500ed}, !- Handle
-  CB_STAFF_RESTROOMS_1_F1,                !- Name
+  TZ_CB_STAFF_RESTROOMS_1_F1,             !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -23177,7 +23177,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {fe4e8b43-9959-479d-8eba-fbc87a3541ac}, !- Handle
-  CB_OFFICES_ENCLOSED_8_F1,               !- Name
+  TZ_CB_OFFICES_ENCLOSED_8_F1,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -23264,7 +23264,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {debc9026-3ba2-4f13-aa27-3c092e5c5dda}, !- Handle
-  CB_SECONDARY_STAIRS_1_F3,               !- Name
+  TZ_CB_SECONDARY_STAIRS_1_F3,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -23351,7 +23351,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {11ea8cf6-3973-4100-8752-aa9f087496fb}, !- Handle
-  CB_OFFICES_ENCLOSED_7_F1,               !- Name
+  TZ_CB_OFFICES_ENCLOSED_7_F1,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -23438,7 +23438,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {932a98e6-a94e-4ee3-b212-06e1d9c9b9b1}, !- Handle
-  CB_OFFICES_ENCLOSED_6_F1,               !- Name
+  TZ_CB_OFFICES_ENCLOSED_6_F1,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -23525,7 +23525,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {bb17fc66-4852-4ea8-99d4-5c646c736796}, !- Handle
-  CB_OFFICES_ENCLOSED_4_F1,               !- Name
+  TZ_CB_OFFICES_ENCLOSED_4_F1,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -23612,7 +23612,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {890e2754-53ba-407f-a0d8-6c4dc0c1d249}, !- Handle
-  CB_STUDENTS_RESTROOMS_1_F4 1,           !- Name
+  TZ_CB_STUDENTS_RESTROOMS_1_F4 1,        !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -23699,7 +23699,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {24f4800a-7e54-46fd-8478-b7e9d79de45c}, !- Handle
-  CB_LAB_2_F4,                            !- Name
+  TZ_CB_LAB_2_F4,                         !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -23786,7 +23786,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {f157b3bc-30b5-42d8-be25-60c52e7392d5}, !- Handle
-  CB_CLASSROOM_5_F2,                      !- Name
+  TZ_CB_CLASSROOM_5_F2,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -23873,7 +23873,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {5e462c8e-8137-4082-8e38-58c7b563f62b}, !- Handle
-  CB_CLASSROOM_6_F2,                      !- Name
+  TZ_CB_CLASSROOM_6_F2,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -23960,7 +23960,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {e5f54042-36a1-4ccd-a7fb-3af35cc08e86}, !- Handle
-  CB_OFFICES_ENCLOSED_3_F1,               !- Name
+  TZ_CB_OFFICES_ENCLOSED_3_F1,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -24047,7 +24047,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {a07dc915-4736-4594-a99b-cc6de63ea89d}, !- Handle
-  CB_FACULTY_OFFICE_1_F2,                 !- Name
+  TZ_CB_FACULTY_OFFICE_1_F2,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -24134,7 +24134,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {c7f52b53-42ac-49d6-9915-f4ff3b72a2a4}, !- Handle
-  CB_SECONDARY_STAIRS_1_F4,               !- Name
+  TZ_CB_SECONDARY_STAIRS_1_F4,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -24221,7 +24221,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {b2eee6ef-111f-49fe-82e0-bc9b8a44771f}, !- Handle
-  CB_CLASSROOM_1_F4,                      !- Name
+  TZ_CB_CLASSROOM_1_F4,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -24308,7 +24308,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {c1f49f58-0f42-4319-8423-d566d15943de}, !- Handle
-  CB_FACULTY_OFFICE_8_F4,                 !- Name
+  TZ_CB_FACULTY_OFFICE_8_F4,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -24395,7 +24395,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {c162d587-f351-4b63-948d-19ccf10573de}, !- Handle
-  CB_CORRIDOR_F4,                         !- Name
+  TZ_CB_CORRIDOR_F4,                      !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -24482,7 +24482,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {951c9b34-88cc-4aa3-a083-c208e5e979f9}, !- Handle
-  CB_CLASSROOM_3_F4,                      !- Name
+  TZ_CB_CLASSROOM_3_F4,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -24569,7 +24569,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {4f098590-f56d-4357-91e6-01f81030eb9c}, !- Handle
-  CB_LAB_3_F4,                            !- Name
+  TZ_CB_LAB_3_F4,                         !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -24656,7 +24656,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {03ef2228-75f1-46c6-b6a8-a53d0539c39f}, !- Handle
-  CB_MAIN_STAIRS_F4,                      !- Name
+  TZ_CB_MAIN_STAIRS_F4,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -24743,7 +24743,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {4c2ba0fc-3d76-42a4-95ed-4c48d3641cb6}, !- Handle
-  CB_CLASSROOM_4_F4,                      !- Name
+  TZ_CB_CLASSROOM_4_F4,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -24830,7 +24830,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {baf27bde-477a-42cd-92fe-781342f9bf51}, !- Handle
-  CB_CLASSROOM_3_F2,                      !- Name
+  TZ_CB_CLASSROOM_3_F2,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -24917,7 +24917,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {cf28c649-e51a-460f-9f31-37c97989d8bb}, !- Handle
-  CB_CLASSROOM_4_F2,                      !- Name
+  TZ_CB_CLASSROOM_4_F2,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -25004,7 +25004,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {3e5a7b9e-629c-47ed-b66a-742c51e0aba1}, !- Handle
-  CB_CLASSROOM_6_F4,                      !- Name
+  TZ_CB_CLASSROOM_6_F4,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -25091,7 +25091,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {c64638dd-6aae-48b2-88d4-24c6ab7055a6}, !- Handle
-  CB_UTILITY_F4,                          !- Name
+  TZ_CB_UTILITY_F4,                       !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -25178,7 +25178,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {63b9deff-33d0-4985-8b89-23fa64f4f8a0}, !- Handle
-  CB_SECONDARY_STAIRS_2_F4,               !- Name
+  TZ_CB_SECONDARY_STAIRS_2_F4,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -25265,7 +25265,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {4135e4a7-b604-4299-a4e8-ee62d04dc3d2}, !- Handle
-  CB_FACULTY_OFFICE_3_F3,                 !- Name
+  TZ_CB_FACULTY_OFFICE_3_F3,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -25352,7 +25352,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {9ad31ee9-71c5-45fc-ba9b-23e874f29c34}, !- Handle
-  CB_CONFERENCE_ROOM_F4,                  !- Name
+  TZ_CB_CONFERENCE_ROOM_F4,               !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -25439,7 +25439,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {33f07c10-b852-47f9-b5b6-57ea5c533b72}, !- Handle
-  CB_OFFICES_OPEN_F4,                     !- Name
+  TZ_CB_OFFICES_OPEN_F4,                  !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -25526,7 +25526,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {4e4eedab-19fe-484a-9f39-3e7d1ff67d62}, !- Handle
-  CB_PUBLIC_ELEVATORS_F3,                 !- Name
+  TZ_CB_PUBLIC_ELEVATORS_F3,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -25613,7 +25613,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {47871e18-6ad3-48a8-bb4c-b9543cb9c31d}, !- Handle
-  CB_FACULTY_OFFICE_8_F3,                 !- Name
+  TZ_CB_FACULTY_OFFICE_8_F3,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -25700,7 +25700,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {b4b04584-6007-4a11-a250-d77529ef5b68}, !- Handle
-  CB_CORRIDOR_F2,                         !- Name
+  TZ_CB_CORRIDOR_F2,                      !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -25787,7 +25787,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {cbc44e83-8251-4b0b-9c98-5d0193669e57}, !- Handle
-  CB_STUDENTS_RESTROOMS_1_F4,             !- Name
+  TZ_CB_STUDENTS_RESTROOMS_1_F4,          !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -25874,7 +25874,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {f57a4576-a249-4a91-8f10-3866827aa8bb}, !- Handle
-  CB_LAB_4_F4,                            !- Name
+  TZ_CB_LAB_4_F4,                         !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -25961,7 +25961,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {09556710-2003-47eb-8079-24c1d43503df}, !- Handle
-  CB_FACULTY_RESTROOMS_1_F4,              !- Name
+  TZ_CB_FACULTY_RESTROOMS_1_F4,           !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -26048,7 +26048,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {09d20715-c46b-4d99-b7c4-9a53b1038dfc}, !- Handle
-  CB_FACULTY_OFFICE_7_F4,                 !- Name
+  TZ_CB_FACULTY_OFFICE_7_F4,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -26135,7 +26135,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {b391ee37-70c1-41ac-a65d-b1f61e3f0e12}, !- Handle
-  CB_FACULTY_OFFICE_6_F4,                 !- Name
+  TZ_CB_FACULTY_OFFICE_6_F4,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -26222,7 +26222,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {664ddd74-3d45-4d5b-a631-a9803a4bbd71}, !- Handle
-  CB_FACULTY_OFFICE_4_F4,                 !- Name
+  TZ_CB_FACULTY_OFFICE_4_F4,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -26309,7 +26309,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {355c75fb-621b-4e6b-9da4-652d7a84129d}, !- Handle
-  CB_FACULTY_OFFICE_3_F4,                 !- Name
+  TZ_CB_FACULTY_OFFICE_3_F4,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -26396,7 +26396,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {450fd762-a3d1-4d35-8028-543d6673b476}, !- Handle
-  CB_FACULTY_OFFICE_2_F4,                 !- Name
+  TZ_CB_FACULTY_OFFICE_2_F4,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -26483,7 +26483,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {d7e7e6ed-0cf6-46f3-b52f-71d6981ee14a}, !- Handle
-  CB_CLASSROOM_2_F2,                      !- Name
+  TZ_CB_CLASSROOM_2_F2,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -26570,7 +26570,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {91803cfa-6350-4e16-90e0-af4b3075f899}, !- Handle
-  CB_CLASSROOM_7_F2,                      !- Name
+  TZ_CB_CLASSROOM_7_F2,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -26657,7 +26657,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {f41c5c6a-c310-43a2-8f8f-0aa3cbbf3f47}, !- Handle
-  CB_FACULTY_RESTROOMS_1_F2,              !- Name
+  TZ_CB_FACULTY_RESTROOMS_1_F2,           !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -26744,7 +26744,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {40fed0a5-c6a5-4023-bf48-1447b8542ec0}, !- Handle
-  CB_UTILITY_F2,                          !- Name
+  TZ_CB_UTILITY_F2,                       !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -26831,7 +26831,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {3a08b6a3-017f-4fbe-9b07-e136730af3fc}, !- Handle
-  CB_STUDIO_2_F2,                         !- Name
+  TZ_CB_STUDIO_2_F2,                      !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -26918,7 +26918,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {6a13e661-a008-4383-bdfb-af1ca3d4fb62}, !- Handle
-  CB_SECONDARY_STAIRS_2_F2,               !- Name
+  TZ_CB_SECONDARY_STAIRS_2_F2,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -27005,7 +27005,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {2145154a-df5e-48f9-a9c6-e2073a9cd8e8}, !- Handle
-  CB_OFFICES_OPEN_F2_1,                   !- Name
+  TZ_CB_OFFICES_OPEN_F2_1,                !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -27092,7 +27092,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {e83ea763-2c7a-442f-8aa0-99528850d30e}, !- Handle
-  CB_CONFERENCE_ROOM_F2,                  !- Name
+  TZ_CB_CONFERENCE_ROOM_F2,               !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -27179,7 +27179,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {a658e1a7-c6bb-4980-acfd-c624bae2168a}, !- Handle
-  CB_FACULTY_RESTROOMS_1_F2 1,            !- Name
+  TZ_CB_FACULTY_RESTROOMS_1_F2 1,         !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -27266,7 +27266,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {036a1970-6b8c-46d0-a0ae-a2fcd69a3f4b}, !- Handle
-  CB_STUDENTS_RESTROOMS_1_F2,             !- Name
+  TZ_CB_STUDENTS_RESTROOMS_1_F2,          !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -27353,7 +27353,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {42558a07-96bf-4388-bdcc-dc1ae740f023}, !- Handle
-  CB_STUDENTS_RESTROOMS_2_F2,             !- Name
+  TZ_CB_STUDENTS_RESTROOMS_2_F2,          !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -27440,7 +27440,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {a09bf8f6-3afa-42d2-9346-23f536018d58}, !- Handle
-  CB_FACULTY_OFFICE_8_F2,                 !- Name
+  TZ_CB_FACULTY_OFFICE_8_F2,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -27527,7 +27527,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {ea691aa5-425c-4cff-bc7b-72ce11a8386d}, !- Handle
-  CB_FACULTY_OFFICE_7_F2,                 !- Name
+  TZ_CB_FACULTY_OFFICE_7_F2,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -27614,7 +27614,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {adb0ef64-9631-4a12-b255-312e8d7767c9}, !- Handle
-  CB_FACULTY_OFFICE_6_F2,                 !- Name
+  TZ_CB_FACULTY_OFFICE_6_F2,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -27701,7 +27701,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {89e1160b-aea9-49c2-999e-386256e1ad29}, !- Handle
-  CB_FACULTY_OFFICE_5_F2,                 !- Name
+  TZ_CB_FACULTY_OFFICE_5_F2,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -27788,7 +27788,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {4fab9615-07a4-46c4-8857-6e716f02d25a}, !- Handle
-  CB_FACULTY_OFFICE_4_F2,                 !- Name
+  TZ_CB_FACULTY_OFFICE_4_F2,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -27875,7 +27875,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {54496fb3-4f9e-4a28-836e-8e74f335cfa8}, !- Handle
-  CB_FACULTY_OFFICE_3_F2,                 !- Name
+  TZ_CB_FACULTY_OFFICE_3_F2,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -27962,7 +27962,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {f878ce30-44dc-415a-8188-e2b83648c7fc}, !- Handle
-  CB_FACULTY_OFFICE_2_F2,                 !- Name
+  TZ_CB_FACULTY_OFFICE_2_F2,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -28049,7 +28049,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {bb99d809-1889-4db3-9236-004b9452bfda}, !- Handle
-  CB_PUBLIC_ELEVATORS_F1,                 !- Name
+  TZ_CB_PUBLIC_ELEVATORS_F1,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -28136,7 +28136,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {bc0c1c1c-e1ef-4d87-80b4-91b81d2c0d7d}, !- Handle
-  CB_PUBLIC_ELEVATORS_F4,                 !- Name
+  TZ_CB_PUBLIC_ELEVATORS_F4,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -28223,7 +28223,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {058dfd21-d745-4e15-839f-4d4a0cc5b514}, !- Handle
-  CB_ENTRANCE_LOBBY&#10_F1,               !- Name
+  TZ_CB_ENTRANCE_LOBBY 10_F1,            !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -28310,7 +28310,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {8b084ad1-be5b-4742-bc7a-48bd0869351a}, !- Handle
-  CB_CLASSROOM_8_F3,                      !- Name
+  TZ_CB_CLASSROOM_8_F3,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -28397,7 +28397,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {680b567c-a053-46e1-a798-197c73862f42}, !- Handle
-  CB_CLASSROOM_7_F3,                      !- Name
+  TZ_CB_CLASSROOM_7_F3,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -28484,7 +28484,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {432bd4fb-2e08-4989-ada9-410076b8f31e}, !- Handle
-  CB_CLASSROOM_6_F3,                      !- Name
+  TZ_CB_CLASSROOM_6_F3,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -28571,7 +28571,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {b9b265af-5585-4bd3-9044-eca9725a5a25}, !- Handle
-  CB_CORRIDOR_2_F3,                       !- Name
+  TZ_CB_CORRIDOR_2_F3,                    !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -28658,7 +28658,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {d85a35be-f098-40b9-b35c-8c684bdbb6b6}, !- Handle
-  CB_CLASSROOM_5_F3,                      !- Name
+  TZ_CB_CLASSROOM_5_F3,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -28745,7 +28745,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {1df75991-46d9-426b-a2e8-65e06a538a82}, !- Handle
-  CB_MAIN_STAIRS_F3,                      !- Name
+  TZ_CB_MAIN_STAIRS_F3,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -28832,7 +28832,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {06cd7f7e-d09d-4ae9-a720-e4d372e26d89}, !- Handle
-  CB_CORRIDOR_1_F3,                       !- Name
+  TZ_CB_CORRIDOR_1_F3,                    !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -28919,7 +28919,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {82b9e596-79af-47de-99dd-a1f8156ee4af}, !- Handle
-  CB_CLASSROOM_4_F3,                      !- Name
+  TZ_CB_CLASSROOM_4_F3,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -29006,7 +29006,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {1a5b330a-1c2d-408c-a83f-6584dcbec588}, !- Handle
-  CB_CLASSROOM_3_F3,                      !- Name
+  TZ_CB_CLASSROOM_3_F3,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -29093,7 +29093,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {57de476c-86e2-4c82-9519-8e7808e75d77}, !- Handle
-  CB_CLASSROOM_2_F3,                      !- Name
+  TZ_CB_CLASSROOM_2_F3,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -29180,7 +29180,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {273b4cb0-67ca-46f9-926c-4dea5ea7f58f}, !- Handle
-  CB_CLASSROOM_1_F3,                      !- Name
+  TZ_CB_CLASSROOM_1_F3,                   !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -29267,7 +29267,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {a856cbd2-9da3-4222-8671-6294f12b9c82}, !- Handle
-  CB_STUDIO_2_F3,                         !- Name
+  TZ_CB_STUDIO_2_F3,                      !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -29354,7 +29354,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {d09d1d16-3d09-4b16-a136-f155a185b5ca}, !- Handle
-  CB_STUDIO_1_F3,                         !- Name
+  TZ_CB_STUDIO_1_F3,                      !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -29441,7 +29441,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {119272fc-021a-476b-85c1-577347e01048}, !- Handle
-  CB_SECONDARY_STAIRS_1_F3 1,             !- Name
+  TZ_CB_SECONDARY_STAIRS_1_F3 1,          !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -29528,7 +29528,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {7c0432de-74f9-42c3-8bb8-11e2dfd4b52d}, !- Handle
-  CB_CONFERENCE_ROOM_F3,                  !- Name
+  TZ_CB_CONFERENCE_ROOM_F3,               !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -29615,7 +29615,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {117add80-9a52-4ad9-8107-2990c5754c2d}, !- Handle
-  CB_OFFICES_OPEN_F3,                     !- Name
+  TZ_CB_OFFICES_OPEN_F3,                  !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -29702,7 +29702,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {d49057f1-8d7c-4f47-b78b-a9240ddbfaef}, !- Handle
-  CB_FACULTY_RESTROOMS_1_F3,              !- Name
+  TZ_CB_FACULTY_RESTROOMS_1_F3,           !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -29789,7 +29789,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {6f3be1e2-7361-4d00-91f1-88361c1c2228}, !- Handle
-  CB_STUDENTS_RESTROOMS_1_F3,             !- Name
+  TZ_CB_STUDENTS_RESTROOMS_1_F3,          !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -29876,7 +29876,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {3986191c-93a1-4789-b7f7-f5a44ee028f5}, !- Handle
-  CB_STUDENTS_RESTROOMS_2_F3,             !- Name
+  TZ_CB_STUDENTS_RESTROOMS_2_F3,          !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -29963,7 +29963,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {248cb63b-0c8f-4b25-ba1f-8b91b1d719f5}, !- Handle
-  CB_FACULTY_RESTROOMS_1_F3 1,            !- Name
+  TZ_CB_FACULTY_RESTROOMS_1_F3 1,         !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -30050,7 +30050,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {25a7e6f2-ed70-4bf1-9939-4c01052fc260}, !- Handle
-  CB_FACULTY_OFFICE_7_F3,                 !- Name
+  TZ_CB_FACULTY_OFFICE_7_F3,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -30137,7 +30137,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {2e97ffbe-a8ff-4a8b-b305-81153f2e4d39}, !- Handle
-  CB_FACULTY_OFFICE_6_F3,                 !- Name
+  TZ_CB_FACULTY_OFFICE_6_F3,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -30224,7 +30224,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {c6f29f48-3263-4f2a-888d-23dec9b619d9}, !- Handle
-  CB_FACULTY_OFFICE_5_F3,                 !- Name
+  TZ_CB_FACULTY_OFFICE_5_F3,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -30311,7 +30311,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {6526d647-1cbd-4e22-8e11-6d4175e9adbb}, !- Handle
-  CB_FACULTY_OFFICE_4_F3,                 !- Name
+  TZ_CB_FACULTY_OFFICE_4_F3,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -30398,7 +30398,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {857bbaa6-0459-4ff3-b50a-549a8db1d972}, !- Handle
-  CB_FACULTY_OFFICE_2_F3,                 !- Name
+  TZ_CB_FACULTY_OFFICE_2_F3,              !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -30485,7 +30485,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {4632850e-371e-402e-aa37-c794d94075bc}, !- Handle
-  CB_UTILITY_F3,                          !- Name
+  TZ_CB_UTILITY_F3,                       !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}

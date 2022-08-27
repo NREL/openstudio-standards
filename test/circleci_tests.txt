@@ -46,6 +46,7 @@ doe_prototype/test_warehouse.rb
 doe_prototype/test_performance.rb
 doe_prototype/test_regression.rb
 doe_prototype/test_college.rb
+doe_prototype_test_courthouse.rb
 
 doe_prototype/test_add_c_factor_wall.rb
 doe_prototype/test_add_elevators.rb
@@ -93,6 +94,7 @@ necb/unit_tests/tests/test_pv_ground.rb
 necb/unit_tests/tests/test_nv.rb
 necb/unit_tests/tests/test_ecm_chiller.rb
 necb/unit_tests/tests/test_ecm_scaling_loads.rb
+necb/unit_tests/tests/test_insuite_central_doas.rb
 
 necb/system_tests/tests/test_necb_hvac_system_2_natural_gas_scroll_hydronic_fpfc.rb
 necb/system_tests/tests/test_necb_hvac_system_2_natural_gas_scroll_dx_fpfc.rb

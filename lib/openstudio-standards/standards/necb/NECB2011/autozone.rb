@@ -93,7 +93,7 @@ class NECB2011
 
   # Organizes Zones and assigns them to appropriate systems according to NECB 2011-17 systems spacetype rules in Sec 8.
   # requires requires fuel type to be assigned for each system aspect. Defaults to gas hydronic.
-  def apply_systems(model:, primary_heating_fuel:, sizing_run_dir:)
+  def apply_systems(model:, primary_heating_fuel:, sizing_run_dir:, shw_scale:, baseline_system_zones_map_option:)
     raise('validation of model failed.') unless validate_initial_model(model)
 
     # Check to see if model is using another vintage of spacetypes. If so overwrite the @standards for the object with the
@@ -151,7 +151,8 @@ class NECB2011
                                heating_coil_type_sys6: heating_coil_type_sys6,
                                mau_cooling_type: mau_cooling_type,
                                mau_heating_coil_type: mau_heating_coil_type,
-                               mau_type: mau_type)
+                               mau_type: mau_type,
+                               baseline_system_zones_map_option: baseline_system_zones_map_option)
 
     # Assign a single system 4 for all wet spaces.. and assign the control zone to the one with the largest load.
     auto_system_wet_spaces(baseboard_type: baseboard_type,
@@ -181,8 +182,9 @@ class NECB2011
                                  heating_coil_type_sys6: heating_coil_type_sys6,
                                  mau_cooling_type: mau_cooling_type,
                                  mau_heating_coil_type: mau_heating_coil_type,
-                                 mau_type: mau_type)
-    model_add_swh(model: model, swh_fueltype: system_fuel_defaults['swh_fueltype'])
+                                 mau_type: mau_type
+    )
+    model_add_swh(model: model, swh_fueltype: system_fuel_defaults['swh_fueltype'], shw_scale: shw_scale)
     model_apply_sizing_parameters(model)
     # set a larger tolerance for unmet hours from default 0.2 to 1.0C
     model.getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
@@ -1000,8 +1002,8 @@ class NECB2011
                        zones: zones)
   end
 
-  # This methos will ensure that all dwelling units are assigned to a system 1 or 3. There is an option to have a shared
-  # AHU or not. Currently set to false. So by default all dwelling units will have their own AHU.
+  # This method will ensure that all dwelling units are assigned to a system 1 or 3.
+  # There is an option to have a shared AHU or not.
 
   def auto_system_dwelling_units(baseboard_type:,
                                  boiler_fueltype:,
@@ -1014,11 +1016,16 @@ class NECB2011
                                  mau_cooling_type:,
                                  mau_heating_coil_type:,
                                  mau_type:,
-                                 model:)
+                                 model:,
+                                 baseline_system_zones_map_option:)
 
     system_zones_hash = {}
-    # Detemine if dwelling units have a shared AHU.  If user entered building stories > 4 then set to true.
-    dwelling_shared_ahu = model.getBuilding.standardsNumberOfAboveGroundStories.get > 4
+    # Determine if dwelling units have a shared AHU.  If user entered building stories > 4 then set to true.
+    if baseline_system_zones_map_option == 'one_sys_per_dwelling_unit'
+      dwelling_shared_ahu = false
+    elsif baseline_system_zones_map_option == 'one_sys_per_bldg' || baseline_system_zones_map_option == 'NECB_Default' || baseline_system_zones_map_option == 'none' || baseline_system_zones_map_option == nil
+      dwelling_shared_ahu = true
+    end
     # store dwelling zones into array
     zones = []
     model.getSpaces.select { |space| is_a_necb_dwelling_unit?(space) }.each do |space|
