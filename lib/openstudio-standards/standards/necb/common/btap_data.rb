@@ -13,6 +13,7 @@ class BTAPData
     # sets sql file.
     set_sql_file(model.sqlFile)
     @standard = Standard.build('NECB2011')
+    @standards_data = @standard.load_standards_database_new()
     @btap_data = {}
     @btap_results_version = 1.00
     @neb_prices_csv_file_name = File.join(__dir__, 'neb_end_use_prices.csv')
@@ -170,7 +171,13 @@ class BTAPData
 
   def net_present_value(npv_start_year, npv_end_year, npv_discount_rate)
 
-    ##### Convert a string to a float
+    # Find end year in the neb data
+    neb_header = CSV.read(@neb_prices_csv_file_name, headers: true).headers
+    neb_header.delete_if { |item| ["building_type", "province", "fuel_type"].include?(item) } # remove "building_type", "province", "fuel_type" from neb_header in order to have only years in neb_header
+    neb_header.map(&:to_f)  #convert years to float
+    year_max = neb_header.max
+
+    # Convert a string to a float
     if npv_start_year.instance_of?(String) && npv_start_year != 'NECB_Default'
       npv_start_year = npv_start_year.to_f
     end
@@ -181,8 +188,7 @@ class BTAPData
       npv_discount_rate = npv_discount_rate.to_f
     end
 
-
-    ##### Set default npv_start_year as 2022, npv_end_year as 2041, npv_discount_rate as 3%
+    # Set default npv_start_year as 2022, npv_end_year as 2041, npv_discount_rate as 3%
     if npv_start_year == 'NECB_Default'
       npv_start_year = 2022
     end
@@ -192,33 +198,27 @@ class BTAPData
     if npv_discount_rate == 'NECB_Default'
       npv_discount_rate = 0.03
     end
-    puts "npv_start_year is #{npv_start_year}"
-    puts "npv_end_year is #{npv_end_year}"
-    puts "npv_discount_rate is #{npv_discount_rate}"
+
+    # Set npv_end_year as year_max if users' input > neb's end year
+    if npv_end_year > year_max.to_f
+      npv_end_year = year_max.to_f
+      warn "WARNING: Your npv_end_year for the calculation of net present value is larger than that in Canada Energy Regulator (CER) (i.e. #{year_max}). So, npv_end_year has been reset as #{year_max}."
+    end
+    # puts "npv_start_year is #{npv_start_year}"
+    # puts "npv_end_year is #{npv_end_year}"
+    # puts "npv_discount_rate is #{npv_discount_rate}"
 
     # Get energy end-use prices (CER data from https://apps.cer-rec.gc.ca/ftrppndc/dflt.aspx?GoCTemplateCulture=en-CA)
     @neb_prices_csv_file_name = "#{File.dirname(__FILE__)}/neb_end_use_prices.csv"
 
-    #Create a hash of the neb data.
+    # Create a hash of the neb data.
     neb_data = CSV.parse(File.read(@neb_prices_csv_file_name), headers: true, converters: :numeric).map(&:to_h)
 
-    # Find which province the proposed building is located in #TODO: Question: is it ok to have provinces_names_map in another function as well?
-    provinces_names_map = { 'QC' => 'Quebec',
-                            'NL' => 'Newfoundland and Labrador',
-                            'NS' => 'Nova Scotia',
-                            'PE' => 'Prince Edward Island',
-                            'ON' => 'Ontario',
-                            'MB' => 'Manitoba',
-                            'SK' => 'Saskatchewan',
-                            'AB' => 'Alberta',
-                            'BC' => 'British Columbia',
-                            'YT' => 'Yukon',
-                            'NT' => 'Northwest Territories',
-                            'NB' => 'New Brunswick',
-                            'NU' => 'Nunavut' }
+    # Find which province the proposed building is located in
     building_type = 'Commercial'
     geography_data = climate_data
-    province = provinces_names_map[geography_data['location_state_province_region']]
+    province_abbreviation = geography_data['location_state_province_region']
+    province = @standards_data['province_map'][province_abbreviation]
 
     # Note: If there is on-site energy generation (e.g. PV), it should be considered in the calculation of EUI for the calculation of energy use cost and NPV.
     # To do so, it has been assumed that on-site energy generation is only for electricity.
@@ -227,7 +227,7 @@ class BTAPData
     # Note: 'total_site_eui_gj_per_m_sq' is the gross energy consumed by the building (REF: https://unmethours.com/question/25416/what-is-the-difference-between-site-energy-and-source-energy/)
     # Note: 'net_site_eui_gj_per_m_sq' is the final energy consumed by the building after accounting for on-site energy generations (e.g. PV) (REF: https://unmethours.com/question/25416/what-is-the-difference-between-site-energy-and-source-energy/)
 
-    # calculate npv of electricity
+    # Calculate npv of electricity
     onsite_elec_generation = @btap_data['total_site_eui_gj_per_m_sq'] - @btap_data['net_site_eui_gj_per_m_sq']
     if onsite_elec_generation > 0.0
       eui_elec = @btap_data['energy_eui_electricity_gj_per_m_sq'] - onsite_elec_generation
@@ -250,7 +250,7 @@ class BTAPData
     end
     # puts "npv_elec is #{npv_elec}"
 
-    # calculate npv of natural gas
+    # Calculate npv of natural gas
     eui_ngas= @btap_data['energy_eui_natural_gas_gj_per_m_sq']
     row = neb_data.detect do |data|
       (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Natural Gas')
@@ -263,7 +263,7 @@ class BTAPData
     end
     # puts "npv_ngas is #{npv_ngas}"
 
-    # calculate npv of oil
+    # Calculate npv of oil
     eui_oil= @btap_data['energy_eui_additional_fuel_gj_per_m_sq']
     row = neb_data.detect do |data|
       (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Oil')
@@ -276,7 +276,7 @@ class BTAPData
     end
     # puts "npv_oil is #{npv_oil}"
 
-    # calculate total npv
+    # Calculate total npv
     npv_total = @btap_data['cost_equipment_total_cost_per_m_sq'] + npv_elec + npv_ngas + npv_oil
 
     @btap_data.merge!('npv_total_per_m_sq' => npv_total)
@@ -512,21 +512,8 @@ class BTAPData
 
   def utility(model)
     economics_data = {}
-    provinces_names_map = { 'QC' => 'Quebec',
-                            'NL' => 'Newfoundland and Labrador',
-                            'NS' => 'Nova Scotia',
-                            'PE' => 'Prince Edward Island',
-                            'ON' => 'Ontario',
-                            'MB' => 'Manitoba',
-                            'SK' => 'Saskatchewan',
-                            'AB' => 'Alberta',
-                            'BC' => 'British Columbia',
-                            'YT' => 'Yukon',
-                            'NT' => 'Northwest Territories',
-                            'NB' => 'New Brunswick',
-                            'NU' => 'Nunavut' }
     building_type = 'Commercial'
-    province = provinces_names_map[model.getWeatherFile.stateProvinceRegion]
+    province = @standards_data['province_map'][model.getWeatherFile.stateProvinceRegion]
     neb_eplus_fuel_map = {'Natural Gas' => {eplus_fuel_name: 'NaturalGas',
                                             eplus_table_name: 'Annual and Peak Values - Natural Gas',
                                             eplus_row_name: 'NaturalGas:Facility',
