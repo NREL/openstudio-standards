@@ -242,7 +242,7 @@ class BTAPData
     npv_elec = 0.0
     year_index = 1.0
     if eui_elec > 0.0
-      for year in npv_start_year..npv_end_year
+      for year in npv_start_year.to_int..npv_end_year.to_int
         # puts "year, #{year}, #{row[year.to_s]}, year_index, #{year_index}"
         npv_elec += (eui_elec * row[year.to_s]) / (1+npv_discount_rate)**year_index
         year_index += 1.0
@@ -257,7 +257,7 @@ class BTAPData
     end
     npv_ngas = 0.0
     year_index = 1.0
-    for year in npv_start_year..npv_end_year
+    for year in npv_start_year.to_int..npv_end_year.to_int
       npv_ngas += (eui_ngas * row[year.to_s]) / (1+npv_discount_rate)**year_index
       year_index += 1.0
     end
@@ -270,7 +270,7 @@ class BTAPData
     end
     npv_oil = 0.0
     year_index = 1.0
-    for year in npv_start_year..npv_end_year
+    for year in npv_start_year.to_int..npv_end_year.to_int
       npv_oil += (eui_oil * row[year.to_s]) / (1+npv_discount_rate)**year_index
       year_index += 1.0
     end
