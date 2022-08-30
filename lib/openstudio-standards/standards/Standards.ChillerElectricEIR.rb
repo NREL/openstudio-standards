@@ -25,11 +25,15 @@ class Standard
     name = chiller_electric_eir.name.get
     condenser_type = nil
     compressor_type = nil
+    absorption_type = nil
     if cooling_type == 'AirCooled'
       if name.include?('WithCondenser')
         condenser_type = 'WithCondenser'
       elsif name.include?('WithoutCondenser')
         condenser_type = 'WithoutCondenser'
+      else
+        # default to 'WithCondenser' if not an absorption chiller
+        condenser_type = 'WithCondenser' if absorption_type.nil?
       end
     elsif cooling_type == 'WaterCooled'
       if name.include?('Reciprocating')
