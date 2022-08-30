@@ -167,10 +167,7 @@ class BTAPDatapoint
                                        output_meters: @options[:output_meters],
                                        airloop_economizer_type: @options[:airloop_economizer_type],
                                        shw_scale: @options[:shw_scale],
-                                       baseline_system_zones_map_option: @options[:baseline_system_zones_map_option],
-                                       npv_start_year: @options[:npv_start_year],
-                                       npv_end_year: @options[:npv_end_year],
-                                       npv_discount_rate: @options[:npv_discount_rate])
+                                       baseline_system_zones_map_option: @options[:baseline_system_zones_map_option])
       end
 
       # Save model to to disk.
