@@ -454,9 +454,7 @@ class AppendixGPRMTests < Minitest::Test
       u_value_goal.each do |key, value|
         value_si = OpenStudio.convert(value, 'Btu/ft^2*hr*R', 'W/m^2*K').get
         assert(((u_value_baseline[key] - value_si).abs < 0.001 || (u_value_baseline[key] - 5.835).abs < 0.01), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si.round(3)}.")
-        if key != 'PERIMETER_ZN_3_WALL_NORTH_DOOR1'
-          assert((construction_baseline[key].include? 'PRM'), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
-        end
+        assert((construction_baseline[key].include? 'PRM'), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
       end
     end
   end
