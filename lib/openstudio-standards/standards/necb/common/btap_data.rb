@@ -178,24 +178,24 @@ class BTAPData
     year_max = neb_header.max
 
     # Convert a string to a float
-    if npv_start_year.instance_of?(String) && npv_start_year != 'NECB_Default'
+    if npv_start_year.instance_of?(String) && npv_start_year != 'NECB_Default' && npv_start_year != 'none'
       npv_start_year = npv_start_year.to_f
     end
-    if npv_end_year.instance_of?(String) && npv_end_year != 'NECB_Default'
+    if npv_end_year.instance_of?(String) && npv_end_year != 'NECB_Default' && npv_end_year != 'none'
       npv_end_year = npv_end_year.to_f
     end
-    if npv_discount_rate.instance_of?(String) && npv_discount_rate != 'NECB_Default'
+    if npv_discount_rate.instance_of?(String) && npv_discount_rate != 'NECB_Default' && npv_discount_rate != 'none'
       npv_discount_rate = npv_discount_rate.to_f
     end
 
     # Set default npv_start_year as 2022, npv_end_year as 2041, npv_discount_rate as 3%
-    if npv_start_year == 'NECB_Default' || npv_start_year == nil
+    if npv_start_year == 'NECB_Default' || npv_start_year == nil || npv_start_year == 'none'
       npv_start_year = 2022
     end
-    if npv_end_year == 'NECB_Default' || npv_end_year == nil
+    if npv_end_year == 'NECB_Default' || npv_end_year == nil || npv_end_year == 'none'
       npv_end_year = 2041
     end
-    if npv_discount_rate == 'NECB_Default' || npv_discount_rate == nil
+    if npv_discount_rate == 'NECB_Default' || npv_discount_rate == nil || npv_discount_rate == 'none'
       npv_discount_rate = 0.03
     end
 
