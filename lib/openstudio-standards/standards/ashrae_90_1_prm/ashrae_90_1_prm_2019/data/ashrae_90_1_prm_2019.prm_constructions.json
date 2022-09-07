@@ -65,6 +65,29 @@
       ]
     },
     {
+      "name": "PRM Typical Insulated Metal Door",
+      "template": "90.1-PRM-2019",
+      "intended_surface_type": "ExteriorDoor",
+      "standards_construction_type": "Swinging",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
+      "materials": [
+        "F08 Metal surface",
+        "Typical Insulation"
+      ]
+    },
+    {
+      "name": "PRM Typical Overhead Door",
+      "template": "90.1-PRM-2019",
+      "intended_surface_type": "ExteriorDoor",
+      "standards_construction_type": "NonSwinging",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
+      "materials": [
+        "Typical Insulation"
+      ]
+    },
+    {
       "name": "PRM U 0.46 SHGC 0.40 VT 0.44 Simple Glazing Glass Door",
       "template": "90.1-PRM-2019",
       "intended_surface_type": "GlassDoor",

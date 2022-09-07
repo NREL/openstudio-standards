@@ -110,6 +110,18 @@ class ASHRAE901PRM < Standard
           return previous_construction_map
         end
       end
+    # Exterior Doors
+    elsif surf_type == 'ExteriorDoor'
+      stds_type = standards_info.standardsConstructionType
+      if stds_type.is_initialized
+        stds_type = stds_type.get
+        case stds_type
+        when 'RollUp'
+          stds_type = 'NonSwinging'
+        end
+      else
+        stds_type = 'Swinging'
+      end
     # Skylights
     elsif surf_type == 'Skylight'
       stds_type = standards_info.fenestrationType
