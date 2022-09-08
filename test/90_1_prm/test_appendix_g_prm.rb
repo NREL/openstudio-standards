@@ -3366,6 +3366,27 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  def check_num_systems_in_zone(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+      model_baseline.getAirLoopHVACs.each do |air_loop|
+        if air_loop.name.get.downcase == 'core_retail'
+          # Normally core retail is > 65 kbtuh
+          # With number_of_systems = 30, it will be < 65 kbtuh
+          air_loop.supplyComponents.each do |sc|
+            # CoilCoolingDXSingleSpeed
+            if sc.to_CoilCoolingDXSingleSpeed.is_initialized
+              coil = sc.to_CoilCoolingDXSingleSpeed.get
+              cop = coil.ratedCOP.to_f
+              diff = (cop - 3.0).abs
+              assert(diff < 0.1,"Cooling COP for the #{building_type}, #{template}, #{climate_zone} model is incorrect. Expected: 3.0, got: #{cop}.")
+            end
+          end
+        end
+      end
+    end
+  end
+
   def test_wwr
     model_hash = prm_test_helper('wwr', require_prototype=false, require_baseline=true)
     check_wwr(model_hash['baseline'])
@@ -3555,6 +3576,11 @@ class AppendixGPRMTests < Minitest::Test
   def test_night_cycle_exception
     model_hash = prm_test_helper('night_cycle_exception', require_prototype=false, require_baseline=true)
     check_nightcycle_exception(model_hash['baseline'])
+  end
+
+  def test_num_systems_in_zone
+    model_hash = prm_test_helper('number_of_systems_in_zone', require_prototype=false, require_baseline=true)
+    check_num_systems_in_zone(model_hash['baseline'])
   end
 
 end
