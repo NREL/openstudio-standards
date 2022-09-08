@@ -128,7 +128,8 @@ class ASHRAE901PRM < Standard
     orig_name = coil_cooling_dx_single_speed.name.to_s
 
     # Find the minimum COP and rename with efficiency rating
-    cop = coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, sys_type, true)
+    # Set last argument to false to avoid renaming coil, since that complicates lookup of HP heating coil efficiency later
+    cop = coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, sys_type, false)
 
     # Map the original name to the new name
     sql_db_vars_map[coil_cooling_dx_single_speed.name.to_s] = orig_name

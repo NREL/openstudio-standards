@@ -107,7 +107,7 @@
         ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []]]]
     ],
     "number_of_systems_in_zone": [
-        ["RetailStandalone", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_num_systems", []]
+        ["RetailStandalone", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_num_systems", []]
     ],
     "hvac_sizing": [
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []]]],
