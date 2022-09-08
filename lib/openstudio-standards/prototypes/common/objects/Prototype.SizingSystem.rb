@@ -57,7 +57,11 @@ class Standard
     end
 
     sizing_system = air_loop_hvac.sizingSystem
-    sizing_system.setSystemOutdoorAirMethod('VentilationRateProcedure')
+    if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.3.0')
+      sizing_system.setSystemOutdoorAirMethod('VentilationRateProcedure')
+    else
+      sizing_system.setSystemOutdoorAirMethod('Standard62.1VentilationRateProcedure')
+    end
     # Set the minimum zone ventilation efficiency to be 0.6
     air_loop_hvac.thermalZones.sort.each do |zone|
       sizing_zone = zone.sizingZone
