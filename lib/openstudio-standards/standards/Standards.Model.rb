@@ -1615,6 +1615,10 @@ class Standard
           # If and only if there are primary zones to attach to the loop
           # counter example: floor with only one elevator machine room that get classified as sec_zones
           unless pri_zones.empty?
+            # if the loop configuration is primary / secondary loop
+            if chilled_water_loop.additionalProperties.hasFeature('secondary_loop_name')
+              chilled_water_loop = model.getPlantLoopByName(chilled_water_loop.additionalProperties.getFeatureAsString('secondary_loop_name').get).get
+            end
             model_add_vav_reheat(model,
                                  pri_zones,
                                  system_name: system_name,
@@ -1682,6 +1686,9 @@ class Standard
           system_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
+            if chilled_water_loop.additionalProperties.hasFeature('secondary_loop_name')
+              chilled_water_loop = model.getPlantLoopByName(chilled_water_loop.additionalProperties.getFeatureAsString('secondary_loop_name').get).get
+            end
             model_add_vav_pfp_boxes(model,
                                     pri_zones,
                                     system_name: system_name,
