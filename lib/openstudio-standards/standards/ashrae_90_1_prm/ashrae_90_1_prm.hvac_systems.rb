@@ -104,9 +104,11 @@ class ASHRAE901PRM < Standard
       pri_chw_pump.setPumpControlType('Intermittent')
       pri_chw_pump.addToNode(primary_chilled_water_loop.supplyInletNode)
     elsif chw_pumping_type == 'const_pri_var_sec'
-      # In this scenario, we will need to create a primary and secondary configuration
-      # Primary: demand: heat exchanger, supply: chillers
-      # Secondary: demand: Coils, supply: heat exchanger
+      # NOTE: PRECONDITIONING for `const_pri_var_sec` pump type is only applicable for PRM routine and only applies to System Type 7 and System Type 8
+      # See: model_add_prm_baseline_system under Model object.
+      # In this scenario, we will need to create a primary and secondary configuration:
+      # Primary: demand: heat exchanger, supply: chillers, name: Chilled Water Loop_Primary, additionalProperty: secondary_loop_name
+      # Secondary: demand: Coils, supply: heat exchanger, name: Chilled Water Loop, additionalProperty: is_secondary_loop
       secondary_chilled_water_loop = OpenStudio::Model::PlantLoop.new(model)
       secondary_loop_name = system_name.nil? ? 'Chilled Water Loop' : system_name
       # Reset primary loop name

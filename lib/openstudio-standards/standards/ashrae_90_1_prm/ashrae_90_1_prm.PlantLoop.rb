@@ -202,7 +202,7 @@ class ASHRAE901PRM < Standard
     return true if chillers.size.zero?
 
     if chillers.size > 1
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{chillers.size} chillers, cannot split up per performance rating method baseline requirements.")
+      OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name}, found #{chillers.size} chillers, cannot split up per performance rating method baseline requirements.")
     else
       first_chiller = chillers[0]
     end
@@ -210,10 +210,10 @@ class ASHRAE901PRM < Standard
     # Ensure there is only 1 pump to start
     orig_pump = nil
     if pumps.size.zero?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{pumps.size} pumps.  A loop must have at least one pump.")
+      OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name}, found #{pumps.size} pumps. A loop must have at least one pump.")
       return false
     elsif pumps.size > 1
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{pumps.size} pumps, cannot split up per performance rating method baseline requirements.")
+      OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name}, found #{pumps.size} pumps, cannot split up per performance rating method baseline requirements.")
       return false
     else
       orig_pump = pumps[0]
