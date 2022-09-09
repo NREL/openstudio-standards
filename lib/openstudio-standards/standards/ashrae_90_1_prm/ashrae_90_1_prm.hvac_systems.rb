@@ -115,7 +115,7 @@ class ASHRAE901PRM < Standard
       primary_chilled_water_loop.setName("#{secondary_loop_name}_Primary")
       secondary_chilled_water_loop.setName(secondary_loop_name)
       chw_sizing_control(model, secondary_chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
-      primary_chilled_water_loop.additionalProperties.setFeature('secondary_loop_name', secondary_loop_name)
+      primary_chilled_water_loop.additionalProperties.setFeature('is_primary_loop', true)
       secondary_chilled_water_loop.additionalProperties.setFeature('is_secondary_loop', true)
       # primary chilled water pump
       # Add Constant pump, in plant loop, the number of chiller adjustment will assign pump to each chiller

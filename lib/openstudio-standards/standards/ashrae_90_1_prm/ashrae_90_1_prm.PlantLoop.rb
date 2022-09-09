@@ -1,4 +1,11 @@
 class ASHRAE901PRM < Standard
+  HOT_WATER_PUMP_POWER = 19 # W/gpm
+  HOT_WATER_DISTRICT_PUMP_POWER = 14 # W/gpm
+  CHILLED_WATER_PRIMARY_PUMP_POWER = 9 # W/gpm
+  CHILLED_WATER_SECONDARY_PUMP_POWER = 13 # W/gpm
+  CHILLED_WATER_DISTRICT_PUMP_POWER = 16 # W/gpm
+  CONDENSER_WATER_PUMP_POWER = 19 # W/gpm
+
   # Keep only one cooling tower, but use one condenser pump per chiller
   def plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
     # Skip non-cooling plants
@@ -149,7 +156,7 @@ class ASHRAE901PRM < Standard
   # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_prm_number_of_chillers(plant_loop, sizing_run_dir = nil)
     # Skip non-cooling plants & secondary cooling loop
-    return true unless plant_loop.sizingPlant.loopType == 'Cooling' && plant_loop.additionalProperties.hasFeature('secondary_loop_name')
+    return true unless plant_loop.sizingPlant.loopType == 'Cooling' && plant_loop.additionalProperties.hasFeature('is_primary_loop')
 
     # Determine the number and type of chillers
     num_chillers = nil
@@ -157,7 +164,7 @@ class ASHRAE901PRM < Standard
     chiller_compressor_type = nil
 
     # Set the equipment to stage sequentially or uniformload if there is secondary loop
-    if plant_loop.additionalProperties.hasFeature('secondary_loop_name')
+    if plant_loop.additionalProperties.hasFeature('is_primary_loop')
       plant_loop.setLoadDistributionScheme('UniformLoad')
     else
       plant_loop.setLoadDistributionScheme('SequentialLoad')
@@ -321,10 +328,10 @@ class ASHRAE901PRM < Standard
       end
 
       w_per_gpm = if has_district_heating # District HW
-                        14.0
-                      else # HW
-                        19.0
-                      end
+                    HOT_WATER_DISTRICT_PUMP_POWER
+                  else # HW
+                    HOT_WATER_PUMP_POWER
+                  end
 
     when 'Cooling'
       has_district_cooling = false
@@ -337,18 +344,18 @@ class ASHRAE901PRM < Standard
       end
 
       if has_district_cooling # District CHW
-        w_per_gpm = 16.0
-      elsif plant_loop.additionalProperties.hasFeature('secondary_loop_name') # The primary loop of the primary/secondary CHW
-        w_per_gpm = 9.0
+        w_per_gpm = CHILLED_WATER_DISTRICT_PUMP_POWER
+      elsif plant_loop.additionalProperties.hasFeature('is_primary_loop') # The primary loop of the primary/secondary CHW
+        w_per_gpm = CHILLED_WATER_PRIMARY_PUMP_POWER
       elsif plant_loop.additionalProperties.hasFeature('is_secondary_loop') # The secondary loop of the primary/secondary CHW
-        w_per_gpm = 13.0
-      else # Primary only CHW
-        w_per_gpm = 22.0
+        w_per_gpm = CHILLED_WATER_SECONDARY_PUMP_POWER
+      else # Primary only CHW combine 9W/gpm + 13W/gpm
+        w_per_gpm = CHILLED_WATER_PRIMARY_PUMP_POWER + CHILLED_WATER_SECONDARY_PUMP_POWER
       end
 
     when 'Condenser'
       # @todo prm condenser loop pump power
-      w_per_gpm = 19.0
+      w_per_gpm = CONDENSER_WATER_PUMP_POWER
     end
 
     # Modify all the primary pumps
