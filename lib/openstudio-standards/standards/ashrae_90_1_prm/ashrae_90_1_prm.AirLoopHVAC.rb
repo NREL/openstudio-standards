@@ -776,7 +776,7 @@ class ASHRAE901PRM < Standard
 
       # Exception 4 - Heating systems in certain climate zones
       if ['ASHRAE 169-2006-0A', 'ASHRAE 169-2006-0B', 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 'ASHRAE 169-2013-0A', 'ASHRAE 169-2013-0B', 'ASHRAE 169-2013-1A', 'ASHRAE 169-2013-1B', 'ASHRAE 169-2013-2A', 'ASHRAE 169-2013-2B', 'ASHRAE 169-2013-3A', 'ASHRAE 169-2013-3B', 'ASHRAE 169-2013-3C'].include?(climate_zone)
-        if air_loop_hvac.additionalProperties.hasfeature('baseline_system_type')
+        if air_loop_hvac.additionalProperties.hasFeature('baseline_system_type')
           system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
           if system_type == 'Gas_Furnace' || system_type == 'Electric_Furnace'
             return nil
