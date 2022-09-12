@@ -442,6 +442,9 @@ class ASHRAE901PRM < Standard
             # Store original boundary condition type
             org_surface_boundary_conditions[surf.name.to_s] = adjacent_surf
 
+            # Identify this surface as exterior
+            surface_category[surf] = 'ExteriorSurface'
+
             # Temporary change the surface's boundary condition to 'Outdoors' so it can be assigned a baseline construction
             surf.setOutsideBoundaryCondition('Outdoors')
             adjacent_surf.setOutsideBoundaryCondition('Outdoors')
