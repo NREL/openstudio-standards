@@ -540,6 +540,21 @@ class ASHRAE9012019 < ASHRAE901
       return true
     end
 
+    # Set the minimum zone ventilation efficiency to be 0.6
+
+    # Use the built-in EnergyPlus method when available
+    if air_loop_hvac.model.version > OpenStudio::VersionString.new('3.0.0')
+      air_loop_hvac.thermalZones.sort.each do |zone|
+        sizing_zone = zone.sizingZone
+        sizing_zone.setDesignMinimumZoneVentilationEfficiency(0.6)
+      end
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: the multizone outdoor air calculation method was applied, and a minimum zone ventilation efficiency of 0.6 was specified using the EnergyPlus algorithm.")
+
+      return true
+    end
+
+    # Use the manual method otherwise
+
     # Total uncorrected outdoor airflow rate
     v_ou = 0.0
     air_loop_hvac.thermalZones.each do |zone|
