@@ -156,7 +156,9 @@ class ASHRAE901PRM < Standard
   # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_prm_number_of_chillers(plant_loop, sizing_run_dir = nil)
     # Skip non-cooling plants & secondary cooling loop
-    return true unless plant_loop.sizingPlant.loopType == 'Cooling' && plant_loop.additionalProperties.hasFeature('is_primary_loop')
+    return true unless plant_loop.sizingPlant.loopType == 'Cooling'
+    # If the loop is cooling but it is a secondary loop, then skip.
+    return true if plant_loop.additionalProperties.hasFeature('is_secondary_loop')
 
     # Determine the number and type of chillers
     num_chillers = nil
