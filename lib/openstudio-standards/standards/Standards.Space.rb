@@ -321,7 +321,7 @@ class Standard
               min_y_val = vertex.y
             end
             # Max y value
-            if vertex.y > max_x_val
+            if vertex.y > max_y_val
               max_y_val = vertex.y
             end
           end
@@ -1822,6 +1822,7 @@ class Standard
       end
     end
 
+    unoccupied_threshold = air_loop_hvac_unoccupied_threshold
     people_objs.each do |people|
       occ_sch = people.numberofPeopleSchedule
       if occ_sch.is_initialized
@@ -1830,7 +1831,7 @@ class Standard
         # Flag = 1 if any schedule shows occupancy for a given hour
         if !occ_sch_values.nil?
           (0..8759).each do |ihr|
-            ppl_values[ihr] = 1 if occ_sch_values[ihr] > 0
+            ppl_values[ihr] = 1 if occ_sch_values[ihr] >= unoccupied_threshold
           end
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retrieve people schedule for #{space.name}.  Assuming #{w_per_person}W/person.")
@@ -2928,6 +2929,31 @@ class Standard
     end
 
     return overlap_area
+  end
+
+
+  # A function to check whether a space is a return / supply plenum.
+  # This function only works on spaces used as a AirLoopSupplyPlenum or AirLoopReturnPlenum
+  # @param [OpenStudio::Model::Space] space
+  # @return boolean true if it is plenum, else false.
+  def space_is_plenum(space)
+    # Get the zone this space is inside
+    zone = space.thermalZone
+    # the zone is a return air plenum
+    space.model.getAirLoopHVACReturnPlenums.each do |return_air_plenum|
+      if return_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
+        # Determine if residential
+        return true
+      end
+    end
+    # the zone is a supply plenum
+    space.model.getAirLoopHVACSupplyPlenums.each do |supply_air_plenum|
+      if supply_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
+        return true
+      end
+    end
+    # None match, return false
+    return false
   end
 
   # Determine if a space should be modeled with an occupancy standby mode

@@ -70,11 +70,11 @@ class Standard
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
     # Check proposed model unmet load hours
     if unmet_load_hours_check
-      # Run proposed model
+      # Run proposed model; need annual simulation to get unmet load hours
       if model_run_simulation_and_log_errors(user_model, run_dir = "#{sizing_run_dir}/PROP")
         umlh = model_get_unmet_load_hours(user_model)
         if umlh > 300
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created.")
+          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created.")
           raise "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created."
         end
       end
@@ -134,7 +134,7 @@ class Standard
         end
 
         # Run the sizing run
-        if model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
+        if model_run_sizing_run(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
           return false
         end
 
@@ -157,7 +157,7 @@ class Standard
 
       # Reduce the WWR and SRR, if necessary
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adjusting Window and Skylight Ratios ***')
-      sucess, wwr_info = model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type)
+      success, wwr_info = model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type)
       model_apply_prm_baseline_skylight_to_roof_ratio(model)
 
       # Assign building stories to spaces in the building where stories are not yet assigned.
@@ -264,6 +264,7 @@ class Standard
 
       # Remove all EMS objects from the model
       model_remove_prm_ems_objects(model)
+
       # Modify the service water heating loops per the baseline rules
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
       model_apply_baseline_swh_loops(model, building_type)
@@ -296,10 +297,12 @@ class Standard
                                       system_type[3],
                                       sys_group['zones'],
                                       zone_fan_scheds)
+
         model.getAirLoopHVACs.each do |air_loop|
           air_loop_name = air_loop.name.get
           unless air_loop_name_array.include?(air_loop_name)
             air_loop.additionalProperties.setFeature('zone_group_type', sys_group['zone_group_type'] || 'None')
+            air_loop.additionalProperties.setFeature('sys_group_occ', sys_group['occ'] || 'None')
             air_loop_name_array << air_loop_name
           end
 
@@ -311,6 +314,7 @@ class Standard
           end
         end
       end
+
       # Add system type reference to all air loops
       model.getAirLoopHVACs.sort.each do |air_loop|
         if air_loop.thermalZones[0].additionalProperties.hasFeature('baseline_system_type')
@@ -324,7 +328,7 @@ class Standard
       # Set the zone sizing SAT for each zone in the model
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Sizing Settings ***')
       model.getThermalZones.each do |zone|
-        thermal_zone_apply_prm_baseline_supply_temperatures(zone) # prm template conditionals added in the methods
+        thermal_zone_apply_prm_baseline_supply_temperatures(zone)
       end
 
       # Set the system sizing properties based on the zone sizing information
@@ -405,7 +409,6 @@ class Standard
       model.getPlantLoops.sort.each do |plant_loop|
         # Skip the SWH loops
         next if plant_loop_swh_loop?(plant_loop)
-
         plant_loop_apply_prm_baseline_pump_power(plant_loop)
         plant_loop_apply_prm_baseline_pumping_type(plant_loop)
       end
@@ -413,14 +416,13 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Prescriptive HVAC Controls and Equipment Efficiencies ***')
 
       # Apply the HVAC efficiency standard
-      if /prm/i !~ template
-        model_apply_hvac_efficiency_standard(model, climate_zone)
-      else
-        model_apply_hvac_efficiency_standard(model)
-      end
+      model_apply_hvac_efficiency_standard(model, climate_zone)
 
       # Set baseline DCV system
       model_set_baseline_demand_control_ventilation(model, climate_zone)
+
+      # Final sizing run and adjustements to values that need refinement
+      model_refine_size_dependent_values(model, sizing_run_dir)
 
       # Fix EMS references.
       # Temporary workaround for OS issue #2598
@@ -592,8 +594,7 @@ class Standard
     return num_stories
   end
 
-
-  # Add design day schedule objects for space loads, 
+  # Add design day schedule objects for space loads,
   # not used for 2013 and earlier
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::model::Model] OpenStudio model object
@@ -606,7 +607,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param custom [String] custom fuel type
-  # @param applicable_zones [list of zone objects] 
+  # @param applicable_zones [list of zone objects]
   # @return [Array<Hash>] an array of hashes, one for each zone,
   #   with the keys 'zone', 'type' (occ type), 'fuel', and 'area'
   def model_zones_with_occ_and_fuel_type(model, custom, applicable_zones = nil)
@@ -659,7 +660,6 @@ class Standard
 
     return zones
   end
-
 
   # Determine the dominant and exceptional areas of the building based on fuel types and occupancy types.
   #
@@ -1266,7 +1266,6 @@ class Standard
   def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom = nil)
     return fuel_type # Don't change fuel type for most templates
   end
-
 
   # Determine whether heating type is fuel or electric
   # @param hvac_building_type [String] Key for lookup of baseline system type
@@ -1977,7 +1976,6 @@ class Standard
     return array_of_zones
   end
 
-
   # Determine which of the zones should be served by the primary HVAC system.
   # First, eliminate zones that differ by more# than 40 full load hours per week.
   # In this case, lighting schedule is used as the proxy for operation instead
@@ -2105,7 +2103,6 @@ class Standard
     return { 'primary' => pri_zones, 'secondary' => sec_zones, 'zone_op_hrs' => zone_op_hrs }
   end
 
-
   # For a multizone system, get straight average of hash values excluding the reference zone
   # @author Doug Maddox, PNNL
   # @param value_hash [Hash<String>] of zoneName:Value
@@ -2154,7 +2151,6 @@ class Standard
   def model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
     # Not applicable if not stable baseline
     return
-
   end
 
   # Group an array of zones into multiple arrays, one for each story in the building.
@@ -2362,7 +2358,7 @@ class Standard
   end
 
   # For backward compatibility, infiltration standard not used for 2013 and earlier
-   # @return [Bool] true if successful, false if not
+  # @return [Bool] true if successful, false if not
   def model_baseline_apply_infiltration_standard(model, climate_zone)
     return true
   end
@@ -2760,7 +2756,7 @@ class Standard
       if existing_sch.is_initialized
         existing_sch = existing_sch.get
         existing_day_sch_vals = existing_sch.defaultDaySchedule.values
-        if existing_day_sch_vals.size == 1 && existing_day_sch_vals[0] == value
+        if existing_day_sch_vals.size == 1 && (existing_day_sch_vals[0] - value).abs < 1.0e-6
           return existing_sch
         end
       end
@@ -3754,11 +3750,12 @@ class Standard
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param building_type [String] the building type
   # @param run_type [String] design day is dd-only, otherwise annual run
+  # @param lkp_template [String] The standards template, e.g.'90.1-2013'
   # @return [Hash] a hash of results for each fuel, where the keys are in the form 'End Use|Fuel Type',
   #   e.g. Heating|Electricity, Exterior Equipment|Water.  All end use/fuel type combos are present,
   #   with values of 0.0 if none of this end use/fuel type combo was used by the simulation.
   #   Returns nil if the legacy results couldn't be found.
-  def model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type)
+  def model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type, lkp_template:nil)
     # Load the legacy idf results CSV file into a ruby hash
     top_dir = File.expand_path('../../..', File.dirname(__FILE__))
     standards_data_dir = "#{top_dir}/data/standards"
@@ -3782,10 +3779,14 @@ class Standard
     legacy_idf_csv = CSV.new(temp, headers: true, converters: :all)
     legacy_idf_results = legacy_idf_csv.to_a.map(&:to_hash)
 
+    if lkp_template.nil?
+      lkp_template = template
+    end
+
     # Get the results for this building
     search_criteria = {
       'Building Type' => building_type,
-      'Template' => template,
+      'Template' => lkp_template,
       'Climate Zone' => climate_zone
     }
     energy_values = model_find_object(legacy_idf_results, search_criteria)
@@ -3802,9 +3803,10 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param building_type [String] the building type
+  # @param lkp_template [String] The standards template, e.g.'90.1-2013'
   # @return [Hash] Returns a hash with data presented in various bins.
   #   Returns nil if no search results
-  def model_process_results_for_datapoint(model, climate_zone, building_type)
+  def model_process_results_for_datapoint(model, climate_zone, building_type, lkp_template: nil)
     # Hash to store the legacy results by fuel and by end use
     legacy_results_hash = {}
     legacy_results_hash['total_legacy_energy_val'] = 0
@@ -3813,7 +3815,7 @@ class Standard
     legacy_results_hash['total_energy_by_end_use'] = {}
 
     # Get the legacy simulation results
-    legacy_values = model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, 'annual')
+    legacy_values = model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, 'annual', lkp_template: lkp_template)
     if legacy_values.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find legacy idf results for #{search_criteria}")
       return legacy_results_hash
@@ -3942,8 +3944,8 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param remap_office [bool] re-map small office or leave it alone
-  # @return [hash] key for climate zone and building type, both values are strings
-  def model_get_building_climate_zone_and_building_type(model, remap_office = true)
+  # @return [hash] key for climate zone, building type, and standards template.  All values are strings.
+  def model_get_building_properties(model, remap_office = true)
     # get climate zone from model
     climate_zone = model_standards_climate_zone(model)
 
@@ -3959,9 +3961,15 @@ class Standard
       building_type = model_remap_office(model, open_studio_area)
     end
 
+    # get standards template
+    if model.getBuilding.standardsTemplate.is_initialized
+      standards_template = model.getBuilding.standardsTemplate.get
+    end
+
     results = {}
     results['climate_zone'] = climate_zone
     results['building_type'] = building_type
+    results['standards_template'] = standards_template
 
     return results
   end
@@ -3993,12 +4001,13 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Double] EUI (MJ/m^2) for target template for given OSM. Returns nil if can't calculate EUI
   def model_find_target_eui(model)
-    building_data = model_get_building_climate_zone_and_building_type(model)
+    building_data = model_get_building_properties(model)
     climate_zone = building_data['climate_zone']
     building_type = building_data['building_type']
+    building_template = building_data['standards_template']
 
     # look up results
-    target_consumption = model_process_results_for_datapoint(model, climate_zone, building_type)
+    target_consumption = model_process_results_for_datapoint(model, climate_zone, building_type, lkp_template: building_template)
 
     # lookup target floor area for prototype buildings
     target_floor_area = model_find_prototype_floor_area(model, building_type)
@@ -4026,12 +4035,13 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Hash] EUI (MJ/m^2) This will return a hash of end uses. key is end use, value is eui
   def model_find_target_eui_by_end_use(model)
-    building_data = model_get_building_climate_zone_and_building_type(model)
+    building_data = model_get_building_properties(model)
     climate_zone = building_data['climate_zone']
     building_type = building_data['building_type']
+    building_template = building_data['standards_template']
 
     # look up results
-    target_consumption = model_process_results_for_datapoint(model, climate_zone, building_type)
+    target_consumption = model_process_results_for_datapoint(model, climate_zone, building_type, lkp_template: building_template)
 
     # lookup target floor area for prototype buildings
     target_floor_area = model_find_prototype_floor_area(model, building_type)
@@ -4300,7 +4310,6 @@ class Standard
 
   # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
   #
-  # @return [Bool] true if successful, false if not
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Bool] returns true if successful, false if not
@@ -4396,7 +4405,7 @@ class Standard
   # @return [Hash] hash of construction properties
   def model_get_construction_properties(model, intended_surface_type, standards_construction_type, building_category, climate_zone = nil)
     # get climate_zone_set
-    climate_zone = model_get_building_climate_zone_and_building_type(model)['climate_zone'] if climate_zone.nil?
+    climate_zone = model_get_building_properties(model)['climate_zone'] if climate_zone.nil?
     climate_zone_set = model_find_climate_zone_set(model, climate_zone)
 
     # populate search hash
@@ -4498,13 +4507,19 @@ class Standard
         # of each space conditioning category (res, nonres, semi-heated)
         # separately.  Include space multipliers.
         bat.store('nr_wall_m2', 0.001) # Avoids divide by zero errors later
+        bat.store('nr_fene_only_wall_m2', 0.001)
+        bat.store('nr_plenum_wall_m2', 0.001)
         bat.store('nr_wind_m2', 0)
         bat.store('res_wall_m2', 0.001)
+        bat.store('res_fene_only_wall_m2', 0.001)
         bat.store('res_wind_m2', 0)
+        bat.store('res_plenum_wall_m2', 0.001)
         bat.store('sh_wall_m2', 0.001)
+        bat.store('sh_fene_only_wall_m2', 0.001)
         bat.store('sh_wind_m2', 0)
+        bat.store('sh_plenum_wall_m2', 0.001)
         bat.store('total_wall_m2', 0.001)
-        bat.store('total_subsurface_m2', 0.0)
+        bat.store('total_plenum_m2', 0.001)
       else
         bat = bat_win_wall_info[std_spc_type]
       end
@@ -4512,6 +4527,8 @@ class Standard
       # Loop through all surfaces in this space
       wall_area_m2 = 0
       wind_area_m2 = 0
+      # save wall area from walls that have fenestrations (subsurfaces)
+      wall_only_area_m2 = 0
       space.surfaces.sort.each do |surface|
         # Skip non-outdoor surfaces
         next unless surface.outsideBoundaryCondition == 'Outdoors'
@@ -4520,11 +4537,16 @@ class Standard
 
         # This wall's gross area (including window area)
         wall_area_m2 += surface.grossArea * space.multiplier
-        # Subsurfaces in this surface
-        surface.subSurfaces.sort.each do |ss|
-          next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
-
-          wind_area_m2 += ss.netArea * space.multiplier
+        unless surface.subSurfaces.empty?
+          # Subsurfaces in this surface
+          surface.subSurfaces.sort.each do |ss|
+            next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
+              # Only add wall surfaces when the wall actually have windows
+              wind_area_m2 += ss.netArea * space.multiplier
+          end
+        end
+        if wind_area_m2 > 0.0
+          wall_only_area_m2 += surface.grossArea * space.multiplier
         end
       end
 
@@ -4561,18 +4583,24 @@ class Standard
       end
       space_cats[space] = cat
 
-      # Add to the correct category
+      # Add to the correct category is_space_plenum?
       case cat
         when 'Unconditioned'
           next # Skip unconditioned spaces
         when 'NonResConditioned'
+          space_is_plenum(space) ? bat['nr_plenum_wall_m2'] += wall_area_m2 : bat['nr_plenum_wall_m2'] += 0.0
           bat['nr_wall_m2'] += wall_area_m2
+          bat['nr_fene_only_wall_m2'] += wall_only_area_m2
           bat['nr_wind_m2'] += wind_area_m2
         when 'ResConditioned'
+          space_is_plenum(space) ? bat['res_plenum_wall_m2'] += wall_area_m2 : bat['res_plenum_wall_m2'] += 0.0
           bat['res_wall_m2'] += wall_area_m2
+          bat['res_fene_only_wall_m2'] += wall_only_area_m2
           bat['res_wind_m2'] += wind_area_m2
         when 'Semiheated'
+          space_is_plenum(space) ? bat['sh_plenum_wall_m2'] += wall_area_m2 : bat['sh_plenum_wall_m2'] += 0.0
           bat['sh_wall_m2'] += wall_area_m2
+          bat['sh_fene_only_wall_m2'] += wall_only_area_m2
           bat['sh_wind_m2'] += wind_area_m2
       end
     end
@@ -4601,32 +4629,15 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Semiheated = #{vals['wwr_sh'].round}%; window = #{vals['sh_wind_ft2'].round} ft2, wall = #{vals['sh_wall_ft2'].round} ft2.")
 
       # WWR limit or target
-      if template == '90.1-PRM-2019'
-        # Lookup WWR target from stable baseline table
-        wwr_lib = standards_data['prm_wwr_bldg_type']
-        search_criteria = {
-          'template' => template,
-          'wwr_building_type' => bat
-        }
-        # If building type isn't found, assume that it's
-        # the same as 'All Others'
-        if model_find_object(wwr_lib, search_criteria).nil?
-          wwr_lim = 40.0
-        else
-          wwr_lim = model_find_object(wwr_lib, search_criteria)['wwr'] * 100.0
-        end
-      else
-        wwr_lim = 40.0
-      end
+      wwr_lim = model_get_bat_wwr_target(bat, [vals['wwr_nr'], vals['wwr_res'], vals['wwr_sh']])
 
       # Check against WWR limit
       vals['red_nr'] = vals['wwr_nr'] > wwr_lim
       vals['red_res'] = vals['wwr_res'] > wwr_lim
       vals['red_sh'] = vals['wwr_sh'] > wwr_lim
 
-      # Stop here unless windows need reducing or increasing if
-      # following the stable baseline approach
-      return true, base_wwr unless (vals['red_nr'] || vals['red_res'] || vals['red_sh']) || template == '90.1-PRM-2019'
+      # Stop here unless windows need reducing or increasing
+      return true, base_wwr unless model_does_require_wwr_adjustment?(wwr_lim, [vals['wwr_nr'], vals['wwr_res'], vals['wwr_sh']])
 
       # Determine the factors by which to reduce the window area
       vals['mult_nr_red'] = wwr_lim / vals['wwr_nr']
@@ -4647,6 +4658,8 @@ class Standard
         std_spc_type = space.additionalProperties.getFeatureAsString('building_type_for_wwr').get
         # skip process the space unless the space wwr type matched.
         next unless bat == std_spc_type
+        # supply and return plenum is now conditioned space but should be excluded from window adjustment
+        next if space_is_plenum(space)
 
         # Determine the space category
         # from the previously stored values
@@ -4657,19 +4670,27 @@ class Standard
           when 'Unconditioned'
             next # Skip unconditioned spaces
           when 'NonResConditioned'
-            next unless vals['red_nr']
-
             mult = vals['mult_nr_red']
+            total_wall_area = vals['nr_wall_m2']
+            total_wall_with_fene_area = vals['nr_fene_only_wall_m2']
+            total_plenum_wall_area = vals['nr_plenum_wall_m2']
+            total_fene_area = vals['nr_wind_m2']
           when 'ResConditioned'
-            next unless vals['red_res']
-
             mult = vals['mult_res_red']
+            total_wall_area = vals['res_wall_m2']
+            total_wall_with_fene_area = vals['res_fene_only_wall_m2']
+            total_plenum_wall_area = vals['res_plenum_wall_m2']
+            total_fene_area = vals['res_wind_m2']
           when 'Semiheated'
-            next unless vals['red_sh']
-
             mult = vals['mult_sh_red']
+            total_wall_area = vals['sh_wall_m2']
+            total_wall_with_fene_area = vals['sh_fene_only_wall_m2']
+            total_plenum_wall_area = vals['sh_plenum_wall_m2']
+            total_fene_area = vals['sh_wind_m2']
         end
 
+        # used for counting how many window area is left for doors
+        residual_fene = 0.0
         # Loop through all surfaces in this space
         space.surfaces.sort.each do |surface|
           # Skip non-outdoor surfaces
@@ -4677,25 +4698,35 @@ class Standard
           # Skip non-walls
           next unless surface.surfaceType.casecmp('wall').zero?
 
-          # Subsurfaces in this surface
-          surface.subSurfaces.sort.each do |ss|
-            next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
+          # Reduce the size of the window
+          # If a vertical rectangle, raise sill height to avoid
+          # impacting daylighting areas, otherwise
+          # reduce toward centroid.
+          #
+          # daylighting control isn't modeled
+          surface_wwr = surface_get_wwr_of_a_surface(surface)
+          red = model_get_wwr_reduction_ratio(mult,
+                                        surface_wwr: surface_wwr,
+                                        surface_dr: surface_get_door_ratio_of_a_surface(surface),
+                                        wwr_building_type: bat,
+                                        wwr_target: wwr_lim / 100, # divide by 100 to revise it to decimals
+                                        total_wall_m2: total_wall_area,
+                                        total_wall_with_fene_m2: total_wall_with_fene_area,
+                                        total_fene_m2: total_fene_area,
+                                        total_plenum_wall_m2: total_plenum_wall_area)
 
-            # Reduce the size of the window
-            # If a vertical rectangle, raise sill height to avoid
-            # impacting daylighting areas, otherwise
-            # reduce toward centroid.
-            #
-            # For 90.1-PRM-2019 a.k.a "stable baseline" we always
-            # want to adjust by shrinking toward centroid since
-            # daylighting control isn't modeled
-            red = 1.0 - mult
-            if sub_surface_vertical_rectangle?(ss) && template != '90.1-PRM-2019'
-              sub_surface_reduce_area_by_percent_by_raising_sill(ss, red)
-            else
-              sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
-            end
+          if red < 0.0
+            # surface with fenestration to its maximum but adjusted by door areas when need to add windows in surfaces no fenestration
+            # turn negative to positive to get the correct adjustment factor.
+            red = -red
+            residual_fene += (0.9 - red * surface_wwr) * surface.grossArea
           end
+          surface_adjust_fenestration_in_a_surface(surface, red, model)
+        end
+
+        if residual_fene > 0.0
+          residual_ratio = residual_fene / (total_wall_area - total_wall_with_fene_area)
+          model_readjust_surface_wwr(residual_ratio, space, model)
         end
       end
     end
@@ -4856,7 +4887,6 @@ class Standard
     return false
   end
 
-
   # Remove all HVAC that will be replaced during the performance rating method baseline generation.
   # This does not include plant loops that serve WaterUse:Equipment or Fan:ZoneExhaust
   #
@@ -5009,7 +5039,7 @@ class Standard
     # @todo for types not in table use standards area normalized swh values
 
     # get building type
-    building_data = model_get_building_climate_zone_and_building_type(model)
+    building_data = model_get_building_properties(model)
     building_type = building_data['building_type']
 
     result = []
@@ -5682,7 +5712,7 @@ class Standard
   # @param model [OpenStudio::Model::Model] the model
   # @return [String] the ventilation method, either Sum or Maximum
   def model_ventilation_method(model)
-    building_data = model_get_building_climate_zone_and_building_type(model)
+    building_data = model_get_building_properties(model)
     building_type = building_data['building_type']
     if building_type != 'Laboratory' # Laboratory has multiple criteria on ventilation, pick the greatest
       ventilation_method = 'Sum'
@@ -6120,6 +6150,40 @@ class Standard
 
   private
 
+  # This function checks whether it is required to adjust the window to wall ratio based on the model WWR and wwr limit.
+  # @param wwr_limit [Float] return wwr_limit
+  # @param wwr_list [Array] list of wwr of zone conditioning category in a building area type category - residential, nonresidential and semiheated
+  # @return require_adjustment [Boolean] True, require adjustment, false not require adjustment.
+  def model_does_require_wwr_adjustment?(wwr_limit, wwr_list)
+    require_adjustment = false
+    wwr_list.each do |wwr|
+      require_adjustment = true unless wwr > wwr_limit
+    end
+    return require_adjustment
+  end
+
+  # The function is used for codes that requires to adjusted wwr based on building categories for all other types
+  #
+  # @param bat [String] building area type category
+  # @param wwr_list [Array] list of wwr of zone conditioning category in a building area type category - residential, nonresidential and semiheated
+  # @return wwr_limit [Float] return adjusted wwr_limit
+  def model_get_bat_wwr_target(bat, wwr_list)
+    return 40.0
+  end
+
+  # Readjusted the WWR for surfaces previously has no windows to meet the
+  # overall WWR requirement.
+  # This function shall only be called if the maximum WWR value for surfaces with fenestration is lower than 90% due to
+  # accommodating the total door surface areas
+  #
+  # @param residual_ratio: [Float] the ratio of residual surfaces among the total wall surface area with no fenestrations
+  # @param space [OpenStudio::Model:Space] a space
+  # @param model [OpenStudio::Model::Model] openstudio model
+  # @return [Bool] return true if successful, false if not
+  def model_readjust_surface_wwr(residual_ratio, space, model)
+    return true
+  end
+
   # Helper method to fill in hourly values
   #
   # @param model [OpenStudio::Model::Model] the model
@@ -6162,6 +6226,7 @@ class Standard
       electric = true
 
       if htg_fuels.include?('NaturalGas') ||
+         htg_fuels.include?('Propane') ||
          htg_fuels.include?('PropaneGas') ||
          htg_fuels.include?('FuelOilNo1') ||
          htg_fuels.include?('FuelOilNo2') ||
@@ -6248,6 +6313,14 @@ class Standard
       end
     end
 
+    return true
+  end
+
+  # This method is a catch-all run at the end of create-baseline to make final adjustements to HVAC capacities
+  # to account for recent model changes
+  # @author Doug Maddox, PNNL
+  # @param model
+  def model_refine_size_dependent_values(model, sizing_run_dir)
     return true
   end
 
@@ -6848,6 +6921,31 @@ class Standard
     return 'warmest_zone'
   end
 
+
+  # Calculate the window to wall ratio reduction factor
+  #
+  # @param multiplier [Float] multiplier of the wwr
+  # @param surface_wwr [Float] the surface window to wall ratio
+  # @param surface_dr [Float] the surface door to wall ratio
+  # @param wwr_building_type[String] building type for wwr
+  # @param wwr_target [Float] target window to wall ratio
+  # @param total_wall_m2 [Float] total wall area of the category in m2.
+  # @param total_wall_with_fene_m2 [Float] total wall area of the category with fenestrations in m2.
+  # @param total_fene_m2 [Float] total fenestration area
+  # @param total_plenum_wall_m2 [Float] total sqaure meter of a plenum
+  # @return [Float] reduction factor
+  def model_get_wwr_reduction_ratio(multiplier,
+                              surface_wwr: 0.0,
+                              surface_dr: 0.0,
+                              wwr_building_type: 'All others',
+                              wwr_target: 0.0,
+                              total_wall_m2: 0.0,
+                              total_wall_with_fene_m2: 0.0,
+                              total_fene_m2: 0.0,
+                              total_plenum_wall_m2: 0.0)
+    return 1.0 - multiplier
+  end
+
   # A template method that handles the loading of user input data from multiple sources
   # include data source from:
   # 1. user data csv files
@@ -6881,6 +6979,7 @@ class Standard
   def model_mark_zone_dcv_existence(model)
     return true
   end
+
   # Check whether the baseline model generation needs to run all four orientations
   # The default shall be true
   #
@@ -6930,6 +7029,7 @@ class Standard
   def model_set_baseline_demand_control_ventilation(model, climate_zone)
     return true
   end
+
   # Identify the return air type associated with each thermal zone
   #
   # @param model [OpenStudio::Model::Model] Openstudio model object

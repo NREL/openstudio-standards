@@ -24,7 +24,7 @@ class Standard
   # Creates a hot water loop with a boiler, district heating, or a water-to-water heat pump and adds it to the model.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param boiler_fuel_type [String] valid choices are Electricity, NaturalGas, PropaneGas, FuelOilNo1, FuelOilNo2, DistrictHeating, HeatPump
+  # @param boiler_fuel_type [String] valid choices are Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2, DistrictHeating, HeatPump
   # @param ambient_loop [OpenStudio::Model::PlantLoop] The condenser loop for the heat pump. Only used when boiler_fuel_type is HeatPump.
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param dsgn_sup_wtr_temp [Double] design supply water temperature in degrees Fahrenheit, default 180F
@@ -128,17 +128,17 @@ class Standard
       when 'AirSourceHeatPump', 'ASHP'
         create_central_air_source_heat_pump(model, hot_water_loop)
       # Boiler
-      when 'Electricity', 'Gas', 'NaturalGas', 'PropaneGas', 'FuelOilNo1', 'FuelOilNo2'
+      when 'Electricity', 'Gas', 'NaturalGas', 'Propane', 'PropaneGas', 'FuelOilNo1', 'FuelOilNo2'
         if boiler_lvg_temp_dsgn.nil?
-          lvg_temp_dsgn = dsgn_sup_wtr_temp
+          lvg_temp_dsgn_f = dsgn_sup_wtr_temp
         else
-          lvg_temp_dsgn = boiler_lvg_temp_dsgn
+          lvg_temp_dsgn_f = boiler_lvg_temp_dsgn
         end
 
         if boiler_out_temp_lmt.nil?
-          out_temp_lmt = OpenStudio.convert(203.0, 'F', 'C').get
+          out_temp_lmt_f = 203.0
         else
-          out_temp_lmt = boiler_out_temp_lmt
+          out_temp_lmt_f = boiler_out_temp_lmt
         end
 
         boiler = create_boiler_hot_water(model,
@@ -147,8 +147,8 @@ class Standard
                                          draft_type: boiler_draft_type,
                                          nominal_thermal_efficiency: 0.78,
                                          eff_curve_temp_eval_var: boiler_eff_curve_temp_eval_var,
-                                         lvg_temp_dsgn: lvg_temp_dsgn,
-                                         out_temp_lmt: out_temp_lmt,
+                                         lvg_temp_dsgn_f: lvg_temp_dsgn_f,
+                                         out_temp_lmt_f: out_temp_lmt_f,
                                          max_plr: boiler_max_plr,
                                          sizing_factor: boiler_sizing_factor)
 
@@ -803,13 +803,13 @@ class Standard
     when 'AirSourceHeatPump', 'ASHP'
       heating_equipment = create_central_air_source_heat_pump(model, heat_pump_water_loop)
       heating_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} ASHP Scheduled Dual Setpoint")
-    when 'Electricity', 'Gas', 'NaturalGas', 'PropaneGas', 'FuelOilNo1', 'FuelOilNo2'
+    when 'Electricity', 'Gas', 'NaturalGas', 'Propane', 'PropaneGas', 'FuelOilNo1', 'FuelOilNo2'
       heating_equipment = create_boiler_hot_water(model,
                                                   hot_water_loop: heat_pump_water_loop,
                                                   name: "#{heat_pump_water_loop.name} Supplemental Boiler",
                                                   fuel_type: heating_fuel,
                                                   flow_mode: 'ConstantFlow',
-                                                  lvg_temp_dsgn: 86.0,
+                                                  lvg_temp_dsgn_f: 86.0, # 30.0 degrees Celsius
                                                   min_plr: 0.0,
                                                   max_plr: 1.2,
                                                   opt_plr: 1.0)
@@ -4078,7 +4078,7 @@ class Standard
       high_temp_radiant = OpenStudio::Model::ZoneHVACHighTemperatureRadiant.new(model)
       high_temp_radiant.setName("#{zone.name} High Temp Radiant")
 
-      if heating_type.nil? || heating_type == 'Gas'
+      if heating_type.nil? || heating_type == 'NaturalGas' || heating_type == 'Gas'
         high_temp_radiant.setFuelType('NaturalGas')
       else
         high_temp_radiant.setFuelType(heating_type)
@@ -4457,7 +4457,14 @@ class Standard
   # @param radiant_type [String] type of radiant system, floor or ceiling, to create in zone.
   # @param include_carpet [Bool] boolean to include thin carpet tile over radiant slab, default to true
   # @param carpet_thickness_in [Double] thickness of carpet in inches
-  # @param control_strategy [String] name of control strategy
+  # @param model_occ_hr_start [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
+  #   Starting hour of building occupancy.
+  # @param model_occ_hr_end [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
+  #   Ending hour of building occupancy.
+  # @param control_strategy [String] name of control strategy.  Options are 'proportional_control' and 'none'.
+  #   If control strategy is 'proportional_control', the method will apply the CBE radiant control sequences 
+  #   detailed in Raftery et al. (2017), “A new control strategy for high thermal mass radiant systems”.
+  #   Otherwise no control strategy will be applied and the radiant system will assume the EnergyPlus default controls.
   # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Proportional gain constant (recommended 0.3 or less).
   # @param minimum_operation [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
@@ -4474,6 +4481,7 @@ class Standard
   #   Only used if radiant_lockout is true
   # @return [Array<OpenStudio::Model::ZoneHVACLowTemperatureRadiantVariableFlow>] array of radiant objects.
   # @todo Once the OpenStudio API supports it, make chilled water loops optional for heating only systems
+  # @todo Lookup occupany start and end hours from zone occupancy schedule
   def model_add_low_temp_radiant(model,
                                  thermal_zones,
                                  hot_water_loop,
@@ -4481,6 +4489,8 @@ class Standard
                                  radiant_type: 'floor',
                                  include_carpet: true,
                                  carpet_thickness_in: 0.25,
+                                 model_occ_hr_start: 6.0,
+                                 model_occ_hr_end: 18.0,
                                  control_strategy: 'proportional_control',
                                  proportional_gain: 0.3,
                                  minimum_operation: 1,
@@ -4790,6 +4800,8 @@ class Standard
       if control_strategy == 'proportional_control'
         model_add_radiant_proportional_controls(model, zone, radiant_loop,
                                                 radiant_type: radiant_type,
+                                                model_occ_hr_start: model_occ_hr_start,
+                                                model_occ_hr_end: model_occ_hr_end,
                                                 proportional_gain: proportional_gain,
                                                 minimum_operation: minimum_operation,
                                                 weekend_temperature_reset: weekend_temperature_reset,
@@ -5527,7 +5539,6 @@ class Standard
       ventilation.setSchedule(availability_schedule)
 
       if ventilation_type == 'Exhaust'
-        ventilation.setDesignFlowRateCalculationMethod('Flow/Zone')
         ventilation.setDesignFlowRate(flow_rate)
         ventilation.setFanPressureRise(31.1361206455786)
         ventilation.setFanTotalEfficiency(0.51)
@@ -5538,7 +5549,6 @@ class Standard
         ventilation.setMaximumIndoorTemperature(100.0)
         ventilation.setDeltaTemperature(-100.0)
       elsif ventilation_type == 'Natural'
-        ventilation.setDesignFlowRateCalculationMethod('Flow/Zone')
         ventilation.setDesignFlowRate(flow_rate)
         ventilation.setFanPressureRise(0.0)
         ventilation.setFanTotalEfficiency(1.0)
@@ -5549,7 +5559,6 @@ class Standard
         ventilation.setMaximumIndoorTemperature(29.4444452244559)
         ventilation.setDeltaTemperature(-100.0)
       elsif ventilation_type == 'Intake'
-        ventilation.setDesignFlowRateCalculationMethod('Flow/Area')
         ventilation.setFlowRateperZoneFloorArea(flow_rate)
         ventilation.setFanPressureRise(49.8)
         ventilation.setFanTotalEfficiency(0.53625)
@@ -5969,6 +5978,7 @@ class Standard
         if air_loop_heating_type == 'Water'
           hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                            hot_water_loop_type: hot_water_loop_type)
+          heating_type = 'Water'
         else
           hot_water_loop = nil
         end

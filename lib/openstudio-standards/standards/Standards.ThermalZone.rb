@@ -602,12 +602,13 @@ class Standard
 
     # Get an array of the heating fuels
     # used by the zone.  Possible values are
-    # Electricity, NaturalGas, PropaneGas, FuelOilNo1, FuelOilNo2,
+    # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
     htg_fuels = thermal_zone.heating_fuels
 
     if htg_fuels.include?('NaturalGas') ||
+       htg_fuels.include?('Propane') ||
        htg_fuels.include?('PropaneGas') ||
        htg_fuels.include?('FuelOilNo1') ||
        htg_fuels.include?('FuelOilNo2') ||
@@ -626,12 +627,11 @@ class Standard
 
   # for 2013 and prior, baseline fuel = proposed fuel
   # @param themal_zone
-  # @return [string] with applicable DistrictHeating and/or DistrictCooling 
+  # @return [string] with applicable DistrictHeating and/or DistrictCooling
   def thermal_zone_get_zone_fuels_for_occ_and_fuel_type(zone)
     zone_fuels = thermal_zone_fossil_or_electric_type(zone, '')
     return zone_fuels
   end
-
 
   # Determine if the thermal zone's fuel type category.
   # Options are:
@@ -650,6 +650,7 @@ class Standard
     # Fossil heating
     htg_fuels = thermal_zone.heating_fuels
     if htg_fuels.include?('NaturalGas') ||
+       htg_fuels.include?('Propane') ||
        htg_fuels.include?('PropaneGas') ||
        htg_fuels.include?('FuelOilNo1') ||
        htg_fuels.include?('FuelOilNo2') ||
@@ -712,7 +713,7 @@ class Standard
 
     # Get an array of the heating fuels
     # used by the zone.  Possible values are
-    # Electricity, NaturalGas, PropaneGas, FuelOilNo1, FuelOilNo2,
+    # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
     htg_fuels = thermal_zone.heating_fuels
@@ -720,6 +721,7 @@ class Standard
     # Includes fossil
     fossil = false
     if htg_fuels.include?('NaturalGas') ||
+       htg_fuels.include?('Propane') ||
        htg_fuels.include?('PropaneGas') ||
        htg_fuels.include?('FuelOilNo1') ||
        htg_fuels.include?('FuelOilNo2') ||
@@ -1223,6 +1225,8 @@ class Standard
           end
         end
       end
+    elsif tstat.to_ThermostatSetpointSingleHeating
+      cld = false
     end
 
     return cld
@@ -1282,6 +1286,7 @@ class Standard
   # Logic to detect indirectly-conditioned spaces cannot be implemented
   # as part of this measure as it would need to call itself.
   # It is implemented as part of space_conditioning_category().
+  # TODO: Add addendum db rules to 90.1-2019 for 90.1-2022 (use stable baseline value for zones designated as semiheated using proposed sizing run)
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
@@ -1304,112 +1309,39 @@ class Standard
     # Determine the heating limit based on climate zone
     # From Table 3.1 Heated Space Criteria
     htg_lim_btu_per_ft2 = 0.0
-    case template
-    # TODO: Add addendum db rules to 90.1-2019 for 90.1-2022
-    when '90.1-2016', '90.1-PRM-2019'
-      case climate_zone
-      when 'ASHRAE 169-2006-0A',
-          'ASHRAE 169-2006-0B',
-          'ASHRAE 169-2006-1A',
-          'ASHRAE 169-2006-1B',
-          'ASHRAE 169-2006-2A',
-          'ASHRAE 169-2006-2B',
-          'ASHRAE 169-2013-0A',
-          'ASHRAE 169-2013-0B',
-          'ASHRAE 169-2013-1A',
-          'ASHRAE 169-2013-1B',
-          'ASHRAE 169-2013-2A',
-          'ASHRAE 169-2013-2B'
-        htg_lim_btu_per_ft2 = 5
-      when 'ASHRAE 169-2006-3A',
-          'ASHRAE 169-2006-3B',
-          'ASHRAE 169-2013-3A',
-          'ASHRAE 169-2013-3B'
-        htg_lim_btu_per_ft2 = 9
-      when 'ASHRAE 169-2006-3C',
-          'ASHRAE 169-2013-3C'
-        htg_lim_btu_per_ft2 = 7
-      when 'ASHRAE 169-2006-4A',
-          'ASHRAE 169-2006-4B',
-          'ASHRAE 169-2013-4A',
-          'ASHRAE 169-2013-4B'
-        htg_lim_btu_per_ft2 = 10
-      when 'ASHRAE 169-2006-4C',
-          'ASHRAE 169-2013-4C'
-        htg_lim_btu_per_ft2 = 8
-      when 'ASHRAE 169-2006-5A',
-        'ASHRAE 169-2006-5B',
-        'ASHRAE 169-2006-5C',
-        'ASHRAE 169-2013-5A',
-        'ASHRAE 169-2013-5B',
-        'ASHRAE 169-2013-5C'
-        htg_lim_btu_per_ft2 = 12
-      when 'ASHRAE 169-2006-6A',
-        'ASHRAE 169-2006-6B',
-        'ASHRAE 169-2013-6A',
-        'ASHRAE 169-2013-6B'
-        htg_lim_btu_per_ft2 = 14
-      when 'ASHRAE 169-2006-7A',
-        'ASHRAE 169-2006-7B',
-        'ASHRAE 169-2013-7A',
-        'ASHRAE 169-2013-7B'
-        htg_lim_btu_per_ft2 = 16
-      when 'ASHRAE 169-2006-8A',
-        'ASHRAE 169-2006-8B',
-        'ASHRAE 169-2013-8A',
-        'ASHRAE 169-2013-8B'
-        htg_lim_btu_per_ft2 = 19
-      end
-    else
-      case climate_zone
-      when 'ASHRAE 169-2006-0A',
-          'ASHRAE 169-2006-0B',
-          'ASHRAE 169-2006-1A',
-          'ASHRAE 169-2006-1B',
-          'ASHRAE 169-2006-2A',
-          'ASHRAE 169-2006-2B',
-          'ASHRAE 169-2013-0A',
-          'ASHRAE 169-2013-0B',
-          'ASHRAE 169-2013-1A',
-          'ASHRAE 169-2013-1B',
-          'ASHRAE 169-2013-2A',
-          'ASHRAE 169-2013-2B'
-        htg_lim_btu_per_ft2 = 5
-      when 'ASHRAE 169-2006-3A',
-          'ASHRAE 169-2006-3B',
-          'ASHRAE 169-2006-3C',
-          'ASHRAE 169-2013-3A',
-          'ASHRAE 169-2013-3B',
-          'ASHRAE 169-2013-3C'
-        htg_lim_btu_per_ft2 = 10
-      when 'ASHRAE 169-2006-4A',
-          'ASHRAE 169-2006-4B',
-          'ASHRAE 169-2006-4C',
-          'ASHRAE 169-2006-5A',
-          'ASHRAE 169-2006-5B',
-          'ASHRAE 169-2006-5C',
-          'ASHRAE 169-2013-4A',
-          'ASHRAE 169-2013-4B',
-          'ASHRAE 169-2013-4C',
-          'ASHRAE 169-2013-5A',
-          'ASHRAE 169-2013-5B',
-          'ASHRAE 169-2013-5C'
-        htg_lim_btu_per_ft2 = 15
-      when 'ASHRAE 169-2006-6A',
-          'ASHRAE 169-2006-6B',
-          'ASHRAE 169-2006-7A',
-          'ASHRAE 169-2006-7B',
-          'ASHRAE 169-2013-6A',
-          'ASHRAE 169-2013-6B',
-          'ASHRAE 169-2013-7A',
-          'ASHRAE 169-2013-7B'
-        htg_lim_btu_per_ft2 = 20
-      when 'ASHRAE 169-2006-8A',
-          'ASHRAE 169-2006-8B',
-          'ASHRAE 169-2013-8A',
-          'ASHRAE 169-2013-8B'
-        htg_lim_btu_per_ft2 = 25
-      end
+    climate_zone_code = climate_zone.split('-')[-1]
+    if ['0A', '0B', '1A', '1B', '2A', '2B'].include? climate_zone_code
+      htg_lim_btu_per_ft2 = 5
+      stable_htg_lim_btu_per_ft2 = 5
+    elsif ['3A', '3B'].include? climate_zone_code
+      htg_lim_btu_per_ft2 = 9
+      stable_htg_lim_btu_per_ft2 = 10
+    elsif climate_zone_code == '3C'
+      htg_lim_btu_per_ft2 = 7
+      stable_htg_lim_btu_per_ft2 = 10
+    elsif ['4A', '4B'].include? climate_zone_code
+      htg_lim_btu_per_ft2 = 10
+      stable_htg_lim_btu_per_ft2 = 15
+    elsif climate_zone_code == '4C'
+      htg_lim_btu_per_ft2 = 8
+      stable_htg_lim_btu_per_ft2 = 15
+    elsif ['5A', '5B', '5C'].include? climate_zone_code
+      htg_lim_btu_per_ft2 = 12
+      stable_htg_lim_btu_per_ft2 = 15
+    elsif ['6A', '6B'].include? climate_zone_code
+      htg_lim_btu_per_ft2 = 14
+      stable_htg_lim_btu_per_ft2 = 20
+    elsif ['7A', '7B'].include? climate_zone_code
+      htg_lim_btu_per_ft2 = 16
+      stable_htg_lim_btu_per_ft2 = 20
+    elsif ['8A', '8B'].include? climate_zone_code
+      htg_lim_btu_per_ft2 = 19
+      stable_htg_lim_btu_per_ft2 = 25
+    end
+
+    # for older code versions use stable baseline value as primary target
+    if ['90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'].include? template
+      htg_lim_btu_per_ft2 = stable_htg_lim_btu_per_ft2
     end
 
     # Cooling limit is climate-independent
@@ -1704,6 +1636,7 @@ class Standard
     zone_ppl_sch = Array.new(8760, 0)     # merged people schedule for zone
     zone_op_sch = Array.new(8760, 0)      # intersection of fan and people scheds
 
+    unoccupied_threshold = air_loop_hvac_unoccupied_threshold
     # Need composite occupant schedule for spaces in the zone
     zone.spaces.each do |space|
       space_ppl_sch = space_occupancy_annual_array(model, space)

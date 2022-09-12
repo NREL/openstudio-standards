@@ -30,7 +30,7 @@ def create_class_array
                          'LargeOfficeDetailed',
                          'Laboratory',
                          'College',
-                         'CourtHouse',
+                         'Courthouse',
                          'TallBuilding',
                          'SuperTallBuilding']
 

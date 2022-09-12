@@ -58,6 +58,7 @@ module OpenstudioStandards
   # NECB2020 Code
   require_relative "#{stds}/necb/NECB2020/necb_2020"
   require_relative "#{stds}/necb/NECB2020/building_envelope"
+  require_relative "#{stds}/necb/NECB2020/service_water_heating"
 
   # BTAPPRE1980
   require_relative "#{stds}/necb/BTAPPRE1980/btap_pre1980"
@@ -286,6 +287,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ThermalZone"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.SpaceType"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.hvac_systems"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Surface"
 
   # 90.1-PRM-2019
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019"

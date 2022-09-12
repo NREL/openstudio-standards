@@ -328,7 +328,11 @@ class AppendixGPRMTests < Minitest::Test
 
       # Check WWR against expected WWR
       wwr_goal = 100 * @@wwr_values[building_type].to_f
-      assert((wwr_baseline - wwr_goal).abs < 0.1, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+      if building_type == 'MidriseApartment' && climate_zone == 'ASHRAE 169-2013-3A'
+        assert(((wwr_baseline - 40.0)/40.0).abs < 0.01, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+      else
+        assert(((wwr_baseline - wwr_goal)/wwr_goal).abs < 0.01, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+      end
     end
   end
 
@@ -454,9 +458,7 @@ class AppendixGPRMTests < Minitest::Test
       u_value_goal.each do |key, value|
         value_si = OpenStudio.convert(value, 'Btu/ft^2*hr*R', 'W/m^2*K').get
         assert(((u_value_baseline[key] - value_si).abs < 0.001 || (u_value_baseline[key] - 5.835).abs < 0.01), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si.round(3)}.")
-        if key != 'PERIMETER_ZN_3_WALL_NORTH_DOOR1'
-          assert((construction_baseline[key].include? 'PRM'), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
-        end
+        assert((construction_baseline[key].include? 'PRM'), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
       end
     end
   end
@@ -655,6 +657,25 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  #
+  # testing method for night cycling control exceptions
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  #
+  def check_nightcycle_exception(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+
+      if building_type == 'MediumOffice'
+        # check for night cycle on lower level
+        thermal_zone = model.getThermalZoneByName('Core_bottom ZN').get
+        air_loop = thermal_zone.airLoopHVAC.get
+        fan_schedule_name = air_loop.availabilitySchedule.name.get
+        assert(fan_schedule_name.include?("Always"), "Night cycle exception failed for #{building_type}-#{template}.")
+      end
+    end
+  end
+ 
   #
   # testing method for PRM 2019 baseline HVAC sizing, specific testing objectives are commented inline
   #
@@ -1747,12 +1768,14 @@ class AppendixGPRMTests < Minitest::Test
       secondary_flow = terminal.autosizedMaximumSecondaryAirFlowRate.get.to_f
     end
     if terminal.maximumPrimaryAirFlowRate.is_initialized
-      primary_flow = terminal.maximumSecondaryAirFlowRate.get.to_f
+      primary_flow = terminal.maximumPrimaryAirFlowRate.get.to_f
     else
       primary_flow = terminal.autosizedMaximumPrimaryAirFlowRate.get.to_f
     end
     secondary_flow_frac = secondary_flow / primary_flow
-    assert(secondary_flow_frac.round(2) == 0.5, "Expected secondary flow fraction should be 0.5 but #{secondary_flow_frac} is used for #{mod_str}.")
+    err = (secondary_flow_frac - 0.5).abs
+    # need to allow some tolerance due to secondary flow getting set before final sizing run
+    assert(err < 0.01, "Expected secondary flow fraction should be 0.5 but #{secondary_flow_frac} is used for #{mod_str}.")
   end
 
   # Check if baseline system type is PTAC or PTHP
@@ -1908,7 +1931,7 @@ class AppendixGPRMTests < Minitest::Test
         wwr_baseline = run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Conditioned Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
         # Check WWR against expected WWR
         wwr_goal = 100 * @@wwr_values[building_type].to_f
-        assert(wwr_baseline < wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model with user data is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_baseline}, smaller than the WWR goal #{wwr_goal}")
+        assert(wwr_baseline > wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model with user data is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be greater than the WWR goal #{wwr_goal}")
       end
       # TODO adding more tests to check if zones are assigned correctly
       if building_type == 'LargeHotel'
@@ -2257,7 +2280,9 @@ class AppendixGPRMTests < Minitest::Test
 
         assert(economizer_activated_model == economizer_activated_target,
                "#{building_type}_#{template} is in #{climate_zone}. Air loop #{air_loop.name.get} system type is #{baseline_system_type}. The target economizer flag should be #{economizer_activated_target} but get #{economizer_activated_model}")
-        assert(temperature_highlimit_model - temperature_highlimit_target <= 0.01,
+        
+        temp_diff = temperature_highlimit_model - temperature_highlimit_target
+        assert(temp_diff.abs <= 0.01,
                "#{building_type}_#{template} is in #{climate_zone}. Air loop #{air_loop.name.get} system type is #{baseline_system_type}. The target economizer temperature high limit setpoint is #{temperature_highlimit_target} but get #{temperature_highlimit_model}")
       end
     end
@@ -2659,34 +2684,52 @@ class AppendixGPRMTests < Minitest::Test
       unless ss.subSurfaces.empty?
         # get subsurface construction
         orig_construction = nil
+        door_list = []
         ss.subSurfaces.sort.each do |sub|
-          next unless sub.subSurfaceType == 'FixedWindow' || sub.subSurfaceType=='OperableWindow'
-          orig_construction = sub.construction.get
+          if sub.subSurfaceType == 'Door'
+            door = {}
+            door['name'] = sub.name.get
+            door['vertices'] = sub.vertices()
+            door['construction'] = sub.construction.get
+            door_list << door
+          else
+            orig_construction = sub.construction.get
           end
+        end
         # remove all existing surfaces
         ss.subSurfaces.sort.each(&:remove)
         # Determine the surface's cardinal direction
         if surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45
-          new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
-          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+          helper_add_window_to_wwr_with_door(target_wwr_north, ss, orig_construction, door_list, model)
         elsif surface_abs_azimuth > 315 && surface_abs_azimuth <= 360
-          new_window = ss.setWindowToWallRatio(target_wwr_north, 0.6, true).get
-          new_window.setConstruction(orig_construction) unless orig_construction.nil?
-        elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135
-          new_window = ss.setWindowToWallRatio(target_wwr_east, 0.6, true).get
-          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+          helper_add_window_to_wwr_with_door(target_wwr_north, ss, orig_construction, door_list, model)
+        elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135 &&
+          helper_add_window_to_wwr_with_door(target_wwr_east, ss, orig_construction, door_list, model)
         elsif surface_abs_azimuth > 135 && surface_abs_azimuth <= 225
-          new_window = ss.setWindowToWallRatio(target_wwr_south, 0.6, true).get
-          new_window.setConstruction(orig_construction) unless orig_construction.nil?
-        elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315
-          new_window = ss.setWindowToWallRatio(target_wwr_west, 0.6, true).get
-          new_window.setConstruction(orig_construction) unless orig_construction.nil?
+          helper_add_window_to_wwr_with_door(target_wwr_south, ss, orig_construction, door_list, model)
+        elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315 && target_wwr_west > 0.0
+          helper_add_window_to_wwr_with_door(target_wwr_west, ss, orig_construction, door_list, model)
         end
       end
     end
     return model
   end
 
+  def helper_add_window_to_wwr_with_door(target_wwr, surface, construction, door_list, model)
+    if target_wwr > 0.0
+      new_window = surface.setWindowToWallRatio(target_wwr, 0.6, true).get
+      new_window.setConstruction(construction) unless construction.nil?
+    end
+    # add door back.
+    unless door_list.empty?
+      door_list.each do |door|
+        os_door = OpenStudio::Model::SubSurface.new(door['vertices'], model)
+        os_door.setName(door['name'])
+        os_door.setConstruction(door['construction'])
+        os_door.setSurface(surface)
+      end
+    end
+  end
   # Change model to different building type
   # @param model, arguments => new building type
   def change_bldg_type(model, arguments)
@@ -2959,7 +3002,7 @@ class AppendixGPRMTests < Minitest::Test
               clg_coil.setRatedTotalCoolingCapacity(capacity_cool_w)
             end
           end
-          std.model_apply_hvac_efficiency_standard(model_ptac)
+          std.model_apply_hvac_efficiency_standard(model_ptac, climate_zone)
           assert((model_ptac.getCoilCoolingDXSingleSpeeds[0].ratedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX single coil (PTAC).')
         end
       end
@@ -3000,7 +3043,7 @@ class AppendixGPRMTests < Minitest::Test
                 htg_coil.setRatedTotalHeatingCapacity(capacity_heat_w)
               end
             end
-            std.model_apply_hvac_efficiency_standard(model_pthp)
+            std.model_apply_hvac_efficiency_standard(model_pthp, climate_zone)
             assert((model_pthp.getCoilCoolingDXSingleSpeeds[0].ratedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX single coil (PTHP).')
             assert((model_pthp.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for heating DX single coil (PTHP).')
           end
@@ -3053,7 +3096,7 @@ class AppendixGPRMTests < Minitest::Test
             model_psz_ac.getFanOnOffs.each do |fan_on_off|
               fan_on_off.setMaximumFlowRate(0.01)
             end
-            std.model_apply_hvac_efficiency_standard(model_psz_ac)
+            std.model_apply_hvac_efficiency_standard(model_psz_ac, climate_zone)
             assert((model_psz_ac.getCoilCoolingDXSingleSpeeds[0].ratedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX single coil (PSZ-AC).')
             assert((model_psz_ac.getCoilHeatingGass[0].gasBurnerEfficiency.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for heating gas coil (PSZ-AC).')
           end
@@ -3085,7 +3128,7 @@ class AppendixGPRMTests < Minitest::Test
             model_psz_hp.getCoilHeatingDXSingleSpeeds.sort.each do |htg_coil|
               htg_coil.setRatedTotalHeatingCapacity(capacity_heat_w)
             end
-            std.model_apply_hvac_efficiency_standard(model_psz_hp)
+            std.model_apply_hvac_efficiency_standard(model_psz_hp, climate_zone)
             assert((model_psz_hp.getCoilCoolingDXSingleSpeeds[0].ratedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX single coil (PSZ-HP).')
             assert((model_psz_hp.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for heating DX single coil (PSZ-HP).')
           end
@@ -3118,7 +3161,7 @@ class AppendixGPRMTests < Minitest::Test
             model_pvav_reheat.getBoilerHotWaters.sort.each do |boiler|
               boiler.setNominalCapacity(capacity_heat_w)
             end
-            std.model_apply_hvac_efficiency_standard(model_pvav_reheat)
+            std.model_apply_hvac_efficiency_standard(model_pvav_reheat, climate_zone)
             assert((model_pvav_reheat.getCoilCoolingDXTwoSpeeds[0].ratedHighSpeedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX two speed coil (PVAV_Reheat).')
             assert((model_pvav_reheat.getCoilCoolingDXTwoSpeeds[0].ratedLowSpeedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX two speed coil (PVAV_Reheat).')
             assert((model_pvav_reheat.getBoilerHotWaters[0].nominalThermalEfficiency.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for boiler (PVAV_Reheat).')
@@ -3146,7 +3189,7 @@ class AppendixGPRMTests < Minitest::Test
               clg_coil.setRatedHighSpeedTotalCoolingCapacity(capacity_cool_w)
               clg_coil.setRatedLowSpeedTotalCoolingCapacity(capacity_cool_w)
             end
-            std.model_apply_hvac_efficiency_standard(model_pvav_pfp_boxes)
+            std.model_apply_hvac_efficiency_standard(model_pvav_pfp_boxes, climate_zone)
             assert((model_pvav_pfp_boxes.getCoilCoolingDXTwoSpeeds[0].ratedHighSpeedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX two speed coil (PVAV_PFP_Boxes).')
             assert((model_pvav_pfp_boxes.getCoilCoolingDXTwoSpeeds[0].ratedLowSpeedCOP.to_f - value_cool).abs < 0.001, 'Error in efficiency setting for cooling DX two speed coil (PVAV_PFP_Boxes).')
           end
@@ -3178,7 +3221,7 @@ class AppendixGPRMTests < Minitest::Test
             model_vav_reheat.getBoilerHotWaters.sort.each do |boiler|
               boiler.setNominalCapacity(capacity_heat_w)
             end
-            std.model_apply_hvac_efficiency_standard(model_vav_reheat)
+            std.model_apply_hvac_efficiency_standard(model_vav_reheat, climate_zone)
             assert((model_vav_reheat.getChillerElectricEIRs[0].referenceCOP.to_f - 3.517 / value_cool).abs < 0.001, 'Error in efficiency setting for chiller (VAV_Reheat).')
             assert((model_vav_reheat.getBoilerHotWaters[0].nominalThermalEfficiency.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for boiler (VAV_Reheat).')
           end
@@ -3202,7 +3245,7 @@ class AppendixGPRMTests < Minitest::Test
         fan_motor_eff = 0.924
         fan_motor_actual_power_hp = fan_bhp / fan_motor_eff
         fan_motor_actual_power_w = fan_motor_actual_power_hp * 745.7
-        std.model_apply_hvac_efficiency_standard(model_vav_reheat_coolingtower)
+        std.model_apply_hvac_efficiency_standard(model_vav_reheat_coolingtower, climate_zone)
         assert((model_vav_reheat_coolingtower.getCoolingTowerVariableSpeeds[0].designFanPower.to_f - fan_motor_actual_power_w).abs < 0.001, 'Error in setting for cooling tower heat rejection (VAV_Reheat).')
       end
     end
@@ -3224,7 +3267,7 @@ class AppendixGPRMTests < Minitest::Test
           model_vav_pfp.getChillerElectricEIRs.sort.each do |chiller|
             chiller.setReferenceCapacity(capacity_cool_w)
           end
-          std.model_apply_hvac_efficiency_standard(model_vav_pfp)
+          std.model_apply_hvac_efficiency_standard(model_vav_pfp, climate_zone)
           assert((model_vav_pfp.getChillerElectricEIRs[0].referenceCOP.to_f - 3.517 / value_cool).abs < 0.001, 'Error in efficiency setting for chiller (VAV_Reheat).')
         end
       end
@@ -3262,7 +3305,7 @@ class AppendixGPRMTests < Minitest::Test
           model_gas_furnace.getFanConstantVolumes.each do |fan_constant_volume|
             fan_constant_volume.setMaximumFlowRate(0.01)
           end
-          std.model_apply_hvac_efficiency_standard(model_gas_furnace)
+          std.model_apply_hvac_efficiency_standard(model_gas_furnace, climate_zone)
           assert((model_gas_furnace.getCoilHeatingGass[0].gasBurnerEfficiency.to_f - value_heat).abs < 0.001, 'Error in efficiency setting for gas furnace (Gas Furnace).')
         end
       end
@@ -3382,8 +3425,28 @@ class AppendixGPRMTests < Minitest::Test
     check_pipe_insulation(model_hash['baseline'])
   end
 
-  def test_hvac_baseline
-    model_hash = prm_test_helper('hvac_baseline', require_prototype=false, require_baseline=true)
+  def test_hvac_baseline_01
+    model_hash = prm_test_helper('hvac_baseline_01', require_prototype=false, require_baseline=true)
+    check_hvac(model_hash['baseline'])
+  end
+
+  def test_hvac_baseline_02
+    model_hash = prm_test_helper('hvac_baseline_02', require_prototype=false, require_baseline=true)
+    check_hvac(model_hash['baseline'])
+  end
+
+  def test_hvac_baseline_03
+    model_hash = prm_test_helper('hvac_baseline_03', require_prototype=false, require_baseline=true)
+    check_hvac(model_hash['baseline'])
+  end
+
+  def test_hvac_baseline_04
+    model_hash = prm_test_helper('hvac_baseline_04', require_prototype=false, require_baseline=true)
+    check_hvac(model_hash['baseline'])
+  end
+
+  def test_hvac_baseline_05
+    model_hash = prm_test_helper('hvac_baseline_05', require_prototype=false, require_baseline=true)
     check_hvac(model_hash['baseline'])
   end
 
@@ -3485,6 +3548,11 @@ class AppendixGPRMTests < Minitest::Test
   def test_lighting_exceptions
     model_hash = prm_test_helper('lighting_exceptions', require_prototype=false, require_baseline=true)
     check_lighting_exceptions(model_hash['baseline'])
+  end
+
+  def test_night_cycle_exception
+    model_hash = prm_test_helper('night_cycle_exception', require_prototype=false, require_baseline=true)
+    check_nightcycle_exception(model_hash['baseline'])
   end
 
 end

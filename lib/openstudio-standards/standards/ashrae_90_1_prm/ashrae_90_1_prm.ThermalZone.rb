@@ -4,7 +4,7 @@ class ASHRAE901PRM < Standard
   # Determine the fan power limitation pressure drop adjustment
   # Per Table 6.5.3.1-2 (90.1-2019)
   #
-  # @param themal_zone
+  # @param thermal_zone
   def thermal_zone_get_fan_power_limitations(thermal_zone, is_energy_recovery_required)
     fan_pwr_adjustment_in_wc = 0
     # Get autosized zone design supply air flow rate
@@ -152,7 +152,7 @@ class ASHRAE901PRM < Standard
 
   # Identify if zone has district energy for occ_and_fuel_type method
   # @param themal_zone
-  # @return [string] with applicable DistrictHeating and/or DistrictCooling 
+  # @return [string] with applicable DistrictHeating and/or DistrictCooling
   def thermal_zone_get_zone_fuels_for_occ_and_fuel_type(zone)
     zone_fuels = ''
     htg_fuels = zone.heating_fuels
@@ -165,6 +165,4 @@ class ASHRAE901PRM < Standard
     end
     return zone_fuels
   end
-
-
 end

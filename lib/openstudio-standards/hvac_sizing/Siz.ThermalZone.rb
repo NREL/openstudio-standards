@@ -315,7 +315,7 @@ class OpenStudio::Model::ThermalZone
   # serving those air loops.
   #
   # return [Array<String>] An array. Possible values are 
-  # Electricity, NaturalGas, PropaneGas, FuelOilNo1, FuelOilNo2,
+  # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
   # Coal, Diesel, Gasoline, DistrictCooling, DistrictHeating, 
   # and SolarEnergy.
   def heating_fuels
@@ -357,7 +357,7 @@ class OpenStudio::Model::ThermalZone
   # serving those air loops.
   #
   # return [Array<String>] An array. Possible values are
-  # Electricity, NaturalGas, PropaneGas, FuelOilNo1, FuelOilNo2,
+  # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
   # Coal, Diesel, Gasoline, DistrictCooling, DistrictHeating, 
   # and SolarEnergy.
   def cooling_fuels

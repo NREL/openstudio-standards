@@ -20,7 +20,7 @@ class TestFindSpaceTypeStandardsData < Minitest::Test
     model.getClimateZones.setClimateZone("ASHRAE",climate_zones.first)
 
     # get climate zone
-    data = standard.model_get_building_climate_zone_and_building_type(model, remap_office = true)
+    data = standard.model_get_building_properties(model, remap_office = true)
     building_type = data[:building_type]
     climate_zone = data[:climate_zone]
 
