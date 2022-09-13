@@ -666,4 +666,127 @@ class ASHRAE901PRM < Standard
 
     return fan_pwr_adjustment_bhp
   end
+
+  # Set effectiveness value of an ERV's heat exchanger
+  #
+  # @param erv [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] ERV to apply efficiency values
+  # @param erv_type [String] ERV type: ERV or HRV
+  # @param heat_exchanger_type [String] Heat exchanger type: Rotary or Plate
+  # @return [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] ERV to apply efficiency values
+  def air_loop_hvac_apply_energy_recovery_ventilator_efficiency(erv, erv_type: 'ERV', heat_exchanger_type: 'Rotary')
+    heat_exchanger_air_to_air_sensible_and_latent_apply_effectiveness(erv)
+
+    return erv
+  end
+
+  # Determine the airflow limits that govern whether or not an ERV is required.
+  # Based on climate zone and % OA.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param pct_oa [Double] percentage of outdoor air
+  # @return [Double] the flow rate above which an ERV is required. if nil, ERV is never required.
+  def air_loop_hvac_energy_recovery_ventilator_flow_limit(air_loop_hvac, climate_zone, pct_oa)
+    if pct_oa < 0.7
+      erv_cfm = nil
+    else
+      # Heating thermostat setpoint threshold
+      temp_c = OpenStudio.convert(60, 'F', 'C').get
+
+      # Check for exceptions for each zone
+      air_loop_hvac.thermalZones.each do |thermal_zone|
+        # Get heating thermosat setpoint and comparing to heating thermostat setpoint threshold
+        tstat = thermal_zone.thermostat.get
+        if tstat.to_ThermostatSetpointDualSetpoint
+          tstat = tstat.to_ThermostatSetpointDualSetpoint.get
+          htg_sch = tstat.getHeatingSchedule
+          if htg_sch.is_initialized
+            htg_sch = htg_sch.get
+            if htg_sch.to_ScheduleRuleset.is_initialized
+              htg_sch = htg_sch.to_ScheduleRuleset.get
+              max_c = schedule_ruleset_annual_min_max_value(htg_sch)['max']
+              if max_c > temp_c
+                htd = true
+              end
+            elsif htg_sch.to_ScheduleConstant.is_initialized
+              htg_sch = htg_sch.to_ScheduleConstant.get
+              max_c = schedule_constant_annual_min_max_value(htg_sch)['max']
+              if max_c > temp_c
+                htd = true
+              end
+            elsif htg_sch.to_ScheduleCompact.is_initialized
+              htg_sch = htg_sch.to_ScheduleCompact.get
+              max_c = schedule_compact_annual_min_max_value(htg_sch)['max']
+              if max_c > temp_c
+                htd = true
+              end
+            else
+              OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Zone #{thermal_zone.name} used an unknown schedule type for the heating setpoint; assuming heated.")
+              htd = true
+            end
+          end
+        elsif tstat.to_ZoneControlThermostatStagedDualSetpoint
+          tstat = tstat.to_ZoneControlThermostatStagedDualSetpoint.get
+          htg_sch = tstat.heatingTemperatureSetpointSchedule
+          if htg_sch.is_initialized
+            htg_sch = htg_sch.get
+            if htg_sch.to_ScheduleRuleset.is_initialized
+              htg_sch = htg_sch.to_ScheduleRuleset.get
+              max_c = schedule_ruleset_annual_min_max_value(htg_sch)['max']
+              if max_c > temp_c
+                htd = true
+              end
+            end
+          end
+        end
+
+        # Exception 1 - Systems heated to less than 60F since all baseline system provide cooling
+        if !htd
+          return nil
+        end
+
+        # Exception 2 - System exhausting toxic fumes
+        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_toxic_fumes_etc')
+          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_toxic_fumes_etc').get == 'yes'
+            return nil
+          end
+        end
+
+        # Exception 3 - Commercial kitchen hoods
+        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_type1_kitchen_hoods')
+          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_type1_kitchen_hoods').get == 'yes'
+            return nil
+          end
+        end
+
+        # Exception 6 - Distributed exhaust
+        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_type_distributed_exhaust')
+          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_type_distributed_exhaust').get == 'yes'
+            return nil
+          end
+        end
+
+        # Exception 7 - Dehumidification
+        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery')
+          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery').get == 'yes'
+            return nil
+          end
+        end
+      end
+
+      # Exception 4 - Heating systems in certain climate zones
+      if ['ASHRAE 169-2006-0A', 'ASHRAE 169-2006-0B', 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 'ASHRAE 169-2013-0A', 'ASHRAE 169-2013-0B', 'ASHRAE 169-2013-1A', 'ASHRAE 169-2013-1B', 'ASHRAE 169-2013-2A', 'ASHRAE 169-2013-2B', 'ASHRAE 169-2013-3A', 'ASHRAE 169-2013-3B', 'ASHRAE 169-2013-3C'].include?(climate_zone)
+        if air_loop_hvac.additionalProperties.hasFeature('baseline_system_type')
+          system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
+          if system_type == 'Gas_Furnace' || system_type == 'Electric_Furnace'
+            return nil
+          end
+        end
+      end
+
+      erv_cfm = 5000
+    end
+
+    return erv_cfm
+  end
 end
