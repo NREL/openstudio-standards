@@ -353,7 +353,8 @@ class NECB2011 < Standard
                            shw_scale: nil,
                            output_meters: nil,
                            airloop_economizer_type: nil,
-                           baseline_system_zones_map_option: nil)
+                           baseline_system_zones_map_option: nil
+                           )
 
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)

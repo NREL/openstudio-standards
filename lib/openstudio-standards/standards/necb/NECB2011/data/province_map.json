@@ -1,0 +1,17 @@
+{
+  "province_map": {
+    "QC": "Quebec",
+    "NL": "Newfoundland and Labrador",
+    "NS": "Nova Scotia",
+    "PE": "Prince Edward Island",
+    "ON": "Ontario",
+    "MB": "Manitoba",
+    "SK": "Saskatchewan",
+    "AB": "Alberta",
+    "BC": "British Columbia",
+    "YT": "Yukon",
+    "NT": "Northwest Territories",
+    "NB": "New Brunswick",
+    "NU": "Nunavut"
+  }
+}
