@@ -364,6 +364,9 @@ class ASHRAE901PRM < Standard
     plant_loop.supplyComponents.each do |sc|
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
+        if chiller_counter > 0
+          w_per_gpm = w_per_gpm / chiller_counter
+        end
         pump_apply_prm_pressure_rise_and_motor_efficiency(pump, w_per_gpm)
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
@@ -374,17 +377,6 @@ class ASHRAE901PRM < Standard
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
         pump_apply_prm_pressure_rise_and_motor_efficiency(pump, w_per_gpm)
-      elsif sc.to_ChillerElectricEIR.is_initialized && chiller_counter > 0
-        # check if Chiller has a pump, if so, the pump need to adjusted
-        chiller = sc.to_ChillerElectricEIR.get
-        pump_object = chiller.connectedObject(chiller.supplyInletPort).get
-        if pump_object.to_PumpConstantSpeed.is_initialized
-          pump = pump_object.to_PumpConstantSpeed.get
-          pump_apply_prm_pressure_rise_and_motor_efficiency(pump, w_per_gpm / chiller_counter)
-        elsif pump_object.to_PumpVariableSpeed.is_initialized
-          pump = pump_object.to_PumpVariableSpeed.get
-          pump_apply_prm_pressure_rise_and_motor_efficiency(pump, w_per_gpm / chiller_counter)
-        end
       end
     end
     return true
