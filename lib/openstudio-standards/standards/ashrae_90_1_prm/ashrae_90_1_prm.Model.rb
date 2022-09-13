@@ -1430,7 +1430,7 @@ class ASHRAE901PRM < Standard
                 end
               end
               # Exhaust air energy recovery
-              if info_key.include?('exhaust_energy_recovery') && !user_airloop[info_key].to_s.empty?
+              if info_key.include?('exhaust_energy_recovery_exception') && !user_airloop[info_key].to_s.empty?
                 if user_airloop[info_key].downcase == 'yes'
                   air_loop.thermalZones.each do |thermal_zone|
                     thermal_zone.additionalProperties.setFeature(info_key, 'yes')
