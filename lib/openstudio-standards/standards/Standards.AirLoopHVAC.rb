@@ -1808,7 +1808,7 @@ class Standard
       if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.3.0')
         controller_mv.setSystemOutdoorAirMethod('VentilationRateProcedure')
       else
-        controller_mv.setSystemOutdoorAirMethod('Standard62.1VentilationRateProcedure')
+        controller_mv.setSystemOutdoorAirMethod('Standard62.1VentilationRateProcedureWithLimit')
       end
         # Change the min flow rate in the controller outdoor air
       controller_oa.setMinimumOutdoorAirFlowRate(0.0)
