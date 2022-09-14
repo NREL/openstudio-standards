@@ -201,5 +201,10 @@
     ],
     "pump_power_check": [
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test",[["remove_transformer", []]]]
+    ],
+    "exhaust_air_energy": [
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []], ["mult_oa_per_area", [3]]]],
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-8A", "userdata_default_test", [["remove_transformer", []], ["mult_oa_per_area", [3]]]],
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_erv_except_01", [["remove_transformer", []]]]
     ]
 }

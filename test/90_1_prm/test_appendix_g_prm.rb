@@ -677,6 +677,36 @@ class AppendixGPRMTests < Minitest::Test
   end
  
   #
+  # testing for exhaust air energy recovery requirement: general requirement and one exception
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  #
+  def check_exhaust_air_energy(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+        hxs = model.getHeatExchangerAirToAirSensibleAndLatents
+        if hxs.length > 0
+          assert(false, "The baseline model for #{building_type}-#{template}-#{climate_zone} should not contain ERVs.") unless user_data_dir == 'userdata_default_test'
+          hxs.each do |hx|
+            if climate_zone.include?('4A')
+              assert(hx.sensibleEffectivenessat100HeatingAirFlow.round(2) == 0.67, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.sensibleEffectivenessat100CoolingAirFlow.round(2) == 0.66, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.latentEffectivenessat75HeatingAirFlow.round(2) == 0.50, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.latentEffectivenessat75CoolingAirFlow.round(2) == 0.45, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+            elsif climate_zone.include?('8A')
+              assert(hx.sensibleEffectivenessat100HeatingAirFlow.round(2) == 0.50, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.sensibleEffectivenessat100CoolingAirFlow.round(2) == 0.50, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.latentEffectivenessat75HeatingAirFlow.round(2) == 0.0, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.latentEffectivenessat75CoolingAirFlow.round(2) == 0.0, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+            end
+          end
+        else
+          assert(false, "The baseline model for #{building_type}-#{template}-#{climate_zone} should contain ERVs.") unless user_data_dir == 'userdata_erv_except_01'
+        end
+    end
+  end
+
+  #
   # testing method for PRM 2019 baseline HVAC sizing, specific testing objectives are commented inline
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -2502,6 +2532,22 @@ class AppendixGPRMTests < Minitest::Test
     return model
   end
 
+  # Multiply the zone outdoor air flow rate per area
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param arguments [Array] Multiplier
+  def mult_oa_per_area(model, arguments)
+    # Get multiplier
+    mult = arguments[0]
+
+    # Multiply the outdoor air flow rate per area
+    model.getDesignSpecificationOutdoorAirs.each do |dsn_oa|
+      dsn_oa.setOutdoorAirFlowperFloorArea(dsn_oa.outdoorAirFlowperFloorArea * mult)
+    end
+
+    return model
+  end
+
   # Add a AirLoopHVACDedicatedOutdoorAirSystem in the model
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
@@ -3348,7 +3394,7 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_base.each do |prototype, model_baseline|
       building_type, template, climate_zone, user_data_dir, mod = prototype
       # Check if the model include PipeIndoor or PipeOutdoor objects
-      model_baseline.getPlantLoops.each do |plant_loop| 
+      model_baseline.getPlantLoops.each do |plant_loop|
         existing_pipe_insulation = ''
         a = plant_loop.supplyComponents
         b = plant_loop.demandComponents
@@ -3569,4 +3615,8 @@ class AppendixGPRMTests < Minitest::Test
     check_nightcycle_exception(model_hash['baseline'])
   end
 
+  def test_exhaust_air_energy
+    model_hash = prm_test_helper('exhaust_air_energy', require_prototype=false, require_baseline=true)
+    check_exhaust_air_energy(model_hash['baseline'])
+  end
 end

@@ -1401,8 +1401,9 @@ class ASHRAE901PRM < Standard
                 end
               end
             end
-            # Fan power credits
+            # Fan power credits, exhaust air energy recovery
             user_airloop.keys.each do |info_key|
+              # Fan power credits
               if info_key.include?('fan_power_credit')
                 if !user_airloop[info_key].to_s.empty?
                   if info_key.include?('has_')
@@ -1425,6 +1426,14 @@ class ASHRAE901PRM < Standard
                         thermal_zone.additionalProperties.setFeature(info_key, user_airloop[info_key])
                       end
                     end
+                  end
+                end
+              end
+              # Exhaust air energy recovery
+              if info_key.include?('exhaust_energy_recovery_exception') && !user_airloop[info_key].to_s.empty?
+                if user_airloop[info_key].downcase == 'yes'
+                  air_loop.thermalZones.each do |thermal_zone|
+                    thermal_zone.additionalProperties.setFeature(info_key, 'yes')
                   end
                 end
               end
