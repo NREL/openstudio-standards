@@ -814,8 +814,7 @@ class ASHRAE901PRM < Standard
       motor_properties = model_find_object(elevator_motor_eff, search_criteria, elevator_motor_bhp)
       if motor_properties.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.elevator', "For #{equip_name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
-        return [motor_eff, nominal_hp]
-
+        return false
       end
 
       motor_eff = motor_properties['nominal_full_load_efficiency']
@@ -830,7 +829,7 @@ class ASHRAE901PRM < Standard
       motor_properties = model_find_object(elevator_motor_eff, search_criteria, nominal_hp + 0.01)
       if motor_properties.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.model', "For #{equip_name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
-        return [motor_eff, nominal_hp]
+        return false
       end
       motor_eff = motor_properties['nominal_full_load_efficiency'].to_f
 
