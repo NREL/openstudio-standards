@@ -3364,6 +3364,20 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  def check_pump_power(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+      model_baseline.getPlantLoops.each do |plant_loop|
+        plant_loop.supplyComponents.each do |sc|
+          if sc.to_PumpConstantSpeed.is_initialized
+            # Pump with two chillers so it shall be use 4.5 W/gpm
+
+          end
+        end
+      end
+    end
+  end
+
   def test_wwr
     model_hash = prm_test_helper('wwr', require_prototype=false, require_baseline=true)
     check_wwr(model_hash['baseline'])
