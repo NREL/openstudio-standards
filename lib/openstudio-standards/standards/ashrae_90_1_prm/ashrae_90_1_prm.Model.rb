@@ -772,6 +772,78 @@ class ASHRAE901PRM < Standard
     end
   end
 
+  # Function to add baseline elevators based on user data
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # ToDo: expand to also allow elevators defined via exterior equipment objects
+  def model_add_prm_elevators(model)
+    #load elevator data from userdata csv files
+    user_elevators = @standards_data.key?('userdata_electric_equipment') ? @standards_data['userdata_electric_equipment'] : nil
+    user_elevators.each do |user_elevator|
+      num_lifts = user_elevator['elevator_number_of_lifts'].to_i
+      next if num_lifts == 0
+
+      equip_name = user_elevator['name']
+      number_of_levels = user_elevator['elevator_number_of_stories'].to_i
+
+      if number_of_levels < 5
+        # From Table G3.9.2 performance rating method baseline elevator motor
+        elevator_mech_eff = 0.58
+        search_criteria = {
+          'template' => template,
+          'type' => 'Hydraulic'
+        }
+       else
+         # From Table G3.9.2 performance rating method baseline elevator motor
+         elevator_mech_eff = 0.64
+         search_criteria = {
+           'template' => template,
+           'type' => 'Any'
+         }
+      end
+      elevator_weight_of_car = user_elevator['elevator_weight_of_car'].to_f
+      elevator_rated_load = user_elevator['elevator_rated_load'].to_f
+      elevator_counter_weight_of_car = user_elevator['elevator_counter_weight_of_car'].to_f
+      elevator_speed_of_car = user_elevator['elevator_speed_of_car'].to_f
+
+      elevator_motor_bhp = (elevator_weight_of_car + elevator_rated_load - elevator_counter_weight_of_car) * elevator_speed_of_car/(33000* elevator_mech_eff)
+      
+      # Lookup the minimum motor efficiency
+      elevator_motor_eff = standards_data['motors']
+  
+
+      motor_properties = model_find_object(elevator_motor_eff, search_criteria, elevator_motor_bhp)
+      if motor_properties.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.elevator', "For #{equip_name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
+        return [motor_eff, nominal_hp]
+
+      end
+
+      motor_eff = motor_properties['nominal_full_load_efficiency']
+      nominal_hp = motor_properties['maximum_capacity'].to_f.round(1)
+      # Round to nearest whole HP for niceness
+      if nominal_hp >= 2
+        nominal_hp = nominal_hp.round
+      end
+
+      # Get the efficiency based on the nominal horsepower
+      # Add 0.01 hp to avoid search errors.
+      motor_properties = model_find_object(elevator_motor_eff, search_criteria, nominal_hp + 0.01)
+      if motor_properties.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.model', "For #{equip_name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
+        return [motor_eff, nominal_hp]
+      end
+      motor_eff = motor_properties['nominal_full_load_efficiency'].to_f
+
+      #Lift_pwr_w = elevator_motor_bhp / motor_eff
+      elevator_power = elevator_motor_bhp * 746 / motor_eff
+      model.getElectricEquipments.each do |electricequipment|
+        if electricequipment.nameString == equip_name
+          electricequipment.electricEquipmentDefinition.setDesignLevel(elevator_power)
+        end
+      end
+    end
+  end
+
   # Add design day schedule objects for space loads, for PRM 2019 baseline models
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::model::Model] OpenStudio model object

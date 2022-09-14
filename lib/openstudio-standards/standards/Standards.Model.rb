@@ -181,6 +181,9 @@ class Standard
 
       model_apply_baseline_exterior_lighting(model)
 
+      # Modify the elevator motor peak power
+      model_add_prm_elevators(model)
+      
       # Calculate infiltration as per 90.1 PRM rules
       model_baseline_apply_infiltration_standard(model, climate_zone)
 
@@ -4881,6 +4884,13 @@ class Standard
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
   def model_apply_baseline_exterior_lighting(model)
+    return false
+  end
+
+  # Function to add baseline elevators based on user data
+  # Only applicable to stable baseline
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  def model_add_prm_elevators(model)
     return false
   end
 
