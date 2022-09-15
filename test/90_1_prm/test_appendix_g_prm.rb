@@ -707,6 +707,32 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   #
+  # testing baseline elevator implementation
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  #
+  def check_elevators(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+
+      if building_type == 'MediumOffice'
+        if user_data_dir.include?('hydraulic')
+          elevators = model.getElectricEquipmentByName('2 Elevator Lift Motors').get.electricEquipmentDefinition
+          elevators_power = elevators.designLevel.get.round(1)
+          assert(elevators_power == 37976.6, "The baseline model elevator power for #{building_type}-#{template}-#{climate_zone} is incorrect, it was  #{elevators_power} instead of 37976.6.")
+          elevators_process_loads = model.getElectricEquipmentByName('2 Elevator Lift Motors - Misc Process Loads').get.electricEquipmentDefinition
+          elevators_process_loads_power = elevators_process_loads.designLevel.get.round(1)
+          assert(elevators_process_loads_power == 408.5, "The baseline model elevator process loads power for #{building_type}-#{template}-#{climate_zone} is incorrect, it was  #{elevators_power} instead of 408.5.")
+        else
+          elevators = model.getElectricEquipmentByName('2 Elevator Lift Motors').get.electricEquipmentDefinition
+          elevators_power = elevators.designLevel.get.round(1)
+          assert(elevators_power == 8524.6, "The baseline model elevator power for #{building_type}-#{template}-#{climate_zone} is incorrect, it was  #{elevators_power} instead of 8524.6.")
+        end
+      end
+    end
+  end
+
+  #
   # testing method for PRM 2019 baseline HVAC sizing, specific testing objectives are commented inline
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -3604,5 +3630,10 @@ class AppendixGPRMTests < Minitest::Test
   def test_exhaust_air_energy
     model_hash = prm_test_helper('exhaust_air_energy', require_prototype=false, require_baseline=true)
     check_exhaust_air_energy(model_hash['baseline'])
+  end
+
+  def test_elevators
+    model_hash = prm_test_helper('elevators', require_prototype=false, require_baseline=true)
+    check_elevators(model_hash['baseline'])
   end
 end
