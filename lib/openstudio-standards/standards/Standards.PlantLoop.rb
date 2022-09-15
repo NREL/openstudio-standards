@@ -771,7 +771,7 @@ class Standard
       end
     end
 
-    # Modify all the secondary pumps
+    # Modify all the secondary pumps besides constant pumps
     plant_loop.demandComponents.each do |sc|
       if sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
