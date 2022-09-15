@@ -9,3 +9,6 @@ The code requirement is straightforward, so are the exception.
 
 # Implementation
 The characteristics of the proposed model elevator(s) are provided by the user using the user data CSV file which includes the each elevator car weight, rated load, counter weight of the car, speed of the car, number of stories served by the elevator, the number of similar elevators, the floor area occupied the elevator, and the ventilation flow rate. The BHP and elevator power are calculated according to Section G3.1.16, the baseline elevator power is used in place of the proposed one (which can be through an electric equipment object or an exterior equipment fuel object). Process loads such as ventilation and lighting are modeled separately and as they are supposed to be modeled as operating continuously.
+
+# Key Ruby Methods
+- `model_add_prm_elevators`: Add baseline elevators based on user data
