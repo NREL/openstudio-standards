@@ -31,7 +31,7 @@ class ASHRAE901PRM < Standard
         thermal_zone = unitary.controllingZoneorThermostatLocation.get
       end
     end
-      # meth = comp.methods
+    # meth = comp.methods
     comp = coil_cooling_dx_single_speed.containingZoneHVACComponent
     if comp.is_initialized
       if comp.get.thermalZone.is_initialized
@@ -43,6 +43,7 @@ class ASHRAE901PRM < Standard
       if standards_data.key?('userdata_thermal_zone')
         standards_data['userdata_thermal_zone'].each do |row|
           next unless row['name'].to_s.downcase.strip == thermal_zone.name.to_s.downcase.strip
+
           if row['number_of_systems'].to_s.upcase.strip != ''
             mult = row['number_of_systems'].to_s
             if mult.to_i.to_s == mult

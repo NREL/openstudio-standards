@@ -2059,7 +2059,7 @@ class ASHRAE901PRM < Standard
     # 90.1 PRM routine requires
     return true
   end
-  
+
   # For 2019, it is required to adjusted wwr based on building categories for all other types
   #
   # @param bat [String] building category
@@ -2100,14 +2100,14 @@ class ASHRAE901PRM < Standard
   # @param total_fene_m2 [Float] total fenestration area
   # @return [Float] reduction factor
   def model_get_wwr_reduction_ratio(multiplier,
-                              surface_wwr: 0.0,
-                              surface_dr: 0.0,
-                              wwr_building_type: 'All others',
-                              wwr_target: nil,
-                              total_wall_m2: 0.0, # prevent 0.0 division
-                              total_wall_with_fene_m2: 0.0,
-                              total_fene_m2: 0.0,
-                              total_plenum_wall_m2: 0.0)
+                                    surface_wwr: 0.0,
+                                    surface_dr: 0.0,
+                                    wwr_building_type: 'All others',
+                                    wwr_target: nil,
+                                    total_wall_m2: 0.0, # prevent 0.0 division
+                                    total_wall_with_fene_m2: 0.0,
+                                    total_fene_m2: 0.0,
+                                    total_plenum_wall_m2: 0.0)
 
     if multiplier < 1.0
       # Case when reduction is required
@@ -2921,7 +2921,6 @@ class ASHRAE901PRM < Standard
   # @param model
   # @return [Bool] true if successful, false if not
   def model_refine_size_dependent_values(model, sizing_run_dir)
- 
     # Final sizing run before refining size-dependent values
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR3") == false
       return false
