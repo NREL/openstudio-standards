@@ -74,6 +74,44 @@ class ASHRAE901PRM < Standard
       capacity_w = coil_cooling_dx_two_speed_find_capacity(clg_coil, sys_type)
     end
 
+    # Check for user data that indicates multiple systems per thermal zone
+    # This could be true for a data center where this is common practice
+    # Or it could be for a thermal zone that represents multiple real building zones
+    mult = 1
+    thermal_zone = nil
+    comp = coil_heating_dx_single_speed.containingHVACComponent
+    if comp.is_initialized
+      if comp.get.to_AirLoopHVACUnitarySystem.is_initialized
+        unitary = comp.get.to_AirLoopHVACUnitarySystem.get
+        thermal_zone = unitary.controllingZoneorThermostatLocation.get
+      end
+    end
+      # meth = comp.methods
+    comp = coil_heating_dx_single_speed.containingZoneHVACComponent
+    if comp.is_initialized
+      if comp.get.thermalZone.is_initialized
+        thermal_zone = comp.get.thermalZone.get
+      end
+    end
+
+    if !thermal_zone.nil?
+      if standards_data.key?('userdata_thermal_zone')
+        standards_data['userdata_thermal_zone'].each do |row|
+          next unless row['name'].to_s.downcase.strip == thermal_zone.name.to_s.downcase.strip
+          if row['number_of_systems'].to_s.upcase.strip != ''
+            mult = row['number_of_systems'].to_s
+            if mult.to_i.to_s == mult
+              mult = mult.to_i
+              capacity_w /= mult
+            else
+              OpenStudio.logFree(OpenStudio::Error, 'prm.log', 'In userdata_thermalzone, number_of_systems requires integer input.')
+            end
+            break
+          end
+        end
+      end
+    end
+
     # If it's a PTAC or PTHP System, we need to divide the capacity by the potential zone multiplier
     # because the COP is dependent on capacity, and the capacity should be the capacity of a single zone, not all the zones
     if sys_type == 'PTHP'
@@ -140,7 +178,7 @@ class ASHRAE901PRM < Standard
     orig_name = coil_heating_dx_single_speed.name.to_s
 
     # Find the minimum COP and rename with efficiency rating
-    cop = coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, sys_type, true)
+    cop = coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, sys_type, false)
 
     # Map the original name to the new name
     sql_db_vars_map[coil_heating_dx_single_speed.name.to_s] = orig_name
