@@ -404,17 +404,13 @@ class Standard
         return false
       end
 
-      if /prm/i !~ template    # TODO: implement pump power and control for stable baseline
-        # Set the pumping control strategy and power
-        # Must be done after sizing components
-        model.getPlantLoops.sort.each do |plant_loop|
-          # Skip the SWH loops
-          next if plant_loop_swh_loop?(plant_loop)
-
-          plant_loop_apply_prm_baseline_pump_power(plant_loop)
-          plant_loop_apply_prm_baseline_pumping_type(plant_loop)
-        end
-
+      # Set the pumping control strategy and power
+      # Must be done after sizing components
+      model.getPlantLoops.sort.each do |plant_loop|
+        # Skip the SWH loops
+        next if plant_loop_swh_loop?(plant_loop)
+        plant_loop_apply_prm_baseline_pump_power(plant_loop)
+        plant_loop_apply_prm_baseline_pumping_type(plant_loop)
       end
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Prescriptive HVAC Controls and Equipment Efficiencies ***')
@@ -1618,6 +1614,10 @@ class Standard
           # If and only if there are primary zones to attach to the loop
           # counter example: floor with only one elevator machine room that get classified as sec_zones
           unless pri_zones.empty?
+            # if the loop configuration is primary / secondary loop
+            if chilled_water_loop.additionalProperties.hasFeature('secondary_loop_name')
+              chilled_water_loop = model.getPlantLoopByName(chilled_water_loop.additionalProperties.getFeatureAsString('secondary_loop_name').get).get
+            end
             model_add_vav_reheat(model,
                                  pri_zones,
                                  system_name: system_name,
@@ -1685,6 +1685,9 @@ class Standard
           system_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
+            if chilled_water_loop.additionalProperties.hasFeature('secondary_loop_name')
+              chilled_water_loop = model.getPlantLoopByName(chilled_water_loop.additionalProperties.getFeatureAsString('secondary_loop_name').get).get
+            end
             model_add_vav_pfp_boxes(model,
                                     pri_zones,
                                     system_name: system_name,
