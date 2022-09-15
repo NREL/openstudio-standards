@@ -458,9 +458,7 @@ class AppendixGPRMTests < Minitest::Test
       u_value_goal.each do |key, value|
         value_si = OpenStudio.convert(value, 'Btu/ft^2*hr*R', 'W/m^2*K').get
         assert(((u_value_baseline[key] - value_si).abs < 0.001 || (u_value_baseline[key] - 5.835).abs < 0.01), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si.round(3)}.")
-        if key != 'PERIMETER_ZN_3_WALL_NORTH_DOOR1'
-          assert((construction_baseline[key].include? 'PRM'), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
-        end
+        assert((construction_baseline[key].include? 'PRM'), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
       end
     end
   end
@@ -678,6 +676,36 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
  
+  #
+  # testing for exhaust air energy recovery requirement: general requirement and one exception
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  #
+  def check_exhaust_air_energy(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+        hxs = model.getHeatExchangerAirToAirSensibleAndLatents
+        if hxs.length > 0
+          assert(false, "The baseline model for #{building_type}-#{template}-#{climate_zone} should not contain ERVs.") unless user_data_dir == 'userdata_default_test'
+          hxs.each do |hx|
+            if climate_zone.include?('4A')
+              assert(hx.sensibleEffectivenessat100HeatingAirFlow.round(2) == 0.67, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.sensibleEffectivenessat100CoolingAirFlow.round(2) == 0.66, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.latentEffectivenessat75HeatingAirFlow.round(2) == 0.50, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.latentEffectivenessat75CoolingAirFlow.round(2) == 0.45, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+            elsif climate_zone.include?('8A')
+              assert(hx.sensibleEffectivenessat100HeatingAirFlow.round(2) == 0.50, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.sensibleEffectivenessat100CoolingAirFlow.round(2) == 0.50, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.latentEffectivenessat75HeatingAirFlow.round(2) == 0.0, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.latentEffectivenessat75CoolingAirFlow.round(2) == 0.0, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+            end
+          end
+        else
+          assert(false, "The baseline model for #{building_type}-#{template}-#{climate_zone} should contain ERVs.") unless user_data_dir == 'userdata_erv_except_01'
+        end
+    end
+  end
+
   #
   # testing method for PRM 2019 baseline HVAC sizing, specific testing objectives are commented inline
   #
@@ -2504,6 +2532,22 @@ class AppendixGPRMTests < Minitest::Test
     return model
   end
 
+  # Multiply the zone outdoor air flow rate per area
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param arguments [Array] Multiplier
+  def mult_oa_per_area(model, arguments)
+    # Get multiplier
+    mult = arguments[0]
+
+    # Multiply the outdoor air flow rate per area
+    model.getDesignSpecificationOutdoorAirs.each do |dsn_oa|
+      dsn_oa.setOutdoorAirFlowperFloorArea(dsn_oa.outdoorAirFlowperFloorArea * mult)
+    end
+
+    return model
+  end
+
   # Add a AirLoopHVACDedicatedOutdoorAirSystem in the model
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
@@ -3350,7 +3394,7 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_base.each do |prototype, model_baseline|
       building_type, template, climate_zone, user_data_dir, mod = prototype
       # Check if the model include PipeIndoor or PipeOutdoor objects
-      model_baseline.getPlantLoops.each do |plant_loop| 
+      model_baseline.getPlantLoops.each do |plant_loop|
         existing_pipe_insulation = ''
         a = plant_loop.supplyComponents
         b = plant_loop.demandComponents
@@ -3581,6 +3625,11 @@ class AppendixGPRMTests < Minitest::Test
   def test_num_systems_in_zone
     model_hash = prm_test_helper('number_of_systems_in_zone', require_prototype=false, require_baseline=true)
     check_num_systems_in_zone(model_hash['baseline'])
+  end
+
+  def test_exhaust_air_energy
+    model_hash = prm_test_helper('exhaust_air_energy', require_prototype=false, require_baseline=true)
+    check_exhaust_air_energy(model_hash['baseline'])
   end
 
 end
