@@ -1,10 +1,4 @@
 class ASHRAE901PRM < Standard
-  HOT_WATER_PUMP_POWER = 19 # W/gpm
-  HOT_WATER_DISTRICT_PUMP_POWER = 14 # W/gpm
-  CHILLED_WATER_PRIMARY_PUMP_POWER = 9 # W/gpm
-  CHILLED_WATER_SECONDARY_PUMP_POWER = 13 # W/gpm
-  CHILLED_WATER_DISTRICT_PUMP_POWER = 16 # W/gpm
-  CONDENSER_WATER_PUMP_POWER = 19 # W/gpm
 
   # Keep only one cooling tower, but use one condenser pump per chiller
   def plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
@@ -311,6 +305,12 @@ class ASHRAE901PRM < Standard
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
   # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_pump_power(plant_loop)
+    hot_water_pump_power = 19 # W/gpm
+    hot_water_district_pump_power = 14 # W/gpm
+    chilled_water_primary_pump_power = 9 # W/gpm
+    chilled_water_secondary_pump_power = 13 # W/gpm
+    chilled_water_district_pump_power = 16 # W/gpm
+    condenser_water_pump_power = 19 # W/gpm
     # Determine the pumping power per
     # flow based on loop type.
     w_per_gpm = nil
@@ -330,9 +330,9 @@ class ASHRAE901PRM < Standard
       end
 
       w_per_gpm = if has_district_heating # District HW
-                    HOT_WATER_DISTRICT_PUMP_POWER
+                    hot_water_district_pump_power
                   else # HW
-                    HOT_WATER_PUMP_POWER
+                    hot_water_pump_power
                   end
 
     when 'Cooling'
@@ -346,18 +346,18 @@ class ASHRAE901PRM < Standard
       end
 
       if has_district_cooling # District CHW
-        w_per_gpm = CHILLED_WATER_DISTRICT_PUMP_POWER
+        w_per_gpm = chilled_water_district_pump_power
       elsif plant_loop.additionalProperties.hasFeature('is_primary_loop') # The primary loop of the primary/secondary CHW
-        w_per_gpm = CHILLED_WATER_PRIMARY_PUMP_POWER
+        w_per_gpm = chilled_water_primary_pump_power
       elsif plant_loop.additionalProperties.hasFeature('is_secondary_loop') # The secondary loop of the primary/secondary CHW
-        w_per_gpm = CHILLED_WATER_SECONDARY_PUMP_POWER
+        w_per_gpm = chilled_water_secondary_pump_power
       else # Primary only CHW combine 9W/gpm + 13W/gpm
-        w_per_gpm = CHILLED_WATER_PRIMARY_PUMP_POWER + CHILLED_WATER_SECONDARY_PUMP_POWER
+        w_per_gpm = chilled_water_primary_pump_power + chilled_water_secondary_pump_power
       end
 
     when 'Condenser'
       # @todo prm condenser loop pump power
-      w_per_gpm = CONDENSER_WATER_PUMP_POWER
+      w_per_gpm = condenser_water_pump_power
     end
 
     # Modify all the primary pumps
