@@ -143,12 +143,12 @@ class NECB2011
       sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
       # Create a diffuser and attach the zone/diffuser pair to the air loop
       # diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model,always_on)
-      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
-      air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
       add_zone_baseboards(baseboard_type: baseboard_type,
                           hw_loop: hw_loop,
                           model: model,
                           zone: zone)
+      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
+      air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
       # zone loop
     end
     sys_name_pars = {}

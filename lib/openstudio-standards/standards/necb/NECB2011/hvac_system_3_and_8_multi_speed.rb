@@ -67,12 +67,12 @@ class NECB2011
       return true
     else
       zones.each do |zone|
-        air_loop = add_system_3_and_8_airloop_multi_speed(heating_coil_type, model, system_data, zone)
         add_sys3_and_8_zone_equip(air_loop,
                                   baseboard_type,
                                   hw_loop,
                                   model,
                                   zone)
+        air_loop = add_system_3_and_8_airloop_multi_speed(heating_coil_type, model, system_data, zone)
       end
       return true
     end

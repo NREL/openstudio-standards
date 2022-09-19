@@ -816,7 +816,7 @@
         {
           "name": "NECB2015_ASHP",
           "minimum_capacity": 238840.0,
-          "maximum_capacity": 9999999.0,
+          "maximum_capacity": 9999999999.0,
           "minimum_heating_seasonal_performance_factor": null,
           "minimum_coefficient_of_performance_heating": null,
           "minimum_energy_efficiency_ratio": 9.2,

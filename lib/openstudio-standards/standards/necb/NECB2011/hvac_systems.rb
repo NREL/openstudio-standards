@@ -21,9 +21,10 @@ class NECB2011
   # @return [Bool] returns true if an economizer is required, false if not
   def air_loop_hvac_economizer_required?(air_loop_hvac)
     economizer_required = false
-
+    
     # need a better way to determine if an economizer is needed.
-    return economizer_required if air_loop_hvac.name.to_s.include? 'Outpatient F1'
+    return economizer_required if ((air_loop_hvac.name.to_s.include? 'Outpatient F1' ) || 
+                                   (air_loop_hvac.sizingSystem.typeofLoadtoSizeOn.to_s == "VentilationRequirement"))
 
     # A big number of btu per hr as the minimum requirement
     infinity_btu_per_hr = 999_999_999_999
