@@ -209,5 +209,9 @@
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []], ["mult_oa_per_area", [3]]]],
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-8A", "userdata_default_test", [["remove_transformer", []], ["mult_oa_per_area", [3]]]],
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_erv_except_01", [["remove_transformer", []]]]
+    ],
+    "elevators": [
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_elevator_offmed", [["remove_transformer", []]]],
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_elevator_offmed_hydraulic", [["remove_transformer", []]]]
     ]
 }

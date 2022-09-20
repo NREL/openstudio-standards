@@ -181,6 +181,9 @@ class Standard
 
       model_apply_baseline_exterior_lighting(model)
 
+      # Modify the elevator motor peak power
+      model_add_prm_elevators(model)
+
       # Calculate infiltration as per 90.1 PRM rules
       model_baseline_apply_infiltration_standard(model, climate_zone)
 
@@ -2467,7 +2470,10 @@ class Standard
       matching_objects = matching_objects.reject { |object| object['minimum_capacity'].nil? || object['maximum_capacity'].nil? }
 
       # Skip objects whose the minimum capacity is below or maximum capacity above the specified fan_motor_bhp
-      matching_capacity_objects = matching_objects.reject { |object| fan_motor_bhp.to_f < object['minimum_capacity'].to_f || fan_motor_bhp.to_f > object['maximum_capacity'].to_f }
+      matching_capacity_objects = matching_objects.reject { |object| fan_motor_bhp.to_f <= object['minimum_capacity'].to_f || fan_motor_bhp.to_f > object['maximum_capacity'].to_f }
+
+      # Filter based on motor type
+      matching_capacity_objects = matching_capacity_objects.select { |object| object['type'].downcase == search_criteria['type'].downcase } if search_criteria.keys.include?('type')
 
       # If no object was found, round the fan_motor_bhp down in case the number fell between the limits in the json file.
       if matching_capacity_objects.size.zero?
@@ -4884,6 +4890,13 @@ class Standard
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
   def model_apply_baseline_exterior_lighting(model)
+    return false
+  end
+
+  # Function to add baseline elevators based on user data
+  # Only applicable to stable baseline
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  def model_add_prm_elevators(model)
     return false
   end
 
