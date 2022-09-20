@@ -2838,11 +2838,12 @@ class ECMS
           'name' => ecm_name,
           'minimum_energy_efficiency_ratio' => cop_package['minimum_energy_efficiency_ratio'],
           'minimum_seasonal_energy_efficiency_ratio' => cop_package['minimum_seasonal_energy_efficiency_ratio'],
+          'minimum_full_load_efficiency' => cop_package['minimum_full_load_efficiency'],
           'cool_cap_ft' => cop_package['cool_cap_ft'],
           'cool_cap_fflow' => cop_package['cool_cap_fflow'],
           'cool_eir_ft' => cop_package['cool_eir_ft'],
           'cool_eir_fflow' => cop_package['cool_eir_fflow'],
-          'cool_plf_fplr' => cop_package['cool_eir_fplr']
+          'cool_plf_fplr' => cop_package['cool_plf_fplr']
         }
       end
       next if unitary_cop['minimum_energy_efficiency_ratio'].nil? && unitary_cop['minimum_seasonal_energy_efficiency_ratio'].nil? && unitary_cop['cool_cap_ft'].nil? &&
@@ -2856,17 +2857,24 @@ class ECMS
           cop = eer_to_cop(unitary_cop['minimum_energy_efficiency_ratio'].to_f)
         elsif unitary_cop['minimum_seasonal_energy_efficiency_ratio']
           cop = seer_to_cop_cooling_with_fan(unitary_cop['minimum_seasonal_energy_efficiency_ratio'].to_f)
+        elsif unitary_cop['minimum_full_load_efficiency']
+          cop = unitary_cop['minimum_full_load_efficiency']
         end
         cool_cap_ft = nil
-        cool_cap_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_ft'] } if unitary_cop['cool_cap_ft']
+        cool_cap_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_ft'] }[0] if unitary_cop['cool_cap_ft']
+        cool_cap_ft = model_add_curve(model, unitary_cop['cool_cap_ft']) if cool_cap_ft
         cool_cap_fflow = nil
-        cool_cap_fflow = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_fflow'] } if unitary_cop['cool_cap_fflow']
+        cool_cap_fflow = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_fflow'] }[0] if unitary_cop['cool_cap_fflow']
+        cool_cap_fflow = model_add_curve(model, unitary_cop['cool_cap_fflow']) if cool_cap_fflow
         cool_eir_ft = nil
-        cool_eir_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_eir_ft'] } if unitary_cop['cool_eir_ft']
+        cool_eir_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_eir_ft'] }[0] if unitary_cop['cool_eir_ft']
+        cool_eir_ft = model_add_curve(model, unitary_cop['cool_eir_ft']) if cool_eir_ft
         cool_eir_fflow = nil
-        cool_eir_fflow = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_eir_fflow'] } if unitary_cop['cool_eir_fflow']
+        cool_eir_fflow = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_eir_fflow'] }[0] if unitary_cop['cool_eir_fflow']
+        cool_eir_fflow = model_add_curve(model, unitary_cop['cool_eir_fflow']) if cool_eir_fflow
         cool_plf_fplr = nil
-        cool_plf_fplr = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_plf_fplr'] } if unitary_cop['cool_plf_fplr']
+        cool_plf_fplr = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_plf_fplr'] }[0] if unitary_cop['cool_plf_fplr']
+        cool_plf_fplr = model_add_curve(model, unitary_cop['cool_plf_fplr']) if cool_plf_fplr
         if coil_type == 'SingleSpeed'
           coil.setRatedCOP(cop) if cop
           coil.setTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft) if cool_cap_ft
