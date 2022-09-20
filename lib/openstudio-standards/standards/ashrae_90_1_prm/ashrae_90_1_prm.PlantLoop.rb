@@ -1,5 +1,4 @@
 class ASHRAE901PRM < Standard
-
   # Keep only one cooling tower, but use one condenser pump per chiller
   def plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
     # Skip non-cooling plants
@@ -365,7 +364,7 @@ class ASHRAE901PRM < Standard
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
         if chiller_counter > 0
-          w_per_gpm = w_per_gpm / chiller_counter
+          w_per_gpm /= chiller_counter
         end
         pump_apply_prm_pressure_rise_and_motor_efficiency(pump, w_per_gpm)
       elsif sc.to_PumpVariableSpeed.is_initialized
