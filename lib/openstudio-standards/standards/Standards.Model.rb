@@ -181,6 +181,9 @@ class Standard
 
       model_apply_baseline_exterior_lighting(model)
 
+      # Modify the elevator motor peak power
+      model_add_prm_elevators(model)
+
       # Calculate infiltration as per 90.1 PRM rules
       model_baseline_apply_infiltration_standard(model, climate_zone)
 
@@ -404,17 +407,14 @@ class Standard
         return false
       end
 
-      if /prm/i !~ template    # TODO: implement pump power and control for stable baseline
-        # Set the pumping control strategy and power
-        # Must be done after sizing components
-        model.getPlantLoops.sort.each do |plant_loop|
-          # Skip the SWH loops
-          next if plant_loop_swh_loop?(plant_loop)
+      # Set the pumping control strategy and power
+      # Must be done after sizing components
+      model.getPlantLoops.sort.each do |plant_loop|
+        # Skip the SWH loops
+        next if plant_loop_swh_loop?(plant_loop)
 
-          plant_loop_apply_prm_baseline_pump_power(plant_loop)
-          plant_loop_apply_prm_baseline_pumping_type(plant_loop)
-        end
-
+        plant_loop_apply_prm_baseline_pump_power(plant_loop)
+        plant_loop_apply_prm_baseline_pumping_type(plant_loop)
       end
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Prescriptive HVAC Controls and Equipment Efficiencies ***')
@@ -1619,6 +1619,10 @@ class Standard
           # If and only if there are primary zones to attach to the loop
           # counter example: floor with only one elevator machine room that get classified as sec_zones
           unless pri_zones.empty?
+            # if the loop configuration is primary / secondary loop
+            if chilled_water_loop.additionalProperties.hasFeature('secondary_loop_name')
+              chilled_water_loop = model.getPlantLoopByName(chilled_water_loop.additionalProperties.getFeatureAsString('secondary_loop_name').get).get
+            end
             model_add_vav_reheat(model,
                                  pri_zones,
                                  system_name: system_name,
@@ -1686,6 +1690,9 @@ class Standard
           system_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
+            if chilled_water_loop.additionalProperties.hasFeature('secondary_loop_name')
+              chilled_water_loop = model.getPlantLoopByName(chilled_water_loop.additionalProperties.getFeatureAsString('secondary_loop_name').get).get
+            end
             model_add_vav_pfp_boxes(model,
                                     pri_zones,
                                     system_name: system_name,
@@ -2465,7 +2472,10 @@ class Standard
       matching_objects = matching_objects.reject { |object| object['minimum_capacity'].nil? || object['maximum_capacity'].nil? }
 
       # Skip objects whose the minimum capacity is below or maximum capacity above the specified fan_motor_bhp
-      matching_capacity_objects = matching_objects.reject { |object| fan_motor_bhp.to_f < object['minimum_capacity'].to_f || fan_motor_bhp.to_f > object['maximum_capacity'].to_f }
+      matching_capacity_objects = matching_objects.reject { |object| fan_motor_bhp.to_f <= object['minimum_capacity'].to_f || fan_motor_bhp.to_f > object['maximum_capacity'].to_f }
+
+      # Filter based on motor type
+      matching_capacity_objects = matching_capacity_objects.select { |object| object['type'].downcase == search_criteria['type'].downcase } if search_criteria.keys.include?('type')
 
       # If no object was found, round the fan_motor_bhp down in case the number fell between the limits in the json file.
       if matching_capacity_objects.size.zero?
@@ -3753,7 +3763,7 @@ class Standard
   #   e.g. Heating|Electricity, Exterior Equipment|Water.  All end use/fuel type combos are present,
   #   with values of 0.0 if none of this end use/fuel type combo was used by the simulation.
   #   Returns nil if the legacy results couldn't be found.
-  def model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type, lkp_template:nil)
+  def model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type, lkp_template: nil)
     # Load the legacy idf results CSV file into a ruby hash
     top_dir = File.expand_path('../../..', File.dirname(__FILE__))
     standards_data_dir = "#{top_dir}/data/standards"
@@ -4539,8 +4549,9 @@ class Standard
           # Subsurfaces in this surface
           surface.subSurfaces.sort.each do |ss|
             next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
-              # Only add wall surfaces when the wall actually have windows
-              wind_area_m2 += ss.netArea * space.multiplier
+
+            # Only add wall surfaces when the wall actually have windows
+            wind_area_m2 += ss.netArea * space.multiplier
           end
         end
         if wind_area_m2 > 0.0
@@ -4704,14 +4715,14 @@ class Standard
           # daylighting control isn't modeled
           surface_wwr = surface_get_wwr_of_a_surface(surface)
           red = model_get_wwr_reduction_ratio(mult,
-                                        surface_wwr: surface_wwr,
-                                        surface_dr: surface_get_door_ratio_of_a_surface(surface),
-                                        wwr_building_type: bat,
-                                        wwr_target: wwr_lim / 100, # divide by 100 to revise it to decimals
-                                        total_wall_m2: total_wall_area,
-                                        total_wall_with_fene_m2: total_wall_with_fene_area,
-                                        total_fene_m2: total_fene_area,
-                                        total_plenum_wall_m2: total_plenum_wall_area)
+                                              surface_wwr: surface_wwr,
+                                              surface_dr: surface_get_door_ratio_of_a_surface(surface),
+                                              wwr_building_type: bat,
+                                              wwr_target: wwr_lim / 100, # divide by 100 to revise it to decimals
+                                              total_wall_m2: total_wall_area,
+                                              total_wall_with_fene_m2: total_wall_with_fene_area,
+                                              total_fene_m2: total_fene_area,
+                                              total_plenum_wall_m2: total_plenum_wall_area)
 
           if red < 0.0
             # surface with fenestration to its maximum but adjusted by door areas when need to add windows in surfaces no fenestration
@@ -4882,6 +4893,13 @@ class Standard
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
   def model_apply_baseline_exterior_lighting(model)
+    return false
+  end
+
+  # Function to add baseline elevators based on user data
+  # Only applicable to stable baseline
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  def model_add_prm_elevators(model)
     return false
   end
 
@@ -6880,7 +6898,6 @@ class Standard
     return 'warmest_zone'
   end
 
-
   # Calculate the window to wall ratio reduction factor
   #
   # @param multiplier [Float] multiplier of the wwr
@@ -6894,14 +6911,14 @@ class Standard
   # @param total_plenum_wall_m2 [Float] total sqaure meter of a plenum
   # @return [Float] reduction factor
   def model_get_wwr_reduction_ratio(multiplier,
-                              surface_wwr: 0.0,
-                              surface_dr: 0.0,
-                              wwr_building_type: 'All others',
-                              wwr_target: 0.0,
-                              total_wall_m2: 0.0,
-                              total_wall_with_fene_m2: 0.0,
-                              total_fene_m2: 0.0,
-                              total_plenum_wall_m2: 0.0)
+                                    surface_wwr: 0.0,
+                                    surface_dr: 0.0,
+                                    wwr_building_type: 'All others',
+                                    wwr_target: 0.0,
+                                    total_wall_m2: 0.0,
+                                    total_wall_with_fene_m2: 0.0,
+                                    total_fene_m2: 0.0,
+                                    total_plenum_wall_m2: 0.0)
     return 1.0 - multiplier
   end
 

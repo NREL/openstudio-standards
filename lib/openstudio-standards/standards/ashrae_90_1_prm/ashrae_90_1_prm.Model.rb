@@ -442,6 +442,9 @@ class ASHRAE901PRM < Standard
             # Store original boundary condition type
             org_surface_boundary_conditions[surf.name.to_s] = adjacent_surf
 
+            # Identify this surface as exterior
+            surface_category[surf] = 'ExteriorSurface'
+
             # Temporary change the surface's boundary condition to 'Outdoors' so it can be assigned a baseline construction
             surf.setOutsideBoundaryCondition('Outdoors')
             adjacent_surf.setOutsideBoundaryCondition('Outdoors')
@@ -769,6 +772,100 @@ class ASHRAE901PRM < Standard
       ext_lights_obj.setMultiplier(1)
       ext_lights_def = ext_lights_obj.exteriorLightsDefinition
       ext_lights_def.setDesignLevel(ext_ltg_pwr)
+    end
+  end
+
+  # Function to add baseline elevators based on user data
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  def model_add_prm_elevators(model)
+    # Load elevator data from userdata csv files
+    user_elevators = @standards_data.key?('userdata_electric_equipment') ? @standards_data['userdata_electric_equipment'] : nil
+    user_elevators.each do |user_elevator|
+      num_lifts = user_elevator['elevator_number_of_lifts'].to_i
+      next if num_lifts == 0
+
+      equip_name = user_elevator['name']
+      number_of_levels = user_elevator['elevator_number_of_stories'].to_i
+
+      elevator_weight_of_car = user_elevator['elevator_weight_of_car'].to_f
+      elevator_rated_load = user_elevator['elevator_rated_load'].to_f
+      elevator_speed_of_car = user_elevator['elevator_speed_of_car'].to_f
+      if number_of_levels < 5
+        # From Table G3.9.2 performance rating method baseline elevator motor
+        elevator_mech_eff = 0.58
+        elevator_counter_weight_of_car = 0.0
+        search_criteria = {
+          'template' => template,
+          'type' => 'Hydraulic'
+        }
+      else
+        # From Table G3.9.2 performance rating method baseline elevator motor
+        elevator_mech_eff = 0.64
+        # Determine the elevator counterweight
+        if user_elevator['elevator_counter_weight_of_car'].nil?
+          # When the proposed design counterweight is not specified
+          # it is determined as per Table G3.9.2
+          elevator_counter_weight_of_car = elevator_weight_of_car + 0.4 * elevator_rated_load
+        else
+          elevator_counter_weight_of_car = user_elevator['elevator_counter_weight_of_car'].to_f
+        end
+        search_criteria = {
+          'template' => template,
+          'type' => 'Any'
+        }
+      end
+
+      elevator_motor_bhp = (elevator_weight_of_car + elevator_rated_load - elevator_counter_weight_of_car) * elevator_speed_of_car / (33000 * elevator_mech_eff)
+
+      # Lookup the minimum motor efficiency
+      elevator_motor_eff = standards_data['motors']
+      motor_properties = model_find_object(elevator_motor_eff, search_criteria, nil, nil, nil, nil, elevator_motor_bhp)
+      if motor_properties.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.elevator', "For #{equip_name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
+        return false
+      end
+
+      nominal_hp = motor_properties['maximum_capacity'].to_f.round(1)
+      # Round to nearest whole HP for niceness
+      if nominal_hp >= 2
+        nominal_hp = nominal_hp.round
+      end
+
+      # Get the efficiency based on the nominal horsepower
+      # Add 0.01 hp to avoid search errors.
+      motor_properties = model_find_object(elevator_motor_eff, search_criteria, nil, nil, nil, nil, nominal_hp + 0.01)
+      if motor_properties.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.model', "For #{equip_name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
+        return false
+      end
+      motor_eff = motor_properties['nominal_full_load_efficiency'].to_f
+      elevator_power = num_lifts * elevator_motor_bhp * 746 / motor_eff
+
+      # Set elevator power to either regular electric equipment object or
+      # exterior fuel equipment
+      if model.getElectricEquipmentByName(equip_name).is_initialized
+        model.getElectricEquipmentByName(equip_name).get.electricEquipmentDefinition.setDesignLevel(elevator_power)
+        elevator_space = model.getElectricEquipmentByName(equip_name).get.space.get
+      end
+      if model.getExteriorFuelEquipmentByName(equip_name).is_initialized
+        model.getExteriorFuelEquipmentByName(equip_name).exteriorFuelEquipmentDefinition.setDesignLevel(elevator_power)
+        elevator_space = model.getElectricEquipmentByName(equip_name).get.space.get
+      end
+
+      # Add ventilation and lighting process loads if modeled in the proposed model
+      misc_elevator_process_loads = 0.0
+      misc_elevator_process_loads += user_elevator['elevator_ventilation_cfm'].to_f * 0.33
+      misc_elevator_process_loads += user_elevator['elevator_area_ft2'].to_f * 3.14
+      if misc_elevator_process_loads > 0
+        misc_elevator_process_loads_def = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+        misc_elevator_process_loads_def.setName("#{equip_name} - Misc Process Loads - Def")
+        misc_elevator_process_loads_def.setDesignLevel(misc_elevator_process_loads)
+        misc_elevator_process_loads = OpenStudio::Model::ElectricEquipment.new(misc_elevator_process_loads_def)
+        misc_elevator_process_loads.setName("#{equip_name} - Misc Process Loads")
+        misc_elevator_process_loads.setEndUseSubcategory('Elevators')
+        misc_elevator_process_loads.setSchedule(model.alwaysOnDiscreteSchedule)
+        misc_elevator_process_loads.setSpace(elevator_space)
+      end
     end
   end
 
@@ -1401,8 +1498,9 @@ class ASHRAE901PRM < Standard
                 end
               end
             end
-            # Fan power credits
+            # Fan power credits, exhaust air energy recovery
             user_airloop.keys.each do |info_key|
+              # Fan power credits
               if info_key.include?('fan_power_credit')
                 if !user_airloop[info_key].to_s.empty?
                   if info_key.include?('has_')
@@ -1425,6 +1523,14 @@ class ASHRAE901PRM < Standard
                         thermal_zone.additionalProperties.setFeature(info_key, user_airloop[info_key])
                       end
                     end
+                  end
+                end
+              end
+              # Exhaust air energy recovery
+              if info_key.include?('exhaust_energy_recovery_exception') && !user_airloop[info_key].to_s.empty?
+                if user_airloop[info_key].downcase == 'yes'
+                  air_loop.thermalZones.each do |thermal_zone|
+                    thermal_zone.additionalProperties.setFeature(info_key, 'yes')
                   end
                 end
               end
@@ -2047,7 +2153,7 @@ class ASHRAE901PRM < Standard
     # 90.1 PRM routine requires
     return true
   end
-  
+
   # For 2019, it is required to adjusted wwr based on building categories for all other types
   #
   # @param bat [String] building category
@@ -2088,14 +2194,14 @@ class ASHRAE901PRM < Standard
   # @param total_fene_m2 [Float] total fenestration area
   # @return [Float] reduction factor
   def model_get_wwr_reduction_ratio(multiplier,
-                              surface_wwr: 0.0,
-                              surface_dr: 0.0,
-                              wwr_building_type: 'All others',
-                              wwr_target: nil,
-                              total_wall_m2: 0.0, # prevent 0.0 division
-                              total_wall_with_fene_m2: 0.0,
-                              total_fene_m2: 0.0,
-                              total_plenum_wall_m2: 0.0)
+                                    surface_wwr: 0.0,
+                                    surface_dr: 0.0,
+                                    wwr_building_type: 'All others',
+                                    wwr_target: nil,
+                                    total_wall_m2: 0.0, # prevent 0.0 division
+                                    total_wall_with_fene_m2: 0.0,
+                                    total_fene_m2: 0.0,
+                                    total_plenum_wall_m2: 0.0)
 
     if multiplier < 1.0
       # Case when reduction is required
@@ -2909,7 +3015,6 @@ class ASHRAE901PRM < Standard
   # @param model
   # @return [Bool] true if successful, false if not
   def model_refine_size_dependent_values(model, sizing_run_dir)
- 
     # Final sizing run before refining size-dependent values
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR3") == false
       return false

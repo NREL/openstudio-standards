@@ -649,6 +649,62 @@ class AppendixGPRMTests < Minitest::Test
   end
  
   #
+  # testing for exhaust air energy recovery requirement: general requirement and one exception
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  #
+  def check_exhaust_air_energy(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+        hxs = model.getHeatExchangerAirToAirSensibleAndLatents
+        if hxs.length > 0
+          assert(false, "The baseline model for #{building_type}-#{template}-#{climate_zone} should not contain ERVs.") unless user_data_dir == 'userdata_default_test'
+          hxs.each do |hx|
+            if climate_zone.include?('4A')
+              assert(hx.sensibleEffectivenessat100HeatingAirFlow.round(2) == 0.67, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.sensibleEffectivenessat100CoolingAirFlow.round(2) == 0.66, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.latentEffectivenessat75HeatingAirFlow.round(2) == 0.50, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.latentEffectivenessat75CoolingAirFlow.round(2) == 0.45, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+            elsif climate_zone.include?('8A')
+              assert(hx.sensibleEffectivenessat100HeatingAirFlow.round(2) == 0.50, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.sensibleEffectivenessat100CoolingAirFlow.round(2) == 0.50, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.latentEffectivenessat75HeatingAirFlow.round(2) == 0.0, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+              assert(hx.latentEffectivenessat75CoolingAirFlow.round(2) == 0.0, "The baseline model for #{building_type}-#{template} does not have the correct effectiveness values.")
+            end
+          end
+        else
+          assert(false, "The baseline model for #{building_type}-#{template}-#{climate_zone} should contain ERVs.") unless user_data_dir == 'userdata_erv_except_01'
+        end
+    end
+  end
+
+  #
+  # testing baseline elevator implementation
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  #
+  def check_elevators(prototypes_base)
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+
+      if building_type == 'MediumOffice'
+        if user_data_dir.include?('hydraulic')
+          elevators = model.getElectricEquipmentByName('2 Elevator Lift Motors').get.electricEquipmentDefinition
+          elevators_power = elevators.designLevel.get.round(1)
+          assert(elevators_power == 37976.6, "The baseline model elevator power for #{building_type}-#{template}-#{climate_zone} is incorrect, it was  #{elevators_power} instead of 37976.6.")
+          elevators_process_loads = model.getElectricEquipmentByName('2 Elevator Lift Motors - Misc Process Loads').get.electricEquipmentDefinition
+          elevators_process_loads_power = elevators_process_loads.designLevel.get.round(1)
+          assert(elevators_process_loads_power == 408.5, "The baseline model elevator process loads power for #{building_type}-#{template}-#{climate_zone} is incorrect, it was  #{elevators_power} instead of 408.5.")
+        else
+          elevators = model.getElectricEquipmentByName('2 Elevator Lift Motors').get.electricEquipmentDefinition
+          elevators_power = elevators.designLevel.get.round(1)
+          assert(elevators_power == 8524.6, "The baseline model elevator power for #{building_type}-#{template}-#{climate_zone} is incorrect, it was  #{elevators_power} instead of 8524.6.")
+        end
+      end
+    end
+  end
+
+  #
   # testing method for PRM 2019 baseline HVAC sizing, specific testing objectives are commented inline
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -2465,6 +2521,22 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # Multiply the zone outdoor air flow rate per area
+  #
+  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param arguments [Array] Multiplier
+  def mult_oa_per_area(model, arguments)
+    # Get multiplier
+    mult = arguments[0]
+
+    # Multiply the outdoor air flow rate per area
+    model.getDesignSpecificationOutdoorAirs.each do |dsn_oa|
+      dsn_oa.setOutdoorAirFlowperFloorArea(dsn_oa.outdoorAirFlowperFloorArea * mult)
+    end
+
+    return model
+  end
+
   # Add a AirLoopHVACDedicatedOutdoorAirSystem in the model
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
@@ -3311,7 +3383,7 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_base.each do |prototype, model_baseline|
       building_type, template, climate_zone, user_data_dir, mod = prototype
       # Check if the model include PipeIndoor or PipeOutdoor objects
-      model_baseline.getPlantLoops.each do |plant_loop| 
+      model_baseline.getPlantLoops.each do |plant_loop|
         existing_pipe_insulation = ''
         a = plant_loop.supplyComponents
         b = plant_loop.demandComponents
@@ -3323,6 +3395,27 @@ class AppendixGPRMTests < Minitest::Test
           existing_pipe_insulation = existing_pipe_insulation
         end
         assert(existing_pipe_insulation.empty?, "The baseline model for the #{building_type}-#{template} in #{climate_zone} has no pipe insulation.")
+      end
+    end
+  end
+
+  def check_num_systems_in_zone(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+      model_baseline.getAirLoopHVACs.each do |air_loop|
+        if air_loop.name.get.downcase == 'core_retail'
+          # Normally core retail is > 65 kbtuh
+          # With number_of_systems = 30, it will be < 65 kbtuh
+          air_loop.supplyComponents.each do |sc|
+            # CoilCoolingDXSingleSpeed
+            if sc.to_CoilCoolingDXSingleSpeed.is_initialized
+              coil = sc.to_CoilCoolingDXSingleSpeed.get
+              cop = coil.ratedCOP.to_f
+              diff = (cop - 3.0).abs
+              assert(diff < 0.1,"Cooling COP for the #{building_type}, #{template}, #{climate_zone} model is incorrect. Expected: 3.0, got: #{cop}.")
+            end
+          end
+        end
       end
     end
   end
@@ -3518,4 +3611,18 @@ class AppendixGPRMTests < Minitest::Test
     check_nightcycle_exception(model_hash['baseline'])
   end
 
+  def test_num_systems_in_zone
+    model_hash = prm_test_helper('number_of_systems_in_zone', require_prototype=false, require_baseline=true)
+    check_num_systems_in_zone(model_hash['baseline'])
+  end
+
+  def test_exhaust_air_energy
+    model_hash = prm_test_helper('exhaust_air_energy', require_prototype=false, require_baseline=true)
+    check_exhaust_air_energy(model_hash['baseline'])
+  end
+
+  def test_elevators
+    model_hash = prm_test_helper('elevators', require_prototype=false, require_baseline=true)
+    check_elevators(model_hash['baseline'])
+  end
 end

@@ -2931,7 +2931,6 @@ class Standard
     return overlap_area
   end
 
-
   # A function to check whether a space is a return / supply plenum.
   # This function only works on spaces used as a AirLoopSupplyPlenum or AirLoopReturnPlenum
   # @param [OpenStudio::Model::Space] space

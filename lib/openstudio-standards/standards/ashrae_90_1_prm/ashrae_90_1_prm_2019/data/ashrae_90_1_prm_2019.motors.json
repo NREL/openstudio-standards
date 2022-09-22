@@ -199,6 +199,66 @@
       "maximum_capacity": 9999.0,
       "nominal_full_load_efficiency": 0.95,
       "notes": "From 90.1-2019 Table G3.9.1, applied to all number of poles, type, and Synchronous Speed"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "number_of_poles": "Any",
+      "type": "Hydraulic",
+      "synchronous_speed": "Any",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9.999,
+      "nominal_full_load_efficiency": 0.72,
+      "notes": "From 90.1-2019 Table G3.9.3, hydraulic elevator motor efficiency"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "number_of_poles": "Any",
+      "type": "Hydraulic",
+      "synchronous_speed": "Any",
+      "minimum_capacity": 10.0,
+      "maximum_capacity": 19.999,
+      "nominal_full_load_efficiency": 0.75,
+      "notes": "From 90.1-2019 Table G3.9.3, hydraulic elevator motor efficiency"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "number_of_poles": "Any",
+      "type": "Hydraulic",
+      "synchronous_speed": "Any",
+      "minimum_capacity": 20.0,
+      "maximum_capacity": 29.999,
+      "nominal_full_load_efficiency": 0.78,
+      "notes": "From 90.1-2019 Table G3.9.3, hydraulic elevator motor efficiency"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "number_of_poles": "Any",
+      "type": "Hydraulic",
+      "synchronous_speed": "Any",
+      "minimum_capacity": 30.0,
+      "maximum_capacity": 39.999,
+      "nominal_full_load_efficiency": 0.78,
+      "notes": "From 90.1-2019 Table G3.9.3, hydraulic elevator motor efficiency"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "number_of_poles": "Any",
+      "type": "Hydraulic",
+      "synchronous_speed": "Any",
+      "minimum_capacity": 40.0,
+      "maximum_capacity": 99.999,
+      "nominal_full_load_efficiency": 0.80,
+      "notes": "From 90.1-2019 Table G3.9.3, hydraulic elevator motor efficiency"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "number_of_poles": "Any",
+      "type": "Hydraulic",
+      "synchronous_speed": "Any",
+      "minimum_capacity": 100.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.80,
+      "notes": "From 90.1-2019 Table G3.9.3, hydraulic elevator motor efficiency"
     }
   ]
 }

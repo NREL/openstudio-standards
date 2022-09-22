@@ -4450,7 +4450,7 @@ class Standard
   # @param model_occ_hr_end [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Ending hour of building occupancy.
   # @param control_strategy [String] name of control strategy.  Options are 'proportional_control' and 'none'.
-  #   If control strategy is 'proportional_control', the method will apply the CBE radiant control sequences 
+  #   If control strategy is 'proportional_control', the method will apply the CBE radiant control sequences
   #   detailed in Raftery et al. (2017), “A new control strategy for high thermal mass radiant systems”.
   #   Otherwise no control strategy will be applied and the radiant system will assume the EnergyPlus default controls.
   # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.

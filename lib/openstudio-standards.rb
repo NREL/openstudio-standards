@@ -283,9 +283,11 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ChillerElectricEIR"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoolingTower"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoolingTowerVariableSpeed"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.HeatExchangerSensLat"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.PlanarSurface"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ThermalZone"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.SpaceType"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.hvac_systems"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Surface"
 
   # 90.1-PRM-2019

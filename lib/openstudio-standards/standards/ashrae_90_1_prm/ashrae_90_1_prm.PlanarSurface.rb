@@ -124,31 +124,19 @@ class ASHRAE901PRM < Standard
       end
     # Skylights
     elsif surf_type == 'Skylight'
-      stds_type = standards_info.fenestrationType
-      if stds_type.is_initialized
-        stds_type = stds_type.get
-        case stds_type
-        when 'Glass Skylight with Curb'
-          stds_type = 'Glass with Curb'
-        when 'Plastic Skylight with Curb'
-          stds_type = 'Plastic with Curb'
-        when 'Plastic Skylight without Curb', 'Glass Skylight without Curb'
-          stds_type = 'Without Curb'
-        else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "The standards fenestration type #{stds_type} cannot be used on #{surf_type} in #{planar_surface.name}.  This surface will not have the standard applied.")
-          return previous_construction_map
-        end
-      else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards fenestration type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
-        return previous_construction_map
-      end
+      # There is only one type for AppendixG stable baseline
+      stds_type = 'Any Skylight'
     # All other surface types
     else
       stds_type = standards_info.standardsConstructionType
       if stds_type.is_initialized
         stds_type = stds_type.get
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards construction type for #{planar_surface.name}.  This surface will not have the standard applied.")
+        if planar_surface.outsideBoundaryCondition == 'Surface' && surface_category == 'NA'
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlanarSurface', "Standards construction is not needed and not applied for interior wall: #{planar_surface.name}.")
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards construction type for #{planar_surface.name}.  This surface will not have the standard applied.")
+        end
         return previous_construction_map
       end
     end

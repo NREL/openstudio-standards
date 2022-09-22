@@ -1,5 +1,4 @@
 class ASHRAE901PRM < Standard
-
   # Adjust the fenestration area to the values specified by the reduction value in a surface
   #
   # @param surface [OpenStudio::Model:Surface] openstudio surface object
@@ -52,5 +51,4 @@ class ASHRAE901PRM < Standard
       end
     end
   end
-
 end
