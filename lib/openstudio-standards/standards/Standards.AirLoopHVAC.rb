@@ -3832,7 +3832,7 @@ class Standard
     return simple_transfer_air
   end
 
-  # Determine if the air loop has a return air plenum
+  # Get the return air plenum zone object for an air loop, if it exists
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] OpenStudio AirLoopHVAC object
   # @return [OpenStudio::Model::ThermalZone] OpenStudio thermal zone object of the return air plenum zone

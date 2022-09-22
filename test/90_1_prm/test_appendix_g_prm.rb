@@ -235,34 +235,6 @@ class AppendixGPRMTests < Minitest::Test
     return baseline_prototypes
   end
 
-  # Write out a SQL query to retrieve simulation outputs
-  # from the TabularDataWithStrings table in the SQL
-  # database produced by OpenStudio/EnergyPlus after
-  # running a simulation.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param report_name [String] Name of the report as defined in the HTM simulation output file
-  # @param table_name [String] Name of the table as defined in the HTM simulation output file
-  # @param row_name [String] Name of the row as defined in the HTM simulation output file
-  # @param column_name [String] Name of the column as defined in the HTM simulation output file
-  # @param units [String] Unit of the value to be retrieved
-  #
-  # @return [String] Result of the query
-  def run_query_tabulardatawithstrings(model, report_name, table_name, row_name, column_name, units = '*')
-    # Define the query
-    query = "Select Value FROM TabularDataWithStrings WHERE
-    ReportName = '#{report_name}' AND
-    TableName = '#{table_name}' AND
-    RowName = '#{row_name}' AND
-    ColumnName = '#{column_name}' AND
-    Units = '#{units}'"
-    # Run the query if the expected output is a string
-    return model.sqlFile.get.execAndReturnFirstString(query).get if units.empty?
-
-    # Run the query if the expected output is a double
-    return model.sqlFile.get.execAndReturnFirstDouble(query).get
-  end
-
   # Identify individual prototypes to be created
   #
   # @param tests [Array] Names of the tests to be performed
@@ -2491,15 +2463,6 @@ class AppendixGPRMTests < Minitest::Test
 
       assert(standard.model_get_unmet_load_hours(model) < 300, "The #{building_type} prototype building model has more than 300 unmet load hours.")
     end
-  end
-
-  # Placeholder method to indicate that we want to check unmet
-  # load hours
-  #
-  # @param model [OpenStudio::model::Model] OpenStudio model object
-  # @param arguments [Array] Not used
-  def unmet_load_hours(model, arguments)
-    return model
   end
 
   # Add a AirLoopHVACDedicatedOutdoorAirSystem in the model

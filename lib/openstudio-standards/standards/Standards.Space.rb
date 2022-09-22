@@ -788,7 +788,7 @@ class Standard
 
   # Removes daylighting controls from model
   #
-  # @param model [OpenStudio::Model::Space] OpenStudio space object
+  # @param space [OpenStudio::Model::Space] OpenStudio space object
   #
   # @return [Boolean] Returns true if a sizing run is required
   def space_remove_daylighting_controls(space)

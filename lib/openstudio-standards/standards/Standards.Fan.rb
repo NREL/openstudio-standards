@@ -75,6 +75,8 @@ module Fan
 
   # Determines the design fan flow (m3/s)
   #
+  # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
+  #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
   # @return [Double] design fan flow
   def fan_design_air_flow(fan)
     # Get design supply air flow rate (whether autosized or hard-sized)

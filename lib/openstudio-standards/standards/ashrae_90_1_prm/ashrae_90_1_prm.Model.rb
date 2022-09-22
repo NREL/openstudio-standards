@@ -353,7 +353,7 @@ class ASHRAE901PRM < Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Bool] returns true if successful, false if not
-  def model_apply_standard_constructions(model, climate_zone, wwr_building_type = nil, wwr_info = {})
+  def model_apply_standard_constructions(model, climate_zone, wwr_building_type: nil, wwr_info: {})
     types_to_modify = []
 
     # Possible boundary conditions are

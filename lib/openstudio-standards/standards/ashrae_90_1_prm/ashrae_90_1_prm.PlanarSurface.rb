@@ -40,19 +40,19 @@ class ASHRAE901PRM < Standard
       space_type = space.spaceType.get
       if space.defaultConstructionSet.is_initialized
         cons_set = space.defaultConstructionSet.get
-        construction = get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
+        construction = get_default_surface_cons_from_surface_type(surface_category, surface_type, cons_set)
       end
       if construction.nil? && space_type.defaultConstructionSet.is_initialized
         cons_set = space_type.defaultConstructionSet.get
-        construction = get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
+        construction = get_default_surface_cons_from_surface_type(surface_category, surface_type, cons_set)
       end
       if construction.nil? && space.buildingStory.get.defaultConstructionSet.is_initialized
         cons_set = space.buildingStory.get.defaultConstructionSet.get
-        construction = get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
+        construction = get_default_surface_cons_from_surface_type(surface_category, surface_type, cons_set)
       end
       if construction.nil? && space.model.building.get.defaultConstructionSet.is_initialized
         cons_set = space.model.building.get.defaultConstructionSet.get
-        construction = get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
+        construction = get_default_surface_cons_from_surface_type(surface_category, surface_type, cons_set)
       end
 
       return previous_construction_map if construction.nil?

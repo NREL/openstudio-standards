@@ -40,19 +40,19 @@ class Standard
       space_type = space.spaceType.get
       if space.defaultConstructionSet.is_initialized
         cons_set = space.defaultConstructionSet.get
-        construction = get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
+        construction = get_default_surface_cons_from_surface_type(surface_category, surface_type, cons_set)
       end
       if construction.nil? && space_type.defaultConstructionSet.is_initialized
         cons_set = space_type.defaultConstructionSet.get
-        construction = get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
+        construction = get_default_surface_cons_from_surface_type(surface_category, surface_type, cons_set)
       end
       if construction.nil? && space.buildingStory.get.defaultConstructionSet.is_initialized
         cons_set = space.buildingStory.get.defaultConstructionSet.get
-        construction = get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
+        construction = get_default_surface_cons_from_surface_type(surface_category, surface_type, cons_set)
       end
       if construction.nil? && space.model.building.get.defaultConstructionSet.is_initialized
         cons_set = space.model.building.get.defaultConstructionSet.get
-        construction = get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
+        construction = get_default_surface_cons_from_surface_type(surface_category, surface_type, cons_set)
       end
 
       return previous_construction_map if construction.nil?
@@ -205,7 +205,7 @@ class Standard
   # @param: surface_type [string] SubSurfaceType: this is an OpenStudio string
   # @param: cons_set [object] DefaultSubSurfaceConstructions object
   # @return: [object] Construction object
-  def get_default_surface_cons_from_type(surface_category, surface_type, cons_set)
+  def get_default_surface_cons_from_surface_type(surface_category, surface_type, cons_set)
     # Get DefaultSurfaceContstructions or DefaultSubSurfaceConstructions object
     if surface_category == 'ExteriorSurface'
       cons_list = cons_set.defaultExteriorSurfaceConstructions.get

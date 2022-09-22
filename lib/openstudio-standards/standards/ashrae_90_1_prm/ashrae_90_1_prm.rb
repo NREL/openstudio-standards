@@ -112,6 +112,11 @@ class ASHRAE901PRM < Standard
   end
 
   # Perform user data validation
+
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+
+  # @return [Boolean] true if data is valid, false if error found
   def user_data_validation(object_name, user_data)
     # 1. Check user_spacetype and user_space LPD total % = 1.0
     case object_name
@@ -124,6 +129,12 @@ class ASHRAE901PRM < Standard
     end
   end
 
+  # Check for incorrect data in electric equipment user data
+
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+
+  # @return [Boolean] true if data is valid, false if error found
   def check_userdata_electric_equipment(object_name, user_data)
     userdata_valid = true
     user_data.each do |electric_row|
@@ -199,6 +210,12 @@ class ASHRAE901PRM < Standard
     return userdata_valid
   end
 
+  # Check for incorrect data in space and spacetype user data
+
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+
+  # @return [Boolean] true if data is valid, false if error found
   def check_userdata_space_and_spacetype(object_name, user_data)
     userdata_valid = true
     user_data.each do |lpd_row|

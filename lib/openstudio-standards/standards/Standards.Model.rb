@@ -1104,6 +1104,7 @@ class Standard
   # Array will include extra 24 values for leap year
   # Array will also include extra 24 values at end for holiday day type
   # @author: Doug Maddox, PNNL
+  # @TODO: consider moving this to Standards.Schedule.rb
   # @param: model [Object]
   # @param: fan_schedule [Object]
   # @return: [Array<String>] annual hourly values from schedule
@@ -3291,7 +3292,7 @@ class Standard
   # @param wwr_info [Hash] @Todo - check what this is used for
   # @param surface [OpenStudio::Model::Surface] OpenStudio surface object, only used for surface specific construction, e.g F/C-factor constructions
   # @return [OpenStudio::Model::Construction] construction object
-  def model_find_and_add_construction(model, climate_zone_set, intended_surface_type, standards_construction_type, building_category, wwr_building_type = nil, wwr_info = {}, surface = nil)
+  def model_find_and_add_construction(model, climate_zone_set, intended_surface_type, standards_construction_type, building_category, wwr_building_type: nil, wwr_info: {}, surface: nil)
     # Get the construction properties,
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
@@ -4310,7 +4311,7 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Bool] returns true if successful, false if not
-  def model_apply_standard_constructions(model, climate_zone, wwr_building_type = nil, wwr_info = {})
+  def model_apply_standard_constructions(model, climate_zone, wwr_building_type: nil, wwr_info: {})
     types_to_modify = []
 
     # Possible boundary conditions are
@@ -4457,7 +4458,7 @@ class Standard
   #   Currently just using existing window geometry, and shrinking as necessary if WWR is above limit.
   # @todo support semiheated spaces as a separate WWR category
   # @todo add window frame area to calculation of WWR
-  def model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type = nil)
+  def model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type: nil)
     # Define a Hash that will contain wall and window area for all
     # building area types included in the model
     # bat = building area type
@@ -6105,46 +6106,6 @@ class Standard
     return parametric_schedules
   end
 
-  # Get the total unmet load hours during occupancy of a model that has been simulated
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Float] returns the number of total unmet load hours during occupancy in a simulated model
-  def model_get_unmet_load_hours(model)
-    result = OpenStudio::OptionalDouble.new
-    sql = model.sqlFile
-    if sql.is_initialized
-      sql = sql.get
-      query = "SELECT Value
-              FROM tabulardatawithstrings
-              WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
-              AND ReportForString='Entire Facility'
-              AND TableName='Comfort and Setpoint Not Met Summary'
-              AND ColumnName='Facility'
-              AND RowName='Time Setpoint Not Met During Occupied Heating'
-              AND Units='Hours'"
-      val = sql.execAndReturnFirstDouble(query)
-      if val.is_initialized
-        result = OpenStudio::OptionalDouble.new(val.get).to_f
-      end
-      query = "SELECT Value
-              FROM tabulardatawithstrings
-              WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
-              AND ReportForString='Entire Facility'
-              AND TableName='Comfort and Setpoint Not Met Summary'
-              AND ColumnName='Facility'
-              AND RowName='Time Setpoint Not Met During Occupied Cooling'
-              AND Units='Hours'"
-      val = sql.execAndReturnFirstDouble(query)
-      if val.is_initialized
-        result += OpenStudio::OptionalDouble.new(val.get).to_f
-      end
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has no sql file containing results, cannot lookup data.')
-    end
-
-    return result
-  end
-
   private
 
   # This function checks whether it is required to adjust the window to wall ratio based on the model WWR and wwr limit.
@@ -6861,6 +6822,7 @@ class Standard
 
   # Utility function that returns the min and max value in a design day schedule.
   #
+  # TODO: move this to Standards.Schedule.rb
   # @param schedule [OpenStudio::Model::Schedule] can be ScheduleCompact, ScheduleRuleset, ScheduleConstant
   # @param type [String] 'heating' for winter design day, 'cooling' for summer design day
   # @return [Hash] Hash has two keys, min and max. if failed, return 999.9 for min and max.

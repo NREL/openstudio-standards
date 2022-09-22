@@ -2699,7 +2699,6 @@ class Standard
 
       # create a diffuser and attach the zone/diffuser pair to the air loop
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
-      # DEM: might need to change to: diffuser = OpenStudio::Model::AirTerminalSingleDuctConstantVolumeNoReheat.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{air_loop.name} Diffuser")
       air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
       air_loops << air_loop
@@ -2828,21 +2827,11 @@ class Standard
 
       # create cooling coil
       case cooling_type
-      when 'AirCooled'
-        clg_coil = OpenStudio::Model::CoilCoolingDXVariableSpeed.new(model)
-        clg_coil.setName("#{air_loop.name} Var spd DX AC Clg Coil")
-        clg_coil.setBasinHeaterCapacity(10.0)
-        clg_coil.setBasinHeaterSetpointTemperature(2.0)
-        # first speed level
-        clg_spd_1 = OpenStudio::Model::CoilCoolingDXVariableSpeedSpeedData.new(model)
-        clg_coil.addSpeed(clg_spd_1)
-        clg_coil.setNominalSpeedLevel(1)
       when 'WaterCooled'
         clg_coil = create_coil_cooling_water(model,
                                              chilled_water_loop,
                                              name: "#{air_loop.name} Clg Coil")
-      else
-        # same as air-cooled
+      else # 'AirCooled'
         clg_coil = OpenStudio::Model::CoilCoolingDXVariableSpeed.new(model)
         clg_coil.setName("#{air_loop.name} Var spd DX AC Clg Coil")
         clg_coil.setBasinHeaterCapacity(10.0)
@@ -2866,7 +2855,6 @@ class Standard
       # The following control strategy can lead to "Developer Error: Component sizing incomplete."
       # EnergyPlus severe (not fatal) errors if there is no heating design load
       unitary_system.setControlType('SingleZoneVAV')
-      unitary_system.maximumSupplyAirTemperature
       unitary_system.setControllingZoneorThermostatLocation(zone)
       unitary_system.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       unitary_system.setFanPlacement('BlowThrough')
