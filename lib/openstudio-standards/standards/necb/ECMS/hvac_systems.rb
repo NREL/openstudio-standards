@@ -2830,15 +2830,18 @@ class ECMS
           capacity_w = coil_cooling_dx_multi_speed_find_capacity(coil)
         end
         coil.setName(coil_name)
+raise("test1:#{coil_name},#{capacity_w}")
         cop_package = model_find_object(@standards_data['tables']['unitary_cop_ecm'], search_criteria, capacity_w)
-        raise "Cannot not find #{unitary_cop_ecm} in the ECMS unitary_acs.json file.  Please check that the name is correctly spelled in the ECMS class unitary_acs.json file and in the code calling (directly or through another method) the ECMS class modify_unitary_eff method." if cop_package.empty?
+        raise "Cannot find #{unitary_cop_ecm} in the ECMS unitary_acs.json file.  Please check that the name is correctly spelled in the ECMS class unitary_acs.json file and in the code calling (directly or through another method) the ECMS class modify_unitary_eff method." if cop_package.empty?
 
         ecm_name = unitary_cop_copy
         unitary_cop = {
           'name' => ecm_name,
+          'maximum_capacity' => cop_package['maximum_capacity'],
           'minimum_energy_efficiency_ratio' => cop_package['minimum_energy_efficiency_ratio'],
           'minimum_seasonal_energy_efficiency_ratio' => cop_package['minimum_seasonal_energy_efficiency_ratio'],
           'minimum_full_load_efficiency' => cop_package['minimum_full_load_efficiency'],
+          'ref_flow_rate_m3_per_sec' => cop_package['ref_flow_rate_m3_per_sec'],
           'cool_cap_ft' => cop_package['cool_cap_ft'],
           'cool_cap_fflow' => cop_package['cool_cap_fflow'],
           'cool_eir_ft' => cop_package['cool_eir_ft'],
@@ -2847,7 +2850,8 @@ class ECMS
         }
       end
       next if unitary_cop['minimum_energy_efficiency_ratio'].nil? && unitary_cop['minimum_seasonal_energy_efficiency_ratio'].nil? && unitary_cop['cool_cap_ft'].nil? &&
-              unitary_cop['cool_cap_fflow'].nil? && unitary_cop['cool_eir_ft'].nil? && unitary_cop['cool_eir_fflow'].nil? && unitary_cop['cool_plf_fplr'].nil?
+              unitary_cop['cool_cap_fflow'].nil? && unitary_cop['cool_eir_ft'].nil? && unitary_cop['cool_eir_fflow'].nil? && unitary_cop['cool_plf_fplr'].nil? && 
+              unitary_cop['ref_flow_rate_m3_per_sec'].nil?
 
       # If the dx coil is on an air loop then update its cop and the performance curves when these are specified in the ecm data
       if (coil_type == 'SingleSpeed' && coil.airLoopHVAC.is_initialized && (!coil.name.to_s.include? "_ASHP")) ||
@@ -2875,6 +2879,8 @@ class ECMS
         cool_plf_fplr = nil
         cool_plf_fplr = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_plf_fplr'] }[0] if unitary_cop['cool_plf_fplr']
         cool_plf_fplr = model_add_curve(model, unitary_cop['cool_plf_fplr']) if cool_plf_fplr
+        rated_flow_rate = nil
+        rated_flow_rate = unitary_cop['ref_flow_rate_m3_per_sec'] * (capacity_w / unitary_cop['maximum_capacity']) if unitary_cop['ref_flow_rate_m3_per_sec'] 
         if coil_type == 'SingleSpeed'
           coil.setRatedCOP(cop) if cop
           coil.setTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft) if cool_cap_ft
@@ -2882,6 +2888,7 @@ class ECMS
           coil.setEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft) if cool_eir_ft
           coil.setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow) if cool_eir_fflow
           coil.setPartLoadFractionCorrelationCurve(cool_plf_fplr) if cool_plf_fplr
+          coil.setRatedAirFlowRate(rated_flow_rate) if rated_flow_rate
         elsif coil_type == 'MultiSpeed'
           coil.stages.sort.each do |stage|
             stage.setGrossRatedCoolingCOP(cop) if cop
