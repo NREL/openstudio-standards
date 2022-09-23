@@ -2830,7 +2830,6 @@ class ECMS
           capacity_w = coil_cooling_dx_multi_speed_find_capacity(coil)
         end
         coil.setName(coil_name)
-raise("test1:#{coil_name},#{capacity_w}")
         cop_package = model_find_object(@standards_data['tables']['unitary_cop_ecm'], search_criteria, capacity_w)
         raise "Cannot find #{unitary_cop_ecm} in the ECMS unitary_acs.json file.  Please check that the name is correctly spelled in the ECMS class unitary_acs.json file and in the code calling (directly or through another method) the ECMS class modify_unitary_eff method." if cop_package.empty?
 
