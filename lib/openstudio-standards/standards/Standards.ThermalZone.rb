@@ -1602,11 +1602,9 @@ class Standard
   # in all spaces in this zone.
   # @author Doug Maddox, PNNL
   # @return [Double] the design internal load, in W
-  def thermal_zone_peak_internal_load(model, thermal_zone)
+  def thermal_zone_peak_internal_load(model, thermal_zone, use_noncoincident_value: true)
     load_w = 0.0
     load_hrs_sum = Array.new(8760, 0)
-
-    use_noncoincident_value = true
 
     if !use_noncoincident_value
       # Get array of coincident internal gain

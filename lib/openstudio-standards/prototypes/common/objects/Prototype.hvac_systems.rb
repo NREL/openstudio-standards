@@ -227,31 +227,7 @@ class Standard
     end
 
     # chilled water loop sizing and controls
-    if dsgn_sup_wtr_temp.nil?
-      dsgn_sup_wtr_temp = 44.0
-      dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
-    else
-      dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
-    end
-    if dsgn_sup_wtr_temp_delt.nil?
-      dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(10.1, 'R', 'K').get
-    else
-      dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(dsgn_sup_wtr_temp_delt, 'R', 'K').get
-    end
-    chilled_water_loop.setMinimumLoopTemperature(1.0)
-    chilled_water_loop.setMaximumLoopTemperature(40.0)
-    sizing_plant = chilled_water_loop.sizingPlant
-    sizing_plant.setLoopType('Cooling')
-    sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
-    sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
-    chw_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                       dsgn_sup_wtr_temp_c,
-                                                       name = "#{chilled_water_loop.name} Temp - #{dsgn_sup_wtr_temp.round(0)}F")
-    chw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, chw_temp_sch)
-    chw_stpt_manager.setName("#{chilled_water_loop.name} Setpoint Manager")
-    chw_stpt_manager.addToNode(chilled_water_loop.supplyOutletNode)
-    # @todo Yixing check the CHW Setpoint from standards
-    # @todo Should be a OutdoorAirReset, see the changes I've made in Standards.PlantLoop.apply_prm_baseline_temperatures
+    chw_sizing_control(model, chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
 
     # create chilled water pumps
     if chw_pumping_type == 'const_pri'
@@ -269,28 +245,86 @@ class Standard
       pri_chw_pump.setPumpControlType('Intermittent')
       pri_chw_pump.addToNode(chilled_water_loop.supplyInletNode)
     elsif chw_pumping_type == 'const_pri_var_sec'
-      # primary chilled water pump
-      pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
-      pri_chw_pump.setName("#{chilled_water_loop.name} Primary Pump")
-      pri_chw_pump.setRatedPumpHead(OpenStudio.convert(15.0, 'ftH_{2}O', 'Pa').get)
-      pri_chw_pump.setMotorEfficiency(0.9)
-      pri_chw_pump.setPumpControlType('Intermittent')
-      pri_chw_pump.addToNode(chilled_water_loop.supplyInletNode)
-      # secondary chilled water pump
-      sec_chw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
-      sec_chw_pump.setName("#{chilled_water_loop.name} Secondary Pump")
-      sec_chw_pump.setRatedPumpHead(OpenStudio.convert(45.0, 'ftH_{2}O', 'Pa').get)
-      sec_chw_pump.setMotorEfficiency(0.9)
-      # curve makes it perform like variable speed pump
-      sec_chw_pump.setFractionofMotorInefficienciestoFluidStream(0)
-      sec_chw_pump.setCoefficient1ofthePartLoadPerformanceCurve(0)
-      sec_chw_pump.setCoefficient2ofthePartLoadPerformanceCurve(0.0205)
-      sec_chw_pump.setCoefficient3ofthePartLoadPerformanceCurve(0.4101)
-      sec_chw_pump.setCoefficient4ofthePartLoadPerformanceCurve(0.5753)
-      sec_chw_pump.setPumpControlType('Intermittent')
-      sec_chw_pump.addToNode(chilled_water_loop.demandInletNode)
-      # Change the chilled water loop to have a two-way common pipes
-      chilled_water_loop.setCommonPipeSimulation('CommonPipe')
+      pri_sec_config = plant_loop_set_chw_pri_sec_configuration(model)
+
+      if pri_sec_config == 'common_pipe'
+        # primary chilled water pump
+        pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+        pri_chw_pump.setName("#{chilled_water_loop.name} Primary Pump")
+        pri_chw_pump.setRatedPumpHead(OpenStudio.convert(15.0, 'ftH_{2}O', 'Pa').get)
+        pri_chw_pump.setMotorEfficiency(0.9)
+        pri_chw_pump.setPumpControlType('Intermittent')
+        pri_chw_pump.addToNode(chilled_water_loop.supplyInletNode)
+        # secondary chilled water pump
+        sec_chw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
+        sec_chw_pump.setName("#{chilled_water_loop.name} Secondary Pump")
+        sec_chw_pump.setRatedPumpHead(OpenStudio.convert(45.0, 'ftH_{2}O', 'Pa').get)
+        sec_chw_pump.setMotorEfficiency(0.9)
+        # curve makes it perform like variable speed pump
+        sec_chw_pump.setFractionofMotorInefficienciestoFluidStream(0)
+        sec_chw_pump.setCoefficient1ofthePartLoadPerformanceCurve(0)
+        sec_chw_pump.setCoefficient2ofthePartLoadPerformanceCurve(0.0205)
+        sec_chw_pump.setCoefficient3ofthePartLoadPerformanceCurve(0.4101)
+        sec_chw_pump.setCoefficient4ofthePartLoadPerformanceCurve(0.5753)
+        sec_chw_pump.setPumpControlType('Intermittent')
+        sec_chw_pump.addToNode(chilled_water_loop.demandInletNode)
+        # Change the chilled water loop to have a two-way common pipes
+        chilled_water_loop.setCommonPipeSimulation('CommonPipe')
+      elsif pri_sec_config == 'heat_exchanger'
+        # NOTE: PRECONDITIONING for `const_pri_var_sec` pump type is only applicable for PRM routine and only applies to System Type 7 and System Type 8
+        # See: model_add_prm_baseline_system under Model object.
+        # In this scenario, we will need to create a primary and secondary configuration:
+        # chilled_water_loop is the primary loop
+        # Primary: demand: heat exchanger, supply: chillers, name: Chilled Water Loop_Primary, additionalProperty: secondary_loop_name
+        # Secondary: demand: Coils, supply: heat exchanger, name: Chilled Water Loop, additionalProperty: is_secondary_loop
+        secondary_chilled_water_loop = OpenStudio::Model::PlantLoop.new(model)
+        secondary_loop_name = system_name.nil? ? 'Chilled Water Loop' : system_name
+        # Reset primary loop name
+        chilled_water_loop.setName("#{secondary_loop_name}_Primary")
+        secondary_chilled_water_loop.setName(secondary_loop_name)
+        chw_sizing_control(model, secondary_chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
+        chilled_water_loop.additionalProperties.setFeature('is_primary_loop', true)
+        secondary_chilled_water_loop.additionalProperties.setFeature('is_secondary_loop', true)
+        # primary chilled water pump
+        # Add Constant pump, in plant loop, the number of chiller adjustment will assign pump to each chiller
+        pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+        pri_chw_pump.setName("#{chilled_water_loop.name} Primary Pump")
+        # Will need to adjust the pump power after a sizing run
+        pri_chw_pump.setRatedPumpHead(OpenStudio.convert(15.0, 'ftH_{2}O', 'Pa').get / num_chillers)
+        pri_chw_pump.setMotorEfficiency(0.9)
+        pri_chw_pump.setPumpControlType('Intermittent')
+        # chiller_inlet_node = chiller.connectedObject(chiller.supplyInletPort).get.to_Node.get
+        pri_chw_pump.addToNode(chilled_water_loop.supplyInletNode)
+
+        # secondary chilled water pump
+        sec_chw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
+        sec_chw_pump.setName("#{secondary_chilled_water_loop.name} Pump")
+        sec_chw_pump.setRatedPumpHead(OpenStudio.convert(45.0, 'ftH_{2}O', 'Pa').get)
+        sec_chw_pump.setMotorEfficiency(0.9)
+        # curve makes it perform like variable speed pump
+        sec_chw_pump.setFractionofMotorInefficienciestoFluidStream(0)
+        sec_chw_pump.setCoefficient1ofthePartLoadPerformanceCurve(0)
+        sec_chw_pump.setCoefficient2ofthePartLoadPerformanceCurve(0.0205)
+        sec_chw_pump.setCoefficient3ofthePartLoadPerformanceCurve(0.4101)
+        sec_chw_pump.setCoefficient4ofthePartLoadPerformanceCurve(0.5753)
+        sec_chw_pump.setPumpControlType('Intermittent')
+        sec_chw_pump.addToNode(secondary_chilled_water_loop.demandInletNode)
+
+        # Add HX to connect secondary and primary loop
+        heat_exchanger = OpenStudio::Model::HeatExchangerFluidToFluid.new(model)
+        secondary_chilled_water_loop.addSupplyBranchForComponent(heat_exchanger)
+        chilled_water_loop.addDemandBranchForComponent(heat_exchanger)
+
+        # Clean up connections
+        hx_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+        hx_bypass_pipe.setName("#{secondary_chilled_water_loop.name} HX Bypass")
+        secondary_chilled_water_loop.addSupplyBranchForComponent(hx_bypass_pipe)
+        outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+        outlet_pipe.setName("#{secondary_chilled_water_loop.name} Supply Outlet")
+        outlet_pipe.addToNode(secondary_chilled_water_loop.supplyOutletNode)
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'No primary/secondary configuration specified for the chilled water loop.')
+      end
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'No pumping type specified for the chilled water loop.')
     end

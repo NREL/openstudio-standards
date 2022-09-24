@@ -1180,11 +1180,11 @@ class ASHRAE901PRM < Standard
   # @param thermalZones Array([OpenStudio::Model::ThermalZone]) thermal zone array
   # @param coil Heating Coils
   # @return [Boolean] true
-  def model_set_central_preheat_coil_spm(model, thermalZones, coil)
+  def model_set_central_preheat_coil_spm(model, thermal_zones, coil)
     # search for the highest zone setpoint temperature
     max_heat_setpoint = 0.0
     coil_name = coil.name.get.to_s
-    thermalZones.each do |zone|
+    thermal_zones.each do |zone|
       tstat = zone.thermostatSetpointDualSetpoint
       if tstat.is_initialized
         tstat = tstat.get

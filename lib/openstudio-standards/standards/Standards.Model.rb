@@ -6944,7 +6944,7 @@ class Standard
   # @param thermalZones Array([OpenStudio::Model::ThermalZone]) thermal zone array
   # @param coil Heating Coils
   # @return [Boolean] true
-  def model_set_central_preheat_coil_spm(model, thermalZones, coil)
+  def model_set_central_preheat_coil_spm(model, thermal_zones, coil)
     return true
   end
 
