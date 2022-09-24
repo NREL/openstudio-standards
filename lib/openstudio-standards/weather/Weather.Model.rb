@@ -123,7 +123,7 @@ class Standard
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param epw_file [String] the name of the epw file; if blank will default to epw file for the ASHRAE climate zone
   # @return [Bool] returns true if successful, false if not
-  def model_add_design_days_and_weather_file(model, climate_zone, epw_file = '')
+  def model_add_design_days_and_weather_file(model, climate_zone, epw_file = '', weather_dir = nil)
     success = true
     require_relative 'Weather.stat_file'
 
@@ -147,6 +147,7 @@ class Standard
     end
 
     weather_file = model_get_weather_file(weather_file_name)
+
     epw_file = OpenStudio::EpwFile.new(weather_file)
     OpenStudio::Model::WeatherFile.setWeatherFile(model, epw_file).get
 

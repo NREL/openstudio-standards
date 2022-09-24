@@ -76,6 +76,11 @@ class BTAPDatapoint
     @options[:btap_costing_git_revision] = Git::Revision.commit_short
     @options[:os_git_revision] = OpenstudioStandards.git_revision
 
+    # Get users' inputs for the parameters needed for the calculation af net present value
+    @npv_start_year = @options[:npv_start_year]
+    @npv_end_year = @options[:npv_end_year]
+    @npv_discount_rate = @options[:npv_discount_rate]
+
     # Save configuration to temp folder.
     File.open(File.join(@dp_temp_folder, 'run_options.yml'), 'w') { |file| file.write(@options.to_yaml) }
     begin
@@ -100,7 +105,11 @@ class BTAPDatapoint
         @standard.set_output_meters(model: model, output_meters: @options[:output_meters])
         climate_zone = 'NECB HDD Method'
         model.getYearDescription.setDayofWeekforStartDay('Sunday')
-        @standard.model_add_design_days_and_weather_file(model, climate_zone, @options[:epw_file]) # Standards
+        epw_file = @options[:epw_file]
+        epw_dir = nil
+        local_epw_file_path = File.join(input_folder_cache,@options[:epw_file])
+        epw_dir = input_folder_cache if File.exists? local_epw_file_path
+        @standard.model_add_design_days_and_weather_file(model, climate_zone, epw_file, epw_dir) # Standards
         @standard.model_add_ground_temperatures(model, nil, climate_zone)
       else
         # Otherwise modify osm input with options.
@@ -228,7 +237,10 @@ class BTAPDatapoint
         @btap_data = BTAPData.new(model: model,
                                   runner: nil,
                                   cost_result: @cost_result,
-                                  qaqc: @qaqc).btap_data
+                                  qaqc: @qaqc,
+                                  npv_start_year: @npv_start_year,
+                                  npv_end_year: @npv_end_year,
+                                  npv_discount_rate: @npv_discount_rate).btap_data
 
         # Write Files
         File.open(File.join(@dp_temp_folder, 'btap_data.json'), 'w') { |f| f.write(JSON.pretty_generate(@btap_data.sort.to_h, allow_nan: true)) }
@@ -270,8 +282,8 @@ class BTAPDatapoint
   end
 
   def s3_copy_file_to_s3(bucket_name:, source_file:, target_file:, n: 0)
-    # require 'aws-sdk-core'
-    # require 'aws-sdk-s3'
+    #require 'aws-sdk-core'
+    #require 'aws-sdk-s3'
     Aws.use_bundled_cert!
     s3_resource = Aws::S3::Resource.new(region: 'ca-central-1')
 
