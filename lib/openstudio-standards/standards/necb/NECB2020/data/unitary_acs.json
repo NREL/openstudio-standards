@@ -452,7 +452,7 @@
           "heating_type": "Electric Resistance or None",
           "subcategory": "PTAC",
           "minimum_capacity": 0,
-          "maximum_capacity": 7000.0,
+          "maximum_capacity": 7165.4,
           "start_date": "9/9/1919",
           "end_date": "2999-09-09T00:00:00+00:00",
           "minimum_seasonal_energy_efficiency_ratio": null,
@@ -466,7 +466,7 @@
           "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
           "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
           "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
-          "notes": "From NECB 2011, Table 5.2.12.1"
+          "notes": "From NECB 2020, Table 5.2.12.1.G"
         },
         {
           
@@ -474,7 +474,7 @@
           "heating_type": "All Other",
           "subcategory": "PTAC",
           "minimum_capacity": 0,
-          "maximum_capacity": 7000.0,
+          "maximum_capacity": 7165.4,
           "start_date": "9/9/1919",
           "end_date": "2999-09-09T00:00:00+00:00",
           "minimum_seasonal_energy_efficiency_ratio": null,
@@ -488,15 +488,15 @@
           "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
           "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
           "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
-          "notes": "From NECB 2011, Table 5.2.12.1"
+          "notes": "From NECB 2020, Table 5.2.12.1.G"
         },
         {
           
           "cooling_type": "AirCooled",
           "heating_type": "Electric Resistance or None",
           "subcategory": "PTAC",
-          "minimum_capacity": 7001.0,
-          "maximum_capacity": 15000.0,
+          "minimum_capacity": 7165.5,
+          "maximum_capacity": 15013.2,
           "start_date": "9/9/1919",
           "end_date": "2999-09-09T00:00:00+00:00",
           "minimum_seasonal_energy_efficiency_ratio": null,
@@ -510,15 +510,15 @@
           "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
           "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
           "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
-          "notes": "From NECB 2011, Table 5.2.12.1"
+          "notes": "From NECB 2020, Table 5.2.12.1.G"
         },
         {
           
           "cooling_type": "AirCooled",
           "heating_type": "All Other",
           "subcategory": "PTAC",
-          "minimum_capacity": 7001.0,
-          "maximum_capacity": 15000.0,
+          "minimum_capacity": 7165.5,
+          "maximum_capacity": 15013.2,
           "start_date": "9/9/1919",
           "end_date": "2999-09-09T00:00:00+00:00",
           "minimum_seasonal_energy_efficiency_ratio": null,
@@ -532,14 +532,14 @@
           "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
           "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
           "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
-          "notes": "From NECB 2011, Table 5.2.12.1"
+          "notes": "From NECB 2020, Table 5.2.12.1.G"
         },
         {
           
           "cooling_type": "AirCooled",
           "heating_type": "Electric Resistance or None",
           "subcategory": "PTAC",
-          "minimum_capacity": 15001.0,
+          "minimum_capacity": 15013.3,
           "maximum_capacity": 9999999.0,
           "start_date": "9/9/1919",
           "end_date": "2999-09-09T00:00:00+00:00",
@@ -554,14 +554,14 @@
           "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
           "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
           "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
-          "notes": "From NECB 2011, Table 5.2.12.1"
+          "notes": "From NECB 2020, Table 5.2.12.1.G"
         },
         {
           
           "cooling_type": "AirCooled",
           "heating_type": "All Other",
           "subcategory": "PTAC",
-          "minimum_capacity": 15001.0,
+          "minimum_capacity": 15013.3,
           "maximum_capacity": 9999999.0,
           "start_date": "9/9/1919",
           "end_date": "2999-09-09T00:00:00+00:00",
@@ -576,7 +576,7 @@
           "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
           "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
           "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
-          "notes": "From NECB 2011, Table 5.2.12.1"
+          "notes": "From NECB 2020, Table 5.2.12.1.G"
         }        
 
       ]
