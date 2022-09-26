@@ -390,16 +390,16 @@ class ASHRAE901PRM < Standard
   # @return [Bool] returns true if successful, false if not
   def chw_sizing_control(model, chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
 
-    DESIGN_CHILLED_WATER_TEMPERATURE = 44 # Loop design chilled water temperature (F)
-    DESIGN_CHILLED_WATER_TEMPERATURE_DELTA = 10.1 # Loop design chilled water temperature  (deltaF)
-    CHW_OUTDOOR_TEMPERATURE_HIGH = 80 # Chilled water temperature reset at high outdoor air temperature (F)
-    CHW_OUTDOOR_TEMPERATURE_LOW = 60 # Chilled water temperature reset at low outdoor air temperature (F)
-    CHW_OUTDOOR_HIGH_SETPOINT = 44 # Chilled water setpoint temperature at high outdoor air temperature (F)
-    CHW_OUTDOOR_LOW_SETPOINT = 54 # Chilled water setpoint temperature at low outdoor air temperature (F)
-    CHILLER_CHW_LOW_TEMP_LIMIT = 36 # Chiller leaving chilled water lower temperature limit (F)
-    CHILLER_CHW_COND_TEMP = 95 # Chiller entering condenser fluid temperature (F)
-    PRIMARY_PUMP_POWER = 9 # primary pump power (W/gpm)
-  
+    design_chilled_water_temperature = 44 # Loop design chilled water temperature (F)
+    design_chilled_water_temperature_delta = 10.1 # Loop design chilled water temperature  (deltaF)
+    chw_outdoor_temperature_high = 80 # Chilled water temperature reset at high outdoor air temperature (F)
+    chw_outdoor_temperature_low = 60 # Chilled water temperature reset at low outdoor air temperature (F)
+    chw_outdoor_high_setpoint = 44 # Chilled water setpoint temperature at high outdoor air temperature (F)
+    chw_outdoor_low_setpoint = 54 # Chilled water setpoint temperature at low outdoor air temperature (F)
+    chiller_chw_low_temp_limit = 36 # Chiller leaving chilled water lower temperature limit (F)
+    chiller_chw_cond_temp = 95 # Chiller entering condenser fluid temperature (F)
+    primary_pump_power = 9 # primary pump power (W/gpm)
+ 
     if dsgn_sup_wtr_temp.nil?
       dsgn_sup_wtr_temp_c = OpenStudio.convert(DESIGN_CHILLED_WATER_TEMPERATURE, 'F', 'C').get
     else
