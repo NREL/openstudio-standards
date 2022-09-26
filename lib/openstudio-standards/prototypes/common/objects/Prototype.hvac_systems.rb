@@ -226,6 +226,10 @@ class Standard
       chilled_water_loop.setName(system_name)
     end
 
+    if dsgn_sup_wtr_temp.nil?
+      dsgn_sup_wtr_temp = 44
+    end
+
     # chilled water loop sizing and controls
     chw_sizing_control(model, chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
 

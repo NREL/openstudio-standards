@@ -401,12 +401,12 @@ class ASHRAE901PRM < Standard
     primary_pump_power = 9 # primary pump power (W/gpm)
  
     if dsgn_sup_wtr_temp.nil?
-      dsgn_sup_wtr_temp_c = OpenStudio.convert(DESIGN_CHILLED_WATER_TEMPERATURE, 'F', 'C').get
+      dsgn_sup_wtr_temp_c = OpenStudio.convert(design_chilled_water_temperature, 'F', 'C').get
     else
       dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
     end
     if dsgn_sup_wtr_temp_delt.nil?
-      dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(DESIGN_CHILLED_WATER_TEMPERATURE_DELTA, 'R', 'K').get
+      dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(design_chilled_water_temperature_delta, 'R', 'K').get
     else
       dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(dsgn_sup_wtr_temp_delt, 'R', 'K').get
     end
@@ -418,10 +418,10 @@ class ASHRAE901PRM < Standard
     sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
     sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
     # Use OA reset setpoint manager
-    outdoor_low_temperature_C = OpenStudio.convert(CHW_OUTDOOR_TEMPERATURE_LOW, 'F', 'C').get.round(1)
-    outdoor_high_temperature_C = OpenStudio.convert(CHW_OUTDOOR_TEMPERATURE_HIGH, 'F', 'C').get.round(1)
-    setpoint_temperature_outdoor_high_C = OpenStudio.convert(CHW_OUTDOOR_HIGH_SETPOINT, 'F', 'C').get.round(1)
-    setpoint_temperature_outdoor_low_C = OpenStudio.convert(CHW_OUTDOOR_LOW_SETPOINT, 'F', 'C').get.round(1)
+    outdoor_low_temperature_C = OpenStudio.convert(chw_outdoor_temperature_low, 'F', 'C').get.round(1)
+    outdoor_high_temperature_C = OpenStudio.convert(chw_outdoor_temperature_high, 'F', 'C').get.round(1)
+    setpoint_temperature_outdoor_high_C = OpenStudio.convert(chw_outdoor_high_setpoint, 'F', 'C').get.round(1)
+    setpoint_temperature_outdoor_low_C = OpenStudio.convert(chw_outdoor_low_setpoint, 'F', 'C').get.round(1)
 
     chw_stpt_manager = OpenStudio::Model::SetpointManagerOutdoorAirReset.new(model)
     chw_stpt_manager.setName("#{chilled_water_loop.name} Setpoint Manager")
