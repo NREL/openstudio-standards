@@ -47,6 +47,7 @@ class NECB2020
     # From PNNL http://www.energycodes.gov/sites/default/files/documents/PrototypeModelEnhancements_2014_0.pdf
     # Appendix A: Service Water Heating
 	  # and modified by PCF 1630 as noted below.
+
     water_heater_eff = nil
     ua_btu_per_hr_per_f = nil
     sl_btu_per_hr = nil
