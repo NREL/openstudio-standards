@@ -356,6 +356,7 @@ class Standard
         chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
         chiller.setName("#{template} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller #{i}")
         chilled_water_loop.addSupplyBranchForComponent(chiller)
+        dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
         chiller.setReferenceLeavingChilledWaterTemperature(dsgn_sup_wtr_temp_c)
         chiller.setLeavingChilledWaterLowerTemperatureLimit(OpenStudio.convert(36.0, 'F', 'C').get)
         chiller.setReferenceEnteringCondenserFluidTemperature(OpenStudio.convert(95.0, 'F', 'C').get)
