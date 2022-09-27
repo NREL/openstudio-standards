@@ -296,7 +296,7 @@ class ASHRAE901PRM < Standard
     return true
   end
 
-  # apply prm baseline pump power
+  # Apply prm baseline pump power
   # @note I think it makes more sense to sense the motor efficiency right there...
   #   But actually it's completely irrelevant...
   #   you could set at 0.9 and just calculate the pressure rise to have your 19 W/GPM or whatever
