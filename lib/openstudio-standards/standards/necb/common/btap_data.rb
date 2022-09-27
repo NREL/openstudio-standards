@@ -432,7 +432,7 @@ class BTAPData
           (data['province'] == province) &&
           (data['fuel_type'] == neb_fuel)
       end
-      neb_fuel_cost = row['2020']
+      neb_fuel_cost = row['2021']
       fuel_consumption_gj = 0.0
       sql_command = "SELECT Value FROM tabulardatawithstrings
                      WHERE ReportName='EnergyMeters'
@@ -1688,19 +1688,19 @@ class BTAPData
       { "province": 'SK', "fuel_type": 'Propane', "CO2eq Emissions (kg/MBtu)": 64.25, "CO2eq Emissions (g/m3)": 1548.00 },
       { "province": 'YT', "fuel_type": 'Propane', "CO2eq Emissions (kg/MBtu)": 64.25, "CO2eq Emissions (g/m3)": 1548.00 },
 
-      { "province": 'AB', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 231.54, "CO2eq Emissions (g/m3)": 790.0 },
-      { "province": 'BC', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 2.99, "CO2eq Emissions (g/m3)": 10.2 },
-      { "province": 'MB', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 0.56, "CO2eq Emissions (g/m3)": 1.9 },
-      { "province": 'NB', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 76.20, "CO2eq Emissions (g/m3)": 260.0 },
-      { "province": 'NL', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 11.72, "CO2eq Emissions (g/m3)": 40.0 },
+      { "province": 'AB', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 202.23, "CO2eq Emissions (g/m3)": 690.0 },
+      { "province": 'BC', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 3.84, "CO2eq Emissions (g/m3)": 13.1 },
+      { "province": 'MB', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 0.41, "CO2eq Emissions (g/m3)": 1.4 },
+      { "province": 'NB', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 84.99, "CO2eq Emissions (g/m3)": 290.0 },
+      { "province": 'NL', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 7.91, "CO2eq Emissions (g/m3)": 27.0 },
       { "province": 'NT', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 46.89, "CO2eq Emissions (g/m3)": 160.0 },
-      { "province": 'NS', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 213.95, "CO2eq Emissions (g/m3)": 730.0 },
-      { "province": 'NU', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 222.74, "CO2eq Emissions (g/m3)": 760.0 },
-      { "province": 'ON', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 5.86, "CO2eq Emissions (g/m3)": 20.0 },
-      { "province": 'PE', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 76.20, "CO2eq Emissions (g/m3)": 260.0 },
-      { "province": 'QC', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 0.41, "CO2eq Emissions (g/m3)": 1.4 },
-      { "province": 'SK', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 211.04, "CO2eq Emissions (g/m3)": 720.0 },
-      { "province": 'YT', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 16.41, "CO2eq Emissions (g/m3)": 140.0 }
+      { "province": 'NS', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 216.88, "CO2eq Emissions (g/m3)": 740.0 },
+      { "province": 'NU', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 260.84, "CO2eq Emissions (g/m3)": 890.0 },
+      { "province": 'ON', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 8.79, "CO2eq Emissions (g/m3)": 30.0 },
+      { "province": 'PE', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 84.99, "CO2eq Emissions (g/m3)": 290.0 },
+      { "province": 'QC', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 0.47, "CO2eq Emissions (g/m3)": 1.6 },
+      { "province": 'SK', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 219.81, "CO2eq Emissions (g/m3)": 750.0 },
+      { "province": 'YT', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 23.15, "CO2eq Emissions (g/m3)": 79.0 }
     ]
     mbtu_to_gj = 1.05505585
     factor = ghg_data.detect { |item| (item[:province] == province) && (item[:fuel_type] == fuel_type) }

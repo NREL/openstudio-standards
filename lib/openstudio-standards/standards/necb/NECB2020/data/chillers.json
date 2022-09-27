@@ -318,7 +318,7 @@
           "compressor_type": "Centrifugal",
           "absorption_type": null,
           "variable_speed_drive": null,
-          "minimum_capacity": 399.99,
+          "minimum_capacity": 400.0,
           "maximum_capacity": 9999.0,
           "start_date": "9/9/1919",
           "end_date": "2999-09-09T00:00:00+00:00",

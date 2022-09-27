@@ -2342,7 +2342,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-A"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2356,7 +2356,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-B"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2370,7 +2370,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-C"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2384,7 +2384,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-D"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2398,7 +2398,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-E"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2412,7 +2412,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-F"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2426,7 +2426,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-G"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2440,7 +2440,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-H"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2454,7 +2454,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-I"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2468,7 +2468,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-J"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2482,7 +2482,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-K"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2496,7 +2496,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-A",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-A"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-A"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2510,7 +2510,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-B",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-B"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-B"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2524,7 +2524,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-C",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-C"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-C"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2538,7 +2538,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-D",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-D"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-D"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2552,7 +2552,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-E",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-E"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-E"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2566,7 +2566,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-F",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-F"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-F"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2580,7 +2580,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-G",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-G"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-G"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2594,7 +2594,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-H",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-H"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-H"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2608,7 +2608,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-I",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-I"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-I"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2622,7 +2622,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-J",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-J"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-J"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2636,7 +2636,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-K",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-K"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-K"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2804,7 +2804,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-A"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2818,7 +2818,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-B"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2832,7 +2832,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-C"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2846,7 +2846,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-D"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2860,7 +2860,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-E"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2874,7 +2874,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-F"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2888,7 +2888,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-G"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2902,7 +2902,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-H"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2916,7 +2916,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-I"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2930,7 +2930,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-J"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2944,7 +2944,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-K"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2958,7 +2958,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-A",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-A"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-A"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2972,7 +2972,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-B",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-B"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-B"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -2986,7 +2986,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-C",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-C"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-C"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3000,7 +3000,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-D",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-D"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-D"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3014,7 +3014,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-E",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-E"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-E"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3028,7 +3028,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-F",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-F"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-F"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3042,7 +3042,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-G",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-G"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-G"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3056,7 +3056,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-H",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-H"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-H"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3070,7 +3070,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-I",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-I"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-I"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3084,7 +3084,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-J",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-J"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-J"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3098,7 +3098,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-K",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-K"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-K"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3266,7 +3266,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-A"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3280,7 +3280,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-B"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3294,7 +3294,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-C"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3308,7 +3308,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-D"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3322,7 +3322,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-E"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3336,7 +3336,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-F"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3350,7 +3350,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-G"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3364,7 +3364,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-H"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3378,7 +3378,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-I"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3392,7 +3392,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-J"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3406,7 +3406,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-K"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3420,7 +3420,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-A",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-A"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-A"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3434,7 +3434,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-B",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-B"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-B"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3448,7 +3448,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-C",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-C"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-C"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3462,7 +3462,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-D",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-D"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-D"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3476,7 +3476,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-E",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-E"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-E"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3490,7 +3490,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-F",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-F"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-F"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3504,7 +3504,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-G",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-G"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-G"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3518,7 +3518,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-H",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-H"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-H"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3532,7 +3532,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-I",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-I"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-I"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3546,7 +3546,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-J",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-J"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-J"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3560,7 +3560,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-K",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-K"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-K"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3728,7 +3728,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-A"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3742,7 +3742,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-B"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3756,7 +3756,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-C"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3770,7 +3770,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-D"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3784,7 +3784,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-E"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3798,7 +3798,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-F"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3812,7 +3812,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-G"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3826,7 +3826,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-H"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3840,7 +3840,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-I"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3854,7 +3854,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-J"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3868,7 +3868,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-K"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3882,7 +3882,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-A",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-A"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-A"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3894,9 +3894,9 @@
           "NECB2015_building_type": "Space Function",
           "NECB2015_space_type": "Storage room > 100 m2-sch-B",
           "NECB2017_building_type": "Space Function",
-          "NECB2017_space_type": "Storage room > 100 m2-sch-A",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-B",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-A"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-B"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3910,7 +3910,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-C",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-C"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-C"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3924,7 +3924,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-D",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-D"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-D"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3938,7 +3938,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-E",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-E"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-E"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3952,7 +3952,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-F",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-F"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-F"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3966,7 +3966,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-G",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-F"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-G"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3980,7 +3980,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-H",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-H"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-H"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -3994,7 +3994,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-I",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-I"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-I"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -4008,7 +4008,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-J",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-J"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-J"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
@@ -4022,7 +4022,7 @@
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Storage room > 100 m2-sch-K",
           "NECB2020_building_type": "Space Function",
-          "NECB2020_space_type": "Storage room > 100 m2-sch-K"
+          "NECB2020_space_type": "Storage room >= 5 m2-sch-K"
         },
         {
           "BTAPPRE1980_building_type": "Space Function",
