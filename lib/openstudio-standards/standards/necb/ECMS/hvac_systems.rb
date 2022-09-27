@@ -2839,7 +2839,7 @@ class ECMS
           'maximum_capacity' => cop_package['maximum_capacity'],
           'minimum_energy_efficiency_ratio' => cop_package['minimum_energy_efficiency_ratio'],
           'minimum_seasonal_energy_efficiency_ratio' => cop_package['minimum_seasonal_energy_efficiency_ratio'],
-          'minimum_full_load_efficiency' => cop_package['minimum_full_load_efficiency'],
+          'minimum_coefficient_of_performance_cooling' => cop_package['minimum_coefficient_of_performance_cooling'],
           'ref_flow_rate_m3_per_sec' => cop_package['ref_flow_rate_m3_per_sec'],
           'cool_cap_ft' => cop_package['cool_cap_ft'],
           'cool_cap_fflow' => cop_package['cool_cap_fflow'],
@@ -2848,9 +2848,9 @@ class ECMS
           'cool_plf_fplr' => cop_package['cool_plf_fplr']
         }
       end
-      next if unitary_cop['minimum_energy_efficiency_ratio'].nil? && unitary_cop['minimum_seasonal_energy_efficiency_ratio'].nil? && unitary_cop['cool_cap_ft'].nil? &&
-              unitary_cop['cool_cap_fflow'].nil? && unitary_cop['cool_eir_ft'].nil? && unitary_cop['cool_eir_fflow'].nil? && unitary_cop['cool_plf_fplr'].nil? && 
-              unitary_cop['ref_flow_rate_m3_per_sec'].nil?
+      next if unitary_cop['minimum_energy_efficiency_ratio'].nil? && unitary_cop['minimum_seasonal_energy_efficiency_ratio'].nil? && 
+              unitary_cop['minimum_coefficient_of_performance_cooling'].nil? && unitary_cop['cool_cap_ft'].nil? && unitary_cop['cool_cap_fflow'].nil? && 
+              unitary_cop['cool_eir_ft'].nil? && unitary_cop['cool_eir_fflow'].nil? && unitary_cop['cool_plf_fplr'].nil? && unitary_cop['ref_flow_rate_m3_per_sec'].nil?
 
       # If the dx coil is on an air loop then update its cop and the performance curves when these are specified in the ecm data
       if (coil_type == 'SingleSpeed' && coil.airLoopHVAC.is_initialized && (!coil.name.to_s.include? "_ASHP")) ||
@@ -2860,8 +2860,8 @@ class ECMS
           cop = eer_to_cop(unitary_cop['minimum_energy_efficiency_ratio'].to_f)
         elsif unitary_cop['minimum_seasonal_energy_efficiency_ratio']
           cop = seer_to_cop_cooling_with_fan(unitary_cop['minimum_seasonal_energy_efficiency_ratio'].to_f)
-        elsif unitary_cop['minimum_full_load_efficiency']
-          cop = unitary_cop['minimum_full_load_efficiency']
+        elsif unitary_cop['minimum_coefficient_of_performance_cooling']
+          cop = unitary_cop['minimum_coefficient_of_performance_cooling'].to_f
         end
         cool_cap_ft = nil
         cool_cap_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_ft'] }[0] if unitary_cop['cool_cap_ft']

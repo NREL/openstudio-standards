@@ -43,7 +43,7 @@ class NECB_HVAC_Unitary_Tests < MiniTest::Test
         unitary_expected_result_file = File.join(@expected_results_folder, "ecm_modify_unitary_#{unitary_ecm.downcase.gsub(' ','_')}_expected_results.csv")
         standard = Standard.build(template)
         ecm = Standard.build('ECMS')
-        unitary_res_file_output_text = "Heating Type,Min Capacity (W),Max Capacity (W),Seasonal Energy Efficiency Ratio (SEER),Energy Efficiency Ratio (EER),Full Load Efficiency (COP)\n"
+        unitary_res_file_output_text = "Heating Type,Min Capacity (W),Max Capacity (W),Seasonal Energy Efficiency Ratio (SEER),Energy Efficiency Ratio (EER),Coefficient of Performance (COP)\n"
         # Initialize hashes for storing expected unitary efficiency data from file
         heating_type_min_cap = {}
         heating_type_min_cap['Electric Resistance'] = []
@@ -63,8 +63,8 @@ class NECB_HVAC_Unitary_Tests < MiniTest::Test
             efficiency_type[data['Heating Type']] << 'Seasonal Energy Efficiency Ratio (SEER)'
           elsif data['Energy Efficiency Ratio (EER)'].to_f > 0.0
             efficiency_type[data['Heating Type']] << 'Energy Efficiency Ratio (EER)'
-          elsif data['Full Load Efficiency (COP)'].to_f > 0.0
-            efficiency_type[data['Heating Type']] << 'Full Load Efficiency (COP)'
+          elsif data['Coefficient of Performance (COP)'].to_f > 0.0
+            efficiency_type[data['Heating Type']] << 'Coefficient of Performance (COP)'
           end
         end
 
@@ -143,7 +143,7 @@ class NECB_HVAC_Unitary_Tests < MiniTest::Test
               elsif efficiency_type[heating_type][int] == 'Energy Efficiency Ratio (EER)'
                 actual_unitary_eff[heating_type][int] = (standard.cop_to_eer(actual_unitary_cop[heating_type][int].to_f) + 0.001).round(2)
                 output_line_text += ",#{actual_unitary_eff[heating_type][int]},\n"
-              elsif efficiency_type[heating_type][int] == 'Full Load Efficiency (COP)'
+              elsif efficiency_type[heating_type][int] == 'Coefficient of Performance (COP)'
                 actual_unitary_eff[heating_type][int] = sprintf('%.2f', actual_unitary_cop[heating_type][int].to_f)
                 output_line_text += ",,#{actual_unitary_eff[heating_type][int]}\n"
               end

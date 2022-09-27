@@ -1,4 +1,4 @@
-Heating Type,Min Capacity (W),Max Capacity (W),Seasonal Energy Efficiency Ratio (SEER),Energy Efficiency Ratio (EER),Full Load Efficiency (COP)
+Heating Type,Min Capacity (W),Max Capacity (W),Seasonal Energy Efficiency Ratio (SEER),Energy Efficiency Ratio (EER),Coefficient of Performance (COP)
 Electric Resistance,0,10137.7,,,4.82
 Electric Resistance,10137.7,13770.9,,,4.63
 Electric Resistance,13770.9,17140.3,,,4.38
