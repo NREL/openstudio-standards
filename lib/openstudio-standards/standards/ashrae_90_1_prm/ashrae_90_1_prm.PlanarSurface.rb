@@ -165,9 +165,9 @@ class ASHRAE901PRM < Standard
                                                          surf_type,
                                                          stds_type,
                                                          occ_type,
-                                                         surface_std_wwr_type,
-                                                         wwr_info,
-                                                         planar_surface)
+                                                         wwr_building_type: surface_std_wwr_type,
+                                                         wwr_info: wwr_info,
+                                                         surface: planar_surface)
       if !new_construction == false
         previous_construction_map[type] = new_construction
       end

@@ -180,8 +180,8 @@ class Standard
                                                          surf_type,
                                                          stds_type,
                                                          occ_type,
-                                                         surface_std_wwr_type,
-                                                         wwr_info)
+                                                         wwr_building_type: surface_std_wwr_type,
+                                                         wwr_info: wwr_info)
       if !new_construction == false
         previous_construction_map[type] = new_construction
       end
