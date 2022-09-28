@@ -1,5 +1,8 @@
 class ASHRAE901PRM < Standard
   # Keep only one cooling tower, but use one condenser pump per chiller
+
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
     # Skip non-cooling plants
     return true unless plant_loop.sizingPlant.loopType == 'Condenser'
