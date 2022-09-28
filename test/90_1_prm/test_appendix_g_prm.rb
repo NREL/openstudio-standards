@@ -1130,6 +1130,13 @@ class AppendixGPRMTests < Minitest::Test
     return zone_dcv
   end
 
+  # This assigns the test case index for the DCV unit tests
+  # @param arguments [array of string] list of test case identifiers
+  def mark_test_case_no(model, arguments)
+    arguments
+    return model
+  end
+
   def remove_zone_oa_per_person_spec(model, arguments)
     std = Standard.build('90.1-PRM-2019')
     # argument contains a list of zone names to remove oa per person specification
