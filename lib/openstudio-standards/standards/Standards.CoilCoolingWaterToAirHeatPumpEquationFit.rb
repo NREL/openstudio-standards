@@ -103,7 +103,6 @@ class Standard
   # @param sql_db_vars_map [Hash] hash map
   # @return [Hash] hash of coil objects
   def coil_cooling_water_to_air_heat_pump_apply_efficiency_and_curves(coil_cooling_water_to_air_heat_pump, sql_db_vars_map)
-
     # Get the search criteria
     search_criteria = {}
     search_criteria['template'] = template

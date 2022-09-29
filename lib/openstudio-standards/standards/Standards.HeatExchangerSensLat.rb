@@ -27,6 +27,7 @@ class Standard
   # Assumed to apply to sensible and latent effectiveness at all flow rates.
   #
   # @param heat_exchanger_air_to_air_sensible_and_latent [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] the heat exchanger
+  # @return [Array] List of full and part load heat echanger effectiveness
   def heat_exchanger_air_to_air_sensible_and_latent_minimum_effectiveness(heat_exchanger_air_to_air_sensible_and_latent)
     full_htg_sens_eff = 0.5
     full_htg_lat_eff = 0.5

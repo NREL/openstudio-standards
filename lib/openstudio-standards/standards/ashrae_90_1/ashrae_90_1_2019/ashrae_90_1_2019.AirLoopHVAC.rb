@@ -428,12 +428,12 @@ class ASHRAE9012019 < ASHRAE901
         'climate_zone' => climate_zone,
         'under_8000_hours' => true,
         'nontransient_dwelling' => false,
-        'enthalpy_recovery_ratio_design_conditions' => "Cooling"
+        'enthalpy_recovery_ratio_design_conditions' => 'Cooling'
       }
       energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
       if energy_recovery_limits.nil?
         # Repeat the search for heating
-        search_criteria['enthalpy_recovery_ratio_design_conditions'] = "Heating"
+        search_criteria['enthalpy_recovery_ratio_design_conditions'] = 'Heating'
         energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
         if energy_recovery_limits.nil?
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Cannot find energy recovery limits for template '#{template}', climate zone '#{climate_zone}', and under 8000 hours, assuming no energy recovery required.")
@@ -481,12 +481,12 @@ class ASHRAE9012019 < ASHRAE901
         'climate_zone' => climate_zone,
         'under_8000_hours' => false,
         'nontransient_dwelling' => nontrans_dwel,
-        'enthalpy_recovery_ratio_design_conditions' => "Cooling"
+        'enthalpy_recovery_ratio_design_conditions' => 'Cooling'
       }
       energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
       if energy_recovery_limits.nil?
         # Repeat the search for heating
-        search_criteria['enthalpy_recovery_ratio_design_conditions'] = "Heating"
+        search_criteria['enthalpy_recovery_ratio_design_conditions'] = 'Heating'
         energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
         if energy_recovery_limits.nil?
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Cannot find energy recovery limits for template '#{template}', climate zone '#{climate_zone}', and under 8000 hours, assuming no energy recovery required.")
