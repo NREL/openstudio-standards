@@ -662,7 +662,7 @@ class ASHRAE9012019 < ASHRAE901
 
     # Add EMS program
     max_oa_ems_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(air_loop_hvac.model)
-    max_oa_ems_prog.setName("#{air_loop_hvac.name}_MAX_OA_FRAC")
+    max_oa_ems_prog.setName("#{air_loop_hvac.name.to_s.gsub('-', '_')}_MAX_OA_FRAC")
     max_oa_ems_prog_body = <<-EMS
     IF #{air_loop_hvac_name_ems}_OA > #{air_loop_hvac_name_ems}_OA_VRP,
     SET #{air_loop_hvac_name_ems}_MAX_OA_FRAC = NULL,
@@ -677,7 +677,7 @@ class ASHRAE9012019 < ASHRAE901
     max_oa_ems_prog.setBody(max_oa_ems_prog_body)
 
     max_oa_ems_prog_manager = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(air_loop_hvac.model)
-    max_oa_ems_prog_manager.setName("SET_#{air_loop_hvac.name.to_s.gsub(' ', '_')}_MAX_OA_FRAC")
+    max_oa_ems_prog_manager.setName("SET_#{air_loop_hvac.name.to_s.gsub(' ', '_').gsub('-', '_')}_MAX_OA_FRAC")
     max_oa_ems_prog_manager.setCallingPoint('InsideHVACSystemIterationLoop')
     max_oa_ems_prog_manager.addProgram(max_oa_ems_prog)
 

@@ -38,6 +38,8 @@ class ASHRAE9012019 < ASHRAE901
   # @param thermostat [OpenStudio::model::ThermostatSetpointDualSetpoint] OpenStudio ThermostatSetpointDualSetpoint object
   # @return [Boolean] true if success
   def space_occupancy_standby_mode(thermostat)
+    return false unless thermostat.getHeatingSchedule.is_initialized || thermostat.getCoolingSchedule.is_initialized
+
     htg_sch = thermostat.getHeatingSchedule.get
     clg_sch = thermostat.getCoolingSchedule.get
 
