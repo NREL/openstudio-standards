@@ -86,6 +86,7 @@ class NRELZNEReady2017 < ASHRAE901
   def air_loop_hvac_integrated_economizer_required?(air_loop_hvac, climate_zone)
     return true
   end
+
   # Same as 90.1-2013
   # Check the economizer type currently specified in the ControllerOutdoorAir object on this air loop
   # is acceptable per the standard.

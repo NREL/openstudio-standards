@@ -16,6 +16,34 @@ Standard.class_eval do
     return model.sqlFile.get
   end
 
+  # Write out a SQL query to retrieve simulation outputs
+  # from the TabularDataWithStrings table in the SQL
+  # database produced by OpenStudio/EnergyPlus after
+  # running a simulation.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param report_name [String] Name of the report as defined in the HTM simulation output file
+  # @param table_name [String] Name of the table as defined in the HTM simulation output file
+  # @param row_name [String] Name of the row as defined in the HTM simulation output file
+  # @param column_name [String] Name of the column as defined in the HTM simulation output file
+  # @param units [String] Unit of the value to be retrieved
+  #
+  # @return [String] Result of the query
+  def run_query_tabulardatawithstrings(model, report_name, table_name, row_name, column_name, units = '*')
+    # Define the query
+    query = "Select Value FROM TabularDataWithStrings WHERE
+    ReportName = '#{report_name}' AND
+    TableName = '#{table_name}' AND
+    RowName = '#{row_name}' AND
+    ColumnName = '#{column_name}' AND
+    Units = '#{units}'"
+    # Run the query if the expected output is a string
+    return model.sqlFile.get.execAndReturnFirstString(query).get if units.empty?
+
+    # Run the query if the expected output is a double
+    return model.sqlFile.get.execAndReturnFirstDouble(query).get
+  end
+
   # Get the weather run period for the model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -384,6 +412,46 @@ Standard.class_eval do
     return heating_or_cooling_setpoint_unmet
   end
 
+   # Get the total unmet load hours during occupancy of a model that has been simulated
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Float] returns the number of total unmet load hours during occupancy in a simulated model
+  def model_get_unmet_load_hours(model)
+    result = OpenStudio::OptionalDouble.new
+    sql = model.sqlFile
+    if sql.is_initialized
+      sql = sql.get
+      query = "SELECT Value
+              FROM tabulardatawithstrings
+              WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
+              AND ReportForString='Entire Facility'
+              AND TableName='Comfort and Setpoint Not Met Summary'
+              AND ColumnName='Facility'
+              AND RowName='Time Setpoint Not Met During Occupied Heating'
+              AND Units='Hours'"
+      val = sql.execAndReturnFirstDouble(query)
+      if val.is_initialized
+        result = OpenStudio::OptionalDouble.new(val.get).to_f
+      end
+      query = "SELECT Value
+              FROM tabulardatawithstrings
+              WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
+              AND ReportForString='Entire Facility'
+              AND TableName='Comfort and Setpoint Not Met Summary'
+              AND ColumnName='Facility'
+              AND RowName='Time Setpoint Not Met During Occupied Cooling'
+              AND Units='Hours'"
+      val = sql.execAndReturnFirstDouble(query)
+      if val.is_initialized
+        result += OpenStudio::OptionalDouble.new(val.get).to_f
+      end
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has no sql file containing results, cannot lookup data.')
+    end
+
+    return result
+  end
+ 
   # Gets the model annual energy consumption by fuel and enduse in GJ from the sql file
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object

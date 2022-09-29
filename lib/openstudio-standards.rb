@@ -22,6 +22,9 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/utilities/simulation'
   require_relative 'openstudio-standards/utilities/hash'
   require_relative 'openstudio-standards/utilities/sqlfile'
+  require_relative 'openstudio-standards/utilities/schedule_translator'
+  require_relative 'openstudio-standards/utilities/array'
+  require_relative 'openstudio-standards/utilities/object_info'
 
   stds = 'openstudio-standards/standards'
   proto = 'openstudio-standards/prototypes'
@@ -73,7 +76,6 @@ module OpenstudioStandards
   require_relative "#{stds}/necb/NECB2015/qaqc/necb_2015_qaqc.rb"
   require_relative "#{stds}/necb/common/btap_data.rb"
   require_relative "#{stds}/necb/common/btap_datapoint.rb"
-
 
   # ECM development
   require_relative "#{stds}/necb/ECMS/ecms.rb"
@@ -172,6 +174,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.CoolingTower"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Fan"
 
   # Model Objects
   require_relative "#{stds}/Standards.AirLoopHVAC"
@@ -258,6 +261,37 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.ThermalZone"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.WaterHeaterMixed"
+  # 90.1-PRM Common
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Model"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Space"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.AirLoopHVAC"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.AirTerminalSingleDuctParallelPIUReheat"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ZoneHVACComponent"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.PlantLoop"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanConstantVolume"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanOnOff"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanVariableVolume"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanZoneExhaust"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilDX"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilCoolingDXSingleSpeed"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilCoolingDXTwoSpeed"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilHeatingDXSingleSpeed"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilHeatingGas"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.BoilerHotWater"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ChillerElectricEIR"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoolingTower"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoolingTowerVariableSpeed"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.HeatExchangerSensLat"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.PlanarSurface"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ThermalZone"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.SpaceType"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Surface"
+
+  # 90.1-PRM-2019
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019.Model"
   # 90.1-2016
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.AirLoopHVAC"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.AirTerminalSingleDuctVAVReheat"
