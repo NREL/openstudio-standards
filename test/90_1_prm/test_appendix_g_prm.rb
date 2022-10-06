@@ -207,11 +207,11 @@ class AppendixGPRMTests < Minitest::Test
       unmet_load_hours = (mod_str == 'unmet_load_hours') ? true : false
 
       # Create baseline model
-      model_baseline = @prototype_creator.model_create_prm_stable_baseline_building(model, building_type, climate_zone,
+      model_baseline = @prototype_creator.model_create_prm_stable_baseline_building(model, climate_zone,
                                                                                     @@hvac_building_types[hvac_building_type],
                                                                                     @@wwr_building_types[building_type],
                                                                                     @@swh_building_types[building_type],
-                                                                                    nil, run_dir_baseline, false, GENERATE_PRM_LOG)
+                                                                                    run_dir_baseline, false, GENERATE_PRM_LOG)
 
 
       # Check if baseline could be created
