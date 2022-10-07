@@ -105,12 +105,12 @@ class Standard
   # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
   # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
-  def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, rename = false)
+  def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, rename = false, necb_reference_hp:false)
     # find ac properties
-    search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed)
+    search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed, necb_reference_hp:necb_reference_hp)
     sub_category = search_criteria['subcategory']
     suppl_heating_type = search_criteria['heating_type']
-    capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed)
+    capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_reference_hp:necb_reference_hp)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
@@ -180,14 +180,14 @@ class Standard
   # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
   # @param sql_db_vars_map [Hash] hash map
   # @return [Hash] hash of coil objects
-  def coil_heating_dx_single_speed_apply_efficiency_and_curves(coil_heating_dx_single_speed, sql_db_vars_map)
+  def coil_heating_dx_single_speed_apply_efficiency_and_curves(coil_heating_dx_single_speed, sql_db_vars_map, necb_reference_hp:false)
     successfully_set_all_properties = true
 
     # Get the search criteria
-    search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed)
+    search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed, necb_reference_hp:necb_reference_hp)
 
     # Get the capacity
-    capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed)
+    capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_reference_hp:necb_reference_hp)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
@@ -250,7 +250,7 @@ class Standard
     orig_name = coil_heating_dx_single_speed.name.to_s
 
     # Find the minimum COP and rename with efficiency rating
-    cop = coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, true)
+    cop = coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, true, necb_reference_hp:necb_reference_hp)
 
     # Map the original name to the new name
     sql_db_vars_map[coil_heating_dx_single_speed.name.to_s] = orig_name

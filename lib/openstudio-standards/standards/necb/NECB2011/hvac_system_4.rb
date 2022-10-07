@@ -1,5 +1,7 @@
 class NECB2011
   def add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model:,
+                                                                   necb_reference_hp:false,
+                                                                   necb_reference_hp_supp_fuel:'DefaultFuel',
                                                                    zones:,
                                                                    heating_coil_type:,
                                                                    baseboard_type:,
@@ -73,7 +75,8 @@ class NECB2011
     sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
     sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
     sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
-    if @reference_hp
+    puts "sys 4 necb_reference_hp #{necb_reference_hp}"
+    if necb_reference_hp
       sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneDXCoolingSizingFactor])
       sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneDXHeatingSizingFactor])
     else
@@ -81,7 +84,7 @@ class NECB2011
       sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
     end
 
-    if @reference_hp
+    if necb_reference_hp
       # AirLoopHVACUnitaryHeatPumpAirToAir needs FanOnOff in order for the fan to turn off during off hours
       fan = OpenStudio::Model::FanOnOff.new(model, always_on)
     else
@@ -117,13 +120,15 @@ class NECB2011
     # Add the components to the air loop
     # in order from closest to zone to furthest from zone
     supply_inlet_node = air_loop.supplyInletNode
-    if @reference_hp
+    if necb_reference_hp
       #create supplemental heating coil based on default regional fuel type
-      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-      primary_heating_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
-      if primary_heating_fuel == 'NaturalGas'
+      if necb_reference_hp_supp_fuel == 'DefaultFuel'
+        epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+        necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+      end
+      if necb_reference_hp_supp_fuel == 'NaturalGas'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
-      elsif primary_heating_fuel == 'Electricity' or  primary_heating_fuel == 'FuelOilNo2'
+      elsif necb_reference_hp_supp_fuel == 'Electricity' or  necb_reference_hp_supp_fuel == 'FuelOilNo2'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
       else #hot water coils is an option in the future
         raise('Invalid fuel type selected for heat pump supplemental coil')
@@ -169,7 +174,7 @@ class NECB2011
       sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
-      if @reference_hp
+      if necb_reference_hp
         sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneDXCoolingSizingFactor])
         sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneDXHeatingSizingFactor])
       else

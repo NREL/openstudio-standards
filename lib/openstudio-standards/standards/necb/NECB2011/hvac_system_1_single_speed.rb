@@ -1,5 +1,7 @@
 class NECB2011
   def add_sys1_unitary_ac_baseboard_heating(model:,
+                                            necb_reference_hp:false,
+                                            necb_reference_hp_supp_fuel:'DefaultFuel',
                                             zones:,
                                             mau_type:,
                                             mau_heating_coil_type:,
@@ -15,6 +17,8 @@ class NECB2011
                                                         hw_loop: hw_loop)
     else
       add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
+                                                         necb_reference_hp:necb_reference_hp,
+                                                         necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
                                                          zones: zones,
                                                          mau_type: mau_type,
                                                          mau_heating_coil_type: mau_heating_coil_type,
@@ -24,12 +28,14 @@ class NECB2011
   end
 
   def add_sys1_unitary_ac_baseboard_heating_single_speed(model:,
+                                                         necb_reference_hp:false,
+                                                         necb_reference_hp_supp_fuel:'DefaultFuel',
                                                          zones:,
                                                          mau_type:,
                                                          mau_heating_coil_type:,
                                                          baseboard_type:,
                                                          hw_loop:)
-
+                                                         puts "sys 1 necb_reference_hp #{necb_reference_hp}"
     # Keep all data and assumptions for both systems on the top here for easy reference.
     system_data = {}
     system_data[:name] = 'Sys_1_Make-up air unit'
@@ -49,7 +55,7 @@ class NECB2011
     system_data[:CentralHeatingDesignSupplyAirTemperature] = 43.0
     system_data[:AllOutdoorAirinCooling] = true
     system_data[:AllOutdoorAirinHeating] = true
-    if @reference_hp
+    if necb_reference_hp
       system_data[:TypeofLoadtoSizeOn] = 'Total'
     else
       system_data[:TypeofLoadtoSizeOn] = 'VentilationRequirement'
@@ -158,7 +164,7 @@ class NECB2011
       oa_system.addToNode(supply_inlet_node)
       
       # Add a setpoint manager to control the supply air temperature
-      if @reference_hp
+      if necb_reference_hp
         setpoint_mgr = OpenStudio::Model::SetpointManagerWarmest.new(model)
         setpoint_mgr.setMinimumSetpointTemperature(13)
         setpoint_mgr.setMaximumSetpointTemperature(20)
@@ -181,7 +187,7 @@ class NECB2011
       sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
       # Different sizing factors for reference HP capacity
-      if @reference_hp
+      if necb_reference_hp
         sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneDXCoolingSizingFactor])
         sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneDXHeatingSizingFactor])
       else
@@ -203,7 +209,7 @@ class NECB2011
       # htg_coil_elec = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
       zero_outdoor_air = true # flag to set outside air flow to 0.0
       # Reference HP system does not use PTAC
-      unless @reference_hp
+      unless necb_reference_hp
         add_ptac_dx_cooling(model, zone, zero_outdoor_air)
       end
 
@@ -215,13 +221,15 @@ class NECB2011
 
       #  # Create a diffuser and attach the zone/diffuser pair to the MAU air loop, if applicable
       
-      if @reference_hp 
-        # Create CAV RH (RH based on region's default fuel type)
-        epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-        primary_heating_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
-        if primary_heating_fuel == 'NaturalGas'
+      if necb_reference_hp 
+        # Create CAV RH (RH based on region's default fuel type or user input)
+        if necb_reference_hp_supp_fuel == 'DefaultFuel'
+          epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+          necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+        end
+        if necb_reference_hp_supp_fuel == 'NaturalGas'
           rh_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
-        elsif primary_heating_fuel == 'Electricity' or  primary_heating_fuel == 'FuelOilNo2'
+        elsif necb_reference_hp_supp_fuel == 'Electricity' or  necb_reference_hp_supp_fuel == 'FuelOilNo2'
           rh_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
         else #hot water coils is an option in the future
           raise('Invalid fuel type selected for heat pump supplemental coil')
@@ -242,7 +250,7 @@ class NECB2011
       sys_name_pars['sys_htg'] = mau_heating_coil_type
       sys_name_pars['sys_sf'] = 'cv'
       sys_name_pars['zone_htg'] = baseboard_type
-      if @reference_hp
+      if necb_reference_hp
         sys_name_pars['zone_clg'] = 'none'
       else
         sys_name_pars['zone_clg'] = 'ptac'

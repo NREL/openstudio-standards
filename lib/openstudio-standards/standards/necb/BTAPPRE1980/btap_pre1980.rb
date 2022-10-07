@@ -63,7 +63,7 @@ class BTAPPRE1980 < NECB2011
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
-  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default')
+  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', necb_reference_hp:false)
     raise('validation of model failed.') unless validate_initial_model(model)
 
     climate_zone = 'NECB HDD Method'

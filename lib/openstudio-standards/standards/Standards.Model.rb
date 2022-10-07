@@ -1542,7 +1542,7 @@ class Standard
   # @param apply_controls [Bool] toggle whether to apply air loop and plant loop controls
   # @param sql_db_vars_map [Hash] hash map
   # @return [Bool] returns true if successful, false if not
-  def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true, sql_db_vars_map: nil)
+  def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true, sql_db_vars_map: nil, necb_reference_hp:false)
     sql_db_vars_map = {} if sql_db_vars_map.nil?
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Started applying HVAC efficiency standards for #{template} template.")
@@ -1578,11 +1578,11 @@ class Standard
     # set DX HP coils before DX clg coils because when DX HP coils need to first
     # pull the capacities of their paired DX clg coils, and this does not work
     # correctly if the DX clg coil efficiencies have been set because they are renamed.
-    model.getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
+    model.getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map, necb_reference_hp:necb_reference_hp) }
 
     # Unitary ACs
     model.getCoilCoolingDXTwoSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
-    model.getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
+    model.getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map, necb_reference_hp:necb_reference_hp) }
     model.getCoilCoolingDXMultiSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_multi_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
 
     # WSHPs

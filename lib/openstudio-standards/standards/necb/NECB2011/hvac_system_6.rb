@@ -317,7 +317,8 @@ class NECB2011
                                                               zones:,
                                                               heating_coil_type:,
                                                               baseboard_type:,
-                                                              hw_loop:)
+                                                              hw_loop:,
+                                                              necb_reference_hp_supp_fuel:'DefaultFuel')
 
     #system data
     system_data = {}
@@ -399,24 +400,27 @@ class NECB2011
           sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneDXCoolingSizingFactor])
           sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneDXHeatingSizingFactor])
 
+          
+          # Set zone baseboards
+          add_zone_baseboards(model: model,
+                              zone: zone,
+                              baseboard_type: baseboard_type,
+                              hw_loop: hw_loop)
+
           # Create CAV RH (RH based on region's default fuel type)
-          epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-          primary_heating_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
-          if primary_heating_fuel == 'NaturalGas'
+          if necb_reference_hp_supp_fuel == 'DefaultFuel'
+            epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+            necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+          end
+          if necb_reference_hp_supp_fuel == 'NaturalGas'
             rh_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
-          elsif primary_heating_fuel == 'Electricity' or  primary_heating_fuel == 'FuelOilNo2'
+          elsif necb_reference_hp_supp_fuel == 'Electricity' or  necb_reference_hp_supp_fuel == 'FuelOilNo2'
             rh_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
           else #hot water coils is an option in the future
             raise('Invalid fuel type selected for heat pump supplemental coil')
           end
           cav_rh_terminal = OpenStudio::Model::AirTerminalSingleDuctConstantVolumeReheat.new(model, always_on, rh_coil)
           air_loop.addBranchForZone(zone, cav_rh_terminal.to_StraightComponent)
-
-          # Set zone baseboards
-          add_zone_baseboards(model: model,
-                              zone: zone,
-                              baseboard_type: baseboard_type,
-                              hw_loop: hw_loop)
         end
         sys_name_pars = {}
         sys_name_pars['sys_hr'] = 'none'

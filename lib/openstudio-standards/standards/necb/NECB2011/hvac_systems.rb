@@ -2255,10 +2255,10 @@ class NECB2011
     airloop.setName(sys_name)
   end
 
-  def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed)
+  def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_reference_hp:false)
     # Set Rated heating capacity = 50% cooling coil capacity at -8.3 C outdoor [8.4.4.13 (2)(c)]
 
-    if @reference_hp #NECB reference heat pump rules apply
+    if necb_reference_hp #NECB reference heat pump rules apply
       # grab paired cooling coil
       if coil_heating_dx_single_speed.airLoopHVAC.empty?
         
@@ -2339,7 +2339,7 @@ class NECB2011
 
       return htg_cap_w
     else # Do not follow NECB reference HP rule; proceed as usual
-      return super
+      return super(coil_heating_dx_single_speed)
     end
   end
   
@@ -2347,9 +2347,9 @@ class NECB2011
   # heating type rules need to be flexible to account for 
   # 1.  DX htg/cooling + gas supplement htg
   # 2.  Potential lack of AirLoopHVACUnitaryHeatPumpAirToAir or AirLoopHVACUnitarySystem  
-  def coil_dx_heating_type(coil_dx)
+  def coil_dx_heating_type(coil_dx, necb_reference_hp:false)
     supp_htg_type = nil
-    if @reference_hp 
+    if necb_reference_hp
       if coil_dx.airLoopHVAC.empty?
         if coil_dx.containingHVACComponent.is_initialized
           containing_comp = coil_dx.containingHVACComponent.get
@@ -2410,7 +2410,7 @@ class NECB2011
 
       end
     else # Does not follow NECB reference HP rules
-      return super 
+      return super(coil_dx)
     end
 
 
