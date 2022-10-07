@@ -94,7 +94,6 @@ class NECB2011
   # Organizes Zones and assigns them to appropriate systems according to NECB 2011-17 systems spacetype rules in Sec 8.
   # requires requires fuel type to be assigned for each system aspect. Defaults to gas hydronic.
   def apply_systems(model:, primary_heating_fuel:, sizing_run_dir:, shw_scale:, necb_reference_hp:false, necb_reference_hp_supp_fuel:'DefaultFuel', baseline_system_zones_map_option:)
-    puts "apply_systems necb_reference_hp #{necb_reference_hp}"
     raise('validation of model failed.') unless validate_initial_model(model)
 
     # Check to see if model is using another vintage of spacetypes. If so overwrite the @standards for the object with the
@@ -896,7 +895,6 @@ class NECB2011
                          zones:,
                          necb_reference_hp:false,
                          necb_reference_hp_supp_fuel:'DefaultFuel')
- puts "create_necb_system necb_reference_hp #{necb_reference_hp}"
     # The goal is to minimize the number of system when possible.
     system_zones_hash = {}
     zones.each do |zone|
@@ -1059,7 +1057,6 @@ class NECB2011
                                  mau_type:,
                                  model:,
                                  baseline_system_zones_map_option:)
-puts "auto_system_dwelling_units necb_reference_hp#{necb_reference_hp}"
     system_zones_hash = {}
     # Determine if dwelling units have a shared AHU.  If user entered building stories > 4 then set to true.
     if baseline_system_zones_map_option == 'one_sys_per_dwelling_unit'

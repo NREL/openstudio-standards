@@ -179,7 +179,6 @@ module CoilDX
     search_criteria['subcategory'] = coil_dx_subcategory(coil_dx)
 
     # Add the heating type to the search criteria
-    puts "coil_dx_find_search_criteria necb_reference_hp #{necb_reference_hp}"
     htg_type = coil_dx_heating_type(coil_dx, necb_reference_hp:necb_reference_hp)
     unless htg_type.nil?
       search_criteria['heating_type'] = htg_type

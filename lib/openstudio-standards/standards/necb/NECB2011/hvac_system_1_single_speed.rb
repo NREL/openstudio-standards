@@ -35,7 +35,6 @@ class NECB2011
                                                          mau_heating_coil_type:,
                                                          baseboard_type:,
                                                          hw_loop:)
-                                                         puts "sys 1 necb_reference_hp #{necb_reference_hp}"
     # Keep all data and assumptions for both systems on the top here for easy reference.
     system_data = {}
     system_data[:name] = 'Sys_1_Make-up air unit'
