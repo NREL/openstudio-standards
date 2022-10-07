@@ -87,6 +87,8 @@ def export_openstudio_libraries
               boiler.setFuelType('NaturalGas')
             when 'Electric'
               boiler.setFuelType('Electricity')
+            when 'Propane', 'PropaneGas'
+              boiler.setFuelType('Propane')
             when 'Oil'
               boiler.setFuelType('FuelOilNo2')
           end

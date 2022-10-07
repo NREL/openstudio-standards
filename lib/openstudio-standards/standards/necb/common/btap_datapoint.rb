@@ -76,6 +76,11 @@ class BTAPDatapoint
     @options[:btap_costing_git_revision] = Git::Revision.commit_short
     @options[:os_git_revision] = OpenstudioStandards.git_revision
 
+    # Get users' inputs for the parameters needed for the calculation af net present value
+    @npv_start_year = @options[:npv_start_year]
+    @npv_end_year = @options[:npv_end_year]
+    @npv_discount_rate = @options[:npv_discount_rate]
+
     # Save configuration to temp folder.
     File.open(File.join(@dp_temp_folder, 'run_options.yml'), 'w') { |file| file.write(@options.to_yaml) }
     begin
@@ -232,7 +237,10 @@ class BTAPDatapoint
         @btap_data = BTAPData.new(model: model,
                                   runner: nil,
                                   cost_result: @cost_result,
-                                  qaqc: @qaqc).btap_data
+                                  qaqc: @qaqc,
+                                  npv_start_year: @npv_start_year,
+                                  npv_end_year: @npv_end_year,
+                                  npv_discount_rate: @npv_discount_rate).btap_data
 
         # Write Files
         File.open(File.join(@dp_temp_folder, 'btap_data.json'), 'w') { |f| f.write(JSON.pretty_generate(@btap_data.sort.to_h, allow_nan: true)) }
