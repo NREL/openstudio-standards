@@ -30,7 +30,7 @@ class Standard
 
   # Method used for 90.1-2016 and onward
   def model_create_prm_stable_baseline_building(model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, output_dir = Dir.pwd, unmet_load_hours_check = true, debug = false)
-    model_create_prm_any_baseline_building(model, "SmallOffice", climate_zone, hvac_building_type, wwr_building_type, swh_building_type, true, false, output_dir, true, unmet_load_hours_check, debug)
+    model_create_prm_any_baseline_building(model, '', climate_zone, hvac_building_type, wwr_building_type, swh_building_type, true, false, output_dir, true, unmet_load_hours_check, debug)
   end
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
@@ -74,6 +74,9 @@ class Standard
           OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created.")
           raise "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created."
         end
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Simulation failed. Check the model to make sure no severe errors.")
+        raise "Simulation on proposed model failed. Baseline generation is stopped."
       end
     end
 

@@ -112,7 +112,11 @@ class ASHRAE901PRM < Standard
           sizing_run_ran = model_run_sizing_run(model, "#{sizing_run_dir}/SR_cooling_plant") if !sizing_run_ran
 
           if sizing_run_ran
-            sizing_run_capacity = model.getAutosizedValueFromEquipmentSummary(chiller, 'Central Plant', 'Nominal Capacity', 'W').get
+            if model.version < OpenStudio::VersionString.new('3.2.1')
+              sizing_run_capacity = model.getAutosizedValueFromEquipmentSummary(chiller, 'Central Plant', 'Nominal Capacity', 'W').get
+            else
+              sizing_run_capacity = model.getAutosizedValueFromEquipmentSummary(chiller, 'Central Plant', 'Rated Capacity', 'W').get
+            end
             chiller.setReferenceCapacity(sizing_run_capacity)
             total_cooling_capacity_w += sizing_run_capacity
           else
