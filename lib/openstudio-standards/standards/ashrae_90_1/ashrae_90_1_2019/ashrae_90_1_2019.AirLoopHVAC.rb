@@ -464,7 +464,7 @@ class ASHRAE9012019 < ASHRAE901
       # Check if air loop serves a non-transient dwelling unit,
       # currently non-transient dwelling units are residential
       # spaces in the apartment prototypes
-      building_data = model_get_building_climate_zone_and_building_type(air_loop_hvac.model)
+      building_data = model_get_building_properties(air_loop_hvac.model)
       building_type = building_data['building_type']
       nontrans_dwel = false
       if building_type == 'MidriseApartment' || building_type == 'HighriseApartment'

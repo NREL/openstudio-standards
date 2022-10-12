@@ -353,7 +353,8 @@ class NECB2011 < Standard
                            shw_scale: nil,
                            output_meters: nil,
                            airloop_economizer_type: nil,
-                           baseline_system_zones_map_option: nil)
+                           baseline_system_zones_map_option: nil
+                           )
 
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
@@ -500,8 +501,6 @@ class NECB2011 < Standard
     ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self, primary_heating_fuel: primary_heating_fuel, 
                          ecm_system_zones_map_option: ecm_system_zones_map_option)
 
-    # Apply ERV equipment as required.
-    ecm.apply_erv_ecm(model: model, erv_package: erv_package)
     # -------- Performace, Efficiencies, Controls and Sensors ------------
     #
     # Set code standard equipment charecteristics.
