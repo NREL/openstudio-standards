@@ -33,8 +33,10 @@ class NECB2011
 
     # zone data
     system_data[:system_supply_air_temperature] = 13.0
-    system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
-    system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
+    system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference] = 11.0
+    system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference] = 21.0
     system_data[:ZoneCoolingSizingFactor] = 1.1
     system_data[:ZoneHeatingSizingFactor] = 1.3
     system_data[:ZoneVAVMinFlowFactorPerFloorArea] = 0.002
@@ -110,8 +112,10 @@ class NECB2011
         (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).each do |zone|
           # Zone sizing parameters
           sizing_zone = zone.sizingZone
-          sizing_zone.setZoneCoolingDesignSupplyAirTemperature(system_data[:ZoneCoolingDesignSupplyAirTemperature])
-          sizing_zone.setZoneHeatingDesignSupplyAirTemperature(system_data[:ZoneHeatingDesignSupplyAirTemperature])
+          sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod])
+          sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
+          sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
+          sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
           sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
           sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
 
@@ -122,6 +126,12 @@ class NECB2011
             reheat_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
           end
 
+          # Set zone baseboards
+          add_zone_baseboards(model: model,
+                              zone: zone,
+                              baseboard_type: baseboard_type,
+                              hw_loop: hw_loop)
+
           vav_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, always_on, reheat_coil)
           air_loop.addBranchForZone(zone, vav_terminal.to_StraightComponent)
           # NECB2011 minimum zone airflow setting
@@ -129,11 +139,6 @@ class NECB2011
           vav_terminal.setMaximumReheatAirTemperature(system_data[:ZoneVAVMaxReheatTemp])
           vav_terminal.setDamperHeatingAction(system_data[:ZoneVAVDamperAction])
 
-          # Set zone baseboards
-          add_zone_baseboards(model: model,
-                              zone: zone,
-                              baseboard_type: baseboard_type,
-                              hw_loop: hw_loop)
         end
         sys_name_pars = {}
         sys_name_pars['sys_hr'] = 'none'
@@ -185,8 +190,10 @@ class NECB2011
     system_6_data[:MinimumSystemAirFlowRatio] = 0.03
     # zone data
     system_6_data[:system_supply_air_temperature] = 13.0
-    system_6_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
-    system_6_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
+    system_6_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_6_data[:ZoneCoolingDesignSupplyAirTemperatureDifference] = 11.0
+    system_6_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_6_data[:ZoneHeatingDesignSupplyAirTemperatureDifference] = 21.0
     system_6_data[:ZoneCoolingSizingFactor] = 1.1
     system_6_data[:ZoneHeatingSizingFactor] = 1.3
     system_6_data[:ZoneVAVMinFlowFactorPerFloorArea] = 0.002

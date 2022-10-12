@@ -1,3 +1,4 @@
+
 class NECB2020
 
   # Go through the default construction sets and hard-assigned
@@ -114,7 +115,7 @@ class NECB2020
     BTAP::Resources::Envelope.assign_interior_surface_construction_to_adiabatic_surfaces(model, nil)
     BTAP.runner_register('Info', ' apply_standard_construction_properties was sucessful.', runner)
   end
-  
+
   # Set all external subsurfaces (doors, windows, skylights) to NECB values.
   # @author phylroy.lopez@nrcan.gc.ca
   # @param subsurface [String]

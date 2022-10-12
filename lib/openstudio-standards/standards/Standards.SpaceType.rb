@@ -584,7 +584,7 @@ class Standard
                         end
 
     # get climate_zone_set
-    climate_zone = model_get_building_climate_zone_and_building_type(space_type.model)['climate_zone']
+    climate_zone = model_get_building_properties(space_type.model)['climate_zone']
     climate_zone_set = model_find_climate_zone_set(space_type.model, climate_zone)
 
     # populate search hash
@@ -598,6 +598,13 @@ class Standard
 
     # switch to use this but update test in standards and measures to load this outside of the method
     construction_properties = model_find_object(standards_data['construction_properties'], search_criteria)
+
+    if !construction_properties
+      # Search again use climate zone (e.g. 3) instead of sub-climate zone (3A)
+      search_criteria['climate_zone_set'] = climate_zone_set[0..-2]
+      construction_properties = model_find_object(standards_data['construction_properties'], search_criteria)
+    end
+
 
     return construction_properties
   end

@@ -226,7 +226,8 @@ class NECB2011 < Standard
                                    output_variables: nil,
                                    shw_scale: nil,
                                    output_meters: nil,
-                                   airloop_economizer_type: nil)
+                                   airloop_economizer_type: nil,
+                                   baseline_system_zones_map_option: nil)
 
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
@@ -281,7 +282,9 @@ class NECB2011 < Standard
                                 output_variables: output_variables,
                                 shw_scale: shw_scale,  # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) a float number larger than 0.0
                                 output_meters: output_meters,
-                                airloop_economizer_type: airloop_economizer_type) # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
+                                airloop_economizer_type: airloop_economizer_type, # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
+                                baseline_system_zones_map_option: baseline_system_zones_map_option  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
+                                )
 
   end
 
@@ -349,7 +352,9 @@ class NECB2011 < Standard
                            output_variables: nil,
                            shw_scale: nil,
                            output_meters: nil,
-                           airloop_economizer_type: nil)
+                           airloop_economizer_type: nil,
+                           baseline_system_zones_map_option: nil
+                           )
 
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
@@ -408,7 +413,8 @@ class NECB2011 < Standard
                                    pv_ground_module_description: pv_ground_module_description,
                                    chiller_type: chiller_type,
                                    shw_scale: shw_scale,
-                                   airloop_economizer_type: airloop_economizer_type)
+                                   airloop_economizer_type: airloop_economizer_type,
+                                   baseline_system_zones_map_option: baseline_system_zones_map_option)
     self.set_output_variables(model: model, output_variables: output_variables)
     self.set_output_meters(model: model, output_meters: output_meters)
 
@@ -479,7 +485,8 @@ class NECB2011 < Standard
                                      pv_ground_module_description:,
                                      chiller_type: 'NECB_Default',
                                      shw_scale:,
-                                     airloop_economizer_type: nil)
+                                     airloop_economizer_type: nil,
+                                     baseline_system_zones_map_option:)
 
     # Create ECM object.
     ecm = ECMS.new
@@ -487,14 +494,13 @@ class NECB2011 < Standard
     # -------- Systems Layout-----------
 
     # Create Default Systems.
-    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir, shw_scale: shw_scale)
+    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir, shw_scale: shw_scale,
+                  baseline_system_zones_map_option: baseline_system_zones_map_option)
 
     # Apply new ECM system. Overwrite standard as required.
     ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self, primary_heating_fuel: primary_heating_fuel, 
                          ecm_system_zones_map_option: ecm_system_zones_map_option)
 
-    # Apply ERV equipment as required.
-    ecm.apply_erv_ecm(model: model, erv_package: erv_package)
     # -------- Performace, Efficiencies, Controls and Sensors ------------
     #
     # Set code standard equipment charecteristics.

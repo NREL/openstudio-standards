@@ -29,8 +29,10 @@ class NECB2011
     system_data[:CentralHeatingDesignSupplyAirHumidityRatio] = 0.0080
 
     # System 3 Zone data
-    system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
-    system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
+    system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference] = 11.0
+    system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference] = 21.0
     system_data[:SetpointManagerSingleZoneReheatSupplyTempMin] = 13.0
     system_data[:SetpointManagerSingleZoneReheatSupplyTempMax] = 43.0
     system_data[:ZoneDXCoolingSizingFactor] = 1.0
@@ -48,10 +50,12 @@ class NECB2011
                                                         system_data,
                                                         determine_control_zone(zones))
       # Add Zone equipment
-      zones.each do |zone| # Zone sizing temperature
+      zones.each do |zone| # Zone sizing temperature difference
         sizing_zone = zone.sizingZone
-        sizing_zone.setZoneCoolingDesignSupplyAirTemperature(system_data[:ZoneCoolingDesignSupplyAirTemperature])
-        sizing_zone.setZoneHeatingDesignSupplyAirTemperature(system_data[:ZoneHeatingDesignSupplyAirTemperature])
+        sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod])
+        sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
+        sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
+        sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
         sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
         sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
         add_sys3_and_8_zone_equip(air_loop,
@@ -63,12 +67,12 @@ class NECB2011
       return true
     else
       zones.each do |zone|
-        air_loop = add_system_3_and_8_airloop_multi_speed(heating_coil_type, model, system_data, zone)
         add_sys3_and_8_zone_equip(air_loop,
                                   baseboard_type,
                                   hw_loop,
                                   model,
                                   zone)
+        air_loop = add_system_3_and_8_airloop_multi_speed(heating_coil_type, model, system_data, zone)
       end
       return true
     end
@@ -90,10 +94,12 @@ class NECB2011
     air_loop = common_air_loop(model: model, system_data: system_data)
     air_loop.setName("#{system_data[:name]} #{control_zone.name}")
 
-    # Zone sizing temperature
+    # Zone sizing temperature difference
     sizing_zone = control_zone.sizingZone
-    sizing_zone.setZoneCoolingDesignSupplyAirTemperature(system_data[:ZoneCoolingDesignSupplyAirTemperature])
-    sizing_zone.setZoneHeatingDesignSupplyAirTemperature(system_data[:ZoneHeatingDesignSupplyAirTemperature])
+    sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod])
+    sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
+    sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
+    sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
     sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
     sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
 

@@ -83,16 +83,22 @@ class Standard
     # and the R-value of the non-insulation layers and air films.
     # This is the desired R-value of the insulation.
     ins_r_value_si = target_r_value_si - other_layer_r_value_si
-    if ins_r_value_si <= 0.0
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} for #{construction.name} is too low given the other materials in the construction; insulation layer will not be modified.")
-      return false
-    end
-    ins_r_value_ip = OpenStudio.convert(ins_r_value_si, 'm^2*K/W', 'ft^2*h*R/Btu').get
 
     # Set the R-value of the insulation layer
-    construction.layers.each do |layer|
+    construction.layers.each_with_index do |layer, l|
       next unless layer.name.get == insulation_layer_name
 
+      # Remove insulation layer if requested R-value is lower than sum of non-insulation materials
+      if ins_r_value_si <= 0.0
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} for #{construction.name} is too low given the other materials in the construction; insulation layer will be removed.")
+        construction.eraseLayer(l)
+        # Set the target R-value to the sum of other layers to make name match properties
+        target_r_value_ip = OpenStudio.convert(other_layer_r_value_si, 'm^2*K/W', 'ft^2*hr*R/Btu').get
+        break # Don't modify the insulation layer since it has been removed
+      end
+
+      # Modify the insulation layer
+      ins_r_value_ip = OpenStudio.convert(ins_r_value_si, 'm^2*K/W', 'ft^2*h*R/Btu').get
       if layer.to_StandardOpaqueMaterial.is_initialized
         layer = layer.to_StandardOpaqueMaterial.get
         layer.setThickness(ins_r_value_si * layer.conductivity)
