@@ -207,11 +207,11 @@ class AppendixGPRMTests < Minitest::Test
       unmet_load_hours = (mod_str == 'unmet_load_hours') ? true : false
 
       # Create baseline model
-      model_baseline = @prototype_creator.model_create_prm_stable_baseline_building(model, building_type, climate_zone,
+      model_baseline = @prototype_creator.model_create_prm_stable_baseline_building(model, climate_zone,
                                                                                     @@hvac_building_types[hvac_building_type],
                                                                                     @@wwr_building_types[building_type],
                                                                                     @@swh_building_types[building_type],
-                                                                                    nil, run_dir_baseline, false, GENERATE_PRM_LOG)
+                                                                                    run_dir_baseline, false, GENERATE_PRM_LOG)
 
 
       # Check if baseline could be created
@@ -433,7 +433,7 @@ class AppendixGPRMTests < Minitest::Test
       u_value_goal = opaque_exterior_name + opaque_interior_name + exterior_fenestration_name + exterior_door_name
       u_value_goal.each do |key, value|
         value_si = OpenStudio.convert(value, 'Btu/ft^2*hr*R', 'W/m^2*K').get
-        assert(((u_value_baseline[key] - value_si).abs < 0.001 || (u_value_baseline[key] - 5.835).abs < 0.01), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si.round(3)}.")
+        assert(((u_value_baseline[key] - value_si).abs < 0.0015 || (u_value_baseline[key] - 5.835).abs < 0.01), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si.round(3)}.")
         assert((construction_baseline[key].include? 'PRM'), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
       end
     end

@@ -19,21 +19,18 @@ class Standard
   # @note Per 90.1, the Performance Rating Method "does NOT offer an alternative compliance path for minimum standard compliance."
   # This means you can't use this method for code compliance to get a permit.
   # @param user_model [OpenStudio::model::Model] User specified OpenStudio model
-  # @param building_type [String] the building type
   # @param climate_zone [String] the climate zone
   # @param hvac_building_type [String] the building type for baseline HVAC system determination (90.1-2016 and onward)
   # @param wwr_building_type [String] the building type for baseline WWR determination (90.1-2016 and onward)
   # @param swh_building_type [String] the building type for baseline SWH determination (90.1-2016 and onward)
-  # @param custom [String] the custom logic that will be applied during baseline creation.  Valid choices are 'Xcel Energy CO EDA' or '90.1-2007 with addenda dn'.
-  #   If nothing is specified, no custom logic will be applied; the process will follow the template logic explicitly.
-  # @param sizing_run_dir [String] the directory where the sizing runs will be performed
+  # @param output_dir [String] the directory where the PRM generations will be performed
   # @param run_all_orients [Boolean] indicate weather a baseline model should be created for all 4 orientations: same as user model, +90 deg, +180 deg, +270 deg
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
 
   # Method used for 90.1-2016 and onward
-  def model_create_prm_stable_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = true, unmet_load_hours_check = true, debug = false)
-    model_create_prm_any_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, true, custom, sizing_run_dir, run_all_orients, unmet_load_hours_check, debug)
+  def model_create_prm_stable_baseline_building(model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, output_dir = Dir.pwd, unmet_load_hours_check = true, debug = false)
+    model_create_prm_any_baseline_building(model, '', climate_zone, hvac_building_type, wwr_building_type, swh_building_type, true, false, output_dir, true, unmet_load_hours_check, debug)
   end
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
@@ -77,6 +74,9 @@ class Standard
           OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created.")
           raise "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created."
         end
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Simulation failed. Check the model to make sure no severe errors.")
+        raise "Simulation on proposed model failed. Baseline generation is stopped."
       end
     end
 
