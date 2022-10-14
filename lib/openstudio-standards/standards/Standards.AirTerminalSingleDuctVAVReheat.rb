@@ -13,10 +13,18 @@ class Standard
   #   which impacts the minimum damper position requirement.
   # @return [Bool] returns true if successful, false if not
   # @todo remove exception where older vintages don't have minimum positions adjusted.
-  def air_terminal_single_duct_vav_reheat_apply_minimum_damper_position(air_terminal_single_duct_vav_reheat, zone_min_oa = nil, has_ddc = true)
+  def air_terminal_single_duct_vav_reheat_apply_minimum_damper_position(air_terminal_single_duct_vav_reheat, zone, zone_min_oa = nil, has_ddc = true)
     # Minimum damper position
     min_damper_position = air_terminal_single_duct_vav_reheat_minimum_damper_position(air_terminal_single_duct_vav_reheat, has_ddc)
-    air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)
+    if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.1.0')
+      # Hard size minimum damper position
+      air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)
+    else
+      # Allow EnergyPlus to autosize minimum damper position with lower limit
+      zone.sizingZone.setCoolingMinimumAirFlowFraction(min_damper_position)
+      air_terminal_single_duct_vav_reheat.autosizeConstantMinimumAirFlowFraction
+    end
+
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirTerminalSingleDuctVAVReheat', "For #{air_terminal_single_duct_vav_reheat.name}: set minimum damper position to #{min_damper_position}.")
 
     # Minimum OA flow rate

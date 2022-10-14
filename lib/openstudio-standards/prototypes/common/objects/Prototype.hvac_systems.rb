@@ -1763,7 +1763,15 @@ class Standard
         terminal.setMaximumFlowFractionDuringReheat(0.5)
         terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
         air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
-        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+        mdp = air_terminal_single_duct_vav_reheat_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+        if zone.model.version < OpenStudio::VersionString.new('3.1.0')
+          # Hard size minimum damper position
+          terminal.setConstantMinimumAirFlowFraction(mdp)
+        else
+          # Allow EnergyPlus to autosize minimum damper position with lower limit
+          zone.sizingZone.setCoolingMinimumAirFlowFraction(mdp)
+          terminal.autosizeConstantMinimumAirFlowFraction
+        end
 
         # zone sizing
         sizing_zone = zone.sizingZone
@@ -1782,7 +1790,15 @@ class Standard
           terminal.setZoneMinimumAirFlowInputMethod('Constant')
         end
         air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
-        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+        mdp = air_terminal_single_duct_vav_reheat_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+        if zone.model.version < OpenStudio::VersionString.new('3.1.0')
+          # Hard size minimum damper position
+          terminal.setConstantMinimumAirFlowFraction(mdp)
+        else
+          # Allow EnergyPlus to autosize minimum damper position with lower limit
+          zone.sizingZone.setCoolingMinimumAirFlowFraction(mdp)
+          terminal.autosizeConstantMinimumAirFlowFraction
+        end
 
         # zone sizing
         sizing_zone = zone.sizingZone
@@ -2103,7 +2119,15 @@ class Standard
       end
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
-      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+      mdp = air_terminal_single_duct_vav_reheat_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+      if zone.model.version < OpenStudio::VersionString.new('3.1.0')
+        # Hard size minimum damper position
+        terminal.setConstantMinimumAirFlowFraction(mdp)
+      else
+        # Allow EnergyPlus to autosize minimum damper position with lower limit
+        zone.sizingZone.setCoolingMinimumAirFlowFraction(mdp)
+        terminal.autosizeConstantMinimumAirFlowFraction
+      end
 
       unless return_plenum.nil?
         zone.setReturnPlenum(return_plenum)
@@ -2410,7 +2434,15 @@ class Standard
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
-      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+      mdp = air_terminal_single_duct_vav_reheat_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+      if zone.model.version < OpenStudio::VersionString.new('3.1.0')
+        # Hard size minimum damper position
+        terminal.setConstantMinimumAirFlowFraction(mdp)
+      else
+        # Allow EnergyPlus to autosize minimum damper position with lower limit
+        zone.sizingZone.setCoolingMinimumAirFlowFraction(mdp)
+        terminal.autosizeConstantMinimumAirFlowFraction
+      end
 
       # zone sizing
       sizing_zone = zone.sizingZone
@@ -4415,7 +4447,7 @@ class Standard
   # @param model_occ_hr_end [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Ending hour of building occupancy.
   # @param control_strategy [String] name of control strategy.  Options are 'proportional_control' and 'none'.
-  #   If control strategy is 'proportional_control', the method will apply the CBE radiant control sequences 
+  #   If control strategy is 'proportional_control', the method will apply the CBE radiant control sequences
   #   detailed in Raftery et al. (2017), “A new control strategy for high thermal mass radiant systems”.
   #   Otherwise no control strategy will be applied and the radiant system will assume the EnergyPlus default controls.
   # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.

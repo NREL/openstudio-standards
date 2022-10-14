@@ -1811,7 +1811,7 @@ class Standard
         controller_mv.setSystemOutdoorAirMethod('Standard62.1VentilationRateProcedureWithLimit')
       end
         # Change the min flow rate in the controller outdoor air
-      controller_oa.setMinimumOutdoorAirFlowRate(0.0)
+      # controller_oa.setMinimumOutdoorAirFlowRate(0.0)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, cannot enable multizone vav optimization because the system has no OA intake.")
       return false
@@ -1850,7 +1850,7 @@ class Standard
         if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
           zone_oa = thermal_zone_outdoor_airflow_rate(zone)
           vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
-          air_terminal_single_duct_vav_reheat_apply_minimum_damper_position(vav_terminal, zone_oa, has_ddc)
+          air_terminal_single_duct_vav_reheat_apply_minimum_damper_position(vav_terminal, zone, zone_oa, has_ddc)
         end
       end
     end
@@ -2292,7 +2292,7 @@ class Standard
     end
 
     # Change the min flow rate in the controller outdoor air
-    controller_oa.setMinimumOutdoorAirFlowRate(0.0)
+    # controller_oa.setMinimumOutdoorAirFlowRate(0.0)
 
     # Enable DCV in the controller mechanical ventilation
     controller_mv.setDemandControlledVentilation(true)
