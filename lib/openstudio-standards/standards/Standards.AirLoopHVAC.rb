@@ -1895,7 +1895,11 @@ class Standard
       oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir
       controller_mv = controller_oa.controllerMechanicalVentilation
-      controller_mv.setSystemOutdoorAirMethod('VentilationRateProcedure')
+      if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.3.0')
+        controller_mv.setSystemOutdoorAirMethod('VentilationRateProcedure')
+      else
+        controller_mv.setSystemOutdoorAirMethod('Standard62.1VentilationRateProcedureWithLimit')
+      end
       # Change the min flow rate in the controller outdoor air
       controller_oa.setMinimumOutdoorAirFlowRate(0.0)
     else
@@ -1922,6 +1926,16 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, cannot disable multizone vav optimization because the system has no OA intake.")
       return false
     end
+  end
+
+  # Determine minimum ventilation efficiency for zones.
+  # This is used to decrease the overall system minimum OA flow rate
+  # such that a few zones do not drive the overall system OA flow rate too
+  # high.
+  def air_loop_hvac_minimum_zone_ventilation_efficiency(air_loop_hvac)
+    min_ventilation_efficiency = 0.6
+
+    return min_ventilation_efficiency
   end
 
   # Set the minimum VAV damper positions.
