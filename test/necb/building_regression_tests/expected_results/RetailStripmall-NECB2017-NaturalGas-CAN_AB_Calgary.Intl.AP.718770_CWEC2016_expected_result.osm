@@ -1324,7 +1324,7 @@ OS:WeatherFile,
   -114.02,                                !- Longitude {deg}
   -7,                                     !- Time Zone {hr}
   1084.1,                                 !- Elevation {m}
-  /var/gems/openstudio-standards/data/weather/CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw, !- Url
+  /home/osdev/openstudio-standards/data/weather/CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw, !- Url
   93FEA5D3;                               !- Checksum
 
 OS:Site,
@@ -5373,19 +5373,6 @@ OS:Curve:Quadratic,
   0,                                      !- Minimum Value of x
   1;                                      !- Maximum Value of x
 
-OS:Coil:Heating:Gas,
-  {89aafc94-3957-4920-8f13-5bf6c44ea3c4}, !- Handle
-  Coil Heating Gas 1,                     !- Name
-  {8799aafd-5147-476a-a31d-5142f0fd0071}, !- Availability Schedule Name
-  0.81,                                   !- Gas Burner Efficiency
-  AutoSize,                               !- Nominal Capacity {W}
-  {849c6a92-5611-4804-ab3a-e7191d71df13}, !- Air Inlet Node Name
-  {fa0de718-3c9c-4efb-bb0a-bf39088fafd5}, !- Air Outlet Node Name
-  ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
-  {b855d8f0-66a5-411c-b281-4779b366eaf9}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
-
 OS:Controller:OutdoorAir,
   {9fed34e9-7733-4959-862c-6daceb12d640}, !- Handle
   Controller Outdoor Air 1,               !- Name
@@ -5900,19 +5887,6 @@ OS:Curve:Quadratic,
   0,                                      !- Coefficient3 x**2
   0,                                      !- Minimum Value of x
   1;                                      !- Maximum Value of x
-
-OS:Coil:Heating:Gas,
-  {48425fd8-3d49-4c3b-ae6e-5f736cbdffb4}, !- Handle
-  Coil Heating Gas 2,                     !- Name
-  {8799aafd-5147-476a-a31d-5142f0fd0071}, !- Availability Schedule Name
-  0.924,                                  !- Gas Burner Efficiency
-  AutoSize,                               !- Nominal Capacity {W}
-  {7dabfc52-0a5d-4c82-b9cf-0ed608485b66}, !- Air Inlet Node Name
-  {e9edfe21-ca0a-407f-a768-44084f149217}, !- Air Outlet Node Name
-  ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
-  {b855d8f0-66a5-411c-b281-4779b366eaf9}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
 
 OS:Controller:OutdoorAir,
   {da8e18aa-5612-40b9-99be-563dcb31e6bd}, !- Handle
@@ -6441,19 +6415,6 @@ OS:Curve:Quadratic,
   0,                                      !- Coefficient3 x**2
   0,                                      !- Minimum Value of x
   1;                                      !- Maximum Value of x
-
-OS:Coil:Heating:Gas,
-  {7f62acaf-88d9-4b1e-a882-7caef7b60af2}, !- Handle
-  Coil Heating Gas 3,                     !- Name
-  {8799aafd-5147-476a-a31d-5142f0fd0071}, !- Availability Schedule Name
-  0.81,                                   !- Gas Burner Efficiency
-  AutoSize,                               !- Nominal Capacity {W}
-  {87a1a91b-02bc-4ae2-adf7-4cde33272dec}, !- Air Inlet Node Name
-  {eb09af2d-54e2-451b-b2ff-0b03b6f178b8}, !- Air Outlet Node Name
-  ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
-  {b855d8f0-66a5-411c-b281-4779b366eaf9}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
 
 OS:Controller:OutdoorAir,
   {fc1d3b43-f35b-43c0-9096-db3da199d21e}, !- Handle

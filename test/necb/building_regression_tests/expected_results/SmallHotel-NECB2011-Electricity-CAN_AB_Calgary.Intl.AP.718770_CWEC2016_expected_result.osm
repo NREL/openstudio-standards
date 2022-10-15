@@ -9787,7 +9787,7 @@ OS:WeatherFile,
   -114.02,                                !- Longitude {deg}
   -7,                                     !- Time Zone {hr}
   1084.1,                                 !- Elevation {m}
-  /var/gems/openstudio-standards/data/weather/CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw, !- Url
+  /home/osdev/openstudio-standards/data/weather/CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw, !- Url
   93FEA5D3;                               !- Checksum
 
 OS:Site:WaterMainsTemperature,
@@ -37793,15 +37793,6 @@ OS:Coil:Cooling:DX:SingleSpeed,
   10,                                     !- Basin Heater Setpoint Temperature {C}
   ;                                       !- Basin Heater Operating Schedule Name
 
-OS:Coil:Heating:Electric,
-  {eb2e6859-e106-4dd2-80a0-9750eab8f280}, !- Handle
-  Coil Heating Electric 37,               !- Name
-  {82915150-1506-4749-8d88-6d1121b6de54}, !- Availability Schedule Name
-  ,                                       !- Efficiency
-  ,                                       !- Nominal Capacity {W}
-  {637c20af-f10c-4216-b8da-d4a2ce166f41}, !- Air Inlet Node Name
-  {2d1c7939-f754-417d-ab23-e333fd54d261}; !- Air Outlet Node Name
-
 OS:Controller:OutdoorAir,
   {a16cc26a-6237-4e29-996d-cebbc8baad5a}, !- Handle
   Controller Outdoor Air 2,               !- Name
@@ -38304,15 +38295,6 @@ OS:Coil:Cooling:DX:SingleSpeed,
   0,                                      !- Basin Heater Capacity {W/K}
   10,                                     !- Basin Heater Setpoint Temperature {C}
   ;                                       !- Basin Heater Operating Schedule Name
-
-OS:Coil:Heating:Electric,
-  {4af533d0-ad21-42ef-84b7-8f32383bd2a7}, !- Handle
-  Coil Heating Electric 38,               !- Name
-  {82915150-1506-4749-8d88-6d1121b6de54}, !- Availability Schedule Name
-  ,                                       !- Efficiency
-  ,                                       !- Nominal Capacity {W}
-  {8c5fca68-6bca-4b15-a06d-50a400f895ab}, !- Air Inlet Node Name
-  {1cd0bed0-e362-46de-9022-05b7d6fc06e2}; !- Air Outlet Node Name
 
 OS:Controller:OutdoorAir,
   {e1122af5-846e-4f05-818f-6e66655f482c}, !- Handle
@@ -39432,15 +39414,6 @@ OS:Coil:Cooling:DX:SingleSpeed,
   0,                                      !- Basin Heater Capacity {W/K}
   10,                                     !- Basin Heater Setpoint Temperature {C}
   ;                                       !- Basin Heater Operating Schedule Name
-
-OS:Coil:Heating:Electric,
-  {e305c6e9-4ef1-4874-bc37-758adbb2b1ef}, !- Handle
-  Coil Heating Electric 39,               !- Name
-  {82915150-1506-4749-8d88-6d1121b6de54}, !- Availability Schedule Name
-  ,                                       !- Efficiency
-  ,                                       !- Nominal Capacity {W}
-  {5d1b666a-25c5-4585-9790-d2d4380591ae}, !- Air Inlet Node Name
-  {771e77d2-6962-4a3f-94ab-73e4605b29b8}; !- Air Outlet Node Name
 
 OS:Controller:OutdoorAir,
   {ce976e5b-b83d-4cb2-9211-d3aed87d56dd}, !- Handle
@@ -43971,15 +43944,6 @@ OS:Curve:Quadratic,
   0,                                      !- Minimum Value of x
   1;                                      !- Maximum Value of x
 
-OS:Coil:Heating:Electric,
-  {817ba8c9-a6b2-447a-84ad-07f694b940e0}, !- Handle
-  Coil Heating Electric 43,               !- Name
-  {82915150-1506-4749-8d88-6d1121b6de54}, !- Availability Schedule Name
-  ,                                       !- Efficiency
-  ,                                       !- Nominal Capacity {W}
-  {4823b2a6-e5fd-406e-b38d-84186c8726ef}, !- Air Inlet Node Name
-  {d5756f98-fe29-48f6-9a1f-e6ba0072dda6}; !- Air Outlet Node Name
-
 OS:Controller:OutdoorAir,
   {1212dec2-abb0-47bf-9958-01dab1941ab9}, !- Handle
   Controller Outdoor Air 6,               !- Name
@@ -44466,15 +44430,6 @@ OS:Curve:Quadratic,
   0,                                      !- Minimum Value of x
   1;                                      !- Maximum Value of x
 
-OS:Coil:Heating:Electric,
-  {9a82970f-3f9a-45a2-9703-9aa8959c63fd}, !- Handle
-  Coil Heating Electric 44,               !- Name
-  {82915150-1506-4749-8d88-6d1121b6de54}, !- Availability Schedule Name
-  ,                                       !- Efficiency
-  ,                                       !- Nominal Capacity {W}
-  {95ba115c-4b37-4a15-a5fb-5385b543926a}, !- Air Inlet Node Name
-  {233cfb93-de67-446f-9e8c-bd95c46f99d5}; !- Air Outlet Node Name
-
 OS:Controller:OutdoorAir,
   {8fecaba7-b43d-4ff0-9c6c-0b616535f974}, !- Handle
   Controller Outdoor Air 7,               !- Name
@@ -44960,15 +44915,6 @@ OS:Curve:Quadratic,
   0,                                      !- Coefficient3 x**2
   0,                                      !- Minimum Value of x
   1;                                      !- Maximum Value of x
-
-OS:Coil:Heating:Electric,
-  {6a1baf78-3102-4122-86b5-4c075239ca41}, !- Handle
-  Coil Heating Electric 45,               !- Name
-  {82915150-1506-4749-8d88-6d1121b6de54}, !- Availability Schedule Name
-  ,                                       !- Efficiency
-  ,                                       !- Nominal Capacity {W}
-  {1e81b766-294e-4c55-a473-5611e6918b6e}, !- Air Inlet Node Name
-  {d321bef1-ef26-4c92-b1b9-74d3a6dd2b56}; !- Air Outlet Node Name
 
 OS:Controller:OutdoorAir,
   {5b32c92f-af12-496d-b2ee-64f6f6d303a2}, !- Handle

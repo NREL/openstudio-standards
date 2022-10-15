@@ -496,7 +496,7 @@ OS:WeatherFile,
   -114.02,                                !- Longitude {deg}
   -7,                                     !- Time Zone {hr}
   1084.1,                                 !- Elevation {m}
-  /var/gems/openstudio-standards/data/weather/CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw, !- Url
+  /home/osdev/openstudio-standards/data/weather/CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw, !- Url
   93FEA5D3;                               !- Checksum
 
 OS:Site:WaterMainsTemperature,
@@ -3852,15 +3852,6 @@ OS:Curve:Quadratic,
   0,                                      !- Minimum Value of x
   1;                                      !- Maximum Value of x
 
-OS:Coil:Heating:Electric,
-  {b59c8c65-639c-4ae6-b0af-e9f9b9d63976}, !- Handle
-  Coil Heating Electric 1,                !- Name
-  {01fa0d24-8c36-43ce-a994-5df824bba490}, !- Availability Schedule Name
-  ,                                       !- Efficiency
-  ,                                       !- Nominal Capacity {W}
-  {3e0a7bff-ff7e-4fdb-a9ed-9e7278f8821d}, !- Air Inlet Node Name
-  {560fbb00-02c5-4911-a9ad-6d08cb927c39}; !- Air Outlet Node Name
-
 OS:Controller:OutdoorAir,
   {7b1f0140-8e8f-47a7-bdae-5bb8c4775f9e}, !- Handle
   Controller Outdoor Air 1,               !- Name
@@ -4332,15 +4323,6 @@ OS:Curve:Quadratic,
   0,                                      !- Coefficient3 x**2
   0,                                      !- Minimum Value of x
   1;                                      !- Maximum Value of x
-
-OS:Coil:Heating:Electric,
-  {f388bd68-87f2-4e09-a064-1ff0ab24e646}, !- Handle
-  Coil Heating Electric 2,                !- Name
-  {01fa0d24-8c36-43ce-a994-5df824bba490}, !- Availability Schedule Name
-  ,                                       !- Efficiency
-  ,                                       !- Nominal Capacity {W}
-  {5bd953b0-ea3a-4d42-baad-926fa9fb455f}, !- Air Inlet Node Name
-  {095a10d1-57a2-4000-be33-9e03a1b74306}; !- Air Outlet Node Name
 
 OS:Controller:OutdoorAir,
   {eeec2ee6-2463-4333-bf6d-051ada959ca2}, !- Handle

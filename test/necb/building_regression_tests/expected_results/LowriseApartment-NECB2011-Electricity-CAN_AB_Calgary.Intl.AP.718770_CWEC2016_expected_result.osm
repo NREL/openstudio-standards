@@ -6449,7 +6449,7 @@ OS:WeatherFile,
   -114.02,                                !- Longitude {deg}
   -7,                                     !- Time Zone {hr}
   1084.1,                                 !- Elevation {m}
-  /var/gems/openstudio-standards/data/weather/CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw, !- Url
+  /home/osdev/openstudio-standards/data/weather/CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw, !- Url
   93FEA5D3;                               !- Checksum
 
 OS:SizingPeriod:DesignDay,
@@ -18138,15 +18138,6 @@ OS:Coil:Cooling:DX:SingleSpeed,
   0,                                      !- Basin Heater Capacity {W/K}
   10,                                     !- Basin Heater Setpoint Temperature {C}
   ;                                       !- Basin Heater Operating Schedule Name
-
-OS:Coil:Heating:Electric,
-  {84f57452-00ee-4a78-9625-825598621f43}, !- Handle
-  Coil Heating Electric 20,               !- Name
-  {2845da04-8193-47b0-8245-7299a63d9400}, !- Availability Schedule Name
-  ,                                       !- Efficiency
-  ,                                       !- Nominal Capacity {W}
-  {898af364-88f7-4429-ac84-148f36df305d}, !- Air Inlet Node Name
-  {376d4edd-1f79-46ed-9e50-b061c6920ebb}; !- Air Outlet Node Name
 
 OS:Controller:OutdoorAir,
   {4375b1d3-9719-43a6-a23b-87130616aa85}, !- Handle
