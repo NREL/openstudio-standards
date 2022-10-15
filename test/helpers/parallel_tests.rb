@@ -5,6 +5,9 @@ require 'parallel'
 require 'open3'
 
 ProcessorsUsed = (Parallel.processor_count - 20).floor
+if ProcessorsUsed < 0 
+  ProcessorsUsed = (Parallel.processor_count - 1).floor
+end
 
 
 
