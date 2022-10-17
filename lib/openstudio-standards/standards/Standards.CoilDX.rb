@@ -160,7 +160,7 @@ module CoilDX
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @return [hash] has for search criteria to be used for find object
-  def coil_dx_find_search_criteria(coil_dx:, necb_reference_hp: false)
+  def coil_dx_find_search_criteria(coil_dx)
     search_criteria = {}
     search_criteria['template'] = template
 
@@ -179,7 +179,7 @@ module CoilDX
     search_criteria['subcategory'] = coil_dx_subcategory(coil_dx)
 
     # Add the heating type to the search criteria
-    htg_type = coil_dx_heating_type(coil_dx, necb_reference_hp)
+    htg_type = coil_dx_heating_type(coil_dx)
     unless htg_type.nil?
       search_criteria['heating_type'] = htg_type
     end

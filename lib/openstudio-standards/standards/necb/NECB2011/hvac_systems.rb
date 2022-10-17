@@ -2255,7 +2255,7 @@ class NECB2011
     airloop.setName(sys_name)
   end
 
-  def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_reference_hp:false)
+  def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed:, necb_reference_hp: false)
     # Set Rated heating capacity = 50% cooling coil capacity at -8.3 C outdoor [8.4.4.13 (2)(c)]
 
     if necb_reference_hp #NECB reference heat pump rules apply
@@ -2347,7 +2347,7 @@ class NECB2011
   # heating type rules need to be flexible to account for 
   # 1.  DX htg/cooling + gas supplement htg
   # 2.  Potential lack of AirLoopHVACUnitaryHeatPumpAirToAir or AirLoopHVACUnitarySystem  
-  def coil_dx_heating_type(coil_dx, necb_reference_hp:false)
+  def coil_dx_heating_type(coil_dx:, necb_reference_hp: false)
     supp_htg_type = nil
     if necb_reference_hp
       if coil_dx.airLoopHVAC.empty?
