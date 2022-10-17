@@ -1885,9 +1885,9 @@ class Standard
           # separate the primary zones from the secondary zones.
           # Add the baseline system type to the primary zones
           # and add the suplemental system type to the secondary zones.
-          story_zone_lists.each do |zones|
+          story_zone_lists.each do |story_group|
             # Differentiate primary and secondary zones
-            pri_sec_zone_lists = model_differentiate_primary_secondary_thermal_zones(model, story_group, zone_fan_scheds)
+            pri_sec_zone_lists = model_differentiate_primary_secondary_thermal_zones(model, story_group)
             # Record the primary zone system types
             pri_sec_zone_lists['primary'].each do |zone|
               zone_to_sys_type[zone] = pri_system_type
