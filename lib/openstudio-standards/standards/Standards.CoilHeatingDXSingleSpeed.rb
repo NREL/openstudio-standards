@@ -105,7 +105,7 @@ class Standard
   # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
   # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
-  def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, rename: false, necb_reference_hp: false)
+  def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed:, rename: false, necb_reference_hp: false)
     # find ac properties
     search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed, necb_reference_hp)
     sub_category = search_criteria['subcategory']
@@ -180,7 +180,7 @@ class Standard
   # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
   # @param sql_db_vars_map [Hash] hash map
   # @return [Hash] hash of coil objects
-  def coil_heating_dx_single_speed_apply_efficiency_and_curves(coil_heating_dx_single_speed, sql_db_vars_map, necb_reference_hp: false)
+  def coil_heating_dx_single_speed_apply_efficiency_and_curves(coil_heating_dx_single_speed:, sql_db_vars_map:, necb_reference_hp: false)
     successfully_set_all_properties = true
 
     # Get the search criteria
