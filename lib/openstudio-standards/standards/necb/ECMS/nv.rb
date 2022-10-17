@@ -122,7 +122,7 @@ class ECMS
               ##### Add a "ZoneVentilation:DesignFlowRate" object for NV to set OA per person.
               zn_vent_design_flow_rate_1 = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(model)
               zn_vent_design_flow_rate_1.setFlowRateperPerson(oa_per_person_normalized_by_number_of_windows)
-              if OpenStudio::VersionString.new(OpenStudio.openStudioVersion) < OpenStudio::VersionString.new('3.5.0')
+              if model.version < OpenStudio::VersionString.new('3.5.0')
                 # Design Flow Rate Calculation Method is automatically set in 3.5.0+
                 zn_vent_design_flow_rate_1.setDesignFlowRateCalculationMethod('Flow/Person')
               end
@@ -137,7 +137,7 @@ class ECMS
               ##### Add another "ZoneVentilation:DesignFlowRate" object for NV to set OA per floor area.
               zn_vent_design_flow_rate_2 = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(model)
               zn_vent_design_flow_rate_2.setFlowRateperZoneFloorArea(oa_per_floor_area_normalized_by_number_of_windows)
-              if OpenStudio::VersionString.new(OpenStudio.openStudioVersion) < OpenStudio::VersionString.new('3.5.0')
+              if model.version < OpenStudio::VersionString.new('3.5.0')
                 # Design Flow Rate Calculation Method is automatically set in 3.5.0+
                 zn_vent_design_flow_rate_2.setDesignFlowRateCalculationMethod('Flow/Area')
               end
