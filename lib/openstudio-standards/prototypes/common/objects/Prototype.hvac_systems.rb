@@ -1764,12 +1764,9 @@ class Standard
       avail_mgr = air_loop.availabilityManagers[0]
     end
 
-    if avail_mgr.is_initialized
-      avail_mgr = avail_mgr.get
-      if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
-        avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
-        avail_mgr.setCyclingRunTime(1800)
-      end
+    if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
+      avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
+      avail_mgr.setCyclingRunTime(1800)
     end
 
     # hook the VAV system to each zone
@@ -2126,12 +2123,9 @@ class Standard
       avail_mgr = air_loop.availabilityManagers[0]
     end
 
-    if avail_mgr.is_initialized
-      avail_mgr = avail_mgr.get
-      if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
-        avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
-        avail_mgr.setCyclingRunTime(1800)
-      end
+    if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
+      avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
+      avail_mgr.setCyclingRunTime(1800)
     end
 
     # attach the VAV system to each zone
@@ -2746,12 +2740,9 @@ class Standard
         avail_mgr = air_loop.availabilityManagers[0]
       end
 
-      if avail_mgr.is_initialized
-        avail_mgr = avail_mgr.get
-        if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
-          avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
-          avail_mgr.setCyclingRunTime(1800)
-        end
+      if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
+        avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
+        avail_mgr.setCyclingRunTime(1800)
       end
 
       # create a diffuser and attach the zone/diffuser pair to the air loop
