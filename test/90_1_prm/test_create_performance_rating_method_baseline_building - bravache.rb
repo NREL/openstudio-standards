@@ -133,177 +133,177 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, deb
 end
 
 class TestRun12 < Minitest::Test
-	#Standard Design Space-by-Space Lighting Method Test
-	#The prototype model is Medium_Office, CZ2, with the following variations:
-	#	- Perimeter Zones are Lobby with LPD 0.5W/ft^2
-	#	- Core Zones are Breakroom with LPD 0.75W/ft^2
+  #Standard Design Space-by-Space Lighting Method Test
+  #The prototype model is Medium_Office, CZ2, with the following variations:
+  # - Perimeter Zones are Lobby with LPD 0.5W/ft^2
+  # - Core Zones are Breakroom with LPD 0.75W/ft^2
 
-	@@model = create_baseline_model('Run12_Prototype', '90.1-2010', 'ASHRAE 169-2013-2A', 'MediumOffice', false)
-	
-	def setup
-		assert_instance_of OpenStudio::Model::Model, @@model
-	end
+  @@model = create_baseline_model('Run12_Prototype', '90.1-2010', 'ASHRAE 169-2013-2A', 'MediumOffice', false)
 
-	def test_901_2010_run12_test01	
-		#Testing the baseline LPD in the perimeter zones (lobby)
-		
-		space = @@model.getSpaceByName("Perimeter_mid_ZN_4").get
-		lpd_w_per_m2 = space.lightingPowerPerFloorArea
-		lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
-		assert_in_delta(0.90, lpd_w_per_ft2, 0.01, "'#{space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.90 was expected.")
-	end
-	
-	def test_901_2010_run12_test02
-		#Testing the baseline LPD in the core zones (breakroom)
-		
-		space = @@model.getSpaceByName("Core_bottom").get
-		lpd_w_per_m2 = space.lightingPowerPerFloorArea
-		lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
-		#(expected, actual, tolerance, message to show if it fails) 
-		assert_in_delta(0.73, lpd_w_per_ft2, 0.01, "'#{space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.73 was expected.")	
-	end
+  def setup
+    assert_instance_of OpenStudio::Model::Model, @@model
+  end
+
+  def test_901_2010_run12_test01
+    #Testing the baseline LPD in the perimeter zones (lobby)
+
+    space = @@model.getSpaceByName("Perimeter_mid_ZN_4").get
+    lpd_w_per_m2 = space.lightingPowerPerFloorArea
+    lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
+    assert_in_delta(0.90, lpd_w_per_ft2, 0.01, "'#{space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.90 was expected.")
+  end
+
+  def test_901_2010_run12_test02
+    #Testing the baseline LPD in the core zones (breakroom)
+
+    space = @@model.getSpaceByName("Core_bottom").get
+    lpd_w_per_m2 = space.lightingPowerPerFloorArea
+    lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
+    #(expected, actual, tolerance, message to show if it fails)
+    assert_in_delta(0.73, lpd_w_per_ft2, 0.01, "'#{space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.73 was expected.")
+  end
 
 end
 
 class TestRun01 < Minitest::Test
-	#Standard Design Exterior Envelope Test
-	#The prototype model is Small_Office, CZ2, with the following variations:
-	#	- Low-Slope Concrete Roof with U-Value 0.065 IP, solar reflectance 0.75 and thermal emittance 0.78
-	#	- Wood-framed wall with U-Value 0.095 IP
-	#	- Windows with U-Value 0.25 IP, SHGC 0.2 and VT 0.45
+  #Standard Design Exterior Envelope Test
+  #The prototype model is Small_Office, CZ2, with the following variations:
+  # - Low-Slope Concrete Roof with U-Value 0.065 IP, solar reflectance 0.75 and thermal emittance 0.78
+  # - Wood-framed wall with U-Value 0.095 IP
+  # - Windows with U-Value 0.25 IP, SHGC 0.2 and VT 0.45
 
-	@@model = create_baseline_model('Run01_Prototype', '90.1-2010', 'ASHRAE 169-2013-2A', 'SmallOffice', false)
-	
-	def setup
-		assert_instance_of OpenStudio::Model::Model, @@model
-	end
+  @@model = create_baseline_model('Run01_Prototype', '90.1-2010', 'ASHRAE 169-2013-2A', 'SmallOffice', false)
 
-	def test_901_2010_run01_test02
-		#Testing the baseline roof, wall and floor U-Value
-		
-		extwall = @@model.getSurfaceByName('Perimeter_ZN_3_wall_north').get
-		floor = @@model.getSurfaceByName('Perimeter_ZN_1_floor').get
-		roof = @@model.getSurfaceByName('Perimeter_ZN_2_roof').get
-		
-		extwall_uFactor_SI = extwall.uFactor.get
-		extwall_uFactor_IP = OpenStudio.convert(extwall_uFactor_SI, 'W/m^2*K','Btu/h*ft^2*R').get
-		
-		floor_uFactor_SI = floor.uFactor.get
-		floor_uFactor_IP = OpenStudio.convert(floor_uFactor_SI, 'W/m^2*K','Btu/h*ft^2*R').get
-		
-		roof_uFactor_SI = roof.uFactor.get
-		roof_uFactor_IP = OpenStudio.convert(roof_uFactor_SI, 'W/m^2*K','Btu/h*ft^2*R').get
-		
-		assert_in_delta(0.089, extwall_uFactor_IP, 0.001, "Exterior Walls have a U-Value of #{extwall_uFactor_IP} BTU/h.ft^2.R when 0.089 BTU/h.ft^2.R was expected (CZ2, Wood-Framed)")
-		assert_in_delta(0.0107, floor_uFactor_IP, 0.001, "Floor has a U-Value of #{floor_uFactor_IP} BTU/h.ft^2.R when 0.0107 BTU/h.ft^2.R was expected (CZ2, Mass)")
-		assert_in_delta(0.048, roof_uFactor_IP, 0.001, "Roof has a U-Value of #{roof_uFactor_IP} BTU/h.ft^2.R when 0.048 BTU/h.ft^2.R was expected (CZ2, IEAD)")		
-	end
-	
-	def test_901_2010_run01_test04	
-		#Testing the baseline roof solar reflectance and thermal emittance/absorptance
-		
-		roof = @@model.getSurfaceByName('Perimeter_ZN_2_roof').get
-		roof_cons_name = roof.construction.get.name.get
-		roof_cons = @@model.getConstructionByName(roof_cons_name).get
-		
-		roof_top_layer_name = roof_cons.getLayer(0).name.get
-		roof_top_layer = @@model.getOpaqueMaterialByName(roof_top_layer_name).get
-		
-		roof_sol_ref = roof_top_layer.solarReflectance.get
-		roof_th_em = roof_top_layer.thermalAbsorptance
-		
-		assert_in_delta(0.55, roof_sol_ref, 0.001, "Roof has a solar reflectance of #{roof_sol_ref} when 0.55 was expected.")
-		assert_in_delta(0.75, roof_th_em, 0.001, "Roof has a thermal emittance of #{roof_th_em} when 0.75 was expected.")
-	end
-		
-	def test_901_2010_run01_test05
-		#Testing the baseline windows U-Value, SHGC and VT.
-		
-		window = @@model.getSubSurfaceByName('Perimeter_ZN_3_wall_north_Window_1').get
-		
-		puts "#{window}"
-		
-		window_uFactor_SI = window.uFactor
-		window_uFactor_IP = OpenStudio.convert(window_uFactor_SI, 'W/m^2*K','Btu/h*ft^2*R').get
-		
-		assert_in_delta(0.75, window_uFactor_IP, 0.001, "Window has a U-Value of #{window_uFactor_IP} BTU/h.ft^2.R when 0.75 BTU/h.ft^2.R was expected (CZ2)")
-		
-		window_cons_name = window.construction.get.name.get
-		window_cons = @@model.getConstructionByName(window_cons_name).get
-		
-		puts "#{window_cons}"		
-		
-		glazing_name = window_cons.getLayer(0).name.get
-		
-		puts "#{glazing_name}"		
-		
-		glazing = @model.getSimpleGlazingByName(glazing_name).get
-		
-		puts "#{glazing}"		
-	end
+  def setup
+    assert_instance_of OpenStudio::Model::Model, @@model
+  end
+
+  def test_901_2010_run01_test02
+    #Testing the baseline roof, wall and floor U-Value
+
+    extwall = @@model.getSurfaceByName('Perimeter_ZN_3_wall_north').get
+    floor = @@model.getSurfaceByName('Perimeter_ZN_1_floor').get
+    roof = @@model.getSurfaceByName('Perimeter_ZN_2_roof').get
+
+    extwall_uFactor_SI = extwall.uFactor.get
+    extwall_uFactor_IP = OpenStudio.convert(extwall_uFactor_SI, 'W/m^2*K','Btu/h*ft^2*R').get
+
+    floor_uFactor_SI = floor.uFactor.get
+    floor_uFactor_IP = OpenStudio.convert(floor_uFactor_SI, 'W/m^2*K','Btu/h*ft^2*R').get
+
+    roof_uFactor_SI = roof.uFactor.get
+    roof_uFactor_IP = OpenStudio.convert(roof_uFactor_SI, 'W/m^2*K','Btu/h*ft^2*R').get
+
+    assert_in_delta(0.089, extwall_uFactor_IP, 0.001, "Exterior Walls have a U-Value of #{extwall_uFactor_IP} BTU/h.ft^2.R when 0.089 BTU/h.ft^2.R was expected (CZ2, Wood-Framed)")
+    assert_in_delta(0.0107, floor_uFactor_IP, 0.001, "Floor has a U-Value of #{floor_uFactor_IP} BTU/h.ft^2.R when 0.0107 BTU/h.ft^2.R was expected (CZ2, Mass)")
+    assert_in_delta(0.048, roof_uFactor_IP, 0.001, "Roof has a U-Value of #{roof_uFactor_IP} BTU/h.ft^2.R when 0.048 BTU/h.ft^2.R was expected (CZ2, IEAD)")
+  end
+
+  def test_901_2010_run01_test04
+    #Testing the baseline roof solar reflectance and thermal emittance/absorptance
+
+    roof = @@model.getSurfaceByName('Perimeter_ZN_2_roof').get
+    roof_cons_name = roof.construction.get.name.get
+    roof_cons = @@model.getConstructionByName(roof_cons_name).get
+
+    roof_top_layer_name = roof_cons.getLayer(0).name.get
+    roof_top_layer = @@model.getOpaqueMaterialByName(roof_top_layer_name).get
+
+    roof_sol_ref = roof_top_layer.solarReflectance.get
+    roof_th_em = roof_top_layer.thermalAbsorptance
+
+    assert_in_delta(0.55, roof_sol_ref, 0.001, "Roof has a solar reflectance of #{roof_sol_ref} when 0.55 was expected.")
+    assert_in_delta(0.75, roof_th_em, 0.001, "Roof has a thermal emittance of #{roof_th_em} when 0.75 was expected.")
+  end
+
+  def test_901_2010_run01_test05
+    #Testing the baseline windows U-Value, SHGC and VT.
+
+    window = @@model.getSubSurfaceByName('Perimeter_ZN_3_wall_north_Window_1').get
+
+    puts "#{window}"
+
+    window_uFactor_SI = window.uFactor
+    window_uFactor_IP = OpenStudio.convert(window_uFactor_SI, 'W/m^2*K','Btu/h*ft^2*R').get
+
+    assert_in_delta(0.75, window_uFactor_IP, 0.001, "Window has a U-Value of #{window_uFactor_IP} BTU/h.ft^2.R when 0.75 BTU/h.ft^2.R was expected (CZ2)")
+
+    window_cons_name = window.construction.get.name.get
+    window_cons = @@model.getConstructionByName(window_cons_name).get
+
+    puts "#{window_cons}"
+
+    glazing_name = window_cons.getLayer(0).name.get
+
+    puts "#{glazing_name}"
+
+    glazing = @model.getSimpleGlazingByName(glazing_name).get
+
+    puts "#{glazing}"
+  end
 
 end
 
 class TestRun18 < Minitest::Test
-	#Standard Design Exterior Envelope Test
-	#The prototype model is Small_Office, CZ2, with the following variations:
-	#	- Single Air Loop with DX Cooling Coil with COP 3.84, Heat Furnace with Efficiency 0.8 and constant volume fan.
+  #Standard Design Exterior Envelope Test
+  #The prototype model is Small_Office, CZ2, with the following variations:
+  # - Single Air Loop with DX Cooling Coil with COP 3.84, Heat Furnace with Efficiency 0.8 and constant volume fan.
 
-	@@model = create_baseline_model('Run18_Prototype', '90.1-2010', 'ASHRAE 169-2013-2A', 'SmallOffice', false)
-	
-	def setup
-		assert_instance_of OpenStudio::Model::Model, @@model
-	end
-	
-	def test_901_2010_run18_test01
-		#Testing if there are one air loop per thermal blocks (G3.1.1, System 3)
-		air_loops = @@model.getLoops
-		assert_equal(5, air_loops.size, "Model has #{air_loops.size} air loops when 5 where expected (one per thermal block)")
-	
-	end
-	
-	def test_901_2010_run18_test02
-		#Testing the type of HVAC System.
-		
-	end
-	
-	def test_901_2010_run18_test03
-		#Testing the cooling and heating equipment efficiency
-		#Fail to catch capacity (set to autosize in the model... to be fixed)
-		cooling_coils = @@model.getCoilCoolingDXSingleSpeeds
-		cooling_coils.each do |cooling_coil|
-			puts "#{cooling_coil}"
-			coil_capacity_SI = cooling_coil.ratedTotalCoolingCapacity.get
-			
-			puts "#{coil_capacity_SI}"
-			
-			coil_capacity_SI = coil_capacity_SI.split(" ").first.to_f
-			
-			puts "#{coil_capacity_SI}"
-			
-			coil_capacity_IP = OpenStudio.convert(coil_capacity_SI, 'W','Btu/h').get
-			
-			coil_name = cooling_coil.name.get
-			
-			coil_COP = cooling_coil.ratedCOP.get
-			coil_EER = OpenStudio.convert(coil_COP, 'W/W', 'Btu/h*W').get
-			coil_SEER = coil_EER / 0.875			
-			
-			case
-			when coil_capacity_IP < 65000
-				assert_in_delta(13.0, coil_SEER, 0.1, "The Cooling Coil #{coil_name} has a SEER of #{coil_SEER} when 13 was expected (capacity = #{coil_capacity_IP} < 65000 BTU/h)")
-			when coil_capacity_IP >= 65000 && coil_capacity_IP < 135000
-				assert_in_delta(11.0, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 11 was expected (65000 <= capacity = #{coil_capacity_IP} < 135000 BTU/h)")
-			when coil_capacity_IP >= 135000 && coil_capacity_IP < 240000
-				assert_in_delta(10.8, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 10.8 was expected (135000 <= capacity = #{coil_capacity_IP} < 240000 BTU/h)")
-			when coil_capacity_IP >= 240000 && coil_capacity_IP < 760000
-				assert_in_delta(10.0, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 10.0 was expected (240000 <= capacity = #{coil_capacity_IP} < 760000 BTU/h)")
-			else
-				assert_in_delta(9.7, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 9.7 was expected (capacity = #{coil_capacity_IP} >= 760000 BTU/h)")
-			end
-		end			
-	end
-		
-	
-	
+  @@model = create_baseline_model('Run18_Prototype', '90.1-2010', 'ASHRAE 169-2013-2A', 'SmallOffice', false)
+
+  def setup
+    assert_instance_of OpenStudio::Model::Model, @@model
+  end
+
+  def test_901_2010_run18_test01
+    #Testing if there are one air loop per thermal blocks (G3.1.1, System 3)
+    air_loops = @@model.getLoops
+    assert_equal(5, air_loops.size, "Model has #{air_loops.size} air loops when 5 where expected (one per thermal block)")
+
+  end
+
+  def test_901_2010_run18_test02
+    #Testing the type of HVAC System.
+
+  end
+
+  def test_901_2010_run18_test03
+    #Testing the cooling and heating equipment efficiency
+    #Fail to catch capacity (set to autosize in the model... to be fixed)
+    cooling_coils = @@model.getCoilCoolingDXSingleSpeeds
+    cooling_coils.each do |cooling_coil|
+      puts "#{cooling_coil}"
+      coil_capacity_SI = cooling_coil.ratedTotalCoolingCapacity.get
+
+      puts "#{coil_capacity_SI}"
+
+      coil_capacity_SI = coil_capacity_SI.split(" ").first.to_f
+
+      puts "#{coil_capacity_SI}"
+
+      coil_capacity_IP = OpenStudio.convert(coil_capacity_SI, 'W','Btu/h').get
+
+      coil_name = cooling_coil.name.get
+
+      coil_COP = cooling_coil.ratedCOP.to_f
+      coil_EER = OpenStudio.convert(coil_COP, 'W/W', 'Btu/h*W').get
+      coil_SEER = coil_EER / 0.875
+
+      case
+      when coil_capacity_IP < 65000
+        assert_in_delta(13.0, coil_SEER, 0.1, "The Cooling Coil #{coil_name} has a SEER of #{coil_SEER} when 13 was expected (capacity = #{coil_capacity_IP} < 65000 BTU/h)")
+      when coil_capacity_IP >= 65000 && coil_capacity_IP < 135000
+        assert_in_delta(11.0, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 11 was expected (65000 <= capacity = #{coil_capacity_IP} < 135000 BTU/h)")
+      when coil_capacity_IP >= 135000 && coil_capacity_IP < 240000
+        assert_in_delta(10.8, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 10.8 was expected (135000 <= capacity = #{coil_capacity_IP} < 240000 BTU/h)")
+      when coil_capacity_IP >= 240000 && coil_capacity_IP < 760000
+        assert_in_delta(10.0, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 10.0 was expected (240000 <= capacity = #{coil_capacity_IP} < 760000 BTU/h)")
+      else
+        assert_in_delta(9.7, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 9.7 was expected (capacity = #{coil_capacity_IP} >= 760000 BTU/h)")
+      end
+    end
+  end
+
+
+
 end

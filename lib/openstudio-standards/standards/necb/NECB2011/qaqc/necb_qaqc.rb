@@ -835,7 +835,7 @@ class NECB2011
           air_loop_info[:cooling_coils][:dx_single_speed] << coil
           single_speed = supply_comp.to_CoilCoolingDXSingleSpeed.get
           coil[:name] = single_speed.name.get
-          coil[:cop] = single_speed.ratedCOP.get
+          coil[:cop] = single_speed.ratedCOP.to_f
           coil[:nominal_total_capacity_w] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
           coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w], model, -1.0)
         end
@@ -844,8 +844,8 @@ class NECB2011
           air_loop_info[:cooling_coils][:dx_two_speed] << coil
           two_speed = supply_comp.to_CoilCoolingDXTwoSpeed.get
           coil[:name] = two_speed.name.get
-          coil[:cop_low] = two_speed.ratedLowSpeedCOP.get
-          coil[:cop_high] = two_speed.ratedHighSpeedCOP.get
+          coil[:cop_low] = two_speed.ratedLowSpeedCOP.to_f
+          coil[:cop_high] = two_speed.ratedHighSpeedCOP.to_f
           coil[:nominal_total_capacity_w] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
           coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w], model, -1.0)
         end
