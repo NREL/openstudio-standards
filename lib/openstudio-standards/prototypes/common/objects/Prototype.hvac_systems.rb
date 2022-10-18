@@ -1760,11 +1760,16 @@ class Standard
 
     if model.version < OpenStudio::VersionString.new('3.5.0')
       avail_mgr = air_loop.availabilityManager
+      if avail_mgr.is_initialized
+        avail_mgr = avail_mgr.get
+      else
+        avail_mgr = nil
+      end 
     else 
       avail_mgr = air_loop.availabilityManagers[0]
     end
 
-    if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
+    if !avail_mgr.nil? && avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
       avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
       avail_mgr.setCyclingRunTime(1800)
     end
@@ -2119,11 +2124,16 @@ class Standard
 
     if model.version < OpenStudio::VersionString.new('3.5.0')
       avail_mgr = air_loop.availabilityManager
+      if avail_mgr.is_initialized
+        avail_mgr = avail_mgr.get
+      else
+        avail_mgr = nil
+      end 
     else 
       avail_mgr = air_loop.availabilityManagers[0]
     end
 
-    if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
+    if !avail_mgr.nil? && avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
       avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
       avail_mgr.setCyclingRunTime(1800)
     end
@@ -2736,11 +2746,16 @@ class Standard
 
       if model.version < OpenStudio::VersionString.new('3.5.0')
         avail_mgr = air_loop.availabilityManager
+        if avail_mgr.is_initialized
+          avail_mgr = avail_mgr.get
+        else
+          avail_mgr = nil
+        end 
       else 
         avail_mgr = air_loop.availabilityManagers[0]
       end
 
-      if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
+      if !avail_mgr.nil? && avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
         avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
         avail_mgr.setCyclingRunTime(1800)
       end
