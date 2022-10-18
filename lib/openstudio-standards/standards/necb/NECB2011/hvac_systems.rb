@@ -2255,7 +2255,7 @@ class NECB2011
     airloop.setName(sys_name)
   end
 
-  def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed:, necb_reference_hp: false)
+  def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_reference_hp = false)
     # Set Rated heating capacity = 50% cooling coil capacity at -8.3 C outdoor [8.4.4.13 (2)(c)]
 
     if necb_reference_hp #NECB reference heat pump rules apply
