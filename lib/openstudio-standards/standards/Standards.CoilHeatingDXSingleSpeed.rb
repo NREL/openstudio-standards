@@ -105,7 +105,7 @@ class Standard
   # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
   # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
-  def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, rename: false)
+  def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, rename = false)
     # find ac properties
     search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed)
     sub_category = search_criteria['subcategory']

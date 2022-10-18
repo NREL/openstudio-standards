@@ -43,7 +43,7 @@ class Standard
   # @param coil_cooling_dx_single_speed [OpenStudio::Model::CoilCoolingDXSingleSpeed] coil cooling dx single speed object
   # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
-  def coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, rename: false)
+  def coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, rename = false)
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_single_speed)
     cooling_type = search_criteria['cooling_type']
     heating_type = search_criteria['heating_type']
