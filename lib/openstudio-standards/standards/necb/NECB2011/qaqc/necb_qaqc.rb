@@ -1712,7 +1712,7 @@ class NECB2011
   # This method will run the HRV compliance for a single air loop
   #
   # @param qaqc [:hash] Hash that contains the base data with qaqc keys
-  # @param model [:OS:Model] Openstudio Model
+  # @param model [:OS:Model] OpenStudio Model
   # @param  air_loop_info [:hash]  single air_loop object from the qaqc hash
   def necb_hrv_compliance_for_single_airloop(qaqc, model, air_loop_info)
     # HRV check

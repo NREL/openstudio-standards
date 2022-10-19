@@ -753,7 +753,7 @@ module BTAP
             @total_building_construction_set_cost
           )
 
-          #Give adiabatic surfaces a construction. Does not matter what. This is a bug in Openstudio that leave these surfaces unassigned by the default construction set.
+          #Give adiabatic surfaces a construction. Does not matter what. This is a bug in OpenStudio that leave these surfaces unassigned by the default construction set.
           all_adiabatic_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces, "Adiabatic")
           unless all_adiabatic_surfaces.empty?
             BTAP::Geometry::Surfaces::set_surfaces_construction( all_adiabatic_surfaces, model.building.get.defaultConstructionSet.get.defaultInteriorSurfaceConstructions.get.wallConstruction.get)

@@ -6926,7 +6926,7 @@ class Standard
   # include data source from:
   # 1. user data csv files
   # 2. data from measure and OpenStudio interface
-  # @param [Openstudio:model:Model] model
+  # @param [OpenStudio:model:Model] model
   # @param [String] climate_zone
   # @param [String] default_hvac_building_type
   # @param [String] default_wwr_building_type
@@ -6940,7 +6940,7 @@ class Standard
   # Template method for adding a setpoint manager for a coil control logic to a heating coil.
   # ASHRAE 90.1-2019 Appendix G.
   #
-  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param model [OpenStudio::Model::Model] OpenStudio model
   # @param thermalZones Array([OpenStudio::Model::ThermalZone]) thermal zone array
   # @param coil Heating Coils
   # @return [Boolean] true
@@ -6951,7 +6951,7 @@ class Standard
   # Template method for adding zone additional property "zone DCV implemented in user model"
   #
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param model [OpenStudio::Model::Model] OpenStudio model
   def model_mark_zone_dcv_existence(model)
     return true
   end
@@ -6960,7 +6960,7 @@ class Standard
   # The default shall be true
   #
   # @param [Boolean] run_all_orients: user inputs to indicate whether it is required to run all orientations
-  # @param [OpenStudio::Model::Model] Openstudio model
+  # @param [OpenStudio::Model::Model] OpenStudio model
   def run_all_orientations(run_all_orients, user_model)
     return run_all_orients
   end
@@ -6968,7 +6968,7 @@ class Standard
   # Template method for reading user data and adding to zone additional properties
   #
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param model [OpenStudio::Model::Model] OpenStudio model
   def model_add_dcv_user_exception_properties(model)
     return true
   end
@@ -6976,7 +6976,7 @@ class Standard
   # Template method for raising user model DCV warning and errors
   #
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param model [OpenStudio::Model::Model] OpenStudio model
   def model_raise_user_model_dcv_errors(model)
     return true
   end
@@ -6984,7 +6984,7 @@ class Standard
   # Template method for adding zone additional property "airloop dcv required by 901" and "zone dcv required by 901"
   #
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param model [OpenStudio::Model::Model] OpenStudio model
   def model_add_dcv_requirement_properties(model)
     return true
   end
@@ -6993,7 +6993,7 @@ class Standard
   # Zone additional property 'apxg no need to have DCV' added
   #
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param model [OpenStudio::Model::Model] OpenStudio model
   def model_add_apxg_dcv_properties(model)
     return true
   end
@@ -7001,14 +7001,14 @@ class Standard
   # Template method for setting DCV in baseline HVAC system if required
   #
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param model [OpenStudio::Model::Model] OpenStudio model
   def model_set_baseline_demand_control_ventilation(model, climate_zone)
     return true
   end
 
   # Identify the return air type associated with each thermal zone
   #
-  # @param model [OpenStudio::Model::Model] Openstudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   def model_identify_return_air_type(model)
     # air-loop based system
     model.getThermalZones.each do |zone|
