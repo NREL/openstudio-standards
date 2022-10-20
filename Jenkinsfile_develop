@@ -2,4 +2,4 @@
 
 @Library('cbci_shared_libs@3.5.0-alpha') _
 
-openstudio_standardis_develop()
+openstudio_standards_develop()
