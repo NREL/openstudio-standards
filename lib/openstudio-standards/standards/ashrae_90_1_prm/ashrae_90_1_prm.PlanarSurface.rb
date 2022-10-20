@@ -7,7 +7,7 @@ class ASHRAE901PRM < Standard
   # create a construction that meets those properties and assign it to this surface.
   # 90.1-PRM-2019
   #
-  # @param planar_surface [Openstudio::Model:PlanarSurface] surface object
+  # @param planar_surface [OpenStudio::Model:PlanarSurface] surface object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param previous_construction_map [Hash] a hash where the keys are an array of inputs
   #   [template, climate_zone, intended_surface_type, standards_construction_type, occ_type]

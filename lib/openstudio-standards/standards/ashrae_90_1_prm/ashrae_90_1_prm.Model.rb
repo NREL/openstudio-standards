@@ -1176,7 +1176,7 @@ class ASHRAE901PRM < Standard
   # Template method for adding a setpoint manager for a coil control logic to a heating coil.
   # ASHRAE 90.1-2019 Appendix G.
   #
-  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param model [OpenStudio::Model::Model] OpenStudio model
   # @param thermalZones Array([OpenStudio::Model::ThermalZone]) thermal zone array
   # @param coil Heating Coils
   # @return [Boolean] true
@@ -1228,7 +1228,7 @@ class ASHRAE901PRM < Standard
   #   - 'false' otherwise
   #
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param model [OpenStudio::Model::Model] OpenStudio model
   def model_mark_zone_dcv_existence(model)
     model.getAirLoopHVACs.each do |air_loop_hvac|
       next unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
@@ -1274,7 +1274,7 @@ class ASHRAE901PRM < Standard
   # "one user specified DCV exception"
   #
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param model [OpenStudio::Model::Model] OpenStudio model
   def model_add_dcv_user_exception_properties(model)
     model.getAirLoopHVACs.each do |air_loop_hvac|
       dcv_airloop_user_exception = false
@@ -1336,7 +1336,7 @@ class ASHRAE901PRM < Standard
   # - 'flase' otherwise
   #
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param model [OpenStudio::Model::Model] OpenStudio model
   def model_add_dcv_requirement_properties(model)
     model.getAirLoopHVACs.each do |air_loop_hvac|
       if user_model_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
@@ -1370,7 +1370,7 @@ class ASHRAE901PRM < Standard
   # generation
   #
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param model [OpenStudio::Model::Model] OpenStudio model
   def model_raise_user_model_dcv_errors(model)
     # TODO: JXL add log msgs to PRM logger
     model.getThermalZones.each do |thermal_zone|
@@ -1396,7 +1396,7 @@ class ASHRAE901PRM < Standard
   # property 'apxg no need to have DCV' added
   #
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param model [OpenStudio::Model::Model] OpenStudio model
   def model_add_apxg_dcv_properties(model)
     model.getAirLoopHVACs.each do |air_loop_hvac|
       if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
@@ -1434,7 +1434,7 @@ class ASHRAE901PRM < Standard
   # Set DCV in baseline HVAC system if required
   #
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] Openstudio model
+  # @param model [OpenStudio::Model::Model] OpenStudio model
   def model_set_baseline_demand_control_ventilation(model, climate_zone)
     model.getAirLoopHVACs.each do |air_loop_hvac|
       if baseline_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
@@ -1452,7 +1452,7 @@ class ASHRAE901PRM < Standard
   # include data source from:
   # 1. user data csv files
   # 2. data from measure and OpenStudio interface
-  # @param [Openstudio:model:Model] model
+  # @param [OpenStudio:model:Model] model
   # @param [String] climate_zone
   # @param [String] default_hvac_building_type
   # @param [String] default_wwr_building_type
@@ -1948,7 +1948,7 @@ class ASHRAE901PRM < Standard
   # The default shall be true
   #
   # @param [Boolean] run_all_orients: user inputs to indicate whether it is required to run all orientations
-  # @param [OpenStudio::Model::Model] Openstudio model
+  # @param [OpenStudio::Model::Model] OpenStudio model
   def run_all_orientations(run_all_orients, user_model)
     # Step 0, assign the default value
     run_orients_flag = run_all_orients

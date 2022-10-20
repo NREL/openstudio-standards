@@ -529,7 +529,7 @@ class Standard
   # Calculate the fenestration U-Factor base on the glass, frame,
   # and divider performance and area calculated by EnergyPlus.
   #
-  # @param [OpenStudio:Model:Construction] Openstudio Construction object
+  # @param [OpenStudio:Model:Construction] OpenStudio Construction object
   #
   # @return [Double] the U-Factor in W/m^2*K
   def construction_calculated_fenestration_u_factor_w_frame(construction)
