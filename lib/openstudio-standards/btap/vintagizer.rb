@@ -99,7 +99,7 @@ class Vintagizer
     new_construction_set.setName(construction_id)
     constructions_model.building.get.setDefaultConstructionSet( new_construction_set.clone( constructions_model ).to_DefaultConstructionSet.get )
 
-    #Give adiabatic surfaces a construction. Does not matter what. This is a bug in Openstudio that leave these surfaces unassigned by the default construction set.
+    #Give adiabatic surfaces a construction. Does not matter what. This is a bug in OpenStudio that leave these surfaces unassigned by the default construction set.
     all_adiabatic_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(constructions_model.getSurfaces, "Adiabatic")
     BTAP::Geometry::Surfaces::set_surfaces_construction( all_adiabatic_surfaces, constructions_model.building.get.defaultConstructionSet.get.defaultInteriorSurfaceConstructions.get.wallConstruction.get)
 

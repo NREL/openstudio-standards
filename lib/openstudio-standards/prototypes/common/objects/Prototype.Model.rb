@@ -597,7 +597,7 @@ Standard.class_eval do
       next unless surface.surfaceType == 'Wall'
 
       boundary_condition = surface.outsideBoundaryCondition
-      next unless boundary_condition == 'OtherSideCoefficients' || boundary_condition == 'Ground'
+      next unless boundary_condition == 'OtherSideCoefficients' || boundary_condition.to_s.downcase.include?('ground')
 
       # calculate wall height as difference of maximum and minimum z values, assuming square, vertical walls
       z_values = []
@@ -677,7 +677,7 @@ Standard.class_eval do
 
     # Find space's floors
     space.surfaces.each do |surface|
-      if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground'
+      if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition.to_s.downcase.include?('ground')
         floors << surface
       end
     end
@@ -1794,7 +1794,7 @@ Standard.class_eval do
   #
   # @param model [OpenStudio::Model::Model] the model
   def model_apply_prototype_hvac_efficiency_adjustments(model)
-    building_data = model_get_building_climate_zone_and_building_type(model)
+    building_data = model_get_building_properties(model)
     building_type = building_data['building_type']
     climate_zone = building_data['climate_zone']
 
@@ -2700,7 +2700,6 @@ Standard.class_eval do
   # @param wwr [Boolean]
   # @return [Numeric] Returns window to wall ratio (percentage) or window area.
   def model_get_window_area_info(model, wwr = true)
-
     window_area = 0
     wall_area = 0
 

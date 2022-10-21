@@ -470,8 +470,6 @@ class Standard
     # Calculate the typical pressure - same for all building types
     final_pressure_pa = 0.5 * cs * rho * uh**2
 
-    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Space", "Final pressure PA = #{final_pressure_pa.round(3)} Pa.")
-
     adjusted_infiltration_rate_m3_per_s = (1.0 + alpha) * initial_infiltration_rate_m3_per_s * (final_pressure_pa / intial_pressure_pa)**n
 
     return adjusted_infiltration_rate_m3_per_s
@@ -691,10 +689,10 @@ class Standard
     case intended_surface_type
     when 'AtticFloor'
       film_r_si += film_int_surf_ht_flow_up_r_si if ext_film # Outside
-      film_r_si += film_semi_ext_surf_r_si if int_film # Inside
+      film_r_si += film_semi_ext_surf_r_si if int_film # Inside @todo: this is only true if the attic is ventilated, interior film should be used otheriwse
     when 'AtticWall', 'AtticRoof'
       film_r_si += film_ext_surf_r_si if ext_film # Outside
-      film_r_si += film_semi_ext_surf_r_si if int_film # Inside
+      film_r_si += film_semi_ext_surf_r_si if int_film # Inside @todo: this is only true if the attic is ventilated, interior film should be used otherwise
     when 'DemisingFloor', 'InteriorFloor'
       film_r_si += film_int_surf_ht_flow_up_r_si if ext_film # Outside
       film_r_si += film_int_surf_ht_flow_dwn_r_si if int_film # Inside

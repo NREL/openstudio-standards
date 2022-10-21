@@ -47,4 +47,15 @@ class DOERef1980to2004 < ASHRAE901
     damper_action = 'Single Maximum'
     return damper_action
   end
+
+  # Determine minimum ventilation efficiency for zones.
+  # For DOE Ref 1980-2004, assume that VAV system designers did not
+  # care about decreasing system OA flow rates and therefore did not
+  # adjust minimum damper positions to achieve any specific
+  # ventilation efficiency.
+  def air_loop_hvac_minimum_zone_ventilation_efficiency(air_loop_hvac)
+    min_ventilation_efficiency = 0
+
+    return min_ventilation_efficiency
+  end
 end

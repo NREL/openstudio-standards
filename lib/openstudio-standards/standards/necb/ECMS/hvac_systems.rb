@@ -442,7 +442,7 @@ class ECMS
     end
     return storey_zones_map
   end
-  
+
   #==============================================================================================================================
   # Update the map between systems and zones
   def update_system_zones_map(model,system_zones_map,system_zones_map_option,system_key)
@@ -482,7 +482,7 @@ class ECMS
       system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1')
     else
       updated_system_zones_map = {}
-      system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..-1]}"] = zones}  # doas unit is an NECB sys_1 
+      system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..-1]}"] = zones}  # doas unit is an NECB sys_1
       system_zones_map = updated_system_zones_map
     end
     # Add outdoor VRF unit
@@ -612,7 +612,11 @@ class ECMS
     airloop.sizingSystem.setSystemOutdoorAirMethod('ZoneSum')
     airloop.sizingSystem.setCentralCoolingDesignSupplyAirHumidityRatio(0.0085)
     airloop.sizingSystem.setCentralHeatingDesignSupplyAirHumidityRatio(0.0080)
-    airloop.sizingSystem.setMinimumSystemAirFlowRatio(1.0)
+    if model.version < OpenStudio::VersionString.new('2.7.0')
+      airloop.sizingSystem.setMinimumSystemAirFlowRatio(1.0)
+    else
+      airloop.sizingSystem.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+    end
     case sys_vent_type.downcase
     when 'doas'
       airloop.sizingSystem.setAllOutdoorAirinCooling(true)
@@ -1126,7 +1130,7 @@ class ECMS
           # There is an error in EnergyPlus in the estimated capacity of the coil "CoilCoolingDXVariableSpeed".
           # Here the capacity reported by OS is adjusted to estimate an appropriate capacity for the cooling coil.
           # The autosized capacity is corrected for the actual fan flow rate and fan power.
-          if supply_fan.autosizedMaximumFlowRate.is_initialized 
+          if supply_fan.autosizedMaximumFlowRate.is_initialized
             fan_max_afr = supply_fan.autosizedMaximumFlowRate.to_f
           elsif supply_fan.maximumFlowRate.is_initialized
             fan_max_afr = supply_fan.maximumFlowRate.to_f
