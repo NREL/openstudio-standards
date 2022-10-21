@@ -27,7 +27,7 @@ module BTAP
 
       #This method removes all costs from model
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@param runner [String]
       def self.remove_all_costs(model,runner = nil)
         #Remove all cost items.
@@ -39,7 +39,7 @@ module BTAP
 
       #This method will add the costs.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@param name [String]
       #@param cost [Float]
       #@param unittype [String]
@@ -54,10 +54,10 @@ module BTAP
         end
         return cost_object
       end
-      
+
       #This method will add the cost per building.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@param name [String]
       #@param cost [Float]
       #@param runner [Float]
@@ -70,10 +70,10 @@ module BTAP
           runner.nil? ? puts(message) : runner.registerInfo(message)
         end
       end
-      
+
       #This method will add the cost per total area.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@param name [String]
       #@param cost [Float]
       #@param runner [Float]
@@ -89,7 +89,7 @@ module BTAP
 
       #This method will set the ecm envelope.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@param library_file_path [String]
       #@param default_construction_set_name [String]
       #@param ext_wall_rsi [Float]
@@ -240,7 +240,7 @@ module BTAP
             tubular_daylight_diffuser_cost_m2,
             total_building_construction_set_cost
           )
-          #Give adiabatic surfaces a construction. Does not matter what. This is a bug in Openstudio that leave these surfaces unassigned by the default construction set.
+          #Give adiabatic surfaces a construction. Does not matter what. This is a bug in OpenStudio that leave these surfaces unassigned by the default construction set.
           all_adiabatic_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces, "Adiabatic")
           unless all_adiabatic_surfaces.empty?
             BTAP::Geometry::Surfaces::set_surfaces_construction( all_adiabatic_surfaces, model.building.get.defaultConstructionSet.get.defaultInteriorSurfaceConstructions.get.wallConstruction.get)
@@ -256,10 +256,10 @@ module BTAP
           return false
         end
       end
-      
+
       #This method will set the ecm infiltration.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@param infiltration_design_flow_rate [Float]
       #@param infiltration_flow_per_space [Float]
       #@param infiltration_flow_per_exterior_area [Float]
@@ -277,7 +277,7 @@ module BTAP
           cost_per_exterior_area_m2,
           runner = nil
         )
-        default_surface_construction_set = model.building.get.defaultConstructionSet.get 
+        default_surface_construction_set = model.building.get.defaultConstructionSet.get
         log = BTAP::Resources::SpaceLoads::ScaleLoads::set_inflitration_magnitude(
           model,
           infiltration_design_flow_rate,
@@ -286,9 +286,9 @@ module BTAP
           infiltration_air_changes_per_hour
         )
         #log change
-        message = log 
+        message = log
         runner.nil? ? puts(message) : runner.registerinfo(message)
-        #set costs based on all external surface type constructions. 
+        #set costs based on all external surface type constructions.
         constructions_and_cost = [
           ["infiltration_ext_wall_cost_m3",cost_per_exterior_area_m2, default_surface_construction_set.defaultExteriorSurfaceConstructions.get.wallConstruction.get],
           ["infiltration_ext_floor_cost_m3", cost_per_exterior_area_m2, default_surface_construction_set.defaultExteriorSurfaceConstructions.get.floorConstruction.get],
@@ -318,10 +318,10 @@ module BTAP
         BTAP::Resources::Economics::object_cost(building, "Infiltration Cost per building.", cost_per_building, "CostPerEach")
         return true
       end
-      
+
       #This method will set the ecm fans.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@return [String] log
       def ecm_fans( model )
         measure_values =
@@ -349,7 +349,7 @@ module BTAP
             fan.setMotorEfficiency( @fan_motor_eff ) unless @fan_motor_eff.nil?
             log  << fan.name.get.to_s << ",#{fan.fanEfficiency},#{fan.motorEfficiency}\n"
           end
-          
+
         end
 
         case @fan_volume_type
@@ -409,11 +409,11 @@ module BTAP
         end
         return log
       end
-      
-      
+
+
       #This method will set the ecm pumps.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@return [String] log
       def ecm_pumps( model )
         measure_values =
@@ -505,10 +505,10 @@ module BTAP
         CSV.open("#{@script_root_folder_path}/sample_pump_eff_ecm.csv", 'w') { |csv| csv << measure_values.unshift("measure_id") }
         return log
       end
-      
+
       #This method will set the ecm cooling COP.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       def ecm_cooling_cop( model )
         log = ""
         measure_values =[
@@ -523,7 +523,9 @@ module BTAP
           model.getCoilCoolingDXSingleSpeeds.sort.each do |cooling_coil|
             cooling_coil.setRatedCOP( OpenStudio::OptionalDouble.new( @cop ) ) unless @cop.nil?
             cop = "NA"
-            cop = cooling_coil.ratedCOP.get unless cooling_coil.ratedCOP.empty?
+            # Prior to 3.5.0, it was an optional double, now it's a double
+            cop_ = OpenStudio::OptionalDouble.new(cooling_coil.ratedCOP)
+            cop = cop_.get unless cop_.empty?
             log  << cooling_coil.name.get.to_s << ",#{cop}\n"
 
           end
@@ -535,18 +537,21 @@ module BTAP
             cooling_coil.setRatedHighSpeedCOP( @cop  ) unless @cop.nil?
             cooling_coil.setRatedLowSpeedCOP(  @cop  ) unless @cop.nil?
             cop_high = "NA"
-            cop_high = cooling_coil.ratedHighSpeedCOP.get unless cooling_coil.ratedHighSpeedCOP.empty?
+            # Prior to 3.5.0, it was an optional double, now it's a double
+            cop_ = OpenStudio::OptionalDouble.new(cooling_coil.ratedHighSpeedCOP)
+            cop_high = cop_.get unless cop_.empty?
             cop_low = "NA"
-            cop_low = cooling_coil.ratedLowSpeedCOP.get unless cooling_coil.ratedLowSpeedCOP.empty?
+            cop_ = OpenStudio::OptionalDouble.new(cooling_coil.ratedLowSpeedCOP)
+            cop_low = cop_.get unless cop_.empty?
             log  << cooling_coil.name.get.to_s << ",#{cop_high},#{cop_low}\n"
           end
         end
         return log
       end
-      
+
       #This method will set the ecm economizers.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@return [String] log
       def ecm_economizers( model )
 
@@ -577,7 +582,7 @@ module BTAP
       end
       #This method will set the ecm sizing.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@return [String] table
       def ecm_sizing( model)
         measure_values =[
@@ -608,10 +613,10 @@ module BTAP
         CSV.open("#{@script_root_folder_path}/sample_sizing_param_ecm.csv", 'w') { |csv| csv << measure_values.unshift("measure_id") }
         return table
       end
-      
+
       #This method will set the ecm domestic hot water.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@return [String] log
       def ecm_dhw( model )
         log = "shw_setpoint_sched,shw_heater_fuel_type,shw_thermal_eff\n"
@@ -638,10 +643,10 @@ module BTAP
         end
         return log
       end
-      
+
       #This method will set the ecm chotwater boilers.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@return [String] table
       def ecm_hotwater_boilers( model )
         measure_values = [
@@ -754,10 +759,10 @@ module BTAP
         end #end boilers loop
         return table
       end
-      
+
       #This method will set the ecm dcv.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@return [String] log
       def ecm_dcv( model )
         log = ""
@@ -771,10 +776,10 @@ module BTAP
         end
         return log
       end
-      
+
       #This method will set the ecm heating and cooling setpoints.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@return [String] log
       def ecm_heating_cooling_setpoints(model)
 
@@ -825,10 +830,10 @@ module BTAP
         end
         return log
       end
-      
+
       #This method will set the ecm erv.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@return [String] log
       def ecm_erv( model )
         log = ""
@@ -878,8 +883,8 @@ module BTAP
             @erv_nominal_electric_power,
             @erv_economizer_lockout.to_bool
           ).each { |erv| log << erv.to_s }
-          
-          
+
+
           #Add setpoint manager to all OA object in airloops.
           model.getHeatExchangerAirToAirSensibleAndLatents.sort.each do |erv|
 
@@ -899,10 +904,10 @@ module BTAP
         end
         return log
       end
-      
+
       #This method will set the ecm cexhaust fans.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@return [String] log
       def ecm_exhaust_fans( model )
         log = ""
@@ -920,10 +925,10 @@ module BTAP
         end
         return log
       end
-      
+
       #This method will set the ecm lighting.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@return [String] log
       def ecm_lighting( model )
         log = ""
@@ -947,10 +952,10 @@ module BTAP
         end
         return log
       end
-      
+
       #This method will set the ecm temperature setback.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@return [String] log
       def ecm_plugs( model )
         log = ""
@@ -978,10 +983,10 @@ module BTAP
         CSV.open("#{@script_root_folder_path}/sample_scale_plug_loads_ecm.csv", 'w') { |csv| csv << measure_values.unshift("measure_id") }
         return log
       end
-      
+
       #This method will set the ecm cold deck reset control.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@return [String] log
       def ecm_cold_deck_reset_control( model )
         log = ""
@@ -1034,10 +1039,10 @@ module BTAP
         end
         return log
       end
-      
+
       #This method will reset the sat ecm.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@return [String] log
       def ecm_sat_reset( model )
         log = ""
@@ -1074,10 +1079,10 @@ module BTAP
         end
         return log
       end
-      
+
       #This method will set the ecm temperature setback.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object
       #@return [String] log
       def ecm_temp_setback( model )
         log = ""
@@ -1115,7 +1120,7 @@ module BTAP
           log << "no change to setbacks."
         end
         return log
-      end  
+      end
     end
   end #module Resources
 end #module BTAP

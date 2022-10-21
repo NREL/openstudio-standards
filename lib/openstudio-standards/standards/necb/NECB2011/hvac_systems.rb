@@ -23,7 +23,8 @@ class NECB2011
     economizer_required = false
 
     # need a better way to determine if an economizer is needed.
-    return economizer_required if air_loop_hvac.name.to_s.include? 'Outpatient F1'
+    return economizer_required if ((air_loop_hvac.name.to_s.include? 'Outpatient F1' ) ||
+                                   (air_loop_hvac.sizingSystem.typeofLoadtoSizeOn.to_s == "VentilationRequirement"))
 
     # A big number of btu per hr as the minimum requirement
     infinity_btu_per_hr = 999_999_999_999
@@ -1996,7 +1997,11 @@ class NECB2011
     air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(system_data[:CentralHeatingDesignSupplyAirTemperature]) unless system_data[:CentralHeatingDesignSupplyAirTemperature].nil?
     air_loop_sizing.setAllOutdoorAirinCooling(system_data[:AllOutdoorAirinCooling]) unless system_data[:AllOutdoorAirinCooling].nil?
     air_loop_sizing.setAllOutdoorAirinHeating(system_data[:AllOutdoorAirinHeating]) unless system_data[:AllOutdoorAirinHeating].nil?
-    air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio]) unless system_data[:MinimumSystemAirFlowRatio].nil?
+    if model.version < OpenStudio::VersionString.new('2.7.0')
+      air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio]) unless system_data[:MinimumSystemAirFlowRatio].nil?
+    else
+      air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio]) unless system_data[:MinimumSystemAirFlowRatio].nil?
+    end
     return mau_air_loop
   end
 

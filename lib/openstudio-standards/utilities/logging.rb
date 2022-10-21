@@ -36,6 +36,54 @@ def log_messages_to_runner(runner, debug = false)
   end
 end
 
+# A function that writes error message to log file and stop the execution.
+#
+# @param msg [String] error message
+# @param log_level [OpenStudio::LogLevel] log level, eg. OpenStudio::Info
+# @param log_path [String] the log file directory
+# @param debug [Boolean] debug mode
+def terminate_prm_write_log(msg, log_path, debug = false)
+  OpenStudio.logFree(OpenStudio::ERROR, 'prm.log', msg)
+  log_messages_to_file_prm("#{log_path}/prm.log", debug)
+  raise msg
+end
+
+# A function to export log messages specific to PRM to a log file.
+#
+# @param file_path [String] the file path to the log file
+# @param debug [Boolean] debug mode
+# @return message [Array] array of message strings
+def log_messages_to_file_prm(file_path, debug = false)
+  messages = []
+
+  File.open(file_path, 'w') do |file|
+    $OPENSTUDIO_LOG.logMessages.each do |msg|
+      # only apply to prm
+      if msg.logChannel.casecmp? 'prm.log'
+        # Report the message in the correct way
+        if msg.logLevel == OpenStudio::Info
+          s = "[#{msg.logChannel}] INFO  #{msg.logMessage}"
+          file.puts(s)
+          messages << s
+        elsif msg.logLevel == OpenStudio::Warn
+          s = "[#{msg.logChannel}] WARN  #{msg.logMessage}"
+          file.puts(s)
+          messages << s
+        elsif msg.logLevel == OpenStudio::Error
+          s = "[#{msg.logChannel}] ERROR #{msg.logMessage}"
+          file.puts(s)
+          messages << s
+        elsif msg.logLevel == OpenStudio::Debug && debug
+          s = "[#{msg.logChannel}] DEBUG #{msg.logMessage}"
+          file.puts(s)
+          messages << s
+        end
+      end
+    end
+  end
+  return messages
+end
+
 # Log the info, warning, and error messages to a file.
 #
 # runner @param [file_path] The path to the log file

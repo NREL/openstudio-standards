@@ -98,7 +98,7 @@ module BTAP
     end
 
 
-    # This method loads an Openstudio file into the model.
+    # This method loads an OpenStudio file into the model.
     # @author Phylroy A. Lopez
     # @param filepath [String] path to the OSM file.
     # @param name [String] optional model name to be set to model.
@@ -163,7 +163,7 @@ module BTAP
 
 
 
-    # This method loads an Openstudio file into the model.
+    # This method loads an OpenStudio file into the model.
     # @author Phylroy A. Lopez
     # @param filepath [String] path to the OSM file.
     # @param name [String] optional model name to be set to model.
@@ -847,7 +847,7 @@ module BTAP
     # This method converts an idf object to a hash
     #
     # @author Padmassun Rajakareyar
-    # @param obj [Openstudio::ModelObject]
+    # @param obj [OpenStudio::ModelObject]
     # @return new_obj_hash [Hash] idf object converted to hash.
     # @example
     #   Converts the following IDF (openstudio::ModelObject) to
@@ -899,7 +899,7 @@ module BTAP
     # This method uses idf_to_h(obj) method, but deletes the fields named 'Handle' and 'Name'
     #
     # @author Padmassun Rajakareyar
-    # @param obj [Openstudio::ModelObject]
+    # @param obj [OpenStudio::ModelObject]
     # @return new_obj_hash [Hash] idf object converted to hash.
     # @example
     #   Converts the following IDF (openstudio::ModelObject) to
@@ -1017,9 +1017,9 @@ module BTAP
     # the duplicate materials can be removed safely.
     #
     # @author Padmassun Rajakareyar
-    # @param model [Openstudio::Model]
+    # @param model [OpenStudio::Model]
     # @param grouped_objs [Hash] Output provided by group_similar_objects()
-    # @return model_string [String] An Openstudio::Model object converted to a string
+    # @return model_string [String] An OpenStudio::Model object converted to a string
     def self.replace_duplicate_obj_handles(model, grouped_objs)
       model_string = model.to_s # convert the OS:Model into a String
       grouped_objs.each {|key, dup_array|
@@ -1050,8 +1050,8 @@ module BTAP
     # converts it to an OpenStudio Model using a VersionTranslater
     #
     # @author Padmassun Rajakareyar
-    # @param model_string [String] An Openstudio::Model object converted to a string
-    # @return model [Openstudio::Model]
+    # @param model_string [String] An OpenStudio::Model object converted to a string
+    # @return model [OpenStudio::Model]
     def self.get_OS_Model_from_string(model_string)
       require 'securerandom'
       require 'fileutils'
@@ -1076,9 +1076,9 @@ module BTAP
     # based on the values of each fields within the ModelObject
     #
     # @author Padmassun Rajakareyar
-    # @param model [Openstudio::Model]
+    # @param model [OpenStudio::Model]
     # @param model_obj_type [String] ModelObject type e.g. "OS:Material"
-    # @return new_model [Openstudio::Model] Returns new model (OS:Model) if the changes were made.
+    # @return new_model [OpenStudio::Model] Returns new model (OS:Model) if the changes were made.
     #   or else returns the old model if no changes were made.
     def self.eleminate_duplicate_objs(model, model_obj_type) # = "OS:Material")
       model_objs_json = {}
@@ -1155,8 +1155,8 @@ module BTAP
     #   "OS:StandardsInformation:Construction"
     #
     # @author Padmassun Rajakareyar
-    # @param model [Openstudio::Model]
-    # @return new_model [Openstudio::Model] Returns new model after removing the
+    # @param model [OpenStudio::Model]
+    # @return new_model [OpenStudio::Model] Returns new model after removing the
     #   duplicate ModelObjects atated abioe.
     def self.remove_duplicate_materials_and_constructions(model)
       old_number_of_objects = model.getModelObjects.length

@@ -179,7 +179,7 @@ end
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     templates = ['NECB2015'] #list of templates
-    num_cap_intv = {'NECB2015' => 3}
+    num_cap_intv = {'NECB2015' => 4}
     speeds = ['single']
     templates.each do |template|
       unitary_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_modify_unitary_efficiencies_expected_results.csv")

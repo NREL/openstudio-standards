@@ -6,12 +6,14 @@ class BTAPData
   attr_accessor :btap_data
 
   def initialize(model:, runner: nil, cost_result:, baseline_cost_equipment_total_cost_per_m_sq: -1.0,
-                 baseline_cost_utility_neb_total_cost_per_m_sq: -1.0, baseline_energy_eui_total_gj_per_m_sq: -1.0, qaqc:)
+                 baseline_cost_utility_neb_total_cost_per_m_sq: -1.0, baseline_energy_eui_total_gj_per_m_sq: -1.0, qaqc:,
+                 npv_start_year:, npv_end_year:, npv_discount_rate:)
     @model = model
     @error_warning = []
     # sets sql file.
     set_sql_file(model.sqlFile)
     @standard = Standard.build('NECB2011')
+    @standards_data = @standard.load_standards_database_new()
     @btap_data = {}
     @btap_results_version = 1.00
     @neb_prices_csv_file_name = File.join(__dir__, 'neb_end_use_prices.csv')
@@ -84,6 +86,8 @@ class BTAPData
     phius_performance_indicators(model)
     # The below method calculates energy performance indicators (i.e. TEDI and MEUI) as per BC Energy Step Code
     bc_energy_step_code_performance_indicators
+    # calculate net present value
+    net_present_value(npv_start_year, npv_end_year, npv_discount_rate) unless cost_result.nil?
 
     measure_metrics(qaqc)
     @btap_data
@@ -157,11 +161,126 @@ class BTAPData
     building_data['cost_equipment_heating_and_cooling_total_cost_per_m_sq'] = (cost_result['totals']['heating_and_cooling']) / @conditioned_floor_area_m_sq
     building_data['cost_equipment_shw_total_cost_per_m_sq'] = (cost_result['totals']['shw']) / @conditioned_floor_area_m_sq
     building_data['cost_equipment_ventilation_total_cost_per_m_sq'] = (cost_result['totals']['ventilation']) / @conditioned_floor_area_m_sq
+    building_data['cost_equipment_renewables_total_cost_per_m_sq'] = (cost_result['totals']['renewables']) / @conditioned_floor_area_m_sq
     building_data['cost_equipment_total_cost_per_m_sq'] = (cost_result['totals']['grand_total']) / @conditioned_floor_area_m_sq
     # building_data.merge!(cost_result['envelope'].select{|k,v| k!='construction_costs' && k!='total_envelope_cost'})
     # building_data.merge!(cost_result['shw'].select{|k,v| k!='shw_total'})
     # building_data.merge!(flatten_mix(cost_result['ventilation'].select{|k,v| k=='mech_to_roof'.to_sym}))
     return building_data
+  end
+
+  def net_present_value(npv_start_year, npv_end_year, npv_discount_rate)
+
+    # Find end year in the neb data
+    neb_header = CSV.read(@neb_prices_csv_file_name, headers: true).headers
+    neb_header.delete_if { |item| ["building_type", "province", "fuel_type"].include?(item) } # remove "building_type", "province", "fuel_type" from neb_header in order to have only years in neb_header
+    neb_header.map(&:to_f)  #convert years to float
+    year_max = neb_header.max
+
+    # Convert a string to a float
+    if npv_start_year.instance_of?(String) && npv_start_year != 'NECB_Default' && npv_start_year != 'none'
+      npv_start_year = npv_start_year.to_f
+    end
+    if npv_end_year.instance_of?(String) && npv_end_year != 'NECB_Default' && npv_end_year != 'none'
+      npv_end_year = npv_end_year.to_f
+    end
+    if npv_discount_rate.instance_of?(String) && npv_discount_rate != 'NECB_Default' && npv_discount_rate != 'none'
+      npv_discount_rate = npv_discount_rate.to_f
+    end
+
+    # Set default npv_start_year as 2022, npv_end_year as 2041, npv_discount_rate as 3%
+    if npv_start_year == 'NECB_Default' || npv_start_year == nil || npv_start_year == 'none'
+      npv_start_year = 2022
+    end
+    if npv_end_year == 'NECB_Default' || npv_end_year == nil || npv_end_year == 'none'
+      npv_end_year = 2041
+    end
+    if npv_discount_rate == 'NECB_Default' || npv_discount_rate == nil || npv_discount_rate == 'none'
+      npv_discount_rate = 0.03
+    end
+
+    # Set npv_end_year as year_max if users' input > neb's end year
+    if npv_end_year > year_max.to_f
+      npv_end_year = year_max.to_f
+      warn "WARNING: Your npv_end_year for the calculation of net present value is larger than that in Canada Energy Regulator (CER) (i.e. #{year_max}). So, npv_end_year has been reset as #{year_max}."
+    end
+    # puts "npv_start_year is #{npv_start_year}"
+    # puts "npv_end_year is #{npv_end_year}"
+    # puts "npv_discount_rate is #{npv_discount_rate}"
+
+    # Get energy end-use prices (CER data from https://apps.cer-rec.gc.ca/ftrppndc/dflt.aspx?GoCTemplateCulture=en-CA)
+    @neb_prices_csv_file_name = "#{File.dirname(__FILE__)}/neb_end_use_prices.csv"
+
+    # Create a hash of the neb data.
+    neb_data = CSV.parse(File.read(@neb_prices_csv_file_name), headers: true, converters: :numeric).map(&:to_h)
+
+    # Find which province the proposed building is located in
+    building_type = 'Commercial'
+    geography_data = climate_data
+    province_abbreviation = geography_data['location_state_province_region']
+    province = @standards_data['province_map'][province_abbreviation]
+
+    # Note: If there is on-site energy generation (e.g. PV), it should be considered in the calculation of EUI for the calculation of energy use cost and NPV.
+    # To do so, it has been assumed that on-site energy generation is only for electricity.
+    # Electricity EUI of a building is re-calculated for NPV. It will be: ['energy_eui_electricity_gj_per_m_sq' - ('total_site_eui_gj_per_m_sq' - 'net_site_eui_gj_per_m_sq')]
+    # Note that if there is no on-site energy generation, 'total_site_eui_gj_per_m_sq' and 'net_site_eui_gj_per_m_sq' will be equal.
+    # Note: 'total_site_eui_gj_per_m_sq' is the gross energy consumed by the building (REF: https://unmethours.com/question/25416/what-is-the-difference-between-site-energy-and-source-energy/)
+    # Note: 'net_site_eui_gj_per_m_sq' is the final energy consumed by the building after accounting for on-site energy generations (e.g. PV) (REF: https://unmethours.com/question/25416/what-is-the-difference-between-site-energy-and-source-energy/)
+
+    # Calculate npv of electricity
+    onsite_elec_generation = @btap_data['total_site_eui_gj_per_m_sq'] - @btap_data['net_site_eui_gj_per_m_sq']
+    if onsite_elec_generation > 0.0
+      eui_elec = @btap_data['energy_eui_electricity_gj_per_m_sq'] - onsite_elec_generation
+    else
+      eui_elec = @btap_data['energy_eui_electricity_gj_per_m_sq']
+    end
+    # puts "onsite_elec_generation is #{onsite_elec_generation}"
+    # puts "eui_elec is #{eui_elec}"
+    row = neb_data.detect do |data|
+      (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Electricity')
+    end
+    npv_elec = 0.0
+    year_index = 1.0
+    if eui_elec > 0.0
+      for year in npv_start_year.to_int..npv_end_year.to_int
+        # puts "year, #{year}, #{row[year.to_s]}, year_index, #{year_index}"
+        npv_elec += (eui_elec * row[year.to_s]) / (1+npv_discount_rate)**year_index
+        year_index += 1.0
+      end
+    end
+    # puts "npv_elec is #{npv_elec}"
+
+    # Calculate npv of natural gas
+    eui_ngas= @btap_data['energy_eui_natural_gas_gj_per_m_sq']
+    row = neb_data.detect do |data|
+      (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Natural Gas')
+    end
+    npv_ngas = 0.0
+    year_index = 1.0
+    for year in npv_start_year.to_int..npv_end_year.to_int
+      npv_ngas += (eui_ngas * row[year.to_s]) / (1+npv_discount_rate)**year_index
+      year_index += 1.0
+    end
+    # puts "npv_ngas is #{npv_ngas}"
+
+    # Calculate npv of oil
+    eui_oil= @btap_data['energy_eui_additional_fuel_gj_per_m_sq']
+    row = neb_data.detect do |data|
+      (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Oil')
+    end
+    npv_oil = 0.0
+    year_index = 1.0
+    for year in npv_start_year.to_int..npv_end_year.to_int
+      npv_oil += (eui_oil * row[year.to_s]) / (1+npv_discount_rate)**year_index
+      year_index += 1.0
+    end
+    # puts "npv_oil is #{npv_oil}"
+
+    # Calculate total npv
+    npv_total = @btap_data['cost_equipment_total_cost_per_m_sq'] + npv_elec + npv_ngas + npv_oil
+
+    @btap_data.merge!('npv_total_per_m_sq' => npv_total)
+
   end
 
   def envelope(model)
@@ -393,21 +512,8 @@ class BTAPData
 
   def utility(model)
     economics_data = {}
-    provinces_names_map = { 'QC' => 'Quebec',
-                            'NL' => 'Newfoundland and Labrador',
-                            'NS' => 'Nova Scotia',
-                            'PE' => 'Prince Edward Island',
-                            'ON' => 'Ontario',
-                            'MB' => 'Manitoba',
-                            'SK' => 'Saskatchewan',
-                            'AB' => 'Alberta',
-                            'BC' => 'British Columbia',
-                            'YT' => 'Yukon',
-                            'NT' => 'Northwest Territories',
-                            'NB' => 'New Brunswick',
-                            'NU' => 'Nunavut' }
     building_type = 'Commercial'
-    province = provinces_names_map[model.getWeatherFile.stateProvinceRegion]
+    province = @standards_data['province_map'][model.getWeatherFile.stateProvinceRegion]
     neb_eplus_fuel_map = {'Natural Gas' => {eplus_fuel_name: 'NaturalGas',
                                             eplus_table_name: 'Annual and Peak Values - Natural Gas',
                                             eplus_row_name: 'NaturalGas:Facility',
@@ -432,7 +538,7 @@ class BTAPData
           (data['province'] == province) &&
           (data['fuel_type'] == neb_fuel)
       end
-      neb_fuel_cost = row['2020']
+      neb_fuel_cost = row['2021']
       fuel_consumption_gj = 0.0
       sql_command = "SELECT Value FROM tabulardatawithstrings
                      WHERE ReportName='EnergyMeters'
@@ -1688,19 +1794,19 @@ class BTAPData
       { "province": 'SK', "fuel_type": 'Propane', "CO2eq Emissions (kg/MBtu)": 64.25, "CO2eq Emissions (g/m3)": 1548.00 },
       { "province": 'YT', "fuel_type": 'Propane', "CO2eq Emissions (kg/MBtu)": 64.25, "CO2eq Emissions (g/m3)": 1548.00 },
 
-      { "province": 'AB', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 231.54, "CO2eq Emissions (g/m3)": 790.0 },
-      { "province": 'BC', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 2.99, "CO2eq Emissions (g/m3)": 10.2 },
-      { "province": 'MB', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 0.56, "CO2eq Emissions (g/m3)": 1.9 },
-      { "province": 'NB', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 76.20, "CO2eq Emissions (g/m3)": 260.0 },
-      { "province": 'NL', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 11.72, "CO2eq Emissions (g/m3)": 40.0 },
+      { "province": 'AB', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 202.23, "CO2eq Emissions (g/m3)": 690.0 },
+      { "province": 'BC', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 3.84, "CO2eq Emissions (g/m3)": 13.1 },
+      { "province": 'MB', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 0.41, "CO2eq Emissions (g/m3)": 1.4 },
+      { "province": 'NB', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 84.99, "CO2eq Emissions (g/m3)": 290.0 },
+      { "province": 'NL', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 7.91, "CO2eq Emissions (g/m3)": 27.0 },
       { "province": 'NT', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 46.89, "CO2eq Emissions (g/m3)": 160.0 },
-      { "province": 'NS', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 213.95, "CO2eq Emissions (g/m3)": 730.0 },
-      { "province": 'NU', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 222.74, "CO2eq Emissions (g/m3)": 760.0 },
-      { "province": 'ON', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 5.86, "CO2eq Emissions (g/m3)": 20.0 },
-      { "province": 'PE', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 76.20, "CO2eq Emissions (g/m3)": 260.0 },
-      { "province": 'QC', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 0.41, "CO2eq Emissions (g/m3)": 1.4 },
-      { "province": 'SK', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 211.04, "CO2eq Emissions (g/m3)": 720.0 },
-      { "province": 'YT', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 16.41, "CO2eq Emissions (g/m3)": 140.0 }
+      { "province": 'NS', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 216.88, "CO2eq Emissions (g/m3)": 740.0 },
+      { "province": 'NU', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 260.84, "CO2eq Emissions (g/m3)": 890.0 },
+      { "province": 'ON', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 8.79, "CO2eq Emissions (g/m3)": 30.0 },
+      { "province": 'PE', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 84.99, "CO2eq Emissions (g/m3)": 290.0 },
+      { "province": 'QC', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 0.47, "CO2eq Emissions (g/m3)": 1.6 },
+      { "province": 'SK', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 219.81, "CO2eq Emissions (g/m3)": 750.0 },
+      { "province": 'YT', "fuel_type": 'Electricity', "CO2eq Emissions (kg/MBtu)": 23.15, "CO2eq Emissions (g/m3)": 79.0 }
     ]
     mbtu_to_gj = 1.05505585
     factor = ghg_data.detect { |item| (item[:province] == province) && (item[:fuel_type] == fuel_type) }
@@ -1805,7 +1911,7 @@ class BTAPData
 
     ### Get weather file name
     weather_file = model.weatherFile.get.path.get.to_s
-    weather_file = weather_file.split('/')[-1]
+#    weather_file = weather_file.split('/')[-1]
 
     ### Cooling Degree Days, base 50degF
     cdd10_degree_c_days = BTAP::Environment::WeatherFile.new(weather_file).cdd10

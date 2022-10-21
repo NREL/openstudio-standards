@@ -2,7 +2,7 @@
   "parking": [
     {
       "building_type": "College",
-      "building_area_per_spot": null,
+      "building_area_per_spot": 250.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
@@ -11,7 +11,7 @@
     },
     {
       "building_type": "Courthouse",
-      "building_area_per_spot": null,
+      "building_area_per_spot": 250.0,
       "units_per_spot": null,
       "students_per_spot": null,
       "beds_per_spot": null,
