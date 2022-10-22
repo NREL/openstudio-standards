@@ -2721,7 +2721,11 @@ Standard.class_eval do
         end
       end
     end
-    return window_area / wall_area * 100 if wwr
+
+    # check wall area is non-zero
+    if wwr && wall_area > 0
+      return window_area / wall_area * 100
+    end
 
     # else
     return window_area
