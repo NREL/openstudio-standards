@@ -980,7 +980,7 @@ class Standard
         end
       elsif equip.to_ZoneHVACLowTemperatureRadiantElectric.is_initialized
         equip = equip.to_ZoneHVACLowTemperatureRadiantElectric.get
-        htg_sch = equip.heatingSetpointTemperatureSchedule.get
+        htg_sch = equip.heatingSetpointTemperatureSchedule
       elsif equip.to_ZoneHVACLowTempRadiantConstFlow.is_initialized
         equip = equip.to_ZoneHVACLowTempRadiantConstFlow.get
         htg_coil = equip.heatingCoil
