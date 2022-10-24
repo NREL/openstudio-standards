@@ -17,8 +17,8 @@ class NECB2011
                                                         hw_loop: hw_loop)
     else
       add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
-                                                         necb_reference_hp:necb_reference_hp,
-                                                         necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
+                                                         necb_reference_hp: necb_reference_hp,
+                                                         necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                                          zones: zones,
                                                          mau_type: mau_type,
                                                          mau_heating_coil_type: mau_heating_coil_type,

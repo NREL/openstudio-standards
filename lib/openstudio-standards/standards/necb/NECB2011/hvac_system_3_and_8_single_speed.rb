@@ -17,8 +17,8 @@ class NECB2011
                                                                                         new_auto_zoner: new_auto_zoner)
     else
       add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-                                                                                         necb_reference_hp:necb_reference_hp,
-                                                                                         necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
+                                                                                         necb_reference_hp: necb_reference_hp,
+                                                                                         necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                                                                          zones: zones,
                                                                                          heating_coil_type: heating_coil_type,
                                                                                          baseboard_type: baseboard_type,
@@ -80,8 +80,8 @@ class NECB2011
                                             model,
                                             system_data,
                                             determine_control_zone(zones),
-                                            necb_reference_hp:necb_reference_hp,
-                                            necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel)
+                                            necb_reference_hp: necb_reference_hp,
+                                            necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel)
       # Add Zone equipment
       zones.each do |zone| # Zone sizing temperature difference
         sizing_zone = zone.sizingZone
@@ -105,7 +105,7 @@ class NECB2011
       end
     else
       zones.each do |zone|
-        air_loop = add_system_3_and_8_airloop(heating_coil_type, model, system_data, zone, necb_reference_hp:necb_reference_hp, necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel)
+        air_loop = add_system_3_and_8_airloop(heating_coil_type, model, system_data, zone, necb_reference_hp: necb_reference_hp, necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel)
         add_sys3_and_8_zone_equip(air_loop,
                                   baseboard_type,
                                   hw_loop,

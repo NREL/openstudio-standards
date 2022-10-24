@@ -149,8 +149,8 @@ class NECB2011
                                           model)
     # Rule that all dwelling units have their own zone and system.
     auto_system_dwelling_units(model: model,
-                               necb_reference_hp:necb_reference_hp,
-                               necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
+                               necb_reference_hp: necb_reference_hp,
+                               necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                baseboard_type: baseboard_type,
                                boiler_fueltype: boiler_fueltype,
                                chiller_type: chiller_type,
@@ -166,30 +166,30 @@ class NECB2011
 
     # Assign a single system 4 for all wet spaces.. and assign the control zone to the one with the largest load.
     auto_system_wet_spaces(baseboard_type: baseboard_type,
-                           necb_reference_hp:necb_reference_hp,
-                           necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
+                           necb_reference_hp: necb_reference_hp,
+                           necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                            boiler_fueltype: boiler_fueltype,
                            heating_coil_type_sys4: heating_coil_type_sys4,
                            model: model)
 
     # Assign a single system 4 for all storage spaces.. and assign the control zone to the one with the largest load.
     auto_system_storage_spaces(baseboard_type: baseboard_type,
-                               necb_reference_hp:necb_reference_hp,
-                               necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
+                               necb_reference_hp: necb_reference_hp,
+                               necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                boiler_fueltype: boiler_fueltype,
                                heating_coil_type_sys4: heating_coil_type_sys4,
                                model: model)
 
     # Assign the wild spaces to a single system 4 system with a control zone with the largest load.
     auto_system_wild_spaces(baseboard_type: baseboard_type,
-                            necb_reference_hp:necb_reference_hp,
-                            necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
+                            necb_reference_hp: necb_reference_hp,
+                            necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                             heating_coil_type_sys4: heating_coil_type_sys4,
                             model: model)
     # do the regular assignment for the rest and group where possible.
     auto_system_all_other_spaces(model: model,
-                                 necb_reference_hp:necb_reference_hp,
-                                 necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
+                                 necb_reference_hp: necb_reference_hp,
+                                 necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                  baseboard_type: baseboard_type,
                                  boiler_fueltype: boiler_fueltype,
                                  chiller_type: chiller_type,
@@ -910,8 +910,8 @@ class NECB2011
       when 1
         group_similar_zones_together(sys_zones).each do |curr_zones|
           mau_air_loop = add_sys1_unitary_ac_baseboard_heating(model: model,
-                                                               necb_reference_hp:necb_reference_hp,
-                                                               necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
+                                                               necb_reference_hp: necb_reference_hp,
+                                                               necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                                                zones: curr_zones,
                                                                mau_type: mau_type,
                                                                mau_heating_coil_type: mau_heating_coil_type,
@@ -931,8 +931,8 @@ class NECB2011
       when 3
         group_similar_zones_together(sys_zones).each do |curr_zones|
           add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
-                                                                                necb_reference_hp:necb_reference_hp,
-                                                                                necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
+                                                                                necb_reference_hp: necb_reference_hp,
+                                                                                necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                                                                 zones: curr_zones,
                                                                                 heating_coil_type: heating_coil_type_sys3,
                                                                                 baseboard_type: baseboard_type,
@@ -942,8 +942,8 @@ class NECB2011
       when 4
         group_similar_zones_together(sys_zones).each do |curr_zones|
           add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-                                                                       necb_reference_hp:necb_reference_hp,       
-                                                                       necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,   
+                                                                       necb_reference_hp: necb_reference_hp,       
+                                                                       necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,   
                                                                        zones: curr_zones,
                                                                        heating_coil_type: heating_coil_type_sys4,
                                                                        baseboard_type: baseboard_type,
@@ -971,7 +971,7 @@ class NECB2011
                                                                   heating_coil_type: heating_coil_type_sys6,
                                                                   baseboard_type: baseboard_type,
                                                                   hw_loop:@hw_loop,
-                                                                  necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel)
+                                                                  necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel)
         else
           add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
                                                                     zones: sys_zones,
@@ -1035,8 +1035,8 @@ class NECB2011
                        mau_type: mau_type,
                        model: model,
                        zones: zones,
-                       necb_reference_hp:necb_reference_hp,
-                       necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel)
+                       necb_reference_hp: necb_reference_hp,
+                       necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel)
   end
 
   # This method will ensure that all dwelling units are assigned to a system 1 or 3.
@@ -1083,8 +1083,8 @@ class NECB2011
       when 1
         if dwelling_shared_ahu
           add_sys1_unitary_ac_baseboard_heating(model: model,
-                                                necb_reference_hp:necb_reference_hp,
-                                                necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
+                                                necb_reference_hp: necb_reference_hp,
+                                                necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                                 zones: sys_zones,
                                                 mau_type: mau_type,
                                                 mau_heating_coil_type: mau_heating_coil_type,
@@ -1095,8 +1095,8 @@ class NECB2011
           # Create a separate air loop for each unit.
           sys_zones.each do |zone|
             add_sys1_unitary_ac_baseboard_heating(model: model,
-                                                  necb_reference_hp:necb_reference_hp,
-                                                  necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
+                                                  necb_reference_hp: necb_reference_hp,
+                                                  necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                                   zones: [zone],
                                                   mau_type: mau_type,
                                                   mau_heating_coil_type: mau_heating_coil_type,
@@ -1109,8 +1109,8 @@ class NECB2011
       when 3
         if dwelling_shared_ahu
           add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
-                                                                                necb_reference_hp:necb_reference_hp,
-                                                                                necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
+                                                                                necb_reference_hp: necb_reference_hp,
+                                                                                necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                                                                 zones: sys_zones,
                                                                                 heating_coil_type: heating_coil_type_sys3,
                                                                                 baseboard_type: baseboard_type,
@@ -1120,8 +1120,8 @@ class NECB2011
           # Create a separate air loop for each unit.
           sys_zones.each do |zone|
             add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
-                                                                                  necb_reference_hp:necb_reference_hp,    
-                                                                                  necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,        
+                                                                                  necb_reference_hp: necb_reference_hp,    
+                                                                                  necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,        
                                                                                   zones: [zone],
                                                                                   heating_coil_type: heating_coil_type_sys3,
                                                                                   baseboard_type: baseboard_type,
@@ -1149,8 +1149,8 @@ class NECB2011
     return if wet_tz.empty?
 
     add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-                                                                 necb_reference_hp:necb_reference_hp,
-                                                                 necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel, 
+                                                                 necb_reference_hp: necb_reference_hp,
+                                                                 necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel, 
                                                                  zones: wet_tz,
                                                                  heating_coil_type: heating_coil_type_sys4,
                                                                  baseboard_type: baseboard_type,
@@ -1180,8 +1180,8 @@ class NECB2011
 
     # create a system 4 for the  zones.
     add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-                                                                 necb_reference_hp:necb_reference_hp,
-                                                                 necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel, 
+                                                                 necb_reference_hp: necb_reference_hp,
+                                                                 necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel, 
                                                                  zones: tz,
                                                                  heating_coil_type: heating_coil_type_sys4,
                                                                  baseboard_type: baseboard_type,
@@ -1210,8 +1210,8 @@ class NECB2011
 
     # create a system 4 for the wild zones.
     add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-                                                                 necb_reference_hp:necb_reference_hp,
-                                                                 necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel, 
+                                                                 necb_reference_hp: necb_reference_hp,
+                                                                 necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel, 
                                                                  zones: zones,
                                                                  heating_coil_type: heating_coil_type_sys4,
                                                                  baseboard_type: baseboard_type,
