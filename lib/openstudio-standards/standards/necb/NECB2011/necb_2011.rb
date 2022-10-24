@@ -166,7 +166,7 @@ class NECB2011 < Standard
       return epw.hdd18.to_f
     else
       dist_clause = "%.2f % #{(min_distance / 1000.0)}"
-      puts "INFO:NECB HDD18 of #{necb_closest['degree_days_below_18_c'].to_f}  at nearest city #{necb_closest['city']},#{necb_closest['province']}, at a distance of " + dist_clause + 'km from epw location. Ref:necb_2015_table_c1'
+      puts "INFO:NECB HDD18 of #{necb_closest['degree_days_below_18_c'].to_f}  at nearest city #{necb_closest['city']},#{necb_closest['province']}, at a distance of " + dist_clause + 'km from epw location. Ref: nbc_2015_table_c1'
       return necb_closest['degree_days_below_18_c'].to_f
     end
   end
@@ -234,8 +234,8 @@ class NECB2011 < Standard
     return model_apply_standard(model: model,
                                 epw_file: epw_file,
                                 sizing_run_dir: sizing_run_dir,
-                                necb_reference_hp:necb_reference_hp,
-                                necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
+                                necb_reference_hp: necb_reference_hp,
+                                necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                 primary_heating_fuel: primary_heating_fuel,
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
                                 lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
@@ -396,7 +396,7 @@ class NECB2011 < Standard
     apply_systems_and_efficiencies(model: model,
                                    primary_heating_fuel: primary_heating_fuel,
                                    sizing_run_dir: sizing_run_dir,
-                                   necb_reference_hp:necb_reference_hp,
+                                   necb_reference_hp: necb_reference_hp,
                                    necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                    dcv_type: dcv_type,
                                    ecm_system_name: ecm_system_name,
