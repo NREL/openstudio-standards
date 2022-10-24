@@ -8,7 +8,7 @@ def setup()
 super()
 end
 def test_NECB2011_RefHP_PrimarySchool_regression_Electricity()
-result, diff = create_model_and_regression_test(building_type: 'PrimarySchool',primary_heating_fuel: 'Electricity', epw_file:  'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw',template: 'NECB2011', run_simulation: false, reference_hp:true)
+result, diff = create_model_and_regression_test(building_type: 'PrimarySchool',primary_heating_fuel: 'Electricity', epw_file:  'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw',template: 'NECB2011', run_simulation: false, reference_hp: true)
 if result == false
 puts "JSON terse listing of diff-errors."
 puts diff

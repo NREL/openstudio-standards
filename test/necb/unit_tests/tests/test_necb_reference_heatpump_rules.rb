@@ -1,7 +1,7 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
 
-class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
+class NECB_HVAC_Ref_Heat_Pump_Tests < MiniTest::Test
   # set to true to run the standards in the test.
   PERFORM_STANDARDS = true
   # set to true to run the simulations.
@@ -249,37 +249,37 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
           standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
           if sys_number == 'sys1'
             standard.add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
-            necb_reference_hp:necb_reference_hp,
-            necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
-            zones: model.getThermalZones,
-            mau_type:true,
-            mau_heating_coil_type: heating_coil_type,
-            baseboard_type: baseboard_type,
-            hw_loop: hw_loop)
+                necb_reference_hp: necb_reference_hp,
+                necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
+                zones: model.getThermalZones,
+                mau_type: true,
+                mau_heating_coil_type: heating_coil_type,
+                baseboard_type: baseboard_type,
+                hw_loop: hw_loop)
           elsif sys_number == 'sys3'
             standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-            necb_reference_hp:necb_reference_hp,
-            necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
-            zones: model.getThermalZones,
-            heating_coil_type: heating_coil_type,
-            baseboard_type: baseboard_type,
-            hw_loop: hw_loop,
-            new_auto_zoner: false)
+                necb_reference_hp: necb_reference_hp,
+                necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
+                zones: model.getThermalZones,
+                heating_coil_type: heating_coil_type,
+                baseboard_type: baseboard_type,
+                hw_loop: hw_loop,
+                new_auto_zoner: false)
           elsif sys_number == 'sys4'
             standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-            necb_reference_hp:necb_reference_hp,
-            necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
-            zones: model.getThermalZones,
-            heating_coil_type: heating_coil_type,
-            baseboard_type: baseboard_type,
-            hw_loop: hw_loop)
+                necb_reference_hp: necb_reference_hp,
+                necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
+                zones: model.getThermalZones,
+                heating_coil_type: heating_coil_type,
+                baseboard_type: baseboard_type,
+                hw_loop: hw_loop)
           elsif sys_number == 'sys6'
             standard.add_sys6_multi_zone_reference_hp_with_baseboard_heating(model: model,
-            necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
-            zones: model.getThermalZones,
-            heating_coil_type: heating_coil_type,
-            baseboard_type: baseboard_type,
-            hw_loop: hw_loop)
+                necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
+                zones: model.getThermalZones,
+                heating_coil_type: heating_coil_type,
+                baseboard_type: baseboard_type,
+                hw_loop: hw_loop)
           end
           # Save the model after btap hvac.
           BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
@@ -354,37 +354,37 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
           standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
           if sys_number == 'sys1'
             standard.add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
-            necb_reference_hp:necb_reference_hp,
-            necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
-            zones: model.getThermalZones,
-            mau_type:true,
-            mau_heating_coil_type: heating_coil_type,
-            baseboard_type: baseboard_type,
-            hw_loop: hw_loop)
+                necb_reference_hp: necb_reference_hp,
+                necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
+                zones: model.getThermalZones,
+                mau_type: true,
+                mau_heating_coil_type: heating_coil_type,
+                baseboard_type: baseboard_type,
+                hw_loop: hw_loop)
           elsif sys_number == 'sys3'
             standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-            necb_reference_hp:necb_reference_hp,
-            necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
-            zones: model.getThermalZones,
-            heating_coil_type: heating_coil_type,
-            baseboard_type: baseboard_type,
-            hw_loop: hw_loop,
-            new_auto_zoner: false)
+                necb_reference_hp: necb_reference_hp,
+                necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
+                zones: model.getThermalZones,
+                heating_coil_type: heating_coil_type,
+                baseboard_type: baseboard_type,
+                hw_loop: hw_loop,
+                new_auto_zoner: false)
           elsif sys_number == 'sys4'
             standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-            necb_reference_hp:necb_reference_hp,
-            necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
-            zones: model.getThermalZones,
-            heating_coil_type: heating_coil_type,
-            baseboard_type: baseboard_type,
-            hw_loop: hw_loop)
+                necb_reference_hp: necb_reference_hp,
+                necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
+                zones: model.getThermalZones,
+                heating_coil_type: heating_coil_type,
+                baseboard_type: baseboard_type,
+                hw_loop: hw_loop)
           elsif sys_number == 'sys6'
             standard.add_sys6_multi_zone_reference_hp_with_baseboard_heating(model: model,
-            necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
-            zones: model.getThermalZones,
-            heating_coil_type: heating_coil_type,
-            baseboard_type: baseboard_type,
-            hw_loop: hw_loop)
+                necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
+                zones: model.getThermalZones,
+                heating_coil_type: heating_coil_type,
+                baseboard_type: baseboard_type,
+                hw_loop: hw_loop)
           end
           # Save the model after btap hvac.
           BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
@@ -788,37 +788,37 @@ def test_ref_heatpump_sizing_factor
         standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
         if sys_number == 'sys1'
           standard.add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
-          necb_reference_hp:necb_reference_hp,
-          necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
-          zones: model.getThermalZones,
-          mau_type:true,
-          mau_heating_coil_type: heating_coil_type,
-          baseboard_type: baseboard_type,
-          hw_loop: hw_loop)
+              necb_reference_hp: necb_reference_hp,
+              necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
+              zones: model.getThermalZones,
+              mau_type: true,
+              mau_heating_coil_type: heating_coil_type,
+              baseboard_type: baseboard_type,
+              hw_loop: hw_loop)
         elsif sys_number == 'sys3'
           standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-          necb_reference_hp:necb_reference_hp,
-          necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
-          zones: model.getThermalZones,
-          heating_coil_type: heating_coil_type,
-          baseboard_type: baseboard_type,
-          hw_loop: hw_loop,
-          new_auto_zoner: false)
+              necb_reference_hp: necb_reference_hp,
+              necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
+              zones: model.getThermalZones,
+              heating_coil_type: heating_coil_type,
+              baseboard_type: baseboard_type,
+              hw_loop: hw_loop,
+              new_auto_zoner: false)
         elsif sys_number == 'sys4'
           standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-          necb_reference_hp:necb_reference_hp,
-          necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
-          zones: model.getThermalZones,
-          heating_coil_type: heating_coil_type,
-          baseboard_type: baseboard_type,
-          hw_loop: hw_loop)
+              necb_reference_hp: necb_reference_hp,
+              necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
+              zones: model.getThermalZones,
+              heating_coil_type: heating_coil_type,
+              baseboard_type: baseboard_type,
+              hw_loop: hw_loop)
         elsif sys_number == 'sys6'
           standard.add_sys6_multi_zone_reference_hp_with_baseboard_heating(model: model,
-          necb_reference_hp_supp_fuel:necb_reference_hp_supp_fuel,
-          zones: model.getThermalZones,
-          heating_coil_type: heating_coil_type,
-          baseboard_type: baseboard_type,
-          hw_loop: hw_loop)
+              necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
+              zones: model.getThermalZones,
+              heating_coil_type: heating_coil_type,
+              baseboard_type: baseboard_type,
+              hw_loop: hw_loop)
         end
         # Save the model after btap hvac.
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
@@ -985,7 +985,7 @@ end
         standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
 
         # Apply the HVAC efficiency standard.
-        #standard.model_apply_hvac_efficiency_standard(model, climate_zone, necb_reference_hp:necb_reference_hp)
+        #standard.model_apply_hvac_efficiency_standard(model, climate_zone, necb_reference_hp: necb_reference_hp)
         standard.model_apply_hvac_efficiency_standard(model, climate_zone)
         # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
 

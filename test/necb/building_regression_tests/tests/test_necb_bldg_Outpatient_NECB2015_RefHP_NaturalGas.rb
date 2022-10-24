@@ -8,7 +8,7 @@ def setup()
 super()
 end
 def test_NECB2015_RefHP_Outpatient_regression_NaturalGas()
-result, diff = create_model_and_regression_test(building_type: 'Outpatient',primary_heating_fuel: 'NaturalGas', epw_file:  'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw',template: 'NECB2015', run_simulation: false, reference_hp:true)
+result, diff = create_model_and_regression_test(building_type: 'Outpatient',primary_heating_fuel: 'NaturalGas', epw_file:  'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw',template: 'NECB2015', run_simulation: false, reference_hp: true)
 if result == false
 puts "JSON terse listing of diff-errors."
 puts diff
