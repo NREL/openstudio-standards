@@ -2347,9 +2347,14 @@ class NECB2011
   # heating type rules need to be flexible to account for 
   # 1.  DX htg/cooling + gas supplement htg
   # 2.  Potential lack of AirLoopHVACUnitaryHeatPumpAirToAir or AirLoopHVACUnitarySystem  
-  def coil_dx_heating_type(coil_dx, necb_reference_hp: false)
+  # @param necb_ref_hp [Bool] if true, NECB reference model rules for heat pumps will be used.
+  def coil_dx_heating_type(coil_dx, necb_reference_hp = false)
     supp_htg_type = nil
-    if necb_reference_hp
+
+    # If not heat pump reference case use the standard implementation.
+    if !necb_reference_hp
+      return super(coil_dx)
+    else
       if coil_dx.airLoopHVAC.empty?
         if coil_dx.containingHVACComponent.is_initialized
           containing_comp = coil_dx.containingHVACComponent.get
@@ -2409,8 +2414,6 @@ class NECB2011
 
 
       end
-    else # Does not follow NECB reference HP rules
-      return super(coil_dx)
     end
 
 

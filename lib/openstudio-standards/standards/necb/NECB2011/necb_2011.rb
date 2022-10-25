@@ -654,19 +654,21 @@ class NECB2011 < Standard
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
+  # @param necb_ref_hp [Bool] if true, NECB reference model rules for heat pumps will be used.
   def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', necb_reference_hp: false)
     raise('validation of model failed.') unless validate_initial_model(model)
 
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
 
-    # This is needed for NECB2011 as a workaround for sizing the reheat boxes
+    # This is needed for NECB2011 as a workaround for sizing the reheat boxes.
     model.getAirTerminalSingleDuctVAVReheats.each { |iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj) }
     # Apply the prototype HVAC assumptions
     model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
     # Apply the HVAC efficiency standard
     sql_db_vars_map = {}
-    model_apply_hvac_efficiency_standard(model, climate_zone, sql_db_vars_map: sql_db_vars_map)
+    model_apply_hvac_efficiency_standard(model, climate_zone, sql_db_vars_map: sql_db_vars_map, necb_ref_hp: necb_reference_hp)
+
     model_enable_demand_controlled_ventilation(model, dcv_type)
     return sql_db_vars_map
   end
