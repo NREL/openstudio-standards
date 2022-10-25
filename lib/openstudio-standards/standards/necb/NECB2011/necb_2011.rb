@@ -390,6 +390,7 @@ class NECB2011 < Standard
                       sizing_run_dir: sizing_run_dir,
                       lights_type: lights_type,
                       lights_scale: lights_scale)
+    apply_kiva_foundation(model)
     apply_systems_and_efficiencies(model: model,
                                    primary_heating_fuel: primary_heating_fuel,
                                    sizing_run_dir: sizing_run_dir,
@@ -626,12 +627,18 @@ class NECB2011 < Standard
                                            fixed_wind_solar_trans: fixed_wind_solar_trans,
                                            skylight_solar_trans: skylight_solar_trans)
     model_create_thermal_zones(model, @space_multiplier_map)
-    apply_kiva_foundation(model)
   end
 
   # apply the Kiva foundation model to floors and walls with ground boundary condition
   def apply_kiva_foundation(model)
+    # define a Kiva model for the whole bldg that's used for the first floor in contact with ground in each zone
+    bldg_kiva_model = OpenStudio::Model::FoundationKiva.new(model)
+    bldg_kiva_model.setName("Bldg Kiva Foundation")
+    bldg_kiva_model.setWallHeightAboveGrade(0.0)
+    bldg_kiva_model.setWallDepthBelowSlab(0.0)
     model.getThermalZones.sort.each do |zone|
+      zone_kiva_models = [bldg_kiva_model]
+      zone_grd_flr_counter = 0
       zone.spaces.sort.each do |space|
         # store space floors and walls in contact with ground and exterior walls
         space_ground_floors = []
@@ -640,16 +647,21 @@ class NECB2011 < Standard
         space_ground_floors += space.surfaces.select {|surf| surf.surfaceType.downcase == 'floor' && surf.isGroundSurface }
         space_ground_walls += space.surfaces.select {|surf| surf.surfaceType.downcase == 'wall' && surf.isGroundSurface }
         space_ext_walls += space.surfaces.select {|surf| surf.surfaceType.downcase == 'wall' && surf.outsideBoundaryCondition.downcase == 'outdoors'}
-        # loop through space floors in contact with ground and create a Kiva model for each
+        # loop through space floors in contact with ground and assing a Kiva model for each
         space_ground_floors.each do |gfloor|
-          kiva_model = OpenStudio::Model::FoundationKiva.new(model)
-          kiva_model.setName("#{gfloor.name.to_s} Kiva Foundation")
-          kiva_model.setWallHeightAboveGrade(0.0)
-          kiva_model.setWallDepthBelowSlab(0.0)
+          zone_grd_flr_counter += 1
+          if zone_grd_flr_counter > 1
+            # a new Kiva model is needed for each additional floor in contact with the ground in the zone
+            kiva_model = OpenStudio::Model::FoundationKiva.new(model)
+            kiva_model.setName("#{gfloor.name.to_s} Kiva Foundation")
+            kiva_model.setWallHeightAboveGrade(0.0)
+            kiva_model.setWallDepthBelowSlab(0.0)
+            zone_kiva_models << kiva_model
+          end
           # Kiva model only works with standard materials. Replace constructions massless materials with standard ones.
           replace_massless_material_with_std_material(model,gfloor)
           gfloor.setOutsideBoundaryCondition('Foundation')
-          gfloor.setAdjacentFoundation(kiva_model)
+          gfloor.setAdjacentFoundation(zone_kiva_models.last)
           # Set the exposed perimeter for space floors in contact with the ground.
           floor_exp_per = 0.0
           if !space_ground_walls.empty?
@@ -664,7 +676,7 @@ class NECB2011 < Standard
             if surfaces_are_in_contact?(gfloor,gwall)
               replace_massless_material_with_std_material(model,gwall)
               gwall.setOutsideBoundaryCondition('Foundation')
-              gwall.setAdjacentFoundation(kiva_model)
+              gwall.setAdjacentFoundation(zone_kiva_kiva_models.last)
             end
           end
         end
@@ -720,31 +732,39 @@ class NECB2011 < Standard
   # with the name: 'Insulation: Expanded polystyrene - extruded (smooth skin surface) (HCFC-142b exp.)'. 
   # The thickness of the new material is based on the thermal resistance of the massless material it replaces.
   def replace_massless_material_with_std_material(model,surf)
-    new_layers = {}
-    has_massless_mat = false
-    layer_index = 0
-    surf.construction.get.to_LayeredConstruction.get.layers.each do |layer|
-      if layer.to_MasslessOpaqueMaterial.is_initialized then
-        has_massless_mat = true
-        new_mat = OpenStudio::Model::StandardOpaqueMaterial.new(model)
-        new_mat.setName("Expanded Polystyrene")
-        new_mat.setThermalConductivity(0.029)
-        new_mat.setDensity(29.0)
-        new_mat.setSpecificHeat(1210.0)
-        new_mat.setRoughness('MediumSmooth')
-        new_mat.setThickness(layer.to_MasslessOpaqueMaterial.get.thermalResistance.to_f * new_mat.thermalConductivity.to_f)
-      else
-        new_mat = layer
+    std_const_name = "#{surf.construction.get.name.to_s}_std"
+    std_const = model.getLayeredConstructions.select {|const| const.name.to_s == std_const_name}
+    new_const = nil
+    if !std_const.empty?
+      new_const = std_const[0]
+    else
+      new_layers = {}
+      has_massless_mat = false
+      layer_index = 0
+      surf.construction.get.to_LayeredConstruction.get.layers.each do |layer|
+        if layer.to_MasslessOpaqueMaterial.is_initialized then
+          has_massless_mat = true
+          new_mat = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+          new_mat.setName("Expanded Polystyrene")
+          new_mat.setThermalConductivity(0.029)
+          new_mat.setDensity(29.0)
+          new_mat.setSpecificHeat(1210.0)
+          new_mat.setRoughness('MediumSmooth')
+          new_mat.setThickness(layer.to_MasslessOpaqueMaterial.get.thermalResistance.to_f * new_mat.thermalConductivity.to_f)
+        else
+          new_mat = layer
+        end
+        new_layers[layer_index] = new_mat
+        layer_index += 1
       end
-      new_layers[layer_index] = new_mat
-      layer_index += 1
+      if has_massless_mat
+        new_const = OpenStudio::Model::Construction.new(model)
+        new_layers.keys.sort.each {|layer_index| new_const.to_LayeredConstruction.get.insertLayer(layer_index,new_layers[layer_index])}
+        new_const.setName("#{surf.construction.get.name.to_s}_std")
+      end
     end
-    if has_massless_mat
-      new_const = OpenStudio::Model::Construction.new(model)
-      new_layers.keys.sort.each {|layer_index| new_const.to_LayeredConstruction.get.insertLayer(layer_index,new_layers[layer_index])}
-      new_const.setName("#{surf.construction.get.name.to_s}")
-      surf.setConstruction(new_const)
-    end
+    surf.setConstruction(new_const) if !new_const.nil?
+
   end
 
   # Find the exposed perimeter of a floor surface. For each side of the floor loop through 
