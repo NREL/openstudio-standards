@@ -546,6 +546,14 @@ class Standard
       default_water_heater_ambient_temp_sch = model_add_constant_schedule_ruleset(model,
                                                                                   OpenStudio.convert(70.0, 'F', 'C').get,
                                                                                   name = 'Water Heater Ambient Temp Schedule - 70F')
+      if temp_sch_type_limits.nil?
+        temp_sch_type_limits = model_add_schedule_type_limits(model,
+                                                              name: 'Temperature Schedule Type Limits',
+                                                              lower_limit_value: 0.0,
+                                                              upper_limit_value: 100.0,
+                                                              numeric_type: 'Continuous',
+                                                              unit_type: 'Temperature')
+      end
       default_water_heater_ambient_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
       tank.setAmbientTemperatureIndicator('Schedule')
       tank.setAmbientTemperatureSchedule(default_water_heater_ambient_temp_sch)
