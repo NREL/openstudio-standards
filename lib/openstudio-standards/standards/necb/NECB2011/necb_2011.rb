@@ -676,7 +676,7 @@ class NECB2011 < Standard
             if surfaces_are_in_contact?(gfloor,gwall)
               replace_massless_material_with_std_material(model,gwall)
               gwall.setOutsideBoundaryCondition('Foundation')
-              gwall.setAdjacentFoundation(zone_kiva_kiva_models.last)
+              gwall.setAdjacentFoundation(zone_kiva_models.last)
             end
           end
         end
