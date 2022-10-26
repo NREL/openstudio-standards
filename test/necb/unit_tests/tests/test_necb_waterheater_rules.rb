@@ -193,6 +193,107 @@ class NECB_SHW_Additional_Tests < MiniTest::Test
     end
   end
 
+   # Test to validate efficiency and standby losses of electric shw heater (NECB 2020)
+   def test_NECB2020_shw_elec_efficiency_standby_losses
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
+    FileUtils.rm_rf(output_folder)
+    FileUtils.mkdir_p(output_folder)
+    standard = Standard.build('NECB2020')
+ 
+    # test tank capacities and volumes (liters)
+    test_caps = [10.0,20.0]
+    test_vols = [200.0,300.0]
+    # Generate the osm files for all relevant cases to generate the test data
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+    # save baseline
+    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
+    test_caps.each do |icap|
+      test_vols.each do |ivol|
+        name = "shw_cap~#{icap}kW~vol~#{ivol}liters"
+        puts "***************************************#{name}*******************************************************\n"
+        model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+        # add shw loop
+        prototype_input = {}
+        prototype_input['main_water_heater_volume'] = 100.0
+        prototype_input['main_service_water_temperature'] = 60.0
+        prototype_input['main_service_water_pump_head'] = 1.0
+        prototype_input['main_service_water_pump_motor_efficiency'] = 0.7
+        prototype_input['main_water_heater_capacity'] = 100000.0
+        prototype_input['main_water_heater_fuel'] = 'Electricity'
+        prototype_input['main_service_water_parasitic_fuel_consumption_rate'] = 1.0
+        standard.model_add_swh_loop(model, 
+                            'Main Service Water Loop',
+                            nil,
+                            prototype_input['main_service_water_temperature'],
+                            prototype_input['main_service_water_pump_head'],
+                            prototype_input['main_service_water_pump_motor_efficiency'],
+                            prototype_input['main_water_heater_capacity'],
+                            prototype_input['main_water_heater_volume'],
+                            prototype_input['main_water_heater_fuel'],
+                            prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
+        # add hvac system
+        boiler_fueltype = 'Electricity'
+        baseboard_type = 'Hot Water'
+        heating_coil_type = 'DX'
+        hw_loop = OpenStudio::Model::PlantLoop.new(model)
+        always_on = model.alwaysOnDiscreteSchedule
+        standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+        standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                                    zones: model.getThermalZones,
+                                                                                                    heating_coil_type: heating_coil_type,
+                                                                                                    baseboard_type: baseboard_type,
+                                                                                                    hw_loop: hw_loop,
+                                                                                                    new_auto_zoner: false)
+        # set volume and capacity of water tank
+        shw_units = model.getWaterHeaterMixeds
+        shw_units[0].setHeaterMaximumCapacity(1000.0*icap)
+        shw_units[0].setTankVolume(ivol/1000.0)
+        # run the standards
+        result = run_the_measure(model, "#{output_folder}/#{name}/sizing","NECB2020")
+        # Save the model
+        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
+        assert_equal(true, result, "test_shw_curves: Failure in Standards for #{name}")
+        # get standard water tank efficiency and standby losses
+        actual_shw_tank_eff = shw_units[0].heaterThermalEfficiency.to_f
+        shw_units = model.getWaterHeaterMixeds
+        actual_shw_tank_vol = shw_units[0].tankVolume.to_f
+        actual_offcycle_ua = shw_units[0].offCycleLossCoefficienttoAmbientTemperature.to_f
+        actual_oncycle_ua = shw_units[0].onCycleLossCoefficienttoAmbientTemperature.to_f
+        vol_gal = OpenStudio.convert(ivol/1000.0, 'm^3', 'gal').get
+        if icap < 12.0
+          expected_eff = 1.0
+          if ivol <= 270.0
+            ua_w = 40 + 0.2 * ivol
+          else
+            ua_w = 0.472 * ivol - 33.5
+          end   
+          ua_btu_p_hr = OpenStudio.convert(ua_w, 'W', 'Btu/hr').get
+        else
+          expected_eff = 1.0
+          ua_w = 0.3 + 102.2/ivol
+          ua_btu_p_hr = OpenStudio.convert(ua_w, 'W', 'Btu/hr').get
+        end
+        ua_btu_p_hr_p_f = ua_btu_p_hr/70.0
+        expected_ua_w_p_k = OpenStudio.convert(ua_btu_p_hr_p_f, 'Btu/hr*R', 'W/K').get
+        tol = 1.0e-5
+        rel_diff = (actual_shw_tank_eff-expected_eff).abs/expected_eff
+        value_is_correct = true
+        if rel_diff > tol then value_is_correct = false end
+        assert(value_is_correct,"SHW efficiency test results do not match expected results!")
+        rel_diff = (actual_offcycle_ua-expected_ua_w_p_k).abs/expected_ua_w_p_k
+        value_is_correct = true
+        if rel_diff > tol then value_is_correct = false end
+        assert(value_is_correct,"SHW off cycle standby loss test results do not match expected results!")
+        rel_diff = (actual_oncycle_ua-expected_ua_w_p_k).abs/expected_ua_w_p_k
+        value_is_correct = true
+        if rel_diff > tol then value_is_correct = false end
+        assert(value_is_correct,"SHW on cycle standby loss test results do not match expected results!")
+      end
+    end
+  end 
+
   # Test to validate efficiency and standby losses of GAS shw heater (NECB 2022)
   def test_NECB2020_shw_gas_efficiency_standby_losses
     output_folder = File.join(@top_output_folder,__method__.to_s.downcase)

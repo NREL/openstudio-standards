@@ -71,7 +71,8 @@ class NECB2020
         # Fixed water heater efficiency per PNNL
         water_heater_eff = 1
         # Calculate the max allowable standby loss (SL)   # use this - NECB does not give SL calculation for cap > 12 kW
-        sl_btu_per_hr = 20 + (35 * Math.sqrt(volume_gal))
+        sl_w = 0.3 + 102.2/volume_litre_per_s
+        sl_btu_per_hr = OpenStudio.convert(sl_w, 'W', 'Btu/hr').get
       end
       # Calculate the skin loss coefficient (UA)
       ua_btu_per_hr_per_f = sl_btu_per_hr / 70
