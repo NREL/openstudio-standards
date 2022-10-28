@@ -630,6 +630,7 @@ class NECB2011 < Standard
   end
 
   # apply the Kiva foundation model to floors and walls with ground boundary condition
+  # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
   def apply_kiva_foundation(model)
     # define a Kiva model for the whole bldg that's used for the first floor in contact with ground in each zone
     bldg_kiva_model = OpenStudio::Model::FoundationKiva.new(model)
@@ -691,6 +692,7 @@ class NECB2011 < Standard
   # defined by the two vertices on surface 1 and those on surface 2 overlap, then the two 
   # surfaces are in contact. If a side from surface 2 is in contact with a side from surface 1,
   # the length of the side from surface 2 is limited to the length of the side from surface 1.
+  # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
   def surfaces_are_in_contact?(surf1,surf2)
     surfaces_in_contact = false
     vert1 = surf1.vertices[0]
@@ -731,6 +733,7 @@ class NECB2011 < Standard
   # a standard one. The material used instead is from the EnergyPlus dataset file 'ASHRAE_2005_HOF_Materials.idf' 
   # with the name: 'Insulation: Expanded polystyrene - extruded (smooth skin surface) (HCFC-142b exp.)'. 
   # The thickness of the new material is based on the thermal resistance of the massless material it replaces.
+  # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
   def replace_massless_material_with_std_material(model,surf)
     std_const_name = "#{surf.construction.get.name.to_s}_std"
     std_const = model.getLayeredConstructions.select {|const| const.name.to_s == std_const_name}
@@ -770,6 +773,7 @@ class NECB2011 < Standard
   # Find the exposed perimeter of a floor surface. For each side of the floor loop through 
   # the walls and find the walls that share sides with the floor. Then sum the lengths of 
   # the sides of the walls that come in contact with sides of the floor.
+  # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
   def get_surface_exp_per(floor,walls)
     floor_exp_per = 0.0
     vert1 = floor.vertices[0]
@@ -813,6 +817,7 @@ class NECB2011 < Standard
 
   # check that three vertices are on the same line. Also check that the vectors 
   # from vert1 and vert2 and from vert1 and vert3 are in the same direction.
+  # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
   def three_vertices_same_line_and_dir?(vert1,vert2,vert3)
     tol = 1.0e-5
     vec12x,vec12y,vec12z = -vert1.x+vert2.x,-vert1.y+vert2.y,-vert1.z+vert2.z # x,y,z of vector 12
