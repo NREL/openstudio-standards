@@ -204,8 +204,8 @@ class NECB2011
                                 hw_loop, model,
                                 zone)
     always_on = model.alwaysOnDiscreteSchedule
+    add_zone_baseboards(baseboard_type: baseboard_type, hw_loop: hw_loop, model: model, zone: zone)
     diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
     air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
-    add_zone_baseboards(baseboard_type: baseboard_type, hw_loop: hw_loop, model: model, zone: zone)
   end
 end

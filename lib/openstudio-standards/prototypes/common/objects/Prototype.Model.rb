@@ -1794,7 +1794,7 @@ Standard.class_eval do
   #
   # @param model [OpenStudio::Model::Model] the model
   def model_apply_prototype_hvac_efficiency_adjustments(model)
-    building_data = model_get_building_climate_zone_and_building_type(model)
+    building_data = model_get_building_properties(model)
     building_type = building_data['building_type']
     climate_zone = building_data['climate_zone']
 
