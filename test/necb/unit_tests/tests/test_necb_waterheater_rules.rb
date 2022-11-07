@@ -488,7 +488,7 @@ class NECB_SHW_Additional_Tests < MiniTest::Test
       puts "water_heater_eff #{water_heater_eff}"
       value_is_correct = true
       if rel_diff > rel_tol and abs_diff > abs_tol then value_is_correct = false end
-      assert(value_is_correct,"SHW efficiency test results (#water_heater_eff) do not match expected results (#actual_shw_tank_eff)!")
+      assert(value_is_correct,"SHW efficiency test results (#{water_heater_eff}) do not match expected results (#{actual_shw_tank_eff})!")
 
 
       rel_diff = (actual_offcycle_ua-ua_w_per_k).abs/ua_w_per_k
@@ -497,7 +497,7 @@ class NECB_SHW_Additional_Tests < MiniTest::Test
       puts "ua_w_per_k #{ua_w_per_k}"
       value_is_correct = true
       if rel_diff > rel_tol and abs_diff > abs_tol then value_is_correct = false end
-      assert(value_is_correct,"SHW off cycle standby loss test results (#ua_w_per_k) do not match expected results (#actual_offcycle_ua)!")
+      assert(value_is_correct,"SHW off cycle standby loss test results (#{ua_w_per_k}) do not match expected results (#{actual_offcycle_ua})!")
 
 
       rel_diff = (actual_oncycle_ua-ua_w_per_k).abs/ua_w_per_k
@@ -506,7 +506,7 @@ class NECB_SHW_Additional_Tests < MiniTest::Test
       puts "ua_w_per_k#{ua_w_per_k}"
       value_is_correct = true
       if rel_diff > rel_tol and abs_diff > abs_tol then value_is_correct = false end
-      assert(value_is_correct,"SHW on cycle standby loss test results (#ua_w_per_k)do not match expected results (#actual_oncycle_ua)!")
+      assert(value_is_correct,"SHW on cycle standby loss test results (#{ua_w_per_k})do not match expected results (#{actual_oncycle_ua})!")
     
     end
   end
