@@ -7,7 +7,7 @@ class NECB2011 < Standard
   attr_accessor :standards_data
   attr_accessor :space_type_map
   attr_accessor :space_multiplier_map
-
+  
   # This is a helper method to convert arguments that may support 'NECB_Default, and nils to convert to float'
   def convert_arg_to_f(variable:, default:)
     return variable if variable.kind_of?(Numeric)
@@ -166,7 +166,7 @@ class NECB2011 < Standard
       return epw.hdd18.to_f
     else
       dist_clause = "%.2f % #{(min_distance / 1000.0)}"
-      puts "INFO:NECB HDD18 of #{necb_closest['degree_days_below_18_c'].to_f}  at nearest city #{necb_closest['city']},#{necb_closest['province']}, at a distance of " + dist_clause + 'km from epw location. Ref:necb_2015_table_c1'
+      puts "INFO:NECB HDD18 of #{necb_closest['degree_days_below_18_c'].to_f}  at nearest city #{necb_closest['city']},#{necb_closest['province']}, at a distance of " + dist_clause + 'km from epw location. Ref: nbc_2015_table_c1'
       return necb_closest['degree_days_below_18_c'].to_f
     end
   end
@@ -177,6 +177,8 @@ class NECB2011 < Standard
                                    epw_file:,
                                    debug: false,
                                    sizing_run_dir: Dir.pwd,
+                                   necb_reference_hp: false,
+                                   necb_reference_hp_supp_fuel: 'DefaultFuel',
                                    primary_heating_fuel: 'DefaultFuel',
                                    dcv_type: 'NECB_Default',
                                    lights_type: 'NECB_Default',
@@ -228,11 +230,12 @@ class NECB2011 < Standard
                                    output_meters: nil,
                                    airloop_economizer_type: nil,
                                    baseline_system_zones_map_option: nil)
-
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 epw_file: epw_file,
                                 sizing_run_dir: sizing_run_dir,
+                                necb_reference_hp: necb_reference_hp,
+                                necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                 primary_heating_fuel: primary_heating_fuel,
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
                                 lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
@@ -303,6 +306,8 @@ class NECB2011 < Standard
   def model_apply_standard(model:,
                            epw_file:,
                            sizing_run_dir: Dir.pwd,
+                           necb_reference_hp: false,
+                           necb_reference_hp_supp_fuel: 'DefaultFuel',
                            primary_heating_fuel: 'DefaultFuel',
                            dcv_type: 'NECB_Default',
                            lights_type: 'NECB_Default',
@@ -353,9 +358,7 @@ class NECB2011 < Standard
                            shw_scale: nil,
                            output_meters: nil,
                            airloop_economizer_type: nil,
-                           baseline_system_zones_map_option: nil
-                           )
-
+                           baseline_system_zones_map_option: nil)
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
@@ -393,6 +396,8 @@ class NECB2011 < Standard
     apply_systems_and_efficiencies(model: model,
                                    primary_heating_fuel: primary_heating_fuel,
                                    sizing_run_dir: sizing_run_dir,
+                                   necb_reference_hp: necb_reference_hp,
+                                   necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                    dcv_type: dcv_type,
                                    ecm_system_name: ecm_system_name,
                                    ecm_system_zones_map_option: ecm_system_zones_map_option,
@@ -465,6 +470,8 @@ class NECB2011 < Standard
   def apply_systems_and_efficiencies(model:,
                                      primary_heating_fuel:,
                                      sizing_run_dir:,
+                                     necb_reference_hp: false,
+                                     necb_reference_hp_supp_fuel: 'DefaultFuel',
                                      dcv_type: 'NECB_Default',
                                      ecm_system_name: 'NECB_Default',
                                      ecm_system_zones_map_option: 'NECB_Default',
@@ -495,7 +502,7 @@ class NECB2011 < Standard
 
     # Create Default Systems.
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir, shw_scale: shw_scale,
-                  baseline_system_zones_map_option: baseline_system_zones_map_option)
+                  necb_reference_hp: necb_reference_hp, necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel, baseline_system_zones_map_option: baseline_system_zones_map_option)
 
     # Apply new ECM system. Overwrite standard as required.
     ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self, primary_heating_fuel: primary_heating_fuel, 
@@ -504,7 +511,7 @@ class NECB2011 < Standard
     # -------- Performace, Efficiencies, Controls and Sensors ------------
     #
     # Set code standard equipment charecteristics.
-    sql_db_vars_map = apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
+    sql_db_vars_map = apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir, necb_reference_hp: necb_reference_hp)
     # Apply System
     ecm.apply_system_efficiencies_ecm(model: model, ecm_system_name: ecm_system_name)
     # Apply ECM ERV charecteristics as required. Part 2 of above ECM.
@@ -655,19 +662,21 @@ class NECB2011 < Standard
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
-  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default')
+  # @param necb_ref_hp [Bool] if true, NECB reference model rules for heat pumps will be used.
+  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', necb_reference_hp: false)
     raise('validation of model failed.') unless validate_initial_model(model)
 
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
 
-    # This is needed for NECB2011 as a workaround for sizing the reheat boxes
+    # This is needed for NECB2011 as a workaround for sizing the reheat boxes.
     model.getAirTerminalSingleDuctVAVReheats.each { |iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj) }
     # Apply the prototype HVAC assumptions
     model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
     # Apply the HVAC efficiency standard
     sql_db_vars_map = {}
-    model_apply_hvac_efficiency_standard(model, climate_zone, sql_db_vars_map: sql_db_vars_map)
+    model_apply_hvac_efficiency_standard(model, climate_zone, sql_db_vars_map: sql_db_vars_map, necb_ref_hp: necb_reference_hp)
+
     model_enable_demand_controlled_ventilation(model, dcv_type)
     return sql_db_vars_map
   end
@@ -707,8 +716,12 @@ class NECB2011 < Standard
 
     # Set HVAC availability schedule to follow occupancy
     air_loop_hvac.setAvailabilitySchedule(loop_occ_sch)
-    air_loop_hvac.supplyComponents('OS:AirLoopHVAC:UnitaryHeatPump:AirToAir:MultiSpeed'.to_IddObjectType).each do |comp|
-      comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.setAvailabilitySchedule(loop_occ_sch)
+    air_loop_hvac.supplyComponents.each do |comp|
+      if comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
+        comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.setSupplyAirFanOperatingModeSchedule(loop_occ_sch)
+      elsif comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
+        comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.setAvailabilitySchedule(loop_occ_sch)
+      end
     end
 
     return true
