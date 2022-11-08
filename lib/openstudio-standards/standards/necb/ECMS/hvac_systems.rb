@@ -2857,6 +2857,7 @@ class ECMS
          (coil_type == 'MultiSpeed' && coil.containingHVACComponent.get.airLoopHVAC.is_initialized)
         rated_flow_rate = nil
         rated_flow_rate = unitary_cop['ref_flow_rate_m3_per_sec'] * (capacity_w / unitary_cop['maximum_capacity']) if unitary_cop['ref_flow_rate_m3_per_sec']
+        # Set the COP if the sizing run is done
         if sizing_done
           cop = nil
           if unitary_cop['minimum_energy_efficiency_ratio']
@@ -2876,6 +2877,7 @@ class ECMS
           coil.setName('CoilCoolingDXSingleSpeed_dx-adv') if coil_type == 'SingleSpeed'
           coil.setName('CoilCoolingDXMultiSpeed_dx-adv') if coil_type == 'MultiSpeed'
         else
+          # Set the performance curves before the sizing run for this ECM
           cool_cap_ft = nil
           cool_cap_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_ft'] }[0] if unitary_cop['cool_cap_ft']
           cool_cap_ft = model_add_curve(model, unitary_cop['cool_cap_ft']) if cool_cap_ft
