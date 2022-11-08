@@ -2809,7 +2809,7 @@ class ECMS
   # Method to update the cop and/or the performance curves of unitary dx coils. The method input 'unitary_cop' can either be a
   # string or a hash. When it's a string it's used to find a hash in the json table 'unitary_cop_ecm'. When it's a hash it holds
   # the parameters needed to update the cop and/or the performance curves of the unitary coil.
-  def modify_unitary_cop(model:, unitary_cop:, sql_db_vars_map:)
+  def modify_unitary_cop(model:, unitary_cop:, sizing_done:, sql_db_vars_map: nil)
     return if unitary_cop.nil? || (unitary_cop.to_s == 'NECB_Default')
 
     coils = model.getCoilCoolingDXSingleSpeeds + model.getCoilCoolingDXMultiSpeeds
@@ -2823,7 +2823,7 @@ class ECMS
         search_criteria = {}
         search_criteria['name'] = unitary_cop_copy
         coil_name = coil.name.to_s
-        if sql_db_vars_map.has_key? coil_name then coil.setName(sql_db_vars_map[coil_name])  end
+        if (sql_db_vars_map.has_key? coil_name) && !sizing_done then coil.setName(sql_db_vars_map[coil_name]) end
         if coil_type == 'SingleSpeed'
           capacity_w = coil_cooling_dx_single_speed_find_capacity(coil)
         elsif coil_type == 'MultiSpeed'
@@ -2855,51 +2855,59 @@ class ECMS
       # If the dx coil is on an air loop then update its cop and the performance curves when these are specified in the ecm data
       if (coil_type == 'SingleSpeed' && coil.airLoopHVAC.is_initialized && (!coil.name.to_s.include? "_ASHP")) ||
          (coil_type == 'MultiSpeed' && coil.containingHVACComponent.get.airLoopHVAC.is_initialized)
-        cop = nil
-        if unitary_cop['minimum_energy_efficiency_ratio']
-          cop = eer_to_cop(unitary_cop['minimum_energy_efficiency_ratio'].to_f)
-        elsif unitary_cop['minimum_seasonal_energy_efficiency_ratio']
-          cop = seer_to_cop_cooling_with_fan(unitary_cop['minimum_seasonal_energy_efficiency_ratio'].to_f)
-        elsif unitary_cop['minimum_coefficient_of_performance_cooling']
-          cop = unitary_cop['minimum_coefficient_of_performance_cooling'].to_f
-        end
-        cool_cap_ft = nil
-        cool_cap_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_ft'] }[0] if unitary_cop['cool_cap_ft']
-        cool_cap_ft = model_add_curve(model, unitary_cop['cool_cap_ft']) if cool_cap_ft
-        cool_cap_fflow = nil
-        cool_cap_fflow = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_fflow'] }[0] if unitary_cop['cool_cap_fflow']
-        cool_cap_fflow = model_add_curve(model, unitary_cop['cool_cap_fflow']) if cool_cap_fflow
-        cool_eir_ft = nil
-        cool_eir_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_eir_ft'] }[0] if unitary_cop['cool_eir_ft']
-        cool_eir_ft = model_add_curve(model, unitary_cop['cool_eir_ft']) if cool_eir_ft
-        cool_eir_fflow = nil
-        cool_eir_fflow = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_eir_fflow'] }[0] if unitary_cop['cool_eir_fflow']
-        cool_eir_fflow = model_add_curve(model, unitary_cop['cool_eir_fflow']) if cool_eir_fflow
-        cool_plf_fplr = nil
-        cool_plf_fplr = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_plf_fplr'] }[0] if unitary_cop['cool_plf_fplr']
-        cool_plf_fplr = model_add_curve(model, unitary_cop['cool_plf_fplr']) if cool_plf_fplr
         rated_flow_rate = nil
-        rated_flow_rate = unitary_cop['ref_flow_rate_m3_per_sec'] * (capacity_w / unitary_cop['maximum_capacity']) if unitary_cop['ref_flow_rate_m3_per_sec'] 
-        if coil_type == 'SingleSpeed'
-          coil.setRatedCOP(cop) if cop
-          coil.setTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft) if cool_cap_ft
-          coil.setTotalCoolingCapacityFunctionOfFlowFractionCurve(cool_cap_fflow) if cool_cap_fflow
-          coil.setEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft) if cool_eir_ft
-          coil.setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow) if cool_eir_fflow
-          coil.setPartLoadFractionCorrelationCurve(cool_plf_fplr) if cool_plf_fplr
-          coil.setRatedAirFlowRate(rated_flow_rate) if rated_flow_rate
-        elsif coil_type == 'MultiSpeed'
-          coil.stages.sort.each do |stage|
-            stage.setGrossRatedCoolingCOP(cop) if cop
-            stage.setTotalCoolingCapacityFunctionofTemperatureCurve(cool_cap_ft) if cool_cap_ft
-            stage.setTotalCoolingCapacityFunctionofFlowFractionCurve(cool_cap_fflow) if cool_cap_fflow
-            stage.setEnergyInputRatioFunctionofTemperatureCurve(cool_eir_ft) if cool_eir_ft
-            stage.setEnergyInputRatioFunctionofFlowFractionCurve(cool_eir_fflow) if cool_eir_fflow
-            stage.setPartLoadFractionCorrelationCurve(cool_plf_fplr) if cool_plf_fplr
+        rated_flow_rate = unitary_cop['ref_flow_rate_m3_per_sec'] * (capacity_w / unitary_cop['maximum_capacity']) if unitary_cop['ref_flow_rate_m3_per_sec']
+        if sizing_done
+          cop = nil
+          if unitary_cop['minimum_energy_efficiency_ratio']
+            cop = eer_to_cop(unitary_cop['minimum_energy_efficiency_ratio'].to_f)
+          elsif unitary_cop['minimum_seasonal_energy_efficiency_ratio']
+            cop = seer_to_cop_cooling_with_fan(unitary_cop['minimum_seasonal_energy_efficiency_ratio'].to_f)
+          elsif unitary_cop['minimum_coefficient_of_performance_cooling']
+            cop = unitary_cop['minimum_coefficient_of_performance_cooling'].to_f
+          end
+          if coil_type == 'SingleSpeed'
+            coil.setRatedCOP(cop) if cop
+          elsif coil_type == 'MultiSpeed'
+            coil.stages.sort.each do |stage|
+              stage.setGrossRatedCoolingCOP(cop) if cop
+            end
+          end
+          coil.setName('CoilCoolingDXSingleSpeed_dx-adv') if coil_type == 'SingleSpeed'
+          coil.setName('CoilCoolingDXMultiSpeed_dx-adv') if coil_type == 'MultiSpeed'
+        else
+          cool_cap_ft = nil
+          cool_cap_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_ft'] }[0] if unitary_cop['cool_cap_ft']
+          cool_cap_ft = model_add_curve(model, unitary_cop['cool_cap_ft']) if cool_cap_ft
+          cool_cap_fflow = nil
+          cool_cap_fflow = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_fflow'] }[0] if unitary_cop['cool_cap_fflow']
+          cool_cap_fflow = model_add_curve(model, unitary_cop['cool_cap_fflow']) if cool_cap_fflow
+          cool_eir_ft = nil
+          cool_eir_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_eir_ft'] }[0] if unitary_cop['cool_eir_ft']
+          cool_eir_ft = model_add_curve(model, unitary_cop['cool_eir_ft']) if cool_eir_ft
+          cool_eir_fflow = nil
+          cool_eir_fflow = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_eir_fflow'] }[0] if unitary_cop['cool_eir_fflow']
+          cool_eir_fflow = model_add_curve(model, unitary_cop['cool_eir_fflow']) if cool_eir_fflow
+          cool_plf_fplr = nil
+          cool_plf_fplr = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_plf_fplr'] }[0] if unitary_cop['cool_plf_fplr']
+          cool_plf_fplr = model_add_curve(model, unitary_cop['cool_plf_fplr']) if cool_plf_fplr
+          if coil_type == 'SingleSpeed'
+            coil.setTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft) if cool_cap_ft
+            coil.setTotalCoolingCapacityFunctionOfFlowFractionCurve(cool_cap_fflow) if cool_cap_fflow
+            coil.setEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft) if cool_eir_ft
+            coil.setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow) if cool_eir_fflow
+            coil.setPartLoadFractionCorrelationCurve(cool_plf_fplr) if cool_plf_fplr
+            coil.setRatedAirFlowRate(rated_flow_rate) if rated_flow_rate
+          elsif coil_type == 'MultiSpeed'
+            coil.stages.sort.each do |stage|
+              stage.setTotalCoolingCapacityFunctionofTemperatureCurve(cool_cap_ft) if cool_cap_ft
+              stage.setTotalCoolingCapacityFunctionofFlowFractionCurve(cool_cap_fflow) if cool_cap_fflow
+              stage.setEnergyInputRatioFunctionofTemperatureCurve(cool_eir_ft) if cool_eir_ft
+              stage.setEnergyInputRatioFunctionofFlowFractionCurve(cool_eir_fflow) if cool_eir_fflow
+              stage.setPartLoadFractionCorrelationCurve(cool_plf_fplr) if cool_plf_fplr
+            end
           end
         end
-        coil.setName('CoilCoolingDXSingleSpeed_dx-adv') if cop && coil_type == 'SingleSpeed'
-        coil.setName('CoilCoolingDXMultiSpeed_dx-adv') if cop && coil_type == 'MultiSpeed'
       end
     end
   end

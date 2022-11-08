@@ -515,8 +515,8 @@ class NECB2011 < Standard
     ecm.modify_boiler_efficiency(model: model, boiler_eff: boiler_eff)
     # Apply Furnace Efficiency
     ecm.modify_furnace_efficiency(model: model, furnace_eff: furnace_eff)
-    # Apply Unitary efficiency
-    ecm.modify_unitary_cop(model: model, unitary_cop: unitary_cop, sql_db_vars_map: sql_db_vars_map)
+    # Apply Unitary curves
+    ecm.modify_unitary_cop(model: model, unitary_cop: unitary_cop, sizing_done: false, sql_db_vars_map: sql_db_vars_map)
     # Apply SHW Efficiency
     ecm.modify_shw_efficiency(model: model, shw_eff: shw_eff)
     # Apply daylight controls.
@@ -525,6 +525,14 @@ class NECB2011 < Standard
     ecm.modify_chiller_efficiency(model: model, chiller_type: chiller_type)
     # Apply airloop economizer
     ecm.add_airloop_economizer(model: model, airloop_economizer_type: airloop_economizer_type)
+    # Perform a second sizing run if needed
+    if (!unitary_cop.nil? && unitary_cop != 'NECB_Default') || !model.getPlantLoops.empty?
+      if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
+        raise('sizing run 2 failed!')
+      end
+    end
+    # apply unitary cop
+    ecm.modify_unitary_cop(model: model, unitary_cop: unitary_cop, sizing_done: true, sql_db_vars_map: sql_db_vars_map)
 
     # -------Pump sizing required by some vintages----------------
     # Apply Pump power as required.
