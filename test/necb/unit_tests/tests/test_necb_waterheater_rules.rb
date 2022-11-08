@@ -357,9 +357,9 @@ class NECB_SHW_Additional_Tests < MiniTest::Test
       shw_units = model.getWaterHeaterMixeds
       puts "shw_units[0] #{shw_units[0]}"
       icap = (shw_units[0].heaterMaximumCapacity.get.to_f)/1000.0 # kW
-      puts "icap#{icap}"
+      puts "icap #{icap} kW"
       ivol = (shw_units[0].tankVolume.get.to_f)*1000.0 # Litres
-      puts "ivol #{ivol }"
+      puts "ivol #{ivol} L"
       actual_shw_tank_eff = shw_units[0].heaterThermalEfficiency.to_f
       actual_shw_tank_vol = shw_units[0].tankVolume.to_f
       actual_offcycle_ua = shw_units[0].offCycleLossCoefficienttoAmbientTemperature.to_f
@@ -374,9 +374,10 @@ class NECB_SHW_Additional_Tests < MiniTest::Test
       # Calc FHR
       tank_param = standard.auto_size_shw_capacity(model:model, shw_scale: 'NECB_Default')
       fhr_L_per_hr = (tank_param['loop_peak_flow_rate_SI']) * 3600000
-      puts "CAlculate UA   ========================================== fhr_L_per_hr #{fhr_L_per_hr}"
-      puts "icap#{icap}"
-      puts "ivol #{ivol }"
+      puts "Calculate UA   ========================================== "
+      puts "fhr_L_per_hr #{fhr_L_per_hr} L/hr"
+      puts "icap #{icap} kW"
+      puts "ivol #{ivol} L; (=#{vol_gal} gal)"
       # select UA and burner efficiency estimation method based on tank volume and heating capacity
 
       if icap <= 22 and ivol >= 76 and ivol < 208
@@ -396,15 +397,18 @@ class NECB_SHW_Additional_Tests < MiniTest::Test
           volume_drawn_m3 = 0.318
         end
         water_heater_eff = 0.82
+        puts "icap <= 22 and ivol >= 76 and ivol < 208"
         puts "uef #{uef}"
         puts "water_heater_eff #{water_heater_eff}"
-        puts "volume_drawn_m3 icap <= 22 and ivol >= 76 and ivol < 208 #{volume_drawn_m3}"
+        volume_drawn_gal = OpenStudio.convert(volume_drawn_m3, 'm^3', 'gal').get
+        puts "volume_drawn_m3 #{volume_drawn_m3}, (= #{volume_drawn_gal} gal)"
         q_load_j = (volume_drawn_m3)*994.6482*4179.53*(51.66667-14.44444) # 33.06C water properties used
-        puts "q_load_j #{q_load_j}"
+        q_load_btu = OpenStudio.convert(q_load_j, 'J', 'Btu').get
+        puts "q_load_j #{q_load_j} J, (=#{q_load_btu} BTU)"
         re = water_heater_eff + q_load_j*(uef - water_heater_eff)/(24*3600*icap*1000*uef)
         puts "re #{re}"
         ua_w_per_k = (water_heater_eff-re)*icap*1000/(51.66667-19.7222)
-        puts "ua_w_per_k 22kw#{ua_w_per_k}"
+        puts "ua_w_per_k 22kw #{ua_w_per_k}"
         
 
 
@@ -423,21 +427,24 @@ class NECB_SHW_Additional_Tests < MiniTest::Test
           volume_drawn_m3 = 0.144
         elsif fhr_L_per_hr >= 193 and fhr_L_per_hr < 284
           uef = 0.7987 - 0.00011 * ivol
-          volume_drawn_m3 = 0.284
+          volume_drawn_m3 = 0.208
         elsif fhr_L_per_hr >= 284
           uef = 0.8072 - 0.00008 * ivol
           volume_drawn_m3 = 0.318
         end
         water_heater_eff = 0.82
+        puts "icap <= 22 and ivol >= 208 and ivol < 380"
         puts "uef #{uef}"
         puts "water_heater_eff #{water_heater_eff}"
-        puts "volume_drawn_m3 icap <= 22 and ivol >= 208 and ivol < 380 #{volume_drawn_m3}"
+        volume_drawn_gal = OpenStudio.convert(volume_drawn_m3, 'm^3', 'gal').get
+        puts "volume_drawn_m3 #{volume_drawn_m3}, (= #{volume_drawn_gal} gal)"
         q_load_j = (volume_drawn_m3)*994.6482*4179.53*(51.66667-14.44444) # 33.06C water properties used
-        puts "q_load_j #{q_load_j}"
+        q_load_btu = OpenStudio.convert(q_load_j, 'J', 'Btu').get
+        puts "q_load_j #{q_load_j} J, (=#{q_load_btu} BTU)"
         re = water_heater_eff + q_load_j*(uef - water_heater_eff)/(24*3600*icap*1000*uef)
         puts "re #{re}"
         ua_w_per_k = (water_heater_eff-re)*icap*1000/(51.66667-19.7222)
-        puts "ua_w_per_k 22kw#{ua_w_per_k}"
+        puts "ua_w_per_k 22kw #{ua_w_per_k}"
 
       elsif icap > 22 and icap <= 30.5 and ivol <= 454
         uef = 1
@@ -447,35 +454,38 @@ class NECB_SHW_Additional_Tests < MiniTest::Test
         elsif fhr_L_per_hr >= 68 and fhr_L_per_hr < 193
           volume_drawn_m3 = 0.144
         elsif fhr_L_per_hr >= 193 and fhr_L_per_hr < 284
-          volume_drawn_m3 = 0.284
+          volume_drawn_m3 = 0.208
         elsif fhr_L_per_hr >= 284
           volume_drawn_m3 = 0.318
         end
         uef = 0.8107 - 0.00021 * ivol
-        puts "icap > 22 and icap <= 30.5 and ivol <= 454  uef = #{uef}"
         water_heater_eff = 0.82
+        puts "icap > 22 and icap <= 30.5 and ivol <= 454"
+        puts "uef #{uef}"
         puts "water_heater_eff #{water_heater_eff}"
+        volume_drawn_gal = OpenStudio.convert(volume_drawn_m3, 'm^3', 'gal').get
+        puts "volume_drawn_m3 #{volume_drawn_m3}, (= #{volume_drawn_gal} gal)"
         q_load_j = volume_drawn_m3*994.6482*4179.53*(51.66667-14.44444) # 33.06C water properties used
-        puts "q_load_j #{q_load_j}"
+        q_load_btu = OpenStudio.convert(q_load_j, 'J', 'Btu').get
+        puts "q_load_j #{q_load_j} J, (=#{q_load_btu} BTU)"
         re = water_heater_eff + q_load_j*(uef - water_heater_eff)/(24*3600*icap*1000*uef)
         puts "re #{re}"
         ua_w_per_k = (water_heater_eff-re)*icap*1000/(51.66667-19.72222)
         puts "ua_w_per_k #{ua_w_per_k}"
       else
         # 
-        puts "ELSE #{} "
+        puts "case ELSE"
         et = 0.9
         sl_w = 0.84*(1.25*icap+16.57*(ivol**0.5))
-        puts "sl_w #{sl_w}"
         sl_btu_per_hr = OpenStudio.convert(sl_w, 'W', 'Btu/hr').get
-        puts "sl_btu_per_hr #{sl_btu_per_hr}"
-        icap_btu_per_hr = OpenStudio.convert(icap, 'kW', 'Btu/hr').get
         ua_btu_per_hr_per_F = sl_btu_per_hr*et/70
-        puts "ua_btu_per_hr_per_F #{ua_btu_per_hr_per_F}"
+        puts "sl_w #{sl_w} W, (=#{sl_btu_per_hr} BTU/hr)"
+        puts "ua_btu_per_hr_per_F #{ua_btu_per_hr_per_F} BTU/hr/F"
+        icap_btu_per_hr = OpenStudio.convert(icap, 'kW', 'Btu/hr').get
         water_heater_eff = (ua_btu_per_hr_per_F*70 + icap_btu_per_hr*et)/icap_btu_per_hr
         puts "water_heater_eff #{water_heater_eff}"
         ua_w_per_k = OpenStudio.convert(ua_btu_per_hr_per_F, 'Btu/hr*R', 'W/K').get
-        puts "ua_w_per_k elsee #{ua_w_per_k}"
+        puts "ua_w_per_k else #{ua_w_per_k}"
       end
 
       # Check accuracy of parameters
@@ -503,7 +513,7 @@ class NECB_SHW_Additional_Tests < MiniTest::Test
       rel_diff = (actual_oncycle_ua-ua_w_per_k).abs/ua_w_per_k
       abs_diff = (actual_oncycle_ua-ua_w_per_k).abs
       puts "actual_oncycle_ua #{actual_oncycle_ua}"
-      puts "ua_w_per_k#{ua_w_per_k}"
+      puts "ua_w_per_k #{ua_w_per_k}"
       value_is_correct = true
       if rel_diff > rel_tol and abs_diff > abs_tol then value_is_correct = false end
       assert(value_is_correct,"SHW on cycle standby loss test results (#ua_w_per_k)do not match expected results (#actual_oncycle_ua)!")
