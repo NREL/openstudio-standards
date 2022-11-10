@@ -1,0 +1,296 @@
+{
+    "Automotive facility": [
+        "WholeBuilding"
+    ],
+    "Convention centre": [
+        "WholeBuilding"
+    ],
+    "Courthouse": [
+        "WholeBuilding"
+    ],
+    "Dining - bar/lounge": [
+        "WholeBuilding"
+    ],
+    "Dining - cafeteria": [
+        "WholeBuilding"
+    ],
+    "Dining - family": [
+        "WholeBuilding"
+    ],
+    "Dormitory": [
+        "WholeBuilding"
+    ],
+    "Exercise centre": [
+        "WholeBuilding"
+    ],
+    "Fire station": [
+        "WholeBuilding"
+    ],
+    "Gymnasium": [
+        "WholeBuilding"
+    ],
+    "Health-care clinic": [
+        "WholeBuilding"
+    ],
+    "Hospital": [
+        "WholeBuilding"
+    ],
+    "Hotel": [
+        "WholeBuilding"
+    ],
+    "Library": [
+        "WholeBuilding"
+    ],
+    "Manufacturing facility": [
+        "WholeBuilding"
+    ],
+    "Motel": [
+        "WholeBuilding"
+    ],
+    "Motion picture theatre": [
+        "WholeBuilding"
+    ],
+    "Multi-unit residential": [
+        "WholeBuilding"
+    ],
+    "Museum": [
+        "WholeBuilding"
+    ],
+    "Office": [
+        "WholeBuilding"
+    ],
+    "Parking garage": [
+        "WholeBuilding"
+    ],
+    "Penitentiary": [
+        "WholeBuilding"
+    ],
+    "Performing arts theatre": [
+        "WholeBuilding"
+    ],
+    "Police station": [
+        "WholeBuilding"
+    ],
+    "Post office": [
+        "WholeBuilding"
+    ],
+    "Religious": [
+        "WholeBuilding"
+    ],
+    "Retail": [
+        "WholeBuilding"
+    ],
+    "School/university": [
+        "WholeBuilding"
+    ],
+    "Space Function": [
+        "- undefined -",
+        "Atrium - H < 13m",
+        "Atrium - H > 13m",
+        "Audience - auditorium",
+        "Audience - motion picture",
+        "Audience - performance arts",
+        "Automotive - repair",
+        "Bank - banking and offices",
+        "Classroom/lecture/training",
+        "Conf./meet./multi-purpose",
+        "Convention centre - audience",
+        "Convention centre - exhibit",
+        "Corr. < 2.4m wide-sch-A",
+        "Corr. < 2.4m wide-sch-B",
+        "Corr. < 2.4m wide-sch-C",
+        "Corr. < 2.4m wide-sch-D",
+        "Corr. < 2.4m wide-sch-E",
+        "Corr. < 2.4m wide-sch-F",
+        "Corr. < 2.4m wide-sch-G",
+        "Corr. < 2.4m wide-sch-H",
+        "Corr. < 2.4m wide-sch-I",
+        "Corr. >= 2.4m wide-sch-A",
+        "Corr. >= 2.4m wide-sch-B",
+        "Corr. >= 2.4m wide-sch-C",
+        "Corr. >= 2.4m wide-sch-D",
+        "Corr. >= 2.4m wide-sch-E",
+        "Corr. >= 2.4m wide-sch-F",
+        "Corr. >= 2.4m wide-sch-G",
+        "Corr. >= 2.4m wide-sch-H",
+        "Corr. >= 2.4m wide-sch-I",
+        "Courthouse - cell",
+        "Courthouse - chambers",
+        "Courthouse - courtroom",
+        "Dining - bar lounge/leisure",
+        "Dining - family space",
+        "Dining - other",
+        "Dormitory - living quarters",
+        "Dress./fitt. - performance arts",
+        "Dwelling Unit(s)",
+        "Electrical/Mechanical-sch-A",
+        "Electrical/Mechanical-sch-B",
+        "Electrical/Mechanical-sch-C",
+        "Electrical/Mechanical-sch-D",
+        "Electrical/Mechanical-sch-E",
+        "Electrical/Mechanical-sch-F",
+        "Electrical/Mechanical-sch-G",
+        "Electrical/Mechanical-sch-H",
+        "Electrical/Mechanical-sch-I",
+        "Fire station - engine room",
+        "Fire station - quarters",
+        "Food preparation",
+        "Food preparation - vented",
+        "Gym - audience",
+        "Gym - fitness",
+        "Gym - play",
+        "Hospital - emergency",
+        "Hospital - exam",
+        "Hospital - laundry/washing",
+        "Hospital - lounge/recreation",
+        "Hospital - medical supply",
+        "Hospital - medical supply - occsens",
+        "Hospital - nursery",
+        "Hospital - nurses station",
+        "Hospital - operating room",
+        "Hospital - patient room",
+        "Hospital - pharmacy",
+        "Hospital - physical therapy",
+        "Hospital - radiology/imaging",
+        "Hospital - recovery",
+        "Hospital corr. < 2.4m-sch-A",
+        "Hospital corr. < 2.4m-sch-B",
+        "Hospital corr. < 2.4m-sch-C",
+        "Hospital corr. < 2.4m-sch-D",
+        "Hospital corr. < 2.4m-sch-E",
+        "Hospital corr. < 2.4m-sch-F",
+        "Hospital corr. < 2.4m-sch-G",
+        "Hospital corr. < 2.4m-sch-H",
+        "Hospital corr. < 2.4m-sch-I",
+        "Hospital corr. >= 2.4m-sch-A",
+        "Hospital corr. >= 2.4m-sch-B",
+        "Hospital corr. >= 2.4m-sch-C",
+        "Hospital corr. >= 2.4m-sch-D",
+        "Hospital corr. >= 2.4m-sch-E",
+        "Hospital corr. >= 2.4m-sch-F",
+        "Hospital corr. >= 2.4m-sch-G",
+        "Hospital corr. >= 2.4m-sch-H",
+        "Hospital corr. >= 2.4m-sch-I",
+        "Hotel/Motel - dining",
+        "Hotel/Motel - lobby",
+        "Hotel/Motel - rooms",
+        "Hway lodging - dining",
+        "Hway lodging - rooms",
+        "Lab - classrooms",
+        "Lab - research",
+        "Library - cataloging",
+        "Library - reading",
+        "Library - stacks",
+        "Lobby - elevator",
+        "Lobby - motion picture",
+        "Lobby - other",
+        "Lobby - performance arts",
+        "Locker room-sch-A",
+        "Locker room-sch-B",
+        "Locker room-sch-C",
+        "Locker room-sch-D",
+        "Locker room-sch-E",
+        "Locker room-sch-F",
+        "Locker room-sch-G",
+        "Locker room-sch-H",
+        "Locker room-sch-I",
+        "Lounge/recreation",
+        "Mfg - 7.5 <= bay H <= 15m",
+        "Mfg - bay H < 7.5m",
+        "Mfg - bay H > 15m",
+        "Mfg - corr. < 2.4m-sch-A",
+        "Mfg - corr. < 2.4m-sch-B",
+        "Mfg - corr. < 2.4m-sch-C",
+        "Mfg - corr. < 2.4m-sch-D",
+        "Mfg - corr. < 2.4m-sch-E",
+        "Mfg - corr. < 2.4m-sch-F",
+        "Mfg - corr. < 2.4m-sch-G",
+        "Mfg - corr. < 2.4m-sch-H",
+        "Mfg - corr. < 2.4m-sch-I",
+        "Mfg - corr. >= 2.4m-sch-A",
+        "Mfg - corr. >= 2.4m-sch-B",
+        "Mfg - corr. >= 2.4m-sch-C",
+        "Mfg - corr. >= 2.4m-sch-D",
+        "Mfg - corr. >= 2.4m-sch-E",
+        "Mfg - corr. >= 2.4m-sch-F",
+        "Mfg - corr. >= 2.4m-sch-G",
+        "Mfg - corr. >= 2.4m-sch-H",
+        "Mfg - corr. >= 2.4m-sch-I",
+        "Mfg - detailed",
+        "Mfg - equipment",
+        "Museum - exhibition",
+        "Museum - restoration",
+        "Office - enclosed",
+        "Office - enclosed - occsens",
+        "Office - open plan",
+        "Parking garage space",
+        "Penitentiary - audience",
+        "Penitentiary - classroom",
+        "Penitentiary - dining",
+        "Post office sorting",
+        "Religious - audience",
+        "Religious - fellowship hall",
+        "Religious - pulpit/choir",
+        "Retail - dressing/fitting",
+        "Retail - mall concourse",
+        "Retail - sales",
+        "Sales area",
+        "Sports arena - audience",
+        "Sports arena - court c1",
+        "Sports arena - court c2",
+        "Sports arena - court c3",
+        "Sports arena - court c4",
+        "Sports arena - ring",
+        "Stairway-sch-A",
+        "Stairway-sch-B",
+        "Stairway-sch-C",
+        "Stairway-sch-D",
+        "Stairway-sch-E",
+        "Stairway-sch-F",
+        "Stairway-sch-G",
+        "Stairway-sch-H",
+        "Stairway-sch-I",
+        "Storage area",
+        "Storage area - occsens",
+        "Storage area - refrigerated",
+        "Storage area - refrigerated - occsens",
+        "Transp. baggage",
+        "Transp. concourse",
+        "Transp. counter",
+        "Transp. seating",
+        "Warehouse - fine",
+        "Warehouse - fine - refrigerated",
+        "Warehouse - med/blk",
+        "Warehouse - med/blk - refrigerated",
+        "Warehouse - med/blk2",
+        "Warehouse - med/blk2 - refrigerated",
+        "Washroom-sch-A",
+        "Washroom-sch-B",
+        "Washroom-sch-C",
+        "Washroom-sch-D",
+        "Washroom-sch-E",
+        "Washroom-sch-F",
+        "Washroom-sch-G",
+        "Washroom-sch-H",
+        "Washroom-sch-I",
+        "Workshop space"
+    ],
+    "Sports arena": [
+        "WholeBuilding"
+    ],
+    "Town hall": [
+        "WholeBuilding"
+    ],
+    "Transportation": [
+        "WholeBuilding"
+    ],
+    "Warehouse": [
+        "WholeBuilding"
+    ],
+    "Warehouse - refrigerated": [
+        "WholeBuilding"
+    ],
+    "Workshop": [
+        "WholeBuilding"
+    ]
+}

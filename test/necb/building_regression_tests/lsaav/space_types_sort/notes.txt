@@ -1,0 +1,5 @@
+WholeBuilding: 34
+Space Function: 190
+Scheduled space function: 90 (10 space types x 9 schedules)
+All types count: 224
+
