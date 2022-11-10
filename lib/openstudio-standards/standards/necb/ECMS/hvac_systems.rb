@@ -521,13 +521,15 @@ W    sum_y = 0.0
       # Appy performance curves
       if air_sys_eqpt_type == 'ccashp'
         eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
+        coil_cooling_dx_variable_speed_apply_curves(clg_dx_coil, eqpt_name)
+        coil_heating_dx_variable_speed_apply_curves(htg_dx_coil, eqpt_name)
       elsif air_sys_eqpt_type == 'ashp'
         eqpt_name = 'NECB2015_ASHP'
+        coil_cooling_dx_single_speed_apply_curves(clg_dx_coil, eqpt_name)
+        coil_heating_dx_single_speed_apply_curves(htg_dx_coil, eqpt_name)
       else
         raise("add_ecm_hs08_ccashp_vrf: The air system equipment type is neither an ashp nor a ccashp")
       end
-      coil_cooling_dx_variable_speed_apply_curves(clg_dx_coil, eqpt_name)
-      coil_heating_dx_variable_speed_apply_curves(htg_dx_coil, eqpt_name)
       # add zone equipment and diffuser
       # add terminal VRF units
       add_zone_eqpt(model: model,
@@ -1195,7 +1197,7 @@ W    sum_y = 0.0
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
                                            zones: zones,
                                            system_doas_flags: system_doas_flags)
-      airloop, return_fan = add_air_system(model: model,
+      airloop,clg_dx_coil,htg_dx_coil,return_fan = add_air_system(model: model,
                                            zones: zones,
                                            sys_abbr: sys_info['sys_abbr'],
                                            sys_vent_type: sys_info['sys_vent_type'],
@@ -1206,20 +1208,9 @@ W    sum_y = 0.0
                                            sys_supp_fan_type: sys_info['sys_supp_fan_type'],
                                            sys_ret_fan_type: sys_info['sys_ret_fan_type'],
                                            sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'])
-      # Get and assign defrost performance curve
-      search_criteria = {}
-      search_criteria['name'] = 'HS11_PTHP'
-      props = model_find_object(standards_data['tables']['heat_pump_heating_ecm']['table'], search_criteria, 1.0)
-      heat_defrost_eir_ft = model_add_curve(model, props['heat_defrost_eir_ft'])
-      if !heat_defrost_eir_ft
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXConstantSpeed', 'Cannot find heat_defrost_eir_ft curve, will not be set.')
-      end
-      airloop.supplyComponents.each do |comp|
-        if comp.to_CoilHeatingDXSingleSpeed.is_initialized
-          htg_coil = comp.to_CoilHeatingDXSingleSpeed.get
-          htg_coil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft)
-        end
-      end
+      eqpt_name = 'HS11_PTHP'
+      coil_cooling_dx_single_speed_apply_curves(clg_dx_coil,eqpt_name)
+      coil_heating_dx_single_speed_apply_curves(htg_dx_coil,eqpt_name)
       # add zone equipment and diffuser
       zone_htg_eqpt_type = 'pthp'
       zone_clg_eqpt_type = 'pthp'
@@ -1239,7 +1230,11 @@ W    sum_y = 0.0
           if comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
             if comp.to_ZoneHVACPackagedTerminalHeatPump.get.heatingCoil.to_CoilHeatingDXSingleSpeed.is_initialized
               htg_coil = comp.to_ZoneHVACPackagedTerminalHeatPump.get.heatingCoil.to_CoilHeatingDXSingleSpeed.get
-              htg_coil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft)
+              coil_heating_dx_single_speed_apply_curves(htg_coil,eqpt_name)
+            end
+            if comp.to_ZoneHVACPackagedTerminalHeatPump.get.coolingCoil.to_CoilCoolingDXSingleSpeed.is_initialized
+              clg_coil = comp.to_ZoneHVACPackagedTerminalHeatPump.get.coolingCoil.to_CoilCoolingDXSingleSpeed.get
+              coil_cooling_dx_single_speed_apply_curves(clg_coil,eqpt_name)
             end
           end
         end
@@ -1302,9 +1297,11 @@ W    sum_y = 0.0
             if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
             # clg_dx_coil.setRatedTotalCoolingCapacity(dx_cap)
             # htg_dx_coil.setRatedTotalHeatingCapacity(dx_cap)
-            # assign performance curves and COPs
-            coil_cooling_dx_single_speed_apply_efficiency_and_curves(clg_dx_coil, pthp_eqpt_name)
-            coil_heating_dx_single_speed_apply_efficiency_and_curves(htg_dx_coil, pthp_eqpt_name)
+            # assign COPs
+            search_criteria = {}
+            search_criteria['name'] = pthp_eqpt_name
+            coil_cooling_dx_single_speed_apply_cop(clg_dx_coil, search_criteria)
+            coil_heating_dx_single_speed_apply_cop(htg_dx_coil, search_criteria)
             # Set fan power
             fan_power_per_flow_rate = 150.0 # based on Mitsubishi data: 100 low and 200 high (W-s/m3)
             fan_pr_rise = fan_power_per_flow_rate * (fan.fanEfficiency * fan.motorEfficiency)
@@ -1344,7 +1341,7 @@ W    sum_y = 0.0
                                            zones: zones,
                                            system_doas_flags: system_doas_flags)
       # add air loop and its equipment
-      airloop, return_fan = add_air_system(model: model,
+      airloop,clg_dx_coil,htg_dx_coil,return_fan = add_air_system(model: model,
                                            zones: zones,
                                            sys_abbr: sys_info['sys_abbr'],
                                            sys_vent_type: sys_info['sys_vent_type'],
@@ -1355,17 +1352,9 @@ W    sum_y = 0.0
                                            sys_supp_fan_type: sys_info['sys_supp_fan_type'],
                                            sys_ret_fan_type: sys_info['sys_ret_fan_type'],
                                            sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'])
-      # get and assign defrost curve
-      htg_dx_coils = model.getCoilHeatingDXSingleSpeeds
-      search_criteria = {}
-      search_criteria['name'] = 'NECB2015_ASHP'
-      props = model_find_object(standards_data['tables']['heat_pump_heating_ecm']['table'], search_criteria, 1.0)
-      heat_defrost_eir_ft = model_add_curve(model, props['heat_defrost_eir_ft'])
-      if heat_defrost_eir_ft
-        htg_dx_coils.sort.each { |dxcoil| dxcoil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft) }
-      else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{htg_dx_coils[0].name}, cannot find heat_defrost_eir_ft curve, will not be set.")
-      end
+      eqpt_name = 'NECB2015_ASHP'
+      coil_cooling_dx_single_speed_apply_curves(clg_dx_coil,eqpt_name)
+      coil_heating_dx_single_speed_apply_curves(htg_dx_coil,eqpt_name)
       # add zone equipment and diffuser
       zone_htg_eqpt_type = 'baseboard_electric'
       zone_htg_eqpt_type = 'ptac_electric_off' if sys_info['sys_vent_type'] == 'doas'
@@ -1462,9 +1451,11 @@ W    sum_y = 0.0
         if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
         clg_dx_coil.setRatedTotalCoolingCapacity(dx_cap)
         htg_dx_coil.setRatedTotalHeatingCapacity(dx_cap)
-        # assign performance curves and COPs
-        coil_cooling_dx_single_speed_apply_efficiency_and_curves(clg_dx_coil, ashp_eqpt_name)
-        coil_heating_dx_single_speed_apply_efficiency_and_curves(htg_dx_coil, ashp_eqpt_name)
+        # assign COPs
+        search_criteria = {}
+        search_criteria['name'] = ashp_eqpt_name
+        coil_cooling_dx_single_speed_apply_cop(clg_dx_coil, search_criteria)
+        coil_heating_dx_single_speed_apply_cop(htg_dx_coil, search_criteria)
       end
     end
   end
@@ -1498,8 +1489,8 @@ W    sum_y = 0.0
   end
 
   # =============================================================================================================================
-  # Applies the standard efficiency ratings and typical performance curves "CoilCoolingDXSingleSpeed" object.
-  def coil_cooling_dx_single_speed_apply_efficiency_and_curves(coil_cooling_dx_single_speed, eqpt_name)
+  # Applies the performance curves "CoilCoolingDXSingleSpeed" object.
+  def coil_cooling_dx_single_speed_apply_curves(coil_cooling_dx_single_speed, eqpt_name)
     successfully_set_all_properties = true
 
     search_criteria = {}
@@ -1507,6 +1498,7 @@ W    sum_y = 0.0
 
     # Get the capacity
     capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed)
+    capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
     # Lookup efficiencies
@@ -1564,16 +1556,11 @@ W    sum_y = 0.0
       successfully_set_all_properties = false
     end
 
-    # Find the minimum COP and rename with efficiency rating
-    cop = coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, search_criteria, false)
-
-    # Set the efficiency values
-    coil_cooling_dx_single_speed.setRatedCOP(cop.to_f) unless cop.nil?
   end
 
   # =============================================================================================================================
-  # Applies the standard efficiency ratings and typical performance curves to "CoilHeatingSingleSpeed" object.
-  def coil_heating_dx_single_speed_apply_efficiency_and_curves(coil_heating_dx_single_speed, eqpt_name)
+  # Applies the performance curves to "CoilHeatingSingleSpeed" object.
+  def coil_heating_dx_single_speed_apply_curves(coil_heating_dx_single_speed, eqpt_name)
     successfully_set_all_properties = true
 
     # Get the search criteria
@@ -1582,6 +1569,7 @@ W    sum_y = 0.0
 
     # Get the capacity
     capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed)
+    capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
@@ -1638,12 +1626,16 @@ W    sum_y = 0.0
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find heat_plf_fplr curve, will not be set.")
       successfully_set_all_properties = false
     end
+    
+    # Make the HEAT-DEFROST-EIR-FT curve
+    heat_defrost_eir_ft = model_add_curve(coil_heating_dx_single_speed.model, props['heat_defrost_eir_ft'])
+    if heat_defrost_eir_ft
+      coil_heating_dx_single_speed.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, can not find heat_defrost_eir_ft curve, will not be set.")
+      successfully_set_all_properties = false
+    end
 
-    # Find the minimum COP and rename with efficiency rating
-    cop = coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, search_criteria, false)
-
-    # Set the efficiency values
-    coil_heating_dx_single_speed.setRatedCOP(cop.to_f) unless cop.nil?
   end
 
   # =============================================================================================================================
@@ -2051,10 +2043,10 @@ W    sum_y = 0.0
   end
 
   # =============================================================================================================================
-  # Find minimum efficiency for "CoilCoolingDXSingleSpeed" object
-  def coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed,
-                                                        search_criteria,
-                                                        rename = false)
+  # Find efficiency for "CoilCoolingDXSingleSpeed" object
+  def coil_cooling_dx_single_speed_apply_cop(coil_cooling_dx_single_speed,
+                                             search_criteria,
+                                             rename = false)
 
     capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
@@ -2116,15 +2108,17 @@ W    sum_y = 0.0
     if rename
       coil_cooling_dx_single_speed.setName(new_comp_name)
     end
+    
+    # Set COP
+    coil_cooling_dx_single_speed.setRatedCOP(cop.to_f) unless cop.nil?
 
-    return cop
   end
 
   # =============================================================================================================================
-  # Find minimum efficiency for "CoilHeatingDXSingleSpeed" object
-  def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed,
-                                                        search_criteria,
-                                                        rename = false)
+  # Find efficiency for "CoilHeatingDXSingleSpeed" object
+  def coil_heating_dx_single_speed_apply_cop(coil_heating_dx_single_speed,
+                                             search_criteria,
+                                             rename = false)
 
     capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
@@ -2179,14 +2173,16 @@ W    sum_y = 0.0
       coil_heating_dx_single_speed.setName(new_comp_name)
     end
 
-    return cop
+    # Set COP
+    coil_heating_dx_single_speed.setRatedCOP(cop.to_f) unless cop.nil?
+
   end
 
   # =============================================================================================================================
   # Find efficiency for "CoilCoolingDXVariableSpeed" object
   def coil_cooling_dx_variable_speed_apply_cop(coil_cooling_dx_variable_speed,
-                                                          search_criteria,
-                                                          rename = false)
+                                               search_criteria,
+                                               rename = false)
 
     capacity_w = coil_cooling_dx_variable_speed_find_capacity(coil_cooling_dx_variable_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
@@ -2321,8 +2317,8 @@ W    sum_y = 0.0
   # =============================================================================================================================
   # Find cooling efficiency for "AirConditionerVariableRefrigerantFlow" object
   def airconditioner_variablerefrigerantflow_cooling_apply_cop(airconditioner_variablerefrigerantflow,
-                                                                          search_criteria,
-                                                                          rename = false)
+                                                               search_criteria,
+                                                               rename = false)
 
     capacity_w = airconditioner_variablerefrigerantflow_cooling_find_capacity(airconditioner_variablerefrigerantflow)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
@@ -2385,8 +2381,8 @@ W    sum_y = 0.0
   # =============================================================================================================================
   # Find heating efficiency for "AirConditionerVariableRefrigerantFlow" object
   def airconditioner_variablerefrigerantflow_heating_apply_cop(airconditioner_variablerefrigerantflow,
-                                                                          search_criteria,
-                                                                          rename = false)
+                                                               search_criteria,
+                                                               rename = false)
 
     capacity_w = airconditioner_variablerefrigerantflow_heating_find_capacity(airconditioner_variablerefrigerantflow)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
