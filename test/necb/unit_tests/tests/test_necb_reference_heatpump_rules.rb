@@ -985,8 +985,8 @@ end
         standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
 
         # Apply the HVAC efficiency standard.
-        #standard.model_apply_hvac_efficiency_standard(model, climate_zone, necb_reference_hp: necb_reference_hp)
-        standard.model_apply_hvac_efficiency_standard(model, climate_zone)
+        standard.model_apply_hvac_efficiency_standard(model, climate_zone, necb_ref_hp: necb_reference_hp)
+        #standard.model_apply_hvac_efficiency_standard(model, climate_zone)
         # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
 
         # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
