@@ -187,7 +187,7 @@ class ECMS
   # Return x,y,z coordinates of the centroid of the roof of the storey
   def get_roof_centroid_coords(storey)
     sum_x = 0.0
-    sum_y = 0.0
+W    sum_y = 0.0
     sum_z = 0.0
     total_area = 0.0
     cent_x = nil
@@ -487,6 +487,9 @@ class ECMS
     end
     # Add outdoor VRF unit
     outdoor_vrf_unit = add_outdoor_vrf_unit(model: model, ecm_name: 'hs08_ccashp_vrf')
+    eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit'
+    airconditioner_variablerefrigerantflow_cooling_apply_curves(outdoor_vrf_unit,eqpt_name)
+    airconditioner_variablerefrigerantflow_heating_apply_curves(outdoor_vrf_unit,eqpt_name)
     # Update system doas flags
     system_doas_flags = {}
     system_zones_map.keys.each { |sname| system_doas_flags[sname] = true }
@@ -504,7 +507,7 @@ class ECMS
                                            system_doas_flags: system_doas_flags)
       sys_supp_htg_eqpt_type = 'coil_electric'
       sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
-      airloop, return_fan = add_air_system(model: model,
+      airloop,clg_dx_coil,htg_dx_coil,return_fan = add_air_system(model: model,
                                            zones: zones,
                                            sys_abbr: sys_info['sys_abbr'],
                                            sys_vent_type: sys_info['sys_vent_type'],
@@ -515,28 +518,16 @@ class ECMS
                                            sys_supp_fan_type: sys_info['sys_supp_fan_type'],
                                            sys_ret_fan_type: sys_info['sys_ret_fan_type'],
                                            sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'])
-      # get and assign defrost curve
-      dx_htg_coil = nil
-      airloop.supplyComponents.sort.each do |comp|
-        if comp.to_CoilHeatingDXSingleSpeed.is_initialized
-          dx_htg_coil = comp.to_CoilHeatingDXSingleSpeed.get
-        elsif comp.to_CoilHeatingDXVariableSpeed.is_initialized
-          dx_htg_coil = comp.to_CoilHeatingDXVariableSpeed.get
-        end
-      end
-      search_criteria = {}
+      # Appy performance curves
       if air_sys_eqpt_type == 'ccashp'
-        search_criteria['name'] = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
+        eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
       elsif air_sys_eqpt_type == 'ashp'
-        search_criteria['name'] = 'NECB2015_ASHP'
-      end
-      props = model_find_object(standards_data['tables']['heat_pump_heating_ecm']['table'], search_criteria, 1.0)
-      heat_defrost_eir_ft = model_add_curve(model, props['heat_defrost_eir_ft'])
-      if heat_defrost_eir_ft
-        dx_htg_coil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft)
+        eqpt_name = 'NECB2015_ASHP'
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDX', "For #{dx_htg_coil.name}, cannot find heat_defrost_eir_ft curve, will not be set.")
+        raise("add_ecm_hs08_ccashp_vrf: The air system equipment type is neither an ashp nor a ccashp")
       end
+      coil_cooling_dx_variable_speed_apply_curves(clg_dx_coil, eqpt_name)
+      coil_heating_dx_variable_speed_apply_curves(htg_dx_coil, eqpt_name)
       # add zone equipment and diffuser
       # add terminal VRF units
       add_zone_eqpt(model: model,
@@ -567,7 +558,7 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Apply efficiencies and performance curves for ECM 'hs08_ccashp_vrf'
+  # Apply efficiencies for ECM 'hs08_ccashp_vrf'
   def apply_efficiency_ecm_hs08_ccashp_vrf(model, air_sys_eqpt_type: 'ccashp')
     # Use same performance data as ECM 'hs09_ccashpsys' for air system
     if air_sys_eqpt_type == 'ccashp'
@@ -575,11 +566,13 @@ class ECMS
     elsif air_sys_eqpt_type == 'ashp'
       apply_efficiency_ecm_hs12_ashp_baseboard(model)
     end
-    # Apply efficiency and curves for VRF units
+    # Apply efficiency for VRF units
     eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit'
+    search_criteria = {}
+    search_criteria['name'] = eqpt_name
     model.getAirConditionerVariableRefrigerantFlows.sort.each do |vrf_unit|
-      airconditioner_variablerefrigerantflow_cooling_apply_efficiency_and_curves(vrf_unit, eqpt_name)
-      airconditioner_variablerefrigerantflow_heating_apply_efficiency_and_curves(vrf_unit, eqpt_name)
+      airconditioner_variablerefrigerantflow_cooling_apply_cop(vrf_unit, search_criteria)
+      airconditioner_variablerefrigerantflow_heating_apply_cop(vrf_unit, search_criteria)
     end
     # Set fan size of VRF terminal units
     fan_power_per_flow_rate = 150.0 # based on Mitsubishi data: 100 low and 200 high (W-s/m3)
@@ -1079,7 +1072,7 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Apply efficiencies and performance curves for ECM "hs09_ccashp_baseboard"
+  # Apply effiencies for ECM "hs09_ccashp_baseboard"
   def apply_efficiency_ecm_hs09_ccashp_baseboard(model)
     # fraction of electric backup heating coil capacity assigned to dx heating coil
     fr_backup_coil_cap_as_dx_coil_cap = 0.5
@@ -1803,19 +1796,19 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Applies the standard cooling efficiency ratings and typical performance curves to "AirConditionerVariableRefrigerantFlow" object.
-  def airconditioner_variablerefrigerantflow_cooling_apply_efficiency_and_curves(airconditioner_variablerefrigerantflow, eqpt_name)
+  # Applies the cooling performance curves to "AirConditionerVariableRefrigerantFlow" object.
+  def airconditioner_variablerefrigerantflow_cooling_apply_curves(airconditioner_variablerefrigerantflow, eqpt_name)
     successfully_set_all_properties = true
 
     search_criteria = {}
     search_criteria['name'] = eqpt_name
-
     # Get the capacity
     capacity_w = airconditioner_variablerefrigerantflow_cooling_find_capacity(airconditioner_variablerefrigerantflow)
+    capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
-    # Lookup efficiencies
+    # Lookup performance curves
     props = model_find_object(standards_data['tables']['heat_pump_cooling_ecm']['table'], search_criteria, capacity_btu_per_hr)
 
     # Check to make sure properties were found
@@ -1932,27 +1925,22 @@ class ECMS
       successfully_set_all_properties = false
     end
 
-    # Find the minimum COP
-    cop = airconditioner_variablerefrigerantflow_cooling_standard_minimum_cop(airconditioner_variablerefrigerantflow, search_criteria, false)
-
-    # Set the efficiency values
-    airconditioner_variablerefrigerantflow.setRatedCoolingCOP(cop.to_f) unless cop.nil?
   end
 
   # =============================================================================================================================
-  # Applies the standard heating efficiency ratings and typical performance curves to "AirConditionerVariableRefrigerantFlow" object.
-  def airconditioner_variablerefrigerantflow_heating_apply_efficiency_and_curves(airconditioner_variablerefrigerantflow, eqpt_name)
+  # Applies the heating performance curves to "AirConditionerVariableRefrigerantFlow" object.
+  def airconditioner_variablerefrigerantflow_heating_apply_curves(airconditioner_variablerefrigerantflow, eqpt_name)
     successfully_set_all_properties = true
 
     search_criteria = {}
     search_criteria['name'] = eqpt_name
-
     # Get the capacity
     capacity_w = airconditioner_variablerefrigerantflow_heating_find_capacity(airconditioner_variablerefrigerantflow)
+    capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
-    # Lookup efficiencies
+    # Lookup performance curves
     props = model_find_object(standards_data['tables']['heat_pump_heating_ecm']['table'], search_criteria, capacity_btu_per_hr)
 
     # Check to make sure properties were found
@@ -2060,11 +2048,6 @@ class ECMS
       successfully_set_all_properties = false
     end
 
-    # Find the minimum COP and rename with efficiency rating
-    cop = airconditioner_variablerefrigerantflow_heating_standard_minimum_cop(airconditioner_variablerefrigerantflow, search_criteria, false)
-
-    # Set the efficiency values
-    airconditioner_variablerefrigerantflow.setRatedHeatingCOP(cop.to_f) unless cop.nil?
   end
 
   # =============================================================================================================================
@@ -2336,8 +2319,8 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Find minimum cooling efficiency for "AirConditionerVariableRefrigerantFlow" object
-  def airconditioner_variablerefrigerantflow_cooling_standard_minimum_cop(airconditioner_variablerefrigerantflow,
+  # Find cooling efficiency for "AirConditionerVariableRefrigerantFlow" object
+  def airconditioner_variablerefrigerantflow_cooling_apply_cop(airconditioner_variablerefrigerantflow,
                                                                           search_criteria,
                                                                           rename = false)
 
@@ -2394,12 +2377,14 @@ class ECMS
       airconditioner_variablerefrigerantflow.setName(new_comp_name)
     end
 
-    return cop
+    # Set COP
+    airconditioner_variablerefrigerantflow.setRatedCoolingCOP(cop.to_f) unless cop.nil?
+
   end
 
   # =============================================================================================================================
-  # Find minimum heating efficiency for "AirConditionerVariableRefrigerantFlow" object
-  def airconditioner_variablerefrigerantflow_heating_standard_minimum_cop(airconditioner_variablerefrigerantflow,
+  # Find heating efficiency for "AirConditionerVariableRefrigerantFlow" object
+  def airconditioner_variablerefrigerantflow_heating_apply_cop(airconditioner_variablerefrigerantflow,
                                                                           search_criteria,
                                                                           rename = false)
 
@@ -2456,7 +2441,9 @@ class ECMS
       airconditioner_variablerefrigerantflow.setName(new_comp_name)
     end
 
-    return cop
+    # Set COP
+    airconditioner_variablerefrigerantflow.setRatedHeatingCOP(cop.to_f) unless cop.nil?
+
   end
 
   # =============================================================================================================================
