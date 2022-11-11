@@ -187,7 +187,7 @@ class ECMS
   # Return x,y,z coordinates of the centroid of the roof of the storey
   def get_roof_centroid_coords(storey)
     sum_x = 0.0
-W    sum_y = 0.0
+    sum_y = 0.0
     sum_z = 0.0
     total_area = 0.0
     cent_x = nil
