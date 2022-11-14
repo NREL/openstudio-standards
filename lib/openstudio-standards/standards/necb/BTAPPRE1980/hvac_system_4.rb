@@ -3,7 +3,9 @@ class BTAPPRE1980
                                                                    zones:,
                                                                    heating_coil_type:,
                                                                    baseboard_type:,
-                                                                   hw_loop:)
+                                                                   hw_loop:,
+                                                                   necb_reference_hp:false,
+                                                                   necb_reference_hp_supp_fuel:'DefaultFuel')
     system_data = {}
     system_data[:name] = 'Sys_4_PSZ'
     system_data[:CentralCoolingDesignSupplyAirTemperature] = 13.0
