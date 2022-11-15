@@ -2794,6 +2794,7 @@ class AppendixGPRMTests < Minitest::Test
   # @param model [OpenStudio::model::Model] OpenStudio model object
   # @param arguments [Array] List of arguments
   def remove_transformer(model, arguments)
+    assert(model, 'Unsuccessfully generating the model')
     model.getElectricLoadCenterTransformers.each(&:remove)
     return model
   end
