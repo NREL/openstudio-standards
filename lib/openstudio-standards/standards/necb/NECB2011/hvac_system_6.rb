@@ -352,10 +352,10 @@ class NECB2011
         return_fan.setName('Sys6 Return Fan')
 
         htg_coil = add_onespeed_htg_DX_coil(model, always_on)
-        htg_coil.setName('CoilHeatingDXSingleSpeed_dx')
+        htg_coil.setName('CoilHeatingDXSingleSpeed_ashp')
 
         clg_coil = add_onespeed_DX_coil(model, always_on)
-        clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
+        clg_coil.setName('CoilCoolingDXSingleSpeed_ashp')
 
         oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
         oa_controller.autosizeMinimumOutdoorAirFlowRate
@@ -400,7 +400,6 @@ class NECB2011
           sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneDXCoolingSizingFactor])
           sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneDXHeatingSizingFactor])
 
-          
           # Set zone baseboards
           add_zone_baseboards(model: model,
                               zone: zone,
@@ -424,8 +423,8 @@ class NECB2011
         end
         sys_name_pars = {}
         sys_name_pars['sys_hr'] = 'none'
-        sys_name_pars['sys_htg'] = heating_coil_type
-        sys_name_pars['sys_clg'] = 'dx'
+        sys_name_pars['sys_htg'] = 'ashp'
+        sys_name_pars['sys_clg'] = 'ashp'
         sys_name_pars['sys_sf'] = 'cv'
         sys_name_pars['zone_htg'] = baseboard_type
         sys_name_pars['zone_clg'] = 'none'
