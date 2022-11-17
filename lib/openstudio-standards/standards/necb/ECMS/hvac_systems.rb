@@ -2794,7 +2794,8 @@ class ECMS
   def modify_unitary_cop(model:, unitary_cop:, sizing_done:, sql_db_vars_map:)
     return if unitary_cop.nil? || (unitary_cop.to_s == 'NECB_Default')
 
-    coils = model.getCoilCoolingDXSingleSpeeds + model.getCoilCoolingDXMultiSpeeds
+    coils = model.getCoilCoolingDXSingleSpeeds.select {|coil| coil.name.to_s.include? '_dx'}
+    coils += model.getCoilCoolingDXMultiSpeeds.select {|coil| coil.name.to_s.include? '_dx'}
     unitary_cop_copy = unitary_cop.dup
     coils.sort.each do |coil|
       coil_type = 'SingleSpeed'

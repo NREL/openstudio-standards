@@ -116,7 +116,9 @@ class NECB2011
     sys_name_pars = {}
     sys_name_pars['sys_hr'] = 'none'
     sys_name_pars['sys_clg'] = 'dx'
+    sys_name_pars['sys_clg'] = 'ashp' if necb_reference_hp
     sys_name_pars['sys_htg'] = heating_coil_type
+    sys_name_pars['sys_htg'] = 'ashp' if necb_reference_hp
     sys_name_pars['sys_sf'] = 'cv'
     sys_name_pars['zone_htg'] = baseboard_type
     sys_name_pars['zone_clg'] = 'none'
@@ -168,12 +170,13 @@ class NECB2011
     # Set up DX coil 
     if necb_reference_hp #NECB curve characteristics
       clg_coil = add_onespeed_DX_coil(model, always_on)
-      clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
+      clg_coil.setName('CoilCoolingDXSingleSpeed_ashp')
     else
       clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model) #sets default OS curve (but will be replaced with NECB curves later)
       clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
     end
-    
+
+    raise("Flag 'necb_reference_hp' is set to true while parameter 'heating_coil_type' is not set to DX") if (necb_reference_hp && (heating_coil_type != 'DX'))
     case heating_coil_type
     when 'Electric' # electric coil
       htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
@@ -182,7 +185,7 @@ class NECB2011
     when 'DX'
       #create main DX heating coil
       htg_coil = add_onespeed_htg_DX_coil(model, always_on)
-      htg_coil.setName('CoilHeatingDXSingleSpeed_dx')
+      htg_coil.setName('CoilHeatingDXSingleSpeed_ashp')
       sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneDXHeatingSizingFactor])
       sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneDXCoolingSizingFactor])
     else

@@ -109,6 +109,7 @@ class NECB2011
         mau_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
       #end
       # MAU Heating type selection.
+      raise("Flag 'necb_reference_hp' is true while 'mau_heating_coil_type' is not set to type DX") if (necb_reference_hp && (mau_heating_coil_type != 'DX'))
       if mau_heating_coil_type == 'Electric' # electric coil
         mau_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
       elsif  mau_heating_coil_type == 'Hot Water'
@@ -116,12 +117,13 @@ class NECB2011
         hw_loop.addDemandBranchForComponent(mau_htg_coil)
       elsif mau_heating_coil_type == 'DX'
         mau_htg_coil = add_onespeed_htg_DX_coil(model, always_on)
-        mau_htg_coil.setName('CoilHeatingDXSingleSpeed_dx')
+        mau_htg_coil.setName('CoilHeatingDXSingleSpeed_ashp')
       end
 
       # Set up Single Speed DX coil with
       mau_clg_coil = add_onespeed_DX_coil(model, always_on)
       mau_clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
+      mau_clg_coil.setName('CoilCoolingDXSingleSpeed_ashp') if necb_reference_hp
       
       # Set up OA system
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -246,18 +248,22 @@ class NECB2011
       sys_name_pars = {}
       sys_name_pars['sys_hr'] = 'none'
       sys_name_pars['sys_clg'] = 'dx'
+      sys_name_pars['sys_clg'] = 'ashp' if necb_reference_hp
       sys_name_pars['sys_htg'] = mau_heating_coil_type
+      sys_name_pars['sys_htg'] = 'ashp' if necb_reference_hp
       sys_name_pars['sys_sf'] = 'cv'
       sys_name_pars['zone_htg'] = baseboard_type
+      sys_oa = 'doas'
       if necb_reference_hp
         sys_name_pars['zone_clg'] = 'none'
+        sys_oa = 'mixed'
       else
         sys_name_pars['zone_clg'] = 'ptac'
       end
       sys_name_pars['sys_rf'] = 'none'
       assign_base_sys_name(mau_air_loop,
                            sys_abbr: 'sys_1',
-                           sys_oa: 'doas',
+                           sys_oa: sys_oa,
                            sys_name_pars: sys_name_pars)
     end
 
