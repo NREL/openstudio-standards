@@ -109,7 +109,7 @@ class NECB2011
         mau_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
       #end
       # MAU Heating type selection.
-      raise("NECB reference heat pump flag set to true while heating coil type is not set to DX") if (necb_reference_hp && (mau_heating_coil_type != 'DX'))
+      raise("Flag 'necb_reference_hp' is true while 'mau_heating_coil_type' is not set to type DX") if (necb_reference_hp && (mau_heating_coil_type != 'DX'))
       if mau_heating_coil_type == 'Electric' # electric coil
         mau_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
       elsif  mau_heating_coil_type == 'Hot Water'
@@ -253,6 +253,7 @@ class NECB2011
       sys_name_pars['sys_htg'] = 'ashp' if necb_reference_hp
       sys_name_pars['sys_sf'] = 'cv'
       sys_name_pars['zone_htg'] = baseboard_type
+      sys_oa = 'doas'
       if necb_reference_hp
         sys_name_pars['zone_clg'] = 'none'
         sys_oa = 'mixed'

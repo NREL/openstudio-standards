@@ -176,7 +176,7 @@ class NECB2011
       clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
     end
 
-    raise("NECB reference heat pump flag set to true while heating coil type not set to DX") if (necb_reference_hp && (heating_coil_type != 'DX'))    
+    raise("Flag 'necb_reference_hp' is set to true while parameter 'heating_coil_type' is not set to DX") if (necb_reference_hp && (heating_coil_type != 'DX'))
     case heating_coil_type
     when 'Electric' # electric coil
       htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)

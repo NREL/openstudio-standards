@@ -117,8 +117,9 @@ class NECB_HVAC_Unitary_Tests < MiniTest::Test
               BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
               # run the standards
               sql_db_vars_map = {}
+              ecm.modify_unitary_cop(model: model, unitary_cop: "#{unitary_ecm}", sizing_done: false, sql_db_vars_map: sql_db_vars_map)
               result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing",sql_db_vars_map)
-              ecm.modify_unitary_cop(model: model, unitary_cop: "#{unitary_ecm}",sql_db_vars_map: sql_db_vars_map)
+              ecm.modify_unitary_cop(model: model, unitary_cop: "#{unitary_ecm}", sizing_done: true, sql_db_vars_map: sql_db_vars_map)
               case speed
               when 'single'
                 actual_unitary_cop[heating_type] << model.getCoilCoolingDXSingleSpeeds[0].ratedCOP.to_f

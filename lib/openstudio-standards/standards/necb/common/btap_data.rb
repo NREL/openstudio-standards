@@ -403,6 +403,7 @@ class BTAPData
     surfaces = @model.getSurfaces.sort
     outdoor_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, 'Outdoors')
     ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, 'Ground')
+    ground_surfaces += BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, 'Foundation')
     exterior_opaque_surfaces = outdoor_surfaces + ground_surfaces
     # outdoor_surfaces.each { |surface| puts surface.name}
     # get surface table from sql
