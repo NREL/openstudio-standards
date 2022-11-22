@@ -200,7 +200,7 @@ class NECB2011
     outdoor_floors = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'Floor')
     outdoor_subsurfaces = BTAP::Geometry::Surfaces.get_subsurfaces_from_surfaces(outdoor_surfaces)
 
-    ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, 'Ground')
+    ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, ['Ground', 'Foundation'])
     ground_walls = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'Wall')
     ground_roofs = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'RoofCeiling')
     ground_floors = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'Floor')
