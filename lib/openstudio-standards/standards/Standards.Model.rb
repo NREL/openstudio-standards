@@ -1541,8 +1541,9 @@ class Standard
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param apply_controls [Bool] toggle whether to apply air loop and plant loop controls
   # @param sql_db_vars_map [Hash] hash map
+  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
   # @return [Bool] returns true if successful, false if not
-  def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true, sql_db_vars_map: nil)
+  def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true, sql_db_vars_map: nil, necb_ref_hp: false)
     sql_db_vars_map = {} if sql_db_vars_map.nil?
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Started applying HVAC efficiency standards for #{template} template.")
@@ -1578,11 +1579,11 @@ class Standard
     # set DX HP coils before DX clg coils because when DX HP coils need to first
     # pull the capacities of their paired DX clg coils, and this does not work
     # correctly if the DX clg coil efficiencies have been set because they are renamed.
-    model.getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
+    model.getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map, necb_ref_hp) }
 
     # Unitary ACs
     model.getCoilCoolingDXTwoSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
-    model.getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
+    model.getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map, necb_ref_hp) }
     model.getCoilCoolingDXMultiSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_multi_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
 
     # WSHPs
@@ -1612,7 +1613,7 @@ class Standard
     model.getEvaporativeFluidCoolerTwoSpeeds.sort.each { |obj| fluid_cooler_apply_minimum_power_per_flow(obj, equipment_type: 'Closed Cooling Tower') }
 
     # ERVs
-    model.getHeatExchangerAirToAirSensibleAndLatents.each { |obj| heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(obj) }
+    model.getHeatExchangerAirToAirSensibleAndLatents.each { |obj| heat_exchanger_air_to_air_sensible_and_latent_apply_effectiveness(obj) }
 
     # Gas Heaters
     model.getCoilHeatingGass.sort.each { |obj| coil_heating_gas_apply_efficiency_and_curves(obj) }
@@ -2010,7 +2011,7 @@ class Standard
       if existing_sch.is_initialized
         existing_sch = existing_sch.get
         existing_day_sch_vals = existing_sch.defaultDaySchedule.values
-        if existing_day_sch_vals.size == 1 && existing_day_sch_vals[0] == value
+        if existing_day_sch_vals.size == 1 && (existing_day_sch_vals[0] - value).abs < 1.0e-6
           return existing_sch
         end
       end
@@ -2524,12 +2525,28 @@ class Standard
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
 
-    props = model_find_object(standards_data['construction_properties'],
-                              'template' => template,
-                              'climate_zone_set' => climate_zone_set,
-                              'intended_surface_type' => intended_surface_type,
-                              'standards_construction_type' => standards_construction_type,
-                              'building_category' => building_category)
+    wwr = model_get_percent_of_surface_range(model, intended_surface_type)
+
+    search_criteria = { 'template' => template,
+                        'climate_zone_set' => climate_zone_set,
+                        'intended_surface_type' => intended_surface_type,
+                        'standards_construction_type' => standards_construction_type,
+                        'building_category' => building_category }
+
+    if !wwr['minimum_percent_of_surface'].nil? && !wwr['maximum_percent_of_surface'].nil?
+      search_criteria['minimum_percent_of_surface'] = wwr['minimum_percent_of_surface']
+      search_criteria['maximum_percent_of_surface'] = wwr['maximum_percent_of_surface']
+    end
+
+    # First search
+    props = model_find_object(standards_data['construction_properties'], search_criteria)
+
+    if !props
+      # Second search: In case need to use climate zone (e.g: 3) instead of sub-climate zone (e.g: 3A) for search
+      climate_zone = climate_zone_set[0..-2]
+      search_criteria['climate_zone_set'] = climate_zone
+      props = model_find_object(standards_data['construction_properties'], search_criteria)
+    end
 
     if !props
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
@@ -2955,11 +2972,12 @@ class Standard
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param building_type [String] the building type
   # @param run_type [String] design day is dd-only, otherwise annual run
+  # @param lkp_template [String] The standards template, e.g.'90.1-2013'
   # @return [Hash] a hash of results for each fuel, where the keys are in the form 'End Use|Fuel Type',
   #   e.g. Heating|Electricity, Exterior Equipment|Water.  All end use/fuel type combos are present,
   #   with values of 0.0 if none of this end use/fuel type combo was used by the simulation.
   #   Returns nil if the legacy results couldn't be found.
-  def model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type)
+  def model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type, lkp_template:nil)
     # Load the legacy idf results CSV file into a ruby hash
     top_dir = File.expand_path('../../..', File.dirname(__FILE__))
     standards_data_dir = "#{top_dir}/data/standards"
@@ -2983,10 +3001,14 @@ class Standard
     legacy_idf_csv = CSV.new(temp, headers: true, converters: :all)
     legacy_idf_results = legacy_idf_csv.to_a.map(&:to_hash)
 
+    if lkp_template.nil?
+      lkp_template = template
+    end
+
     # Get the results for this building
     search_criteria = {
       'Building Type' => building_type,
-      'Template' => template,
+      'Template' => lkp_template,
       'Climate Zone' => climate_zone
     }
     energy_values = model_find_object(legacy_idf_results, search_criteria)
@@ -3003,9 +3025,10 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param building_type [String] the building type
+  # @param lkp_template [String] The standards template, e.g.'90.1-2013'
   # @return [Hash] Returns a hash with data presented in various bins.
   #   Returns nil if no search results
-  def model_process_results_for_datapoint(model, climate_zone, building_type)
+  def model_process_results_for_datapoint(model, climate_zone, building_type, lkp_template: nil)
     # Hash to store the legacy results by fuel and by end use
     legacy_results_hash = {}
     legacy_results_hash['total_legacy_energy_val'] = 0
@@ -3014,7 +3037,7 @@ class Standard
     legacy_results_hash['total_energy_by_end_use'] = {}
 
     # Get the legacy simulation results
-    legacy_values = model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, 'annual')
+    legacy_values = model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, 'annual', lkp_template: lkp_template)
     if legacy_values.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find legacy idf results for #{search_criteria}")
       return legacy_results_hash
@@ -3143,8 +3166,8 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param remap_office [bool] re-map small office or leave it alone
-  # @return [hash] key for climate zone and building type, both values are strings
-  def model_get_building_climate_zone_and_building_type(model, remap_office = true)
+  # @return [hash] key for climate zone, building type, and standards template.  All values are strings.
+  def model_get_building_properties(model, remap_office = true)
     # get climate zone from model
     climate_zone = model_standards_climate_zone(model)
 
@@ -3160,12 +3183,20 @@ class Standard
       building_type = model_remap_office(model, open_studio_area)
     end
 
+    # get standards template
+    if model.getBuilding.standardsTemplate.is_initialized
+      standards_template = model.getBuilding.standardsTemplate.get
+    end
+
     results = {}
     results['climate_zone'] = climate_zone
     results['building_type'] = building_type
+    results['standards_template'] = standards_template
 
     return results
   end
+
+
 
   # remap office to one of the prototype buildings
   #
@@ -3194,12 +3225,13 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Double] EUI (MJ/m^2) for target template for given OSM. Returns nil if can't calculate EUI
   def model_find_target_eui(model)
-    building_data = model_get_building_climate_zone_and_building_type(model)
+    building_data = model_get_building_properties(model)
     climate_zone = building_data['climate_zone']
     building_type = building_data['building_type']
+    building_template = building_data['standards_template']
 
     # look up results
-    target_consumption = model_process_results_for_datapoint(model, climate_zone, building_type)
+    target_consumption = model_process_results_for_datapoint(model, climate_zone, building_type, lkp_template: building_template)
 
     # lookup target floor area for prototype buildings
     target_floor_area = model_find_prototype_floor_area(model, building_type)
@@ -3227,12 +3259,13 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Hash] EUI (MJ/m^2) This will return a hash of end uses. key is end use, value is eui
   def model_find_target_eui_by_end_use(model)
-    building_data = model_get_building_climate_zone_and_building_type(model)
+    building_data = model_get_building_properties(model)
     climate_zone = building_data['climate_zone']
     building_type = building_data['building_type']
+    building_template = building_data['standards_template']
 
     # look up results
-    target_consumption = model_process_results_for_datapoint(model, climate_zone, building_type)
+    target_consumption = model_process_results_for_datapoint(model, climate_zone, building_type, lkp_template: building_template)
 
     # lookup target floor area for prototype buildings
     target_floor_area = model_find_prototype_floor_area(model, building_type)
@@ -3587,7 +3620,7 @@ class Standard
   # @return [Hash] hash of construction properties
   def model_get_construction_properties(model, intended_surface_type, standards_construction_type, building_category, climate_zone = nil)
     # get climate_zone_set
-    climate_zone = model_get_building_climate_zone_and_building_type(model)['climate_zone'] if climate_zone.nil?
+    climate_zone = model_get_building_properties(model)['climate_zone'] if climate_zone.nil?
     climate_zone_set = model_find_climate_zone_set(model, climate_zone)
 
     # populate search hash
@@ -3601,6 +3634,12 @@ class Standard
 
     # switch to use this but update test in standards and measures to load this outside of the method
     construction_properties = model_find_object(standards_data['construction_properties'], search_criteria)
+
+    if !construction_properties
+      # Search again use climate zone (e.g. 3) instead of sub-climate zone (3A)
+      search_criteria['climate_zone_set'] = climate_zone_set[0..-2]
+      construction_properties = model_find_object(standards_data['construction_properties'], search_criteria)
+    end
 
     return construction_properties
   end
@@ -3962,6 +4001,9 @@ class Standard
 
     # Air loops
     model.getAirLoopHVACs.each(&:remove)
+    if model.version > OpenStudio::VersionString.new('3.1.0')
+      model.getAirLoopHVACDedicatedOutdoorAirSystems.each(&:remove)
+    end
 
     # Zone equipment
     model.getThermalZones.sort.each do |zone|
@@ -4073,7 +4115,7 @@ class Standard
     # @todo for types not in table use standards area normalized swh values
 
     # get building type
-    building_data = model_get_building_climate_zone_and_building_type(model)
+    building_data = model_get_building_properties(model)
     building_type = building_data['building_type']
 
     result = []
@@ -4290,7 +4332,7 @@ class Standard
   # @param possible_climate_zone_sets [Array] climate zone sets
   # @return [String] climate zone ses
   def model_get_climate_zone_set_from_list(model, possible_climate_zone_sets)
-    climate_zone_set = possible_climate_zone_sets.min
+    climate_zone_set = possible_climate_zone_sets.max
     return climate_zone_set
   end
 
@@ -4745,7 +4787,7 @@ class Standard
   # @param model [OpenStudio::Model::Model] the model
   # @return [String] the ventilation method, either Sum or Maximum
   def model_ventilation_method(model)
-    building_data = model_get_building_climate_zone_and_building_type(model)
+    building_data = model_get_building_properties(model)
     building_type = building_data['building_type']
     if building_type != 'Laboratory' # Laboratory has multiple criteria on ventilation, pick the greatest
       ventilation_method = 'Sum'
@@ -5185,6 +5227,7 @@ class Standard
       electric = true
 
       if htg_fuels.include?('NaturalGas') ||
+         htg_fuels.include?('Propane') ||
          htg_fuels.include?('PropaneGas') ||
          htg_fuels.include?('FuelOilNo1') ||
          htg_fuels.include?('FuelOilNo2') ||
@@ -5777,6 +5820,15 @@ class Standard
     end
 
     return parametric_inputs
+  end
+
+  # Determine the surface range of a baseline model.
+  # The method calculates the window to wall ratio (assuming all spaces are conditioned)
+  # and select the range based on the calculated window to wall ratio
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param intended_surface_type [String] surface type
+  def model_get_percent_of_surface_range(model, intended_surface_type)
+    return { 'minimum_percent_of_surface' => nil, 'maximum_percent_of_surface' => nil }
   end
 
   # Default SAT reset type

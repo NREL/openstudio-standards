@@ -309,7 +309,7 @@ class ECMS
 
   # =============================================================================================================================
   # Method to determine whether zone can have terminal vrf equipment. Zones with no vrf terminal equipment are characterized by
-  # transient occupancy such is the case for corridors, stairwells, storage, etc ...
+  # transient occupancy such is the case for corridors, stairwells, storage, ...
   def zone_with_no_vrf_eqpt?(zone)
     space_types_to_skip = {}
     space_types_to_skip['NECB2011'] = ['Atrium - H < 13m',
@@ -413,57 +413,122 @@ class ECMS
     end
   end
 
+  #=============================================================================================================================
+  # Get building storey for a zone
+  def get_zone_storey(zone)
+    zone_storey = nil
+    zone.model.getBuildingStorys.each do |storey|
+      storey.spaces.each do |space|
+        if space.thermalZone.get.name.to_s == zone.name.to_s
+          zone_storey = storey
+          break
+        end
+      end
+      break if !zone_storey.nil?
+    end
+    return zone_storey
+  end
+
+  #==============================================================================================================================
+  # Get a map of bldg storeys and zones
+  def get_storey_zones_map(system_zones_map)
+    storey_zones_map = {}
+    system_zones_map.each do |sys,zones|
+      zones.each do |zone|
+        storey = get_zone_storey(zone)
+        storey_zones_map[storey.name.to_s] = [] if !storey_zones_map.has_key? storey.name.to_s
+        storey_zones_map[storey.name.to_s] << zone
+      end
+    end
+    return storey_zones_map
+  end
+  
+  #==============================================================================================================================
+  # Update the map between systems and zones
+  def update_system_zones_map(model,system_zones_map,system_zones_map_option,system_key)
+    updated_system_zones_map = {}
+    if system_zones_map_option == 'one_sys_per_bldg'
+      system_zones_map.each do |sname,zones|
+        updated_system_zones_map[system_key] = [] if !updated_system_zones_map.has_key? system_key
+        updated_system_zones_map[system_key] += zones
+      end
+    elsif system_zones_map_option == 'one_sys_per_floor'
+      storey_zones_map = get_storey_zones_map(system_zones_map)
+      storey_zones_map.each do |storey_name,zones|
+        sys_name = "#{system_key}_#{storey_name.gsub(' ','_')}"
+        updated_system_zones_map[sys_name] = [] if !updated_system_zones_map.has_key? sys_name
+        updated_system_zones_map[sys_name] += zones
+      end
+    end
+    return updated_system_zones_map
+  end
+
   # =============================================================================================================================
   # Add equipment for ECM 'hs08_ccashp_vrf':
   #   -Constant-volume DOAS with air-source heat pump for heating and cooling and electric backup
   #   -Zonal terminal VRF units connected to an outdoor VRF condenser unit
   #   -Zonal electric backup
-  def add_ecm_hs08_ccashp_vrf(model:,
-                              system_zones_map:,
-                              system_doas_flags:,
-                              air_sys_eqpt_type: 'ccashp')
+  def add_ecm_hs08_ccashp_vrf(
+    model:,
+    system_zones_map:,
+    system_doas_flags:,
+    ecm_system_zones_map_option:,
+    heating_fuel:,
+    standard:,
+    air_sys_eqpt_type: 'ccashp')
 
+    # Update system zones map if needed
+    if ecm_system_zones_map_option != 'NECB_Default'
+      system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1')
+    else
+      updated_system_zones_map = {}
+      system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..-1]}"] = zones}  # doas unit is an NECB sys_1 
+      system_zones_map = updated_system_zones_map
+    end
     # Add outdoor VRF unit
     outdoor_vrf_unit = add_outdoor_vrf_unit(model: model, ecm_name: 'hs08_ccashp_vrf')
+    eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit'
+    airconditioner_variablerefrigerantflow_cooling_apply_curves(outdoor_vrf_unit,eqpt_name)
+    airconditioner_variablerefrigerantflow_heating_apply_curves(outdoor_vrf_unit,eqpt_name)
     # Update system doas flags
-    system_doas_flags.keys.each { |sname| system_doas_flags[sname] = true }
+    system_doas_flags = {}
+    system_zones_map.keys.each { |sname| system_doas_flags[sname] = true }
+    # Set heating fuel
+    updated_heating_fuel = heating_fuel
+    if heating_fuel == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+    end
+    raise("Heating fuel for ECM 'HS08_CCASHP_VRF' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
     # use system zones map and generate new air system and zonal equipment
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
                                            zones: zones,
                                            system_doas_flags: system_doas_flags)
-      airloop, return_fan = add_air_system(model: model,
+      sys_supp_htg_eqpt_type = 'coil_electric'
+      sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
+      airloop,clg_dx_coil,htg_dx_coil,return_fan = add_air_system(model: model,
                                            zones: zones,
                                            sys_abbr: sys_info['sys_abbr'],
                                            sys_vent_type: sys_info['sys_vent_type'],
                                            sys_heat_rec_type: sys_info['sys_heat_rec_type'],
                                            sys_htg_eqpt_type: air_sys_eqpt_type,
-                                           sys_supp_htg_eqpt_type: 'coil_electric',
+                                           sys_supp_htg_eqpt_type: sys_supp_htg_eqpt_type,
                                            sys_clg_eqpt_type: air_sys_eqpt_type,
                                            sys_supp_fan_type: sys_info['sys_supp_fan_type'],
                                            sys_ret_fan_type: sys_info['sys_ret_fan_type'],
                                            sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'])
-      # get and assign defrost curve
-      dx_htg_coil = nil
-      airloop.supplyComponents.sort.each do |comp|
-        if comp.to_CoilHeatingDXSingleSpeed.is_initialized
-          dx_htg_coil = comp.to_CoilHeatingDXSingleSpeed.get
-        elsif comp.to_CoilHeatingDXVariableSpeed.is_initialized
-          dx_htg_coil = comp.to_CoilHeatingDXVariableSpeed.get
-        end
-      end
-      search_criteria = {}
+      # Appy performance curves
       if air_sys_eqpt_type == 'ccashp'
-        search_criteria['name'] = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
+        eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
+        coil_cooling_dx_variable_speed_apply_curves(clg_dx_coil, eqpt_name)
+        coil_heating_dx_variable_speed_apply_curves(htg_dx_coil, eqpt_name)
       elsif air_sys_eqpt_type == 'ashp'
-        search_criteria['name'] = 'NECB2015_ASHP'
-      end
-      props = model_find_object(standards_data['tables']['heat_pump_heating_ecm']['table'], search_criteria, 1.0)
-      heat_defrost_eir_ft = model_add_curve(model, props['heat_defrost_eir_ft'])
-      if heat_defrost_eir_ft
-        dx_htg_coil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft)
+        eqpt_name = 'NECB2015_ASHP'
+        coil_cooling_dx_single_speed_apply_curves(clg_dx_coil, eqpt_name)
+        coil_heating_dx_single_speed_apply_curves(htg_dx_coil, eqpt_name)
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDX', "For #{dx_htg_coil.name}, cannot find heat_defrost_eir_ft curve, will not be set.")
+        raise("add_ecm_hs08_ccashp_vrf: The air system equipment type is neither an ashp nor a ccashp")
       end
       # add zone equipment and diffuser
       # add terminal VRF units
@@ -476,7 +541,7 @@ class ECMS
                     zone_supp_htg_eqpt_type: 'none',
                     zone_clg_eqpt_type: 'vrf',
                     zone_fan_type: 'On_Off')
-      # add electric unit heaters fpr backup
+      # add electric baseboards for backup
       add_zone_eqpt(model: model,
                     airloop: airloop,
                     zones: zones,
@@ -485,7 +550,7 @@ class ECMS
                     zone_htg_eqpt_type: 'baseboard_electric',
                     zone_supp_htg_eqpt_type: 'none',
                     zone_clg_eqpt_type: 'none',
-                    zone_fan_type: 'none') # OS doesn't support onoff fans for unit heaters
+                    zone_fan_type: 'none')
       # Now we can find and apply maximum horizontal and vertical distances between outdoor vrf unit and zones with vrf terminal units
       max_hor_pipe_length, max_vert_pipe_length = get_max_vrf_pipe_lengths(model)
       outdoor_vrf_unit.setEquivalentPipingLengthusedforPipingCorrectionFactorinCoolingMode(max_hor_pipe_length)
@@ -495,7 +560,7 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Apply efficiencies and performance curves for ECM 'hs08_ccashp_vrf'
+  # Apply efficiencies for ECM 'hs08_ccashp_vrf'
   def apply_efficiency_ecm_hs08_ccashp_vrf(model, air_sys_eqpt_type: 'ccashp')
     # Use same performance data as ECM 'hs09_ccashpsys' for air system
     if air_sys_eqpt_type == 'ccashp'
@@ -503,11 +568,13 @@ class ECMS
     elsif air_sys_eqpt_type == 'ashp'
       apply_efficiency_ecm_hs12_ashp_baseboard(model)
     end
-    # Apply efficiency and curves for VRF units
+    # Apply efficiency for VRF units
     eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit'
+    search_criteria = {}
+    search_criteria['name'] = eqpt_name
     model.getAirConditionerVariableRefrigerantFlows.sort.each do |vrf_unit|
-      airconditioner_variablerefrigerantflow_cooling_apply_efficiency_and_curves(vrf_unit, eqpt_name)
-      airconditioner_variablerefrigerantflow_heating_apply_efficiency_and_curves(vrf_unit, eqpt_name)
+      airconditioner_variablerefrigerantflow_cooling_apply_cop(vrf_unit, search_criteria)
+      airconditioner_variablerefrigerantflow_heating_apply_cop(vrf_unit, search_criteria)
     end
     # Set fan size of VRF terminal units
     fan_power_per_flow_rate = 150.0 # based on Mitsubishi data: 100 low and 200 high (W-s/m3)
@@ -640,6 +707,9 @@ class ECMS
     when 'coil_electric'
       htg_eqpt = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
       htg_eqpt.setName('CoilHeatingElectric')
+    when 'coil_gas'
+      htg_eqpt = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+      htg_eqpt.setName('CoilHeatingGas')
     when 'ashp'
       htg_eqpt = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)
       htg_eqpt.setName('CoilHeatingDXSingleSpeed_ASHP')
@@ -714,7 +784,7 @@ class ECMS
     sys_name_pars['sys_rf'] = 'cv' if sys_ret_fan_type == 'constant_volume'
     sys_name_pars['sys_rf'] = 'vv' if sys_ret_fan_type == 'variable_volume'
     assign_base_sys_name(airloop, sys_abbr: sys_abbr, sys_oa: sys_vent_type, sys_name_pars: sys_name_pars)
-    return airloop, return_fan
+    return airloop, clg_eqpt, htg_eqpt, return_fan
   end
 
   # =============================================================================================================================
@@ -1069,38 +1139,44 @@ class ECMS
   #   -Electric baseboards
   def add_ecm_hs09_ccashp_baseboard(model:,
                                     system_zones_map:,    # hash of ailoop names as keys and array of zones as values
-                                    system_doas_flags:)   # hash of system names as keys and flag for DOAS as values
+                                    system_doas_flags:,   # hash of system names as keys and flag for DOAS as values
+                                    ecm_system_zones_map_option:,
+                                    heating_fuel:,
+                                    standard:)
 
+    # Set heating fuel
+    updated_heating_fuel = heating_fuel
+    if heating_fuel == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
+    end
+    raise("Heating fuel for ECM 'HS09_CCASHP_Baseboard' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
+    # Set supplemental heating for air loop
+    sys_supp_htg_eqpt_type = 'coil_electric'
+    sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
                                            zones: zones,
                                            system_doas_flags: system_doas_flags)
-      # add air loop and its equipment
-      airloop, return_fan = add_air_system(
+      # add airloop and its equipment
+      airloop,clg_dx_coil,htg_dx_coil,return_fan = add_air_system(
         model: model,
         zones: zones,
         sys_abbr: sys_info['sys_abbr'],
         sys_vent_type: sys_info['sys_vent_type'],
         sys_heat_rec_type: sys_info['sys_heat_rec_type'],
         sys_htg_eqpt_type: 'ccashp',
-        sys_supp_htg_eqpt_type: 'coil_electric',
+        sys_supp_htg_eqpt_type: sys_supp_htg_eqpt_type,
         sys_clg_eqpt_type: 'ccashp',
         sys_supp_fan_type: sys_info['sys_supp_fan_type'],
         sys_ret_fan_type: sys_info['sys_ret_fan_type'],
         sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type']
       )
-      htg_dx_coils = model.getCoilHeatingDXVariableSpeeds
-      search_criteria = {}
-      search_criteria['name'] = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU',
-                                props = model_find_object(standards_data['tables']['heat_pump_heating_ecm']['table'], search_criteria, 1.0)
-      heat_defrost_eir_ft = model_add_curve(model, props['heat_defrost_eir_ft'])
-      # This defrost curve has to be assigned here before sizing
-      if heat_defrost_eir_ft
-        htg_dx_coils.sort.each { |dxcoil| dxcoil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft) }
-      else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{htg_dx_coils[0].name}, cannot find heat_defrost_eir_ft curve, will not be set.")
-      end
+      # Appy performance curves
+      eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
+      coil_cooling_dx_variable_speed_apply_curves(clg_dx_coil, eqpt_name)
+      coil_heating_dx_variable_speed_apply_curves(htg_dx_coil, eqpt_name)
       # add zone equipment and diffuser
       zone_htg_eqpt_type = 'baseboard_electric'
       zone_htg_eqpt_type = 'ptac_electric_off' if sys_info['sys_vent_type'] == 'doas'
@@ -1137,7 +1213,7 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Apply efficiencies and performance curves for ECM "hs09_ccashp_baseboard"
+  # Apply effiencies for ECM "hs09_ccashp_baseboard"
   def apply_efficiency_ecm_hs09_ccashp_baseboard(model)
     # fraction of electric backup heating coil capacity assigned to dx heating coil
     fr_backup_coil_cap_as_dx_coil_cap = 0.5
@@ -1154,6 +1230,8 @@ class ECMS
           htg_dx_coil = icomp.to_CoilHeatingDXVariableSpeed.get
         elsif icomp.to_CoilHeatingElectric.is_initialized
           backup_coil = icomp.to_CoilHeatingElectric.get
+        elsif icomp.to_CoilHeatingGas.is_initialized
+          backup_coil = icomp.to_CoilHeatingGas.get
         elsif icomp.to_FanConstantVolume.is_initialized
           fans << icomp.to_FanConstantVolume.get
         elsif icomp.to_FanVariableVolume.is_initialized
@@ -1172,25 +1250,50 @@ class ECMS
               supply_fan = fan # assume supply fan has higher pressure drop
             end
           end
-          fan_power = supply_fan.autosizedMaximumFlowRate.to_f * max_pd / supply_fan.fanTotalEfficiency.to_f
+          # There is an error in EnergyPlus in the estimated capacity of the coil "CoilCoolingDXVariableSpeed".
+          # Here the capacity reported by OS is adjusted to estimate an appropriate capacity for the cooling coil.
+          # The autosized capacity is corrected for the actual fan flow rate and fan power.
+          if supply_fan.autosizedMaximumFlowRate.is_initialized 
+            fan_max_afr = supply_fan.autosizedMaximumFlowRate.to_f
+          elsif supply_fan.maximumFlowRate.is_initialized
+            fan_max_afr = supply_fan.maximumFlowRate.to_f
+          else
+            raise "Fan flow rate is undefined for fan #{supply_fan.name.to_s}"
+          end
+          if clg_dx_coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.is_initialized
+            clg_dx_coil_afr = clg_dx_coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.to_f
+          elsif clg_dx_coil.ratedAirFlowRateAtSelectedNominalSpeedLevel.is_initialized
+             clg_dx_coil_afr = clg_dx_coil.ratedAirFlowRateAtSelectedNominalSpeedLevel.to_f
+          else
+            raise "Rated air flow rate at selected nominal speed level is undefined for coil #{clg_dx_coil.name.to_s}"
+          end
+          fan_power = fan_max_afr * max_pd / supply_fan.fanTotalEfficiency.to_f
           clg_dx_coil_cap = clg_dx_coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f *
-                            supply_fan.autosizedMaximumFlowRate.to_f / clg_dx_coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.to_f +
-                            fan_power / clg_dx_coil.speeds.last.referenceUnitGrossRatedSensibleHeatRatio.to_f
-        else
+                            fan_max_afr / clg_dx_coil_afr + fan_power / clg_dx_coil.speeds.last.referenceUnitGrossRatedSensibleHeatRatio.to_f
+        elsif clg_dx_coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
           clg_dx_coil_cap = clg_dx_coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
+        else
+          raise "Rated total cooling capacity at selected nominal speed is undefined for coil #{clg_dx_coil.name.to_s}"
         end
         htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, false)
         htg_dx_coil.setName(htg_dx_coil_init_name)
-        backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        if backup_coil.autosizedNominalCapacity.is_initialized
+           backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        elsif backup_coil.nominalCapacity.is_initialized
+           backup_coil_cap = backup_coil.nominalCapacity.to_f
+        else
+          raise "Nominal capacity is undefiled for coil #{backup_coil.name.to_s}"
+        end
         # Set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
         dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
         if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
         clg_dx_coil.setGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel(dx_cap)
         htg_dx_coil.setRatedHeatingCapacityAtSelectedNominalSpeedLevel(dx_cap)
-        # Assign performance curves and COPs
-        eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
-        coil_cooling_dx_variable_speed_apply_efficiency_and_curves(clg_dx_coil, eqpt_name)
-        coil_heating_dx_variable_speed_apply_efficiency_and_curves(htg_dx_coil, eqpt_name)
+        # Assign COPs
+        search_criteria = {}
+        search_criteria['name'] = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
+        coil_cooling_dx_variable_speed_apply_cop(clg_dx_coil, search_criteria, false)
+        coil_heating_dx_variable_speed_apply_cop(htg_dx_coil, search_criteria, false)
       end
     end
   end
@@ -1201,41 +1304,52 @@ class ECMS
   #   -Packaged-Terminal air-source heat pumps with electric backup
   def add_ecm_hs11_ashp_pthp(model:,
                              system_zones_map:,
-                             system_doas_flags:)
+                             system_doas_flags:,
+                             ecm_system_zones_map_option:,
+                             standard:,
+                             heating_fuel:)
 
+    # Set heating fuel
+    updated_heating_fuel = heating_fuel
+    if heating_fuel == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
+    end
+    raise("Heating fuel for ECM 'HS11_ASHP_PTHP' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
+    # Set supplemental heaing for airloop
+    sys_supp_htg_eqpt_type = 'coil_electric'
+    sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
+    # Update system zones map if needed
+    if ecm_system_zones_map_option != 'NECB_Default'
+      system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1')
+    else
+      updated_system_zones_map = {}
+      system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..-1]}"] = zones}
+      system_zones_map = updated_system_zones_map
+    end
     # Update system doas flags
-    system_doas_flags.keys.each { |sname| system_doas_flags[sname] = true }
+    system_doas_flags = {}
+    system_zones_map.keys.each { |sname| system_doas_flags[sname] = true }
     # use system zones map and generate new air system and zonal equipment
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
                                            zones: zones,
                                            system_doas_flags: system_doas_flags)
-      airloop, return_fan = add_air_system(model: model,
+      airloop,clg_dx_coil,htg_dx_coil,return_fan = add_air_system(model: model,
                                            zones: zones,
                                            sys_abbr: sys_info['sys_abbr'],
                                            sys_vent_type: sys_info['sys_vent_type'],
                                            sys_heat_rec_type: sys_info['sys_heat_rec_type'],
                                            sys_htg_eqpt_type: 'ashp',
-                                           sys_supp_htg_eqpt_type: 'coil_electric',
+                                           sys_supp_htg_eqpt_type: sys_supp_htg_eqpt_type,
                                            sys_clg_eqpt_type: 'ashp',
                                            sys_supp_fan_type: sys_info['sys_supp_fan_type'],
                                            sys_ret_fan_type: sys_info['sys_ret_fan_type'],
                                            sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'])
-      # Get and assign defrost performance curve
-      search_criteria = {}
-      search_criteria['name'] = 'HS11_PTHP'
-      props = model_find_object(standards_data['tables']['heat_pump_heating_ecm']['table'], search_criteria, 1.0)
-      heat_defrost_eir_ft = model_add_curve(model, props['heat_defrost_eir_ft'])
-      if !heat_defrost_eir_ft
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXConstantSpeed', 'Cannot find heat_defrost_eir_ft curve, will not be set.')
-      end
-      airloop.supplyComponents.each do |comp|
-        if comp.to_CoilHeatingDXSingleSpeed.is_initialized
-          htg_coil = comp.to_CoilHeatingDXSingleSpeed.get
-          htg_coil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft)
-        end
-      end
+      eqpt_name = 'HS11_PTHP'
+      coil_cooling_dx_single_speed_apply_curves(clg_dx_coil,eqpt_name)
+      coil_heating_dx_single_speed_apply_curves(htg_dx_coil,eqpt_name)
       # add zone equipment and diffuser
       zone_htg_eqpt_type = 'pthp'
       zone_clg_eqpt_type = 'pthp'
@@ -1255,7 +1369,11 @@ class ECMS
           if comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
             if comp.to_ZoneHVACPackagedTerminalHeatPump.get.heatingCoil.to_CoilHeatingDXSingleSpeed.is_initialized
               htg_coil = comp.to_ZoneHVACPackagedTerminalHeatPump.get.heatingCoil.to_CoilHeatingDXSingleSpeed.get
-              htg_coil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft)
+              coil_heating_dx_single_speed_apply_curves(htg_coil,eqpt_name)
+            end
+            if comp.to_ZoneHVACPackagedTerminalHeatPump.get.coolingCoil.to_CoilCoolingDXSingleSpeed.is_initialized
+              clg_coil = comp.to_ZoneHVACPackagedTerminalHeatPump.get.coolingCoil.to_CoilCoolingDXSingleSpeed.get
+              coil_cooling_dx_single_speed_apply_curves(clg_coil,eqpt_name)
             end
           end
         end
@@ -1299,20 +1417,30 @@ class ECMS
             clg_dx_coil.setName(clg_dx_coil_init_name)
             if clg_dx_coil.autosizedRatedTotalCoolingCapacity.is_initialized
               clg_dx_coil_cap = clg_dx_coil.autosizedRatedTotalCoolingCapacity.to_f
-            else
+            elsif clg_dx_coil.ratedTotalCoolingCapacity.is_initialized
               clg_dx_coil_cap = clg_dx_coil.ratedTotalCoolingCapacity.to_f
+            else
+              raise "The total cooling capacity is undefined for coil #{clg_dx_coil_cap.name.to_s}"
             end
             htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, true)
             htg_dx_coil.setName(htg_dx_coil_init_name)
-            backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+            if backup_coil.autosizedNominalCapacity.is_initialized
+              backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+            elsif backup_coil.nominalCapacity.is_initialized
+              backup_coil_cap = backup_coil.nominalCapacity.to_f
+            else
+              raise "The nominal capacity is undefined for coil #{backup_coil.name.to_s}"
+            end
             # Set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
             dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
             if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
             # clg_dx_coil.setRatedTotalCoolingCapacity(dx_cap)
             # htg_dx_coil.setRatedTotalHeatingCapacity(dx_cap)
-            # assign performance curves and COPs
-            coil_cooling_dx_single_speed_apply_efficiency_and_curves(clg_dx_coil, pthp_eqpt_name)
-            coil_heating_dx_single_speed_apply_efficiency_and_curves(htg_dx_coil, pthp_eqpt_name)
+            # assign COPs
+            search_criteria = {}
+            search_criteria['name'] = pthp_eqpt_name
+            coil_cooling_dx_single_speed_apply_cop(clg_dx_coil, search_criteria)
+            coil_heating_dx_single_speed_apply_cop(htg_dx_coil, search_criteria)
             # Set fan power
             fan_power_per_flow_rate = 150.0 # based on Mitsubishi data: 100 low and 200 high (W-s/m3)
             fan_pr_rise = fan_power_per_flow_rate * (fan.fanEfficiency * fan.motorEfficiency)
@@ -1331,36 +1459,41 @@ class ECMS
   #   -Electric baseboards
   def add_ecm_hs12_ashp_baseboard(model:,
                                   system_zones_map:,
-                                  system_doas_flags:)
+                                  system_doas_flags:,
+                                  ecm_system_zones_map_option:,
+                                  standard:,
+                                  heating_fuel:)
 
+    # Set heating fuel
+    updated_heating_fuel = heating_fuel
+    if heating_fuel == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
+    end
+    raise("Heating fuel for ECM 'HS12_ASHP_Baseboard' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
+    # Set supplemental heating fuel for airloop
+    sys_supp_htg_eqpt_type = 'coil_electric'
+    sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
                                            zones: zones,
                                            system_doas_flags: system_doas_flags)
       # add air loop and its equipment
-      airloop, return_fan = add_air_system(model: model,
+      airloop,clg_dx_coil,htg_dx_coil,return_fan = add_air_system(model: model,
                                            zones: zones,
                                            sys_abbr: sys_info['sys_abbr'],
                                            sys_vent_type: sys_info['sys_vent_type'],
                                            sys_heat_rec_type: sys_info['sys_heat_rec_type'],
                                            sys_htg_eqpt_type: 'ashp',
-                                           sys_supp_htg_eqpt_type: 'coil_electric',
+                                           sys_supp_htg_eqpt_type: sys_supp_htg_eqpt_type,
                                            sys_clg_eqpt_type: 'ashp',
                                            sys_supp_fan_type: sys_info['sys_supp_fan_type'],
                                            sys_ret_fan_type: sys_info['sys_ret_fan_type'],
                                            sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'])
-      # get and assign defrost curve
-      htg_dx_coils = model.getCoilHeatingDXSingleSpeeds
-      search_criteria = {}
-      search_criteria['name'] = 'NECB2015_ASHP'
-      props = model_find_object(standards_data['tables']['heat_pump_heating_ecm']['table'], search_criteria, 1.0)
-      heat_defrost_eir_ft = model_add_curve(model, props['heat_defrost_eir_ft'])
-      if heat_defrost_eir_ft
-        htg_dx_coils.sort.each { |dxcoil| dxcoil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft) }
-      else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{htg_dx_coils[0].name}, cannot find heat_defrost_eir_ft curve, will not be set.")
-      end
+      eqpt_name = 'NECB2015_ASHP'
+      coil_cooling_dx_single_speed_apply_curves(clg_dx_coil,eqpt_name)
+      coil_heating_dx_single_speed_apply_curves(htg_dx_coil,eqpt_name)
       # add zone equipment and diffuser
       zone_htg_eqpt_type = 'baseboard_electric'
       zone_htg_eqpt_type = 'ptac_electric_off' if sys_info['sys_vent_type'] == 'doas'
@@ -1428,6 +1561,8 @@ class ECMS
           htg_dx_coil = icomp.to_CoilHeatingDXSingleSpeed.get
         elsif icomp.to_CoilHeatingElectric.is_initialized
           backup_coil = icomp.to_CoilHeatingElectric.get
+        elsif icomp.to_CoilHeatingGas.is_initialized
+          backup_coil = icomp.to_CoilHeatingGas.get
         end
       end
       if clg_dx_coil && htg_dx_coil && backup_coil
@@ -1436,20 +1571,30 @@ class ECMS
         clg_dx_coil.setName(clg_dx_coil_init_name)
         if clg_dx_coil.autosizedRatedTotalCoolingCapacity.is_initialized
           clg_dx_coil_cap = clg_dx_coil.autosizedRatedTotalCoolingCapacity.to_f
-        else
+        elsif clg_dx_coil.ratedTotalCoolingCapacity.is_initialized
           clg_dx_coil_cap = clg_dx_coil.ratedTotalCoolingCapacity.to_f
+        else
+          raise "Rated total cooling capacity is undefined for coil #{clg_dx_coil.name.to_s}"
         end
         htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, true)
         htg_dx_coil.setName(htg_dx_coil_init_name)
-        backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        if backup_coil.autosizedNominalCapacity.is_initialized
+          backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        elsif backup_coil.nominalCapacity.is_initialized
+          backup_coil_cap = backup_coil.nominalCapacity.to_f
+        else
+          raise "Nominal capacity is undefined for coil #{backup_coil.name.to_s}"
+        end
         # set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
         dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
         if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
         clg_dx_coil.setRatedTotalCoolingCapacity(dx_cap)
         htg_dx_coil.setRatedTotalHeatingCapacity(dx_cap)
-        # assign performance curves and COPs
-        coil_cooling_dx_single_speed_apply_efficiency_and_curves(clg_dx_coil, ashp_eqpt_name)
-        coil_heating_dx_single_speed_apply_efficiency_and_curves(htg_dx_coil, ashp_eqpt_name)
+        # assign COPs
+        search_criteria = {}
+        search_criteria['name'] = ashp_eqpt_name
+        coil_cooling_dx_single_speed_apply_cop(clg_dx_coil, search_criteria)
+        coil_heating_dx_single_speed_apply_cop(htg_dx_coil, search_criteria)
       end
     end
   end
@@ -1461,11 +1606,17 @@ class ECMS
   #   -Zonal VRF terminal units for heating and cooling with electric baseboards
   def add_ecm_hs13_ashp_vrf(model:,
                             system_zones_map:,
-                            system_doas_flags:)
+                            system_doas_flags:,
+                            ecm_system_zones_map_option:,
+                            standard:,
+                            heating_fuel:)
     # call method for ECM hs08 with ASHP in the air system
     add_ecm_hs08_ccashp_vrf(model: model,
                             system_zones_map: system_zones_map,
                             system_doas_flags: system_doas_flags,
+                            ecm_system_zones_map_option: ecm_system_zones_map_option,
+                            standard: standard,
+                            heating_fuel: heating_fuel,
                             air_sys_eqpt_type: 'ashp')
   end
 
@@ -1621,8 +1772,8 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Applies the standard efficiency ratings and typical performance curves "CoilCoolingDXSingleSpeed" object.
-  def coil_cooling_dx_single_speed_apply_efficiency_and_curves(coil_cooling_dx_single_speed, eqpt_name)
+  # Applies the performance curves "CoilCoolingDXSingleSpeed" object.
+  def coil_cooling_dx_single_speed_apply_curves(coil_cooling_dx_single_speed, eqpt_name)
     successfully_set_all_properties = true
 
     search_criteria = {}
@@ -1630,6 +1781,7 @@ class ECMS
 
     # Get the capacity
     capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed)
+    capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
     # Lookup efficiencies
@@ -1687,16 +1839,11 @@ class ECMS
       successfully_set_all_properties = false
     end
 
-    # Find the minimum COP and rename with efficiency rating
-    cop = coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, search_criteria, false)
-
-    # Set the efficiency values
-    coil_cooling_dx_single_speed.setRatedCOP(cop.to_f) unless cop.nil?
   end
 
   # =============================================================================================================================
-  # Applies the standard efficiency ratings and typical performance curves to "CoilHeatingSingleSpeed" object.
-  def coil_heating_dx_single_speed_apply_efficiency_and_curves(coil_heating_dx_single_speed, eqpt_name)
+  # Applies the performance curves to "CoilHeatingSingleSpeed" object.
+  def coil_heating_dx_single_speed_apply_curves(coil_heating_dx_single_speed, eqpt_name)
     successfully_set_all_properties = true
 
     # Get the search criteria
@@ -1705,6 +1852,7 @@ class ECMS
 
     # Get the capacity
     capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed)
+    capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
@@ -1761,32 +1909,37 @@ class ECMS
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find heat_plf_fplr curve, will not be set.")
       successfully_set_all_properties = false
     end
+    
+    # Make the HEAT-DEFROST-EIR-FT curve
+    heat_defrost_eir_ft = model_add_curve(coil_heating_dx_single_speed.model, props['heat_defrost_eir_ft'])
+    if heat_defrost_eir_ft
+      coil_heating_dx_single_speed.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, can not find heat_defrost_eir_ft curve, will not be set.")
+      successfully_set_all_properties = false
+    end
 
-    # Find the minimum COP and rename with efficiency rating
-    cop = coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, search_criteria, false)
-
-    # Set the efficiency values
-    coil_heating_dx_single_speed.setRatedCOP(cop.to_f) unless cop.nil?
   end
 
   # =============================================================================================================================
-  # Applies the standard efficiency ratings and typical performance curves "CoilCoolingDXVariableSpeed" object.
-  def coil_cooling_dx_variable_speed_apply_efficiency_and_curves(coil_cooling_dx_variable_speed, eqpt_name)
+  # Applies the performance curves "CoilCoolingDXVariableSpeed" object.
+  def coil_cooling_dx_variable_speed_apply_curves(coil_cooling_dx_variable_speed, eqpt_name)
     successfully_set_all_properties = true
 
     # Get the capacity
     capacity_w = coil_cooling_dx_variable_speed_find_capacity(coil_cooling_dx_variable_speed)
+    capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
-    # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
+    # Lookup performance curves
     search_criteria = {}
     search_criteria['name'] = eqpt_name
     ac_props = model_find_object(standards_data['tables']['heat_pump_cooling_ecm']['table'], search_criteria, capacity_btu_per_hr)
 
     # Check to make sure properties were found
     if ac_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.CoilCoolingDXVariableSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.CoilCoolingDXVariableSpeed', "For #{coil_cooling_dx_variable_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency.")
       successfully_set_all_properties = false
     end
 
@@ -1835,16 +1988,11 @@ class ECMS
       successfully_set_all_properties = false
     end
 
-    # Find the minimum COP and rename with efficiency rating
-    cop = coil_cooling_dx_variable_speed_standard_minimum_cop(coil_cooling_dx_variable_speed, search_criteria, false)
-
-    # Set the efficiency values
-    coil_cooling_dx_variable_speed.speeds.each { |speed| speed.setReferenceUnitGrossRatedCoolingCOP(cop.to_f) } unless cop.nil?
   end
 
   # =============================================================================================================================
-  # Applies the standard efficiency ratings and typical performance curves to "CoilHeatingVariableSpeed" object.
-  def coil_heating_dx_variable_speed_apply_efficiency_and_curves(coil_heating_dx_variable_speed, eqpt_name)
+  # Applies performance curves to "CoilHeatingVariableSpeed" object.
+  def coil_heating_dx_variable_speed_apply_curves(coil_heating_dx_variable_speed, eqpt_name)
     successfully_set_all_properties = true
 
     # Get the search criteria
@@ -1853,10 +2001,11 @@ class ECMS
 
     # Get the capacity
     capacity_w = coil_heating_dx_variable_speed_find_capacity(coil_heating_dx_variable_speed)
+    capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
-    # Lookup efficiencies
+    # Lookup performance curves
     props = model_find_object(standards_data['tables']['heat_pump_heating_ecm']['table'], search_criteria, capacity_btu_per_hr)
 
     # Check to make sure properties were found
@@ -1910,27 +2059,31 @@ class ECMS
       successfully_set_all_properties = false
     end
 
-    # Find the minimum COP and rename with efficiency rating
-    cop = coil_heating_dx_variable_speed_standard_minimum_cop(coil_heating_dx_variable_speed, search_criteria, false)
+    # Make the heat_defrost_eir_ft
+    heat_defrost_eir_ft = model_add_curve(coil_heating_dx_variable_speed.model, props['heat_defrost_eir_ft'])
+    if heat_defrost_eir_ft
+      coil_heating_dx_variable_speed.setDefrostEnergyInputRatioFunctionofTemperatureCurve(heat_defrost_eir_ft)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{coil_heating_dx_variable_speed.name}, cannot find heat_defrost_eir_ft curve, will not be set")
+      successfully_set_all_properties = false
+    end
 
-    # Set the efficiency values
-    coil_heating_dx_variable_speed.speeds.each { |speed| speed.setReferenceUnitGrossRatedHeatingCOP(cop.to_f) } unless cop.nil?
   end
 
   # =============================================================================================================================
-  # Applies the standard cooling efficiency ratings and typical performance curves to "AirConditionerVariableRefrigerantFlow" object.
-  def airconditioner_variablerefrigerantflow_cooling_apply_efficiency_and_curves(airconditioner_variablerefrigerantflow, eqpt_name)
+  # Applies the cooling performance curves to "AirConditionerVariableRefrigerantFlow" object.
+  def airconditioner_variablerefrigerantflow_cooling_apply_curves(airconditioner_variablerefrigerantflow, eqpt_name)
     successfully_set_all_properties = true
 
     search_criteria = {}
     search_criteria['name'] = eqpt_name
-
     # Get the capacity
     capacity_w = airconditioner_variablerefrigerantflow_cooling_find_capacity(airconditioner_variablerefrigerantflow)
+    capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
-    # Lookup efficiencies
+    # Lookup performance curves
     props = model_find_object(standards_data['tables']['heat_pump_cooling_ecm']['table'], search_criteria, capacity_btu_per_hr)
 
     # Check to make sure properties were found
@@ -2047,27 +2200,22 @@ class ECMS
       successfully_set_all_properties = false
     end
 
-    # Find the minimum COP
-    cop = airconditioner_variablerefrigerantflow_cooling_standard_minimum_cop(airconditioner_variablerefrigerantflow, search_criteria, false)
-
-    # Set the efficiency values
-    airconditioner_variablerefrigerantflow.setRatedCoolingCOP(cop.to_f) unless cop.nil?
   end
 
   # =============================================================================================================================
-  # Applies the standard heating efficiency ratings and typical performance curves to "AirConditionerVariableRefrigerantFlow" object.
-  def airconditioner_variablerefrigerantflow_heating_apply_efficiency_and_curves(airconditioner_variablerefrigerantflow, eqpt_name)
+  # Applies the heating performance curves to "AirConditionerVariableRefrigerantFlow" object.
+  def airconditioner_variablerefrigerantflow_heating_apply_curves(airconditioner_variablerefrigerantflow, eqpt_name)
     successfully_set_all_properties = true
 
     search_criteria = {}
     search_criteria['name'] = eqpt_name
-
     # Get the capacity
     capacity_w = airconditioner_variablerefrigerantflow_heating_find_capacity(airconditioner_variablerefrigerantflow)
+    capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
-    # Lookup efficiencies
+    # Lookup performance curves
     props = model_find_object(standards_data['tables']['heat_pump_heating_ecm']['table'], search_criteria, capacity_btu_per_hr)
 
     # Check to make sure properties were found
@@ -2175,18 +2323,13 @@ class ECMS
       successfully_set_all_properties = false
     end
 
-    # Find the minimum COP and rename with efficiency rating
-    cop = airconditioner_variablerefrigerantflow_heating_standard_minimum_cop(airconditioner_variablerefrigerantflow, search_criteria, false)
-
-    # Set the efficiency values
-    airconditioner_variablerefrigerantflow.setRatedHeatingCOP(cop.to_f) unless cop.nil?
   end
 
   # =============================================================================================================================
-  # Find minimum efficiency for "CoilCoolingDXSingleSpeed" object
-  def coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed,
-                                                        search_criteria,
-                                                        rename = false)
+  # Find efficiency for "CoilCoolingDXSingleSpeed" object
+  def coil_cooling_dx_single_speed_apply_cop(coil_cooling_dx_single_speed,
+                                             search_criteria,
+                                             rename = false)
 
     capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
@@ -2248,15 +2391,17 @@ class ECMS
     if rename
       coil_cooling_dx_single_speed.setName(new_comp_name)
     end
+    
+    # Set COP
+    coil_cooling_dx_single_speed.setRatedCOP(cop.to_f) unless cop.nil?
 
-    return cop
   end
 
   # =============================================================================================================================
-  # Find minimum efficiency for "CoilHeatingDXSingleSpeed" object
-  def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed,
-                                                        search_criteria,
-                                                        rename = false)
+  # Find efficiency for "CoilHeatingDXSingleSpeed" object
+  def coil_heating_dx_single_speed_apply_cop(coil_heating_dx_single_speed,
+                                             search_criteria,
+                                             rename = false)
 
     capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
@@ -2311,14 +2456,16 @@ class ECMS
       coil_heating_dx_single_speed.setName(new_comp_name)
     end
 
-    return cop
+    # Set COP
+    coil_heating_dx_single_speed.setRatedCOP(cop.to_f) unless cop.nil?
+
   end
 
   # =============================================================================================================================
-  # Find minimum efficiency for "CoilCoolingDXVariableSpeed" object
-  def coil_cooling_dx_variable_speed_standard_minimum_cop(coil_cooling_dx_variable_speed,
-                                                          search_criteria,
-                                                          rename = false)
+  # Find efficiency for "CoilCoolingDXVariableSpeed" object
+  def coil_cooling_dx_variable_speed_apply_cop(coil_cooling_dx_variable_speed,
+                                               search_criteria,
+                                               rename = false)
 
     capacity_w = coil_cooling_dx_variable_speed_find_capacity(coil_cooling_dx_variable_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
@@ -2381,14 +2528,16 @@ class ECMS
       coil_cooling_dx_variable_speed.setName(new_comp_name)
     end
 
-    return cop
+    # Set COP values
+    coil_cooling_dx_variable_speed.speeds.each { |speed| speed.setReferenceUnitGrossRatedCoolingCOP(cop.to_f) } unless cop.nil?
+
   end
 
   # =============================================================================================================================
-  # Find minimum efficiency for "CoilHeatingDXVariableSpeed" object
-  def coil_heating_dx_variable_speed_standard_minimum_cop(coil_heating_dx_variable_speed,
-                                                          search_criteria,
-                                                          rename = false)
+  # Find efficiency for "CoilHeatingDXVariableSpeed" object
+  def coil_heating_dx_variable_speed_apply_cop(coil_heating_dx_variable_speed,
+                                               search_criteria,
+                                               rename = false)
 
     capacity_w = coil_heating_dx_variable_speed_find_capacity(coil_heating_dx_variable_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
@@ -2443,14 +2592,16 @@ class ECMS
       coil_heating_dx_variable_speed.setName(new_comp_name)
     end
 
-    return cop
+    # Set COP values
+    coil_heating_dx_variable_speed.speeds.each { |speed| speed.setReferenceUnitGrossRatedHeatingCOP(cop.to_f) } unless cop.nil?
+
   end
 
   # =============================================================================================================================
-  # Find minimum cooling efficiency for "AirConditionerVariableRefrigerantFlow" object
-  def airconditioner_variablerefrigerantflow_cooling_standard_minimum_cop(airconditioner_variablerefrigerantflow,
-                                                                          search_criteria,
-                                                                          rename = false)
+  # Find cooling efficiency for "AirConditionerVariableRefrigerantFlow" object
+  def airconditioner_variablerefrigerantflow_cooling_apply_cop(airconditioner_variablerefrigerantflow,
+                                                               search_criteria,
+                                                               rename = false)
 
     capacity_w = airconditioner_variablerefrigerantflow_cooling_find_capacity(airconditioner_variablerefrigerantflow)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
@@ -2505,14 +2656,16 @@ class ECMS
       airconditioner_variablerefrigerantflow.setName(new_comp_name)
     end
 
-    return cop
+    # Set COP
+    airconditioner_variablerefrigerantflow.setRatedCoolingCOP(cop.to_f) unless cop.nil?
+
   end
 
   # =============================================================================================================================
-  # Find minimum heating efficiency for "AirConditionerVariableRefrigerantFlow" object
-  def airconditioner_variablerefrigerantflow_heating_standard_minimum_cop(airconditioner_variablerefrigerantflow,
-                                                                          search_criteria,
-                                                                          rename = false)
+  # Find heating efficiency for "AirConditionerVariableRefrigerantFlow" object
+  def airconditioner_variablerefrigerantflow_heating_apply_cop(airconditioner_variablerefrigerantflow,
+                                                               search_criteria,
+                                                               rename = false)
 
     capacity_w = airconditioner_variablerefrigerantflow_heating_find_capacity(airconditioner_variablerefrigerantflow)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
@@ -2567,7 +2720,9 @@ class ECMS
       airconditioner_variablerefrigerantflow.setName(new_comp_name)
     end
 
-    return cop
+    # Set COP
+    airconditioner_variablerefrigerantflow.setRatedHeatingCOP(cop.to_f) unless cop.nil?
+
   end
 
   # =============================================================================================================================
@@ -2733,7 +2888,7 @@ class ECMS
     else
       eff_measure_name = eff['name']
     end
-    new_boiler_name = boiler_primacy + eff_measure_name + " #{boiler_size_kbtu_per_hour.round(0)}kBtu/hr #{component.nominalThermalEfficiency} Thermal Eff"
+    new_boiler_name = (boiler_primacy + eff_measure_name + " #{boiler_size_kbtu_per_hour.round(0)}kBtu/hr #{component.nominalThermalEfficiency} Thermal Eff").strip
     component.setName(new_boiler_name)
   end
 
@@ -2814,7 +2969,7 @@ class ECMS
       ecm_package_name = eff['name']
     end
     furnace_num = component.name.to_s.gsub(/[^0-9]/, '')
-    new_furnace_name = ecm_package_name + " #{furnace_num}"
+    new_furnace_name = (ecm_package_name + " #{furnace_num}").strip
     component.setName(new_furnace_name)
   end
 
@@ -2911,7 +3066,7 @@ class ECMS
     else
       shw_ecm_package_name = eff['name']
     end
-    shw_name = "#{shw_vol_gal} Gal #{shw_ecm_package_name} Water Heater - #{shw_capacity_kBtu_hr}kBtu/hr #{eff['efficiency']} Therm Eff"
+    shw_name = ("#{shw_vol_gal} Gal #{shw_ecm_package_name} Water Heater - #{shw_capacity_kBtu_hr}kBtu/hr #{eff['efficiency']} Therm Eff").strip
     component.setName(shw_name)
   end
 
@@ -2919,10 +3074,11 @@ class ECMS
   # Method to update the cop and/or the performance curves of unitary dx coils. The method input 'unitary_cop' can either be a
   # string or a hash. When it's a string it's used to find a hash in the json table 'unitary_cop_ecm'. When it's a hash it holds
   # the parameters needed to update the cop and/or the performance curves of the unitary coil.
-  def modify_unitary_cop(model:, unitary_cop:, sql_db_vars_map:)
+  def modify_unitary_cop(model:, unitary_cop:, sizing_done:, sql_db_vars_map:)
     return if unitary_cop.nil? || (unitary_cop.to_s == 'NECB_Default')
 
-    coils = model.getCoilCoolingDXSingleSpeeds + model.getCoilCoolingDXMultiSpeeds
+    coils = model.getCoilCoolingDXSingleSpeeds.select {|coil| coil.name.to_s.include? '_dx'}
+    coils += model.getCoilCoolingDXMultiSpeeds.select {|coil| coil.name.to_s.include? '_dx'}
     unitary_cop_copy = unitary_cop.dup
     coils.sort.each do |coil|
       coil_type = 'SingleSpeed'
@@ -2933,7 +3089,7 @@ class ECMS
         search_criteria = {}
         search_criteria['name'] = unitary_cop_copy
         coil_name = coil.name.to_s
-        if sql_db_vars_map.has_key? coil_name then coil.setName(sql_db_vars_map[coil_name])  end
+        if (sql_db_vars_map.has_key? coil_name) && !sizing_done then coil.setName(sql_db_vars_map[coil_name]) end
         if coil_type == 'SingleSpeed'
           capacity_w = coil_cooling_dx_single_speed_find_capacity(coil)
         elsif coil_type == 'MultiSpeed'
@@ -2941,61 +3097,85 @@ class ECMS
         end
         coil.setName(coil_name)
         cop_package = model_find_object(@standards_data['tables']['unitary_cop_ecm'], search_criteria, capacity_w)
-        raise "Cannot not find #{unitary_cop_ecm} in the ECMS unitary_acs.json file.  Please check that the name is correctly spelled in the ECMS class unitary_acs.json file and in the code calling (directly or through another method) the ECMS class modify_unitary_eff method." if cop_package.empty?
+        raise "Cannot find #{unitary_cop_ecm} in the ECMS unitary_acs.json file.  Please check that the name is correctly spelled in the ECMS class unitary_acs.json file and in the code calling (directly or through another method) the ECMS class modify_unitary_eff method." if cop_package.empty?
 
         ecm_name = unitary_cop_copy
         unitary_cop = {
           'name' => ecm_name,
+          'maximum_capacity' => cop_package['maximum_capacity'],
           'minimum_energy_efficiency_ratio' => cop_package['minimum_energy_efficiency_ratio'],
           'minimum_seasonal_energy_efficiency_ratio' => cop_package['minimum_seasonal_energy_efficiency_ratio'],
+          'minimum_coefficient_of_performance_cooling' => cop_package['minimum_coefficient_of_performance_cooling'],
+          'ref_flow_rate_m3_per_sec' => cop_package['ref_flow_rate_m3_per_sec'],
           'cool_cap_ft' => cop_package['cool_cap_ft'],
           'cool_cap_fflow' => cop_package['cool_cap_fflow'],
           'cool_eir_ft' => cop_package['cool_eir_ft'],
           'cool_eir_fflow' => cop_package['cool_eir_fflow'],
-          'cool_plf_fplr' => cop_package['cool_eir_fplr']
+          'cool_plf_fplr' => cop_package['cool_plf_fplr']
         }
       end
-      next if unitary_cop['minimum_energy_efficiency_ratio'].nil? && unitary_cop['minimum_seasonal_energy_efficiency_ratio'].nil? && unitary_cop['cool_cap_ft'].nil? &&
-              unitary_cop['cool_cap_fflow'].nil? && unitary_cop['cool_eir_ft'].nil? && unitary_cop['cool_eir_fflow'].nil? && unitary_cop['cool_plf_fplr'].nil?
+      next if unitary_cop['minimum_energy_efficiency_ratio'].nil? && unitary_cop['minimum_seasonal_energy_efficiency_ratio'].nil? && 
+              unitary_cop['minimum_coefficient_of_performance_cooling'].nil? && unitary_cop['cool_cap_ft'].nil? && unitary_cop['cool_cap_fflow'].nil? && 
+              unitary_cop['cool_eir_ft'].nil? && unitary_cop['cool_eir_fflow'].nil? && unitary_cop['cool_plf_fplr'].nil? && unitary_cop['ref_flow_rate_m3_per_sec'].nil?
 
       # If the dx coil is on an air loop then update its cop and the performance curves when these are specified in the ecm data
       if (coil_type == 'SingleSpeed' && coil.airLoopHVAC.is_initialized && (!coil.name.to_s.include? "_ASHP")) ||
          (coil_type == 'MultiSpeed' && coil.containingHVACComponent.get.airLoopHVAC.is_initialized)
-        cop = nil
-        if unitary_cop['minimum_energy_efficiency_ratio']
-          cop = eer_to_cop(unitary_cop['minimum_energy_efficiency_ratio'].to_f)
-        elsif unitary_cop['minimum_seasonal_energy_efficiency_ratio']
-          cop = seer_to_cop_cooling_with_fan(unitary_cop['minimum_seasonal_energy_efficiency_ratio'].to_f)
-        end
-        cool_cap_ft = nil
-        cool_cap_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_ft'] } if unitary_cop['cool_cap_ft']
-        cool_cap_fflow = nil
-        cool_cap_fflow = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_fflow'] } if unitary_cop['cool_cap_fflow']
-        cool_eir_ft = nil
-        cool_eir_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_eir_ft'] } if unitary_cop['cool_eir_ft']
-        cool_eir_fflow = nil
-        cool_eir_fflow = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_eir_fflow'] } if unitary_cop['cool_eir_fflow']
-        cool_plf_fplr = nil
-        cool_plf_fplr = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_plf_fplr'] } if unitary_cop['cool_plf_fplr']
-        if coil_type == 'SingleSpeed'
-          coil.setRatedCOP(cop) if cop
-          coil.setTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft) if cool_cap_ft
-          coil.setTotalCoolingCapacityFunctionOfFlowFractionCurve(cool_cap_fflow) if cool_cap_fflow
-          coil.setEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft) if cool_eir_ft
-          coil.setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow) if cool_eir_fflow
-          coil.setPartLoadFractionCorrelationCurve(cool_plf_fplr) if cool_plf_fplr
-        elsif coil_type == 'MultiSpeed'
-          coil.stages.sort.each do |stage|
-            stage.setGrossRatedCoolingCOP(cop) if cop
-            stage.setTotalCoolingCapacityFunctionofTemperatureCurve(cool_cap_ft) if cool_cap_ft
-            stage.setTotalCoolingCapacityFunctionofFlowFractionCurve(cool_cap_fflow) if cool_cap_fflow
-            stage.setEnergyInputRatioFunctionofTemperatureCurve(cool_eir_ft) if cool_eir_ft
-            stage.setEnergyInputRatioFunctionofFlowFractionCurve(cool_eir_fflow) if cool_eir_fflow
-            stage.setPartLoadFractionCorrelationCurve(cool_plf_fplr) if cool_plf_fplr
+        # Set COP if sizing run is done
+        if sizing_done
+          cop = nil
+          if unitary_cop['minimum_energy_efficiency_ratio']
+            cop = eer_to_cop(unitary_cop['minimum_energy_efficiency_ratio'].to_f)
+          elsif unitary_cop['minimum_seasonal_energy_efficiency_ratio']
+            cop = seer_to_cop_cooling_with_fan(unitary_cop['minimum_seasonal_energy_efficiency_ratio'].to_f)
+          elsif unitary_cop['minimum_coefficient_of_performance_cooling']
+            cop = unitary_cop['minimum_coefficient_of_performance_cooling'].to_f
+          end
+          if coil_type == 'SingleSpeed'
+            coil.setRatedCOP(cop) if cop
+          elsif coil_type == 'MultiSpeed'
+            coil.stages.sort.each do |stage|
+              stage.setGrossRatedCoolingCOP(cop) if cop
+            end
+          end
+          coil.setName('CoilCoolingDXSingleSpeed_dx-adv') if coil_type == 'SingleSpeed'
+          coil.setName('CoilCoolingDXMultiSpeed_dx-adv') if coil_type == 'MultiSpeed'
+        else
+        # Set performance curves before sizing run
+          cool_cap_ft = nil
+          cool_cap_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_ft'] }[0] if unitary_cop['cool_cap_ft']
+          cool_cap_ft = model_add_curve(model, unitary_cop['cool_cap_ft']) if cool_cap_ft
+          cool_cap_fflow = nil
+          cool_cap_fflow = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_cap_fflow'] }[0] if unitary_cop['cool_cap_fflow']
+          cool_cap_fflow = model_add_curve(model, unitary_cop['cool_cap_fflow']) if cool_cap_fflow
+          cool_eir_ft = nil
+          cool_eir_ft = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_eir_ft'] }[0] if unitary_cop['cool_eir_ft']
+          cool_eir_ft = model_add_curve(model, unitary_cop['cool_eir_ft']) if cool_eir_ft
+          cool_eir_fflow = nil
+          cool_eir_fflow = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_eir_fflow'] }[0] if unitary_cop['cool_eir_fflow']
+          cool_eir_fflow = model_add_curve(model, unitary_cop['cool_eir_fflow']) if cool_eir_fflow
+          cool_plf_fplr = nil
+          cool_plf_fplr = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_plf_fplr'] }[0] if unitary_cop['cool_plf_fplr']
+          cool_plf_fplr = model_add_curve(model, unitary_cop['cool_plf_fplr']) if cool_plf_fplr
+          rated_flow_rate = nil
+          rated_flow_rate = unitary_cop['ref_flow_rate_m3_per_sec'] * (capacity_w / unitary_cop['maximum_capacity']) if unitary_cop['ref_flow_rate_m3_per_sec'] 
+          if coil_type == 'SingleSpeed'
+            coil.setTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft) if cool_cap_ft
+            coil.setTotalCoolingCapacityFunctionOfFlowFractionCurve(cool_cap_fflow) if cool_cap_fflow
+            coil.setEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft) if cool_eir_ft
+            coil.setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow) if cool_eir_fflow
+            coil.setPartLoadFractionCorrelationCurve(cool_plf_fplr) if cool_plf_fplr
+            coil.setRatedAirFlowRate(rated_flow_rate) if rated_flow_rate
+          elsif coil_type == 'MultiSpeed'
+            coil.stages.sort.each do |stage|
+              stage.setTotalCoolingCapacityFunctionofTemperatureCurve(cool_cap_ft) if cool_cap_ft
+              stage.setTotalCoolingCapacityFunctionofFlowFractionCurve(cool_cap_fflow) if cool_cap_fflow
+              stage.setEnergyInputRatioFunctionofTemperatureCurve(cool_eir_ft) if cool_eir_ft
+              stage.setEnergyInputRatioFunctionofFlowFractionCurve(cool_eir_fflow) if cool_eir_fflow
+              stage.setPartLoadFractionCorrelationCurve(cool_plf_fplr) if cool_plf_fplr
+            end
           end
         end
-        coil.setName('CoilCoolingDXSingleSpeed_dx-adv') if cop && coil_type == 'SingleSpeed'
-        coil.setName('CoilCoolingDXMultiSpeed_dx-adv') if cop && coil_type == 'MultiSpeed'
       end
     end
   end
@@ -3011,19 +3191,19 @@ class ECMS
   def add_ecm_remove_airloops_add_zone_baseboards(model:,
                                                   system_zones_map:,
                                                   system_doas_flags: nil,
-                                                  zone_clg_eqpt_type: nil,
+                                                  ecm_system_zones_map_option:,
                                                   standard:,
-                                                  primary_heating_fuel:)
+                                                  heating_fuel:)
     # Set the primary fuel set to default to to specific fuel type.
     standards_info = standard.standards_data
 
-    if primary_heating_fuel == 'DefaultFuel'
+    if heating_fuel == 'DefaultFuel'
       epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-      primary_heating_fuel = standards_info['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+      heating_fuel = standards_info['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
     end
     # Get fuelset.
-    system_fuel_defaults = standards_info['fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == primary_heating_fuel }
-    raise("fuel_type_sets named #{primary_heating_fuel} not found in fuel_type_sets table.") if system_fuel_defaults.nil?
+    system_fuel_defaults = standards_info['fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == heating_fuel }
+    raise("fuel_type_sets named #{heating_fuel} not found in fuel_type_sets table.") if system_fuel_defaults.nil?
 
     # Assign fuel sources.
     boiler_fueltype = system_fuel_defaults['boiler_fueltype']
@@ -3176,6 +3356,9 @@ class ECMS
       economizer_type = 'DifferentialEnthalpy'
     elsif airloop_economizer_type.downcase == "differentialdrybulb"
       economizer_type = 'DifferentialDryBulb'
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.airLoopHVACOutdoorAirSystem', "The air loop economizer type #{airloop_economizer_type} is not recognized.  Please make sure that the economizer being applied by the ECM is either a DifferentialEnthalpy or DifferentialDryBulb type.  No economizer will be applied.")
+      return
     end
 
     model.getAirLoopHVACs.sort.each do |air_loop|

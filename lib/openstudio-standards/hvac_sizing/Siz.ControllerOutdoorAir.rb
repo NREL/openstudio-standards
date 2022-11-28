@@ -54,60 +54,6 @@ class OpenStudio::Model::ControllerOutdoorAir
     end
     air_loop = oa_sys.airLoop.get
 
-    # Determine if the system is multizone
-    multizone = false
-    if air_loop.thermalZones.size > 1
-      multizone = true
-    end
-
-    # Determine if the system is variable volume
-    vav = false
-    air_loop.supplyComponents.reverse.each do |comp|
-      if comp.to_FanVariableVolume.is_initialized
-        vav = true
-      elsif comp.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.is_initialized
-        fan = comp.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.get.supplyAirFan
-        if fan.to_FanVariableVolume.is_initialized
-          vav = true
-        end
-      elsif comp.to_AirLoopHVACUnitarySystem.is_initialized
-        fan = comp.to_AirLoopHVACUnitarySystem.get.supplyFan
-        if fan.is_initialized
-          if fan.get.to_FanVariableVolume.is_initialized
-            vav = true
-          end
-        end
-      end
-    end
-    
-    # If it is a multizone VAV system, get the system multiplier
-    # to work around the bug in EnergyPlus.
-    if multizone && vav
-      if oa.is_initialized
-        oa_val = oa.get
-        
-        # Get the system multiplier
-        mult = 1
-
-        # Get all the zone multipliers
-        zn_mults = []
-        air_loop.thermalZones.each do |zone|
-          zn_mults << zone.multiplier
-        end
-     
-        # Warn if there are different multipliers
-        uniq_mults = zn_mults.uniq
-        if uniq_mults.size > 1
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop.name}: not all zones on the system have an identical zone multiplier.  Multipliers are: #{uniq_mults.join(', ')}.")
-        else
-          mult = uniq_mults[0]
-        end
-
-        oa_val = oa_val * mult
-        oa = OpenStudio::OptionalDouble.new(oa_val)
-      end
-    end
-
     return oa
   end
 end

@@ -2,6 +2,7 @@ require 'openstudio'
 require 'securerandom'
 require 'optparse'
 require 'yaml'
+require 'git-revision'
 # resource_folder = File.join(__dir__, '..', '..', 'measures/btap_results/resources')
 # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
@@ -75,6 +76,11 @@ class BTAPDatapoint
     @options[:btap_costing_git_revision] = Git::Revision.commit_short
     @options[:os_git_revision] = OpenstudioStandards.git_revision
 
+    # Get users' inputs for the parameters needed for the calculation af net present value
+    @npv_start_year = @options[:npv_start_year]
+    @npv_end_year = @options[:npv_end_year]
+    @npv_discount_rate = @options[:npv_discount_rate]
+
     # Save configuration to temp folder.
     File.open(File.join(@dp_temp_folder, 'run_options.yml'), 'w') { |file| file.write(@options.to_yaml) }
     begin
@@ -88,7 +94,7 @@ class BTAPDatapoint
       # model = load_osm(@options[:building_type]) # loads skeleton file from path.
       model = @standard.load_building_type_from_library(building_type: @options[:building_type])
       if false == model
-        osm_model_path = File.absolute_path(File.join(input_folder, @options[:building_type] + '.osm'))
+        osm_model_path = File.absolute_path(File.join(input_folder_cache, @options[:building_type] + '.osm'))
         raise("File #{osm_model_path} not found") unless File.exist?(osm_model_path)
 
         model = BTAP::FileIO.load_osm(osm_model_path)
@@ -99,7 +105,11 @@ class BTAPDatapoint
         @standard.set_output_meters(model: model, output_meters: @options[:output_meters])
         climate_zone = 'NECB HDD Method'
         model.getYearDescription.setDayofWeekforStartDay('Sunday')
-        @standard.model_add_design_days_and_weather_file(model, climate_zone, @options[:epw_file]) # Standards
+        epw_file = @options[:epw_file]
+        epw_dir = nil
+        local_epw_file_path = File.join(input_folder_cache,@options[:epw_file])
+        epw_dir = input_folder_cache if File.exists? local_epw_file_path
+        @standard.model_add_design_days_and_weather_file(model, climate_zone, epw_file, epw_dir) # Standards
         @standard.model_add_ground_temperatures(model, nil, climate_zone)
       else
         # Otherwise modify osm input with options.
@@ -107,11 +117,14 @@ class BTAPDatapoint
                                        epw_file: @options[:epw_file],
                                        sizing_run_dir: File.join(@dp_temp_folder, 'sizing_folder'),
                                        primary_heating_fuel: @options[:primary_heating_fuel],
+                                       necb_reference_hp: @options[:necb_reference_hp],
+                                       necb_reference_hp_supp_fuel: @options[:necb_reference_hp_supp_fuel],
                                        dcv_type: @options[:dcv_type], # Four options: @options[: (1) 'NECB_Default', (2) 'No DCV', (3) 'Occupancy-based DCV' , (4) 'CO2-based DCV'
                                        lights_type: @options[:lights_type], # Two options: @options[: (1) 'NECB_Default', (2) 'LED'
                                        lights_scale: @options[:lights_scale],
                                        daylighting_type: @options[:daylighting_type], # Two options: @options[: (1) 'NECB_Default', (2) 'add_daylighting_controls'
                                        ecm_system_name: @options[:ecm_system_name],
+                                       ecm_system_zones_map_option: @options[:ecm_system_zones_map_option], # (1) 'NECB_Default' (2) 'one_sys_per_floor' (3) 'one_sys_per_bldg'
                                        erv_package: @options[:erv_package],
                                        boiler_eff: @options[:boiler_eff],
                                        # Inconsistent naming Todo Chris K.
@@ -154,7 +167,9 @@ class BTAPDatapoint
                                        chiller_type: @options[:chiller_type],
                                        output_variables: @options[:output_variables],
                                        output_meters: @options[:output_meters],
-                                       airloop_economizer_type: @options[:airloop_economizer_type])
+                                       airloop_economizer_type: @options[:airloop_economizer_type],
+                                       shw_scale: @options[:shw_scale],
+                                       baseline_system_zones_map_option: @options[:baseline_system_zones_map_option])
       end
 
       # Save model to to disk.
@@ -224,7 +239,10 @@ class BTAPDatapoint
         @btap_data = BTAPData.new(model: model,
                                   runner: nil,
                                   cost_result: @cost_result,
-                                  qaqc: @qaqc).btap_data
+                                  qaqc: @qaqc,
+                                  npv_start_year: @npv_start_year,
+                                  npv_end_year: @npv_end_year,
+                                  npv_discount_rate: @npv_discount_rate).btap_data
 
         # Write Files
         File.open(File.join(@dp_temp_folder, 'btap_data.json'), 'w') { |f| f.write(JSON.pretty_generate(@btap_data.sort.to_h, allow_nan: true)) }
@@ -266,6 +284,9 @@ class BTAPDatapoint
   end
 
   def s3_copy_file_to_s3(bucket_name:, source_file:, target_file:, n: 0)
+    require 'aws-sdk-core'
+    require 'aws-sdk-s3'
+    Aws.use_bundled_cert!
     s3_resource = Aws::S3::Resource.new(region: 'ca-central-1')
 
     puts("Copying File to S3. source_file:#{source_file} bucket:#{bucket_name} target_folder:#{target_file}")
@@ -395,9 +416,11 @@ class BTAPDatapoint
     end
 
     CSV.open(csv_output, "wb") do |csv|
-      csv << array_of_hashes.first.keys # adds the attributes name on the first line
-      array_of_hashes.each do |hash|
-        csv << hash.values
+      unless array_of_hashes.empty?
+        csv << array_of_hashes.first.keys # adds the attributes name on the first line
+        array_of_hashes.each do |hash|
+          csv << hash.values
+        end
       end
     end
   end

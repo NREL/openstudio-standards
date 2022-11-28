@@ -32,14 +32,14 @@ class OpenStudio::Model::CoilCoolingDXVariableRefrigerantFlow
         
   end
 
-  # Design Size Rated Air Flow Rate as an optional double
+  # Design Size Gross Rated Total Cooling Capacity as an optional double
   def autosizedRatedTotalCoolingCapacity
-    return self.model.getAutosizedValue(self, 'Design Size Rated Air Flow Rate', 'm3/s')
+    return self.model.getAutosizedValue(self, 'Design Size Gross Rated Total Cooling Capacity', 'W')
   end
 
-  # Design Size Gross Rated Total Cooling Capacity as an optional double
+  # Design Size Rated Air Flow Rate as an optional double
   def autosizedRatedAirFlowRate
-    return self.model.getAutosizedValue(self, 'Design Size Gross Rated Total Cooling Capacity', 'W')
+    return self.model.getAutosizedValue(self, 'Design Size Rated Air Flow Rate', 'm3/s')
   end
 
   # Design Size Gross Rated Sensible Heat Ratio as an optional double

@@ -6,7 +6,9 @@ class BTAPPRE1980
                                                                                          heating_coil_type:,
                                                                                          baseboard_type:,
                                                                                          hw_loop:,
-                                                                                         new_auto_zoner: true)
+                                                                                         new_auto_zoner: true,
+                                                                                         necb_reference_hp: false,
+                                                                                         necb_reference_hp_supp_fuel: 'DefaultFuel')
 
     system_data = {}
     system_data[:name] = 'Sys_3_PSZ'
@@ -31,8 +33,10 @@ class BTAPPRE1980
     system_data[:CentralHeatingDesignSupplyAirHumidityRatio] = 0.0080
 
     # System 3 Zone data
-    system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
-    system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
+    system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference] = 11.0
+    system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod] = 'TemperatureDifference'
+    system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference] = 21.0
     system_data[:SetpointManagerSingleZoneReheatSupplyTempMin] = 13.0
     system_data[:SetpointManagerSingleZoneReheatSupplyTempMax] = 43.0
     system_data[:ZoneDXCoolingSizingFactor] = 1.0
@@ -52,8 +56,10 @@ class BTAPPRE1980
       # Add Zone equipment
       zones.each do |zone| # Zone sizing temperature
         sizing_zone = zone.sizingZone
-        sizing_zone.setZoneCoolingDesignSupplyAirTemperature(system_data[:ZoneCoolingDesignSupplyAirTemperature])
-        sizing_zone.setZoneHeatingDesignSupplyAirTemperature(system_data[:ZoneHeatingDesignSupplyAirTemperature])
+        sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod])
+        sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
+        sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
+        sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
         sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
         sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
         add_sys3_and_8_zone_equip(air_loop,
@@ -108,8 +114,10 @@ class BTAPPRE1980
 
     # Zone sizing temperature
     sizing_zone = control_zone.sizingZone
-    sizing_zone.setZoneCoolingDesignSupplyAirTemperature(system_data[:ZoneCoolingDesignSupplyAirTemperature])
-    sizing_zone.setZoneHeatingDesignSupplyAirTemperature(system_data[:ZoneHeatingDesignSupplyAirTemperature])
+    sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod])
+    sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
+    sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
+    sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
     sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
     sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
 

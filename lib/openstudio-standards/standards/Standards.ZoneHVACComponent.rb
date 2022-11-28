@@ -156,7 +156,7 @@ class Standard
     unless existing_sch.nil?
       if existing_sch.name.is_initialized
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ZoneHVACComponent', "#{zone_hvac_component.name} has ventilation, and schedule is set to always on; keeping always on schedule.")
-        return false if existing_sch.name.get.to_s.downcase.include? 'always on discrete'
+        return false if existing_sch.name.get.to_s.downcase.include?('always on discrete') || existing_sch.name.get.to_s.downcase.include?('guestroom_vent_ctrl_sch')
       end
     end
 
@@ -181,6 +181,35 @@ class Standard
       zone_hvac_component_apply_vestibule_heating_control(zone_hvac_component)
     end
 
+    # Convert to objects
+    zone_hvac_component = if zone_hvac_component.to_ZoneHVACFourPipeFanCoil.is_initialized
+                            zone_hvac_component.to_ZoneHVACFourPipeFanCoil.get
+                          elsif zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+                            zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.get
+                          elsif zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+                            zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.get
+                          end
+
+    # Do nothing for other types of zone HVAC equipment
+    if zone_hvac_component.nil?
+      return true
+    end
+
+    # Standby mode occupancy control
+    return true unless zone_hvac_component.thermalZone.empty?
+
+    thermal_zone = zone_hvac_component.thermalZone.get
+
+    standby_mode_spaces = []
+    thermal_zone.spaces.sort.each do |space|
+      if space_occupancy_standby_mode_required?(space)
+        standby_mode_spaces << space
+      end
+    end
+    if !standby_mode_spaces.empty?
+      zone_hvac_model_standby_mode_occupancy_control(zone_hvac_component)
+    end
+
     # zone ventilation occupancy control for systems with ventilation
     zone_hvac_component_occupancy_ventilation_control(zone_hvac_component)
 
@@ -195,6 +224,16 @@ class Standard
   def zone_hvac_component_vestibule_heating_control_required?(zone_hvac_component)
     vest_htg_control_required = false
     return vest_htg_control_required
+  end
+
+  # Add occupant standby controls to zone equipment
+  # Currently, the controls consists of cycling the
+  # fan during the occupant standby mode hours
+  #
+  # @param zone_hvac_component OpenStudio zonal equipment object
+  # @retrun [Boolean] true if sucessful, false otherwise
+  def zone_hvac_model_standby_mode_occupancy_control(zone_hvac_component)
+    return true
   end
 
   # Turns off vestibule heating below 45F

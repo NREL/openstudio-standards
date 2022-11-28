@@ -7,12 +7,12 @@ class NECB2011 < Standard
   attr_accessor :standards_data
   attr_accessor :space_type_map
   attr_accessor :space_multiplier_map
-
+  
   # This is a helper method to convert arguments that may support 'NECB_Default, and nils to convert to float'
   def convert_arg_to_f(variable:, default:)
-    return variable if variable.instance_of?(Numeric)
+    return variable if variable.kind_of?(Numeric)
     return default if variable.nil? || (variable == 'NECB_Default')
-    return unless variable.instance_of?(String)
+    return unless variable.kind_of?(String)
 
     variable = variable.strip
     return variable.to_f
@@ -166,23 +166,26 @@ class NECB2011 < Standard
       return epw.hdd18.to_f
     else
       dist_clause = "%.2f % #{(min_distance / 1000.0)}"
-      puts "INFO:NECB HDD18 of #{necb_closest['degree_days_below_18_c'].to_f}  at nearest city #{necb_closest['city']},#{necb_closest['province']}, at a distance of " + dist_clause + 'km from epw location. Ref:necb_2015_table_c1'
+      puts "INFO:NECB HDD18 of #{necb_closest['degree_days_below_18_c'].to_f}  at nearest city #{necb_closest['city']},#{necb_closest['province']}, at a distance of " + dist_clause + 'km from epw location. Ref: nbc_2015_table_c1'
       return necb_closest['degree_days_below_18_c'].to_f
     end
   end
 
-  # This method is a wrapper to create the 16 archetypes easily. # 37 args
+  # This method is a wrapper to create the 16 archetypes easily. # 55 args
   def model_create_prototype_model(template:,
                                    building_type:,
                                    epw_file:,
                                    debug: false,
                                    sizing_run_dir: Dir.pwd,
+                                   necb_reference_hp: false,
+                                   necb_reference_hp_supp_fuel: 'DefaultFuel',
                                    primary_heating_fuel: 'DefaultFuel',
                                    dcv_type: 'NECB_Default',
                                    lights_type: 'NECB_Default',
                                    lights_scale: 1.0,
                                    daylighting_type: 'NECB_Default',
                                    ecm_system_name: 'NECB_Default',
+                                   ecm_system_zones_map_option: 'NECB_Default',
                                    erv_package: 'NECB_Default',
                                    boiler_eff: nil,
                                    unitary_cop: nil,
@@ -223,19 +226,23 @@ class NECB2011 < Standard
                                    oa_scale: nil,
                                    infiltration_scale: nil,
                                    output_variables: nil,
+                                   shw_scale: nil,
                                    output_meters: nil,
-                                   airloop_economizer_type: nil)
-
+                                   airloop_economizer_type: nil,
+                                   baseline_system_zones_map_option: nil)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 epw_file: epw_file,
                                 sizing_run_dir: sizing_run_dir,
+                                necb_reference_hp: necb_reference_hp,
+                                necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                 primary_heating_fuel: primary_heating_fuel,
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
                                 lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
                                 lights_scale: lights_scale,
                                 daylighting_type: daylighting_type, # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
                                 ecm_system_name: ecm_system_name,
+                                ecm_system_zones_map_option: ecm_system_zones_map_option, # (1) 'NECB_Default' (2) 'one_sys_per_floor' (3) 'one_sys_per_bldg'
                                 erv_package: erv_package,
                                 boiler_eff: boiler_eff,
                                 unitary_cop: unitary_cop,
@@ -259,9 +266,9 @@ class NECB2011 < Standard
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
                                 nv_type: nv_type, # Two options: (1) nil/none/false/'NECB_Default', (2) 'add_nv'
-                                nv_opening_fraction: nv_opening_fraction, # options: (1) nil/none/false (2) 'NECB_Default' (i.e. 0.1)
-                                nv_temp_out_min: nv_temp_out_min, # options: (1) nil/none/false(2) 'NECB_Default' (i.e. 13.0 based on inputs from Michel Tardif re a real school in QC)
-                                nv_delta_temp_in_out: nv_delta_temp_in_out, # options: (1) nil/none/false (2) 'NECB_Default' (i.e. 1.0 based on inputs from Michel Tardif re a real school in QC)
+                                nv_opening_fraction: nv_opening_fraction, # options: (1) nil/none/false (2) 'NECB_Default' (i.e. 0.1), (3) opening fraction of windows, which can be a float number between 0.0 and 1.0
+                                nv_temp_out_min: nv_temp_out_min, # options: (1) nil/none/false(2) 'NECB_Default' (i.e. 13.0 based on inputs from Michel Tardif re a real school in QC), (3) minimum outdoor air temperature (in Celsius) below which natural ventilation is shut down
+                                nv_delta_temp_in_out: nv_delta_temp_in_out, # options: (1) nil/none/false (2) 'NECB_Default' (i.e. 1.0 based on inputs from Michel Tardif re a real school in QC), (3) temperature difference (in Celsius) between the indoor and outdoor air temperatures below which ventilation is shut down
                                 scale_x: scale_x,
                                 scale_y: scale_y,
                                 scale_z: scale_z,
@@ -276,8 +283,11 @@ class NECB2011 < Standard
                                 infiltration_scale: infiltration_scale,
                                 chiller_type: chiller_type, # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) e.g. 'VSD'
                                 output_variables: output_variables,
+                                shw_scale: shw_scale,  # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) a float number larger than 0.0
                                 output_meters: output_meters,
-                                airloop_economizer_type: airloop_economizer_type) # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
+                                airloop_economizer_type: airloop_economizer_type, # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
+                                baseline_system_zones_map_option: baseline_system_zones_map_option  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
+                                )
 
   end
 
@@ -296,12 +306,15 @@ class NECB2011 < Standard
   def model_apply_standard(model:,
                            epw_file:,
                            sizing_run_dir: Dir.pwd,
+                           necb_reference_hp: false,
+                           necb_reference_hp_supp_fuel: 'DefaultFuel',
                            primary_heating_fuel: 'DefaultFuel',
                            dcv_type: 'NECB_Default',
                            lights_type: 'NECB_Default',
                            lights_scale: 'NECB_Default',
                            daylighting_type: 'NECB_Default',
                            ecm_system_name: 'NECB_Default',
+                           ecm_system_zones_map_option: 'NECB_Default',
                            erv_package: 'NECB_Default',
                            boiler_eff: nil,
                            furnace_eff: nil,
@@ -342,9 +355,10 @@ class NECB2011 < Standard
                            oa_scale: nil,
                            infiltration_scale: nil,
                            output_variables: nil,
+                           shw_scale: nil,
                            output_meters: nil,
-                           airloop_economizer_type: nil)
-
+                           airloop_economizer_type: nil,
+                           baseline_system_zones_map_option: nil)
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
@@ -379,11 +393,15 @@ class NECB2011 < Standard
                       sizing_run_dir: sizing_run_dir,
                       lights_type: lights_type,
                       lights_scale: lights_scale)
+    apply_kiva_foundation(model)
     apply_systems_and_efficiencies(model: model,
                                    primary_heating_fuel: primary_heating_fuel,
                                    sizing_run_dir: sizing_run_dir,
+                                   necb_reference_hp: necb_reference_hp,
+                                   necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                    dcv_type: dcv_type,
                                    ecm_system_name: ecm_system_name,
+                                   ecm_system_zones_map_option: ecm_system_zones_map_option,
                                    erv_package: erv_package,
                                    boiler_eff: boiler_eff,
                                    unitary_cop: unitary_cop,
@@ -400,7 +418,9 @@ class NECB2011 < Standard
                                    pv_ground_azimuth_angle: pv_ground_azimuth_angle,
                                    pv_ground_module_description: pv_ground_module_description,
                                    chiller_type: chiller_type,
-                                   airloop_economizer_type: airloop_economizer_type)
+                                   shw_scale: shw_scale,
+                                   airloop_economizer_type: airloop_economizer_type,
+                                   baseline_system_zones_map_option: baseline_system_zones_map_option)
     self.set_output_variables(model: model, output_variables: output_variables)
     self.set_output_meters(model: model, output_meters: output_meters)
 
@@ -428,7 +448,13 @@ class NECB2011 < Standard
     model.getBoilerSteams.each(&:remove)
     model.getPlantLoops.each(&:remove)
     model.getSchedules.each(&:remove)
+    model.getThermalZones.sort.each { |zone| zone.thermostat(&:remove) }
+    model.getSpaces.sort.each { |space| space.designSpecificationOutdoorAir(&:remove) }
+    model.getThermostatSetpointDualSetpoints.each(&:remove)
 
+    scale_x = 1.0
+    scale_y = 1.0
+    scale_z = 1.0
     # Rotate to model if requested
     rotation_degrees = convert_arg_to_f(variable: rotation_degrees, default: 0.0)
     BTAP::Geometry.rotate_building(model: model, degrees: rotation_degrees) unless rotation_degrees == 0.0
@@ -445,8 +471,11 @@ class NECB2011 < Standard
   def apply_systems_and_efficiencies(model:,
                                      primary_heating_fuel:,
                                      sizing_run_dir:,
+                                     necb_reference_hp: false,
+                                     necb_reference_hp_supp_fuel: 'DefaultFuel',
                                      dcv_type: 'NECB_Default',
                                      ecm_system_name: 'NECB_Default',
+                                     ecm_system_zones_map_option: 'NECB_Default',
                                      erv_package: 'NECB_Default',
                                      boiler_eff: nil,
                                      furnace_eff: nil,
@@ -463,7 +492,9 @@ class NECB2011 < Standard
                                      pv_ground_azimuth_angle:,
                                      pv_ground_module_description:,
                                      chiller_type: 'NECB_Default',
-                                     airloop_economizer_type: nil)
+                                     shw_scale:,
+                                     airloop_economizer_type: nil,
+                                     baseline_system_zones_map_option:)
 
     # Create ECM object.
     ecm = ECMS.new
@@ -471,17 +502,17 @@ class NECB2011 < Standard
     # -------- Systems Layout-----------
 
     # Create Default Systems.
-    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
+    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir, shw_scale: shw_scale,
+                  necb_reference_hp: necb_reference_hp, necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel, baseline_system_zones_map_option: baseline_system_zones_map_option)
 
     # Apply new ECM system. Overwrite standard as required.
-    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self, primary_heating_fuel: primary_heating_fuel)
+    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self, primary_heating_fuel: primary_heating_fuel, 
+                         ecm_system_zones_map_option: ecm_system_zones_map_option)
 
-    # Apply ERV equipment as required.
-    ecm.apply_erv_ecm(model: model, erv_package: erv_package)
     # -------- Performace, Efficiencies, Controls and Sensors ------------
     #
     # Set code standard equipment charecteristics.
-    sql_db_vars_map = apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
+    sql_db_vars_map = apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir, necb_reference_hp: necb_reference_hp)
     # Apply System
     ecm.apply_system_efficiencies_ecm(model: model, ecm_system_name: ecm_system_name)
     # Apply ECM ERV charecteristics as required. Part 2 of above ECM.
@@ -492,8 +523,8 @@ class NECB2011 < Standard
     ecm.modify_boiler_efficiency(model: model, boiler_eff: boiler_eff)
     # Apply Furnace Efficiency
     ecm.modify_furnace_efficiency(model: model, furnace_eff: furnace_eff)
-    # Apply Unitary efficiency
-    ecm.modify_unitary_cop(model: model, unitary_cop: unitary_cop, sql_db_vars_map: sql_db_vars_map)
+    # Apply Unitary curves
+    ecm.modify_unitary_cop(model: model, unitary_cop: unitary_cop, sizing_done: false, sql_db_vars_map: sql_db_vars_map)
     # Apply SHW Efficiency
     ecm.modify_shw_efficiency(model: model, shw_eff: shw_eff)
     # Apply daylight controls.
@@ -502,6 +533,14 @@ class NECB2011 < Standard
     ecm.modify_chiller_efficiency(model: model, chiller_type: chiller_type)
     # Apply airloop economizer
     ecm.add_airloop_economizer(model: model, airloop_economizer_type: airloop_economizer_type)
+    # Perform a second sizing run if needed
+    if (!unitary_cop.nil? && unitary_cop != 'NECB_Default') || !model.getPlantLoops.empty?
+      if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
+        raise('sizing run 2 failed!')
+      end
+    end
+    # apply unitary cop
+    ecm.modify_unitary_cop(model: model, unitary_cop: unitary_cop, sizing_done: true, sql_db_vars_map: sql_db_vars_map)
 
     # -------Pump sizing required by some vintages----------------
     # Apply Pump power as required.
@@ -519,14 +558,15 @@ class NECB2011 < Standard
 
     # -------Ground-mounted PV panels----------------
     # Apply ground-mounted PV panels as required.
-    return unless pv_ground_type == 'add_pv_ground'
+    if pv_ground_type == 'add_pv_ground'
+      ecm.apply_pv_ground(model: model,
+                          pv_ground_type: pv_ground_type,
+                          pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
+                          pv_ground_tilt_angle: pv_ground_tilt_angle,
+                          pv_ground_azimuth_angle: pv_ground_azimuth_angle,
+                          pv_ground_module_description: pv_ground_module_description)
+    end
 
-    ecm.apply_pv_ground(model: model,
-                        pv_ground_type: pv_ground_type,
-                        pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
-                        pv_ground_tilt_angle: pv_ground_tilt_angle,
-                        pv_ground_azimuth_angle: pv_ground_azimuth_angle,
-                        pv_ground_module_description: pv_ground_module_description)
   end
 
   def apply_loads(model:,
@@ -604,6 +644,224 @@ class NECB2011 < Standard
     model_create_thermal_zones(model, @space_multiplier_map)
   end
 
+  # apply the Kiva foundation model to floors and walls with ground boundary condition
+  # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
+  def apply_kiva_foundation(model)
+    # define a Kiva model for the whole bldg that's used for the first floor in contact with ground in each zone
+    bldg_kiva_model = OpenStudio::Model::FoundationKiva.new(model)
+    bldg_kiva_model.setName("Bldg Kiva Foundation")
+    bldg_kiva_model.setWallHeightAboveGrade(0.0)
+    bldg_kiva_model.setWallDepthBelowSlab(0.0)
+    model.getThermalZones.sort.each do |zone|
+      zone_kiva_models = [bldg_kiva_model]
+      zone_grd_flr_counter = 0
+      zone.spaces.sort.each do |space|
+        # store space floors and walls in contact with ground and exterior walls
+        space_ground_floors = []
+        space_ground_walls = []
+        space_ext_walls = []
+        space_ground_floors += space.surfaces.select {|surf| surf.surfaceType.downcase == 'floor' && surf.isGroundSurface }
+        space_ground_walls += space.surfaces.select {|surf| surf.surfaceType.downcase == 'wall' && surf.isGroundSurface }
+        space_ext_walls += space.surfaces.select {|surf| surf.surfaceType.downcase == 'wall' && surf.outsideBoundaryCondition.downcase == 'outdoors'}
+        # loop through space floors in contact with ground and assing a Kiva model for each
+        space_ground_floors.each do |gfloor|
+          zone_grd_flr_counter += 1
+          if zone_grd_flr_counter > 1
+            # a new Kiva model is needed for each additional floor in contact with the ground in the zone
+            kiva_model = OpenStudio::Model::FoundationKiva.new(model)
+            kiva_model.setName("#{gfloor.name.to_s} Kiva Foundation")
+            kiva_model.setWallHeightAboveGrade(0.0)
+            kiva_model.setWallDepthBelowSlab(0.0)
+            zone_kiva_models << kiva_model
+          end
+          # Kiva model only works with standard materials. Replace constructions massless materials with standard ones.
+          replace_massless_material_with_std_material(model,gfloor)
+          gfloor.setOutsideBoundaryCondition('Foundation')
+          gfloor.setAdjacentFoundation(zone_kiva_models.last)
+          # Set the exposed perimeter for space floors in contact with the ground.
+          floor_exp_per = 0.0
+          if !space_ground_walls.empty?
+            floor_exp_per += get_surface_exp_per(gfloor,space_ground_walls)
+          elsif !space_ext_walls.empty?
+            floor_exp_per += get_surface_exp_per(gfloor,space_ext_walls)
+          end
+          gfloor.createSurfacePropertyExposedFoundationPerimeter('TotalExposedPerimeter',floor_exp_per)
+          # specify a foundation boundary condition for space walls in contact with the ground and in
+          # contact with the space floor in contact with ground 'gfloor'
+          space_ground_walls.each do |gwall|
+            if surfaces_are_in_contact?(gfloor,gwall)
+              replace_massless_material_with_std_material(model,gwall)
+              gwall.setOutsideBoundaryCondition('Foundation')
+              gwall.setAdjacentFoundation(zone_kiva_models.last)
+            end
+          end
+        end
+      end
+    end
+    kiva_settings = model.getFoundationKivaSettings if !model.getFoundationKivas.empty?
+  end
+
+  # check if two surfaces are in contact. For every two consecutive vertices on surface 1, 
+  # loop through two consecutive vertices of surface two. Then check whether the vertices 
+  # of surfaces 2 are on the same line as the vertices from surface 1. If the two vectors 
+  # defined by the two vertices on surface 1 and those on surface 2 overlap, then the two 
+  # surfaces are in contact. If a side from surface 2 is in contact with a side from surface 1,
+  # the length of the side from surface 2 is limited to the length of the side from surface 1.
+  # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
+  def surfaces_are_in_contact?(surf1,surf2)
+    surfaces_in_contact = false
+    vert1 = surf1.vertices[0]
+    for index1 in 1..surf1.vertices.size
+      if index1 < surf1.vertices.size
+        vert2 = surf1.vertices[index1]
+      else
+        vert2 = surf1.vertices[0]
+      end
+      seg12_length = ((vert2.x-vert1.x)**2+(vert2.y-vert1.y)**2+(vert2.z-vert1.z)**2)**0.5
+      surf2_seg_length = 0.0
+      vert3 = surf2.vertices[0]
+      for index2 in 1..surf2.vertices.size
+        if index2 < surf2.vertices.size
+          vert4 = surf2.vertices[index2]
+        else
+          vert4 = surf2.vertices[0]
+        end
+        vert1_2_3_same_line_and_dir = three_vertices_same_line_and_dir?(vert1,vert2,vert3)
+        if vert1_2_3_same_line_and_dir
+          vert1_2_4_same_line_and_dir = three_vertices_same_line_and_dir?(vert1,vert2,vert4)
+          if vert1_2_4_same_line_and_dir
+            surfaces_in_contact = true
+            seg34_length = ((vert4.x-vert3.x)**2+(vert4.y-vert3.y)**2+(vert4.z-vert3.z)**2)**0.5
+            surf2_seg_length += seg34_length
+            raise("Surface #{surf2.name.to_s} has sides in contact with surface #{surf1.name.to_s} but with a length greater than the max.") if surf2_seg_length > seg12_length
+          end
+        end
+        vert3 = vert4
+      end
+      vert1 = vert2
+    end
+
+    return surfaces_in_contact
+  end
+
+  # Loop through the layers of the construction of the surface and replace any massless material with 
+  # a standard one. The material used instead is from the EnergyPlus dataset file 'ASHRAE_2005_HOF_Materials.idf' 
+  # with the name: 'Insulation: Expanded polystyrene - extruded (smooth skin surface) (HCFC-142b exp.)'. 
+  # The thickness of the new material is based on the thermal resistance of the massless material it replaces.
+  # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
+  def replace_massless_material_with_std_material(model,surf)
+    std_const_name = "#{surf.construction.get.name.to_s}_std"
+    std_const = model.getLayeredConstructions.select {|const| const.name.to_s == std_const_name}
+    new_const = nil
+    if !std_const.empty?
+      new_const = std_const[0]
+    else
+      new_layers = {}
+      has_massless_mat = false
+      layer_index = 0
+      surf.construction.get.to_LayeredConstruction.get.layers.each do |layer|
+        if layer.to_MasslessOpaqueMaterial.is_initialized then
+          has_massless_mat = true
+          new_mat = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+          new_mat.setName("Expanded Polystyrene")
+          new_mat.setThermalConductivity(0.029)
+          new_mat.setDensity(29.0)
+          new_mat.setSpecificHeat(1210.0)
+          new_mat.setRoughness('MediumSmooth')
+          new_mat.setThickness(layer.to_MasslessOpaqueMaterial.get.thermalResistance.to_f * new_mat.thermalConductivity.to_f)
+        else
+          new_mat = layer
+        end
+        new_layers[layer_index] = new_mat
+        layer_index += 1
+      end
+      if has_massless_mat
+        new_const = OpenStudio::Model::Construction.new(model)
+        new_layers.keys.sort.each {|layer_index| new_const.to_LayeredConstruction.get.insertLayer(layer_index,new_layers[layer_index])}
+        new_const.setName("#{surf.construction.get.name.to_s}_std")
+      end
+    end
+    surf.setConstruction(new_const) if !new_const.nil?
+
+  end
+
+  # Find the exposed perimeter of a floor surface. For each side of the floor loop through 
+  # the walls and find the walls that share sides with the floor. Then sum the lengths of 
+  # the sides of the walls that come in contact with sides of the floor.
+  # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
+  def get_surface_exp_per(floor,walls)
+    floor_exp_per = 0.0
+    vert1 = floor.vertices[0]
+    # loop through the indices of the floor surface
+    for index in 1..floor.vertices.size
+      if index < floor.vertices.size
+        vert2 = floor.vertices[index]
+      else
+        vert2 = floor.vertices[0]
+      end
+      side_length = ((vert2.x-vert1.x)**2+(vert2.y-vert1.y)**2+(vert2.z-vert1.z)**2)**0.5
+      walls_exp_per = 0.0
+      walls.each do |wall|
+        vert3 = wall.vertices[0]
+        # loop through the indices of the wall surface
+        for index2 in 1..wall.vertices.size-1
+          if index2 < wall.vertices.size
+            vert4 = wall.vertices[index2]
+          else
+            vert4 = wall.vertices[0]
+          end
+          vert1_2_3_on_same_line = three_vertices_same_line_and_dir?(vert1,vert2,vert3)
+          if vert1_2_3_on_same_line
+            vert1_2_4_on_same_line = three_vertices_same_line_and_dir?(vert1,vert2,vert4)
+            if vert1_2_4_on_same_line
+              wall_width = ((vert4.x-vert3.x)**2+(vert4.y-vert3.y)**2+(vert4.z-vert3.z)**2)**0.5
+              walls_exp_per += wall_width
+            end
+          end
+          vert3 = vert4
+        end
+      end
+      # increment the exposed perimeter of the floor. Limit the length of the walls in contact with the 
+      # side of the floor to the length of the side of the floor.
+      floor_exp_per += [walls_exp_per,side_length].min
+      vert1 = vert2
+    end
+
+    return floor_exp_per
+  end
+
+  # check that three vertices are on the same line. Also check that the vectors 
+  # from vert1 and vert2 and from vert1 and vert3 are in the same direction.
+  # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
+  def three_vertices_same_line_and_dir?(vert1,vert2,vert3)
+    tol = 1.0e-5
+    vec12x,vec12y,vec12z = -vert1.x+vert2.x,-vert1.y+vert2.y,-vert1.z+vert2.z # x,y,z of vector 12
+    vec12x = 0.0 if vec12x.abs < tol
+    vec12y = 0.0 if vec12y.abs < tol
+    vec12z = 0.0 if vec12z.abs < tol
+    vec13x,vec13y,vec13z = -vert1.x+vert3.x,-vert1.y+vert3.y,-vert1.z+vert3.z # x,y,z of vector 13
+    vec13x = 0.0 if vec13x.abs < tol
+    vec13y = 0.0 if vec13y.abs < tol
+    vec13z = 0.0 if vec13z.abs < tol
+    # x,y,z of the cross product of the vectors 12 and 13
+    cross_12_13_x = vec12y*vec13z-vec12z*vec13y
+    cross_12_13_y = vec12z*vec13x-vec12x*vec13z
+    cross_12_13_z = vec12x*vec13y-vec12y*vec13x
+    # vectors are in parallel when x,y,z of cross product are 0.0
+    vertices_on_same_line = false
+    vertices_on_same_line = true if (cross_12_13_x == 0.0) && (cross_12_13_y == 0.0) && (cross_12_13_z == 0.0)
+    vectors_same_direction = false
+    if vertices_on_same_line
+      vec12_13_x_factor = vec13x*vec12x
+      vec12_13_y_factor = vec13y*vec12y
+      vec12_13_z_factor = vec13z*vec12z
+      vectors_same_direction = true if (vec12_13_x_factor >= 0.0) && (vec12_13_y_factor >= 0.0) && (vec12_13_z_factor >= 0.0)
+    end
+    same_line_same_dir = vertices_on_same_line && vectors_same_direction
+
+    return same_line_same_dir
+  end
+  
   # Thermal zones need to be set to determine conditioned spaces when applying fdwr and srr limits.
   #     # fdwr_set/srr_set settings:
   #     # 0-1:  Remove all windows/skylights and add windows/skylights to match this fdwr/srr
@@ -623,19 +881,21 @@ class NECB2011 < Standard
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
-  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default')
+  # @param necb_ref_hp [Bool] if true, NECB reference model rules for heat pumps will be used.
+  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', necb_reference_hp: false)
     raise('validation of model failed.') unless validate_initial_model(model)
 
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
 
-    # This is needed for NECB2011 as a workaround for sizing the reheat boxes
+    # This is needed for NECB2011 as a workaround for sizing the reheat boxes.
     model.getAirTerminalSingleDuctVAVReheats.each { |iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj) }
     # Apply the prototype HVAC assumptions
     model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
     # Apply the HVAC efficiency standard
     sql_db_vars_map = {}
-    model_apply_hvac_efficiency_standard(model, climate_zone, sql_db_vars_map: sql_db_vars_map)
+    model_apply_hvac_efficiency_standard(model, climate_zone, sql_db_vars_map: sql_db_vars_map, necb_ref_hp: necb_reference_hp)
+
     model_enable_demand_controlled_ventilation(model, dcv_type)
     return sql_db_vars_map
   end
@@ -675,8 +935,12 @@ class NECB2011 < Standard
 
     # Set HVAC availability schedule to follow occupancy
     air_loop_hvac.setAvailabilitySchedule(loop_occ_sch)
-    air_loop_hvac.supplyComponents('OS:AirLoopHVAC:UnitaryHeatPump:AirToAir:MultiSpeed'.to_IddObjectType).each do |comp|
-      comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.setAvailabilitySchedule(loop_occ_sch)
+    air_loop_hvac.supplyComponents.each do |comp|
+      if comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
+        comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.setSupplyAirFanOperatingModeSchedule(loop_occ_sch)
+      elsif comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
+        comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.setAvailabilitySchedule(loop_occ_sch)
+      end
     end
 
     return true

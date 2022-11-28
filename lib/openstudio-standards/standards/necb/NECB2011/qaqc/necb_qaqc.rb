@@ -201,6 +201,7 @@ class NECB2011
     outdoor_subsurfaces = BTAP::Geometry::Surfaces.get_subsurfaces_from_surfaces(outdoor_surfaces)
 
     ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, 'Ground')
+    ground_surfaces += BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, 'Foundation')
     ground_walls = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'Wall')
     ground_roofs = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'RoofCeiling')
     ground_floors = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'Floor')
@@ -215,8 +216,8 @@ class NECB2011
                                                                        " AND ReportForString='Entire Facility' AND TableName='Annual and Peak Values - Electricity' AND RowName='Electricity:Facility'" \
                                                                        " AND ColumnName='Electricity Maximum Value' AND Units='W'")
     natural_gas_peak = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM tabulardatawithstrings WHERE ReportName='EnergyMeters'" \
-                                                                          " AND ReportForString='Entire Facility' AND TableName='Annual and Peak Values - Gas' AND RowName='Gas:Facility'" \
-                                                                          " AND ColumnName='Gas Maximum Value' AND Units='W'")
+                                                                          " AND ReportForString='Entire Facility' AND TableName='Annual and Peak Values - Natural Gas' AND RowName='NaturalGas:Facility'" \
+                                                                          " AND ColumnName='Natural Gas Maximum Value' AND Units='W'")
 
     get_sql_tables_to_json(model)
 
@@ -627,7 +628,7 @@ class NECB2011
           end
         end
 
-        spaceinfo[:occ_per_m2] = space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.get.round(3) unless space.spaceType.get.people[0].nil? or space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.empty?
+        spaceinfo[:occ_per_m2] = space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.get.round(3) unless space.spaceType.get.people[0].nil? || space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.empty?
         if space.spaceType.get.lights[0].nil?
           error_warning << "space.spaceType.get.lights[0] is nil for Space:[#{space.name.get}] Space Type:[#{spaceinfo[:space_type_name]}]"
         else

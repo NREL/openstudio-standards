@@ -84,8 +84,9 @@ module CoilDX
   #
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
   # @return [String] the heating type
-  def coil_dx_heating_type(coil_dx)
+  def coil_dx_heating_type(coil_dx, necb_ref_hp = false)
     htg_type = nil
 
     # If Unitary or Zone HVAC
@@ -159,8 +160,9 @@ module CoilDX
   #
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
   # @return [hash] has for search criteria to be used for find object
-  def coil_dx_find_search_criteria(coil_dx)
+  def coil_dx_find_search_criteria(coil_dx, necb_ref_hp = false)
     search_criteria = {}
     search_criteria['template'] = template
 
@@ -179,7 +181,7 @@ module CoilDX
     search_criteria['subcategory'] = coil_dx_subcategory(coil_dx)
 
     # Add the heating type to the search criteria
-    htg_type = coil_dx_heating_type(coil_dx)
+    htg_type = coil_dx_heating_type(coil_dx, necb_ref_hp)
     unless htg_type.nil?
       search_criteria['heating_type'] = htg_type
     end

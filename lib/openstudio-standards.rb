@@ -55,6 +55,7 @@ module OpenstudioStandards
   # NECB2020 Code
   require_relative "#{stds}/necb/NECB2020/necb_2020"
   require_relative "#{stds}/necb/NECB2020/building_envelope"
+  require_relative "#{stds}/necb/NECB2020/service_water_heating"
 
   # BTAPPRE1980
   require_relative "#{stds}/necb/BTAPPRE1980/btap_pre1980"
@@ -443,7 +444,9 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.hvac_systems"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Pump"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.PumpVariableSpeed"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Space"
   # DOE Ref 1980-2004
   require_relative "#{proto}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.AirTerminalSingleDuctVAVReheat"
   require_relative "#{proto}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.Model.elevators"

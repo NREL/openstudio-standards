@@ -281,7 +281,7 @@ class OpenStudio::Model::Model
 
     result = OpenStudio::OptionalDouble.new
 
-    name = object.name.get.upcase
+    name = object.name.get.upcase.strip
 
     object_type = object.iddObject.type.valueDescription.gsub('OS:','')
 
