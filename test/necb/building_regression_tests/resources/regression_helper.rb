@@ -84,6 +84,55 @@ class NECBRegressionHelper < Minitest::Test
     return self
   end
 
+  def create_iterative_model_and_regression_test(building_type: @building_type,
+                                                epw_file: @epw_file,
+                                                template: @template,
+                                                test_dir: @test_dir,
+                                                expected_results_folder: @expected_results_folder,
+                                                run_simulation: @run_simulation,
+                                                primary_heating_fuel: @primary_heating_fuel,
+                                                reference_hp: @reference_hp,
+                                                iteration: int)
+    #set paths
+    unless reference_hp
+      @model_name = "#{building_type}-#{template}-#{primary_heating_fuel}-#{File.basename(epw_file, '.epw')}-iteration#{iteration}"
+    else
+      @model_name = "#{building_type}-#{template}-RefHP-#{primary_heating_fuel}-#{File.basename(epw_file, '.epw')}-iteration#{iteration}"
+    end
+    @run_dir = "#{test_dir}/#{@model_name}"
+    #create folders
+    if !Dir.exists?(test_dir)
+      Dir.mkdir(test_dir)
+    end
+    if !Dir.exists?(@run_dir)
+      Dir.mkdir(@run_dir)
+    end
+    puts "========================model_name =================== #{@model_name}"
+    puts "reference_hp #{reference_hp}"
+    # Load model from library, instead of prototype
+    @model = Standard.build("#{template}").load_building_type_from_library(building_type: building_type)
+
+    # Apply spacetype measure, based on iteration argument
+    apply_spacetype_iteration_to_model(model: @model, iteration: iteration)
+    # Apply necb standard
+    @model = Standard.build("#{template}").model_apply_standard(model: @model,
+                        epw_file: epw_file,
+                        sizing_run_dir: @run_dir,
+                        primary_heating_fuel: primary_heating_fuel,
+                        necb_reference_hp: reference_hp)
+
+    unless @model.instance_of?(OpenStudio::Model::Model)
+      puts "Creation of Model for #{@model_name} failed. Please check output for errors."
+    end
+
+    result, diff = self.osm_regression(expected_results_folder: @expected_results_folder)
+    if run_simulation
+      self.run_simulation()
+      #self.qaqc_regression()
+    end
+    return result, diff
+
+  end
 
   def osm_regression(expected_results_folder: @expected_results_folder)
     begin
@@ -127,6 +176,65 @@ class NECBRegressionHelper < Minitest::Test
     else
       return true, []
     end
+  end
+
+  # This method applies 20 space types to 20 spaces of a model. Space types are determined
+  # from the iteration argument, and a test_sets file.
+  def apply_spacetype_iteration_to_model(model: @model, iteration: int)
+    # Remove space types in model
+    model.getSpaceTypes.each do |space_type|
+      space_type.remove
+    end
+
+    # Get NECB space_types information
+    spacetype_names_file = "/home/osdev/OpenStudio/Measures/necb_spacetypes_test_measure/resources/spacetype_names_only.json"
+
+    spacetype_names_data = File.read(spacetype_names_file)
+    spacetype_names_hash = JSON.parse(spacetype_names_data)
+    spacetype_names_arr = spacetype_names_hash["Space Function"]
+
+    # Add NECB space types to model from information pulled from above.
+    building_type = "Space Function"
+    standards_template = "NECB2011"
+
+    spacetype_names_arr.each do |space_type_name|
+      new_space_type = OpenStudio::Model::SpaceType.new(model)
+      new_space_type.setName("#{building_type} #{space_type_name}")
+      new_space_type.setStandardsBuildingType("#{building_type}")
+      new_space_type.setStandardsSpaceType("#{space_type_name}")
+      new_space_type.setStandardsTemplate("#{standards_template}")
+    end
+
+    # Fetch test sets information from json file
+    test_set_file = "/home/osdev/OpenStudio/Measures/necb_spacetypes_test_measure/resources/test_sets.json"
+    test_set_data = File.read(test_set_file)
+    test_set_hash = JSON.parse(test_set_data)
+
+    # Create test set matrix from hash created by json.parse
+    test_sets = []
+    test_set_hash.each do |key, val|
+      test_sets.push(val)
+    end
+
+    # Iterate through spaces, and assign them correct space type
+    spacetype_index = 0
+    model.getSpaces.each do |space|
+      # Get spacetype name as it would be in OS from test_set data.
+      st_name_temp = "Space Function " + test_sets[iteration][spacetype_index]
+
+      # Find spacetype in model from test set
+      model.getSpaceTypes.each do |space_type|
+        if space_type.name.get == st_name_temp
+          # Apply spacetype to space
+          space.setSpaceType(space_type)
+        end
+      end
+      spacetype_index += 1
+    end
+
+    return true
+
+    
   end
 
   def run_simulation(expected_results_folder: @expected_results_folder)
