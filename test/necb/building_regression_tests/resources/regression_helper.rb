@@ -180,14 +180,16 @@ class NECBRegressionHelper < Minitest::Test
 
   # This method applies 20 space types to 20 spaces of a model. Space types are determined
   # from the iteration argument, and a test_sets file.
-  def apply_spacetype_iteration_to_model(model: @model, iteration: int)
+  def apply_spacetype_iteration_to_model(model: @model, iteration: int, template: @template)
     # Remove space types in model
     model.getSpaceTypes.each do |space_type|
       space_type.remove
     end
 
     # Get NECB space_types information
-    spacetype_names_file = "/home/osdev/OpenStudio/Measures/necb_spacetypes_test_measure/resources/spacetype_names_only.json"
+
+
+    spacetype_names_file = "test/necb/building_regression_tests/resources/space_types_data/NECB2011-space-type-names.json"
 
     spacetype_names_data = File.read(spacetype_names_file)
     spacetype_names_hash = JSON.parse(spacetype_names_data)
@@ -206,7 +208,7 @@ class NECBRegressionHelper < Minitest::Test
     end
 
     # Fetch test sets information from json file
-    test_set_file = "/home/osdev/OpenStudio/Measures/necb_spacetypes_test_measure/resources/test_sets.json"
+    test_set_file = "test/necb/building_regression_tests/resources/space_types_data/NECB2011-test-set-buffer-size-6.json"
     test_set_data = File.read(test_set_file)
     test_set_hash = JSON.parse(test_set_data)
 
