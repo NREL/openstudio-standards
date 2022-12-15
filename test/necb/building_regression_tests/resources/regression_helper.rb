@@ -93,6 +93,15 @@ class NECBRegressionHelper < Minitest::Test
                                                 primary_heating_fuel: @primary_heating_fuel,
                                                 reference_hp: @reference_hp,
                                                 iteration: int)
+    # Update global variables ()
+    @epw_file = epw_file
+    @template = template
+    @building_type = building_type
+    @test_dir = test_dir
+    @expected_results_folder = expected_results_folder
+    @primary_heating_fuel = primary_heating_fuel
+    @reference_hp = reference_hp
+
     #set paths
     unless reference_hp
       @model_name = "#{building_type}-#{template}-#{primary_heating_fuel}-#{File.basename(epw_file, '.epw')}-iteration#{iteration}"
@@ -186,19 +195,22 @@ class NECBRegressionHelper < Minitest::Test
       space_type.remove
     end
 
-    # Get NECB space_types information
+    # Get NECB space_types names
+    spacetypes_paths = {
+      "NECB2011"=> "test/necb/building_regression_tests/resources/space_types_data/NECB2011-space-type-names.json",
+      "NECB2015"=> "test/necb/building_regression_tests/resources/space_types_data/NECB2015-space-type-names.json",
+      "NECB2017"=> "test/necb/building_regression_tests/resources/space_types_data/NECB2017-space-type-names.json",
+      "NECB2020"=> "test/necb/building_regression_tests/resources/space_types_data/NECB2020-space-type-names.json"
+    }
 
-
-    spacetype_names_file = "test/necb/building_regression_tests/resources/space_types_data/NECB2011-space-type-names.json"
-
-    spacetype_names_data = File.read(spacetype_names_file)
+    spacetype_names_data = File.read(spacetypes_paths[template])
     spacetype_names_hash = JSON.parse(spacetype_names_data)
     spacetype_names_arr = spacetype_names_hash["Space Function"]
+    spacetype_names_arr = spacetype_names_arr.sort
 
-    # Add NECB space types to model from information pulled from above.
+    # Add NECB space types to model
     building_type = "Space Function"
-    standards_template = "NECB2011"
-
+    standards_template = template
     spacetype_names_arr.each do |space_type_name|
       new_space_type = OpenStudio::Model::SpaceType.new(model)
       new_space_type.setName("#{building_type} #{space_type_name}")
@@ -208,22 +220,31 @@ class NECBRegressionHelper < Minitest::Test
     end
 
     # Fetch test sets information from json file
-    test_set_file = "test/necb/building_regression_tests/resources/space_types_data/NECB2011-test-set-buffer-size-6.json"
-    test_set_data = File.read(test_set_file)
+
+    test_set_paths = {
+      "NECB2011"=> "test/necb/building_regression_tests/resources/space_types_data/NECB2011-test-set-buffer-size-6.json",
+      "NECB2015"=> "test/necb/building_regression_tests/resources/space_types_data/NECB2015-test-set-buffer-size-6.json",
+      "NECB2017"=> "test/necb/building_regression_tests/resources/space_types_data/NECB2017-test-set-buffer-size-6.json",
+      "NECB2020"=> "test/necb/building_regression_tests/resources/space_types_data/NECB2020-test-set-buffer-size-6.json"
+    }
+    test_set_data = File.read(test_set_paths[template])
+
+    # test_set_file = "test/necb/building_regression_tests/resources/space_types_data/NECB2011-test-set-buffer-size-6.json"
+    # test_set_data = File.read(test_set_file)
     test_set_hash = JSON.parse(test_set_data)
 
-    # Create test set matrix from hash created by json.parse
+    # Create test set matrix from hash created by json.parse, then sort for consistency.
     test_sets = []
     test_set_hash.each do |key, val|
-      test_sets.push(val)
+      test_sets.push(val.sort)
     end
 
-    # Iterate through spaces, and assign them correct space type
+
+    # Iterate through spaces, and assign them correct space type. Note that spaces are sorted for consistency.
     spacetype_index = 0
-    model.getSpaces.each do |space|
+    model.getSpaces.sort.each do |space|
       # Get spacetype name as it would be in OS from test_set data.
       st_name_temp = "Space Function " + test_sets[iteration][spacetype_index]
-
       # Find spacetype in model from test set
       model.getSpaceTypes.each do |space_type|
         if space_type.name.get == st_name_temp
@@ -233,10 +254,7 @@ class NECBRegressionHelper < Minitest::Test
       end
       spacetype_index += 1
     end
-
     return true
-
-    
   end
 
   def run_simulation(expected_results_folder: @expected_results_folder)

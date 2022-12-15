@@ -68,6 +68,9 @@ def parse_and_output_spacetype_names(template, name_file_output = True):
 def generate_spacetypes_test_sets(n_spaces: int, buffer_size: int, n_iterations = None, template: str = 'NECB2011',
                                   name_file_output: bool = True):
     """
+    This algorithm generates test set files for a given NECB release. Since nothing in this algorithm is hardcoded,
+    it is possible to use this code to generate test files for a model with any amount of spaces.
+    For more
 
     :param n_spaces: Number of space types per iteration (number of spaces in target model).
     :param buffer_size: Size of the scrolling window size.
@@ -106,7 +109,7 @@ def generate_spacetypes_test_sets(n_spaces: int, buffer_size: int, n_iterations 
                 shuffled_list = shuffle_list(spacefunction_names_list)
                 continue
 
-            # Algorithm won't add a space type to current test set, if there is an equivalent one.
+            # I won't add a space type to current test set, if there is an equivalent one.
             # An equivalent pair  means same space type, different schedule
             # Any spaces not added due to this rule are added to temp_list, and are prioritised to be added
             # in any following iterations.
@@ -145,15 +148,10 @@ def dict_to_json(input_dict, output_path):
         json.dump(input_dict, output, indent=4)
 
 if __name__ == '__main__':
-    output_path = ''
+    no_of_spaces = 20
     buffer_size = 6
-    templates = [
-        'NECB2011',
-        'NECB2015',
-        'NECB2017',
-        'NECB2020'
-    ]
-    for template in templates:
-        test_sets = generate_spacetypes_test_sets(20, buffer_size=buffer_size, template=template)
-        dict_to_json(test_sets, f'./space_types_data/{template}-test-set-buffer-size-{buffer_size}.json')
+    template = "NECB2020"
+
+    test_sets = generate_spacetypes_test_sets(no_of_spaces, buffer_size=buffer_size, template=template)
+    dict_to_json(test_sets, f'./space_types_data/{template}-test-set-buffer-size-{buffer_size}.json')
 
