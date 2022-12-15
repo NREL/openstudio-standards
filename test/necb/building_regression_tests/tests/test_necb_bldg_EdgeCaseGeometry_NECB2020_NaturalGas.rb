@@ -3,21 +3,33 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 require_relative '../../../helpers/compare_models_helper'
 require_relative '../resources/regression_helper'
 
-class Test_EdgeCaseGeometry_NECB2020 < NECBRegressionHelper
-  iterations = []
+class Test_EdgeCaseGeometry_NECB2020_NaturalGas < NECBRegressionHelper
+
   def setup
-    # Do nothing
-    # Setup JSON
     super()
   end
 
-  (0..15).each do |iteration|
-    define_method("test_#{iteration}_lsaav") do
+  # Use this code to test a single iteration
+  test_single_iteration = false
+  single_iteration = nil
+
+  primary_heating_fuel = "NaturalGas"
+  template = "NECB2020"
+
+  ## There are 21 [0 to 20] iterations in the NECB2017 test set
+  (0..21).each do |iteration|
+    if test_single_iteration
+      unless iteration == single_iteration
+        next
+      end
+    end
+
+    define_method("test_#{template}_EdgeCaseGeometry_regression_#{primary_heating_fuel}_iteration#{iteration}") do
       # begin
       result, diff = create_iterative_model_and_regression_test(building_type: 'EdgeCaseGeometry',
-                                                                primary_heating_fuel: 'Electricity',
+                                                                primary_heating_fuel: primary_heating_fuel,
                                                                 epw_file:  'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw',
-                                                                template: 'NECB2011',
+                                                                template: template,
                                                                 run_simulation: true,
                                                                 iteration: iteration
       )
@@ -31,12 +43,7 @@ class Test_EdgeCaseGeometry_NECB2020 < NECBRegressionHelper
         puts diff["diffs-errors"] if result == false
       end
       assert(result, diff)
-      # rescue => exception
-      #   puts("There was an exception with iteration #{iteration}")
-      #   puts(exception)
-      # end
     end
   end
 
 end
-

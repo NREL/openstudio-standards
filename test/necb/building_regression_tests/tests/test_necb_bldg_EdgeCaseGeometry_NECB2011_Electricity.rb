@@ -9,24 +9,27 @@ class Test_EdgeCaseGeometry_NECB2011_Electricity < NECBRegressionHelper
     super()
   end
 
+  # Use this code to test a single iteration
   test_single_iteration = false
-  single_iteration = NIL
+  single_iteration = nil
+
+  primary_heating_fuel = "Electricity"
+  template = "NECB2011"
 
   ## There are 15 [0 to 14] iterations in the NECB2011 test set
-
-  (3..5).each do |iteration|
+  (0..14).each do |iteration|
     if test_single_iteration
       unless iteration == single_iteration
         next
       end
     end
 
-    define_method("test_#{iteration}_lsaav") do
+    define_method("test_#{template}_EdgeCaseGeometry_regression_#{primary_heating_fuel}_iteration#{iteration}") do
       # begin
       result, diff = create_iterative_model_and_regression_test(building_type: 'EdgeCaseGeometry',
-                                                                primary_heating_fuel: 'Electricity',
+                                                                primary_heating_fuel: primary_heating_fuel,
                                                                 epw_file:  'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw',
-                                                                template: 'NECB2011',
+                                                                template: template,
                                                                 run_simulation: true,
                                                                 iteration: iteration
       )

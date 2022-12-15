@@ -41,3 +41,13 @@ For every iteration, the program will try to pop items from the shuffled list an
 In every iteration but the first one, the first X items from the previous iteration's items list are kept. This X value is refered to the buffer sized, and can be visualised as a sliding window. This design choice is intended to help isolate problematic space types if there is a test failure.
 
 The loop ends when every space type appears in at least one iteration, and the test set output is generated. 
+
+# Additional notes
+
+Currently the EdgeCaseGeometry regression test files produce inconsistent test results. This is problematic, as they output test failures. The issue is likely linked to the test file itself, as it uniquely uses dynamic methods, which is not used anywhere else. Therefore, it's probably the cause of the error.
+
+Trying a different approach should work, as every other aspect of the test has been tested independently, and seems to be working fine. The test set generation files, as well as the helper methods described in the sections above are working without issues.
+
+TODO: Try creating a set of test files, similarly to the current regression test files for the archetype buildings. This will probably solve the error, as the existing tests produce consistent results. If possible, add a logging system if there is an error with a test.
+
+Another unrelated TODO: If time allows it, try making it so the python generation files are generated in a different folder than the current test-set files. This would make it so the python code doesn't overwrite any current files, although they should remain identical anyways. Maybe make it so the python code creates a temporary directory in that would be in .gitignore, and that the test-set and names files should be only added manually to the repository?

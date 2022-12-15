@@ -102,6 +102,7 @@ class NECBRegressionHelper < Minitest::Test
     @primary_heating_fuel = primary_heating_fuel
     @reference_hp = reference_hp
 
+    # This part borrowed code from create_model()
     #set paths
     unless reference_hp
       @model_name = "#{building_type}-#{template}-#{primary_heating_fuel}-#{File.basename(epw_file, '.epw')}-iteration#{iteration}"
@@ -130,6 +131,7 @@ class NECBRegressionHelper < Minitest::Test
                         primary_heating_fuel: primary_heating_fuel,
                         necb_reference_hp: reference_hp)
 
+    # This part borrowed code from create_model_and_regression_test()
     unless @model.instance_of?(OpenStudio::Model::Model)
       puts "Creation of Model for #{@model_name} failed. Please check output for errors."
     end
@@ -220,7 +222,6 @@ class NECBRegressionHelper < Minitest::Test
     end
 
     # Fetch test sets information from json file
-
     test_set_paths = {
       "NECB2011"=> "test/necb/building_regression_tests/resources/space_types_data/NECB2011-test-set-buffer-size-6.json",
       "NECB2015"=> "test/necb/building_regression_tests/resources/space_types_data/NECB2015-test-set-buffer-size-6.json",
@@ -228,23 +229,15 @@ class NECBRegressionHelper < Minitest::Test
       "NECB2020"=> "test/necb/building_regression_tests/resources/space_types_data/NECB2020-test-set-buffer-size-6.json"
     }
     test_set_data = File.read(test_set_paths[template])
-
-    # test_set_file = "test/necb/building_regression_tests/resources/space_types_data/NECB2011-test-set-buffer-size-6.json"
-    # test_set_data = File.read(test_set_file)
     test_set_hash = JSON.parse(test_set_data)
 
-    # Create test set matrix from hash created by json.parse, then sort for consistency.
-    test_sets = []
-    test_set_hash.each do |key, val|
-      test_sets.push(val.sort)
-    end
-
+    test_set = test_set_hash["#{iteration}"]
 
     # Iterate through spaces, and assign them correct space type. Note that spaces are sorted for consistency.
     spacetype_index = 0
     model.getSpaces.sort.each do |space|
       # Get spacetype name as it would be in OS from test_set data.
-      st_name_temp = "Space Function " + test_sets[iteration][spacetype_index]
+      st_name_temp = "Space Function " + test_set[spacetype_index]
       # Find spacetype in model from test set
       model.getSpaceTypes.each do |space_type|
         if space_type.name.get == st_name_temp
