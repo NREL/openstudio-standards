@@ -1,7 +1,0 @@
-building function
-    name1
-    name2
-other
-    othername1
-other2
-    othername2
