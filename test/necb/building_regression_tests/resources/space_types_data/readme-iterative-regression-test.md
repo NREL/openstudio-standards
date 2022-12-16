@@ -2,7 +2,7 @@
 
 The iterative regression tests are a solution to reduce the current amount of regression tests for necb in openstudio standards.
 
-Instead of testing the different building archetypes, there is one universal building geometry that contains various scenarios, including edge cases. This geometry can be found in "lib/openstudio-standards/standards/necb/NECB2011/data/geometry/EdgeCaseGeometry.osm". 
+Instead of testing the different building archetypes, there is one universal building geometry that contains various scenarios, including edge cases. This geometry can be found in "lib/openstudio-standards/standards/necb/NECB2011/data/geometry/EdgeCaseGeometry.osm".
 
 To test different space types, the new regression test is an iterative test that dynamically creates multiple sub sets. Each of these subsets uses the same geometry but a different set of space types in it's spaces. These space type sets are consistent, and created once per
 
@@ -40,14 +40,16 @@ For every iteration, the program will try to pop items from the shuffled list an
 
 In every iteration but the first one, the first X items from the previous iteration's items list are kept. This X value is refered to the buffer sized, and can be visualised as a sliding window. This design choice is intended to help isolate problematic space types if there is a test failure.
 
-The loop ends when every space type appears in at least one iteration, and the test set output is generated. 
+The loop ends when every space type appears in at least one iteration, and the test set output is generated.
 
 # Additional notes
 
-Currently the EdgeCaseGeometry regression test files produce inconsistent test results. This is problematic, as they output test failures. The issue is likely linked to the test file itself, as it uniquely uses dynamic methods, which is not used anywhere else. Therefore, it's probably the cause of the error.
+Currently the EdgeCaseGeometry regression test files produce inconsistent test results. The issue is likely linked to the dynamic methods in the test files, which look like define_method files.
 
-Trying a different approach should work, as every other aspect of the test has been tested independently, and seems to be working fine. The test set generation files, as well as the helper methods described in the sections above are working without issues.
+TODO: A current fix is to use automatically generated files. These can be found under test\necb\building_regression_tests\iterative_tests. **They need to be tested**. If there are syntax errors, take a look at test\necb\building_regression_tests\resources\generate_tests.py, and correct the errors there, then the files again.
 
-TODO: Try creating a set of test files, similarly to the current regression test files for the archetype buildings. This will probably solve the error, as the existing tests produce consistent results. If possible, add a logging system if there is an error with a test.
+To execute the python script, use the command
+$ python generate_tests.py
 
-Another unrelated TODO: If time allows it, try making it so the python generation files are generated in a different folder than the current test-set files. This would make it so the python code doesn't overwrite any current files, although they should remain identical anyways. Maybe make it so the python code creates a temporary directory in that would be in .gitignore, and that the test-set and names files should be only added manually to the repository?
+
+TODO: Another potential fix for this is to add the setup() method in every dynamically created method. This is shown in the file test\necb\building_regression_tests\tests\test_necb_bldg_EdgeCaseGeometry_NECB2011_Electricity_potential_fix.rb. This fix has not been tested, so please try it.
