@@ -49,7 +49,9 @@ The loop ends when every space type appears in at least one iteration, and the t
 
 Currently the eight EdgeCaseGeometry regression test files found under test\necb\building_regression_tests\tests produce inconsistent test results. The issue is likely linked to the dynamic methods in the test files (part that uses define_method).
 
-TODO: A current fix is to use automatically generated files. These can be found under test\necb\building_regression_tests\iterative_tests. **However, these files need to be tested**. If there are syntax errors, take a look at test\necb\building_regression_tests\resources\generate_tests.py, and correct the errors there, then the files again. This file could also be re-used to create tests for future necb releases.
+Below are two methods that could solve this problem, but both need to be tested. 
+
+First method: Using automatically generated files. These can be found under test\necb\building_regression_tests\iterative_tests. **These files need to be tested**. If there are syntax errors, take a look at test\necb\building_regression_tests\resources\generate_tests.py, and correct any syntax errors there, as this is the python script that generated the test files. Then, generate the test files again by running the script. This file could also be re-used to create tests for future necb releases.
 
 To execute the python script and generate the test files, use the command
 $ python generate_tests.py
