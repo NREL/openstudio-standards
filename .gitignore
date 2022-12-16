@@ -41,3 +41,4 @@ coverage/
 /data/standards/openstudio_standards_duplicates_log.csv
 /data/standards/export
 /data/geometry/../*.osw
+/test/necb/building_regression_tests/resources/generated-iterative-regression-tests
