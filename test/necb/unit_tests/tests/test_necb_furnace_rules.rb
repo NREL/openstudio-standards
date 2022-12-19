@@ -1,5 +1,5 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/necb_helper'
 
 class NECB_HVAC_Furnace_Tests < MiniTest::Test
   # set to true to run the standards in the test.
@@ -173,14 +173,17 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
           furnace_res_file_output_text += output_line_text
         end
 
-        # Write actual results file
-        test_result_file = File.join( @test_results_folder, "#{template.downcase}_compliance_furnace_efficiencies_test_results.csv")
-        File.open(test_result_file, 'w') {|f| f.write(furnace_res_file_output_text)}
+
+       # Write test results file.
+        test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_furnace_efficiencies_test_results.csv")
+        File.open(test_result_file, 'w') { |f| f.write(furnace_res_file_output_text) }
+
         # Test that the values are correct by doing a file compare.
-        expected_result_file = File.join( @expected_results_folder, "#{template.downcase}_compliance_furnace_efficiencies_expected_results.csv")
-        b_result = FileUtils.compare_file(expected_result_file, test_result_file)
-        assert(b_result,
-             "test_furnace_efficiency: Furnace efficiencies test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+        expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_furnace_efficiencies_expected_results.csv")
+
+        # Check if test results match expected.
+        msg = "Furnace efficiencies test results do not match what is expected in test"
+        file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
       end
     end
   end
@@ -242,14 +245,16 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
       furnace_res_file_output_text += "Furnace-EFFFPLR-NECB2011,cubic,#{furnace_curve.coefficient1Constant},#{furnace_curve.coefficient2x},#{furnace_curve.coefficient3xPOW2}," +
         "#{furnace_curve.coefficient4xPOW3},#{furnace_curve.minimumValueofx},#{furnace_curve.maximumValueofx}"
 
-      # Write actual results file
-      test_result_file = File.join( @test_results_folder, "#{template.downcase}_compliance_furnace_#{stage_type}_plfvsplr_curve_test_results.csv")
-      File.open(test_result_file, 'w') {|f| f.write(furnace_res_file_output_text)}
+      # Write test results file.
+      test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_furnace_#{stage_type}_plfvsplr_curve_test_results.csv")
+      File.open(test_result_file, 'w') { |f| f.write(furnace_res_file_output_text) }
+
       # Test that the values are correct by doing a file compare.
-      expected_result_file = File.join( @expected_results_folder, "#{template.downcase}_compliance_furnace_plfvsplr_curve_expected_results.csv")
-      b_result = FileUtils.compare_file(expected_result_file, test_result_file)
-      assert(b_result,
-           "test_furnace_plf_vs_plr_curve: Furnace plf vs plr curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+      expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_furnace_plfvsplr_curve_expected_results.csv")
+
+      # Check if test results match expected.
+      msg = "Furnace plf vs plr curve coeffs test results do not match what is expected in test"
+      file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
     end
   end
 

@@ -1,4 +1,5 @@
 require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/necb_helper'
 
 
 # This class will perform tests that are HDD driven, A Test model will be created
@@ -240,19 +241,17 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
       end #Weather file loop.
     end # Template vintage loop
 
-    #Write test report file.
+    # Write test report and osm files.
     test_result_file = File.join(@test_results_folder, 'compliance_envelope_test_results.json')
     File.open(test_result_file, 'w') { |f| f.write(JSON.pretty_generate(@json_test_output)) }
-
-
-    #Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(@expected_results_folder, 'compliance_envelope_expected_results.json')
-    b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     BTAP::FileIO::save_osm(@model, File.join(output_folder, 'envelope_test.osm'))
-    assert(b_result,
-           "Envelope test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
-    )
 
+    # Test that the values are correct by doing a file compare.
+    expected_result_file = File.join(@expected_results_folder, 'compliance_envelope_expected_results.json')
+
+    # Check if test results match expected.
+    msg = "Envelope test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end # test_envelope()
 
 end #Class NECBHDDTests

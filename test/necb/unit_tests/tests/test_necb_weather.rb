@@ -1,5 +1,5 @@
 require_relative '../../../helpers/minitest_helper'
-
+require_relative '../../../helpers/necb_helper'
 
 #This test verifies that we can read in the weatherfile data from all the
 # epw/stat files.
@@ -30,11 +30,9 @@ class NECB_Weather_Tests < Minitest::Test
         weather_file_folder,
         test_results
     )
-
-    test = FileUtils.compare_file(expected_results, test_results)
-
-    assert( test ,
-            "Weather output from test does not match what is expected. Compare #{File.join(File.dirname(__FILE__),'data','weather_expected_results.json')} with #{File.join(File.dirname(__FILE__),'data','weather_test_results.json')}"
-    )
+ 
+    # Check if test results match expected.
+    msg = "Weather output does not match what is expected in test"
+    file_compare(expected_results_file: expected_results, test_results_file: test_results, msg: msg)
   end
 end

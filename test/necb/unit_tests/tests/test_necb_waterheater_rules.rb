@@ -1,5 +1,5 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/necb_helper'
 
 
 class NECB_SHW_Additional_Tests < MiniTest::Test
@@ -88,9 +88,10 @@ class NECB_SHW_Additional_Tests < MiniTest::Test
     File.open(test_result_file, 'w') { |f| f.write(shw_res_file_output_text.chomp) }
     # Test that the values are correct by doing a file compare.
     expected_result_file = File.join(@expected_results_folder, 'compliance_shw_curves_expected_results.csv')
-    b_result = FileUtils.compare_file(expected_result_file, test_result_file)
-    assert(b_result,
-    "SHW performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+
+    # Check if test results match expected.
+    msg = "SHW performance curve coeffs test results do not match expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
 
   # Test to validate efficiency and standby losses of electric shw heater

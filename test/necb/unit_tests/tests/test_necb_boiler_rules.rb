@@ -1,5 +1,5 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/necb_helper'
 
 class NECB_HVAC_Boiler_Tests < MiniTest::Test
   # set to true to run the standards in the test.
@@ -143,14 +143,16 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
         boiler_res_file_output_text += output_line_text
       end
 
-      # Write actual results file
+      # Write test results file.
       test_result_file = File.join( @test_results_folder, "#{template.downcase}_compliance_boiler_efficiencies_test_results.csv")
       File.open(test_result_file, 'w') {|f| f.write(boiler_res_file_output_text)}
+
       # Test that the values are correct by doing a file compare.
       expected_result_file = File.join( @expected_results_folder, "#{template.downcase}_compliance_boiler_efficiencies_expected_results.csv")
-      b_result = FileUtils.compare_file(expected_result_file, test_result_file)
-      assert(b_result,
-             "test_boiler_efficiency: Boiler efficiencies test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+
+      # Check if test results match expected.
+      msg = "Boiler efficiencies test results do not match what is expected in test"
+      file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
     end
   end
 
@@ -293,14 +295,16 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
     boiler_res_file_output_text += "BOILER-EFFFPLR-NECB2011,cubic,#{boiler_curve.coefficient1Constant},#{boiler_curve.coefficient2x},#{boiler_curve.coefficient3xPOW2}," +
         "#{boiler_curve.coefficient4xPOW3},#{boiler_curve.minimumValueofx},#{boiler_curve.maximumValueofx}"
 
-    # Write actual results file
+    # Write test results file.
     test_result_file = File.join( @test_results_folder, "#{template.downcase}_compliance_boiler_plfvsplr_curve_test_results.csv")
     File.open(test_result_file, 'w') {|f| f.write(boiler_res_file_output_text)}
+
     # Test that the values are correct by doing a file compare.
     expected_result_file = File.join( @expected_results_folder, "#{template.downcase}_compliance_boiler_plfvsplr_curve_expected_results.csv")
-    b_result = FileUtils.compare_file(expected_result_file, test_result_file)
-    assert(b_result,
-           "test_boiler_plf_vs_plr_curve: Boiler plf vs plr curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+
+    # Check if test results match expected.
+    msg = "Boiler plf vs plr curve coeffs test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
 
   # Test to validate the custom boiler thermal efficiencies applied against expected values stored in the file:
@@ -427,13 +431,15 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
         end
       end
     end
-    test_result_file_name = File.join( @test_results_folder, "boiler_efficiency_modification_test_results.json")
-    File.write(test_result_file_name, JSON.pretty_generate(test_res))
-    expected_results_file_name = File.join( @test_results_folder, "boiler_efficiency_modification_expected_results.json")
-    # Test that the values are correct by doing a file compare.
-    b_result = FileUtils.compare_file(expected_results_file_name, test_result_file_name)
-    assert(b_result,
-           "test_boiler_custom_efficiency: Boiler custom efficiencies test results do not match expected results! Compare/diff the output with the stored values here #{expected_results_file_name} and #{test_result_file_name}")
+
+    # Write test results.
+    test_result_file = File.join( @test_results_folder, "boiler_efficiency_modification_test_results.json")
+    File.write(test_result_file, JSON.pretty_generate(test_res))
+    expected_result_file = File.join( @test_results_folder, "boiler_efficiency_modification_expected_results.json")
+
+    # Check if test results match expected.
+    msg = "Boiler custom efficiencies test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
 
   def run_the_measure(model, template, sizing_dir)

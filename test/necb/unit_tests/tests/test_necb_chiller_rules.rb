@@ -1,5 +1,5 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/necb_helper'
 
 
 class NECB_HVAC_Chiller_Test < MiniTest::Test
@@ -119,6 +119,17 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
           end
         end
       end
+
+      # Write actual results file.
+      test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_chiller_cop_test_results.csv")
+      File.open(test_result_file, 'w') { |f| f.write(chiller_res_file_output_text.chomp) }
+      
+      # Test that the values are correct by doing a file compare.
+      expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_chiller_cop_expected_results.csv")
+
+      # Check if test results match expected.
+      msg = "Chiller COP test results do not match expected in test"
+      file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
     end
 
     # Generate table of test chiller cop
@@ -192,7 +203,7 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
         if chillers.size == 2 then
           num_of_chillers_is_correct = true
         end
-        assert(num_of_chillers_is_correct, 'Number of chillers is not 2')
+        assert(num_of_chillers_is_correct, 'Number of chillers is not 2 in test #{self.class}.')
         this_is_the_first_cap_range = false
         this_is_the_second_cap_range = false
         if chiller_cap < first_cutoff_chlr_cap
@@ -212,7 +223,7 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
             if cap_diff < tol then
               chiller_cap_is_correct = true
             end
-            assert(chiller_cap_is_correct, 'Primary chiller capacity is not correct')
+            assert(chiller_cap_is_correct, 'Primary chiller capacity is not correct in test #{self.class}.')
           end
           if ichiller.name.to_s.include? 'Secondary Chiller'
             chiller_cap_is_correct = false
@@ -224,7 +235,7 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
             if cap_diff < tol then
               chiller_cap_is_correct = true
             end
-            assert(chiller_cap_is_correct, 'Secondary chiller capacity is not correct')
+            assert(chiller_cap_is_correct, 'Secondary chiller capacity is not correct in test #{self.class}.')
           end
         end
       end
@@ -301,9 +312,10 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
     File.open(test_result_file, 'w') {|f| f.write(chiller_res_file_output_text.chomp)}
     # Test that the values are correct by doing a file compare.
     expected_result_file = File.join(@expected_results_folder, 'compliance_chiller_curves_expected_results.csv')
-    b_result = FileUtils.compare_file(expected_result_file, test_result_file)
-    assert(b_result,
-           "Chiller performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+
+    # Check if test results match expected.
+    msg = "Chiller performance curve coeffs test results do not match expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
 
   def run_simulations(output_folder)

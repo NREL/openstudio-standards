@@ -1,5 +1,5 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/necb_helper'
 
 
 class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
@@ -107,14 +107,17 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
       end
       heatpump_res_file_output_text += output_line_text
 
-      # Write actual results file
+      # Write test results file.
       test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_heatpump_efficiencies_test_results.csv")
-      File.open(test_result_file, 'w') {|f| f.write(heatpump_res_file_output_text.chomp)}
+
+      File.open(test_result_file, 'w') { |f| f.write(heatpump_res_file_output_text.chomp) }
+
       # Test that the values are correct by doing a file compare.
       expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_efficiencies_expected_results.csv")
-      b_result = FileUtils.compare_file(expected_result_file, test_result_file)
-      assert(b_result,
-             "test_heatpump_efficiency: Heat pump efficiency test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+
+      # Check if test results match expected.
+      msg = "Heat pump efficiency test results do not match what is expected in test"
+      file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
     end
   end
 
@@ -184,14 +187,17 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
             "#{'%.5E' % heatpump_plfvsplr__curve.coefficient3xPOW2},#{'%.5E' % heatpump_plfvsplr__curve.coefficient4xPOW3}," +
             "#{'%.5E' % heatpump_plfvsplr__curve.minimumValueofx},#{'%.5E' % heatpump_plfvsplr__curve.maximumValueofx}\n"
 
-    # Write actual results file
+    # Write test results file.
     test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_heatpump_curves_test_results.csv")
-    File.open(test_result_file, 'w') {|f| f.write(heatpump_res_file_output_text.chomp)}
+
+    File.open(test_result_file, 'w') { |f| f.write(heatpump_res_file_output_text.chomp) }
+
     # Test that the values are correct by doing a file compare.
     expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_curves_expected_results.csv")
-    b_result = FileUtils.compare_file(expected_result_file, test_result_file)
-    assert(b_result,
-           "Heat pump performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+
+    # Check if test results match expected.
+    msg = "Heat pump performance curve coeffs test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
 
   def run_the_measure(model, template, sizing_dir)
