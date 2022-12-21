@@ -1,33 +1,27 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/necb_helper'
-
+include(NecbHelper)
 
 class NECB_HVAC_Chiller_Test < MiniTest::Test
-  #set to true to run the standards in the test.
+
+  # Set to true to run the standards in the test.
   PERFORM_STANDARDS = true
-  #set to true to run the simulations.
-  FULL_SIMULATIONS = false
 
   def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '..')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    define_folders(__dir__)
+    define_std_ranges
   end
 
   # Test to validate the chiller COP generated against expected values stored in the file:
   # 'compliance_chiller_cop_expected_results.csv
   def test_NECB2011_chiller_cop
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
-    chiller_expected_result_file = File.join( @expected_results_folder, 'compliance_chiller_cop_expected_results.csv')
-    standard = Standard.build('NECB2011')
 
-    # Initialize hashes for storing expected chiller cop data from file
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
+    standard = get_standard('NECB2011')
+    chiller_expected_result_file = File.join( @expected_results_folder, 'compliance_chiller_cop_expected_results.csv')
+
+    # Initialize hashes for storing expected chiller cop data from file.
     chiller_type_min_cap = {}
     chiller_type_min_cap['Rotary Screw'] = []
     chiller_type_min_cap['Reciprocating'] = []
@@ -107,11 +101,10 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
         # Save the model after btap hvac. 
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
         model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
-        # run the standards
-        result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
-        # Save the model
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-        assert_equal(true, result, "Failure in Standards for #{name}")
+        
+        # Run the standards.
+        run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+
         model.getChillerElectricEIRs.each do |ichiller|
           if ichiller.referenceCapacity.to_f > 1
             actual_chiller_cop[chiller_type] << ichiller.referenceCOP.round(3)
@@ -155,10 +148,8 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
   # "if capacity <= 2100 kW ---> one chiller
   # if capacity > 2100 kW ---> 2 chillers with half the capacity each"
   def test_NECB2011_number_of_chillers
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
-    standard = Standard.build('NECB2011')
+    output_folder = method_output_folder
+    standard = get_standard('NECB2011')
 
     first_cutoff_chlr_cap = 2100000.0
     tol = 1.0e-3
@@ -192,11 +183,10 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
         # Save the model after btap hvac.
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
         model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
-        # run the standards
-        result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
-        # Save the model
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-        assert_equal(true, result, "Failure in Standards for #{name}")
+
+        # Run the standards.
+        run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+
         chillers = model.getChillerElectricEIRs
         # check that there are two chillers in the model
         num_of_chillers_is_correct = false
@@ -244,10 +234,8 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
 
   # Test to validate the chiller performance curves
   def test_NECB2011_chiller_curves
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
-    standard = Standard.build('NECB2011')
+    output_folder = method_output_folder
+    standard = get_standard('NECB2011')
 
     chiller_expected_result_file = File.join(@expected_results_folder, 'compliance_chiller_curves_expected_results.csv')
     chiller_curve_names = {}
@@ -283,11 +271,10 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
                                        hw_loop: hw_loop)
       # Save the model after btap hvac.
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-      # run the standards
-      result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
-      # Save the model
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-      assert_equal(true, result, "test_chiller_curves: Failure in Standards for #{name}")
+
+      # Run the standards.
+      run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+
       chillers = model.getChillerElectricEIRs
       chiller_cap_ft_curve = chillers[0].coolingCapacityFunctionOfTemperature
       chiller_res_file_output_text +=
@@ -316,58 +303,5 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
     # Check if test results match expected.
     msg = "Chiller performance curve coeffs test results do not match expected in test"
     file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
-  end
-
-  def run_simulations(output_folder)
-    if FULL_SIMULATIONS == true
-      file_array = []
-      BTAP::FileIO.get_find_files_from_folder_by_extension(output_folder, '.osm').each do |file|
-        # skip any sizing.osm file.
-        unless file.to_s.include? 'sizing.osm'
-          file_array << file
-        end
-      end
-      BTAP::SimManager.simulate_files(output_folder, file_array)
-      BTAP::Reporting.get_all_annual_results_from_runmanger_by_files(output_folder, file_array)
-
-      are_there_no_severe_errors = File.zero?("#{output_folder}/failed simulations.txt")
-      assert_equal(true, are_there_no_severe_errors, "Simulations had severe errors. Check #{output_folder}/failed simulations.txt")
-    end
-  end
-
-  def run_the_measure(model, sizing_dir)
-    if PERFORM_STANDARDS
-      # Hard-code the building vintage
-      building_vintage = 'NECB2011'
-      building_type = 'NECB'
-      climate_zone = 'NECB'
-      standard = Standard.build(building_vintage)
-
-      # Make a directory to run the sizing run in
-      unless Dir.exist? sizing_dir
-        FileUtils.mkdir_p(sizing_dir)
-      end
-
-      # Perform a sizing run
-      if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
-        puts "could not find sizing run #{sizing_dir}/SizingRun1"
-        raise("could not find sizing run #{sizing_dir}/SizingRun1")
-        return false
-      else
-        puts "found sizing run #{sizing_dir}/SizingRun1"
-      end
-
-      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
-
-      # need to set prototype assumptions so that HRV added
-      standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-      # Apply the HVAC efficiency standard
-      standard.model_apply_hvac_efficiency_standard(model, climate_zone)
-      # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
-
-      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
-
-      return true
-    end
   end
 end

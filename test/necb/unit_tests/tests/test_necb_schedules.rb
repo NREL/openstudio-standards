@@ -1,22 +1,19 @@
 require_relative '../../../helpers/minitest_helper'
-
-
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
 
 # This class will perform tests that are Spacetype dependant, Test model will be created
 # to specifically test aspects of the NECB2011 code that are Spacetype dependant. 
 class NECB_Schedules_Tests < Minitest::Test
-  #Standards
-  Templates = ['NECB2011', 'NECB2015', 'BTAPPRE1980']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
+
+  # Set to true to run the standards in the test.
+  PERFORM_STANDARDS = true
 
   def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '..')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    define_folders(__dir__)
+    define_std_ranges
   end
+
     
   # Tests to ensure that the NECB default schedules are being defined correctly.
   # This is not for compliance, but for archetype development. 
@@ -30,9 +27,9 @@ class NECB_Schedules_Tests < Minitest::Test
 
     output_array = []
     #Iterate through all spacetypes/buildingtypes. 
-    Templates.each do |template|
+    @Templates.each do |template|
       #Get spacetypes from googledoc.
-      standard = Standard.build(template)
+      standard = get_standard(template)
 
       search_criteria = {
         "template" => template,

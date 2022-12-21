@@ -1,18 +1,16 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
-require 'json'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
 
 
-class NECB_RemoveDuplicateModelObjects_Tests < CreateDOEPrototypeBuildingTest
+class NECB_RemoveDuplicateModelObjects_Tests < MiniTest::Test
+
+  # Set to true to run the standards in the test.
+  PERFORM_STANDARDS = true
 
   def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '../../../')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    define_folders(__dir__)
+    define_std_ranges
   end
 
   def test_remove_duplicate_model_objects

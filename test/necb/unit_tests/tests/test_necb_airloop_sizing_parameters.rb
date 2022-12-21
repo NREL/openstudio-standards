@@ -1,29 +1,27 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
 
 
 class NECB_Airloop_Sizing_Parameters_Tests < MiniTest::Test
-  # set to true to run the standards in the test.
+
+  # Set to true to run the standards in the test.
   PERFORM_STANDARDS = true
-  # set to true to run the simulations.
-  FULL_SIMULATIONS = false
-begin
+
   def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '..')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    define_folders(__dir__)
+    define_std_ranges
   end
 
+begin
   # Test to validate sizing rules for air loop
   def test_airloop_sizing_rules_vav
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
-    standard = Standard.build("NECB2011")
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
+    template="NECB2011"
+    standard = get_standard(template)
 
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
@@ -52,11 +50,10 @@ begin
       hw_loop: hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-    # run the standards
-    result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
-    # Save the model
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-    assert_equal(true, result, "test_airloop_sizing_rules_vav: Failure in Standards for #{name}")
+
+            # Run the measure.
+            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+
     airloops = model.getAirLoopHVACs
     airloops.each do |iloop|
       thermal_zones = iloop.thermalZones
@@ -116,10 +113,12 @@ end
 begin
   # Test to validate sizing rules for air loop
   def test_airloop_sizing_rules_heatpump
-    standard = Standard.build("NECB2011")
-    output_folder = "#{File.dirname(__FILE__)}/output/airloop_sizing_rules"
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
+    template="NECB2011"
+    standard = get_standard(template)
+
     boiler_fueltype = 'NaturalGas'
     baseboard_type = 'Hot Water'
     heating_coil_type = 'DX'
@@ -144,11 +143,10 @@ begin
       new_auto_zoner: false)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-    # run the standards
-    result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
-    # Save the model
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-    assert_equal(true, result, "test_airloop_sizing_rules_heatpump: Failure in Standards for #{name}")
+
+            # Run the measure.
+            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+
     airloops = model.getAirLoopHVACs
     airloops.each do |iloop|
       thermal_zones = iloop.thermalZones
@@ -187,56 +185,4 @@ begin
   end
 end
   
-  def run_simulations(output_folder)
-    if FULL_SIMULATIONS == true
-      file_array = []
-      BTAP::FileIO.get_find_files_from_folder_by_extension(output_folder, '.osm').each do |file|
-        # skip any sizing.osm file.
-        unless file.to_s.include? 'sizing.osm'
-          file_array << file
-        end
-      end
-      BTAP::SimManager.simulate_files(output_folder, file_array)
-      BTAP::Reporting.get_all_annual_results_from_runmanger_by_files(output_folder, file_array)
-
-      are_there_no_severe_errors = File.zero?("#{output_folder}/failed simulations.txt")
-      assert_equal(true, are_there_no_severe_errors, "Simulations had severe errors. Check #{output_folder}/failed simulations.txt")
-    end
-  end
-
-  def run_the_measure(model, sizing_dir)
-    if PERFORM_STANDARDS
-      # Hard-code the building vintage
-      building_vintage = 'NECB2011'
-      building_type = 'NECB'
-      climate_zone = 'NECB'
-      standard = Standard.build(building_vintage)
-      
-      # Make a directory to run the sizing run in
-      unless Dir.exist? sizing_dir
-        FileUtils.mkdir_p(sizing_dir)
-      end
-
-      # Perform a sizing run
-      if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
-        puts "could not find sizing run #{sizing_dir}/SizingRun1"
-        raise("could not find sizing run #{sizing_dir}/SizingRun1")
-        return false
-      else
-        puts "found sizing run #{sizing_dir}/SizingRun1"
-      end
-
-      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
-
-      # need to set prototype assumptions so that HRV added
-      standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-      # Apply the HVAC efficiency standard
-      standard.model_apply_hvac_efficiency_standard(model, climate_zone)
-      # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
-
-      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
-
-      return true
-    end
-  end
 end

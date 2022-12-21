@@ -1,4 +1,8 @@
 require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
+
+# *** Needs a re-write to use std paths etc ***
 
 
 # This class will perform tests that are Spacetype dependant, Test model will be created
@@ -7,15 +11,6 @@ class DefaultSystemSelectionTests < Minitest::Test
   #Standards
   Templates = ['NECB2011', 'NECB2015'] #,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
 
-  def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '..')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
-  end
 
   #  # This test will ensure that the system selection for each of the 133 spacetypes are
   #  # being assigned the appropriate values for LPD.

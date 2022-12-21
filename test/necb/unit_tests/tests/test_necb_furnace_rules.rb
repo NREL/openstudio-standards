@@ -1,28 +1,21 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
 
 class NECB_HVAC_Furnace_Tests < MiniTest::Test
-  # set to true to run the standards in the test.
+
+  # Set to true to run the standards in the test.
   PERFORM_STANDARDS = true
-  # set to true to run the simulations.
-  FULL_SIMULATIONS = false
 
   def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '..')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    define_folders(__dir__)
+    define_std_ranges
   end
 
   # Test to validate the furnace thermal efficiency generated against expected values stored in the file:
   # 'compliance_furnace_efficiencies_expected_results.csv
   def test_NECB2011_furnace_efficiency
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
+    output_folder = method_output_folder
 
     # Generate the osm files for all relevant cases to generate the test data for system 3
     heating_coil_types = ['Electric','NaturalGas']
@@ -32,7 +25,7 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     templates = ['NECB2011', 'NECB2015']
     templates.each do |template|
-      standard = Standard.build(template)
+      standard = get_standard(template)
       furnace_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_furnace_efficiencies_expected_results.csv")
 
       # Initialize hashes for storing expected furnace efficiency data from file
@@ -127,11 +120,10 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
                 end
               end
             end
-            # run the standards
-            result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
-            # Save the model
-            BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-            assert_equal(true, result, "test_furnace_efficiency: Failure in Standards for #{name}")
+
+            # Run the measure.
+            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+
             if stage_type == 'single'
               if heating_coil_type == 'NaturalGas'
                 actual_furnace_thermal_eff[heating_coil_type] << model.getCoilHeatingGass[0].gasBurnerEfficiency
@@ -190,13 +182,10 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
 
   # Test to validate the furnace part load performance curve
   def test_NECB2011_furnace_plf_vs_plr_curve
-    setup()
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
-    standard = Standard.build('NECB2011')
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
+    standard = get_standard('NECB2011')
 
     # Generate the osm files for all relevant cases to generate the test data for system 3
     boiler_fueltype = 'NaturalGas'
@@ -232,11 +221,10 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
       end
       # Save the model after btap hvac.
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-      # run the standards
-      result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
-      # Save the model
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-      assert_equal(true, result, "test_furnace_plf_vs_plr_curve: Failure in Standards for #{name}")
+
+            # Run the measure.
+            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+
       if stage_type == 'single'
         furnace_curve = model.getCoilHeatingGass[0].partLoadFractionCorrelationCurve.get.to_CurveCubic.get
       elsif stage_type == 'multi'
@@ -260,13 +248,10 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
 
   # Test to validate number of stages for multi furnaces
   def test_NECB2011_furnace_num_stages
-    setup()
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
-    standard = Standard.build('NECB2011')
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
+    standard = get_standard('NECB2011')
 
     # Generate the osm files for all relevant cases to generate the test data for system 3
     boiler_fueltype = 'NaturalGas'
@@ -298,49 +283,12 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
       model.getCoilHeatingGasMultiStages.each {|coil| coil.stages.last.setNominalCapacity(cap)}
       # Save the model after btap hvac.
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-      # run the standards
-      result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
-      # Save the model
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-      assert_equal(true, result, "test_furnace_plf_vs_plr_curve: Failure in Standards for #{name}")
+
+            # Run the measure.
+            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+
       actual_num_stages = model.getCoilHeatingGasMultiStages[0].stages.size
       assert(actual_num_stages == num_stages_needed[cap],"The actual number of stages for capacity #{cap} W is not #{num_stages_needed[cap]}")
     end
   end
-
-  def run_the_measure(model, template, sizing_dir)
-    if PERFORM_STANDARDS
-      # Hard-code the building vintage
-      building_vintage = template
-      building_type = 'NECB'
-      climate_zone = 'NECB'
-      standard = Standard.build(building_vintage)
-
-      # Make a directory to run the sizing run in
-      unless Dir.exist? sizing_dir
-        FileUtils.mkdir_p(sizing_dir)
-      end
-
-      # Perform a sizing run
-      if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
-        puts "could not find sizing run #{sizing_dir}/SizingRun1"
-        raise("could not find sizing run #{sizing_dir}/SizingRun1")
-        return false
-      else
-        puts "found sizing run #{sizing_dir}/SizingRun1"
-      end
-
-      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
-
-      # need to set prototype assumptions so that HRV added
-      standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-      # Apply the HVAC efficiency standard
-      standard.model_apply_hvac_efficiency_standard(model, climate_zone)
-      # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
-
-      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
-      return true
-    end
-  end
-
 end

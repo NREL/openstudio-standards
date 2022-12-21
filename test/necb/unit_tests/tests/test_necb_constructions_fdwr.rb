@@ -1,6 +1,6 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/necb_helper'
-
+include(NecbHelper)
 
 # This class will perform tests that are HDD driven, A Test model will be created
 # that will have all of OpenStudios surface types with different contructions. All
@@ -8,7 +8,16 @@ require_relative '../../../helpers/necb_helper'
 # not run into version issues with the test. 
 ## to specifically test aspects of the NECB2011 code that are HDD dependant. 
 class NECB_Constructions_FDWR_Tests < Minitest::Test
-  #set global weather files sample
+
+  # Set to true to run the standards in the test.
+  PERFORM_STANDARDS = true
+
+  def setup()
+    define_folders(__dir__)
+    define_std_ranges
+  end
+
+  # Set global weather files sample.
   NECB_epw_files_for_cdn_climate_zones = [
       'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw', #  CZ 4 HDD = 2932
       'CAN_BC_Kamloops.AP.718870_CWEC2016.epw', #    CZ 5 HDD = 3567
@@ -17,21 +26,12 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
       'CAN_ON_Armstrong.AP.718410_CWEC2016.epw', #CZ 7b HDD = 6572
       'CAN_NU_Resolute.AP.719240_CWEC2016.epw' # CZ 8HDD = 12570
   ]
-  #Set Compliance vintage
-  Templates = ['NECB2011','NECB2015','NECB2017', 'BTAPPRE1980', 'BTAP1980TO2010']
+
+  # Set Compliance vintage.
+  Templates = ['NECB2011', 'NECB2015', 'NECB2017', 'BTAPPRE1980', 'BTAP1980TO2010']
 
   # Create scaffolding to create a model with windows, then reset to appropriate values.
   # Will require large windows and constructions that have high U-values.    
-  def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '..')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
-  end
-
   def create_base_model()
 
     #Create new model for testing. 
@@ -96,14 +96,11 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
       end
     end
 
-    standard = Standard.build("NECB2011")
+    standard = get_standard("NECB2011")
     standard.model_clear_and_set_example_constructions(@model)
     #Ensure that building is Conditioned add spacetype to each space. 
 
   end
-
-  #setup()
-
 
   # Tests to ensure that the U-Values of the construction are set correctly. This 
   # test will set up  
@@ -112,13 +109,12 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
   # @return [Bool] true if successful. 
   def test_necb_hdd_envelope_rules()
 
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
 
-    output_folder = File.join(@top_output_folder, __method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
     #Create report string. 
-
     @json_test_output = {}
+
     #Iterate through the vintage templates 'NECB2011', etc..
     Templates.each do |template|
       @json_test_output[template] = {}
@@ -126,13 +122,11 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
       NECB_epw_files_for_cdn_climate_zones.each do |weather_file|
         create_base_model()
 
-
         #Create a space type and assign to all spaces.. This is done because the FWDR is only applied to conditions spaces.. So we need conditioning data.
-
         building_type = "Office"
         space_type = "WholeBuilding"
         climate_zone = 'NECB HDD Method'
-        standard = Standard.build(template)
+        standard = get_standard(template)
 
         table = standard.standards_data['tables']['space_types']['table']
         space_type_properties = table.detect { |st| st["building_type"] == building_type && st["space_type"] == space_type }
@@ -147,10 +141,10 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
           space.setSpaceType(st)
         end
 
-        #Create Zones.
+        # Create Zones.
         standard.model_create_thermal_zones(@model)
 
-        #worflow should mirror BTAP workflow up to fdwr. Note envelope includes infiltration.
+        # Worflow should mirror BTAP workflow up to fdwr. Note envelope includes infiltration.
         # Not validating spacetypes as not needed for this simplified test.
         standard.apply_weather_data(model: @model, epw_file: File.basename(weather_file))
         standard.apply_loads(model: @model)
@@ -160,7 +154,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         #Store hdd for classifing results.
         @hdd = standard.get_necb_hdd18(@model)
 
-        #Get Surfaces by type.
+        # Get Surfaces by type.
         outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(@model.getSurfaces(), "Outdoors")
         outdoor_walls = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Wall")
         outdoor_roofs = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "RoofCeiling")
@@ -175,7 +169,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         ground_roofs = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "RoofCeiling")
         ground_floors = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Floor")
 
-        #Determine the weighted average conductances by surface type. 
+        # Determine the weighted average conductances by surface type. 
         ## exterior surfaces
         outdoor_walls_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_walls)
         outdoor_roofs_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_roofs)
@@ -191,7 +185,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(doors)
         overhead_doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors)
 
-
+        # SRR and FDWR
         srr_info = standard.find_exposed_conditioned_roof_surfaces(@model)
         fdwr_info = standard.find_exposed_conditioned_vertical_surfaces(@model)
 
@@ -218,33 +212,32 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         @json_test_output[template][@hdd]['doors_average_conductance'] = roundOrNA(doors_average_conductance)
 
 
-        #infiltration test
+        # Infiltration test.
         # Get the effective infiltration rate through the walls and roof only.
         sorted_spaces = BTAP::Geometry::Spaces::get_spaces_from_storeys(@model, @above_ground_floors).sort_by { |space| space.name.get }
-        #Need to sort spaces otherwise the output order is random.
+        # Need to sort spaces otherwise the output order is random.
         @json_test_output[template][@hdd]['Wall/Roof infil rate (L/s/m2)'] = {}
         sorted_spaces.each do |space|
           assert(space.spaceInfiltrationDesignFlowRates.size <= 1, "There should be no more than one infiltration object per space in the reference/budget building#{space.spaceInfiltrationDesignFlowRates}")
-          #If space rightfully does not have an infiltration rate (no exterior surfaces) output an NA. 
+          # If space rightfully does not have an infiltration rate (no exterior surfaces) output an NA. 
           if space.spaceInfiltrationDesignFlowRates.size == 0
             @json_test_output[template][@hdd]['Wall/Roof infil rate (L/s/m2)'][space.name] = "NA,"
           else
-            #Do some math to determine the effective infiltration rate of the walls and roof only as per NECB. 
+            # Do some math to determine the effective infiltration rate of the walls and roof only as per NECB. 
             wall_roof_infiltration_rate = space.spaceInfiltrationDesignFlowRates[0].flowperExteriorSurfaceArea.get * space.exteriorArea / standard.space_exterior_wall_and_roof_and_subsurface_area(space)
-            #Output effective infiltration rate
+            # Output effective infiltration rate
             @json_test_output[template][@hdd]['Wall/Roof infil rate (L/s/m2)'][space.name] = "#{(wall_roof_infiltration_rate * 1000).round(3)},"
 
           end
         end
 
-        BTAP::FileIO::save_osm(@model, File.join(File.dirname(__FILE__), "output", "#{template}-hdd#{@hdd}-envelope_test.osm"))
-      end #Weather file loop.
+        BTAP::FileIO::save_osm(@model, File.join(output_folder, '#{template}-hdd#{@hdd}-envelope_test.osm'))
+      end # Weather file loop.
     end # Template vintage loop
 
     # Write test report and osm files.
     test_result_file = File.join(@test_results_folder, 'compliance_envelope_test_results.json')
     File.open(test_result_file, 'w') { |f| f.write(JSON.pretty_generate(@json_test_output)) }
-    BTAP::FileIO::save_osm(@model, File.join(output_folder, 'envelope_test.osm'))
 
     # Test that the values are correct by doing a file compare.
     expected_result_file = File.join(@expected_results_folder, 'compliance_envelope_expected_results.json')
@@ -254,4 +247,4 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end # test_envelope()
 
-end #Class NECBHDDTests
+end # Class NECBHDDTests

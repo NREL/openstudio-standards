@@ -1,35 +1,29 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/necb_helper'
-
+include(NecbHelper)
 
 class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
-  # set to true to run the standards in the test.
+
+  # Set to true to run the standards in the test.
   PERFORM_STANDARDS = true
-  # set to true to run the simulations.
-  FULL_SIMULATIONS = false
 
   def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '..')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    define_folders(__dir__)
+    define_std_ranges
   end
 
   # Test to validate the heating efficiency generated against expected values stored in the file:
   # 'compliance_heatpump_efficiencies_expected_results.csv
   def test_heatpump_efficiency
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
 
     templates = ['NECB2011', 'NECB2015', 'BTAPPRE1980']
     templates.each do |template|
 
       heatpump_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_efficiencies_expected_results.csv")
-      standard = Standard.build(template)
+      standard = get_standard(template)
 
       # Initialize hashes for storing expected heat pump efficiency data from file
       min_caps = []
@@ -87,12 +81,10 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
           flow_rate = cap * 5.0e-5
           coil.setRatedAirFlowRate(flow_rate)
         end
-        # run the standards
-        result = self.run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
+
+            # Run the measure.
+            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
         actual_heatpump_cop << model.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f
-        # Save the model
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-        assert_equal(true, result, "test_heatpump_efficiency: Failure in Standards for #{name}")
       end
 
       # Generate table of test heat pump efficiencies
@@ -123,11 +115,10 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
 
   # Test to validate the heat pump performance curves
   def test_heatpump_curves
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
-    template = 'NECB2011'
-    standard = Standard.build(template)
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
+    standard = get_standard('NECB2011')
 
     heatpump_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_curves_expected_results.csv")
     heatpump_curve_names = []
@@ -156,11 +147,10 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
                                                                                                 new_auto_zoner: false)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-    # run the standards
-    result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
-    # Save the model
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-    assert_equal(true, result, "test_heatpump_curves: Failure in Standards for #{name}")
+
+            # Run the measure.
+            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+
     dx_units = model.getCoilHeatingDXSingleSpeeds
     heatpump_cap_ft_curve = dx_units[0].totalHeatingCapacityFunctionofTemperatureCurve.to_CurveCubic.get
     heatpump_res_file_output_text +=
@@ -198,41 +188,5 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
     # Check if test results match expected.
     msg = "Heat pump performance curve coeffs test results do not match what is expected in test"
     file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
-  end
-
-  def run_the_measure(model, template, sizing_dir)
-    if PERFORM_STANDARDS
-      # Hard-code the building vintage
-      building_vintage = template
-      building_type = 'NECB'
-      climate_zone = 'NECB'
-      standard = Standard.build(building_vintage)
-
-      # Make a directory to run the sizing run in
-      unless Dir.exist? sizing_dir
-        FileUtils.mkdir_p(sizing_dir)
-      end
-
-      # Perform a sizing run
-      if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
-        puts "could not find sizing run #{sizing_dir}/SizingRun1"
-        raise("could not find sizing run #{sizing_dir}/SizingRun1")
-        return false
-      else
-        puts "found sizing run #{sizing_dir}/SizingRun1"
-      end
-
-      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
-
-      # need to set prototype assumptions so that HRV added
-      standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-      # Apply the HVAC efficiency standard
-      standard.model_apply_hvac_efficiency_standard(model, climate_zone)
-      # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
-
-      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
-
-      return true
-    end
   end
 end

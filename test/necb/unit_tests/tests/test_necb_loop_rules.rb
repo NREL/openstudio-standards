@@ -1,30 +1,25 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
-
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
 
 class NECB_HVAC_Loop_Rules_Tests < MiniTest::Test
-  # set to true to run the standards in the test.
+
+  # Set to true to run the standards in the test.
   PERFORM_STANDARDS = true
-  # set to true to run the simulations.
-  FULL_SIMULATIONS = false
 
   def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '..')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    define_folders(__dir__)
+    define_std_ranges
   end
 
   # Test to validate hot water loop rules
   def test_hw_loop_rules
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
     template = 'NECB2011'
-    standard = Standard.build(template)
+    standard = get_standard(template)
 
     # Generate the osm files for all relevant cases to generate the test data for system 6
     boiler_fueltype = 'NaturalGas'
@@ -50,11 +45,10 @@ class NECB_HVAC_Loop_Rules_Tests < MiniTest::Test
                                                                         hw_loop: hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-    # run the standards
-    result = run_the_measure(model,  template,"#{output_folder}/#{name}/sizing")
-    # Save the model
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-    assert_equal(true, result, "test_hw_loop_rules: Failure in Standards for #{name}")
+
+            # Run the measure.
+            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+
     tol = 1.0e-3
     loops = model.getPlantLoops
     loops.each do |iloop|
@@ -92,11 +86,11 @@ class NECB_HVAC_Loop_Rules_Tests < MiniTest::Test
 
   # Test to validate chilled water loop rules
   def test_chw_loop_rules
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
     template = 'NECB2011'
-    standard = Standard.build(template)
+    standard = get_standard(template)
 
     # Generate the osm files for all relevant cases to generate the test data for system 2
     boiler_fueltype = 'Electricity'
@@ -119,11 +113,10 @@ class NECB_HVAC_Loop_Rules_Tests < MiniTest::Test
                                      hw_loop: hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-    # run the standards
-    result = run_the_measure(model, template,"#{output_folder}/#{name}/sizing")
-    # Save the model
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-    assert_equal(true, result, "test_chw_loop_rules: Failure in Standards for #{name}")
+
+            # Run the measure.
+            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+
     loops = model.getPlantLoops
     tol = 1.0e-3
     loops.each do |iloop|
@@ -164,11 +157,11 @@ class NECB_HVAC_Loop_Rules_Tests < MiniTest::Test
   
   # Test to validate condenser loop rules
   def test_NECB2011_cw_loop_rules
-    output_folder = "#{File.dirname(__FILE__)}/output/cw_loop_rules"
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
     template = 'NECB2011'
-    standard = Standard.build(template)
+    standard = get_standard(template)
 
     # Generate the osm files for all relevant cases to generate the test data for system 2
     boiler_fueltype = 'Electricity'
@@ -191,11 +184,10 @@ class NECB_HVAC_Loop_Rules_Tests < MiniTest::Test
                                      hw_loop: hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-    # run the standards
-    result = run_the_measure(model, template,"#{output_folder}/#{name}/sizing")
-    # Save the model
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-    assert_equal(true, result, "test_cw_loop_rules: Failure in Standards for #{name}")
+
+            # Run the measure.
+            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+
     loops = model.getPlantLoops
     tol = 1.0e-3
     loops.each do |iloop|
@@ -238,39 +230,4 @@ class NECB_HVAC_Loop_Rules_Tests < MiniTest::Test
     end
   end
   
-  def run_the_measure(model, template, sizing_dir)
-    if PERFORM_STANDARDS
-      # Hard-code the building vintage
-      building_vintage = template
-      building_type = 'NECB'
-      climate_zone = 'NECB'
-      standard = Standard.build(building_vintage)
-      
-      # Make a directory to run the sizing run in
-      unless Dir.exist? sizing_dir
-        FileUtils.mkdir_p(sizing_dir)
-      end
-
-      # Perform a sizing run
-      if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
-        puts "could not find sizing run #{sizing_dir}/SizingRun1"
-        raise("could not find sizing run #{sizing_dir}/SizingRun1")
-        return false
-      else
-        puts "found sizing run #{sizing_dir}/SizingRun1"
-      end
-
-      BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
-
-      # need to set prototype assumptions so that HRV added
-      standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-      # Apply the HVAC efficiency standard
-      standard.model_apply_hvac_efficiency_standard(model, climate_zone)
-      # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
-
-      BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
-
-      return true
-    end
-  end
 end

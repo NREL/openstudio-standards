@@ -1,31 +1,30 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
-
+#require_relative '../../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
 
 # This class will perform tests to ensure that the centroid of the highest ceiling is being found and that the overall
 # centroid of ceilings of spaces in a thermal zone in story is properly found.  It uses the Ceilingtest.osm which is
 # a modified version of the initial HighriseApartement.osm geometry file.
 class NECB_Ceiling_Centroid_Test < Minitest::Test
-  #Standards
-  Templates = ['NECB2011', 'NECB2015', 'NECB2017', 'BTAPPRE1980']
-  Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw']
+
+  # Set to true to run the standards in the test.
+  PERFORM_STANDARDS = true
 
   def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '..')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    define_folders(__dir__)
+    define_std_ranges
   end
+
+  # Additional constant ranges for tests.
+  Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw']
 
   # @return [Bool] true if successful.
   def test_ceiling_centroid()
     output_array = []
     climate_zone = 'none'
-    #Iterate through NECB2011, NECB2015, and NECB2017.  It shouldn't make a different but I do it anyway.
-    Templates.sort.each do |template|
+    #Iterate through code versions. It shouldn't make a different but do it anyway. 
+    @Templates.sort.each do |template|
       Epw_files.sort.each do |epw_file|
         model = nil
         standard = nil
@@ -34,7 +33,7 @@ class NECB_Ceiling_Centroid_Test < Minitest::Test
         # Set the weather file.
         BTAP::Environment::WeatherFile.new(epw_file).set_weather_file(model)
         # Get access to the standards class
-        standard = Standard.build(template)
+        standard = get_standard(template)
         # Find the centroid of the highest outside ceiling and add it to the output array
         output_array << standard.find_highest_roof_centre(model)
         # Go through the thermal zones and find all the conditioned, non-plenum, spaces in the thermal zore.  Sort by

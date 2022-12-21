@@ -1,20 +1,16 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
+#require_relative '../../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
 
 class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
-  # set to true to run the standards in the test.
+
+  # Set to true to run the standards in the test.
   PERFORM_STANDARDS = true
-  # set to true to run the simulations.
-  FULL_SIMULATIONS = false
 
   def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '..')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    define_folders(__dir__)
+    define_std_ranges
   end
 
 #Tests to confirm heat pump rules from NECB 8.4.4.13
@@ -24,9 +20,10 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
   # will "extrapolate", unless the capacity curve at -8.3C yields a negative factor.
   # Thus, there 2 possible capacities and the test will pass if either value is used.
   def test_ref_heatpump_heating_capacity
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
+
     # Test all systems and templates, to ensure future editions and additional systems follow this rule
     templates = ['NECB2011', 'NECB2015', 'NECB2017']
     sys_numbers = ['sys1', 'sys3', 'sys4', 'sys6']
@@ -35,7 +32,7 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
       sys_numbers.each do |sys_number|
         necb_reference_hp_supp_fuels.each do |necb_reference_hp_supp_fuel|
           name = "ref_heatpump_heating_capacity_#{template}_#{sys_number}"
-          standard = Standard.build(template)
+          standard = get_standard(template)
 
           # Set standard to use reference hp rules.
           necb_reference_hp = true
@@ -103,12 +100,9 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
             coil.setRatedAirFlowRate(flow_rate)
           end
 
-          # Run the standards.
-          result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
 
-          # Save the model.
-          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-          assert_equal(true, result, "test_ref_heatpump_heating_capacity: Failure in Standards for #{name}")
+            # Run the measure.
+            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
 
           # Non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
           unless sys_number == 'sys6'
@@ -219,9 +213,9 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
 
   # Test heating coil to check if it turns off at <-10C
   def test_ref_heatpump_heating_low_temp
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
 
     templates = ['NECB2011', 'NECB2015', 'NECB2017']
     sys_numbers = ['sys1', 'sys3', 'sys4', 'sys6']
@@ -230,7 +224,8 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
       sys_numbers.each do |sys_number|
         necb_reference_hp_supp_fuels.each do |necb_reference_hp_supp_fuel|
           name = "ref_heatpump_heating_low_temp_#{template}_#{sys_number}"
-          standard = Standard.build(template)
+          standard = get_standard(template)
+
           # set standard to use reference hp rules
           necb_reference_hp = true
           #set up model
@@ -283,11 +278,9 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
           end
           # Save the model after btap hvac.
           BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-          # run the standards
-          result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
-          # Save the model
-          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-          assert_equal(true, result, "test_ref_heatpump_heating_low_temp: Failure in Standards for #{name}")
+
+            # Run the measure.
+            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
 
           # non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
           unless sys_number == 'sys6'
@@ -324,9 +317,9 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
 
   # Test if curve performance matches NECB curve
   def test_ref_heatpump_curve
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
 
     templates = ['NECB2011', 'NECB2015', 'NECB2017']
     sys_numbers = ['sys1', 'sys3', 'sys4', 'sys6']
@@ -335,7 +328,7 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
       sys_numbers.each do |sys_number|
         necb_reference_hp_supp_fuels.each do |necb_reference_hp_supp_fuel|
           name = "ref_heatpump_curve_#{template}_#{sys_number}"
-          standard = Standard.build(template)
+          standard = get_standard(template)
           # set standard to use reference hp rules
           necb_reference_hp = true
           #set up model
@@ -388,11 +381,9 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
           end
           # Save the model after btap hvac.
           BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-          # run the standards
-          result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
-          # Save the model
-          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-          assert_equal(true, result, "test_ref_heatpump_curve: Failure in Standards for #{name}")
+
+            # Run the measure.
+            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
 
           #get expected cooling values
           cooling_curve_expected_result_file = File.join(@expected_results_folder, "necb2011_reference_heatpump_cooling_curves_expected_results.csv")
@@ -756,9 +747,9 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
 
 # Test HP cooling set to zone peak load without oversizing
 def test_ref_heatpump_sizing_factor
-  output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-  FileUtils.rm_rf(output_folder)
-  FileUtils.mkdir_p(output_folder)
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
 
   templates = ['NECB2011', 'NECB2015', 'NECB2017']
   sys_numbers = ['sys1', 'sys3', 'sys4', 'sys6']
@@ -769,7 +760,8 @@ def test_ref_heatpump_sizing_factor
         name = "test_ref_heatpump_sizing_factor_#{template}_#{sys_number}"
         puts"name#{name}"
         puts "necb_reference_hp_supp_fuel #{necb_reference_hp_supp_fuel}"
-        standard = Standard.build(template)
+        standard = get_standard(template)
+
         # set standard to use reference hp rules
         necb_reference_hp = true
         #set up model
@@ -822,11 +814,9 @@ def test_ref_heatpump_sizing_factor
         end
         # Save the model after btap hvac.
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-        # run the standards
-        result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
-        # Save the model
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-        assert_equal(true, result, "test_ref_heatpump_sizing_factor: Failure in Standards for #{name}")
+
+            # Run the measure.
+            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
 
         no_over_sizing = true
         model.getThermalZones.each do |zone|
@@ -844,9 +834,9 @@ end
 # Test for correct supplemental heating
  # Test heating coil to check if it turns off at <-10C
  def test_ref_heatpump_heating_low_temp
-  output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-  FileUtils.rm_rf(output_folder)
-  FileUtils.mkdir_p(output_folder)
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
 
   templates = ['NECB2011', 'NECB2015', 'NECB2017']
   sys_numbers = ['sys1', 'sys3', 'sys4', 'sys6']
@@ -855,7 +845,7 @@ end
     sys_numbers.each do |sys_number|
       necb_reference_hp_supp_fuels.each do |necb_reference_hp_supp_fuel|
         name = "ref_heatpump_heating_low_temp_#{template}_#{sys_number}"
-        standard = Standard.build(template)
+        standard = get_standard(template)
 
         # Set standard to use reference hp rules.
         necb_reference_hp = true
@@ -914,12 +904,8 @@ end
         # Save the model after btap hvac.
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
-        # Run the standards.
-        result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
-
-        # Save the model.
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-        assert_equal(true, result, "test_ref_heatpump_heating_low_temp: Failure in Standards for #{name}")
+            # Run the measure.
+            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
 
         # non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
         unless sys_number == 'sys6'
@@ -953,45 +939,4 @@ end
   end
 end
 
-  def run_the_measure(model, template, sizing_dir)
-      if PERFORM_STANDARDS
-
-        # Hard-code the building vintage.
-        building_vintage = template
-        building_type = 'NECB'
-        climate_zone = 'NECB'
-        standard = Standard.build(building_vintage)
-
-        # Set standard to use reference hp rules.
-        necb_reference_hp = true
-
-        # Make a directory to run the sizing run in.
-        unless Dir.exist? sizing_dir
-          FileUtils.mkdir_p(sizing_dir)
-        end
-
-        # Perform a sizing run.
-        if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
-          puts "could not find sizing run #{sizing_dir}/SizingRun1"
-          raise("could not find sizing run #{sizing_dir}/SizingRun1")
-          return false
-        else
-          puts "found sizing run #{sizing_dir}/SizingRun1"
-        end
-
-        # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
-
-        # Need to set prototype assumptions so that HRV added.
-        standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-
-        # Apply the HVAC efficiency standard.
-        standard.model_apply_hvac_efficiency_standard(model, climate_zone, necb_ref_hp: necb_reference_hp)
-        #standard.model_apply_hvac_efficiency_standard(model, climate_zone)
-        # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
-
-        # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
-
-        return true
-      end
-  end
 end

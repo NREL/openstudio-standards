@@ -1,18 +1,17 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
 
 #This test verifies that we can read in the weatherfile data from all the
 # epw/stat files.
 class NECB_Weather_Tests < Minitest::Test
 
+  # Set to true to run the standards in the test.
+  PERFORM_STANDARDS = true
+
   def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '../../../')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    define_folders(__dir__)
+    define_std_ranges
   end
 
   # Tests to ensure that the NECB default schedules are being defined correctly.
