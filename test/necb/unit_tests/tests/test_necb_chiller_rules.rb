@@ -17,8 +17,10 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
   def test_NECB2011_chiller_cop
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
-    standard = get_standard('NECB2011')
+    output_folder = method_output_folder(__method__)
+    template = 'NECB2011'
+    standard = get_standard(template)
+
     chiller_expected_result_file = File.join( @expected_results_folder, 'compliance_chiller_cop_expected_results.csv')
 
     # Initialize hashes for storing expected chiller cop data from file.
@@ -85,7 +87,7 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
       chiller_type_cap[chiller_type].each do |chiller_cap|
         name = "sys2_ChillerType~#{chiller_type}_Chiller_cap~#{chiller_cap}watts"
         puts "***************************************#{name}*******************************************************\n"
-        model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/../resources/5ZoneNoHVAC.osm")
+        model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
         BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
@@ -103,7 +105,7 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
         model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
         
         # Run the standards.
-        run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+        run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
 
         model.getChillerElectricEIRs.each do |ichiller|
           if ichiller.referenceCapacity.to_f > 1
@@ -138,9 +140,10 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
     File.open(test_result_file, 'w') {|f| f.write(chiller_res_file_output_text.chomp)}
     # Test that the values are correct by doing a file compare.
     expected_result_file = File.join(@expected_results_folder, 'compliance_chiller_cop_expected_results.csv')
-    b_result = FileUtils.compare_file(expected_result_file, test_result_file)
-    assert(b_result,
-           "Chiller COP test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+
+    # Check if test results match expected.
+    msg = "Chiller COP test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
 
   # Test to validate the number of chillers used and their capacities depending on total cooling capacity. 
@@ -148,8 +151,11 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
   # "if capacity <= 2100 kW ---> one chiller
   # if capacity > 2100 kW ---> 2 chillers with half the capacity each"
   def test_NECB2011_number_of_chillers
-    output_folder = method_output_folder
-    standard = get_standard('NECB2011')
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder(__method__)
+    template = 'NECB2011'
+    standard = get_standard(template)
 
     first_cutoff_chlr_cap = 2100000.0
     tol = 1.0e-3
@@ -185,7 +191,7 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
         model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
 
         # Run the standards.
-        run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+        run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
 
         chillers = model.getChillerElectricEIRs
         # check that there are two chillers in the model
@@ -234,8 +240,9 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
 
   # Test to validate the chiller performance curves
   def test_NECB2011_chiller_curves
-    output_folder = method_output_folder
-    standard = get_standard('NECB2011')
+    output_folder = method_output_folder(__method__)
+    template = 'NECB2011'
+    standard = get_standard(template)
 
     chiller_expected_result_file = File.join(@expected_results_folder, 'compliance_chiller_curves_expected_results.csv')
     chiller_curve_names = {}
@@ -273,7 +280,7 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
       # Run the standards.
-      run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+      run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
 
       chillers = model.getChillerElectricEIRs
       chiller_cap_ft_curve = chillers[0].coolingCapacityFunctionOfTemperature

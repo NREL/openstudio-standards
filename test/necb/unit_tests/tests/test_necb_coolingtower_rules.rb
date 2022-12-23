@@ -112,8 +112,8 @@ class NECB_HVAC_Cooling_Tower_Tests < MiniTest::Test
   def test_NECB2015_coolingtower
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
-    template = "NECB2015"
+    output_folder = method_output_folder(__method__)
+    template = 'NECB2015'
     standard = get_standard(template)
 
     tol = 1.0e-3
@@ -149,8 +149,8 @@ class NECB_HVAC_Cooling_Tower_Tests < MiniTest::Test
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
       model.getChillerElectricEIRs.each { |ichiller| ichiller.setReferenceCapacity(chiller_cap) }
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+      # Run the measure.
+      run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
 
       necb2011_refCOP = 5.0
       model.getChillerElectricEIRs.each do |ichiller|

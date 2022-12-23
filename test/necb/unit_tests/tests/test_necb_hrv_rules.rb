@@ -29,7 +29,8 @@ class NECB_HVAC_HRV_Tests < MiniTest::Test
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     name = "hrv"
     puts "***************************************#{name}*******************************************************\n"
-    # add hvac system
+
+    # Add hvac system
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
     heating_coil_type = 'DX'
@@ -43,6 +44,7 @@ class NECB_HVAC_HRV_Tests < MiniTest::Test
                                                                                                 hw_loop: hw_loop,
                                                                                                 new_auto_zoner: false)
     systems = model.getAirLoopHVACs
+
     # increase default outdoor air requirement so that some of the systems in the project would require an HRV
     for isys in 0..0
       zones = systems[isys].thermalZones
@@ -57,8 +59,8 @@ class NECB_HVAC_HRV_Tests < MiniTest::Test
     end
 
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+    # Run the measure.
+    run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
 
     systems = model.getAirLoopHVACs
     tol = 1.0e-5

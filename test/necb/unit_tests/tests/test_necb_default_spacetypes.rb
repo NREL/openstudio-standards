@@ -19,6 +19,10 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
   # This is not for compliance, but for archetype development. 
   # @return [Bool] true if successful. 
   def test_schedule_type_defaults()
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder(__method__)
+
     #Create new model for testing. 
     @model = OpenStudio::Model::Model.new
     #Create only above ground geometry (Used for infiltration tests) 
@@ -54,12 +58,11 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
 
         #Add Infiltration rates to the space objects themselves. 
         standard.model_apply_infiltration_standard(@model)
-          
+
         #Get handle for space. 
         space = @model.getSpaces[0]
         space_area = space.floorArea #m2
-          
-  
+
         #Lights
         total_lpd = []
         lpd_sched = []
@@ -256,16 +259,17 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
       end #loop spacetypes
       puts template
     end #loop Template
+
     #Write test report file. 
     test_result_file = File.join( @test_results_folder,'space_type_test_results.csv')
     File.open(test_result_file, 'w') {|f| f.write(header_output + output) }
       
     #Test that the values are correct by doing a file compare.
     expected_result_file = File.join(@expected_results_folder,'space_type_expected_results.csv')
-    b_result = FileUtils.compare_file(expected_result_file , test_result_file )
-    assert( b_result, 
-      "Spacetype test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
-    )  
+
+    # Check if test results match expected.
+    msg = "Spacetype test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end 
   
 end

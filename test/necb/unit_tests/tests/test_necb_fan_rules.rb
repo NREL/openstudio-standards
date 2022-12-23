@@ -18,7 +18,7 @@ class NECB_HVAC_Fan_Rules_Tests < MiniTest::Test
   def test_NECB2011_vav_fan_rules
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(__method__)
     template = "NECB2011"
     standard = get_standard(template)
 
@@ -120,16 +120,17 @@ class NECB_HVAC_Fan_Rules_Tests < MiniTest::Test
     File.open(test_result_file, 'w') {|f| f.write(vavfan_res_file_output_text.chomp)}
     # Test that the values are correct by doing a file compare.
     expected_result_file = File.join(@expected_results_folder, 'compliance_vavfan_curves_expected_results.csv')
-    b_result = FileUtils.compare_file(expected_result_file, test_result_file)
-    assert(b_result,
-           "Variable volume fan performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+
+    # Check if test results match expected.
+    msg = "Variable volume fan performance curve coeffs test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
 
   # Test to validate constant volume fan pressure rise and total efficiency
   def test_NECB2011_const_vol_fan_rules
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(__method__)
     template = "NECB2011"
     standard = get_standard(template)
 

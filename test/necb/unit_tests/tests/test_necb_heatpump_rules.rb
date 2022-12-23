@@ -17,7 +17,7 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
   def test_heatpump_efficiency
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(__method__)
 
     templates = ['NECB2011', 'NECB2015', 'BTAPPRE1980']
     templates.each do |template|
@@ -82,8 +82,9 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
           coil.setRatedAirFlowRate(flow_rate)
         end
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+        # Run the measure.
+        run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
+
         actual_heatpump_cop << model.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f
       end
 
@@ -117,8 +118,9 @@ class NECB_HVAC_Heat_Pump_Tests < MiniTest::Test
   def test_heatpump_curves
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
-    standard = get_standard('NECB2011')
+    output_folder = method_output_folder(__method__)
+    template = 'NECB2011'
+    standard = get_standard(template)
 
     heatpump_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_curves_expected_results.csv")
     heatpump_curve_names = []

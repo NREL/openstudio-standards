@@ -16,10 +16,10 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
 
   # Test to validate the boiler thermal efficiency generated against expected values stored in the file:
   # 'compliance_boiler_efficiencies_expected_results.csv
-  def test_NECB2011_boiler_efficiency
+  def test_boiler_efficiency
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(__method__)
 
     # Generate the osm files for all relevant cases to generate the test data for system 1
     boiler_fueltypes = ['Electricity','NaturalGas','FuelOilNo2']
@@ -103,8 +103,8 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
           BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
           model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+          # Run the measure.
+          run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
 
           model.getBoilerHotWaters.each do |iboiler|
             if iboiler.nominalCapacity.to_f > 1
@@ -160,7 +160,7 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
   def test_NECB2011_number_of_boilers
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(__method__)
     standard = get_standard('NECB2011')
 
     first_cutoff_blr_cap = 176000.0
@@ -249,7 +249,7 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
   def test_NECB2011_boiler_plf_vs_plr_curve
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(__method__)
     standard = get_standard('NECB2011')
 
     # Generate the osm files for all relevant cases to generate the test data for system 1
@@ -302,7 +302,7 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
   def test_NECB2011_custom_efficiency
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(__method__)
 
     # Generate the osm files for all relevant cases to generate the test data for system 1
     mau_type = true
@@ -335,10 +335,10 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
         model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+        # Run the measure.
+        run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
 
-        # customize the efficiency
+        # Customize the efficiency.
         standard_ecms.modify_boiler_efficiency(model: model, boiler_eff: cust_eff_test)
 
         boilers = model.getBoilerHotWaters

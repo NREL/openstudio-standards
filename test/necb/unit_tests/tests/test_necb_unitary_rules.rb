@@ -15,10 +15,10 @@ class NECB_HVAC_Unitary_Tests < MiniTest::Test
 
   # Test to validate the cooling efficiency generated against expected values stored in the file:
   # 'compliance_unitary_efficiencies_expected_results.csv.
-  def test_NECB2011_unitary_efficiency
+  def test_unitary_efficiency
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(__method__)
 
     # Generate the osm files for all relevant cases to generate the test data for system 3
     boiler_fueltype = 'NaturalGas'
@@ -113,7 +113,7 @@ class NECB_HVAC_Unitary_Tests < MiniTest::Test
             BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
             # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+            run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
 
             case speed
             when 'single'
@@ -161,8 +161,8 @@ class NECB_HVAC_Unitary_Tests < MiniTest::Test
   def test_NECB2011_unitary_curves
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
-    template="NECB2011"
+    output_folder = method_output_folder(__method__)
+    template='NECB2011'
     standard = get_standard(template)
 
     unitary_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_unitary_curves_expected_results.csv")
@@ -179,7 +179,6 @@ class NECB_HVAC_Unitary_Tests < MiniTest::Test
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    template = 'NECB2011'
     name = "#{template.downcase}_sys2_CoolingType~#{mua_cooling_type}"
     puts "***************************************#{name}*******************************************************\n"
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -194,8 +193,8 @@ class NECB_HVAC_Unitary_Tests < MiniTest::Test
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+    # Run the measure.
+    run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
 
     dx_units = model.getCoilCoolingDXSingleSpeeds
     unitary_cap_ft_curve = dx_units[0].totalCoolingCapacityFunctionOfTemperatureCurve.to_CurveBiquadratic.get
@@ -234,7 +233,6 @@ class NECB_HVAC_Unitary_Tests < MiniTest::Test
     # Check if test results match expected.
     msg = "Unitary performance curve coeffs test results do not match what is expected in test"
     file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
-    b_result = FileUtils.compare_file(expected_result_file, test_result_file)
   end
 
 end

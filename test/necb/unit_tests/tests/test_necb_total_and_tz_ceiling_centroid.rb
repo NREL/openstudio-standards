@@ -18,13 +18,18 @@ class NECB_Ceiling_Centroid_Test < Minitest::Test
 
   # Additional constant ranges for tests.
   Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw']
+  Templates = ['NECB2011', 'NECB2015', 'NECB2017']
 
   # @return [Bool] true if successful.
   def test_ceiling_centroid()
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder(__method__)
+
     output_array = []
     climate_zone = 'none'
     #Iterate through code versions. It shouldn't make a different but do it anyway. 
-    @Templates.sort.each do |template|
+    Templates.sort.each do |template|
       Epw_files.sort.each do |epw_file|
         model = nil
         standard = nil
@@ -51,9 +56,9 @@ class NECB_Ceiling_Centroid_Test < Minitest::Test
 
     #Test that the values are correct by doing a file compare.
     expected_result_file = File.join(@expected_results_folder,'ceiling_test_expected_results.json')
-    b_result = FileUtils.compare_file(expected_result_file , test_result_file )
-    assert( b_result,
-            "shw test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
-    )
+
+    # Check if test results match expected.
+    msg = "Ceiling centroid test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
 end

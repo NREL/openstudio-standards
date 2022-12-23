@@ -30,7 +30,7 @@ class NECB_Autozone_Tests < MiniTest::Test
   def autozone(building_type)
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(building_type)
 
     outfile = output_folder + "/#{building_type}_autozoned.osm"
     File.delete(outfile) if File.exist?(outfile)

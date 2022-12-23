@@ -17,7 +17,7 @@ class NECB_HVAC_Loop_Rules_Tests < MiniTest::Test
   def test_hw_loop_rules
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(__method__)
     template = 'NECB2011'
     standard = get_standard(template)
 
@@ -46,8 +46,8 @@ class NECB_HVAC_Loop_Rules_Tests < MiniTest::Test
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+    # Run the measure.
+    run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
 
     tol = 1.0e-3
     loops = model.getPlantLoops
@@ -88,7 +88,7 @@ class NECB_HVAC_Loop_Rules_Tests < MiniTest::Test
   def test_chw_loop_rules
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(__method__)
     template = 'NECB2011'
     standard = get_standard(template)
 
@@ -114,8 +114,8 @@ class NECB_HVAC_Loop_Rules_Tests < MiniTest::Test
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+    # Run the measure.
+    run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
 
     loops = model.getPlantLoops
     tol = 1.0e-3
@@ -159,7 +159,7 @@ class NECB_HVAC_Loop_Rules_Tests < MiniTest::Test
   def test_NECB2011_cw_loop_rules
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(__method__)
     template = 'NECB2011'
     standard = get_standard(template)
 
@@ -185,8 +185,8 @@ class NECB_HVAC_Loop_Rules_Tests < MiniTest::Test
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+    # Run the measure.
+    run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
 
     loops = model.getPlantLoops
     tol = 1.0e-3

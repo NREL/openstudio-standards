@@ -14,8 +14,8 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
 
   # Test to validate the furnace thermal efficiency generated against expected values stored in the file:
   # 'compliance_furnace_efficiencies_expected_results.csv
-  def test_NECB2011_furnace_efficiency
-    output_folder = method_output_folder
+  def test_furnace_efficiency
+    output_folder = method_output_folder(__method__)
 
     # Generate the osm files for all relevant cases to generate the test data for system 3
     heating_coil_types = ['Electric','NaturalGas']
@@ -122,7 +122,7 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
             end
 
             # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+            run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
 
             if stage_type == 'single'
               if heating_coil_type == 'NaturalGas'
@@ -184,14 +184,14 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
   def test_NECB2011_furnace_plf_vs_plr_curve
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
-    standard = get_standard('NECB2011')
+    output_folder = method_output_folder(__method__)
+    template = 'NECB2011'
+    standard = get_standard(template)
 
     # Generate the osm files for all relevant cases to generate the test data for system 3
     boiler_fueltype = 'NaturalGas'
     heating_coil_type = 'Gas'
     baseboard_type = 'Hot Water'
-    template = 'NECB2011'
     stage_types = ['single','multi']
     stage_types.each do |stage_type|
       furnace_res_file_output_text = "Name,Type,coeff1,coeff2,coeff3,coeff4,min_x,max_x\n"
@@ -222,8 +222,8 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
       # Save the model after btap hvac.
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+      # Run the measure.
+      run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
 
       if stage_type == 'single'
         furnace_curve = model.getCoilHeatingGass[0].partLoadFractionCorrelationCurve.get.to_CurveCubic.get
@@ -250,8 +250,9 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
   def test_NECB2011_furnace_num_stages
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
-    standard = get_standard('NECB2011')
+    output_folder = method_output_folder(__method__)
+    template = 'NECB2011'
+    standard = get_standard(template)
 
     # Generate the osm files for all relevant cases to generate the test data for system 3
     boiler_fueltype = 'NaturalGas'
@@ -284,8 +285,8 @@ class NECB_HVAC_Furnace_Tests < MiniTest::Test
       # Save the model after btap hvac.
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+      # Run the measure.
+      run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
 
       actual_num_stages = model.getCoilHeatingGasMultiStages[0].stages.size
       assert(actual_num_stages == num_stages_needed[cap],"The actual number of stages for capacity #{cap} W is not #{num_stages_needed[cap]}")

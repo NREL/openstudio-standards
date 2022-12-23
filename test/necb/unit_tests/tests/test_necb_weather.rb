@@ -23,8 +23,10 @@ class NECB_Weather_Tests < Minitest::Test
     #todo Must deal with ground temperatures..They are currently not correct for NECB.
     test_results = File.join(@test_results_folder,'weather_test_results.json')
     expected_results = File.join(@expected_results_folder,'weather_expected_results.json')
+
     weather_file_folder = File.join(@root_folder,'data','weather')
     puts weather_file_folder
+    
     BTAP::Environment::create_climate_json_file(
         weather_file_folder,
         test_results

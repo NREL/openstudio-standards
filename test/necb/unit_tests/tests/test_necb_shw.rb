@@ -107,10 +107,10 @@ class NECB_SHW_tests < Minitest::Test
 
     #Test that the values are correct by doing a file compare.
     expected_result_file = File.join(@expected_results_folder,'shw_expected_results.json')
-    b_result = FileUtils.compare_file(expected_result_file , test_result_file )
-    assert( b_result, 
-      "shw test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
-    )
+
+    # Check if test results match expected.
+    msg = "SHW test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
 
   def add_shw_test_output_info(model:, output_array:, template:, epw_file:, space_type_names:)

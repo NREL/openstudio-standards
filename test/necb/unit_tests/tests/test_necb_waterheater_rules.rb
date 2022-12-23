@@ -17,7 +17,7 @@ class NECB_SHW_Additional_Tests < MiniTest::Test
   def test_NECB2011_shw_curves
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(__method__)
     template="NECB2011"
     standard = get_standard(template)
 
@@ -93,7 +93,7 @@ class NECB_SHW_Additional_Tests < MiniTest::Test
   def test_NECB2011_shw_elec_efficiency_standby_losses
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(__method__)
     template="NECB2011"
     standard = get_standard(template)
  

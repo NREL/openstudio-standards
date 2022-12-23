@@ -19,6 +19,10 @@ class NECB_Schedules_Tests < Minitest::Test
   # This is not for compliance, but for archetype development. 
   # @return [Bool] true if successful. 
   def test_schedule_type_defaults()
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder(__method__)
+
     #Create new model for testing. 
     @model = OpenStudio::Model::Model.new
     #Create only above ground geometry (Used for infiltration tests) 
@@ -228,15 +232,16 @@ class NECB_Schedules_Tests < Minitest::Test
         water_fixture.remove unless water_fixture.nil?
       end #loop spacetypes
     end #loop Template
-    #Write test report file. 
+
+    # Write test report file. 
     test_result_file = File.join(@test_results_folder,'schedule_test_results.json')
     File.open(test_result_file, 'w') {|f| f.write(JSON.pretty_generate(output_array)) }
 
-    #Test that the values are correct by doing a file compare.
+    # Test that the values are correct by doing a file compare.
     expected_result_file = File.join(@expected_results_folder,'schedule_expected_results.json')
-    b_result = FileUtils.compare_file(expected_result_file , test_result_file )
-    assert( b_result, 
-      "Schedule test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
-    )
+
+    # Check if test results match expected.
+    msg = "Schedule test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
 end

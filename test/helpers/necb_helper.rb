@@ -8,44 +8,44 @@ module NecbHelper
 # Standard path definitions for NECB testing.
   def define_folders(file_folder)
     @test_folder = File.join(file_folder, '..')
-    @root_folder = File.join(@test_folder, '..')
+    @root_folder = File.join(@test_folder, '../../..')
     @resources_folder = File.join(@test_folder, 'resources')
     @expected_results_folder = File.join(@test_folder, 'expected_results')
     @test_results_folder = @expected_results_folder
     @top_output_folder = "#{@test_folder}/output/"
   end
 
-  def method_output_folder
-    output_folder = File.join(@top_output_folder,self.class.ancestors[0].to_s.downcase)
+  def method_output_folder(name="")
+    output_folder = File.join(@top_output_folder,self.class.ancestors[0].to_s.downcase,name.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     return output_folder
   end
 
   def define_std_ranges
-    @Templates = ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020', 'BTAPPRE1980']
+    @Templates = ['NECB2011', 'NECB2015', 'NECB2017', 'BTAPPRE1980']
     @AllBuildings = [
-      "FullServiceRestaurant",
-      "LargeHotel",
-      "LargeOffice",
-      "MediumOffice",
-      "HighriseApartment",
-      "MidriseApartment",
-      "Outpatient",
-      "PrimarySchool",
-      "QuickServiceRestaurant",
-      "RetailStandalone",
-      "RetailStripmall",
-      "SmallHotel",
-      "SmallOffice",
-      "Warehouse",
-      "Hospital"
+      'FullServiceRestaurant',
+      'LargeHotel',
+      'LargeOffice',
+      'MediumOffice',
+      'HighriseApartment',
+      'MidriseApartment',
+      'Outpatient',
+      'PrimarySchool',
+      'QuickServiceRestaurant',
+      'RetailStandalone',
+      'RetailStripmall',
+      'SmallHotel',
+      'SmallOffice',
+      'Warehouse',
+      'Hospital'
     ]
     @CommonBuildings = [
-      "MediumOffice",
-      "MidriseApartment",
-      "RetailStandalone",
-      "Warehouse",
+      'MediumOffice',
+      'MidriseApartment',
+      'RetailStandalone',
+      'Warehouse',
     ]
   end
 
@@ -53,11 +53,9 @@ module NecbHelper
   def get_standard(template)
     standard = nil
     if @@standards.any? {|std| std.template == template}
-      puts "*** FOUND a matching standard ***"
       standard = @@standards.select{|std| std.template == template}.first
       puts standard.class
     else
-      puts "*** CREATING a new standard ***"
       standard = Standard.build(template)
       puts standard.class
       @@standards << standard
@@ -70,9 +68,15 @@ module NecbHelper
 #   model - the model object to be operated on
 #   template - version of NECB to use
 #   test_name - unique name of this test (used to create folders for output)
+#   necb_ref_hp = true if the caase is for the NECB reference model using heat pumps
 #   sql_db_vars_map - ???
 #   save_model_versions - logical to trigger saving of osm files before and after standards applied
-  def run_the_measure(model:, template: "NECB2011", test_name:, sql_db_vars_map: nil, save_model_versions: false)
+  def run_the_measure(model:, 
+                      template: 'NECB2011', 
+                      test_name:, 
+                      necb_ref_hp: false,
+                      sql_db_vars_map: nil, 
+                      save_model_versions: false)
 
     # Ensure we're doing this for NECB.
     building_type = 'NECB'
@@ -84,7 +88,7 @@ module NecbHelper
 
     # Define output folders.
     test_method_name = self.class.ancestors[0].to_s.downcase
-    sizing_dir = File.join(@top_output_folder, test_method_name, test_name, "sizing")
+    sizing_dir = File.join(@top_output_folder, test_method_name, test_name, 'sizing')
     models_dir = File.join(@top_output_folder, test_method_name, test_name)
 
     # Make a directory to run the sizing run in.
@@ -107,17 +111,16 @@ module NecbHelper
     standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
 
     # Apply the HVAC efficiency standard.
-    standard.model_apply_hvac_efficiency_standard(model, climate_zone)
+    standard.model_apply_hvac_efficiency_standard(model, climate_zone, necb_ref_hp: necb_ref_hp)
 
-    # Do another sizing run after applying the hvac assumptions and efficiency standars to properly apply the pump rules.
-    if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun2") == false
-      puts "could not find sizing run #{sizing_dir}/SizingRun2"
-      assert(false, "Failure in sizing run 2 wile running test: #{self.class.ancestors[0]}")
-    else
-      puts "found sizing run #{sizing_dir}/SizingRun2"
-    end
-    # Apply the pump power rules to the model.
-    #standard.apply_maximum_loop_pump_power(model)
+    # Do another sizing run after applying the hvac assumptions and efficiency standards 
+    #  to properly apply the pump rules.
+    #if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun2") == false
+    #  puts "could not find sizing run #{sizing_dir}/SizingRun2"
+    #  assert(false, "Failure in sizing run 2 wile running test: #{self.class.ancestors[0]}")
+    #else
+    #  puts "found sizing run #{sizing_dir}/SizingRun2"
+    #end
 
     # Save model after applying standard.
     BTAP::FileIO.save_osm(model, "#{models_dir}/after.osm") if save_model_versions
@@ -127,8 +130,8 @@ module NecbHelper
 # (used in place of simple ruby methods)
   def file_compare(expected_results_file:, test_results_file:, msg: "Files do not match", type: nil)
   
-    if type == "fred"
-    else
+    #if type == "fred" # Place holder for other file compare options. So far just defined the default behaviour.
+    #else
       # Open files and compare the line by line. Remove line endings before checking strings (this can be an issue when running in docker).
       same = true
       fe = File.open(expected_results_file, 'rb') 
@@ -140,6 +143,6 @@ module NecbHelper
         break if !same
       end
       assert(same, "#{msg} #{self.class.ancestors[0]}. Compare #{expected_results_file} with #{test_results_file}. File contents differ!")
-    end
+    #end
   end
 end

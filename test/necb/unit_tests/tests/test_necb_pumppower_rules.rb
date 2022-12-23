@@ -26,7 +26,7 @@ class NECB_2015PumpPower_Test < MiniTest::Test
   def test_NECB2015_pumppower
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(__method__)
 
     tol = 1.0e-3
     # Generate the osm files for all relevant cases to generate the test data for system 6
@@ -63,8 +63,11 @@ class NECB_2015PumpPower_Test < MiniTest::Test
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
       model.getChillerElectricEIRs.each { |ichiller| ichiller.setReferenceCapacity(chiller_cap) }
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+      # Run the measure.
+      run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
+
+      # Apply the NECB 2015 pump power rules to the model.
+      standard.apply_maximum_loop_pump_power(model)
 
       # From here to the end of the method the expected pump power is calculated and is compared to what was applied to the model.
       plant_loops = model.getPlantLoops
