@@ -229,9 +229,13 @@ class NECB2011 < Standard
                                    shw_scale: nil,
                                    output_meters: nil,
                                    airloop_economizer_type: nil,
-                                   baseline_system_zones_map_option: nil)
+                                   baseline_system_zones_map_option: nil,
+                                   derate: false,
+                                   uprate: false)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
+                                derate: derate,
+                                uprate: uprate,
                                 epw_file: epw_file,
                                 sizing_run_dir: sizing_run_dir,
                                 necb_reference_hp: necb_reference_hp,
@@ -304,6 +308,8 @@ class NECB2011 < Standard
   # Created this method so that additional methods can be addded for bulding the prototype model in later
   # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
   def model_apply_standard(model:,
+                           derate: false,
+                           uprate: false,
                            epw_file:,
                            sizing_run_dir: Dir.pwd,
                            necb_reference_hp: false,
@@ -371,6 +377,8 @@ class NECB2011 < Standard
                 electrical_loads_scale: electrical_loads_scale,
                 oa_scale: oa_scale)
     apply_envelope(model: model,
+                   derate: derate,
+                   uprate: uprate,
                    ext_wall_cond: ext_wall_cond,
                    ext_floor_cond: ext_floor_cond,
                    ext_roof_cond: ext_roof_cond,
@@ -603,6 +611,8 @@ class NECB2011 < Standard
   end
 
   def apply_envelope(model:,
+                     derate: false,
+                     uprate: false,
                      ext_wall_cond: nil,
                      ext_floor_cond: nil,
                      ext_roof_cond: nil,
@@ -642,6 +652,31 @@ class NECB2011 < Standard
                                            fixed_wind_solar_trans: fixed_wind_solar_trans,
                                            skylight_solar_trans: skylight_solar_trans)
     model_create_thermal_zones(model, @space_multiplier_map)
+
+    if derate
+      argh          = {} # BTAP/TBD arguments (Uo/Ut factors may be nilled)
+      argh[:walls ] = { uo: ext_wall_cond  }
+      argh[:floors] = { uo: ext_floor_cond }
+      argh[:roofs ] = { uo: ext_roof_cond  }
+
+      if uprate
+        argh[:walls ][:ut] = ext_wall_cond
+        argh[:floors][:ut] = ext_floor_cond
+        argh[:roofs ][:ut] = ext_roof_cond
+      end
+
+      tbd = BTAP::Bridging.new(model, argh)
+      # To-do output to json for costing... - Phylroy
+      tbd.tally
+
+      tbd.feedback[:logs].each do |log|
+        puts log
+      end
+
+
+
+      # tbd.feedback ... report (how?) failed attempts (e.g. uprating) to users.
+    end
   end
 
   # apply the Kiva foundation model to floors and walls with ground boundary condition
