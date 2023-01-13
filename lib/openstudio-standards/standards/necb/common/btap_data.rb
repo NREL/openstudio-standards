@@ -1504,7 +1504,6 @@ class BTAPData
     #===============================================================================================================
     airloops_total_outdoor_air_mechanical_ventilation_m3 = 0.0
     airloops_total_outdoor_air_natural_ventilation_m3 = 0.0
-    airloops_total_outdoor_air_infiltration_m3 = 0.0
     zones_total_outdoor_air_mechanical_ventilation_m3 = 0.0
     zones_total_outdoor_air_natural_ventilation_m3 = 0.0
     zones_total_outdoor_air_infiltration_m3 = 0.0
@@ -1535,38 +1534,23 @@ class BTAPData
                AND Units='m3'"
       airloops_total_outdoor_air_natural_ventilation_m3 += @sqlite_file.get.execAndReturnFirstDouble(command).to_f
 
-      # Infiltration of all airloops
-      command = "SELECT Value
-               FROM TabularDataWithStrings
-               WHERE ReportName='OutdoorAirDetails'
-               AND ReportForString='Entire Facility'
-               AND TableName='Total Outdoor Air by AirLoop'
-               AND RowName='#{air_loop_name}'
-               AND ColumnName='Infiltration'
-               AND Units='m3'"
-      airloops_total_outdoor_air_infiltration_m3 += @sqlite_file.get.execAndReturnFirstDouble(command).to_f
-
     end
 
-    # Not-normalized mechanical/natural/infiltration.
+    # Not-normalized mechanical/natural.
     outdoor_air_data['airloops_total_outdoor_air_mechanical_ventilation_m3'] = airloops_total_outdoor_air_mechanical_ventilation_m3
     outdoor_air_data['airloops_total_outdoor_air_natural_ventilation_m3'] = airloops_total_outdoor_air_natural_ventilation_m3
-    outdoor_air_data['airloops_total_outdoor_air_infiltration_m3'] = airloops_total_outdoor_air_infiltration_m3
 
-    # Normalized mechanical/natural/infiltration: ACH (air changes per hour)
+    # Normalized mechanical/natural: ACH (air changes per hour)
     outdoor_air_data['airloops_total_outdoor_air_mechanical_ventilation_ach_1_per_hr'] = airloops_total_outdoor_air_mechanical_ventilation_m3 / (@btap_data['bldg_volume_m_cu'] * 365 * 24)
     outdoor_air_data['airloops_total_outdoor_air_natural_ventilation_ach_1_per_hr'] = airloops_total_outdoor_air_natural_ventilation_m3 / (@btap_data['bldg_volume_m_cu'] * 365 * 24)
-    outdoor_air_data['airloops_total_outdoor_air_infiltration_ach_1_per_hr'] = airloops_total_outdoor_air_infiltration_m3 / (@btap_data['bldg_volume_m_cu'] * 365 * 24)
 
-    # Normalized mechanical/natural/infiltration: normalized by conditioned floor area
+    # Normalized mechanical/natural: normalized by conditioned floor area
     outdoor_air_data['airloops_total_outdoor_air_mechanical_ventilation_flow_per_conditioned_floor_area_m3_per_s_m2'] = airloops_total_outdoor_air_mechanical_ventilation_m3 / (@conditioned_floor_area_m_sq * 365 * 24 * 3600)
     outdoor_air_data['airloops_total_outdoor_air_natural_ventilation_flow_per_conditioned_floor_area_m3_per_s_m2'] = airloops_total_outdoor_air_natural_ventilation_m3 / (@conditioned_floor_area_m_sq * 365 * 24 * 3600)
-    outdoor_air_data['airloops_total_outdoor_air_infiltration_flow_per_conditioned_floor_area_m3_per_s_m2'] = airloops_total_outdoor_air_infiltration_m3 / (@conditioned_floor_area_m_sq * 365 * 24 * 3600)
 
-    # Normalized mechanical/natural/infiltration: normalized by exterior area
+    # Normalized mechanical/natural: normalized by exterior area
     outdoor_air_data['airloops_total_outdoor_air_mechanical_ventilation_flow_per_exterior_area_m3_per_s_m2'] = airloops_total_outdoor_air_mechanical_ventilation_m3 / (@btap_data['bldg_exterior_area_m_sq'] * 365 * 24 * 3600)
     outdoor_air_data['airloops_total_outdoor_air_natural_ventilation_flow_per_exterior_area_m3_per_s_m2'] = airloops_total_outdoor_air_natural_ventilation_m3 / (@btap_data['bldg_exterior_area_m_sq'] * 365 * 24 * 3600)
-    outdoor_air_data['airloops_total_outdoor_air_infiltration_flow_per_exterior_area_m3_per_s_m2'] = airloops_total_outdoor_air_infiltration_m3 / (@btap_data['bldg_exterior_area_m_sq'] * 365 * 24 * 3600)
 
     #===============================================================================================================
     # Total outdoor air by zone
