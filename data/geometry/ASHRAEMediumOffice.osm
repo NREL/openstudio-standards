@@ -4452,30 +4452,30 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:SpaceType,
   {34e15ad4-259e-4af7-9d47-f9dfb6b78bc5}, !- Handle
-  Office WholeBuilding - Md Office,       !- Name
+  Office,       !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {507a5052-c6fa-4e80-96ea-d8413460cc49}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Office,                                 !- Standards Building Type
-  WholeBuilding - Md Office;              !- Standards Space Type
+  Office;              !- Standards Space Type
 
 OS:Rendering:Color,
   {507a5052-c6fa-4e80-96ea-d8413460cc49}, !- Handle
-  Office WholeBuilding - Md Office,       !- Name
+  Office,       !- Name
   120,                                    !- Rendering Red Value
   230,                                    !- Rendering Green Value
   199;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {197e68ab-195b-4ad3-9452-c3b5ed7c640d}, !- Handle
-  Plenum,                                 !- Name
+  Corridor,                                 !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  Corridor;                                 !- Standards Space Type
 
 OS:SubSurface,
   {bc65ca32-39bf-48a6-a1cd-d61dc5fd3db7}, !- Handle
