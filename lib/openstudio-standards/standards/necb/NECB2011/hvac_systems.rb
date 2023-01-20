@@ -504,6 +504,7 @@ class NECB2011
     capacity_w = boiler_hot_water_find_capacity(boiler_hot_water)
 
     # Check if secondary and/or modulating boiler required
+    boiler_capacity = capacity_w
     if capacity_w / 1000.0 >= 352.0
       if boiler_hot_water.name.to_s.include?('Primary Boiler')
         boiler_capacity = capacity_w
@@ -513,7 +514,7 @@ class NECB2011
         boiler_capacity = 0.001
       end
     elsif ((capacity_w / 1000.0) >= 176.0) && ((capacity_w / 1000.0) < 352.0)
-      boiler_capacity = capacity_w / 2
+      boiler_capacity = capacity_w / 2 if (boiler_hot_water.name.to_s.include?('Primary Boiler')) || (boiler_hot_water.name.to_s.include?('Secondary Boiler'))
     elsif (capacity_w / 1000.0) <= 176.0
       if boiler_hot_water.name.to_s.include?('Primary Boiler')
         boiler_capacity = capacity_w
@@ -609,7 +610,7 @@ class NECB2011
         chiller_capacity = 0.001
       end
     else
-      chiller_capacity = capacity_w / 2.0
+      chiller_capacity = capacity_w / 2.0 if (chiller_electric_eir.name.to_s.include 'Primary') || (chiller_electric_eir.name.to_s.include 'Secondary')
     end
     chiller_electric_eir.setReferenceCapacity(chiller_capacity)
 
