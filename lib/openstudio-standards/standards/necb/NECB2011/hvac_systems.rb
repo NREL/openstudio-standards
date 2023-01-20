@@ -504,22 +504,25 @@ class NECB2011
     capacity_w = boiler_hot_water_find_capacity(boiler_hot_water)
 
     # Check if secondary and/or modulating boiler required
+    # If boiler names include 'Primary Boiler' or 'Secondary Boiler' then NECB rules are applied
     boiler_capacity = capacity_w
-    if capacity_w / 1000.0 >= 352.0
-      if boiler_hot_water.name.to_s.include?('Primary Boiler')
-        boiler_capacity = capacity_w
-        boiler_hot_water.setBoilerFlowMode('LeavingSetpointModulated')
-        boiler_hot_water.setMinimumPartLoadRatio(0.25)
-      elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
-        boiler_capacity = 0.001
-      end
-    elsif ((capacity_w / 1000.0) >= 176.0) && ((capacity_w / 1000.0) < 352.0)
-      boiler_capacity = capacity_w / 2 if (boiler_hot_water.name.to_s.include?('Primary Boiler')) || (boiler_hot_water.name.to_s.include?('Secondary Boiler'))
-    elsif (capacity_w / 1000.0) <= 176.0
-      if boiler_hot_water.name.to_s.include?('Primary Boiler')
-        boiler_capacity = capacity_w
-      elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
-        boiler_capacity = 0.001
+    if boiler_hot_water.name.to_s.include?('Primary Boiler') || boiler_hot_water.name.to_s.include?('Secondary Boiler')
+      if capacity_w / 1000.0 >= 352.0
+        if boiler_hot_water.name.to_s.include?('Primary Boiler')
+          boiler_capacity = capacity_w
+          boiler_hot_water.setBoilerFlowMode('LeavingSetpointModulated')
+          boiler_hot_water.setMinimumPartLoadRatio(0.25)
+        elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
+          boiler_capacity = 0.001
+        end
+      elsif ((capacity_w / 1000.0) >= 176.0) && ((capacity_w / 1000.0) < 352.0)
+        boiler_capacity = capacity_w / 2
+      elsif (capacity_w / 1000.0) <= 176.0
+        if boiler_hot_water.name.to_s.include?('Primary Boiler')
+          boiler_capacity = capacity_w
+        elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
+          boiler_capacity = 0.001
+        end
       end
     end
     boiler_hot_water.setNominalCapacity(boiler_capacity)
@@ -603,14 +606,18 @@ class NECB2011
     chiller_electric_eir.setChillerFlowMode('LeavingSetpointModulated')
     chiller_electric_eir.setMinimumPartLoadRatio(0.25)
     chiller_electric_eir.setMinimumUnloadingRatio(0.25)
-    if (capacity_w / 1000.0) < 2100.0
-      if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
-        chiller_capacity = capacity_w
-      elsif chiller_electric_eir.name.to_s.include? 'Secondary Chiller'
-        chiller_capacity = 0.001
+    chiller_capacity = capacity_w
+    # If the chiller name includes 'Primary' or 'Secondary' then apply NECB rules
+    if (chiller_electric_eir.name.to_s.include 'Primary') || (chiller_electric_eir.name.to_s.include 'Secondary')
+      if (capacity_w / 1000.0) < 2100.0
+        if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
+          chiller_capacity = capacity_w
+        elsif chiller_electric_eir.name.to_s.include? 'Secondary Chiller'
+          chiller_capacity = 0.001
+        end
+      else
+        chiller_capacity = capacity_w / 2.0 
       end
-    else
-      chiller_capacity = capacity_w / 2.0 if (chiller_electric_eir.name.to_s.include 'Primary') || (chiller_electric_eir.name.to_s.include 'Secondary')
     end
     chiller_electric_eir.setReferenceCapacity(chiller_capacity)
 
