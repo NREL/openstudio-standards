@@ -52,7 +52,7 @@ class NECB_2015PumpPower_Test < MiniTest::Test
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
-      always_on = model.alwaysOnDiscreteSchedule	
+      always_on = model.alwaysOnDiscreteSchedule
       standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
       standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
           model: model,
@@ -96,16 +96,16 @@ class NECB_2015PumpPower_Test < MiniTest::Test
               max_powertoload = 22
             when 'OS_Pump_VariableSpeed'
               pumps << supplycomp.to_PumpVariableSpeed.get
-              total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
+              total_pump_power += supplycomp.getAutosizedValue('Design Power Consumption', 'W').to_f
             when 'OS_Pump_ConstantSpeed'
               pumps << supplycomp.to_PumpConstantSpeed.get
-              total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
+              total_pump_power += supplycomp.getAutosizedValue('Design Power Consumption', 'W').to_f
             when 'OS_HeaderedPumps_ConstantSpeed'
               pumps << supplycomp.to_HeaderedPumpsConstantSpeed.get
-              total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
+              total_pump_power += supplycomp.getAutosizedValue('Design Power Consumption', 'W').to_f
             when 'OS_HeaderedPumps_VariableSpeed'
               pumps << supplycomp.to_HeaderedPumpsVariableSpeed.get
-              total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
+              total_pump_power += supplycomp.getAutosizedValue('Design Power Consumption', 'W').to_f
           end
         end
         # If no pumps were found then there is nothing to set so go to the next plant loop
