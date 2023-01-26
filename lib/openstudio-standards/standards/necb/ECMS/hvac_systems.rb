@@ -607,7 +607,11 @@ class ECMS
     airloop.sizingSystem.setSystemOutdoorAirMethod('ZoneSum')
     airloop.sizingSystem.setCentralCoolingDesignSupplyAirHumidityRatio(0.0085)
     airloop.sizingSystem.setCentralHeatingDesignSupplyAirHumidityRatio(0.0080)
-    airloop.sizingSystem.setMinimumSystemAirFlowRatio(1.0)
+    if model.version < OpenStudio::VersionString.new('2.7.0')
+      airloop.sizingSystem.setMinimumSystemAirFlowRatio(1.0)
+    else
+      airloop.sizingSystem.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+    end
     case sys_vent_type.downcase
     when 'doas'
       airloop.sizingSystem.setAllOutdoorAirinCooling(true)
