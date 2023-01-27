@@ -780,6 +780,8 @@ class ASHRAE901PRM < Standard
   def model_add_prm_elevators(model)
     # Load elevator data from userdata csv files
     user_elevators = @standards_data.key?('userdata_electric_equipment') ? @standards_data['userdata_electric_equipment'] : nil
+    return false if user_elevators.nil?
+
     user_elevators.each do |user_elevator|
       num_lifts = user_elevator['elevator_number_of_lifts'].to_i
       next if num_lifts == 0
