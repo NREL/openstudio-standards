@@ -19,6 +19,7 @@ class NECB2015
     chiller_electric_eir.setChillerFlowMode('LeavingSetpointModulated')
     chiller_electric_eir.setMinimumPartLoadRatio(0.25)
     chiller_electric_eir.setMinimumUnloadingRatio(0.25)
+    chiller_capacity = capacity_w
     if (capacity_w / 1000.0) < 2100.0
       if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
         chiller_capacity = capacity_w
@@ -118,9 +119,11 @@ class NECB2015
       max_total_loop_pump_power_table = @standards_data['max_total_loop_pump_power']
       plantloop.supplyComponents.each do |supplycomp|
         case supplycomp.iddObjectType.valueName.to_s
-          when 'OS_CentralHeatPumpSystem', 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit', 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit', 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit_SpeedData', 'OS_HeatPump_WaterToWater_EquationFit_Cooling', 'OS_HeatPump_WaterToWater_EquationFit_Heating'
+          when 'OS_CentralHeatPumpSystem', 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit', 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit', 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit_SpeedData'
             search_hash = { 'hydronic_system_type' => 'WSHP' }
             max_powertoload = model_find_object(max_total_loop_pump_power_table, search_hash)['total_normalized_pump_power_wperkw']
+          when 'OS_GroundHeatExchanger_Vertical'
+            max_powertoload = 21.0
           when 'OS_Pump_VariableSpeed'
             pumps << supplycomp.to_PumpVariableSpeed.get
             total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
@@ -135,6 +138,25 @@ class NECB2015
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "A pump used in the plant loop named #{plantloop.name} is headered.  This may result in an error and cause a failure.")
             pumps << supplycomp.to_HeaderedPumpsVariableSpeed.get
             total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
+        end
+      end
+      var_spd_pumps = pumps.select {|pump| pump.to_PumpVariableSpeed.is_initialized}
+      # EnergyPlus doesn't currently properly account for variable speed pumps operation in the condenser loop.
+      # This code is an approximation for a correction to the pump head when the loop has variable speed pumps for ground-source condenser loops.
+      # These estimates were confirmed with OS runs using Montreal weather file for offices, schoold, and apartment bldgs. Office estimates are 
+      # then for other bldg types.
+      if plantloop.name.to_s.upcase.include? "GLHX"
+        max_powertoload = 21.0
+        if !var_spd_pumps.empty?
+          if model.getBuilding.standardsBuildingType.to_s.include? 'Office'
+            max_powertoload = 21.0/4.0
+          elsif model.getBuilding.standardsBuildingType.to_s.include? 'School'
+            max_powertoload = 21.0/18.0
+          elsif model.getBuilding.standardsBuildingType.to_s.include? 'Apartment'
+             max_powertoload = 21.0/3.0
+          else
+            max_powertoload = 21.0/4.0
+          end
         end
       end
       # If no pumps were found then there is nothing to set so go to the next plant loop
@@ -167,14 +189,11 @@ class NECB2015
       # Sizing factor is pump power (W)/ zone demand (in kW, as approximated using plant loop capacity).
       necb_pump_power_cap = plantloop_capacity * max_powertoload / 1000
       pump_power_adjustment = necb_pump_power_cap / total_pump_power
-      # Multiply the factor EnergyPlus uses to calculate the pump power by the sizing factor to make pump power in line with NECB 2015.
+      # Update rated pump head to make pump power in line with NECB 2015.
       pumps.each do |pump|
-        case pump.designPowerSizingMethod
-          when 'PowerPerFlowPerPressure'
-            pump.setDesignShaftPowerPerUnitFlowRatePerUnitHead(pump.designShaftPowerPerUnitFlowRatePerUnitHead.to_f * pump_power_adjustment)
-          when 'PowerPerFlow'
-            pump.setDesignElectricPowerPerUnitFlowRate(pump.designElectricPowerPerUnitFlowRate.to_f * pump_power_adjustment)
-        end
+        if pump.designPowerSizingMethod != "PowerPerFlowPerPressure" then OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', 'Design power sizing method for pump ',pump.name.to_s,' not set to PowerPerFlowPerPressure') end
+        new_pump_head = pump_power_adjustment*pump.ratedPumpHead.to_f
+        pump.setRatedPumpHead(new_pump_head)
       end
     end
     return model
