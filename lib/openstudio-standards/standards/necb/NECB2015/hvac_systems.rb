@@ -125,18 +125,18 @@ class NECB2015
             max_powertoload = model_find_object(max_total_loop_pump_power_table, search_hash)['total_normalized_pump_power_wperkw']
           when 'OS_Pump_VariableSpeed'
             pumps << supplycomp.to_PumpVariableSpeed.get
-            total_pump_power += supplycomp.getAutosizedValue('Design Power Consumption', 'W').to_f
+            total_pump_power += supplycomp.autosizedRatedPowerConsumption.get
           when 'OS_Pump_ConstantSpeed'
             pumps << supplycomp.to_PumpConstantSpeed.get
-            total_pump_power += supplycomp.getAutosizedValue('Design Power Consumption', 'W').to_f
+            total_pump_power += supplycomp.autosizedRatedPowerConsumption.get
           when 'OS_HeaderedPumps_ConstantSpeed'
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "A pump used in the plant loop named #{plantloop.name} is headered.  This may result in an error and cause a failure.")
             pumps << supplycomp.to_HeaderedPumpsConstantSpeed.get
-            total_pump_power += supplycomp.getAutosizedValue('Design Power Consumption', 'W').to_f
+            total_pump_power += supplycomp.autosizedRatedPowerConsumption.get
           when 'OS_HeaderedPumps_VariableSpeed'
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "A pump used in the plant loop named #{plantloop.name} is headered.  This may result in an error and cause a failure.")
             pumps << supplycomp.to_HeaderedPumpsVariableSpeed.get
-            total_pump_power += supplycomp.getAutosizedValue('Design Power Consumption', 'W').to_f
+            total_pump_power += supplycomp.autosizedRatedPowerConsumption.get
         end
       end
       # If no pumps were found then there is nothing to set so go to the next plant loop
