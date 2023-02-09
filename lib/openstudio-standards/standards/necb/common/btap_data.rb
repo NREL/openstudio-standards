@@ -295,7 +295,7 @@ class BTAPData
     outdoor_roofs = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'RoofCeiling')
     outdoor_floors = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'Floor')
     outdoor_subsurfaces = BTAP::Geometry::Surfaces.get_subsurfaces_from_surfaces(outdoor_surfaces)
-    ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, 'Ground')
+    ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, ['Ground', 'Foundation'])
     ground_walls = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'Wall')
     ground_roofs = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'RoofCeiling')
     ground_floors = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'Floor')
@@ -403,8 +403,7 @@ class BTAPData
   def envelope_exterior_surface_table
     surfaces = @model.getSurfaces.sort
     outdoor_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, 'Outdoors')
-    ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, 'Ground')
-    ground_surfaces += BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, 'Foundation')
+    ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, ['Ground', 'Foundation'])
     exterior_opaque_surfaces = outdoor_surfaces + ground_surfaces
     # outdoor_surfaces.each { |surface| puts surface.name}
     # get surface table from sql
@@ -1410,6 +1409,7 @@ class BTAPData
      'energy_eui_natural_gas_gj_per_m_sq',
      'energy_eui_pumps_gj_per_m_sq',
      'energy_eui_total_gj_per_m_sq',
+     'energy_eui_heat recovery_gj_per_m_sq',
      'energy_eui_water systems_gj_per_m_sq'].each { |end_use| data[end_use] = 0.0 }
     # Get E+ End use table from sql
     table = get_sql_table_to_json(@model, 'AnnualBuildingUtilityPerformanceSummary', 'Entire Facility', 'End Uses')['table']
