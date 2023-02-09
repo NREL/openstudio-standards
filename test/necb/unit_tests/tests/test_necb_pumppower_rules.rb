@@ -95,17 +95,21 @@ class NECB_2015PumpPower_Test < MiniTest::Test
             when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
               max_powertoload = 22
             when 'OS_Pump_VariableSpeed'
-              pumps << supplycomp.to_PumpVariableSpeed.get
-              total_pump_power += supplycomp.autosizedRatedPowerConsumption.get
+              pump = supplycomp.to_PumpVariableSpeed.get
+              pumps << pump
+              total_pump_power += pump.autosizedRatedPowerConsumption.get
             when 'OS_Pump_ConstantSpeed'
-              pumps << supplycomp.to_PumpConstantSpeed.get
-              total_pump_power += supplycomp.autosizedRatedPowerConsumption.get
+              pump = supplycomp.to_PumpConstantSpeed.get
+              pumps << pump
+              total_pump_power += pump.autosizedRatedPowerConsumption.get
             when 'OS_HeaderedPumps_ConstantSpeed'
-              pumps << supplycomp.to_HeaderedPumpsConstantSpeed.get
-              total_pump_power += supplycomp.autosizedRatedPowerConsumption.get
+              pump = supplycomp.to_HeaderedPumpsConstantSpeed.get
+              pumps << pump
+              total_pump_power += pump.autosizedRatedPowerConsumption.get
             when 'OS_HeaderedPumps_VariableSpeed'
-              pumps << supplycomp.to_HeaderedPumpsVariableSpeed.get
-              total_pump_power += supplycomp.autosizedRatedPowerConsumption.get
+              pump = supplycomp.to_HeaderedPumpsVariableSpeed.get
+              pumps << pump
+              total_pump_power += pump.autosizedRatedPowerConsumption.get
           end
         end
         # If no pumps were found then there is nothing to set so go to the next plant loop
