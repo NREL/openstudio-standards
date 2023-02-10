@@ -1817,8 +1817,10 @@ class ECMS
                                                      loop_spm_type: 'none',
                                                      loop_setpoint: 'none',
                                                      loop_temp_diff: 10.0)
+    heat_rej_loop_eqpt.setName('DistrictHeating GLHX')
     htg_eqpt_outlet_node = heat_rej_loop_eqpt.outletModelObject.get.to_Node.get
     clg_eqpt = create_plantloop_clg_eqpt(model, 'District_Cooling')
+    clg_eqpt.setName('DistrictCooling GLHX')
     clg_eqpt.addToNode(htg_eqpt_outlet_node)
     htg_spm = create_plantloop_spm( model, 'Scheduled', 5.0)
     htg_spm.addToNode(htg_eqpt_outlet_node)
@@ -1829,14 +1831,23 @@ class ECMS
     heat_rej_loop.addDemandBranchForComponent(hw_loop_htg_eqpt)
     heat_rej_loop.addDemandBranchForComponent(chw_loop_clg_eqpt)
 
+    # add output variables  for district heating and cooling
+    model.getOutputVariables.each {|ivar| ivar.remove}
+    dist_htg_var = OpenStudio::Model::OutputVariable.new("District Heating Hot Water Rate",model)
+    dist_htg_var.setReportingFrequency("hourly")
+    dist_htg_var.setKeyValue("*")
+    dist_clg_var = OpenStudio::Model::OutputVariable.new("District Cooling Chilled Water Rate",model)
+    dist_clg_var.setReportingFrequency("hourly")
+    dist_clg_var.setKeyValue("*")
+
     return systems
   end
 
   #=============================================================================================================================
   # Appy efficiencies for ECM "hs14_cgshp_fancoils"
   def apply_efficiency_ecm_hs14_cgshp_fancoils(model)
-    heatpump_siz_f = 0.5  # sizing factor for water-source heat pump (heating mode)
-    chiller_siz_f = 0.5  # sizing factor for water-cooled chiller 
+    heatpump_siz_f = 0.4  # sizing factor for water-source heat pump (heating mode)
+    chiller_siz_f = 0.4  # sizing factor for water-cooled chiller 
     # get water-source heat pump
     hw_loops = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'heating'}
     hw_heatpump_loop = nil
@@ -1899,8 +1910,57 @@ class ECMS
       raise("apply_efficiency_ecm_hs14_cgshp_fancoils: cooling capacity of chiller #{chiller_water_cooled.name.to_s} is not defined")
     end
     chiller_water_cooled.setReferenceCapacity(chiller_siz_f*cap)
-     
-    return
+  end
+
+  #=============================================================================================================================
+  def set_ghx_loop_district_cap(model)
+    # The autosized values for the district heating and cooling objects on a condenser loop are the sum of the peak heating and 
+    # cooling loads. Here the capacity of the district heating object of the condenser loop is set to the maximum district heating 
+    # rate on the winter design day. Similarily the capacity of the district cooling object of the condenser loop is set to the 
+    # maximum district cooling rate on the summer design day.
+
+    cw_loops = model.getPlantLoops.select{|loop| loop.sizingPlant.loopType.to_s.downcase == 'condenser'}
+    ghx_loops = cw_loops.select {|loop| loop.name.to_s.downcase.include? 'glhx'}
+    return if ghx_loops.empty?
+    ghx_loop = ghx_loops[0]
+    dist_htg_eqpts = ghx_loop.supplyComponents.select {|comp| comp.to_DistrictHeating.is_initialized}
+    dist_htg_eqpt = dist_htg_eqpts[0].to_DistrictHeating.get if !dist_htg_eqpts.empty?
+    dist_clg_eqpts = ghx_loop.supplyComponents.select {|comp| comp.to_DistrictCooling.is_initialized}
+    dist_clg_eqpt = dist_clg_eqpts[0].to_DistrictCooling.get if !dist_clg_eqpts.empty?
+    raise("set_cond_loop_district_cap: condenser loop doesn't have a district heating and district cooling objects") if dist_htg_eqpts.empty? || dist_clg_eqpts.empty?
+    # District Heating
+    sql_command = "SELECT ReportVariableDataDictionaryIndex FROM ReportVariableDataDictionary
+               WHERE VariableName='District Heating Hot Water Rate'"
+    dhtg_index = model.sqlFile.get.execAndReturnFirstString(sql_command).get
+    raise("set_ghx_loop_district_cap: EnergyPlus sql results file has no data for district heating hot water rate") if dhtg_index.nil?
+    sql_command = "SELECT Value FROM ReportVariableWithTime
+               WHERE ReportDataDictionaryIndex=#{dhtg_index} AND DayType='WinterDesignDay'"
+    dist_htg_w = model.sqlFile.get.execAndReturnVectorOfString(sql_command).get
+    sql_command = "SELECT Value FROM ReportVariableWithTime
+               WHERE ReportDataDictionaryIndex=#{dhtg_index} AND DayType='SummerDesignDay'"
+    dist_htg_s = model.sqlFile.get.execAndReturnVectorOfString(sql_command).get
+    # District Cooling
+    sql_command = "SELECT ReportVariableDataDictionaryIndex FROM ReportVariableDataDictionary
+               WHERE VariableName='District Cooling Chilled Water Rate'"
+    dclg_index = model.sqlFile.get.execAndReturnFirstString(sql_command).get
+    raise("set_ghx_loop_district_cap: EnergyPlus sql results file has no data for district cooling chilled water rate") if dclg_index.nil?
+    sql_command = "SELECT Value FROM ReportVariableWithTime
+               WHERE ReportDataDictionaryIndex=#{dclg_index} AND DayType='SummerDesignDay'"
+    dist_clg_s = model.sqlFile.get.execAndReturnVectorOfString(sql_command).get
+    sql_command = "SELECT Value FROM ReportVariableWithTime
+               WHERE ReportDataDictionaryIndex=#{dclg_index} AND DayType='WinterDesignDay'"
+    dist_clg_w = model.sqlFile.get.execAndReturnVectorOfString(sql_command).get
+    # Assign peak heating and cooling loads to capacities of district objects
+    max_htg_load = 0.0
+    max_clg_load = 0.0
+    for hour in 1..24
+      htg_load = [dist_htg_w[hour-1].to_f-dist_clg_w[hour-1].to_f,0.0].max
+      clg_load = [dist_clg_s[hour-1].to_f-dist_htg_s[hour-1].to_f,0.0].max
+      max_htg_load = [max_htg_load,htg_load].max
+      max_clg_load = [max_clg_load,clg_load].max
+    end
+    dist_htg_eqpt.setNominalCapacity(max_htg_load)
+    dist_clg_eqpt.setNominalCapacity(max_clg_load)
   end
 
   # =============================================================================================================================
