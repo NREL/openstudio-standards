@@ -1048,6 +1048,7 @@ class NECB2011
     heat_pump_avail_sch_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, heat_pump_avail_sch_var)
     updated_heat_pump_avail_sch = OpenStudio::Model::ScheduleConstant.new(model)
     multi_speed_heat_pump.setAvailabilitySchedule(updated_heat_pump_avail_sch)
+    # This method will seem like an error in number of args..but this is due to swig voodoo.
     heat_pump_avail_sch_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(updated_heat_pump_avail_sch, 'Schedule:Constant', 'Schedule Value')
     heat_pump_avail_sch_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     heat_pump_avail_sch_prog.setName("#{multi_speed_heat_pump.name.to_s.gsub(/[ +-.]/, '_')} Availability Schedule Program by Line")
@@ -2015,6 +2016,7 @@ class NECB2011
     fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
     fan.setPressureRise(640)
 
+    # This method will seem like an error in number of args..but this is due to swig voodoo.
     ptac = OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner.new(model,
                                                                          always_on,
                                                                          fan,
