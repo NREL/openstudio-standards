@@ -608,7 +608,7 @@ class NECB2011
     chiller_electric_eir.setMinimumUnloadingRatio(0.25)
     chiller_capacity = capacity_w
     # If the chiller name includes 'Primary' or 'Secondary' then apply NECB rules
-    if (chiller_electric_eir.name.to_s.include 'Primary') || (chiller_electric_eir.name.to_s.include 'Secondary')
+    if (chiller_electric_eir.name.to_s.include? 'Primary') || (chiller_electric_eir.name.to_s.include? 'Secondary')
       if (capacity_w / 1000.0) < 2100.0
         if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
           chiller_capacity = capacity_w
