@@ -2613,7 +2613,7 @@ class ECMS
 
     component.setNormalizedBoilerEfficiencyCurve(part_load_curve)
     if component.isNominalCapacityAutosized
-      boiler_size_W = model.getAutosizedValue(component, 'Design Size Nominal Capacity', 'W').to_f
+      boiler_size_W = component.autosizedNominalCapacity.get
     else
       boiler_size_W = component.nominalCapacity.to_f
     end

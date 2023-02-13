@@ -42,7 +42,7 @@ class NECB2011
 
     # puts air_loop_hvac.name.to_s
     # Design Supply Air Flow Rate: This method below reads the value from the sql file.
-    dsafr_m3_per_s = air_loop_hvac.model.getAutosizedValue(air_loop_hvac, 'Design Supply Air Flow Rate', 'm3/s')
+    dsafr_m3_per_s = air_loop_hvac.autosizedDesignSupplyAirFlowRate
     min_dsafr_l_per_s = 1500
     unless dsafr_m3_per_s.empty?
       dsafr_l_per_s = dsafr_m3_per_s.get * 1000
