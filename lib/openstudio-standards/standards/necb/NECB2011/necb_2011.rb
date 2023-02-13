@@ -7,6 +7,7 @@ class NECB2011 < Standard
   attr_accessor :standards_data
   attr_accessor :space_type_map
   attr_accessor :space_multiplier_map
+  attr_accessor :fuel_type_set
   
   # This is a helper method to convert arguments that may support 'NECB_Default, and nils to convert to float'
   def convert_arg_to_f(variable:, default:)
@@ -359,6 +360,8 @@ class NECB2011 < Standard
                            output_meters: nil,
                            airloop_economizer_type: nil,
                            baseline_system_zones_map_option: nil)
+    self.fuel_type_set = SystemFuels.new()
+    self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel)
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
@@ -395,10 +398,8 @@ class NECB2011 < Standard
                       lights_scale: lights_scale)
     apply_kiva_foundation(model)
     apply_systems_and_efficiencies(model: model,
-                                   primary_heating_fuel: primary_heating_fuel,
                                    sizing_run_dir: sizing_run_dir,
-                                   necb_reference_hp: necb_reference_hp,
-                                   necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
+                                   primary_heating_fuel: primary_heating_fuel,
                                    dcv_type: dcv_type,
                                    ecm_system_name: ecm_system_name,
                                    ecm_system_zones_map_option: ecm_system_zones_map_option,
@@ -469,10 +470,8 @@ class NECB2011 < Standard
   end
 
   def apply_systems_and_efficiencies(model:,
-                                     primary_heating_fuel:,
                                      sizing_run_dir:,
-                                     necb_reference_hp: false,
-                                     necb_reference_hp_supp_fuel: 'DefaultFuel',
+                                     primary_heating_fuel:,
                                      dcv_type: 'NECB_Default',
                                      ecm_system_name: 'NECB_Default',
                                      ecm_system_zones_map_option: 'NECB_Default',
@@ -502,17 +501,25 @@ class NECB2011 < Standard
     # -------- Systems Layout-----------
 
     # Create Default Systems.
-    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir, shw_scale: shw_scale,
-                  necb_reference_hp: necb_reference_hp, necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel, baseline_system_zones_map_option: baseline_system_zones_map_option)
+    apply_systems(model: model,
+                  primary_heating_fuel: primary_heating_fuel,
+                  sizing_run_dir: sizing_run_dir,
+                  shw_scale: shw_scale,
+                  baseline_system_zones_map_option: baseline_system_zones_map_option)
 
     # Apply new ECM system. Overwrite standard as required.
-    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self, primary_heating_fuel: primary_heating_fuel, 
+    ecm.apply_system_ecm(model: model,
+                         ecm_system_name: ecm_system_name,
+                         template_standard: self,
+                         primary_heating_fuel: primary_heating_fuel,
                          ecm_system_zones_map_option: ecm_system_zones_map_option)
 
     # -------- Performace, Efficiencies, Controls and Sensors ------------
     #
     # Set code standard equipment charecteristics.
-    sql_db_vars_map = apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir, necb_reference_hp: necb_reference_hp)
+    sql_db_vars_map = apply_standard_efficiencies(model: model,
+                                                  sizing_run_dir: sizing_run_dir,
+                                                  necb_reference_hp: self.fuel_type_set.necb_reference_hp)
     # Apply System
     ecm.apply_system_efficiencies_ecm(model: model, ecm_system_name: ecm_system_name)
     # Apply ECM ERV charecteristics as required. Part 2 of above ECM.
