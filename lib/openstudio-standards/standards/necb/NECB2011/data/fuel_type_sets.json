@@ -38,7 +38,7 @@
           "heating_coil_type_sys4": "DX",
           "heating_coil_type_sys6": "DX",
           "necb_reference_hp_supp_fuel": "NaturalGas",
-          "necb_reference_hp": false,
+          "necb_reference_hp": true,
           "fan_type": "cav_speed_drive",
           "swh_fueltype": "NaturalGas"        },
         {
