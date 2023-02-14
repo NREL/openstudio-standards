@@ -178,9 +178,7 @@ class NECB2011 < Standard
                                    epw_file:,
                                    debug: false,
                                    sizing_run_dir: Dir.pwd,
-                                   necb_reference_hp: false,
-                                   necb_reference_hp_supp_fuel: 'DefaultFuel',
-                                   primary_heating_fuel: 'DefaultFuel',
+                                   primary_heating_fuel: 'Electricity',
                                    dcv_type: 'NECB_Default',
                                    lights_type: 'NECB_Default',
                                    lights_scale: 1.0,
@@ -235,8 +233,6 @@ class NECB2011 < Standard
     return model_apply_standard(model: model,
                                 epw_file: epw_file,
                                 sizing_run_dir: sizing_run_dir,
-                                necb_reference_hp: necb_reference_hp,
-                                necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                 primary_heating_fuel: primary_heating_fuel,
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
                                 lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
