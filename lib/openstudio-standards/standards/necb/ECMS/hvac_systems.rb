@@ -467,7 +467,7 @@ class ECMS
   # Add equipment for ECM 'hs08_ccashp_vrf':
   #   -Constant-volume DOAS with air-source heat pump for heating and cooling and electric backup
   #   -Zonal terminal VRF units connected to an outdoor VRF condenser unit
-  #   -Zonal electric backup
+  #   -Zonal electric backup   #TODO revise text Sara
   def add_ecm_hs08_ccashp_vrf(
     model:,
     system_zones_map:,
@@ -476,6 +476,7 @@ class ECMS
     heating_fuel:,
     standard:,
     air_sys_eqpt_type: 'ccashp')
+    puts "heating_fuel is #{heating_fuel}"#TODO Sara delete
 
     # Update system zones map if needed
     if ecm_system_zones_map_option != 'NECB_Default'
@@ -541,13 +542,15 @@ class ECMS
                     zone_supp_htg_eqpt_type: 'none',
                     zone_clg_eqpt_type: 'vrf',
                     zone_fan_type: 'On_Off')
-      # add electric baseboards for backup
+      # add electric or hot-water baseboards for backup; Type of baseboard follows the primary heating fuel used in the building model.
+      zone_htg_eqpt_type = 'baseboard_hotwater' if heating_fuel == 'NaturalGas'  #baseboard_hotwater #TODO to be corrected
+      zone_htg_eqpt_type = 'baseboard_electric' if heating_fuel == 'Electricity'
       add_zone_eqpt(model: model,
                     airloop: airloop,
                     zones: zones,
                     outdoor_unit: nil,
                     zone_diffuser_type: nil,
-                    zone_htg_eqpt_type: 'baseboard_electric',
+                    zone_htg_eqpt_type: zone_htg_eqpt_type,
                     zone_supp_htg_eqpt_type: 'none',
                     zone_clg_eqpt_type: 'none',
                     zone_fan_type: 'none')
@@ -562,6 +565,7 @@ class ECMS
   # =============================================================================================================================
   # Apply efficiencies for ECM 'hs08_ccashp_vrf'
   def apply_efficiency_ecm_hs08_ccashp_vrf(model, air_sys_eqpt_type: 'ccashp')
+    puts "Sara hs08_ccashp_vrf" #TODO Sara Delete
     # Use same performance data as ECM 'hs09_ccashpsys' for air system
     if air_sys_eqpt_type == 'ccashp'
       apply_efficiency_ecm_hs09_ccashp_baseboard(model)
@@ -589,6 +593,8 @@ class ECMS
       fan_pr_rise = fan_power_per_flow_rate * (fan.fanEfficiency * fan.motorEfficiency)
       fan.setPressureRise(fan_pr_rise)
     end
+    puts model  #TODO Sara delete
+
   end
 
   # =============================================================================================================================
@@ -810,6 +816,16 @@ class ECMS
     when 'baseboard_electric'
       htg_eqpt = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
       htg_eqpt.setName('Zone HVAC Baseboard Convective Electric')
+    when 'baseboard_hotwater'
+      hw_loop = OpenStudio::Model::PlantLoop.new(model)
+      setup_hw_loop_with_components(model, hw_loop, 'NaturalGas', model.alwaysOnDiscreteSchedule)
+
+      htg_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
+      htg_coil.setName("Coil Heating Water Baseboard")
+      hw_loop.addDemandBranchForComponent(htg_coil)
+
+      htg_eqpt = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, model.alwaysOnDiscreteSchedule, htg_coil)
+      htg_eqpt.setName('Zone HVAC Baseboard Convective Water')
     when 'coil_electric', 'ptac_electric_off', 'unitheater_electric'
       htg_eqpt = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
       htg_eqpt.setName('CoilHeatingElectric')
@@ -949,6 +965,7 @@ class ECMS
     end
     sys_name_zone_htg_eqpt_type = zone_htg_eqpt_type
     sys_name_zone_htg_eqpt_type = 'b-e' if zone_htg_eqpt_type == 'baseboard_electric' || zone_htg_eqpt_type == 'ptac_electric_off'
+    sys_name_zone_htg_eqpt_type = 'b-hw' if zone_htg_eqpt_type == 'baseboard_hotwater'
     sys_name_zone_clg_eqpt_type = zone_clg_eqpt_type
     sys_name_zone_clg_eqpt_type = 'ptac' if zone_clg_eqpt_type == 'ptac_electric_off'
     update_sys_name(airloop, zone_htg: sys_name_zone_htg_eqpt_type, zone_clg: sys_name_zone_clg_eqpt_type) if zone_diffuser_type
@@ -1039,7 +1056,8 @@ class ECMS
       coil_cooling_dx_variable_speed_apply_curves(clg_dx_coil, eqpt_name)
       coil_heating_dx_variable_speed_apply_curves(htg_dx_coil, eqpt_name)
       # add zone equipment and diffuser
-      zone_htg_eqpt_type = 'baseboard_electric'
+      zone_htg_eqpt_type = 'baseboard_hotwater' if heating_fuel == 'NaturalGas'
+      zone_htg_eqpt_type = 'baseboard_electric' if heating_fuel == 'Electricity'
       zone_htg_eqpt_type = 'ptac_electric_off' if sys_info['sys_vent_type'] == 'doas'
       zone_clg_eqpt_type = 'none'
       zone_clg_eqpt_type = 'ptac_electric_off' if sys_info['sys_vent_type'] == 'doas'
@@ -1054,14 +1072,16 @@ class ECMS
                     zone_supp_htg_eqpt_type: 'none',
                     zone_clg_eqpt_type: zone_clg_eqpt_type,
                     zone_fan_type: zone_fan_type)
-      # for doas use baseboard electric as backup for PTAC units
+      # for doas use baseboard electric or hotwater as backup for PTAC units
+      zone_htg_eqpt_type = 'baseboard_hotwater' if heating_fuel == 'NaturalGas'
+      zone_htg_eqpt_type = 'baseboard_electric' if heating_fuel == 'Electricity'
       if sys_info['sys_vent_type'] == 'doas'
         add_zone_eqpt(model: model,
                       airloop: airloop,
                       zones: zones,
                       outdoor_unit: nil,
                       zone_diffuser_type: nil,
-                      zone_htg_eqpt_type: 'baseboard_electric',
+                      zone_htg_eqpt_type: zone_htg_eqpt_type,
                       zone_supp_htg_eqpt_type: 'none',
                       zone_clg_eqpt_type: 'none',
                       zone_fan_type: 'none')
@@ -1356,7 +1376,8 @@ class ECMS
       coil_cooling_dx_single_speed_apply_curves(clg_dx_coil,eqpt_name)
       coil_heating_dx_single_speed_apply_curves(htg_dx_coil,eqpt_name)
       # add zone equipment and diffuser
-      zone_htg_eqpt_type = 'baseboard_electric'
+      zone_htg_eqpt_type = 'baseboard_hotwater' if heating_fuel == 'NaturalGas'
+      zone_htg_eqpt_type = 'baseboard_electric' if heating_fuel == 'Electricity'
       zone_htg_eqpt_type = 'ptac_electric_off' if sys_info['sys_vent_type'] == 'doas'
       zone_clg_eqpt_type = 'none'
       zone_clg_eqpt_type = 'ptac_electric_off' if sys_info['sys_vent_type'] == 'doas'
@@ -1371,14 +1392,14 @@ class ECMS
                     zone_supp_htg_eqpt_type: 'none',
                     zone_clg_eqpt_type: zone_clg_eqpt_type,
                     zone_fan_type: zone_fan_type)
-      # for doas use baseboard electric as backup for PTAC units
+      # for doas use baseboard electric or hotwater as backup for PTAC units
       if sys_info['sys_vent_type'] == 'doas'
         add_zone_eqpt(model: model,
                       airloop: airloop,
                       zones: zones,
                       outdoor_unit: nil,
                       zone_diffuser_type: nil,
-                      zone_htg_eqpt_type: 'baseboard_electric',
+                      zone_htg_eqpt_type: zone_htg_eqpt_type,
                       zone_supp_htg_eqpt_type: 'none',
                       zone_clg_eqpt_type: 'none',
                       zone_fan_type: 'none')
