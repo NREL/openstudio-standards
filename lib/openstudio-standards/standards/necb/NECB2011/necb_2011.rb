@@ -507,7 +507,7 @@ class NECB2011 < Standard
     ecm.apply_system_ecm(model: model,
                          ecm_system_name: ecm_system_name,
                          template_standard: self,
-                         primary_heating_fuel: primary_heating_fuel,
+                         primary_heating_fuel: self.fuel_type_set.ecm_fueltype,
                          ecm_system_zones_map_option: ecm_system_zones_map_option)
 
     # -------- Performace, Efficiencies, Controls and Sensors ------------

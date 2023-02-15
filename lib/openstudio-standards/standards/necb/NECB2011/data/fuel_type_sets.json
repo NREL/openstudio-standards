@@ -24,7 +24,8 @@
           "necb_reference_hp_supp_fuel": null,
           "necb_reference_hp": false,
           "fan_type": "var_speed_drive",
-          "swh_fueltype": "NaturalGas"
+          "swh_fueltype": "NaturalGas",
+          "ecm_fueltype": "NaturalGas"
         },
         {
           "name":"NaturalGasHPGasBackup",
@@ -40,7 +41,9 @@
           "necb_reference_hp_supp_fuel": "NaturalGas",
           "necb_reference_hp": true,
           "fan_type": "cav_speed_drive",
-          "swh_fueltype": "NaturalGas"        },
+          "swh_fueltype": "NaturalGas",
+          "ecm_fueltype": "NaturalGas"
+        },
         {
           "name":"NaturalGasHPElecBackupMixed",
           "boiler_fueltype": "NaturalGas",
@@ -55,7 +58,9 @@
           "necb_reference_hp_supp_fuel": "Electricity",
           "necb_reference_hp":true,
           "fan_type": "cav_speed_drive",
-          "swh_fueltype": "NaturalGas"        },
+          "swh_fueltype": "NaturalGas",
+          "ecm_fueltype": "NaturalGas"
+        },
         {
           "name": "Electricity",
           "boiler_fueltype": "Electricity",
@@ -70,7 +75,8 @@
           "hp_supp_heating_coil_type": null,
           "necb_reference_hp":false,
           "fan_type": "var_speed_drive",
-          "swh_fueltype": "Electricity"
+          "swh_fueltype": "Electricity",
+          "ecm_fueltype": "Electricity"
 
         },
         {
@@ -87,7 +93,9 @@
           "necb_reference_hp_supp_fuel": "Electricity",
           "necb_reference_hp":true,
           "fan_type": "cav_speed_drive",
-          "swh_fueltype": "Electricity"        },
+          "swh_fueltype": "Electricity",
+          "ecm_fueltype": "Electricity"
+        },
         {
           "name": "ElectricityHPGasBackupMixed",
           "boiler_fueltype": "Electricity",
@@ -102,7 +110,8 @@
           "necb_reference_hp_supp_fuel": "NaturalGas",
           "necb_reference_hp":true,
           "fan_type": "cav_speed_drive",
-          "swh_fueltype": "Electricity"        },
+          "swh_fueltype": "Electricity",
+          "ecm_fueltype": "Electricity" },
         {
           "name": "FuelOilNo2",
           "boiler_fueltype": "FuelOilNo2",
@@ -117,7 +126,10 @@
           "hp_supp_heating_coil_type": null,
           "necb_reference_hp":true,
           "fan_type": "var_speed_drive",
-          "swh_fueltype": "Electricity"        }
+          "swh_fueltype": "Electricity",
+          "ecm_fueltype": "Electricity"
+
+        }
       ]
     }
   }
