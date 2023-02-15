@@ -478,16 +478,7 @@ class ECMS
     air_sys_eqpt_type: 'ccashp')
 
     # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
-    plant_loop_names = []
-    if heating_fuel == 'NaturalGas'
-      model.getPlantLoops.sort.each do |plant_loop|
-        plant_loop_names << plant_loop.name.to_s
-      end
-      unless plant_loop_names.include? 'Hot Water Loop'
-        hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        setup_hw_loop_with_components(model, hw_loop, 'NaturalGas', model.alwaysOnDiscreteSchedule)
-      end
-    end
+    hw_loop = add_hotwater_loop(model: model, heating_fuel: heating_fuel)
 
     # Update system zones map if needed
     if ecm_system_zones_map_option != 'NECB_Default'
@@ -1032,16 +1023,7 @@ class ECMS
                                     standard:)
 
     # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
-    plant_loop_names = []
-    if heating_fuel == 'NaturalGas'
-      model.getPlantLoops.sort.each do |plant_loop|
-        plant_loop_names << plant_loop.name.to_s
-      end
-      unless plant_loop_names.include? 'Hot Water Loop'
-        hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        setup_hw_loop_with_components(model, hw_loop, 'NaturalGas', model.alwaysOnDiscreteSchedule)
-      end
-    end
+    hw_loop = add_hotwater_loop(model: model, heating_fuel: heating_fuel)
 
     # Set heating fuel
     updated_heating_fuel = heating_fuel
@@ -1214,16 +1196,7 @@ class ECMS
                              heating_fuel:)
 
     # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
-    plant_loop_names = []
-    if heating_fuel == 'NaturalGas'
-      model.getPlantLoops.sort.each do |plant_loop|
-        plant_loop_names << plant_loop.name.to_s
-      end
-      unless plant_loop_names.include? 'Hot Water Loop'
-        hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        setup_hw_loop_with_components(model, hw_loop, 'NaturalGas', model.alwaysOnDiscreteSchedule)
-      end
-    end
+    hw_loop = add_hotwater_loop(model: model, heating_fuel: heating_fuel)
 
     # Set heating fuel
     updated_heating_fuel = heating_fuel
@@ -1382,16 +1355,7 @@ class ECMS
                                   heating_fuel:)
 
     # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
-    plant_loop_names = []
-    if heating_fuel == 'NaturalGas'
-      model.getPlantLoops.sort.each do |plant_loop|
-        plant_loop_names << plant_loop.name.to_s
-      end
-      unless plant_loop_names.include? 'Hot Water Loop'
-        hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        setup_hw_loop_with_components(model, hw_loop, 'NaturalGas', model.alwaysOnDiscreteSchedule)
-      end
-    end
+    hw_loop = add_hotwater_loop(model: model, heating_fuel: heating_fuel)
 
     # Set heating fuel
     updated_heating_fuel = heating_fuel
@@ -3157,4 +3121,21 @@ class ECMS
       end
     end
   end
+  # ============================================================================================================================
+  # Add one hot-water loop for hot-water baseboards if primary heating fuel is gas
+  def add_hotwater_loop(model:, heating_fuel:)
+    plant_loop_names = []
+    if heating_fuel == 'NaturalGas'
+      model.getPlantLoops.sort.each do |plant_loop|
+        plant_loop_names << plant_loop.name.to_s
+      end
+      unless plant_loop_names.include? 'Hot Water Loop'
+        hw_loop = OpenStudio::Model::PlantLoop.new(model)
+        setup_hw_loop_with_components(model, hw_loop, 'NaturalGas', model.alwaysOnDiscreteSchedule)
+      end
+    end
+    return hw_loop
+  end
+  # ============================================================================================================================
+
 end
