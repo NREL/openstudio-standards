@@ -150,6 +150,7 @@ class NECB2011
       chw_loop.addDemandBranchForComponent(fc_clg_coil)
 
       # add connections to FPFC.
+      # This method will seem like an error in number of args..but this is due to swig voodoo.
       zone_fc = OpenStudio::Model::ZoneHVACFourPipeFanCoil.new(model, always_on, fc_fan, fc_clg_coil, fc_htg_coil)
       zone_fc.addToThermalZone(zone)
 
