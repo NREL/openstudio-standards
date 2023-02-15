@@ -96,7 +96,12 @@ class NECB2011
 
       # TODO: other fuel-fired heating coil types? (not available in OpenStudio/E+ - may need to play with efficiency to mimic other fuel types)
 
-      air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.new(model, mau_fan, mau_htg_coil, mau_clg_coil, mau_supplemental_htg_coil)
+      # This method will seem like an error in number of args..but this is due to swig voodoo.
+      air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.new(model,
+                                                                                                mau_fan,
+                                                                                                mau_htg_coil,
+                                                                                                mau_clg_coil,
+                                                                                                mau_supplemental_htg_coil)
       air_to_air_heatpump.setName("#{zones[0].name} ASHP")
       air_to_air_heatpump.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(system_data[:MinimumOutdoorDryBulbTemperatureforCompressorOperation])
       air_to_air_heatpump.setControllingZoneorThermostatLocation(zones[0])

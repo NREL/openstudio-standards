@@ -93,7 +93,11 @@ class NECB2011
 
   # Organizes Zones and assigns them to appropriate systems according to NECB 2011-17 systems spacetype rules in Sec 8.
   # requires requires fuel type to be assigned for each system aspect. Defaults to gas hydronic.
-  def apply_systems(model:, primary_heating_fuel:, sizing_run_dir:, shw_scale:, necb_reference_hp:false, necb_reference_hp_supp_fuel:'DefaultFuel', baseline_system_zones_map_option:)
+  def apply_systems(model:,
+                    primary_heating_fuel:,
+                    sizing_run_dir:,
+                    shw_scale:,
+                    baseline_system_zones_map_option:)
     raise('validation of model failed.') unless validate_initial_model(model)
 
     # Check to see if model is using another vintage of spacetypes. If so overwrite the @standards for the object with the
@@ -112,97 +116,71 @@ class NECB2011
     # collect sizing information on each space.
     store_space_sizing_loads(model)
 
-    # Set the primary fuel set to default to to specific fuel type.
-    if primary_heating_fuel == 'DefaultFuel'
-      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-      primary_heating_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
-    end
-    # Get fuelset.
-    system_fuel_defaults = @standards_data['fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == primary_heating_fuel }
-    raise("fuel_type_sets named #{primary_heating_fuel} not found in fuel_type_sets table.") if system_fuel_defaults.nil?
-
-    # Assign fuel sources.
-    boiler_fueltype = system_fuel_defaults['boiler_fueltype']
-    baseboard_type = system_fuel_defaults['baseboard_type']
-    mau_type = system_fuel_defaults['mau_type']
-    mau_cooling_type = system_fuel_defaults['mau_cooling_type']
-    chiller_type = system_fuel_defaults['chiller_type']
-    if necb_reference_hp # heating coils must be DX if NECB reference HP HVAC is selected
-      mau_heating_coil_type = 'DX'
-      heating_coil_type_sys3 = 'DX'
-      heating_coil_type_sys4 = 'DX'
-      heating_coil_type_sys6 = 'DX'
-      fan_type = 'cav_speed_drive'
-    else
-      mau_heating_coil_type = system_fuel_defaults['mau_heating_coil_type']
-      heating_coil_type_sys3 = system_fuel_defaults['heating_coil_type_sys3']
-      heating_coil_type_sys4 = system_fuel_defaults['heating_coil_type_sys4']
-      heating_coil_type_sys6 = system_fuel_defaults['heating_coil_type_sys6']
-      fan_type = system_fuel_defaults['fan_type']
-    end
 
     # remove idealair from zones if any.
     model.getZoneHVACIdealLoadsAirSystems.each(&:remove)
-    @hw_loop = create_hw_loop_if_required(baseboard_type,
-                                          boiler_fueltype,
-                                          mau_heating_coil_type,
+    @hw_loop = create_hw_loop_if_required(self.fuel_type_set.baseboard_type,
+                                          self.fuel_type_set.boiler_fueltype,
+                                          self.fuel_type_set.mau_heating_coil_type,
                                           model)
     # Rule that all dwelling units have their own zone and system.
     auto_system_dwelling_units(model: model,
-                               necb_reference_hp: necb_reference_hp,
-                               necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
-                               baseboard_type: baseboard_type,
-                               boiler_fueltype: boiler_fueltype,
-                               chiller_type: chiller_type,
-                               fan_type: fan_type,
-                               heating_coil_type_sys3: heating_coil_type_sys3,
-                               heating_coil_type_sys4: heating_coil_type_sys4,
+                               necb_reference_hp: self.fuel_type_set.necb_reference_hp,
+                               necb_reference_hp_supp_fuel: self.fuel_type_set.necb_reference_hp_supp_fuel,
+                               baseboard_type: self.fuel_type_set.baseboard_type,
+                               boiler_fueltype: self.fuel_type_set.boiler_fueltype,
+                               chiller_type: self.fuel_type_set.chiller_type,
+                               fan_type: self.fuel_type_set.fan_type,
+                               heating_coil_type_sys3: self.fuel_type_set.heating_coil_type_sys3,
+                               heating_coil_type_sys4: self.fuel_type_set.heating_coil_type_sys4,
                                hw_loop: @hw_loop,
-                               heating_coil_type_sys6: heating_coil_type_sys6,
-                               mau_cooling_type: mau_cooling_type,
-                               mau_heating_coil_type: mau_heating_coil_type,
-                               mau_type: mau_type,
+                               heating_coil_type_sys6: self.fuel_type_set.heating_coil_type_sys6,
+                               mau_cooling_type: self.fuel_type_set.mau_cooling_type,
+                               mau_heating_coil_type: self.fuel_type_set.mau_heating_coil_type,
+                               mau_type: self.fuel_type_set.mau_type,
                                baseline_system_zones_map_option: baseline_system_zones_map_option)
 
     # Assign a single system 4 for all wet spaces.. and assign the control zone to the one with the largest load.
-    auto_system_wet_spaces(baseboard_type: baseboard_type,
-                           necb_reference_hp: necb_reference_hp,
-                           necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
-                           boiler_fueltype: boiler_fueltype,
-                           heating_coil_type_sys4: heating_coil_type_sys4,
+    auto_system_wet_spaces(baseboard_type: self.fuel_type_set.baseboard_type,
+                           necb_reference_hp: self.fuel_type_set.necb_reference_hp,
+                           necb_reference_hp_supp_fuel: self.fuel_type_set.necb_reference_hp_supp_fuel,
+                           boiler_fueltype: self.fuel_type_set.boiler_fueltype,
+                           heating_coil_type_sys4: self.fuel_type_set.heating_coil_type_sys4,
                            model: model)
 
     # Assign a single system 4 for all storage spaces.. and assign the control zone to the one with the largest load.
-    auto_system_storage_spaces(baseboard_type: baseboard_type,
-                               necb_reference_hp: necb_reference_hp,
-                               necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
-                               boiler_fueltype: boiler_fueltype,
-                               heating_coil_type_sys4: heating_coil_type_sys4,
+    auto_system_storage_spaces(baseboard_type: self.fuel_type_set.baseboard_type,
+                               necb_reference_hp: self.fuel_type_set.necb_reference_hp,
+                               necb_reference_hp_supp_fuel: self.fuel_type_set.necb_reference_hp_supp_fuel,
+                               boiler_fueltype: self.fuel_type_set.boiler_fueltype,
+                               heating_coil_type_sys4: self.fuel_type_set.heating_coil_type_sys4,
                                model: model)
 
     # Assign the wild spaces to a single system 4 system with a control zone with the largest load.
-    auto_system_wild_spaces(baseboard_type: baseboard_type,
-                            necb_reference_hp: necb_reference_hp,
-                            necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
-                            heating_coil_type_sys4: heating_coil_type_sys4,
+    auto_system_wild_spaces(baseboard_type: self.fuel_type_set.baseboard_type,
+                            necb_reference_hp: self.fuel_type_set.necb_reference_hp,
+                            necb_reference_hp_supp_fuel: self.fuel_type_set.necb_reference_hp_supp_fuel,
+                            heating_coil_type_sys4: self.fuel_type_set.heating_coil_type_sys4,
                             model: model)
     # do the regular assignment for the rest and group where possible.
     auto_system_all_other_spaces(model: model,
-                                 necb_reference_hp: necb_reference_hp,
-                                 necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
-                                 baseboard_type: baseboard_type,
-                                 boiler_fueltype: boiler_fueltype,
-                                 chiller_type: chiller_type,
-                                 fan_type: fan_type,
-                                 heating_coil_type_sys3: heating_coil_type_sys3,
-                                 heating_coil_type_sys4: heating_coil_type_sys4,
+                                 necb_reference_hp: self.fuel_type_set.necb_reference_hp,
+                                 necb_reference_hp_supp_fuel: self.fuel_type_set.necb_reference_hp_supp_fuel,
+                                 baseboard_type: self.fuel_type_set.baseboard_type,
+                                 boiler_fueltype: self.fuel_type_set.boiler_fueltype,
+                                 chiller_type: self.fuel_type_set.chiller_type,
+                                 fan_type: self.fuel_type_set.fan_type,
+                                 heating_coil_type_sys3: self.fuel_type_set.heating_coil_type_sys3,
+                                 heating_coil_type_sys4: self.fuel_type_set.heating_coil_type_sys4,
                                  hw_loop: @hw_loop,
-                                 heating_coil_type_sys6: heating_coil_type_sys6,
-                                 mau_cooling_type: mau_cooling_type,
-                                 mau_heating_coil_type: mau_heating_coil_type,
-                                 mau_type: mau_type
+                                 heating_coil_type_sys6: self.fuel_type_set.heating_coil_type_sys6,
+                                 mau_cooling_type: self.fuel_type_set.mau_cooling_type,
+                                 mau_heating_coil_type: self.fuel_type_set.mau_heating_coil_type,
+                                 mau_type: self.fuel_type_set.mau_type
     )
-    model_add_swh(model: model, swh_fueltype: system_fuel_defaults['swh_fueltype'], shw_scale: shw_scale)
+    model_add_swh(model: model,
+                  swh_fueltype: self.fuel_type_set.swh_fueltype,
+                  shw_scale: shw_scale)
     model_apply_sizing_parameters(model)
     # set a larger tolerance for unmet hours from default 0.2 to 1.0C
     model.getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
