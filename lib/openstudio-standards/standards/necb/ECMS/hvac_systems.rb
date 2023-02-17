@@ -822,7 +822,7 @@ class ECMS
       htg_eqpt.setName('ZoneHVACBaseboardConvectiveElectric')
     when 'baseboard_hotwater'
       htg_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
-      htg_coil.setName("Coil Heating Water Baseboard")
+      htg_coil.setName("CoilHeatingWaterBaseboard")
       hw_loop.addDemandBranchForComponent(htg_coil)
       htg_eqpt = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, model.alwaysOnDiscreteSchedule, htg_coil)
       htg_eqpt.setName('ZoneHVACBaseboardConvectiveWater')
