@@ -33,6 +33,6 @@ class SystemFuels
     @necb_reference_hp_supp_fuel = system_fuel_defaults['necb_reference_hp_supp_fuel']
     @fan_type = system_fuel_defaults['fan_type']
     @swh_fueltype = system_fuel_defaults['swh_fueltype']
-    @ecm_fuel_type = system_fuel_defaults['ecm_fueltype']
+    @ecm_fueltype = system_fuel_defaults['ecm_fueltype']
   end
 end
