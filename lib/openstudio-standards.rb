@@ -30,6 +30,7 @@ module OpenstudioStandards
   # Standards classes
   require_relative "#{stds}/standard"
   # NECB2011 Code
+  require_relative "#{stds}/necb/NECB2011/system_fuels"
   require_relative "#{stds}/necb/NECB2011/necb_2011"
   require_relative "#{stds}/necb/NECB2011/building_envelope"
   require_relative "#{stds}/necb/NECB2011/lighting"
@@ -73,8 +74,6 @@ module OpenstudioStandards
   require_relative "#{stds}/necb/NECB2015/qaqc/necb_2015_qaqc.rb"
   require_relative "#{stds}/necb/common/btap_data.rb"
   require_relative "#{stds}/necb/common/btap_datapoint.rb"
-
-
   # ECM development
   require_relative "#{stds}/necb/ECMS/ecms.rb"
   require_relative "#{stds}/necb/ECMS/erv.rb"

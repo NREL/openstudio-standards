@@ -41,7 +41,7 @@ class NECB_insuite_central_doas_Tests < Minitest::Test
     @epw_files = [
         'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
     ]
-    @primary_heating_fuels = ['DefaultFuel']
+    @primary_heating_fuels = ['NaturalGas']
 
     @baseline_system_zones_map_options = [ # DOAS system types
       'one_sys_per_dwelling_unit',
