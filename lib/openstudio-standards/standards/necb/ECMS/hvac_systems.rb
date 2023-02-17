@@ -467,7 +467,7 @@ class ECMS
   # Add equipment for ECM 'hs08_ccashp_vrf':
   #   -Constant-volume DOAS with air-source heat pump for heating and cooling and electric backup
   #   -Zonal terminal VRF units connected to an outdoor VRF condenser unit
-  #   -Zonal electric backup
+  #   -Zonal electric or hot-water backup
   def add_ecm_hs08_ccashp_vrf(
     model:,
     system_zones_map:,
@@ -476,6 +476,10 @@ class ECMS
     heating_fuel:,
     standard:,
     air_sys_eqpt_type: 'ccashp')
+
+    # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
+    hw_loop = nil
+    hw_loop = add_hotwater_loop(model: model) if heating_fuel == 'NaturalGas'
 
     # Update system zones map if needed
     if ecm_system_zones_map_option != 'NECB_Default'
@@ -540,17 +544,22 @@ class ECMS
                     zone_htg_eqpt_type: 'vrf',
                     zone_supp_htg_eqpt_type: 'none',
                     zone_clg_eqpt_type: 'vrf',
-                    zone_fan_type: 'On_Off')
-      # add electric baseboards for backup
+                    zone_fan_type: 'On_Off',
+                    hw_loop: hw_loop)
+      # add electric or hot-water baseboards for backup; Type of baseboard follows the primary heating fuel used in the building model.
+      zone_htg_eqpt_type = 'baseboard_hotwater' if heating_fuel == 'NaturalGas'
+      zone_htg_eqpt_type = 'baseboard_electric' if heating_fuel == 'Electricity'
+
       add_zone_eqpt(model: model,
                     airloop: airloop,
                     zones: zones,
                     outdoor_unit: nil,
                     zone_diffuser_type: nil,
-                    zone_htg_eqpt_type: 'baseboard_electric',
+                    zone_htg_eqpt_type: zone_htg_eqpt_type,
                     zone_supp_htg_eqpt_type: 'none',
                     zone_clg_eqpt_type: 'none',
-                    zone_fan_type: 'none')
+                    zone_fan_type: 'none',
+                    hw_loop: hw_loop)
       # Now we can find and apply maximum horizontal and vertical distances between outdoor vrf unit and zones with vrf terminal units
       max_hor_pipe_length, max_vert_pipe_length = get_max_vrf_pipe_lengths(model)
       outdoor_vrf_unit.setEquivalentPipingLengthusedforPipingCorrectionFactorinCoolingMode(max_hor_pipe_length)
@@ -589,6 +598,7 @@ class ECMS
       fan_pr_rise = fan_power_per_flow_rate * (fan.fanEfficiency * fan.motorEfficiency)
       fan.setPressureRise(fan_pr_rise)
     end
+
   end
 
   # =============================================================================================================================
@@ -802,14 +812,20 @@ class ECMS
 
   # =============================================================================================================================
   # create zonal heating equipment
-  def create_zone_htg_eqpt(model, zone_htg_eqpt_type)
+  def create_zone_htg_eqpt(model, zone_htg_eqpt_type, hw_loop)
     always_on = model.alwaysOnDiscreteSchedule
     always_off = model.alwaysOffDiscreteSchedule
     htg_eqpt = nil
     case zone_htg_eqpt_type.downcase
     when 'baseboard_electric'
       htg_eqpt = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-      htg_eqpt.setName('Zone HVAC Baseboard Convective Electric')
+      htg_eqpt.setName('ZoneHVACBaseboardConvectiveElectric')
+    when 'baseboard_hotwater'
+      htg_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
+      htg_coil.setName("CoilHeatingWaterBaseboard")
+      hw_loop.addDemandBranchForComponent(htg_coil)
+      htg_eqpt = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, model.alwaysOnDiscreteSchedule, htg_coil)
+      htg_eqpt.setName('ZoneHVACBaseboardConvectiveWater')
     when 'coil_electric', 'ptac_electric_off', 'unitheater_electric'
       htg_eqpt = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
       htg_eqpt.setName('CoilHeatingElectric')
@@ -910,7 +926,8 @@ class ECMS
                     zone_htg_eqpt_type:,
                     zone_supp_htg_eqpt_type:,
                     zone_clg_eqpt_type:,
-                    zone_fan_type:)
+                    zone_fan_type:,
+                    hw_loop:)
 
     always_on = model.alwaysOnDiscreteSchedule
     zones.sort.each do |zone|
@@ -925,8 +942,8 @@ class ECMS
         airloop.addBranchForZone(zone, diffuser.to_StraightComponent)
       end
       clg_eqpt = create_zone_clg_eqpt(model, zone_clg_eqpt_type)
-      htg_eqpt = create_zone_htg_eqpt(model, zone_htg_eqpt_type)
-      supp_htg_eqpt = create_zone_htg_eqpt(model, zone_supp_htg_eqpt_type)
+      htg_eqpt = create_zone_htg_eqpt(model, zone_htg_eqpt_type, hw_loop)
+      supp_htg_eqpt = create_zone_htg_eqpt(model, zone_supp_htg_eqpt_type, hw_loop)
       fan = create_air_sys_fan(model, zone_fan_type)
       # for container zonal equipment call method "create_zone_container_equipment"
       this_is_container_comp = false
@@ -949,6 +966,7 @@ class ECMS
     end
     sys_name_zone_htg_eqpt_type = zone_htg_eqpt_type
     sys_name_zone_htg_eqpt_type = 'b-e' if zone_htg_eqpt_type == 'baseboard_electric' || zone_htg_eqpt_type == 'ptac_electric_off'
+    sys_name_zone_htg_eqpt_type = 'b-hw' if zone_htg_eqpt_type == 'baseboard_hotwater'
     sys_name_zone_clg_eqpt_type = zone_clg_eqpt_type
     sys_name_zone_clg_eqpt_type = 'ptac' if zone_clg_eqpt_type == 'ptac_electric_off'
     update_sys_name(airloop, zone_htg: sys_name_zone_htg_eqpt_type, zone_clg: sys_name_zone_clg_eqpt_type) if zone_diffuser_type
@@ -997,13 +1015,17 @@ class ECMS
   #   -Constant-volume reheat system for single zone systems
   #   -VAV system with reheat for non DOAS multi-zone systems
   #   -Cold-climate air-source heat pump for heating and cooling with electric backup
-  #   -Electric baseboards
+  #   -Electric or hot-water baseboards
   def add_ecm_hs09_ccashp_baseboard(model:,
                                     system_zones_map:,    # hash of ailoop names as keys and array of zones as values
                                     system_doas_flags:,   # hash of system names as keys and flag for DOAS as values
                                     ecm_system_zones_map_option:,
                                     heating_fuel:,
                                     standard:)
+
+    # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
+    hw_loop = nil
+    hw_loop = add_hotwater_loop(model: model) if heating_fuel == 'NaturalGas'
 
     # Set heating fuel
     updated_heating_fuel = heating_fuel
@@ -1039,7 +1061,8 @@ class ECMS
       coil_cooling_dx_variable_speed_apply_curves(clg_dx_coil, eqpt_name)
       coil_heating_dx_variable_speed_apply_curves(htg_dx_coil, eqpt_name)
       # add zone equipment and diffuser
-      zone_htg_eqpt_type = 'baseboard_electric'
+      zone_htg_eqpt_type = 'baseboard_hotwater' if heating_fuel == 'NaturalGas'
+      zone_htg_eqpt_type = 'baseboard_electric' if heating_fuel == 'Electricity'
       zone_htg_eqpt_type = 'ptac_electric_off' if sys_info['sys_vent_type'] == 'doas'
       zone_clg_eqpt_type = 'none'
       zone_clg_eqpt_type = 'ptac_electric_off' if sys_info['sys_vent_type'] == 'doas'
@@ -1053,18 +1076,22 @@ class ECMS
                     zone_htg_eqpt_type: zone_htg_eqpt_type,
                     zone_supp_htg_eqpt_type: 'none',
                     zone_clg_eqpt_type: zone_clg_eqpt_type,
-                    zone_fan_type: zone_fan_type)
-      # for doas use baseboard electric as backup for PTAC units
+                    zone_fan_type: zone_fan_type,
+                    hw_loop: hw_loop)
+      # for doas use baseboard electric or hotwater as backup for PTAC units
+      zone_htg_eqpt_type = 'baseboard_hotwater' if heating_fuel == 'NaturalGas'
+      zone_htg_eqpt_type = 'baseboard_electric' if heating_fuel == 'Electricity'
       if sys_info['sys_vent_type'] == 'doas'
         add_zone_eqpt(model: model,
                       airloop: airloop,
                       zones: zones,
                       outdoor_unit: nil,
                       zone_diffuser_type: nil,
-                      zone_htg_eqpt_type: 'baseboard_electric',
+                      zone_htg_eqpt_type: zone_htg_eqpt_type,
                       zone_supp_htg_eqpt_type: 'none',
                       zone_clg_eqpt_type: 'none',
-                      zone_fan_type: 'none')
+                      zone_fan_type: 'none',
+                      hw_loop: hw_loop)
       end
       return_fan.addToNode(airloop.returnAirNode.get) if return_fan
       systems << airloop
@@ -1170,6 +1197,10 @@ class ECMS
                              standard:,
                              heating_fuel:)
 
+    # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
+    hw_loop = nil
+    hw_loop = add_hotwater_loop(model: model) if heating_fuel == 'NaturalGas'
+
     # Set heating fuel
     updated_heating_fuel = heating_fuel
     if heating_fuel == 'DefaultFuel'
@@ -1224,7 +1255,8 @@ class ECMS
                     zone_htg_eqpt_type: zone_htg_eqpt_type,
                     zone_supp_htg_eqpt_type: zone_supp_htg_eqpt_type,
                     zone_clg_eqpt_type: zone_clg_eqpt_type,
-                    zone_fan_type: zone_fan_type)
+                    zone_fan_type: zone_fan_type,
+                    hw_loop: hw_loop)
       zones.each do |zone|
         zone.equipment.each do |comp|
           if comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
@@ -1317,13 +1349,17 @@ class ECMS
   #   -Constant-volume reheat system for single zone systems
   #   -VAV system with reheat for non DOAS multi-zone systems
   #   -Air-source heat pump for heating and cooling with electric backup
-  #   -Electric baseboards
+  #   -Electric or hot-water baseboards
   def add_ecm_hs12_ashp_baseboard(model:,
                                   system_zones_map:,
                                   system_doas_flags:,
                                   ecm_system_zones_map_option:,
                                   standard:,
                                   heating_fuel:)
+
+    # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
+    hw_loop = nil
+    hw_loop = add_hotwater_loop(model: model) if heating_fuel == 'NaturalGas'
 
     # Set heating fuel
     updated_heating_fuel = heating_fuel
@@ -1356,7 +1392,8 @@ class ECMS
       coil_cooling_dx_single_speed_apply_curves(clg_dx_coil,eqpt_name)
       coil_heating_dx_single_speed_apply_curves(htg_dx_coil,eqpt_name)
       # add zone equipment and diffuser
-      zone_htg_eqpt_type = 'baseboard_electric'
+      zone_htg_eqpt_type = 'baseboard_hotwater' if heating_fuel == 'NaturalGas'
+      zone_htg_eqpt_type = 'baseboard_electric' if heating_fuel == 'Electricity'
       zone_htg_eqpt_type = 'ptac_electric_off' if sys_info['sys_vent_type'] == 'doas'
       zone_clg_eqpt_type = 'none'
       zone_clg_eqpt_type = 'ptac_electric_off' if sys_info['sys_vent_type'] == 'doas'
@@ -1370,18 +1407,20 @@ class ECMS
                     zone_htg_eqpt_type: zone_htg_eqpt_type,
                     zone_supp_htg_eqpt_type: 'none',
                     zone_clg_eqpt_type: zone_clg_eqpt_type,
-                    zone_fan_type: zone_fan_type)
-      # for doas use baseboard electric as backup for PTAC units
+                    zone_fan_type: zone_fan_type,
+                    hw_loop: hw_loop)
+      # for doas use baseboard electric or hotwater as backup for PTAC units
       if sys_info['sys_vent_type'] == 'doas'
         add_zone_eqpt(model: model,
                       airloop: airloop,
                       zones: zones,
                       outdoor_unit: nil,
                       zone_diffuser_type: nil,
-                      zone_htg_eqpt_type: 'baseboard_electric',
+                      zone_htg_eqpt_type: zone_htg_eqpt_type,
                       zone_supp_htg_eqpt_type: 'none',
                       zone_clg_eqpt_type: 'none',
-                      zone_fan_type: 'none')
+                      zone_fan_type: 'none',
+                      hw_loop: hw_loop)
       end
       return_fan.addToNode(airloop.returnAirNode.get) if return_fan
       systems << airloop
@@ -3086,4 +3125,19 @@ class ECMS
       end
     end
   end
+  # ============================================================================================================================
+  # Add one hot-water loop for hot-water baseboards if primary heating fuel is gas
+  def add_hotwater_loop(model:)
+    plant_loop_names = []
+    model.getPlantLoops.sort.each do |plant_loop|
+      plant_loop_names << plant_loop.name.to_s
+    end
+    unless plant_loop_names.include? 'Hot Water Loop'
+      hw_loop = OpenStudio::Model::PlantLoop.new(model)
+      setup_hw_loop_with_components(model, hw_loop, 'NaturalGas', model.alwaysOnDiscreteSchedule)
+    end
+    return hw_loop
+  end
+  # ============================================================================================================================
+
 end
