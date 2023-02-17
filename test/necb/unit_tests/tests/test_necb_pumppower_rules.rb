@@ -146,8 +146,8 @@ class NECB_2015PumpPower_Test < MiniTest::Test
         pumps.each do |pump|
           case pump.designPowerSizingMethod
             when 'PowerPerFlowPerPressure'
-              # The default Design Shaft Power Per Unit Flow Rate Per Unit Head is 1.282051282
-              error_value += ((pump.designShaftPowerPerUnitFlowRatePerUnitHead/(pump_power_adjustment*1.282051282)) - 1).abs
+              # The default rated pump head is 179352.0 Pa
+              error_value += ((pump.ratedPumpHead/(pump_power_adjustment*179352.0)) - 1).abs
               run_check = true
             when 'PowerPerFlow'
               # The default Default Design Electric Power Per Unit Flow Rate is 348701.1
