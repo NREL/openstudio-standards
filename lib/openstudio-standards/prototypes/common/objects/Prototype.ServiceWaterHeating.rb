@@ -352,9 +352,13 @@ class Standard
     u_tank = (5.678 * tank_ua) / OpenStudio.convert(tank_surface_area, 'm^2', 'ft^2').get
     hpwh.setName("#{hpwh_vol_gal.round}gal Heat Pump Water Heater - #{water_heater_capacity_kbtu_per_hr.round(0)}kBtu/hr")
 
+    # set min/max HPWH operating temperature limit
+    hpwh_op_min_temp = OpenStudio.convert(45.0, 'F', 'C').get
+    hpwh_op_max_temp = OpenStudio.convert(120.0, 'F', 'C').get
+
     if type == 'WrappedCondenser'
-      hpwh.setMinimumInletAirTemperatureforCompressorOperation(OpenStudio.convert(45.0, 'F', 'C').get)
-      hpwh.setMaximumInletAirTemperatureforCompressorOperation(OpenStudio.convert(120.0, 'F', 'C').get)
+      hpwh.setMinimumInletAirTemperatureforCompressorOperation(hpwh_op_min_temp)
+      hpwh.setMaximumInletAirTemperatureforCompressorOperation(hpwh_op_max_temp)
       # set sensor heights
       if hpwh_vol_gal <= 50.0
         hpwh.setDeadBandTemperatureDifference(0.5)
@@ -586,7 +590,7 @@ class Standard
     # add EMS for overriding HPWH setpoints schedules (for upper/lower heating element in water tank and compressor in heat pump)
     hpwh_name_ems_friendly = ems_friendly_name(hpwh.name.to_s)
     amb_temp_sensor = get_loc_temp_sensors(model, hpwh_name_ems_friendly, water_heater_thermal_zone)
-    hpwh_ctrl_program = add_hpwh_control_program(model, runner, hpwh_name_ems_friendly, amb_temp_sensor, top_element_setpoint_schedule, bottom_element_setpoint_schedule, min_temp, max_temp, sched, tank)
+    hpwh_ctrl_program = add_hpwh_control_program(model, hpwh_name_ems_friendly, amb_temp_sensor, hpwh_top_element_sp, hpwh_bottom_element_sp, hpwh_op_min_temp, hpwh_op_max_temp, swh_temp_sch, tank)
     program_calling_manager = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
     program_calling_manager.setName("#{hpwh_name_ems_friendly} ProgramManager")
     program_calling_manager.setCallingPoint('InsideHVACSystemIterationLoop')
