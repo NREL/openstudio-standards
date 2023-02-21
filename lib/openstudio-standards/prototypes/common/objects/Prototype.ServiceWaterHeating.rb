@@ -1237,5 +1237,15 @@ class Standard
     return hpwh_ctrl_program
   end
 
+  # converts existing string to ems friendly string
+  #
+  # @param name_in_string [String] original name
+  # @return [String] the resulting EMS friendly string
+  def ems_friendly_name(name_in_string)
+    name_ems_friendly = name_in_string.name.to_s
+    name_ems_friendly.gsub!(/\s+/, '') # remove white spaces
+    name_ems_friendly.gsub!(/[^0-9A-Za-z]/, '') # remove special characters
+    name_ems_friendly = "a"+name_ems_friendly # add alphabet at the beginning in case original name starts with a number
+  end
 
 end
