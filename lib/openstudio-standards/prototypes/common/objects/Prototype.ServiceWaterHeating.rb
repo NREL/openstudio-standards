@@ -1154,4 +1154,80 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{pipe_length_ft.round}ft of #{pipe_construction.name} losing heat to #{swh_piping_air_temp_f.round}F air to #{swh_loop.name}.")
     return true
   end
+
+  # Creates/returns EMS sensor for the air that blows through HPWH's evaporator
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param obj_name_hpwh [String] name for the EMS sensor
+  # @param loc_space [OpenStudio::Model::ThermalZone] location of HPWH
+  # @return [OpenStudio::Model::EnergyManagementSystemSensor] the resulting EMS sensor
+  def get_loc_temp_sensors(model, obj_name_hpwh, loc_space)
+    if not loc_space.nil?
+      amb_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Mean Air Temperature')
+      amb_temp_sensor.setName("#{obj_name_hpwh} amb temp")
+      amb_temp_sensor.setKeyName(loc_space.name.to_s)
+    else # Located outside
+      amb_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
+      amb_temp_sensor.setName("#{obj_name_hpwh} amb temp")
+      amb_temp_sensor.setKeyName('Environment')
+    end
+    return amb_temp_sensor
+  end
+
+  # Creates EMS program for overriding setpoint schedules of HPWH
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param obj_name_hpwh [String] name for the EMS sensor
+  # @param amb_temp_sensor [OpenStudio::Model::EnergyManagementSystemSensor] EMS sensor reading air temperature around HPWH's evaporator
+  # @param upper_heating_element_sp_sch [OpenStudio::Model::ScheduleConstant] setpoint schedule for tank's upper heating element
+  # @param lower_heating_element_sp_sch [OpenStudio::Model::ScheduleConstant] setpoint schedule for tank's lower heating element
+  # @param min_temp [Double] minimum operating temperature limit for HPWH's compressor
+  # @param max_temp [Double] maximum operating temperature limit for HPWH's compressor
+  # @param hp_compressor_sp_sch [OpenStudio::Model::ScheduleConstant] setpoint schedule for HPWH's compressor
+  # @param tank [OpenStudio::Model::WaterHeaterStratified] HPWH's water tank
+  # @return [OpenStudio::Model::EnergyManagementSystemSensor] the resulting EMS sensor
+  def add_hpwh_control_program(model, obj_name_hpwh, amb_temp_sensor, upper_heating_element_sp_sch, lower_heating_element_sp_sch, min_temp, max_temp, hp_compressor_sp_sch, tank)
+    # actuator for heat pump compressor
+    hpwhschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(hp_compressor_sp_sch,"Schedule:Constant","Schedule Value")
+    hpwhschedoverride_actuator.setName("#{obj_name_hpwh} HPWHSchedOverride")
+
+    # actuator for lower heating element in water tank
+    leschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(lower_heating_element_sp_sch,"Schedule:Constant","Schedule Value")
+    leschedoverride_actuator.setName("#{obj_name_hpwh} LESchedOverride")
+
+    # actuator for upper heating element in water tank
+    ueschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(upper_heating_element_sp_sch,"Schedule:Constant","Schedule Value")
+    ueschedoverride_actuator.setName("#{obj_name_hpwh} UESchedOverride")
+
+    # sensor for heat pump compressor
+    t_set_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
+    t_set_sensor.setName("#{obj_name_hpwh} T_set")
+    t_set_sensor.setKeyName(hp_compressor_sp_sch.name.to_s)
+
+    # define control configuration 
+    t_offset = 9.0 # deg-C
+    min_temp_c = OpenStudio.convert(min_temp, 'F', 'C').get.round(2)
+    max_temp_c = OpenStudio.convert(max_temp, 'F', 'C').get.round(2)
+
+    # get tank specifications
+    upper_element_db = tank.heater1DeadbandTemperatureDifference
+
+    # define control logic
+    hpwh_ctrl_program = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    hpwh_ctrl_program.setName("#{obj_name_hpwh} Control")
+    hpwh_ctrl_program.addLine("Set #{hpwhschedoverride_actuator.name} = #{t_set_sensor.name}")
+    hpwh_ctrl_program.addLine("If (#{amb_temp_sensor.name}<#{min_temp_c}) || (#{amb_temp_sensor.name}>#{max_temp_c})") # lockout hp when ambient temperature is either too high or too low
+    hpwh_ctrl_program.addLine("Set #{ueschedoverride_actuator.name} = #{t_set_sensor.name}")
+    hpwh_ctrl_program.addLine("Set #{leschedoverride_actuator.name} = #{t_set_sensor.name}")
+    hpwh_ctrl_program.addLine('Else')
+    hpwh_ctrl_program.addLine("Set #{ueschedoverride_actuator.name} = #{t_set_sensor.name} - #{t_offset}") # upper element setpoint temperature
+    hpwh_ctrl_program.addLine("Set #{ueschedoverride_actuator.name}_cut_in = #{ueschedoverride_actuator.name} - #{upper_element_db}") # upper element cut-in temperature
+    hpwh_ctrl_program.addLine("Set #{leschedoverride_actuator.name} = 0") # lower element disabled
+    hpwh_ctrl_program.addLine("Set #{leschedoverride_actuator.name}_cut_in = 0") # lower element disabled
+    hpwh_ctrl_program.addLine('EndIf')
+  
+    return hpwh_ctrl_program
+  end
+
+
 end
