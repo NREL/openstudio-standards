@@ -583,6 +583,14 @@ class Standard
       tank.setUseFlowRateFractionSchedule(schedule)
     end
 
+    # add EMS for overriding HPWH setpoints schedules (for upper/lower heating element in water tank and compressor in heat pump)
+    amb_temp_sensor = get_loc_temp_sensors(model, hpwh_name_ems_friendly, best_location)
+    hpwh_ctrl_program = add_hpwh_control_program(model, runner, hpwh_name_ems_friendly, amb_temp_sensor, top_element_setpoint_schedule, bottom_element_setpoint_schedule, min_temp, max_temp, sched, tank)
+    program_calling_manager = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+    program_calling_manager.setName("#{hpwh_name_ems_friendly} ProgramManager")
+    program_calling_manager.setCallingPoint('InsideHVACSystemIterationLoop')
+    program_calling_manager.addProgram(hpwh_ctrl_program)     
+
     return hpwh
   end
 
