@@ -1196,6 +1196,7 @@ class ECMS
                              ecm_system_zones_map_option:,
                              standard:,
                              heating_fuel:)
+    hw_loop = nil
 
     # Set heating fuel
     updated_heating_fuel = heating_fuel
