@@ -942,7 +942,7 @@ class ECMS
                     zone_supp_htg_eqpt_type:,
                     zone_clg_eqpt_type:,
                     zone_fan_type:,
-                    hw_loop:)
+                    hw_loop: nil)
 
     always_on = model.alwaysOnDiscreteSchedule
     zones.sort.each do |zone|
