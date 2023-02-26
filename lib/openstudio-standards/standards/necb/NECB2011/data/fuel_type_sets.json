@@ -124,7 +124,7 @@
           "heating_coil_type_sys4": "Electric",
           "heating_coil_type_sys6": "Electric",
           "hp_supp_heating_coil_type": null,
-          "necb_reference_hp":true,
+          "necb_reference_hp":false,
           "fan_type": "var_speed_drive",
           "swh_fueltype": "Electricity",
           "ecm_fueltype": "Electricity"
