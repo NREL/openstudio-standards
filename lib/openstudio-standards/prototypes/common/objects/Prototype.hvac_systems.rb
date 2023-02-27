@@ -379,6 +379,8 @@ class Standard
           default_cop = kw_per_ton_to_cop(1.188)
         when 'WaterCooled'
           default_cop = kw_per_ton_to_cop(0.66)
+        else
+          default_cop = kw_per_ton_to_cop(0.66)
         end
         chiller.setReferenceCOP(default_cop)
 
