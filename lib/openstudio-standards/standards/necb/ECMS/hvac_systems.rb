@@ -1359,10 +1359,7 @@ class ECMS
                              ecm_system_zones_map_option:,
                              standard:,
                              heating_fuel:)
-
-    # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
     hw_loop = nil
-    hw_loop = add_hotwater_loop(model: model) if heating_fuel == 'NaturalGas'
 
     # Set heating fuel
     updated_heating_fuel = heating_fuel
