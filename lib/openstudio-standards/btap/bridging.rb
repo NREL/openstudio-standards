@@ -1,5 +1,5 @@
 # **************************************************************************** /
-# *  Copyright (c) 2008-2022, Natural Resources Canada
+# *  Copyright (c) 2008-2023, Natural Resources Canada
 # *  All rights reserved.
 # *
 # *  This library is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ module BTAP
     #   - range of PSI factors (i.e. MAJOR thermal bridging), e.g. corners
     #   - costing parameters
     #
-    # NOTE: This method is be replaced with roo-based spreadsheet parsing,
+    # NOTE: This module is be replaced with roo-based spreadsheet parsing,
     #       generating a BTAP costing JSON file. TO DO.
     #
     # Ref: EVOKE BTAP costing spreadsheet modifications (2022), synced with:
@@ -72,12 +72,12 @@ module BTAP
     #   MASS8 : precast  | xps     | wool | frame | gypsum
     #   MASSC : cladding | mineral | cmu  | foam  | gypsum
     #
-    # Paired LPs vs HPs vall variants are critical for NECB2017 and NECB2020.
-    # See below, and end of this document for additional NOTES.
+    # Paired LPs vs HPs vall variants are critical for 'uprating' cases, e.g.
+    # NECB2017. See below, and end of this document for additional NOTES.
 
     MASS2      = "BTAP-ExteriorWall-Mass-2"              # LP wall
-    MASS2_BAD  = "BTAP-ExteriorWall-Mass-2 bad"          # LP "bad" factors
-    MASS2_GOOD = "BTAP-ExteriorWall-Mass-2 good"         # LP "good" factors
+    MASS2_BAD  = "BTAP-ExteriorWall-Mass-2 bad"          # LP "bad" PSI factors
+    MASS2_GOOD = "BTAP-ExteriorWall-Mass-2 good"         # LP "good" PSI factors
     MASSB      = "BTAP-ExteriorWall-Mass-2b"             # HP, from @Uo < 0.183
     MASSB_BAD  = "BTAP-ExteriorWall-Mass-2b bad"         # HP "bad" PSI factors
     MASSB_GOOD = "BTAP-ExteriorWall-Mass-2b good"        # HP "good" PSI factors
@@ -134,22 +134,23 @@ module BTAP
     #      - superclass for ECMS
     #   3. NECB2020
     #
-    # In all 3 classes, 2x TRUE/FALSE switches allow BTAP users to activate
-    # or deactivate TBD functionality altogether:
-    #   - to derate above-grade, opaque surface constructions (or not)
-    #   - to (first) uprate opaque surface constructions (or not)
+    # In all 3 classes, a BTAP/TBD option switch allows BTAP users to activate
+    # or deactivate TBD functionality :
+    #   - "none" : TBD is deactivated, i.e. no up/de-rating
+    #   - "bad" or "good": (BTAP-costed) PSI factor sets, i.e. derating only
+    #   - "uprate": iteratively determine initial Uo ... prior to derating
     #
     # For vintages < NECB2017, the default BTAP policy is to switch off TBD,
-    # i.e. 'false' for both switches see NOTE at the end of this document).
-    # To instead assess prescriptive Ut compliance for vintages NECB2017 and
-    # NECB2020, TBD must be activated ('true' for Ut switch) and it needs to
-    # iteratively reset combined Uo & PSI factors towards finding the least
-    # expensive, yet compliant combination. Why? Improved Uo construction
-    # variants are necessarily required, given:
+    # i.e. 'none' (see the NOTE on this topic at the end of this document). To
+    # instead assess prescriptive Ut compliance for vintages NECB2017 and
+    # NECB2020, the BTAP/TBD must be set to "uprate" so it can iteratively reset
+    # combined Uo & PSI factors towards finding the least expensive, yet
+    # compliant combination. Why? Improved Uo construction variants are
+    # necessarily required, given:
     #
-    #   Ut = Uo + ( ∑psi • L )/A + ( ∑khi • n )/A   (ref: rd2.github.io/tbd)
+    #   Ut = Uo + ( ∑psi  L )/A + ( ∑khi  n )/A   (ref: rd2.github.io/tbd)
     #
-    # If one ignores linear ("( ∑psi • L )/A") and point ("( ∑khi • n )/A")
+    # If one ignores linear ("( ∑psi  L )/A") and point ("( ∑khi  n )/A")
     # conductances, Ut simply equates to Uo. Yet for ANY added linear or
     # point conductance, Uo factors must necessarily be lower than required
     # NECB2017 or NECB2020 Ut factors. EVOKE's 2022 contribution extends
@@ -168,8 +169,8 @@ module BTAP
     #   github.com/rd2/tbd/blob/f34ec6a017fcc0f6022f2a46e056b46b9d036b3b/
     #   spec/tbd_tests_spec.rb#L9219
     #
-    # For these reasons, BTAP's use of TBD rests on an ITERATIVE solution
-    # for NECB2017 and NECB2020 (or similar vintages in the future):
+    # For these reasons, BTAP's use of TBD rests on an ITERATIVE uprating
+    # solution for e.g. NECB2017 and NECB2020:
     #
     #   1. TBD attempts to achieve NECB-required area-weighted Ut factors
     #      for above-grade walls (then for roofs and exposed floors),
@@ -194,7 +195,7 @@ module BTAP
     #
     # If none of the available combinations are sufficient:
     #   - TBD red-flags a failed attempt at NECB2017 or NECB2020 compliance
-    #   - TBD maintains the last attempted Uo + PSI combination
+    #   - TBD keeps iteration #4 Uo + PSI combo, then derates
     #   - BTAP runs the simulation (giving some performance gap indication)
 
     # Hash of admissible Uo factors. If initial BTAP constructions fail to
@@ -428,7 +429,7 @@ module BTAP
     # here (just in case):
     #
     #   - for the "bad" BTAP cases, retained values are those of the
-    #     generic "poor" BETBG set
+    #     generic "bad" BETBG set
     #   - while "good" BTAP values are those of the generic BETBG
     #     "efficient" set
 
@@ -1171,18 +1172,18 @@ module BTAP
     ##
     # Retrieve building/space type-specific assembly/construction.
     #
-    # @param sptype [Symbol] BTAP/TBD spacetype
+    # @param spacetype [Symbol] BTAP/TBD spacetype
     # @param stype [Symbol] :walls, :floors or :roofs
     # @param performance [Symbol] :lp (low-) or :hp (high-performance)
     #
     # @return [String] corresponding BTAP construction (STEL2 if fail)
-    def assembly(sptype = :office, stype = :walls, performance = :hp)
+    def assembly(spacetype = :office, stype = :walls, performance = :hp)
       return FLOOR if stype == :floors
       return ROOFS if stype == :roofs
 
       @@data.each do |id, construction|
         next  unless construction.key?(performance)
-        return id if construction[:sptypes].key?(sptype)
+        return id if construction[:sptypes].key?(spacetype)
       end
 
       STEL2
@@ -1237,6 +1238,14 @@ module BTAP
   class BTAP::Bridging
     extend BridgingData
 
+    TOL  = TBD::TOL
+    TOL2 = TBD::TOL2
+    DBG  = TBD::DBG
+    INF  = TBD::INF
+    WRN  = TBD::WRN
+    ERR  = TBD::ERR
+    FTL  = TBD::FTL
+
     # @return [Hash] BTAP/TBD Hash, specific to an OpenStudio model
     attr_reader :model
 
@@ -1252,8 +1261,28 @@ module BTAP
     # @param model [OpenStudio::Model::Model] a model
     # @param argh [Hash] BTAP/TBD argument hash
     def initialize(model = nil, argh = {})
+      @model    = {}
+      @tally    = {}
       @feedback = { logs: [] }
       lgs       = @feedback[:logs]
+
+      # BTAP generates free-floating, unoccupied spaces (e.g. attics) as
+      # 'indirectly conditioned', rather than 'unconditioned' (e.g. vented
+      # attics). For instance, all outdoor-facing sloped roof surfaces of an
+      # attic in BTAP are insulated, while attic floors remain uninsulated. BTAP
+      # adds to the thermal zone of each unoccupied space a thermostat without
+      # referecing heating and/or cooling setpoint schedule objects. These
+      # conditions do not meet TBD's internal 'plenum' logic/check (which is
+      # based on OpenStudio-Standards), and so TBD ends up tagging such spaces
+      # as unconditioned. Consequently, TBD attempts to up/de-rate attic floors
+      # - not sloped roof surfaces. The original BTAP solution will undoubtedly
+      # need revision. In the meantime, and in an effort to harmonize TBD with
+      # BTAP's current approach, an OpenStudio model may be temporarily
+      # modified prior to TBD processes, ensuring that each attic space is
+      # temporarily mistaken as a conditioned plenum. The return variable of the
+      # following method is a Hash holding temporarily-modified spaces,
+      # i.e. buffer zones.
+      buffers = self.alter_buffers(model)
 
       # Populate BTAP/TBD inputs with BTAP & OpenStudio model parameters,
       # which returns 'true' if successful. Check @feedback logs if failure to
@@ -1265,15 +1294,21 @@ module BTAP
       comply  = false
       redflag = false
       perform = :lp    # Low-performance wall constructions
-      quality = :bad   # poor PSI factors
+      quality = :bad   # default PSI factors - BTAP users can reset to :good
+      quality = :good if argh.key?(:quality) && argh[:quality] == :good
       combo   = "#{perform.to_s}_#{quality.to_s}".to_sym # e.g. :lp_bad
       args    = {}     # initialize native TBD arguments
 
       # If uprating, initialize native TBD args.
       [:walls, :floors, :roofs].each do |stypes|
-        next if @model[stypes].zero?
+        next if @model[stypes].empty?
         next unless argh.key?(stypes)
         next unless argh[stypes].key?(:ut)
+
+        ut = argh[stypes][:ut]
+        ok = ut.is_a?(Numeric) && ut.between?(UMIN, UMAX)
+        lgs << "Invalid BTAP/TBD #{stypes} Ut" unless ok
+        next                                   unless ok
 
         stype  = stypes.to_s.chop
         uprate = "uprate_#{stypes.to_s}".to_sym
@@ -1282,7 +1317,7 @@ module BTAP
 
         args[uprate] = true
         args[option] = "ALL #{stype} constructions"
-        args[ut    ] = argh[stypes][:ut]
+        args[ut    ] = ut
       end
 
       args[:io_path] = @model[combo] # contents of a "tbd.json" file
@@ -1309,7 +1344,6 @@ module BTAP
         # Run TBD on cloned OpenStudio models until compliant.
         mdl = OpenStudio::Model::Model.new
         mdl.addObjects(model.toIdfFile.objects)
-
         TBD.clean!
         res = TBD.process(mdl, args)
 
@@ -1340,11 +1374,11 @@ module BTAP
           end
 
           if unable
-            puts # TEMPORARY
-            puts "¨¨¨ combo : #{combo}"
-            puts args[:io_path][:psis]
-            TBD.logs.each { |lg| puts lg }
-            puts
+            # puts # TEMPORARY for debugging
+            # puts "¨¨¨ combo : #{combo}"
+            # puts args[:io_path][:psis]
+            # TBD.logs.each { |lg| puts lg }
+            # puts
           else
             comply = true
           end
@@ -1354,14 +1388,14 @@ module BTAP
           # Not completely out of the woods yet for uprated cases. Despite
           # having TBD identify a winning combination, determine if BTAP holds
           # admissible Uo values (see lines ~245, :uos key). If TBD-estimated
-          # Uo is lower than any of these admissible BTAP Uo, then no
-          # commercially available solution has been identified. Reset
-          # "comply" to "false", and loop again (until TBD-reported Uo is
-          # above or equal to any of the BTAP Uo values). This needs
-          # revisiting once BTAP enables building-type construction selection.
+          # Uo is lower than any of these admissible BTAP Uo factors, then no
+          # commercially available solution has been identified. Reset "comply"
+          # to "false", and loop again (until TBD-reported Uo is above or equal
+          # to any of the BTAP Uo factors). This needs revisiting once BTAP
+          # enables building-type construction selection.
           [:walls, :floors, :roofs].each do |stypes|
             break unless comply
-            next if @model[stypes].zero?
+            next if @model[stypes].empty?
             next unless argh.key?(stypes)
             next unless argh[stypes].key?(:ut)
 
@@ -1378,21 +1412,21 @@ module BTAP
             comply = false unless ok
             break          unless ok
 
-            # Check if within range of BTAP commercially options, for:
+            # Check if within range of BTAP commercially-available options, for:
             #   - walls, floors & roofs
             #   - specific to each space type
-            @model[:sptypes].values.each do |sptype|
-              uo_sptype = nil # reset at each iteration
+            @model[:sptypes].each do |id, spacetype|
+              uo_sptype = nil
               break unless comply
-              next unless sptype.key?(stypes)
-              next unless sptype[stypes].key?(perform) # :lp or :hp
+              next unless spacetype.key?(stypes)
+              next unless spacetype[stypes].key?(perform) # :lp or :hp
 
-              construction = sptype[stypes][perform]
+              construction = spacetype[stypes][perform]
               next unless @@data.key?(construction)
               next unless @@data[construction].key?(:uos)
 
               # puts
-              # puts "required Uo for #{stype}: #{args[stype_uo]}"
+              # puts "required Uo for #{id} #{stypes}: #{args[stype_uo]}"
               # puts
 
               @@data[construction][:uos].keys.each do |u|
@@ -1401,6 +1435,8 @@ module BTAP
                 next unless ok
 
                 uo_sptype = uo # winning combo?
+                @model[:constructions] = {} unless @model.key?(:constructions)
+                @model[:constructions][construction] = { uo: uo }
                 break
               end
 
@@ -1424,10 +1460,10 @@ module BTAP
           lgs << "REDFLAG: no Ut-compliant TBD combo"
 
           [:walls, :floors, :roofs].each do |stypes|
-            next if @model[stypes].zero?
             next unless argh.key?(stypes)
             next unless argh[stypes].key?(:ut)
 
+            groups = {}
             stype  = stypes.to_s.chop
             uprate = "uprate_#{stypes.to_s}".to_sym
             option = "#{stype}_option".to_sym
@@ -1438,14 +1474,55 @@ module BTAP
             args.delete(option)
             args.delete(ut    )
 
-            # Reset OpenStudio wall, floor and/or roof Uo factors to minimum
-            # available BTAP (costed) values e.g.:
+            # Group BTAP constructions based on lowest Uo factors e.g.:
             #  - 0.130 for WOOD7
             #  - 0.080 for STEL2
             #  - 0.100 for all ROOFS
-            #    TO_DO ...
+            @model[stypes].each do |id, type|
+              next unless type.key?(:sptype)
+
+              spacetype = type[:sptype] # e.g. :office
+              next unless @model[:sptypes].key?(spacetype)
+              next unless @model[:sptypes][spacetype].key?(stypes)
+              next unless @model[:sptypes][spacetype][stypes].key?(perform)
+
+              construction = @model[:sptypes][spacetype][stypes][perform]
+              next unless @@data.key?(construction)
+              next unless @@data[construction].key?(:uos)
+
+              uos = []
+              @@data[construction][:uos].keys.each { |u| uos << u.to_f / 1000 }
+              uo  = uos.min
+              @model[:constructions] = {} unless @model.key?(:constructions)
+              @model[:constructions][construction] = { uo: uo }
+
+              exists = groups.key?(construction)
+              groups[construction] = { uo: uo, faces: [] } unless exists
+              surface = model.getSurfaceByName(id)
+              next if surface.empty?
+
+              groups[construction][:faces] << surface.get
+            end
+
+            groups.each do |id, group|
+              # puts
+              # puts "#{id} : #{stypes} : #{group[:uo]}: #{group[:faces].size}x"
+              # group[:faces].each { |s| puts s.nameString }
+              sss = BTAP::Geometry::Surfaces.set_surfaces_construction_conductance(group[:faces], group[:uo])
+              # puts
+              #
+              # sss.each do |ssss|
+              #   lc = ssss.construction.get.to_LayeredConstruction.get
+              #   usi = 1 / TBD.rsi(lc, ssss.filmResistance)
+              #   puts "#{ssss.construction.get.nameString} : #{usi}"
+              # end
+              #
+              # puts "~~~~~~~~~~"
+              # puts
+            end
           end
 
+          comply = true # temporary
           break
         end
       end
@@ -1457,17 +1534,17 @@ module BTAP
 
       if comply
         # Run "process" TBD (with last generated args Hash) one last time on
-        # "model" (not cloned "mdl"). This will successfully uprate, then
-        # derate BTAP above-grade surface constructions before simulation.
+        # "model" (not cloned "mdl"). This may uprate (if applicable ... unless
+        # redflagged), then derate BTAP above-grade surface constructions before
+        # simulation.
         TBD.clean!
         res = TBD.process(model, args)
 
-        puts # TEMPORARY
-        puts args[:io_path][:psis]
-        puts
+        # puts # TEMPORARY
+        # puts args[:io_path][:psis]
+        # puts
 
-        comply = false if redflag
-
+        @model[:comply  ] = false            if redflag
         @model[:io      ] = res[:io      ] # TBD outputs (i.e. "tbd.out.json")
         @model[:surfaces] = res[:surfaces] # TBD derated surface data
         @model[:args    ] = args           # last TBD inputs (i.e. "tbd.json")
@@ -1475,6 +1552,103 @@ module BTAP
         self.gen_tallies                   # tallies for BTAP costing
         self.gen_feedback                  # log success messages for BTAP
       end
+
+      self.purge_buffer_schedules(model, buffers)
+    end
+
+    ##
+    # Modify BTAP-generated 'buffer zones' (e.g. attics) to ensure TBD tags
+    # these as indirectly conditioned spaces (e.g. plenums).
+    #
+    # @param model [OpenStudio::Model::Model] a model
+    #
+    # @return [Array] identifiers of modified buffer spaces in model
+    def alter_buffers(model = nil)
+      buffers = []
+      sched   = nil
+      lgs     = @feedback[:logs]
+      cl      = OpenStudio::Model::Model
+      lgs << "Invalid OpenStudio model (buffers)" unless model.is_a?(cl)
+      return buffers                              unless model.is_a?(cl)
+
+      model.getSpaces.each do |space|
+        next if space.partofTotalFloorArea
+        next if space.thermalZone.empty?
+
+        id    = space.nameString
+        zone  = space.thermalZone.get
+        next if zone.isPlenum
+        next if zone.thermostat.empty?
+
+        tstat  = zone.thermostat.get
+        staged = tstat.respond_to?(:heatingTemperatureSetpointSchedule)
+        tstat  = tstat.to_ZoneControlThermostatStagedDualSetpoint.get if staged
+        tstat  = tstat.to_ThermostatSetpointDualSetpoint.get      unless staged
+
+        if sched.nil?
+          name  = "TBD attic setpoint sched"
+          sched = OpenStudio::Model::ScheduleCompact.new(model)
+          sched.setName(name)
+        end
+
+        tstat.setHeatingTemperatureSetpointSchedule(sched)     if staged
+        tstat.setHeatingSetpointTemperatureSchedule(sched) unless staged
+
+        buffers << id
+      end
+
+      buffers
+    end
+
+    ##
+    # Remove previously BTAP/TBD-added heating setpoint schedules for 'buffer
+    # zones' (e.g. attics).
+    #
+    # @param model [OpenStudio::Model::Model] a model
+    # @param buffers [Array] identifiers of modified buffer spaces in model
+    #
+    # @return [Bool] true if successful
+    def purge_buffer_schedules(model = nil, buffers = [])
+      scheds = []
+      lgs    = @feedback[:logs]
+      cl     = OpenStudio::Model::Model
+      lgs << "Invalid OpenStudio model (purge)" unless model.is_a?(cl)
+      lgs << "Invalid BTAP/TBD buffers"         unless buffers.is_a?(Array)
+      return false                              unless model.is_a?(cl)
+      return false                              unless buffers.is_a?(Array)
+
+      buffers.each do |id|
+        space = model.getSpaceByName(id)
+        next if space.empty?
+
+        space = space.get
+        next if space.thermalZone.empty?
+
+        zone = space.thermalZone.get
+        next if zone.thermostat.empty?
+
+        tstat  = zone.thermostat.get
+        staged = tstat.respond_to?(:heatingTemperatureSetpointSchedule)
+        tstat  = tstat.to_ZoneControlThermostatStagedDualSetpoint.get if staged
+        tstat  = tstat.to_ThermostatSetpointDualSetpoint.get      unless staged
+        sched  = tstat.heatingTemperatureSetpointSchedule             if staged
+        sched  = tstat.heatingSetpointTemperatureSchedule         unless staged
+        next if sched.empty?
+
+        sched = sched.get
+        scheds << sched.nameString
+        tstat.resetHeatingSetpointTemperatureSchedule             unless staged
+        tstat.resetHeatingTemperatureSetpointSchedule                 if staged
+      end
+
+      scheds.each do |sched|
+        schd = model.getScheduleByName(sched)
+        next if schd.empty?
+        schd = schd.get
+        schd.remove
+      end
+
+      true
     end
 
     ##
@@ -1506,8 +1680,8 @@ module BTAP
         u = [uo, u].min
       end
 
-      u0 = format("%.3f", u) # TEMPORARY
-      puts "~~ Extracted #{stypes} minU (#{u0}) W/m2.K from OpenStudio model"
+      # u0 = format("%.3f", u) # TEMPORARY
+      # puts "~~ Extracted #{stypes} minU (#{u0}) W/m2.K from OpenStudio model"
 
       u
     end
@@ -1522,9 +1696,9 @@ module BTAP
     def populate(model = nil, argh = {})
       lgs    = @feedback[:logs]
       cl     = OpenStudio::Model::Model
-      @model = {}
+      args   = { option: "(non thermal bridging)" }    # for initial TBD dry run
 
-      # Validate.
+      # Pre-TBD BTAP validatation.
       lgs << "Invalid BTAP/TBD feedback" unless @feedback.is_a?(Hash)
       lgs << "Missing BTAP/TBD logs"     unless @feedback.key?(:logs)
       lgs << "Invalid BTAP/TBD logs"     unless @feedback[:logs].is_a?(Array)
@@ -1539,30 +1713,94 @@ module BTAP
       return false                                    unless argh.is_a?(Hash)
       return false                                        if argh.empty?
 
-      # Initialize number of outdoors-facing walls, exposed floors & roofs.
-      [:walls, :floors, :roofs].each { |stypes| @model[stypes] = 0 }
+      # Fetch number of stories in OpenStudio model.
+      stories = model.getBuilding.standardsNumberOfAboveGroundStories
+      stories = stories.get                  unless stories.empty?
+      stories = model.getBuildingStorys.size unless stories.is_a?(Integer)
 
-      model.getSurfaces.each do |s|
-        stype = s.surfaceType.downcase
-        next unless s.outsideBoundaryCondition.downcase == "outdoors"
+      @model[:stories] = stories
+      @model[:stories] = 1              if stories < 1
+      @model[:stories] = 999            if stories > 999
+      @model[:spaces ] = {}
+      @model[:sptypes] = {}
 
-        @model[:walls ] += 1 if stype.include?("wall" )
-        @model[:floors] += 1 if stype.include?("floor")
-        @model[:roofs ] += 1 if stype.include?("roof" )
+      # Run TBD on cloned OpenStudio models (dry run).
+      mdl      = OpenStudio::Model::Model.new
+      mdl.addObjects(model.toIdfFile.objects)
+      TBD.clean!
+      res      = TBD.process(mdl, args)
+      surfaces = res[:surfaces]
+
+      # TBD validation of OpenStudio model.
+      lgs << "TBD-identified FATAL error(s):"      if TBD.fatal?
+      lgs << "TBD-identified non-FATAL error(s):"  if TBD.error?
+      TBD.logs.each { |log| lgs << log[:message] } if TBD.fatal? || TBD.error?
+      return false                                 if TBD.fatal?
+
+      lgs << "TBD: no deratable surfaces in model" if surfaces.nil?
+      return false                                 if surfaces.nil?
+
+      # Initialize deratable walls, exposed floors & roofs.
+      [:walls, :floors, :roofs].each { |stypes| @model[stypes] = {} }
+
+      surfaces.each do |id, surface|
+        next unless surface.key?(:type     ) # :wall, :floor, :ceiling
+        next unless surface.key?(:space    ) # OpenStudio space object
+        next unless surface.key?(:deratable) # true/false
+        next unless surface[:deratable]
+
+        stypes = :walls  if surface[:type] == :wall
+        stypes = :floors if surface[:type] == :floor
+        stypes = :roofs  if surface[:type] == :ceiling
+        next unless stypes == :walls || stypes == :floors || stypes == :roofs
+
+        space     = surface[:space].nameString
+        spacetype = surface[:stype].nameString if surface.key?(:stype)
+        spacetype = ""                     unless surface.key?(:stype)
+        typ       = self.sptype(spacetype, @model[:stories]) # e.g. :office
+
+        # Keep track of individual surface's space and spacetype keyword.
+        @model[stypes][id]          = {}
+        @model[stypes][id][:space ] = space
+        @model[stypes][id][:sptype] = typ
+
+        # Keep track of individual spaces and spacetypes.
+        exists = @model[:spaces].key?(space)
+        @model[:spaces][space]          = {}        unless exists
+        @model[:spaces][space][:sptype] = typ       unless exists
+
+        exists = @model[:sptypes].key?(typ)
+        @model[:sptypes][typ ]          = {}        unless exists
+        @model[:sptypes][typ ][:sptype] = spacetype unless exists
+        next if @model[:sptypes][typ].key?(stypes)
+
+        # Low- vs Hi-Performance BTAP assemblies.
+        lo = self.assembly(typ, stypes, :lp)
+        hi = self.assembly(typ, stypes, :hp)
+        @model[:sptypes][typ][stypes]      = {}
+        @model[:sptypes][typ][stypes][:lp] = lo
+        @model[:sptypes][typ][stypes][:hp] = hi
+        next unless stypes == :walls
+
+        # Fetch bad vs good PSI factor sets - strictly a function of walls.
+        @model[:sptypes][typ][:lp_bad ] = self.set(lo, :bad )
+        @model[:sptypes][typ][:lp_good] = self.set(lo, :good)
+        @model[:sptypes][typ][:hp_bad ] = self.set(hi, :bad )
+        @model[:sptypes][typ][:hp_good] = self.set(hi, :good)
       end
 
+      # Post-TBD validation: BTAP-fed Uo factors, then Ut factors (optional).
       [:walls, :floors, :roofs].each do |stypes|
         lgs << "Missing BTAP/TBD #{stypes}"    unless argh.key?(stypes)
         lgs << "Missing BTAP/TBD #{stypes} Uo" unless argh[stypes].key?(:uo)
         return false                           unless argh.key?(stypes)
         return false                           unless argh[stypes].key?(:uo)
-        next                                       if @model[stypes].zero?
+        next                                       if @model[stypes].empty?
 
-        uo = argh[stypes][:uo]
-        uo = self.minU(model, stypes)              if argh[stypes][:uo].nil?
-        argh[stypes][:uo] = uo                     if argh[stypes][:uo].nil?
-        next                                       if uo.is_a?(Numeric)
-        next                                       if uo.between?(UMIN, UMAX)
+        uo = self.minU(model, stypes)
+        ok = uo.is_a?(Numeric) && uo.between?(UMIN, UMAX)
+        argh[stypes][:uo] = uo                     if ok
+        next                                       if ok
 
         lgs << "Invalid BTAP/TBD #{stypes} Uo"
         return false
@@ -1570,72 +1808,22 @@ module BTAP
 
       [:walls, :floors, :roofs].each do |stypes| # Ut optional
         next                                   unless argh[stypes].key?(:ut)
-        next                                       if @model[stypes].zero?
+        next                                       if @model[stypes].empty?
 
-        ut = argh[stypes][:ut]
-        ut = self.minU(model, stypes)              if argh[stypes][:ut].nil?
-        argh[stypes][:ut] = ut                     if argh[stypes][:ut].nil?
-        next                                       if ut.is_a?(Numeric)
-        next                                       if ut.between?(UMIN, UMAX)
+        ut = self.minU(model, stypes)
+        ok = ut.is_a?(Numeric) && ut.between?(UMIN, UMAX)
+        argh[stypes][:ut] = ut                     if ok
+        next                                       if ok
 
-        lgs << "Invalid BTAP/TBD #{stypes} Ut"
+        lgs << "Invalid BTAP #{stypes} Ut"
         return false
-      end
-
-      stories = model.building.get.standardsNumberOfAboveGroundStories.get
-      # puts "TBD stories = #{stories}"
-      # stories = stories.get         unless stories.empty?
-      # stories = model.getBuildingStorys if stories.empty?
-      #
-      # @model[:stories] = stories.size
-      @model[:stories] = 1              if stories < 1
-      @model[:stories] = 999            if stories > 999
-      @model[:spaces ] = {}
-      @model[:sptypes] = {}
-
-      # Fetch space-specific parameters. Currently, BTAP construction
-      # selection is strictly based on OpenStudio model space types. This
-      # will likely extend to building types in the future.
-      model.getSpaces.each do |space|
-        id = space.nameString
-        @model[:spaces][id] = {}
-
-        sptyp = space.spaceType
-        next if sptyp.empty?
-        sptyp = sptyp.get.nameString
-        typ   = self.sptype(sptyp, @model[:stories]) # e.g. :office
-
-        @model[:spaces][id][:sptype] = sptyp unless sptyp.empty?
-        @model[:spaces][id][:type  ] = typ
-        next if @model[:sptypes].key?(typ)      # skip if previously added
-
-        @model[:sptypes][typ]          = {}
-        @model[:sptypes][typ][:sptype] = sptyp unless sptyp.empty?
-
-        # Fetch BTAP low-performance & high-performance assemblies.
-        [:walls, :floors, :roofs].each do |stypes|
-          next if @model[:sptypes][typ].key?(stypes)
-
-          lo = self.assembly(typ, stypes, :lp)
-          hi = self.assembly(typ, stypes, :hp)
-          @model[:sptypes][typ][stypes]      = {}
-          @model[:sptypes][typ][stypes][:lp] = lo
-          @model[:sptypes][typ][stypes][:hp] = hi
-          next unless stypes == :walls
-
-          # Fetch bad vs good PSI factor sets - strictly a function of walls.
-          @model[:sptypes][typ][:lp_bad ] = self.set(lo, :bad )
-          @model[:sptypes][typ][:lp_good] = self.set(lo, :good)
-          @model[:sptypes][typ][:hp_bad ] = self.set(hi, :bad )
-          @model[:sptypes][typ][:hp_good] = self.set(hi, :good)
-        end
       end
 
       # Generate native TBD input Hashes for the model, for both :good & :bad
       # PSI factor sets. The typical TBD use case involves writing out the
       # contents of either Hash (e.g. JSON::pretty_generate) as a "tbd.json"
       # input file, to save under a standard OpenStudio "files" folder. At
-      # runtime, TBD then reopens the JSON file and populate its own data
+      # runtime, TBD then reopens the JSON file and populates its own data
       # model in memory. Yet BTAP is not a typical use case. To avoid writing
       # out (then re-reading) TBD JSON files/hashes (i.e. resource intensive),
       # BTAP/TBD instead populates the TBD data model directly.
@@ -1711,14 +1899,11 @@ module BTAP
     ##
     # Generate BTAP/TBD tallies
     #
-    # @return [Bool] true if valid BTAP/TBD model
+    # @return [Bool] true if BTAP/TBD tally is successful
     def gen_tallies
-      return false unless @model.key?(:comply)
-      return false unless @model[:comply]
+      edges  = {}
       return false unless @model.key?(:io)
       return false unless @model[:io].key?(:edges)
-
-      @tally = {}
 
       @model[:io][:edges].each do |e|
         # Content of TBD-generated 'edges' (hashes):
@@ -1726,11 +1911,21 @@ module BTAP
         #     type: thermal bridge type, e.g. :corner
         #   length: (in m)
         # surfaces: linked OpenStudio surface IDs
-
-        @tally[e[:type]]           = {} unless @tally.key?(e[:type])
-        @tally[e[:type]][e[:psi]]  = 0  unless @tally[e[:type]].key?(e[:psi])
-        @tally[e[:type]][e[:psi]] += e[:length]
+        edges[e[:type]]           = {} unless edges.key?(e[:type])
+        edges[e[:type]][e[:psi]]  = 0  unless edges[e[:type]].key?(e[:psi])
+        edges[e[:type]][e[:psi]] += e[:length]
       end
+
+      return false if edges.empty?
+
+      @tally[:edges] = edges
+
+      # Add final selection of (uprated) Uo factors per BTAP construction.
+      return true unless @model.key?(:constructions)
+
+      @tally[:constructions] = @model[:constructions]
+
+      true
     end
 
     ##
@@ -1740,51 +1935,64 @@ module BTAP
     def gen_feedback
       lgs = @feedback[:logs]
       return false unless @model.key?(:comply)
-      return false unless @model[:comply]
-      return false unless @model.key?(:args)
+      return false unless @model.key?(:args  )
 
       args = @model[:args]
 
-      # Uprated Uo (if requested).
+      # Successfully uprated Uo (if requested).
       [:walls, :floors, :roofs].each do |stypes|
+        break unless @model[:comply]
+
         stype_ut = "#{stypes.to_s.chop}_ut".to_sym
         stype_uo = "#{stypes.to_s.chop}_uo".to_sym
         next unless args.key?(stype_ut)
         next unless args.key?(stype_uo)
         next unless @model.key?(stypes)
-        next if @model[stypes].zero?
+        next     if @model[stypes].empty?
 
         ut = args[stype_ut]
         uo = args[stype_uo]
         next unless ut.is_a?(Numeric)
         next unless uo.is_a?(Numeric)
+
         ut = format("%.3f", ut)
         uo = format("%.3f", uo)
         lgs << "Compliant #{stypes}: Uo #{uo} vs Ut #{ut} W/m2.K"
       end
 
+      # Uprating unsuccessful: report min Uo factor per construction.
+      if @model.key?(:constructions)
+        @model[:constructions].each do |id, construction|
+          break if @model[:comply]
+
+          lgs << "Non-compliant #{id} Uo factor #{construction[:uo]} (W/K.m^2)"
+        end
+      end
+
       # Summary of TBD-derated constructions.
       @model[:osm].getSurfaces.each do |s|
-        next unless s.outsideBoundaryCondition.downcase == "outdoors"
         next if s.construction.empty?
         next if s.construction.get.to_LayeredConstruction.empty?
 
         lc = s.construction.get.to_LayeredConstruction.get
         next unless lc.nameString.include?(" c tbd")
+
         rsi = TBD.rsi(lc, s.filmResistance)
         rsi = format("%.1f", rsi)
-
-        lgs << "~~ '#{lc.nameString}' derated Rsi #{rsi}"
+        lgs << "~~ '#{lc.nameString}' derated Rsi: #{rsi} (m^2.K/W)"
       end
 
-      # Show relevant tallies.
-      @tally.each do |type, e|
-        next if type == :transition
-        lgs << "# '#{type}' (#{e.size}x):"
+      # Log PSI factor tallies (per thermal bridge type).
+      if @tally.key?(:edges)
+        @tally[:edges].each do |type, e|
+          next if type == :transition
 
-        e.each do |psi, length|
-          l = format("%.2f", length)
-          lgs << "... PSI set '#{psi}' : #{l} m"
+          lgs << "# '#{type}' (#{e.size}x):"
+
+          e.each do |psi, length|
+            l = format("%.2f", length)
+            lgs << "... PSI set '#{psi}' : #{l} m"
+          end
         end
       end
 
