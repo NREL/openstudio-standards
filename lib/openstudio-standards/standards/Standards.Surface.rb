@@ -379,6 +379,70 @@ class Standard
     return roof_cent
   end
 
+  # Returns the surface and subsurface UA product
+  #
+  # @param [OpenStudio::Model::Surface] OpenStudio model surface object
+  #
+  # @retrun [Double] UA product in W/K
+  def surface_subsurface_ua(surface)
+    # Compute the surface UA product
+    if surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod' && surface.construction.is_initialized
+      cons = surface.construction.get
+      fc_obj_type = cons.iddObjectType.valueName.to_s
+      case fc_obj_type
+        when 'OS_Construction_FfactorGroundFloor'
+          cons = surface.construction.get.to_FFactorGroundFloorConstruction.get
+          ffac = cons.fFactor
+          area = cons.area
+          peri = cons.perimeterExposed
+          ua = ffac * peri * surface.netArea / area
+        when 'OS_Construction_CfactorUndergroundWall'
+          cons = surface.construction.get.to_CFactorUndergroundWallConstruction.get
+          cfac = cons.cFactor
+          heig = cons.height
+
+          # From 90.1-2019 Section A.9.4.1: Interior vertical surfaces (SI units)
+          r_inside_film = 0.1197548
+          r_outside_film = 0.0
+
+          # EnergyPlus Engineering Manual equation 3.195
+          r_soil = 0.0607 + 0.3479 * heig
+
+          r_eff = 1 / cfac + r_soil
+          u_eff = 1 / (r_eff + r_inside_film + r_outside_film)
+
+          ua = u_eff * surface.netArea
+      end
+    else
+      ua = surface.uFactor.get * surface.netArea
+    end
+
+    surface.subSurfaces.sort.each do |subsurface|
+      if subsurface.construction.get.to_Construction.get.layers[0].to_Material.get.to_SimpleGlazing.empty?
+        # the uFactor() method does not work for complex glazing inputs
+        # For this case the U-Factor is retrieved from previous sizing run
+        u_factor = construction_calculated_fenestration_u_factor_w_frame(subsurface.construction.get)
+      else
+        # replace with direct query: u_factor = subsurface.uFactor.get
+        glass_u_factor_query = "SELECT Value
+                  FROM tabulardatawithstrings
+                  WHERE ReportName='EnvelopeSummary'
+                  AND ReportForString='Entire Facility'
+                  AND TableName='Exterior Fenestration'
+                  AND ColumnName='Glass U-Factor'
+                  AND RowName='#{subsurface.name.get.upcase}'"
+        sql = surface.model.sqlFile.get
+
+        glass_u_factor_w_per_m2_k = sql.execAndReturnFirstDouble(glass_u_factor_query)
+        u_factor = glass_u_factor_w_per_m2_k.is_initialized ? glass_u_factor_w_per_m2_k.get : 0.0
+      end
+      # u_factor = subsurface.uFactor.is_initialized ? (subsurface.uFactor.get) : (construction_calculated_fenestration_u_factor_w_frame(subsurface.construction.get))
+      ua += u_factor * subsurface.netArea
+    end
+
+    return ua
+  end
+
   # Calculate a surface's absolute azimuth
   # source: https://github.com/NREL/openstudio-extension-gem/blob/e354355054b83ffc26e3b69befa20d6baf5ef242/lib/openstudio/extension/core/os_lib_geometry.rb#L913
   #
@@ -421,5 +485,58 @@ class Standard
     elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315
       return 'W'
     end
+  end
+
+  # Calculate the wwr of a surface
+  #
+  # @param surface [OpenStudio::Model::Surface]
+  # @return [Float] window to wall ratio of a surface
+  def surface_get_wwr_of_a_surface(surface)
+    surface_area = surface.grossArea
+    surface_fene_area = 0.0
+    surface.subSurfaces.sort.each do |ss|
+      next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
+
+      surface_fene_area += ss.netArea
+    end
+    return surface_fene_area / surface_area
+  end
+
+  # Adjust the fenestration area to the values specified by the reduction value in a surface
+  #
+  # @param surface [OpenStudio::Model:Surface] openstudio surface object
+  # @param reduction [Float] ratio of adjustments
+  # @param model [OpenStudio::Model::Model] openstudio model
+  # @return [Bool] return true if successful, false if not
+  def surface_adjust_fenestration_in_a_surface(surface, reduction, model)
+    # Subsurfaces in this surface
+    # Default case only handles reduction
+    if reduction < 1.0
+      surface.subSurfaces.sort.each do |ss|
+        next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
+
+        if sub_surface_vertical_rectangle?(ss)
+          sub_surface_reduce_area_by_percent_by_raising_sill(ss, reduction)
+        else
+          sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, reduction)
+        end
+      end
+    end
+    return true
+  end
+
+  # Calculate the door ratio of a surface
+  #
+  # @param surface [OpenStudio::Model::Surface]
+  # @return [Float] window to wall ratio of a surface
+  def surface_get_door_ratio_of_a_surface(surface)
+    surface_area = surface.grossArea
+    surface_door_area = 0.0
+    surface.subSurfaces.sort.each do |ss|
+      next unless ss.subSurfaceType == 'Door'
+
+      surface_door_area += ss.netArea
+    end
+    return surface_door_area / surface_area
   end
 end

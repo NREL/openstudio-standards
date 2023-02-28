@@ -29,7 +29,7 @@ module College
     # add extra infiltration for entry door
     add_door_infiltration(climate_zone, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Added door infiltration')
-  
+
     return true
   end
 

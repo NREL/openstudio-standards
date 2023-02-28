@@ -59,7 +59,7 @@ class Standard
     end
 
     # add exterior lights for parking area
-    if area_length_count_hash[:parking_area_and_drives_area] > 0
+    if !area_length_count_hash[:parking_area_and_drives_area].nil? && area_length_count_hash[:parking_area_and_drives_area] > 0
 
       # lighting values
       multiplier = area_length_count_hash[:parking_area_and_drives_area] * onsite_parking_fraction
@@ -86,7 +86,7 @@ class Standard
     end
 
     # add exterior lights for facades
-    if area_length_count_hash[:building_facades] > 0
+    if !area_length_count_hash[:building_facades].nil? && area_length_count_hash[:building_facades] > 0
 
       # lighting values
       multiplier = area_length_count_hash[:building_facades]
@@ -113,7 +113,7 @@ class Standard
     end
 
     # add exterior lights for main entries
-    if area_length_count_hash[:main_entries] > 0
+    if !area_length_count_hash[:main_entries].nil? && area_length_count_hash[:main_entries] > 0
 
       # lighting values
       multiplier = area_length_count_hash[:main_entries]
@@ -140,7 +140,7 @@ class Standard
     end
 
     # add exterior lights for other doors
-    if area_length_count_hash[:other_doors] > 0
+    if !area_length_count_hash[:other_doors].nil? && area_length_count_hash[:other_doors] > 0
 
       # lighting values
       multiplier = area_length_count_hash[:other_doors]
@@ -167,7 +167,7 @@ class Standard
     end
 
     # add exterior lights for entry canopies
-    if area_length_count_hash[:canopy_entry_area] > 0
+    if !area_length_count_hash[:canopy_entry_area].nil? && area_length_count_hash[:canopy_entry_area] > 0
 
       # lighting values
       multiplier = area_length_count_hash[:canopy_entry_area]
@@ -194,7 +194,7 @@ class Standard
     end
 
     # add exterior lights for emergency canopies
-    if area_length_count_hash[:canopy_emergency_area] > 0
+    if !area_length_count_hash[:canopy_emergency_area].nil? && area_length_count_hash[:canopy_emergency_area] > 0
 
       # lighting values
       multiplier = area_length_count_hash[:canopy_emergency_area]
@@ -221,7 +221,7 @@ class Standard
     end
 
     # add exterior lights for drive through windows
-    if area_length_count_hash[:drive_through_windows] > 0
+    if !area_length_count_hash[:drive_through_windows].nil? && area_length_count_hash[:drive_through_windows] > 0
 
       # lighting values
       multiplier = area_length_count_hash[:drive_through_windows]

@@ -226,32 +226,12 @@ class Standard
       chilled_water_loop.setName(system_name)
     end
 
-    # chilled water loop sizing and controls
     if dsgn_sup_wtr_temp.nil?
-      dsgn_sup_wtr_temp = 44.0
-      dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
-    else
-      dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
+      dsgn_sup_wtr_temp = 44
     end
-    if dsgn_sup_wtr_temp_delt.nil?
-      dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(10.1, 'R', 'K').get
-    else
-      dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(dsgn_sup_wtr_temp_delt, 'R', 'K').get
-    end
-    chilled_water_loop.setMinimumLoopTemperature(1.0)
-    chilled_water_loop.setMaximumLoopTemperature(40.0)
-    sizing_plant = chilled_water_loop.sizingPlant
-    sizing_plant.setLoopType('Cooling')
-    sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
-    sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
-    chw_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                       dsgn_sup_wtr_temp_c,
-                                                       name = "#{chilled_water_loop.name} Temp - #{dsgn_sup_wtr_temp.round(0)}F")
-    chw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, chw_temp_sch)
-    chw_stpt_manager.setName("#{chilled_water_loop.name} Setpoint Manager")
-    chw_stpt_manager.addToNode(chilled_water_loop.supplyOutletNode)
-    # @todo Yixing check the CHW Setpoint from standards
-    # @todo Should be a OutdoorAirReset, see the changes I've made in Standards.PlantLoop.apply_prm_baseline_temperatures
+
+    # chilled water loop sizing and controls
+    chw_sizing_control(model, chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
 
     # create chilled water pumps
     if chw_pumping_type == 'const_pri'
@@ -269,28 +249,86 @@ class Standard
       pri_chw_pump.setPumpControlType('Intermittent')
       pri_chw_pump.addToNode(chilled_water_loop.supplyInletNode)
     elsif chw_pumping_type == 'const_pri_var_sec'
-      # primary chilled water pump
-      pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
-      pri_chw_pump.setName("#{chilled_water_loop.name} Primary Pump")
-      pri_chw_pump.setRatedPumpHead(OpenStudio.convert(15.0, 'ftH_{2}O', 'Pa').get)
-      pri_chw_pump.setMotorEfficiency(0.9)
-      pri_chw_pump.setPumpControlType('Intermittent')
-      pri_chw_pump.addToNode(chilled_water_loop.supplyInletNode)
-      # secondary chilled water pump
-      sec_chw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
-      sec_chw_pump.setName("#{chilled_water_loop.name} Secondary Pump")
-      sec_chw_pump.setRatedPumpHead(OpenStudio.convert(45.0, 'ftH_{2}O', 'Pa').get)
-      sec_chw_pump.setMotorEfficiency(0.9)
-      # curve makes it perform like variable speed pump
-      sec_chw_pump.setFractionofMotorInefficienciestoFluidStream(0)
-      sec_chw_pump.setCoefficient1ofthePartLoadPerformanceCurve(0)
-      sec_chw_pump.setCoefficient2ofthePartLoadPerformanceCurve(0.0205)
-      sec_chw_pump.setCoefficient3ofthePartLoadPerformanceCurve(0.4101)
-      sec_chw_pump.setCoefficient4ofthePartLoadPerformanceCurve(0.5753)
-      sec_chw_pump.setPumpControlType('Intermittent')
-      sec_chw_pump.addToNode(chilled_water_loop.demandInletNode)
-      # Change the chilled water loop to have a two-way common pipes
-      chilled_water_loop.setCommonPipeSimulation('CommonPipe')
+      pri_sec_config = plant_loop_set_chw_pri_sec_configuration(model)
+
+      if pri_sec_config == 'common_pipe'
+        # primary chilled water pump
+        pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+        pri_chw_pump.setName("#{chilled_water_loop.name} Primary Pump")
+        pri_chw_pump.setRatedPumpHead(OpenStudio.convert(15.0, 'ftH_{2}O', 'Pa').get)
+        pri_chw_pump.setMotorEfficiency(0.9)
+        pri_chw_pump.setPumpControlType('Intermittent')
+        pri_chw_pump.addToNode(chilled_water_loop.supplyInletNode)
+        # secondary chilled water pump
+        sec_chw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
+        sec_chw_pump.setName("#{chilled_water_loop.name} Secondary Pump")
+        sec_chw_pump.setRatedPumpHead(OpenStudio.convert(45.0, 'ftH_{2}O', 'Pa').get)
+        sec_chw_pump.setMotorEfficiency(0.9)
+        # curve makes it perform like variable speed pump
+        sec_chw_pump.setFractionofMotorInefficienciestoFluidStream(0)
+        sec_chw_pump.setCoefficient1ofthePartLoadPerformanceCurve(0)
+        sec_chw_pump.setCoefficient2ofthePartLoadPerformanceCurve(0.0205)
+        sec_chw_pump.setCoefficient3ofthePartLoadPerformanceCurve(0.4101)
+        sec_chw_pump.setCoefficient4ofthePartLoadPerformanceCurve(0.5753)
+        sec_chw_pump.setPumpControlType('Intermittent')
+        sec_chw_pump.addToNode(chilled_water_loop.demandInletNode)
+        # Change the chilled water loop to have a two-way common pipes
+        chilled_water_loop.setCommonPipeSimulation('CommonPipe')
+      elsif pri_sec_config == 'heat_exchanger'
+        # NOTE: PRECONDITIONING for `const_pri_var_sec` pump type is only applicable for PRM routine and only applies to System Type 7 and System Type 8
+        # See: model_add_prm_baseline_system under Model object.
+        # In this scenario, we will need to create a primary and secondary configuration:
+        # chilled_water_loop is the primary loop
+        # Primary: demand: heat exchanger, supply: chillers, name: Chilled Water Loop_Primary, additionalProperty: secondary_loop_name
+        # Secondary: demand: Coils, supply: heat exchanger, name: Chilled Water Loop, additionalProperty: is_secondary_loop
+        secondary_chilled_water_loop = OpenStudio::Model::PlantLoop.new(model)
+        secondary_loop_name = system_name.nil? ? 'Chilled Water Loop' : system_name
+        # Reset primary loop name
+        chilled_water_loop.setName("#{secondary_loop_name}_Primary")
+        secondary_chilled_water_loop.setName(secondary_loop_name)
+        chw_sizing_control(model, secondary_chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
+        chilled_water_loop.additionalProperties.setFeature('is_primary_loop', true)
+        secondary_chilled_water_loop.additionalProperties.setFeature('is_secondary_loop', true)
+        # primary chilled water pump
+        # Add Constant pump, in plant loop, the number of chiller adjustment will assign pump to each chiller
+        pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+        pri_chw_pump.setName("#{chilled_water_loop.name} Primary Pump")
+        # Will need to adjust the pump power after a sizing run
+        pri_chw_pump.setRatedPumpHead(OpenStudio.convert(15.0, 'ftH_{2}O', 'Pa').get / num_chillers)
+        pri_chw_pump.setMotorEfficiency(0.9)
+        pri_chw_pump.setPumpControlType('Intermittent')
+        # chiller_inlet_node = chiller.connectedObject(chiller.supplyInletPort).get.to_Node.get
+        pri_chw_pump.addToNode(chilled_water_loop.supplyInletNode)
+
+        # secondary chilled water pump
+        sec_chw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
+        sec_chw_pump.setName("#{secondary_chilled_water_loop.name} Pump")
+        sec_chw_pump.setRatedPumpHead(OpenStudio.convert(45.0, 'ftH_{2}O', 'Pa').get)
+        sec_chw_pump.setMotorEfficiency(0.9)
+        # curve makes it perform like variable speed pump
+        sec_chw_pump.setFractionofMotorInefficienciestoFluidStream(0)
+        sec_chw_pump.setCoefficient1ofthePartLoadPerformanceCurve(0)
+        sec_chw_pump.setCoefficient2ofthePartLoadPerformanceCurve(0.0205)
+        sec_chw_pump.setCoefficient3ofthePartLoadPerformanceCurve(0.4101)
+        sec_chw_pump.setCoefficient4ofthePartLoadPerformanceCurve(0.5753)
+        sec_chw_pump.setPumpControlType('Intermittent')
+        sec_chw_pump.addToNode(secondary_chilled_water_loop.demandInletNode)
+
+        # Add HX to connect secondary and primary loop
+        heat_exchanger = OpenStudio::Model::HeatExchangerFluidToFluid.new(model)
+        secondary_chilled_water_loop.addSupplyBranchForComponent(heat_exchanger)
+        chilled_water_loop.addDemandBranchForComponent(heat_exchanger)
+
+        # Clean up connections
+        hx_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+        hx_bypass_pipe.setName("#{secondary_chilled_water_loop.name} HX Bypass")
+        secondary_chilled_water_loop.addSupplyBranchForComponent(hx_bypass_pipe)
+        outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+        outlet_pipe.setName("#{secondary_chilled_water_loop.name} Supply Outlet")
+        outlet_pipe.addToNode(secondary_chilled_water_loop.supplyOutletNode)
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'No primary/secondary configuration specified for the chilled water loop.')
+      end
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'No pumping type specified for the chilled water loop.')
     end
@@ -322,6 +360,7 @@ class Standard
         chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
         chiller.setName("#{template} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller #{i}")
         chilled_water_loop.addSupplyBranchForComponent(chiller)
+        dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
         chiller.setReferenceLeavingChilledWaterTemperature(dsgn_sup_wtr_temp_c)
         chiller.setLeavingChilledWaterLowerTemperatureLimit(OpenStudio.convert(36.0, 'F', 'C').get)
         chiller.setReferenceEnteringCondenserFluidTemperature(OpenStudio.convert(95.0, 'F', 'C').get)
@@ -1660,24 +1699,27 @@ class Standard
     # create heating coil
     if hot_water_loop.nil?
       if heating_type == 'Electricity'
-        create_coil_heating_electric(model,
-                                     air_loop_node: air_loop.supplyInletNode,
-                                     name: "#{air_loop.name} Main Electric Htg Coil")
+        htg_coil = create_coil_heating_electric(model,
+                                                air_loop_node: air_loop.supplyInletNode,
+                                                name: "#{air_loop.name} Main Electric Htg Coil")
       else # default to NaturalGas
-        create_coil_heating_gas(model,
-                                air_loop_node: air_loop.supplyInletNode,
-                                name: "#{air_loop.name} Main Gas Htg Coil")
+        htg_coil = create_coil_heating_gas(model,
+                                           air_loop_node: air_loop.supplyInletNode,
+                                           name: "#{air_loop.name} Main Gas Htg Coil")
       end
     else
-      create_coil_heating_water(model,
-                                hot_water_loop,
-                                air_loop_node: air_loop.supplyInletNode,
-                                name: "#{air_loop.name} Main Htg Coil",
-                                rated_inlet_water_temperature: hw_temp_c,
-                                rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
-                                rated_inlet_air_temperature: dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
-                                rated_outlet_air_temperature: dsgn_temps['htg_dsgn_sup_air_temp_c'])
+      htg_coil = create_coil_heating_water(model,
+                                           hot_water_loop,
+                                           air_loop_node: air_loop.supplyInletNode,
+                                           name: "#{air_loop.name} Main Htg Coil",
+                                           rated_inlet_water_temperature: hw_temp_c,
+                                           rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                           rated_inlet_air_temperature: dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
+                                           rated_outlet_air_temperature: dsgn_temps['htg_dsgn_sup_air_temp_c'])
     end
+
+    # set the setpointmanager for the central/preheat coil if required
+    model_set_central_preheat_coil_spm(model, thermal_zones, htg_coil)
 
     # create cooling coil
     if chilled_water_loop.nil?
@@ -1715,13 +1757,21 @@ class Standard
     # set air loop availability controls and night cycle manager, after oa system added
     air_loop.setAvailabilitySchedule(hvac_op_sch)
     air_loop.setNightCycleControlType('CycleOnAny')
-    avail_mgr = air_loop.availabilityManager
-    if avail_mgr.is_initialized
-      avail_mgr = avail_mgr.get
-      if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
-        avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
-        avail_mgr.setCyclingRunTime(1800)
-      end
+
+    if model.version < OpenStudio::VersionString.new('3.5.0')
+      avail_mgr = air_loop.availabilityManager
+      if avail_mgr.is_initialized
+        avail_mgr = avail_mgr.get
+      else
+        avail_mgr = nil
+      end 
+    else 
+      avail_mgr = air_loop.availabilityManagers[0]
+    end
+
+    if !avail_mgr.nil? && avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
+      avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
+      avail_mgr.setCyclingRunTime(1800)
     end
 
     # hook the VAV system to each zone
@@ -1874,9 +1924,12 @@ class Standard
     fan.addToNode(air_loop.supplyInletNode)
 
     # create heating coil
-    create_coil_heating_electric(model,
-                                 air_loop_node: air_loop.supplyInletNode,
-                                 name: "#{air_loop.name} Htg Coil")
+    htg_coil = create_coil_heating_electric(model,
+                                            air_loop_node: air_loop.supplyInletNode,
+                                            name: "#{air_loop.name} Htg Coil")
+
+    # set the setpointmanager for the central/preheat coil if required
+    model_set_central_preheat_coil_spm(model, thermal_zones, htg_coil)
 
     # create cooling coil
     create_coil_cooling_water(model,
@@ -2018,24 +2071,26 @@ class Standard
     # create heating coil
     if hot_water_loop.nil?
       if heating_type == 'Electricity'
-        create_coil_heating_electric(model,
-                                     air_loop_node: air_loop.supplyInletNode,
-                                     name: "#{air_loop.name} Main Electric Htg Coil")
+        htg_coil = create_coil_heating_electric(model,
+                                                air_loop_node: air_loop.supplyInletNode,
+                                                name: "#{air_loop.name} Main Electric Htg Coil")
       else # default to NaturalGas
-        create_coil_heating_gas(model,
-                                air_loop_node: air_loop.supplyInletNode,
-                                name: "#{air_loop.name} Main Gas Htg Coil")
+        htg_coil = create_coil_heating_gas(model,
+                                           air_loop_node: air_loop.supplyInletNode,
+                                           name: "#{air_loop.name} Main Gas Htg Coil")
       end
     else
-      create_coil_heating_water(model,
-                                hot_water_loop,
-                                air_loop_node: air_loop.supplyInletNode,
-                                name: "#{air_loop.name} Main Htg Coil",
-                                rated_inlet_water_temperature: hw_temp_c,
-                                rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
-                                rated_inlet_air_temperature: dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
-                                rated_outlet_air_temperature: dsgn_temps['htg_dsgn_sup_air_temp_c'])
+      htg_coil = create_coil_heating_water(model, hot_water_loop,
+                                           air_loop_node: air_loop.supplyInletNode,
+                                           name: "#{air_loop.name} Main Htg Coil",
+                                           rated_inlet_water_temperature: hw_temp_c,
+                                           rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                           rated_inlet_air_temperature: dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
+                                           rated_outlet_air_temperature: dsgn_temps['htg_dsgn_sup_air_temp_c'])
     end
+
+    # set the setpointmanager for the central/preheat coil if required
+    model_set_central_preheat_coil_spm(model, thermal_zones, htg_coil)
 
     # create cooling coil
     if chilled_water_loop.nil?
@@ -2066,13 +2121,21 @@ class Standard
     # set air loop availability controls and night cycle manager, after oa system added
     air_loop.setAvailabilitySchedule(hvac_op_sch)
     air_loop.setNightCycleControlType('CycleOnAny')
-    avail_mgr = air_loop.availabilityManager
-    if avail_mgr.is_initialized
-      avail_mgr = avail_mgr.get
-      if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
-        avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
-        avail_mgr.setCyclingRunTime(1800)
-      end
+
+    if model.version < OpenStudio::VersionString.new('3.5.0')
+      avail_mgr = air_loop.availabilityManager
+      if avail_mgr.is_initialized
+        avail_mgr = avail_mgr.get
+      else
+        avail_mgr = nil
+      end 
+    else 
+      avail_mgr = air_loop.availabilityManagers[0]
+    end
+
+    if !avail_mgr.nil? && avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
+      avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
+      avail_mgr.setCyclingRunTime(1800)
     end
 
     # attach the VAV system to each zone
@@ -2194,9 +2257,12 @@ class Standard
     fan.addToNode(air_loop.supplyInletNode)
 
     # create heating coil
-    create_coil_heating_electric(model,
-                                 air_loop_node: air_loop.supplyInletNode,
-                                 name: "#{air_loop.name} Main Htg Coil")
+    htg_coil = create_coil_heating_electric(model,
+                                            air_loop_node: air_loop.supplyInletNode,
+                                            name: "#{air_loop.name} Main Htg Coil")
+
+    # set the setpointmanager for the central/preheat coil if required
+    model_set_central_preheat_coil_spm(model, thermal_zones, htg_coil)
 
     # create cooling coil
     if chilled_water_loop.nil?
@@ -2677,13 +2743,21 @@ class Standard
       # set air loop availability controls and night cycle manager, after oa system added
       air_loop.setAvailabilitySchedule(hvac_op_sch)
       air_loop.setNightCycleControlType('CycleOnAny')
-      avail_mgr = air_loop.availabilityManager
-      if avail_mgr.is_initialized
-        avail_mgr = avail_mgr.get
-        if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
-          avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
-          avail_mgr.setCyclingRunTime(1800)
-        end
+
+      if model.version < OpenStudio::VersionString.new('3.5.0')
+        avail_mgr = air_loop.availabilityManager
+        if avail_mgr.is_initialized
+          avail_mgr = avail_mgr.get
+        else
+          avail_mgr = nil
+        end 
+      else 
+        avail_mgr = air_loop.availabilityManagers[0]
+      end
+
+      if !avail_mgr.nil? && avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
+        avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
+        avail_mgr.setCyclingRunTime(1800)
       end
 
       # create a diffuser and attach the zone/diffuser pair to the air loop
@@ -2710,9 +2784,14 @@ class Standard
                         thermal_zones,
                         system_name: nil,
                         heating_type: nil,
+                        cooling_type: 'AirCooled',
                         supplemental_heating_type: nil,
                         hvac_op_sch: nil,
-                        oa_damper_sch: nil)
+                        fan_type: 'VAV_System_Fan',
+                        oa_damper_sch: nil,
+                        hot_water_loop: nil,
+                        chilled_water_loop: nil,
+                        minimum_volume_setpoint: nil)
 
     # hvac operation schedule
     if hvac_op_sch.nil?
@@ -2767,7 +2846,7 @@ class Standard
       # create fan
       # @type [OpenStudio::Model::FanVariableVolume] fan
       fan = create_fan_by_name(model,
-                               'VAV_System_Fan',
+                               fan_type,
                                fan_name: "#{air_loop.name} Fan",
                                end_use_subcategory: 'VAV System Fans')
       fan.setAvailabilitySchedule(hvac_op_sch)
@@ -2780,6 +2859,11 @@ class Standard
       when 'Electricity', 'Electric'
         htg_coil = create_coil_heating_electric(model,
                                                 name: "#{air_loop.name} Electric Htg Coil")
+      when 'Water'
+        htg_coil = create_coil_heating_water(model,
+                                             hot_water_loop,
+                                             air_loop_node: air_loop.supplyOutletNode,
+                                             name: "#{air_loop.name} Water Htg Coil")
       else
         # Zero-capacity, always-off electric heating coil
         htg_coil = create_coil_heating_electric(model,
@@ -2805,14 +2889,21 @@ class Standard
       end
 
       # create cooling coil
-      clg_coil = OpenStudio::Model::CoilCoolingDXVariableSpeed.new(model)
-      clg_coil.setName("#{air_loop.name} Var spd DX AC Clg Coil")
-      clg_coil.setBasinHeaterCapacity(10.0)
-      clg_coil.setBasinHeaterSetpointTemperature(2.0)
-      # first speed level
-      clg_spd_1 = OpenStudio::Model::CoilCoolingDXVariableSpeedSpeedData.new(model)
-      clg_coil.addSpeed(clg_spd_1)
-      clg_coil.setNominalSpeedLevel(1)
+      case cooling_type
+      when 'WaterCooled'
+        clg_coil = create_coil_cooling_water(model,
+                                             chilled_water_loop,
+                                             name: "#{air_loop.name} Clg Coil")
+      else # 'AirCooled'
+        clg_coil = OpenStudio::Model::CoilCoolingDXVariableSpeed.new(model)
+        clg_coil.setName("#{air_loop.name} Var spd DX AC Clg Coil")
+        clg_coil.setBasinHeaterCapacity(10.0)
+        clg_coil.setBasinHeaterSetpointTemperature(2.0)
+        # first speed level
+        clg_spd_1 = OpenStudio::Model::CoilCoolingDXVariableSpeedSpeedData.new(model)
+        clg_coil.addSpeed(clg_spd_1)
+        clg_coil.setNominalSpeedLevel(1)
+      end
 
       # @todo enable economizer maximum fraction outdoor air schedule input
       # econ_eff_sch = model_add_schedule(model, 'RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
@@ -2824,13 +2915,20 @@ class Standard
       unitary_system.setCoolingCoil(clg_coil)
       unitary_system.setSupplementalHeatingCoil(supplemental_htg_coil)
       unitary_system.setName("#{zone.name} Unitary PSZ-VAV")
-      unitary_system.setString(2, 'SingleZoneVAV') # @todo add setControlType() method
+      # The following control strategy can lead to "Developer Error: Component sizing incomplete."
+      # EnergyPlus severe (not fatal) errors if there is no heating design load
+      unitary_system.setControlType('SingleZoneVAV')
       unitary_system.setControllingZoneorThermostatLocation(zone)
       unitary_system.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       unitary_system.setFanPlacement('BlowThrough')
       unitary_system.setSupplyAirFlowRateMethodDuringCoolingOperation('SupplyAirFlowRate')
       unitary_system.setSupplyAirFlowRateMethodDuringHeatingOperation('SupplyAirFlowRate')
-      unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('SupplyAirFlowRate')
+      if minimum_volume_setpoint.nil?
+        unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('SupplyAirFlowRate')
+      else
+        unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('FractionOfAutosizedCoolingValue')
+        unitary_system.setFractionofAutosizedDesignCoolingSupplyAirFlowRateWhenNoCoolingorHeatingisRequired(minimum_volume_setpoint)
+      end
       unitary_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOnDiscreteSchedule)
       unitary_system.addToNode(air_loop.supplyInletNode)
 
@@ -3166,7 +3264,9 @@ class Standard
       # To solve the issue, add economizer here for cold climates
       # select the climate zones with winter design temperature lower than -20C (for safer)
       cold_climates = ['ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A',
-                       'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B']
+                       'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B',
+                       'ASHRAE 169-2013-6A', 'ASHRAE 169-2013-6B', 'ASHRAE 169-2013-7A',
+                       'ASHRAE 169-2013-7B', 'ASHRAE 169-2013-8A', 'ASHRAE 169-2013-8B']
       if cold_climates.include? climate_zone
         # Determine the economizer type in the prototype buildings, which depends on climate zone.
         economizer_type = model_economizer_type(model, climate_zone)
@@ -4415,7 +4515,7 @@ class Standard
   # @param model_occ_hr_end [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Ending hour of building occupancy.
   # @param control_strategy [String] name of control strategy.  Options are 'proportional_control' and 'none'.
-  #   If control strategy is 'proportional_control', the method will apply the CBE radiant control sequences 
+  #   If control strategy is 'proportional_control', the method will apply the CBE radiant control sequences
   #   detailed in Raftery et al. (2017), “A new control strategy for high thermal mass radiant systems”.
   #   Otherwise no control strategy will be applied and the radiant system will assume the EnergyPlus default controls.
   # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
@@ -5006,7 +5106,11 @@ class Standard
                                                        name: "#{air_loop.name} heating coil",
                                                        type: 'Residential Central Air Source HP',
                                                        cop: hspf_to_cop_heating_no_fan(hspf))
-        htg_coil.setRatedSupplyFanPowerPerVolumeFlowRate(ac_w_per_cfm / OpenStudio.convert(1.0, 'cfm', 'm^3/s').get)
+        if model.version < OpenStudio::VersionString.new('3.5.0')
+          htg_coil.setRatedSupplyFanPowerPerVolumeFlowRate(ac_w_per_cfm / OpenStudio.convert(1.0, 'cfm', 'm^3/s').get)
+        else
+          htg_coil.setRatedSupplyFanPowerPerVolumeFlowRate2017(ac_w_per_cfm / OpenStudio.convert(1.0, 'cfm', 'm^3/s').get)
+        end
         htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(OpenStudio.convert(min_hp_oat_f, 'F', 'C').get)
         htg_coil.setMaximumOutdoorDryBulbTemperatureforDefrostOperation(OpenStudio.convert(40.0, 'F', 'C').get)
         htg_coil.setCrankcaseHeaterCapacity(crank_case_heat_w)

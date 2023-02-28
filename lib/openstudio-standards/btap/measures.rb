@@ -24,28 +24,28 @@ require "#{File.dirname(__FILE__)}/btap"
 
 class OSMArg
   ARGUMENT_TYPES = [
-    "BOOL",         
-    "STRING",       
-    "INTEGER",      
-    "FLOAT",        
+    "BOOL",
+    "STRING",
+    "INTEGER",
+    "FLOAT",
     "STRINGCHOICE",
-    "WSCHOICE"     
+    "WSCHOICE"
   ]
-        
-        
-        
-  attr_accessor :runner, 
-    :variable_name, 
+
+
+
+  attr_accessor :runner,
+    :variable_name,
     :type,
-    :required,  
+    :required,
     :model_dependant,
-    :display_name, 
-    :default_value, 
-    :min_value,  
-    :max_value,  
-    :string_choice_array,  	
+    :display_name,
+    :default_value,
+    :min_value,
+    :max_value,
+    :string_choice_array,
     :os_object_type
-        
+
   def self.bool( variable_name,display_name,required,default_value )
     raise "#{default_value} defaut value is not a bool." unless default_value.is_a?(Bool)
     default_value.respond_to?(:to_s)
@@ -53,47 +53,47 @@ class OSMArg
     arg.default_value = default_value
     return arg
   end
-        
+
   def self.string( variable_name,display_name,required,default_value )
     raise "#{default_value} defaut value is not a string." unless default_value.respond_to?(:to_s)
     arg = OSMArg.new( "STRING", variable_name, display_name, required)
     arg.default_value = default_value
     return arg
   end
-        
+
   def self.integer( variable_name,display_name,required,default_value,min_value,max_value )
     raise "#{default_value} defaut value is not a integer." unless default_value.respond_to?(:to_i)
     arg = OSMArg.new( "INTEGER", variable_name, display_name, required)
     arg.default_value = default_value
     arg.min_value = min_value
     arg.max_value = max_value
-    return arg          
+    return arg
   end
-        
+
   def self.float( variable_name, display_name, required,default_value,min_value, max_value )
     raise "#{default_value} defaut value is not a float." unless default_value.respond_to?(:to_f)
     arg = OSMArg.new( "INTEGER", variable_name, display_name, required)
     arg.default_value = default_value
     arg.min_value = min_value
     arg.max_value = max_value
-    return arg          
+    return arg
   end
-        
+
   def self.choice(variable_name,display_name,required,default_value,string_choice_array)
-    raise "#{default_value} defaut value is not an array." unless default_value.is_a?(Array)    
+    raise "#{default_value} defaut value is not an array." unless default_value.is_a?(Array)
     arg = OSMArg.new( "STRINGCHOICE", variable_name, display_name, required)
     arg.default_value = default_value
     arg.string_choice_array = string_choice_array
     return arg
   end
-        
+
   def self.wschoice( variable_name, display_name, required, default_value, os_object_type)
     arg = OSMArg.new( "WSCHOICE", variable_name, display_name, required )
     arg.default_value = default_value
     arg.os_object_type = os_object_type
-    return arg          
+    return arg
   end
-        
+
   def initialize( type, variable_name, display_name, required )
     self.type = type
     self.variable_name = variable_name
@@ -106,9 +106,9 @@ class OSMArg
       self.model_dependant = false
     end
     return self
-  end  
+  end
 end
-      
+
 
 
 
@@ -116,10 +116,10 @@ end
 module BTAP
   module Measures
     module OSMeasures
-      
-      
-      
-      
+
+
+
+
       class BTAPModelUserScript < OpenStudio::Ruleset::ModelUserScript
         #if and E+ measure replace OpenStudio::Ruleset::ModelUserScript with OpenStudio::Ruleset::WorkspaceUserScript
         #Array containing information of all inputs required by measure.
@@ -134,8 +134,8 @@ module BTAP
           "BTAPModelUserScript"
           OSMArgument.new
         end
-        
-        #this method will output the ruby macro to perform the change. 
+
+        #this method will output the ruby macro to perform the change.
         def generate_ruby_macro(model,runner)
           if @file == nil or @file == ""
             @file = "Enter_Path_To_#{self.class.name}_measure.rb_File!"
@@ -190,8 +190,8 @@ module BTAP
           if not runner.validateUserArguments(self.arguments(model),user_arguments)
             return false
           end
-          
-          #Set argument to instance variables. 
+
+          #Set argument to instance variables.
           self.argument_getter(model, runner,user_arguments)
           #will run the childs method measure_code
           result =  self.measure_code(model,runner)
@@ -201,7 +201,7 @@ module BTAP
 
         def argument_setter(model,args)
           #***boilerplate code starts. Do not edit...
-          
+
 
           #iterate through array of hashes and make arguments based on type and set
           # max and min values where applicable.
@@ -247,7 +247,7 @@ module BTAP
           unless @argument_array == nil
             @argument_array.each do |row|
               name = row.variable_name
-            
+
               case row.type
               when "BOOL"
                 value = runner.getBoolArgumentValue(name, user_arguments)
@@ -269,7 +269,7 @@ module BTAP
                 value = runner.getDoubleArgumentValue(name, user_arguments)
                 instance_variable_set("@#{name}",value)
                 @arg_table << [name,value]
-                
+
                 if ( not row.min_value.nil?  and instance_variable_get("@#{name}") < row.min_value ) or ( not row.max_value.nil? and instance_variable_get("@#{name}") > row.max_value )
                   runner.registerError("#{row.display_name} must be greater than or equal to #{row.min_value} and less than or equal to #{row.max_value}.  You entered #{instance_variable_get("@#{name}")}.")
                   return false
@@ -288,10 +288,10 @@ module BTAP
             end #end do
           end
           return @arg_table
-        end        
-        
+        end
+
       end
-      #Measure Template simplified. 
+      #Measure Template simplified.
       class TemplateModelMeasure < BTAPModelUserScript
 
         def name
@@ -391,14 +391,14 @@ module BTAP
         def run(model, runner, user_arguments)
           #run the super
           parent_method_is_true = super(model, runner, user_arguments)
-          
-          
+
+
           ###############
-          
-          #Set Archetype name in runner. 
+
+          #Set Archetype name in runner.
           runner.registerValue('archetype_name',@archetype_name)
-          
-          #Set path to OSM files. 
+
+          #Set path to OSM files.
           alternative_model_path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/#{@archetype_name}.osm")
           #load model and test.
           translator = OpenStudio::OSVersion::VersionTranslator.new
@@ -561,7 +561,7 @@ module BTAP
             model = self.load_base_model_building()
             self.set_weather_file(model)
             self.set_hourly_output(model)
-          
+
             model,log = self.apply_ecms(model,@csv_data)
             BTAP::FileIO::save_osm( model, "#{output_folder}/#{BTAP::FileIO::get_name(model)}.osm") unless output_folder.nil?
             File.open("#{output_folder}/#{BTAP::FileIO::get_name(model)}.log", 'w') { |file| file.write(log) }  unless output_folder.nil?
@@ -621,7 +621,7 @@ module BTAP
           "cost_per_building"
         ]
         self.set_instance_variables( measure_values )
-        
+
         #cost per building and building area
         building = model.building.get
         raise ("you did not enter a cost for measure #{@measure_id}. All measures must have a cost of at least 0.0 .  Please add a cost_per_building field.") if @cost_per_building.nil?
@@ -753,7 +753,7 @@ module BTAP
             @total_building_construction_set_cost
           )
 
-          #Give adiabatic surfaces a construction. Does not matter what. This is a bug in Openstudio that leave these surfaces unassigned by the default construction set.
+          #Give adiabatic surfaces a construction. Does not matter what. This is a bug in OpenStudio that leave these surfaces unassigned by the default construction set.
           all_adiabatic_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces, "Adiabatic")
           unless all_adiabatic_surfaces.empty?
             BTAP::Geometry::Surfaces::set_surfaces_construction( all_adiabatic_surfaces, model.building.get.defaultConstructionSet.get.defaultInteriorSurfaceConstructions.get.wallConstruction.get)
@@ -772,7 +772,7 @@ module BTAP
           "infiltration_flow_per_exterior_area",
           "infiltration_air_changes_per_hour"
         ]
-    
+
         #Set all the above instance variables to the @csv_data values or, if not set or == 'na', to nil.
         self.set_instance_variables(measure_values)
 
@@ -811,7 +811,7 @@ module BTAP
             fan.setMotorEfficiency( @fan_motor_eff ) unless @fan_motor_eff.nil?
             log  << fan.name.get.to_s << ",#{fan.fanEfficiency},#{fan.motorEfficiency}\n"
           end
-          
+
         end
 
         case @fan_volume_type
@@ -975,7 +975,9 @@ module BTAP
           model.getCoilCoolingDXSingleSpeeds.sort.each do |cooling_coil|
             cooling_coil.setRatedCOP( OpenStudio::OptionalDouble.new( @cop ) ) unless @cop.nil?
             cop = "NA"
-            cop = cooling_coil.ratedCOP.get unless cooling_coil.ratedCOP.empty?
+            # Prior to 3.5.0, it was an optional double, now it's a double
+            cop_ = OpenStudio::OptionalDouble.new(cooling_coil.ratedCOP)
+            cop = cop_.get unless cop_.empty?
             log  << cooling_coil.name.get.to_s << ",#{cop}\n"
 
           end
@@ -987,9 +989,11 @@ module BTAP
             cooling_coil.setRatedHighSpeedCOP( @cop  ) unless @cop.nil?
             cooling_coil.setRatedLowSpeedCOP(  @cop  ) unless @cop.nil?
             cop_high = "NA"
-            cop_high = cooling_coil.ratedHighSpeedCOP.get unless cooling_coil.ratedHighSpeedCOP.empty?
+            cop_ = OpenStudio::OptionalDouble.new(cooling_coil.ratedHighSpeedCOP)
+            cop_high = cop_.get unless cop_.empty?
             cop_low = "NA"
-            cop_low = cooling_coil.ratedLowSpeedCOP.get unless cooling_coil.ratedLowSpeedCOP.empty?
+            cop_ = OpenStudio::OptionalDouble.new(cooling_coil.ratedLowSpeedCOP)
+            cop_low = cop_.get unless cop_.empty?
             log  << cooling_coil.name.get.to_s << ",#{cop_high},#{cop_low}\n"
           end
         end
@@ -1296,8 +1300,8 @@ module BTAP
             @erv_nominal_electric_power,
             @erv_economizer_lockout.to_bool
           ).each { |erv| log << erv.to_s }
-          
-          
+
+
           #Add setpoint manager to all OA object in airloops.
           model.getHeatExchangerAirToAirSensibleAndLatents.sort.each do |erv|
 

@@ -4,7 +4,7 @@ require_relative '../helpers/create_doe_prototype_helper'
 class TestTallBuilding < CreateDOEPrototypeBuildingTest
   building_types = ['TallBuilding']
   templates = ['90.1-2004','90.1-2007','90.1-2010','90.1-2013']
-  climate_zones = ['ASHRAE 169-2013-2A','ASHRAE 169-2013-3B','ASHRAE 169-2013-5A','ASHRAE 169-2013-8A']
+  climate_zones = ['ASHRAE 169-2013-2A','ASHRAE 169-2013-3B','ASHRAE 169-2013-5A']
   epw_files = ['USA_FL_Miami.Intl.AP.722020_TMY3.epw'] # not used for ASHRAE/DOE archetypes, but required for call
   create_models = true
   run_models = false

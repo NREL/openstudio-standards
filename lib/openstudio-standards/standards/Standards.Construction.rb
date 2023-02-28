@@ -186,8 +186,8 @@ class Standard
     # This is the desired R-value of the insulation.
     ins_r_value_si = target_r_value_si - film_coeff_r_value_si
     if ins_r_value_si <= 0.0
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} Btu/ft^2*hr*R for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)} Btu/ft^2*hr*R; U-value will not be modified.")
-      return false
+      ins_r_value_si = 0.001
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} Btu/ft^2*hr*R for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)} Btu/ft^2*hr*R.")
     end
     ins_u_value_si = 1.0 / ins_r_value_si
 
@@ -252,6 +252,7 @@ class Standard
     end
 
     # Not simple unless the layer is a SimpleGlazing material
+    # if construction.layers.first.to_SimpleGlazing.empty?
     if construction.layers.first.to_SimpleGlazing.empty?
       return false
     end
@@ -283,6 +284,39 @@ class Standard
     return true
   end
 
+  # Set the surface specific F-factor parameters of a construction
+  #
+  # @param construction [OpenStudio::Model::FFactorGroundFloorConstruction] OpenStudio F-factor construction object
+  # @param target_f_factor_ip [Float] Targeted F-Factor in IP units
+  # @param surface [OpenStudio::Model::Surface] OpenStudio surface object
+  # @return [Bool] returns true if successful, false if not
+  def construction_set_surface_slab_f_factor(construction, target_f_factor_ip, surface)
+    # Get space associated with surface
+    space = surface.space.get
+
+    # Find this space's exposed floor area and perimeter. NOTE: this assumes only only floor per space.
+    perimeter, area = model_get_f_floor_geometry(space)
+
+    if area == 0
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Area for #{surface.name} was calculated to be 0 m2, slab f-factor cannot be set.")
+      return false
+    end
+
+    # Change construction name
+    construction.setName("#{construction.name}_#{surface.name}_#{target_f_factor_ip}")
+
+    # Set properties
+    f_factor_si = target_f_factor_ip * OpenStudio.convert(1.0, 'Btu/ft*h*R', 'W/m*K').get
+    construction.setFFactor(f_factor_si)
+    construction.setArea(area)
+    construction.setPerimeterExposed(perimeter)
+
+    # Set surface outside boundary condition
+    surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
+
+    return true
+  end
+
   # Set the C-Factor of an underground wall to a specified value.
   # Assumes continuous exterior insulation and modifies
   # the insulation layer according to the values from 90.1-2004
@@ -304,6 +338,36 @@ class Standard
     construction.setName("#{construction.name} C-#{target_c_factor_ip.round(3)}")
 
     return true
+  end
+
+  # Set the surface specific C-factor parameters of a construction
+  #
+  # @param construction [OpenStudio::Model::CFactorUndergroundWallConstruction] OpenStudio C-factor construction object
+  # @param target_c_factor_ip [Float] Targeted C-Factor in IP units
+  # @param surface [OpenStudio::Model::Surface] OpenStudio surface object
+  # @return [Bool] returns true if successful, false if not
+  def construction_set_surface_underground_wall_c_factor(construction, target_c_factor_ip, surface)
+    # Get space associated with surface
+    space = surface.space.get
+
+    # Get height of the first below grade wall in this space.
+    below_grade_wall_height = model_get_space_below_grade_wall_height(space)
+
+    if below_grade_wall_height == 0
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Below grade wall height for #{surface.name} was calculated to be 0 m2, below grade wall c-factor cannot be set.")
+      return false
+    end
+
+    # Change construction name
+    construction.setName("#{construction.name}_#{surface.name}_#{target_c_factor_ip}")
+
+    # Set properties
+    c_factor_si = target_c_factor_ip * OpenStudio.convert(1.0, 'Btu/ft^2*h*R', 'W/m^2*K').get
+    construction.setCFactor(c_factor_si)
+    construction.setHeight(below_grade_wall_height)
+
+    # Set surface outside boundary condition
+    surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
   end
 
   # Get the SHGC as calculated by EnergyPlus.
@@ -462,6 +526,124 @@ class Standard
     return u_factor_w_per_m2_k
   end
 
+  # Calculate the fenestration U-Factor base on the glass, frame,
+  # and divider performance and area calculated by EnergyPlus.
+  #
+  # @param [OpenStudio:Model:Construction] OpenStudio Construction object
+  #
+  # @return [Double] the U-Factor in W/m^2*K
+  def construction_calculated_fenestration_u_factor_w_frame(construction)
+    construction_name = construction.name.get.to_s
+
+    u_factor_w_per_m2_k = nil
+
+    sql = construction.model.sqlFile
+
+    if sql.is_initialized
+      sql = sql.get
+
+      row_query = "SELECT RowName
+                  FROM tabulardatawithstrings
+                  WHERE ReportName='EnvelopeSummary'
+                  AND ReportForString='Entire Facility'
+                  AND TableName='Exterior Fenestration'
+                  AND Value='#{construction_name.upcase}'"
+
+      row_id = sql.execAndReturnFirstString(row_query)
+
+      if row_id.is_initialized
+        row_id = row_id.get
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "U-Factor row ID not found for construction: #{construction_name}.")
+        row_id = 9999
+      end
+
+      # Glass U-Factor
+      glass_u_factor_query = "SELECT Value
+                  FROM tabulardatawithstrings
+                  WHERE ReportName='EnvelopeSummary'
+                  AND ReportForString='Entire Facility'
+                  AND TableName='Exterior Fenestration'
+                  AND ColumnName='Glass U-Factor'
+                  AND RowName='#{row_id}'"
+
+      glass_u_factor_w_per_m2_k = sql.execAndReturnFirstDouble(glass_u_factor_query)
+
+      glass_u_factor_w_per_m2_k = glass_u_factor_w_per_m2_k.is_initialized ? glass_u_factor_w_per_m2_k.get : 0.0
+
+      # Glass area
+      glass_area_query = "SELECT Value
+                          FROM tabulardatawithstrings
+                          WHERE ReportName='EnvelopeSummary'
+                          AND ReportForString='Entire Facility'
+                          AND TableName='Exterior Fenestration'
+                          AND ColumnName='Glass Area'
+                          AND RowName='#{row_id}'"
+
+      glass_area_m2 = sql.execAndReturnFirstDouble(glass_area_query)
+
+      glass_area_m2 = glass_area_m2.is_initialized ? glass_area_m2.get : 0.0
+
+      # Frame conductance
+      frame_conductance_query = "SELECT Value
+                  FROM tabulardatawithstrings
+                  WHERE ReportName='EnvelopeSummary'
+                  AND ReportForString='Entire Facility'
+                  AND TableName='Exterior Fenestration'
+                  AND ColumnName='Frame Conductance'
+                  AND RowName='#{row_id}'"
+
+      frame_conductance_w_per_m2_k = sql.execAndReturnFirstDouble(frame_conductance_query)
+
+      frame_conductance_w_per_m2_k = frame_conductance_w_per_m2_k.is_initialized ? frame_conductance_w_per_m2_k.get : 0.0
+
+      # Frame area
+      frame_area_query = "SELECT Value
+                          FROM tabulardatawithstrings
+                          WHERE ReportName='EnvelopeSummary'
+                          AND ReportForString='Entire Facility'
+                          AND TableName='Exterior Fenestration'
+                          AND ColumnName='Frame Area'
+                          AND RowName='#{row_id}'"
+
+      frame_area_m2 = sql.execAndReturnFirstDouble(frame_area_query)
+
+      frame_area_m2 = frame_area_m2.is_initialized ? frame_area_m2.get : 0.0
+
+      # Divider conductance
+      divider_conductance_query = "SELECT Value
+                  FROM tabulardatawithstrings
+                  WHERE ReportName='EnvelopeSummary'
+                  AND ReportForString='Entire Facility'
+                  AND TableName='Exterior Fenestration'
+                  AND ColumnName='Divider Conductance'
+                  AND RowName='#{row_id}'"
+
+      divider_conductance_w_per_m2_k = sql.execAndReturnFirstDouble(divider_conductance_query)
+
+      divider_conductance_w_per_m2_k = divider_conductance_w_per_m2_k.is_initialized ? divider_conductance_w_per_m2_k.get : 0.0
+
+      # Divider area
+      divider_area_query = "SELECT Value
+                          FROM tabulardatawithstrings
+                          WHERE ReportName='EnvelopeSummary'
+                          AND ReportForString='Entire Facility'
+                          AND TableName='Exterior Fenestration'
+                          AND ColumnName='Divder Area'
+                          AND RowName='#{row_id}'"
+
+      divider_area_m2 = sql.execAndReturnFirstDouble(divider_area_query)
+
+      divider_area_m2 = divider_area_m2.is_initialized ? divider_area_m2.get : 0.0
+
+      u_factor_w_per_m2_k = (glass_u_factor_w_per_m2_k * glass_area_m2 + frame_conductance_w_per_m2_k * frame_area_m2 + divider_conductance_w_per_m2_k * divider_area_m2) / (glass_area_m2 + frame_area_m2 + divider_area_m2)
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', 'Model has no sql file containing results, cannot lookup data.')
+    end
+
+    return u_factor_w_per_m2_k
+  end
+
   # find and get the insulation layer for a construction
   #
   # @param construction [OpenStudio::Model::Construction] construction object
@@ -505,7 +687,7 @@ class Standard
   # @param is_percentage [Bool] toggle is percentage
   # @return [Hash] json information
   def change_construction_properties_in_model(model, values, is_percentage = false)
-    puts JSON.pretty_generate(values)
+    # puts JSON.pretty_generate(values)
     # copy orginal model for reporting.
     before_measure_model = BTAP::FileIO.deep_copy(model)
     # report change as Info

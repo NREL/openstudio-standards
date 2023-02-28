@@ -21,9 +21,9 @@ class NECB2011
   # @return [Bool] returns true if an economizer is required, false if not
   def air_loop_hvac_economizer_required?(air_loop_hvac)
     economizer_required = false
-    
+
     # need a better way to determine if an economizer is needed.
-    return economizer_required if ((air_loop_hvac.name.to_s.include? 'Outpatient F1' ) || 
+    return economizer_required if ((air_loop_hvac.name.to_s.include? 'Outpatient F1' ) ||
                                    (air_loop_hvac.sizingSystem.typeofLoadtoSizeOn.to_s == "VentilationRequirement"))
 
     # A big number of btu per hr as the minimum requirement
@@ -42,7 +42,7 @@ class NECB2011
 
     # puts air_loop_hvac.name.to_s
     # Design Supply Air Flow Rate: This method below reads the value from the sql file.
-    dsafr_m3_per_s = air_loop_hvac.model.getAutosizedValue(air_loop_hvac, 'Design Supply Air Flow Rate', 'm3/s')
+    dsafr_m3_per_s = air_loop_hvac.autosizedDesignSupplyAirFlowRate
     min_dsafr_l_per_s = 1500
     unless dsafr_m3_per_s.empty?
       dsafr_l_per_s = dsafr_m3_per_s.get * 1000
@@ -2053,7 +2053,11 @@ class NECB2011
     air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(system_data[:CentralHeatingDesignSupplyAirTemperature]) unless system_data[:CentralHeatingDesignSupplyAirTemperature].nil?
     air_loop_sizing.setAllOutdoorAirinCooling(system_data[:AllOutdoorAirinCooling]) unless system_data[:AllOutdoorAirinCooling].nil?
     air_loop_sizing.setAllOutdoorAirinHeating(system_data[:AllOutdoorAirinHeating]) unless system_data[:AllOutdoorAirinHeating].nil?
-    air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio]) unless system_data[:MinimumSystemAirFlowRatio].nil?
+    if model.version < OpenStudio::VersionString.new('2.7.0')
+      air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio]) unless system_data[:MinimumSystemAirFlowRatio].nil?
+    else
+      air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio]) unless system_data[:MinimumSystemAirFlowRatio].nil?
+    end
     return mau_air_loop
   end
 

@@ -51,10 +51,14 @@ if ENV['RM_INFO'] || ENV['TEAMCITY_RAKE_RUNNER_MODE'] # RubyMine
   puts "Running tests from RubyMine, using RubyMine test reporter."
   ENV.delete('RM_INFO') # Delete this environment variable because it forces use of only RubyMineReporter
   Minitest::Reporters.use! [Minitest::Reporters::RubyMineReporter.new]
+  # line below for PNNL local testing
+  # Minitest::Reporters.use! [Minitest::Reporters::RubyMineReporter.new, Minitest::Reporters::JUnitReporter.new(reports_dir="test/reports", empty=false)] 
 elsif ENV['JENKINS_HOME'] # Jenkins
   puts "Running tests from Jenkins, using JUnit XML test reporter and console-based test reporter."
   Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new, Minitest::Reporters::JUnitReporter.new(reports_dir = "test/reports", empty = false)]
 else # Terminal or other
   puts "Running tests from terminal, using console-based test reporter."
   Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
+  # line below for PNNL local testing
+  # Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new, Minitest::Reporters::JUnitReporter.new(reports_dir="test/reports", empty=false)] 
 end
