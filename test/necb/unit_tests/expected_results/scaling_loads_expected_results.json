@@ -3,14 +3,14 @@
     "template": "NECB2011",
     "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
     "building_type": "FullServiceRestaurant",
-    "primary_heating_fuel": "DefaultFuel",
+    "primary_heating_fuel": "NaturalGas",
     "loads_scale": 0.0
   },
   {
     "template": "NECB2011",
     "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
     "building_type": "FullServiceRestaurant",
-    "primary_heating_fuel": "DefaultFuel",
+    "primary_heating_fuel": "NaturalGas",
     "loads_scale": 0.5,
     "Space Function Dining - family space People - multiplier": 0.5,
     "Space Function Food preparation People - multiplier": 0.5,

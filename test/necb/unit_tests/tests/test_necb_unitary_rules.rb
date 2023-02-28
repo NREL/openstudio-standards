@@ -34,8 +34,8 @@ class NECB_HVAC_Unitary_Tests < MiniTest::Test
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    templates = ['NECB2011', 'NECB2015', 'BTAPPRE1980'] #list of templates
-    num_cap_intv = {'NECB2011' => 4, 'NECB2015' => 5, 'BTAPPRE1980' => 4}
+    templates = ['NECB2011', 'NECB2015', 'NECB2020', 'BTAPPRE1980'] #list of templates
+    num_cap_intv = {'NECB2011' => 4, 'NECB2015' => 5, 'NECB2020' => 5, 'BTAPPRE1980' => 4}
     speeds = ['single']  # only single speed test works for now
     templates.each do |template|
       unitary_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_unitary_efficiencies_expected_results.csv")

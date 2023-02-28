@@ -46,6 +46,8 @@ module EnergyPlus
     attr_accessor :typical_winter_dry_week
     attr_accessor :typical_autumn_week
     attr_accessor :typical_spring_week
+    attr_accessor :monthly_undis_ground_temps_0p5m
+    attr_accessor :monthly_undis_ground_temps_4p0m
 
     def initialize(path)
       @path = Pathname.new(path)
@@ -73,6 +75,8 @@ module EnergyPlus
       @typical_winter_dry_week = []
       @typical_autumn_week = []
       @typical_spring_week = []
+      @monthly_undis_ground_temps_0p5m = []
+      @monthly_undis_ground_temps_4p0m = []
       @data = []
       init
     end
@@ -313,7 +317,7 @@ module EnergyPlus
         # use regex to get the temperatures
         regex = /Daily Avg(.*)\n/
         match_data = text.match(regex)
-        if match_data.nil?
+       if match_data.nil?
           puts "Can't find outdoor air temps"
           raise
         else
@@ -329,6 +333,34 @@ module EnergyPlus
           # insert as numbers
           monthly_temps.each { |temp| @monthly_dry_bulb << temp.to_f }
           # puts "#{@monthly_dry_bulb}"
+        end
+
+        # use regex to get undisturbed ground temps at 0.5 m depth
+        regex = /Monthly.*Calculated.*undisturbed*.*Ground.*Temperatures.*\n.*Jan.*Feb.*Mar.*Apr.*May.*Jun.*Jul.*Aug.*Sep.*Oct.*Nov.*Dec.*\n(.*)\n(.*)\n(.*)/
+        match_data = text.match(regex)
+        if match_data.nil?
+          puts "Can't find undisturbed ground temperatures"
+          raise
+        else
+          # first match is undisturbed ground temperature at 0.5 m and 4.0 m depth
+          monthly_undis_ground_temps_0p5m = match_data[1].strip.split(/\s+/)
+          monthly_undis_ground_temps_0p5m.shift
+          monthly_undis_ground_temps_0p5m.shift
+          monthly_undis_ground_temps_4p0m = match_data[3].strip.split(/\s+/)
+          monthly_undis_ground_temps_4p0m.shift
+          monthly_undis_ground_temps_4p0m.shift
+          # have to be 12 months
+          if monthly_undis_ground_temps_0p5m.size != 12
+            puts "Can't find undisturbed ground temps at 0.5 m"
+            raise
+          end
+          if monthly_undis_ground_temps_4p0m.size != 12
+            puts "Can't find undisturbed ground temps at 4.0 m"
+            raise
+          end
+          # insert as numbers
+          monthly_undis_ground_temps_0p5m.each { |temp| @monthly_undis_ground_temps_0p5m << temp.to_f }
+          monthly_undis_ground_temps_4p0m.each { |temp| @monthly_undis_ground_temps_4p0m << temp.to_f }
         end
 
         # now we are valid

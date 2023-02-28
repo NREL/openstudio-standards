@@ -3,7 +3,7 @@
     "template": "NECB2011",
     "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
     "building_type": "FullServiceRestaurant",
-    "primary_heating_fuel": "DefaultFuel",
+    "primary_heating_fuel": "NaturalGas",
     "pv_ground_type": "add_pv_ground",
     "Generator PVWatts 1 - dc_system_capacity": "88032.1359886609",
     "Generator PVWatts 1 - module_type": "Standard",

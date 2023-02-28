@@ -47,7 +47,8 @@ class NECB_Autozone_Tests < MiniTest::Test
     model = standard.model_create_prototype_model(epw_file: @epw_file,
                                                   sizing_run_dir: File.join(@output_folder, building_type, 'sizing'),
                                                   template: @template,
-                                                  building_type: building_type)
+                                                  building_type: building_type,
+                                                  primary_heating_fuel: 'NaturalGas')
 
 
     puts "Writing Output #{outfile}"
