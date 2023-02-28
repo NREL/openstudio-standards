@@ -550,6 +550,8 @@ class NECB2011 < Standard
     end
     # apply unitary cop
     ecm.modify_unitary_cop(model: model, unitary_cop: unitary_cop, sizing_done: true, sql_db_vars_map: sql_db_vars_map)
+    # set capacities of district heating and cooling equipment for ground-source heat pump ecm
+    ecm.set_ghx_loop_district_cap(model) if (!model.getDistrictHeatings.empty? && !model.getDistrictCoolings.empty?)
 
     # -------Pump sizing required by some vintages----------------
     # Apply Pump power as required.

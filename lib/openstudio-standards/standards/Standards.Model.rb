@@ -3588,6 +3588,7 @@ class Standard
     existing_curves += model.getCurveQuadratics
     existing_curves += model.getCurveBicubics
     existing_curves += model.getCurveBiquadratics
+    existing_curves += model.getCurveQuadLinears
     existing_curves.sort.each do |curve|
       if curve.name.get.to_s == curve_name
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added curve: #{curve_name}")
@@ -3687,6 +3688,25 @@ class Standard
         curve.setMaximumValueofy(data['maximum_independent_variable_2']) if data['maximum_independent_variable_2']
         curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
         curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
+        return curve
+      when 'QuadLinear'
+        curve = OpenStudio::Model::CurveQuadLinear.new(model)
+        curve.setName(data['name'])
+        curve.setCoefficient1Constant(data['coeff_1'])
+        curve.setCoefficient2w(data['coeff_2'])
+        curve.setCoefficient3x(data['coeff_3'])
+        curve.setCoefficient4y(data['coeff_4'])
+        curve.setCoefficient5z(data['coeff_5'])
+        curve.setMinimumValueofw(data['minimum_independent_variable_w'])
+        curve.setMaximumValueofw(data['maximum_independent_variable_w'])
+        curve.setMinimumValueofx(data['minimum_independent_variable_x'])
+        curve.setMaximumValueofx(data['maximum_independent_variable_x'])
+        curve.setMinimumValueofy(data['minimum_independent_variable_y'])
+        curve.setMaximumValueofy(data['maximum_independent_variable_y'])
+        curve.setMinimumValueofz(data['minimum_independent_variable_z'])
+        curve.setMaximumValueofz(data['maximum_independent_variable_z'])
+        curve.setMinimumCurveOutput(data['minimum_dependent_variable_output'])
+        curve.setMaximumCurveOutput(data['maximum_dependent_variable_output'])
         return curve
       when 'MultiVariableLookupTable'
         num_ind_var = data['number_independent_variables'].to_i

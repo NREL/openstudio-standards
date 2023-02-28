@@ -328,6 +328,23 @@
           "eirft": "WaterCooled_Centrifugal_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Centrifugal_EIRFPLR_NECB2011",
           "notes": "capacity in ton"
+        },
+        {
+          "cooling_type": "AirCooled",
+          "condenser_type": "WithCondenser",
+          "compressor_type": null,
+          "absorption_type": null,
+          "variable_speed_drive": null,
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 9999.0,
+          "start_date": "9/9/1919",
+          "end_date": "2999-09-09T00:00:00+00:00",
+          "minimum_full_load_efficiency": 1.227,
+          "minimum_integrated_part_load_value": null,
+          "capft": null,
+          "eirft": null,
+          "eirfplr": null,
+          "notes": "capacity in ton"
         }
       ]
     }
