@@ -482,13 +482,8 @@ class ECMS
     hw_loop = add_hotwater_loop(model: model) if heating_fuel == 'NaturalGas'
 
     # Update system zones map if needed
-    if ecm_system_zones_map_option != 'NECB_Default'
-      system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1')
-    else
-      updated_system_zones_map = {}
-      system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..-1]}"] = zones}  # doas unit is an NECB sys_1 
-      system_zones_map = updated_system_zones_map
-    end
+    system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
+    system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1') if ecm_system_zones_map_option != 'NECB_Default'
     # Add outdoor VRF unit
     outdoor_vrf_unit = add_outdoor_vrf_unit(model: model, ecm_name: 'hs08_ccashp_vrf')
     eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit'
@@ -1372,13 +1367,8 @@ class ECMS
     sys_supp_htg_eqpt_type = 'coil_electric'
     sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
     # Update system zones map if needed
-    if ecm_system_zones_map_option != 'NECB_Default'
-      system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1')
-    else
-      updated_system_zones_map = {}
-      system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..-1]}"] = zones}
-      system_zones_map = updated_system_zones_map
-    end
+    system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
+    system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1') if ecm_system_zones_map_option != 'NECB_Default'
     # Update system doas flags
     system_doas_flags = {}
     system_zones_map.keys.each { |sname| system_doas_flags[sname] = true }
@@ -1750,13 +1740,8 @@ class ECMS
     sys_supp_htg_eqpt_type = 'coil_electric'
     sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
     # Update system zones map if needed
-    if ecm_system_zones_map_option != 'NECB_Default'
-      system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1')
-    else
-      updated_system_zones_map = {}
-      system_zones_map.each {|sname,zones| updated_system_zones_map["sys_1#{sname[5..-1]}"] = zones}
-      system_zones_map = updated_system_zones_map
-    end
+    system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
+    system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1') if ecm_system_zones_map_option != 'NECB_Default'
     # Update system doas flags
     system_doas_flags = {}
     system_zones_map.keys.each { |sname| system_doas_flags[sname] = true }
@@ -1877,6 +1862,32 @@ class ECMS
     dist_clg_var.setKeyValue("*")
 
     return systems
+  end
+
+  #=============================================================================================================================
+  def update_system_zones_map_keys(system_zones_map,sys_abbr)
+    updated_system_zones_map = {}
+    system_zones_map.each do |sname,zones|
+      updated_sys_name = "#{sys_abbr}#{sname[5..-1]}"
+      if !updated_system_zones_map.has_key? updated_sys_name
+        updated_system_zones_map[updated_sys_name] = zones
+      else
+        updated_sys_name_set = false
+        index = 1
+        while !updated_sys_name_set
+          updated_sys_name = "#{sys_abbr}#{sname[5..-1]}"
+          updated_sys_name.chop! if updated_sys_name.split.size > 1
+          updated_sys_name = updated_sys_name + index.to_s
+          if !updated_system_zones_map.has_key? updated_sys_name
+            updated_sys_name_set = true
+            updated_system_zones_map[updated_sys_name] = zones
+          end
+          index += 1
+        end
+      end
+    end
+
+    return updated_system_zones_map
   end
 
   #=============================================================================================================================
