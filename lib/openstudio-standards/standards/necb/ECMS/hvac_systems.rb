@@ -460,6 +460,36 @@ class ECMS
         updated_system_zones_map[sys_name] += zones
       end
     end
+
+    return updated_system_zones_map
+  end
+
+  # =============================================================================================================================
+  # The first 5 letters of the air loop name designate the system type (sys_abbr). This method updates the system type designation 
+  # in the air loop name. At the same time the chosen air loop names are checked to avoid duplicate names from being used in the 
+  # hash for system to zomes.
+  def update_system_zones_map_keys(system_zones_map,sys_abbr)
+    updated_system_zones_map = {}
+    system_zones_map.each do |sname,zones|
+      updated_sys_name = "#{sys_abbr}#{sname[5..-1]}"
+      if !updated_system_zones_map.has_key? updated_sys_name
+        updated_system_zones_map[updated_sys_name] = zones
+      else
+        updated_sys_name_set = false
+        index = 1
+        while !updated_sys_name_set
+          updated_sys_name = "#{sys_abbr}#{sname[5..-1]}"
+          updated_sys_name.chop! if updated_sys_name.split.size > 1
+          updated_sys_name = updated_sys_name + index.to_s
+          if !updated_system_zones_map.has_key? updated_sys_name
+            updated_sys_name_set = true
+            updated_system_zones_map[updated_sys_name] = zones
+          end
+          index += 1
+        end
+      end
+    end
+
     return updated_system_zones_map
   end
 
@@ -1862,32 +1892,6 @@ class ECMS
     dist_clg_var.setKeyValue("*")
 
     return systems
-  end
-
-  #=============================================================================================================================
-  def update_system_zones_map_keys(system_zones_map,sys_abbr)
-    updated_system_zones_map = {}
-    system_zones_map.each do |sname,zones|
-      updated_sys_name = "#{sys_abbr}#{sname[5..-1]}"
-      if !updated_system_zones_map.has_key? updated_sys_name
-        updated_system_zones_map[updated_sys_name] = zones
-      else
-        updated_sys_name_set = false
-        index = 1
-        while !updated_sys_name_set
-          updated_sys_name = "#{sys_abbr}#{sname[5..-1]}"
-          updated_sys_name.chop! if updated_sys_name.split.size > 1
-          updated_sys_name = updated_sys_name + index.to_s
-          if !updated_system_zones_map.has_key? updated_sys_name
-            updated_sys_name_set = true
-            updated_system_zones_map[updated_sys_name] = zones
-          end
-          index += 1
-        end
-      end
-    end
-
-    return updated_system_zones_map
   end
 
   #=============================================================================================================================
