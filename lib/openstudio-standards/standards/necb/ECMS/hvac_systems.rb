@@ -470,7 +470,7 @@ class ECMS
   # hash for system to zomes.
   def update_system_zones_map_keys(system_zones_map,sys_abbr)
     updated_system_zones_map = {}
-    system_zones_map.each do |sname,zones|
+    system_zones_map.sort.each do |sname,zones|
       updated_sys_name = "#{sys_abbr}#{sname[5..-1]}"
       if !updated_system_zones_map.has_key? updated_sys_name
         updated_system_zones_map[updated_sys_name] = zones
