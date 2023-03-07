@@ -52,7 +52,7 @@ class NECB_2015PumpPower_Test < MiniTest::Test
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
-      always_on = model.alwaysOnDiscreteSchedule	
+      always_on = model.alwaysOnDiscreteSchedule
       standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
       standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
           model: model,
@@ -95,17 +95,21 @@ class NECB_2015PumpPower_Test < MiniTest::Test
             when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
               max_powertoload = 22
             when 'OS_Pump_VariableSpeed'
-              pumps << supplycomp.to_PumpVariableSpeed.get
-              total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
+              pump = supplycomp.to_PumpVariableSpeed.get
+              pumps << pump
+              total_pump_power += pump.autosizedRatedPowerConsumption.get
             when 'OS_Pump_ConstantSpeed'
-              pumps << supplycomp.to_PumpConstantSpeed.get
-              total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
+              pump = supplycomp.to_PumpConstantSpeed.get
+              pumps << pump
+              total_pump_power += pump.autosizedRatedPowerConsumption.get
             when 'OS_HeaderedPumps_ConstantSpeed'
-              pumps << supplycomp.to_HeaderedPumpsConstantSpeed.get
-              total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
+              pump = supplycomp.to_HeaderedPumpsConstantSpeed.get
+              pumps << pump
+              total_pump_power += pump.autosizedRatedPowerConsumption.get
             when 'OS_HeaderedPumps_VariableSpeed'
-              pumps << supplycomp.to_HeaderedPumpsVariableSpeed.get
-              total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
+              pump = supplycomp.to_HeaderedPumpsVariableSpeed.get
+              pumps << pump
+              total_pump_power += pump.autosizedRatedPowerConsumption.get
           end
         end
         # If no pumps were found then there is nothing to set so go to the next plant loop

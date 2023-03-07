@@ -23,17 +23,17 @@ module BTAP
         " AND ReportForString='Entire Facility' AND TableName='Annual and Peak Values - Natural Gas' AND RowName='NaturalGas:Facility'" +
         " AND ColumnName='Natural Gas Maximum Value' AND Units='W'")
 
-    # Create hash to store all the collected data. 
+    # Create hash to store all the collected data.
     qaqc = {}
     error_warning=[]
     qaqc[:os_standards_revision] = OpenstudioStandards::git_revision
     qaqc[:os_standards_version] = OpenstudioStandards::VERSION
-    # Store Building data. 
+    # Store Building data.
     qaqc[:building] = {}
     qaqc[:building][:name] = model.building.get.name.get
     qaqc[:building][:conditioned_floor_area_m2]=nil
     unless model.building.get.conditionedFloorArea().empty?
-      qaqc[:building][:conditioned_floor_area_m2] = model.building.get.conditionedFloorArea().get 
+      qaqc[:building][:conditioned_floor_area_m2] = model.building.get.conditionedFloorArea().get
     else
       error_warning <<  "model.building.get.conditionedFloorArea() is empty for #{model.building.get.name.get}"
     end
@@ -50,7 +50,7 @@ module BTAP
     qaqc[:geography][:country] = model.getWeatherFile.country
     qaqc[:geography][:latitude] = model.getWeatherFile.latitude
     qaqc[:geography][:longitude] = model.getWeatherFile.longitude
-    
+
     #Spacetype Breakdown
     qaqc[:spacetype_area_breakdown]={}
     model.getSpaceTypes.sort.each do |spaceType|
@@ -66,9 +66,9 @@ module BTAP
       end
       qaqc[:spacetype_area_breakdown][spaceType.name.get.gsub(/\s+/, "_").downcase.to_sym] = floor_area_si
     end
-    
-    
-    
+
+
+
     #Economics Section
     qaqc[:economics] = {}
     costing_rownames = model.sqlFile().get().execAndReturnVectorOfString("SELECT RowName FROM TabularDataWithStrings WHERE ReportName='LEEDsummary' AND ReportForString='Entire Facility' AND TableName='EAp2-7. Energy Cost Summary' AND ColumnName='Total Energy Cost'")
@@ -83,11 +83,11 @@ module BTAP
         when "Natural Gas"
           qaqc[:economics][:natural_gas_cost] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='LEEDsummary' AND ReportForString='Entire Facility' AND TableName='EAp2-7. Energy Cost Summary' AND ColumnName='Total Energy Cost' AND RowName='#{rowname}'").get
           qaqc[:economics][:natural_gas_cost_per_m2]=qaqc[:economics][:natural_gas_cost]/qaqc[:building][:conditioned_floor_area_m2] unless model.building.get.conditionedFloorArea().empty?
-      
+
         when "Additional"
           qaqc[:economics][:additional_cost] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='LEEDsummary' AND ReportForString='Entire Facility' AND TableName='EAp2-7. Energy Cost Summary' AND ColumnName='Total Energy Cost' AND RowName='#{rowname}'").get
           qaqc[:economics][:additional_cost_per_m2]=qaqc[:economics][:additional_cost]/qaqc[:building][:conditioned_floor_area_m2] unless model.building.get.conditionedFloorArea().empty?
-      
+
         when "Total"
           qaqc[:economics][:total_cost] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='LEEDsummary' AND ReportForString='Entire Facility' AND TableName='EAp2-7. Energy Cost Summary' AND ColumnName='Total Energy Cost' AND RowName='#{rowname}'").get
           qaqc[:economics][:total_cost_per_m2]=qaqc[:economics][:total_cost]/qaqc[:building][:conditioned_floor_area_m2] unless model.building.get.conditionedFloorArea().empty?
@@ -96,7 +96,7 @@ module BTAP
     else
       error_warning <<  "costing is unavailable because the sql statement is nil RowName FROM TabularDataWithStrings WHERE ReportName='LEEDsummary' AND ReportForString='Entire Facility' AND TableName='EAp2-7. Energy Cost Summary' AND ColumnName='Total Energy Cost'"
     end
-    
+
     #Store end_use data
     end_uses = [
       'Heating',
@@ -112,18 +112,18 @@ module BTAP
       'Heat Recovery',
       'Water Systems',
       'Refrigeration',
-      'Generators',                                                                                
+      'Generators',
       'Total End Uses'
     ]
-    
-    fuels = [ 
-      ['Electricity', 'GJ'],       
-      ['Natural Gas', 'GJ'] , 
+
+    fuels = [
+      ['Electricity', 'GJ'],
+      ['Natural Gas', 'GJ'] ,
       ['Additional Fuel', 'GJ'],
-      ['District Cooling','GJ'],             
-      ['District Heating', 'GJ'], 
+      ['District Cooling','GJ'],
+      ['District Heating', 'GJ'],
     ]
-    
+
     qaqc[:end_uses] = {}
     qaqc[:end_uses_eui] = {}
     end_uses.each do |use_type|
@@ -148,23 +148,23 @@ module BTAP
         end
       end
     end
-    
+
     # Store Peak Data
     qaqc[:meter_peaks] = {}
-    qaqc[:meter_peaks][:electric_w] = electric_peak.empty? ? "NA" : electric_peak.get  
-    qaqc[:meter_peaks][:natural_gas_w] = natural_gas_peak.empty? ? "NA" : natural_gas_peak.get 
-    
-    
+    qaqc[:meter_peaks][:electric_w] = electric_peak.empty? ? "NA" : electric_peak.get
+    qaqc[:meter_peaks][:natural_gas_w] = natural_gas_peak.empty? ? "NA" : natural_gas_peak.get
+
+
     #Store unmet hour data
     qaqc[:unmet_hours] = {}
     qaqc[:unmet_hours][:cooling] = model.getFacility.hoursCoolingSetpointNotMet().get unless model.getFacility.hoursCoolingSetpointNotMet().empty?
     qaqc[:unmet_hours][:heating] = model.getFacility.hoursHeatingSetpointNotMet().get unless model.getFacility.hoursHeatingSetpointNotMet().empty?
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     #puts "\n\n\n#{costing_rownames}\n\n\n"
     #Padmassun's Code -- Tarrif end
 
@@ -174,23 +174,23 @@ module BTAP
     qaqc[:service_water_heating][:total_nominal_occupancy]=-1
     #qaqc[:service_water_heating][:total_nominal_occupancy]=model.sqlFile().get().execAndReturnVectorOfDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='OutdoorAirSummary' AND ReportForString='Entire Facility' AND TableName='Average Outdoor Air During Occupied Hours' AND ColumnName='Nominal Number of Occupants'").get.inject(0, :+)
     qaqc[:service_water_heating][:total_nominal_occupancy]=get_total_nominal_capacity(model)
-    
+
     qaqc[:service_water_heating][:electricity_per_year]=model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='AnnualBuildingUtilityPerformanceSummary' AND ReportForString='Entire Facility' AND TableName='End Uses' AND ColumnName='Electricity' AND RowName='Water Systems'")
     qaqc[:service_water_heating][:electricity_per_year]= validate_optional(qaqc[:service_water_heating][:electricity_per_year], model, -1)
 
     qaqc[:service_water_heating][:electricity_per_day]=qaqc[:service_water_heating][:electricity_per_year]/365.5
     qaqc[:service_water_heating][:electricity_per_day_per_occupant]=qaqc[:service_water_heating][:electricity_per_day]/qaqc[:service_water_heating][:total_nominal_occupancy]
-	
-    
+
+
     qaqc[:service_water_heating][:natural_gas_per_year]=model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='AnnualBuildingUtilityPerformanceSummary' AND ReportForString='Entire Facility' AND TableName='End Uses' AND ColumnName='Natural Gas' AND RowName='Water Systems'")
     qaqc[:service_water_heating][:natural_gas_per_year]=validate_optional(qaqc[:service_water_heating][:natural_gas_per_year], model, -1)
 
     qaqc[:service_water_heating][:additional_fuel_per_year]=model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='AnnualBuildingUtilityPerformanceSummary' AND ReportForString='Entire Facility' AND TableName='End Uses' AND ColumnName='Additional Fuel' AND RowName='Water Systems'")
     qaqc[:service_water_heating][:additional_fuel_per_year] = validate_optional(qaqc[:service_water_heating][:additional_fuel_per_year], model, -1)
-    
+
     qaqc[:service_water_heating][:water_m3_per_year]=model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='AnnualBuildingUtilityPerformanceSummary' AND ReportForString='Entire Facility' AND TableName='End Uses' AND ColumnName='Water' AND RowName='Water Systems'")
     qaqc[:service_water_heating][:water_m3_per_year]=validate_optional(qaqc[:service_water_heating][:water_m3_per_year], model, -1)
-    
+
     qaqc[:service_water_heating][:water_m3_per_day]=qaqc[:service_water_heating][:water_m3_per_year]/365.5
     qaqc[:service_water_heating][:water_m3_per_day_per_occupant]=qaqc[:service_water_heating][:water_m3_per_day]/qaqc[:service_water_heating][:total_nominal_occupancy]
     #puts qaqc[:service_water_heating][:total_nominal_occupancy]
@@ -198,7 +198,7 @@ module BTAP
 
     #Store Envelope data.
     qaqc[:envelope] = {}
-	
+
     qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] 	= BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_walls).round(4) if outdoor_walls.size > 0
     qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k]  = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_roofs).round(4) if outdoor_roofs.size > 0
     qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_floors).round(4) if outdoor_floors.size > 0
@@ -211,8 +211,8 @@ module BTAP
     qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors).round(4) if overhead_doors.size > 0
     qaqc[:envelope][:fdwr]  										= (BTAP::Geometry::get_fwdr(model) * 100.0).round(1)
     qaqc[:envelope][:srr]  											= (BTAP::Geometry::get_srr(model) * 100.0).round(1)
-	
-	
+
+
     qaqc[:envelope][:constructions] = {}
     qaqc[:envelope][:constructions][:exterior_fenestration] = []
     constructions = []
@@ -228,8 +228,8 @@ module BTAP
       construction_info[:thermal_conductance_m2_w_per_k] = BTAP::Resources::Envelope::Constructions::get_conductance(construction).round(3)
       construction_info[:solar_transmittance] = BTAP::Resources::Envelope::Constructions::get_shgc(model, construction).round(3)
       construction_info[:visible_tranmittance] = BTAP::Resources::Envelope::Constructions::get_tvis(model,construction).round(3)
-    end	
-    
+    end
+
     #Exterior
     qaqc[:envelope][:constructions][:exterior_opaque] = []
     constructions = []
@@ -246,7 +246,7 @@ module BTAP
       construction_info[:net_area_m2] = construction.to_Construction.get.getNetArea.round(2)
       construction_info[:solar_absorptance] = construction.to_Construction.get.layers[0].exteriorVisibleAbsorptance.get
     end
-	
+
     #Ground
     qaqc[:envelope][:constructions][:ground] = []
     constructions = []
@@ -263,7 +263,7 @@ module BTAP
       construction_info[:net_area_m2] = construction.to_Construction.get.getNetArea.round(2)
       construction_info[:solar_absorptance] = construction.to_Construction.get.layers[0].exteriorVisibleAbsorptance.get
     end
-	
+
 
     # Store Space data.
     qaqc[:spaces] =[]
@@ -271,17 +271,17 @@ module BTAP
       spaceinfo = {}
       qaqc[:spaces] << spaceinfo
       spaceinfo[:name] = space.name.get #name should be defined test
-      spaceinfo[:multiplier] = space.multiplier 
+      spaceinfo[:multiplier] = space.multiplier
       spaceinfo[:volume] = space.volume # should be greater than zero
-      spaceinfo[:exterior_wall_area] = space.exteriorWallArea # just for information. 
-      spaceinfo[:space_type_name] = space.spaceType.get.name.get unless space.spaceType.empty? #should have a space types name defined. 
+      spaceinfo[:exterior_wall_area] = space.exteriorWallArea # just for information.
+      spaceinfo[:space_type_name] = space.spaceType.get.name.get unless space.spaceType.empty? #should have a space types name defined.
       spaceinfo[:thermal_zone] = space.thermalZone.get.name.get unless space.thermalZone.empty? # should be assigned a thermalzone name.
       #puts space.name.get
       #puts space.thermalZone.empty?
       spaceinfo[:breathing_zone_outdoor_airflow_vbz] =-1
       breathing_zone_outdoor_airflow_vbz= model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName='Zone Ventilation Parameters' AND ColumnName='Breathing Zone Outdoor Airflow - Vbz' AND Units='m3/s' AND RowName='#{spaceinfo[:thermal_zone].to_s.upcase}' ")
       spaceinfo[:breathing_zone_outdoor_airflow_vbz] =breathing_zone_outdoor_airflow_vbz.get unless breathing_zone_outdoor_airflow_vbz.empty?
-      spaceinfo[:infiltration_method] = 'N/A' 
+      spaceinfo[:infiltration_method] = 'N/A'
       spaceinfo[:infiltration_flow_per_m2]  =-1.0
       unless space.spaceInfiltrationDesignFlowRates[0].nil?
         spaceinfo[:infiltration_method] = space.spaceInfiltrationDesignFlowRates[0].designFlowRateCalculationMethod
@@ -291,9 +291,9 @@ module BTAP
         error_warning <<  "space.spaceInfiltrationDesignFlowRates[0] is empty for #{spaceinfo[:name]}"
         error_warning <<  "space.spaceInfiltrationDesignFlowRates[0].designFlowRateCalculationMethod is empty for #{spaceinfo[:name]}"
         error_warning <<  "space.spaceInfiltrationDesignFlowRates[0].flowperExteriorSurfaceArea is empty for #{spaceinfo[:name]}"
-      end  
+      end
 
-      #the following should have values unless the spacetype is "undefined" other they should be set to the correct NECB values. 
+      #the following should have values unless the spacetype is "undefined" other they should be set to the correct NECB values.
       unless space.spaceType.empty?
         spaceinfo[:occupancy_schedule] = nil
         unless (space.spaceType.get.defaultScheduleSet.empty?)
@@ -305,8 +305,8 @@ module BTAP
         else
           error_warning <<  "space.spaceType.get.defaultScheduleSet is empty for #{space.name.get }"
         end
-      
-        spaceinfo[:occ_per_m2] = space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.get.round(3) unless space.spaceType.get.people[0].nil? 
+
+        spaceinfo[:occ_per_m2] = space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.get.round(3) unless space.spaceType.get.people[0].nil?
         unless space.spaceType.get.lights[0].nil?
           spaceinfo[:lighting_w_per_m2] = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea#.get.round(3) unless space.spaceType.get.lights[0].nil?
           spaceinfo[:lighting_w_per_m2] = validate_optional(spaceinfo[:lighting_w_per_m2], model, -1.0)
@@ -315,7 +315,7 @@ module BTAP
           end
         end
         #spaceinfo[:electric_w_per_m2] = space.spaceType.get.electricEquipment[0].electricEquipmentDefinition.wattsperSpaceFloorArea.get.round(3) unless space.spaceType.get.electricEquipment[0].nil?
-      
+
         unless space.spaceType.get.electricEquipment[0].nil?
           unless space.spaceType.get.electricEquipment[0].electricEquipmentDefinition.wattsperSpaceFloorArea.empty?
             spaceinfo[:electric_w_per_m2] = space.spaceType.get.electricEquipment[0].electricEquipmentDefinition.wattsperSpaceFloorArea.get.round(3)
@@ -338,9 +338,9 @@ module BTAP
         error_warning <<  "space.spaceType is empty for #{space.name.get }"
       end
     end
-    
+
     # Store Thermal zone data
-    qaqc[:thermal_zones] = [] 
+    qaqc[:thermal_zones] = []
     model.getThermalZones.sort.each do  |zone|
       zoneinfo = {}
       qaqc[:thermal_zones] << zoneinfo
@@ -353,29 +353,29 @@ module BTAP
       else
         error_warning <<  "zone.isConditioned is empty for #{zone.name.get}"
       end
-      
+
       zoneinfo[:is_ideal_air_loads] = zone.useIdealAirLoads
       zoneinfo[:heating_sizing_factor] = -1.0
       unless zone.sizingZone.zoneHeatingSizingFactor.empty?
         zoneinfo[:heating_sizing_factor] = zone.sizingZone.zoneHeatingSizingFactor.get
       else
         error_warning <<  "zone.sizingZone.zoneHeatingSizingFactor is empty for #{zone.name.get}"
-      end  
-      
+      end
+
       zoneinfo[:cooling_sizing_factor] = -1.0 #zone.sizingZone.zoneCoolingSizingFactor.get
       unless zone.sizingZone.zoneCoolingSizingFactor.empty?
         zoneinfo[:cooling_sizing_factor] = zone.sizingZone.zoneCoolingSizingFactor.get
       else
         error_warning <<  "zone.sizingZone.zoneCoolingSizingFactor is empty for #{zone.name.get}"
-      end  
-      
+      end
+
       zoneinfo[:zone_heating_design_supply_air_temperature] = zone.sizingZone.zoneHeatingDesignSupplyAirTemperature
       zoneinfo[:zone_cooling_design_supply_air_temperature] = zone.sizingZone.zoneCoolingDesignSupplyAirTemperature
       zoneinfo[:spaces] = []
       zone.spaces.sort.each do |space|
         spaceinfo ={}
         zoneinfo[:spaces] << spaceinfo
-        spaceinfo[:name] = space.name.get  
+        spaceinfo[:name] = space.name.get
         spaceinfo[:type] = space.spaceType.get.name.get unless space.spaceType.empty?
       end
       zoneinfo[:equipment] = []
@@ -407,7 +407,7 @@ module BTAP
       end
       air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName='System Ventilation Parameters' AND ColumnName='Area Outdoor Air Rate - Ra' AND Units='m3/s-m2' AND RowName='#{air_loop_info[:name].to_s.upcase}' ")
       air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] = validate_optional(air_loop_info[:area_outdoor_air_rate_m3_per_s_m2], model, -1.0)
-      
+
       air_loop_info[:outdoor_air_L_per_s] = -1.0
       unless air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] ==-1.0
         air_loop_info[:outdoor_air_L_per_s] = air_loop_info[:area_outdoor_air_rate_m3_per_s_m2]*air_loop_info[:total_floor_area_served]*1000
@@ -416,10 +416,10 @@ module BTAP
 
       unless air_loop.supplyFan.empty?
         air_loop_info[:supply_fan] = {}
-        if air_loop.supplyFan.get.to_FanConstantVolume.is_initialized 
+        if air_loop.supplyFan.get.to_FanConstantVolume.is_initialized
           air_loop_info[:supply_fan][:type] = 'CV'
           fan = air_loop.supplyFan.get.to_FanConstantVolume.get
-        elsif air_loop.supplyFan.get.to_FanVariableVolume.is_initialized 
+        elsif air_loop.supplyFan.get.to_FanVariableVolume.is_initialized
           air_loop_info[:supply_fan][:type]  = 'VV'
           fan = air_loop.supplyFan.get.to_FanVariableVolume.get
         end
@@ -429,7 +429,7 @@ module BTAP
         air_loop_info[:supply_fan][:motor_efficiency] = fan.motorEfficiency
         air_loop_info[:supply_fan][:pressure_rise] = fan.pressureRise
         air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]  = -1.0
-       
+
         max_air_flow_info = model.sqlFile().get().execAndReturnVectorOfString("SELECT RowName FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Max Air Flow Rate' AND Units='m3/s' ")
         max_air_flow_info = validate_optional(max_air_flow_info, model, "N/A")
         unless max_air_flow_info == "N/A"
@@ -444,7 +444,7 @@ module BTAP
         end
       end
 
-      #economizer                                                                                             
+      #economizer
       air_loop_info[:economizer] = {}
       air_loop_info[:economizer][:name] = air_loop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.name.get
       air_loop_info[:economizer][:control_type] = air_loop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.getEconomizerControlType
@@ -462,7 +462,7 @@ module BTAP
 
       #Heat Excahnger
       air_loop_info[:heat_exchanger] = {}
-      
+
       air_loop.supplyComponents.each do |supply_comp|
         if supply_comp.to_CoilHeatingGas.is_initialized
           coil={}
@@ -498,11 +498,11 @@ module BTAP
           air_loop_info[:heat_exchanger][:name] = heatExchanger.name.get
         end
       end
-      
+
       #I dont think i need to get the type of heating coil from the sql file, because the coils are differentiated by class, and I have hard coded the information
       #model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName= 'Heating Coils' AND ColumnName='Type' ").get #padmussen to complete #AND RowName='#{air_loop_info[:heating_coils][:name].upcase}'
-      
-      
+
+
       #Collect all the fans into the the array.
       air_loop.supplyComponents.each do |supply_comp|
         if supply_comp.to_CoilCoolingDXSingleSpeed.is_initialized
@@ -510,7 +510,7 @@ module BTAP
           air_loop_info[:cooling_coils][:dx_single_speed] << coil
           single_speed = supply_comp.to_CoilCoolingDXSingleSpeed.get
           coil[:name] = single_speed.name.get
-          coil[:cop] = single_speed.ratedCOP.get
+          coil[:cop] = single_speed.ratedCOP.to_f
           coil[:nominal_total_capacity_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
           coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w], model, -1.0)
         end
@@ -519,8 +519,8 @@ module BTAP
           air_loop_info[:cooling_coils][:dx_two_speed] << coil
           two_speed = supply_comp.to_CoilCoolingDXTwoSpeed.get
           coil[:name] = two_speed.name.get
-          coil[:cop_low] = two_speed.ratedLowSpeedCOP.get
-          coil[:cop_high] =  two_speed.ratedHighSpeedCOP.get
+          coil[:cop_low] = two_speed.ratedLowSpeedCOP.to_f
+          coil[:cop_high] =  two_speed.ratedHighSpeedCOP.to_f
           coil[:nominal_total_capacity_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
           coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w] , model,-1.0)
         end
@@ -534,11 +534,11 @@ module BTAP
       plant_loop_info = {}
       qaqc[:plant_loops] << plant_loop_info
       plant_loop_info[:name] = plant_loop.name.get
-      
+
       sizing = plant_loop.sizingPlant
       plant_loop_info[:design_loop_exit_temperature] = sizing.designLoopExitTemperature
       plant_loop_info[:loop_design_temperature_difference] = sizing.loopDesignTemperatureDifference
-      
+
       #Create Container for plant equipment arrays.
       plant_loop_info[:pumps] = []
       plant_loop_info[:boilers] = []
@@ -546,7 +546,7 @@ module BTAP
       plant_loop_info[:cooling_tower_single_speed] = []
       plant_loop_info[:water_heater_mixed] =[]
       plant_loop.supplyComponents.each do |supply_comp|
-      
+
         #Collect Constant Speed
         if supply_comp.to_PumpConstantSpeed.is_initialized
           pump = supply_comp.to_PumpConstantSpeed.get
@@ -562,14 +562,14 @@ module BTAP
           pump_info[:electric_power_w] = validate_optional(pump_info[:electric_power_w], model, -1.0)
           pump_info[:motor_efficency] = pump.motorEfficiency
         end
-        
+
         #Collect Variable Speed
         if supply_comp.to_PumpVariableSpeed.is_initialized
           pump = supply_comp.to_PumpVariableSpeed.get
           pump_info = {}
           plant_loop_info[:pumps] << pump_info
           pump_info[:name] = pump.name.get
-          pump_info[:type] = "Pump:VariableSpeed" 
+          pump_info[:type] = "Pump:VariableSpeed"
           pump_info[:head_pa] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Head' AND RowName='#{pump_info[:name].upcase}' ")
           pump_info[:head_pa] = validate_optional(pump_info[:head_pa], model, -1.0)
           pump_info[:water_flow_m3_per_s] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Water Flow' AND RowName='#{pump_info[:name].upcase}' ")
@@ -578,37 +578,37 @@ module BTAP
           pump_info[:electric_power_w] = validate_optional(pump_info[:electric_power_w], model, -1.0)
           pump_info[:motor_efficency] = pump.motorEfficiency
         end
-        
+
         # Collect HotWaterBoilers
         if supply_comp.to_BoilerHotWater.is_initialized
           boiler = supply_comp.to_BoilerHotWater.get
           boiler_info = {}
           plant_loop_info[:boilers] << boiler_info
           boiler_info[:name] = boiler.name.get
-          boiler_info[:type] = "Boiler:HotWater" 
+          boiler_info[:type] = "Boiler:HotWater"
           boiler_info[:fueltype] = boiler.fuelType
           boiler_info[:nominal_capacity] = boiler.nominalCapacity
           boiler_info[:nominal_capacity] = validate_optional(boiler_info[:nominal_capacity], model, -1.0)
         end
-        
+
         # Collect ChillerElectricEIR
         if supply_comp.to_ChillerElectricEIR.is_initialized
           chiller = supply_comp.to_ChillerElectricEIR.get
           chiller_info = {}
           plant_loop_info[:chiller_electric_eir] << chiller_info
           chiller_info[:name] = chiller.name.get
-          chiller_info[:type] = "Chiller:Electric:EIR" 
+          chiller_info[:type] = "Chiller:Electric:EIR"
           chiller_info[:reference_capacity] = validate_optional(chiller.referenceCapacity, model, -1.0)
           chiller_info[:reference_leaving_chilled_water_temperature] =chiller.referenceLeavingChilledWaterTemperature
         end
-        
+
         # Collect CoolingTowerSingleSpeed
         if supply_comp.to_CoolingTowerSingleSpeed.is_initialized
           coolingTower = supply_comp.to_CoolingTowerSingleSpeed.get
           coolingTower_info = {}
           plant_loop_info[:cooling_tower_single_speed] << coolingTower_info
           coolingTower_info[:name] = coolingTower.name.get
-          coolingTower_info[:type] = "CoolingTower:SingleSpeed" 
+          coolingTower_info[:type] = "CoolingTower:SingleSpeed"
           coolingTower_info[:fan_power_at_design_air_flow_rate] = validate_optional(coolingTower.fanPoweratDesignAirFlowRate, model, -1.0)
 
         end
@@ -624,8 +624,8 @@ module BTAP
           waterHeaterMixed_info[:heater_fuel_type] = waterHeaterMixed.heaterFuelType
         end
       end
-      
-      qaqc[:eplusout_err] ={}  
+
+      qaqc[:eplusout_err] ={}
       warnings = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='0' ")
       warnings = validate_optional(warnings, model, "N/A")
       unless warnings == "N/A"
@@ -633,20 +633,20 @@ module BTAP
         qaqc[:eplusout_err][:fatal] =model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='2' ").get
         qaqc[:eplusout_err][:severe] =model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='1' ").get
       end
-      
+
       qaqc[:ruby_warnings] = error_warning
     end
-       
-    
+
+
     # Perform qaqc
     necb_2011_qaqc(qaqc, model) if qaqc[:building][:name].include?("NECB2011") #had to nodify this because this is specifically for "NECB-2011" standard
     sanity_check(qaqc)
-    
+
     qaqc[:information] = qaqc[:information].sort
     qaqc[:warnings] = qaqc[:warnings].sort
     qaqc[:errors] = qaqc[:errors].sort
     qaqc[:unique_errors]= qaqc[:unique_errors].sort
-    
+
     return qaqc
   end
 end
@@ -672,7 +672,7 @@ def look_up_csv_data(csv_fname, search_criteria)
   CSV.open( csv_fname, "r", options ) do |csv|
 
     # Since CSV includes Enumerable we can use 'find_all'
-    # which will return all the elements of the Enumerble for 
+    # which will return all the elements of the Enumerble for
     # which the block returns true
 
     matches = csv.find_all do |row|
@@ -704,7 +704,7 @@ def necb_section_test(qaqc,result_value,bool_operator,expected_value,necb_sectio
   end
   test = eval(command)
   test == 'true' ? true :false
-  raise ("Eval command failed #{test}") if !!test != test 
+  raise ("Eval command failed #{test}") if !!test != test
   if test
     qaqc[:information] << "[Info][TEST-PASS][#{necb_section_name}]:#{test_text} result value:#{result_value} #{bool_operator} expected value:#{expected_value}"
   else
@@ -721,8 +721,8 @@ def check_boolean_value (value,varname)
 
   raise ArgumentError.new "invalid value for #{varname}: #{value}"
 end
-  
-  
+
+
 def get_total_nominal_capacity (model)
   total_nominal_capacity = 0
   model.getSpaces.sort.each do |space|
@@ -764,23 +764,23 @@ def sanity_check(qaqc)
           qaqc[:sanity_check][:pass] << "[TEST-PASS][SANITY_CHECK-PASS] for [SPACE][#{space[:name]}] and [THERMAL ZONE] [#{zoneinfo[:name]}] where isConditioned is supposed to be [""Yes""] and found as #{zoneinfo[:is_conditioned]}"
         elsif zoneinfo[:name]
           qaqc[:sanity_check][:fail] << "[ERROR][SANITY_CHECK-FAIL] for [SPACE][#{space[:name]}] and [THERMAL ZONE] [#{zoneinfo[:name]}] where isConditioned is supposed to be [""Yes""] but found as #{zoneinfo[:is_conditioned]}"
-        end          
+        end
       end
     end
-  end	
+  end
   qaqc[:sanity_check][:fail] = qaqc[:sanity_check][:fail].sort
   qaqc[:sanity_check][:pass] = qaqc[:sanity_check][:pass].sort
   #Padmassun's code for isConditioned end
 end
-  
-  
+
+
 def necb_2011_qaqc(qaqc, model)
-  #Now perform basic QA/QC on items for NECB2011 
+  #Now perform basic QA/QC on items for NECB2011
   qaqc[:information] = []
   qaqc[:warnings] =[]
   qaqc[:errors] = []
   qaqc[:unique_errors]=[]
-    
+
 
   #    #Padmassun's Code Start
   csv_file_name ="#{File.dirname(__FILE__)}/necb_2011_spacetype_info.csv"
@@ -802,20 +802,20 @@ def necb_2011_qaqc(qaqc, model)
       puts "space type of [#{space_type}] and/or building type of [#{building_type}] was not found in the excel sheet for space: [#{space[:name]}]"
     else
       #correct the data from the csv file to include a multiplier of 0.9 for specific space types.
-      
+
       reduceLPDSpaces = ["Classroom/lecture/training", "Conf./meet./multi-purpose", "Lounge/recreation",
-        "Washroom-sch-A", "Washroom-sch-B", "Washroom-sch-C", "Washroom-sch-D", "Washroom-sch-E", 
-        "Washroom-sch-F", "Washroom-sch-G", "Washroom-sch-H", "Washroom-sch-I", "Dress./fitt. - performance arts", 
+        "Washroom-sch-A", "Washroom-sch-B", "Washroom-sch-C", "Washroom-sch-D", "Washroom-sch-E",
+        "Washroom-sch-F", "Washroom-sch-G", "Washroom-sch-H", "Washroom-sch-I", "Dress./fitt. - performance arts",
         "Locker room", "Retail - dressing/fitting","Locker room-sch-A","Locker room-sch-B","Locker room-sch-C",
         "Locker room-sch-D","Locker room-sch-E","Locker room-sch-F","Locker room-sch-G","Locker room-sch-H",
         "Locker room-sch-I", "Office - open plan - occsens", "Office - enclosed - occsens", "Storage area - occsens",
         "Hospital - medical supply - occsens", "Storage area - refrigerated - occsens"]
-      
+
       if reduceLPDSpaces.include?(space_type)
         row[3] = row[3]*0.9
         puts "\n============================\nspace_type: #{space_type}\n============================\n"
       end
-      
+
       # Start of Space Compliance
       necb_section_name = "NECB2011-Section 8.4.3.6"
       data = {}
@@ -838,13 +838,13 @@ def necb_2011_qaqc(qaqc, model)
     end#space Compliance
   end
   #Padmassun's Code End
-    
+
 
   # Envelope
   necb_section_name = "NECB2011-Section 3.2.1.4"
   #store hdd in short form
   hdd = qaqc[:geography][:hdd]
-  #calculate fdwr based on hdd. 
+  #calculate fdwr based on hdd.
   fdwr = 0
   if hdd < 4000
     fdwr = 0.40
@@ -853,15 +853,15 @@ def necb_2011_qaqc(qaqc, model)
   elsif hdd >7000
     fdwr = 0.20
   end
-  #hardset srr to 0.05 
+  #hardset srr to 0.05
   srr = 0.05
   #create table of expected values and results.
   data = {}
   data[:fenestration_to_door_and_window_percentage]  = [ fdwr * 100,qaqc[:envelope][:fdwr].round(3)]
   data[:skylight_to_roof_percentage]  = [  srr * 100,qaqc[:envelope][:srr].round(3)]
   #perform test. result must be less than or equal to.
-  data.each {|key,value| necb_section_test( 
-      qaqc, 
+  data.each {|key,value| necb_section_test(
+      qaqc,
       value[0],
       '>=',
       value[1],
@@ -875,11 +875,11 @@ def necb_2011_qaqc(qaqc, model)
   necb_section_name = "NECB2011-Section 8.4.3.6"
   qaqc[:spaces].each do |spaceinfo|
     data = {}
-    data[:infiltration_method] 		= [ "Flow/ExteriorArea", spaceinfo[:infiltration_method] , nil ] 
+    data[:infiltration_method] 		= [ "Flow/ExteriorArea", spaceinfo[:infiltration_method] , nil ]
     data[:infiltration_flow_per_m2] = [ 0.00025,			 spaceinfo[:infiltration_flow_per_m2], 5 ]
     data.each do |key,value|
       #puts key
-      necb_section_test( 
+      necb_section_test(
         qaqc,
         value[0],
         '==',
@@ -899,8 +899,8 @@ def necb_2011_qaqc(qaqc, model)
   data[:ext_wall_conductances]        =  [0.315,0.278,0.247,0.210,0.210,0.183,qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k].nil?
   data[:ext_roof_conductances]        =  [0.227,0.183,0.183,0.162,0.162,0.142,qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k].nil?
   data[:ext_floor_conductances]       =  [0.227,0.183,0.183,0.162,0.162,0.142,qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k].nil?
-    
-  data.each {|key,value| necb_section_test( 
+
+  data.each {|key,value| necb_section_test(
       qaqc,
       value[result_value_index],
       '==',
@@ -921,9 +921,9 @@ def necb_2011_qaqc(qaqc, model)
   data[:ext_overhead_door_conductances] =   [2.400,2.200,2.200,2.200,2.200,1.600,qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k].nil?
   data[:ext_skylight_conductances]  =       [2.400,2.200,2.200,2.200,2.200,1.600,qaqc[:envelope][:skylights_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:skylights_average_conductance_w_per_m2_k].nil?
   data.each do |key,value|
-	
+
     #puts key
-    necb_section_test( 
+    necb_section_test(
       qaqc,
       value[result_value_index].round(round_precision),
       '==',
@@ -932,7 +932,7 @@ def necb_2011_qaqc(qaqc, model)
       "[ENVELOPE]#{key}",
       round_precision
     )
-  end    
+  end
   #Exterior Ground surfaces
   necb_section_name = "NECB2011-Section 3.2.3.1"
   climate_index = NECB2011.new().get_climate_zone_index(qaqc[:geography][:hdd])
@@ -942,7 +942,7 @@ def necb_2011_qaqc(qaqc, model)
   data[:ground_wall_conductances]  = [ 0.568,0.379,0.284,0.284,0.284,0.210, qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k] ]  unless qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k].nil?
   data[:ground_roof_conductances]  = [ 0.568,0.379,0.284,0.284,0.284,0.210, qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k] ]  unless qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k].nil?
   data[:ground_floor_conductances] = [ 0.757,0.757,0.757,0.757,0.757,0.379, qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k] ] unless qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k].nil?
-  data.each {|key,value| necb_section_test( 
+  data.each {|key,value| necb_section_test(
       qaqc,
       value[result_value_index],
       '==',
@@ -964,9 +964,9 @@ def necb_2011_qaqc(qaqc, model)
     data[:cooling_sizing_factor] = [1.1 ,zoneinfo[:cooling_sizing_factor]]
     data[:heating_design_supply_air_temp] =   [43.0, zoneinfo[:zone_heating_design_supply_air_temperature] ] #unless zoneinfo[:zone_heating_design_supply_air_temperature].nil?
     data[:cooling_design_supply_temp] 	=   [13.0, zoneinfo[:zone_cooling_design_supply_air_temperature] ]
-    data.each do |key,value| 
+    data.each do |key,value|
       #puts key
-      necb_section_test( 
+      necb_section_test(
         qaqc,
         value[0],
         '==',
@@ -976,26 +976,26 @@ def necb_2011_qaqc(qaqc, model)
         round_precision
       )
     end
-  end	
+  end
   #Air flow sizing check
   #determine correct economizer usage according to section 5.2.2.7 of NECB2011
   necb_section_name = "NECB2011-5.2.2.7"
   qaqc[:air_loops].each do |air_loop_info|
-    #    air_loop_info[:name] 
-    #    air_loop_info[:thermal_zones] 
+    #    air_loop_info[:name]
+    #    air_loop_info[:thermal_zones]
     #    air_loop_info[:total_floor_area_served]
     #    air_loop_info[:cooling_coils][:dx_single_speed]
     #    air_loop_info[:cooling_coils][:dx_two_speed]
     #    air_loop_info[:supply_fan][:max_air_flow_rate]
-    #    
+    #
     #    air_loop_info[:heating_coils][:coil_heating_gas][:nominal_capacity]
     #    air_loop_info[:heating_coils][:coil_heating_electric][:nominal_capacity]
     #    air_loop_info[:heating_coils][:coil_heating_water][:nominal_capacity]
-    #    
+    #
     #    air_loop_info[:economizer][:control_type]
-    
+
     capacity = -1.0
-    
+
     if !air_loop_info[:cooling_coils][:dx_single_speed][0].nil?
       puts "air_loop_info[:heating_coils][:coil_heating_gas][0][:nominal_capacity]"
       capacity = air_loop_info[:cooling_coils][:dx_single_speed][0][:nominal_total_capacity_w]
@@ -1015,7 +1015,7 @@ def necb_2011_qaqc(qaqc, model)
         if capacity > 20000 or air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000 >1500
           #diff enth
           #puts "diff"
-          necb_section_test( 
+          necb_section_test(
             qaqc,
             "DifferentialEnthalpy",
             '==',
@@ -1026,7 +1026,7 @@ def necb_2011_qaqc(qaqc, model)
         else
           #no economizer
           #puts "no econ"
-          necb_section_test( 
+          necb_section_test(
             qaqc,
             'NoEconomizer',
             '==',
@@ -1038,7 +1038,7 @@ def necb_2011_qaqc(qaqc, model)
       end
     end
   end
-  
+
   #*TODO*
   necb_section_name = "NECB2011-5.2.10.1"
   qaqc[:air_loops].each do |air_loop_info|
@@ -1050,7 +1050,7 @@ def necb_2011_qaqc(qaqc, model)
       unless air_loop_info[:heat_exchanger].empty?
         hrv_present = true
       end
-      necb_section_test( 
+      necb_section_test(
         qaqc,
         hrv_reqd,
         '==',
@@ -1058,10 +1058,10 @@ def necb_2011_qaqc(qaqc, model)
         necb_section_name,
         "[AIR LOOP][:heat_exchanger] for [#{air_loop_info[:name]}] is present?"
       )
-      
+
     end
   end
-  
+
   necb_section_name = "NECB2011-5.2.3.3"
   qaqc[:air_loops].each do |air_loop_info|
     #necb_clg_cop = air_loop_info[:cooling_coils][:dx_single_speed][:cop] #*assuming that the cop is defined correctly*
@@ -1098,7 +1098,7 @@ def necb_2011_qaqc(qaqc, model)
     else
       #The test should pass if and only if the percent difference is less than 10%
       percent_diff = ((necb_supply_fan_w - supply_fan_w).to_f.abs/necb_supply_fan_w * 100).round(3)
-      necb_section_test( 
+      necb_section_test(
         qaqc,
         10,
         '>=',
@@ -1108,9 +1108,9 @@ def necb_2011_qaqc(qaqc, model)
       )
     end
   end
-  
+
   necb_section_name = "SANITY-??"
-  qaqc[:plant_loops].each do |plant_loop_info|  
+  qaqc[:plant_loops].each do |plant_loop_info|
     pump_head = plant_loop_info[:pumps][0][:head_pa]
     flow_rate = plant_loop_info[:pumps][0][:water_flow_m3_per_s]*1000
     hp_check = ((flow_rate*60*60)/1000*1000*9.81*pump_head*0.000101997)/3600000
@@ -1121,13 +1121,13 @@ def necb_2011_qaqc(qaqc, model)
     puts "hp_check #{hp_check}\n"
     pump_power_hp = plant_loop_info[:pumps][0][:electric_power_w]/1000*0.746
     percent_diff = (hp_check - pump_power_hp).to_f.abs/hp_check * 100
-    
+
     if percent_diff.nan?
       qaqc[:ruby_warnings] << "(hp_check - pump_power_hp).to_f.abs/hp_check * 100 for #{plant_loop_info[:name]} is NaN"
       next
     end
-    
-    necb_section_test( 
+
+    necb_section_test(
       qaqc,
       20, #diff of 20%
       '>=',
@@ -1135,6 +1135,6 @@ def necb_2011_qaqc(qaqc, model)
       necb_section_name,
       "[PLANT LOOP][#{plant_loop_info[:name]}][:pumps][0][:electric_power_hp] [#{pump_power_hp}] Percent Diff from NECB value [#{hp_check}]"
     )
-    
+
   end
 end

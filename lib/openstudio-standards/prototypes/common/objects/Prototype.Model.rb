@@ -597,7 +597,7 @@ Standard.class_eval do
       next unless surface.surfaceType == 'Wall'
 
       boundary_condition = surface.outsideBoundaryCondition
-      next unless boundary_condition == 'OtherSideCoefficients' || boundary_condition == 'Ground'
+      next unless boundary_condition == 'OtherSideCoefficients' || boundary_condition.to_s.downcase.include?('ground')
 
       # calculate wall height as difference of maximum and minimum z values, assuming square, vertical walls
       z_values = []
@@ -677,7 +677,7 @@ Standard.class_eval do
 
     # Find space's floors
     space.surfaces.each do |surface|
-      if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground'
+      if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition.to_s.downcase.include?('ground')
         floors << surface
       end
     end
@@ -2700,7 +2700,6 @@ Standard.class_eval do
   # @param wwr [Boolean]
   # @return [Numeric] Returns window to wall ratio (percentage) or window area.
   def model_get_window_area_info(model, wwr = true)
-
     window_area = 0
     wall_area = 0
 
@@ -2722,7 +2721,11 @@ Standard.class_eval do
         end
       end
     end
-    return window_area / wall_area * 100 if wwr
+
+    # check wall area is non-zero
+    if wwr && wall_area > 0
+      return window_area / wall_area * 100
+    end
 
     # else
     return window_area

@@ -84,6 +84,10 @@ def unique_properties(sheet_name)
   return case sheet_name
          when 'templates', 'standards', 'climate_zone_sets', 'constructions', 'curves', 'fans'
            ['name']
+         when 'prm_constructions'
+           ['template', 'name']
+         when 'prm_exterior_lighting'
+           ['template']
          when 'materials'
            ['name', 'code_category']
          when 'space_types', 'space_types_lighting', 'space_types_rendering_color', 'space_types_ventilation', 'space_types_occupancy', 'space_types_infiltration', 'space_types_equipment', 'space_types_thermostats', 'space_types_swh', 'space_types_exhaust'
@@ -128,6 +132,8 @@ def unique_properties(sheet_name)
            ['template', 'compressor_name', 'compressor_type']
          when 'economizers'
            ['template', 'climate_zone', 'data_center']
+         when 'prm_economizers'
+           ['template', 'climate_ID']
          when 'motors'
            ['template', 'number_of_poles', 'type', 'synchronous_speed', 'minimum_capacity', 'maximum_capacity']
          when 'ground_temperatures'
@@ -148,9 +154,23 @@ def unique_properties(sheet_name)
            ['template', 'climate_zone', 'under_8000_hours', 'nontransient_dwelling', 'enthalpy_recovery_ratio_design_conditions']
          when 'space_types_lighting_control'
            ['template', 'building_type', 'space_type']
+         when 'prm_hvac_bldg_type'
+           ['template', 'hvac_building_type']
+         when 'prm_swh_bldg_type'
+           ['template', 'swh_building_type']
+         when 'prm_wwr_bldg_type'
+           ['template', 'wwr_building_type']
+         when 'prm_baseline_hvac'
+           ['template', 'hvac_building_type', 'bldg_area_min', 'bldg_area_max', 'bldg_flrs_min', 'bldg_flrs_max']
+         when 'prm_heat_type'
+           ['template', 'hvac_building_type', 'climate_zone']
+         when 'prm_interior_lighting'
+           ['template', 'lpd_space_type']
+         when 'lpd_space_type'
+           ['template', 'lpd_space_type']
          else
            []
-         end
+        end
 end
 
 # Shortens JSON file path names to avoid Windows build errors when
@@ -316,6 +336,7 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
 
     # Open workbook
     workbook = RubyXL::Parser.parse(xlsx_path)
+    puts "After parse workbook"
 
     # Find all the template directories that match the search criteria embedded in the spreadsheet title
     dirs = spreadsheet_title.gsub('OpenStudio_Standards-', '').gsub(/\(\w*\)/, '').split('-')
@@ -323,7 +344,8 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
     dirs.each { |d| d == 'ALL' ? new_dirs << '*' : new_dirs << "*#{d}*" }
     glob_string = "#{standards_dir}/#{new_dirs.join('/')}"
     puts "--spreadsheet title embedded search criteria: #{glob_string} yields:"
-    template_dirs = Dir.glob(glob_string).select { |f| File.directory?(f) && !f.include?('data') }
+#    template_dirs = Dir.glob(glob_string).select { |f| File.directory?(f) && !f.include?('data') && !f.include?('prm')}
+    template_dirs = Dir.glob(glob_string).select { |f| File.directory?(f) && !f.include?('data')}
     template_dirs.each do |template_dir|
       puts "----#{template_dir}"
     end
@@ -462,7 +484,7 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
           end
           new_obj['climate_zones'] = items
           objs << new_obj
-        elsif sheet_name == 'constructions'
+        elsif sheet_name == 'constructions' or sheet_name == 'prm_constructions'
           new_obj = {}
           new_obj['name'] = obj['name']
           items = []
@@ -607,10 +629,15 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
           sorted_objs = {sheet_name => objs}.sort_by_key_updated(true) {|x, y| x.to_s <=> y.to_s}
 
           # Also check directly underneath the parent directory
-          child_dir = "#{standards_dir}/#{parent_dir}/#{template_dir_name}"
+          if /prm/.match(template_dir_name) && !/prm/.match(parent_dir)
+            child_dir = "#{standards_dir}/#{parent_dir}_prm/#{template_dir_name}"
+          else
+            child_dir = "#{standards_dir}/#{parent_dir}/#{template_dir_name}"
+          end
           additional_dirs = []
           additional_dirs << child_dir if Dir.exist?(child_dir)
           possible_template_dirs = template_dirs + additional_dirs
+          puts "Additional dir = #{child_dir}"
 
           wrote_json = false
           possible_template_dirs.each do |template_dir|

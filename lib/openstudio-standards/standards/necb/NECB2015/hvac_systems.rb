@@ -127,19 +127,23 @@ class NECB2015
           when 'OS_GroundHeatExchanger_Vertical'
             max_powertoload = 21.0
           when 'OS_Pump_VariableSpeed'
-            pumps << supplycomp.to_PumpVariableSpeed.get
-            total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
+            pump = supplycomp.to_PumpVariableSpeed.get
+            pumps << pump
+            total_pump_power += pump.autosizedRatedPowerConsumption.get
           when 'OS_Pump_ConstantSpeed'
-            pumps << supplycomp.to_PumpConstantSpeed.get
-            total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
+            pump = supplycomp.to_PumpConstantSpeed.get
+            pumps << pump
+            total_pump_power += pump.autosizedRatedPowerConsumption.get
           when 'OS_HeaderedPumps_ConstantSpeed'
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "A pump used in the plant loop named #{plantloop.name} is headered.  This may result in an error and cause a failure.")
-            pumps << supplycomp.to_HeaderedPumpsConstantSpeed.get
-            total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
+            pump = supplycomp.to_HeaderedPumpsConstantSpeed.get
+            pumps << pump
+            total_pump_power += pump.autosizedRatedPowerConsumption.get
           when 'OS_HeaderedPumps_VariableSpeed'
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "A pump used in the plant loop named #{plantloop.name} is headered.  This may result in an error and cause a failure.")
-            pumps << supplycomp.to_HeaderedPumpsVariableSpeed.get
-            total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
+            pump = supplycomp.to_HeaderedPumpsVariableSpeed.get
+            pumps << pump
+            total_pump_power += pump.autosizedRatedPowerConsumption.get
         end
       end
       var_spd_pumps = pumps.select {|pump| pump.to_PumpVariableSpeed.is_initialized}

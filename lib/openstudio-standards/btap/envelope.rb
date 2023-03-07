@@ -70,7 +70,7 @@ module BTAP
       def self.assign_interior_surface_construction_to_adiabatic_surfaces(model, runner = nil)
         BTAP::runner_register("Info", "assign_interior_surface_construction_to_adiabatic_surfaces", runner)
         unless model.building.get.defaultConstructionSet.empty? or model.building.get.defaultConstructionSet.get.defaultInteriorSurfaceConstructions.empty? or model.building.get.defaultConstructionSet.get.defaultInteriorSurfaceConstructions.get.wallConstruction.empty?
-          #Give adiabatic surfaces a construction. Does not matter what. This is a bug in Openstudio that leave these surfaces unassigned by the default construction set.
+          #Give adiabatic surfaces a construction. Does not matter what. This is a bug in OpenStudio that leave these surfaces unassigned by the default construction set.
 
           all_adiabatic_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces, "Adiabatic")
 
