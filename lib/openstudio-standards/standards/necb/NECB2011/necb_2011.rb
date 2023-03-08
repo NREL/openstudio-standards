@@ -241,7 +241,7 @@ class NECB2011 < Standard
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
                                 lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
                                 lights_scale: lights_scale,
-                                daylighting_type: daylighting_type, # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
+                                daylighting_type: 'add_daylighting_controls', # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
                                 ecm_system_name: ecm_system_name,
                                 ecm_system_zones_map_option: ecm_system_zones_map_option, # (1) 'NECB_Default' (2) 'one_sys_per_floor' (3) 'one_sys_per_bldg'
                                 erv_package: erv_package,
@@ -1255,16 +1255,11 @@ class NECB2011 < Standard
     end
   end
 
-  ##### Ask user's inputs for daylighting controls illuminance setpoint and number of stepped control steps.
-  ##### Note that the minimum number of stepped control steps is two steps as per NECB2011.
-  def daylighting_controls_settings(illuminance_setpoint: 500.0,
-                                    number_of_stepped_control_steps: 2)
-    return illuminance_setpoint, number_of_stepped_control_steps
-  end
-
   def model_add_daylighting_controls(model)
+
     ##### Find spaces with exterior fenestration including fixed window, operable window, and skylight.
     daylight_spaces = []
+    daylight_spaces_target_illuminance_setpoint_hash = {}
     model.getSpaces.sort.each do |space|
       space.surfaces.sort.each do |surface|
         surface.subSurfaces.sort.each do |subsurface|
@@ -1273,6 +1268,22 @@ class NECB2011 < Standard
                  subsurface.subSurfaceType == 'OperableWindow' ||
                  subsurface.subSurfaceType == 'Skylight')
             daylight_spaces << space
+            space_type = space.spaceType.get
+            space_type_name = space.spaceType.get.name.to_s
+            space_type_name = space_type_name.gsub('Space Function', '')
+
+            # Gather minimum illuminance level as per NECB
+            lux_spacetype_data = @standards_data['tables']['space_types']['table']
+            standards_building_type = space_type.standardsBuildingType.is_initialized ? space_type.standardsBuildingType.get : nil
+            standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil
+            lux_space_type_properties = lux_spacetype_data.detect { |s| (s['building_type'] == standards_building_type) && (s['space_type'] == standards_space_type) }
+            if lux_space_type_properties.nil?
+              raise("#{standards_building_type} for #{standards_space_type} was not found please verify the target_illuminance_setpoint database names match the space type names.")
+            end
+
+            target_illuminance_setpoint = lux_space_type_properties['target_illuminance_setpoint'].to_f
+            daylight_spaces_target_illuminance_setpoint_hash[space.name.to_s] = target_illuminance_setpoint
+
             # subsurface.outsideBoundaryCondition == "Outdoors" && (subsurface.subSurfaceType == "FixedWindow" || "OperableWindow")
           end
           # surface.subSurfaces.each do |subsurface|
@@ -1284,7 +1295,7 @@ class NECB2011 < Standard
 
     ##### Remove duplicate spaces from the "daylight_spaces" array, as a daylighted space may have various fenestration types.
     daylight_spaces = daylight_spaces.uniq
-    # puts daylight_spaces
+    # puts "daylight_spaces are #{daylight_spaces}"
 
     ##### Create hashes for "Primary Sidelighted Areas", "Sidelighting Effective Aperture", "Daylighted Area Under Skylights",
     ##### and "Skylight Effective Aperture" for the whole model.
@@ -1297,7 +1308,6 @@ class NECB2011 < Standard
 
     ##### Calculate "Primary Sidelighted Areas" AND "Sidelighting Effective Aperture" as per NECB2011. #TODO: consider removing overlapped sidelighted area
     daylight_spaces.sort.each do |daylight_space|
-      # puts daylight_space.name.to_s
       primary_sidelighted_area = 0.0
       area_weighted_vt_handle = 0.0
       area_weighted_vt = 0.0
@@ -1358,7 +1368,7 @@ class NECB2011 < Standard
       skylight_effective_aperture_hash[daylight_space.name.to_s] = 0.85 * skylight_area_sum * skylight_area_weighted_vt * 0.9 / daylighted_under_skylight_area
       # daylight_spaces.each do |daylight_space|
     end
-    # puts primary_sidelighted_area_hash
+    # puts "primary_sidelighted_area_hash is #{primary_sidelighted_area_hash}"
     # puts sidelighting_effective_aperture_hash
     # puts daylighted_area_under_skylights_hash
     # puts skylight_effective_aperture_hash
@@ -1559,6 +1569,7 @@ class NECB2011 < Standard
 
       ##### Get the thermal zone of daylight_space (this is used later to assign daylighting sensor)
       zone = daylight_space.thermalZone
+      # puts "zone name is #{zone}"
       if !zone.empty?
         zone = daylight_space.thermalZone.get
         ##### Get the floor of the daylight_space
@@ -1569,8 +1580,10 @@ class NECB2011 < Standard
           end
         end
 
-        ##### Get user's input for daylighting controls illuminance setpoint and number of stepped control steps
-        illuminance_setpoint, number_of_stepped_control_steps = daylighting_controls_settings(illuminance_setpoint: 500.0, number_of_stepped_control_steps: 2)
+        ##### Set daylighting controls illuminance setpoint and number of stepped control steps
+        number_of_stepped_control_steps = 2   ##### Note that the minimum number of stepped control steps is two steps as per NECB2011.
+        illuminance_setpoint =  daylight_spaces_target_illuminance_setpoint_hash.select {|key| key == daylight_space.name.to_s }
+        illuminance_setpoint = illuminance_setpoint[daylight_space.name.to_s]
 
         ##### Create daylighting sensor control
         ##### NOTE: NECB2011 has some requirements on the number of sensors in spaces based on the area of the spaces.
