@@ -455,66 +455,74 @@ class Standard
       if unmet_load_hours_check
         nb_adjustments = 0
         loop do
-          model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}") == false
-          # If UMLH are greater than the threshold allowed by Appendix G,
-          # increase zone air flow and load as per the recommendation in
-          # the PRM-RM; Note that the PRM-RM only suggest to increase
-          # air zone air flow, but the zone sizing factor in EnergyPlus
-          # increase both air flow and load.
-          if model_get_unmet_load_hours(model) > 300
-            # Limit the number of zone sizing factor adjustment to 8
-            unless nb_adjustments < 8
-              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "After 8 rounds of zone sizing factor adjustments the unmet load hours for the baseline model (#{degs} degree of rotation) still exceed 300 hours. Please open an issue on GitHub (https://github.com/NREL/openstudio-standards/issues) and share your user model with the developers.")
-              break
-            end
-            model.getThermalZones.each do |thermal_zone|
-              # Cooling adjustments
-              clg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Cooling')
-              if clg_umlh > 50
-                # Get zone cooling sizing factor
-                if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
-                  sizing_factor = thermal_zone.sizingZone.zoneCoolingSizingFactor.get
-                else
+          # Loop break condition: Limit the number of zone sizing factor adjustment to 8
+          unless nb_adjustments < 8
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "After 8 rounds of zone sizing factor adjustments the unmet load hours for the baseline model (#{degs} degree of rotation) still exceed 300 hours. Please open an issue on GitHub (https://github.com/NREL/openstudio-standards/issues) and share your user model with the developers.")
+            break
+          end
+          # Close the previous SQL session if any - this could prevent EnergyPlus overloading the same session
+          sql = model.sqlFile.get
+          if sql.connectionOpen
+            sql.close
+          end
+          if model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}")
+            # model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}") == false
+            # If UMLH are greater than the threshold allowed by Appendix G,
+            # increase zone air flow and load as per the recommendation in
+            # the PRM-RM; Note that the PRM-RM only suggest to increase
+            # air zone air flow, but the zone sizing factor in EnergyPlus
+            # increase both air flow and load.
+            if model_get_unmet_load_hours(model) > 300
+              model.getThermalZones.each do |thermal_zone|
+                # Cooling adjustments
+                clg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Cooling')
+                if clg_umlh > 50
                   sizing_factor = 1.0
-                end
-
-                # Make adjustment to zone cooling sizing factor
-                # Do not adjust factors greater or equal to 2
-                if sizing_factor < 2.0
-                  if clg_umlh > 150
-                    sizing_factor *= 1.1
-                  elsif clg_umlh > 50
-                    sizing_factor *= 1.05
+                  if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
+                    sizing_factor = thermal_zone.sizingZone.zoneCoolingSizingFactor.get
                   end
+                  # Make adjustment to zone cooling sizing factor
+                  # Do not adjust factors greater or equal to 2
+                  # Rewrite the logic to avoid 5 level nested logic.
+                  clg_umlh > 150 ? sizing_factor = [2.0, sizing_factor * 1.1].min : sizing_factor = [2.0, sizing_factor * 1.05].min
+                  # if clg_umlh > 150
+                  #  sizing_factor *= 1.1
+                  # else # elseif clg_umlh > 50 is not needed since the code block only reached when clg_umlh>50
+                  #  sizing_factor *= 1.05
+                  # end
                   thermal_zone.sizingZone.setZoneCoolingSizingFactor(sizing_factor)
                 end
-              end
 
-              # Heating adjustments
-              htg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Heating')
-              if htg_umlh > 50
-                # Get zone cooling sizing factor
-                if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized
-                  sizing_factor = thermal_zone.sizingZone.zoneHeatingSizingFactor.get
-                else
+                # Heating adjustments
+                # Reset sizing factor
+                htg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Heating')
+                if htg_umlh > 50
                   sizing_factor = 1.0
-                end
-
-                # Make adjustment to zone heating sizing factor
-                # Do not adjust factors greater or equal to 2
-                if sizing_factor < 2.0
-                  if htg_umlh > 150
-                    sizing_factor *= 1.1
-                  elsif htg_umlh > 50
-                    sizing_factor *= 1.05
+                  if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized
+                    # Get zone heating sizing factor
+                    sizing_factor = thermal_zone.sizingZone.zoneHeatingSizingFactor.get
                   end
+
+                  # Make adjustment to zone heating sizing factor
+                  # Do not adjust factors greater or equal to 2
+                  # Rewrite the logic to avoid 5 level nested logic.
+                  htg_umlh > 150 ? sizing_factor = [2.0, sizing_factor * 1.1].min : sizing_factor = [2.0, sizing_factor * 1.05].min
+                  # if sizing_factor < 2.0
+                  #  if htg_umlh > 150
+                  #    sizing_factor *= 1.1
+                  #  else #elsif htg_umlh > 50 is not needed for the same reason
+                  #    sizing_factor *= 1.05
+                  #  end
                   thermal_zone.sizingZone.setZoneHeatingSizingFactor(sizing_factor)
                 end
               end
             end
           else
-            break
+            # simulation failure, need raise the exception.
+            # OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'OpenStudio simulation failed.')
+            raise('OpenStudio simulation failed.')
           end
+          nb_adjustments += 1
         end
       end
     end
