@@ -277,19 +277,19 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
       assert_equal(true, result, "test_chiller_curves: Failure in Standards for #{name}")
       chillers = model.getChillerElectricEIRs
-      chiller_cap_ft_curve = chillers[0].coolingCapacityFunctionOfTemperature
+      chiller_cap_ft_curve = chillers[0].coolingCapacityFunctionOfTemperature.to_CurveBiquadratic.get
       chiller_res_file_output_text +=
         "#{chiller_type},#{chiller_curve_names[chiller_type][0]},biquadratic,#{'%.5E' % chiller_cap_ft_curve.coefficient1Constant},#{'%.5E' % chiller_cap_ft_curve.coefficient2x}," +
           "#{'%.5E' % chiller_cap_ft_curve.coefficient3xPOW2},#{'%.5E' % chiller_cap_ft_curve.coefficient4y},#{'%.5E' % chiller_cap_ft_curve.coefficient5yPOW2}," +
           "#{'%.5E' % chiller_cap_ft_curve.coefficient6xTIMESY},#{'%.5E' % chiller_cap_ft_curve.minimumValueofx},#{'%.5E' % chiller_cap_ft_curve.maximumValueofx}," +
           "#{'%.5E' % chiller_cap_ft_curve.minimumValueofy},#{'%.5E' % chiller_cap_ft_curve.maximumValueofy}\n"
-      chiller_eir_ft_curve = chillers[0].electricInputToCoolingOutputRatioFunctionOfTemperature
+      chiller_eir_ft_curve = chillers[0].electricInputToCoolingOutputRatioFunctionOfTemperature.to_CurveBiquadratic.get
       chiller_res_file_output_text +=
         "#{chiller_type},#{chiller_curve_names[chiller_type][1]},biquadratic,#{'%.5E' % chiller_eir_ft_curve.coefficient1Constant},#{'%.5E' % chiller_eir_ft_curve.coefficient2x}," +
           "#{'%.5E' % chiller_eir_ft_curve.coefficient3xPOW2},#{'%.5E' % chiller_eir_ft_curve.coefficient4y},#{'%.5E' % chiller_eir_ft_curve.coefficient5yPOW2}," +
           "#{'%.5E' % chiller_eir_ft_curve.coefficient6xTIMESY},#{'%.5E' % chiller_eir_ft_curve.minimumValueofx},#{'%.5E' % chiller_eir_ft_curve.maximumValueofx}," +
           "#{'%.5E' % chiller_eir_ft_curve.minimumValueofy},#{'%.5E' % chiller_eir_ft_curve.maximumValueofy}\n"
-      chiller_eir_plr_curve = chillers[0].electricInputToCoolingOutputRatioFunctionOfPLR
+      chiller_eir_plr_curve = chillers[0].electricInputToCoolingOutputRatioFunctionOfPLR.to_CurveQuadratic.get
       chiller_res_file_output_text +=
         "#{chiller_type},#{chiller_curve_names[chiller_type][2]},quadratic,#{'%.5E' % chiller_eir_plr_curve.coefficient1Constant},#{'%.5E' % chiller_eir_plr_curve.coefficient2x}," +
           "#{'%.5E' % chiller_eir_plr_curve.coefficient3xPOW2},#{'%.5E' % chiller_eir_plr_curve.minimumValueofx},#{'%.5E' % chiller_eir_plr_curve.maximumValueofx}\n"
