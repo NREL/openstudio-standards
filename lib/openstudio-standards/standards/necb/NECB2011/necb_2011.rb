@@ -241,7 +241,7 @@ class NECB2011 < Standard
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
                                 lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
                                 lights_scale: lights_scale,
-                                daylighting_type: 'add_daylighting_controls', # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
+                                daylighting_type: 'add_daylighting_controls', # Two options: (1) nil/none/false/'NECB_Default' (Option #1 puts daylighting sensors in the spaces as per NECB requirements; so some spaces may not have sensors), (2) 'add_daylighting_controls' (Option #2 puts daylighting sensors in all spaces regardless of NECB requirements)
                                 ecm_system_name: ecm_system_name,
                                 ecm_system_zones_map_option: ecm_system_zones_map_option, # (1) 'NECB_Default' (2) 'one_sys_per_floor' (3) 'one_sys_per_bldg'
                                 erv_package: erv_package,
@@ -537,7 +537,7 @@ class NECB2011 < Standard
     # Apply SHW Efficiency
     ecm.modify_shw_efficiency(model: model, shw_eff: shw_eff)
     # Apply daylight controls.
-    model_add_daylighting_controls(model) if daylighting_type == 'add_daylighting_controls'
+    model_add_daylighting_controls(model: model, daylighting_type: daylighting_type)
     # Apply Chiller efficiency
     ecm.modify_chiller_efficiency(model: model, chiller_type: chiller_type)
     # Apply airloop economizer
@@ -1255,363 +1255,369 @@ class NECB2011 < Standard
     end
   end
 
-  def model_add_daylighting_controls(model)
+  def model_add_daylighting_controls(model:, daylighting_type:)
 
-    ##### Find spaces with exterior fenestration including fixed window, operable window, and skylight.
-    daylight_spaces = []
-    daylight_spaces_target_illuminance_setpoint_hash = {}
-    model.getSpaces.sort.each do |space|
-      space.surfaces.sort.each do |surface|
-        surface.subSurfaces.sort.each do |subsurface|
-          if subsurface.outsideBoundaryCondition == 'Outdoors' &&
-             (subsurface.subSurfaceType == 'FixedWindow' ||
-                 subsurface.subSurfaceType == 'OperableWindow' ||
-                 subsurface.subSurfaceType == 'Skylight')
-            daylight_spaces << space
-            space_type = space.spaceType.get
-            space_type_name = space.spaceType.get.name.to_s
-            space_type_name = space_type_name.gsub('Space Function', '')
+    if daylighting_type.nil? || daylighting_type == false || daylighting_type == 'none' || daylighting_type == 'NECB_Default' # puts daylighting sensors in the spaces as per NECB requirements; so some spaces may not have sensors
 
-            # Gather minimum illuminance level as per NECB
-            lux_spacetype_data = @standards_data['tables']['space_types']['table']
-            standards_building_type = space_type.standardsBuildingType.is_initialized ? space_type.standardsBuildingType.get : nil
-            standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil
-            lux_space_type_properties = lux_spacetype_data.detect { |s| (s['building_type'] == standards_building_type) && (s['space_type'] == standards_space_type) }
-            if lux_space_type_properties.nil?
-              raise("#{standards_building_type} for #{standards_space_type} was not found please verify the target_illuminance_setpoint database names match the space type names.")
+      ##### Find spaces with exterior fenestration including fixed window, operable window, and skylight.
+      daylight_spaces = []
+      daylight_spaces_target_illuminance_setpoint_hash = {}
+      model.getSpaces.sort.each do |space|
+        space.surfaces.sort.each do |surface|
+          surface.subSurfaces.sort.each do |subsurface|
+            if subsurface.outsideBoundaryCondition == 'Outdoors' &&
+              (subsurface.subSurfaceType == 'FixedWindow' ||
+                subsurface.subSurfaceType == 'OperableWindow' ||
+                subsurface.subSurfaceType == 'Skylight')
+              daylight_spaces << space
+              space_type = space.spaceType.get
+              space_type_name = space.spaceType.get.name.to_s
+              space_type_name = space_type_name.gsub('Space Function', '')
+
+              # Gather minimum illuminance level as per NECB
+              lux_spacetype_data = @standards_data['tables']['space_types']['table']
+              standards_building_type = space_type.standardsBuildingType.is_initialized ? space_type.standardsBuildingType.get : nil
+              standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil
+              lux_space_type_properties = lux_spacetype_data.detect { |s| (s['building_type'] == standards_building_type) && (s['space_type'] == standards_space_type) }
+              if lux_space_type_properties.nil?
+                raise("#{standards_building_type} for #{standards_space_type} was not found please verify the target_illuminance_setpoint database names match the space type names.")
+              end
+
+              target_illuminance_setpoint = lux_space_type_properties['target_illuminance_setpoint'].to_f
+              daylight_spaces_target_illuminance_setpoint_hash[space.name.to_s] = target_illuminance_setpoint
+
+              # subsurface.outsideBoundaryCondition == "Outdoors" && (subsurface.subSurfaceType == "FixedWindow" || "OperableWindow")
             end
-
-            target_illuminance_setpoint = lux_space_type_properties['target_illuminance_setpoint'].to_f
-            daylight_spaces_target_illuminance_setpoint_hash[space.name.to_s] = target_illuminance_setpoint
-
-            # subsurface.outsideBoundaryCondition == "Outdoors" && (subsurface.subSurfaceType == "FixedWindow" || "OperableWindow")
+            # surface.subSurfaces.each do |subsurface|
           end
-          # surface.subSurfaces.each do |subsurface|
+          # space.surfaces.each do |surface|
         end
-        # space.surfaces.each do |surface|
-      end
-      # model.getSpaces.sort.each do |space|
-    end
-
-    ##### Remove duplicate spaces from the "daylight_spaces" array, as a daylighted space may have various fenestration types.
-    daylight_spaces = daylight_spaces.uniq
-    # puts "daylight_spaces are #{daylight_spaces}"
-
-    ##### Create hashes for "Primary Sidelighted Areas", "Sidelighting Effective Aperture", "Daylighted Area Under Skylights",
-    ##### and "Skylight Effective Aperture" for the whole model.
-    ##### Each of these hashes will be used later in this function (i.e. model_add_daylighting_controls)
-    ##### to provide a dictionary of daylighted space names and the associated value (i.e. daylighted area or effective aperture).
-    primary_sidelighted_area_hash = {}
-    sidelighting_effective_aperture_hash = {}
-    daylighted_area_under_skylights_hash = {}
-    skylight_effective_aperture_hash = {}
-
-    ##### Calculate "Primary Sidelighted Areas" AND "Sidelighting Effective Aperture" as per NECB2011. #TODO: consider removing overlapped sidelighted area
-    daylight_spaces.sort.each do |daylight_space|
-      primary_sidelighted_area = 0.0
-      area_weighted_vt_handle = 0.0
-      area_weighted_vt = 0.0
-      window_area_sum = 0.0
-
-      ##### Calculate floor area of the daylight_space and get floor vertices of the daylight_space (to be used for the calculation of daylight_space depth)
-      floor_surface = nil
-      floor_area = 0.0
-      floor_vertices = []
-      daylight_space.surfaces.sort.each do |surface|
-        if surface.surfaceType == 'Floor'
-          floor_surface = surface
-          floor_area += surface.netArea
-          floor_vertices << surface.vertices
-        end
+        # model.getSpaces.sort.each do |space|
       end
 
-      ##### Loop through the surfaces of each daylight_space to calculate primary_sidelighted_area and
-      ##### area-weighted visible transmittance and window_area_sum which are used to calculate sidelighting_effective_aperture
-      primary_sidelighted_area, area_weighted_vt_handle, window_area_sum =
-        get_parameters_sidelighting(daylight_space: daylight_space,
-                                    floor_surface: floor_surface,
-                                    floor_vertices: floor_vertices,
-                                    floor_area: floor_area,
-                                    primary_sidelighted_area: primary_sidelighted_area,
-                                    area_weighted_vt_handle: area_weighted_vt_handle,
-                                    window_area_sum: window_area_sum)
+      ##### Remove duplicate spaces from the "daylight_spaces" array, as a daylighted space may have various fenestration types.
+      daylight_spaces = daylight_spaces.uniq
+      # puts "daylight_spaces are #{daylight_spaces}"
 
-      primary_sidelighted_area_hash[daylight_space.name.to_s] = primary_sidelighted_area
+      ##### Create hashes for "Primary Sidelighted Areas", "Sidelighting Effective Aperture", "Daylighted Area Under Skylights",
+      ##### and "Skylight Effective Aperture" for the whole model.
+      ##### Each of these hashes will be used later in this function (i.e. model_add_daylighting_controls)
+      ##### to provide a dictionary of daylighted space names and the associated value (i.e. daylighted area or effective aperture).
+      primary_sidelighted_area_hash = {}
+      sidelighting_effective_aperture_hash = {}
+      daylighted_area_under_skylights_hash = {}
+      skylight_effective_aperture_hash = {}
 
-      ##### Calculate area-weighted VT of glazing (this is used to calculate sidelighting effective aperture; see NECB2011: 4.2.2.10.).
-      area_weighted_vt = area_weighted_vt_handle / window_area_sum
-      sidelighting_effective_aperture_hash[daylight_space.name.to_s] = window_area_sum * area_weighted_vt / primary_sidelighted_area
-      # daylight_spaces.each do |daylight_space|
-    end
-
-    ##### Calculate "Daylighted Area Under Skylights" AND "Skylight Effective Aperture"
-    daylight_spaces.sort.each do |daylight_space|
-      # puts daylight_space.name.to_s
-      skylight_area = 0.0
-      skylight_area_weighted_vt_handle = 0.0
-      skylight_area_weighted_vt = 0.0
-      skylight_area_sum = 0.0
-      daylighted_under_skylight_area = 0.0
-
-      ##### Loop through the surfaces of each daylight_space to calculate daylighted_area_under_skylights and skylight_effective_aperture for each daylight_space
-      daylighted_under_skylight_area, skylight_area_weighted_vt_handle, skylight_area_sum =
-        get_parameters_skylight(daylight_space: daylight_space,
-                                skylight_area_weighted_vt_handle: skylight_area_weighted_vt_handle,
-                                skylight_area_sum: skylight_area_sum,
-                                daylighted_under_skylight_area: daylighted_under_skylight_area)
-
-      daylighted_area_under_skylights_hash[daylight_space.name.to_s] = daylighted_under_skylight_area
-
-      ##### Calculate skylight_effective_aperture as per NECB2011: 4.2.2.7.
-      ##### Note that it was assumed that the skylight is flush with the ceiling. Therefore, area-weighted average well factor (WF) was set to 0.9 in the below Equation.
-      skylight_area_weighted_vt = skylight_area_weighted_vt_handle / skylight_area_sum
-      skylight_effective_aperture_hash[daylight_space.name.to_s] = 0.85 * skylight_area_sum * skylight_area_weighted_vt * 0.9 / daylighted_under_skylight_area
-      # daylight_spaces.each do |daylight_space|
-    end
-    # puts "primary_sidelighted_area_hash is #{primary_sidelighted_area_hash}"
-    # puts sidelighting_effective_aperture_hash
-    # puts daylighted_area_under_skylights_hash
-    # puts skylight_effective_aperture_hash
-
-    ##### Find office spaces >= 25m2 among daylight_spaces
-    offices_larger_25m2 = []
-    daylight_spaces.sort.each do |daylight_space|
-      ## The following steps are for in case an office has multiple floors at various heights
-      ## 1. Calculate number of floors of each daylight_space
-      ## 2. Find the lowest z among all floors of each daylight_space
-      ## 3. Find lowest floors of each daylight_space (these floors are at the same level)
-      ## 4. Calculate 'daylight_space_area' as sum of area of all the lowest floors of each daylight_space, and gather the vertices of all the lowest floors of each daylight_space
-
-      ## 1. Calculate number of floors of daylight_space
-      floor_vertices = []
-      number_floor = 0
-      daylight_space.surfaces.sort.each do |surface|
-        if surface.surfaceType == 'Floor'
-          floor_vertices << surface.vertices
-          number_floor += 1
-        end
-      end
-
-      ## 2. Loop through all floors of daylight_space, and find the lowest z among all floors of daylight_space
-      lowest_floor_z = []
-      highest_floor_z = []
-      for i in 0..number_floor - 1
-        if i == 0
-          lowest_floor_z = floor_vertices[i][0].z
-          highest_floor_z = floor_vertices[i][0].z
-        else
-          if lowest_floor_z > floor_vertices[i][0].z
-            lowest_floor_z = floor_vertices[i][0].z
-          else
-            lowest_floor_z = lowest_floor_z
-          end
-          if highest_floor_z < floor_vertices[i][0].z
-            highest_floor_z = floor_vertices[i][0].z
-          else
-            highest_floor_z = highest_floor_z
-          end
-        end
-      end
-
-      ## 3 and 4. Loop through all floors of daylight_space, and calculate the sum of area of all the lowest floors of daylight_space,
-      ## and gather the vertices of all the lowest floors of daylight_space
-      daylight_space_area = 0
-      lowest_floors_vertices = []
-      floor_vertices = []
-      daylight_space.surfaces.sort.each do |surface|
-        if surface.surfaceType == 'Floor'
-          floor_vertices = surface.vertices
-          if floor_vertices[0].z == lowest_floor_z
-            lowest_floors_vertices << floor_vertices
-            daylight_space_area += surface.netArea
-          end
-        end
-      end
-
-      if daylight_space.spaceType.get.standardsSpaceType.get.to_s == 'Office - enclosed' && daylight_space_area >= 25.0
-        offices_larger_25m2 << daylight_space.name.to_s
-      end
-    end
-
-    ##### find daylight_spaces which do not need daylight sensor controls based on the primary_sidelighted_area as per NECB2011: 4.2.2.8.
-    ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their primary_sidelighted_area <= 100m2), as per NECB2011: 4.2.2.2.
-    daylight_spaces_exception = []
-    primary_sidelighted_area_hash.sort.each do |key_daylight_space_name, value_primary_sidelighted_area|
-      if value_primary_sidelighted_area <= 100.0 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
-        daylight_spaces_exception << key_daylight_space_name
-      end
-    end
-
-    ##### find daylight_spaces which do not need daylight sensor controls based on the sidelighting_effective_aperture as per NECB2011: 4.2.2.8.
-    ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their sidelighting_effective_aperture <= 10%), as per NECB2011: 4.2.2.2.
-    sidelighting_effective_aperture_hash.sort.each do |key_daylight_space_name, value_sidelighting_effective_aperture|
-      if value_sidelighting_effective_aperture <= 0.1 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
-        daylight_spaces_exception << key_daylight_space_name
-      end
-    end
-
-    ##### find daylight_spaces which do not need daylight sensor controls based on the daylighted_area_under_skylights as per NECB2011: 4.2.2.4.
-    ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their daylighted_area_under_skylights <= 400m2), as per NECB2011: 4.2.2.2.
-    daylighted_area_under_skylights_hash.sort.each do |key_daylight_space_name, value_daylighted_area_under_skylights|
-      if value_daylighted_area_under_skylights <= 400.0 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
-        daylight_spaces_exception << key_daylight_space_name
-      end
-    end
-
-    ##### find daylight_spaces which do not need daylight sensor controls based on the skylight_effective_aperture criterion as per NECB2011: 4.2.2.4.
-    ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their skylight_effective_aperture <= 0.6%), as per NECB2011: 4.2.2.2.
-    skylight_effective_aperture_hash.sort.each do |key_daylight_space_name, value_skylight_effective_aperture|
-      if value_skylight_effective_aperture <= 0.006 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
-        daylight_spaces_exception << key_daylight_space_name
-      end
-    end
-    # puts daylight_spaces_exception
-
-    ##### Loop through the daylight_spaces and exclude the daylight_spaces that do not meet the criteria (see above) as per NECB2011: 4.2.2.4. and 4.2.2.8.
-    daylight_spaces_exception.sort.each do |daylight_space_exception|
+      ##### Calculate "Primary Sidelighted Areas" AND "Sidelighting Effective Aperture" as per NECB2011. #TODO: consider removing overlapped sidelighted area
       daylight_spaces.sort.each do |daylight_space|
-        if daylight_space.name.to_s == daylight_space_exception
-          daylight_spaces.delete(daylight_space)
-        end
-      end
-    end
-    # puts daylight_spaces
+        primary_sidelighted_area = 0.0
+        area_weighted_vt_handle = 0.0
+        area_weighted_vt = 0.0
+        window_area_sum = 0.0
 
-    ##### Create one daylighting sensor and put it at the center of each daylight_space if the space area < 250m2;
-    ##### otherwise, create two daylight sensors, divide the space into two parts and put each of the daylight sensors at the center of each part of the space.
-    daylight_spaces.sort.each do |daylight_space|
-      # puts daylight_space.name.to_s
-      ##### 1. Calculate number of floors of each daylight_space
-      ##### 2. Find the lowest z among all floors of each daylight_space
-      ##### 3. Find lowest floors of each daylight_space (these floors are at the same level)
-      ##### 4. Calculate 'daylight_space_area' as sum of area of all the lowest floors of each daylight_space, and gather the vertices of all the lowest floors of each daylight_space
-      ##### 5. Find min and max of x and y among vertices of all the lowest floors of each daylight_space
-
-      ##### Calculate number of floors of daylight_space
-      floor_vertices = []
-      number_floor = 0
-      daylight_space.surfaces.sort.each do |surface|
-        if surface.surfaceType == 'Floor'
-          floor_vertices << surface.vertices
-          number_floor += 1
-        end
-      end
-
-      ##### Loop through all floors of daylight_space, and find the lowest z among all floors of daylight_space
-      lowest_floor_z = []
-      highest_floor_z = []
-      for i in 0..number_floor - 1
-        if i == 0
-          lowest_floor_z = floor_vertices[i][0].z
-          highest_floor_z = floor_vertices[i][0].z
-        else
-          if lowest_floor_z > floor_vertices[i][0].z
-            lowest_floor_z = floor_vertices[i][0].z
-          else
-            lowest_floor_z = lowest_floor_z
-          end
-          if highest_floor_z < floor_vertices[i][0].z
-            highest_floor_z = floor_vertices[i][0].z
-          else
-            highest_floor_z = highest_floor_z
-          end
-        end
-      end
-      # puts lowest_floor_z
-
-      ##### Loop through all floors of daylight_space, and calculate the sum of area of all the lowest floors of daylight_space,
-      ##### and gather the vertices of all the lowest floors of daylight_space
-      daylight_space_area = 0
-      lowest_floors_vertices = []
-      floor_vertices = []
-      daylight_space.surfaces.sort.each do |surface|
-        if surface.surfaceType == 'Floor'
-          floor_vertices = surface.vertices
-          if floor_vertices[0].z == lowest_floor_z
-            lowest_floors_vertices << floor_vertices
-            daylight_space_area += surface.netArea
-          end
-        end
-      end
-      # puts daylight_space.name.to_s
-      # puts number_floor
-      # puts lowest_floors_vertices
-      # puts daylight_space_area
-
-      ##### Loop through all lowest floors of daylight_space and find the min and max of x and y among their vertices
-      xmin = lowest_floors_vertices[0][0].x
-      ymin = lowest_floors_vertices[0][0].y
-      xmax = lowest_floors_vertices[0][0].x
-      ymax = lowest_floors_vertices[0][0].y
-      zmin = lowest_floor_z
-      for i in 0..lowest_floors_vertices.count - 1 # this loops through each of the lowers floors of daylight_space
-        for j in 0..lowest_floors_vertices[i].count - 1 # this loops through each of vertices of each of the lowers floors of daylight_space
-
-          if xmin > lowest_floors_vertices[i][j].x
-            xmin = lowest_floors_vertices[i][j].x
-          end
-          if ymin > lowest_floors_vertices[i][j].y
-            ymin = lowest_floors_vertices[i][j].y
-          end
-          if xmax < lowest_floors_vertices[i][j].x
-            xmax = lowest_floors_vertices[i][j].x
-          end
-          if ymax < lowest_floors_vertices[i][j].y
-            ymax = lowest_floors_vertices[i][j].y
-          end
-        end
-      end
-      # puts daylight_space.name.to_s
-      # puts xmin
-      # puts xmax
-      # puts ymin
-      # puts ymax
-
-      ##### Get the thermal zone of daylight_space (this is used later to assign daylighting sensor)
-      zone = daylight_space.thermalZone
-      # puts "zone name is #{zone}"
-      if !zone.empty?
-        zone = daylight_space.thermalZone.get
-        ##### Get the floor of the daylight_space
-        floors = []
+        ##### Calculate floor area of the daylight_space and get floor vertices of the daylight_space (to be used for the calculation of daylight_space depth)
+        floor_surface = nil
+        floor_area = 0.0
+        floor_vertices = []
         daylight_space.surfaces.sort.each do |surface|
           if surface.surfaceType == 'Floor'
-            floors << surface
+            floor_surface = surface
+            floor_area += surface.netArea
+            floor_vertices << surface.vertices
           end
         end
 
-        ##### Set daylighting controls illuminance setpoint and number of stepped control steps
-        number_of_stepped_control_steps = 2   ##### Note that the minimum number of stepped control steps is two steps as per NECB2011.
-        illuminance_setpoint =  daylight_spaces_target_illuminance_setpoint_hash.select {|key| key == daylight_space.name.to_s }
-        illuminance_setpoint = illuminance_setpoint[daylight_space.name.to_s]
+        ##### Loop through the surfaces of each daylight_space to calculate primary_sidelighted_area and
+        ##### area-weighted visible transmittance and window_area_sum which are used to calculate sidelighting_effective_aperture
+        primary_sidelighted_area, area_weighted_vt_handle, window_area_sum =
+          get_parameters_sidelighting(daylight_space: daylight_space,
+                                      floor_surface: floor_surface,
+                                      floor_vertices: floor_vertices,
+                                      floor_area: floor_area,
+                                      primary_sidelighted_area: primary_sidelighted_area,
+                                      area_weighted_vt_handle: area_weighted_vt_handle,
+                                      window_area_sum: window_area_sum)
 
-        ##### Create daylighting sensor control
-        ##### NOTE: NECB2011 has some requirements on the number of sensors in spaces based on the area of the spaces.
-        ##### However, EnergyPlus/OpenStudio allows to put maximum two built-in sensors in each thermal zone rather than in each space.
-        ##### Since a thermal zone may include several spaces which are not next to each other on the same floor, or
-        ##### a thermal zone may include spaces on different floors, a simplified method has been used to create a daylighting sensor.
-        ##### So, in each thermal zone, only one daylighting sensor has been created even if the area of that thermal zone requires more than one daylighting sensor.
-        ##### Also, it has been assumed that a thermal zone includes spaces which are next to each other and are on the same floor.
-        ##### Furthermore, the one daylighting sensor in each thermal zone (where the thermal zone needs daylighting sensor),
-        ##### the sensor has been put at the intersection of the minimum and maximum x and y of the lowest floor of that thermal zones.
-        sensor = OpenStudio::Model::DaylightingControl.new(daylight_space.model)
-        sensor.setName("#{daylight_space.name} daylighting control")
-        sensor.setSpace(daylight_space)
-        sensor.setIlluminanceSetpoint(illuminance_setpoint)
-        sensor.setLightingControlType('Stepped')
-        sensor.setNumberofSteppedControlSteps(number_of_stepped_control_steps)
-        x_pos = (xmin + xmax) / 2.0
-        y_pos = (ymin + ymax) / 2.0
-        z_pos = zmin + 0.8 # put it 0.8 meter above the floor
-        sensor_vertex = OpenStudio::Point3d.new(x_pos, y_pos, z_pos)
-        sensor.setPosition(sensor_vertex)
-        zone.setPrimaryDaylightingControl(sensor)
-        zone.setFractionofZoneControlledbyPrimaryDaylightingControl(1.0)
-        # if !zone.empty?
+        primary_sidelighted_area_hash[daylight_space.name.to_s] = primary_sidelighted_area
+
+        ##### Calculate area-weighted VT of glazing (this is used to calculate sidelighting effective aperture; see NECB2011: 4.2.2.10.).
+        area_weighted_vt = area_weighted_vt_handle / window_area_sum
+        sidelighting_effective_aperture_hash[daylight_space.name.to_s] = window_area_sum * area_weighted_vt / primary_sidelighted_area
+        # daylight_spaces.each do |daylight_space|
       end
-      # daylight_spaces.each do |daylight_space|
+
+      ##### Calculate "Daylighted Area Under Skylights" AND "Skylight Effective Aperture"
+      daylight_spaces.sort.each do |daylight_space|
+        # puts daylight_space.name.to_s
+        skylight_area = 0.0
+        skylight_area_weighted_vt_handle = 0.0
+        skylight_area_weighted_vt = 0.0
+        skylight_area_sum = 0.0
+        daylighted_under_skylight_area = 0.0
+
+        ##### Loop through the surfaces of each daylight_space to calculate daylighted_area_under_skylights and skylight_effective_aperture for each daylight_space
+        daylighted_under_skylight_area, skylight_area_weighted_vt_handle, skylight_area_sum =
+          get_parameters_skylight(daylight_space: daylight_space,
+                                  skylight_area_weighted_vt_handle: skylight_area_weighted_vt_handle,
+                                  skylight_area_sum: skylight_area_sum,
+                                  daylighted_under_skylight_area: daylighted_under_skylight_area)
+
+        daylighted_area_under_skylights_hash[daylight_space.name.to_s] = daylighted_under_skylight_area
+
+        ##### Calculate skylight_effective_aperture as per NECB2011: 4.2.2.7.
+        ##### Note that it was assumed that the skylight is flush with the ceiling. Therefore, area-weighted average well factor (WF) was set to 0.9 in the below Equation.
+        skylight_area_weighted_vt = skylight_area_weighted_vt_handle / skylight_area_sum
+        skylight_effective_aperture_hash[daylight_space.name.to_s] = 0.85 * skylight_area_sum * skylight_area_weighted_vt * 0.9 / daylighted_under_skylight_area
+        # daylight_spaces.each do |daylight_space|
+      end
+      # puts "primary_sidelighted_area_hash is #{primary_sidelighted_area_hash}"
+      # puts sidelighting_effective_aperture_hash
+      # puts daylighted_area_under_skylights_hash
+      # puts skylight_effective_aperture_hash
+
+      ##### Find office spaces >= 25m2 among daylight_spaces
+      offices_larger_25m2 = []
+      daylight_spaces.sort.each do |daylight_space|
+        ## The following steps are for in case an office has multiple floors at various heights
+        ## 1. Calculate number of floors of each daylight_space
+        ## 2. Find the lowest z among all floors of each daylight_space
+        ## 3. Find lowest floors of each daylight_space (these floors are at the same level)
+        ## 4. Calculate 'daylight_space_area' as sum of area of all the lowest floors of each daylight_space, and gather the vertices of all the lowest floors of each daylight_space
+
+        ## 1. Calculate number of floors of daylight_space
+        floor_vertices = []
+        number_floor = 0
+        daylight_space.surfaces.sort.each do |surface|
+          if surface.surfaceType == 'Floor'
+            floor_vertices << surface.vertices
+            number_floor += 1
+          end
+        end
+
+        ## 2. Loop through all floors of daylight_space, and find the lowest z among all floors of daylight_space
+        lowest_floor_z = []
+        highest_floor_z = []
+        for i in 0..number_floor - 1
+          if i == 0
+            lowest_floor_z = floor_vertices[i][0].z
+            highest_floor_z = floor_vertices[i][0].z
+          else
+            if lowest_floor_z > floor_vertices[i][0].z
+              lowest_floor_z = floor_vertices[i][0].z
+            else
+              lowest_floor_z = lowest_floor_z
+            end
+            if highest_floor_z < floor_vertices[i][0].z
+              highest_floor_z = floor_vertices[i][0].z
+            else
+              highest_floor_z = highest_floor_z
+            end
+          end
+        end
+
+        ## 3 and 4. Loop through all floors of daylight_space, and calculate the sum of area of all the lowest floors of daylight_space,
+        ## and gather the vertices of all the lowest floors of daylight_space
+        daylight_space_area = 0
+        lowest_floors_vertices = []
+        floor_vertices = []
+        daylight_space.surfaces.sort.each do |surface|
+          if surface.surfaceType == 'Floor'
+            floor_vertices = surface.vertices
+            if floor_vertices[0].z == lowest_floor_z
+              lowest_floors_vertices << floor_vertices
+              daylight_space_area += surface.netArea
+            end
+          end
+        end
+
+        if daylight_space.spaceType.get.standardsSpaceType.get.to_s == 'Office - enclosed' && daylight_space_area >= 25.0
+          offices_larger_25m2 << daylight_space.name.to_s
+        end
+      end
+
+      ##### find daylight_spaces which do not need daylight sensor controls based on the primary_sidelighted_area as per NECB2011: 4.2.2.8.
+      ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their primary_sidelighted_area <= 100m2), as per NECB2011: 4.2.2.2.
+      daylight_spaces_exception = []
+      primary_sidelighted_area_hash.sort.each do |key_daylight_space_name, value_primary_sidelighted_area|
+        if value_primary_sidelighted_area <= 100.0 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
+          daylight_spaces_exception << key_daylight_space_name
+        end
+      end
+
+      ##### find daylight_spaces which do not need daylight sensor controls based on the sidelighting_effective_aperture as per NECB2011: 4.2.2.8.
+      ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their sidelighting_effective_aperture <= 10%), as per NECB2011: 4.2.2.2.
+      sidelighting_effective_aperture_hash.sort.each do |key_daylight_space_name, value_sidelighting_effective_aperture|
+        if value_sidelighting_effective_aperture <= 0.1 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
+          daylight_spaces_exception << key_daylight_space_name
+        end
+      end
+
+      ##### find daylight_spaces which do not need daylight sensor controls based on the daylighted_area_under_skylights as per NECB2011: 4.2.2.4.
+      ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their daylighted_area_under_skylights <= 400m2), as per NECB2011: 4.2.2.2.
+      daylighted_area_under_skylights_hash.sort.each do |key_daylight_space_name, value_daylighted_area_under_skylights|
+        if value_daylighted_area_under_skylights <= 400.0 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
+          daylight_spaces_exception << key_daylight_space_name
+        end
+      end
+
+      ##### find daylight_spaces which do not need daylight sensor controls based on the skylight_effective_aperture criterion as per NECB2011: 4.2.2.4.
+      ##### Note: Office spaces >= 25m2 are excluded (i.e. they should have daylighting controls even if their skylight_effective_aperture <= 0.6%), as per NECB2011: 4.2.2.2.
+      skylight_effective_aperture_hash.sort.each do |key_daylight_space_name, value_skylight_effective_aperture|
+        if value_skylight_effective_aperture <= 0.006 && [key_daylight_space_name].any? { |word| offices_larger_25m2.include?(word) } == false
+          daylight_spaces_exception << key_daylight_space_name
+        end
+      end
+      # puts daylight_spaces_exception
+
+      ##### Loop through the daylight_spaces and exclude the daylight_spaces that do not meet the criteria (see above) as per NECB2011: 4.2.2.4. and 4.2.2.8.
+      daylight_spaces_exception.sort.each do |daylight_space_exception|
+        daylight_spaces.sort.each do |daylight_space|
+          if daylight_space.name.to_s == daylight_space_exception
+            daylight_spaces.delete(daylight_space)
+          end
+        end
+      end
+      # puts daylight_spaces
+
+      ##### Create one daylighting sensor and put it at the center of each daylight_space if the space area < 250m2;
+      ##### otherwise, create two daylight sensors, divide the space into two parts and put each of the daylight sensors at the center of each part of the space.
+      daylight_spaces.sort.each do |daylight_space|
+        # puts daylight_space.name.to_s
+        ##### 1. Calculate number of floors of each daylight_space
+        ##### 2. Find the lowest z among all floors of each daylight_space
+        ##### 3. Find lowest floors of each daylight_space (these floors are at the same level)
+        ##### 4. Calculate 'daylight_space_area' as sum of area of all the lowest floors of each daylight_space, and gather the vertices of all the lowest floors of each daylight_space
+        ##### 5. Find min and max of x and y among vertices of all the lowest floors of each daylight_space
+
+        ##### Calculate number of floors of daylight_space
+        floor_vertices = []
+        number_floor = 0
+        daylight_space.surfaces.sort.each do |surface|
+          if surface.surfaceType == 'Floor'
+            floor_vertices << surface.vertices
+            number_floor += 1
+          end
+        end
+
+        ##### Loop through all floors of daylight_space, and find the lowest z among all floors of daylight_space
+        lowest_floor_z = []
+        highest_floor_z = []
+        for i in 0..number_floor - 1
+          if i == 0
+            lowest_floor_z = floor_vertices[i][0].z
+            highest_floor_z = floor_vertices[i][0].z
+          else
+            if lowest_floor_z > floor_vertices[i][0].z
+              lowest_floor_z = floor_vertices[i][0].z
+            else
+              lowest_floor_z = lowest_floor_z
+            end
+            if highest_floor_z < floor_vertices[i][0].z
+              highest_floor_z = floor_vertices[i][0].z
+            else
+              highest_floor_z = highest_floor_z
+            end
+          end
+        end
+        # puts lowest_floor_z
+
+        ##### Loop through all floors of daylight_space, and calculate the sum of area of all the lowest floors of daylight_space,
+        ##### and gather the vertices of all the lowest floors of daylight_space
+        daylight_space_area = 0
+        lowest_floors_vertices = []
+        floor_vertices = []
+        daylight_space.surfaces.sort.each do |surface|
+          if surface.surfaceType == 'Floor'
+            floor_vertices = surface.vertices
+            if floor_vertices[0].z == lowest_floor_z
+              lowest_floors_vertices << floor_vertices
+              daylight_space_area += surface.netArea
+            end
+          end
+        end
+        # puts daylight_space.name.to_s
+        # puts number_floor
+        # puts lowest_floors_vertices
+        # puts daylight_space_area
+
+        ##### Loop through all lowest floors of daylight_space and find the min and max of x and y among their vertices
+        xmin = lowest_floors_vertices[0][0].x
+        ymin = lowest_floors_vertices[0][0].y
+        xmax = lowest_floors_vertices[0][0].x
+        ymax = lowest_floors_vertices[0][0].y
+        zmin = lowest_floor_z
+        for i in 0..lowest_floors_vertices.count - 1 # this loops through each of the lowers floors of daylight_space
+          for j in 0..lowest_floors_vertices[i].count - 1 # this loops through each of vertices of each of the lowers floors of daylight_space
+
+            if xmin > lowest_floors_vertices[i][j].x
+              xmin = lowest_floors_vertices[i][j].x
+            end
+            if ymin > lowest_floors_vertices[i][j].y
+              ymin = lowest_floors_vertices[i][j].y
+            end
+            if xmax < lowest_floors_vertices[i][j].x
+              xmax = lowest_floors_vertices[i][j].x
+            end
+            if ymax < lowest_floors_vertices[i][j].y
+              ymax = lowest_floors_vertices[i][j].y
+            end
+          end
+        end
+        # puts daylight_space.name.to_s
+        # puts xmin
+        # puts xmax
+        # puts ymin
+        # puts ymax
+
+        ##### Get the thermal zone of daylight_space (this is used later to assign daylighting sensor)
+        zone = daylight_space.thermalZone
+        # puts "zone name is #{zone}"
+        if !zone.empty?
+          zone = daylight_space.thermalZone.get
+          ##### Get the floor of the daylight_space
+          floors = []
+          daylight_space.surfaces.sort.each do |surface|
+            if surface.surfaceType == 'Floor'
+              floors << surface
+            end
+          end
+
+          ##### Set daylighting controls illuminance setpoint and number of stepped control steps
+          number_of_stepped_control_steps = 2   ##### Note that the minimum number of stepped control steps is two steps as per NECB2011.
+          illuminance_setpoint =  daylight_spaces_target_illuminance_setpoint_hash.select {|key| key == daylight_space.name.to_s }
+          illuminance_setpoint = illuminance_setpoint[daylight_space.name.to_s]
+
+          ##### Create daylighting sensor control
+          ##### NOTE: NECB2011 has some requirements on the number of sensors in spaces based on the area of the spaces.
+          ##### However, EnergyPlus/OpenStudio allows to put maximum two built-in sensors in each thermal zone rather than in each space.
+          ##### Since a thermal zone may include several spaces which are not next to each other on the same floor, or
+          ##### a thermal zone may include spaces on different floors, a simplified method has been used to create a daylighting sensor.
+          ##### So, in each thermal zone, only one daylighting sensor has been created even if the area of that thermal zone requires more than one daylighting sensor.
+          ##### Also, it has been assumed that a thermal zone includes spaces which are next to each other and are on the same floor.
+          ##### Furthermore, the one daylighting sensor in each thermal zone (where the thermal zone needs daylighting sensor),
+          ##### the sensor has been put at the intersection of the minimum and maximum x and y of the lowest floor of that thermal zones.
+          sensor = OpenStudio::Model::DaylightingControl.new(daylight_space.model)
+          sensor.setName("#{daylight_space.name} daylighting control")
+          sensor.setSpace(daylight_space)
+          sensor.setIlluminanceSetpoint(illuminance_setpoint)
+          sensor.setLightingControlType('Stepped')
+          sensor.setNumberofSteppedControlSteps(number_of_stepped_control_steps)
+          x_pos = (xmin + xmax) / 2.0
+          y_pos = (ymin + ymax) / 2.0
+          z_pos = zmin + 0.8 # put it 0.8 meter above the floor
+          sensor_vertex = OpenStudio::Point3d.new(x_pos, y_pos, z_pos)
+          sensor.setPosition(sensor_vertex)
+          zone.setPrimaryDaylightingControl(sensor)
+          zone.setFractionofZoneControlledbyPrimaryDaylightingControl(1.0)
+          # if !zone.empty?
+        end
+        # daylight_spaces.each do |daylight_space|
+      end # END if daylighting_controls_type.nil? || daylighting_controls_type == false || daylighting_controls_type == 'none' || daylighting_controls_type == 'NECB_Default'
+
+      elsif daylighting_type == 'add_daylighting_controls' # puts daylighting sensors in all spaces regardless of NECB requirements
     end
-  end
+
+  end # END model_add_daylighting_controls(model:, daylighting_type:)
 
   ##### Define ScheduleTypeLimits for Any_Number_ppm
   ##### TODO: (upon other BTAP tasks) This function can be added to btap/schedules.rb > module StandardScheduleTypeLimits

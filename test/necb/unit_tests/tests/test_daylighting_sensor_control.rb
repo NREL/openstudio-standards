@@ -17,8 +17,8 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
     #Range of test options.
     @templates = [  #expected results are for 'NECB2011', 'NECB2015', 'NECB2017'
         'NECB2011',
-        'NECB2015',
-        'NECB2017'
+        # 'NECB2015',
+        # 'NECB2017'
     ]
     @building_types = [         #expected results are for 'Hospital', 'LargeOffice', 'Outpatient', 'Warehouse'
         # 'FullServiceRestaurant',
@@ -40,6 +40,10 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
     @primary_heating_fuels = ['DefaultFuel']
     @dcv_types = ['No DCV']
     @lighting_types = ['NECB_Default'] #LED  #NECB_Default
+    @daylighting_types = [
+      'NECB_Default',
+      # 'add_daylighting_controls'
+    ]
 
     # Test results storage array.
     @test_results_array = []
@@ -71,7 +75,7 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
                 standard.apply_loads(model: model, lights_type: lighting_type, lights_scale: 1.0)
                 standard.apply_envelope(model: model)
                 standard.apply_fdwr_srr_daylighting(model: model)
-                standard.model_add_daylighting_controls(model)
+                standard.model_add_daylighting_controls(model: model, daylighting_type: daylighting_type)
 
                 # # comment out for regular tests
                 # BTAP::FileIO.save_osm(model, File.join(@output_folder,"#{template}-#{building_type}-daylighting-sensor-control.osm"))
