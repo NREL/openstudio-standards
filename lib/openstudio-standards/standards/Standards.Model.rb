@@ -460,13 +460,12 @@ class Standard
             OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "After 8 rounds of zone sizing factor adjustments the unmet load hours for the baseline model (#{degs} degree of rotation) still exceed 300 hours. Please open an issue on GitHub (https://github.com/NREL/openstudio-standards/issues) and share your user model with the developers.")
             break
           end
-          # Close the previous SQL session if any - this could prevent EnergyPlus overloading the same session
+          # Close the previous SQL session if any - this could prevent EnergyPlus from overloading the same session
           sql = model.sqlFile.get
           if sql.connectionOpen
             sql.close
           end
           if model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}")
-            # model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}") == false
             # If UMLH are greater than the threshold allowed by Appendix G,
             # increase zone air flow and load as per the recommendation in
             # the PRM-RM; Note that the PRM-RM only suggest to increase
@@ -483,13 +482,7 @@ class Standard
                   end
                   # Make adjustment to zone cooling sizing factor
                   # Do not adjust factors greater or equal to 2
-                  # Rewrite the logic to avoid 5 level nested logic.
                   clg_umlh > 150 ? sizing_factor = [2.0, sizing_factor * 1.1].min : sizing_factor = [2.0, sizing_factor * 1.05].min
-                  # if clg_umlh > 150
-                  #  sizing_factor *= 1.1
-                  # else # elseif clg_umlh > 50 is not needed since the code block only reached when clg_umlh>50
-                  #  sizing_factor *= 1.05
-                  # end
                   thermal_zone.sizingZone.setZoneCoolingSizingFactor(sizing_factor)
                 end
 
@@ -505,20 +498,13 @@ class Standard
 
                   # Make adjustment to zone heating sizing factor
                   # Do not adjust factors greater or equal to 2
-                  # Rewrite the logic to avoid 5 level nested logic.
                   htg_umlh > 150 ? sizing_factor = [2.0, sizing_factor * 1.1].min : sizing_factor = [2.0, sizing_factor * 1.05].min
-                  # if sizing_factor < 2.0
-                  #  if htg_umlh > 150
-                  #    sizing_factor *= 1.1
-                  #  else #elsif htg_umlh > 50 is not needed for the same reason
-                  #    sizing_factor *= 1.05
-                  #  end
                   thermal_zone.sizingZone.setZoneHeatingSizingFactor(sizing_factor)
                 end
               end
             end
           else
-            # simulation failure, need raise the exception.
+            # simulation failure, raise the exception.
             # OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'OpenStudio simulation failed.')
             raise('OpenStudio simulation failed.')
           end
