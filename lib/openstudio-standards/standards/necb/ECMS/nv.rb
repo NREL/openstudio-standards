@@ -121,7 +121,6 @@ class ECMS
 
               ##### Add a "ZoneVentilation:DesignFlowRate" object for NV to set OA per person.
               zn_vent_design_flow_rate_1 = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(model)
-              zn_vent_design_flow_rate_1.setDesignFlowRateCalculationMethod('Flow/Person')
               zn_vent_design_flow_rate_1.setFlowRateperPerson(oa_per_person_normalized_by_number_of_windows)
               zn_vent_design_flow_rate_1.setVentilationType('Natural')
               zn_vent_design_flow_rate_1.setMinimumIndoorTemperatureSchedule(min_Tin_schedule)
@@ -133,7 +132,6 @@ class ECMS
 
               ##### Add another "ZoneVentilation:DesignFlowRate" object for NV to set OA per floor area.
               zn_vent_design_flow_rate_2 = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(model)
-              zn_vent_design_flow_rate_2.setDesignFlowRateCalculationMethod('Flow/Area')
               zn_vent_design_flow_rate_2.setFlowRateperZoneFloorArea(oa_per_floor_area_normalized_by_number_of_windows)
               zn_vent_design_flow_rate_2.setVentilationType('Natural')
               zn_vent_design_flow_rate_2.setMinimumIndoorTemperatureSchedule(min_Tin_schedule)
