@@ -314,23 +314,21 @@ class Standard
     htg_clg_schs.uniq.each_with_index do |htg_clg_sch, i|
       htg_sch = htg_clg_sch[0]
       clg_sch = htg_clg_sch[1]
-      htg_sch_type = 'Schedule:Year'
-      clg_sch_type = 'Schedule:Year'
 
       if htg_sch.to_ScheduleConstant.is_initialized
         htg_sch_type = 'Schedule:Constant'
-      end
-
-      if htg_sch.to_ScheduleCompact.is_initialized
+      elsif htg_sch.to_ScheduleCompact.is_initialized
         htg_sch_type = 'Schedule:Compact'
+      else
+        htg_sch_type = 'Schedule:Year'
       end
 
       if clg_sch.to_ScheduleCompact.is_initialized
         clg_sch_type = 'Schedule:Constant'
-      end
-
-      if clg_sch.to_ScheduleCompact.is_initialized
+      elsif clg_sch.to_ScheduleCompact.is_initialized
         clg_sch_type = 'Schedule:Compact'
+      else
+        clg_sch_type = 'Schedule:Year'
       end
 
       # Actuators

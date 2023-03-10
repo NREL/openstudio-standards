@@ -454,17 +454,18 @@ class Standard
       # Check unmet load hours
       if unmet_load_hours_check
         nb_adjustments = 0
-        loop do
-          # Loop break condition: Limit the number of zone sizing factor adjustment to 8
+        loop d
+          # Loop break condition: Limit the number of zone sizing factor adjustment to 3
           unless nb_adjustments < 3
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "After 8 rounds of zone sizing factor adjustments the unmet load hours for the baseline model (#{degs} degree of rotation) still exceed 300 hours. Please open an issue on GitHub (https://github.com/NREL/openstudio-standards/issues) and share your user model with the developers.")
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "After 3 rounds of zone sizing factor adjustments the unmet load hours for the baseline model (#{degs} degree of rotation) still exceed 300 hours. Please open an issue on GitHub (https://github.com/NREL/openstudio-standards/issues) and share your user model with the developers.")
             break
           end
-          # Close the previous SQL session if any - this could prevent EnergyPlus from overloading the same session
+          # Close the previous SQL session if open to prevent EnergyPlus from overloading the same session
           sql = model.sqlFile.get
           if sql.connectionOpen
             sql.close
           end
+
           if model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}")
             # If UMLH are greater than the threshold allowed by Appendix G,
             # increase zone air flow and load as per the recommendation in
