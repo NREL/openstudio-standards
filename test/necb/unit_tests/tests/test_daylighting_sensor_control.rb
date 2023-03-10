@@ -7,9 +7,9 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
   def test_daylighting_sensor_control()
 
     # File paths.
-    @output_folder = File.join(__dir__, 'output/test_daylight_sensor')
-    @expected_results_file = File.join(__dir__, '../expected_results/daylighting_expected_results.json')
-    @test_results_file = File.join(__dir__, '../expected_results/daylighting_test_results.json')
+    # @output_folder = File.join(__dir__, 'output/test_daylight_sensor')
+    # @expected_results_file = File.join(__dir__, '../expected_results/daylighting_expected_results.json')
+    # @test_results_file = File.join(__dir__, '../expected_results/daylighting_test_results.json')
 
     # Initial test condition
     @test_passed = true
@@ -17,22 +17,22 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
     #Range of test options.
     @templates = [  #expected results are for 'NECB2011', 'NECB2015', 'NECB2017'
         'NECB2011',
-        # 'NECB2015',
-        # 'NECB2017'
+        'NECB2015',
+        'NECB2017'
     ]
     @building_types = [         #expected results are for 'Hospital', 'LargeOffice', 'Outpatient', 'Warehouse'
         # # 'FullServiceRestaurant',
         # # 'HighriseApartment',
         # 'Hospital',
         # # 'LargeHotel',
-        # 'LargeOffice',
+        'LargeOffice',
         # # 'MediumOffice',
         # # 'MidriseApartment',
-        # 'Outpatient',
+        'Outpatient',
         # # 'PrimarySchool',
         # # 'QuickServiceRestaurant',
         # # 'RetailStandalone',
-        # # 'SecondarySchool',
+        'SecondarySchool',
         # # 'SmallHotel',
         'Warehouse'
     ]
@@ -42,7 +42,7 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
     @lighting_types = ['NECB_Default'] #LED  #NECB_Default
     @daylighting_types = [
       'NECB_Default',
-      # 'add_daylighting_controls'
+      'add_daylighting_controls'
     ]
 
     # Test results storage array.
@@ -80,29 +80,30 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
                   standard.model_add_daylighting_controls(model: model, daylighting_type: daylighting_type)
 
                   # # comment out for regular tests
-                  # BTAP::FileIO.save_osm(model, File.join(@output_folder,"#{template}-#{building_type}-daylighting-sensor-control.osm"))
-                  # puts File.join(@output_folder,"#{template}-#{building_type}-daylighting-sensor-control.osm")
+                  BTAP::FileIO.save_osm(model, File.join(@output_folder,"#{template}-#{building_type}-daylighting_type-#{daylighting_type}.osm"))
+                  puts File.join(@output_folder,"#{template}-#{building_type}-daylighting_type-#{daylighting_type}.osm")
 
                   ##### gather daylighting sensor controls once this measure is applied to the model
+
+                  ##### Find spaces with exterior fenestration including fixed window, operable window, and skylight.
+                  daylight_spaces = []
+                  model.getSpaces.sort.each do |space|
+                    space.surfaces.sort.each do |surface|
+                      surface.subSurfaces.sort.each do |subsurface|
+                        if subsurface.outsideBoundaryCondition == "Outdoors" &&
+                          (subsurface.subSurfaceType == "FixedWindow" ||
+                            subsurface.subSurfaceType == "OperableWindow" ||
+                            subsurface.subSurfaceType == "Skylight")
+                          daylight_spaces << space
+                        end #subsurface.outsideBoundaryCondition == "Outdoors" && (subsurface.subSurfaceType == "FixedWindow" || "OperableWindow")
+                      end #surface.subSurfaces.each do |subsurface|
+                    end #space.surfaces.each do |surface|
+                  end #model.getSpaces.each do |space|
+
+                  ##### Remove duplicate spaces from the "daylight_spaces" array, as a daylighted space may have various fenestration types.
+                  daylight_spaces = daylight_spaces.uniq
+
                   if daylighting_type == 'NECB_Default'
-
-                    ##### Find spaces with exterior fenestration including fixed window, operable window, and skylight.
-                    daylight_spaces = []
-                    model.getSpaces.sort.each do |space|
-                      space.surfaces.sort.each do |surface|
-                        surface.subSurfaces.sort.each do |subsurface|
-                          if subsurface.outsideBoundaryCondition == "Outdoors" &&
-                            (subsurface.subSurfaceType == "FixedWindow" ||
-                              subsurface.subSurfaceType == "OperableWindow" ||
-                              subsurface.subSurfaceType == "Skylight")
-                            daylight_spaces << space
-                          end #subsurface.outsideBoundaryCondition == "Outdoors" && (subsurface.subSurfaceType == "FixedWindow" || "OperableWindow")
-                        end #surface.subSurfaces.each do |subsurface|
-                      end #space.surfaces.each do |surface|
-                    end #model.getSpaces.each do |space|
-
-                    ##### Remove duplicate spaces from the "daylight_spaces" array, as a daylighted space may have various fenestration types.
-                    daylight_spaces = daylight_spaces.uniq
 
                     ##### Create hashes for "Primary Sidelighted Areas", "Sidelighting Effective Aperture", "Daylighted Area Under Skylights",
                     ##### and "Skylight Effective Aperture" for the whole model.
@@ -233,96 +234,97 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
                       end
                     end
 
-                    ##### Gather daylighting sensors specifications in the model for the daylight_spaces that should have daylighting sensor
-                    daylight_spaces.sort.each do |daylight_space|
-                      ##### 1. Calculate number of floors of each daylight_space
-                      ##### 2. Find the lowest z among all floors of each daylight_space
-                      ##### 3. Find lowest floors of each daylight_space (these floors are at the same level)
-                      ##### 4. Calculate 'daylight_space_area' as sum of area of all the lowest floors of each daylight_space, and gather the vertices of all the lowest floors of each daylight_space
-                      ##### 5. Find min and max of x and y among vertices of all the lowest floors of each daylight_space (these vertices are required for boundingBox to find the location of daylighting sensor(s))
+                  end #END if daylighting_type == 'NECB_Default'
 
-                      ##### Calculate number of floors of daylight_space
-                      floor_vertices = []
-                      number_floor = 0
-                      daylight_space.surfaces.sort.each do |surface|
-                        if surface.surfaceType == 'Floor'
-                          floor_vertices << surface.vertices
-                          number_floor += 1
-                        end
+                  ##### Gather daylighting sensors specifications in the model for the daylight_spaces that should have daylighting sensor
+                  daylight_spaces.sort.each do |daylight_space|
+                    ##### 1. Calculate number of floors of each daylight_space
+                    ##### 2. Find the lowest z among all floors of each daylight_space
+                    ##### 3. Find lowest floors of each daylight_space (these floors are at the same level)
+                    ##### 4. Calculate 'daylight_space_area' as sum of area of all the lowest floors of each daylight_space, and gather the vertices of all the lowest floors of each daylight_space
+                    ##### 5. Find min and max of x and y among vertices of all the lowest floors of each daylight_space (these vertices are required for boundingBox to find the location of daylighting sensor(s))
+
+                    ##### Calculate number of floors of daylight_space
+                    floor_vertices = []
+                    number_floor = 0
+                    daylight_space.surfaces.sort.each do |surface|
+                      if surface.surfaceType == 'Floor'
+                        floor_vertices << surface.vertices
+                        number_floor += 1
                       end
+                    end
 
-                      ##### Loop through all floors of daylight_space, and find the lowest z among all floors of daylight_space
-                      lowest_floor_z = []
-                      highest_floor_z = []
-                      for i in 0..number_floor - 1
-                        if i == 0
+                    ##### Loop through all floors of daylight_space, and find the lowest z among all floors of daylight_space
+                    lowest_floor_z = []
+                    highest_floor_z = []
+                    for i in 0..number_floor - 1
+                      if i == 0
+                        lowest_floor_z = floor_vertices[i][0].z
+                        highest_floor_z = floor_vertices[i][0].z
+                      else
+                        if lowest_floor_z > floor_vertices[i][0].z
                           lowest_floor_z = floor_vertices[i][0].z
+                        else
+                          lowest_floor_z = lowest_floor_z
+                        end
+                        if highest_floor_z < floor_vertices[i][0].z
                           highest_floor_z = floor_vertices[i][0].z
                         else
-                          if lowest_floor_z > floor_vertices[i][0].z
-                            lowest_floor_z = floor_vertices[i][0].z
-                          else
-                            lowest_floor_z = lowest_floor_z
-                          end
-                          if highest_floor_z < floor_vertices[i][0].z
-                            highest_floor_z = floor_vertices[i][0].z
-                          else
-                            highest_floor_z = highest_floor_z
-                          end
+                          highest_floor_z = highest_floor_z
                         end
                       end
+                    end
 
-                      ##### Loop through all floors of daylight_space, and calculate the sum of area of all the lowest floors of daylight_space,
-                      ##### and gather the vertices of all the lowest floors of daylight_space
-                      daylight_space_area = 0
-                      lowest_floors_vertices = []
-                      floor_vertices = []
-                      daylight_space.surfaces.sort.each do |surface|
-                        if surface.surfaceType == 'Floor'
-                          floor_vertices = surface.vertices
-                          if floor_vertices[0].z == lowest_floor_z
-                            lowest_floors_vertices << floor_vertices
-                            daylight_space_area = daylight_space_area + surface.netArea
-                          end
+                    ##### Loop through all floors of daylight_space, and calculate the sum of area of all the lowest floors of daylight_space,
+                    ##### and gather the vertices of all the lowest floors of daylight_space
+                    daylight_space_area = 0
+                    lowest_floors_vertices = []
+                    floor_vertices = []
+                    daylight_space.surfaces.sort.each do |surface|
+                      if surface.surfaceType == 'Floor'
+                        floor_vertices = surface.vertices
+                        if floor_vertices[0].z == lowest_floor_z
+                          lowest_floors_vertices << floor_vertices
+                          daylight_space_area = daylight_space_area + surface.netArea
                         end
                       end
+                    end
 
-                      ##### Get the thermal zone of daylight_space (this is used later to assign daylighting sensor)
-                      zone = daylight_space.thermalZone
-                      if !zone.empty?
-                        zone = daylight_space.thermalZone.get
-                        # puts zone
+                    ##### Get the thermal zone of daylight_space (this is used later to assign daylighting sensor)
+                    zone = daylight_space.thermalZone
+                    if !zone.empty?
+                      zone = daylight_space.thermalZone.get
+                      # puts zone
 
-                        if !zone.primaryDaylightingControl.empty?
-                          zone_daylighting_control_primary = zone.primaryDaylightingControl.get
-                          primary_daylighting_control_fraction_of_zone_controlled = zone.fractionofZoneControlledbyPrimaryDaylightingControl()
-                          primary_daylighting_control_illuminance_setpoint = zone_daylighting_control_primary.illuminanceSetpoint()
-                          primary_daylighting_control_lighting_control_type = zone_daylighting_control_primary.lightingControlType()
-                          primary_daylighting_control_number_of_stepped_control_steps = zone_daylighting_control_primary.numberofSteppedControlSteps()
-                          primary_daylighting_x_pos = zone_daylighting_control_primary.positionXCoordinate()
-                          primary_daylighting_y_pos = zone_daylighting_control_primary.positionYCoordinate()
-                          primary_daylighting_z_pos = zone_daylighting_control_primary.positionZCoordinate()
+                      if !zone.primaryDaylightingControl.empty?
+                        zone_daylighting_control_primary = zone.primaryDaylightingControl.get
+                        primary_daylighting_control_fraction_of_zone_controlled = zone.fractionofZoneControlledbyPrimaryDaylightingControl()
+                        primary_daylighting_control_illuminance_setpoint = zone_daylighting_control_primary.illuminanceSetpoint()
+                        primary_daylighting_control_lighting_control_type = zone_daylighting_control_primary.lightingControlType()
+                        primary_daylighting_control_number_of_stepped_control_steps = zone_daylighting_control_primary.numberofSteppedControlSteps()
+                        primary_daylighting_x_pos = zone_daylighting_control_primary.positionXCoordinate()
+                        primary_daylighting_y_pos = zone_daylighting_control_primary.positionYCoordinate()
+                        primary_daylighting_z_pos = zone_daylighting_control_primary.positionZCoordinate()
 
-                          ##### Gather results from this iteration and store it into the test_result_array.
-                          result["#{daylight_space.name.to_s} - area"] = daylight_space_area
-                          result["#{daylight_space.name.to_s} - primary_daylighting_control_fraction_of_zone_controlled"] = primary_daylighting_control_fraction_of_zone_controlled
-                          result["#{daylight_space.name.to_s} - primary_daylighting_control_illuminance_setpoint"] = primary_daylighting_control_illuminance_setpoint
-                          result["#{daylight_space.name.to_s} - primary_daylighting_control_lighting_control_type"] = primary_daylighting_control_lighting_control_type
-                          result["#{daylight_space.name.to_s} - primary_daylighting_control_number_of_stepped_control_steps"] = primary_daylighting_control_number_of_stepped_control_steps
-                          result["#{daylight_space.name.to_s} - primary_daylighting_x_pos"] = primary_daylighting_x_pos
-                          result["#{daylight_space.name.to_s} - primary_daylighting_y_pos"] = primary_daylighting_y_pos
-                          result["#{daylight_space.name.to_s} - primary_daylighting_z_pos"] = primary_daylighting_z_pos
+                        ##### Gather results from this iteration and store it into the test_result_array.
+                        result["#{daylight_space.name.to_s} - area"] = daylight_space_area
+                        result["#{daylight_space.name.to_s} - primary_daylighting_control_fraction_of_zone_controlled"] = primary_daylighting_control_fraction_of_zone_controlled
+                        result["#{daylight_space.name.to_s} - primary_daylighting_control_illuminance_setpoint"] = primary_daylighting_control_illuminance_setpoint
+                        result["#{daylight_space.name.to_s} - primary_daylighting_control_lighting_control_type"] = primary_daylighting_control_lighting_control_type
+                        result["#{daylight_space.name.to_s} - primary_daylighting_control_number_of_stepped_control_steps"] = primary_daylighting_control_number_of_stepped_control_steps
+                        result["#{daylight_space.name.to_s} - primary_daylighting_x_pos"] = primary_daylighting_x_pos
+                        result["#{daylight_space.name.to_s} - primary_daylighting_y_pos"] = primary_daylighting_y_pos
+                        result["#{daylight_space.name.to_s} - primary_daylighting_z_pos"] = primary_daylighting_z_pos
 
-                        end
-                      end #!zone.empty?
+                      end
+                    end #!zone.empty?
 
-                    end #daylight_spaces.each do |daylight_space|
+                  end #daylight_spaces.each do |daylight_space|
 
-                    # elsif daylighting_type == 'add_daylighting_controls'  #TODO to be completed
+                  # elsif daylighting_type == 'add_daylighting_controls'  #TODO to be completed
 
-                    #then store result into the array that contains all the scenario results.
-                    @test_results_array << result
-                  end  # if daylighting_type == 'NECB_Default'
+                  #then store result into the array that contains all the scenario results.
+                  @test_results_array << result
 
 
 
