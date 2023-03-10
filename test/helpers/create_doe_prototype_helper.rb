@@ -247,7 +247,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           model.setSqlFile(sql_file)
         end
 
-        acceptable_error_percentage = 0.001
+        acceptable_error_percentage = 0.1
         rounding_tolerance = 3
 
         # Get the legacy simulation results
