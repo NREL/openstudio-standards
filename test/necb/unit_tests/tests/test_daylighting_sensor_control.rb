@@ -7,9 +7,9 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
   def test_daylighting_sensor_control()
 
     # File paths.
-    # @output_folder = File.join(__dir__, 'output/test_daylight_sensor')
-    # @expected_results_file = File.join(__dir__, '../expected_results/daylighting_expected_results.json')
-    # @test_results_file = File.join(__dir__, '../expected_results/daylighting_test_results.json')
+    @output_folder = File.join(__dir__, 'output/test_daylight_sensor')
+    @expected_results_file = File.join(__dir__, '../expected_results/daylighting_expected_results.json')
+    @test_results_file = File.join(__dir__, '../expected_results/daylighting_test_results.json')
 
     # Initial test condition
     @test_passed = true
@@ -80,8 +80,8 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
                   standard.model_add_daylighting_controls(model: model, daylighting_type: daylighting_type)
 
                   # # comment out for regular tests
-                  BTAP::FileIO.save_osm(model, File.join(@output_folder,"#{template}-#{building_type}-daylighting_type-#{daylighting_type}.osm"))
-                  puts File.join(@output_folder,"#{template}-#{building_type}-daylighting_type-#{daylighting_type}.osm")
+                  # BTAP::FileIO.save_osm(model, File.join(@output_folder,"#{template}-#{building_type}-daylighting_type-#{daylighting_type}.osm"))
+                  # puts File.join(@output_folder,"#{template}-#{building_type}-daylighting_type-#{daylighting_type}.osm")
 
                   ##### gather daylighting sensor controls once this measure is applied to the model
 
