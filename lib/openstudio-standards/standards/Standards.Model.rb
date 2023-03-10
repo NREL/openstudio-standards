@@ -454,7 +454,7 @@ class Standard
       # Check unmet load hours
       if unmet_load_hours_check
         nb_adjustments = 0
-        loop d
+        loop do
           # Loop break condition: Limit the number of zone sizing factor adjustment to 3
           unless nb_adjustments < 3
             OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "After 3 rounds of zone sizing factor adjustments the unmet load hours for the baseline model (#{degs} degree of rotation) still exceed 300 hours. Please open an issue on GitHub (https://github.com/NREL/openstudio-standards/issues) and share your user model with the developers.")
