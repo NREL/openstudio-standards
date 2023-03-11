@@ -307,6 +307,8 @@ class Standard
   # Creates a heatpump water heater and attaches it to the supplied service water heating loop.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param type [String] valid option are 'WrappedCondenser' or 'PumpedCondenser' (default).
+  #   The 'WrappedCondenser' uses a WaterHeaterStratified tank, 'PumpedCondenser' uses a WaterHeaterMixed tank.
   # @param water_heater_capacity [Double] water heater capacity, in W
   # @param water_heater_volume [Double] water heater volume, in m^3
   # @param service_water_temperature [Double] water heater temperature, in C
@@ -317,6 +319,7 @@ class Standard
   # @param flowrate_schedule [String] name of the flow rate schedule
   # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone] zone to place water heater in.
   #   If nil, will be assumed in 70F air for heat loss.
+  # @param use_ems_control [Bool] if true, use ems control logic if using a 'WrappedCondenser' style HPWH.
   # @return [OpenStudio::Model::WaterHeaterMixed] the resulting water heater
   def model_add_heatpump_water_heater(model,
                                       type: 'PumpedCondenser',
@@ -332,7 +335,8 @@ class Standard
                                       set_peak_use_flowrate: false,
                                       peak_flowrate: 0.0,
                                       flowrate_schedule: nil,
-                                      water_heater_thermal_zone: nil)
+                                      water_heater_thermal_zone: nil,
+                                      use_ems_control: true)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding heat pump water heater')
 
@@ -353,12 +357,12 @@ class Standard
     hpwh.setName("#{hpwh_vol_gal.round}gal Heat Pump Water Heater - #{water_heater_capacity_kbtu_per_hr.round(0)}kBtu/hr")
 
     # set min/max HPWH operating temperature limit
-    hpwh_op_min_temp = OpenStudio.convert(45.0, 'F', 'C').get
-    hpwh_op_max_temp = OpenStudio.convert(120.0, 'F', 'C').get
+    hpwh_op_min_temp_c = OpenStudio.convert(45.0, 'F', 'C').get
+    hpwh_op_max_temp_c = OpenStudio.convert(120.0, 'F', 'C').get
 
     if type == 'WrappedCondenser'
-      hpwh.setMinimumInletAirTemperatureforCompressorOperation(hpwh_op_min_temp)
-      hpwh.setMaximumInletAirTemperatureforCompressorOperation(hpwh_op_max_temp)
+      hpwh.setMinimumInletAirTemperatureforCompressorOperation(hpwh_op_min_temp_c)
+      hpwh.setMaximumInletAirTemperatureforCompressorOperation(hpwh_op_max_temp_c)
       # set sensor heights
       if hpwh_vol_gal <= 50.0
         hpwh.setDeadBandTemperatureDifference(0.5)
@@ -588,13 +592,69 @@ class Standard
     end
 
     # add EMS for overriding HPWH setpoints schedules (for upper/lower heating element in water tank and compressor in heat pump)
-    hpwh_name_ems_friendly = ems_friendly_name(hpwh.name.to_s)
-    amb_temp_sensor = get_loc_temp_sensors(model, hpwh_name_ems_friendly, water_heater_thermal_zone)
-    hpwh_ctrl_program = add_hpwh_control_program(model, hpwh_name_ems_friendly, amb_temp_sensor, hpwh_top_element_sp, hpwh_bottom_element_sp, hpwh_op_min_temp, hpwh_op_max_temp, swh_temp_sch, tank)
-    program_calling_manager = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-    program_calling_manager.setName("#{hpwh_name_ems_friendly} ProgramManager")
-    program_calling_manager.setCallingPoint('InsideHVACSystemIterationLoop')
-    program_calling_manager.addProgram(hpwh_ctrl_program)     
+    if type == 'WrappedCondenser' && use_ems_control
+      hpwh_name_ems_friendly = ems_friendly_name(hpwh.name)
+
+      # create an ambient temperature sensor for the air that blows through the HPWH evaporator
+      if water_heater_thermal_zone.nil?
+        amb_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Mean Air Temperature')
+        amb_temp_sensor.setName("#{hpwh_name_ems_friendly}_amb_temp")
+        amb_temp_sensor.setKeyName(water_heater_thermal_zone.name.to_s)
+      else
+        # assume the condenser is outside
+        amb_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
+        amb_temp_sensor.setName("#{hpwh_name_ems_friendly}_amb_temp")
+        amb_temp_sensor.setKeyName('Environment')
+      end
+
+      # create actuator for heat pump compressor
+      hpwhschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(swh_temp_sch,'Schedule:Constant','Schedule Value')
+      hpwhschedoverride_actuator.setName("#{hpwh_name_ems_friendly}_HPWHSchedOverride")
+
+      # create actuator for lower heating element in water tank
+      leschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(hpwh_bottom_element_sp,'Schedule:Constant','Schedule Value')
+      leschedoverride_actuator.setName("#{hpwh_name_ems_friendly}_LESchedOverride")
+
+      # create actuator for upper heating element in water tank
+      ueschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(hpwh_top_element_sp,'Schedule:Constant','Schedule Value')
+      ueschedoverride_actuator.setName("#{hpwh_name_ems_friendly}_UESchedOverride")
+
+      # create sensor for heat pump compressor
+      t_set_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
+      t_set_sensor.setName("#{hpwh_name_ems_friendly}_T_set")
+      t_set_sensor.setKeyName(swh_temp_sch.name.to_s)
+
+      # define control configuration 
+      t_offset = 9.0 # deg-C
+
+      # get tank specifications
+      upper_element_db = tank.heater1DeadbandTemperatureDifference
+
+      # define control logic
+      hpwh_ctrl_program = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+      hpwh_ctrl_program.setName("#{hpwh_name_ems_friendly}_Control")
+      hpwh_ctrl_program.addLine("SET #{hpwhschedoverride_actuator.name} = #{t_set_sensor.name}")
+      # lockout hp when ambient temperature is either too high or too low
+      hpwh_ctrl_program.addLine("IF (#{amb_temp_sensor.name}<#{hpwh_op_min_temp_c}) || (#{amb_temp_sensor.name}>#{hpwh_op_max_temp_c})")
+      hpwh_ctrl_program.addLine("SET #{ueschedoverride_actuator.name} = #{t_set_sensor.name}")
+      hpwh_ctrl_program.addLine("SET #{leschedoverride_actuator.name} = #{t_set_sensor.name}")
+      hpwh_ctrl_program.addLine('ELSE')
+      # upper element setpoint temperature
+      hpwh_ctrl_program.addLine("SET #{ueschedoverride_actuator.name} = #{t_set_sensor.name} - #{t_offset}")
+      # upper element cut-in temperature
+      hpwh_ctrl_program.addLine("SET #{ueschedoverride_actuator.name}_cut_in = #{ueschedoverride_actuator.name} - #{upper_element_db}")
+      # lower element disabled
+      hpwh_ctrl_program.addLine("SET #{leschedoverride_actuator.name} = 0")
+      # lower element disabled
+      hpwh_ctrl_program.addLine("SET #{leschedoverride_actuator.name}_cut_in = 0")
+      hpwh_ctrl_program.addLine('ENDIF')    
+
+      # create a program calling manager
+      program_calling_manager = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+      program_calling_manager.setName("#{hpwh_name_ems_friendly}_ProgramManager")
+      program_calling_manager.setCallingPoint('InsideHVACSystemIterationLoop')
+      program_calling_manager.addProgram(hpwh_ctrl_program)
+    end
 
     return hpwh
   end
@@ -1167,90 +1227,4 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{pipe_length_ft.round}ft of #{pipe_construction.name} losing heat to #{swh_piping_air_temp_f.round}F air to #{swh_loop.name}.")
     return true
   end
-
-  # Creates/returns EMS sensor for the air that blows through HPWH's evaporator
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param obj_name_hpwh [String] name for the EMS sensor
-  # @param loc_space [OpenStudio::Model::ThermalZone] location of HPWH
-  # @return [OpenStudio::Model::EnergyManagementSystemSensor] the resulting EMS sensor
-  def get_loc_temp_sensors(model, obj_name_hpwh, loc_space)
-    if not loc_space.nil?
-      amb_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Mean Air Temperature')
-      amb_temp_sensor.setName("#{obj_name_hpwh} amb temp")
-      amb_temp_sensor.setKeyName(loc_space.name.to_s)
-    else # Located outside
-      amb_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
-      amb_temp_sensor.setName("#{obj_name_hpwh} amb temp")
-      amb_temp_sensor.setKeyName('Environment')
-    end
-    return amb_temp_sensor
-  end
-
-  # Creates EMS program for overriding setpoint schedules of HPWH
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param obj_name_hpwh [String] name for the EMS sensor
-  # @param amb_temp_sensor [OpenStudio::Model::EnergyManagementSystemSensor] EMS sensor reading air temperature around HPWH's evaporator
-  # @param upper_heating_element_sp_sch [OpenStudio::Model::ScheduleConstant] setpoint schedule for tank's upper heating element
-  # @param lower_heating_element_sp_sch [OpenStudio::Model::ScheduleConstant] setpoint schedule for tank's lower heating element
-  # @param min_temp [Double] minimum operating temperature limit for HPWH's compressor
-  # @param max_temp [Double] maximum operating temperature limit for HPWH's compressor
-  # @param hp_compressor_sp_sch [OpenStudio::Model::ScheduleConstant] setpoint schedule for HPWH's compressor
-  # @param tank [OpenStudio::Model::WaterHeaterStratified] HPWH's water tank
-  # @return [OpenStudio::Model::EnergyManagementSystemSensor] the resulting EMS sensor
-  def add_hpwh_control_program(model, obj_name_hpwh, amb_temp_sensor, upper_heating_element_sp_sch, lower_heating_element_sp_sch, min_temp, max_temp, hp_compressor_sp_sch, tank)
-    # actuator for heat pump compressor
-    hpwhschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(hp_compressor_sp_sch,"Schedule:Constant","Schedule Value")
-    hpwhschedoverride_actuator.setName("#{obj_name_hpwh} HPWHSchedOverride")
-
-    # actuator for lower heating element in water tank
-    leschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(lower_heating_element_sp_sch,"Schedule:Constant","Schedule Value")
-    leschedoverride_actuator.setName("#{obj_name_hpwh} LESchedOverride")
-
-    # actuator for upper heating element in water tank
-    ueschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(upper_heating_element_sp_sch,"Schedule:Constant","Schedule Value")
-    ueschedoverride_actuator.setName("#{obj_name_hpwh} UESchedOverride")
-
-    # sensor for heat pump compressor
-    t_set_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
-    t_set_sensor.setName("#{obj_name_hpwh} T_set")
-    t_set_sensor.setKeyName(hp_compressor_sp_sch.name.to_s)
-
-    # define control configuration 
-    t_offset = 9.0 # deg-C
-    min_temp_c = OpenStudio.convert(min_temp, 'F', 'C').get.round(2)
-    max_temp_c = OpenStudio.convert(max_temp, 'F', 'C').get.round(2)
-
-    # get tank specifications
-    upper_element_db = tank.heater1DeadbandTemperatureDifference
-
-    # define control logic
-    hpwh_ctrl_program = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    hpwh_ctrl_program.setName("#{obj_name_hpwh} Control")
-    hpwh_ctrl_program.addLine("Set #{hpwhschedoverride_actuator.name} = #{t_set_sensor.name}")
-    hpwh_ctrl_program.addLine("If (#{amb_temp_sensor.name}<#{min_temp_c}) || (#{amb_temp_sensor.name}>#{max_temp_c})") # lockout hp when ambient temperature is either too high or too low
-    hpwh_ctrl_program.addLine("Set #{ueschedoverride_actuator.name} = #{t_set_sensor.name}")
-    hpwh_ctrl_program.addLine("Set #{leschedoverride_actuator.name} = #{t_set_sensor.name}")
-    hpwh_ctrl_program.addLine('Else')
-    hpwh_ctrl_program.addLine("Set #{ueschedoverride_actuator.name} = #{t_set_sensor.name} - #{t_offset}") # upper element setpoint temperature
-    hpwh_ctrl_program.addLine("Set #{ueschedoverride_actuator.name}_cut_in = #{ueschedoverride_actuator.name} - #{upper_element_db}") # upper element cut-in temperature
-    hpwh_ctrl_program.addLine("Set #{leschedoverride_actuator.name} = 0") # lower element disabled
-    hpwh_ctrl_program.addLine("Set #{leschedoverride_actuator.name}_cut_in = 0") # lower element disabled
-    hpwh_ctrl_program.addLine('EndIf')
-  
-    return hpwh_ctrl_program
-  end
-
-  # converts existing string to ems friendly string
-  #
-  # @param name_in_string [String] original name
-  # @return [String] the resulting EMS friendly string
-  def ems_friendly_name(name_in_string)
-    name_ems_friendly = name_in_string.name.to_s
-    name_ems_friendly.gsub!(/\s+/, '') # remove white spaces
-    name_ems_friendly.gsub!(/[^0-9A-Za-z]/, '') # remove special characters
-    name_ems_friendly = "a"+name_ems_friendly # add alphabet at the beginning in case original name starts with a number
-  end
-
 end
