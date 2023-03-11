@@ -597,14 +597,14 @@ class Standard
 
       # create an ambient temperature sensor for the air that blows through the HPWH evaporator
       if water_heater_thermal_zone.nil?
-        amb_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Mean Air Temperature')
-        amb_temp_sensor.setName("#{hpwh_name_ems_friendly}_amb_temp")
-        amb_temp_sensor.setKeyName(water_heater_thermal_zone.name.to_s)
-      else
         # assume the condenser is outside
         amb_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
         amb_temp_sensor.setName("#{hpwh_name_ems_friendly}_amb_temp")
         amb_temp_sensor.setKeyName('Environment')
+      else
+        amb_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Mean Air Temperature')
+        amb_temp_sensor.setName("#{hpwh_name_ems_friendly}_amb_temp")
+        amb_temp_sensor.setKeyName(water_heater_thermal_zone.name.to_s)
       end
 
       # create actuator for heat pump compressor
