@@ -1297,7 +1297,7 @@
       "stocking_door_u": 0.031,
       "reachin_door_area_mult": null,
       "glass_reachin_door_u_value": 0.399725299,
-      "reachin_door_area": null,
+      "reachin_door_area": 0.0,
       "total_insulated_surface_area": 994.5,
       "height_of_glass_reachin_doors": 6.88968,
       "area_of_stocking_doors": 35.52206674,

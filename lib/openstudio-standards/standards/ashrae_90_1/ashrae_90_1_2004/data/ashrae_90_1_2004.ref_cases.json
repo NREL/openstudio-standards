@@ -1069,7 +1069,7 @@
       "evap_fan_power_per_length": 7.19328,
       "evap_temp": -22.0,
       "lighting_per_ft": 0.0,
-      "fraction_of_lighting_energy_to_case": null,
+      "fraction_of_lighting_energy_to_case": 0.5,
       "latent_case_credit_curve_name": "Coffin Latent Curve Case",
       "defrost_power_per_length": 435.98592,
       "defrost_type": "ElectricwithTemperatureTermination",
