@@ -208,7 +208,7 @@ class Standard
       # Add daylighting controls for 90.1-2013 and prior
       # Remove daylighting control for 90.1-PRM-2019 and onward
       model.getSpaces.sort.each do |space|
-        space_set_baseline_daylighting_controls(space, false, false)
+        space_set_baseline_daylighting_controls(space, true, false)
       end
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
@@ -455,66 +455,61 @@ class Standard
       if unmet_load_hours_check
         nb_adjustments = 0
         loop do
-          model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}") == false
-          # If UMLH are greater than the threshold allowed by Appendix G,
-          # increase zone air flow and load as per the recommendation in
-          # the PRM-RM; Note that the PRM-RM only suggest to increase
-          # air zone air flow, but the zone sizing factor in EnergyPlus
-          # increase both air flow and load.
-          if model_get_unmet_load_hours(model) > 300
-            # Limit the number of zone sizing factor adjustment to 8
-            unless nb_adjustments < 8
-              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "After 8 rounds of zone sizing factor adjustments the unmet load hours for the baseline model (#{degs} degree of rotation) still exceed 300 hours. Please open an issue on GitHub (https://github.com/NREL/openstudio-standards/issues) and share your user model with the developers.")
-              break
-            end
-            model.getThermalZones.each do |thermal_zone|
-              # Cooling adjustments
-              clg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Cooling')
-              if clg_umlh > 50
-                # Get zone cooling sizing factor
-                if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
-                  sizing_factor = thermal_zone.sizingZone.zoneCoolingSizingFactor.get
-                else
-                  sizing_factor = 1.0
-                end
+          # Loop break condition: Limit the number of zone sizing factor adjustment to 3
+          unless nb_adjustments < 3
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "After 3 rounds of zone sizing factor adjustments the unmet load hours for the baseline model (#{degs} degree of rotation) still exceed 300 hours. Please open an issue on GitHub (https://github.com/NREL/openstudio-standards/issues) and share your user model with the developers.")
+            break
+          end
+          # Close the previous SQL session if open to prevent EnergyPlus from overloading the same session
+          sql = model.sqlFile.get
+          if sql.connectionOpen
+            sql.close
+          end
 
-                # Make adjustment to zone cooling sizing factor
-                # Do not adjust factors greater or equal to 2
-                if sizing_factor < 2.0
-                  if clg_umlh > 150
-                    sizing_factor *= 1.1
-                  elsif clg_umlh > 50
-                    sizing_factor *= 1.05
+          if model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}")
+            # If UMLH are greater than the threshold allowed by Appendix G,
+            # increase zone air flow and load as per the recommendation in
+            # the PRM-RM; Note that the PRM-RM only suggest to increase
+            # air zone air flow, but the zone sizing factor in EnergyPlus
+            # increase both air flow and load.
+            if model_get_unmet_load_hours(model) > 300
+              model.getThermalZones.each do |thermal_zone|
+                # Cooling adjustments
+                clg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Cooling')
+                if clg_umlh > 50
+                  sizing_factor = 1.0
+                  if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
+                    sizing_factor = thermal_zone.sizingZone.zoneCoolingSizingFactor.get
                   end
+                  # Make adjustment to zone cooling sizing factor
+                  # Do not adjust factors greater or equal to 2
+                  clg_umlh > 150 ? sizing_factor = [2.0, sizing_factor * 1.1].min : sizing_factor = [2.0, sizing_factor * 1.05].min
                   thermal_zone.sizingZone.setZoneCoolingSizingFactor(sizing_factor)
                 end
-              end
 
-              # Heating adjustments
-              htg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Heating')
-              if htg_umlh > 50
-                # Get zone cooling sizing factor
-                if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized
-                  sizing_factor = thermal_zone.sizingZone.zoneHeatingSizingFactor.get
-                else
+                # Heating adjustments
+                # Reset sizing factor
+                htg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Heating')
+                if htg_umlh > 50
                   sizing_factor = 1.0
-                end
-
-                # Make adjustment to zone heating sizing factor
-                # Do not adjust factors greater or equal to 2
-                if sizing_factor < 2.0
-                  if htg_umlh > 150
-                    sizing_factor *= 1.1
-                  elsif htg_umlh > 50
-                    sizing_factor *= 1.05
+                  if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized
+                    # Get zone heating sizing factor
+                    sizing_factor = thermal_zone.sizingZone.zoneHeatingSizingFactor.get
                   end
+
+                  # Make adjustment to zone heating sizing factor
+                  # Do not adjust factors greater or equal to 2
+                  htg_umlh > 150 ? sizing_factor = [2.0, sizing_factor * 1.1].min : sizing_factor = [2.0, sizing_factor * 1.05].min
                   thermal_zone.sizingZone.setZoneHeatingSizingFactor(sizing_factor)
                 end
               end
             end
           else
-            break
+            # simulation failure, raise the exception.
+            # OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'OpenStudio simulation failed.')
+            raise('OpenStudio simulation failed.')
           end
+          nb_adjustments += 1
         end
       end
     end
@@ -2355,7 +2350,7 @@ class Standard
 
     # Add daylighting controls to each space
     model.getSpaces.sort.each do |space|
-      added = space_add_daylighting_controls(space, false, false)
+      added = space_add_daylighting_controls(space, true, false)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding daylighting controls.')

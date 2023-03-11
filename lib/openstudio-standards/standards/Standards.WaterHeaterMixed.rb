@@ -169,15 +169,15 @@ class Standard
     end
 
     # Convert to SI
-    ua_btu_per_hr_per_c = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, skin-loss UA = #{ua_btu_per_hr_per_c} W/K.")
+    ua_w_per_k = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, skin-loss UA = #{ua_w_per_k} W/K.")
 
     # Set the water heater properties
     # Efficiency
     water_heater_mixed.setHeaterThermalEfficiency(water_heater_eff)
     # Skin loss
-    water_heater_mixed.setOffCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
-    water_heater_mixed.setOnCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
+    water_heater_mixed.setOffCycleLossCoefficienttoAmbientTemperature(ua_w_per_k)
+    water_heater_mixed.setOnCycleLossCoefficienttoAmbientTemperature(ua_w_per_k)
     # @todo Parasitic loss (pilot light)
     # PNNL document says pilot lights were removed, but IDFs
     # still have the on/off cycle parasitic fuel consumptions filled in
@@ -190,7 +190,7 @@ class Standard
 
     # Append the name with standards information
     water_heater_mixed.setName("#{water_heater_mixed.name} #{water_heater_eff.round(3)} Therm Eff")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr-R")
 
     return true
   end

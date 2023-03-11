@@ -98,6 +98,11 @@ class Standard
       weather_dir = File.expand_path(File.join(Dir.pwd, 'extracted_files/weather/'))
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Extracting weather files from OpenStudio CLI to #{weather_dir}")
       FileUtils.mkdir_p(weather_dir)
+
+      path_length = "#{weather_dir}/#{weather_file_name}".length
+      if path_length > 260
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', "Weather file path length #{path_length} is >260 characters and may cause issues in Windows environments.")
+      end
       File.open("#{weather_dir}/#{weather_file_name}", 'wb') { |f| f << epw_string; f.flush }
       File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.ddy')}", 'wb') { |f| f << ddy_string; f.flush }
       File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.stat')}", 'wb') { |f| f << stat_string; f.flush }

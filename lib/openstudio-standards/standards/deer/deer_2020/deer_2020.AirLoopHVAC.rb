@@ -32,4 +32,12 @@ class DEER2020 < DEER
     motorized_oa_damper_required = true
     return motorized_oa_damper_required
   end
+
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @return [Array<Double>] [min_oa_without_economizer_cfm, min_oa_with_economizer_cfm]
+  def air_loop_hvac_demand_control_ventilation_limits(air_loop_hvac)
+    min_oa_without_economizer_cfm = 3000
+    min_oa_with_economizer_cfm = 0
+    return [min_oa_without_economizer_cfm, min_oa_with_economizer_cfm]
+  end
 end
