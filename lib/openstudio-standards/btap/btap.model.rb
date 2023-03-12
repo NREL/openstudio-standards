@@ -8,7 +8,7 @@ class OpenStudio::Model::Construction
   #insulation layer.
   #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
   #@return OpenStudio::Model::Material insulation_material_layer
-  def self.find_and_set_insulaton_layer()
+  def self.find_and_set_insulation_layer()
       insulation_material_layer = nil
       #return if there is already a defined insulation layer.
       return self.insulation unless self.insulation.empty?
@@ -77,7 +77,7 @@ class OpenStudio::Model::Construction
 
     if  conductance.kind_of?(Float)
       #re-find insulation layer
-      find_and_set_insulaton_layer(self.model,new_construction)
+      find_and_set_insulation_layer(self.model,new_construction)
 
       #Determine how low the resistance can be set. Subtract existing insulation
       #Values from the total resistance to see how low we can go.
