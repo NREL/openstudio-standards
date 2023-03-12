@@ -2,45 +2,6 @@ require "#{File.dirname(__FILE__)}/btap"
 
 
 class OpenStudio::Model::Construction
-  #This method will search through the layers and find the layer with the
-  #lowest conductance and set that as the insulation layer. Note: Concrete walls
-  #or slabs with no insulation layer but with a carper will see the carpet as the
-  #insulation layer.
-  #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-  #@return OpenStudio::Model::Material insulation_material_layer
-  def self.find_and_set_insulaton_layer()
-      insulation_material_layer = nil
-      #return if there is already a defined insulation layer.
-      return self.insulation unless self.insulation.empty?
-      #set minimum conductance to 100.0
-      min_conductance = 100.0
-      #loop through Layers
-      self.layers.each do |layer|
-        #try casting the layer to an OpaqueMaterial.
-        material = nil
-        material = layer.to_OpaqueMaterial.get unless layer.to_OpaqueMaterial.empty?
-        material = layer.to_FenestrationMaterial.get unless layer.to_FenestrationMaterial.empty?
-        #check if the cast was successful, then find the insulation layer.
-        unless nil == material
-          if BTAP::Resources::Envelope::Materials::get_conductance(material) < min_conductance
-            #Keep track of the highest thermal resistance value.
-            min_conductance = BTAP::Resources::Envelope::Materials::get_conductance(material)
-            insulation_material_layer = material
-            unless material.to_OpaqueMaterial.empty?
-              self.setInsulation(material)
-            end
-          end
-        end
-      end
-      if self.insulation.empty? and self.isOpaque
-        raise ("construction #{self.name.get.to_s} insulation layer could not be set!. This occurs when a insulation layer is duplicated in the construction.")
-      end
-      return insulation_material_layer
-  end
-
-
-
-
   #This method will create a new construction based on self and a new conductance value.
   #It will check to see if a similar construction has already been created by this method
   #if so it will return the existing construction. If you wish to keep some of the properties, enter the
@@ -77,7 +38,7 @@ class OpenStudio::Model::Construction
 
     if  conductance.kind_of?(Float)
       #re-find insulation layer
-      find_and_set_insulaton_layer(self.model,new_construction)
+      find_and_set_insulation_layer(self.model,new_construction)
 
       #Determine how low the resistance can be set. Subtract existing insulation
       #Values from the total resistance to see how low we can go.
