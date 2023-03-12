@@ -954,7 +954,9 @@ class Standard
       boiler.setSizingFactor(sizing_factor)
       boiler_capacity_autosized = boiler.isNominalCapacityAutosized
       capacity_w = boiler_hot_water_find_capacity(boiler)
-      boiler.setNominalCapacity(capacity_w * sizing_factor)
+      if capacity_w
+        boiler.setNominalCapacity(capacity_w * sizing_factor)
+      end
 
       boiler_flow_rate_autosized = boiler.isDesignWaterFlowRateAutosized
       unless boiler_flow_rate_autosized
