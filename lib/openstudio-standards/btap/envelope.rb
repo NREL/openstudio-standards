@@ -502,6 +502,19 @@ module BTAP
               assert(construction.insulation().get == @insulation)
             end
 
+            #This method will test find and set insulation layer.
+            # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
+            def test_find_and_set_insulaton_layer()
+              construction = BTAP::Resources::Envelope::Constructions::create_construction(@model, "test construction", [@opaque, @air_gap, @insulation, @massless, @opaque])
+
+              #check insulation was not set.
+              assert((construction.insulation().empty?))
+              #now set it.
+              BTAP::Resources::Envelope::Constructions::find_and_set_insulaton_layer(@model, [construction])
+              #Now check that it found the insulation  value.
+              assert(construction.insulation().get == @insulation)
+            end
+
             #This method will test creation of fenestration construction.
             #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
             def test_create_fenestration_construction()
@@ -522,6 +535,53 @@ module BTAP
             end
           end
         end # End Test Constructions
+
+        #This method will search through the layers and find the layer with the
+        #lowest conductance and set that as the insulation layer. Note: Concrete walls
+        #or slabs with no insulation layer but with a carper will see the carpet as the
+        #insulation layer.
+        #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
+        #@param model [OpenStudio::Model::Model]
+        #@param constructions_array [BTAP::Common::validate_array]
+        #@return <String> insulating_layers
+        def self.find_and_set_insulaton_layer(model, constructions_array)
+          constructions_array = BTAP::Common::validate_array(model, constructions_array, "Construction")
+          insulating_layers = Array.new()
+          constructions_array.each do |construction|
+            return_material = ""
+            #skip if already has an insulation layer set.
+            next unless construction.insulation.empty?
+            #set insulation layer.
+            #find insulation layer
+            min_conductance = 100.0
+            #loop through Layers
+            construction.layers.each do |layer|
+              #try casting the layer to an OpaqueMaterial.
+              material = nil
+              material = layer.to_OpaqueMaterial.get unless layer.to_OpaqueMaterial.empty?
+              material = layer.to_FenestrationMaterial.get unless layer.to_FenestrationMaterial.empty?
+              #check if the cast was successful, then find the insulation layer.
+              unless nil == material
+
+                if BTAP::Resources::Envelope::Materials::get_conductance(material) < min_conductance
+                  #Keep track of the highest thermal resistance value.
+                  min_conductance = BTAP::Resources::Envelope::Materials::get_conductance(material)
+                  return_material = material
+                  unless material.to_OpaqueMaterial.empty?
+                    construction.setInsulation(material)
+                  end
+                end
+              end
+            end
+            if construction.insulation.empty? and construction.isOpaque
+              raise ("construction #{construction.name.get.to_s} insulation layer could not be set!. This occurs when a insulation layer is duplicated in the construction.")
+            end
+
+            insulating_layers << return_material
+          end
+
+          return insulating_layers
+        end
 
         #This method will create a new construction based on self and a new conductance value.
         #It will check to see if a similar construction has already been created by this method
@@ -559,7 +619,7 @@ module BTAP
 
           if conductance.kind_of?(Float)
             #re-find insulation layer
-            find_and_set_insulation_layer(model, new_construction)
+            find_and_set_insulaton_layer(model, new_construction)
 
             #Determine how low the resistance can be set. Subtract exisiting insulation
             #Values from the total resistance to see how low we can go.
