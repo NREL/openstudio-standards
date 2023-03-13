@@ -336,7 +336,7 @@ class Standard
                                       peak_flowrate: 0.0,
                                       flowrate_schedule: nil,
                                       water_heater_thermal_zone: nil,
-                                      use_ems_control: true)
+                                      use_ems_control: false)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding heat pump water heater')
 
@@ -543,7 +543,10 @@ class Standard
       fan.setFanEfficiency(65.0 / fan_power * OpenStudio.convert(1.0, 'ft^3/min', 'm^3/s').get)
       fan.setPressureRise(65.0)
     end
-    fan.setMaximumFlowRate(OpenStudio.convert(181.0, 'ft^3/min', 'm^3/s').get)
+    # determine maximum flow rate from water heater capacity
+    # use 5.035E-5 m^3/s/W from EnergyPlus used to autocalculate the evaporator air flow rate in WaterHeater:HeatPump:PumpedCondenser and Coil:WaterHeating:AirToWaterHeatPump:Pumped
+    fan_flow_rate_m3_per_s = water_heater_capacity * 5.035e-5
+    fan.setMaximumFlowRate(fan_flow_rate_m3_per_s)
     fan.setMotorEfficiency(1.0)
     fan.setMotorInAirstreamFraction(1.0)
     fan.setEndUseSubcategory('Service Hot Water')
@@ -608,7 +611,20 @@ class Standard
       end
 
       # create actuator for heat pump compressor
-      hpwhschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(swh_temp_sch,'Schedule:Constant','Schedule Value')
+      if swh_temp_sch.to_ScheduleConstant.is_initialized
+        swh_temp_sch = swh_temp_sch.to_ScheduleConstant.get
+        schedule_type = 'Schedule:Constant'
+      elsif swh_temp_sch.to_ScheduleCompact.is_initialized
+        swh_temp_sch = swh_temp_sch.to_ScheduleCompact.get
+        schedule_type = 'Schedule:Compact'
+      elsif swh_temp_sch.to_ScheduleRuleset.is_initialized
+        swh_temp_sch = swh_temp_sch.to_ScheduleRuleset.get
+        schedule_type = 'Schedule:Year'
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Prototype.ServiceWaterHeating', "Unsupported schedule type for HPWH setpoint schedule #{swh_temp_sch.name}.")
+        return false
+      end
+      hpwhschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(swh_temp_sch,schedule_type,'Schedule Value')
       hpwhschedoverride_actuator.setName("#{hpwh_name_ems_friendly}_HPWHSchedOverride")
 
       # create actuator for lower heating element in water tank
