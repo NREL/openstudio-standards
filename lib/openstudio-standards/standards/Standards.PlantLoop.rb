@@ -945,30 +945,11 @@ class Standard
     final_boilers = [first_boiler, second_boiler]
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, added a second boiler.")
 
-    # Set the sizing factor for all boilers evenly and Rename the boilers
+    # Rename boilers and set the sizing factor
     sizing_factor = (1.0 / final_boilers.size).round(2)
     final_boilers.each_with_index do |boiler, i|
       boiler.setName("#{plant_loop.name} Boiler #{i + 1} of #{final_boilers.size}")
-      
-      # Set new sizing factor and new capacity (temporarily if autosized)
       boiler.setSizingFactor(sizing_factor)
-      boiler_capacity_autosized = boiler.isNominalCapacityAutosized
-      capacity_w = boiler_hot_water_find_capacity(boiler)
-      if capacity_w
-        boiler.setNominalCapacity(capacity_w * sizing_factor)
-      end
-
-      boiler_flow_rate_autosized = boiler.isDesignWaterFlowRateAutosized
-      unless boiler_flow_rate_autosized
-        design_water_flow_rate_m3_per_s = boiler_hot_water_find_design_water_flow_rate(boiler)
-        boiler.setDesignWaterFlowRate(design_water_flow_rate_m3_per_s * sizing_factor)
-      end
-
-      # Reapply the standard efficiencies as the sizing change may have changed the efficiency lookup
-      boiler_hot_water_standard_minimum_thermal_efficiency(boiler, rename = true)
-
-      # Reset back to autosized if the boiler capacity was initially autosized
-      boiler.autosizeNominalCapacity if boiler_capacity_autosized
     end
 
     # Set the equipment to stage sequentially
