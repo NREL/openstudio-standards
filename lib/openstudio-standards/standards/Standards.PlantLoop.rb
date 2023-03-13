@@ -965,7 +965,7 @@ class Standard
       end
 
       # Reapply the standard efficiencies as the sizing change may have changed the efficiency lookup
-      boiler_hot_water_standard_minimum_thermal_efficiency(boiler_hot_water, rename = true)
+      boiler_hot_water_standard_minimum_thermal_efficiency(boiler, rename = true)
 
       # Reset back to autosized if the boiler capacity was initially autosized
       boiler.autosizeNominalCapacity if boiler_capacity_autosized
