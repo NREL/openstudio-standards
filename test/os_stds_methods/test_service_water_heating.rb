@@ -5,10 +5,7 @@ class TestServiceWaterHeating < Minitest::Test
     test_name = 'test_add_hpwh_with_ems'
     # Load model
     std = Standard.build('90.1-2013')
-    osm_path = OpenStudio::Path.new('../doe_prototype/models/QuickServiceRestaurant_2A_2010.osm')
-    translator = OpenStudio::OSVersion::VersionTranslator.new
-    model = translator.loadModel(osm_path)
-    model = model.get
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/models/QuickServiceRestaurant_2A_2010.osm")
 
     # get existing water heater properties
     wh = model.getWaterHeaterMixedByName('100.0gal Natural Gas Water Heater - 100kBtu/hr 0.81 Therm Eff').get
@@ -48,10 +45,7 @@ class TestServiceWaterHeating < Minitest::Test
     test_name = 'test_add_hpwh_without_ems'
     # Load model
     std = Standard.build('90.1-2013')
-    osm_path = OpenStudio::Path.new('../doe_prototype/models/QuickServiceRestaurant_2A_2010.osm')
-    translator = OpenStudio::OSVersion::VersionTranslator.new
-    model = translator.loadModel(osm_path)
-    model = model.get
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/models/QuickServiceRestaurant_2A_2010.osm")
 
     # get existing water heater properties
     wh = model.getWaterHeaterMixedByName('100.0gal Natural Gas Water Heater - 100kBtu/hr 0.81 Therm Eff').get
