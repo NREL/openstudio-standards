@@ -65,10 +65,9 @@ class OpenStudio::Model::Model
         if component.secondaryPlantLoop.is_initialized
           fuels += self.plant_loop_heating_fuels(component.secondaryPlantLoop.get)
         end
-
       when 'OS_HeatExchanger_FluidToFluid'
         hx = component.to_HeatExchangerFluidToFluid.get
-        cooling_hx_control_types = ["CoolingSetpointModulated", "CoolingSetpointOnOff", "CoolingDifferentialOnOff", "CoolingSetpointOnOffWithComponentOverride"]
+        cooling_hx_control_types = ['CoolingSetpointModulated', 'CoolingSetpointOnOff', 'CoolingDifferentialOnOff', 'CoolingSetpointOnOffWithComponentOverride']
         cooling_hx_control_types.each {|x| x.downcase!}
         if !cooling_hx_control_types.include?(hx.controlType.downcase) && hx.secondaryPlantLoop.is_initialized
           fuels += self.plant_loop_heating_fuels(hx.secondaryPlantLoop.get)
@@ -119,6 +118,13 @@ class OpenStudio::Model::Model
         fuels << 'Electricity'
       when 'OS_FluidCooler_TwoSpeed'
         fuels << 'Electricity'
+      when 'OS_HeatExchanger_FluidToFluid'
+        hx = component.to_HeatExchangerFluidToFluid.get
+        cooling_hx_control_types = ['CoolingSetpointModulated', 'CoolingSetpointOnOff', 'CoolingDifferentialOnOff', 'CoolingSetpointOnOffWithComponentOverride']
+        cooling_hx_control_types.each {|x| x.downcase!}
+        if cooling_hx_control_types.include?(hx.controlType.downcase) && hx.secondaryPlantLoop.is_initialized
+          fuels += self.plant_loop_cooling_fuels(hx.secondaryPlantLoop.get)
+        end
       when 'OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'
         # To avoid extraneous debug messages
       else
