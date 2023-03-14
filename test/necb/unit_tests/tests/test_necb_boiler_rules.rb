@@ -19,7 +19,7 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
 
   # Test to validate the boiler thermal efficiency generated against expected values stored in the file:
   # 'compliance_boiler_efficiencies_expected_results.csv
-  def test_NECB2011_boiler_efficiency
+  def test_NECB_boiler_efficiency
     output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
@@ -31,7 +31,7 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
     baseboard_type = 'Hot Water'
     model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    templates = ['NECB2011', 'NECB2015', 'BTAPPRE1980']
+    templates = ['NECB2011', 'NECB2015', 'NECB2020', 'BTAPPRE1980']
     templates.each do |template|
       standard = Standard.build(template)
       boiler_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_boiler_efficiencies_expected_results.csv")
