@@ -36,10 +36,6 @@ Standard.class_eval do
     epw_path = epw_path.get
 
     # close current sql file
-    if model.sqlFile.is_initialized
-      sql = model.sqlFile.get
-      sql.close if sql.connectionOpen
-    end
     model.resetSqlFile
 
     # If running on a regular desktop, use RunManager.
@@ -120,6 +116,7 @@ Standard.class_eval do
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished run.')
 
       sql_path = OpenStudio::Path.new("#{run_dir}/run/eplusout.sql")
+
     end
 
     # @todo Delete the eplustbl.htm and other files created by the run for cleanliness.
