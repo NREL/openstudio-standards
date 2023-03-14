@@ -286,34 +286,53 @@ class ASHRAE9012019 < ASHRAE901
       end
       space = spaces[0]
       space_lights = space.lights
+      lights_defined_by_spacetype = false
       if space_lights.empty?
         space_lights = space.spaceType.get.lights
+        lights_defined_by_spacetype = true
       end
       space_people = space.people
       if space_people.empty?
         space_people = space.spaceType.get.people
       end
 
-      next if space_lights.empty? # skip space with no lights
+      # guard clause to skip space with no lights
+      next if space_lights.empty? 
+
+      # if lights are defined at the space type level, clone each lights object and make it individual to the space
+      new_space_lights = []
+      if lights_defined_by_spacetype
+        space_lights.each do |lights|
+          new_lights = lights.clone.to_Lights.get
+          new_lights.setName("#{space.name}-#{lights.name}")
+          new_lights.setSpace(space)
+          new_space_lights << new_lights
+        end
+        space_lights = new_space_lights
+      end
 
       zone_name = zone.name.to_s
       next if zone_name =~ /data\s*center/i # skip data centers
 
-      # EnergyPlus v9.4 name change for EMS actuators
+      # EnergyPlus v9.4.0 / OpenStudio v3.1.0 variable name change from 'Zone Lights Electric Power' to 'Zone Lights Electricity Rate'
+      # EnergyPlus v9.6.0 / OpenStudio v3.3.0 added Space objects, variable name change from 'Zone Lights Electricity Rate' to 'Space Lights Electricity Rate'
       # https://github.com/NREL/OpenStudio/pull/4104
       if model.version < OpenStudio::VersionString.new('3.1.0')
         light_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Lights Electric Power')
-      else
+        key_name = zone_name
+      elsif model.version < OpenStudio::VersionString.new('3.3.0')
         light_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Lights Electricity Rate')
+        key_name = zone_name
+      else
+        light_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Space Lights Electricity Rate')
+        key_name = space.name.to_s
       end
-      light_sensor.setKeyName(zone_name)
-      light_sensor.setName("#{zone_name}_LSr".gsub(/[\s-]/, ''))
+      light_sensor.setKeyName(key_name)
+      light_sensor.setName("#{key_name}_LSr".gsub(/[\s-]/, ''))
       light_sensor_name = light_sensor.name.to_s
 
-      floor_area = OpenStudio::Model::EnergyManagementSystemInternalVariable.new(model, 'Zone Floor Area')
-      floor_area.setInternalDataIndexKeyName(zone_name)
-      floor_area.setName("#{zone_name}_Area".gsub(/[\s-]/, ''))
-      floor_area_name = floor_area.name.to_s
+      # get the space floor area for calculations
+      space_floor_area = space.floorArea
 
       # account for multiple lights (also work for single light)
       big_light = space_lights[0] # find the light with highest power (assuming specified by watts/area)
@@ -337,20 +356,20 @@ class ASHRAE9012019 < ASHRAE901
         else
           light_x_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(light_x, 'Lights', 'Electricity Rate')
         end
-        light_x_actuator.setName("#{zone_name}_Light#{light_id}_Actuator".gsub(/[\s-]/, ''))
+        light_x_actuator.setName("#{key_name}_Light#{light_id}_Actuator".gsub(/[\s-]/, ''))
         light_x_actuator_name = light_x_actuator.name.to_s
         add_lights_prog_null += "\n      SET #{light_x_actuator_name} = NULL,"
         if light_x == big_light
-          add_lights_prog_0 += "\n      SET #{light_x_actuator_name} = 0.02*#{floor_area_name}/0.09290304,"
+          add_lights_prog_0 += "\n      SET #{light_x_actuator_name} = 0.02*#{space_floor_area}/0.09290304,"
           next
         end
         add_lights_prog_0 += "\n      SET #{light_x_actuator_name} = 0,"
       end
 
       light_ems_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-      light_ems_prog.setName("SET_#{zone_name}_Light_EMS_Program".gsub(/[\s-]/, ''))
+      light_ems_prog.setName("SET_#{key_name}_Light_EMS_Program".gsub(/[\s-]/, ''))
       light_ems_prog_body = <<-EMS
-      SET #{light_sensor_name}_IP=0.093*#{light_sensor_name}/#{floor_area_name},
+      SET #{light_sensor_name}_IP=0.093*#{light_sensor_name}/#{space_floor_area},
       IF (#{business_sensor_name} <= 0) && (#{light_sensor_name}_IP >= 0.02),#{add_lights_prog_0}
       ELSE,#{add_lights_prog_null}
       ENDIF
@@ -358,11 +377,10 @@ class ASHRAE9012019 < ASHRAE901
       light_ems_prog.setBody(light_ems_prog_body)
 
       light_ems_prog_manager = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-      light_ems_prog_manager.setName("SET_#{zone_name}_Light_EMS_Program_Manager")
+      light_ems_prog_manager.setName("SET_#{key_name}_Light_EMS_Program_Manager")
       light_ems_prog_manager.setCallingPoint('AfterPredictorAfterHVACManagers')
       light_ems_prog_manager.addProgram(light_ems_prog)
     end
-
     return true
   end
 end
