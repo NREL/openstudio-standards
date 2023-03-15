@@ -279,6 +279,7 @@ class ASHRAE9012019 < ASHRAE901
     business_sensor.setName('Business_Sensor')
     business_sensor_name = business_sensor.name.to_s
 
+    space_types_affected = []
     zones.sort.each do |zone|
       spaces = zone.spaces
       if spaces.length != 1
@@ -290,6 +291,7 @@ class ASHRAE9012019 < ASHRAE901
       if space_lights.empty?
         space_lights = space.spaceType.get.lights
         lights_defined_by_spacetype = true
+        space_types_affected << space.spaceType
       end
       space_people = space.people
       if space_people.empty?
@@ -381,6 +383,12 @@ class ASHRAE9012019 < ASHRAE901
       light_ems_prog_manager.setCallingPoint('AfterPredictorAfterHVACManagers')
       light_ems_prog_manager.addProgram(light_ems_prog)
     end
+
+    # remove lights at the space type level
+    space_types_affected.each do |space_type|
+      space_type.get.lights.each(&:remove)
+    end
+
     return true
   end
 end
