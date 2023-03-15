@@ -20,14 +20,16 @@ class NECB2015
     chiller_electric_eir.setMinimumPartLoadRatio(0.25)
     chiller_electric_eir.setMinimumUnloadingRatio(0.25)
     chiller_capacity = capacity_w
-    if (capacity_w / 1000.0) < 2100.0
-      if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
-        chiller_capacity = capacity_w
-      elsif chiller_electric_eir.name.to_s.include? 'Secondary Chiller'
-        chiller_capacity = 0.001
+    if (chiller_electric_eir.name.to_s.include? 'Primary') || (chiller_electric_eir.name.to_s.include? 'Secondary')
+      if (capacity_w / 1000.0) < 2100.0
+        if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
+          chiller_capacity = capacity_w
+        elsif chiller_electric_eir.name.to_s.include? 'Secondary Chiller'
+          chiller_capacity = 0.001
+        end
+      else
+        chiller_capacity = capacity_w / 2.0
       end
-    else
-      chiller_capacity = capacity_w / 2.0
     end
     chiller_electric_eir.setReferenceCapacity(chiller_capacity)
 

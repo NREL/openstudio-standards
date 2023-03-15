@@ -71,6 +71,10 @@ class GeneratorNECBRegressionTests
         [
             'NaturalGas',
             'Electricity',
+            'NaturalGasHPGasBackup',
+            'NaturalGasHPElecBackupMixed',
+            'ElectricityHPElecBackup',
+            'ElectricityHPGasBackupMixed'
         ]
 
     @run_simulation = false

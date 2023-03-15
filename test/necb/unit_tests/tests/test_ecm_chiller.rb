@@ -43,7 +43,7 @@ class NECB_VSDchiller_Tests < Minitest::Test
         'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw',
         # 'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw'
     ]
-    @primary_heating_fuels = ['DefaultFuel']
+    @primary_heating_fuels = ['NaturalGas']
 
     @chiller_types = ['VSD']
 
