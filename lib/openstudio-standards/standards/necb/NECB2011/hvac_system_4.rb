@@ -94,7 +94,7 @@ class NECB2011
     clg_coil = add_onespeed_DX_coil(model, always_on)
     clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
     clg_coil.setName('CoilCoolingDXSingleSpeed_ashp') if necb_reference_hp
- 
+
     raise("Flag 'necb_reference_hp' is set to true while parameter 'heating_coil_type' is not set to DX") if (necb_reference_hp && (heating_coil_type != 'DX'))
     if heating_coil_type == 'Electric' # electric coil
       htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)

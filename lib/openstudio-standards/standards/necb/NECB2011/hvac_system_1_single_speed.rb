@@ -259,6 +259,7 @@ class NECB2011
         sys_oa = 'mixed'
       else
         sys_name_pars['zone_clg'] = 'ptac'
+        sys_oa = 'doas'
       end
       sys_name_pars['sys_rf'] = 'none'
       assign_base_sys_name(mau_air_loop,

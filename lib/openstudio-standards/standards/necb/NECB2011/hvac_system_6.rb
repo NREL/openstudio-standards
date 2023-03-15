@@ -400,7 +400,6 @@ class NECB2011
           sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneDXCoolingSizingFactor])
           sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneDXHeatingSizingFactor])
 
-          
           # Set zone baseboards
           add_zone_baseboards(model: model,
                               zone: zone,
