@@ -93,14 +93,16 @@ class NECB2011
     # Set up DX coil with NECB performance curve characteristics;
     clg_coil = add_onespeed_DX_coil(model, always_on)
     clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
-
+    clg_coil.setName('CoilCoolingDXSingleSpeed_ashp') if necb_reference_hp
+ 
+    raise("Flag 'necb_reference_hp' is set to true while parameter 'heating_coil_type' is not set to DX") if (necb_reference_hp && (heating_coil_type != 'DX'))
     if heating_coil_type == 'Electric' # electric coil
       htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
     elsif heating_coil_type == 'Gas'
       htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
     elsif heating_coil_type == 'DX'
       htg_coil = add_onespeed_htg_DX_coil(model, always_on)
-      htg_coil.setName('CoilHeatingDXSingleSpeed_dx')
+      htg_coil.setName('CoilHeatingDXSingleSpeed_ashp')
     end
 
     # TO DO: other fuel-fired heating coil types? (not available in OpenStudio/E+ - may need to play with efficiency to mimic other fuel types)
@@ -193,7 +195,9 @@ class NECB2011
     sys_name_pars = {}
     sys_name_pars['sys_hr'] = 'none'
     sys_name_pars['sys_clg'] = 'dx'
+    sys_name_pars['sys_clg'] = 'ashp' if necb_reference_hp
     sys_name_pars['sys_htg'] = heating_coil_type
+    sys_name_pars['sys_htg'] = 'ashp' if necb_reference_hp
     sys_name_pars['sys_sf'] = 'cv'
     sys_name_pars['zone_htg'] = baseboard_type
     sys_name_pars['zone_clg'] = 'none'
