@@ -20,7 +20,7 @@
           "capft": "WaterCooled_Scroll_CAPFT_NECB2011",
           "eirft": "WaterCooled_Scroll_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Scroll_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -37,7 +37,7 @@
           "capft": "WaterCooled_Scroll_CAPFT_NECB2011",
           "eirft": "WaterCooled_Scroll_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Scroll_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           
@@ -55,7 +55,7 @@
           "capft": "WaterCooled_Scroll_CAPFT_NECB2011",
           "eirft": "WaterCooled_Scroll_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Scroll_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -72,7 +72,7 @@
           "capft": "WaterCooled_Scroll_CAPFT_NECB2011",
           "eirft": "WaterCooled_Scroll_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Scroll_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -89,7 +89,7 @@
           "capft": "WaterCooled_Scroll_CAPFT_NECB2011",
           "eirft": "WaterCooled_Scroll_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Scroll_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -106,7 +106,7 @@
           "capft": "WaterCooled_Reciprocating_CAPFT_NECB2011",
           "eirft": "WaterCooled_Reciprocating_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Reciprocating_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -123,7 +123,7 @@
           "capft": "WaterCooled_Reciprocating_CAPFT_NECB2011",
           "eirft": "WaterCooled_Reciprocating_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Reciprocating_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -140,7 +140,7 @@
           "capft": "WaterCooled_Reciprocating_CAPFT_NECB2011",
           "eirft": "WaterCooled_Reciprocating_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Reciprocating_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -157,7 +157,7 @@
           "capft": "WaterCooled_Reciprocating_CAPFT_NECB2011",
           "eirft": "WaterCooled_Reciprocating_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Reciprocating_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -174,7 +174,7 @@
           "capft": "WaterCooled_Reciprocating_CAPFT_NECB2011",
           "eirft": "WaterCooled_Reciprocating_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Reciprocating_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -191,7 +191,7 @@
           "capft": "WaterCooled_Screw_CAPFT_NECB2011",
           "eirft": "WaterCooled_Screw_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Screw_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -208,7 +208,7 @@
           "capft": "WaterCooled_Screw_CAPFT_NECB2011",
           "eirft": "WaterCooled_Screw_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Screw_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -225,7 +225,7 @@
           "capft": "WaterCooled_Screw_CAPFT_NECB2011",
           "eirft": "WaterCooled_Screw_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Screw_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -242,7 +242,7 @@
           "capft": "WaterCooled_Screw_CAPFT_NECB2011",
           "eirft": "WaterCooled_Screw_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Screw_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -259,7 +259,7 @@
           "capft": "WaterCooled_Screw_CAPFT_NECB2011",
           "eirft": "WaterCooled_Screw_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Screw_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
 		{
           "cooling_type": "WaterCooled",
@@ -276,7 +276,7 @@
           "capft": "WaterCooled_Centrifugal_CAPFT_NECB2011",
           "eirft": "WaterCooled_Centrifugal_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Centrifugal_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -293,7 +293,7 @@
           "capft": "WaterCooled_Centrifugal_CAPFT_NECB2011",
           "eirft": "WaterCooled_Centrifugal_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Centrifugal_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -310,7 +310,7 @@
           "capft": "WaterCooled_Centrifugal_CAPFT_NECB2011",
           "eirft": "WaterCooled_Centrifugal_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Centrifugal_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         },
         {
           "cooling_type": "WaterCooled",
@@ -327,7 +327,7 @@
           "capft": "WaterCooled_Centrifugal_CAPFT_NECB2011",
           "eirft": "WaterCooled_Centrifugal_EIRFT_NECB2011",
           "eirfplr": "WaterCooled_Centrifugal_EIRFPLR_NECB2011",
-          "notes": null
+          "notes": "capacity in ton"
         }
       ]
     }
