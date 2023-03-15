@@ -1317,12 +1317,20 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, user_data_dir, mod = prototype
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
 
+      # At this step, model simulations shall be successful.
+      # Otherwise, we should handle the simulation failure in the PRM method
+      sql = model.sqlFile.get
+      unless sql.connectionOpen
+        sql.reopen
+      end
+
       # Get space envelope area
       spc_env_area = 0
       model.getSpaces.sort.each do |spc|
         spc_env_area += std.space_envelope_area(spc, climate_zone)
       end
-
+      # close the sql
+      sql.close
       prototypes_spc_area_calc[prototype] = spc_env_area
     end
 
@@ -1333,6 +1341,13 @@ class AppendixGPRMTests < Minitest::Test
       mod_str = mod.flatten.join('_') unless mod.empty?
 
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
+
+      # At this step, model simulations shall be successful.
+      # Otherwise, we should handle the simulation failure in the PRM method
+      sql = model.sqlFile.get
+      unless sql.connectionOpen
+        sql.reopen
+      end
 
       # Check if the space envelope area calculations
       spc_env_area = 0
@@ -1346,6 +1361,8 @@ class AppendixGPRMTests < Minitest::Test
       model.getSpaceTypes.sort.each do |spc|
         assert(false, "The baseline for the #{building_type}, #{template}, #{climate_zone} model has infiltration specified at the space type level.") unless spc.spaceInfiltrationDesignFlowRates.empty?
       end
+      # close SQL
+      sql.close
 
       # Back calculate the I_75 (cfm/ft2), expected value is 1 cfm/ft2 in 90.1-PRM-2019
       # Use input prototype's space envelope area because, even though the baseline model space
