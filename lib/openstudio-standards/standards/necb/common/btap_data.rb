@@ -51,6 +51,7 @@ class BTAPData
     @btap_data.merge!(energy_peak_data)
     @btap_data.merge!(utility(model))
     @btap_data.merge!(unmet_hours(model))
+    @btap_data.merge!outdoor_air_data(model)
 
     # Data in tables...
     @btap_data.merge!('measures_data_table' => measures_data_table(runner)) unless runner.nil?
@@ -294,7 +295,7 @@ class BTAPData
     outdoor_roofs = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'RoofCeiling')
     outdoor_floors = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'Floor')
     outdoor_subsurfaces = BTAP::Geometry::Surfaces.get_subsurfaces_from_surfaces(outdoor_surfaces)
-    ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, 'Ground')
+    ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, ['Ground', 'Foundation'])
     ground_walls = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'Wall')
     ground_roofs = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'RoofCeiling')
     ground_floors = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'Floor')
@@ -402,7 +403,7 @@ class BTAPData
   def envelope_exterior_surface_table
     surfaces = @model.getSurfaces.sort
     outdoor_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, 'Outdoors')
-    ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, 'Ground')
+    ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, ['Ground', 'Foundation'])
     exterior_opaque_surfaces = outdoor_surfaces + ground_surfaces
     # outdoor_surfaces.each { |surface| puts surface.name}
     # get surface table from sql
@@ -1408,6 +1409,7 @@ class BTAPData
      'energy_eui_natural_gas_gj_per_m_sq',
      'energy_eui_pumps_gj_per_m_sq',
      'energy_eui_total_gj_per_m_sq',
+     'energy_eui_heat recovery_gj_per_m_sq',
      'energy_eui_water systems_gj_per_m_sq'].each { |end_use| data[end_use] = 0.0 }
     # Get E+ End use table from sql
     table = get_sql_table_to_json(@model, 'AnnualBuildingUtilityPerformanceSummary', 'Entire Facility', 'End Uses')['table']
@@ -1493,6 +1495,126 @@ class BTAPData
     service_water_heating['shw_water_m_cu_per_day'] = service_water_heating['shw_water_m_cu_per_year'] / 365.5
     service_water_heating['shw_water_m_cu_per_day_per_occupant'] = service_water_heating['shw_water_m_cu_per_day'] / service_water_heating['shw_total_nominal_occupancy']
     return service_water_heating
+  end
+
+  # The below method (outdoor_air_data extract a couple of outputs related to outdoor air from the .html output file)
+  def outdoor_air_data(model)
+    # Store outdoor air data
+    outdoor_air_data = {}
+    #===============================================================================================================
+    airloops_total_outdoor_air_mechanical_ventilation_m3 = 0.0
+    airloops_total_outdoor_air_natural_ventilation_m3 = 0.0
+    zones_total_outdoor_air_mechanical_ventilation_m3 = 0.0
+    zones_total_outdoor_air_natural_ventilation_m3 = 0.0
+    zones_total_outdoor_air_infiltration_m3 = 0.0
+    #===============================================================================================================
+    # Total outdoor air by airLoop
+    model.getAirLoopHVACs.sort.each do |air_loop|
+      air_loop_name = air_loop.name.get.upcase
+
+      # Mechanical ventilation of all airloops
+      command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='OutdoorAirDetails'
+               AND ReportForString='Entire Facility'
+               AND TableName='Total Outdoor Air by AirLoop'
+               AND RowName='#{air_loop_name}'
+               AND ColumnName='Mechanical Ventilation'
+               AND Units='m3'"
+      airloops_total_outdoor_air_mechanical_ventilation_m3 += @sqlite_file.get.execAndReturnFirstDouble(command).to_f
+
+      # Natural ventilation of all airloops
+      command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='OutdoorAirDetails'
+               AND ReportForString='Entire Facility'
+               AND TableName='Total Outdoor Air by AirLoop'
+               AND RowName='#{air_loop_name}'
+               AND ColumnName='Natural Ventilation'
+               AND Units='m3'"
+      airloops_total_outdoor_air_natural_ventilation_m3 += @sqlite_file.get.execAndReturnFirstDouble(command).to_f
+
+    end
+
+    # Not-normalized mechanical/natural.
+    outdoor_air_data['airloops_total_outdoor_air_mechanical_ventilation_m3'] = airloops_total_outdoor_air_mechanical_ventilation_m3
+    outdoor_air_data['airloops_total_outdoor_air_natural_ventilation_m3'] = airloops_total_outdoor_air_natural_ventilation_m3
+
+    # Normalized mechanical/natural: ACH (air changes per hour)
+    outdoor_air_data['airloops_total_outdoor_air_mechanical_ventilation_ach_1_per_hr'] = airloops_total_outdoor_air_mechanical_ventilation_m3 / (@btap_data['bldg_volume_m_cu'] * 365 * 24)
+    outdoor_air_data['airloops_total_outdoor_air_natural_ventilation_ach_1_per_hr'] = airloops_total_outdoor_air_natural_ventilation_m3 / (@btap_data['bldg_volume_m_cu'] * 365 * 24)
+
+    # Normalized mechanical/natural: normalized by conditioned floor area
+    outdoor_air_data['airloops_total_outdoor_air_mechanical_ventilation_flow_per_conditioned_floor_area_m3_per_s_m2'] = airloops_total_outdoor_air_mechanical_ventilation_m3 / (@conditioned_floor_area_m_sq * 365 * 24 * 3600)
+    outdoor_air_data['airloops_total_outdoor_air_natural_ventilation_flow_per_conditioned_floor_area_m3_per_s_m2'] = airloops_total_outdoor_air_natural_ventilation_m3 / (@conditioned_floor_area_m_sq * 365 * 24 * 3600)
+
+    # Normalized mechanical/natural: normalized by exterior area
+    outdoor_air_data['airloops_total_outdoor_air_mechanical_ventilation_flow_per_exterior_area_m3_per_s_m2'] = airloops_total_outdoor_air_mechanical_ventilation_m3 / (@btap_data['bldg_exterior_area_m_sq'] * 365 * 24 * 3600)
+    outdoor_air_data['airloops_total_outdoor_air_natural_ventilation_flow_per_exterior_area_m3_per_s_m2'] = airloops_total_outdoor_air_natural_ventilation_m3 / (@btap_data['bldg_exterior_area_m_sq'] * 365 * 24 * 3600)
+
+    #===============================================================================================================
+    # Total outdoor air by zone
+    total_outdoor_air_mechanical_ventilation_zones_m3 = 0.0
+    model.getThermalZones.sort.each do |zone|
+      zone_name = zone.name.get.upcase
+
+      # Mechanical ventilation of all zones
+      command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='OutdoorAirDetails'
+               AND ReportForString='Entire Facility'
+               AND TableName='Total Outdoor Air by Zone'
+               AND RowName='#{zone_name}'
+               AND ColumnName='Mechanical Ventilation'
+               AND Units='m3'"
+      zones_total_outdoor_air_mechanical_ventilation_m3 += @sqlite_file.get.execAndReturnFirstDouble(command).to_f
+
+      # Natural ventilation of all zones
+      command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='OutdoorAirDetails'
+               AND ReportForString='Entire Facility'
+               AND TableName='Total Outdoor Air by Zone'
+               AND RowName='#{zone_name}'
+               AND ColumnName='Natural Ventilation'
+               AND Units='m3'"
+      zones_total_outdoor_air_natural_ventilation_m3 += @sqlite_file.get.execAndReturnFirstDouble(command).to_f
+
+      # Infiltration of all zones
+      command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='OutdoorAirDetails'
+               AND ReportForString='Entire Facility'
+               AND TableName='Total Outdoor Air by Zone'
+               AND RowName='#{zone_name}'
+               AND ColumnName='Infiltration'
+               AND Units='m3'"
+      zones_total_outdoor_air_infiltration_m3 += @sqlite_file.get.execAndReturnFirstDouble(command).to_f
+
+    end
+
+    # Not-normalized mechanical/natural/infiltration.
+    outdoor_air_data['zones_total_outdoor_air_mechanical_ventilation_m3'] = zones_total_outdoor_air_mechanical_ventilation_m3
+    outdoor_air_data['zones_total_outdoor_air_natural_ventilation_m3'] = zones_total_outdoor_air_natural_ventilation_m3
+    outdoor_air_data['zones_total_outdoor_air_infiltration_m3'] = zones_total_outdoor_air_infiltration_m3
+
+    # Normalized mechanical/natural/infiltration: ACH (air changes per hour)
+    outdoor_air_data['zones_total_outdoor_air_mechanical_ventilation_ach_1_per_hr'] = zones_total_outdoor_air_mechanical_ventilation_m3 / (@btap_data['bldg_volume_m_cu'] * 365 * 24)
+    outdoor_air_data['zones_total_outdoor_air_natural_ventilation_ach_1_per_hr'] = zones_total_outdoor_air_natural_ventilation_m3 / (@btap_data['bldg_volume_m_cu'] * 365 * 24)
+    outdoor_air_data['zones_total_outdoor_air_infiltration_ach_1_per_hr'] = zones_total_outdoor_air_infiltration_m3 / (@btap_data['bldg_volume_m_cu'] * 365 * 24)
+
+    # Normalized mechanical/natural/infiltration: normalized by conditioned floor area
+    outdoor_air_data['zones_total_outdoor_air_mechanical_ventilation_flow_per_conditioned_floor_area_m3_per_s_m2'] = zones_total_outdoor_air_mechanical_ventilation_m3 / (@conditioned_floor_area_m_sq * 365 * 24 * 3600)
+    outdoor_air_data['zones_total_outdoor_air_natural_ventilation_flow_per_conditioned_floor_area_m3_per_s_m2'] = zones_total_outdoor_air_natural_ventilation_m3 / (@conditioned_floor_area_m_sq * 365 * 24 * 3600)
+    outdoor_air_data['zones_total_outdoor_air_infiltration_flow_per_conditioned_floor_area_m3_per_s_m2'] = zones_total_outdoor_air_infiltration_m3 / (@conditioned_floor_area_m_sq * 365 * 24 * 3600)
+
+    # Normalized mechanical/natural/infiltration: normalized by exterior area
+    outdoor_air_data['zones_total_outdoor_air_mechanical_ventilation_flow_per_exterior_area_m3_per_s_m2'] = zones_total_outdoor_air_mechanical_ventilation_m3 / (@btap_data['bldg_exterior_area_m_sq'] * 365 * 24 * 3600)
+    outdoor_air_data['zones_total_outdoor_air_natural_ventilation_flow_per_exterior_area_m3_per_s_m2'] = zones_total_outdoor_air_natural_ventilation_m3 / (@btap_data['bldg_exterior_area_m_sq'] * 365 * 24 * 3600)
+    outdoor_air_data['zones_total_outdoor_air_infiltration_flow_per_exterior_area_m3_per_s_m2'] = zones_total_outdoor_air_infiltration_m3 / (@btap_data['bldg_exterior_area_m_sq'] * 365 * 24 * 3600)
+    #===============================================================================================================
+
+    return outdoor_air_data
   end
 
   def sql_data_tables(model)

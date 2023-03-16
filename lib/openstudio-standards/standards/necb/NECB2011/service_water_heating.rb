@@ -197,7 +197,6 @@ class NECB2011
 
     # Convert to SI
     ua_btu_per_hr_per_c = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
-
     # Set the water heater properties
     # Efficiency
     water_heater_mixed.setHeaterThermalEfficiency(water_heater_eff)
@@ -280,7 +279,6 @@ class NECB2011
       # If there is no service hot water load.. Don't bother adding anything.
       # Skip space types with no data
       next if data.nil?
-
       space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
       # Calculate the peak shw flow rate for the space.  Peak flow from JSON file is in US Gal/hr/ft^2
       # space_peak_flow_ind is the peak flow rate for the space while space_peak_flow is the peak flow

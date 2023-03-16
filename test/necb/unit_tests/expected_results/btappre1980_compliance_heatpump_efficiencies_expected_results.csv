@@ -1,4 +1,4 @@
-Min Capacity (Btu per hr),Max Capacity (Btu per hr),Energy Efficiency Ratio (EER)
-0,65000,9.4
-65001,238840,9.3
-238841,9999999,8.8
+Min Capacity (kW),Max Capacity (kW),Test Capacity (kW),COP (no fan),COP-H
+0,19,9.5,3.2,3.0
+19,70,44.5,3.3,3.0
+70,9999999,80.0,3.3,3.0

@@ -2260,8 +2260,9 @@ class Standard
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param apply_controls [Bool] toggle whether to apply air loop and plant loop controls
   # @param sql_db_vars_map [Hash] hash map
+  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
   # @return [Bool] returns true if successful, false if not
-  def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true, sql_db_vars_map: nil)
+  def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true, sql_db_vars_map: nil, necb_ref_hp: false)
     sql_db_vars_map = {} if sql_db_vars_map.nil?
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Started applying HVAC efficiency standards for #{template} template.")
@@ -2297,11 +2298,11 @@ class Standard
     # set DX HP coils before DX clg coils because when DX HP coils need to first
     # pull the capacities of their paired DX clg coils, and this does not work
     # correctly if the DX clg coil efficiencies have been set because they are renamed.
-    model.getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
+    model.getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map, necb_ref_hp) }
 
     # Unitary ACs
     model.getCoilCoolingDXTwoSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
-    model.getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
+    model.getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map, necb_ref_hp) }
     model.getCoilCoolingDXMultiSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_multi_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
 
     # WSHPs
@@ -3582,6 +3583,7 @@ class Standard
     existing_curves += model.getCurveQuadratics
     existing_curves += model.getCurveBicubics
     existing_curves += model.getCurveBiquadratics
+    existing_curves += model.getCurveQuadLinears
     existing_curves.sort.each do |curve|
       if curve.name.get.to_s == curve_name
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added curve: #{curve_name}")
@@ -3681,6 +3683,25 @@ class Standard
         curve.setMaximumValueofy(data['maximum_independent_variable_2']) if data['maximum_independent_variable_2']
         curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
         curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
+        return curve
+      when 'QuadLinear'
+        curve = OpenStudio::Model::CurveQuadLinear.new(model)
+        curve.setName(data['name'])
+        curve.setCoefficient1Constant(data['coeff_1'])
+        curve.setCoefficient2w(data['coeff_2'])
+        curve.setCoefficient3x(data['coeff_3'])
+        curve.setCoefficient4y(data['coeff_4'])
+        curve.setCoefficient5z(data['coeff_5'])
+        curve.setMinimumValueofw(data['minimum_independent_variable_w'])
+        curve.setMaximumValueofw(data['maximum_independent_variable_w'])
+        curve.setMinimumValueofx(data['minimum_independent_variable_x'])
+        curve.setMaximumValueofx(data['maximum_independent_variable_x'])
+        curve.setMinimumValueofy(data['minimum_independent_variable_y'])
+        curve.setMaximumValueofy(data['maximum_independent_variable_y'])
+        curve.setMinimumValueofz(data['minimum_independent_variable_z'])
+        curve.setMaximumValueofz(data['maximum_independent_variable_z'])
+        curve.setMinimumCurveOutput(data['minimum_dependent_variable_output'])
+        curve.setMaximumCurveOutput(data['maximum_dependent_variable_output'])
         return curve
       when 'MultiVariableLookupTable'
         num_ind_var = data['number_independent_variables'].to_i

@@ -236,9 +236,9 @@ class BTAPPRE1980
         air_loop_sizing.setAllOutdoorAirinCooling(system_data[:AllOutdoorAirinCooling])
         air_loop_sizing.setAllOutdoorAirinHeating(system_data[:AllOutdoorAirinHeating])
         if model.version < OpenStudio::VersionString.new('2.7.0')
-          air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio])
+          air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio]) unless system_data[:MinimumSystemAirFlowRatio].nil?
         else
-          air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio])
+          air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio]) unless system_data[:MinimumSystemAirFlowRatio].nil?
         end
 
         supply_fan = OpenStudio::Model::FanVariableVolume.new(model, always_on)

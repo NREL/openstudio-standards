@@ -3,11 +3,13 @@
 class NECB2011 < Standard
   @template = new.class.name
   register_standard(@template)
+  attr_reader :tbd
   attr_reader :template
   attr_accessor :standards_data
   attr_accessor :space_type_map
   attr_accessor :space_multiplier_map
-
+  attr_accessor :fuel_type_set
+  
   # This is a helper method to convert arguments that may support 'NECB_Default, and nils to convert to float'
   def convert_arg_to_f(variable:, default:)
     return variable if variable.kind_of?(Numeric)
@@ -119,6 +121,7 @@ class NECB2011 < Standard
     @template = self.class.name
     @standards_data = load_standards_database_new
     corrupt_standards_database
+    @tbd = nil
     # puts "loaded these tables..."
     # puts @standards_data.keys.size
     # raise("tables not all loaded in parent #{}") if @standards_data.keys.size < 24
@@ -166,7 +169,7 @@ class NECB2011 < Standard
       return epw.hdd18.to_f
     else
       dist_clause = "%.2f % #{(min_distance / 1000.0)}"
-      puts "INFO:NECB HDD18 of #{necb_closest['degree_days_below_18_c'].to_f}  at nearest city #{necb_closest['city']},#{necb_closest['province']}, at a distance of " + dist_clause + 'km from epw location. Ref:necb_2015_table_c1'
+      puts "INFO:NECB HDD18 of #{necb_closest['degree_days_below_18_c'].to_f}  at nearest city #{necb_closest['city']},#{necb_closest['province']}, at a distance of " + dist_clause + 'km from epw location. Ref: nbc_2015_table_c1'
       return necb_closest['degree_days_below_18_c'].to_f
     end
   end
@@ -177,7 +180,7 @@ class NECB2011 < Standard
                                    epw_file:,
                                    debug: false,
                                    sizing_run_dir: Dir.pwd,
-                                   primary_heating_fuel: 'DefaultFuel',
+                                   primary_heating_fuel: 'Electricity',
                                    dcv_type: 'NECB_Default',
                                    lights_type: 'NECB_Default',
                                    lights_scale: 1.0,
@@ -227,10 +230,11 @@ class NECB2011 < Standard
                                    shw_scale: nil,
                                    output_meters: nil,
                                    airloop_economizer_type: nil,
-                                   baseline_system_zones_map_option: nil)
-
+                                   baseline_system_zones_map_option: nil,
+                                   tbd_option: nil)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
+                                tbd_option: tbd_option,
                                 epw_file: epw_file,
                                 sizing_run_dir: sizing_run_dir,
                                 primary_heating_fuel: primary_heating_fuel,
@@ -301,8 +305,11 @@ class NECB2011 < Standard
   # Created this method so that additional methods can be addded for bulding the prototype model in later
   # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
   def model_apply_standard(model:,
+                           tbd_option: nil,
                            epw_file:,
                            sizing_run_dir: Dir.pwd,
+                           necb_reference_hp: false,
+                           necb_reference_hp_supp_fuel: 'DefaultFuel',
                            primary_heating_fuel: 'DefaultFuel',
                            dcv_type: 'NECB_Default',
                            lights_type: 'NECB_Default',
@@ -353,9 +360,9 @@ class NECB2011 < Standard
                            shw_scale: nil,
                            output_meters: nil,
                            airloop_economizer_type: nil,
-                           baseline_system_zones_map_option: nil
-                           )
-
+                           baseline_system_zones_map_option: nil)
+    self.fuel_type_set = SystemFuels.new()
+    self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel)
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
@@ -386,14 +393,15 @@ class NECB2011 < Standard
     apply_fdwr_srr_daylighting(model: model,
                                fdwr_set: fdwr_set,
                                srr_set: srr_set)
+    apply_thermal_bridging(model: model, tbd_option: tbd_option)
     apply_auto_zoning(model: model,
                       sizing_run_dir: sizing_run_dir,
                       lights_type: lights_type,
                       lights_scale: lights_scale)
     apply_kiva_foundation(model)
     apply_systems_and_efficiencies(model: model,
-                                   primary_heating_fuel: primary_heating_fuel,
                                    sizing_run_dir: sizing_run_dir,
+                                   primary_heating_fuel: primary_heating_fuel,
                                    dcv_type: dcv_type,
                                    ecm_system_name: ecm_system_name,
                                    ecm_system_zones_map_option: ecm_system_zones_map_option,
@@ -464,8 +472,8 @@ class NECB2011 < Standard
   end
 
   def apply_systems_and_efficiencies(model:,
-                                     primary_heating_fuel:,
                                      sizing_run_dir:,
+                                     primary_heating_fuel:,
                                      dcv_type: 'NECB_Default',
                                      ecm_system_name: 'NECB_Default',
                                      ecm_system_zones_map_option: 'NECB_Default',
@@ -495,17 +503,25 @@ class NECB2011 < Standard
     # -------- Systems Layout-----------
 
     # Create Default Systems.
-    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir, shw_scale: shw_scale,
+    apply_systems(model: model,
+                  primary_heating_fuel: primary_heating_fuel,
+                  sizing_run_dir: sizing_run_dir,
+                  shw_scale: shw_scale,
                   baseline_system_zones_map_option: baseline_system_zones_map_option)
 
     # Apply new ECM system. Overwrite standard as required.
-    ecm.apply_system_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self, primary_heating_fuel: primary_heating_fuel, 
+    ecm.apply_system_ecm(model: model,
+                         ecm_system_name: ecm_system_name,
+                         template_standard: self,
+                         primary_heating_fuel: self.fuel_type_set.ecm_fueltype,
                          ecm_system_zones_map_option: ecm_system_zones_map_option)
 
     # -------- Performace, Efficiencies, Controls and Sensors ------------
     #
     # Set code standard equipment charecteristics.
-    sql_db_vars_map = apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
+    sql_db_vars_map = apply_standard_efficiencies(model: model,
+                                                  sizing_run_dir: sizing_run_dir,
+                                                  necb_reference_hp: self.fuel_type_set.necb_reference_hp)
     # Apply System
     ecm.apply_system_efficiencies_ecm(model: model, ecm_system_name: ecm_system_name)
     # Apply ECM ERV charecteristics as required. Part 2 of above ECM.
@@ -516,8 +532,8 @@ class NECB2011 < Standard
     ecm.modify_boiler_efficiency(model: model, boiler_eff: boiler_eff)
     # Apply Furnace Efficiency
     ecm.modify_furnace_efficiency(model: model, furnace_eff: furnace_eff)
-    # Apply Unitary efficiency
-    ecm.modify_unitary_cop(model: model, unitary_cop: unitary_cop, sql_db_vars_map: sql_db_vars_map)
+    # Apply Unitary curves
+    ecm.modify_unitary_cop(model: model, unitary_cop: unitary_cop, sizing_done: false, sql_db_vars_map: sql_db_vars_map)
     # Apply SHW Efficiency
     ecm.modify_shw_efficiency(model: model, shw_eff: shw_eff)
     # Apply daylight controls.
@@ -526,6 +542,16 @@ class NECB2011 < Standard
     ecm.modify_chiller_efficiency(model: model, chiller_type: chiller_type)
     # Apply airloop economizer
     ecm.add_airloop_economizer(model: model, airloop_economizer_type: airloop_economizer_type)
+    # Perform a second sizing run if needed
+    if (!unitary_cop.nil? && unitary_cop != 'NECB_Default') || !model.getPlantLoops.empty?
+      if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
+        raise('sizing run 2 failed!')
+      end
+    end
+    # apply unitary cop
+    ecm.modify_unitary_cop(model: model, unitary_cop: unitary_cop, sizing_done: true, sql_db_vars_map: sql_db_vars_map)
+    # set capacities of district heating and cooling equipment for ground-source heat pump ecm
+    ecm.set_ghx_loop_district_cap(model) if (!model.getDistrictHeatings.empty? && !model.getDistrictCoolings.empty?)
 
     # -------Pump sizing required by some vintages----------------
     # Apply Pump power as required.
@@ -866,19 +892,66 @@ class NECB2011 < Standard
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
-  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default')
+  ##
+  # Optionally uprates, then derates, envelope surfaces due to MAJOR thermal
+  # bridges (e.g. roof parapets, corners, fenestration perimeters). See
+  # lib/openstudio-standards/btap/bridging.rb, which relies on the Thermal
+  # Bridging & Derating (TBD) gem.
+  #
+  # @param model [OpenStudio::Model::Model] an OpenStudio model
+  # @param tbd_option [String] BTAP/TBD option
+  #
+  # @return [Bool] true if successful, e.g. no errors, compliant if uprated
+  def apply_thermal_bridging(model: nil, tbd_option: nil)
+    return false unless model.is_a?(OpenStudio::Model::Model)
+    return false unless tbd_option.respond_to?(:to_s)
+
+    tbd_option = tbd_option.to_s
+    # 4x options:
+    #  - nil or 'none'(TBD is ignored)
+    #  - derate using 'bad' PSI factors (BTAP-costed)
+    #  - derate using 'good' PSI factors (BTAP-costed)
+    #  - 'uprate' (then derate), i.e. iterative process (BTAP-costed)
+
+    # Do nothing if nil or none or NECB_Default.
+    return true  if tbd_option.nil? || tbd_option == 'none' || tbd_option =='NECB_Default'
+    unless tbd_option == 'bad' || tbd_option == 'good' || tbd_option == 'uprate'
+      puts("invalid input for thermal bridging. Must be good, bad, uprate or nil")
+      return false
+    end
+
+    argh          = {} # BTAP/TBD arguments
+    argh[:walls ] = { uo: nil }
+    argh[:floors] = { uo: nil }
+    argh[:roofs ] = { uo: nil }
+
+    if tbd_option == 'uprate'
+      argh[:walls  ][:ut] = nil
+      argh[:floors ][:ut] = nil
+      argh[:roofs  ][:ut] = nil
+    elsif tbd_option == 'good'
+      argh[:quality] = :good
+    end    # default == :bad
+
+    @tbd = BTAP::Bridging.new(model, argh)
+    true
+  end
+
+  # @param necb_ref_hp [Bool] if true, NECB reference model rules for heat pumps will be used.
+  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', necb_reference_hp: false)
     raise('validation of model failed.') unless validate_initial_model(model)
 
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
 
-    # This is needed for NECB2011 as a workaround for sizing the reheat boxes
+    # This is needed for NECB2011 as a workaround for sizing the reheat boxes.
     model.getAirTerminalSingleDuctVAVReheats.each { |iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj) }
     # Apply the prototype HVAC assumptions
     model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
     # Apply the HVAC efficiency standard
     sql_db_vars_map = {}
-    model_apply_hvac_efficiency_standard(model, climate_zone, sql_db_vars_map: sql_db_vars_map)
+    model_apply_hvac_efficiency_standard(model, climate_zone, sql_db_vars_map: sql_db_vars_map, necb_ref_hp: necb_reference_hp)
+
     model_enable_demand_controlled_ventilation(model, dcv_type)
     return sql_db_vars_map
   end
@@ -918,8 +991,12 @@ class NECB2011 < Standard
 
     # Set HVAC availability schedule to follow occupancy
     air_loop_hvac.setAvailabilitySchedule(loop_occ_sch)
-    air_loop_hvac.supplyComponents('OS:AirLoopHVAC:UnitaryHeatPump:AirToAir:MultiSpeed'.to_IddObjectType).each do |comp|
-      comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.setAvailabilitySchedule(loop_occ_sch)
+    air_loop_hvac.supplyComponents.each do |comp|
+      if comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
+        comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.setSupplyAirFanOperatingModeSchedule(loop_occ_sch)
+      elsif comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
+        comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.setAvailabilitySchedule(loop_occ_sch)
+      end
     end
 
     return true
