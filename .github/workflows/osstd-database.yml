@@ -1,0 +1,40 @@
+# This workflow will check formatting with Black, install Python dependencies,
+# and run tests with pytest
+on:
+  pull_request:
+    path:
+      - 'data/data-refactor'
+jobs:
+  black-formatting-check:
+    name: Black formatting check
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+          with:
+            python-version: '3.10'
+        # This will halt the action if formatting fails
+         # Note: This will also fail if there are syntax errors
+      - uses: psf/black@stable
+        with:
+            version: "22.12.0"
+  run-unit-tests:
+    name: Run unit tests
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pipenv'
+      - name: Install pipenv
+        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+      - name: Install dpendencies
+        run: pipenv install --dev
+      - name: Run pytests
+        # This will halt the action if any of the tests fail
+        run: pipenv run pytest -v
