@@ -42,7 +42,7 @@ id,ventilation_primary_space_type,ventilation_secondary_space_type,ventilation_p
 41,Public Assembly Spaces,Legislative chambers,5,cfm/person,0.06,cfm/ft2,50,ppl/1000 ft2,1,,
 42,Public Assembly Spaces,Libraries,5,cfm/person,0.12,cfm/ft2,10,ppl/1000 ft2,1,,
 43,Public Assembly Spaces,Lobbies,5,cfm/person,0.06,cfm/ft2,150,ppl/1000 ft2,1,,
-44,Public Assembly Spaces,Museums (children’s),7.5,cfm/person,0.12,cfm/ft2,40,ppl/1000 ft2,1,,
+44,Public Assembly Spaces,Museums (children's),7.5,cfm/person,0.12,cfm/ft2,40,ppl/1000 ft2,1,,
 45,Public Assembly Spaces,Museums/galleries,7.5,cfm/person,0.06,cfm/ft2,40,ppl/1000 ft2,1,,
 46,Retail,Sales (except as below),7.5,cfm/person,0.12,cfm/ft2,15,ppl/1000 ft2,2,,
 47,Retail,Mall common areas,7.5,cfm/person,0.06,cfm/ft2,40,ppl/1000 ft2,1,,
