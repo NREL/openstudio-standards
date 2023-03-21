@@ -33,8 +33,11 @@ jobs:
           cache: 'pipenv'
       - name: Install pipenv
         run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+        working-directory: 'data/data-refactor'
       - name: Install dpendencies
         run: pipenv install --dev
+        working-directory: 'data/data-refactor'
       - name: Run pytests
         # This will halt the action if any of the tests fail
         run: pipenv run pytest -v
+        working-directory: 'data/data-refactor'
