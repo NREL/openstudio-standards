@@ -1,6 +1,8 @@
 import sqlite3
 
-from database_tables.hvac_minimum_requirement_furnaces import HVACMinimumRequirementFurnaces
+from database_tables.hvac_minimum_requirement_furnaces import (
+    HVACMinimumRequirementFurnaces,
+)
 
 TABLE_NAME = "hvac_minimum_requirement_furnaces_90_1"
 

@@ -38,4 +38,3 @@ def fetch_space_data(connection: sqlite3.Connection):
     return _convert_list_tuple_to_list_dict(
         connection.execute(SPACE_JOIN_QUERY).fetchall(), SPACE_DATA_HEADER
     )
-

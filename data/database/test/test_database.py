@@ -9,16 +9,14 @@ class TestDatabaseQuries(TestCase):
     """
     Test database - unfinished
     """
+
     def fix_dbc(self):
-        dbc = mock.MagicMock(spec=['cursor'])
+        dbc = mock.MagicMock(spec=["cursor"])
         dbc.autocommit = True
         return dbc
 
     def fix_rows(self):
-        rows = [
-            {"id": 1, "name": "John"},
-            {"id": 2, "name": "Jane"}
-        ]
+        rows = [{"id": 1, "name": "John"}, {"id": 2, "name": "Jane"}]
         return rows
 
     def test_insert_rows_calls_cursor_method(self):
