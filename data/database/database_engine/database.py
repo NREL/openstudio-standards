@@ -40,7 +40,7 @@ class DBOperation:
         :param connection:
         :return:
         """
-        print(f"creating table: {self.data_table_name}")
+        print(f"creating table: {self.data_table_name} from {self.initial_data_directory}")
         connection.execute(self._get_create_table_query())
         return True
 
