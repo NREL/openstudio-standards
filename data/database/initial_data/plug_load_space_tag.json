@@ -1,0 +1,464 @@
+[
+    {
+        "plug_load_space_tag": "corridor - all other"
+    },
+    {
+        "plug_load_space_tag": "dining - all other"
+    },
+    {
+        "plug_load_space_tag": "electrical/mechanical"
+    },
+    {
+        "plug_load_space_tag": "kitchen"
+    },
+    {
+        "plug_load_space_tag": "laboratory"
+    },
+    {
+        "plug_load_space_tag": "lobby - all other"
+    },
+    {
+        "plug_load_space_tag": "locker room"
+    },
+    {
+        "plug_load_space_tag": "lounge/breakroom - all other"
+    },
+    {
+        "plug_load_space_tag": "office - enclosed <= 250 sf"
+    },
+    {
+        "plug_load_space_tag": "office - enclosed > 250 sf"
+    },
+    {
+        "plug_load_space_tag": "office - open"
+    },
+    {
+        "plug_load_space_tag": "restroom - all other"
+    },
+    {
+        "plug_load_space_tag": "stairwell"
+    },
+    {
+        "plug_load_space_tag": "storage < 50 sf - all other"
+    },
+    {
+        "plug_load_space_tag": "storage 50 to 1000 sf - all other"
+    },
+    {
+        "plug_load_space_tag": "vehicular maintenance"
+    },
+    {
+        "plug_load_space_tag": "atrium - first three floors"
+    },
+    {
+        "plug_load_space_tag": "audience seating - convention center"
+    },
+    {
+        "plug_load_space_tag": "classroom/lecture/training - all other"
+    },
+    {
+        "plug_load_space_tag": "conference/meeting/multipurpose"
+    },
+    {
+        "plug_load_space_tag": "exhibit - convention center"
+    },
+    {
+        "plug_load_space_tag": "gymnasium exercise area"
+    },
+    {
+        "plug_load_space_tag": "gymnasium playing area"
+    },
+    {
+        "plug_load_space_tag": "laundry/washing"
+    },
+    {
+        "plug_load_space_tag": "lobby - elevator"
+    },
+    {
+        "plug_load_space_tag": "nurses station"
+    },
+    {
+        "plug_load_space_tag": "post office - sorting area"
+    },
+    {
+        "plug_load_space_tag": "sports arena playing area, class IV"
+    },
+    {
+        "plug_load_space_tag": "audience seating - all other"
+    },
+    {
+        "plug_load_space_tag": "confinement cells"
+    },
+    {
+        "plug_load_space_tag": "judges chambers"
+    },
+    {
+        "plug_load_space_tag": "library - stacks"
+    },
+    {
+        "plug_load_space_tag": "storage - inactive"
+    },
+    {
+        "plug_load_space_tag": "dining - bar/lounge/leisure"
+    },
+    {
+        "plug_load_space_tag": "dining - cafeteria/fast food"
+    },
+    {
+        "plug_load_space_tag": "dining - family"
+    },
+    {
+        "plug_load_space_tag": "computer room"
+    },
+    {
+        "plug_load_space_tag": "dormitory - living quarters"
+    },
+    {
+        "plug_load_space_tag": "audience seating - exercise center"
+    },
+    {
+        "plug_load_space_tag": "exam/treatment"
+    },
+    {
+        "plug_load_space_tag": "library - reading"
+    },
+    {
+        "plug_load_space_tag": "emergency vehicle garage"
+    },
+    {
+        "plug_load_space_tag": "firestation - sleeping quarters"
+    },
+    {
+        "plug_load_space_tag": "parking area, interior"
+    },
+    {
+        "plug_load_space_tag": "audience seating - gymnasium"
+    },
+    {
+        "plug_load_space_tag": "emergency room"
+    },
+    {
+        "plug_load_space_tag": "patient room"
+    },
+    {
+        "plug_load_space_tag": "corridor - hospital"
+    },
+    {
+        "plug_load_space_tag": "fellowship hall - religious facility"
+    },
+    {
+        "plug_load_space_tag": "lounge/breakroom - healthcare facility"
+    },
+    {
+        "plug_load_space_tag": "operating room"
+    },
+    {
+        "plug_load_space_tag": "physical therapy"
+    },
+    {
+        "plug_load_space_tag": "storage < 50 sf - hospital"
+    },
+    {
+        "plug_load_space_tag": "storage 50 to 1000 sf - hospital"
+    },
+    {
+        "plug_load_space_tag": "guest room"
+    },
+    {
+        "plug_load_space_tag": "lobby - hotel"
+    },
+    {
+        "plug_load_space_tag": "library - cataloging"
+    },
+    {
+        "plug_load_space_tag": "museum exhibit area"
+    },
+    {
+        "plug_load_space_tag": "corridor - manufacturing facility"
+    },
+    {
+        "plug_load_space_tag": "manufacturing equipment room"
+    },
+    {
+        "plug_load_space_tag": "manufacturing low bay"
+    },
+    {
+        "plug_load_space_tag": "performing arts dressing room"
+    },
+    {
+        "plug_load_space_tag": "audience seating - auditorium"
+    },
+    {
+        "plug_load_space_tag": "audience seating - motion picture theater"
+    },
+    {
+        "plug_load_space_tag": "lobby - motion picture theater"
+    },
+    {
+        "plug_load_space_tag": "Dwelling Unit"
+    },
+    {
+        "plug_load_space_tag": "museum restoration"
+    },
+    {
+        "plug_load_space_tag": "banking activity"
+    },
+    {
+        "plug_load_space_tag": "warehouse - fine storage"
+    },
+    {
+        "plug_load_space_tag": "classroom/lecture/training - penitentiary"
+    },
+    {
+        "plug_load_space_tag": "dining - penitentiary"
+    },
+    {
+        "plug_load_space_tag": "audience seating - performing arts theater"
+    },
+    {
+        "plug_load_space_tag": "lobby - performing arts theater"
+    },
+    {
+        "plug_load_space_tag": "audience seating - religious facility"
+    },
+    {
+        "plug_load_space_tag": "worship/pulpit/choir area"
+    },
+    {
+        "plug_load_space_tag": "classroom/lecture/training - preschool to 12th"
+    },
+    {
+        "plug_load_space_tag": "sports arena playing area, class II"
+    },
+    {
+        "plug_load_space_tag": "audience seating - sports arena"
+    },
+    {
+        "plug_load_space_tag": "airport concourse"
+    },
+    {
+        "plug_load_space_tag": "atrium < 20 ft height"
+    },
+    {
+        "plug_load_space_tag": "atrium > 40 ft height"
+    },
+    {
+        "plug_load_space_tag": "atrium >= 20 ft and <= 40 ft in height"
+    },
+    {
+        "plug_load_space_tag": "baggage/carousel"
+    },
+    {
+        "plug_load_space_tag": "seating area, general"
+    },
+    {
+        "plug_load_space_tag": "transportation ticket counter"
+    },
+    {
+        "plug_load_space_tag": "warehouse - bulk storage"
+    },
+    {
+        "plug_load_space_tag": "workshop"
+    },
+    {
+        "plug_load_space_tag": "gymnasium_playing_area"
+    },
+    {
+        "plug_load_space_tag": "gymnasium_exercise_area"
+    },
+    {
+        "plug_load_space_tag": "courtroom"
+    },
+    {
+        "plug_load_space_tag": "confinement_cells"
+    },
+    {
+        "plug_load_space_tag": "judges_chambers"
+    },
+    {
+        "plug_load_space_tag": "emergency_vehicle_garage"
+    },
+    {
+        "plug_load_space_tag": "firestation_sleeping_quarters"
+    },
+    {
+        "plug_load_space_tag": "post_office_sorting_area"
+    },
+    {
+        "plug_load_space_tag": "exhibit_convention_center"
+    },
+    {
+        "plug_load_space_tag": "library_cataloging"
+    },
+    {
+        "plug_load_space_tag": "library_stacks"
+    },
+    {
+        "plug_load_space_tag": "library_reading"
+    },
+    {
+        "plug_load_space_tag": "emergency_room"
+    },
+    {
+        "plug_load_space_tag": "recovery"
+    },
+    {
+        "plug_load_space_tag": "nurses_station"
+    },
+    {
+        "plug_load_space_tag": "exam_treatment"
+    },
+    {
+        "plug_load_space_tag": "pharmacy"
+    },
+    {
+        "plug_load_space_tag": "patient_room"
+    },
+    {
+        "plug_load_space_tag": "operating_room"
+    },
+    {
+        "plug_load_space_tag": "nursery"
+    },
+    {
+        "plug_load_space_tag": "medical_supply"
+    },
+    {
+        "plug_load_space_tag": "physical_therapy"
+    },
+    {
+        "plug_load_space_tag": "imaging"
+    },
+    {
+        "plug_load_space_tag": "laundry_washing"
+    },
+    {
+        "plug_load_space_tag": "automotive"
+    },
+    {
+        "plug_load_space_tag": "manufacturing_low_bay"
+    },
+    {
+        "plug_load_space_tag": "manufacturing_high_bay"
+    },
+    {
+        "plug_load_space_tag": "detailed_manufacuring"
+    },
+    {
+        "plug_load_space_tag": "manufacturing_equipment_room"
+    },
+    {
+        "plug_load_space_tag": "manufacturing_control"
+    },
+    {
+        "plug_load_space_tag": "manufacturing_extra_high_bay"
+    },
+    {
+        "plug_load_space_tag": "guest_room"
+    },
+    {
+        "plug_load_space_tag": "dormitory_living_quarters"
+    },
+    {
+        "plug_load_space_tag": "museum_exhibit_area"
+    },
+    {
+        "plug_load_space_tag": "museum_restoration"
+    },
+    {
+        "plug_load_space_tag": "banking_activity"
+    },
+    {
+        "plug_load_space_tag": "worship_pulpit_choir_area"
+    },
+    {
+        "plug_load_space_tag": "fellowship_hall_religious_facility"
+    },
+    {
+        "plug_load_space_tag": "sales"
+    },
+    {
+        "plug_load_space_tag": "retail_mall_concourse"
+    },
+    {
+        "plug_load_space_tag": "retail_dressing_room"
+    },
+    {
+        "plug_load_space_tag": "sports_arena_ring_sports_area"
+    },
+    {
+        "plug_load_space_tag": "sports_arena_court_sports_area"
+    },
+    {
+        "plug_load_space_tag": "sports_arena_indoor_playing_field"
+    },
+    {
+        "plug_load_space_tag": "sports_arena_playing_area_class_I"
+    },
+    {
+        "plug_load_space_tag": "sports_arena_playing_area_class_II"
+    },
+    {
+        "plug_load_space_tag": "sports_arena_playing_area_class_III"
+    },
+    {
+        "plug_load_space_tag": "sports_arena_playing_area_class_IV"
+    },
+    {
+        "plug_load_space_tag": "warehouse_fine_storage"
+    },
+    {
+        "plug_load_space_tag": "warehouse_bulk_storage"
+    },
+    {
+        "plug_load_space_tag": "parking_area_interior"
+    },
+    {
+        "plug_load_space_tag": "airport_concourse"
+    },
+    {
+        "plug_load_space_tag": "baggage_carousel"
+    },
+    {
+        "plug_load_space_tag": "transportation_ticket_counter"
+    },
+    {
+        "plug_load_space_tag": "sales_display_type_1"
+    },
+    {
+        "plug_load_space_tag": "sales_display_type_2"
+    },
+    {
+        "plug_load_space_tag": "sales_display_type_3"
+    },
+    {
+        "plug_load_space_tag": "sales_display_type_4"
+    },
+    {
+        "plug_load_space_tag": "breakroom"
+    },
+    {
+        "plug_load_space_tag": "copy_print"
+    },
+    {
+        "plug_load_space_tag": "computer_room"
+    },
+    {
+        "plug_load_space_tag": "loading_dock"
+    },
+    {
+        "plug_load_space_tag": "locker_room"
+    },
+    {
+        "plug_load_space_tag": "seating_area_general"
+    },
+    {
+        "plug_load_space_tag": "vehicular_maintenance"
+    },
+    {
+        "plug_load_space_tag": "chapel_visually_impaired"
+    },
+    {
+        "plug_load_space_tag": "recreation_common_living_visually_impaired"
+    }
+]

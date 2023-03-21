@@ -1,0 +1,1040 @@
+[
+    {
+        "id": 1,
+        "ventilation_type_name": "correctional_facilities_cell",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 13
+    },
+    {
+        "id": 2,
+        "ventilation_type_name": "correctional_facilities_dayroom",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 14
+    },
+    {
+        "id": 3,
+        "ventilation_type_name": "correctional_facilities_guard_stations",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 15
+    },
+    {
+        "id": 4,
+        "ventilation_type_name": "correctional_facilities_booking_waiting",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 12
+    },
+    {
+        "id": 5,
+        "ventilation_type_name": "educational_facilities_daycare",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 21
+    },
+    {
+        "id": 6,
+        "ventilation_type_name": "educational_facilities_classroom_young",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 17
+    },
+    {
+        "id": 7,
+        "ventilation_type_name": "educational_facilities_classroom_old",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 18
+    },
+    {
+        "id": 8,
+        "ventilation_type_name": "educational_facilities_lecture_classroom",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 22
+    },
+    {
+        "id": 9,
+        "ventilation_type_name": "educational_facilities_lecture_hall",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 23
+    },
+    {
+        "id": 10,
+        "ventilation_type_name": "educational_facilities_art_classroom",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 16
+    },
+    {
+        "id": 11,
+        "ventilation_type_name": "educational_facilities_science_laboratories",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 28
+    },
+    {
+        "id": 12,
+        "ventilation_type_name": "educational_facilities_wood_metal_shop",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 30
+    },
+    {
+        "id": 13,
+        "ventilation_type_name": "educational_facilities_computer_lab",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 19
+    },
+    {
+        "id": 14,
+        "ventilation_type_name": "educational_facilities_media_center",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 25
+    },
+    {
+        "id": 15,
+        "ventilation_type_name": "educational_facilities_music_theater_dance",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 27
+    },
+    {
+        "id": 16,
+        "ventilation_type_name": "educational_facilities_multiuse_assembly",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 26
+    },
+    {
+        "id": 17,
+        "ventilation_type_name": "educational_facilities_daycare_sickroom",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 20
+    },
+    {
+        "id": 18,
+        "ventilation_type_name": "educational_facilities_libraries",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 24
+    },
+    {
+        "id": 19,
+        "ventilation_type_name": "educational_facilities_university_college_laboratories",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 29
+    },
+    {
+        "id": 20,
+        "ventilation_type_name": "food_beverage_service_restaurant_dining_rooms",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 34
+    },
+    {
+        "id": 21,
+        "ventilation_type_name": "food_beverage_service_cafeteria_fast_food_dining",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 32
+    },
+    {
+        "id": 22,
+        "ventilation_type_name": "food_beverage_service_bars_cocktail_lounges",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 31
+    },
+    {
+        "id": 23,
+        "ventilation_type_name": "food_beverage_service_kitchen",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 33
+    },
+    {
+        "id": 24,
+        "ventilation_type_name": "general_conference_meeting",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 37
+    },
+    {
+        "id": 25,
+        "ventilation_type_name": "general_conference_corridors",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 38
+    },
+    {
+        "id": 26,
+        "ventilation_type_name": "general_conference_storage_rooms",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 39
+    },
+    {
+        "id": 27,
+        "ventilation_type_name": "general_break_rooms",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 35
+    },
+    {
+        "id": 28,
+        "ventilation_type_name": "general_coffee_stations",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 36
+    },
+    {
+        "id": 29,
+        "ventilation_type_name": "hotels_motels_resorts_dormitories_bedroom_living_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 41
+    },
+    {
+        "id": 30,
+        "ventilation_type_name": "hotels_motels_resorts_dormitories_barracks_sleeping_areas",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 40
+    },
+    {
+        "id": 31,
+        "ventilation_type_name": "hotels_motels_resorts_dormitories_lobbies_prefunction",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 44
+    },
+    {
+        "id": 32,
+        "ventilation_type_name": "hotels_motels_resorts_dormitories_multi_purpose_assembly",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 45
+    },
+    {
+        "id": 33,
+        "ventilation_type_name": "hotels_motels_resorts_dormitories_laundry_rooms",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 42
+    },
+    {
+        "id": 34,
+        "ventilation_type_name": "hotels_motels_resorts_dormitories_laundry_rooms_w_dwelling_units",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 43
+    },
+    {
+        "id": 35,
+        "ventilation_type_name": "office_buildings_office_space",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 62
+    },
+    {
+        "id": 36,
+        "ventilation_type_name": "office_buildings_reception_areas",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 63
+    },
+    {
+        "id": 37,
+        "ventilation_type_name": "office_buildings_telephone_data_entry",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 64
+    },
+    {
+        "id": 38,
+        "ventilation_type_name": "office_buildings_main_entry_lobbies",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 60
+    },
+    {
+        "id": 39,
+        "ventilation_type_name": "office_buildings_breakrooms",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 59
+    },
+    {
+        "id": 40,
+        "ventilation_type_name": "office_buildings_occupiable_storage_rooms",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 61
+    },
+    {
+        "id": 41,
+        "ventilation_type_name": "miscellaneous_spaces_bank_ vaults_safe_deposit",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 47
+    },
+    {
+        "id": 42,
+        "ventilation_type_name": "miscellaneous_spaces_computer",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 48
+    },
+    {
+        "id": 43,
+        "ventilation_type_name": "miscellaneous_spaces_pharmacy",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 52
+    },
+    {
+        "id": 44,
+        "ventilation_type_name": "miscellaneous_spaces_photo_studios",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 53
+    },
+    {
+        "id": 45,
+        "ventilation_type_name": "miscellaneous_spaces_shipping_receiving",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 54
+    },
+    {
+        "id": 46,
+        "ventilation_type_name": "miscellaneous_spaces_transportation_waiting",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 57
+    },
+    {
+        "id": 47,
+        "ventilation_type_name": "miscellaneous_spaces_warehouses",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 58
+    },
+    {
+        "id": 48,
+        "ventilation_type_name": "miscellaneous_spaces_banks_bank_lobbies",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 46
+    },
+    {
+        "id": 49,
+        "ventilation_type_name": "miscellaneous_spaces_freezer_refrigerated_spaces",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 49
+    },
+    {
+        "id": 50,
+        "ventilation_type_name": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 50
+    },
+    {
+        "id": 51,
+        "ventilation_type_name": "miscellaneous_spaces_manufacturing_w_hazardous_materials",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 51
+    },
+    {
+        "id": 52,
+        "ventilation_type_name": "miscellaneous_spaces_sorting_packing_light_assembly",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 55
+    },
+    {
+        "id": 53,
+        "ventilation_type_name": "miscellaneous_spaces_telephone_closets",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 56
+    },
+    {
+        "id": 54,
+        "ventilation_type_name": "public_assembly_spaces_auditorium_seating_area",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 83
+    },
+    {
+        "id": 55,
+        "ventilation_type_name": "public_assembly_spaces_religious_workshop",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 90
+    },
+    {
+        "id": 56,
+        "ventilation_type_name": "public_assembly_spaces_courtrooms",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 84
+    },
+    {
+        "id": 57,
+        "ventilation_type_name": "public_assembly_spaces_legislative_chambers",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 85
+    },
+    {
+        "id": 58,
+        "ventilation_type_name": "public_assembly_spaces_libraries",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 86
+    },
+    {
+        "id": 59,
+        "ventilation_type_name": "public_assembly_spaces_lobbies",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 87
+    },
+    {
+        "id": 60,
+        "ventilation_type_name": "public_assembly_spaces_children_museums",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 88
+    },
+    {
+        "id": 61,
+        "ventilation_type_name": "public_assembly_spaces_museums_galleries",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 89
+    },
+    {
+        "id": 62,
+        "ventilation_type_name": "retail_sales",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 91
+    },
+    {
+        "id": 63,
+        "ventilation_type_name": "retail_mall_common_areas",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 95
+    },
+    {
+        "id": 64,
+        "ventilation_type_name": "retail_barbershop",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 92
+    },
+    {
+        "id": 65,
+        "ventilation_type_name": "retail_beauty_nail_salons",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 93
+    },
+    {
+        "id": 66,
+        "ventilation_type_name": "retail_pet_shops",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 96
+    },
+    {
+        "id": 67,
+        "ventilation_type_name": "retail_supermarket",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 97
+    },
+    {
+        "id": 68,
+        "ventilation_type_name": "retail_coin_operated_laundries",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 94
+    },
+    {
+        "id": 69,
+        "ventilation_type_name": "sports_entertainment_sports_arena",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 102
+    },
+    {
+        "id": 70,
+        "ventilation_type_name": "sports_entertainment_gym_stadium",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 102
+    },
+    {
+        "id": 71,
+        "ventilation_type_name": "sports_entertainment_spectator_areas",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 105
+    },
+    {
+        "id": 72,
+        "ventilation_type_name": "sports_entertainment_swimming",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 107
+    },
+    {
+        "id": 73,
+        "ventilation_type_name": "sports_entertainment_disco_dance_floors",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 99
+    },
+    {
+        "id": 74,
+        "ventilation_type_name": "sports_entertainment_health_club_aerobics_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 103
+    },
+    {
+        "id": 75,
+        "ventilation_type_name": "sports_entertainment_health_club_weight_rooms",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 104
+    },
+    {
+        "id": 76,
+        "ventilation_type_name": "sports_entertainment_bowling_alley",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 98
+    },
+    {
+        "id": 77,
+        "ventilation_type_name": "sports_entertainment_gambling_casinos",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 100
+    },
+    {
+        "id": 78,
+        "ventilation_type_name": "sports_entertainment_game_arcades",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 101
+    },
+    {
+        "id": 79,
+        "ventilation_type_name": "sports_entertainment_stages_studios",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 106
+    },
+    {
+        "id": 80,
+        "ventilation_type_name": "animal_facilities_animal_exam_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 1
+    },
+    {
+        "id": 81,
+        "ventilation_type_name": "animal_facilities_animal_imaging",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 2
+    },
+    {
+        "id": 82,
+        "ventilation_type_name": "animal_facilities_animal_operating_rooms",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 3
+    },
+    {
+        "id": 83,
+        "ventilation_type_name": "animal_facilities_animal_postoperative_recovery_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 4
+    },
+    {
+        "id": 84,
+        "ventilation_type_name": "animal_facilities_animal_preparation_rooms",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 5
+    },
+    {
+        "id": 85,
+        "ventilation_type_name": "animal_facilities_animal_procedure_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 6
+    },
+    {
+        "id": 86,
+        "ventilation_type_name": "animal_facilities_animal_surgery_scrub",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 7
+    },
+    {
+        "id": 87,
+        "ventilation_type_name": "animal_facilities_large_animal_holding_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 8
+    },
+    {
+        "id": 88,
+        "ventilation_type_name": "animal_facilities_necropsy",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 9
+    },
+    {
+        "id": 89,
+        "ventilation_type_name": "animal_facilities_small_animal_cage_room_static",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 10
+    },
+    {
+        "id": 90,
+        "ventilation_type_name": "animal_facilities_small_animal_cage_room_ventilated",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 11
+    },
+    {
+        "id": 91,
+        "ventilation_type_name": "outpatient_health_care_facilities_birthing_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 65
+    },
+    {
+        "id": 92,
+        "ventilation_type_name": "outpatient_health_care_facilities_class_1_imaging_rooms",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 66
+    },
+    {
+        "id": 93,
+        "ventilation_type_name": "outpatient_health_care_facilities_dental_operatory",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 67
+    },
+    {
+        "id": 94,
+        "ventilation_type_name": "outpatient_health_care_facilities_general_examination_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 68
+    },
+    {
+        "id": 95,
+        "ventilation_type_name": "outpatient_health_care_facilities_other_dental_treatment_areas",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 69
+    },
+    {
+        "id": 96,
+        "ventilation_type_name": "outpatient_health_care_facilities_physical_therapy_exercise_area",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 70
+    },
+    {
+        "id": 97,
+        "ventilation_type_name": "outpatient_health_care_facilities_physical_therapy_individual_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 71
+    },
+    {
+        "id": 98,
+        "ventilation_type_name": "outpatient_health_care_facilities_physical_therapeutic_pool_area",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 72
+    },
+    {
+        "id": 99,
+        "ventilation_type_name": "outpatient_health_care_facilities_prosthetics_orthotics_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 73
+    },
+    {
+        "id": 100,
+        "ventilation_type_name": "outpatient_health_care_facilities_psychiatric_consultation_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 74
+    },
+    {
+        "id": 101,
+        "ventilation_type_name": "outpatient_health_care_facilities_psychiatric_examination_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 75
+    },
+    {
+        "id": 102,
+        "ventilation_type_name": "outpatient_health_care_facilities_psychiatric_group_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 76
+    },
+    {
+        "id": 103,
+        "ventilation_type_name": "outpatient_health_care_facilities_psychiatric_seclusion_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 77
+    },
+    {
+        "id": 104,
+        "ventilation_type_name": "outpatient_health_care_facilities_speech_therapy_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 78
+    },
+    {
+        "id": 105,
+        "ventilation_type_name": "outpatient_health_care_facilities_urgent_care_examination_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 79
+    },
+    {
+        "id": 106,
+        "ventilation_type_name": "outpatient_health_care_facilities_urgent_care_observation_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 80
+    },
+    {
+        "id": 107,
+        "ventilation_type_name": "outpatient_health_care_facilities_urgent_care_treatment_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 81
+    },
+    {
+        "id": 108,
+        "ventilation_type_name": "outpatient_health_care_facilities_urgent_care_triage_room",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 82
+    },
+    {
+        "id": 109,
+        "ventilation_type_name": "transient_residential_common_corridors",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 108
+    },
+    {
+        "id": 110,
+        "ventilation_type_name": "transient_residential_dwelling_unit",
+        "ventilation_table": "vent_def_62_1_2019",
+        "vent_621_id": 109
+    },
+    {
+        "id": 111,
+        "ventilation_type_name": "correctional_facilities_cell",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 1
+    },
+    {
+        "id": 112,
+        "ventilation_type_name": "correctional_facilities_dayroom",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 2
+    },
+    {
+        "id": 113,
+        "ventilation_type_name": "correctional_facilities_guard_stations",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 3
+    },
+    {
+        "id": 114,
+        "ventilation_type_name": "correctional_facilities_booking_waiting",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 4
+    },
+    {
+        "id": 115,
+        "ventilation_type_name": "educational_facilities_daycare",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 5
+    },
+    {
+        "id": 116,
+        "ventilation_type_name": "educational_facilities_classroom_young",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 6
+    },
+    {
+        "id": 117,
+        "ventilation_type_name": "educational_facilities_classroom_old",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 7
+    },
+    {
+        "id": 118,
+        "ventilation_type_name": "educational_facilities_lecture_classroom",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 8
+    },
+    {
+        "id": 119,
+        "ventilation_type_name": "educational_facilities_lecture_hall",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 9
+    },
+    {
+        "id": 120,
+        "ventilation_type_name": "educational_facilities_art_classroom",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 10
+    },
+    {
+        "id": 121,
+        "ventilation_type_name": "educational_facilities_science_laboratories",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 11
+    },
+    {
+        "id": 122,
+        "ventilation_type_name": "educational_facilities_wood_metal_shop",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 12
+    },
+    {
+        "id": 123,
+        "ventilation_type_name": "educational_facilities_computer_lab",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 13
+    },
+    {
+        "id": 124,
+        "ventilation_type_name": "educational_facilities_media_center",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 14
+    },
+    {
+        "id": 125,
+        "ventilation_type_name": "educational_facilities_music_theater_dance",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 15
+    },
+    {
+        "id": 126,
+        "ventilation_type_name": "educational_facilities_multiuse_assembly",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 16
+    },
+    {
+        "id": 127,
+        "ventilation_type_name": "food_beverage_service_restaurant_dining_rooms",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 17
+    },
+    {
+        "id": 128,
+        "ventilation_type_name": "food_beverage_service_cafeteria_fast_food_dining",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 18
+    },
+    {
+        "id": 129,
+        "ventilation_type_name": "food_beverage_service_bars_cocktail_lounges",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 19
+    },
+    {
+        "id": 130,
+        "ventilation_type_name": "general_conference_meeting",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 20
+    },
+    {
+        "id": 131,
+        "ventilation_type_name": "general_conference_corridors",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 21
+    },
+    {
+        "id": 132,
+        "ventilation_type_name": "general_conference_storage_rooms",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 22
+    },
+    {
+        "id": 133,
+        "ventilation_type_name": "hotels_motels_resorts_dormitories_bedroom_living_room",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 23
+    },
+    {
+        "id": 134,
+        "ventilation_type_name": "hotels_motels_resorts_dormitories_barracks_sleeping_areas",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 24
+    },
+    {
+        "id": 135,
+        "ventilation_type_name": "hotels_motels_resorts_dormitories_lobbies_prefunction",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 25
+    },
+    {
+        "id": 136,
+        "ventilation_type_name": "hotels_motels_resorts_dormitories_multi_purpose_assembly",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 26
+    },
+    {
+        "id": 137,
+        "ventilation_type_name": "office_buildings_office_space",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 27
+    },
+    {
+        "id": 138,
+        "ventilation_type_name": "office_buildings_reception_areas",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 28
+    },
+    {
+        "id": 139,
+        "ventilation_type_name": "office_buildings_telephone_data_entry",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 29
+    },
+    {
+        "id": 140,
+        "ventilation_type_name": "office_buildings_main_entry_lobbies",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 30
+    },
+    {
+        "id": 141,
+        "ventilation_type_name": "miscellaneous_spaces_bank_ vaults_safe_deposit",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 31
+    },
+    {
+        "id": 142,
+        "ventilation_type_name": "miscellaneous_spaces_computer",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 32
+    },
+    {
+        "id": 143,
+        "ventilation_type_name": "miscellaneous_spaces_pharmacy",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 33
+    },
+    {
+        "id": 144,
+        "ventilation_type_name": "miscellaneous_spaces_photo_studios",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 34
+    },
+    {
+        "id": 145,
+        "ventilation_type_name": "miscellaneous_spaces_shipping_receiving",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 35
+    },
+    {
+        "id": 146,
+        "ventilation_type_name": "miscellaneous_spaces_transportation_waiting",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 36
+    },
+    {
+        "id": 147,
+        "ventilation_type_name": "miscellaneous_spaces_warehouses",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 37
+    },
+    {
+        "id": 148,
+        "ventilation_type_name": "public_assembly_spaces_auditorium_seating_area",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 38
+    },
+    {
+        "id": 149,
+        "ventilation_type_name": "public_assembly_spaces_religious_workshop",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 39
+    },
+    {
+        "id": 150,
+        "ventilation_type_name": "public_assembly_spaces_courtrooms",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 40
+    },
+    {
+        "id": 151,
+        "ventilation_type_name": "public_assembly_spaces_legislative_chambers",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 41
+    },
+    {
+        "id": 152,
+        "ventilation_type_name": "public_assembly_spaces_libraries",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 42
+    },
+    {
+        "id": 153,
+        "ventilation_type_name": "public_assembly_spaces_lobbies",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 43
+    },
+    {
+        "id": 154,
+        "ventilation_type_name": "public_assembly_spaces_children_museums",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 44
+    },
+    {
+        "id": 155,
+        "ventilation_type_name": "public_assembly_spaces_museums_galleries",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 45
+    },
+    {
+        "id": 156,
+        "ventilation_type_name": "retail_sales",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 46
+    },
+    {
+        "id": 157,
+        "ventilation_type_name": "retail_mall_common_areas",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 47
+    },
+    {
+        "id": 158,
+        "ventilation_type_name": "retail_barbershop",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 48
+    },
+    {
+        "id": 159,
+        "ventilation_type_name": "retail_beauty_nail_salons",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 49
+    },
+    {
+        "id": 160,
+        "ventilation_type_name": "retail_pet_shops",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 50
+    },
+    {
+        "id": 161,
+        "ventilation_type_name": "retail_supermarket",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 51
+    },
+    {
+        "id": 162,
+        "ventilation_type_name": "retail_coin_operated_laundries",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 52
+    },
+    {
+        "id": 163,
+        "ventilation_type_name": "sports_entertainment_sports_arena",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 53
+    },
+    {
+        "id": 164,
+        "ventilation_type_name": "sports_entertainment_gym_stadium",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 54
+    },
+    {
+        "id": 165,
+        "ventilation_type_name": "sports_entertainment_spectator_areas",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 55
+    },
+    {
+        "id": 166,
+        "ventilation_type_name": "sports_entertainment_swimming",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 56
+    },
+    {
+        "id": 167,
+        "ventilation_type_name": "sports_entertainment_disco_dance_floors",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 57
+    },
+    {
+        "id": 168,
+        "ventilation_type_name": "sports_entertainment_health_club_aerobics_room",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 58
+    },
+    {
+        "id": 169,
+        "ventilation_type_name": "sports_entertainment_health_club_weight_rooms",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 59
+    },
+    {
+        "id": 170,
+        "ventilation_type_name": "sports_entertainment_bowling_alley",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 60
+    },
+    {
+        "id": 171,
+        "ventilation_type_name": "sports_entertainment_gambling_casinos",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 61
+    },
+    {
+        "id": 172,
+        "ventilation_type_name": "sports_entertainment_game_arcades",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 62
+    },
+    {
+        "id": 173,
+        "ventilation_type_name": "sports_entertainment_stages_studios",
+        "ventilation_table": "vent_def_62_1_2004",
+        "vent_621_id": 63
+    }
+]
