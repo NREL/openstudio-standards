@@ -1,0 +1,1718 @@
+[
+    {
+        "id": 1,
+        "lighting_type_name": "bam_automotive_facility",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 1
+    },
+    {
+        "id": 2,
+        "lighting_type_name": "bam_convention_center",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 2
+    },
+    {
+        "id": 3,
+        "lighting_type_name": "bam_courthouse",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 3
+    },
+    {
+        "id": 4,
+        "lighting_type_name": "bam_dinin_bar_lounge_leisure",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 4
+    },
+    {
+        "id": 5,
+        "lighting_type_name": "bam_dining_cafeteria_fast_food",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 5
+    },
+    {
+        "id": 6,
+        "lighting_type_name": "bam_dining_family",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 6
+    },
+    {
+        "id": 7,
+        "lighting_type_name": "bam_dormitory",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 7
+    },
+    {
+        "id": 8,
+        "lighting_type_name": "bam_exercise_center",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 8
+    },
+    {
+        "id": 9,
+        "lighting_type_name": "bam_fire_station",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 23
+    },
+    {
+        "id": 10,
+        "lighting_type_name": "bam_gymnasium",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 9
+    },
+    {
+        "id": 11,
+        "lighting_type_name": "bam_healthcare_clinic",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 10
+    },
+    {
+        "id": 12,
+        "lighting_type_name": "bam_hospital",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 11
+    },
+    {
+        "id": 13,
+        "lighting_type_name": "bam_hotel",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 12
+    },
+    {
+        "id": 14,
+        "lighting_type_name": "bam_library",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 13
+    },
+    {
+        "id": 15,
+        "lighting_type_name": "bam_manufacturing_facility",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 14
+    },
+    {
+        "id": 16,
+        "lighting_type_name": "bam_motel",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 15
+    },
+    {
+        "id": 17,
+        "lighting_type_name": "bam_motion_picture_theater",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 16
+    },
+    {
+        "id": 18,
+        "lighting_type_name": "bam_multifamily",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 17
+    },
+    {
+        "id": 19,
+        "lighting_type_name": "bam_museum",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 18
+    },
+    {
+        "id": 20,
+        "lighting_type_name": "bam_office",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 19
+    },
+    {
+        "id": 21,
+        "lighting_type_name": "bam_parking_garage",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 20
+    },
+    {
+        "id": 22,
+        "lighting_type_name": "bam_penitentiary",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 21
+    },
+    {
+        "id": 23,
+        "lighting_type_name": "bam_performing_arts_theater",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 22
+    },
+    {
+        "id": 24,
+        "lighting_type_name": "bam_police_station",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 23
+    },
+    {
+        "id": 25,
+        "lighting_type_name": "bam_post_office",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 24
+    },
+    {
+        "id": 26,
+        "lighting_type_name": "bam_religious_facility",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 25
+    },
+    {
+        "id": 27,
+        "lighting_type_name": "bam_retail",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 26
+    },
+    {
+        "id": 28,
+        "lighting_type_name": "bam_school_university",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 27
+    },
+    {
+        "id": 29,
+        "lighting_type_name": "bam_sports_arena",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 28
+    },
+    {
+        "id": 30,
+        "lighting_type_name": "bam_town_hall",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 29
+    },
+    {
+        "id": 31,
+        "lighting_type_name": "bam_transportation",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 30
+    },
+    {
+        "id": 32,
+        "lighting_type_name": "bam_warehouse",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 31
+    },
+    {
+        "id": 33,
+        "lighting_type_name": "bam_workshop",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 32
+    },
+    {
+        "id": 34,
+        "lighting_type_name": "office_enclosed_small",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 33
+    },
+    {
+        "id": 35,
+        "lighting_type_name": "office_enclosed_large",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 33
+    },
+    {
+        "id": 36,
+        "lighting_type_name": "office_open",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 34
+    },
+    {
+        "id": 37,
+        "lighting_type_name": "conference_meeting_multipurpose",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 35
+    },
+    {
+        "id": 38,
+        "lighting_type_name": "classroom_lecture_training_general",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 36
+    },
+    {
+        "id": 39,
+        "lighting_type_name": "classroom_lecture_training_penitentiary",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 37
+    },
+    {
+        "id": 40,
+        "lighting_type_name": "lobby_general",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 38
+    },
+    {
+        "id": 41,
+        "lighting_type_name": "lobby_hotel",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 39
+    },
+    {
+        "id": 42,
+        "lighting_type_name": "lobby_performing_arts_theater",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 40
+    },
+    {
+        "id": 43,
+        "lighting_type_name": "lobby_motion_picture_theater",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 41
+    },
+    {
+        "id": 44,
+        "lighting_type_name": "lobby_visually_impaired",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 38
+    },
+    {
+        "id": 45,
+        "lighting_type_name": "lobby_elevator",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 38
+    },
+    {
+        "id": 46,
+        "lighting_type_name": "audience_seating_general",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 42
+    },
+    {
+        "id": 47,
+        "lighting_type_name": "audience_seating_gymnasium",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 43
+    },
+    {
+        "id": 48,
+        "lighting_type_name": "audience_seating_exercise_center",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 44
+    },
+    {
+        "id": 49,
+        "lighting_type_name": "audience_seating_convention_center",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 45
+    },
+    {
+        "id": 50,
+        "lighting_type_name": "audience_seating_penitentiary",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 46
+    },
+    {
+        "id": 51,
+        "lighting_type_name": "audience_seating_religious_facility",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 47
+    },
+    {
+        "id": 52,
+        "lighting_type_name": "audience_seating_sports_arena",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 48
+    },
+    {
+        "id": 53,
+        "lighting_type_name": "audience_seating_performing_arts_theater",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 49
+    },
+    {
+        "id": 54,
+        "lighting_type_name": "audience_seating_motion_picture_theater",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 50
+    },
+    {
+        "id": 55,
+        "lighting_type_name": "audience_seating_transportation",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 51
+    },
+    {
+        "id": 56,
+        "lighting_type_name": "audience_seating_auditorium",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 42
+    },
+    {
+        "id": 57,
+        "lighting_type_name": "atrium_first_three_floor",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 52
+    },
+    {
+        "id": 58,
+        "lighting_type_name": "atrium_each_additional_floor",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 53
+    },
+    {
+        "id": 59,
+        "lighting_type_name": "lounge_breakroom_general",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 54
+    },
+    {
+        "id": 60,
+        "lighting_type_name": "lounge_breakroom_healthcare_facility",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 55
+    },
+    {
+        "id": 61,
+        "lighting_type_name": "dining_general",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 56
+    },
+    {
+        "id": 62,
+        "lighting_type_name": "dining_penitentiary",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 57
+    },
+    {
+        "id": 63,
+        "lighting_type_name": "dining_hotel",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 58
+    },
+    {
+        "id": 64,
+        "lighting_type_name": "dining_motel",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 59
+    },
+    {
+        "id": 65,
+        "lighting_type_name": "dining_bar_lounge_leisure",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 60
+    },
+    {
+        "id": 66,
+        "lighting_type_name": "dining_family",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 61
+    },
+    {
+        "id": 67,
+        "lighting_type_name": "dining_cafeteria_fast_food",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 56
+    },
+    {
+        "id": 68,
+        "lighting_type_name": "dining_visually_impaired",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 56
+    },
+    {
+        "id": 69,
+        "lighting_type_name": "kitchen",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 62
+    },
+    {
+        "id": 70,
+        "lighting_type_name": "laboratory_classroom",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 63
+    },
+    {
+        "id": 71,
+        "lighting_type_name": "laboratory_all_other",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 63
+    },
+    {
+        "id": 72,
+        "lighting_type_name": "restroom_visually_impaired",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 64
+    },
+    {
+        "id": 73,
+        "lighting_type_name": "restroom_all_other",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 64
+    },
+    {
+        "id": 74,
+        "lighting_type_name": "performing_arts_dressing_room",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 65
+    },
+    {
+        "id": 75,
+        "lighting_type_name": "corridor_general",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 66
+    },
+    {
+        "id": 76,
+        "lighting_type_name": "corridor_hospital",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 67
+    },
+    {
+        "id": 77,
+        "lighting_type_name": "corridor_manufacturing_facility",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 68
+    },
+    {
+        "id": 78,
+        "lighting_type_name": "corridor_visually_impaired",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 66
+    },
+    {
+        "id": 79,
+        "lighting_type_name": "stairway",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 69
+    },
+    {
+        "id": 80,
+        "lighting_type_name": "stairwell",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 69
+    },
+    {
+        "id": 81,
+        "lighting_type_name": "storage_ all_other_small",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 70
+    },
+    {
+        "id": 82,
+        "lighting_type_name": "storage_ all_other_large",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 70
+    },
+    {
+        "id": 83,
+        "lighting_type_name": "storage_hospital_small",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 71
+    },
+    {
+        "id": 84,
+        "lighting_type_name": "storage_hospital_large",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 71
+    },
+    {
+        "id": 85,
+        "lighting_type_name": "storage_inactive",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 72
+    },
+    {
+        "id": 86,
+        "lighting_type_name": "storage_inactive_museum",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 73
+    },
+    {
+        "id": 87,
+        "lighting_type_name": "electrical_mechanical",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 74
+    },
+    {
+        "id": 88,
+        "lighting_type_name": "workshop",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 75
+    },
+    {
+        "id": 89,
+        "lighting_type_name": "gymnasium_playing_area",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 76
+    },
+    {
+        "id": 90,
+        "lighting_type_name": "gymnasium_exercise_area",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 77
+    },
+    {
+        "id": 91,
+        "lighting_type_name": "courtroom",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 78
+    },
+    {
+        "id": 92,
+        "lighting_type_name": "confinement_cells",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 79
+    },
+    {
+        "id": 93,
+        "lighting_type_name": "judges_chambers",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 80
+    },
+    {
+        "id": 94,
+        "lighting_type_name": "emergency_vehicle_garage",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 81
+    },
+    {
+        "id": 95,
+        "lighting_type_name": "firestation_sleeping_quarters",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 82
+    },
+    {
+        "id": 96,
+        "lighting_type_name": "post_office_sorting_area",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 83
+    },
+    {
+        "id": 97,
+        "lighting_type_name": "exhibit_convention_center",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 84
+    },
+    {
+        "id": 98,
+        "lighting_type_name": "library_cataloging",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 85
+    },
+    {
+        "id": 99,
+        "lighting_type_name": "library_stacks",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 86
+    },
+    {
+        "id": 100,
+        "lighting_type_name": "library_reading",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 87
+    },
+    {
+        "id": 101,
+        "lighting_type_name": "emergency_room",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 88
+    },
+    {
+        "id": 102,
+        "lighting_type_name": "recovery",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 89
+    },
+    {
+        "id": 103,
+        "lighting_type_name": "nurses_station",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 90
+    },
+    {
+        "id": 104,
+        "lighting_type_name": "exam_treatment",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 91
+    },
+    {
+        "id": 105,
+        "lighting_type_name": "pharmacy",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 92
+    },
+    {
+        "id": 106,
+        "lighting_type_name": "patient_room",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 93
+    },
+    {
+        "id": 107,
+        "lighting_type_name": "operating_room",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 94
+    },
+    {
+        "id": 108,
+        "lighting_type_name": "nursery",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 95
+    },
+    {
+        "id": 109,
+        "lighting_type_name": "medical_supply",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 96
+    },
+    {
+        "id": 110,
+        "lighting_type_name": "physical_therapy",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 97
+    },
+    {
+        "id": 111,
+        "lighting_type_name": "imaging",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 98
+    },
+    {
+        "id": 112,
+        "lighting_type_name": "laundry_washing",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 99
+    },
+    {
+        "id": 113,
+        "lighting_type_name": "automotive",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 100
+    },
+    {
+        "id": 114,
+        "lighting_type_name": "manufacturing_low_bay",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 101
+    },
+    {
+        "id": 115,
+        "lighting_type_name": "manufacturing_high_bay",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 102
+    },
+    {
+        "id": 116,
+        "lighting_type_name": "detailed_manufacuring",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 103
+    },
+    {
+        "id": 117,
+        "lighting_type_name": "manufacturing_equipment_room",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 104
+    },
+    {
+        "id": 118,
+        "lighting_type_name": "manufacturing_control",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 105
+    },
+    {
+        "id": 119,
+        "lighting_type_name": "guest_room",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 106
+    },
+    {
+        "id": 120,
+        "lighting_type_name": "dormitory_living_quarters",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 107
+    },
+    {
+        "id": 121,
+        "lighting_type_name": "museum_exhibit_area",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 108
+    },
+    {
+        "id": 122,
+        "lighting_type_name": "museum_restoration",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 109
+    },
+    {
+        "id": 123,
+        "lighting_type_name": "banking_activity",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 110
+    },
+    {
+        "id": 124,
+        "lighting_type_name": "worship_pulpit_choir_area",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 111
+    },
+    {
+        "id": 125,
+        "lighting_type_name": "fellowship_hall_religious_facility",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 112
+    },
+    {
+        "id": 126,
+        "lighting_type_name": "sales",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 113
+    },
+    {
+        "id": 127,
+        "lighting_type_name": "retail_mall_concourse",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 114
+    },
+    {
+        "id": 128,
+        "lighting_type_name": "sports_arena_ring_sports_area",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 115
+    },
+    {
+        "id": 129,
+        "lighting_type_name": "sports_arena_court_sports_area",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 116
+    },
+    {
+        "id": 130,
+        "lighting_type_name": "sports_arena_indoor_playing_field",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 117
+    },
+    {
+        "id": 131,
+        "lighting_type_name": "warehouse_bulk_storage",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 119
+    },
+    {
+        "id": 132,
+        "lighting_type_name": "parking_area_interior",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 120
+    },
+    {
+        "id": 133,
+        "lighting_type_name": "airport_concourse",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 121
+    },
+    {
+        "id": 134,
+        "lighting_type_name": "baggage_carousel",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 122
+    },
+    {
+        "id": 135,
+        "lighting_type_name": "transportation_ticket_counter",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 123
+    },
+    {
+        "id": 136,
+        "lighting_type_name": "sales_display_type_1",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 124
+    },
+    {
+        "id": 137,
+        "lighting_type_name": "sales_display_type_2",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 124
+    },
+    {
+        "id": 138,
+        "lighting_type_name": "sales_display_type_3",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 125
+    },
+    {
+        "id": 139,
+        "lighting_type_name": "sales_display_type_4",
+        "lighting_table": "light_def_90_1_2004",
+        "lpd_901_id": 125
+    },
+    {
+        "id": 140,
+        "lighting_type_name": "bam_automotive_facility",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 1
+    },
+    {
+        "id": 141,
+        "lighting_type_name": "bam_convention_center",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 2
+    },
+    {
+        "id": 142,
+        "lighting_type_name": "bam_courthouse",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 3
+    },
+    {
+        "id": 143,
+        "lighting_type_name": "bam_dinin_bar_lounge_leisure",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 4
+    },
+    {
+        "id": 144,
+        "lighting_type_name": "bam_dining_cafeteria_fast_food",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 5
+    },
+    {
+        "id": 145,
+        "lighting_type_name": "bam_dining_family",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 6
+    },
+    {
+        "id": 146,
+        "lighting_type_name": "bam_dormitory",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 7
+    },
+    {
+        "id": 147,
+        "lighting_type_name": "bam_exercise_center",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 8
+    },
+    {
+        "id": 148,
+        "lighting_type_name": "bam_fire_station",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 9
+    },
+    {
+        "id": 149,
+        "lighting_type_name": "bam_gymnasium",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 10
+    },
+    {
+        "id": 150,
+        "lighting_type_name": "bam_healthcare_clinic",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 11
+    },
+    {
+        "id": 151,
+        "lighting_type_name": "bam_hospital",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 12
+    },
+    {
+        "id": 152,
+        "lighting_type_name": "bam_hotel",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 13
+    },
+    {
+        "id": 153,
+        "lighting_type_name": "bam_library",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 14
+    },
+    {
+        "id": 154,
+        "lighting_type_name": "bam_manufacturing_facility",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 15
+    },
+    {
+        "id": 155,
+        "lighting_type_name": "bam_motel",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 13
+    },
+    {
+        "id": 156,
+        "lighting_type_name": "bam_motion_picture_theater",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 16
+    },
+    {
+        "id": 157,
+        "lighting_type_name": "bam_multifamily",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 17
+    },
+    {
+        "id": 158,
+        "lighting_type_name": "bam_museum",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 18
+    },
+    {
+        "id": 159,
+        "lighting_type_name": "bam_office",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 19
+    },
+    {
+        "id": 160,
+        "lighting_type_name": "bam_parking_garage",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 20
+    },
+    {
+        "id": 161,
+        "lighting_type_name": "bam_penitentiary",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 21
+    },
+    {
+        "id": 162,
+        "lighting_type_name": "bam_performing_arts_theater",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 22
+    },
+    {
+        "id": 163,
+        "lighting_type_name": "bam_police_station",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 23
+    },
+    {
+        "id": 164,
+        "lighting_type_name": "bam_post_office",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 24
+    },
+    {
+        "id": 165,
+        "lighting_type_name": "bam_religious_facility",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 25
+    },
+    {
+        "id": 166,
+        "lighting_type_name": "bam_retail",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 26
+    },
+    {
+        "id": 167,
+        "lighting_type_name": "bam_school_university",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 27
+    },
+    {
+        "id": 168,
+        "lighting_type_name": "bam_sports_arena",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 28
+    },
+    {
+        "id": 169,
+        "lighting_type_name": "bam_town_hall",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 29
+    },
+    {
+        "id": 170,
+        "lighting_type_name": "bam_transportation",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 30
+    },
+    {
+        "id": 171,
+        "lighting_type_name": "bam_warehouse",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 31
+    },
+    {
+        "id": 172,
+        "lighting_type_name": "bam_workshop",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 32
+    },
+    {
+        "id": 173,
+        "lighting_type_name": "office_enclosed_small",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 79
+    },
+    {
+        "id": 174,
+        "lighting_type_name": "office_enclosed_large",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 80
+    },
+    {
+        "id": 175,
+        "lighting_type_name": "office_open",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 81
+    },
+    {
+        "id": 176,
+        "lighting_type_name": "conference_meeting_multipurpose",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 48
+    },
+    {
+        "id": 177,
+        "lighting_type_name": "classroom_lecture_training_general",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 47
+    },
+    {
+        "id": 178,
+        "lighting_type_name": "classroom_lecture_training_penitentiary",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 46
+    },
+    {
+        "id": 179,
+        "lighting_type_name": "lobby_general",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 75
+    },
+    {
+        "id": 180,
+        "lighting_type_name": "lobby_hotel",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 72
+    },
+    {
+        "id": 181,
+        "lighting_type_name": "lobby_performing_arts_theater",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 74
+    },
+    {
+        "id": 182,
+        "lighting_type_name": "lobby_motion_picture_theater",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 73
+    },
+    {
+        "id": 183,
+        "lighting_type_name": "lobby_visually_impaired",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 70
+    },
+    {
+        "id": 184,
+        "lighting_type_name": "lobby_elevator",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 71
+    },
+    {
+        "id": 185,
+        "lighting_type_name": "audience_seating_general",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 43
+    },
+    {
+        "id": 186,
+        "lighting_type_name": "audience_seating_gymnasium",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 37
+    },
+    {
+        "id": 187,
+        "lighting_type_name": "audience_seating_exercise_center",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 43
+    },
+    {
+        "id": 188,
+        "lighting_type_name": "audience_seating_convention_center",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 43
+    },
+    {
+        "id": 189,
+        "lighting_type_name": "audience_seating_penitentiary",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 39
+    },
+    {
+        "id": 190,
+        "lighting_type_name": "audience_seating_religious_facility",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 41
+    },
+    {
+        "id": 191,
+        "lighting_type_name": "audience_seating_sports_arena",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 42
+    },
+    {
+        "id": 192,
+        "lighting_type_name": "audience_seating_performing_arts_theater",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 40
+    },
+    {
+        "id": 193,
+        "lighting_type_name": "audience_seating_motion_picture_theater",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 38
+    },
+    {
+        "id": 194,
+        "lighting_type_name": "audience_seating_transportation",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 43
+    },
+    {
+        "id": 195,
+        "lighting_type_name": "audience_seating_auditorium",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 36
+    },
+    {
+        "id": 196,
+        "lighting_type_name": "atrium_low",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 33
+    },
+    {
+        "id": 197,
+        "lighting_type_name": "atrium_medium",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 34
+    },
+    {
+        "id": 198,
+        "lighting_type_name": "atrium_high",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 35
+    },
+    {
+        "id": 199,
+        "lighting_type_name": "lounge_breakroom_general",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 78
+    },
+    {
+        "id": 200,
+        "lighting_type_name": "lounge_breakroom_healthcare_facility",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 77
+    },
+    {
+        "id": 201,
+        "lighting_type_name": "dining_general",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 61
+    },
+    {
+        "id": 202,
+        "lighting_type_name": "dining_penitentiary",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 56
+    },
+    {
+        "id": 203,
+        "lighting_type_name": "dining_hotel",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 61
+    },
+    {
+        "id": 204,
+        "lighting_type_name": "dining_motel",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 61
+    },
+    {
+        "id": 205,
+        "lighting_type_name": "dining_bar_lounge_leisure",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 58
+    },
+    {
+        "id": 206,
+        "lighting_type_name": "dining_family",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 60
+    },
+    {
+        "id": 207,
+        "lighting_type_name": "dining_cafeteria_fast_food",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 59
+    },
+    {
+        "id": 208,
+        "lighting_type_name": "dining_visually_impaired",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 57
+    },
+    {
+        "id": 209,
+        "lighting_type_name": "kitchen",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 64
+    },
+    {
+        "id": 210,
+        "lighting_type_name": "laboratory_classroom",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 66
+    },
+    {
+        "id": 211,
+        "lighting_type_name": "laboratory_all_other",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 67
+    },
+    {
+        "id": 212,
+        "lighting_type_name": "restroom_visually_impaired",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 84
+    },
+    {
+        "id": 213,
+        "lighting_type_name": "restroom_all_other",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 85
+    },
+    {
+        "id": 214,
+        "lighting_type_name": "performing_arts_dressing_room",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 120
+    },
+    {
+        "id": 215,
+        "lighting_type_name": "corridor_general",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 53
+    },
+    {
+        "id": 216,
+        "lighting_type_name": "corridor_hospital",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 52
+    },
+    {
+        "id": 217,
+        "lighting_type_name": "corridor_manufacturing_facility",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 53
+    },
+    {
+        "id": 218,
+        "lighting_type_name": "corridor_visually_impaired",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 51
+    },
+    {
+        "id": 219,
+        "lighting_type_name": "stairway",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 88
+    },
+    {
+        "id": 220,
+        "lighting_type_name": "stairwell",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 89
+    },
+    {
+        "id": 221,
+        "lighting_type_name": "storage_ all_other_small",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 90
+    },
+    {
+        "id": 222,
+        "lighting_type_name": "storage_ all_other_large",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 91
+    },
+    {
+        "id": 223,
+        "lighting_type_name": "storage_hospital_small",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 90
+    },
+    {
+        "id": 224,
+        "lighting_type_name": "storage_hospital_large",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 91
+    },
+    {
+        "id": 225,
+        "lighting_type_name": "electrical_mechanical",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 62
+    },
+    {
+        "id": 226,
+        "lighting_type_name": "workshop",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 93
+    },
+    {
+        "id": 227,
+        "lighting_type_name": "gymnasium_playing_area",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 101
+    },
+    {
+        "id": 228,
+        "lighting_type_name": "gymnasium_exercise_area",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 100
+    },
+    {
+        "id": 229,
+        "lighting_type_name": "courtroom",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 54
+    },
+    {
+        "id": 230,
+        "lighting_type_name": "confinement_cells",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 49
+    },
+    {
+        "id": 231,
+        "lighting_type_name": "emergency_vehicle_garage",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 63
+    },
+    {
+        "id": 232,
+        "lighting_type_name": "firestation_sleeping_quarters",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 99
+    },
+    {
+        "id": 233,
+        "lighting_type_name": "post_office_sorting_area",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 121
+    },
+    {
+        "id": 234,
+        "lighting_type_name": "exhibit_convention_center",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 97
+    },
+    {
+        "id": 235,
+        "lighting_type_name": "library_stacks",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 112
+    },
+    {
+        "id": 236,
+        "lighting_type_name": "library_reading",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 111
+    },
+    {
+        "id": 237,
+        "lighting_type_name": "recovery",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 110
+    },
+    {
+        "id": 238,
+        "lighting_type_name": "nurses_station",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 106
+    },
+    {
+        "id": 239,
+        "lighting_type_name": "exam_treatment",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 102
+    },
+    {
+        "id": 240,
+        "lighting_type_name": "pharmacy",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 83
+    },
+    {
+        "id": 241,
+        "lighting_type_name": "patient_room",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 108
+    },
+    {
+        "id": 242,
+        "lighting_type_name": "operating_room",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 107
+    },
+    {
+        "id": 243,
+        "lighting_type_name": "nursery",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 105
+    },
+    {
+        "id": 244,
+        "lighting_type_name": "medical_supply",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 104
+    },
+    {
+        "id": 245,
+        "lighting_type_name": "physical_therapy",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 109
+    },
+    {
+        "id": 246,
+        "lighting_type_name": "imaging",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 103
+    },
+    {
+        "id": 247,
+        "lighting_type_name": "laundry_washing",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 68
+    },
+    {
+        "id": 248,
+        "lighting_type_name": "automotive",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 96
+    },
+    {
+        "id": 249,
+        "lighting_type_name": "manufacturing_low_bay",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 117
+    },
+    {
+        "id": 250,
+        "lighting_type_name": "manufacturing_high_bay",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 116
+    },
+    {
+        "id": 251,
+        "lighting_type_name": "detailed_manufacuring",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 113
+    },
+    {
+        "id": 252,
+        "lighting_type_name": "manufacturing_equipment_room",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 114
+    },
+    {
+        "id": 253,
+        "lighting_type_name": "manufacturing_extra_high_bay",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 115
+    },
+    {
+        "id": 254,
+        "lighting_type_name": "guest_room",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 65
+    },
+    {
+        "id": 255,
+        "lighting_type_name": "dormitory_living_quarters",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 98
+    },
+    {
+        "id": 256,
+        "lighting_type_name": "museum_exhibit_area",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 118
+    },
+    {
+        "id": 257,
+        "lighting_type_name": "museum_restoration",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 119
+    },
+    {
+        "id": 258,
+        "lighting_type_name": "banking_activity",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 44
+    },
+    {
+        "id": 259,
+        "lighting_type_name": "worship_pulpit_choir_area",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 123
+    },
+    {
+        "id": 260,
+        "lighting_type_name": "fellowship_hall_religious_facility",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 122
+    },
+    {
+        "id": 261,
+        "lighting_type_name": "sales",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 86
+    },
+    {
+        "id": 262,
+        "lighting_type_name": "retail_mall_concourse",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 125
+    },
+    {
+        "id": 263,
+        "lighting_type_name": "retail_dressing_room",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 124
+    },
+    {
+        "id": 264,
+        "lighting_type_name": "sports_arena_playing_area_class_I",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 126
+    },
+    {
+        "id": 265,
+        "lighting_type_name": "sports_arena_playing_area_class_II",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 127
+    },
+    {
+        "id": 266,
+        "lighting_type_name": "sports_arena_playing_area_class_III",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 128
+    },
+    {
+        "id": 267,
+        "lighting_type_name": "sports_arena_playing_area_class_IV",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 129
+    },
+    {
+        "id": 268,
+        "lighting_type_name": "warehouse_fine_storage",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 134
+    },
+    {
+        "id": 269,
+        "lighting_type_name": "warehouse_bulk_storage",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 133
+    },
+    {
+        "id": 270,
+        "lighting_type_name": "parking_area_interior",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 82
+    },
+    {
+        "id": 271,
+        "lighting_type_name": "airport_concourse",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 131
+    },
+    {
+        "id": 272,
+        "lighting_type_name": "baggage_carousel",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 130
+    },
+    {
+        "id": 273,
+        "lighting_type_name": "transportation_ticket_counter",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 132
+    },
+    {
+        "id": 274,
+        "lighting_type_name": "sales_display_type_1",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 135
+    },
+    {
+        "id": 275,
+        "lighting_type_name": "sales_display_type_2",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 136
+    },
+    {
+        "id": 276,
+        "lighting_type_name": "sales_display_type_3",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 137
+    },
+    {
+        "id": 277,
+        "lighting_type_name": "sales_display_type_4",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 138
+    },
+    {
+        "id": 278,
+        "lighting_type_name": "breakroom",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 45
+    },
+    {
+        "id": 279,
+        "lighting_type_name": "copy_print",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 50
+    },
+    {
+        "id": 280,
+        "lighting_type_name": "computer_room",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 55
+    },
+    {
+        "id": 281,
+        "lighting_type_name": "loading_dock",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 69
+    },
+    {
+        "id": 282,
+        "lighting_type_name": "locker_room",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 76
+    },
+    {
+        "id": 283,
+        "lighting_type_name": "seating_area_general",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 87
+    },
+    {
+        "id": 284,
+        "lighting_type_name": "vehicular_maintenance",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 92
+    },
+    {
+        "id": 285,
+        "lighting_type_name": "chapel_visually_impaired",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 94
+    },
+    {
+        "id": 286,
+        "lighting_type_name": "recreation_common_living_visually_impaired",
+        "lighting_table": "light_def_90_1_2019",
+        "lpd_901_id": 95
+    }
+]

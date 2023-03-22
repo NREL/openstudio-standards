@@ -1,0 +1,91 @@
+id,electric_equipment_space_type_name,electric_equipment_minimum_epd,electric_equipment_average_epd,electric_equipment_median_epd,electric_equipment_maximum_epd,electric_equipment_epd_unit
+1,corridor - all other,0,0.28,0.24,0.82,W/ft2
+2,dining - all other,0.32,0.55,0.55,0.82,W/ft2
+3,electrical/mechanical,0,0,0,0,W/ft2
+4,kitchen,0.3,0.76,0.71,2.52,W/ft2
+5,laboratory,0.49,0.78,0.7,2.02,W/ft2
+6,lobby - all other,0.16,0.41,0.35,0.83,W/ft2
+7,locker room,0,0.38,0.44,0.97,W/ft2
+8,lounge/breakroom - all other,0,0.49,0.52,0.88,W/ft2
+9,office - enclosed <= 250 sf,0.51,0.68,0.68,0.89,W/ft2
+10,office - enclosed > 250 sf,0.65,0.7,0.69,0.82,W/ft2
+11,office - open,0.53,0.66,0.67,0.81,W/ft2
+12,restroom - all other,0,0,0,0,W/ft2
+13,stairwell,0,0.25,0.25,0.53,W/ft2
+14,storage < 50 sf - all other,0,0,0,0,W/ft2
+15,storage 50 to 1000 sf - all other,0,0,0,0,W/ft2
+16,vehicular maintenance,0.65,0.69,0.69,0.73,W/ft2
+17,workshop,0,0.54,0.57,0.74,W/ft2
+18,atrium - first three floors,0,0.52,0.54,0.75,W/ft2
+19,audience seating - convention center,0.63,0.63,0.63,0.63,W/ft2
+20,classroom/lecture/training - all other,0.5,0.63,0.62,0.8,W/ft2
+21,conference/meeting/multipurpose,0.42,0.62,0.62,0.97,W/ft2
+22,exhibit - convention center,0.84,0.84,0.84,0.84,W/ft2
+23,gymnasium exercise area,0.27,0.48,0.49,0.68,W/ft2
+24,gymnasium playing area,0,0.51,0.51,1.06,W/ft2
+25,laundry/washing,0,0.39,0.39,0.59,W/ft2
+26,lobby - elevator,0.32,0.32,0.32,0.32,W/ft2
+27,nurses station,0,0.52,0.57,0.85,W/ft2
+28,post office - sorting area,0,0.23,0.24,0.39,W/ft2
+29,sales,0.41,0.67,0.67,0.92,W/ft2
+30,"sports arena playing area, class IV",0.32,0.5,0.64,0.69,W/ft2
+31,audience seating - all other,0.31,0.49,0.46,0.75,W/ft2
+32,confinement cells,0.22,0.26,0.26,0.32,W/ft2
+33,courtroom,0.25,0.4,0.4,0.56,W/ft2
+34,judges chambers,0.5,0.59,0.59,0.68,W/ft2
+35,library - stacks,0,0.2,0.2,0.33,W/ft2
+36,storage - inactive,0,0,0,0,W/ft2
+37,dining - bar/lounge/leisure,0.5,0.5,0.5,0.5,W/ft2
+38,dining - cafeteria/fast food,0.6,0.6,0.6,0.6,W/ft2
+39,dining - family,0.78,0.78,0.78,0.78,W/ft2
+40,computer room,0.69,0.7,0.69,0.73,W/ft2
+41,dormitory - living quarters,0.23,0.44,0.42,0.62,W/ft2
+42,audience seating - exercise center,0.6,0.6,0.6,0.6,W/ft2
+43,exam/treatment,0.51,0.56,0.53,0.66,W/ft2
+44,library - reading,0.32,0.49,0.46,0.71,W/ft2
+45,emergency vehicle garage,0.39,0.39,0.39,0.39,W/ft2
+46,firestation - sleeping quarters,0.37,0.37,0.37,0.37,W/ft2
+47,"parking area, interior",0.11,0.27,0.3,0.32,W/ft2
+48,audience seating - gymnasium,0.64,0.64,0.64,0.64,W/ft2
+49,emergency room,0.61,0.62,0.62,0.62,W/ft2
+50,patient room,0.71,0.72,0.72,0.73,W/ft2
+51,pharmacy,0.47,0.64,0.72,0.74,W/ft2
+52,corridor - hospital,0.3,0.3,0.3,0.3,W/ft2
+53,fellowship hall - religious facility,0.36,0.39,0.39,0.41,W/ft2
+54,lounge/breakroom - healthcare facility,0.75,0.75,0.75,0.75,W/ft2
+55,operating room,0.77,0.77,0.77,0.77,W/ft2
+56,physical therapy,0.73,0.73,0.73,0.73,W/ft2
+57,storage < 50 sf - hospital,0,0,0,0,W/ft2
+58,storage 50 to 1000 sf - hospital,0,0,0,0,W/ft2
+59,guest room,0.47,0.53,0.53,0.58,W/ft2
+60,lobby - hotel,0.5,0.5,0.5,0.5,W/ft2
+61,library - cataloging,0.21,0.21,0.21,0.21,W/ft2
+62,museum exhibit area,0.32,0.46,0.43,0.68,W/ft2
+63,corridor - manufacturing facility,0.38,0.38,0.38,0.38,W/ft2
+64,manufacturing equipment room,0,0,0,0,W/ft2
+65,manufacturing low bay,0.67,0.67,0.67,0.67,W/ft2
+66,performing arts dressing room,0.29,0.41,0.43,0.5,W/ft2
+67,audience seating - auditorium,0.26,0.29,0.29,0.32,W/ft2
+68,audience seating - motion picture theater,0.28,0.28,0.28,0.28,W/ft2
+69,lobby - motion picture theater,0.33,0.33,0.33,0.33,W/ft2
+70,Dwelling Unit,0.25,0.25,0.25,0.25,W/ft2
+71,museum restoration,0.21,0.21,0.21,0.21,W/ft2
+72,banking activity,0.54,0.55,0.55,0.56,W/ft2
+73,warehouse - fine storage,0,0.06,0.06,0.12,W/ft2
+74,classroom/lecture/training - penitentiary,0.41,0.41,0.41,0.41,W/ft2
+75,dining - penitentiary,0.35,0.35,0.35,0.35,W/ft2
+76,audience seating - performing arts theater,0.27,0.27,0.27,0.27,W/ft2
+77,lobby - performing arts theater,0.33,0.33,0.33,0.33,W/ft2
+78,audience seating - religious facility,0.41,0.41,0.41,0.41,W/ft2
+79,worship/pulpit/choir area,0.42,0.42,0.42,0.42,W/ft2
+80,classroom/lecture/training - preschool to 12th,0.67,0.67,0.67,0.67,W/ft2
+81,"sports arena playing area, class II",0.32,0.48,0.48,0.64,W/ft2
+82,audience seating - sports arena,0.38,0.38,0.38,0.38,W/ft2
+83,airport concourse,0.52,0.52,0.52,0.52,W/ft2
+84,atrium < 20 ft height,0.53,0.53,0.53,0.53,W/ft2
+85,atrium > 40 ft height,0.53,0.53,0.53,0.53,W/ft2
+86,atrium >= 20 ft and <= 40 ft in height,0.53,0.53,0.53,0.53,W/ft2
+87,baggage/carousel,0.55,0.55,0.55,0.55,W/ft2
+88,"seating area, general",0.25,0.25,0.25,0.25,W/ft2
+89,transportation ticket counter,0.74,0.74,0.74,0.74,W/ft2
+90,warehouse - bulk storage,0.11,0.11,0.11,0.11,W/ft2

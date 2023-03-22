@@ -3,7 +3,7 @@
 on:
   pull_request:
     path:
-      - 'data/data-refactor'
+      - 'data/openstudio_standards_data'
 jobs:
   black-formatting-check:
     name: Black formatting check
@@ -33,8 +33,11 @@ jobs:
           cache: 'pipenv'
       - name: Install pipenv
         run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+        working-directory: 'data/openstudio_standards_data'
       - name: Install dpendencies
         run: pipenv install --dev
+        working-directory: 'data/openstudio_standards_data'
       - name: Run pytests
         # This will halt the action if any of the tests fail
         run: pipenv run pytest -v
+        working-directory: 'data/openstudio_standards_data'

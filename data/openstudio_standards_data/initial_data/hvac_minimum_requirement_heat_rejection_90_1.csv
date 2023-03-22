@@ -1,0 +1,31 @@
+template,equipment_type,fan_type,start_date,end_date,minimum_performance_gpm_per_hp,annotation
+90.1-2004,Open Cooling Tower,Centrifugal,9/9/1919,9/9/2999,20,From 90.1-2004 Table 6.8.1G
+90.1-2004,Open Cooling Tower,Propeller or Axial,9/9/1919,9/9/2999,38.2,From 90.1-2004 Table 6.8.1G
+90.1-2004,Closed Cooling Tower,Centrifugal,9/9/1919,9/9/2999,20,From 90.1-2004 Table 6.8.1G
+90.1-2004,Closed Cooling Tower,Propeller or Axial,9/9/1919,9/9/2999,38.2,From 90.1-2004 Table 6.8.1G
+90.1-2004,Dry Cooler,Propeller or Axial,9/9/1919,9/9/2999,4,Not required by code. Value provided by 90.1 Mechanical Subcommittee
+90.1-2007,Open Cooling Tower,Centrifugal,9/9/1919,9/9/2999,20,From 90.1-2007 Table 6.8.1G
+90.1-2007,Open Cooling Tower,Propeller or Axial,9/9/1919,9/9/2999,38.2,From 90.1-2007 Table 6.8.1G
+90.1-2007,Closed Cooling Tower,Centrifugal,9/9/1919,9/9/2999,20,From 90.1-2007 Table 6.8.1G
+90.1-2007,Closed Cooling Tower,Propeller or Axial,9/9/1919,9/9/2999,38.2,From 90.1-2007 Table 6.8.1G
+90.1-2007,Dry Cooler,Propeller or Axial,9/9/1919,9/9/2999,4,Not required by code. Value provided by 90.1 Mechanical Subcommittee
+90.1-2010,Open Cooling Tower,Centrifugal,9/9/1919,9/9/2999,20,From 90.1-2010 Table 6.8.1 G
+90.1-2010,Open Cooling Tower,Propeller or Axial,9/9/1919,9/9/2999,38.2,From 90.1-2010 Table 6.8.1 G
+90.1-2010,Closed Cooling Tower,Centrifugal,9/9/1919,9/9/2999,7,From 90.1-2010 Table 6.8.1 G
+90.1-2010,Closed Cooling Tower,Propeller or Axial,9/9/1919,9/9/2999,14,From 90.1-2010 Table 6.8.1 G
+90.1-2010,Dry Cooler,Propeller or Axial,9/9/1919,9/9/2999,4,Not required by code. Value provided by 90.1 Mechanical Subcommittee
+90.1-2013,Open Cooling Tower,Centrifugal,9/9/1919,9/9/2999,20,From 90.1-2013 Table 6.8.1-7
+90.1-2013,Open Cooling Tower,Propeller or Axial,9/9/1919,9/9/2999,40.2,From 90.1-2013 Table 6.8.1-7
+90.1-2013,Closed Cooling Tower,Centrifugal,9/9/1919,9/9/2999,7,From 90.1-2013 Table 6.8.1-7
+90.1-2013,Closed Cooling Tower,Propeller or Axial,9/9/1919,9/9/2999,14,From 90.1-2013 Table 6.8.1-7
+90.1-2013,Dry Cooler,Propeller or Axial,9/9/1919,9/9/2999,4,NOTE: Not required by code. Value provided by 90.1 Mechanical Subcommittee
+90.1-2016,Open Cooling Tower,Centrifugal,9/9/1919,9/9/2999,20,From 90.1-2016 Table 6.8.1-7
+90.1-2016,Open Cooling Tower,Propeller or Axial,9/9/1919,9/9/2999,40.2,From 90.1-2016 Table 6.8.1-7
+90.1-2016,Closed Cooling Tower,Centrifugal,9/9/1919,9/9/2999,7,From 90.1-2016 Table 6.8.1-7
+90.1-2016,Closed Cooling Tower,Propeller or Axial,9/9/1919,9/9/2999,16.1,From 90.1-2016 Table 6.8.1-7
+90.1-2016,Dry Cooler,Propeller or Axial,9/9/1919,9/9/2999,4,NOTE Not required by code. Value provided by 90.1 Mechanical Subcommittee
+90.1-2019,Open Cooling Tower,Centrifugal,9/9/1919,9/9/2999,20,From 90.1-2019 Table 6.8.1-7
+90.1-2019,Open Cooling Tower,Propeller or Axial,9/9/1919,9/9/2999,40.2,From 90.1-2019 Table 6.8.1-7
+90.1-2019,Closed Cooling Tower,Centrifugal,9/9/1919,9/9/2999,7,From 90.1-2019 Table 6.8.1-7
+90.1-2019,Closed Cooling Tower,Propeller or Axial,9/9/1919,9/9/2999,16.1,From 90.1-2019 Table 6.8.1-7
+90.1-2019,Dry Cooler,Propeller or Axial,9/9/1919,9/9/2999,4.5,From 90.1-2019 Table 6.8.1.7. Juan Gonzalez Added 01/11/2021 to account for fluid coolers in data center water loop heat pump condenser loops
