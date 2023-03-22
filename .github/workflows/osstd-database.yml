@@ -3,7 +3,7 @@
 on:
   pull_request:
     path:
-      - 'data/data-refactor'
+      - 'data/openstudio_standards_data'
 jobs:
   check:
     name: Check changes
@@ -21,7 +21,7 @@ jobs:
         run: |
           for file in ${{ steps.changed-files.outputs.all_changed_files}}; do
             echo "$file was changed"
-            if [[$file == data/data/*]]; then
+            if [[$file == data/openstudio_standards_data/*]]; then
               echo "::set-output name=run_job::true"
               break
             fi
@@ -59,11 +59,11 @@ jobs:
           cache: 'pipenv'
       - name: Install pipenv
         run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-        working-directory: 'data/database'
+        working-directory: 'data/openstudio_standards_data'
       - name: Install dpendencies
         run: pipenv install --dev
-        working-directory: 'data/database'
+        working-directory: 'data/openstudio_standards_data'
       - name: Run pytests
         # This will halt the action if any of the tests fail
         run: pipenv run pytest -v
-        working-directory: 'data/database'
+        working-directory: 'data/openstudio_standards_data'
