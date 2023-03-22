@@ -5,32 +5,9 @@ on:
     path:
       - 'data/openstudio_standards_data'
 jobs:
-  check:
-    name: Check changes
-    outputs:
-      run_job: ${{steps.check_files.outputs.run_job}}
-    runs-on: 'ubuntu-latest'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Get changed files
-        id: change-files
-        uses: tj-actions/changed-files@v35
-      - name: Check changed files
-        id: check_files
-        run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files}}; do
-            echo "$file was changed"
-            if [[$file == data/openstudio_standards_data/*]]; then
-              echo "::set-output name=run_job::true"
-              break
-            fi
-          done
-
   black-formatting-check:
     name: Black formatting check
     needs: check
-    if: needs.check.outputs.run_job == 'true'
     runs-on: 'ubuntu-latest'
     steps:
       - name: Checkout code
@@ -47,7 +24,6 @@ jobs:
   run-unit-tests:
     name: Run unit tests
     needs: check
-    if: needs.check.outputs.run_job == 'true'
     runs-on: 'ubuntu-latest'
     steps:
       - name: Checkout code
