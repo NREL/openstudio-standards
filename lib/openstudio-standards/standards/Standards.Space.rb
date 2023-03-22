@@ -1429,6 +1429,7 @@ class Standard
   # @return [Double] area in m^2
   def space_envelope_area(space, climate_zone)
     area_m2 = 0.0
+
     # Get the space conditioning type
     space_cond_type = space_conditioning_category(space)
 
