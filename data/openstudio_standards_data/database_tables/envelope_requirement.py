@@ -8,7 +8,7 @@ Must provide a tuple that contains:
 template: TEXT
 climate_zone_set: TEXT
 intended_surface_type: TEXT
-standard_construction_type: TEXT
+standards_construction_type: TEXT
 building_category: TEXT
 construction: TEXT
 orientation: TEXT
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS %s
 template TEXT NOT NULL, 
 climate_zone_set TEXT NOT NULL,
 intended_surface_type TEXT NOT NULL,
-standard_construction_type TEXT,
+standards_construction_type TEXT,
 building_category TEXT NOT NULL,
 construction TEXT NOT NULL,
 orientation TEXT,
@@ -53,7 +53,7 @@ INSERT_A_ENVELOPE_REQUIREMENT_RECORD = """
 template, 
 climate_zone_set,
 intended_surface_type,
-standard_construction_type,
+standards_construction_type,
 building_category,
 construction,
 orientation,
@@ -75,7 +75,7 @@ RECORD_TEMPLATE = {
     "template": "",
     "climate_zone_set": "",
     "intended_surface_type": "",
-    "standard_construction_type": "",
+    "standards_construction_type": "",
     "building_category": "",
     "construction": "",
     "orientation": "",
@@ -112,7 +112,7 @@ class EnvelopeRequirementTable(DBOperation):
             "template",
             "climate_zone_set",
             "intended_surface_type",
-            "standard_construction_type",
+            "standards_construction_type",
             "building_category",
             "construction",
             "orientation",
@@ -153,7 +153,7 @@ class EnvelopeRequirementTable(DBOperation):
             getattr_either("template", record),
             getattr_either("climate_zone_set", record),
             getattr_either("intended_surface_type", record),
-            getattr_either("standard_construction_type", record),
+            getattr_either("standards_construction_type", record),
             getattr_either("building_category", record),
             getattr_either("construction", record),
             getattr_either("orientation", record),

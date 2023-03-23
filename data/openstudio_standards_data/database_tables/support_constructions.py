@@ -7,7 +7,7 @@ RECORD_HELP = """
 Must provide a dict that contains following key value pairs:
 name: TEXT
 intended_surface_type: TEXT
-standard_construction_type: TEXT
+standards_construction_type: TEXT
 insulation_layer: TEXT
 skylight_framing: TEXT
 material_1: TEXT
@@ -22,7 +22,7 @@ CREATE_CONSTRUCTIONS_TABLE = f"""
 CREATE TABLE IF NOT EXISTS {TABLE_NAME}
 (name TEXT UNIQUE NOT NULL PRIMARY KEY,
 intended_surface_type TEXT,
-standard_construction_type TEXT,
+standards_construction_type TEXT,
 insulation_layer TEXT,
 skylight_framing TEXT,
 material_1 TEXT,
@@ -44,7 +44,7 @@ INSERT_CONSTRUCTION = f"""
     INSERT INTO {TABLE_NAME}
     (name,
 intended_surface_type,
-standard_construction_type,
+standards_construction_type,
 insulation_layer,
 skylight_framing,
 material_1,
@@ -60,7 +60,7 @@ material_6)
 RECORD_TEMPLATE = {
     "name": "",
     "intended_surface_type": "",
-    "standard_construction_type": "",
+    "standards_construction_type": "",
     "insulation_layer": "",
     "skylight_framing": "",
     "material_1": "",
@@ -91,7 +91,7 @@ class SupportConstructionsTable(DBOperation):
         str_expected = [
             "name",
             "intended_surface_type",
-            "standard_construction_type",
+            "standards_construction_type",
             "insulation_layer",
             "skylight_framing",
             "material_1",
@@ -118,7 +118,7 @@ class SupportConstructionsTable(DBOperation):
         return (
             getattr_either("name", record),
             getattr_either("intended_surface_type", record),
-            getattr_either("standard_construction_type", record),
+            getattr_either("standards_construction_type", record),
             getattr_either("insulation_layer", record),
             getattr_either("skylight_framing", record),
             getattr_either("material_1", record),
