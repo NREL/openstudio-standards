@@ -13,7 +13,9 @@ from query.fetch.database_table import (
 from query.fetch.template import fetch_templates
 
 
-def create_openstudio_standards_space_data_json(conn: sqlite3.Connection, json_data_dir: str):
+def create_openstudio_standards_space_data_json(
+    conn: sqlite3.Connection, json_data_dir: str
+):
     """
     Extract OpenSutdio Standards building data to a json file.
     :param conn: database connection
