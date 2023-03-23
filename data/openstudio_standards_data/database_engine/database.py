@@ -126,7 +126,10 @@ class DBOperation:
             dict((cursor.description[i][0], value) for i, value in enumerate(row))
             for row in cursor.fetchall()
         ]
-
+        # Exclude IDs
+        for i in r:
+            if "id" in i.keys():
+                del i["id"]
         json_dir = f"{save_dir}{self.data_table_name}.json"
         json_output = json.dumps(r, indent=4)
         with open(json_dir, "w", newline="") as json_file:
