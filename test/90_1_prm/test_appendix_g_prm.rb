@@ -550,12 +550,16 @@ class AppendixGPRMTests < Minitest::Test
       space_name = JSON.parse(File.read("#{@@json_dir}/lpd.json"))[run_id]
 
       std = Standard.build('90.1-PRM-2019')
-      
+      sql = model_baseline.sqlFile.get
+      unless sql.connectionOpen
+        sql.reopen
+      end
       # Get LPD in baseline model
       lpd_baseline = {}
       space_name.each do |val|
         lpd_baseline[val[0]] = std.run_query_tabulardatawithstrings(model_baseline, 'LightingSummary', 'Interior Lighting', val[0], 'Lighting Power Density', 'W/m2').to_f
       end
+      sql.close
 
       # Check LPD against expected LPD
       space_name.each do |key, value|
