@@ -1,0 +1,722 @@
+[
+    {
+        "electric_equipment_space_type_name": "corridor - all other",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0.28,
+        "electric_equipment_median_epd": 0.24,
+        "electric_equipment_maximum_epd": 0.82,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "dining - all other",
+        "electric_equipment_minimum_epd": 0.32,
+        "electric_equipment_average_epd": 0.55,
+        "electric_equipment_median_epd": 0.55,
+        "electric_equipment_maximum_epd": 0.82,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "electrical/mechanical",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0,
+        "electric_equipment_median_epd": 0,
+        "electric_equipment_maximum_epd": 0,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "kitchen",
+        "electric_equipment_minimum_epd": 0.3,
+        "electric_equipment_average_epd": 0.76,
+        "electric_equipment_median_epd": 0.71,
+        "electric_equipment_maximum_epd": 2.52,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "laboratory",
+        "electric_equipment_minimum_epd": 0.49,
+        "electric_equipment_average_epd": 0.78,
+        "electric_equipment_median_epd": 0.7,
+        "electric_equipment_maximum_epd": 2.02,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "lobby - all other",
+        "electric_equipment_minimum_epd": 0.16,
+        "electric_equipment_average_epd": 0.41,
+        "electric_equipment_median_epd": 0.35,
+        "electric_equipment_maximum_epd": 0.83,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "locker room",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0.38,
+        "electric_equipment_median_epd": 0.44,
+        "electric_equipment_maximum_epd": 0.97,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "lounge/breakroom - all other",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0.49,
+        "electric_equipment_median_epd": 0.52,
+        "electric_equipment_maximum_epd": 0.88,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "office - enclosed <= 250 sf",
+        "electric_equipment_minimum_epd": 0.51,
+        "electric_equipment_average_epd": 0.68,
+        "electric_equipment_median_epd": 0.68,
+        "electric_equipment_maximum_epd": 0.89,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "office - enclosed > 250 sf",
+        "electric_equipment_minimum_epd": 0.65,
+        "electric_equipment_average_epd": 0.7,
+        "electric_equipment_median_epd": 0.69,
+        "electric_equipment_maximum_epd": 0.82,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "office - open",
+        "electric_equipment_minimum_epd": 0.53,
+        "electric_equipment_average_epd": 0.66,
+        "electric_equipment_median_epd": 0.67,
+        "electric_equipment_maximum_epd": 0.81,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "restroom - all other",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0,
+        "electric_equipment_median_epd": 0,
+        "electric_equipment_maximum_epd": 0,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "stairwell",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0.25,
+        "electric_equipment_median_epd": 0.25,
+        "electric_equipment_maximum_epd": 0.53,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "storage < 50 sf - all other",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0,
+        "electric_equipment_median_epd": 0,
+        "electric_equipment_maximum_epd": 0,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "storage 50 to 1000 sf - all other",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0,
+        "electric_equipment_median_epd": 0,
+        "electric_equipment_maximum_epd": 0,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "vehicular maintenance",
+        "electric_equipment_minimum_epd": 0.65,
+        "electric_equipment_average_epd": 0.69,
+        "electric_equipment_median_epd": 0.69,
+        "electric_equipment_maximum_epd": 0.73,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "workshop",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0.54,
+        "electric_equipment_median_epd": 0.57,
+        "electric_equipment_maximum_epd": 0.74,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "atrium - first three floors",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0.52,
+        "electric_equipment_median_epd": 0.54,
+        "electric_equipment_maximum_epd": 0.75,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "audience seating - convention center",
+        "electric_equipment_minimum_epd": 0.63,
+        "electric_equipment_average_epd": 0.63,
+        "electric_equipment_median_epd": 0.63,
+        "electric_equipment_maximum_epd": 0.63,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "classroom/lecture/training - all other",
+        "electric_equipment_minimum_epd": 0.5,
+        "electric_equipment_average_epd": 0.63,
+        "electric_equipment_median_epd": 0.62,
+        "electric_equipment_maximum_epd": 0.8,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "conference/meeting/multipurpose",
+        "electric_equipment_minimum_epd": 0.42,
+        "electric_equipment_average_epd": 0.62,
+        "electric_equipment_median_epd": 0.62,
+        "electric_equipment_maximum_epd": 0.97,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "exhibit - convention center",
+        "electric_equipment_minimum_epd": 0.84,
+        "electric_equipment_average_epd": 0.84,
+        "electric_equipment_median_epd": 0.84,
+        "electric_equipment_maximum_epd": 0.84,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "gymnasium exercise area",
+        "electric_equipment_minimum_epd": 0.27,
+        "electric_equipment_average_epd": 0.48,
+        "electric_equipment_median_epd": 0.49,
+        "electric_equipment_maximum_epd": 0.68,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "gymnasium playing area",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0.51,
+        "electric_equipment_median_epd": 0.51,
+        "electric_equipment_maximum_epd": 1.06,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "laundry/washing",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0.39,
+        "electric_equipment_median_epd": 0.39,
+        "electric_equipment_maximum_epd": 0.59,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "lobby - elevator",
+        "electric_equipment_minimum_epd": 0.32,
+        "electric_equipment_average_epd": 0.32,
+        "electric_equipment_median_epd": 0.32,
+        "electric_equipment_maximum_epd": 0.32,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "nurses station",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0.52,
+        "electric_equipment_median_epd": 0.57,
+        "electric_equipment_maximum_epd": 0.85,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "post office - sorting area",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0.23,
+        "electric_equipment_median_epd": 0.24,
+        "electric_equipment_maximum_epd": 0.39,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "sales",
+        "electric_equipment_minimum_epd": 0.41,
+        "electric_equipment_average_epd": 0.67,
+        "electric_equipment_median_epd": 0.67,
+        "electric_equipment_maximum_epd": 0.92,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "sports arena playing area, class IV",
+        "electric_equipment_minimum_epd": 0.32,
+        "electric_equipment_average_epd": 0.5,
+        "electric_equipment_median_epd": 0.64,
+        "electric_equipment_maximum_epd": 0.69,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "audience seating - all other",
+        "electric_equipment_minimum_epd": 0.31,
+        "electric_equipment_average_epd": 0.49,
+        "electric_equipment_median_epd": 0.46,
+        "electric_equipment_maximum_epd": 0.75,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "confinement cells",
+        "electric_equipment_minimum_epd": 0.22,
+        "electric_equipment_average_epd": 0.26,
+        "electric_equipment_median_epd": 0.26,
+        "electric_equipment_maximum_epd": 0.32,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "courtroom",
+        "electric_equipment_minimum_epd": 0.25,
+        "electric_equipment_average_epd": 0.4,
+        "electric_equipment_median_epd": 0.4,
+        "electric_equipment_maximum_epd": 0.56,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "judges chambers",
+        "electric_equipment_minimum_epd": 0.5,
+        "electric_equipment_average_epd": 0.59,
+        "electric_equipment_median_epd": 0.59,
+        "electric_equipment_maximum_epd": 0.68,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "library - stacks",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0.2,
+        "electric_equipment_median_epd": 0.2,
+        "electric_equipment_maximum_epd": 0.33,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "storage - inactive",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0,
+        "electric_equipment_median_epd": 0,
+        "electric_equipment_maximum_epd": 0,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "dining - bar/lounge/leisure",
+        "electric_equipment_minimum_epd": 0.5,
+        "electric_equipment_average_epd": 0.5,
+        "electric_equipment_median_epd": 0.5,
+        "electric_equipment_maximum_epd": 0.5,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "dining - cafeteria/fast food",
+        "electric_equipment_minimum_epd": 0.6,
+        "electric_equipment_average_epd": 0.6,
+        "electric_equipment_median_epd": 0.6,
+        "electric_equipment_maximum_epd": 0.6,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "dining - family",
+        "electric_equipment_minimum_epd": 0.78,
+        "electric_equipment_average_epd": 0.78,
+        "electric_equipment_median_epd": 0.78,
+        "electric_equipment_maximum_epd": 0.78,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "computer room",
+        "electric_equipment_minimum_epd": 0.69,
+        "electric_equipment_average_epd": 0.7,
+        "electric_equipment_median_epd": 0.69,
+        "electric_equipment_maximum_epd": 0.73,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "dormitory - living quarters",
+        "electric_equipment_minimum_epd": 0.23,
+        "electric_equipment_average_epd": 0.44,
+        "electric_equipment_median_epd": 0.42,
+        "electric_equipment_maximum_epd": 0.62,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "audience seating - exercise center",
+        "electric_equipment_minimum_epd": 0.6,
+        "electric_equipment_average_epd": 0.6,
+        "electric_equipment_median_epd": 0.6,
+        "electric_equipment_maximum_epd": 0.6,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "exam/treatment",
+        "electric_equipment_minimum_epd": 0.51,
+        "electric_equipment_average_epd": 0.56,
+        "electric_equipment_median_epd": 0.53,
+        "electric_equipment_maximum_epd": 0.66,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "library - reading",
+        "electric_equipment_minimum_epd": 0.32,
+        "electric_equipment_average_epd": 0.49,
+        "electric_equipment_median_epd": 0.46,
+        "electric_equipment_maximum_epd": 0.71,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "emergency vehicle garage",
+        "electric_equipment_minimum_epd": 0.39,
+        "electric_equipment_average_epd": 0.39,
+        "electric_equipment_median_epd": 0.39,
+        "electric_equipment_maximum_epd": 0.39,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "firestation - sleeping quarters",
+        "electric_equipment_minimum_epd": 0.37,
+        "electric_equipment_average_epd": 0.37,
+        "electric_equipment_median_epd": 0.37,
+        "electric_equipment_maximum_epd": 0.37,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "parking area, interior",
+        "electric_equipment_minimum_epd": 0.11,
+        "electric_equipment_average_epd": 0.27,
+        "electric_equipment_median_epd": 0.3,
+        "electric_equipment_maximum_epd": 0.32,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "audience seating - gymnasium",
+        "electric_equipment_minimum_epd": 0.64,
+        "electric_equipment_average_epd": 0.64,
+        "electric_equipment_median_epd": 0.64,
+        "electric_equipment_maximum_epd": 0.64,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "emergency room",
+        "electric_equipment_minimum_epd": 0.61,
+        "electric_equipment_average_epd": 0.62,
+        "electric_equipment_median_epd": 0.62,
+        "electric_equipment_maximum_epd": 0.62,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "patient room",
+        "electric_equipment_minimum_epd": 0.71,
+        "electric_equipment_average_epd": 0.72,
+        "electric_equipment_median_epd": 0.72,
+        "electric_equipment_maximum_epd": 0.73,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "pharmacy",
+        "electric_equipment_minimum_epd": 0.47,
+        "electric_equipment_average_epd": 0.64,
+        "electric_equipment_median_epd": 0.72,
+        "electric_equipment_maximum_epd": 0.74,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "corridor - hospital",
+        "electric_equipment_minimum_epd": 0.3,
+        "electric_equipment_average_epd": 0.3,
+        "electric_equipment_median_epd": 0.3,
+        "electric_equipment_maximum_epd": 0.3,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "fellowship hall - religious facility",
+        "electric_equipment_minimum_epd": 0.36,
+        "electric_equipment_average_epd": 0.39,
+        "electric_equipment_median_epd": 0.39,
+        "electric_equipment_maximum_epd": 0.41,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "lounge/breakroom - healthcare facility",
+        "electric_equipment_minimum_epd": 0.75,
+        "electric_equipment_average_epd": 0.75,
+        "electric_equipment_median_epd": 0.75,
+        "electric_equipment_maximum_epd": 0.75,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "operating room",
+        "electric_equipment_minimum_epd": 0.77,
+        "electric_equipment_average_epd": 0.77,
+        "electric_equipment_median_epd": 0.77,
+        "electric_equipment_maximum_epd": 0.77,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "physical therapy",
+        "electric_equipment_minimum_epd": 0.73,
+        "electric_equipment_average_epd": 0.73,
+        "electric_equipment_median_epd": 0.73,
+        "electric_equipment_maximum_epd": 0.73,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "storage < 50 sf - hospital",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0,
+        "electric_equipment_median_epd": 0,
+        "electric_equipment_maximum_epd": 0,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "storage 50 to 1000 sf - hospital",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0,
+        "electric_equipment_median_epd": 0,
+        "electric_equipment_maximum_epd": 0,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "guest room",
+        "electric_equipment_minimum_epd": 0.47,
+        "electric_equipment_average_epd": 0.53,
+        "electric_equipment_median_epd": 0.53,
+        "electric_equipment_maximum_epd": 0.58,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "lobby - hotel",
+        "electric_equipment_minimum_epd": 0.5,
+        "electric_equipment_average_epd": 0.5,
+        "electric_equipment_median_epd": 0.5,
+        "electric_equipment_maximum_epd": 0.5,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "library - cataloging",
+        "electric_equipment_minimum_epd": 0.21,
+        "electric_equipment_average_epd": 0.21,
+        "electric_equipment_median_epd": 0.21,
+        "electric_equipment_maximum_epd": 0.21,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "museum exhibit area",
+        "electric_equipment_minimum_epd": 0.32,
+        "electric_equipment_average_epd": 0.46,
+        "electric_equipment_median_epd": 0.43,
+        "electric_equipment_maximum_epd": 0.68,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "corridor - manufacturing facility",
+        "electric_equipment_minimum_epd": 0.38,
+        "electric_equipment_average_epd": 0.38,
+        "electric_equipment_median_epd": 0.38,
+        "electric_equipment_maximum_epd": 0.38,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "manufacturing equipment room",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0,
+        "electric_equipment_median_epd": 0,
+        "electric_equipment_maximum_epd": 0,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "manufacturing low bay",
+        "electric_equipment_minimum_epd": 0.67,
+        "electric_equipment_average_epd": 0.67,
+        "electric_equipment_median_epd": 0.67,
+        "electric_equipment_maximum_epd": 0.67,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "performing arts dressing room",
+        "electric_equipment_minimum_epd": 0.29,
+        "electric_equipment_average_epd": 0.41,
+        "electric_equipment_median_epd": 0.43,
+        "electric_equipment_maximum_epd": 0.5,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "audience seating - auditorium",
+        "electric_equipment_minimum_epd": 0.26,
+        "electric_equipment_average_epd": 0.29,
+        "electric_equipment_median_epd": 0.29,
+        "electric_equipment_maximum_epd": 0.32,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "audience seating - motion picture theater",
+        "electric_equipment_minimum_epd": 0.28,
+        "electric_equipment_average_epd": 0.28,
+        "electric_equipment_median_epd": 0.28,
+        "electric_equipment_maximum_epd": 0.28,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "lobby - motion picture theater",
+        "electric_equipment_minimum_epd": 0.33,
+        "electric_equipment_average_epd": 0.33,
+        "electric_equipment_median_epd": 0.33,
+        "electric_equipment_maximum_epd": 0.33,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "Dwelling Unit",
+        "electric_equipment_minimum_epd": 0.25,
+        "electric_equipment_average_epd": 0.25,
+        "electric_equipment_median_epd": 0.25,
+        "electric_equipment_maximum_epd": 0.25,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "museum restoration",
+        "electric_equipment_minimum_epd": 0.21,
+        "electric_equipment_average_epd": 0.21,
+        "electric_equipment_median_epd": 0.21,
+        "electric_equipment_maximum_epd": 0.21,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "banking activity",
+        "electric_equipment_minimum_epd": 0.54,
+        "electric_equipment_average_epd": 0.55,
+        "electric_equipment_median_epd": 0.55,
+        "electric_equipment_maximum_epd": 0.56,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "warehouse - fine storage",
+        "electric_equipment_minimum_epd": 0,
+        "electric_equipment_average_epd": 0.06,
+        "electric_equipment_median_epd": 0.06,
+        "electric_equipment_maximum_epd": 0.12,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "classroom/lecture/training - penitentiary",
+        "electric_equipment_minimum_epd": 0.41,
+        "electric_equipment_average_epd": 0.41,
+        "electric_equipment_median_epd": 0.41,
+        "electric_equipment_maximum_epd": 0.41,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "dining - penitentiary",
+        "electric_equipment_minimum_epd": 0.35,
+        "electric_equipment_average_epd": 0.35,
+        "electric_equipment_median_epd": 0.35,
+        "electric_equipment_maximum_epd": 0.35,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "audience seating - performing arts theater",
+        "electric_equipment_minimum_epd": 0.27,
+        "electric_equipment_average_epd": 0.27,
+        "electric_equipment_median_epd": 0.27,
+        "electric_equipment_maximum_epd": 0.27,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "lobby - performing arts theater",
+        "electric_equipment_minimum_epd": 0.33,
+        "electric_equipment_average_epd": 0.33,
+        "electric_equipment_median_epd": 0.33,
+        "electric_equipment_maximum_epd": 0.33,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "audience seating - religious facility",
+        "electric_equipment_minimum_epd": 0.41,
+        "electric_equipment_average_epd": 0.41,
+        "electric_equipment_median_epd": 0.41,
+        "electric_equipment_maximum_epd": 0.41,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "worship/pulpit/choir area",
+        "electric_equipment_minimum_epd": 0.42,
+        "electric_equipment_average_epd": 0.42,
+        "electric_equipment_median_epd": 0.42,
+        "electric_equipment_maximum_epd": 0.42,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "classroom/lecture/training - preschool to 12th",
+        "electric_equipment_minimum_epd": 0.67,
+        "electric_equipment_average_epd": 0.67,
+        "electric_equipment_median_epd": 0.67,
+        "electric_equipment_maximum_epd": 0.67,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "sports arena playing area, class II",
+        "electric_equipment_minimum_epd": 0.32,
+        "electric_equipment_average_epd": 0.48,
+        "electric_equipment_median_epd": 0.48,
+        "electric_equipment_maximum_epd": 0.64,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "audience seating - sports arena",
+        "electric_equipment_minimum_epd": 0.38,
+        "electric_equipment_average_epd": 0.38,
+        "electric_equipment_median_epd": 0.38,
+        "electric_equipment_maximum_epd": 0.38,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "airport concourse",
+        "electric_equipment_minimum_epd": 0.52,
+        "electric_equipment_average_epd": 0.52,
+        "electric_equipment_median_epd": 0.52,
+        "electric_equipment_maximum_epd": 0.52,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "atrium < 20 ft height",
+        "electric_equipment_minimum_epd": 0.53,
+        "electric_equipment_average_epd": 0.53,
+        "electric_equipment_median_epd": 0.53,
+        "electric_equipment_maximum_epd": 0.53,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "atrium > 40 ft height",
+        "electric_equipment_minimum_epd": 0.53,
+        "electric_equipment_average_epd": 0.53,
+        "electric_equipment_median_epd": 0.53,
+        "electric_equipment_maximum_epd": 0.53,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "atrium >= 20 ft and <= 40 ft in height",
+        "electric_equipment_minimum_epd": 0.53,
+        "electric_equipment_average_epd": 0.53,
+        "electric_equipment_median_epd": 0.53,
+        "electric_equipment_maximum_epd": 0.53,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "baggage/carousel",
+        "electric_equipment_minimum_epd": 0.55,
+        "electric_equipment_average_epd": 0.55,
+        "electric_equipment_median_epd": 0.55,
+        "electric_equipment_maximum_epd": 0.55,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "seating area, general",
+        "electric_equipment_minimum_epd": 0.25,
+        "electric_equipment_average_epd": 0.25,
+        "electric_equipment_median_epd": 0.25,
+        "electric_equipment_maximum_epd": 0.25,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "transportation ticket counter",
+        "electric_equipment_minimum_epd": 0.74,
+        "electric_equipment_average_epd": 0.74,
+        "electric_equipment_median_epd": 0.74,
+        "electric_equipment_maximum_epd": 0.74,
+        "electric_equipment_epd_unit": "W/ft2"
+    },
+    {
+        "electric_equipment_space_type_name": "warehouse - bulk storage",
+        "electric_equipment_minimum_epd": 0.11,
+        "electric_equipment_average_epd": 0.11,
+        "electric_equipment_median_epd": 0.11,
+        "electric_equipment_maximum_epd": 0.11,
+        "electric_equipment_epd_unit": "W/ft2"
+    }
+]

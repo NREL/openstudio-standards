@@ -1,0 +1,272 @@
+[
+    {
+        "template": "90.1-2004",
+        "equipment_type": "Open Cooling Tower",
+        "fan_type": "Centrifugal",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 20,
+        "annotation": "From 90.1-2004 Table 6.8.1G"
+    },
+    {
+        "template": "90.1-2004",
+        "equipment_type": "Open Cooling Tower",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 38.2,
+        "annotation": "From 90.1-2004 Table 6.8.1G"
+    },
+    {
+        "template": "90.1-2004",
+        "equipment_type": "Closed Cooling Tower",
+        "fan_type": "Centrifugal",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 20,
+        "annotation": "From 90.1-2004 Table 6.8.1G"
+    },
+    {
+        "template": "90.1-2004",
+        "equipment_type": "Closed Cooling Tower",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 38.2,
+        "annotation": "From 90.1-2004 Table 6.8.1G"
+    },
+    {
+        "template": "90.1-2004",
+        "equipment_type": "Dry Cooler",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 4,
+        "annotation": "Not required by code. Value provided by 90.1 Mechanical Subcommittee"
+    },
+    {
+        "template": "90.1-2007",
+        "equipment_type": "Open Cooling Tower",
+        "fan_type": "Centrifugal",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 20,
+        "annotation": "From 90.1-2007 Table 6.8.1G"
+    },
+    {
+        "template": "90.1-2007",
+        "equipment_type": "Open Cooling Tower",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 38.2,
+        "annotation": "From 90.1-2007 Table 6.8.1G"
+    },
+    {
+        "template": "90.1-2007",
+        "equipment_type": "Closed Cooling Tower",
+        "fan_type": "Centrifugal",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 20,
+        "annotation": "From 90.1-2007 Table 6.8.1G"
+    },
+    {
+        "template": "90.1-2007",
+        "equipment_type": "Closed Cooling Tower",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 38.2,
+        "annotation": "From 90.1-2007 Table 6.8.1G"
+    },
+    {
+        "template": "90.1-2007",
+        "equipment_type": "Dry Cooler",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 4,
+        "annotation": "Not required by code. Value provided by 90.1 Mechanical Subcommittee"
+    },
+    {
+        "template": "90.1-2010",
+        "equipment_type": "Open Cooling Tower",
+        "fan_type": "Centrifugal",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 20,
+        "annotation": "From 90.1-2010 Table 6.8.1 G"
+    },
+    {
+        "template": "90.1-2010",
+        "equipment_type": "Open Cooling Tower",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 38.2,
+        "annotation": "From 90.1-2010 Table 6.8.1 G"
+    },
+    {
+        "template": "90.1-2010",
+        "equipment_type": "Closed Cooling Tower",
+        "fan_type": "Centrifugal",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 7,
+        "annotation": "From 90.1-2010 Table 6.8.1 G"
+    },
+    {
+        "template": "90.1-2010",
+        "equipment_type": "Closed Cooling Tower",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 14,
+        "annotation": "From 90.1-2010 Table 6.8.1 G"
+    },
+    {
+        "template": "90.1-2010",
+        "equipment_type": "Dry Cooler",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 4,
+        "annotation": "Not required by code. Value provided by 90.1 Mechanical Subcommittee"
+    },
+    {
+        "template": "90.1-2013",
+        "equipment_type": "Open Cooling Tower",
+        "fan_type": "Centrifugal",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 20,
+        "annotation": "From 90.1-2013 Table 6.8.1-7"
+    },
+    {
+        "template": "90.1-2013",
+        "equipment_type": "Open Cooling Tower",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 40.2,
+        "annotation": "From 90.1-2013 Table 6.8.1-7"
+    },
+    {
+        "template": "90.1-2013",
+        "equipment_type": "Closed Cooling Tower",
+        "fan_type": "Centrifugal",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 7,
+        "annotation": "From 90.1-2013 Table 6.8.1-7"
+    },
+    {
+        "template": "90.1-2013",
+        "equipment_type": "Closed Cooling Tower",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 14,
+        "annotation": "From 90.1-2013 Table 6.8.1-7"
+    },
+    {
+        "template": "90.1-2013",
+        "equipment_type": "Dry Cooler",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 4,
+        "annotation": "NOTE: Not required by code. Value provided by 90.1 Mechanical Subcommittee"
+    },
+    {
+        "template": "90.1-2016",
+        "equipment_type": "Open Cooling Tower",
+        "fan_type": "Centrifugal",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 20,
+        "annotation": "From 90.1-2016 Table 6.8.1-7"
+    },
+    {
+        "template": "90.1-2016",
+        "equipment_type": "Open Cooling Tower",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 40.2,
+        "annotation": "From 90.1-2016 Table 6.8.1-7"
+    },
+    {
+        "template": "90.1-2016",
+        "equipment_type": "Closed Cooling Tower",
+        "fan_type": "Centrifugal",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 7,
+        "annotation": "From 90.1-2016 Table 6.8.1-7"
+    },
+    {
+        "template": "90.1-2016",
+        "equipment_type": "Closed Cooling Tower",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 16.1,
+        "annotation": "From 90.1-2016 Table 6.8.1-7"
+    },
+    {
+        "template": "90.1-2016",
+        "equipment_type": "Dry Cooler",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 4,
+        "annotation": "NOTE Not required by code. Value provided by 90.1 Mechanical Subcommittee"
+    },
+    {
+        "template": "90.1-2019",
+        "equipment_type": "Open Cooling Tower",
+        "fan_type": "Centrifugal",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 20,
+        "annotation": "From 90.1-2019 Table 6.8.1-7"
+    },
+    {
+        "template": "90.1-2019",
+        "equipment_type": "Open Cooling Tower",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 40.2,
+        "annotation": "From 90.1-2019 Table 6.8.1-7"
+    },
+    {
+        "template": "90.1-2019",
+        "equipment_type": "Closed Cooling Tower",
+        "fan_type": "Centrifugal",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 7,
+        "annotation": "From 90.1-2019 Table 6.8.1-7"
+    },
+    {
+        "template": "90.1-2019",
+        "equipment_type": "Closed Cooling Tower",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 16.1,
+        "annotation": "From 90.1-2019 Table 6.8.1-7"
+    },
+    {
+        "template": "90.1-2019",
+        "equipment_type": "Dry Cooler",
+        "fan_type": "Propeller or Axial",
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_performance_gpm_per_hp": 4.5,
+        "annotation": "From 90.1-2019 Table 6.8.1.7. Juan Gonzalez Added 01/11/2021 to account for fluid coolers in data center water loop heat pump condenser loops"
+    }
+]

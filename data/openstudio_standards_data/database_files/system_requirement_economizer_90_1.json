@@ -1,0 +1,3970 @@
+[
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-1A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-1A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-1B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-1B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-2A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-2A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-2B",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-2B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-3A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-3A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-3B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-3B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-3C",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-3C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-4A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-4A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-4B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-4B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-4C",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-4C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-5A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-5A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-5B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-5B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-5C",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-5C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-6A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-6A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-6B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-6B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-7A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-7A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-7B",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-7B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-8A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-8A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-8B",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-8B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-1A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-1A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-1B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-1B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-2A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-2A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-2B",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-2B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-3A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-3A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-3B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-3B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-3C",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-3C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-4A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-4A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-4B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-4B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-4C",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-4C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-5A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-5A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-5B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-5B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-5C",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-5C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-6A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-6A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-6B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-6B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-7A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-7A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-7B",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-7B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-8A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-8A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-8B",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-8B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-1A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-1A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-1B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-1B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-2A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-2A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-2B",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-2B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-3A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-3A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-3B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-3B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-3C",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-3C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-4A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-4A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-4B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-4B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-4C",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-4C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-5A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-5A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-5B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-5B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-5C",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-5C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-6A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-6A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-6B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-6B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-7A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-7A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-7B",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-7B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-8A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-8A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-8B",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-8B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-1A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-1A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-1B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-1B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-2A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-2A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-2B",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-2B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-3A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-3A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-3B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-3B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-3C",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-3C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-4A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-4A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-4B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-4B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-4C",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-4C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-5A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-5A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-5B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-5B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-5C",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-5C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-6A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-6A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-6B",
+        "data_center": "FALSE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-6B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-7A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-7A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-7B",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-7B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-8A",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-8A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-8B",
+        "data_center": "FALSE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-8B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-1A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-1A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-1B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-1B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-2A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-2A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-2B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-2B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-3A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-3A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-3B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-3B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-3C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-3C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-4A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-4A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-4B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-4B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-4C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-4C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-5A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-5A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-5B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-5B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-5C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-5C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-6A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-6A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-6B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-6B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-7A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-7A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-7B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-7B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-8A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-8A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-8B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-8B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-1A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-1A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-1B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-1B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-2A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-2A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-2B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-2B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-3A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-3A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-3B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-3B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-3C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-3C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-4A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-4A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-4B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-4B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-4C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-4C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-5A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-5A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-5B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-5B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-5C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-5C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-6A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-6A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-6B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-6B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-7A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-7A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-7B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-7B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-8A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-8A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-8B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-8B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-1A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-1A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-1B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-1B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-2A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-2A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-2B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-2B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-3A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-3A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-3B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-3B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-3C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-3C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-4A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-4A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-4B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-4B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-4C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-4C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-5A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-5A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-5B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-5B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-5C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-5C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-6A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-6A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-6B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-6B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-7A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-7A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-7B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-7B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-8A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-8A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-8B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-8B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-1A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-1A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-1B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-1B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-2A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-2A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-2B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-2B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-3A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-3A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-3B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-3B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-3C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-3C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-4A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-4A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-4B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-4B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-4C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-4C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-5A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-5A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-5B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-5B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-5C",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-5C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-6A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-6A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-6B",
+        "data_center": "TRUE",
+        "capacity_limit": 65000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-6B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-7A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-7A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-7B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-7B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-8A",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-8A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-8B",
+        "data_center": "TRUE",
+        "capacity_limit": 135000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-8B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-0A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2006-0B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-0A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2006-0B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-0A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-0B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-0A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-0B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-0A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2004",
+        "climate_zone": "ASHRAE 169-2013-0B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2004 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-0A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 65,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2007",
+        "climate_zone": "ASHRAE 169-2013-0B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2007 Table 6.5.1"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-0A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-0B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1A"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-0A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-0B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-1"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-0A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2006-0B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-0A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "climate_zone": "ASHRAE 169-2013-0B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2010 Table 6.5.1B"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-0A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2006-0B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-0A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2013",
+        "climate_zone": "ASHRAE 169-2013-0B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2013 Table 6.5.1-2"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-1A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-1A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-1B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-1B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-2A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-2A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-2B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-2B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-3A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-3A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-3B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-3B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-3C",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-3C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-4A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-4A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-4B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-4B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-4C",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-4C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-5A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-5A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-5B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-5B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-5C",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-5C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-6A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-6A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-6B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-6B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-7A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-7A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-7B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-7B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-8A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-8A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-8B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-8B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-1A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-1A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-1B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-1B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-2A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-2A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-2B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-2B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-3A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-3A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-3B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-3B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-3C",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-3C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-4A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-4A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-4B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-4B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-4C",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-4C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-5A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-5A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-5B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-5B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-5C",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-5C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-6A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-6A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-6B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-6B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-7A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-7A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-7B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-7B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-8A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-8A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-8B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-8B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-0A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-0B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-0A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-0B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-0A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2006-0B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-0A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2016",
+        "climate_zone": "ASHRAE 169-2013-0B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2016 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-1A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-1A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-1B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-1B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-2A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-2A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-2B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-2B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-3A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-3A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-3B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-3B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-3C",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-3C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-4A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-4A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-4B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-4B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-4C",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-4C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-5A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-5A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-5B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-5B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-5C",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-5C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-6A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-6A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-6B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-6B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-7A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-7A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-7B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-7B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-8A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-8A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-8B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-8B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-1A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-1A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-1B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-1B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-2A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-2A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-2B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-2B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-3A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-3A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-3B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-3B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-3C",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-3C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-4A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-4A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-4B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-4B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-4C",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-4C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-5A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-5A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-5B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-5B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-5C",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-5C",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-6A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-6A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 70,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-6B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-6B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-7A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-7A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-7B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-7B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-8A",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-8A",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-8B",
+        "data_center": "TRUE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-8B",
+        "data_center": "FALSE",
+        "capacity_limit": 54000,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-0A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-0B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-0A",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-0B",
+        "data_center": "FALSE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-0A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2006-0B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-0A",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    },
+    {
+        "template": "90.1-2019",
+        "climate_zone": "ASHRAE 169-2013-0B",
+        "data_center": "TRUE",
+        "capacity_limit": null,
+        "fixed_dry_bulb_high_limit_shutoff_temp": 75,
+        "annotation": "90.1-2019 Table 6.5.1.1.3"
+    }
+]
