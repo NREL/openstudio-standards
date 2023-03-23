@@ -9,5 +9,5 @@ class VentDef6212004Table(VentDef621):
     def __init__(self):
         super(VentDef6212004Table, self).__init__(
             table_name=TABLE_NAME,
-            initial_data_directory=f"initial_data/{TABLE_NAME}",
+            initial_data_directory=f"database_files/{TABLE_NAME}",
         )
