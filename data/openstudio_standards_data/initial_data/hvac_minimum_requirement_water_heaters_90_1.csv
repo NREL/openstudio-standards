@@ -1,0 +1,25 @@
+template,fuel_type,minimum_capacity,maximum_capacity,start_date,end_date,energy_factor_base,energy_factor_volume_derate,standby_loss_base,standby_loss_capacity_allowance,standby_loss_volume_allowance,hourly_loss_base,hourly_loss_volume_allowance,thermal_efficiency,annotation
+90.1-2004,Electricity,0,40945.99,9/9/1919,9/9/2999,0.93,0.00132,,,,,,,From 90.1-2004 Table 7.8
+90.1-2004,Electricity,40946,99999999,9/9/1919,9/9/2999,,,20,,35,,,,From 90.1-2004 Table 7.8
+90.1-2004,NaturalGas,0,74999.99,9/9/1919,9/9/2999,0.62,0.0019,,,,,,,From 90.1-2004 Table 7.8
+90.1-2004,NaturalGas,75000,99999999,9/9/1919,9/9/2999,,,,800,110,,,0.8,From 90.1-2004 Table 7.8
+90.1-2007,Electricity,0,40945.99,9/9/1919,9/9/2999,0.93,0.00132,,,,,,,From 90.1-2007 Table 7.8
+90.1-2007,Electricity,40946,99999999,9/9/1919,9/9/2999,,,20,,35,,,,From 90.1-2007 Table 7.8
+90.1-2007,NaturalGas,0,74999.99,9/9/1919,9/9/2999,0.62,0.0019,,,,,,,From 90.1-2007 Table 7.8
+90.1-2007,NaturalGas,75000,99999999,9/9/1919,9/9/2999,,,,800,110,,,0.8,From 90.1-2007 Table 7.8
+90.1-2010,Electricity,0,40945.99,9/9/1919,9/9/2999,0.97,0.00132,,,,,,,From 90.1-2010 Table 7.8
+90.1-2010,Electricity,40946,99999999,9/9/1919,9/9/2999,,,20,,35,,,,From 90.1-2010 Table 7.8
+90.1-2010,NaturalGas,0,74999.99,9/9/1919,9/9/2999,0.67,0.0019,,,,,,,From 90.1-2010 Table 7.8
+90.1-2010,NaturalGas,75000,99999999,9/9/1919,9/9/2999,,,,800,110,,,0.8,From 90.1-2010 Table 7.8
+90.1-2013,Electricity,0,40945.99,9/9/1919,9/9/2999,0.97,0.00132,,,,,,,From 90.1-2013 Table 7.8
+90.1-2013,Electricity,40946,99999999,9/9/1919,9/9/2999,,,,,,0.3,27,,From 90.1-2013 Table 7.8
+90.1-2013,NaturalGas,0,74999.99,9/9/1919,9/9/2999,0.67,0.0019,,,,,,,From 90.1-2013 Table 7.8
+90.1-2013,NaturalGas,75000,99999999,9/9/1919,9/9/2999,,,,800,110,,,0.8,From 90.1-2013 Table 7.8
+90.1-2016,Electricity,0,40945.99,9/9/1919,9/9/2999,0.96,0.0003,,,,,,,"From 90.1-2016 Table F-2, Rated Storage Volume <= 55 gal"
+90.1-2016,Electricity,40946,99999999,9/9/1919,9/9/2999,,,,,,0.3,27,,
+90.1-2016,NaturalGas,0,74999.99,9/9/1919,9/9/2999,0.675,0.0015,,,,,,,"From 90.1-2016 Table F-2, Rated Storage Volume <= 55 gal"
+90.1-2016,NaturalGas,75000,99999999,9/9/1919,9/9/2999,,,,800,110,,,0.8,
+90.1-2019,Electricity,0,40945.99,9/9/1919,9/9/2999,0.96,0.0003,,,,,,,Same as 90.1-2016 as placeholder; 90.1-2019 Table F-2 uses UEF
+90.1-2019,Electricity,40946,99999999,9/9/1919,9/9/2999,,,,,,0.3,27,,
+90.1-2019,NaturalGas,0,74999.99,9/9/1919,9/9/2999,0.675,0.0015,,,,,,,Same as 90.1-2016 as placeholder; 90.1-2019 Table F-2 uses UEF
+90.1-2019,NaturalGas,75000,99999999,9/9/1919,9/9/2999,,,,800,110,,,0.8,

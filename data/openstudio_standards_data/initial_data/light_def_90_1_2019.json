@@ -1,0 +1,1244 @@
+[
+    {
+        "id": 1,
+        "method": "BA",
+        "lighting_primary_space_type": "Automotive facility",
+        "lighting_per_area": 0.75,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 2,
+        "method": "BA",
+        "lighting_primary_space_type": "Convention center",
+        "lighting_per_area": 0.64,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 3,
+        "method": "BA",
+        "lighting_primary_space_type": "Courthouse",
+        "lighting_per_area": 0.79,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 4,
+        "method": "BA",
+        "lighting_primary_space_type": "Dining: Bar lounge/leisure",
+        "lighting_per_area": 0.8,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 5,
+        "method": "BA",
+        "lighting_primary_space_type": "Dining: Cafeteria/fast food",
+        "lighting_per_area": 0.76,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 6,
+        "method": "BA",
+        "lighting_primary_space_type": "Dining: Family",
+        "lighting_per_area": 0.71,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 7,
+        "method": "BA",
+        "lighting_primary_space_type": "Dormitory",
+        "lighting_per_area": 0.53,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 8,
+        "method": "BA",
+        "lighting_primary_space_type": "Exercise center",
+        "lighting_per_area": 0.72,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 9,
+        "method": "BA",
+        "lighting_primary_space_type": "Fire station",
+        "lighting_per_area": 0.56,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 10,
+        "method": "BA",
+        "lighting_primary_space_type": "Gymnasium",
+        "lighting_per_area": 0.76,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 11,
+        "method": "BA",
+        "lighting_primary_space_type": "Health-care clinic",
+        "lighting_per_area": 0.81,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 12,
+        "method": "BA",
+        "lighting_primary_space_type": "Hospital",
+        "lighting_per_area": 0.96,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 13,
+        "method": "BA",
+        "lighting_primary_space_type": "Hotel/motel",
+        "lighting_per_area": 0.56,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 14,
+        "method": "BA",
+        "lighting_primary_space_type": "Library",
+        "lighting_per_area": 0.83,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 15,
+        "method": "BA",
+        "lighting_primary_space_type": "Manufacturing facility",
+        "lighting_per_area": 0.82,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 16,
+        "method": "BA",
+        "lighting_primary_space_type": "Motion picture theater",
+        "lighting_per_area": 0.44,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 17,
+        "method": "BA",
+        "lighting_primary_space_type": "Multifamily",
+        "lighting_per_area": 0.45,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 18,
+        "method": "BA",
+        "lighting_primary_space_type": "Museum",
+        "lighting_per_area": 0.55,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 19,
+        "method": "BA",
+        "lighting_primary_space_type": "Office",
+        "lighting_per_area": 0.64,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 20,
+        "method": "BA",
+        "lighting_primary_space_type": "Parking garage",
+        "lighting_per_area": 0.18,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 21,
+        "method": "BA",
+        "lighting_primary_space_type": "Penitentiary",
+        "lighting_per_area": 0.69,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 22,
+        "method": "BA",
+        "lighting_primary_space_type": "Performing arts theater",
+        "lighting_per_area": 0.84,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 23,
+        "method": "BA",
+        "lighting_primary_space_type": "Police station",
+        "lighting_per_area": 0.66,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 24,
+        "method": "BA",
+        "lighting_primary_space_type": "Post office",
+        "lighting_per_area": 0.65,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 25,
+        "method": "BA",
+        "lighting_primary_space_type": "Religious facility",
+        "lighting_per_area": 0.67,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 26,
+        "method": "BA",
+        "lighting_primary_space_type": "Retail",
+        "lighting_per_area": 0.84,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 27,
+        "method": "BA",
+        "lighting_primary_space_type": "School/university",
+        "lighting_per_area": 0.72,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 28,
+        "method": "BA",
+        "lighting_primary_space_type": "Sports arena",
+        "lighting_per_area": 0.76,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 29,
+        "method": "BA",
+        "lighting_primary_space_type": "Town hall",
+        "lighting_per_area": 0.69,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 30,
+        "method": "BA",
+        "lighting_primary_space_type": "Transportation",
+        "lighting_per_area": 0.5,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 31,
+        "method": "BA",
+        "lighting_primary_space_type": "Warehouse",
+        "lighting_per_area": 0.45,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 32,
+        "method": "BA",
+        "lighting_primary_space_type": "Workshop",
+        "lighting_per_area": 0.91,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 33,
+        "method": "CS",
+        "lighting_primary_space_type": "Atrium",
+        "lighting_per_area": 0.39,
+        "lighting_secondary_space_type": "< 20 ft in height",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 34,
+        "method": "CS",
+        "lighting_primary_space_type": "Atrium",
+        "lighting_per_area": 0.48,
+        "lighting_secondary_space_type": ">= 20 ft and <= 40 ft in height",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 35,
+        "method": "CS",
+        "lighting_primary_space_type": "Atrium",
+        "lighting_per_area": 0.6,
+        "lighting_secondary_space_type": "> 40 ft in height",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 36,
+        "method": "CS",
+        "lighting_primary_space_type": "Audience Seating Area",
+        "lighting_per_area": 0.61,
+        "lighting_secondary_space_type": "Auditorium",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 37,
+        "method": "CS",
+        "lighting_primary_space_type": "Audience Seating Area",
+        "lighting_per_area": 0.23,
+        "lighting_secondary_space_type": "Gymnasium",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 38,
+        "method": "CS",
+        "lighting_primary_space_type": "Audience Seating Area",
+        "lighting_per_area": 0.27,
+        "lighting_secondary_space_type": "Motion picture theater",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 39,
+        "method": "CS",
+        "lighting_primary_space_type": "Audience Seating Area",
+        "lighting_per_area": 0.67,
+        "lighting_secondary_space_type": "Penitentiary",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 40,
+        "method": "CS",
+        "lighting_primary_space_type": "Audience Seating Area",
+        "lighting_per_area": 1.16,
+        "lighting_secondary_space_type": "Performing arts theater",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 41,
+        "method": "CS",
+        "lighting_primary_space_type": "Audience Seating Area",
+        "lighting_per_area": 0.72,
+        "lighting_secondary_space_type": "Religious facility",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 42,
+        "method": "CS",
+        "lighting_primary_space_type": "Audience Seating Area",
+        "lighting_per_area": 0.33,
+        "lighting_secondary_space_type": "Sports arena",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 43,
+        "method": "CS",
+        "lighting_primary_space_type": "Audience Seating Area",
+        "lighting_per_area": 0.23,
+        "lighting_secondary_space_type": "All other audience seating areas",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 44,
+        "method": "CS",
+        "lighting_primary_space_type": "Banking Activity Area",
+        "lighting_per_area": 0.61,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 45,
+        "method": "CS",
+        "lighting_primary_space_type": "Breakroom",
+        "lighting_per_area": 0.59,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": "(See Lounge/Breakroom)"
+    },
+    {
+        "id": 46,
+        "method": "CS",
+        "lighting_primary_space_type": "Classroom/Lecture Hall/Training Room",
+        "lighting_per_area": 0.89,
+        "lighting_secondary_space_type": "Penitentiary",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 47,
+        "method": "CS",
+        "lighting_primary_space_type": "Classroom/Lecture Hall/Training Room",
+        "lighting_per_area": 0.71,
+        "lighting_secondary_space_type": "All other classrooms/lecture halls/training rooms",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 48,
+        "method": "CS",
+        "lighting_primary_space_type": "Conference/Meeting/Multipurpose Room",
+        "lighting_per_area": 0.97,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 49,
+        "method": "CS",
+        "lighting_primary_space_type": "Confinement Cells",
+        "lighting_per_area": 0.7,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 50,
+        "method": "CS",
+        "lighting_primary_space_type": "Copy/Print Room",
+        "lighting_per_area": 0.31,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 51,
+        "method": "CS",
+        "lighting_primary_space_type": "Corridor",
+        "lighting_per_area": 0.71,
+        "lighting_secondary_space_type": "Facility for the visually impaired (and not used primarily by the staff)",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 52,
+        "method": "CS",
+        "lighting_primary_space_type": "Corridor",
+        "lighting_per_area": 0.71,
+        "lighting_secondary_space_type": "Hospital",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 53,
+        "method": "CS",
+        "lighting_primary_space_type": "Corridor",
+        "lighting_per_area": 0.41,
+        "lighting_secondary_space_type": "All other corridors",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 54,
+        "method": "CS",
+        "lighting_primary_space_type": "Courtroom",
+        "lighting_per_area": 1.2,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 55,
+        "method": "CS",
+        "lighting_primary_space_type": "Computer Room",
+        "lighting_per_area": 0.94,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 56,
+        "method": "CS",
+        "lighting_primary_space_type": "Dining Area",
+        "lighting_per_area": 0.42,
+        "lighting_secondary_space_type": "Penitentiary",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 57,
+        "method": "CS",
+        "lighting_primary_space_type": "Dining Area",
+        "lighting_per_area": 1.27,
+        "lighting_secondary_space_type": "Facility for the visually impaired (and not used primarily by staff)",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 58,
+        "method": "CS",
+        "lighting_primary_space_type": "Dining Area",
+        "lighting_per_area": 0.86,
+        "lighting_secondary_space_type": "Bar/lounge or leisure dining",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 59,
+        "method": "CS",
+        "lighting_primary_space_type": "Dining Area",
+        "lighting_per_area": 0.4,
+        "lighting_secondary_space_type": "Cafeteria or fast food dining",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 60,
+        "method": "CS",
+        "lighting_primary_space_type": "Dining Area",
+        "lighting_per_area": 0.6,
+        "lighting_secondary_space_type": "Family dining",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 61,
+        "method": "CS",
+        "lighting_primary_space_type": "Dining Area",
+        "lighting_per_area": 0.43,
+        "lighting_secondary_space_type": "All other dining areas",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 62,
+        "method": "CS",
+        "lighting_primary_space_type": "Electrical/Mechanical Room",
+        "lighting_per_area": 0.43,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 63,
+        "method": "CS",
+        "lighting_primary_space_type": "Emergency Vehicle Garage",
+        "lighting_per_area": 0.52,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 64,
+        "method": "CS",
+        "lighting_primary_space_type": "Food Preparation Area",
+        "lighting_per_area": 1.09,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 65,
+        "method": "CS",
+        "lighting_primary_space_type": "Guest Room",
+        "lighting_per_area": 0.41,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 66,
+        "method": "CS",
+        "lighting_primary_space_type": "Laboratory",
+        "lighting_per_area": 1.11,
+        "lighting_secondary_space_type": "In or as a classroom",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 67,
+        "method": "CS",
+        "lighting_primary_space_type": "Laboratory",
+        "lighting_per_area": 1.33,
+        "lighting_secondary_space_type": "All other laboratories",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 68,
+        "method": "CS",
+        "lighting_primary_space_type": "Laundry/Washing Area",
+        "lighting_per_area": 0.53,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 69,
+        "method": "CS",
+        "lighting_primary_space_type": "Loading Dock, Interior",
+        "lighting_per_area": 0.88,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 70,
+        "method": "CS",
+        "lighting_primary_space_type": "Lobby",
+        "lighting_per_area": 1.69,
+        "lighting_secondary_space_type": "Facility for the visually impaired (and not used primarily by the staff)",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 71,
+        "method": "CS",
+        "lighting_primary_space_type": "Lobby",
+        "lighting_per_area": 0.65,
+        "lighting_secondary_space_type": "Elevator",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 72,
+        "method": "CS",
+        "lighting_primary_space_type": "Lobby",
+        "lighting_per_area": 0.51,
+        "lighting_secondary_space_type": "Hotel",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 73,
+        "method": "CS",
+        "lighting_primary_space_type": "Lobby",
+        "lighting_per_area": 0.23,
+        "lighting_secondary_space_type": "Motion picture theater",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 74,
+        "method": "CS",
+        "lighting_primary_space_type": "Lobby",
+        "lighting_per_area": 1.25,
+        "lighting_secondary_space_type": "Performing arts theater ",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 75,
+        "method": "CS",
+        "lighting_primary_space_type": "Lobby",
+        "lighting_per_area": 0.84,
+        "lighting_secondary_space_type": "All other lobbies",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 76,
+        "method": "CS",
+        "lighting_primary_space_type": "Locker Room",
+        "lighting_per_area": 0.52,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 77,
+        "method": "CS",
+        "lighting_primary_space_type": "Lounge/Breakroom",
+        "lighting_per_area": 0.42,
+        "lighting_secondary_space_type": "Healthcare facility",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 78,
+        "method": "CS",
+        "lighting_primary_space_type": "Lounge/Breakroom",
+        "lighting_per_area": 0.59,
+        "lighting_secondary_space_type": "All other lounges/breakrooms",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 79,
+        "method": "CS",
+        "lighting_primary_space_type": "Office",
+        "lighting_per_area": 0.74,
+        "lighting_secondary_space_type": "Enclosed and <= 250 ft2",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 80,
+        "method": "CS",
+        "lighting_primary_space_type": "Office",
+        "lighting_per_area": 0.66,
+        "lighting_secondary_space_type": "Enclosed and > 250 ft2",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 81,
+        "method": "CS",
+        "lighting_primary_space_type": "Office",
+        "lighting_per_area": 0.61,
+        "lighting_secondary_space_type": "Open plan",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 82,
+        "method": "CS",
+        "lighting_primary_space_type": "Parking Area, Interior",
+        "lighting_per_area": 0.15,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 83,
+        "method": "CS",
+        "lighting_primary_space_type": "Pharmacy Area",
+        "lighting_per_area": 1.66,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 84,
+        "method": "CS",
+        "lighting_primary_space_type": "Restroom",
+        "lighting_per_area": 1.26,
+        "lighting_secondary_space_type": "Facility for the visually impaired (and not used primarily by the staff)",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 85,
+        "method": "CS",
+        "lighting_primary_space_type": "Restroom",
+        "lighting_per_area": 0.63,
+        "lighting_secondary_space_type": "All other restrooms",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 86,
+        "method": "CS",
+        "lighting_primary_space_type": "Sales Area",
+        "lighting_per_area": 1.05,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 87,
+        "method": "CS",
+        "lighting_primary_space_type": "Seating Area, General",
+        "lighting_per_area": 0.23,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 88,
+        "method": "CS",
+        "lighting_primary_space_type": "Stairway",
+        "lighting_per_area": 0.49,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": "The space containing the stairway shall determine the LPD and control requirements for the stairway."
+    },
+    {
+        "id": 89,
+        "method": "CS",
+        "lighting_primary_space_type": "Stairwell",
+        "lighting_per_area": 0.49,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 90,
+        "method": "CS",
+        "lighting_primary_space_type": "Storage Room",
+        "lighting_per_area": 0.51,
+        "lighting_secondary_space_type": "< 50 ft2",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 91,
+        "method": "CS",
+        "lighting_primary_space_type": "Storage Room",
+        "lighting_per_area": 0.38,
+        "lighting_secondary_space_type": ">= 50 ft2",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 92,
+        "method": "CS",
+        "lighting_primary_space_type": "Vehicular Maintenance Area",
+        "lighting_per_area": 0.6,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 93,
+        "method": "CS",
+        "lighting_primary_space_type": "Workshop",
+        "lighting_per_area": 1.26,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 94,
+        "method": "SS",
+        "lighting_primary_space_type": "Facility for the Visually Impaired",
+        "lighting_per_area": 0.7,
+        "lighting_secondary_space_type": "Chapel (used primarily by residents)",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 95,
+        "method": "SS",
+        "lighting_primary_space_type": "Facility for the Visually Impaired",
+        "lighting_per_area": 1.77,
+        "lighting_secondary_space_type": "Recreation room/common living room (and not used primarily by staff)",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 96,
+        "method": "SS",
+        "lighting_primary_space_type": "Automotive",
+        "lighting_per_area": 0.6,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": "(See \u201cVehicular Maintenance Area\u201d)"
+    },
+    {
+        "id": 97,
+        "method": "SS",
+        "lighting_primary_space_type": "Convention Center\u2014Exhibit Space",
+        "lighting_per_area": 0.61,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 98,
+        "method": "SS",
+        "lighting_primary_space_type": "Dormitory\u2014Living Quarters",
+        "lighting_per_area": 0.5,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 99,
+        "method": "SS",
+        "lighting_primary_space_type": "Fire Station\u2014Sleeping Quarters",
+        "lighting_per_area": 0.23,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 100,
+        "method": "SS",
+        "lighting_primary_space_type": "Gymnasium/Fitness Center",
+        "lighting_per_area": 0.9,
+        "lighting_secondary_space_type": "Exercise area",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 101,
+        "method": "SS",
+        "lighting_primary_space_type": "Gymnasium/Fitness Center",
+        "lighting_per_area": 0.85,
+        "lighting_secondary_space_type": "Playing area",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 102,
+        "method": "SS",
+        "lighting_primary_space_type": "Healthcare Facility",
+        "lighting_per_area": 1.4,
+        "lighting_secondary_space_type": "Exam/treatment room",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 103,
+        "method": "SS",
+        "lighting_primary_space_type": "Healthcare Facility",
+        "lighting_per_area": 0.94,
+        "lighting_secondary_space_type": "Imaging room",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 104,
+        "method": "SS",
+        "lighting_primary_space_type": "Healthcare Facility",
+        "lighting_per_area": 0.62,
+        "lighting_secondary_space_type": "Medical supply room",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 105,
+        "method": "SS",
+        "lighting_primary_space_type": "Healthcare Facility",
+        "lighting_per_area": 0.92,
+        "lighting_secondary_space_type": "Nursery",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 106,
+        "method": "SS",
+        "lighting_primary_space_type": "Healthcare Facility",
+        "lighting_per_area": 1.17,
+        "lighting_secondary_space_type": "Nurse\u2019s station",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 107,
+        "method": "SS",
+        "lighting_primary_space_type": "Healthcare Facility",
+        "lighting_per_area": 2.26,
+        "lighting_secondary_space_type": "Operating room",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 108,
+        "method": "SS",
+        "lighting_primary_space_type": "Healthcare Facility",
+        "lighting_per_area": 0.68,
+        "lighting_secondary_space_type": "Patient room",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 109,
+        "method": "SS",
+        "lighting_primary_space_type": "Healthcare Facility",
+        "lighting_per_area": 0.91,
+        "lighting_secondary_space_type": "Physical therapy room",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 110,
+        "method": "SS",
+        "lighting_primary_space_type": "Healthcare Facility",
+        "lighting_per_area": 1.25,
+        "lighting_secondary_space_type": "Recovery room",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 111,
+        "method": "SS",
+        "lighting_primary_space_type": "Library",
+        "lighting_per_area": 0.96,
+        "lighting_secondary_space_type": "Reading area",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 112,
+        "method": "SS",
+        "lighting_primary_space_type": "Library",
+        "lighting_per_area": 1.18,
+        "lighting_secondary_space_type": "Stacks",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 113,
+        "method": "SS",
+        "lighting_primary_space_type": "Manufacturing Facility",
+        "lighting_per_area": 0.8,
+        "lighting_secondary_space_type": "Detailed manufacturing area",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 114,
+        "method": "SS",
+        "lighting_primary_space_type": "Manufacturing Facility",
+        "lighting_per_area": 0.76,
+        "lighting_secondary_space_type": "Equipment room",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 115,
+        "method": "SS",
+        "lighting_primary_space_type": "Manufacturing Facility",
+        "lighting_per_area": 1.42,
+        "lighting_secondary_space_type": "Extra high bay area (> 50 ft floor-to-ceiling height)",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 116,
+        "method": "SS",
+        "lighting_primary_space_type": "Manufacturing Facility",
+        "lighting_per_area": 1.24,
+        "lighting_secondary_space_type": "High bay area (25 to 50 ft floor-to-ceiling height)",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 117,
+        "method": "SS",
+        "lighting_primary_space_type": "Manufacturing Facility",
+        "lighting_per_area": 0.86,
+        "lighting_secondary_space_type": "Low bay area (< 25 ft floor-to-ceiling height)",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 118,
+        "method": "SS",
+        "lighting_primary_space_type": "Museum",
+        "lighting_per_area": 0.31,
+        "lighting_secondary_space_type": "General exhibition area",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 119,
+        "method": "SS",
+        "lighting_primary_space_type": "Museum",
+        "lighting_per_area": 1.1,
+        "lighting_secondary_space_type": "Restoration room",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 120,
+        "method": "SS",
+        "lighting_primary_space_type": "Performing Arts Theater\u2014Dressing Room",
+        "lighting_per_area": 0.41,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 121,
+        "method": "SS",
+        "lighting_primary_space_type": "Post Office\u2014Sorting Area",
+        "lighting_per_area": 0.76,
+        "lighting_secondary_space_type": "General",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 122,
+        "method": "SS",
+        "lighting_primary_space_type": "Religious Facility",
+        "lighting_per_area": 0.54,
+        "lighting_secondary_space_type": "Fellowship hall",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 123,
+        "method": "SS",
+        "lighting_primary_space_type": "Religious Facility",
+        "lighting_per_area": 0.85,
+        "lighting_secondary_space_type": "Worship/pulpit/choir area",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 124,
+        "method": "SS",
+        "lighting_primary_space_type": "Retail Facilities",
+        "lighting_per_area": 0.51,
+        "lighting_secondary_space_type": "Dressing/fitting room",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 125,
+        "method": "SS",
+        "lighting_primary_space_type": "Retail Facilities",
+        "lighting_per_area": 0.82,
+        "lighting_secondary_space_type": "Mall concourse",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 126,
+        "method": "SS",
+        "lighting_primary_space_type": "Sports Arena\u2014Playing Area",
+        "lighting_per_area": 2.94,
+        "lighting_secondary_space_type": "Class I facility",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 127,
+        "method": "SS",
+        "lighting_primary_space_type": "Sports Arena\u2014Playing Area",
+        "lighting_per_area": 2.01,
+        "lighting_secondary_space_type": "Class II facility",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 128,
+        "method": "SS",
+        "lighting_primary_space_type": "Sports Arena\u2014Playing Area",
+        "lighting_per_area": 1.3,
+        "lighting_secondary_space_type": "Class III facility",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 129,
+        "method": "SS",
+        "lighting_primary_space_type": "Sports Arena\u2014Playing Area",
+        "lighting_per_area": 0.86,
+        "lighting_secondary_space_type": "Class IV facility",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 130,
+        "method": "SS",
+        "lighting_primary_space_type": "Transportation Facility",
+        "lighting_per_area": 0.39,
+        "lighting_secondary_space_type": "Baggage/carousel area",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 131,
+        "method": "SS",
+        "lighting_primary_space_type": "Transportation Facility",
+        "lighting_per_area": 0.25,
+        "lighting_secondary_space_type": "Airport concourse",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 132,
+        "method": "SS",
+        "lighting_primary_space_type": "Transportation Facility",
+        "lighting_per_area": 0.51,
+        "lighting_secondary_space_type": "Ticket counter",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 133,
+        "method": "SS",
+        "lighting_primary_space_type": "Warehouse\u2014Storage Area",
+        "lighting_per_area": 0.33,
+        "lighting_secondary_space_type": "Medium to bulky, palletized items",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 134,
+        "method": "SS",
+        "lighting_primary_space_type": "Warehouse\u2014Storage Area",
+        "lighting_per_area": 0.69,
+        "lighting_secondary_space_type": "Smaller, hand-carried items",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 135,
+        "method": "SS",
+        "lighting_primary_space_type": "Retail",
+        "lighting_per_area": 0.45,
+        "lighting_secondary_space_type": "Sales Additional (Retail Area 1)",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 136,
+        "method": "SS",
+        "lighting_primary_space_type": "Retail",
+        "lighting_per_area": 0.45,
+        "lighting_secondary_space_type": "Sales Additional (Retail Area 2)",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 137,
+        "method": "SS",
+        "lighting_primary_space_type": "Retail",
+        "lighting_per_area": 1.05,
+        "lighting_secondary_space_type": "Sales Additional (Retail Area 3)",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    },
+    {
+        "id": 138,
+        "method": "SS",
+        "lighting_primary_space_type": "Retail",
+        "lighting_per_area": 1.88,
+        "lighting_secondary_space_type": "Sales Additional (Retail Area 4)",
+        "lighting_per_area_unit": "W/ft2",
+        "annotation": ""
+    }
+]

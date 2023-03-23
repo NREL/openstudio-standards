@@ -1,0 +1,898 @@
+[
+    {
+        "id": 1,
+        "space_type": "chapel - visually impaired",
+        "lighting_subspace_type": "chapel_visually_impaired",
+        "ventilation_subspace_type": "public_assembly_spaces_religious_workshop",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 2,
+        "space_type": "recreation/common living - visually impaired",
+        "lighting_subspace_type": "recreation_common_living_visually_impaired",
+        "ventilation_subspace_type": "hotels_motels_resorts_dormitories_multi_purpose_assembly",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 3,
+        "space_type": "atrium < 20 ft height",
+        "lighting_subspace_type": "atrium_low",
+        "ventilation_subspace_type": "office_buildings_main_entry_lobbies",
+        "plug_load_subspace_type": "atrium < 20 ft height"
+    },
+    {
+        "id": 4,
+        "space_type": "atrium >= 20 ft and <= 40 ft in height",
+        "lighting_subspace_type": "atrium_medium",
+        "ventilation_subspace_type": "office_buildings_main_entry_lobbies",
+        "plug_load_subspace_type": "atrium >= 20 ft and <= 40 ft in height"
+    },
+    {
+        "id": 5,
+        "space_type": "atrium > 40 ft height",
+        "lighting_subspace_type": "atrium_high",
+        "ventilation_subspace_type": "office_buildings_main_entry_lobbies",
+        "plug_load_subspace_type": "atrium > 40 ft height"
+    },
+    {
+        "id": 6,
+        "space_type": "audience seating - convention center",
+        "lighting_subspace_type": "audience_seating_convention_center",
+        "ventilation_subspace_type": "public_assembly_spaces_auditorium_seating_area",
+        "plug_load_subspace_type": "audience seating - convention center"
+    },
+    {
+        "id": 7,
+        "space_type": "audience seating - exercise center",
+        "lighting_subspace_type": "audience_seating_exercise_center",
+        "ventilation_subspace_type": "sports_entertainment_spectator_areas",
+        "plug_load_subspace_type": "audience seating - exercise center"
+    },
+    {
+        "id": 8,
+        "space_type": "audience seating - all other",
+        "lighting_subspace_type": "audience_seating_general",
+        "ventilation_subspace_type": "public_assembly_spaces_auditorium_seating_area",
+        "plug_load_subspace_type": "audience seating - all other"
+    },
+    {
+        "id": 9,
+        "space_type": "audience seating - auditorium",
+        "lighting_subspace_type": "audience_seating_auditorium",
+        "ventilation_subspace_type": "public_assembly_spaces_auditorium_seating_area",
+        "plug_load_subspace_type": "audience seating - auditorium"
+    },
+    {
+        "id": 10,
+        "space_type": "audience seating - gymnasium",
+        "lighting_subspace_type": "audience_seating_gymnasium",
+        "ventilation_subspace_type": "sports_entertainment_spectator_areas",
+        "plug_load_subspace_type": "audience seating - gymnasium"
+    },
+    {
+        "id": 11,
+        "space_type": "audience seating - sports arena",
+        "lighting_subspace_type": "audience_seating_sports_arena",
+        "ventilation_subspace_type": "sports_entertainment_spectator_areas",
+        "plug_load_subspace_type": "audience seating - sports arena"
+    },
+    {
+        "id": 12,
+        "space_type": "audience seating - motion picture theater",
+        "lighting_subspace_type": "audience_seating_motion_picture_theater",
+        "ventilation_subspace_type": "public_assembly_spaces_auditorium_seating_area",
+        "plug_load_subspace_type": "audience seating - motion picture theater"
+    },
+    {
+        "id": 13,
+        "space_type": "audience seating - penitentiary",
+        "lighting_subspace_type": "audience_seating_penitentiary",
+        "ventilation_subspace_type": "public_assembly_spaces_auditorium_seating_area",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 14,
+        "space_type": "audience seating - performing arts theater",
+        "lighting_subspace_type": "audience_seating_performing_arts_theater",
+        "ventilation_subspace_type": "public_assembly_spaces_auditorium_seating_area",
+        "plug_load_subspace_type": "audience seating - performing arts theater"
+    },
+    {
+        "id": 15,
+        "space_type": "audience seating - religious facility",
+        "lighting_subspace_type": "audience_seating_religious_facility",
+        "ventilation_subspace_type": "public_assembly_spaces_auditorium_seating_area",
+        "plug_load_subspace_type": "audience seating - religious facility"
+    },
+    {
+        "id": 16,
+        "space_type": "audience seating - transportation facility",
+        "lighting_subspace_type": "audience_seating_transportation",
+        "ventilation_subspace_type": "public_assembly_spaces_auditorium_seating_area",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 17,
+        "space_type": "automotive",
+        "lighting_subspace_type": "automotive",
+        "ventilation_subspace_type": "miscellaneous_spaces_transportation_waiting",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 18,
+        "space_type": "banking activity",
+        "lighting_subspace_type": "banking_activity",
+        "ventilation_subspace_type": "miscellaneous_spaces_banks_bank_lobbies",
+        "plug_load_subspace_type": "banking activity"
+    },
+    {
+        "id": 19,
+        "space_type": "classroom/lecture/training - all other",
+        "lighting_subspace_type": "classroom_lecture_training_general",
+        "ventilation_subspace_type": "educational_facilities_classroom_old",
+        "plug_load_subspace_type": "classroom/lecture/training - all other"
+    },
+    {
+        "id": 20,
+        "space_type": "classroom/lecture/training - penitentiary",
+        "lighting_subspace_type": "classroom_lecture_training_penitentiary",
+        "ventilation_subspace_type": "correctional_facilities_dayroom",
+        "plug_load_subspace_type": "classroom/lecture/training - penitentiary"
+    },
+    {
+        "id": 21,
+        "space_type": "classroom - laboratory or shop",
+        "lighting_subspace_type": "laboratory_classroom",
+        "ventilation_subspace_type": "educational_facilities_university_college_laboratories",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 22,
+        "space_type": "classroom/lecture/training - preschool to 12th",
+        "lighting_subspace_type": "classroom_lecture_training_general",
+        "ventilation_subspace_type": "educational_facilities_classroom_young",
+        "plug_load_subspace_type": "classroom/lecture/training - preschool to 12th"
+    },
+    {
+        "id": 23,
+        "space_type": "computer room",
+        "lighting_subspace_type": "computer_room",
+        "ventilation_subspace_type": "miscellaneous_spaces_computer",
+        "plug_load_subspace_type": "computer room"
+    },
+    {
+        "id": 24,
+        "space_type": "conference/meeting/multipurpose",
+        "lighting_subspace_type": "conference_meeting_multipurpose",
+        "ventilation_subspace_type": "general_conference_meeting",
+        "plug_load_subspace_type": "conference/meeting/multipurpose"
+    },
+    {
+        "id": 25,
+        "space_type": "confinement cells",
+        "lighting_subspace_type": "confinement_cells",
+        "ventilation_subspace_type": "correctional_facilities_cell",
+        "plug_load_subspace_type": "confinement cells"
+    },
+    {
+        "id": 26,
+        "space_type": "exhibit - convention center",
+        "lighting_subspace_type": "exhibit_convention_center",
+        "ventilation_subspace_type": "public_assembly_spaces_museums_galleries",
+        "plug_load_subspace_type": "exhibit - convention center"
+    },
+    {
+        "id": 27,
+        "space_type": "copy/print",
+        "lighting_subspace_type": "copy_print",
+        "ventilation_subspace_type": "office_buildings_telephone_data_entry",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 28,
+        "space_type": "corridor for visually impaired",
+        "lighting_subspace_type": "corridor_visually_impaired",
+        "ventilation_subspace_type": "general_conference_corridors",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 29,
+        "space_type": "corridor - hospital",
+        "lighting_subspace_type": "corridor_hospital",
+        "ventilation_subspace_type": "general_conference_corridors",
+        "plug_load_subspace_type": "corridor - hospital"
+    },
+    {
+        "id": 30,
+        "space_type": "corridor - manufacturing facility",
+        "lighting_subspace_type": "corridor_manufacturing_facility",
+        "ventilation_subspace_type": "general_conference_corridors",
+        "plug_load_subspace_type": "corridor - manufacturing facility"
+    },
+    {
+        "id": 31,
+        "space_type": "corridor - all other",
+        "lighting_subspace_type": "corridor_general",
+        "ventilation_subspace_type": "general_conference_corridors",
+        "plug_load_subspace_type": "corridor - all other"
+    },
+    {
+        "id": 32,
+        "space_type": "courtroom",
+        "lighting_subspace_type": "courtroom",
+        "ventilation_subspace_type": "public_assembly_spaces_courtrooms",
+        "plug_load_subspace_type": "courtroom"
+    },
+    {
+        "id": 33,
+        "space_type": "dining - all other",
+        "lighting_subspace_type": "dining_general",
+        "ventilation_subspace_type": "food_beverage_service_restaurant_dining_rooms",
+        "plug_load_subspace_type": "dining - all other"
+    },
+    {
+        "id": 34,
+        "space_type": "dining - bar/lounge/leisure",
+        "lighting_subspace_type": "dining_bar_lounge_leisure",
+        "ventilation_subspace_type": "food_beverage_service_bars_cocktail_lounges",
+        "plug_load_subspace_type": "dining - bar/lounge/leisure"
+    },
+    {
+        "id": 35,
+        "space_type": "dining - cafeteria/fast food",
+        "lighting_subspace_type": "dining_cafeteria_fast_food",
+        "ventilation_subspace_type": "food_beverage_service_cafeteria_fast_food_dining",
+        "plug_load_subspace_type": "dining - cafeteria/fast food"
+    },
+    {
+        "id": 36,
+        "space_type": "dining for visually impaired",
+        "lighting_subspace_type": "dining_visually_impaired",
+        "ventilation_subspace_type": "food_beverage_service_restaurant_dining_rooms",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 37,
+        "space_type": "dining - family",
+        "lighting_subspace_type": "dining_family",
+        "ventilation_subspace_type": "food_beverage_service_restaurant_dining_rooms",
+        "plug_load_subspace_type": "dining - family"
+    },
+    {
+        "id": 38,
+        "space_type": "dining - penitentiary",
+        "lighting_subspace_type": "dining_penitentiary",
+        "ventilation_subspace_type": "food_beverage_service_restaurant_dining_rooms",
+        "plug_load_subspace_type": "dining - penitentiary"
+    },
+    {
+        "id": 39,
+        "space_type": "dining - hotel",
+        "lighting_subspace_type": "dining_hotel",
+        "ventilation_subspace_type": "food_beverage_service_restaurant_dining_rooms",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 40,
+        "space_type": "dining - motel",
+        "lighting_subspace_type": "dining_motel",
+        "ventilation_subspace_type": "food_beverage_service_restaurant_dining_rooms",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 41,
+        "space_type": "dormitory - living quarters",
+        "lighting_subspace_type": "dormitory_living_quarters",
+        "ventilation_subspace_type": "hotels_motels_resorts_dormitories_bedroom_living_room",
+        "plug_load_subspace_type": "dormitory - living quarters"
+    },
+    {
+        "id": 42,
+        "space_type": "electrical/mechanical",
+        "lighting_subspace_type": "electrical_mechanical",
+        "ventilation_subspace_type": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
+        "plug_load_subspace_type": "electrical/mechanical"
+    },
+    {
+        "id": 43,
+        "space_type": "emergency vehicle garage",
+        "lighting_subspace_type": "emergency_vehicle_garage",
+        "ventilation_subspace_type": "miscellaneous_spaces_transportation_waiting",
+        "plug_load_subspace_type": "emergency vehicle garage"
+    },
+    {
+        "id": 44,
+        "space_type": "firestation - sleeping quarters",
+        "lighting_subspace_type": "firestation_sleeping_quarters",
+        "ventilation_subspace_type": "hotels_motels_resorts_dormitories_barracks_sleeping_areas",
+        "plug_load_subspace_type": "firestation - sleeping quarters"
+    },
+    {
+        "id": 45,
+        "space_type": "kitchen",
+        "lighting_subspace_type": "kitchen",
+        "ventilation_subspace_type": "food_beverage_service_kitchen",
+        "plug_load_subspace_type": "kitchen"
+    },
+    {
+        "id": 46,
+        "space_type": "guest room",
+        "lighting_subspace_type": "guest_room",
+        "ventilation_subspace_type": "hotels_motels_resorts_dormitories_barracks_sleeping_areas",
+        "plug_load_subspace_type": "guest room"
+    },
+    {
+        "id": 47,
+        "space_type": "gymnasium exercise area",
+        "lighting_subspace_type": "gymnasium_exercise_area",
+        "ventilation_subspace_type": "sports_entertainment_gym_stadium",
+        "plug_load_subspace_type": "gymnasium exercise area"
+    },
+    {
+        "id": 48,
+        "space_type": "gymnasium playing area",
+        "lighting_subspace_type": "gymnasium_playing_area",
+        "ventilation_subspace_type": "sports_entertainment_gym_stadium",
+        "plug_load_subspace_type": "gymnasium playing area"
+    },
+    {
+        "id": 49,
+        "space_type": "emergency room",
+        "lighting_subspace_type": "emergency_room",
+        "ventilation_subspace_type": "outpatient_health_care_facilities_general_examination_room",
+        "plug_load_subspace_type": "emergency room"
+    },
+    {
+        "id": 50,
+        "space_type": "exam/treatment",
+        "lighting_subspace_type": "exam_treatment",
+        "ventilation_subspace_type": "outpatient_health_care_facilities_general_examination_room",
+        "plug_load_subspace_type": "exam/treatment"
+    },
+    {
+        "id": 51,
+        "space_type": "imaging",
+        "lighting_subspace_type": "imaging",
+        "ventilation_subspace_type": "outpatient_health_care_facilities_class_1_imaging_rooms",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 52,
+        "space_type": "medical supply",
+        "lighting_subspace_type": "medical_supply",
+        "ventilation_subspace_type": "miscellaneous_spaces_pharmacy",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 53,
+        "space_type": "nursery",
+        "lighting_subspace_type": "nursery",
+        "ventilation_subspace_type": "outpatient_health_care_facilities_psychiatric_consultation_room",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 54,
+        "space_type": "nurses station",
+        "lighting_subspace_type": "nurses_station",
+        "ventilation_subspace_type": "outpatient_health_care_facilities_psychiatric_consultation_room",
+        "plug_load_subspace_type": "nurses station"
+    },
+    {
+        "id": 55,
+        "space_type": "operating room",
+        "lighting_subspace_type": "operating_room",
+        "ventilation_subspace_type": "outpatient_health_care_facilities_general_examination_room",
+        "plug_load_subspace_type": "operating room"
+    },
+    {
+        "id": 56,
+        "space_type": "patient room",
+        "lighting_subspace_type": "patient_room",
+        "ventilation_subspace_type": "outpatient_health_care_facilities_physical_therapy_individual_room",
+        "plug_load_subspace_type": "patient room"
+    },
+    {
+        "id": 57,
+        "space_type": "physical therapy",
+        "lighting_subspace_type": "physical_therapy",
+        "ventilation_subspace_type": "outpatient_health_care_facilities_physical_therapy_exercise_area",
+        "plug_load_subspace_type": "physical therapy"
+    },
+    {
+        "id": 58,
+        "space_type": "recovery",
+        "lighting_subspace_type": "recovery",
+        "ventilation_subspace_type": "outpatient_health_care_facilities_urgent_care_examination_room",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 59,
+        "space_type": "judges chambers",
+        "lighting_subspace_type": "judges_chambers",
+        "ventilation_subspace_type": "public_assembly_spaces_legislative_chambers",
+        "plug_load_subspace_type": "judges chambers"
+    },
+    {
+        "id": 60,
+        "space_type": "laboratory",
+        "lighting_subspace_type": "laboratory_all_other",
+        "ventilation_subspace_type": "educational_facilities_science_laboratories",
+        "plug_load_subspace_type": "laboratory"
+    },
+    {
+        "id": 61,
+        "space_type": "library - reading",
+        "lighting_subspace_type": "library_reading",
+        "ventilation_subspace_type": "public_assembly_spaces_libraries",
+        "plug_load_subspace_type": "library - reading"
+    },
+    {
+        "id": 62,
+        "space_type": "library - stacks",
+        "lighting_subspace_type": "library_stacks",
+        "ventilation_subspace_type": "public_assembly_spaces_libraries",
+        "plug_load_subspace_type": "library - stacks"
+    },
+    {
+        "id": 63,
+        "space_type": "library - cataloging",
+        "lighting_subspace_type": "library_cataloging",
+        "ventilation_subspace_type": "public_assembly_spaces_libraries",
+        "plug_load_subspace_type": "library - cataloging"
+    },
+    {
+        "id": 64,
+        "space_type": "loading dock",
+        "lighting_subspace_type": "loading_dock",
+        "ventilation_subspace_type": "miscellaneous_spaces_sorting_packing_light_assembly",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 65,
+        "space_type": "lobby - all other",
+        "lighting_subspace_type": "lobby_general",
+        "ventilation_subspace_type": "public_assembly_spaces_lobbies",
+        "plug_load_subspace_type": "lobby - all other"
+    },
+    {
+        "id": 66,
+        "space_type": "lobby - elevator",
+        "lighting_subspace_type": "lobby_elevator",
+        "ventilation_subspace_type": "public_assembly_spaces_lobbies",
+        "plug_load_subspace_type": "lobby - elevator"
+    },
+    {
+        "id": 67,
+        "space_type": "lobby for visually impaired",
+        "lighting_subspace_type": "lobby_visually_impaired",
+        "ventilation_subspace_type": "public_assembly_spaces_lobbies",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 68,
+        "space_type": "lobby - hotel",
+        "lighting_subspace_type": "lobby_hotel",
+        "ventilation_subspace_type": "hotels_motels_resorts_dormitories_lobbies_prefunction",
+        "plug_load_subspace_type": "lobby - hotel"
+    },
+    {
+        "id": 69,
+        "space_type": "lobby - motion picture theater",
+        "lighting_subspace_type": "lobby_motion_picture_theater",
+        "ventilation_subspace_type": "public_assembly_spaces_lobbies",
+        "plug_load_subspace_type": "lobby - motion picture theater"
+    },
+    {
+        "id": 70,
+        "space_type": "lobby - performing arts theater",
+        "lighting_subspace_type": "lobby_performing_arts_theater",
+        "ventilation_subspace_type": "public_assembly_spaces_lobbies",
+        "plug_load_subspace_type": "lobby - performing arts theater"
+    },
+    {
+        "id": 71,
+        "space_type": "locker room",
+        "lighting_subspace_type": "locker_room",
+        "ventilation_subspace_type": "general_break_rooms",
+        "plug_load_subspace_type": "locker room"
+    },
+    {
+        "id": 72,
+        "space_type": "lounge/breakroom - all other",
+        "lighting_subspace_type": "lounge_breakroom_general",
+        "ventilation_subspace_type": "general_break_rooms",
+        "plug_load_subspace_type": "lounge/breakroom - all other"
+    },
+    {
+        "id": 73,
+        "space_type": "lounge/breakroom - healthcare facility",
+        "lighting_subspace_type": "lounge_breakroom_healthcare_facility",
+        "ventilation_subspace_type": "general_break_rooms",
+        "plug_load_subspace_type": "lounge/breakroom - healthcare facility"
+    },
+    {
+        "id": 74,
+        "space_type": "laundry/washing",
+        "lighting_subspace_type": "laundry_washing",
+        "ventilation_subspace_type": "hotels_motels_resorts_dormitories_laundry_rooms",
+        "plug_load_subspace_type": "laundry/washing"
+    },
+    {
+        "id": 75,
+        "space_type": "detailed manufacuring",
+        "lighting_subspace_type": "detailed_manufacuring",
+        "ventilation_subspace_type": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 76,
+        "space_type": "manufacturing equipment room",
+        "lighting_subspace_type": "manufacturing_equipment_room",
+        "ventilation_subspace_type": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
+        "plug_load_subspace_type": "manufacturing equipment room"
+    },
+    {
+        "id": 77,
+        "space_type": "manufacturing extra high bay",
+        "lighting_subspace_type": "manufacturing_extra_high_bay",
+        "ventilation_subspace_type": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 78,
+        "space_type": "manufacturing high bay",
+        "lighting_subspace_type": "manufacturing_high_bay",
+        "ventilation_subspace_type": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 79,
+        "space_type": "manufacturing low bay",
+        "lighting_subspace_type": "manufacturing_low_bay",
+        "ventilation_subspace_type": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
+        "plug_load_subspace_type": "manufacturing low bay"
+    },
+    {
+        "id": 80,
+        "space_type": "manufacturing control",
+        "lighting_subspace_type": "manufacturing_control",
+        "ventilation_subspace_type": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 81,
+        "space_type": "museum exhibit area",
+        "lighting_subspace_type": "museum_exhibit_area",
+        "ventilation_subspace_type": "public_assembly_spaces_museums_galleries",
+        "plug_load_subspace_type": "museum exhibit area"
+    },
+    {
+        "id": 82,
+        "space_type": "museum restoration",
+        "lighting_subspace_type": "museum_restoration",
+        "ventilation_subspace_type": "public_assembly_spaces_museums_galleries",
+        "plug_load_subspace_type": "museum restoration"
+    },
+    {
+        "id": 83,
+        "space_type": "performing arts dressing room",
+        "lighting_subspace_type": "performing_arts_dressing_room",
+        "ventilation_subspace_type": "retail_mall_common_areas",
+        "plug_load_subspace_type": "performing arts dressing room"
+    },
+    {
+        "id": 84,
+        "space_type": "office - enclosed <= 250 sf",
+        "lighting_subspace_type": "office_enclosed_small",
+        "ventilation_subspace_type": "office_buildings_office_space",
+        "plug_load_subspace_type": "office - enclosed <= 250 sf"
+    },
+    {
+        "id": 85,
+        "space_type": "office - enclosed > 250 sf",
+        "lighting_subspace_type": "office_enclosed_large",
+        "ventilation_subspace_type": "office_buildings_office_space",
+        "plug_load_subspace_type": "office - enclosed > 250 sf"
+    },
+    {
+        "id": 86,
+        "space_type": "office - open",
+        "lighting_subspace_type": "office_open",
+        "ventilation_subspace_type": "office_buildings_office_space",
+        "plug_load_subspace_type": "office - open"
+    },
+    {
+        "id": 87,
+        "space_type": "parking area, interior",
+        "lighting_subspace_type": "parking_area_interior",
+        "ventilation_subspace_type": "miscellaneous_spaces_transportation_waiting",
+        "plug_load_subspace_type": "parking area, interior"
+    },
+    {
+        "id": 88,
+        "space_type": "pharmacy",
+        "lighting_subspace_type": "pharmacy",
+        "ventilation_subspace_type": "miscellaneous_spaces_pharmacy",
+        "plug_load_subspace_type": "pharmacy"
+    },
+    {
+        "id": 89,
+        "space_type": "post office - sorting area",
+        "lighting_subspace_type": "post_office_sorting_area",
+        "ventilation_subspace_type": "miscellaneous_spaces_sorting_packing_light_assembly",
+        "plug_load_subspace_type": "post office - sorting area"
+    },
+    {
+        "id": 90,
+        "space_type": "fellowship hall - religious facility",
+        "lighting_subspace_type": "fellowship_hall_religious_facility",
+        "ventilation_subspace_type": "public_assembly_spaces_religious_workshop",
+        "plug_load_subspace_type": "fellowship hall - religious facility"
+    },
+    {
+        "id": 91,
+        "space_type": "worship/pulpit/choir area",
+        "lighting_subspace_type": "worship_pulpit_choir_area",
+        "ventilation_subspace_type": "public_assembly_spaces_religious_workshop",
+        "plug_load_subspace_type": "worship/pulpit/choir area"
+    },
+    {
+        "id": 92,
+        "space_type": "restroom - all other",
+        "lighting_subspace_type": "restroom_all_other",
+        "ventilation_subspace_type": null,
+        "plug_load_subspace_type": "restroom - all other"
+    },
+    {
+        "id": 93,
+        "space_type": "restroom - visually impaired",
+        "lighting_subspace_type": "restroom_visually_impaired",
+        "ventilation_subspace_type": null,
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 94,
+        "space_type": "retail dressing room",
+        "lighting_subspace_type": "retail_dressing_room",
+        "ventilation_subspace_type": "retail_mall_common_areas",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 95,
+        "space_type": "retail mall concourse",
+        "lighting_subspace_type": "retail_mall_concourse",
+        "ventilation_subspace_type": "retail_mall_common_areas",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 96,
+        "space_type": "seating area, general",
+        "lighting_subspace_type": "seating_area_general",
+        "ventilation_subspace_type": "public_assembly_spaces_auditorium_seating_area",
+        "plug_load_subspace_type": "seating area, general"
+    },
+    {
+        "id": 97,
+        "space_type": "sports arena playing area, class I",
+        "lighting_subspace_type": "sports_arena_playing_area_class_I",
+        "ventilation_subspace_type": "sports_entertainment_sports_arena",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 98,
+        "space_type": "sports arena playing area, class II",
+        "lighting_subspace_type": "sports_arena_playing_area_class_II",
+        "ventilation_subspace_type": "sports_entertainment_sports_arena",
+        "plug_load_subspace_type": "sports arena playing area, class II"
+    },
+    {
+        "id": 99,
+        "space_type": "sports arena playing area, class III",
+        "lighting_subspace_type": "sports_arena_playing_area_class_III",
+        "ventilation_subspace_type": "sports_entertainment_sports_arena",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 100,
+        "space_type": "sports arena playing area, class IV",
+        "lighting_subspace_type": "sports_arena_playing_area_class_IV",
+        "ventilation_subspace_type": "sports_entertainment_sports_arena",
+        "plug_load_subspace_type": "sports arena playing area, class IV"
+    },
+    {
+        "id": 101,
+        "space_type": "sports arena - ring sports area",
+        "lighting_subspace_type": "sports_arena_ring_sports_area",
+        "ventilation_subspace_type": "sports_entertainment_sports_arena",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 102,
+        "space_type": "sports arena - court sports area",
+        "lighting_subspace_type": "sports_arena_court_sports_area",
+        "ventilation_subspace_type": "sports_entertainment_sports_arena",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 103,
+        "space_type": "sports arena - indoor playing field",
+        "lighting_subspace_type": "sports_arena_indoor_playing_field",
+        "ventilation_subspace_type": "sports_entertainment_sports_arena",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 104,
+        "space_type": "stairwell",
+        "lighting_subspace_type": "stairwell",
+        "ventilation_subspace_type": "general_conference_corridors",
+        "plug_load_subspace_type": "stairwell"
+    },
+    {
+        "id": 105,
+        "space_type": "storage < 50 sf - all other",
+        "lighting_subspace_type": "storage_ all_other_small",
+        "ventilation_subspace_type": "general_conference_storage_rooms",
+        "plug_load_subspace_type": "storage < 50 sf - all other"
+    },
+    {
+        "id": 106,
+        "space_type": "storage 50 to 1000 sf - all other",
+        "lighting_subspace_type": "storage_ all_other_large",
+        "ventilation_subspace_type": "general_conference_storage_rooms",
+        "plug_load_subspace_type": "storage 50 to 1000 sf - all other"
+    },
+    {
+        "id": 107,
+        "space_type": "storage < 50 sf - hospital",
+        "lighting_subspace_type": "storage_hospital_small",
+        "ventilation_subspace_type": "general_conference_storage_rooms",
+        "plug_load_subspace_type": "storage < 50 sf - hospital"
+    },
+    {
+        "id": 108,
+        "space_type": "storage 50 to 1000 sf - hospital",
+        "lighting_subspace_type": "storage_hospital_large",
+        "ventilation_subspace_type": "general_conference_storage_rooms",
+        "plug_load_subspace_type": "storage 50 to 1000 sf - hospital"
+    },
+    {
+        "id": 109,
+        "space_type": "storage - inactive",
+        "lighting_subspace_type": "storage_inactive",
+        "ventilation_subspace_type": "general_conference_storage_rooms",
+        "plug_load_subspace_type": "storage - inactive"
+    },
+    {
+        "id": 110,
+        "space_type": "storage, inactive - museum",
+        "lighting_subspace_type": "storage_inactive_museum",
+        "ventilation_subspace_type": "general_conference_storage_rooms",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 111,
+        "space_type": "airport concourse",
+        "lighting_subspace_type": "airport_concourse",
+        "ventilation_subspace_type": "office_buildings_reception_areas",
+        "plug_load_subspace_type": "airport concourse"
+    },
+    {
+        "id": 112,
+        "space_type": "baggage/carousel",
+        "lighting_subspace_type": "baggage_carousel",
+        "ventilation_subspace_type": "office_buildings_reception_areas",
+        "plug_load_subspace_type": "baggage/carousel"
+    },
+    {
+        "id": 113,
+        "space_type": "transportation ticket counter",
+        "lighting_subspace_type": "transportation_ticket_counter",
+        "ventilation_subspace_type": "office_buildings_reception_areas",
+        "plug_load_subspace_type": "transportation ticket counter"
+    },
+    {
+        "id": 114,
+        "space_type": "vehicular maintenance",
+        "lighting_subspace_type": "vehicular_maintenance",
+        "ventilation_subspace_type": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
+        "plug_load_subspace_type": "vehicular maintenance"
+    },
+    {
+        "id": 115,
+        "space_type": "warehouse - bulk storage",
+        "lighting_subspace_type": "warehouse_bulk_storage",
+        "ventilation_subspace_type": "miscellaneous_spaces_warehouses",
+        "plug_load_subspace_type": "warehouse - bulk storage"
+    },
+    {
+        "id": 116,
+        "space_type": "warehouse - fine storage",
+        "lighting_subspace_type": "warehouse_fine_storage",
+        "ventilation_subspace_type": "miscellaneous_spaces_warehouses",
+        "plug_load_subspace_type": "warehouse - fine storage"
+    },
+    {
+        "id": 117,
+        "space_type": "workshop",
+        "lighting_subspace_type": "workshop",
+        "ventilation_subspace_type": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
+        "plug_load_subspace_type": "workshop"
+    },
+    {
+        "id": 118,
+        "space_type": "sales",
+        "lighting_subspace_type": "sales",
+        "ventilation_subspace_type": "retail_sales",
+        "plug_load_subspace_type": "sales"
+    },
+    {
+        "id": 119,
+        "space_type": "sales - display type 1",
+        "lighting_subspace_type": "sales_display_type_1",
+        "ventilation_subspace_type": "retail_sales",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 120,
+        "space_type": "sales - display type 2",
+        "lighting_subspace_type": "sales_display_type_2",
+        "ventilation_subspace_type": "retail_sales",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 121,
+        "space_type": "sales - display type 3",
+        "lighting_subspace_type": "sales_display_type_3",
+        "ventilation_subspace_type": "retail_sales",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 122,
+        "space_type": "sales - display type 4",
+        "lighting_subspace_type": "sales_display_type_4",
+        "ventilation_subspace_type": "retail_sales",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 123,
+        "space_type": "guest room - highway",
+        "lighting_subspace_type": "guest_room",
+        "ventilation_subspace_type": "hotels_motels_resorts_dormitories_barracks_sleeping_areas",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 124,
+        "space_type": "lodging dining - highway",
+        "lighting_subspace_type": "dining_general",
+        "ventilation_subspace_type": "food_beverage_service_restaurant_dining_rooms",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 125,
+        "space_type": "audience seating - classroom/lecture/training",
+        "lighting_subspace_type": "audience_seating_general",
+        "ventilation_subspace_type": "public_assembly_spaces_auditorium_seating_area",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 126,
+        "space_type": "audience seating - conference/meeting/multipurpose",
+        "lighting_subspace_type": "audience_seating_general",
+        "ventilation_subspace_type": "public_assembly_spaces_auditorium_seating_area",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 127,
+        "space_type": "audience seating - corridor/transition",
+        "lighting_subspace_type": "audience_seating_general",
+        "ventilation_subspace_type": "public_assembly_spaces_auditorium_seating_area",
+        "plug_load_subspace_type": null
+    },
+    {
+        "id": 128,
+        "space_type": "guest room - bathroom",
+        "lighting_subspace_type": "guest_room",
+        "ventilation_subspace_type": "hotels_motels_resorts_dormitories_barracks_sleeping_areas",
+        "plug_load_subspace_type": null
+    }
+]
