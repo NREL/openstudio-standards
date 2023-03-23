@@ -1,9 +1,10 @@
-## Data Refactor Repo
+# OpenStudio Standards Data
+This folder contains code that manages the data needed by OpenStudio Standards to operate
 
-### Prerequisite
+## Prerequisites
 Python 3.10 (3.9 could work but not tested)
 
-### How to use
+## Quick Start Guide
 Clone this repo
 To create the full database in your local repo:
 
@@ -19,8 +20,7 @@ conn.close()
 
 This code will generate an `openstudio_standards_database.sql` in the same file directory.
 
-
-### How to contribute:
+## How to contribute
 1. Create a new branch
 2. Write code
 3. Run `pipenv run black .` -> format your code

@@ -18,7 +18,7 @@ conn = create_connect(None)
 # create_openstudio_standards_database_from_csv(conn)
 # a = fetch_a_record_from_table_by_id(conn, "level_3_lighting_90_1_2019", 1)
 # export_openstudio_standards_database_to_csv(conn, "")
-# export_openstudio_standards_database_to_json(conn, "initial_data/")
+# export_openstudio_standards_database_to_json(conn, "database_files/")
 # create_openstudio_standards_database_from_json(conn)
 # create_openstudio_standards_building_data_json(conn, 'openstudio_standards_building_data.json')
 update_json = [

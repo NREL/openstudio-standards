@@ -1,0 +1,22 @@
+template,fluid_type,fuel_type,condensing,condensing_control,minimum_capacity,maximum_capacity,start_date,end_date,minimum_annual_fuel_utilization_efficiency,minimum_thermal_efficiency,minimum_combustion_efficiency,efffplr,annotation
+90.1-2004,Hot Water,Gas,,,0,299999,9/9/1919,9/9/2999,0.8,,,Boiler with No Minimum Turndown,From 90.1-2004
+90.1-2004,Hot Water,Gas,,,300000,249999999,9/9/1919,9/9/2999,,0.75,,Boiler with No Minimum Turndown,From 90.1-2004
+90.1-2004,Hot Water,Gas,,,250000000,9999999999,9/9/1919,9/9/2999,,,0.8,Boiler with No Minimum Turndown,From 90.1-2004
+90.1-2007,Hot Water,Gas,,,0,299999,9/9/1919,9/9/2999,0.8,,,Boiler with No Minimum Turndown,From 90.1-2007
+90.1-2007,Hot Water,Gas,,,300000,249999999,9/9/1919,9/9/2999,,0.8,,Boiler with No Minimum Turndown,From 90.1-2007
+90.1-2007,Hot Water,Gas,,,250000000,9999999999,9/9/1919,9/9/2999,,,0.82,Boiler with No Minimum Turndown,From 90.1-2007
+90.1-2010,Hot Water,Gas,,,0,299999,9/9/1919,9/9/2999,0.8,,,Boiler with No Minimum Turndown,From 90.1-2010
+90.1-2010,Hot Water,Gas,,,300000,249999999,9/9/1919,9/9/2999,,0.8,,Boiler with No Minimum Turndown,From 90.1-2010
+90.1-2010,Hot Water,Gas,,,250000000,9999999999,9/9/1919,9/9/2999,,,0.82,Boiler with No Minimum Turndown,From 90.1-2010
+90.1-2013,Hot Water,Gas,,,0,299999,9/9/1919,9/9/2999,0.82,,,Boiler with No Minimum Turndown,From 90.1-2013
+90.1-2013,Hot Water,Gas,,,300000,999999,9/9/1919,9/9/2999,,0.8,,Boiler with No Minimum Turndown,From 90.1-2013
+90.1-2013,Hot Water,Gas,,,1000000,249999999,9/9/1919,9/9/2999,,0.8,,Boiler with Minimum Turndown,From 90.1-2013
+90.1-2013,Hot Water,Gas,,,250000000,9999999999,9/9/1919,9/9/2999,,,0.82,Boiler with Minimum Turndown,From 90.1-2013
+90.1-2016,Hot Water,Gas,,,0,299999,9/9/1919,9/9/2999,0.82,,,Boiler with No Minimum Turndown,From 90.1-2016
+90.1-2016,Hot Water,Gas,,,300000,999999,9/9/1919,9/9/2999,,0.8,,Boiler with No Minimum Turndown,From 90.1-2016
+90.1-2016,Hot Water,Gas,,,1000000,249999999,9/9/1919,9/9/2999,,0.8,,Boiler with Minimum Turndown,From 90.1-2016
+90.1-2016,Hot Water,Gas,,,250000000,9999999999,9/9/1919,9/9/2999,,,0.82,Boiler with Minimum Turndown,From 90.1-2016
+90.1-2019,Hot Water,Gas,,,0,299999,9/9/1919,9/9/2999,0.84,,,Boiler with No Minimum Turndown,From 90.1-2019
+90.1-2019,Hot Water,Gas,,,300000,999999,9/9/1919,9/9/2999,,0.8,,Boiler with No Minimum Turndown,From 90.1-2019
+90.1-2019,Hot Water,Gas,,,1000000,249999999,9/9/1919,9/9/2999,,0.8,,Boiler with Minimum Turndown,From 90.1-2019
+90.1-2019,Hot Water,Gas,,,250000000,9999999999,9/9/1919,9/9/2999,,,0.82,Boiler with Minimum Turndown,From 90.1-2019

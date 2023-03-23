@@ -9,5 +9,5 @@ class HVACMinimumRequirementMotors901Table(HVACMinimumRequirementMotors):
     def __init__(self):
         super(HVACMinimumRequirementMotors901Table, self).__init__(
             table_name=TABLE_NAME,
-            initial_data_directory=f"initial_data/{TABLE_NAME}",
+            initial_data_directory=f"database_files/{TABLE_NAME}",
         )
