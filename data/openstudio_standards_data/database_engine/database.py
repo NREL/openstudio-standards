@@ -2,6 +2,7 @@ import sqlite3
 from sqlite3 import Error
 import csv
 import json
+import logging
 
 DB_FILE = "openstudio_standards_database.db"
 
@@ -18,7 +19,7 @@ def create_connect(db_file):
         # enable foreign keys execution
         conn.execute("PRAGMA foreign_keys = 1")
     except Error as e:
-        print(e)
+        logging.error(e)
     return conn
 
 
@@ -40,7 +41,7 @@ class DBOperation:
         :param connection:
         :return:
         """
-        print(f"creating table: {self.data_table_name}")
+        logging.info(f"creating table: {self.data_table_name}")
         connection.execute(self._get_create_table_query())
         return True
 

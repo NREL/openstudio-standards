@@ -6,12 +6,6 @@ from applications.database_maintenance import (
 )
 
 db_name = "openstudio_standards_data"
-if os.path.isfile(f"{db_name}.db"):
-    os.remove(f"{db_name}.db")
-conn = sqlite3.connect(f"{db_name}.db")
-create_openstudio_standards_database_from_csv(conn)
-conn.close()
-assert os.path.isfile(f"{db_name}.db")
 
 
 def test_get_template_data__true():
