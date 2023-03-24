@@ -1,0 +1,1472 @@
+[
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 0,
+        "maximum_capacity": 0.999,
+        "nominal_full_load_efficiency": 0.29,
+        "annotation": "Motors below 1 HP assumed to be PSC, with average typical efficiency of 29% per PNNL"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 1,
+        "maximum_capacity": 1.499,
+        "nominal_full_load_efficiency": 0.825,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 1.5,
+        "maximum_capacity": 1.999,
+        "nominal_full_load_efficiency": 0.84,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 2,
+        "maximum_capacity": 2.999,
+        "nominal_full_load_efficiency": 0.84,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 3,
+        "maximum_capacity": 4.999,
+        "nominal_full_load_efficiency": 0.875,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 5,
+        "maximum_capacity": 7.499,
+        "nominal_full_load_efficiency": 0.875,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 7.5,
+        "maximum_capacity": 9.999,
+        "nominal_full_load_efficiency": 0.895,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 10,
+        "maximum_capacity": 14.999,
+        "nominal_full_load_efficiency": 0.895,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 15,
+        "maximum_capacity": 19.999,
+        "nominal_full_load_efficiency": 0.91,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 20,
+        "maximum_capacity": 24.999,
+        "nominal_full_load_efficiency": 0.91,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 25,
+        "maximum_capacity": 29.999,
+        "nominal_full_load_efficiency": 0.924,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 30,
+        "maximum_capacity": 39.999,
+        "nominal_full_load_efficiency": 0.924,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 40,
+        "maximum_capacity": 49.999,
+        "nominal_full_load_efficiency": 0.93,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 50,
+        "maximum_capacity": 59.999,
+        "nominal_full_load_efficiency": 0.93,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 60,
+        "maximum_capacity": 74.999,
+        "nominal_full_load_efficiency": 0.936,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 75,
+        "maximum_capacity": 99.999,
+        "nominal_full_load_efficiency": 0.941,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 100,
+        "maximum_capacity": 124.999,
+        "nominal_full_load_efficiency": 0.945,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 125,
+        "maximum_capacity": 149.999,
+        "nominal_full_load_efficiency": 0.945,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 150,
+        "maximum_capacity": 199.999,
+        "nominal_full_load_efficiency": 0.95,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2004",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 200,
+        "maximum_capacity": 9999,
+        "nominal_full_load_efficiency": 0.95,
+        "annotation": "From 90.1-2004 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 0,
+        "maximum_capacity": 0.999,
+        "nominal_full_load_efficiency": 0.29,
+        "annotation": "Motors below 1 HP assumed to be PSC, with average typical efficiency of 29% per PNNL"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 1,
+        "maximum_capacity": 1.499,
+        "nominal_full_load_efficiency": 0.825,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 1.5,
+        "maximum_capacity": 1.999,
+        "nominal_full_load_efficiency": 0.84,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 2,
+        "maximum_capacity": 2.999,
+        "nominal_full_load_efficiency": 0.84,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 3,
+        "maximum_capacity": 4.999,
+        "nominal_full_load_efficiency": 0.875,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 5,
+        "maximum_capacity": 7.499,
+        "nominal_full_load_efficiency": 0.875,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 7.5,
+        "maximum_capacity": 9.999,
+        "nominal_full_load_efficiency": 0.895,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 10,
+        "maximum_capacity": 14.999,
+        "nominal_full_load_efficiency": 0.895,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 15,
+        "maximum_capacity": 19.999,
+        "nominal_full_load_efficiency": 0.91,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 20,
+        "maximum_capacity": 24.999,
+        "nominal_full_load_efficiency": 0.91,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 25,
+        "maximum_capacity": 29.999,
+        "nominal_full_load_efficiency": 0.924,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 30,
+        "maximum_capacity": 39.999,
+        "nominal_full_load_efficiency": 0.924,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 40,
+        "maximum_capacity": 49.999,
+        "nominal_full_load_efficiency": 0.93,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 50,
+        "maximum_capacity": 59.999,
+        "nominal_full_load_efficiency": 0.93,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 60,
+        "maximum_capacity": 74.999,
+        "nominal_full_load_efficiency": 0.936,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 75,
+        "maximum_capacity": 99.999,
+        "nominal_full_load_efficiency": 0.941,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 100,
+        "maximum_capacity": 124.999,
+        "nominal_full_load_efficiency": 0.945,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 125,
+        "maximum_capacity": 149.999,
+        "nominal_full_load_efficiency": 0.945,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 150,
+        "maximum_capacity": 199.999,
+        "nominal_full_load_efficiency": 0.95,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2007",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 200,
+        "maximum_capacity": 9999,
+        "nominal_full_load_efficiency": 0.95,
+        "annotation": "From 90.1-2007 Table 10.8"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 0,
+        "maximum_capacity": 0.999,
+        "nominal_full_load_efficiency": 0.29,
+        "annotation": "Motors below 1 HP assumed to be PSC, with average typical efficiency of 29% per PNNL"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 1,
+        "maximum_capacity": 1.499,
+        "nominal_full_load_efficiency": 0.855,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 1.5,
+        "maximum_capacity": 1.999,
+        "nominal_full_load_efficiency": 0.865,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 2,
+        "maximum_capacity": 2.999,
+        "nominal_full_load_efficiency": 0.865,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 3,
+        "maximum_capacity": 4.999,
+        "nominal_full_load_efficiency": 0.895,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 5,
+        "maximum_capacity": 7.499,
+        "nominal_full_load_efficiency": 0.895,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 7.5,
+        "maximum_capacity": 9.999,
+        "nominal_full_load_efficiency": 0.917,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 10,
+        "maximum_capacity": 14.999,
+        "nominal_full_load_efficiency": 0.917,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 15,
+        "maximum_capacity": 19.999,
+        "nominal_full_load_efficiency": 0.924,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 20,
+        "maximum_capacity": 24.9999,
+        "nominal_full_load_efficiency": 0.93,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 25,
+        "maximum_capacity": 29.999,
+        "nominal_full_load_efficiency": 0.936,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 30,
+        "maximum_capacity": 39.999,
+        "nominal_full_load_efficiency": 0.936,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 40,
+        "maximum_capacity": 49.999,
+        "nominal_full_load_efficiency": 0.941,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 50,
+        "maximum_capacity": 59.999,
+        "nominal_full_load_efficiency": 0.945,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 60,
+        "maximum_capacity": 74.999,
+        "nominal_full_load_efficiency": 0.95,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 75,
+        "maximum_capacity": 99.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 100,
+        "maximum_capacity": 124.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 125,
+        "maximum_capacity": 149.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 150,
+        "maximum_capacity": 199.999,
+        "nominal_full_load_efficiency": 0.958,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 200,
+        "maximum_capacity": 249.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 250,
+        "maximum_capacity": 299.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 300,
+        "maximum_capacity": 349.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 350,
+        "maximum_capacity": 399.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 400,
+        "maximum_capacity": 449.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 450,
+        "maximum_capacity": 499.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2010",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 500,
+        "maximum_capacity": 9999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": "From 90.1-2010 Table 10.8B"
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 0,
+        "maximum_capacity": 0.08333,
+        "nominal_full_load_efficiency": 0.29,
+        "annotation": "Motors below 1/12 HP assumed to be PSC, with average typical efficiency of 29% per PNNL"
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 0.08334,
+        "maximum_capacity": 0.999,
+        "nominal_full_load_efficiency": 0.7,
+        "annotation": "Motors between 1/12 and 1 HP must be EC, with minimum efficiency of 70% per PNNL"
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 1,
+        "maximum_capacity": 1.499,
+        "nominal_full_load_efficiency": 0.855,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 1.5,
+        "maximum_capacity": 1.999,
+        "nominal_full_load_efficiency": 0.865,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 2,
+        "maximum_capacity": 2.999,
+        "nominal_full_load_efficiency": 0.865,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 3,
+        "maximum_capacity": 4.999,
+        "nominal_full_load_efficiency": 0.895,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 5,
+        "maximum_capacity": 7.499,
+        "nominal_full_load_efficiency": 0.895,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 7.5,
+        "maximum_capacity": 9.999,
+        "nominal_full_load_efficiency": 0.917,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 10,
+        "maximum_capacity": 14.999,
+        "nominal_full_load_efficiency": 0.917,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 15,
+        "maximum_capacity": 19.999,
+        "nominal_full_load_efficiency": 0.924,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 20,
+        "maximum_capacity": 24.999,
+        "nominal_full_load_efficiency": 0.93,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 25,
+        "maximum_capacity": 29.999,
+        "nominal_full_load_efficiency": 0.936,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 30,
+        "maximum_capacity": 39.999,
+        "nominal_full_load_efficiency": 0.936,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 40,
+        "maximum_capacity": 49.999,
+        "nominal_full_load_efficiency": 0.941,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 50,
+        "maximum_capacity": 59.999,
+        "nominal_full_load_efficiency": 0.945,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 60,
+        "maximum_capacity": 74.999,
+        "nominal_full_load_efficiency": 0.95,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 75,
+        "maximum_capacity": 99.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 100,
+        "maximum_capacity": 124.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 125,
+        "maximum_capacity": 149.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 150,
+        "maximum_capacity": 199.999,
+        "nominal_full_load_efficiency": 0.958,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 200,
+        "maximum_capacity": 249.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 250,
+        "maximum_capacity": 299.999,
+        "nominal_full_load_efficiency": 0.95,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 300,
+        "maximum_capacity": 349.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 350,
+        "maximum_capacity": 399.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 400,
+        "maximum_capacity": 449.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 450,
+        "maximum_capacity": 499.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2013",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 500,
+        "maximum_capacity": 9999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 0,
+        "maximum_capacity": 0.08333,
+        "nominal_full_load_efficiency": 0.29,
+        "annotation": "Motors below 1/12 HP assumed to be PSC, with average typical efficiency of 29% per PNNL"
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 0.08334,
+        "maximum_capacity": 0.999,
+        "nominal_full_load_efficiency": 0.7,
+        "annotation": "Motors between 1/12 and 1 HP must be EC, with minimum efficiency of 70% per PNNL"
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 1,
+        "maximum_capacity": 1.499,
+        "nominal_full_load_efficiency": 0.855,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 1.5,
+        "maximum_capacity": 1.999,
+        "nominal_full_load_efficiency": 0.865,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 2,
+        "maximum_capacity": 2.999,
+        "nominal_full_load_efficiency": 0.865,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 3,
+        "maximum_capacity": 4.999,
+        "nominal_full_load_efficiency": 0.895,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 5,
+        "maximum_capacity": 7.499,
+        "nominal_full_load_efficiency": 0.895,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 7.5,
+        "maximum_capacity": 9.999,
+        "nominal_full_load_efficiency": 0.917,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 10,
+        "maximum_capacity": 14.999,
+        "nominal_full_load_efficiency": 0.917,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 15,
+        "maximum_capacity": 19.999,
+        "nominal_full_load_efficiency": 0.924,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 20,
+        "maximum_capacity": 24.999,
+        "nominal_full_load_efficiency": 0.93,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 25,
+        "maximum_capacity": 29.999,
+        "nominal_full_load_efficiency": 0.936,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 30,
+        "maximum_capacity": 39.999,
+        "nominal_full_load_efficiency": 0.936,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 40,
+        "maximum_capacity": 49.999,
+        "nominal_full_load_efficiency": 0.941,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 50,
+        "maximum_capacity": 59.999,
+        "nominal_full_load_efficiency": 0.945,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 60,
+        "maximum_capacity": 74.999,
+        "nominal_full_load_efficiency": 0.95,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 75,
+        "maximum_capacity": 99.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 100,
+        "maximum_capacity": 124.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 125,
+        "maximum_capacity": 149.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 150,
+        "maximum_capacity": 199.999,
+        "nominal_full_load_efficiency": 0.958,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 200,
+        "maximum_capacity": 249.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 250,
+        "maximum_capacity": 299.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 300,
+        "maximum_capacity": 349.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 350,
+        "maximum_capacity": 399.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 400,
+        "maximum_capacity": 449.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 450,
+        "maximum_capacity": 499.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2016",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 500,
+        "maximum_capacity": 9999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 0,
+        "maximum_capacity": 0.08333,
+        "nominal_full_load_efficiency": 0.29,
+        "annotation": "Motors below 1/12 HP assumed to be PSC, with average typical efficiency of 29% per PNNL"
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 0.08334,
+        "maximum_capacity": 0.999,
+        "nominal_full_load_efficiency": 0.7,
+        "annotation": "Motors between 1/12 and 1 HP must be EC, with minimum efficiency of 70% per PNNL"
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 1,
+        "maximum_capacity": 1.499,
+        "nominal_full_load_efficiency": 0.855,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 1.5,
+        "maximum_capacity": 1.999,
+        "nominal_full_load_efficiency": 0.865,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 2,
+        "maximum_capacity": 2.999,
+        "nominal_full_load_efficiency": 0.865,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 3,
+        "maximum_capacity": 4.999,
+        "nominal_full_load_efficiency": 0.895,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 5,
+        "maximum_capacity": 7.499,
+        "nominal_full_load_efficiency": 0.895,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 7.5,
+        "maximum_capacity": 9.999,
+        "nominal_full_load_efficiency": 0.917,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 10,
+        "maximum_capacity": 14.999,
+        "nominal_full_load_efficiency": 0.917,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 15,
+        "maximum_capacity": 19.999,
+        "nominal_full_load_efficiency": 0.924,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 20,
+        "maximum_capacity": 24.999,
+        "nominal_full_load_efficiency": 0.93,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 25,
+        "maximum_capacity": 29.999,
+        "nominal_full_load_efficiency": 0.936,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 30,
+        "maximum_capacity": 39.999,
+        "nominal_full_load_efficiency": 0.936,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 40,
+        "maximum_capacity": 49.999,
+        "nominal_full_load_efficiency": 0.941,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 50,
+        "maximum_capacity": 59.999,
+        "nominal_full_load_efficiency": 0.945,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 60,
+        "maximum_capacity": 74.999,
+        "nominal_full_load_efficiency": 0.95,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 75,
+        "maximum_capacity": 99.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 100,
+        "maximum_capacity": 124.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 125,
+        "maximum_capacity": 149.999,
+        "nominal_full_load_efficiency": 0.954,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 150,
+        "maximum_capacity": 199.999,
+        "nominal_full_load_efficiency": 0.958,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 200,
+        "maximum_capacity": 249.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 250,
+        "maximum_capacity": 299.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 300,
+        "maximum_capacity": 349.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 350,
+        "maximum_capacity": 399.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 400,
+        "maximum_capacity": 449.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 450,
+        "maximum_capacity": 499.999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": null
+    },
+    {
+        "template": "90.1-2019",
+        "number_of_poles": 4,
+        "type": "Enclosed",
+        "synchronous_speed": 1800,
+        "minimum_capacity": 500,
+        "maximum_capacity": 9999,
+        "nominal_full_load_efficiency": 0.962,
+        "annotation": null
+    }
+]

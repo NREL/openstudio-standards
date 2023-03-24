@@ -1,0 +1,134 @@
+[
+    {
+        "template": "90.1-2004",
+        "minimum_capacity": 0,
+        "maximum_capacity": 224999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_annual_fuel_utilization_efficiency": 0.78,
+        "minimum_thermal_efficiency": 0.8,
+        "minimum_combustion_efficiency": null,
+        "annotation": "Table 6.8.1E page 49"
+    },
+    {
+        "template": "90.1-2004",
+        "minimum_capacity": 225000,
+        "maximum_capacity": 249999999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_annual_fuel_utilization_efficiency": null,
+        "minimum_thermal_efficiency": null,
+        "minimum_combustion_efficiency": 0.8,
+        "annotation": "Table 6.8.1E page 49"
+    },
+    {
+        "template": "90.1-2007",
+        "minimum_capacity": 0,
+        "maximum_capacity": 224999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_annual_fuel_utilization_efficiency": 0.78,
+        "minimum_thermal_efficiency": 0.8,
+        "minimum_combustion_efficiency": null,
+        "annotation": "Table 6.8.1E page 49"
+    },
+    {
+        "template": "90.1-2007",
+        "minimum_capacity": 225000,
+        "maximum_capacity": 249999999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_annual_fuel_utilization_efficiency": null,
+        "minimum_thermal_efficiency": null,
+        "minimum_combustion_efficiency": 0.8,
+        "annotation": "Table 6.8.1E page 49"
+    },
+    {
+        "template": "90.1-2010",
+        "minimum_capacity": 0,
+        "maximum_capacity": 224999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_annual_fuel_utilization_efficiency": 0.78,
+        "minimum_thermal_efficiency": 0.8,
+        "minimum_combustion_efficiency": null,
+        "annotation": "Table 6.8.1E page 62"
+    },
+    {
+        "template": "90.1-2010",
+        "minimum_capacity": 225000,
+        "maximum_capacity": 249999999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_annual_fuel_utilization_efficiency": null,
+        "minimum_thermal_efficiency": 0.8,
+        "minimum_combustion_efficiency": null,
+        "annotation": "Table 6.8.1E page 62"
+    },
+    {
+        "template": "90.1-2013",
+        "minimum_capacity": 0,
+        "maximum_capacity": 224999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_annual_fuel_utilization_efficiency": 0.78,
+        "minimum_thermal_efficiency": 0.8,
+        "minimum_combustion_efficiency": null,
+        "annotation": "Table 6.8.1E page 72"
+    },
+    {
+        "template": "90.1-2013",
+        "minimum_capacity": 225000,
+        "maximum_capacity": 249999999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_annual_fuel_utilization_efficiency": null,
+        "minimum_thermal_efficiency": 0.8,
+        "minimum_combustion_efficiency": null,
+        "annotation": "Table 6.8.1E page 72"
+    },
+    {
+        "template": "90.1-2016",
+        "minimum_capacity": 0,
+        "maximum_capacity": 224999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_annual_fuel_utilization_efficiency": 0.78,
+        "minimum_thermal_efficiency": 0.8,
+        "minimum_combustion_efficiency": null,
+        "annotation": "Table 6.8.1E page 116"
+    },
+    {
+        "template": "90.1-2016",
+        "minimum_capacity": 225000,
+        "maximum_capacity": 249999999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_annual_fuel_utilization_efficiency": null,
+        "minimum_thermal_efficiency": 0.8,
+        "minimum_combustion_efficiency": null,
+        "annotation": "Table 6.8.1E page 116"
+    },
+    {
+        "template": "90.1-2019",
+        "minimum_capacity": 0,
+        "maximum_capacity": 224999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_annual_fuel_utilization_efficiency": null,
+        "minimum_thermal_efficiency": 0.81,
+        "minimum_combustion_efficiency": null,
+        "annotation": "Table 6.8.1-6 for > 225 ktbu/hr; Table F-4 for < 225 ktbu/hr"
+    },
+    {
+        "template": "90.1-2019",
+        "minimum_capacity": 225000,
+        "maximum_capacity": 249999999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_annual_fuel_utilization_efficiency": null,
+        "minimum_thermal_efficiency": 0.8,
+        "minimum_combustion_efficiency": null,
+        "annotation": "Table 6.8.1-6 for > 225 ktbu/hr; Table F-4 for < 225 ktbu/hr"
+    }
+]

@@ -1,0 +1,16 @@
+[
+    {
+        "template": "90.1-2019",
+        "lighting_standard": "ASHRAE 90.1-2019",
+        "lighting_standard_table": "level_3_lighting_90_1_2019",
+        "ventilation_standard": "ASHRAE 62.1-2019",
+        "ventilation_standard_table": "level_3_ventilation_90_1_2019"
+    },
+    {
+        "template": "90.1-2004",
+        "lighting_standard": "ASHRAE 90.1-2004",
+        "lighting_standard_table": "level_3_lighting_90_1_2004",
+        "ventilation_standard": "ASHRAE 62.1-2004",
+        "ventilation_standard_table": "level_3_ventilation_90_1_2004"
+    }
+]

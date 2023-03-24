@@ -1,0 +1,56 @@
+[
+    {
+        "template": "90.1-2004",
+        "minimum_capacity": 0,
+        "maximum_capacity": 9999999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_coefficient_of_performance": 4.2,
+        "annotation": "From 90.1-2004 Table 6.8.1B"
+    },
+    {
+        "template": "90.1-2007",
+        "minimum_capacity": 0,
+        "maximum_capacity": 9999999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_coefficient_of_performance": 4.2,
+        "annotation": "From 90.1-2007 Table 6.8.1B"
+    },
+    {
+        "template": "90.1-2010",
+        "minimum_capacity": 0,
+        "maximum_capacity": 9999999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_coefficient_of_performance": 4.2,
+        "annotation": "From 90.1-2010 Table 6.8.1B"
+    },
+    {
+        "template": "90.1-2013",
+        "minimum_capacity": 0,
+        "maximum_capacity": 9999999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_coefficient_of_performance": 4.3,
+        "annotation": "From 90.1-2013 Table 6.8.1-2"
+    },
+    {
+        "template": "90.1-2016",
+        "minimum_capacity": 0,
+        "maximum_capacity": 9999999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_coefficient_of_performance": 4.3,
+        "annotation": "From 90.1-2016 Table 6.8.1-2"
+    },
+    {
+        "template": "90.1-2019",
+        "minimum_capacity": 0,
+        "maximum_capacity": 9999999,
+        "start_date": "9/9/1919",
+        "end_date": "9/9/2999",
+        "minimum_coefficient_of_performance": 4.3,
+        "annotation": "From 90.1-2016 Table 6.8.1-15"
+    }
+]

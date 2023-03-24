@@ -105,8 +105,12 @@ class DBOperation:
         csv_dir = f"{save_dir}{self.data_table_name}.csv"
         with open(csv_dir, "w", newline="") as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=",")
-            csv_writer.writerow([i[0] for i in cursor.description])
-            csv_writer.writerows(cursor)
+            csv_writer.writerow([i[0] for i in cursor.description if i[0] != "id"])
+            rows = []
+            # Exclude IDs
+            exclude_first_row = True if cursor.description[0][0] == "id" else False
+            rows = [i[1:] for i in cursor] if exclude_first_row else cursor
+            csv_writer.writerows(rows)
 
     def export_table_to_json(self, conn, save_dir=""):
         """
@@ -122,10 +126,13 @@ class DBOperation:
             dict((cursor.description[i][0], value) for i, value in enumerate(row))
             for row in cursor.fetchall()
         ]
-
+        # Exclude IDs
+        for i in r:
+            if "id" in i.keys():
+                del i["id"]
         json_dir = f"{save_dir}{self.data_table_name}.json"
         json_output = json.dumps(r, indent=4)
-        with open(json_dir, "w", newline="") as json_file:
+        with open(json_dir, "w", newline="\r\n") as json_file:
             json_file.write(json_output)
 
     def _preprocess_record(self, record):

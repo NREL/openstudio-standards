@@ -1,4 +1,4 @@
-template,climate_zone_set,intended_surface_type,standards_construction_type,building_category,construction,orientation,minimum_percent_of_surface,maximum_percent_of_surface,assembly_maximum_u_value,u_value_includes_interior_film_coefficient,u_value_includes_exterior_film_coefficient,asssembly_maximum_f_factor,assembly_maximum_c_factor,assembly_maximum_solar_heat_gain_coefficient,assembly_minimum_vt_shgc,annotation
+template,climate_zone_set,intended_surface_type,standards_construction_type,building_category,construction,orientation,minimum_percent_of_surface,maximum_percent_of_surface,assembly_maximum_u_value,u_value_includes_interior_film_coefficient,u_value_includes_exterior_film_coefficient,assembly_maximum_f_factor,assembly_maximum_c_factor,assembly_maximum_solar_heat_gain_coefficient,assembly_minimum_vt_shgc,annotation
 90.1-2004,ClimateZone 1,ExteriorDoor,Swinging,Nonresidential,Typical Insulated Metal Door,,,,0.7,TRUE,TRUE,,,,,
 90.1-2004,ClimateZone 1,ExteriorDoor,NonSwinging,Nonresidential,Typical Overhead Door,,,,1.45,TRUE,TRUE,,,,,
 90.1-2004,ClimateZone 1,ExteriorDoor,Swinging,Residential,Typical Insulated Metal Door,,,,0.7,TRUE,TRUE,,,,,

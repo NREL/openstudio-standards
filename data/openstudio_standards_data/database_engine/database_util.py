@@ -70,4 +70,9 @@ def getattr_either(key: str, record: dict, option=None):
     :param option: value return when reject (optional), default is None
     :return: value
     """
-    return record[key] if record.get(key) else option
+    if record.get(key) == "":  # used for reading data from CSV
+        return option
+    elif record.get(key) is None:  # used for readting data from CSV
+        return option
+    else:
+        return f"{record[key]}"
