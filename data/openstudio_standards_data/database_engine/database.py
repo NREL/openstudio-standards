@@ -132,7 +132,7 @@ class DBOperation:
                 del i["id"]
         json_dir = f"{save_dir}{self.data_table_name}.json"
         json_output = json.dumps(r, indent=4)
-        with open(json_dir, "w", newline="") as json_file:
+        with open(json_dir, "w", newline="\r\n") as json_file:
             json_file.write(json_output)
 
     def _preprocess_record(self, record):
