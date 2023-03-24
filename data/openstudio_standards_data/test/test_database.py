@@ -93,7 +93,7 @@ def test_create_export_database():
     # There should be no difference between the JSON files originating
     # from a DB generated from JSON or CSV files
     filenames = glob.glob("./test/database_files_from_json/*.json")
-    filenames = [f.split("\\")[-1] for f in filenames]
+    filenames = [os.path.basename(f) for f in filenames]
     for f in filenames:
         with open(f"./test/database_files_from_json/{f}") as f_from_json:
             fc_from_json = f_from_json.readlines()
