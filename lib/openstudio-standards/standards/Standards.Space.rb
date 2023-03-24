@@ -1002,24 +1002,31 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Space #{space_type} is an unknown space type, assuming #{daylight_stpt_lux} Lux daylight setpoint")
     else
       space_type = space_type.get
-      standards_building_type = if space_type.standardsBuildingType.is_initialized
-                                  space_type.standardsBuildingType.get
-                                end
-      standards_space_type = if space_type.standardsSpaceType.is_initialized
-                               space_type.standardsSpaceType.get
-                             end
+      standards_building_type = nil
+      standards_space_type = nil
+      data = nil
+      if space_type.standardsBuildingType.is_initialized
+        standards_building_type = space_type.standardsBuildingType.get
+      end
+      if space_type.standardsSpaceType.is_initialized
+        standards_space_type = space_type.standardsSpaceType.get
+      end
 
-      # use the building type (standards_building_type) and space type (standards_space_type)
-      # as well as template to locate the space type data
-      search_criteria = {
-        'template' => template,
-        'building_type' => standards_building_type,
-        'space_type' => standards_space_type
-      }
+      unless standards_building_type.nil? || standards_space_type.nil?
+        # use the building type (standards_building_type) and space type (standards_space_type)
+        # as well as template to locate the space type data
+        search_criteria = {
+          'template' => template,
+          'building_type' => standards_building_type,
+          'space_type' => standards_space_type
+        }
+        data = model_find_object(standards_data['space_types'], search_criteria)
+      end
 
-      data = model_find_object(standards_data['space_types'], search_criteria)
-      if data.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "No data available for #{space_type.name}: #{standards_space_type} of #{standards_building_type} at #{template}, assuming a #{daylight_stpt_lux} Lux daylight setpoint!")
+      if standards_building_type.nil? || standards_space_type.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Unable to determine standards building type and standards space type for space '#{space.name}' with space type '#{space_type.name}'. Assign a standards building type and standards space type to the space type object. Defaulting to a #{daylight_stpt_lux} Lux daylight setpoint.")
+      elsif data.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Unable to find target illuminance setpoint data for space type '#{space_type.name}' with #{template} space type '#{standards_space_type}' in building type '#{standards_building_type}'. Defaulting to a #{daylight_stpt_lux} Lux daylight setpoint.")
       else
         # Read the illuminance setpoint value
         # If 'na', daylighting is not appropriate for this space type for some reason
