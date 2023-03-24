@@ -53,6 +53,24 @@
       "capacity_curve": "New_Med_Temp_Comp_Cap_Curve",
       "rated_capacity": 203827.71451,
       "notes": null
+    },
+    {
+      "template": "90.1-2013",
+      "compressor_name": "SuperMarket Low Temp",
+      "compressor_type": "SuperMarket Low Temp",
+      "power_curve": "New_Low_Temp_Comp_Pwr_Curve",
+      "capacity_curve": "New_Low_Temp_Comp_Cap_Curve",
+      "rated_capacity": 58628.18,
+      "notes": null
+    },
+    {
+      "template": "90.1-2013",
+      "compressor_name": "SuperMarket Med Temp",
+      "compressor_type": "SuperMarket Med Temp",
+      "power_curve": "New_Med_Temp_Comp_Pwr_Curve",
+      "capacity_curve": "New_Med_Temp_Comp_Cap_Curve",
+      "rated_capacity": 130015.26,
+      "notes": null
     }
   ]
 }

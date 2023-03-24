@@ -315,11 +315,27 @@ class Standard
       htg_sch = htg_clg_sch[0]
       clg_sch = htg_clg_sch[1]
 
+      if htg_sch.to_ScheduleConstant.is_initialized
+        htg_sch_type = 'Schedule:Constant'
+      elsif htg_sch.to_ScheduleCompact.is_initialized
+        htg_sch_type = 'Schedule:Compact'
+      else
+        htg_sch_type = 'Schedule:Year'
+      end
+
+      if clg_sch.to_ScheduleCompact.is_initialized
+        clg_sch_type = 'Schedule:Constant'
+      elsif clg_sch.to_ScheduleCompact.is_initialized
+        clg_sch_type = 'Schedule:Compact'
+      else
+        clg_sch_type = 'Schedule:Year'
+      end
+
       # Actuators
-      htg_sch_act = OpenStudio::Model::EnergyManagementSystemActuator.new(htg_sch, 'Schedule:Year', 'Schedule Value')
+      htg_sch_act = OpenStudio::Model::EnergyManagementSystemActuator.new(htg_sch, htg_sch_type, 'Schedule Value')
       htg_sch_act.setName("#{loop_name_clean}HtgSch#{i}")
 
-      clg_sch_act = OpenStudio::Model::EnergyManagementSystemActuator.new(clg_sch, 'Schedule:Year', 'Schedule Value')
+      clg_sch_act = OpenStudio::Model::EnergyManagementSystemActuator.new(clg_sch, clg_sch_type, 'Schedule Value')
       clg_sch_act.setName("#{loop_name_clean}ClgSch#{i}")
 
       # Programs

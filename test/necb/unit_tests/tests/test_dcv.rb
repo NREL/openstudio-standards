@@ -24,9 +24,9 @@ class NECB_DCV_Tests < Minitest::Test
     @building_types = [     #test for 'FullServiceRestaurant' and 'Hospital'
         'FullServiceRestaurant',
         # 'HighriseApartment',
-        'Hospital'#,
+        # 'Hospital',
         # 'LargeHotel',
-        # 'LargeOffice',
+        'LargeOffice',
         # 'MediumOffice',
         # 'MidriseApartment',
         # 'Outpatient',

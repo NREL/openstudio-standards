@@ -209,6 +209,15 @@ class ASHRAE901PRM < Standard
     return 'Multi Zone VAV with VSD and Fixed SP Setpoint'
   end
 
+  # Determines if optimum start control is required.
+  # PRM does not require optimum start - override it to false.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @return [Bool] returns true if required, false if not
+  def air_loop_hvac_optimum_start_required?(air_loop_hvac)
+    return false
+  end
+
   # Calculate and apply the performance rating method
   # baseline fan power to this air loop based on the
   # system type that it represents.

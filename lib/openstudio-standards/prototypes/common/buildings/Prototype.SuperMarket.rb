@@ -17,9 +17,6 @@ module SuperMarket
     # additional kitchen loads
     add_extra_equip_kitchen(model)
 
-    # reset bakery & deli OA reset
-    reset_bakery_deli_oa(model)
-
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
     return true
@@ -35,7 +32,7 @@ module SuperMarket
       space = model.getSpaceByName(space_name).get
       kitchen_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
       kitchen_definition.setName('kitchen load')
-      kitchen_definition.setDesignLevel(11_674.5)
+      kitchen_definition.setDesignLevel(11674.5)
       kitchen_definition.setFractionLatent(0.25)
       kitchen_definition.setFractionRadiant(0.3)
       kitchen_definition.setFractionLost(0.2)
@@ -75,25 +72,6 @@ module SuperMarket
     model.getFanZoneExhausts.sort.each do |exhaust_fan|
       exhaust_fan.setFanEfficiency(0.45)
       exhaust_fan.setPressureRise(125)
-    end
-    return true
-  end
-
-  # reset bakery & deli OA from AEDG baseline model
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
-  def reset_bakery_deli_oa(model)
-    space_names = ['Deli', 'Bakery']
-    space_names.each do |space_name|
-      space_kitchen = model.getSpaceByName(space_name).get
-      ventilation = space_kitchen.designSpecificationOutdoorAir.get
-      ventilation.setOutdoorAirFlowperPerson(0)
-      ventilation.setOutdoorAirFlowperFloorArea(0.0015)
-      # case template
-      # when '90.1-2004','90.1-2007','90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019',
-      #  ventilation.setOutdoorAirFlowRate(4.27112436)
-      # end
     end
     return true
   end

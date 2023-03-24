@@ -392,7 +392,16 @@ class BTAPDatapoint
         FROM ReportDataDictionary
         WHERE ReportDataDictionaryIndex == #{rdd_index}
       "
-      key_value = model.sqlFile.get.execAndReturnFirstString(query).get
+
+      # In some cases KeyValue has a value and sometimes it does not.  In some cases KeyValue is null.  If the command
+      # below is run and KeyValue is null then the command fails and returns an error.  The fix below assumes that if
+      # the command below fails it is because KeyValue is null.  In that case the "key_value" variable is set to a
+      # blank.
+      begin
+        key_value = model.sqlFile.get.execAndReturnFirstString(query).get
+      rescue StandardError => bang
+        key_value = ""
+      end
 
       #Get Units
       query = "

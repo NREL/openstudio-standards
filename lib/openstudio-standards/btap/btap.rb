@@ -22,24 +22,26 @@ require 'fileutils'
 require 'singleton'
 require 'find'
 require 'date'
-require_relative 'fileio' 
+require_relative 'fileio'
 require_relative 'geometry'
-require_relative 'analysis' 
-require_relative 'simmanager' 
-require_relative 'mpc' 
 require_relative 'envelope'
 require_relative 'bridging'
-require_relative 'spaceloads'
-require_relative 'spacetypes'
 require_relative 'schedules'
-require_relative 'hvac'
-require_relative 'economics'
-require_relative 'measures'
-require_relative 'utilities'
-require_relative 'reporting'
-require_relative 'equest'
 require_relative 'btap_result'
-require_relative 'btap_costing'
+
+# require_relative 'analysis'
+# require_relative 'simmanager'
+# require_relative 'mpc'
+# require_relative 'spaceloads'
+# require_relative 'spacetypes'
+
+# require_relative 'hvac'
+# require_relative 'economics'
+# require_relative 'measures'
+# require_relative 'utilities'
+# require_relative 'reporting'
+# require_relative 'equest'
+# require_relative 'btap_costing'
 #require_relative 'btap.space'
 #require_relative 'btap.model'
 class String
@@ -96,12 +98,12 @@ module BTAP
   #EnergyPlus version
   ENERGY_PLUS_MAJOR_VERSION = 8
   ENERGY_PLUS_MINOR_VERSION = 3
-  
+
   #Path constants
   OS_RUBY_PATH = File.expand_path("..\\..\\..", __FILE__)
   TESTING_FOLDER = "C:\\test"
-  
-  #  A wrapper for outputing feedback to users and developers. 
+
+  #  A wrapper for outputing feedback to users and developers.
   #  BTAP::runner_register("InitialCondition",   "Your Information Message Here", runner)
   #  BTAP::runner_register("Info",    "Your Information Message Here", runner)
   #  BTAP::runner_register("Warning", "Your Information Message Here", runner)
@@ -109,12 +111,12 @@ module BTAP
   #  BTAP::runner_register("Debug",   "Your Information Message Here", runner)
   #  BTAP::runner_register("FinalCondition",   "Your Information Message Here", runner)
   #  @params type [String]
-  #  @params runner [OpenStudio::Ruleset::OSRunner] # or a nil. 
+  #  @params runner [OpenStudio::Ruleset::OSRunner] # or a nil.
   def self.runner_register(type,text,runner = nil)
 
-    #dump to console. 
+    #dump to console.
     puts "#{type.upcase}: #{text}"
-    #dump to runner. 
+    #dump to runner.
     if runner.is_a?(OpenStudio::Ruleset::OSRunner)
       case type.downcase
       when "info"
@@ -136,21 +138,21 @@ module BTAP
       end
     end
   end
-  
+
   def self.runner_register_value(name,value,runner = nil)
     if runner.is_a?(OpenStudio::Ruleset::OSRunner)
       runner.registerValue( name,value.to_s)
       BTAP::runner_register("Info", "#{name} = #{value} has been registered in the runner", runner)
     end
   end
-  
-  
-  
-  
 
-  
-  
-  
+
+
+
+
+
+
+
   def self.gut_building(model)
     #clean up any remaining items that we don't need for NECB.
     puts "Removing casual loads."
@@ -168,7 +170,7 @@ module BTAP
     puts "Removing HVAC"
     BTAP::Resources::HVAC.clear_all_hvac_from_model( model )
   end
-  
+
 
   class OpenStudioLibrary
     include Singleton
@@ -282,7 +284,7 @@ module BTAP
 
   end
   # This contains methods for creation and querying object that deal with Envelope, SpaceLoads,Schedules, and HVAC.
-  
+
   module Common
     #This model checks to see if the obj_array passed is
     #the object we require, or if a string is given to search for a object of that strings name.
