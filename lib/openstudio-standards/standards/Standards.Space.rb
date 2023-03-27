@@ -835,12 +835,22 @@ class Standard
   def space_add_daylighting_controls(space, remove_existing_controls, draw_daylight_areas_for_debugging = false)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "******For #{space.name}, adding daylight controls.")
 
+    # Get the space thermal zone
+    zone = space.thermalZone
+    if zone.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', "Space #{space.name} has no thermal zone; cannot set daylighting controls for zone.")
+    else
+      zone = zone.get
+    end
+
     # Check for existing daylighting controls
     # and remove if specified in the input
     existing_daylighting_controls = space.daylightingControls
     unless existing_daylighting_controls.empty?
       if remove_existing_controls
         space_remove_daylighting_controls(space)
+        zone.resetFractionofZoneControlledbyPrimaryDaylightingControl
+        zone.resetFractionofZoneControlledbySecondaryDaylightingControl
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}, daylight controls were already present, no additional controls added.")
         return false
@@ -1037,14 +1047,6 @@ class Standard
       end
     end
 
-    # Get the zone that the space is in
-    zone = space.thermalZone
-    if zone.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', "Space #{space.name} has no thermal zone")
-    else
-      zone = zone.get
-    end
-
     # Sort by priority; first by facade, then by area,
     # then by name to ensure deterministic in case identical in other ways
     sorted_windows = windows.sort_by { |_window, vals| [vals[:facade], vals[:area], vals[:name]] }
@@ -1077,16 +1079,6 @@ class Standard
     if standards_building_type == 'Office' && standards_space_type.include?('WholeBuilding')
       sensor_1_frac *= psa_nongeo_frac unless psa_nongeo_frac.nil?
       sensor_2_frac *= ssa_nongeo_frac unless ssa_nongeo_frac.nil?
-    end
-
-    # Place the sensors and set control fractions
-    # get the zone that the space is in
-    zone = space.thermalZone
-    if zone.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', "Space #{space.name}, cannot determine daylighted areas.")
-      return false
-    else
-      zone = space.thermalZone.get
     end
 
     # Ensure that total controlled fraction
@@ -1149,6 +1141,9 @@ class Standard
 
       # @todo rotate sensor to face window (only needed for glare calcs)
       zone.setPrimaryDaylightingControl(sensor_1)
+      if zone.fractionofZoneControlledbyPrimaryDaylightingControl + sensor_1_frac > 1
+        zone.resetFractionofZoneControlledbySecondaryDaylightingControl
+      end
       zone.setFractionofZoneControlledbyPrimaryDaylightingControl(sensor_1_frac)
     end
 
@@ -1191,6 +1186,9 @@ class Standard
 
       # @todo rotate sensor to face window (only needed for glare calcs)
       zone.setSecondaryDaylightingControl(sensor_2)
+      if zone.fractionofZoneControlledbySecondaryDaylightingControl + sensor_2_frac > 1
+        zone.resetFractionofZoneControlledbyPrimaryDaylightingControl
+      end
       zone.setFractionofZoneControlledbySecondaryDaylightingControl(sensor_2_frac)
     end
 

@@ -367,6 +367,11 @@ class NECB2011 < Standard
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
 
+    # Ensure the volume calculation in all spaces is done automatically
+    model.getSpaces.sort.each do |space|
+      space.autocalculateVolume
+    end
+
     apply_weather_data(model: model, epw_file: epw_file)
     apply_loads(model: model,
                 lights_type: lights_type,

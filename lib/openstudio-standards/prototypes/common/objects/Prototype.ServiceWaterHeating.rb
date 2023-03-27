@@ -307,6 +307,8 @@ class Standard
   # Creates a heatpump water heater and attaches it to the supplied service water heating loop.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param type [String] valid option are 'WrappedCondenser' or 'PumpedCondenser' (default).
+  #   The 'WrappedCondenser' uses a WaterHeaterStratified tank, 'PumpedCondenser' uses a WaterHeaterMixed tank.
   # @param water_heater_capacity [Double] water heater capacity, in W
   # @param water_heater_volume [Double] water heater volume, in m^3
   # @param service_water_temperature [Double] water heater temperature, in C
@@ -317,6 +319,7 @@ class Standard
   # @param flowrate_schedule [String] name of the flow rate schedule
   # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone] zone to place water heater in.
   #   If nil, will be assumed in 70F air for heat loss.
+  # @param use_ems_control [Bool] if true, use ems control logic if using a 'WrappedCondenser' style HPWH.
   # @return [OpenStudio::Model::WaterHeaterMixed] the resulting water heater
   def model_add_heatpump_water_heater(model,
                                       type: 'PumpedCondenser',
@@ -332,7 +335,8 @@ class Standard
                                       set_peak_use_flowrate: false,
                                       peak_flowrate: 0.0,
                                       flowrate_schedule: nil,
-                                      water_heater_thermal_zone: nil)
+                                      water_heater_thermal_zone: nil,
+                                      use_ems_control: false)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding heat pump water heater')
 
@@ -352,9 +356,13 @@ class Standard
     u_tank = (5.678 * tank_ua) / OpenStudio.convert(tank_surface_area, 'm^2', 'ft^2').get
     hpwh.setName("#{hpwh_vol_gal.round}gal Heat Pump Water Heater - #{water_heater_capacity_kbtu_per_hr.round(0)}kBtu/hr")
 
+    # set min/max HPWH operating temperature limit
+    hpwh_op_min_temp_c = OpenStudio.convert(45.0, 'F', 'C').get
+    hpwh_op_max_temp_c = OpenStudio.convert(120.0, 'F', 'C').get
+
     if type == 'WrappedCondenser'
-      hpwh.setMinimumInletAirTemperatureforCompressorOperation(OpenStudio.convert(45.0, 'F', 'C').get)
-      hpwh.setMaximumInletAirTemperatureforCompressorOperation(OpenStudio.convert(120.0, 'F', 'C').get)
+      hpwh.setMinimumInletAirTemperatureforCompressorOperation(hpwh_op_min_temp_c)
+      hpwh.setMaximumInletAirTemperatureforCompressorOperation(hpwh_op_max_temp_c)
       # set sensor heights
       if hpwh_vol_gal <= 50.0
         hpwh.setDeadBandTemperatureDifference(0.5)
@@ -535,7 +543,10 @@ class Standard
       fan.setFanEfficiency(65.0 / fan_power * OpenStudio.convert(1.0, 'ft^3/min', 'm^3/s').get)
       fan.setPressureRise(65.0)
     end
-    fan.setMaximumFlowRate(OpenStudio.convert(181.0, 'ft^3/min', 'm^3/s').get)
+    # determine maximum flow rate from water heater capacity
+    # use 5.035E-5 m^3/s/W from EnergyPlus used to autocalculate the evaporator air flow rate in WaterHeater:HeatPump:PumpedCondenser and Coil:WaterHeating:AirToWaterHeatPump:Pumped
+    fan_flow_rate_m3_per_s = water_heater_capacity * 5.035e-5
+    fan.setMaximumFlowRate(fan_flow_rate_m3_per_s)
     fan.setMotorEfficiency(1.0)
     fan.setMotorInAirstreamFraction(1.0)
     fan.setEndUseSubcategory('Service Hot Water')
@@ -581,6 +592,84 @@ class Standard
       tank.setPeakUseFlowRate(rated_flow_rate_m3_per_s)
       schedule = model_add_schedule(model, flowrate_schedule)
       tank.setUseFlowRateFractionSchedule(schedule)
+    end
+
+    # add EMS for overriding HPWH setpoints schedules (for upper/lower heating element in water tank and compressor in heat pump)
+    if type == 'WrappedCondenser' && use_ems_control
+      hpwh_name_ems_friendly = ems_friendly_name(hpwh.name)
+
+      # create an ambient temperature sensor for the air that blows through the HPWH evaporator
+      if water_heater_thermal_zone.nil?
+        # assume the condenser is outside
+        amb_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
+        amb_temp_sensor.setName("#{hpwh_name_ems_friendly}_amb_temp")
+        amb_temp_sensor.setKeyName('Environment')
+      else
+        amb_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Mean Air Temperature')
+        amb_temp_sensor.setName("#{hpwh_name_ems_friendly}_amb_temp")
+        amb_temp_sensor.setKeyName(water_heater_thermal_zone.name.to_s)
+      end
+
+      # create actuator for heat pump compressor
+      if swh_temp_sch.to_ScheduleConstant.is_initialized
+        swh_temp_sch = swh_temp_sch.to_ScheduleConstant.get
+        schedule_type = 'Schedule:Constant'
+      elsif swh_temp_sch.to_ScheduleCompact.is_initialized
+        swh_temp_sch = swh_temp_sch.to_ScheduleCompact.get
+        schedule_type = 'Schedule:Compact'
+      elsif swh_temp_sch.to_ScheduleRuleset.is_initialized
+        swh_temp_sch = swh_temp_sch.to_ScheduleRuleset.get
+        schedule_type = 'Schedule:Year'
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Prototype.ServiceWaterHeating', "Unsupported schedule type for HPWH setpoint schedule #{swh_temp_sch.name}.")
+        return false
+      end
+      hpwhschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(swh_temp_sch,schedule_type,'Schedule Value')
+      hpwhschedoverride_actuator.setName("#{hpwh_name_ems_friendly}_HPWHSchedOverride")
+
+      # create actuator for lower heating element in water tank
+      leschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(hpwh_bottom_element_sp,'Schedule:Constant','Schedule Value')
+      leschedoverride_actuator.setName("#{hpwh_name_ems_friendly}_LESchedOverride")
+
+      # create actuator for upper heating element in water tank
+      ueschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(hpwh_top_element_sp,'Schedule:Constant','Schedule Value')
+      ueschedoverride_actuator.setName("#{hpwh_name_ems_friendly}_UESchedOverride")
+
+      # create sensor for heat pump compressor
+      t_set_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
+      t_set_sensor.setName("#{hpwh_name_ems_friendly}_T_set")
+      t_set_sensor.setKeyName(swh_temp_sch.name.to_s)
+
+      # define control configuration 
+      t_offset = 9.0 # deg-C
+
+      # get tank specifications
+      upper_element_db = tank.heater1DeadbandTemperatureDifference
+
+      # define control logic
+      hpwh_ctrl_program = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+      hpwh_ctrl_program.setName("#{hpwh_name_ems_friendly}_Control")
+      hpwh_ctrl_program.addLine("SET #{hpwhschedoverride_actuator.name} = #{t_set_sensor.name}")
+      # lockout hp when ambient temperature is either too high or too low
+      hpwh_ctrl_program.addLine("IF (#{amb_temp_sensor.name}<#{hpwh_op_min_temp_c}) || (#{amb_temp_sensor.name}>#{hpwh_op_max_temp_c})")
+      hpwh_ctrl_program.addLine("SET #{ueschedoverride_actuator.name} = #{t_set_sensor.name}")
+      hpwh_ctrl_program.addLine("SET #{leschedoverride_actuator.name} = #{t_set_sensor.name}")
+      hpwh_ctrl_program.addLine('ELSE')
+      # upper element setpoint temperature
+      hpwh_ctrl_program.addLine("SET #{ueschedoverride_actuator.name} = #{t_set_sensor.name} - #{t_offset}")
+      # upper element cut-in temperature
+      hpwh_ctrl_program.addLine("SET #{ueschedoverride_actuator.name}_cut_in = #{ueschedoverride_actuator.name} - #{upper_element_db}")
+      # lower element disabled
+      hpwh_ctrl_program.addLine("SET #{leschedoverride_actuator.name} = 0")
+      # lower element disabled
+      hpwh_ctrl_program.addLine("SET #{leschedoverride_actuator.name}_cut_in = 0")
+      hpwh_ctrl_program.addLine('ENDIF')    
+
+      # create a program calling manager
+      program_calling_manager = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+      program_calling_manager.setName("#{hpwh_name_ems_friendly}_ProgramManager")
+      program_calling_manager.setCallingPoint('InsideHVACSystemIterationLoop')
+      program_calling_manager.addProgram(hpwh_ctrl_program)
     end
 
     return hpwh
