@@ -22,16 +22,16 @@ module Pump
     # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
     flow_m3_per_s = if pump.to_PumpVariableSpeed.is_initialized || pump.to_PumpConstantSpeed.is_initialized
-                      if pump.autosizedRatedFlowRate.is_initialized
-                        pump.autosizedRatedFlowRate.get
-                      else
+                      if pump.ratedFlowRate.is_initialized
                         pump.ratedFlowRate.get
+                      elsif pump.autosizedRatedFlowRate.is_initialized
+                        pump.autosizedRatedFlowRate.get
                       end
                     elsif pump.to_HeaderedPumpsVariableSpeed.is_initialized || pump.to_HeaderedPumpsConstantSpeed.is_initialized
-                      if pump.autosizedTotalRatedFlowRate.is_initialized
-                        pump.autosizedTotalRatedFlowRate.get / pump.numberofPumpsinBank
-                      else
+                      if pump.totalRatedFlowRate.is_initialized
                         pump.totalRatedFlowRate.get / pump.numberofPumpsinBank
+                      elsif pump.autosizedTotalRatedFlowRate.is_initialized
+                        pump.autosizedTotalRatedFlowRate.get / pump.numberofPumpsinBank
                       end
                     end
 
@@ -178,16 +178,18 @@ module Pump
     # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
     flow_m3_per_s = if pump.to_PumpVariableSpeed.is_initialized || pump.to_PumpConstantSpeed.is_initialized
-                      if pump.autosizedRatedFlowRate.is_initialized
+                      if pump.ratedFlowRate.is_initialized
+                        pump.ratedFlowRate.get
+                      elsif pump.autosizedRatedFlowRate.is_initialized
                         pump.autosizedRatedFlowRate.get
                       else
                         pump.ratedFlowRate.get
                       end
                     elsif pump.to_HeaderedPumpsVariableSpeed.is_initialized || pump.to_HeaderedPumpsConstantSpeed.is_initialized
-                      if pump.autosizedTotalRatedFlowRate.is_initialized
-                        pump.autosizedTotalRatedFlowRate.get
-                      else
+                      if pump.totalRatedFlowRate.is_initialized
                         pump.totalRatedFlowRate.get
+                      elsif pump.autosizedTotalRatedFlowRate.is_initialized
+                        pump.autosizedTotalRatedFlowRate.get
                       end
                     end
 
@@ -223,16 +225,16 @@ module Pump
     # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
     flow_m3_per_s = if pump.to_PumpVariableSpeed.is_initialized || pump.to_PumpConstantSpeed.is_initialized
-                      if pump.autosizedRatedFlowRate.is_initialized
-                        pump.autosizedRatedFlowRate.get
-                      else
+                      if pump.ratedFlowRate.is_initialized
                         pump.ratedFlowRate.get
+                      elsif pump.autosizedRatedFlowRate.is_initialized
+                        pump.autosizedRatedFlowRate.get
                       end
                     elsif pump.to_HeaderedPumpsVariableSpeed.is_initialized || pump.to_HeaderedPumpsConstantSpeed.is_initialized
-                      if pump.autosizedTotalRatedFlowRate.is_initialized
-                        pump.autosizedTotalRatedFlowRate.get
-                      else
+                      if pump.totalRatedFlowRate.is_initialized
                         pump.totalRatedFlowRate.get
+                      elsif pump.autosizedTotalRatedFlowRate.is_initialized
+                        pump.autosizedTotalRatedFlowRate.get
                       end
                     end
 
@@ -275,10 +277,10 @@ module Pump
   def pump_rated_w_per_gpm(pump)
     # Get design power (whether autosized or hard-sized)
     rated_power_w = 0
-    if pump.autosizedRatedPowerConsumption.is_initialized
-      rated_power_w = pump.autosizedRatedPowerConsumption.get
-    elsif pump.ratedPowerConsumption.is_initialized
+    if pump.ratedPowerConsumption.is_initialized
       rated_power_w = pump.ratedPowerConsumption.get
+    elsif pump.autosizedRatedPowerConsumption.is_initialized
+      rated_power_w = pump.autosizedRatedPowerConsumption.get
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find rated pump power consumption, cannot determine w per gpm correctly.")
       return 0.0
