@@ -241,7 +241,7 @@ class NECB2011 < Standard
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
                                 lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
                                 lights_scale: lights_scale,
-                                daylighting_type: 'add_daylighting_controls', # Two options: (1) nil/none/false/'NECB_Default' (Option #1 puts daylighting sensors in the spaces as per NECB requirements; so some spaces may not have sensors), (2) 'add_daylighting_controls' (Option #2 puts daylighting sensors in all spaces regardless of NECB requirements)
+                                daylighting_type: daylighting_type, # Two options: (1) nil/none/false/'NECB_Default' (Option #1 puts daylighting sensors in the spaces as per NECB requirements; so some spaces may not have sensors), (2) 'add_daylighting_controls' (Option #2 puts daylighting sensors in all spaces regardless of NECB requirements)
                                 ecm_system_name: ecm_system_name,
                                 ecm_system_zones_map_option: ecm_system_zones_map_option, # (1) 'NECB_Default' (2) 'one_sys_per_floor' (3) 'one_sys_per_bldg'
                                 erv_package: erv_package,
@@ -1271,7 +1271,7 @@ class NECB2011 < Standard
             space_type = space.spaceType.get
             space_type_name = space.spaceType.get.name.to_s
             space_type_name = space_type_name.gsub('Space Function', '')
-            puts "space_type_name is #{space_type_name}"
+            # puts "space_type_name is #{space_type_name}"
 
             # Gather minimum illuminance level as per NECB
             lux_spacetype_data = @standards_data['tables']['space_types']['table']

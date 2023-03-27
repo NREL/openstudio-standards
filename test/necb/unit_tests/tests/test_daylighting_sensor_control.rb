@@ -61,7 +61,6 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
                   result['epw_file'] = epw_file
                   result['building_type'] = building_type
                   result['primary_heating_fuel'] = primary_heating_fuel
-                  result['dcv_type'] = dcv_type
                   result['daylighting_type'] = daylighting_type
 
                   # make an empty model
@@ -320,8 +319,6 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
                     end #!zone.empty?
 
                   end #daylight_spaces.each do |daylight_space|
-
-                  # elsif daylighting_type == 'add_daylighting_controls'  #TODO to be completed
 
                   #then store result into the array that contains all the scenario results.
                   @test_results_array << result
