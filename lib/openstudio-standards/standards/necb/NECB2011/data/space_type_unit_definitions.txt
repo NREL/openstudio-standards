@@ -21,7 +21,8 @@
           "high_bay_lighting_schedule":
           "specialty_lighting_schedule":
           "exit_lighting_schedule":
-          "target_illuminance_setpoint":
+          "target_illuminance_setpoint": lux
+          "target_illuminance_setpoint_ref":
           "psa_nongeometry_fraction":
           "ssa_nongeometry_fraction":
           "ventilation_standard":
