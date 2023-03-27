@@ -166,11 +166,16 @@ class OpenStudio::Model::ThermalZone
       sql = sql.get
 
       table_name = 'Zone Sizing Information'
+      if self.model.version < OpenStudio::VersionString.new('3.5.0')
+        report_name = 'Initialization Summary'
+      else
+        report_name = 'InitializationSummary'
+      end
 
       # Get zone row name
       query = "SELECT RowName
               FROM tabulardatawithstrings
-              WHERE ReportName='Initialization Summary'
+              WHERE ReportName='#{report_name}'
               AND ReportForString='Entire Facility'
               AND TableName='#{table_name}'
               AND ColumnName='Zone Name'
@@ -193,7 +198,7 @@ class OpenStudio::Model::ThermalZone
         # Get zone cooling design flow rate
         query = "SELECT Value
                 FROM tabulardatawithstrings
-                WHERE ReportName='Initialization Summary'
+                WHERE ReportName='#{report_name}'
                 AND ReportForString='Entire Facility'
                 AND TableName='#{table_name}'
                 AND ColumnName='User Des Air Flow Rate {m3/s}'
@@ -208,7 +213,7 @@ class OpenStudio::Model::ThermalZone
         # Get zone heating design flow rate
         query = "SELECT Value
                 FROM tabulardatawithstrings
-                WHERE ReportName='Initialization Summary'
+                WHERE ReportName='#{report_name}'
                 AND ReportForString='Entire Facility'
                 AND TableName='#{table_name}'
                 AND ColumnName='User Des Air Flow Rate {m3/s}'

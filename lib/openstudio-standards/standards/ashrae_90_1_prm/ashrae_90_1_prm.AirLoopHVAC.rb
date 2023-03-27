@@ -303,10 +303,10 @@ class ASHRAE901PRM < Standard
     if supply_fan.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.AirLoopHVAC', "Supply not found on #{airloop.name}.")
     end
-    supply_fan_max_flow = if supply_fan.autosizedMaximumFlowRate.is_initialized
-                            supply_fan.autosizedMaximumFlowRate.get
-                          else
+    supply_fan_max_flow = if supply_fan.maximumFlowRate.is_initialized
                             supply_fan.maximumFlowRate.get
+                          elsif supply_fan.autosizedMaximumFlowRate.is_initialized
+                            supply_fan.autosizedMaximumFlowRate.get
                           end
 
     # Check that baseline system has the same

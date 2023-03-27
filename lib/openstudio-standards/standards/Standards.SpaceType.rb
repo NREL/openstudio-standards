@@ -437,7 +437,6 @@ class Standard
     end
 
     if set_infiltration && infiltration_have_info
-
       # Remove all but the first instance
       instances = space_type.spaceInfiltrationDesignFlowRates.sort
       if instances.size.zero?
@@ -470,8 +469,9 @@ class Standard
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{ventilation_ach} ACH.")
         end
       end
-
     end
+
+    return true
   end
 
   # Sets the internal loads for Appendix G PRM for 2016 and later
