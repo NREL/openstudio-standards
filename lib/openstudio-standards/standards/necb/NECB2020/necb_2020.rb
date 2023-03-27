@@ -138,8 +138,6 @@ class NECB2020 < NECB2017
     infiltration.setVelocityTermCoefficient(self.get_standards_constant('infiltration_velocity_term_coefficient'))
     infiltration.setVelocitySquaredTermCoefficient(self.get_standards_constant('infiltration_velocity_squared_term_coefficient'))
     infiltration.setSpace(space)
-
     return true
   end
-
 end

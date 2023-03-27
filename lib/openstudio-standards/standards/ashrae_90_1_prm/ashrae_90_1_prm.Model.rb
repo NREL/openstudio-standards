@@ -780,6 +780,8 @@ class ASHRAE901PRM < Standard
   def model_add_prm_elevators(model)
     # Load elevator data from userdata csv files
     user_elevators = @standards_data.key?('userdata_electric_equipment') ? @standards_data['userdata_electric_equipment'] : nil
+    return false if user_elevators.nil?
+
     user_elevators.each do |user_elevator|
       num_lifts = user_elevator['elevator_number_of_lifts'].to_i
       next if num_lifts == 0
@@ -3030,10 +3032,10 @@ class ASHRAE901PRM < Standard
 
         # Get the maximum flow rate through the terminal
         max_primary_air_flow_rate = nil
-        if pfp_term.autosizedMaximumPrimaryAirFlowRate.is_initialized
-          max_primary_air_flow_rate = pfp_term.autosizedMaximumPrimaryAirFlowRate.get
-        elsif pfp_term.maximumPrimaryAirFlowRate.is_initialized
+        if pfp_term.maximumPrimaryAirFlowRate.is_initialized
           max_primary_air_flow_rate = pfp_term.maximumPrimaryAirFlowRate.get
+        elsif pfp_term.autosizedMaximumPrimaryAirFlowRate.is_initialized
+          max_primary_air_flow_rate = pfp_term.autosizedMaximumPrimaryAirFlowRate.get
         end
 
         max_sec_flow_rate_m3_per_s = max_primary_air_flow_rate * sec_flow_frac

@@ -58,10 +58,10 @@ class Standard
 
     # Get the maximum flow rate through the fan
     max_air_flow_rate = nil
-    if fan.autosizedMaximumFlowRate.is_initialized
-      max_air_flow_rate = fan.autosizedMaximumFlowRate.get
-    elsif fan.maximumFlowRate.is_initialized
+    if fan.maximumFlowRate.is_initialized
       max_air_flow_rate = fan.maximumFlowRate.get
+    elsif fan.autosizedMaximumFlowRate.is_initialized
+      max_air_flow_rate = fan.autosizedMaximumFlowRate.get
     end
     max_air_flow_rate_cfm = OpenStudio.convert(max_air_flow_rate, 'm^3/s', 'ft^3/min').get
 

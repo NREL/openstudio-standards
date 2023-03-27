@@ -32,9 +32,6 @@ class NECB_Weather_Tests < Minitest::Test
     )
 
     test = FileUtils.compare_file(expected_results, test_results)
-
-    assert( test ,
-            "Weather output from test does not match what is expected. Compare #{File.join(File.dirname(__FILE__),'data','weather_expected_results.json')} with #{File.join(File.dirname(__FILE__),'data','weather_test_results.json')}"
-    )
+    assert(test, "Weather output from test does not match what is expected. Compare #{expected_results} with #{test_results}")
   end
 end

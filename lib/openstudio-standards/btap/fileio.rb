@@ -834,6 +834,15 @@ module BTAP
           # Move to the next field if no difference was found
           next if true_value == compare_value
 
+          # Check numeric values if numeric
+          if (compare_value.is_a? Numeric) && (true_value.is_a? Numeric)
+            diff = true_value.to_f - compare_value.to_f
+            unless true_value.zero?
+              # next if absolute value is less than a tenth of a percent difference
+              next if (diff / true_value.to_f).abs < 0.001
+            end
+          end
+
           # Report the difference
           diffs << "For #{true_object.iddObject.name} called '#{true_object.name}' field '#{field_name}': before model = #{true_value}, after model = #{compare_value}"
 
