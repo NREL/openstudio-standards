@@ -31,7 +31,7 @@ class Standard
     if insulation_layer_name.nil? && target_u_value_ip == 0.0
       # Do nothing if the construction already doesn't have an insulation layer
     elsif insulation_layer_name.nil?
-      insulation_layer_name = find_and_set_insulaton_layer(construction).name
+      insulation_layer_name = find_and_set_insulation_layer(construction).name
     end
 
     # Remove the insulation layer if the specified U-value is zero.

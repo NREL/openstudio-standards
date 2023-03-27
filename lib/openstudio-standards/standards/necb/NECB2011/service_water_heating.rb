@@ -197,7 +197,6 @@ class NECB2011
 
     # Convert to SI
     ua_btu_per_hr_per_c = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
-
     # Set the water heater properties
     # Efficiency
     water_heater_mixed.setHeaterThermalEfficiency(water_heater_eff)
@@ -263,14 +262,14 @@ class NECB2011
     model.getSpaces.sort.each do |space|
       space_peak_flow = 0
       data = nil
-      space_type_name = space.spaceType.get.nameString
+      space_type_name = space.spaceType.get.standardsSpaceType.get.to_s
       tank_temperature = 60
       # find the specific space_type properties from standard.json
       space_types_table.each do |space_type|
-        if space_type_name == (space_type['building_type'] + ' ' + space_type['space_type'])
+        if (space_type['building_type'] + ' ' + space_type_name) == (space_type['building_type'] + ' ' + space_type['space_type'])
           break if space_type['necb_hvac_system_selection_type'] == '- undefined -'
           # If there is no service hot water load.. Don't bother adding anything.
-          break if space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0 || space_type['service_water_heating_schedule'].nil?
+          break if (space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0) || space_type['service_water_heating_schedule'].nil?
 
           # If there is a service hot water load collect the space information
           data = space_type
@@ -280,7 +279,6 @@ class NECB2011
       # If there is no service hot water load.. Don't bother adding anything.
       # Skip space types with no data
       next if data.nil?
-
       space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
       # Calculate the peak shw flow rate for the space.  Peak flow from JSON file is in US Gal/hr/ft^2
       # space_peak_flow_ind is the peak flow rate for the space while space_peak_flow is the peak flow

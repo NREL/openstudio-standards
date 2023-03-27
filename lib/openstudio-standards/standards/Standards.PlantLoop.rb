@@ -945,11 +945,11 @@ class Standard
     final_boilers = [first_boiler, second_boiler]
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, added a second boiler.")
 
-    # Set the sizing factor for all boilers evenly and Rename the boilers
+    # Rename boilers and set the sizing factor
     sizing_factor = (1.0 / final_boilers.size).round(2)
     final_boilers.each_with_index do |boiler, i|
+      boiler.setName("#{plant_loop.name} Boiler #{i + 1} of #{final_boilers.size}")
       boiler.setSizingFactor(sizing_factor)
-      boiler.setName("#{first_boiler.name} #{i + 1} of #{final_boilers.size}")
     end
 
     # Set the equipment to stage sequentially

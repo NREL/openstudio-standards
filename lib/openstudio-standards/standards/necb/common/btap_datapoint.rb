@@ -117,6 +117,8 @@ class BTAPDatapoint
                                        epw_file: @options[:epw_file],
                                        sizing_run_dir: File.join(@dp_temp_folder, 'sizing_folder'),
                                        primary_heating_fuel: @options[:primary_heating_fuel],
+                                       necb_reference_hp: @options[:necb_reference_hp],
+                                       necb_reference_hp_supp_fuel: @options[:necb_reference_hp_supp_fuel],
                                        dcv_type: @options[:dcv_type], # Four options: @options[: (1) 'NECB_Default', (2) 'No DCV', (3) 'Occupancy-based DCV' , (4) 'CO2-based DCV'
                                        lights_type: @options[:lights_type], # Two options: @options[: (1) 'NECB_Default', (2) 'LED'
                                        lights_scale: @options[:lights_scale],
@@ -167,7 +169,9 @@ class BTAPDatapoint
                                        output_meters: @options[:output_meters],
                                        airloop_economizer_type: @options[:airloop_economizer_type],
                                        shw_scale: @options[:shw_scale],
-                                       baseline_system_zones_map_option: @options[:baseline_system_zones_map_option])
+                                       baseline_system_zones_map_option: @options[:baseline_system_zones_map_option],
+                                       tbd_option: @options[:tbd_option]
+                                       )
       end
 
       # Save model to to disk.
@@ -388,7 +392,16 @@ class BTAPDatapoint
         FROM ReportDataDictionary
         WHERE ReportDataDictionaryIndex == #{rdd_index}
       "
-      key_value = model.sqlFile.get.execAndReturnFirstString(query).get
+
+      # In some cases KeyValue has a value and sometimes it does not.  In some cases KeyValue is null.  If the command
+      # below is run and KeyValue is null then the command fails and returns an error.  The fix below assumes that if
+      # the command below fails it is because KeyValue is null.  In that case the "key_value" variable is set to a
+      # blank.
+      begin
+        key_value = model.sqlFile.get.execAndReturnFirstString(query).get
+      rescue StandardError => bang
+        key_value = ""
+      end
 
       #Get Units
       query = "

@@ -8,7 +8,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # outpatient.osm file).
 class NECB_SHW_tests < Minitest::Test
   #Standards
-  Templates = ['NECB2011', 'NECB2015', 'NECB2017', 'BTAPPRE1980']
+  Templates = ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020','BTAPPRE1980']
   Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw', 'CAN_QC_Kuujjuaq.AP.719060_CWEC2016.epw']
 
 
@@ -83,8 +83,9 @@ class NECB_SHW_tests < Minitest::Test
           end
           # apply swh to the renamed space types (model_add_swh only looks at the name of the space type not what is
           # actually in it).
-
           standard.model_add_swh(model: model, swh_fueltype: 'DefaultFuel', shw_scale: 'NECB_Default')
+		  #Apply the water heater mixed efficiencies
+		  model.getWaterHeaterMixeds.sort.each { |obj| standard.water_heater_mixed_apply_efficiency(obj) }
 
           # Apply measure info if gas
           apply_shw_ecm = false

@@ -33,6 +33,7 @@ module OpenstudioStandards
   # Standards classes
   require_relative "#{stds}/standard"
   # NECB2011 Code
+  require_relative "#{stds}/necb/NECB2011/system_fuels"
   require_relative "#{stds}/necb/NECB2011/necb_2011"
   require_relative "#{stds}/necb/NECB2011/building_envelope"
   require_relative "#{stds}/necb/NECB2011/lighting"

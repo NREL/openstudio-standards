@@ -371,6 +371,19 @@ class Standard
         chiller.setChillerFlowMode('ConstantFlow')
         chiller.setSizingFactor(chiller_sizing_factor)
 
+        # use default efficiency from 90.1-2019
+        # 1.188 kw/ton for a 150 ton AirCooled chiller
+        # 0.66 kw/ton for a 150 ton Water Cooled positive displacement chiller
+        case chiller_cooling_type
+        when 'AirCooled'
+          default_cop = kw_per_ton_to_cop(1.188)
+        when 'WaterCooled'
+          default_cop = kw_per_ton_to_cop(0.66)
+        else
+          default_cop = kw_per_ton_to_cop(0.66)
+        end
+        chiller.setReferenceCOP(default_cop)
+
         # connect the chiller to the condenser loop if one was supplied
         if condenser_water_loop.nil?
           chiller.setCondenserType('AirCooled')

@@ -514,6 +514,7 @@ class Standard
   # z = C1 + C2*x + C3*x^2 + C4*y + C5*y^2 + C6*x*y
   #
   # @author Scott Horowitz, NREL
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param coeffs [Array<Double>] an array of 6 coefficients, in order
   # @param crv_name [String] the name of the curve
   # @param min_x [Double] the minimum value of independent variable X that will be used
@@ -545,6 +546,7 @@ class Standard
   # z = C1 + C2*x + C3*x^2 + C4*y + C5*y^2 + C6*x*y + C7*x^3 + C8*y^3 + C9*x^2*y + C10*x*y^2
   #
   # @author Scott Horowitz, NREL
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param coeffs [Array<Double>] an array of 10 coefficients, in order
   # @param crv_name [String] the name of the curve
   # @param min_x [Double] the minimum value of independent variable X that will be used
@@ -580,6 +582,7 @@ class Standard
   # z = C1 + C2*x + C3*x^2
   #
   # @author Scott Horowitz, NREL
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param coeffs [Array<Double>] an array of 3 coefficients, in order
   # @param crv_name [String] the name of the curve
   # @param min_x [Double] the minimum value of independent variable X that will be used
@@ -610,6 +613,7 @@ class Standard
   # z = C1 + C2*x + C3*x^2 + C4*x^3
   #
   # @author Scott Horowitz, NREL
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param coeffs [Array<Double>] an array of 4 coefficients, in order
   # @param crv_name [String] the name of the curve
   # @param min_x [Double] the minimum value of independent variable X that will be used
@@ -617,8 +621,8 @@ class Standard
   # @param min_out [Double] the minimum value of dependent variable Z
   # @param max_out [Double] the maximum value of dependent variable Z
   # @return [OpenStudio::Model::CurveCubic] a cubic curve
-  def create_curve_cubic(coeffs, crv_name, min_x, max_x, min_out, max_out)
-    curve = OpenStudio::Model::CurveCubic.new(self)
+  def create_curve_cubic(model, coeffs, crv_name, min_x, max_x, min_out, max_out)
+    curve = OpenStudio::Model::CurveCubic.new(model)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
     curve.setCoefficient2x(coeffs[1])
@@ -635,6 +639,7 @@ class Standard
   # z = C1 + C2*x^C3
   #
   # @author Scott Horowitz, NREL
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param coeffs [Array<Double>] an array of 3 coefficients, in order
   # @param crv_name [String] the name of the curve
   # @param min_x [Double] the minimum value of independent variable X that will be used
@@ -642,8 +647,8 @@ class Standard
   # @param min_out [Double] the minimum value of dependent variable Z
   # @param max_out [Double] the maximum value of dependent variable Z
   # @return [OpenStudio::Model::CurveExponent] an exponent curve
-  def create_curve_exponent(coeffs, crv_name, min_x, max_x, min_out, max_out)
-    curve = OpenStudio::Model::CurveExponent.new(self)
+  def create_curve_exponent(model, coeffs, crv_name, min_x, max_x, min_out, max_out)
+    curve = OpenStudio::Model::CurveExponent.new(model)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
     curve.setCoefficient2Constant(coeffs[1])
@@ -964,6 +969,21 @@ class Standard
     end
 
     return model
+  end
+
+  # converts existing string to ems friendly string
+  #
+  # @param name [String] original name
+  # @return [String] the resulting EMS friendly string
+  def ems_friendly_name(name)
+    # replace white space and special characters with underscore
+    # \W is equivalent to [^a-zA-Z0-9_]
+    new_name = name.to_s.gsub(/\W/, '_')
+
+    # prepend ems_ in case the name starts with a number
+    new_name = 'ems_' + new_name
+
+    return new_name
   end
 
   def true?(obj)
