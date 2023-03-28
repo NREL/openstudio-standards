@@ -8,9 +8,6 @@ class Baseline9012013TestBldg9 < Minitest::Test
 
   # @author Matt Steen, Eric Ringold, Ambient Energy
   def test_bldg_9
-
     base_model = create_baseline_model('bldg_9', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
-
   end
-
 end

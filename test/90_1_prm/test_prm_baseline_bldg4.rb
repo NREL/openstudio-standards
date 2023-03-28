@@ -9,34 +9,30 @@ class Baseline9012013TestBldg4 < Minitest::Test
   # Test LPDs for bldg_4
   # @author Matt Leach, NORESCO
   # Known failure due to currently not having parking space type
-  def known_fail_test_lpd_bldg4
-
+  def test_lpd_bldg4
     model = create_baseline_model('bldg_4', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
-    
+
     lpd_test_hash = {}
-      lpd_test_hash["Parking Level 1B ParkingLot"] = {"LPD" => 0.19,"Space_Type" => "Parking"} #Interior parking lot is currently not an available space type.
+    lpd_test_hash["Parking Level 1B ParkingLot"] = {"LPD" => 0.19,"Space_Type" => "Parking"} #Interior parking lot is currently not an available space type.
     lpd_test_hash["Parking Level 1B IDF 1B05"] = {"LPD" => 1.11,"Space_Type" => "IT_Room"}
     lpd_test_hash["IndoorPracticeField"] = {"LPD" => 0.72,"Space_Type" => "Gym"}
-    
+
     lpd_test_hash.keys.each do |space_name|
       space = model.getSpaceByName(space_name).get
       lpd_w_per_m2 = space.lightingPowerPerFloorArea
       lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
-      
+
       unless (lpd_test_hash[space_name]["LPD"] - lpd_w_per_ft2).abs < 0.01
         failure_array << "Expected LPD of #{lpd_test_hash[space_name]["LPD"]} W/ft2 for Space #{space_name} of Type #{lpd_test_hash[space_name]["Space_Type"]}; got #{lpd_w_per_ft2.round(2)} W/ft2 instead"
       end
     end
-    
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
   end
 
   # Test System Type for bldg_4
   # @author Matt Leach, NORESCO
   def test_system_type_bldg4
-
     model = create_baseline_model('bldg_4', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
@@ -150,22 +146,18 @@ class Baseline9012013TestBldg4 < Minitest::Test
     unless number_of_exhaust_fans == 2
       failure_array << "Expected 2 Exhaust Fans; found #{number_of_exhaust_fans} instead"
     end
-
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-
   end
 
   # Test Equipment Efficiencies for bldg_4
   # @author Matt Leach, NORESCO
   def test_hvac_eff_bldg4
-
     model = create_baseline_model('bldg_4', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
     # check coil efficiencies
     dx_coil_hash = {}
     dx_coil_hash["IPF Above Ground PVAV_Reheat (Sys5) Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 3651.0,"EfficiencyType" => "EER","Efficiency" => 9.5}
-
     failure_array = check_dx_cooling_two_speed_efficiency(model, dx_coil_hash, failure_array)
 
     # check fan powers
@@ -173,16 +165,12 @@ class Baseline9012013TestBldg4 < Minitest::Test
     # expect test to fail because pressure differential for MERV 13 filter is being added to expected calculation
     # if pressure differential is set to zero, test passes
     supply_fan_hash["IPF Above Ground PVAV_Reheat (Sys5) Fan"] = {"CFM" => 136667.0,"PressureDifferential" => 0.0}
-
     failure_array = check_variable_speed_fan_power(model, supply_fan_hash, failure_array)
     failure_array = check_constant_speed_fan_power(model, supply_fan_hash, failure_array)
 
     # check plant loop components
     # hw pumps
     failure_array = check_district_hw_pumps(model, failure_array)
-
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-
   end
-
 end

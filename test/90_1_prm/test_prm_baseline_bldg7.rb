@@ -9,7 +9,6 @@ class Baseline9012013TestBldg7 < Minitest::Test
   # Test LPDs for bldg_7
   # @author Matt Leach, NORESCO
   def test_lpd_bldg7
-
     model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
     failure_array = []
     
@@ -17,8 +16,7 @@ class Baseline9012013TestBldg7 < Minitest::Test
     lpd_test_hash["L1-ES_apt"] = {"LPD" => 0.45,"Space_Type" => "Apartment"}
     lpd_test_hash["L1-E_corr"] = {"LPD" => 0.792,"Space_Type" => "Corridor"}
     lpd_test_hash["L1-W_ret"] = {"LPD" => 2.22,"Space_Type" => "Office"} # Apartment offices have 1.11 W/f^2 extra task lighting according to the DOE prototype buildings
-    
-      lpd_test_hash.keys.each do |space_name|
+    lpd_test_hash.keys.each do |space_name|
       space = model.getSpaceByName(space_name).get
       lpd_w_per_m2 = space.lightingPowerPerFloorArea
       lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
@@ -27,15 +25,34 @@ class Baseline9012013TestBldg7 < Minitest::Test
         failure_array << "Expected LPD of #{lpd_test_hash[space_name]["LPD"]} W/ft2 for Space #{space_name} of Type #{lpd_test_hash[space_name]["Space_Type"]}; got #{lpd_w_per_ft2.round(2)} W/ft2 instead"
       end
     end
-    
-     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
+    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
+  end  
+
+  # Test LPDs for bldg_7
+  # @author Matt Leach, NORESCO
+  def test_lpd2_bldg7
+    model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
+    failure_array = []
+
+    lpd_test_hash = {}
+    lpd_test_hash["L1-ES_apt"] = {"LPD" => 1.34,"Space_Type" => "Apartment"}
+    lpd_test_hash["L1-E_corr"] = {"LPD" => 0.66,"Space_Type" => "Corridor"}
+    lpd_test_hash["L1-W_ret"] = {"LPD" => 1.11,"Space_Type" => "Office"} # Apartment offices have 1.11 W/f^2 extra task lighting according to the DOE prototype buildings
+    lpd_test_hash.keys.each do |space_name|
+      space = model.getSpaceByName(space_name).get
+      lpd_w_per_m2 = space.lightingPowerPerFloorArea
+      lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
+      
+      unless (lpd_test_hash[space_name]["LPD"] - lpd_w_per_ft2).abs < 0.01
+        failure_array << "Expected LPD of #{lpd_test_hash[space_name]["LPD"]} W/ft2 for Space #{space_name} of Type #{lpd_test_hash[space_name]["Space_Type"]}; got #{lpd_w_per_ft2.round(2)} W/ft2 instead"
+      end
+    end
+    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
   end  
 
   # Test System Type for bldg_7
   # @author Matt Leach, NORESCO
   def test_system_type_bldg7
-
     model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
@@ -44,6 +61,15 @@ class Baseline9012013TestBldg7 < Minitest::Test
     # expect PSZ-AC for L1-W_ret
     model.getAirLoopHVACs.each do |airloop|
       airloop_name = airloop.name.get.to_s
+
+      # check for unitary system
+      unitary_system = nil
+      airloop.supplyComponents.each do |comp|
+        if comp.to_AirLoopHVACUnitarySystem.is_initialized
+          unitary_system = comp.to_AirLoopHVACUnitarySystem.get
+        end
+      end
+
       unless airloop_name.include? expected_system_string
         system_type_confirmed = false
         # look for residential zones
@@ -71,25 +97,68 @@ class Baseline9012013TestBldg7 < Minitest::Test
           unless thermal_zones_attached == 1
             failure_array << "Expected 1 Thermal Zone to be attached to System #{airloop_name}; found #{thermal_zones_attached} Zone(s) attached"
           end
+
           # check fan type
-          unless airloop.supplyFan.is_initialized
-            failure_array << "No supply fan attached to System #{airloop_name}"
-          else
-            # get fan type
+          supply_fan = nil
+          if airloop.supplyFan.is_initialized
             supply_fan = airloop.supplyFan.get
-            unless supply_fan.to_FanConstantVolume.is_initialized
-              failure_array << "Expected fan of type ConstantVolume for System #{airloop_name}"
+          elsif !unitary_system.nil?
+            supply_fan = unitary_system.supplyFan.get
+          else
+            failure_array << "No supply fan attached to System #{airloop_name}"
+          end
+
+          # get fan type
+          unless supply_fan.nil?
+            unless supply_fan.to_FanOnOff.is_initialized
+              failure_array << "Expected fan of type OnOff for System #{airloop_name}"
             end
           end
+
           # check heating and cooling coil types
           # heating coil
-          unless airloop.supplyComponents('OS_Coil_Heating_Gas'.to_IddObjectType).length == 2
-            failure_array << "Expected heating coils of type CoilHeatingGas for System #{airloop_name}"
+          heating_coils = []
+          cooling_coils = []
+          airloop.supplyComponents.each do |comp|
+            if comp.to_CoilHeatingWater.is_initialized
+              heating_coils << comp.to_CoilHeatingWater.get
+            elsif comp.to_CoilHeatingGas.is_initialized
+              heating_coils << comp.to_CoilHeatingGas.get
+            end
+            if comp.to_CoilCoolingWater.is_initialized
+              cooling_coils << comp.to_CoilCoolingWater.get
+            elsif comp.to_CoilCoolingDXSingleSpeed.is_initialized
+              cooling_coils << comp.to_CoilCoolingDXSingleSpeed.get
+            end
           end
-          # cooling coil
-          unless airloop.supplyComponents('OS_Coil_Cooling_DX_SingleSpeed'.to_IddObjectType).length == 1
+
+          unless unitary_system.nil?
+            if unitary_system.heatingCoil.is_initialized
+              heating_coil = unitary_system.heatingCoil.get
+              if heating_coil.to_CoilHeatingWater.is_initialized
+                heating_coils << heating_coil.to_CoilHeatingWater.get
+              elsif heating_coil.to_CoilHeatingGas.is_initialized
+                heating_coils << heating_coil.to_CoilHeatingGas.get
+              end
+            end
+            if unitary_system.coolingCoil.is_initialized
+              cooling_coil = unitary_system.coolingCoil.get
+              if cooling_coil.to_CoilCoolingWater.is_initialized
+                cooling_coils << cooling_coil.to_CoilCoolingWater.get
+              elsif cooling_coil.to_CoilCoolingDXSingleSpeed.is_initialized
+                cooling_coils << cooling_coil.to_CoilCoolingDXSingleSpeed.get
+              end
+            end
+          end
+
+          if heating_coils.empty?
+            failure_array << "Expected heating coil of type CoilHeatingGas for System #{airloop_name}"
+          end
+
+          if cooling_coils.empty?
             failure_array << "Expected cooling coil of type CoilCoolingDXSingleSpeed for System #{airloop_name}"
           end
+
           # PSZ system checks end here
           next
         end
@@ -148,7 +217,7 @@ class Baseline9012013TestBldg7 < Minitest::Test
         failure_array << "Expected heating coil of type CoilCoolingDXTwoSpeed for System #{airloop_name}"
       end
     end
-    
+
     # check for PTACs in residential zones
     model.getThermalZones.each do |zone|
       next unless zone.name.get.to_s.include? "_apt"
@@ -187,15 +256,12 @@ class Baseline9012013TestBldg7 < Minitest::Test
         failure_array << "Expected Zone #{zone.name} to be served by a PTAC"
       end
     end
-    
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
   end  
 
   # Test System Type for bldg_7
   # @author Matt Leach, NORESCO
   def test_system_type_bldg7_electric
-
     model = create_baseline_model('bldg_7_electric', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
@@ -231,27 +297,46 @@ class Baseline9012013TestBldg7 < Minitest::Test
           unless thermal_zones_attached == 1
             failure_array << "Expected 1 Thermal Zone to be attached to System #{airloop_name}; found #{thermal_zones_attached} Zone(s) attached"
           end
-          # check fan type
-          unless airloop.supplyFan.is_initialized
-            failure_array << "No supply fan attached to System #{airloop_name}"
-          else
-            # get fan type
-            supply_fan = airloop.supplyFan.get
-            unless supply_fan.to_FanConstantVolume.is_initialized
-              failure_array << "Expected fan of type ConstantVolume for System #{airloop_name}"
+
+          # check system type
+          if airloop.supplyComponents('OS_AirLoopHVAC_UnitarySystem'.to_IddObjectType).length >= 1 
+            airloop.supplyComponents('OS_AirLoopHVAC_UnitarySystem'.to_IddObjectType).each do |usys|
+              usys = usys.to_AirLoopHVACUnitarySystem.get
+              unless usys.supplyFan.get.iddObjectType.valueName.to_s == 'OS_Fan_OnOff'
+                failure_array << "Expected fan of type OnOff for System #{airloop_name}"
+              end
+              unless usys.heatingCoil.get.iddObjectType.valueName.to_s == 'OS_Coil_Heating_DX_SingleSpeed'
+                failure_array << "Expected heating coil of type CoilHeatingDXSingleSpeed for System #{airloop_name}"
+              end
+              unless usys.coolingCoil.get.iddObjectType.valueName.to_s == 'OS_Coil_Cooling_DX_SingleSpeed'
+                failure_array << "Expected cooling coil of type CoilCoolingDXSingleSpeed for System #{airloop_name}"
+              end
             end
+            # PSZ system checks end here
+            next
+          else
+            # check fan type
+            unless airloop.supplyFan.is_initialized
+              failure_array << "No supply fan attached to System #{airloop_name}"
+            else
+              # get fan type
+              supply_fan = airloop.supplyFan.get
+              unless supply_fan.to_FanConstantVolume.is_initialized
+                failure_array << "Expected fan of type ConstantVolume for System #{airloop_name}"
+              end
+            end
+            # check heating and cooling coil types
+            # heating coil
+            unless airloop.supplyComponents('OS_Coil_Heating_DX_SingleSpeed'.to_IddObjectType).length == 1
+              failure_array << "Expected heating coil of type CoilHeatingDXSingleSpeed for System #{airloop_name}"
+            end
+            # cooling coil
+            unless airloop.supplyComponents('OS_Coil_Cooling_DX_SingleSpeed'.to_IddObjectType).length == 1
+              failure_array << "Expected cooling coil of type CoilCoolingDXSingleSpeed for System #{airloop_name}"
+            end
+            # PSZ system checks end here
+            next
           end
-          # check heating and cooling coil types
-          # heating coil
-          unless airloop.supplyComponents('OS_Coil_Heating_DX_SingleSpeed'.to_IddObjectType).length == 1
-            failure_array << "Expected heating coil of type CoilHeatingDXSingleSpeed for System #{airloop_name}"
-          end
-          # cooling coil
-          unless airloop.supplyComponents('OS_Coil_Cooling_DX_SingleSpeed'.to_IddObjectType).length == 1
-            failure_array << "Expected cooling coil of type CoilCoolingDXSingleSpeed for System #{airloop_name}"
-          end
-          # PSZ system checks end here
-          next
         end
       else
         system_type_confirmed = true
@@ -297,7 +382,7 @@ class Baseline9012013TestBldg7 < Minitest::Test
         failure_array << "Expected cooling coil of type CoilCoolingDXTwoSpeed for System #{airloop_name}"
       end
     end
-    
+
     # check for PTHPs in residential zones
     model.getThermalZones.each do |zone|
       next unless zone.name.get.to_s.include? "_apt"
@@ -327,18 +412,15 @@ class Baseline9012013TestBldg7 < Minitest::Test
         failure_array << "Expected Zone #{zone.name} to be served by a PTHP"
       end
     end
-    
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end
+  end  
 
   # Test Equipment Efficiencies for bldg_7
   # @author Matt Leach, NORESCO
   # Known failure; this test assumes that all fans should have the SP reset curve,
   # which does not make sense since SP reset is only prescriptively required
   # if there is DDC control of VAV terminals.
-  def known_fail_test_hvac_eff_bldg7
-
+  def test_hvac_eff_bldg7
     model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
@@ -347,9 +429,7 @@ class Baseline9012013TestBldg7 < Minitest::Test
     dx_coil_hash["Thermal Zone: L1-S_apt PTAC 1spd DX AC Clg Coil"] = {"CoilType" => "SingleSpeedCooling","Capacity" => 66.0,"EfficiencyType" => "PTAC","Efficiency" => "NA"}
     dx_coil_hash["Thermal Zone: L2-N_apt_out PTAC 1spd DX AC Clg Coil"] = {"CoilType" => "SingleSpeedCooling","Capacity" => 42.0,"EfficiencyType" => "PTAC","Efficiency" => "NA"}
     dx_coil_hash["Thermal Zone: L3-ES_apt_out PTAC 1spd DX AC Clg Coil"] = {"CoilType" => "SingleSpeedCooling","Capacity" => 15.0,"EfficiencyType" => "PTAC","Efficiency" => "NA"}
-
     failure_array = check_dx_cooling_single_speed_efficiency(model, dx_coil_hash, failure_array)
-
     # get fan powers
     supply_fan_hash = {}
     # expect test to fail because pressure differential (0.9) for MERV 13 filter is being added to expected calculation
@@ -357,19 +437,14 @@ class Baseline9012013TestBldg7 < Minitest::Test
     supply_fan_hash["Thermal Zone: L1-S_apt PTAC Fan"] = {"CFM" => 2479.0,"PressureDifferential" => 0}
     supply_fan_hash["Thermal Zone: L2-N_apt_out PTAC Fan"] = {"CFM" => 1568.0,"PressureDifferential" => 0}
     supply_fan_hash["Thermal Zone: L3-ES_apt_out PTAC Fan"] = {"CFM" => 551.0,"PressureDifferential" => 0}
-
     failure_array = check_variable_speed_fan_power(model, supply_fan_hash, failure_array)
     failure_array = check_constant_speed_fan_power(model, supply_fan_hash, failure_array)
-
     # check plant loop components
     # boilers
     failure_array = check_boilers(model, failure_array)
-
     # hw pumps
     failure_array = check_hw_pumps(model, failure_array)
-
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-
   end
 
   # Combined space heating and DHW Test
@@ -377,20 +452,14 @@ class Baseline9012013TestBldg7 < Minitest::Test
   # Known failure; this test assumes that the SWH pump in the baseline
   # will carry directly into the proposed.  While this is generally true,
   # in the baseline the motor efficiency will be set to the minimum value.
-  def known_fail_test_dhw_bldg7
-
+  def test_dhw_bldg7
     model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
     failure_array = []
-
     found_dhw_loop = false
     model.getPlantLoops.each do |plant_loop|
       plant_loop_name = plant_loop.name.get.to_s
       next unless plant_loop_name == "Service Water Heating Loop"
       found_dhw_loop = true
-
-
-
-
 
       # confirm heating source is district heating
       unless plant_loop.supplyComponents('OS_WaterHeater_Mixed'.to_IddObjectType).length == 1
@@ -450,9 +519,6 @@ class Baseline9012013TestBldg7 < Minitest::Test
         failure_array << "Expected Loop #{plant_loop_name} to have zero ConstantSpeed pumps; found #{plant_loop.supplyComponents('OS_Pump_ConstantSpeed'.to_IddObjectType).length} instead"
       end
     end
-
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-
   end
-
 end

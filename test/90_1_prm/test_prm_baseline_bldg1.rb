@@ -9,17 +9,15 @@ class Baseline9012013TestBldg1 < Minitest::Test
   # Test LPDs for bldg_1
   # @author Matt Leach, NORESCO
   def test_lpd_bldg1
-
     model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
-    
+
     lpd_test_hash = {}
     lpd_test_hash["Stairs 1"] = {"LPD" => 0.69,"Space_Type" => "Stair"}
     lpd_test_hash["Lobby 1"] = {"LPD" => 0.90,"Space_Type" => "Lobby"}
     lpd_test_hash["Office CR 35b"] = {"LPD" => 0.98,"Space_Type" => "Open Office"}
     lpd_test_hash["RR 14"] = {"LPD" => 0.98,"Space_Type" => "Restroom"}
     lpd_test_hash["Utility 1"] = {"LPD" => 0.42,"Space_Type" => "Elec/MechRoom"}
-    
     lpd_test_hash.keys.each do |space_name|
       space = model.getSpaceByName(space_name).get
       lpd_w_per_m2 = space.lightingPowerPerFloorArea
@@ -29,25 +27,22 @@ class Baseline9012013TestBldg1 < Minitest::Test
         failure_array << "Expected LPD of #{lpd_test_hash[space_name]["LPD"]} W/ft2 for Space #{space_name} of Type #{lpd_test_hash[space_name]["Space_Type"]}; got #{lpd_w_per_ft2.round(2)} W/ft2 instead"
       end
     end
-    
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
   end  
 
   # Test Daylighting for bldg_1
   # @author Matt Leach, NORESCO
   def test_daylighting_bldg1
-
     model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
-  
+
     daylighting_test_hash = {}
     daylighting_test_hash["Lobby 1"] = {"PrimaryArea" => 1869.7,"SecondaryArea" => 1631,"ControlType" => "PrimaryAndSecondary"}
     daylighting_test_hash["Retail 1b"] = {"PrimaryArea" => 870.4,"SecondaryArea" => 557.7,"ControlType" => "PrimaryAndSecondary"}
     daylighting_test_hash["Office PR 14c"] = {"PrimaryArea" => 2662.2,"SecondaryArea" => 491.6,"ControlType" => "PrimaryAndSecondary"}
     daylighting_test_hash["Office PR 35d"] = {"PrimaryArea" => 868.7,"SecondaryArea" => 147.1,"ControlType" => "PrimaryAndSecondary"}
     # currently the measure is not calculating the expected daylighting areas because window width is getting reduced from proposed to baseline 
-    
+
     daylighting_test_hash.keys.each do |space_name|
       space = model.getSpaceByName(space_name).get
       # get thermal zone
@@ -95,7 +90,7 @@ class Baseline9012013TestBldg1 < Minitest::Test
             else
               failure_array << "No Primary Daylighting Control object found for Thermal Zone #{zone_name}"
             end
-          
+
             # secondary
             if zone.secondaryDaylightingControl.is_initialized
               # check fraction controlled
@@ -115,15 +110,12 @@ class Baseline9012013TestBldg1 < Minitest::Test
         failure_array << "Space #{space_name} is not assigned to a thermal zone.  Pick a different space for daylighting check"
       end
     end
-  
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
   end  
 
   # Test System Type for bldg_1
   # @author Matt Leach, NORESCO
   def test_system_type_bldg1
-
     model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
@@ -265,17 +257,14 @@ class Baseline9012013TestBldg1 < Minitest::Test
         end
       end
     end          
-    
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
   end
 
   # Test Equipment Efficiencies for bldg_1
   # @author Matt Leach, NORESCO
   # Known failures due to code not yet accounting for zone multipliers affecting components.
-  def known_fail_test_hvac_eff_bldg1
-
-    model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+  def test_hvac_eff_bldg1
+    model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
     # check coil efficiencies
@@ -321,9 +310,6 @@ class Baseline9012013TestBldg1 < Minitest::Test
     failure_array = check_chw_controls(model, failure_array)
     # check cw controls
     failure_array = check_cw_controls(model, failure_array)
-
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-
   end
-
 end
