@@ -75,8 +75,8 @@ class Standard
           raise "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created."
         end
       else
-        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Simulation failed. Check the model to make sure no severe errors.")
-        raise "Simulation on proposed model failed. Baseline generation is stopped."
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', 'Simulation failed. Check the model to make sure no severe errors.')
+        raise 'Simulation on proposed model failed. Baseline generation is stopped.'
       end
     end
 
