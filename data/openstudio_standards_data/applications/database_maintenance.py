@@ -2,6 +2,7 @@ import sqlite3
 import logging
 
 import database_tables as tables
+from database_engine.assertions import assert_
 from database_engine.database_util import read_csv_to_list_dict, read_json_to_list_dict
 
 
@@ -14,7 +15,10 @@ def create_openstudio_standards_database_from_csv(conn: sqlite3.Connection):
             data = read_csv_to_list_dict(f"{datatable.initial_data_directory}.csv")
             for record in data:
                 logging.info(record)
-                logging.info(datatable.add_a_record(conn, record))
+                assert_(
+                    datatable.add_a_record(conn, record),
+                    f"Unsuccessful adding a new record: {record} to table {datatable.data_table_name}",
+                )
 
 
 def create_openstudio_standards_database_from_json(conn: sqlite3.Connection):
@@ -26,7 +30,10 @@ def create_openstudio_standards_database_from_json(conn: sqlite3.Connection):
             data = read_json_to_list_dict(f"{datatable.initial_data_directory}.json")
             for record in data:
                 logging.info(record)
-                logging.info(datatable.add_a_record(conn, record))
+                assert_(
+                    datatable.add_a_record(conn, record),
+                    f"Unsuccessful adding a new record: {record} to table {datatable.data_table_name}",
+                )
 
 
 def export_openstudio_standards_database_to_csv(conn: sqlite3.Connection, save_dir=""):

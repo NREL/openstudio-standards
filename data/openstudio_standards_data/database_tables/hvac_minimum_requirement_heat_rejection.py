@@ -85,6 +85,7 @@ class HVACMinimumRequirementHeatRejection(DBOperation):
             assert is_float(
                 record.get("minimum_performance_gpm_per_hp")
             ), f"minimum_performance_gpm_per_hp requires to be numeric data type, instead got {record['minimum_performance_gpm_per_hp']}"
+        return True
 
     def _preprocess_record(self, record):
         """

@@ -109,6 +109,7 @@ class SupportConstructionsTable(DBOperation):
                 assert isinstance(
                     record[f], str
                 ), f"{f} requires to be a string, instead got {record[f]}"
+        return True
 
     def _preprocess_record(self, record):
         """

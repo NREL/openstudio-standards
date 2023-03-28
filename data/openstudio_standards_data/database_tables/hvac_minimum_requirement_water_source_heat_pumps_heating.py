@@ -90,6 +90,7 @@ class HVACMinimumRequirementWaterSourceHeatPumpsHeating(DBOperation):
                 assert is_float(
                     record.get(f)
                 ), f"{f} requires to be numeric data type, instead got {record[f]}"
+        return True
 
     def _preprocess_record(self, record):
         """

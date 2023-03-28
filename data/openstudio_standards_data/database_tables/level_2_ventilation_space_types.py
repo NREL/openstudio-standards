@@ -17,7 +17,6 @@ ventilation_space_type_name TEXT NOT NULL,
 level_3_ventilation_definition_table TEXT NOT NULL,
 level_3_ventilation_definition_id INTEGER NOT NULL,
 FOREIGN KEY(ventilation_space_type_name) REFERENCES support_ventilation_space_type_name_tags(ventilation_space_type_name)
-
 );
 """
 
@@ -52,11 +51,9 @@ class VentSubspaceTable(DBOperation):
         return RECORD_HELP
 
     def _get_weak_foreign_key_value(self, record):
-        associate_table = (
-            getattr_either("level_3_ventilation_definition_table", record),
-        )
+        associate_table = getattr_either("level_3_ventilation_definition_table", record)
         key = "id"
-        value = (getattr_either("level_3_ventilation_definition_id", record),)
+        value = getattr_either("level_3_ventilation_definition_id", record)
         return associate_table, key, value
 
     def _preprocess_record(self, record):

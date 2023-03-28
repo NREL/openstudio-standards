@@ -173,6 +173,7 @@ class VentSpaceTagTable(DBOperation):
                 assert is_float(
                     record.get(coeff)
                 ), f"{coeff} requires to be numeric data type, instead got {record_id}"
+        return True
 
     def _preprocess_record(self, record):
         """

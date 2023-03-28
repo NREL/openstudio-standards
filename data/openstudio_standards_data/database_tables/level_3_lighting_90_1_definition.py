@@ -68,6 +68,7 @@ class LightDef901(DBOperation):
             assert is_float(
                 record.get("lighting_per_area")
             ), f"lighting_per_area requires to be numeric data type, instead got {record['lighting_per_area']}"
+        return True
 
     def _preprocess_record(self, record):
         """
