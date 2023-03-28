@@ -4,6 +4,8 @@ import csv
 import json
 import logging
 
+from query.util import is_index_in_table
+
 DB_FILE = "openstudio_standards_database.db"
 
 
@@ -24,16 +26,27 @@ def create_connect(db_file):
 
 
 class DBOperation:
-    def __init__(self, table_name, record_template, initial_data_directory):
+    def __init__(
+        self,
+        table_name,
+        record_template,
+        initial_data_directory,
+        create_table_query,
+        insert_record_query,
+    ):
         """
         DB Operation class
         :param table_name: String name of the table
         :param record_template: dictionary record template
         :param initial_data_directory: String initial data directory
+        :param create_table_query: String create table query
+        :param insert_record_query: String insert record query
         """
         self.data_table_name = table_name
         self.record_template = record_template
         self.initial_data_directory = initial_data_directory
+        self.create_table_query = create_table_query
+        self.insert_record_query = insert_record_query
 
     def create_a_table(self, connection):
         """
@@ -42,7 +55,7 @@ class DBOperation:
         :return:
         """
         logging.info(f"creating table: {self.data_table_name}")
-        connection.execute(self._get_create_table_query())
+        connection.execute(self.create_table_query)
         return True
 
     def add_a_record(self, connection, record: dict):
@@ -54,11 +67,14 @@ class DBOperation:
         """
         # run data validation, raise exception if data is not validated.
         cur = connection.cursor()
-
-        self.validate_record_datatype(record)
-        cur.execute(self._get_insert_record_query(), self._preprocess_record(record))
-        connection.commit()
-        return cur.lastrowid
+        success_added = False
+        if self.validate_record_datatype(record) and self.validate_weak_foreign_key(
+            connection, record
+        ):
+            cur.execute(self.insert_record_query, self._preprocess_record(record))
+            connection.commit()
+            success_added = True
+        return success_added
 
     def get_all_records(self, connection):
         """
@@ -92,6 +108,23 @@ class DBOperation:
         :return: boolean
         """
         return True
+
+    def validate_weak_foreign_key(self, conn, record):
+        """
+        Validate if a key is existing in a weak associated table. The definition of weak associate table in OSSTD
+        means when the primary key in a table is referenced by another table in a column instead of SQL foriegn key
+        relationship. An example is the level_2_lighting_space_type contains level_3_lighting_definition_id that
+        references an index from the table specified in the column level_3_lighting_definition_table.
+        For weak foreign key, we will use this function to determine whether it is correct addition or update.
+
+        :param: conn, SQL3lite connection
+        :param: record: dictionary
+        """
+        associate_table, key, value = self._get_weak_foreign_key_value(record)
+        # any value is Falsy (no association) should return True, or pass the is_index_in_table check.
+        return not all([associate_table, key, value]) or is_index_in_table(
+            conn, associate_table, key, value
+        )
 
     def export_table_to_csv(self, conn, save_dir=""):
         """
@@ -136,6 +169,19 @@ class DBOperation:
         with open(json_dir, "w", newline="\r\n") as json_file:
             json_file.write(json_output)
 
+    # Functions to be overridden based on need
+    def _get_weak_foreign_key_value(self, record):
+        """
+        Function to extract values from a record for weak foreign key validation
+        :param record: dictionary
+        :return
+        associate_table: str - table that has weak foreign cooneciton
+        key: the foreign key
+        value: the foreign key value
+        default are NONE (falsy)
+        """
+        return None, None, None
+
     def _preprocess_record(self, record):
         """
         Function that pre-process a record before insert to Table.
@@ -143,21 +189,7 @@ class DBOperation:
         :param record:
         :return:
         """
-        pass
-
-    def _get_create_table_query(self):
-        """
-        Function to create a table
-        :return:
-        """
-        pass
-
-    def _get_insert_record_query(self):
-        """
-        Function to insert a query
-        :return:
-        """
-        pass
+        return record
 
     def _get_retrieve_all_query(self):
         """

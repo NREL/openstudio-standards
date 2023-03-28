@@ -19,7 +19,7 @@ material_6: TEXT
 """
 
 CREATE_CONSTRUCTIONS_TABLE = f"""
-CREATE TABLE IF NOT EXISTS {TABLE_NAME}
+CREATE TABLE IF NOT EXISTS %s
 (name TEXT UNIQUE NOT NULL PRIMARY KEY,
 intended_surface_type TEXT,
 standards_construction_type TEXT,
@@ -41,7 +41,7 @@ FOREIGN KEY(material_6) REFERENCES support_materials(name)
 """
 
 INSERT_CONSTRUCTION = f"""
-    INSERT INTO {TABLE_NAME}
+    INSERT INTO %s
     (name,
 intended_surface_type,
 standards_construction_type,
@@ -78,6 +78,8 @@ class SupportConstructionsTable(DBOperation):
             table_name=TABLE_NAME,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
+            create_table_query=CREATE_CONSTRUCTIONS_TABLE % TABLE_NAME,
+            insert_record_query=INSERT_CONSTRUCTION % TABLE_NAME,
         )
 
     def get_record_info(self):
@@ -107,6 +109,7 @@ class SupportConstructionsTable(DBOperation):
                 assert isinstance(
                     record[f], str
                 ), f"{f} requires to be a string, instead got {record[f]}"
+        return True
 
     def _preprocess_record(self, record):
         """
@@ -128,9 +131,3 @@ class SupportConstructionsTable(DBOperation):
             getattr_either("material_5", record),
             getattr_either("material_6", record),
         )
-
-    def _get_create_table_query(self):
-        return CREATE_CONSTRUCTIONS_TABLE
-
-    def _get_insert_record_query(self):
-        return INSERT_CONSTRUCTION

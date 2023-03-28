@@ -11,9 +11,9 @@ SPACE_DATA_HEADER = [
     "lighting_space_type_name",
     "ventilation_space_type_name",
     "level_3_lighting_definition_table",
-    "level_3_lighting_defintion_id",
+    "level_3_lighting_definition_id",
     "level_3_ventilation_definition_table",
-    "level_3_ventilation_defintion_id",
+    "level_3_ventilation_definition_id",
     "electric_equipment_space_type_name",
 ]
 

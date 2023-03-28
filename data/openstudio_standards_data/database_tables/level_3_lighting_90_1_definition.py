@@ -46,6 +46,8 @@ class LightDef901(DBOperation):
             table_name=table_name,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=initial_data_directory,
+            create_table_query=CREATE_LIGHT_DEF_90_1_TABLE % table_name,
+            insert_record_query=INSERT_A_LIGHT_RECORD % table_name,
         )
 
     def get_record_info(self):
@@ -66,6 +68,7 @@ class LightDef901(DBOperation):
             assert is_float(
                 record.get("lighting_per_area")
             ), f"lighting_per_area requires to be numeric data type, instead got {record['lighting_per_area']}"
+        return True
 
     def _preprocess_record(self, record):
         """
@@ -82,9 +85,3 @@ class LightDef901(DBOperation):
             getattr_either("annotation", record, ""),
         )
         return record_tuple
-
-    def _get_create_table_query(self):
-        return CREATE_LIGHT_DEF_90_1_TABLE % self.data_table_name
-
-    def _get_insert_record_query(self):
-        return INSERT_A_LIGHT_RECORD % self.data_table_name

@@ -11,8 +11,8 @@ ventilation_space_type_name: TEXT
 electric_equipment_space_type_name: TEXT
 """
 
-CREATE_level_1_space_types = f"""
-CREATE TABLE IF NOT EXISTS {TABLE_NAME}
+CREATE_LEVEL_1_SPACE_TYPES = f"""
+CREATE TABLE IF NOT EXISTS %s
 (id INTEGER PRIMARY KEY, 
 space_type_name TEXT NOT NULL,
 lighting_space_type_name TEXT,
@@ -24,8 +24,8 @@ FOREIGN KEY(electric_equipment_space_type_name) REFERENCES support_electric_equi
 );
 """
 
-INSERT_level_1_space_types = f"""
-    INSERT INTO {TABLE_NAME}
+INSERT_LEVEL_1_SPACE_TYPES = f"""
+    INSERT INTO %s
     (space_type_name, lighting_space_type_name, ventilation_space_type_name, electric_equipment_space_type_name)
     VALUES (?, ?, ?, ?);
 """
@@ -45,6 +45,8 @@ class GeneralBuildingSpaceTypeTable(DBOperation):
             table_name=TABLE_NAME,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
+            create_table_query=CREATE_LEVEL_1_SPACE_TYPES % TABLE_NAME,
+            insert_record_query=INSERT_LEVEL_1_SPACE_TYPES % TABLE_NAME,
         )
 
     def get_record_info(self):
@@ -68,9 +70,3 @@ class GeneralBuildingSpaceTypeTable(DBOperation):
             getattr_either("ventilation_space_type_name", record),
             getattr_either("electric_equipment_space_type_name", record),
         )
-
-    def _get_create_table_query(self):
-        return CREATE_level_1_space_types
-
-    def _get_insert_record_query(self):
-        return INSERT_level_1_space_types
