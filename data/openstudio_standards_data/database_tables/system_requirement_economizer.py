@@ -51,7 +51,7 @@ class SystemRequirementEconomizer(DBOperation):
             record_template=RECORD_TEMPLATE,
             initial_data_directory=initial_data_directory,
             create_table_query=CREATE_SYSTEM_REQUIREMENT_ECONOMIZER_TABLE % table_name,
-            insert_record_query=INSERT_A_SYSTEM_REQUIREMENT_ECONOMIZER % table_name
+            insert_record_query=INSERT_A_SYSTEM_REQUIREMENT_ECONOMIZER % table_name,
         )
 
     def get_record_info(self):

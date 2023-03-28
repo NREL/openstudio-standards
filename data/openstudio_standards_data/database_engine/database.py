@@ -26,7 +26,14 @@ def create_connect(db_file):
 
 
 class DBOperation:
-    def __init__(self, table_name, record_template, initial_data_directory, create_table_query, insert_record_query):
+    def __init__(
+        self,
+        table_name,
+        record_template,
+        initial_data_directory,
+        create_table_query,
+        insert_record_query,
+    ):
         """
         DB Operation class
         :param table_name: String name of the table
@@ -61,7 +68,9 @@ class DBOperation:
         # run data validation, raise exception if data is not validated.
         cur = connection.cursor()
         success_added = False
-        if self.validate_record_datatype(record) and self.validate_weak_foreign_key(connection, record):
+        if self.validate_record_datatype(record) and self.validate_weak_foreign_key(
+            connection, record
+        ):
             cur.execute(self.insert_record_query, self._preprocess_record(record))
             connection.commit()
             success_added = True
@@ -113,7 +122,9 @@ class DBOperation:
         """
         associate_table, key, value = self._get_weak_foreign_key_value(record)
         # any value is Falsy (no association) should return True, or pass the is_index_in_table check.
-        return not all([associate_table, key, value]) or is_index_in_table(conn, associate_table, key, value)
+        return not all([associate_table, key, value]) or is_index_in_table(
+            conn, associate_table, key, value
+        )
 
     def export_table_to_csv(self, conn, save_dir=""):
         """
@@ -186,4 +197,3 @@ class DBOperation:
         :return:
         """
         return f"SELECT * FROM {self.data_table_name}"
-

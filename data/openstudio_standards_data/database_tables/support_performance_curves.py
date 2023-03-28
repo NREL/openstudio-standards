@@ -125,7 +125,7 @@ class VentSpaceTagTable(DBOperation):
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
             create_table_query=CREATE_PERFORMANCE_CURVES_TABLE % TABLE_NAME,
-            insert_record_query=INSERT_PERFORMANCE_CURVE % TABLE_NAME
+            insert_record_query=INSERT_PERFORMANCE_CURVE % TABLE_NAME,
         )
 
     def get_record_info(self):
@@ -206,4 +206,3 @@ class VentSpaceTagTable(DBOperation):
             getattr_either("maximum_dependent_variable_output", record),
             getattr_either("annotation", record),
         )
-

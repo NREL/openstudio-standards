@@ -42,13 +42,11 @@ class SampleL3TestTable(DBOperation):
             record_template={},
             initial_data_directory="",
             create_table_query=CREATE_L3_TEST_TABLE,
-            insert_record_query=INSERT_L3_TEST_TABLE
+            insert_record_query=INSERT_L3_TEST_TABLE,
         )
 
     def _preprocess_record(self, record):
-        return (
-            record["name"],
-        )
+        return (record["name"],)
 
 
 class SampleL2TestTable(DBOperation):
@@ -58,14 +56,11 @@ class SampleL2TestTable(DBOperation):
             record_template={},
             initial_data_directory="",
             create_table_query=CREATE_L2_TABLE,
-            insert_record_query=INSERT_L2_TABLE
+            insert_record_query=INSERT_L2_TABLE,
         )
 
     def _preprocess_record(self, record):
-        return (
-            record["associate_table"],
-            record["foreign_key"]
-        )
+        return (record["associate_table"], record["foreign_key"])
 
     def _get_weak_foreign_key_value(self, record):
         return record["associate_table"], "id", record["foreign_key"]
@@ -80,8 +75,8 @@ class TestWeakForeignKeyAssociation(unittest.TestCase):
         self.level_3_table = SampleL3TestTable()
         self.level_2_table.create_a_table(self.conn)
         self.level_3_table.create_a_table(self.conn)
-        self.level_3_table.add_a_record(self.conn, {"name":"test_value_1"}) # index 1
-        self.level_3_table.add_a_record(self.conn, {"name":"test_value_2"}) # index 2
+        self.level_3_table.add_a_record(self.conn, {"name": "test_value_1"})  # index 1
+        self.level_3_table.add_a_record(self.conn, {"name": "test_value_2"})  # index 2
 
     def tearDown(self):
         # close the database connection
@@ -90,17 +85,23 @@ class TestWeakForeignKeyAssociation(unittest.TestCase):
 
     def test_index_exists(self):
         # Test that the function correctly identifies an existing index
-        add_success = self.level_2_table.add_a_record(self.conn, {"associate_table": "level_3_table", "foreign_key": "1"})
+        add_success = self.level_2_table.add_a_record(
+            self.conn, {"associate_table": "level_3_table", "foreign_key": "1"}
+        )
         self.assertTrue(add_success)
 
     def test_index_does_not_exist(self):
         # Test that the function validated the index is not exist
-        add_success = self.level_2_table.add_a_record(self.conn, {"associate_table": "level_3_table", "foreign_key": "3"})
+        add_success = self.level_2_table.add_a_record(
+            self.conn, {"associate_table": "level_3_table", "foreign_key": "3"}
+        )
         self.assertFalse(add_success)
 
     def test_table_does_not_exist(self):
         # Test if the table is not exist
-        add_success = self.level_2_table.add_a_record(self.conn, {"associate_table": "missing_table", "foreign_key": "1"})
+        add_success = self.level_2_table.add_a_record(
+            self.conn, {"associate_table": "missing_table", "foreign_key": "1"}
+        )
         self.assertFalse(add_success)
 
 

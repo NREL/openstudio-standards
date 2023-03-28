@@ -33,8 +33,9 @@ class PlugLoadSpaceTagTable(DBOperation):
             table_name=TABLE_NAME,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
-            create_table_query=CREATE_SUPPORT_ELECTRIC_EQUIPMENT_SPACE_TYPE_NAME_TAGS % TABLE_NAME,
-            insert_record_query=INSERT_SPACE_TAG % TABLE_NAME
+            create_table_query=CREATE_SUPPORT_ELECTRIC_EQUIPMENT_SPACE_TYPE_NAME_TAGS
+            % TABLE_NAME,
+            insert_record_query=INSERT_SPACE_TAG % TABLE_NAME,
         )
 
     def get_record_info(self):

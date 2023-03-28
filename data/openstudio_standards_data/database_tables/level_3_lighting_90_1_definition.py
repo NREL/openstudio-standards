@@ -47,7 +47,7 @@ class LightDef901(DBOperation):
             record_template=RECORD_TEMPLATE,
             initial_data_directory=initial_data_directory,
             create_table_query=CREATE_LIGHT_DEF_90_1_TABLE % table_name,
-            insert_record_query=INSERT_A_LIGHT_RECORD % table_name
+            insert_record_query=INSERT_A_LIGHT_RECORD % table_name,
         )
 
     def get_record_info(self):
@@ -84,4 +84,3 @@ class LightDef901(DBOperation):
             getattr_either("annotation", record, ""),
         )
         return record_tuple
-

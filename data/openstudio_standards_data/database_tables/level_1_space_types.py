@@ -46,7 +46,7 @@ class GeneralBuildingSpaceTypeTable(DBOperation):
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
             create_table_query=CREATE_LEVEL_1_SPACE_TYPES % TABLE_NAME,
-            insert_record_query=INSERT_LEVEL_1_SPACE_TYPES % TABLE_NAME
+            insert_record_query=INSERT_LEVEL_1_SPACE_TYPES % TABLE_NAME,
         )
 
     def get_record_info(self):

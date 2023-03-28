@@ -79,7 +79,7 @@ class SupportConstructionsTable(DBOperation):
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
             create_table_query=CREATE_CONSTRUCTIONS_TABLE % TABLE_NAME,
-            insert_record_query=INSERT_CONSTRUCTION % TABLE_NAME
+            insert_record_query=INSERT_CONSTRUCTION % TABLE_NAME,
         )
 
     def get_record_info(self):
@@ -130,4 +130,3 @@ class SupportConstructionsTable(DBOperation):
             getattr_either("material_5", record),
             getattr_either("material_6", record),
         )
-

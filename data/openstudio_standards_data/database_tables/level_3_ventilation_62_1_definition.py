@@ -63,7 +63,7 @@ class VentDef621(DBOperation):
             record_template=RECORD_TEMPLATE,
             initial_data_directory=initial_data_directory,
             create_table_query=CREATE_VENT_DEF_62_1_TABLE % table_name,
-            insert_record_query=INSERT_A_VENT_RECORD % table_name
+            insert_record_query=INSERT_A_VENT_RECORD % table_name,
         )
 
     def get_record_info(self):
@@ -106,4 +106,3 @@ class VentDef621(DBOperation):
             getattr_either("os", record),
             getattr_either("annotation", record, ""),
         )
-

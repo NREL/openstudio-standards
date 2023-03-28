@@ -44,7 +44,7 @@ class StandardTemplateTable(DBOperation):
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
             create_table_query=CREATE_SUPPORT_STANDARD_TEMPLATES % TABLE_NAME,
-            insert_record_query=INSERT_A_TEMPLATE_RECORD % TABLE_NAME
+            insert_record_query=INSERT_A_TEMPLATE_RECORD % TABLE_NAME,
         )
 
     def get_record_info(self):
@@ -68,4 +68,3 @@ class StandardTemplateTable(DBOperation):
             getattr_either("ventilation_standard", record),
             getattr_either("ventilation_standard_table", record),
         )
-

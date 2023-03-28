@@ -34,7 +34,7 @@ class LightingSpaceTagTable(DBOperation):
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
             create_table_query=CREATE_LIGHTING_SPACE_TAG % TABLE_NAME,
-            insert_record_query=INSERT_SPACE_TAG % TABLE_NAME
+            insert_record_query=INSERT_SPACE_TAG % TABLE_NAME,
         )
 
     def get_record_info(self):
@@ -51,4 +51,3 @@ class LightingSpaceTagTable(DBOperation):
         :return:
         """
         return (getattr_either("lighting_space_type_name", record),)
-

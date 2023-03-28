@@ -90,8 +90,10 @@ class SystemRequirementEnergyRecovery(DBOperation):
             table_name=table_name,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=initial_data_directory,
-            create_table_query=CREATE_SYSTEM_REQUIREMENT_ENERGY_RECOVERY_TABLE % table_name,
-            insert_record_query=INSERT_A_SYSTEM_REQUIREMENT_ENERGY_RECOVERY_RECORD % table_name
+            create_table_query=CREATE_SYSTEM_REQUIREMENT_ENERGY_RECOVERY_TABLE
+            % table_name,
+            insert_record_query=INSERT_A_SYSTEM_REQUIREMENT_ENERGY_RECOVERY_RECORD
+            % table_name,
         )
 
     def get_record_info(self):
@@ -160,4 +162,3 @@ class SystemRequirementEnergyRecovery(DBOperation):
             getattr_either("enthalpy_recovery_ratio", record),
             getattr_either("annotation", record),
         )
-

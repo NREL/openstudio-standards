@@ -34,7 +34,7 @@ class VentSpaceTagTable(DBOperation):
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
             create_table_query=CREATE_VENTILATION_SPACE_TYPE_NAME % TABLE_NAME,
-            insert_record_query=INSERT_SPACE_TAG % TABLE_NAME
+            insert_record_query=INSERT_SPACE_TAG % TABLE_NAME,
         )
 
     def get_record_info(self):
@@ -52,4 +52,3 @@ class VentSpaceTagTable(DBOperation):
         """
 
         return (getattr_either("ventilation_space_type_name", record),)
-

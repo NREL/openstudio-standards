@@ -83,7 +83,7 @@ class HVACMinReqBoilers(DBOperation):
             record_template=RECORD_TEMPLATE,
             initial_data_directory=initial_data_directory,
             create_table_query=CREATE_HVAC_REQ_BOILER_TABLE % table_name,
-            insert_record_query=INSERT_A_BOILER_RECORD % table_name
+            insert_record_query=INSERT_A_BOILER_RECORD % table_name,
         )
 
     def get_record_info(self):

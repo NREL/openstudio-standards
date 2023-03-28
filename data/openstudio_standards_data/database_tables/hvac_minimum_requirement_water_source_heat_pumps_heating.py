@@ -54,8 +54,9 @@ class HVACMinimumRequirementWaterSourceHeatPumpsHeating(DBOperation):
             table_name=table_name,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=initial_data_directory,
-            create_table_query=CREATE_HVAC_REQUIREMENT_WATER_SOURCE_HEAT_PUMPS_HEATING_TABLE % table_name,
-            insert_record_query=INSERT_A_WATER_SOURCE_HEAT_PUMP_RECORD % table_name
+            create_table_query=CREATE_HVAC_REQUIREMENT_WATER_SOURCE_HEAT_PUMPS_HEATING_TABLE
+            % table_name,
+            insert_record_query=INSERT_A_WATER_SOURCE_HEAT_PUMP_RECORD % table_name,
         )
 
     def get_record_info(self):
@@ -106,4 +107,3 @@ class HVACMinimumRequirementWaterSourceHeatPumpsHeating(DBOperation):
             getattr_either("minimum_coefficient_of_performance", record),
             getattr_either("annotation", record),
         )
-

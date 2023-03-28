@@ -59,7 +59,7 @@ class HVACMinimumRequirementMotors(DBOperation):
             record_template=RECORD_TEMPLATE,
             initial_data_directory=initial_data_directory,
             create_table_query=CREATE_HVAC_REQUIREMENT_MOTORS_TABLE % table_name,
-            insert_record_query=INSERT_A_MOTOR_RECORD % table_name
+            insert_record_query=INSERT_A_MOTOR_RECORD % table_name,
         )
 
     def get_record_info(self):
@@ -112,5 +112,3 @@ class HVACMinimumRequirementMotors(DBOperation):
             getattr_either("nominal_full_load_efficiency", record),
             getattr_either("annotation", record),
         )
-
-

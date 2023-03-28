@@ -98,8 +98,9 @@ class HVACMinimumRequirementHeatPumpHeating(DBOperation):
             table_name=table_name,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=initial_data_directory,
-            create_table_query=CREATE_HVAC_REQUIREMENT_HEAT_PUMP_HEATING_TABLE % table_name,
-            insert_record_query=INSERT_A_HEAT_PUMP_HEATING_RECORD % table_name
+            create_table_query=CREATE_HVAC_REQUIREMENT_HEAT_PUMP_HEATING_TABLE
+            % table_name,
+            insert_record_query=INSERT_A_HEAT_PUMP_HEATING_RECORD % table_name,
         )
 
     def get_record_info(self):

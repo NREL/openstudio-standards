@@ -22,7 +22,9 @@ def _convert_tuple_to_dict(data: tuple, data_head_list: List[str]):
     return dict(zip(data_head_list, data))
 
 
-def is_index_in_table(conn: sqlite3.Connection, table_name: str | None, key: str | None, index: str | None):
+def is_index_in_table(
+    conn: sqlite3.Connection, table_name: str | None, key: str | None, index: str | None
+):
     """
     Utility function to ensure the index exist in a table.
     :param conn: sqlite3 connection
