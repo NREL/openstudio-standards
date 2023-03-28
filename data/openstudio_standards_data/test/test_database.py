@@ -1,3 +1,4 @@
+import unittest
 from unittest import TestCase
 from unittest import mock
 import os
@@ -11,26 +12,96 @@ from applications.database_maintenance import (
     export_openstudio_standards_database_to_csv,
     export_openstudio_standards_database_to_json,
 )
+from database_engine.database import DBOperation
 
 
-class TestDatabaseQueries(TestCase):
-    """
-    Test database - unfinished
-    """
+CREATE_L3_TEST_TABLE = """
+CREATE TABLE level_3_table (id INTEGER PRIMARY KEY, name TEXT);
+"""
+INSERT_L3_TEST_TABLE = f"""
+    INSERT INTO level_3_table
+    (name)
+    VALUES (?);
+"""
 
-    def fix_dbc(self):
-        dbc = mock.MagicMock(spec=["cursor"])
-        dbc.autocommit = True
-        return dbc
+CREATE_L2_TABLE = """
+CREATE TABLE level_2_table (id INTEGER PRIMARY KEY, associate_table TEXT, foreign_key TEXT)
+"""
 
-    def fix_rows(self):
-        rows = [{"id": 1, "name": "John"}, {"id": 2, "name": "Jane"}]
-        return rows
+INSERT_L2_TABLE = f"""
+    INSERT INTO level_2_table
+    (associate_table, foreign_key)
+    VALUES (?, ?);
+"""
 
-    def test_insert_rows_calls_cursor_method(self):
-        dbc = self.fix_dbc()
-        rows = self.fix_rows()
-        pass
+
+class SampleL3TestTable(DBOperation):
+    def __init__(self):
+        super(SampleL3TestTable, self).__init__(
+            table_name="l3_table",
+            record_template={},
+            initial_data_directory="",
+            create_table_query=CREATE_L3_TEST_TABLE,
+            insert_record_query=INSERT_L3_TEST_TABLE
+        )
+
+    def _preprocess_record(self, record):
+        return (
+            record["name"],
+        )
+
+
+class SampleL2TestTable(DBOperation):
+    def __init__(self):
+        super(SampleL2TestTable, self).__init__(
+            table_name="test_table",
+            record_template={},
+            initial_data_directory="",
+            create_table_query=CREATE_L2_TABLE,
+            insert_record_query=INSERT_L2_TABLE
+        )
+
+    def _preprocess_record(self, record):
+        return (
+            record["associate_table"],
+            record["foreign_key"]
+        )
+
+    def _get_weak_foreign_key_value(self, record):
+        return record["associate_table"], "id", record["foreign_key"]
+
+
+class TestWeakForeignKeyAssociation(unittest.TestCase):
+    def setUp(self):
+        # Create a test database with two tables and index
+        self.conn = sqlite3.connect(":memory:")
+        self.cur = self.conn.cursor()
+        self.level_2_table = SampleL2TestTable()
+        self.level_3_table = SampleL3TestTable()
+        self.level_2_table.create_a_table(self.conn)
+        self.level_3_table.create_a_table(self.conn)
+        self.level_3_table.add_a_record(self.conn, {"name":"test_value_1"}) # index 1
+        self.level_3_table.add_a_record(self.conn, {"name":"test_value_2"}) # index 2
+
+    def tearDown(self):
+        # close the database connection
+        self.cur.close()
+        self.conn.close()
+
+    def test_index_exists(self):
+        # Test that the function correctly identifies an existing index
+        add_success = self.level_2_table.add_a_record(self.conn, {"associate_table": "level_3_table", "foreign_key": "1"})
+        self.assertTrue(add_success)
+
+    def test_index_does_not_exist(self):
+        # Test that the function validated the index is not exist
+        add_success = self.level_2_table.add_a_record(self.conn, {"associate_table": "level_3_table", "foreign_key": "3"})
+        self.assertFalse(add_success)
+
+    def test_table_does_not_exist(self):
+        # Test if the table is not exist
+        add_success = self.level_2_table.add_a_record(self.conn, {"associate_table": "missing_table", "foreign_key": "1"})
+        self.assertFalse(add_success)
 
 
 def create_db(db_name, from_type=""):

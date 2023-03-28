@@ -12,8 +12,8 @@ lighting_standard,TEXT
 ventilation_standard, TEXT
 """
 
-CREATE_support_standard_templates = """
-CREATE TABLE IF NOT EXISTS support_standard_templates
+CREATE_SUPPORT_STANDARD_TEMPLATES = """
+CREATE TABLE IF NOT EXISTS %s
 (id INTEGER PRIMARY KEY, 
 template TEXT NOT NULL UNIQUE, 
 lighting_standard TEXT,
@@ -23,7 +23,7 @@ ventilation_standard_table TEXT);
 """
 
 INSERT_A_TEMPLATE_RECORD = """
-    INSERT INTO support_standard_templates (template, 
+    INSERT INTO %s (template, 
 lighting_standard, lighting_standard_table, ventilation_standard, ventilation_standard_table) 
 VALUES (?, ?, ?, ? , ?);
 """
@@ -43,6 +43,8 @@ class StandardTemplateTable(DBOperation):
             table_name=TABLE_NAME,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
+            create_table_query=CREATE_SUPPORT_STANDARD_TEMPLATES % TABLE_NAME,
+            insert_record_query=INSERT_A_TEMPLATE_RECORD % TABLE_NAME
         )
 
     def get_record_info(self):
@@ -67,8 +69,3 @@ class StandardTemplateTable(DBOperation):
             getattr_either("ventilation_standard_table", record),
         )
 
-    def _get_create_table_query(self):
-        return CREATE_support_standard_templates
-
-    def _get_insert_record_query(self):
-        return INSERT_A_TEMPLATE_RECORD

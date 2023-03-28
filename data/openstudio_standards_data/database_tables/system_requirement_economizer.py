@@ -50,6 +50,8 @@ class SystemRequirementEconomizer(DBOperation):
             table_name=table_name,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=initial_data_directory,
+            create_table_query=CREATE_SYSTEM_REQUIREMENT_ECONOMIZER_TABLE % table_name,
+            insert_record_query=INSERT_A_SYSTEM_REQUIREMENT_ECONOMIZER % table_name
         )
 
     def get_record_info(self):
@@ -101,9 +103,3 @@ class SystemRequirementEconomizer(DBOperation):
             getattr_either("fixed_dry_bulb_high_limit_shutoff_temp", record),
             getattr_either("annotation", record),
         )
-
-    def _get_create_table_query(self):
-        return CREATE_SYSTEM_REQUIREMENT_ECONOMIZER_TABLE % self.data_table_name
-
-    def _get_insert_record_query(self):
-        return INSERT_A_SYSTEM_REQUIREMENT_ECONOMIZER % self.data_table_name

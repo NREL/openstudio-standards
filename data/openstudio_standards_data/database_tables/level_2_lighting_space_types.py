@@ -10,8 +10,8 @@ level_3_lighting_definition_table: TEXT
 level_3_lighting_definition_id: id from level_3_lighting_definition index
 """
 
-LIGHT_SUBSPACE_TABLE = """
-CREATE TABLE IF NOT EXISTS level_2_lighting_space_types 
+CREATE_LIGHT_SUBSPACE_TABLE = """
+CREATE TABLE IF NOT EXISTS %s 
 (id INTEGER PRIMARY KEY,
 lighting_space_type_name TEXT NOT NULL,
 level_3_lighting_definition_table TEXT NOT NULL,
@@ -21,7 +21,7 @@ FOREIGN KEY(lighting_space_type_name) REFERENCES support_lighting_space_type_nam
 """
 
 INSERT_LIGHT_SUBSPACE = f"""
-    INSERT INTO {TABLE_NAME}
+    INSERT INTO %s
     (lighting_space_type_name, level_3_lighting_definition_table, level_3_lighting_definition_id)
     VALUES (?, ?, ?);
 """
@@ -39,6 +39,8 @@ class LightSubspaceTable(DBOperation):
             table_name=TABLE_NAME,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
+            create_table_query=CREATE_LIGHT_SUBSPACE_TABLE % TABLE_NAME,
+            insert_record_query=INSERT_LIGHT_SUBSPACE % TABLE_NAME
         )
 
     def get_record_info(self):
@@ -68,8 +70,3 @@ class LightSubspaceTable(DBOperation):
 
         return record_list
 
-    def _get_create_table_query(self):
-        return LIGHT_SUBSPACE_TABLE
-
-    def _get_insert_record_query(self):
-        return INSERT_LIGHT_SUBSPACE

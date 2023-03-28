@@ -37,7 +37,7 @@ annotation: TEXT
 """
 
 CREATE_MATERIALS_TABLE = f"""
-CREATE TABLE IF NOT EXISTS {TABLE_NAME}
+CREATE TABLE IF NOT EXISTS %s
 (name TEXT UNIQUE NOT NULL PRIMARY KEY,
 material_type TEXT,
 roughness NUMERIC,
@@ -71,7 +71,7 @@ annotation TEXT
 """
 
 INSERT_MATERIAL = f"""
-    INSERT INTO {TABLE_NAME}
+    INSERT INTO %s
     (name,
 material_type,
 roughness,
@@ -144,6 +144,8 @@ class SupportMaterialTable(DBOperation):
             table_name=TABLE_NAME,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
+            create_table_query=CREATE_MATERIALS_TABLE % TABLE_NAME,
+            insert_record_query=INSERT_MATERIAL % TABLE_NAME
         )
 
     def get_record_info(self):
@@ -243,9 +245,3 @@ class SupportMaterialTable(DBOperation):
             getattr_either("frame_width", record),
             getattr_either("annotation", record),
         )
-
-    def _get_create_table_query(self):
-        return CREATE_MATERIALS_TABLE
-
-    def _get_insert_record_query(self):
-        return INSERT_MATERIAL

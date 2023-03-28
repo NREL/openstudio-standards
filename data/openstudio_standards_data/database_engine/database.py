@@ -26,16 +26,20 @@ def create_connect(db_file):
 
 
 class DBOperation:
-    def __init__(self, table_name, record_template, initial_data_directory):
+    def __init__(self, table_name, record_template, initial_data_directory, create_table_query, insert_record_query):
         """
         DB Operation class
         :param table_name: String name of the table
         :param record_template: dictionary record template
         :param initial_data_directory: String initial data directory
+        :param create_table_query: String create table query
+        :param insert_record_query: String insert record query
         """
         self.data_table_name = table_name
         self.record_template = record_template
         self.initial_data_directory = initial_data_directory
+        self.create_table_query = create_table_query
+        self.insert_record_query = insert_record_query
 
     def create_a_table(self, connection):
         """
@@ -44,7 +48,7 @@ class DBOperation:
         :return:
         """
         logging.info(f"creating table: {self.data_table_name}")
-        connection.execute(self._get_create_table_query())
+        connection.execute(self.create_table_query)
         return True
 
     def add_a_record(self, connection, record: dict):
@@ -57,8 +61,8 @@ class DBOperation:
         # run data validation, raise exception if data is not validated.
         cur = connection.cursor()
         success_added = False
-        if self.validate_record_datatype(record) and self.validate_weak_foreign_key(record):
-            cur.execute(self._get_insert_record_query(), self._preprocess_record(record))
+        if self.validate_record_datatype(record) and self.validate_weak_foreign_key(connection, record):
+            cur.execute(self.insert_record_query, self._preprocess_record(record))
             connection.commit()
             success_added = True
         return success_added
@@ -174,21 +178,7 @@ class DBOperation:
         :param record:
         :return:
         """
-        pass
-
-    def _get_create_table_query(self):
-        """
-        Function to create a table
-        :return:
-        """
-        pass
-
-    def _get_insert_record_query(self):
-        """
-        Function to insert a query
-        :return:
-        """
-        pass
+        return record
 
     def _get_retrieve_all_query(self):
         """

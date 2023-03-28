@@ -10,8 +10,8 @@ level_3_ventilation_definition_table: TEXT
 level_3_ventilation_definition_id: id from level_3_ventilation_definition index
 """
 
-VENT_SUBSPACE_TABLE = """
-CREATE TABLE IF NOT EXISTS level_2_ventilation_space_types 
+CREATE_VENT_SUBSPACE_TABLE = """
+CREATE TABLE IF NOT EXISTS %s 
 (id INTEGER PRIMARY KEY,
 ventilation_space_type_name TEXT NOT NULL,
 level_3_ventilation_definition_table TEXT NOT NULL,
@@ -22,7 +22,7 @@ FOREIGN KEY(ventilation_space_type_name) REFERENCES support_ventilation_space_ty
 """
 
 INSERT_VENT_SUBSPACE = f"""
-    INSERT INTO {TABLE_NAME}
+    INSERT INTO %s
     (ventilation_space_type_name, level_3_ventilation_definition_table, level_3_ventilation_definition_id)
     VALUES (?, ?, ?);
 """
@@ -40,6 +40,8 @@ class VentSubspaceTable(DBOperation):
             table_name=TABLE_NAME,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
+            create_table_query=CREATE_VENT_SUBSPACE_TABLE % TABLE_NAME,
+            insert_record_query=INSERT_VENT_SUBSPACE % TABLE_NAME
         )
 
     def get_record_info(self):
@@ -70,8 +72,3 @@ class VentSubspaceTable(DBOperation):
 
         return record_list
 
-    def _get_create_table_query(self):
-        return VENT_SUBSPACE_TABLE
-
-    def _get_insert_record_query(self):
-        return INSERT_VENT_SUBSPACE
