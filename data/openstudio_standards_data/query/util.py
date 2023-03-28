@@ -22,6 +22,23 @@ def _convert_tuple_to_dict(data: tuple, data_head_list: List[str]):
     return dict(zip(data_head_list, data))
 
 
+def is_index_in_table(conn: sqlite3.Connection, table_name: str, key: str, index: str):
+    """
+    Utility function to ensure the index exist in a table.
+    :param conn: sqlite3 connection
+    :param table_name: string, a table's name
+    :param key: string, the foreign key name
+    :param index: integer, a table's index, primary key
+    :return: True if index is in table, False otherwise.
+    """
+    result = None
+    cursor = conn.cursor()
+    if is_table_exist(conn, table_name):
+        cursor.execute(f"SELECT id FROM {table_name} WHERE {key} = ?", (index,))
+        result = cursor.fetchone()
+    return True if result else False
+
+
 def is_table_exist(conn: sqlite3.Connection, table_name):
     """
     Utility function to ensure the table name provided is correct and exist in the openstudio_standards data tables

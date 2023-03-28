@@ -4,6 +4,8 @@ import csv
 import json
 import logging
 
+from query.util import is_index_in_table
+
 DB_FILE = "openstudio_standards_database.db"
 
 
@@ -54,11 +56,12 @@ class DBOperation:
         """
         # run data validation, raise exception if data is not validated.
         cur = connection.cursor()
-
-        self.validate_record_datatype(record)
-        cur.execute(self._get_insert_record_query(), self._preprocess_record(record))
-        connection.commit()
-        return cur.lastrowid
+        success_added = False
+        if self.validate_record_datatype(record) and self.validate_weak_foreign_key(record):
+            cur.execute(self._get_insert_record_query(), self._preprocess_record(record))
+            connection.commit()
+            success_added = True
+        return success_added
 
     def get_all_records(self, connection):
         """
@@ -92,6 +95,21 @@ class DBOperation:
         :return: boolean
         """
         return True
+
+    def validate_weak_foreign_key(self, conn, record):
+        """
+        Validate if a key is existing in a weak associated table. The definition of weak associate table in OSSTD
+        means when the primary key in a table is referenced by another table in a column instead of SQL foriegn key
+        relationship. An example is the level_2_lighting_space_type contains level_3_lighting_definition_id that
+        references an index from the table specified in the column level_3_lighting_definition_table.
+        For weak foreign key, we will use this function to determine whether it is correct addition or update.
+
+        :param: conn, SQL3lite connection
+        :param: record: dictionary
+        """
+        associate_table, key, value = self._get_weak_foreign_key_value(record)
+        # any value is Falsy (no association) should return True, or pass the is_index_in_table check.
+        return not all([associate_table, key, value]) or is_index_in_table(conn, associate_table, key, value)
 
     def export_table_to_csv(self, conn, save_dir=""):
         """
@@ -136,6 +154,19 @@ class DBOperation:
         with open(json_dir, "w", newline="\r\n") as json_file:
             json_file.write(json_output)
 
+    # Functions to be overridden based on need
+    def _get_weak_foreign_key_value(self, record):
+        """
+        Function to extract values from a record for weak foreign key validation
+        :param record: dictionary
+        :return
+        associate_table: str - table that has weak foreign cooneciton
+        key: the foreign key
+        value: the foreign key value
+        default are NONE (falsy)
+        """
+        return None, None, None
+
     def _preprocess_record(self, record):
         """
         Function that pre-process a record before insert to Table.
@@ -165,3 +196,4 @@ class DBOperation:
         :return:
         """
         return f"SELECT * FROM {self.data_table_name}"
+

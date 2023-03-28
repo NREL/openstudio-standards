@@ -48,6 +48,12 @@ class LightSubspaceTable(DBOperation):
         """
         return RECORD_HELP
 
+    def _get_weak_foreign_key_value(self, record):
+        associate_table = getattr_either("level_3_lighting_definition_table", record),
+        key = "id"
+        value = getattr_either("level_3_lighting_definition_id", record),
+        return associate_table, key, value
+
     def _preprocess_record(self, record):
         """
 
