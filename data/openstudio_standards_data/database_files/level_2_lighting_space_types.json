@@ -2,1431 +2,1431 @@
     {
         "lighting_space_type_name": "bam_automotive_facility",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 1
+        "level_3_lighting_definition_id": 1
     },
     {
         "lighting_space_type_name": "bam_convention_center",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 2
+        "level_3_lighting_definition_id": 2
     },
     {
         "lighting_space_type_name": "bam_courthouse",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 3
+        "level_3_lighting_definition_id": 3
     },
     {
         "lighting_space_type_name": "bam_dinin_bar_lounge_leisure",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 4
+        "level_3_lighting_definition_id": 4
     },
     {
         "lighting_space_type_name": "bam_dining_cafeteria_fast_food",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 5
+        "level_3_lighting_definition_id": 5
     },
     {
         "lighting_space_type_name": "bam_dining_family",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 6
+        "level_3_lighting_definition_id": 6
     },
     {
         "lighting_space_type_name": "bam_dormitory",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 7
+        "level_3_lighting_definition_id": 7
     },
     {
         "lighting_space_type_name": "bam_exercise_center",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 8
+        "level_3_lighting_definition_id": 8
     },
     {
         "lighting_space_type_name": "bam_fire_station",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 23
+        "level_3_lighting_definition_id": 23
     },
     {
         "lighting_space_type_name": "bam_gymnasium",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 9
+        "level_3_lighting_definition_id": 9
     },
     {
         "lighting_space_type_name": "bam_healthcare_clinic",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 10
+        "level_3_lighting_definition_id": 10
     },
     {
         "lighting_space_type_name": "bam_hospital",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 11
+        "level_3_lighting_definition_id": 11
     },
     {
         "lighting_space_type_name": "bam_hotel",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 12
+        "level_3_lighting_definition_id": 12
     },
     {
         "lighting_space_type_name": "bam_library",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 13
+        "level_3_lighting_definition_id": 13
     },
     {
         "lighting_space_type_name": "bam_manufacturing_facility",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 14
+        "level_3_lighting_definition_id": 14
     },
     {
         "lighting_space_type_name": "bam_motel",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 15
+        "level_3_lighting_definition_id": 15
     },
     {
         "lighting_space_type_name": "bam_motion_picture_theater",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 16
+        "level_3_lighting_definition_id": 16
     },
     {
         "lighting_space_type_name": "bam_multifamily",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 17
+        "level_3_lighting_definition_id": 17
     },
     {
         "lighting_space_type_name": "bam_museum",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 18
+        "level_3_lighting_definition_id": 18
     },
     {
         "lighting_space_type_name": "bam_office",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 19
+        "level_3_lighting_definition_id": 19
     },
     {
         "lighting_space_type_name": "bam_parking_garage",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 20
+        "level_3_lighting_definition_id": 20
     },
     {
         "lighting_space_type_name": "bam_penitentiary",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 21
+        "level_3_lighting_definition_id": 21
     },
     {
         "lighting_space_type_name": "bam_performing_arts_theater",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 22
+        "level_3_lighting_definition_id": 22
     },
     {
         "lighting_space_type_name": "bam_police_station",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 23
+        "level_3_lighting_definition_id": 23
     },
     {
         "lighting_space_type_name": "bam_post_office",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 24
+        "level_3_lighting_definition_id": 24
     },
     {
         "lighting_space_type_name": "bam_religious_facility",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 25
+        "level_3_lighting_definition_id": 25
     },
     {
         "lighting_space_type_name": "bam_retail",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 26
+        "level_3_lighting_definition_id": 26
     },
     {
         "lighting_space_type_name": "bam_school_university",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 27
+        "level_3_lighting_definition_id": 27
     },
     {
         "lighting_space_type_name": "bam_sports_arena",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 28
+        "level_3_lighting_definition_id": 28
     },
     {
         "lighting_space_type_name": "bam_town_hall",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 29
+        "level_3_lighting_definition_id": 29
     },
     {
         "lighting_space_type_name": "bam_transportation",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 30
+        "level_3_lighting_definition_id": 30
     },
     {
         "lighting_space_type_name": "bam_warehouse",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 31
+        "level_3_lighting_definition_id": 31
     },
     {
         "lighting_space_type_name": "bam_workshop",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 32
+        "level_3_lighting_definition_id": 32
     },
     {
         "lighting_space_type_name": "office_enclosed_small",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 33
+        "level_3_lighting_definition_id": 33
     },
     {
         "lighting_space_type_name": "office_enclosed_large",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 33
+        "level_3_lighting_definition_id": 33
     },
     {
         "lighting_space_type_name": "office_open",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 34
+        "level_3_lighting_definition_id": 34
     },
     {
         "lighting_space_type_name": "conference_meeting_multipurpose",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 35
+        "level_3_lighting_definition_id": 35
     },
     {
         "lighting_space_type_name": "classroom_lecture_training_general",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 36
+        "level_3_lighting_definition_id": 36
     },
     {
         "lighting_space_type_name": "classroom_lecture_training_penitentiary",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 37
+        "level_3_lighting_definition_id": 37
     },
     {
         "lighting_space_type_name": "lobby_general",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 38
+        "level_3_lighting_definition_id": 38
     },
     {
         "lighting_space_type_name": "lobby_hotel",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 39
+        "level_3_lighting_definition_id": 39
     },
     {
         "lighting_space_type_name": "lobby_performing_arts_theater",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 40
+        "level_3_lighting_definition_id": 40
     },
     {
         "lighting_space_type_name": "lobby_motion_picture_theater",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 41
+        "level_3_lighting_definition_id": 41
     },
     {
         "lighting_space_type_name": "lobby_visually_impaired",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 38
+        "level_3_lighting_definition_id": 38
     },
     {
         "lighting_space_type_name": "lobby_elevator",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 38
+        "level_3_lighting_definition_id": 38
     },
     {
         "lighting_space_type_name": "audience_seating_general",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 42
+        "level_3_lighting_definition_id": 42
     },
     {
         "lighting_space_type_name": "audience_seating_gymnasium",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 43
+        "level_3_lighting_definition_id": 43
     },
     {
         "lighting_space_type_name": "audience_seating_exercise_center",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 44
+        "level_3_lighting_definition_id": 44
     },
     {
         "lighting_space_type_name": "audience_seating_convention_center",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 45
+        "level_3_lighting_definition_id": 45
     },
     {
         "lighting_space_type_name": "audience_seating_penitentiary",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 46
+        "level_3_lighting_definition_id": 46
     },
     {
         "lighting_space_type_name": "audience_seating_religious_facility",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 47
+        "level_3_lighting_definition_id": 47
     },
     {
         "lighting_space_type_name": "audience_seating_sports_arena",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 48
+        "level_3_lighting_definition_id": 48
     },
     {
         "lighting_space_type_name": "audience_seating_performing_arts_theater",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 49
+        "level_3_lighting_definition_id": 49
     },
     {
         "lighting_space_type_name": "audience_seating_motion_picture_theater",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 50
+        "level_3_lighting_definition_id": 50
     },
     {
         "lighting_space_type_name": "audience_seating_transportation",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 51
+        "level_3_lighting_definition_id": 51
     },
     {
         "lighting_space_type_name": "audience_seating_auditorium",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 42
+        "level_3_lighting_definition_id": 42
     },
     {
         "lighting_space_type_name": "atrium_first_three_floor",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 52
+        "level_3_lighting_definition_id": 52
     },
     {
         "lighting_space_type_name": "atrium_each_additional_floor",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 53
+        "level_3_lighting_definition_id": 53
     },
     {
         "lighting_space_type_name": "lounge_breakroom_general",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 54
+        "level_3_lighting_definition_id": 54
     },
     {
         "lighting_space_type_name": "lounge_breakroom_healthcare_facility",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 55
+        "level_3_lighting_definition_id": 55
     },
     {
         "lighting_space_type_name": "dining_general",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 56
+        "level_3_lighting_definition_id": 56
     },
     {
         "lighting_space_type_name": "dining_penitentiary",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 57
+        "level_3_lighting_definition_id": 57
     },
     {
         "lighting_space_type_name": "dining_hotel",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 58
+        "level_3_lighting_definition_id": 58
     },
     {
         "lighting_space_type_name": "dining_motel",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 59
+        "level_3_lighting_definition_id": 59
     },
     {
         "lighting_space_type_name": "dining_bar_lounge_leisure",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 60
+        "level_3_lighting_definition_id": 60
     },
     {
         "lighting_space_type_name": "dining_family",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 61
+        "level_3_lighting_definition_id": 61
     },
     {
         "lighting_space_type_name": "dining_cafeteria_fast_food",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 56
+        "level_3_lighting_definition_id": 56
     },
     {
         "lighting_space_type_name": "dining_visually_impaired",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 56
+        "level_3_lighting_definition_id": 56
     },
     {
         "lighting_space_type_name": "kitchen",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 62
+        "level_3_lighting_definition_id": 62
     },
     {
         "lighting_space_type_name": "laboratory_classroom",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 63
+        "level_3_lighting_definition_id": 63
     },
     {
         "lighting_space_type_name": "laboratory_all_other",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 63
+        "level_3_lighting_definition_id": 63
     },
     {
         "lighting_space_type_name": "restroom_visually_impaired",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 64
+        "level_3_lighting_definition_id": 64
     },
     {
         "lighting_space_type_name": "restroom_all_other",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 64
+        "level_3_lighting_definition_id": 64
     },
     {
         "lighting_space_type_name": "performing_arts_dressing_room",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 65
+        "level_3_lighting_definition_id": 65
     },
     {
         "lighting_space_type_name": "corridor_general",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 66
+        "level_3_lighting_definition_id": 66
     },
     {
         "lighting_space_type_name": "corridor_hospital",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 67
+        "level_3_lighting_definition_id": 67
     },
     {
         "lighting_space_type_name": "corridor_manufacturing_facility",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 68
+        "level_3_lighting_definition_id": 68
     },
     {
         "lighting_space_type_name": "corridor_visually_impaired",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 66
+        "level_3_lighting_definition_id": 66
     },
     {
         "lighting_space_type_name": "stairway",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 69
+        "level_3_lighting_definition_id": 69
     },
     {
         "lighting_space_type_name": "stairwell",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 69
+        "level_3_lighting_definition_id": 69
     },
     {
         "lighting_space_type_name": "storage_ all_other_small",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 70
+        "level_3_lighting_definition_id": 70
     },
     {
         "lighting_space_type_name": "storage_ all_other_large",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 70
+        "level_3_lighting_definition_id": 70
     },
     {
         "lighting_space_type_name": "storage_hospital_small",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 71
+        "level_3_lighting_definition_id": 71
     },
     {
         "lighting_space_type_name": "storage_hospital_large",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 71
+        "level_3_lighting_definition_id": 71
     },
     {
         "lighting_space_type_name": "storage_inactive",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 72
+        "level_3_lighting_definition_id": 72
     },
     {
         "lighting_space_type_name": "storage_inactive_museum",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 73
+        "level_3_lighting_definition_id": 73
     },
     {
         "lighting_space_type_name": "electrical_mechanical",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 74
+        "level_3_lighting_definition_id": 74
     },
     {
         "lighting_space_type_name": "workshop",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 75
+        "level_3_lighting_definition_id": 75
     },
     {
         "lighting_space_type_name": "gymnasium_playing_area",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 76
+        "level_3_lighting_definition_id": 76
     },
     {
         "lighting_space_type_name": "gymnasium_exercise_area",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 77
+        "level_3_lighting_definition_id": 77
     },
     {
         "lighting_space_type_name": "courtroom",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 78
+        "level_3_lighting_definition_id": 78
     },
     {
         "lighting_space_type_name": "confinement_cells",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 79
+        "level_3_lighting_definition_id": 79
     },
     {
         "lighting_space_type_name": "judges_chambers",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 80
+        "level_3_lighting_definition_id": 80
     },
     {
         "lighting_space_type_name": "emergency_vehicle_garage",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 81
+        "level_3_lighting_definition_id": 81
     },
     {
         "lighting_space_type_name": "firestation_sleeping_quarters",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 82
+        "level_3_lighting_definition_id": 82
     },
     {
         "lighting_space_type_name": "post_office_sorting_area",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 83
+        "level_3_lighting_definition_id": 83
     },
     {
         "lighting_space_type_name": "exhibit_convention_center",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 84
+        "level_3_lighting_definition_id": 84
     },
     {
         "lighting_space_type_name": "library_cataloging",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 85
+        "level_3_lighting_definition_id": 85
     },
     {
         "lighting_space_type_name": "library_stacks",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 86
+        "level_3_lighting_definition_id": 86
     },
     {
         "lighting_space_type_name": "library_reading",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 87
+        "level_3_lighting_definition_id": 87
     },
     {
         "lighting_space_type_name": "emergency_room",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 88
+        "level_3_lighting_definition_id": 88
     },
     {
         "lighting_space_type_name": "recovery",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 89
+        "level_3_lighting_definition_id": 89
     },
     {
         "lighting_space_type_name": "nurses_station",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 90
+        "level_3_lighting_definition_id": 90
     },
     {
         "lighting_space_type_name": "exam_treatment",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 91
+        "level_3_lighting_definition_id": 91
     },
     {
         "lighting_space_type_name": "pharmacy",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 92
+        "level_3_lighting_definition_id": 92
     },
     {
         "lighting_space_type_name": "patient_room",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 93
+        "level_3_lighting_definition_id": 93
     },
     {
         "lighting_space_type_name": "operating_room",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 94
+        "level_3_lighting_definition_id": 94
     },
     {
         "lighting_space_type_name": "nursery",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 95
+        "level_3_lighting_definition_id": 95
     },
     {
         "lighting_space_type_name": "medical_supply",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 96
+        "level_3_lighting_definition_id": 96
     },
     {
         "lighting_space_type_name": "physical_therapy",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 97
+        "level_3_lighting_definition_id": 97
     },
     {
         "lighting_space_type_name": "imaging",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 98
+        "level_3_lighting_definition_id": 98
     },
     {
         "lighting_space_type_name": "laundry_washing",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 99
+        "level_3_lighting_definition_id": 99
     },
     {
         "lighting_space_type_name": "automotive",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 100
+        "level_3_lighting_definition_id": 100
     },
     {
         "lighting_space_type_name": "manufacturing_low_bay",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 101
+        "level_3_lighting_definition_id": 101
     },
     {
         "lighting_space_type_name": "manufacturing_high_bay",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 102
+        "level_3_lighting_definition_id": 102
     },
     {
         "lighting_space_type_name": "detailed_manufacuring",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 103
+        "level_3_lighting_definition_id": 103
     },
     {
         "lighting_space_type_name": "manufacturing_equipment_room",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 104
+        "level_3_lighting_definition_id": 104
     },
     {
         "lighting_space_type_name": "manufacturing_control",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 105
+        "level_3_lighting_definition_id": 105
     },
     {
         "lighting_space_type_name": "guest_room",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 106
+        "level_3_lighting_definition_id": 106
     },
     {
         "lighting_space_type_name": "dormitory_living_quarters",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 107
+        "level_3_lighting_definition_id": 107
     },
     {
         "lighting_space_type_name": "museum_exhibit_area",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 108
+        "level_3_lighting_definition_id": 108
     },
     {
         "lighting_space_type_name": "museum_restoration",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 109
+        "level_3_lighting_definition_id": 109
     },
     {
         "lighting_space_type_name": "banking_activity",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 110
+        "level_3_lighting_definition_id": 110
     },
     {
         "lighting_space_type_name": "worship_pulpit_choir_area",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 111
+        "level_3_lighting_definition_id": 111
     },
     {
         "lighting_space_type_name": "fellowship_hall_religious_facility",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 112
+        "level_3_lighting_definition_id": 112
     },
     {
         "lighting_space_type_name": "sales",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 113
+        "level_3_lighting_definition_id": 113
     },
     {
         "lighting_space_type_name": "retail_mall_concourse",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 114
+        "level_3_lighting_definition_id": 114
     },
     {
         "lighting_space_type_name": "sports_arena_ring_sports_area",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 115
+        "level_3_lighting_definition_id": 115
     },
     {
         "lighting_space_type_name": "sports_arena_court_sports_area",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 116
+        "level_3_lighting_definition_id": 116
     },
     {
         "lighting_space_type_name": "sports_arena_indoor_playing_field",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 117
+        "level_3_lighting_definition_id": 117
     },
     {
         "lighting_space_type_name": "warehouse_bulk_storage",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 119
+        "level_3_lighting_definition_id": 119
     },
     {
         "lighting_space_type_name": "parking_area_interior",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 120
+        "level_3_lighting_definition_id": 120
     },
     {
         "lighting_space_type_name": "airport_concourse",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 121
+        "level_3_lighting_definition_id": 121
     },
     {
         "lighting_space_type_name": "baggage_carousel",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 122
+        "level_3_lighting_definition_id": 122
     },
     {
         "lighting_space_type_name": "transportation_ticket_counter",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 123
+        "level_3_lighting_definition_id": 123
     },
     {
         "lighting_space_type_name": "sales_display_type_1",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 124
+        "level_3_lighting_definition_id": 124
     },
     {
         "lighting_space_type_name": "sales_display_type_2",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 124
+        "level_3_lighting_definition_id": 124
     },
     {
         "lighting_space_type_name": "sales_display_type_3",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 125
+        "level_3_lighting_definition_id": 125
     },
     {
         "lighting_space_type_name": "sales_display_type_4",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2004",
-        "level_3_lighting_defintion_id": 125
+        "level_3_lighting_definition_id": 125
     },
     {
         "lighting_space_type_name": "bam_automotive_facility",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 1
+        "level_3_lighting_definition_id": 1
     },
     {
         "lighting_space_type_name": "bam_convention_center",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 2
+        "level_3_lighting_definition_id": 2
     },
     {
         "lighting_space_type_name": "bam_courthouse",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 3
+        "level_3_lighting_definition_id": 3
     },
     {
         "lighting_space_type_name": "bam_dinin_bar_lounge_leisure",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 4
+        "level_3_lighting_definition_id": 4
     },
     {
         "lighting_space_type_name": "bam_dining_cafeteria_fast_food",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 5
+        "level_3_lighting_definition_id": 5
     },
     {
         "lighting_space_type_name": "bam_dining_family",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 6
+        "level_3_lighting_definition_id": 6
     },
     {
         "lighting_space_type_name": "bam_dormitory",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 7
+        "level_3_lighting_definition_id": 7
     },
     {
         "lighting_space_type_name": "bam_exercise_center",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 8
+        "level_3_lighting_definition_id": 8
     },
     {
         "lighting_space_type_name": "bam_fire_station",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 9
+        "level_3_lighting_definition_id": 9
     },
     {
         "lighting_space_type_name": "bam_gymnasium",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 10
+        "level_3_lighting_definition_id": 10
     },
     {
         "lighting_space_type_name": "bam_healthcare_clinic",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 11
+        "level_3_lighting_definition_id": 11
     },
     {
         "lighting_space_type_name": "bam_hospital",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 12
+        "level_3_lighting_definition_id": 12
     },
     {
         "lighting_space_type_name": "bam_hotel",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 13
+        "level_3_lighting_definition_id": 13
     },
     {
         "lighting_space_type_name": "bam_library",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 14
+        "level_3_lighting_definition_id": 14
     },
     {
         "lighting_space_type_name": "bam_manufacturing_facility",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 15
+        "level_3_lighting_definition_id": 15
     },
     {
         "lighting_space_type_name": "bam_motel",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 13
+        "level_3_lighting_definition_id": 13
     },
     {
         "lighting_space_type_name": "bam_motion_picture_theater",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 16
+        "level_3_lighting_definition_id": 16
     },
     {
         "lighting_space_type_name": "bam_multifamily",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 17
+        "level_3_lighting_definition_id": 17
     },
     {
         "lighting_space_type_name": "bam_museum",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 18
+        "level_3_lighting_definition_id": 18
     },
     {
         "lighting_space_type_name": "bam_office",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 19
+        "level_3_lighting_definition_id": 19
     },
     {
         "lighting_space_type_name": "bam_parking_garage",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 20
+        "level_3_lighting_definition_id": 20
     },
     {
         "lighting_space_type_name": "bam_penitentiary",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 21
+        "level_3_lighting_definition_id": 21
     },
     {
         "lighting_space_type_name": "bam_performing_arts_theater",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 22
+        "level_3_lighting_definition_id": 22
     },
     {
         "lighting_space_type_name": "bam_police_station",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 23
+        "level_3_lighting_definition_id": 23
     },
     {
         "lighting_space_type_name": "bam_post_office",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 24
+        "level_3_lighting_definition_id": 24
     },
     {
         "lighting_space_type_name": "bam_religious_facility",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 25
+        "level_3_lighting_definition_id": 25
     },
     {
         "lighting_space_type_name": "bam_retail",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 26
+        "level_3_lighting_definition_id": 26
     },
     {
         "lighting_space_type_name": "bam_school_university",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 27
+        "level_3_lighting_definition_id": 27
     },
     {
         "lighting_space_type_name": "bam_sports_arena",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 28
+        "level_3_lighting_definition_id": 28
     },
     {
         "lighting_space_type_name": "bam_town_hall",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 29
+        "level_3_lighting_definition_id": 29
     },
     {
         "lighting_space_type_name": "bam_transportation",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 30
+        "level_3_lighting_definition_id": 30
     },
     {
         "lighting_space_type_name": "bam_warehouse",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 31
+        "level_3_lighting_definition_id": 31
     },
     {
         "lighting_space_type_name": "bam_workshop",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 32
+        "level_3_lighting_definition_id": 32
     },
     {
         "lighting_space_type_name": "office_enclosed_small",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 79
+        "level_3_lighting_definition_id": 79
     },
     {
         "lighting_space_type_name": "office_enclosed_large",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 80
+        "level_3_lighting_definition_id": 80
     },
     {
         "lighting_space_type_name": "office_open",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 81
+        "level_3_lighting_definition_id": 81
     },
     {
         "lighting_space_type_name": "conference_meeting_multipurpose",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 48
+        "level_3_lighting_definition_id": 48
     },
     {
         "lighting_space_type_name": "classroom_lecture_training_general",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 47
+        "level_3_lighting_definition_id": 47
     },
     {
         "lighting_space_type_name": "classroom_lecture_training_penitentiary",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 46
+        "level_3_lighting_definition_id": 46
     },
     {
         "lighting_space_type_name": "lobby_general",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 75
+        "level_3_lighting_definition_id": 75
     },
     {
         "lighting_space_type_name": "lobby_hotel",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 72
+        "level_3_lighting_definition_id": 72
     },
     {
         "lighting_space_type_name": "lobby_performing_arts_theater",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 74
+        "level_3_lighting_definition_id": 74
     },
     {
         "lighting_space_type_name": "lobby_motion_picture_theater",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 73
+        "level_3_lighting_definition_id": 73
     },
     {
         "lighting_space_type_name": "lobby_visually_impaired",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 70
+        "level_3_lighting_definition_id": 70
     },
     {
         "lighting_space_type_name": "lobby_elevator",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 71
+        "level_3_lighting_definition_id": 71
     },
     {
         "lighting_space_type_name": "audience_seating_general",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 43
+        "level_3_lighting_definition_id": 43
     },
     {
         "lighting_space_type_name": "audience_seating_gymnasium",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 37
+        "level_3_lighting_definition_id": 37
     },
     {
         "lighting_space_type_name": "audience_seating_exercise_center",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 43
+        "level_3_lighting_definition_id": 43
     },
     {
         "lighting_space_type_name": "audience_seating_convention_center",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 43
+        "level_3_lighting_definition_id": 43
     },
     {
         "lighting_space_type_name": "audience_seating_penitentiary",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 39
+        "level_3_lighting_definition_id": 39
     },
     {
         "lighting_space_type_name": "audience_seating_religious_facility",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 41
+        "level_3_lighting_definition_id": 41
     },
     {
         "lighting_space_type_name": "audience_seating_sports_arena",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 42
+        "level_3_lighting_definition_id": 42
     },
     {
         "lighting_space_type_name": "audience_seating_performing_arts_theater",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 40
+        "level_3_lighting_definition_id": 40
     },
     {
         "lighting_space_type_name": "audience_seating_motion_picture_theater",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 38
+        "level_3_lighting_definition_id": 38
     },
     {
         "lighting_space_type_name": "audience_seating_transportation",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 43
+        "level_3_lighting_definition_id": 43
     },
     {
         "lighting_space_type_name": "audience_seating_auditorium",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 36
+        "level_3_lighting_definition_id": 36
     },
     {
         "lighting_space_type_name": "atrium_low",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 33
+        "level_3_lighting_definition_id": 33
     },
     {
         "lighting_space_type_name": "atrium_medium",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 34
+        "level_3_lighting_definition_id": 34
     },
     {
         "lighting_space_type_name": "atrium_high",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 35
+        "level_3_lighting_definition_id": 35
     },
     {
         "lighting_space_type_name": "lounge_breakroom_general",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 78
+        "level_3_lighting_definition_id": 78
     },
     {
         "lighting_space_type_name": "lounge_breakroom_healthcare_facility",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 77
+        "level_3_lighting_definition_id": 77
     },
     {
         "lighting_space_type_name": "dining_general",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 61
+        "level_3_lighting_definition_id": 61
     },
     {
         "lighting_space_type_name": "dining_penitentiary",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 56
+        "level_3_lighting_definition_id": 56
     },
     {
         "lighting_space_type_name": "dining_hotel",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 61
+        "level_3_lighting_definition_id": 61
     },
     {
         "lighting_space_type_name": "dining_motel",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 61
+        "level_3_lighting_definition_id": 61
     },
     {
         "lighting_space_type_name": "dining_bar_lounge_leisure",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 58
+        "level_3_lighting_definition_id": 58
     },
     {
         "lighting_space_type_name": "dining_family",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 60
+        "level_3_lighting_definition_id": 60
     },
     {
         "lighting_space_type_name": "dining_cafeteria_fast_food",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 59
+        "level_3_lighting_definition_id": 59
     },
     {
         "lighting_space_type_name": "dining_visually_impaired",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 57
+        "level_3_lighting_definition_id": 57
     },
     {
         "lighting_space_type_name": "kitchen",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 64
+        "level_3_lighting_definition_id": 64
     },
     {
         "lighting_space_type_name": "laboratory_classroom",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 66
+        "level_3_lighting_definition_id": 66
     },
     {
         "lighting_space_type_name": "laboratory_all_other",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 67
+        "level_3_lighting_definition_id": 67
     },
     {
         "lighting_space_type_name": "restroom_visually_impaired",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 84
+        "level_3_lighting_definition_id": 84
     },
     {
         "lighting_space_type_name": "restroom_all_other",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 85
+        "level_3_lighting_definition_id": 85
     },
     {
         "lighting_space_type_name": "performing_arts_dressing_room",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 120
+        "level_3_lighting_definition_id": 120
     },
     {
         "lighting_space_type_name": "corridor_general",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 53
+        "level_3_lighting_definition_id": 53
     },
     {
         "lighting_space_type_name": "corridor_hospital",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 52
+        "level_3_lighting_definition_id": 52
     },
     {
         "lighting_space_type_name": "corridor_manufacturing_facility",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 53
+        "level_3_lighting_definition_id": 53
     },
     {
         "lighting_space_type_name": "corridor_visually_impaired",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 51
+        "level_3_lighting_definition_id": 51
     },
     {
         "lighting_space_type_name": "stairway",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 88
+        "level_3_lighting_definition_id": 88
     },
     {
         "lighting_space_type_name": "stairwell",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 89
+        "level_3_lighting_definition_id": 89
     },
     {
         "lighting_space_type_name": "storage_ all_other_small",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 90
+        "level_3_lighting_definition_id": 90
     },
     {
         "lighting_space_type_name": "storage_ all_other_large",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 91
+        "level_3_lighting_definition_id": 91
     },
     {
         "lighting_space_type_name": "storage_hospital_small",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 90
+        "level_3_lighting_definition_id": 90
     },
     {
         "lighting_space_type_name": "storage_hospital_large",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 91
+        "level_3_lighting_definition_id": 91
     },
     {
         "lighting_space_type_name": "electrical_mechanical",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 62
+        "level_3_lighting_definition_id": 62
     },
     {
         "lighting_space_type_name": "workshop",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 93
+        "level_3_lighting_definition_id": 93
     },
     {
         "lighting_space_type_name": "gymnasium_playing_area",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 101
+        "level_3_lighting_definition_id": 101
     },
     {
         "lighting_space_type_name": "gymnasium_exercise_area",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 100
+        "level_3_lighting_definition_id": 100
     },
     {
         "lighting_space_type_name": "courtroom",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 54
+        "level_3_lighting_definition_id": 54
     },
     {
         "lighting_space_type_name": "confinement_cells",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 49
+        "level_3_lighting_definition_id": 49
     },
     {
         "lighting_space_type_name": "emergency_vehicle_garage",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 63
+        "level_3_lighting_definition_id": 63
     },
     {
         "lighting_space_type_name": "firestation_sleeping_quarters",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 99
+        "level_3_lighting_definition_id": 99
     },
     {
         "lighting_space_type_name": "post_office_sorting_area",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 121
+        "level_3_lighting_definition_id": 121
     },
     {
         "lighting_space_type_name": "exhibit_convention_center",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 97
+        "level_3_lighting_definition_id": 97
     },
     {
         "lighting_space_type_name": "library_stacks",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 112
+        "level_3_lighting_definition_id": 112
     },
     {
         "lighting_space_type_name": "library_reading",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 111
+        "level_3_lighting_definition_id": 111
     },
     {
         "lighting_space_type_name": "recovery",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 110
+        "level_3_lighting_definition_id": 110
     },
     {
         "lighting_space_type_name": "nurses_station",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 106
+        "level_3_lighting_definition_id": 106
     },
     {
         "lighting_space_type_name": "exam_treatment",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 102
+        "level_3_lighting_definition_id": 102
     },
     {
         "lighting_space_type_name": "pharmacy",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 83
+        "level_3_lighting_definition_id": 83
     },
     {
         "lighting_space_type_name": "patient_room",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 108
+        "level_3_lighting_definition_id": 108
     },
     {
         "lighting_space_type_name": "operating_room",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 107
+        "level_3_lighting_definition_id": 107
     },
     {
         "lighting_space_type_name": "nursery",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 105
+        "level_3_lighting_definition_id": 105
     },
     {
         "lighting_space_type_name": "medical_supply",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 104
+        "level_3_lighting_definition_id": 104
     },
     {
         "lighting_space_type_name": "physical_therapy",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 109
+        "level_3_lighting_definition_id": 109
     },
     {
         "lighting_space_type_name": "imaging",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 103
+        "level_3_lighting_definition_id": 103
     },
     {
         "lighting_space_type_name": "laundry_washing",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 68
+        "level_3_lighting_definition_id": 68
     },
     {
         "lighting_space_type_name": "automotive",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 96
+        "level_3_lighting_definition_id": 96
     },
     {
         "lighting_space_type_name": "manufacturing_low_bay",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 117
+        "level_3_lighting_definition_id": 117
     },
     {
         "lighting_space_type_name": "manufacturing_high_bay",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 116
+        "level_3_lighting_definition_id": 116
     },
     {
         "lighting_space_type_name": "detailed_manufacuring",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 113
+        "level_3_lighting_definition_id": 113
     },
     {
         "lighting_space_type_name": "manufacturing_equipment_room",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 114
+        "level_3_lighting_definition_id": 114
     },
     {
         "lighting_space_type_name": "manufacturing_extra_high_bay",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 115
+        "level_3_lighting_definition_id": 115
     },
     {
         "lighting_space_type_name": "guest_room",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 65
+        "level_3_lighting_definition_id": 65
     },
     {
         "lighting_space_type_name": "dormitory_living_quarters",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 98
+        "level_3_lighting_definition_id": 98
     },
     {
         "lighting_space_type_name": "museum_exhibit_area",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 118
+        "level_3_lighting_definition_id": 118
     },
     {
         "lighting_space_type_name": "museum_restoration",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 119
+        "level_3_lighting_definition_id": 119
     },
     {
         "lighting_space_type_name": "banking_activity",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 44
+        "level_3_lighting_definition_id": 44
     },
     {
         "lighting_space_type_name": "worship_pulpit_choir_area",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 123
+        "level_3_lighting_definition_id": 123
     },
     {
         "lighting_space_type_name": "fellowship_hall_religious_facility",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 122
+        "level_3_lighting_definition_id": 122
     },
     {
         "lighting_space_type_name": "sales",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 86
+        "level_3_lighting_definition_id": 86
     },
     {
         "lighting_space_type_name": "retail_mall_concourse",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 125
+        "level_3_lighting_definition_id": 125
     },
     {
         "lighting_space_type_name": "retail_dressing_room",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 124
+        "level_3_lighting_definition_id": 124
     },
     {
         "lighting_space_type_name": "sports_arena_playing_area_class_I",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 126
+        "level_3_lighting_definition_id": 126
     },
     {
         "lighting_space_type_name": "sports_arena_playing_area_class_II",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 127
+        "level_3_lighting_definition_id": 127
     },
     {
         "lighting_space_type_name": "sports_arena_playing_area_class_III",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 128
+        "level_3_lighting_definition_id": 128
     },
     {
         "lighting_space_type_name": "sports_arena_playing_area_class_IV",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 129
+        "level_3_lighting_definition_id": 129
     },
     {
         "lighting_space_type_name": "warehouse_fine_storage",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 134
+        "level_3_lighting_definition_id": 134
     },
     {
         "lighting_space_type_name": "warehouse_bulk_storage",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 133
+        "level_3_lighting_definition_id": 133
     },
     {
         "lighting_space_type_name": "parking_area_interior",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 82
+        "level_3_lighting_definition_id": 82
     },
     {
         "lighting_space_type_name": "airport_concourse",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 131
+        "level_3_lighting_definition_id": 131
     },
     {
         "lighting_space_type_name": "baggage_carousel",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 130
+        "level_3_lighting_definition_id": 130
     },
     {
         "lighting_space_type_name": "transportation_ticket_counter",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 132
+        "level_3_lighting_definition_id": 132
     },
     {
         "lighting_space_type_name": "sales_display_type_1",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 135
+        "level_3_lighting_definition_id": 135
     },
     {
         "lighting_space_type_name": "sales_display_type_2",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 136
+        "level_3_lighting_definition_id": 136
     },
     {
         "lighting_space_type_name": "sales_display_type_3",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 137
+        "level_3_lighting_definition_id": 137
     },
     {
         "lighting_space_type_name": "sales_display_type_4",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 138
+        "level_3_lighting_definition_id": 138
     },
     {
         "lighting_space_type_name": "breakroom",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 45
+        "level_3_lighting_definition_id": 45
     },
     {
         "lighting_space_type_name": "copy_print",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 50
+        "level_3_lighting_definition_id": 50
     },
     {
         "lighting_space_type_name": "computer_room",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 55
+        "level_3_lighting_definition_id": 55
     },
     {
         "lighting_space_type_name": "loading_dock",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 69
+        "level_3_lighting_definition_id": 69
     },
     {
         "lighting_space_type_name": "locker_room",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 76
+        "level_3_lighting_definition_id": 76
     },
     {
         "lighting_space_type_name": "seating_area_general",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 87
+        "level_3_lighting_definition_id": 87
     },
     {
         "lighting_space_type_name": "vehicular_maintenance",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 92
+        "level_3_lighting_definition_id": 92
     },
     {
         "lighting_space_type_name": "chapel_visually_impaired",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 94
+        "level_3_lighting_definition_id": 94
     },
     {
         "lighting_space_type_name": "recreation_common_living_visually_impaired",
         "level_3_lighting_definition_table": "level_3_lighting_90_1_2019",
-        "level_3_lighting_defintion_id": 95
+        "level_3_lighting_definition_id": 95
     }
 ]
