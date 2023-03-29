@@ -9,33 +9,64 @@ method: [BA, CS, SS]
 lighting_primary_space_type: TEXT
 lighting_secondary_space_type: TEXT
 lighting_per_area: REAL
-lighting_per_area_unit: TEXT
+unit: TEXT
+rcr_threshold: NUMERIC
+automatic_daylight_responsive_controls_for_sidelighting: TEXT
+automatic_daylight_responsive_controls_for_toplighting: TEXT
+automatic_partial_off: TEXT
+automatic_full_off: TEXT
+scheduled_shutoff: TEXT
 annotation: TEXT (optional)
 """
 
 CREATE_LIGHT_DEF_90_1_TABLE = """
-CREATE TABLE IF NOT EXISTS %s 
-(id INTEGER PRIMARY KEY, 
-method TEXT DEFAULT 'BA' NOT NULL, 
-lighting_primary_space_type TEXT, 
-lighting_per_area NUMERIC NOT NULL, 
+CREATE TABLE IF NOT EXISTS %s
+(id INTEGER PRIMARY KEY,
+method TEXT DEFAULT 'BA' NOT NULL,
+lighting_primary_space_type TEXT,
 lighting_secondary_space_type TEXT, 
-lighting_per_area_unit TEXT DEFAULT 'w/ft2' NOT NULL, 
+lighting_power_density NUMERIC NOT NULL,
+unit TEXT DEFAULT 'w/ft2' NOT NULL,
+rcr_threshold NUMERIC,
+automatic_daylight_responsive_controls_for_sidelighting TEXT,
+automatic_daylight_responsive_controls_for_toplighting TEXT,
+automatic_partial_off TEXT,
+automatic_full_off TEXT,
+scheduled_shutoff TEXT,
 annotation TEXT);
 """
 
 INSERT_A_LIGHT_RECORD = """
     INSERT INTO %s
-    (method, lighting_primary_space_type, lighting_secondary_space_type, lighting_per_area, lighting_per_area_unit, annotation)
-    VALUES (?, ?, ?, ? , ? ,?);
+    (
+        method,
+        lighting_primary_space_type,
+        lighting_secondary_space_type,
+        lighting_power_density,
+        unit,
+        rcr_threshold,
+        automatic_daylight_responsive_controls_for_sidelighting,
+        automatic_daylight_responsive_controls_for_toplighting,
+        automatic_partial_off,
+        automatic_full_off,
+        scheduled_shutoff,
+        annotation
+        )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 """
 
 RECORD_TEMPLATE = {
     "method": "",
     "lighting_primary_space_type": "",
     "lighting_secondary_space_type": "",
-    "lighting_per_area": 0.0,
-    "lighting_per_area_unit": "W/ft2",
+    "lighting_power_density": 0.0,
+    "unit": "W/ft2",
+    "rcr_threshold": 0.0,
+    "automatic_daylight_responsive_controls_for_sidelighting": "",
+    "automatic_daylight_responsive_controls_for_toplighting": "",
+    "automatic_partial_off": "",
+    "automatic_full_off": "",
+    "scheduled_shutoff": "",
     "annotation": "",
 }
 
@@ -80,8 +111,18 @@ class LightDef901(DBOperation):
             getattr_either("method", record),
             getattr_either("lighting_primary_space_type", record),
             getattr_either("lighting_secondary_space_type", record),
-            getattr_either("lighting_per_area", record),
-            getattr_either("lighting_per_area_unit", record, "W/ft2"),
-            getattr_either("annotation", record, ""),
+            getattr_either("lighting_power_density", record),
+            getattr_either("unit", record, "W/ft2"),
+            getattr_either("rcr_threshold", record),
+            getattr_either(
+                "automatic_daylight_responsive_controls_for_sidelighting", record
+            ),
+            getattr_either(
+                "automatic_daylight_responsive_controls_for_toplighting", record
+            ),
+            getattr_either("automatic_partial_off", record),
+            getattr_either("automatic_full_off", record),
+            getattr_either("scheduled_shutoff", record),
+            getattr_either("annotation", record),
         )
         return record_tuple

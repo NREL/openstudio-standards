@@ -1,129 +1,64 @@
-space_type_name,lighting_space_type_name,ventilation_space_type_name,electric_equipment_space_type_name
-chapel - visually impaired,chapel_visually_impaired,public_assembly_spaces_religious_workshop,
-recreation/common living - visually impaired,recreation_common_living_visually_impaired,hotels_motels_resorts_dormitories_multi_purpose_assembly,
-atrium < 20 ft height,atrium_low,office_buildings_main_entry_lobbies,atrium < 20 ft height
-atrium >= 20 ft and <= 40 ft in height,atrium_medium,office_buildings_main_entry_lobbies,atrium >= 20 ft and <= 40 ft in height
-atrium > 40 ft height,atrium_high,office_buildings_main_entry_lobbies,atrium > 40 ft height
-audience seating - convention center,audience_seating_convention_center,public_assembly_spaces_auditorium_seating_area,audience seating - convention center
-audience seating - exercise center,audience_seating_exercise_center,sports_entertainment_spectator_areas,audience seating - exercise center
-audience seating - all other,audience_seating_general,public_assembly_spaces_auditorium_seating_area,audience seating - all other
-audience seating - auditorium,audience_seating_auditorium,public_assembly_spaces_auditorium_seating_area,audience seating - auditorium
-audience seating - gymnasium,audience_seating_gymnasium,sports_entertainment_spectator_areas,audience seating - gymnasium
-audience seating - sports arena,audience_seating_sports_arena,sports_entertainment_spectator_areas,audience seating - sports arena
-audience seating - motion picture theater,audience_seating_motion_picture_theater,public_assembly_spaces_auditorium_seating_area,audience seating - motion picture theater
-audience seating - penitentiary,audience_seating_penitentiary,public_assembly_spaces_auditorium_seating_area,
-audience seating - performing arts theater,audience_seating_performing_arts_theater,public_assembly_spaces_auditorium_seating_area,audience seating - performing arts theater
-audience seating - religious facility,audience_seating_religious_facility,public_assembly_spaces_auditorium_seating_area,audience seating - religious facility
-audience seating - transportation facility,audience_seating_transportation,public_assembly_spaces_auditorium_seating_area,
-automotive,automotive,miscellaneous_spaces_transportation_waiting,
-banking activity,banking_activity,miscellaneous_spaces_banks_bank_lobbies,banking activity
-classroom/lecture/training - all other,classroom_lecture_training_general,educational_facilities_classroom_old,classroom/lecture/training - all other
-classroom/lecture/training - penitentiary,classroom_lecture_training_penitentiary,correctional_facilities_dayroom,classroom/lecture/training - penitentiary
-classroom - laboratory or shop,laboratory_classroom,educational_facilities_university_college_laboratories,
-classroom/lecture/training - preschool to 12th,classroom_lecture_training_general,educational_facilities_classroom_young,classroom/lecture/training - preschool to 12th
-computer room,computer_room,miscellaneous_spaces_computer,computer room
-conference/meeting/multipurpose,conference_meeting_multipurpose,general_conference_meeting,conference/meeting/multipurpose
-confinement cells,confinement_cells,correctional_facilities_cell,confinement cells
-exhibit - convention center,exhibit_convention_center,public_assembly_spaces_museums_galleries,exhibit - convention center
-copy/print,copy_print,office_buildings_telephone_data_entry,
-corridor for visually impaired,corridor_visually_impaired,general_conference_corridors,
-corridor - hospital,corridor_hospital,general_conference_corridors,corridor - hospital
-corridor - manufacturing facility,corridor_manufacturing_facility,general_conference_corridors,corridor - manufacturing facility
-corridor - all other,corridor_general,general_conference_corridors,corridor - all other
-courtroom,courtroom,public_assembly_spaces_courtrooms,courtroom
-dining - all other,dining_general,food_beverage_service_restaurant_dining_rooms,dining - all other
-dining - bar/lounge/leisure,dining_bar_lounge_leisure,food_beverage_service_bars_cocktail_lounges,dining - bar/lounge/leisure
-dining - cafeteria/fast food,dining_cafeteria_fast_food,food_beverage_service_cafeteria_fast_food_dining,dining - cafeteria/fast food
-dining for visually impaired,dining_visually_impaired,food_beverage_service_restaurant_dining_rooms,
-dining - family,dining_family,food_beverage_service_restaurant_dining_rooms,dining - family
-dining - penitentiary,dining_penitentiary,food_beverage_service_restaurant_dining_rooms,dining - penitentiary
-dining - hotel,dining_hotel,food_beverage_service_restaurant_dining_rooms,
-dining - motel,dining_motel,food_beverage_service_restaurant_dining_rooms,
-dormitory - living quarters,dormitory_living_quarters,hotels_motels_resorts_dormitories_bedroom_living_room,dormitory - living quarters
-electrical/mechanical,electrical_mechanical,miscellaneous_spaces_manufacturing_wo_hazardous_materials,electrical/mechanical
-emergency vehicle garage,emergency_vehicle_garage,miscellaneous_spaces_transportation_waiting,emergency vehicle garage
-firestation - sleeping quarters,firestation_sleeping_quarters,hotels_motels_resorts_dormitories_barracks_sleeping_areas,firestation - sleeping quarters
-kitchen,kitchen,food_beverage_service_kitchen,kitchen
-guest room,guest_room,hotels_motels_resorts_dormitories_barracks_sleeping_areas,guest room
-gymnasium exercise area,gymnasium_exercise_area,sports_entertainment_gym_stadium,gymnasium exercise area
-gymnasium playing area,gymnasium_playing_area,sports_entertainment_gym_stadium,gymnasium playing area
-emergency room,emergency_room,outpatient_health_care_facilities_general_examination_room,emergency room
-exam/treatment,exam_treatment,outpatient_health_care_facilities_general_examination_room,exam/treatment
-imaging,imaging,outpatient_health_care_facilities_class_1_imaging_rooms,
-medical supply,medical_supply,miscellaneous_spaces_pharmacy,
-nursery,nursery,outpatient_health_care_facilities_psychiatric_consultation_room,
-nurses station,nurses_station,outpatient_health_care_facilities_psychiatric_consultation_room,nurses station
-operating room,operating_room,outpatient_health_care_facilities_general_examination_room,operating room
-patient room,patient_room,outpatient_health_care_facilities_physical_therapy_individual_room,patient room
-physical therapy,physical_therapy,outpatient_health_care_facilities_physical_therapy_exercise_area,physical therapy
-recovery,recovery,outpatient_health_care_facilities_urgent_care_examination_room,
-judges chambers,judges_chambers,public_assembly_spaces_legislative_chambers,judges chambers
-laboratory,laboratory_all_other,educational_facilities_science_laboratories,laboratory
-library - reading,library_reading,public_assembly_spaces_libraries,library - reading
-library - stacks,library_stacks,public_assembly_spaces_libraries,library - stacks
-library - cataloging,library_cataloging,public_assembly_spaces_libraries,library - cataloging
-loading dock,loading_dock,miscellaneous_spaces_sorting_packing_light_assembly,
-lobby - all other,lobby_general,public_assembly_spaces_lobbies,lobby - all other
-lobby - elevator,lobby_elevator,public_assembly_spaces_lobbies,lobby - elevator
-lobby for visually impaired,lobby_visually_impaired,public_assembly_spaces_lobbies,
-lobby - hotel,lobby_hotel,hotels_motels_resorts_dormitories_lobbies_prefunction,lobby - hotel
-lobby - motion picture theater,lobby_motion_picture_theater,public_assembly_spaces_lobbies,lobby - motion picture theater
-lobby - performing arts theater,lobby_performing_arts_theater,public_assembly_spaces_lobbies,lobby - performing arts theater
-locker room,locker_room,general_break_rooms,locker room
-lounge/breakroom - all other,lounge_breakroom_general,general_break_rooms,lounge/breakroom - all other
-lounge/breakroom - healthcare facility,lounge_breakroom_healthcare_facility,general_break_rooms,lounge/breakroom - healthcare facility
-laundry/washing,laundry_washing,hotels_motels_resorts_dormitories_laundry_rooms,laundry/washing
-detailed manufacuring,detailed_manufacuring,miscellaneous_spaces_manufacturing_wo_hazardous_materials,
-manufacturing equipment room,manufacturing_equipment_room,miscellaneous_spaces_manufacturing_wo_hazardous_materials,manufacturing equipment room
-manufacturing extra high bay,manufacturing_extra_high_bay,miscellaneous_spaces_manufacturing_wo_hazardous_materials,
-manufacturing high bay,manufacturing_high_bay,miscellaneous_spaces_manufacturing_wo_hazardous_materials,
-manufacturing low bay,manufacturing_low_bay,miscellaneous_spaces_manufacturing_wo_hazardous_materials,manufacturing low bay
-manufacturing control,manufacturing_control,miscellaneous_spaces_manufacturing_wo_hazardous_materials,
-museum exhibit area,museum_exhibit_area,public_assembly_spaces_museums_galleries,museum exhibit area
-museum restoration,museum_restoration,public_assembly_spaces_museums_galleries,museum restoration
-performing arts dressing room,performing_arts_dressing_room,retail_mall_common_areas,performing arts dressing room
-office - enclosed <= 250 sf,office_enclosed_small,office_buildings_office_space,office - enclosed <= 250 sf
-office - enclosed > 250 sf,office_enclosed_large,office_buildings_office_space,office - enclosed > 250 sf
-office - open,office_open,office_buildings_office_space,office - open
-"parking area, interior",parking_area_interior,miscellaneous_spaces_transportation_waiting,"parking area, interior"
-pharmacy,pharmacy,miscellaneous_spaces_pharmacy,pharmacy
-post office - sorting area,post_office_sorting_area,miscellaneous_spaces_sorting_packing_light_assembly,post office - sorting area
-fellowship hall - religious facility,fellowship_hall_religious_facility,public_assembly_spaces_religious_workshop,fellowship hall - religious facility
-worship/pulpit/choir area,worship_pulpit_choir_area,public_assembly_spaces_religious_workshop,worship/pulpit/choir area
-restroom - all other,restroom_all_other,,restroom - all other
-restroom - visually impaired,restroom_visually_impaired,,
-retail dressing room,retail_dressing_room,retail_mall_common_areas,
-retail mall concourse,retail_mall_concourse,retail_mall_common_areas,
-"seating area, general",seating_area_general,public_assembly_spaces_auditorium_seating_area,"seating area, general"
-"sports arena playing area, class I",sports_arena_playing_area_class_I,sports_entertainment_sports_arena,
-"sports arena playing area, class II",sports_arena_playing_area_class_II,sports_entertainment_sports_arena,"sports arena playing area, class II"
-"sports arena playing area, class III",sports_arena_playing_area_class_III,sports_entertainment_sports_arena,
-"sports arena playing area, class IV",sports_arena_playing_area_class_IV,sports_entertainment_sports_arena,"sports arena playing area, class IV"
-sports arena - ring sports area,sports_arena_ring_sports_area,sports_entertainment_sports_arena,
-sports arena - court sports area,sports_arena_court_sports_area,sports_entertainment_sports_arena,
-sports arena - indoor playing field,sports_arena_indoor_playing_field,sports_entertainment_sports_arena,
-stairwell,stairwell,general_conference_corridors,stairwell
-storage < 50 sf - all other,storage_ all_other_small,general_conference_storage_rooms,storage < 50 sf - all other
-storage 50 to 1000 sf - all other,storage_ all_other_large,general_conference_storage_rooms,storage 50 to 1000 sf - all other
-storage < 50 sf - hospital,storage_hospital_small,general_conference_storage_rooms,storage < 50 sf - hospital
-storage 50 to 1000 sf - hospital,storage_hospital_large,general_conference_storage_rooms,storage 50 to 1000 sf - hospital
-storage - inactive,storage_inactive,general_conference_storage_rooms,storage - inactive
-"storage, inactive - museum",storage_inactive_museum,general_conference_storage_rooms,
-airport concourse,airport_concourse,office_buildings_reception_areas,airport concourse
-baggage/carousel,baggage_carousel,office_buildings_reception_areas,baggage/carousel
-transportation ticket counter,transportation_ticket_counter,office_buildings_reception_areas,transportation ticket counter
-vehicular maintenance,vehicular_maintenance,miscellaneous_spaces_manufacturing_wo_hazardous_materials,vehicular maintenance
-warehouse - bulk storage,warehouse_bulk_storage,miscellaneous_spaces_warehouses,warehouse - bulk storage
-warehouse - fine storage,warehouse_fine_storage,miscellaneous_spaces_warehouses,warehouse - fine storage
-workshop,workshop,miscellaneous_spaces_manufacturing_wo_hazardous_materials,workshop
-sales,sales,retail_sales,sales
-sales - display type 1,sales_display_type_1,retail_sales,
-sales - display type 2,sales_display_type_2,retail_sales,
-sales - display type 3,sales_display_type_3,retail_sales,
-sales - display type 4,sales_display_type_4,retail_sales,
-guest room - highway,guest_room,hotels_motels_resorts_dormitories_barracks_sleeping_areas,
-lodging dining - highway,dining_general,food_beverage_service_restaurant_dining_rooms,
-audience seating - classroom/lecture/training,audience_seating_general,public_assembly_spaces_auditorium_seating_area,
-audience seating - conference/meeting/multipurpose,audience_seating_general,public_assembly_spaces_auditorium_seating_area,
-audience seating - corridor/transition,audience_seating_general,public_assembly_spaces_auditorium_seating_area,
-guest room - bathroom,guest_room,hotels_motels_resorts_dormitories_barracks_sleeping_areas,
+space_type_name,lighting_space_type_name,lighting_technology_name,ventilation_space_type_name,electric_equipment_space_type_name,natural_gas_equipment_space_type_name
+airport concourse,,default,,,
+atrium,,default,,,
+attic,,default,,,
+audience seating,,default,,,
+baggage/carousel,,default,,,
+banking,,default,,,
+classroom/lecture/training,,default,,,
+computer room,,default,,,
+conference/meeting/multipurpose,,default,,,
+confinement cells,,default,,,
+copy/print,,default,,,
+corridor,,default,,,
+courtroom,,default,,,
+datacenterHighITE,,default,,,
+datacenterLowITE,,default,,,
+dining,,default,,,
+dressing room,,default,,,
+electrical/mechanical,,default,,,
+emergency room,,default,,,
+emergency vehicle garage,,default,,,
+exam/treatment,,default,,,
+exercise area,,default,,,
+exhibit,,default,,,
+guest room,,default,,,
+imaging,,default,,,
+interior parking,,default,,,
+judges chambers,,default,,,
+food preparation,,default,,,kitchen
+laboratory,,default,,,
+laundry/washing,,default,,,laundry
+library,,default,,,
+living quarters,,default,,,
+loading dock,,default,,,
+lobby,,default,,,
+locker room,,default,,,
+lounge/breakroom,,default,,,
+manufacturing,,default,,,
+medical supply,,default,,,
+multifamily,,default,,,
+nursery,,default,,,
+nurses station,,default,,,
+office,,default,,,
+"office, enclosed",,default,,,
+operating room,,default,,,
+patient room,,default,,,
+pharmacy,,default,,,
+physical therapy,,default,,,
+playing area,,default,,,
+plenum,,default,,,
+post office,,default,,,
+recovery,,default,,,
+recreation/common living,,default,,,
+restroom,,default,,,
+retail,,default,,,
+shaft,,default,,,
+sleeping quarters,,default,,,
+sports arena,,default,,,
+stairwell,,default,,,
+storage,,default,,,
+transportation,,default,,,
+vehicular maintenance,,default,,,
+workshop,,default,,,
+worship,,default,,,

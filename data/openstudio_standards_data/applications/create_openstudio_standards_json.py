@@ -36,7 +36,7 @@ def create_openstudio_standards_space_data_json(
         ventilation_standard_table = template["ventilation_standard_table"]
         # filter out the matching lighting standard table and ventilation standard table
         subset_space_map_table = filter(
-            lambda bldg: bldg["level_3_lighting_definition_table"]
+            lambda bldg: bldg["level_3_lighting_code_definition_table"]
             == lighting_standard_table
             and bldg["level_3_ventilation_definition_table"]
             == ventilation_standard_table,
@@ -51,8 +51,13 @@ def create_openstudio_standards_space_data_json(
             sp_data["ventilation_standard"] = template["ventilation_standard"]
             sp_data["space_type"] = space["space_type"]
 
+<<<<<<< Updated upstream
             lpd_id = int(space["level_3_lighting_definition_id"])
             vent_id = int(space["level_3_ventilation_definition_id"])
+=======
+            lpd_id = int(space["level_3_lighting_code_definition_id"])
+            vent_id = int(space["level_3_ventilation_defintion_id"])
+>>>>>>> Stashed changes
             if lighting_standard_table not in standard_data_tables.keys():
                 light_table = fetch_table(conn, lighting_standard_table)
                 standard_data_tables[lighting_standard_table] = light_table

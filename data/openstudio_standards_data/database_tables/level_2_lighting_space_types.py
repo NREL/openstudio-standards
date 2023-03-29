@@ -6,30 +6,59 @@ TABLE_NAME = "level_2_lighting_space_types"
 RECORD_HELP = """
 Must provide a tuple that contains:
 lighting_space_type_name: TEXT (unique)
+<<<<<<< Updated upstream
 level_3_lighting_definition_table: TEXT
 level_3_lighting_definition_id: id from level_3_lighting_definition index
+=======
+level_3_lighting_code_definition_table: TEXT
+level_3_lighting_code_definition_id: id from level_3_lighting_definition index
+lighting_space_type_target_illuminance_setpoint: NUMERIC
+>>>>>>> Stashed changes
 """
 
 CREATE_LIGHT_SUBSPACE_TABLE = """
 CREATE TABLE IF NOT EXISTS %s 
 (id INTEGER PRIMARY KEY,
 lighting_space_type_name TEXT NOT NULL,
+<<<<<<< Updated upstream
 level_3_lighting_definition_table TEXT NOT NULL,
 level_3_lighting_definition_id INTEGER NOT NULL,
+=======
+level_3_lighting_code_definition_table TEXT NOT NULL,
+level_3_lighting_code_definition_id INTEGER NOT NULL,
+lighting_space_type_target_illuminance_setpoint NUMERIC,
+>>>>>>> Stashed changes
 FOREIGN KEY(lighting_space_type_name) REFERENCES support_lighting_space_type_name_tags(lighting_space_type_name)
 );
 """
 
 INSERT_LIGHT_SUBSPACE = f"""
+<<<<<<< Updated upstream
     INSERT INTO %s
     (lighting_space_type_name, level_3_lighting_definition_table, level_3_lighting_definition_id)
     VALUES (?, ?, ?);
+=======
+    INSERT INTO {TABLE_NAME}
+    (
+        lighting_space_type_name,
+        level_3_lighting_code_definition_table,
+        level_3_lighting_code_definition_id,
+        lighting_space_type_target_illuminance_setpoint
+    )
+    VALUES (?, ?, ?, ?, ?);
+>>>>>>> Stashed changes
 """
 
 RECORD_TEMPLATE = {
     "lighting_space_type_name": "",
+<<<<<<< Updated upstream
     "level_3_lighting_definition_table": "",
     "level_3_lighting_definition_id": "",
+=======
+    "level_3_lighting_code_definition_table": "",
+    "level_3_lighting_code_definition_id": "",
+    "lighting_space_type_target_illuminance_setpoint": 0.0,
+>>>>>>> Stashed changes
 }
 
 
@@ -64,8 +93,14 @@ class LightSubspaceTable(DBOperation):
         """
         record_list = (
             getattr_either("lighting_space_type_name", record),
+<<<<<<< Updated upstream
             getattr_either("level_3_lighting_definition_table", record),
             getattr_either("level_3_lighting_definition_id", record),
+=======
+            getattr_either("level_3_lighting_code_definition_table", record),
+            getattr_either("level_3_lighting_code_definition_id", record),
+            getattr_either("lighting_space_type_target_illuminance_setpoint", record),
+>>>>>>> Stashed changes
         )
 
         return record_list

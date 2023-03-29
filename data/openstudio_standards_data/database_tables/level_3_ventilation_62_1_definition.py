@@ -7,10 +7,10 @@ RECORD_HELP = """
 Must provide a tuple that contains:
 ventilation_primary_space_type: TEXT
 ventilation_secondary_space_type: TEXT
-ventilation_per_person: NUMERIC
-ventilation_per_person_unit: TEXT
-ventilation_per_area: NUMERIC
-ventilation_per_area_unit: TEXT,
+ventilation_rate: NUMERIC
+ventilation_rate_occupant_unit: TEXT
+ventilation_rate_area: NUMERIC
+ventilation_rate_area_unit: TEXT,
 occupancy_per_area: NUMERIC,
 occupancy_per_area_unit: TEXT
 air_class: INTEGER
@@ -23,10 +23,10 @@ CREATE TABLE IF NOT EXISTS %s
 (id INTEGER PRIMARY KEY, 
 ventilation_primary_space_type TEXT NOT NULL, 
 ventilation_secondary_space_type TEXT NOT NULL,
-ventilation_per_person NUMERIC,
-ventilation_per_person_unit TEXT DEFAULT 'cfm/person',
-ventilation_per_area NUMERIC,
-ventilation_per_area_unit TEXT DEFAULT 'cfm/ft2',
+ventilation_rate_occupant NUMERIC,
+ventilation_rate_occupant_unit TEXT DEFAULT 'cfm/person',
+ventilation_rate_area NUMERIC,
+ventilation_rate_area_unit TEXT DEFAULT 'cfm/ft2',
 occupancy_per_area NUMERIC,
 occupancy_per_area_unit TEXT DEFAULT 'ppl/1000 ft2',
 air_class INTEGER,
@@ -36,18 +36,18 @@ annotation TEXT);
 
 INSERT_A_VENT_RECORD = """
     INSERT INTO %s (ventilation_primary_space_type, 
-ventilation_secondary_space_type, ventilation_per_person, ventilation_per_person_unit, 
-ventilation_per_area, ventilation_per_area_unit, occupancy_per_area, occupancy_per_area_unit, air_class, os, annotation) 
+ventilation_secondary_space_type, ventilation_rate_occupant, ventilation_rate_occupant_unit, 
+ventilation_rate_area, ventilation_rate_area_unit, occupancy_per_area, occupancy_per_area_unit, air_class, os, annotation) 
 VALUES (?, ?, ?, ? ,? ,? , ?, ?, ?, ?, ?);
 """
 
 RECORD_TEMPLATE = {
     "ventilation_primary_space_type": "",
     "ventilation_secondary_space_type": "",
-    "ventilation_per_person": 0.0,
-    "ventilation_per_person_unit": "cfm/person",
-    "ventilation_per_area": 0.0,
-    "ventilation_per_area_unit": "cfm/ft2",
+    "ventilation_rate_occupant": 0.0,
+    "ventilation_rate_occupant_unit": "cfm/person",
+    "ventilation_rate_area": 0.0,
+    "ventilation_rate_area_unit": "cfm/ft2",
     "occupancy_per_area": 0.0,
     "occupancy_per_area_unit": "ppl/1000 ft2",
     "air_class": 0,
@@ -75,8 +75,8 @@ class VentDef621(DBOperation):
 
     def validate_record_datatype(self, record):
         float_expected = [
-            "ventilation_per_person",
-            "ventilation_per_area",
+            "ventilation_rate_occupant",
+            "ventilation_rate_area",
             "occupancy_per_area",
         ]
 
@@ -97,10 +97,10 @@ class VentDef621(DBOperation):
         return (
             getattr_either("ventilation_primary_space_type", record),
             getattr_either("ventilation_secondary_space_type", record),
-            getattr_either("ventilation_per_person", record),
-            getattr_either("ventilation_per_person_unit", record, "cfm/person"),
-            getattr_either("ventilation_per_area", record),
-            getattr_either("ventilation_per_area_unit", record, "cfm/ft2"),
+            getattr_either("ventilation_rate_occupant", record),
+            getattr_either("ventilation_rate_occupant_unit", record, "cfm/person"),
+            getattr_either("ventilation_rate_area", record),
+            getattr_either("ventilation_rate_area_unit", record, "cfm/ft2"),
             getattr_either("occupancy_per_area", record),
             getattr_either("occupancy_per_area_unit", record, "ppl/1000 ft2"),
             getattr_either("air_class", record),
