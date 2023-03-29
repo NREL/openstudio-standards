@@ -49,7 +49,7 @@ class TestDOEPrototypesPerformance < CreateDOEPrototypeBuildingTest
   ]
 
   all_comp =  @building_types.product @templates, @climate_zones
-  all_comp.each do |building_type, template, climate_zone|
+  all_comp.sort.each do |building_type, template, climate_zone|
     result, msg = TestDOEPrototypesPerformance.create_building(building_type, template, climate_zone, nil, true, true, true, false, 'dd-only', false, 'performance-')
   end
 end
