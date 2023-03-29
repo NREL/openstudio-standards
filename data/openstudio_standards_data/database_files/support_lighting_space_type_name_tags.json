@@ -1,476 +1,356 @@
 [
     {
-        "lighting_space_type_name": "bam_automotive_facility"
+        "lighting_space_type_name": "airport_concourse_lighting"
     },
     {
-        "lighting_space_type_name": "bam_convention_center"
+        "lighting_space_type_name": "atrium_lighting"
     },
     {
-        "lighting_space_type_name": "bam_courthouse"
+        "lighting_space_type_name": "none_lighting"
     },
     {
-        "lighting_space_type_name": "bam_dinin_bar_lounge_leisure"
+        "lighting_space_type_name": "audience_seating_lighting"
     },
     {
-        "lighting_space_type_name": "bam_dining_cafeteria_fast_food"
+        "lighting_space_type_name": "baggage_carousel_lighting"
     },
     {
-        "lighting_space_type_name": "bam_dining_family"
+        "lighting_space_type_name": "banking_lighting"
     },
     {
-        "lighting_space_type_name": "bam_dormitory"
+        "lighting_space_type_name": "classroom_lecture_training_lighting"
     },
     {
-        "lighting_space_type_name": "bam_exercise_center"
+        "lighting_space_type_name": "computer_room_lighting"
     },
     {
-        "lighting_space_type_name": "bam_fire_station"
+        "lighting_space_type_name": "conference_meeting_multipurpose_lighting"
     },
     {
-        "lighting_space_type_name": "bam_gymnasium"
+        "lighting_space_type_name": "confinement_cells_lighting"
     },
     {
-        "lighting_space_type_name": "bam_healthcare_clinic"
+        "lighting_space_type_name": "copy_print_lighting"
     },
     {
-        "lighting_space_type_name": "bam_hospital"
+        "lighting_space_type_name": "corridor_lighting"
     },
     {
-        "lighting_space_type_name": "bam_hotel"
+        "lighting_space_type_name": "courtroom_lighting"
     },
     {
-        "lighting_space_type_name": "bam_library"
+        "lighting_space_type_name": "datacenterhighite_lighting"
     },
     {
-        "lighting_space_type_name": "bam_manufacturing_facility"
+        "lighting_space_type_name": "datacenterlowite_lighting"
     },
     {
-        "lighting_space_type_name": "bam_motel"
+        "lighting_space_type_name": "dining_lighting"
     },
     {
-        "lighting_space_type_name": "bam_motion_picture_theater"
+        "lighting_space_type_name": "dressing_room_lighting"
     },
     {
-        "lighting_space_type_name": "bam_multifamily"
+        "lighting_space_type_name": "electrical_mechanical_lighting"
     },
     {
-        "lighting_space_type_name": "bam_museum"
+        "lighting_space_type_name": "emergency_room_lighting"
     },
     {
-        "lighting_space_type_name": "bam_office"
+        "lighting_space_type_name": "emergency_vehicle_garage_lighting"
     },
     {
-        "lighting_space_type_name": "bam_parking_garage"
+        "lighting_space_type_name": "exam_treatment_lighting"
     },
     {
-        "lighting_space_type_name": "bam_penitentiary"
+        "lighting_space_type_name": "exercise_area_lighting"
     },
     {
-        "lighting_space_type_name": "bam_performing_arts_theater"
+        "lighting_space_type_name": "exhibit_lighting"
     },
     {
-        "lighting_space_type_name": "bam_police_station"
+        "lighting_space_type_name": "guest_room_lighting"
     },
     {
-        "lighting_space_type_name": "bam_post_office"
+        "lighting_space_type_name": "imaging_lighting"
     },
     {
-        "lighting_space_type_name": "bam_religious_facility"
+        "lighting_space_type_name": "interior_parking_lighting"
     },
     {
-        "lighting_space_type_name": "bam_retail"
+        "lighting_space_type_name": "judges_chambers_lighting"
     },
     {
-        "lighting_space_type_name": "bam_school_university"
+        "lighting_space_type_name": "food_preparation_lighting"
     },
     {
-        "lighting_space_type_name": "bam_sports_arena"
+        "lighting_space_type_name": "laboratory_lighting"
     },
     {
-        "lighting_space_type_name": "bam_town_hall"
+        "lighting_space_type_name": "laundry_washing_lighting"
     },
     {
-        "lighting_space_type_name": "bam_transportation"
+        "lighting_space_type_name": "library_lighting"
     },
     {
-        "lighting_space_type_name": "bam_warehouse"
+        "lighting_space_type_name": "living_quarters_lighting"
     },
     {
-        "lighting_space_type_name": "bam_workshop"
+        "lighting_space_type_name": "loading_dock_lighting"
     },
     {
-        "lighting_space_type_name": "office_enclosed_small"
+        "lighting_space_type_name": "lobby_lighting"
     },
     {
-        "lighting_space_type_name": "office_enclosed_large"
+        "lighting_space_type_name": "locker_room_lighting"
     },
     {
-        "lighting_space_type_name": "office_open"
+        "lighting_space_type_name": "lounge_breakroom_lighting"
     },
     {
-        "lighting_space_type_name": "conference_meeting_multipurpose"
+        "lighting_space_type_name": "manufacturing_lighting"
     },
     {
-        "lighting_space_type_name": "classroom_lecture_training_general"
+        "lighting_space_type_name": "medical_supply_lighting"
     },
     {
-        "lighting_space_type_name": "classroom_lecture_training_penitentiary"
+        "lighting_space_type_name": "multifamily_lighting"
     },
     {
-        "lighting_space_type_name": "lobby_general"
+        "lighting_space_type_name": "nursery_lighting"
     },
     {
-        "lighting_space_type_name": "lobby_hotel"
+        "lighting_space_type_name": "nurses_station_lighting"
     },
     {
-        "lighting_space_type_name": "lobby_performing_arts_theater"
+        "lighting_space_type_name": "office_lighting"
     },
     {
-        "lighting_space_type_name": "lobby_motion_picture_theater"
+        "lighting_space_type_name": "office_enclosed_lighting"
     },
     {
-        "lighting_space_type_name": "lobby_visually_impaired"
+        "lighting_space_type_name": "operating_room_lighting"
     },
     {
-        "lighting_space_type_name": "lobby_elevator"
+        "lighting_space_type_name": "patient_room_lighting"
     },
     {
-        "lighting_space_type_name": "audience_seating_general"
+        "lighting_space_type_name": "pharmacy_lighting"
     },
     {
-        "lighting_space_type_name": "audience_seating_gymnasium"
+        "lighting_space_type_name": "physical_therapy_lighting"
     },
     {
-        "lighting_space_type_name": "audience_seating_exercise_center"
+        "lighting_space_type_name": "playing_area_lighting"
     },
     {
-        "lighting_space_type_name": "audience_seating_convention_center"
+        "lighting_space_type_name": "post_office_lighting"
     },
     {
-        "lighting_space_type_name": "audience_seating_penitentiary"
+        "lighting_space_type_name": "recovery_lighting"
     },
     {
-        "lighting_space_type_name": "audience_seating_religious_facility"
+        "lighting_space_type_name": "recreation_common_living_lighting"
     },
     {
-        "lighting_space_type_name": "audience_seating_sports_arena"
+        "lighting_space_type_name": "restroom_lighting"
     },
     {
-        "lighting_space_type_name": "audience_seating_performing_arts_theater"
+        "lighting_space_type_name": "retail_sales_lighting"
     },
     {
-        "lighting_space_type_name": "audience_seating_motion_picture_theater"
+        "lighting_space_type_name": "sleeping_quarters_lighting"
     },
     {
-        "lighting_space_type_name": "audience_seating_transportation"
+        "lighting_space_type_name": "sports_arena_lighting"
     },
     {
-        "lighting_space_type_name": "audience_seating_auditorium"
+        "lighting_space_type_name": "stairwell_lighting"
     },
     {
-        "lighting_space_type_name": "atrium_first_three_floor"
+        "lighting_space_type_name": "storage_lighting"
     },
     {
-        "lighting_space_type_name": "atrium_each_additional_floor"
+        "lighting_space_type_name": "transportation_lighting"
     },
     {
-        "lighting_space_type_name": "atrium_low"
+        "lighting_space_type_name": "vehicular_maintenance_lighting"
     },
     {
-        "lighting_space_type_name": "atrium_medium"
+        "lighting_space_type_name": "workshop_lighting"
     },
     {
-        "lighting_space_type_name": "atrium_high"
+        "lighting_space_type_name": "worship_lighting"
     },
     {
-        "lighting_space_type_name": "lounge_breakroom_general"
+        "lighting_space_type_name": "ba_automotive_facility_lighting"
     },
     {
-        "lighting_space_type_name": "lounge_breakroom_healthcare_facility"
+        "lighting_space_type_name": "ba_convention_center_lighting"
     },
     {
-        "lighting_space_type_name": "dining_general"
+        "lighting_space_type_name": "ba_courthouse_lighting"
     },
     {
-        "lighting_space_type_name": "dining_penitentiary"
+        "lighting_space_type_name": "ba_dining_bar_lounge_leisure_lighting"
     },
     {
-        "lighting_space_type_name": "dining_hotel"
+        "lighting_space_type_name": "ba_dining_cafeteria_fast_food_lighting"
     },
     {
-        "lighting_space_type_name": "dining_motel"
+        "lighting_space_type_name": "ba_dining_family_lighting"
     },
     {
-        "lighting_space_type_name": "dining_bar_lounge_leisure"
+        "lighting_space_type_name": "ba_dormitory_lighting"
     },
     {
-        "lighting_space_type_name": "dining_family"
+        "lighting_space_type_name": "ba_exercise_center_lighting"
     },
     {
-        "lighting_space_type_name": "dining_cafeteria_fast_food"
+        "lighting_space_type_name": "ba_fire_station_lighting"
     },
     {
-        "lighting_space_type_name": "dining_visually_impaired"
+        "lighting_space_type_name": "ba_gymnasium_lighting"
     },
     {
-        "lighting_space_type_name": "kitchen"
+        "lighting_space_type_name": "ba_health-care_clinic_lighting"
     },
     {
-        "lighting_space_type_name": "laboratory_classroom"
+        "lighting_space_type_name": "ba_hospital_lighting"
     },
     {
-        "lighting_space_type_name": "laboratory_all_other"
+        "lighting_space_type_name": "ba_hotel_motel_lighting"
     },
     {
-        "lighting_space_type_name": "restroom_visually_impaired"
+        "lighting_space_type_name": "ba_motion_picture_theater_lighting"
     },
     {
-        "lighting_space_type_name": "restroom_all_other"
+        "lighting_space_type_name": "ba_museum_lighting"
     },
     {
-        "lighting_space_type_name": "performing_arts_dressing_room"
+        "lighting_space_type_name": "ba_parking_garage_lighting"
     },
     {
-        "lighting_space_type_name": "corridor_general"
+        "lighting_space_type_name": "ba_penitentiary_lighting"
     },
     {
-        "lighting_space_type_name": "corridor_hospital"
+        "lighting_space_type_name": "ba_performing_arts_theater_lighting"
     },
     {
-        "lighting_space_type_name": "corridor_manufacturing_facility"
+        "lighting_space_type_name": "ba_police_station_lighting"
     },
     {
-        "lighting_space_type_name": "corridor_visually_impaired"
+        "lighting_space_type_name": "ba_school_university_lighting"
     },
     {
-        "lighting_space_type_name": "stairway"
+        "lighting_space_type_name": "ba_town_hall_lighting"
     },
     {
-        "lighting_space_type_name": "stairwell"
+        "lighting_space_type_name": "ba_retail_lighting"
     },
     {
-        "lighting_space_type_name": "storage_ all_other_small"
+        "lighting_space_type_name": "ba_warehouse_lighting"
     },
     {
-        "lighting_space_type_name": "storage_ all_other_large"
+        "lighting_space_type_name": "audience_seating_area_for_gymnasium_lighting"
     },
     {
-        "lighting_space_type_name": "storage_hospital_small"
+        "lighting_space_type_name": "audience_seating_area_for_motion_picture_theater_lighting"
     },
     {
-        "lighting_space_type_name": "storage_hospital_large"
+        "lighting_space_type_name": "audience_seating_area_for_penitentiary_lighting"
     },
     {
-        "lighting_space_type_name": "storage_inactive"
+        "lighting_space_type_name": "audience_seating_area_for_performing_arts_theater_lighting"
     },
     {
-        "lighting_space_type_name": "storage_inactive_museum"
+        "lighting_space_type_name": "audience_seating_area_for_religious_buildings_lighting"
     },
     {
-        "lighting_space_type_name": "electrical_mechanical"
+        "lighting_space_type_name": "audience_seating_area_for_sports_arena_lighting"
     },
     {
-        "lighting_space_type_name": "workshop"
+        "lighting_space_type_name": "classroom_lecture_training_for_penitentiary_lighting"
     },
     {
-        "lighting_space_type_name": "gymnasium_playing_area"
+        "lighting_space_type_name": "corridor_transition_for_hospital_lighting"
     },
     {
-        "lighting_space_type_name": "gymnasium_exercise_area"
+        "lighting_space_type_name": "dining_area_for_penitentiary_lighting"
     },
     {
-        "lighting_space_type_name": "courtroom"
+        "lighting_space_type_name": "dining_bar_lounge_leisure_general_lighting"
     },
     {
-        "lighting_space_type_name": "confinement_cells"
+        "lighting_space_type_name": "dining_cafeteria_fast_food_general_lighting"
     },
     {
-        "lighting_space_type_name": "judges_chambers"
+        "lighting_space_type_name": "dining_area_for_family_dining_lighting"
     },
     {
-        "lighting_space_type_name": "emergency_vehicle_garage"
+        "lighting_space_type_name": "lobby_for_hotel_lighting"
     },
     {
-        "lighting_space_type_name": "firestation_sleeping_quarters"
+        "lighting_space_type_name": "lobby_for_motion_picture_theater_lighting"
     },
     {
-        "lighting_space_type_name": "post_office_sorting_area"
+        "lighting_space_type_name": "lobby_for_performing_arts_theater_lighting"
     },
     {
-        "lighting_space_type_name": "exhibit_convention_center"
+        "lighting_space_type_name": "lounge_recreation_for_hospital_lighting"
     },
     {
-        "lighting_space_type_name": "library_cataloging"
+        "lighting_space_type_name": "office-enclosed_general_lighting"
     },
     {
-        "lighting_space_type_name": "library_stacks"
+        "lighting_space_type_name": "office_open_plan_lighting"
     },
     {
-        "lighting_space_type_name": "library_reading"
+        "lighting_space_type_name": "automotive_general_lighting"
     },
     {
-        "lighting_space_type_name": "emergency_room"
+        "lighting_space_type_name": "convention_center_exhibit_space_general_lighting"
     },
     {
-        "lighting_space_type_name": "recovery"
+        "lighting_space_type_name": "library_reading_area_lighting"
     },
     {
-        "lighting_space_type_name": "nurses_station"
+        "lighting_space_type_name": "library_stacks_lighting"
     },
     {
-        "lighting_space_type_name": "exam_treatment"
+        "lighting_space_type_name": "manufacturing_facility_detailed_manufacturing_area_lighting"
     },
     {
-        "lighting_space_type_name": "pharmacy"
+        "lighting_space_type_name": "manufacturing_facility_equipment_room_lighting"
     },
     {
-        "lighting_space_type_name": "patient_room"
+        "lighting_space_type_name": "manufacturing_facility_high_bay_area_25_to_50_ft_ftc_hgt_lighting"
     },
     {
-        "lighting_space_type_name": "operating_room"
+        "lighting_space_type_name": "manufacturing_facility_low_bay_area_lt_25_ft_ftc_hgt_lighting"
     },
     {
-        "lighting_space_type_name": "nursery"
+        "lighting_space_type_name": "museum_restoration_room_lighting"
     },
     {
-        "lighting_space_type_name": "medical_supply"
+        "lighting_space_type_name": "post_office_sorting_area_general_lighting"
     },
     {
-        "lighting_space_type_name": "physical_therapy"
+        "lighting_space_type_name": "religious_buildings_fellowship_hall_lighting"
     },
     {
-        "lighting_space_type_name": "imaging"
+        "lighting_space_type_name": "religious_buildings_worship_pulpit_choir_lighting"
     },
     {
-        "lighting_space_type_name": "laundry_washing"
+        "lighting_space_type_name": "retail_mall_concourse_lighting"
     },
     {
-        "lighting_space_type_name": "automotive"
+        "lighting_space_type_name": "transportation_facility_ticket_counter_lighting"
     },
     {
-        "lighting_space_type_name": "manufacturing_low_bay"
+        "lighting_space_type_name": "warehouse_storage_area_medium_to_bulky_palletized_items_lighting"
     },
     {
-        "lighting_space_type_name": "manufacturing_high_bay"
-    },
-    {
-        "lighting_space_type_name": "detailed_manufacuring"
-    },
-    {
-        "lighting_space_type_name": "manufacturing_equipment_room"
-    },
-    {
-        "lighting_space_type_name": "manufacturing_control"
-    },
-    {
-        "lighting_space_type_name": "manufacturing_extra_high_bay"
-    },
-    {
-        "lighting_space_type_name": "guest_room"
-    },
-    {
-        "lighting_space_type_name": "dormitory_living_quarters"
-    },
-    {
-        "lighting_space_type_name": "museum_exhibit_area"
-    },
-    {
-        "lighting_space_type_name": "museum_restoration"
-    },
-    {
-        "lighting_space_type_name": "banking_activity"
-    },
-    {
-        "lighting_space_type_name": "worship_pulpit_choir_area"
-    },
-    {
-        "lighting_space_type_name": "fellowship_hall_religious_facility"
-    },
-    {
-        "lighting_space_type_name": "sales"
-    },
-    {
-        "lighting_space_type_name": "retail_mall_concourse"
-    },
-    {
-        "lighting_space_type_name": "retail_dressing_room"
-    },
-    {
-        "lighting_space_type_name": "sports_arena_ring_sports_area"
-    },
-    {
-        "lighting_space_type_name": "sports_arena_court_sports_area"
-    },
-    {
-        "lighting_space_type_name": "sports_arena_indoor_playing_field"
-    },
-    {
-        "lighting_space_type_name": "sports_arena_playing_area_class_I"
-    },
-    {
-        "lighting_space_type_name": "sports_arena_playing_area_class_II"
-    },
-    {
-        "lighting_space_type_name": "sports_arena_playing_area_class_III"
-    },
-    {
-        "lighting_space_type_name": "sports_arena_playing_area_class_IV"
-    },
-    {
-        "lighting_space_type_name": "warehouse_fine_storage"
-    },
-    {
-        "lighting_space_type_name": "warehouse_bulk_storage"
-    },
-    {
-        "lighting_space_type_name": "parking_area_interior"
-    },
-    {
-        "lighting_space_type_name": "airport_concourse"
-    },
-    {
-        "lighting_space_type_name": "baggage_carousel"
-    },
-    {
-        "lighting_space_type_name": "transportation_ticket_counter"
-    },
-    {
-        "lighting_space_type_name": "sales_display_type_1"
-    },
-    {
-        "lighting_space_type_name": "sales_display_type_2"
-    },
-    {
-        "lighting_space_type_name": "sales_display_type_3"
-    },
-    {
-        "lighting_space_type_name": "sales_display_type_4"
-    },
-    {
-        "lighting_space_type_name": "breakroom"
-    },
-    {
-        "lighting_space_type_name": "copy_print"
-    },
-    {
-        "lighting_space_type_name": "computer_room"
-    },
-    {
-        "lighting_space_type_name": "loading_dock"
-    },
-    {
-        "lighting_space_type_name": "locker_room"
-    },
-    {
-        "lighting_space_type_name": "seating_area_general"
-    },
-    {
-        "lighting_space_type_name": "vehicular_maintenance"
-    },
-    {
-        "lighting_space_type_name": "chapel_visually_impaired"
-    },
-    {
-        "lighting_space_type_name": "recreation_common_living_visually_impaired"
+        "lighting_space_type_name": "warehouse_storage_area_smaller_hand-carried_items_lighting"
     }
 ]

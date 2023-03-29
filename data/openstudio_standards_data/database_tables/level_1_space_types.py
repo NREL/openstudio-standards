@@ -7,10 +7,10 @@ RECORD_HELP = """
 Must provide a dict that contains following key value pairs:
 space_type_name: TEXT
 lighting_space_type_name: TEXT
-lighting_technology_name: TEXT
 ventilation_space_type_name: TEXT
 electric_equipment_space_type_name: TEXT
 natural_gas_equipment_space_type_name: TEXT
+schedule_set_name: TEXT
 """
 
 CREATE_LEVEL_1_SPACE_TYPES = f"""
@@ -18,45 +18,37 @@ CREATE TABLE IF NOT EXISTS %s
 (id INTEGER PRIMARY KEY, 
 space_type_name TEXT NOT NULL,
 lighting_space_type_name TEXT,
-lighting_technology_name INTEGER NOT NULL,
 ventilation_space_type_name TEXT,
 electric_equipment_space_type_name TEXT,
 natural_gas_equipment_space_type_name TEXT,
+schedule_set_name TEXT,
 FOREIGN KEY(lighting_space_type_name) REFERENCES support_lighting_space_type_name_tags(lighting_space_type_name)
-FOREIGN KEY(lighting_technology_name) REFERENCES support_lighting_technologies(lighting_technology_defintion_name)
 FOREIGN KEY(ventilation_space_type_name) REFERENCES support_ventilation_space_type_name_tags(ventilation_space_type_name)
 FOREIGN KEY(electric_equipment_space_type_name) REFERENCES support_electric_equipment_space_type_name_tags(support_electric_equipment_space_type_name_tags)
-FOREIGN KEY(natural_gas_equipment_space_type_name) REFERENCES support_natural_gas_equipment_space_type_name_tags(support_natural_gas_equipment_space_type_name_tags)
 );
 """
 
-<<<<<<< Updated upstream
 INSERT_LEVEL_1_SPACE_TYPES = f"""
     INSERT INTO %s
-    (space_type_name, lighting_space_type_name, ventilation_space_type_name, electric_equipment_space_type_name)
-=======
-INSERT_level_1_space_types = f"""
-    INSERT INTO {TABLE_NAME}
     (
         space_type_name,
         lighting_space_type_name,
-        lighting_technology_name,
         ventilation_space_type_name,
         electric_equipment_space_type_name,
-        natural_gas_equipment_space_type_name
+        natural_gas_equipment_space_type_name,
+        schedule_set_name
     )
->>>>>>> Stashed changes
-    VALUES (?, ?, ?, ?);
+    VALUES (?, ?, ?, ?, ?, ?);
 """
 
 
 RECORD_TEMPLATE = {
     "space_type_name": "",
     "lighting_space_type_name": "",
-    "lighting_technology_name": "",
     "ventilation_space_type_name": "",
     "electric_equipment_space_type_name": "",
     "natural_gas_equipment_space_type_name": "",
+    "schedule_set_name": "",
 }
 
 
@@ -77,6 +69,12 @@ class GeneralBuildingSpaceTypeTable(DBOperation):
         """
         return RECORD_HELP
 
+    def _get_weak_foreign_key_value(self, record):
+        associate_table = getattr_either("support_schedules", record)
+        key = "name"
+        value = getattr_either("schedule_set_name", record)
+        return associate_table, key, value
+
     def _preprocess_record(self, record):
         """
 
@@ -88,8 +86,8 @@ class GeneralBuildingSpaceTypeTable(DBOperation):
         return (
             getattr_either("space_type_name", record),
             getattr_either("lighting_space_type_name", record),
-            getattr_either("lighting_technology_name", record),
             getattr_either("ventilation_space_type_name", record),
             getattr_either("electric_equipment_space_type_name", record),
             getattr_either("natural_gas_equipment_space_type_name", record),
+            getattr_either("schedule_set_name", record),
         )

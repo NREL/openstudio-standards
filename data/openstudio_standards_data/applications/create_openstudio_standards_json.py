@@ -51,13 +51,8 @@ def create_openstudio_standards_space_data_json(
             sp_data["ventilation_standard"] = template["ventilation_standard"]
             sp_data["space_type"] = space["space_type"]
 
-<<<<<<< Updated upstream
-            lpd_id = int(space["level_3_lighting_definition_id"])
-            vent_id = int(space["level_3_ventilation_definition_id"])
-=======
             lpd_id = int(space["level_3_lighting_code_definition_id"])
             vent_id = int(space["level_3_ventilation_defintion_id"])
->>>>>>> Stashed changes
             if lighting_standard_table not in standard_data_tables.keys():
                 light_table = fetch_table(conn, lighting_standard_table)
                 standard_data_tables[lighting_standard_table] = light_table

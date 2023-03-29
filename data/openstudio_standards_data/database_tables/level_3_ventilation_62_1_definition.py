@@ -7,7 +7,7 @@ RECORD_HELP = """
 Must provide a tuple that contains:
 ventilation_primary_space_type: TEXT
 ventilation_secondary_space_type: TEXT
-ventilation_rate: NUMERIC
+ventilation_rate_occupant: NUMERIC
 ventilation_rate_occupant_unit: TEXT
 ventilation_rate_area: NUMERIC
 ventilation_rate_area_unit: TEXT,
@@ -35,9 +35,19 @@ annotation TEXT);
 """
 
 INSERT_A_VENT_RECORD = """
-    INSERT INTO %s (ventilation_primary_space_type, 
-ventilation_secondary_space_type, ventilation_rate_occupant, ventilation_rate_occupant_unit, 
-ventilation_rate_area, ventilation_rate_area_unit, occupancy_per_area, occupancy_per_area_unit, air_class, os, annotation) 
+    INSERT INTO %s (
+ventilation_primary_space_type,
+ventilation_secondary_space_type,
+ventilation_rate_occupant,
+ventilation_rate_occupant_unit,
+ventilation_rate_area,
+ventilation_rate_area_unit,
+occupancy_per_area,
+occupancy_per_area_unit,
+air_class,
+os,
+annotation
+) 
 VALUES (?, ?, ?, ? ,? ,? , ?, ?, ?, ?, ?);
 """
 

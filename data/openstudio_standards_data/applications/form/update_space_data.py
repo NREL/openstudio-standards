@@ -19,13 +19,8 @@ from query.util import match_dict_data_by_key
 
 SPACE_TABLE_HEADER = [
     "space_type",
-<<<<<<< Updated upstream
-    "level_3_lighting_definition_id",
-    "level_3_ventilation_definition_id",
-=======
     "level_3_lighting_code_definition_id",
     "level_3_ventilation_defintion_id",
->>>>>>> Stashed changes
 ]
 
 FETCH_SPACE_TO_TABLE_QUEYR = f"""
@@ -82,13 +77,8 @@ def update_openstudio_standards_space_data(
 
         # loop through the rows in table
         for row in cur:
-<<<<<<< Updated upstream
-            level_3_lighting_definition_id = row[
-                SPACE_TABLE_HEADER.index("level_3_lighting_definition_id")
-=======
             level_3_lighting_code_definition_id = row[
                 SPACE_TABLE_HEADER.index("level_3_lighting_code_definition_id")
->>>>>>> Stashed changes
             ]
             level_3_ventilation_definition_id = row[
                 SPACE_TABLE_HEADER.index("level_3_ventilation_definition_id")
@@ -112,11 +102,7 @@ def update_openstudio_standards_space_data(
             search_condition = (
                 "id=%s AND lighting_primary_space_type='%s' AND lighting_secondary_space_type='%s'"
                 % (
-<<<<<<< Updated upstream
-                    level_3_lighting_definition_id,
-=======
                     level_3_lighting_code_definition_id,
->>>>>>> Stashed changes
                     lighting_primary_space_type,
                     lighting_secondary_space_type,
                 )

@@ -1,4 +1,4 @@
-ventilation_primary_space_type,ventilation_secondary_space_type,ventilation_rate_occupantventilation_rate_occupant_unit,ventilation_rate_area,ventilation_rate_area_unit,occupancy_per_area,occupancy_per_area_unit,air_class,os,annotation
+ventilation_primary_space_type,ventilation_secondary_space_type,ventilation_rate_occupant,ventilation_rate_occupant_unit,ventilation_rate_area,ventilation_rate_area_unit,occupancy_per_area,occupancy_per_area_unit,air_class,os,annotation
 Animal Facilities,Animal exam room (veterinary office),10,cfm/person,0.12,cfm/ft2,20,ppl/1000 ft2,2,,
 Animal Facilities,Animal imaging (MRI/CT/PET),10,cfm/person,0.18,cfm/ft2,20,ppl/1000 ft2,3,,
 Animal Facilities,Animal operating rooms,10,cfm/person,0.18,cfm/ft2,20,ppl/1000 ft2,3,,
@@ -47,7 +47,7 @@ Food and Beverage Service,Restaurant dining rooms,7.5,cfm/person,0.18,cfm/ft2,70
 Miscellaneous Spaces,Banks or bank lobbies,7.5,cfm/person,0.06,cfm/ft2,15,ppl/1000 ft2,1,yes,
 Miscellaneous Spaces,Bank vaults/safe deposit,5,cfm/person,0.06,cfm/ft2,5,ppl/1000 ft2,2,yes,
 Miscellaneous Spaces,Computer (not printing),5,cfm/person,0.06,cfm/ft2,4,ppl/1000 ft2,1,yes,
-Miscellaneous Spaces,Freezer and refrigerated spaces (<50�F [10�C]),10,cfm/person,0,cfm/ft2,0,ppl/1000 ft2,2,,
+Miscellaneous Spaces,Freezer and refrigerated spaces (<50ï¿½F [10ï¿½C]),10,cfm/person,0,cfm/ft2,0,ppl/1000 ft2,2,,
 Miscellaneous Spaces,Manufacturing where hazardous materials are not used,10,cfm/person,0.18,cfm/ft2,7,ppl/1000 ft2,2,,
 Miscellaneous Spaces,Manufacturing where hazardous materials are used (excludes heavy industrial and chemical processes),10,cfm/person,0.18,cfm/ft2,7,ppl/1000 ft2,3,,
 Miscellaneous Spaces,Pharmacy (prep. area),5,cfm/person,0.18,cfm/ft2,10,ppl/1000 ft2,2,,
@@ -108,3 +108,4 @@ Sports and Entertainment,"Stages, studios",10,cfm/person,0.06,cfm/ft2,70,ppl/100
 Sports and Entertainment,Swimming (pool and deck),0,cfm/person,0.48,cfm/ft2,0,ppl/1000 ft2,2,,
 Transient Residential,Common corridors,0,cfm/person,0.06,cfm/ft2,0,ppl/1000 ft2,1,yes,
 Transient Residential,Dwelling unit,5,cfm/person,0.06,cfm/ft2,0,ppl/1000 ft2,1,yes,
+None,None,0,cfm/person,0,cfm/ft2,0,ppl/1000 ft2,,,

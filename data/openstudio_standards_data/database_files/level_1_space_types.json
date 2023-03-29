@@ -1,770 +1,506 @@
 [
     {
-        "space_type_name": "chapel - visually impaired",
-        "lighting_space_type_name": "chapel_visually_impaired",
-        "ventilation_space_type_name": "public_assembly_spaces_religious_workshop",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "recreation/common living - visually impaired",
-        "lighting_space_type_name": "recreation_common_living_visually_impaired",
-        "ventilation_space_type_name": "hotels_motels_resorts_dormitories_multi_purpose_assembly",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "atrium < 20 ft height",
-        "lighting_space_type_name": "atrium_low",
-        "ventilation_space_type_name": "office_buildings_main_entry_lobbies",
-        "electric_equipment_space_type_name": "atrium < 20 ft height"
-    },
-    {
-        "space_type_name": "atrium >= 20 ft and <= 40 ft in height",
-        "lighting_space_type_name": "atrium_medium",
-        "ventilation_space_type_name": "office_buildings_main_entry_lobbies",
-        "electric_equipment_space_type_name": "atrium >= 20 ft and <= 40 ft in height"
-    },
-    {
-        "space_type_name": "atrium > 40 ft height",
-        "lighting_space_type_name": "atrium_high",
-        "ventilation_space_type_name": "office_buildings_main_entry_lobbies",
-        "electric_equipment_space_type_name": "atrium > 40 ft height"
-    },
-    {
-        "space_type_name": "audience seating - convention center",
-        "lighting_space_type_name": "audience_seating_convention_center",
-        "ventilation_space_type_name": "public_assembly_spaces_auditorium_seating_area",
-        "electric_equipment_space_type_name": "audience seating - convention center"
-    },
-    {
-        "space_type_name": "audience seating - exercise center",
-        "lighting_space_type_name": "audience_seating_exercise_center",
-        "ventilation_space_type_name": "sports_entertainment_spectator_areas",
-        "electric_equipment_space_type_name": "audience seating - exercise center"
-    },
-    {
-        "space_type_name": "audience seating - all other",
-        "lighting_space_type_name": "audience_seating_general",
-        "ventilation_space_type_name": "public_assembly_spaces_auditorium_seating_area",
-        "electric_equipment_space_type_name": "audience seating - all other"
-    },
-    {
-        "space_type_name": "audience seating - auditorium",
-        "lighting_space_type_name": "audience_seating_auditorium",
-        "ventilation_space_type_name": "public_assembly_spaces_auditorium_seating_area",
-        "electric_equipment_space_type_name": "audience seating - auditorium"
-    },
-    {
-        "space_type_name": "audience seating - gymnasium",
-        "lighting_space_type_name": "audience_seating_gymnasium",
-        "ventilation_space_type_name": "sports_entertainment_spectator_areas",
-        "electric_equipment_space_type_name": "audience seating - gymnasium"
-    },
-    {
-        "space_type_name": "audience seating - sports arena",
-        "lighting_space_type_name": "audience_seating_sports_arena",
-        "ventilation_space_type_name": "sports_entertainment_spectator_areas",
-        "electric_equipment_space_type_name": "audience seating - sports arena"
-    },
-    {
-        "space_type_name": "audience seating - motion picture theater",
-        "lighting_space_type_name": "audience_seating_motion_picture_theater",
-        "ventilation_space_type_name": "public_assembly_spaces_auditorium_seating_area",
-        "electric_equipment_space_type_name": "audience seating - motion picture theater"
-    },
-    {
-        "space_type_name": "audience seating - penitentiary",
-        "lighting_space_type_name": "audience_seating_penitentiary",
-        "ventilation_space_type_name": "public_assembly_spaces_auditorium_seating_area",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "audience seating - performing arts theater",
-        "lighting_space_type_name": "audience_seating_performing_arts_theater",
-        "ventilation_space_type_name": "public_assembly_spaces_auditorium_seating_area",
-        "electric_equipment_space_type_name": "audience seating - performing arts theater"
-    },
-    {
-        "space_type_name": "audience seating - religious facility",
-        "lighting_space_type_name": "audience_seating_religious_facility",
-        "ventilation_space_type_name": "public_assembly_spaces_auditorium_seating_area",
-        "electric_equipment_space_type_name": "audience seating - religious facility"
-    },
-    {
-        "space_type_name": "audience seating - transportation facility",
-        "lighting_space_type_name": "audience_seating_transportation",
-        "ventilation_space_type_name": "public_assembly_spaces_auditorium_seating_area",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "automotive",
-        "lighting_space_type_name": "automotive",
-        "ventilation_space_type_name": "miscellaneous_spaces_transportation_waiting",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "banking activity",
-        "lighting_space_type_name": "banking_activity",
-        "ventilation_space_type_name": "miscellaneous_spaces_banks_bank_lobbies",
-        "electric_equipment_space_type_name": "banking activity"
-    },
-    {
-        "space_type_name": "classroom/lecture/training - all other",
-        "lighting_space_type_name": "classroom_lecture_training_general",
-        "ventilation_space_type_name": "educational_facilities_classroom_old",
-        "electric_equipment_space_type_name": "classroom/lecture/training - all other"
-    },
-    {
-        "space_type_name": "classroom/lecture/training - penitentiary",
-        "lighting_space_type_name": "classroom_lecture_training_penitentiary",
-        "ventilation_space_type_name": "correctional_facilities_dayroom",
-        "electric_equipment_space_type_name": "classroom/lecture/training - penitentiary"
-    },
-    {
-        "space_type_name": "classroom - laboratory or shop",
-        "lighting_space_type_name": "laboratory_classroom",
-        "ventilation_space_type_name": "educational_facilities_university_college_laboratories",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "classroom/lecture/training - preschool to 12th",
-        "lighting_space_type_name": "classroom_lecture_training_general",
-        "ventilation_space_type_name": "educational_facilities_classroom_young",
-        "electric_equipment_space_type_name": "classroom/lecture/training - preschool to 12th"
-    },
-    {
-        "space_type_name": "computer room",
-        "lighting_space_type_name": "computer_room",
-        "ventilation_space_type_name": "miscellaneous_spaces_computer",
-        "electric_equipment_space_type_name": "computer room"
-    },
-    {
-        "space_type_name": "conference/meeting/multipurpose",
-        "lighting_space_type_name": "conference_meeting_multipurpose",
-        "ventilation_space_type_name": "general_conference_meeting",
-        "electric_equipment_space_type_name": "conference/meeting/multipurpose"
-    },
-    {
-        "space_type_name": "confinement cells",
-        "lighting_space_type_name": "confinement_cells",
-        "ventilation_space_type_name": "correctional_facilities_cell",
-        "electric_equipment_space_type_name": "confinement cells"
-    },
-    {
-        "space_type_name": "exhibit - convention center",
-        "lighting_space_type_name": "exhibit_convention_center",
-        "ventilation_space_type_name": "public_assembly_spaces_museums_galleries",
-        "electric_equipment_space_type_name": "exhibit - convention center"
-    },
-    {
-        "space_type_name": "copy/print",
-        "lighting_space_type_name": "copy_print",
-        "ventilation_space_type_name": "office_buildings_telephone_data_entry",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "corridor for visually impaired",
-        "lighting_space_type_name": "corridor_visually_impaired",
-        "ventilation_space_type_name": "general_conference_corridors",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "corridor - hospital",
-        "lighting_space_type_name": "corridor_hospital",
-        "ventilation_space_type_name": "general_conference_corridors",
-        "electric_equipment_space_type_name": "corridor - hospital"
-    },
-    {
-        "space_type_name": "corridor - manufacturing facility",
-        "lighting_space_type_name": "corridor_manufacturing_facility",
-        "ventilation_space_type_name": "general_conference_corridors",
-        "electric_equipment_space_type_name": "corridor - manufacturing facility"
-    },
-    {
-        "space_type_name": "corridor - all other",
-        "lighting_space_type_name": "corridor_general",
-        "ventilation_space_type_name": "general_conference_corridors",
-        "electric_equipment_space_type_name": "corridor - all other"
-    },
-    {
-        "space_type_name": "courtroom",
-        "lighting_space_type_name": "courtroom",
-        "ventilation_space_type_name": "public_assembly_spaces_courtrooms",
-        "electric_equipment_space_type_name": "courtroom"
-    },
-    {
-        "space_type_name": "dining - all other",
-        "lighting_space_type_name": "dining_general",
-        "ventilation_space_type_name": "food_beverage_service_restaurant_dining_rooms",
-        "electric_equipment_space_type_name": "dining - all other"
-    },
-    {
-        "space_type_name": "dining - bar/lounge/leisure",
-        "lighting_space_type_name": "dining_bar_lounge_leisure",
-        "ventilation_space_type_name": "food_beverage_service_bars_cocktail_lounges",
-        "electric_equipment_space_type_name": "dining - bar/lounge/leisure"
-    },
-    {
-        "space_type_name": "dining - cafeteria/fast food",
-        "lighting_space_type_name": "dining_cafeteria_fast_food",
-        "ventilation_space_type_name": "food_beverage_service_cafeteria_fast_food_dining",
-        "electric_equipment_space_type_name": "dining - cafeteria/fast food"
-    },
-    {
-        "space_type_name": "dining for visually impaired",
-        "lighting_space_type_name": "dining_visually_impaired",
-        "ventilation_space_type_name": "food_beverage_service_restaurant_dining_rooms",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "dining - family",
-        "lighting_space_type_name": "dining_family",
-        "ventilation_space_type_name": "food_beverage_service_restaurant_dining_rooms",
-        "electric_equipment_space_type_name": "dining - family"
-    },
-    {
-        "space_type_name": "dining - penitentiary",
-        "lighting_space_type_name": "dining_penitentiary",
-        "ventilation_space_type_name": "food_beverage_service_restaurant_dining_rooms",
-        "electric_equipment_space_type_name": "dining - penitentiary"
-    },
-    {
-        "space_type_name": "dining - hotel",
-        "lighting_space_type_name": "dining_hotel",
-        "ventilation_space_type_name": "food_beverage_service_restaurant_dining_rooms",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "dining - motel",
-        "lighting_space_type_name": "dining_motel",
-        "ventilation_space_type_name": "food_beverage_service_restaurant_dining_rooms",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "dormitory - living quarters",
-        "lighting_space_type_name": "dormitory_living_quarters",
-        "ventilation_space_type_name": "hotels_motels_resorts_dormitories_bedroom_living_room",
-        "electric_equipment_space_type_name": "dormitory - living quarters"
-    },
-    {
-        "space_type_name": "electrical/mechanical",
-        "lighting_space_type_name": "electrical_mechanical",
-        "ventilation_space_type_name": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
-        "electric_equipment_space_type_name": "electrical/mechanical"
-    },
-    {
-        "space_type_name": "emergency vehicle garage",
-        "lighting_space_type_name": "emergency_vehicle_garage",
-        "ventilation_space_type_name": "miscellaneous_spaces_transportation_waiting",
-        "electric_equipment_space_type_name": "emergency vehicle garage"
-    },
-    {
-        "space_type_name": "firestation - sleeping quarters",
-        "lighting_space_type_name": "firestation_sleeping_quarters",
-        "ventilation_space_type_name": "hotels_motels_resorts_dormitories_barracks_sleeping_areas",
-        "electric_equipment_space_type_name": "firestation - sleeping quarters"
-    },
-    {
-        "space_type_name": "kitchen",
-        "lighting_space_type_name": "kitchen",
-        "ventilation_space_type_name": "food_beverage_service_kitchen",
-        "electric_equipment_space_type_name": "kitchen"
-    },
-    {
-        "space_type_name": "guest room",
-        "lighting_space_type_name": "guest_room",
-        "ventilation_space_type_name": "hotels_motels_resorts_dormitories_barracks_sleeping_areas",
-        "electric_equipment_space_type_name": "guest room"
-    },
-    {
-        "space_type_name": "gymnasium exercise area",
-        "lighting_space_type_name": "gymnasium_exercise_area",
-        "ventilation_space_type_name": "sports_entertainment_gym_stadium",
-        "electric_equipment_space_type_name": "gymnasium exercise area"
-    },
-    {
-        "space_type_name": "gymnasium playing area",
-        "lighting_space_type_name": "gymnasium_playing_area",
-        "ventilation_space_type_name": "sports_entertainment_gym_stadium",
-        "electric_equipment_space_type_name": "gymnasium playing area"
-    },
-    {
-        "space_type_name": "emergency room",
-        "lighting_space_type_name": "emergency_room",
-        "ventilation_space_type_name": "outpatient_health_care_facilities_general_examination_room",
-        "electric_equipment_space_type_name": "emergency room"
-    },
-    {
-        "space_type_name": "exam/treatment",
-        "lighting_space_type_name": "exam_treatment",
-        "ventilation_space_type_name": "outpatient_health_care_facilities_general_examination_room",
-        "electric_equipment_space_type_name": "exam/treatment"
-    },
-    {
-        "space_type_name": "imaging",
-        "lighting_space_type_name": "imaging",
-        "ventilation_space_type_name": "outpatient_health_care_facilities_class_1_imaging_rooms",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "medical supply",
-        "lighting_space_type_name": "medical_supply",
-        "ventilation_space_type_name": "miscellaneous_spaces_pharmacy",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "nursery",
-        "lighting_space_type_name": "nursery",
-        "ventilation_space_type_name": "outpatient_health_care_facilities_psychiatric_consultation_room",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "nurses station",
-        "lighting_space_type_name": "nurses_station",
-        "ventilation_space_type_name": "outpatient_health_care_facilities_psychiatric_consultation_room",
-        "electric_equipment_space_type_name": "nurses station"
-    },
-    {
-        "space_type_name": "operating room",
-        "lighting_space_type_name": "operating_room",
-        "ventilation_space_type_name": "outpatient_health_care_facilities_general_examination_room",
-        "electric_equipment_space_type_name": "operating room"
-    },
-    {
-        "space_type_name": "patient room",
-        "lighting_space_type_name": "patient_room",
-        "ventilation_space_type_name": "outpatient_health_care_facilities_physical_therapy_individual_room",
-        "electric_equipment_space_type_name": "patient room"
-    },
-    {
-        "space_type_name": "physical therapy",
-        "lighting_space_type_name": "physical_therapy",
-        "ventilation_space_type_name": "outpatient_health_care_facilities_physical_therapy_exercise_area",
-        "electric_equipment_space_type_name": "physical therapy"
-    },
-    {
-        "space_type_name": "recovery",
-        "lighting_space_type_name": "recovery",
-        "ventilation_space_type_name": "outpatient_health_care_facilities_urgent_care_examination_room",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "judges chambers",
-        "lighting_space_type_name": "judges_chambers",
-        "ventilation_space_type_name": "public_assembly_spaces_legislative_chambers",
-        "electric_equipment_space_type_name": "judges chambers"
-    },
-    {
-        "space_type_name": "laboratory",
-        "lighting_space_type_name": "laboratory_all_other",
-        "ventilation_space_type_name": "educational_facilities_science_laboratories",
-        "electric_equipment_space_type_name": "laboratory"
-    },
-    {
-        "space_type_name": "library - reading",
-        "lighting_space_type_name": "library_reading",
-        "ventilation_space_type_name": "public_assembly_spaces_libraries",
-        "electric_equipment_space_type_name": "library - reading"
-    },
-    {
-        "space_type_name": "library - stacks",
-        "lighting_space_type_name": "library_stacks",
-        "ventilation_space_type_name": "public_assembly_spaces_libraries",
-        "electric_equipment_space_type_name": "library - stacks"
-    },
-    {
-        "space_type_name": "library - cataloging",
-        "lighting_space_type_name": "library_cataloging",
-        "ventilation_space_type_name": "public_assembly_spaces_libraries",
-        "electric_equipment_space_type_name": "library - cataloging"
-    },
-    {
-        "space_type_name": "loading dock",
-        "lighting_space_type_name": "loading_dock",
-        "ventilation_space_type_name": "miscellaneous_spaces_sorting_packing_light_assembly",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "lobby - all other",
-        "lighting_space_type_name": "lobby_general",
-        "ventilation_space_type_name": "public_assembly_spaces_lobbies",
-        "electric_equipment_space_type_name": "lobby - all other"
-    },
-    {
-        "space_type_name": "lobby - elevator",
-        "lighting_space_type_name": "lobby_elevator",
-        "ventilation_space_type_name": "public_assembly_spaces_lobbies",
-        "electric_equipment_space_type_name": "lobby - elevator"
-    },
-    {
-        "space_type_name": "lobby for visually impaired",
-        "lighting_space_type_name": "lobby_visually_impaired",
-        "ventilation_space_type_name": "public_assembly_spaces_lobbies",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "lobby - hotel",
-        "lighting_space_type_name": "lobby_hotel",
-        "ventilation_space_type_name": "hotels_motels_resorts_dormitories_lobbies_prefunction",
-        "electric_equipment_space_type_name": "lobby - hotel"
-    },
-    {
-        "space_type_name": "lobby - motion picture theater",
-        "lighting_space_type_name": "lobby_motion_picture_theater",
-        "ventilation_space_type_name": "public_assembly_spaces_lobbies",
-        "electric_equipment_space_type_name": "lobby - motion picture theater"
-    },
-    {
-        "space_type_name": "lobby - performing arts theater",
-        "lighting_space_type_name": "lobby_performing_arts_theater",
-        "ventilation_space_type_name": "public_assembly_spaces_lobbies",
-        "electric_equipment_space_type_name": "lobby - performing arts theater"
-    },
-    {
-        "space_type_name": "locker room",
-        "lighting_space_type_name": "locker_room",
-        "ventilation_space_type_name": "general_break_rooms",
-        "electric_equipment_space_type_name": "locker room"
-    },
-    {
-        "space_type_name": "lounge/breakroom - all other",
-        "lighting_space_type_name": "lounge_breakroom_general",
-        "ventilation_space_type_name": "general_break_rooms",
-        "electric_equipment_space_type_name": "lounge/breakroom - all other"
-    },
-    {
-        "space_type_name": "lounge/breakroom - healthcare facility",
-        "lighting_space_type_name": "lounge_breakroom_healthcare_facility",
-        "ventilation_space_type_name": "general_break_rooms",
-        "electric_equipment_space_type_name": "lounge/breakroom - healthcare facility"
-    },
-    {
-        "space_type_name": "laundry/washing",
-        "lighting_space_type_name": "laundry_washing",
-        "ventilation_space_type_name": "hotels_motels_resorts_dormitories_laundry_rooms",
-        "electric_equipment_space_type_name": "laundry/washing"
-    },
-    {
-        "space_type_name": "detailed manufacuring",
-        "lighting_space_type_name": "detailed_manufacuring",
-        "ventilation_space_type_name": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "manufacturing equipment room",
-        "lighting_space_type_name": "manufacturing_equipment_room",
-        "ventilation_space_type_name": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
-        "electric_equipment_space_type_name": "manufacturing equipment room"
-    },
-    {
-        "space_type_name": "manufacturing extra high bay",
-        "lighting_space_type_name": "manufacturing_extra_high_bay",
-        "ventilation_space_type_name": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "manufacturing high bay",
-        "lighting_space_type_name": "manufacturing_high_bay",
-        "ventilation_space_type_name": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "manufacturing low bay",
-        "lighting_space_type_name": "manufacturing_low_bay",
-        "ventilation_space_type_name": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
-        "electric_equipment_space_type_name": "manufacturing low bay"
-    },
-    {
-        "space_type_name": "manufacturing control",
-        "lighting_space_type_name": "manufacturing_control",
-        "ventilation_space_type_name": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "museum exhibit area",
-        "lighting_space_type_name": "museum_exhibit_area",
-        "ventilation_space_type_name": "public_assembly_spaces_museums_galleries",
-        "electric_equipment_space_type_name": "museum exhibit area"
-    },
-    {
-        "space_type_name": "museum restoration",
-        "lighting_space_type_name": "museum_restoration",
-        "ventilation_space_type_name": "public_assembly_spaces_museums_galleries",
-        "electric_equipment_space_type_name": "museum restoration"
-    },
-    {
-        "space_type_name": "performing arts dressing room",
-        "lighting_space_type_name": "performing_arts_dressing_room",
-        "ventilation_space_type_name": "retail_mall_common_areas",
-        "electric_equipment_space_type_name": "performing arts dressing room"
-    },
-    {
-        "space_type_name": "office - enclosed <= 250 sf",
-        "lighting_space_type_name": "office_enclosed_small",
-        "ventilation_space_type_name": "office_buildings_office_space",
-        "electric_equipment_space_type_name": "office - enclosed <= 250 sf"
-    },
-    {
-        "space_type_name": "office - enclosed > 250 sf",
-        "lighting_space_type_name": "office_enclosed_large",
-        "ventilation_space_type_name": "office_buildings_office_space",
-        "electric_equipment_space_type_name": "office - enclosed > 250 sf"
-    },
-    {
-        "space_type_name": "office - open",
-        "lighting_space_type_name": "office_open",
-        "ventilation_space_type_name": "office_buildings_office_space",
-        "electric_equipment_space_type_name": "office - open"
-    },
-    {
-        "space_type_name": "parking area, interior",
-        "lighting_space_type_name": "parking_area_interior",
-        "ventilation_space_type_name": "miscellaneous_spaces_transportation_waiting",
-        "electric_equipment_space_type_name": "parking area, interior"
-    },
-    {
-        "space_type_name": "pharmacy",
-        "lighting_space_type_name": "pharmacy",
-        "ventilation_space_type_name": "miscellaneous_spaces_pharmacy",
-        "electric_equipment_space_type_name": "pharmacy"
-    },
-    {
-        "space_type_name": "post office - sorting area",
-        "lighting_space_type_name": "post_office_sorting_area",
-        "ventilation_space_type_name": "miscellaneous_spaces_sorting_packing_light_assembly",
-        "electric_equipment_space_type_name": "post office - sorting area"
-    },
-    {
-        "space_type_name": "fellowship hall - religious facility",
-        "lighting_space_type_name": "fellowship_hall_religious_facility",
-        "ventilation_space_type_name": "public_assembly_spaces_religious_workshop",
-        "electric_equipment_space_type_name": "fellowship hall - religious facility"
-    },
-    {
-        "space_type_name": "worship/pulpit/choir area",
-        "lighting_space_type_name": "worship_pulpit_choir_area",
-        "ventilation_space_type_name": "public_assembly_spaces_religious_workshop",
-        "electric_equipment_space_type_name": "worship/pulpit/choir area"
-    },
-    {
-        "space_type_name": "restroom - all other",
-        "lighting_space_type_name": "restroom_all_other",
-        "ventilation_space_type_name": null,
-        "electric_equipment_space_type_name": "restroom - all other"
-    },
-    {
-        "space_type_name": "restroom - visually impaired",
-        "lighting_space_type_name": "restroom_visually_impaired",
-        "ventilation_space_type_name": null,
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "retail dressing room",
-        "lighting_space_type_name": "retail_dressing_room",
-        "ventilation_space_type_name": "retail_mall_common_areas",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "retail mall concourse",
-        "lighting_space_type_name": "retail_mall_concourse",
-        "ventilation_space_type_name": "retail_mall_common_areas",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "seating area, general",
-        "lighting_space_type_name": "seating_area_general",
-        "ventilation_space_type_name": "public_assembly_spaces_auditorium_seating_area",
-        "electric_equipment_space_type_name": "seating area, general"
-    },
-    {
-        "space_type_name": "sports arena playing area, class I",
-        "lighting_space_type_name": "sports_arena_playing_area_class_I",
-        "ventilation_space_type_name": "sports_entertainment_sports_arena",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "sports arena playing area, class II",
-        "lighting_space_type_name": "sports_arena_playing_area_class_II",
-        "ventilation_space_type_name": "sports_entertainment_sports_arena",
-        "electric_equipment_space_type_name": "sports arena playing area, class II"
-    },
-    {
-        "space_type_name": "sports arena playing area, class III",
-        "lighting_space_type_name": "sports_arena_playing_area_class_III",
-        "ventilation_space_type_name": "sports_entertainment_sports_arena",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "sports arena playing area, class IV",
-        "lighting_space_type_name": "sports_arena_playing_area_class_IV",
-        "ventilation_space_type_name": "sports_entertainment_sports_arena",
-        "electric_equipment_space_type_name": "sports arena playing area, class IV"
-    },
-    {
-        "space_type_name": "sports arena - ring sports area",
-        "lighting_space_type_name": "sports_arena_ring_sports_area",
-        "ventilation_space_type_name": "sports_entertainment_sports_arena",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "sports arena - court sports area",
-        "lighting_space_type_name": "sports_arena_court_sports_area",
-        "ventilation_space_type_name": "sports_entertainment_sports_arena",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "sports arena - indoor playing field",
-        "lighting_space_type_name": "sports_arena_indoor_playing_field",
-        "ventilation_space_type_name": "sports_entertainment_sports_arena",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "stairwell",
-        "lighting_space_type_name": "stairwell",
-        "ventilation_space_type_name": "general_conference_corridors",
-        "electric_equipment_space_type_name": "stairwell"
-    },
-    {
-        "space_type_name": "storage < 50 sf - all other",
-        "lighting_space_type_name": "storage_ all_other_small",
-        "ventilation_space_type_name": "general_conference_storage_rooms",
-        "electric_equipment_space_type_name": "storage < 50 sf - all other"
-    },
-    {
-        "space_type_name": "storage 50 to 1000 sf - all other",
-        "lighting_space_type_name": "storage_ all_other_large",
-        "ventilation_space_type_name": "general_conference_storage_rooms",
-        "electric_equipment_space_type_name": "storage 50 to 1000 sf - all other"
-    },
-    {
-        "space_type_name": "storage < 50 sf - hospital",
-        "lighting_space_type_name": "storage_hospital_small",
-        "ventilation_space_type_name": "general_conference_storage_rooms",
-        "electric_equipment_space_type_name": "storage < 50 sf - hospital"
-    },
-    {
-        "space_type_name": "storage 50 to 1000 sf - hospital",
-        "lighting_space_type_name": "storage_hospital_large",
-        "ventilation_space_type_name": "general_conference_storage_rooms",
-        "electric_equipment_space_type_name": "storage 50 to 1000 sf - hospital"
-    },
-    {
-        "space_type_name": "storage - inactive",
-        "lighting_space_type_name": "storage_inactive",
-        "ventilation_space_type_name": "general_conference_storage_rooms",
-        "electric_equipment_space_type_name": "storage - inactive"
-    },
-    {
-        "space_type_name": "storage, inactive - museum",
-        "lighting_space_type_name": "storage_inactive_museum",
-        "ventilation_space_type_name": "general_conference_storage_rooms",
-        "electric_equipment_space_type_name": null
-    },
-    {
         "space_type_name": "airport concourse",
-        "lighting_space_type_name": "airport_concourse",
-        "ventilation_space_type_name": "office_buildings_reception_areas",
-        "electric_equipment_space_type_name": "airport concourse"
+        "lighting_space_type_name": "airport_concourse_lighting",
+        "ventilation_space_type_name": "airport_concourse_ventilation",
+        "electric_equipment_space_type_name": "airport_concourse_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "airport_concourse"
+    },
+    {
+        "space_type_name": "atrium",
+        "lighting_space_type_name": "atrium_lighting",
+        "ventilation_space_type_name": "atrium_ventilation",
+        "electric_equipment_space_type_name": "atrium_lt_20_ft_height_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "atrium_lt_20_ft_height"
+    },
+    {
+        "space_type_name": "attic",
+        "lighting_space_type_name": "none_lighting",
+        "ventilation_space_type_name": "attic_ventilation",
+        "electric_equipment_space_type_name": "attic_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "attic"
+    },
+    {
+        "space_type_name": "audience seating",
+        "lighting_space_type_name": "audience_seating_lighting",
+        "ventilation_space_type_name": "audience_seating_ventilation",
+        "electric_equipment_space_type_name": "audience_seating_all_other_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "audience_seating_all_other"
     },
     {
         "space_type_name": "baggage/carousel",
-        "lighting_space_type_name": "baggage_carousel",
-        "ventilation_space_type_name": "office_buildings_reception_areas",
-        "electric_equipment_space_type_name": "baggage/carousel"
+        "lighting_space_type_name": "baggage_carousel_lighting",
+        "ventilation_space_type_name": "baggage_carousel_ventilation",
+        "electric_equipment_space_type_name": "baggage_carousel_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "baggage_carousel"
     },
     {
-        "space_type_name": "transportation ticket counter",
-        "lighting_space_type_name": "transportation_ticket_counter",
-        "ventilation_space_type_name": "office_buildings_reception_areas",
-        "electric_equipment_space_type_name": "transportation ticket counter"
+        "space_type_name": "banking",
+        "lighting_space_type_name": "banking_lighting",
+        "ventilation_space_type_name": "banking_ventilation",
+        "electric_equipment_space_type_name": "banking_activity_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "banking_activity"
+    },
+    {
+        "space_type_name": "classroom/lecture/training",
+        "lighting_space_type_name": "classroom_lecture_training_lighting",
+        "ventilation_space_type_name": "classroom_lecture_training_ventilation",
+        "electric_equipment_space_type_name": "classroom_lecture_training_all_other_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "classroom_lecture_training_all_other"
+    },
+    {
+        "space_type_name": "computer room",
+        "lighting_space_type_name": "computer_room_lighting",
+        "ventilation_space_type_name": "computer_room_ventilation",
+        "electric_equipment_space_type_name": "computer_room_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "computer_room"
+    },
+    {
+        "space_type_name": "conference/meeting/multipurpose",
+        "lighting_space_type_name": "conference_meeting_multipurpose_lighting",
+        "ventilation_space_type_name": "conference_meeting_multipurpose_ventilation",
+        "electric_equipment_space_type_name": "conference_meeting_multipurpose_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "conference_meeting_multipurpose"
+    },
+    {
+        "space_type_name": "confinement cells",
+        "lighting_space_type_name": "confinement_cells_lighting",
+        "ventilation_space_type_name": "confinement_cells_ventilation",
+        "electric_equipment_space_type_name": "confinement_cells_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "confinement_cells"
+    },
+    {
+        "space_type_name": "copy/print",
+        "lighting_space_type_name": "copy_print_lighting",
+        "ventilation_space_type_name": "copy_print_ventilation",
+        "electric_equipment_space_type_name": null,
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": null
+    },
+    {
+        "space_type_name": "corridor",
+        "lighting_space_type_name": "corridor_lighting",
+        "ventilation_space_type_name": "corridor_ventilation",
+        "electric_equipment_space_type_name": "corridor_all_other_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "corridor_all_other"
+    },
+    {
+        "space_type_name": "courtroom",
+        "lighting_space_type_name": "courtroom_lighting",
+        "ventilation_space_type_name": "courtroom_ventilation",
+        "electric_equipment_space_type_name": "courtroom_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "courtroom"
+    },
+    {
+        "space_type_name": "datacenterHighITE",
+        "lighting_space_type_name": "datacenterhighite_lighting",
+        "ventilation_space_type_name": "datacenterhighite_ventilation",
+        "electric_equipment_space_type_name": null,
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": null
+    },
+    {
+        "space_type_name": "datacenterLowITE",
+        "lighting_space_type_name": "datacenterlowite_lighting",
+        "ventilation_space_type_name": "datacenterlowite_ventilation",
+        "electric_equipment_space_type_name": null,
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": null
+    },
+    {
+        "space_type_name": "dining",
+        "lighting_space_type_name": "dining_lighting",
+        "ventilation_space_type_name": "dining_ventilation",
+        "electric_equipment_space_type_name": "dining_all_other_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "dining_all_other"
+    },
+    {
+        "space_type_name": "dressing room",
+        "lighting_space_type_name": "dressing_room_lighting",
+        "ventilation_space_type_name": "dressing_room_ventilation",
+        "electric_equipment_space_type_name": "performing_arts_dressing_room_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "performing_arts_dressing_room"
+    },
+    {
+        "space_type_name": "electrical/mechanical",
+        "lighting_space_type_name": "electrical_mechanical_lighting",
+        "ventilation_space_type_name": "electrical_mechanical_ventilation",
+        "electric_equipment_space_type_name": "electrical_mechanical_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "electrical_mechanical"
+    },
+    {
+        "space_type_name": "emergency room",
+        "lighting_space_type_name": "emergency_room_lighting",
+        "ventilation_space_type_name": "emergency_room_ventilation",
+        "electric_equipment_space_type_name": "emergency_room_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "emergency_room"
+    },
+    {
+        "space_type_name": "emergency vehicle garage",
+        "lighting_space_type_name": "emergency_vehicle_garage_lighting",
+        "ventilation_space_type_name": "emergency_vehicle_garage_ventilation",
+        "electric_equipment_space_type_name": "emergency_vehicle_garage_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "emergency_vehicle_garage"
+    },
+    {
+        "space_type_name": "exam/treatment",
+        "lighting_space_type_name": "exam_treatment_lighting",
+        "ventilation_space_type_name": "exam_treatment_ventilation",
+        "electric_equipment_space_type_name": "exam_treatment_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "exam_treatment"
+    },
+    {
+        "space_type_name": "exercise area",
+        "lighting_space_type_name": "exercise_area_lighting",
+        "ventilation_space_type_name": "exercise_area_ventilation",
+        "electric_equipment_space_type_name": "gymnasium_exercise_area_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "gymnasium_exercise_area"
+    },
+    {
+        "space_type_name": "exhibit",
+        "lighting_space_type_name": "exhibit_lighting",
+        "ventilation_space_type_name": "exhibit_ventilation",
+        "electric_equipment_space_type_name": "museum_exhibit_area_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "museum_exhibit_area"
+    },
+    {
+        "space_type_name": "guest room",
+        "lighting_space_type_name": "guest_room_lighting",
+        "ventilation_space_type_name": "guest_room_ventilation",
+        "electric_equipment_space_type_name": "guest_room_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "guest_room"
+    },
+    {
+        "space_type_name": "imaging",
+        "lighting_space_type_name": "imaging_lighting",
+        "ventilation_space_type_name": "imaging_ventilation",
+        "electric_equipment_space_type_name": null,
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": null
+    },
+    {
+        "space_type_name": "interior parking",
+        "lighting_space_type_name": "interior_parking_lighting",
+        "ventilation_space_type_name": "interior_parking_ventilation",
+        "electric_equipment_space_type_name": "parking_area_interior_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "parking_area_interior"
+    },
+    {
+        "space_type_name": "judges chambers",
+        "lighting_space_type_name": "judges_chambers_lighting",
+        "ventilation_space_type_name": "judges_chambers_ventilation",
+        "electric_equipment_space_type_name": "judges_chambers_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "judges_chambers"
+    },
+    {
+        "space_type_name": "food preparation",
+        "lighting_space_type_name": "food_preparation_lighting",
+        "ventilation_space_type_name": "food_preparation_ventilation",
+        "electric_equipment_space_type_name": "kitchen_electric_equipment",
+        "natural_gas_equipment_space_type_name": "kitchen",
+        "schedule_set_name": "kitchen"
+    },
+    {
+        "space_type_name": "laboratory",
+        "lighting_space_type_name": "laboratory_lighting",
+        "ventilation_space_type_name": "laboratory_ventilation",
+        "electric_equipment_space_type_name": "laboratory_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "laboratory"
+    },
+    {
+        "space_type_name": "laundry/washing",
+        "lighting_space_type_name": "laundry_washing_lighting",
+        "ventilation_space_type_name": "laundry_washing_ventilation",
+        "electric_equipment_space_type_name": "laundry_washing_electric_equipment",
+        "natural_gas_equipment_space_type_name": "laundry",
+        "schedule_set_name": "laundry_washing"
+    },
+    {
+        "space_type_name": "library",
+        "lighting_space_type_name": "library_lighting",
+        "ventilation_space_type_name": "library_ventilation",
+        "electric_equipment_space_type_name": "library_stacks_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "library_stacks"
+    },
+    {
+        "space_type_name": "living quarters",
+        "lighting_space_type_name": "living_quarters_lighting",
+        "ventilation_space_type_name": "living_quarters_ventilation",
+        "electric_equipment_space_type_name": "dormitory_living_quarters_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "dormitory_living_quarters"
+    },
+    {
+        "space_type_name": "loading dock",
+        "lighting_space_type_name": "loading_dock_lighting",
+        "ventilation_space_type_name": "loading_dock_ventilation",
+        "electric_equipment_space_type_name": null,
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": null
+    },
+    {
+        "space_type_name": "lobby",
+        "lighting_space_type_name": "lobby_lighting",
+        "ventilation_space_type_name": "lobby_ventilation",
+        "electric_equipment_space_type_name": "lobby_all_other_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "lobby_all_other"
+    },
+    {
+        "space_type_name": "locker room",
+        "lighting_space_type_name": "locker_room_lighting",
+        "ventilation_space_type_name": "locker_room_ventilation",
+        "electric_equipment_space_type_name": "locker_room_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "locker_room"
+    },
+    {
+        "space_type_name": "lounge/breakroom",
+        "lighting_space_type_name": "lounge_breakroom_lighting",
+        "ventilation_space_type_name": "lounge_breakroom_ventilation",
+        "electric_equipment_space_type_name": "lounge_breakroom_all_other_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "lounge_breakroom_all_other"
+    },
+    {
+        "space_type_name": "manufacturing",
+        "lighting_space_type_name": "manufacturing_lighting",
+        "ventilation_space_type_name": "manufacturing_ventilation",
+        "electric_equipment_space_type_name": "manufacturing_low_bay_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "manufacturing_low_bay"
+    },
+    {
+        "space_type_name": "medical supply",
+        "lighting_space_type_name": "medical_supply_lighting",
+        "ventilation_space_type_name": "medical_supply_ventilation",
+        "electric_equipment_space_type_name": "pharmacy_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "pharmacy"
+    },
+    {
+        "space_type_name": "multifamily",
+        "lighting_space_type_name": "multifamily_lighting",
+        "ventilation_space_type_name": "multifamily_ventilation",
+        "electric_equipment_space_type_name": null,
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": null
+    },
+    {
+        "space_type_name": "nursery",
+        "lighting_space_type_name": "nursery_lighting",
+        "ventilation_space_type_name": "nursery_ventilation",
+        "electric_equipment_space_type_name": "patient_room_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "patient_room"
+    },
+    {
+        "space_type_name": "nurses station",
+        "lighting_space_type_name": "nurses_station_lighting",
+        "ventilation_space_type_name": "nurses_station_ventilation",
+        "electric_equipment_space_type_name": "nurses_station_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "nurses_station"
+    },
+    {
+        "space_type_name": "office",
+        "lighting_space_type_name": "office_lighting",
+        "ventilation_space_type_name": "office_ventilation",
+        "electric_equipment_space_type_name": "office_open_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "office_open"
+    },
+    {
+        "space_type_name": "office, enclosed",
+        "lighting_space_type_name": "office_enclosed_lighting",
+        "ventilation_space_type_name": "office_enclosed_ventilation",
+        "electric_equipment_space_type_name": "office_enclosed_lte_250_sf_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "office_enclosed_lte_250_sf"
+    },
+    {
+        "space_type_name": "operating room",
+        "lighting_space_type_name": "operating_room_lighting",
+        "ventilation_space_type_name": "operating_room_ventilation",
+        "electric_equipment_space_type_name": "operating_room_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "operating_room"
+    },
+    {
+        "space_type_name": "patient room",
+        "lighting_space_type_name": "patient_room_lighting",
+        "ventilation_space_type_name": "patient_room_ventilation",
+        "electric_equipment_space_type_name": "patient_room_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "patient_room"
+    },
+    {
+        "space_type_name": "pharmacy",
+        "lighting_space_type_name": "pharmacy_lighting",
+        "ventilation_space_type_name": "pharmacy_ventilation",
+        "electric_equipment_space_type_name": "pharmacy_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "pharmacy"
+    },
+    {
+        "space_type_name": "physical therapy",
+        "lighting_space_type_name": "physical_therapy_lighting",
+        "ventilation_space_type_name": "physical_therapy_ventilation",
+        "electric_equipment_space_type_name": "physical_therapy_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "physical_therapy"
+    },
+    {
+        "space_type_name": "playing area",
+        "lighting_space_type_name": "playing_area_lighting",
+        "ventilation_space_type_name": "playing_area_ventilation",
+        "electric_equipment_space_type_name": "gymnasium_playing_area_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "gymnasium_playing_area"
+    },
+    {
+        "space_type_name": "plenum",
+        "lighting_space_type_name": "none_lighting",
+        "ventilation_space_type_name": "plenum_ventilation",
+        "electric_equipment_space_type_name": "plenum_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "plenum"
+    },
+    {
+        "space_type_name": "post office",
+        "lighting_space_type_name": "post_office_lighting",
+        "ventilation_space_type_name": "post_office_ventilation",
+        "electric_equipment_space_type_name": "post_office_sorting_area_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "post_office_sorting_area"
+    },
+    {
+        "space_type_name": "recovery",
+        "lighting_space_type_name": "recovery_lighting",
+        "ventilation_space_type_name": "recovery_ventilation",
+        "electric_equipment_space_type_name": "patient_room_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "patient_room"
+    },
+    {
+        "space_type_name": "recreation/common living",
+        "lighting_space_type_name": "recreation_common_living_lighting",
+        "ventilation_space_type_name": "recreation_common_living_ventilation",
+        "electric_equipment_space_type_name": "lounge_breakroom_all_other_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "lounge_breakroom_all_other"
+    },
+    {
+        "space_type_name": "restroom",
+        "lighting_space_type_name": "restroom_lighting",
+        "ventilation_space_type_name": "restroom_ventilation",
+        "electric_equipment_space_type_name": "restroom_all_other_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "restroom_all_other"
+    },
+    {
+        "space_type_name": "retail",
+        "lighting_space_type_name": "retail_sales_lighting",
+        "ventilation_space_type_name": "retail_sales_ventilation",
+        "electric_equipment_space_type_name": "sales_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "sales"
+    },
+    {
+        "space_type_name": "shaft",
+        "lighting_space_type_name": "none_lighting",
+        "ventilation_space_type_name": "shaft_ventilation",
+        "electric_equipment_space_type_name": "shaft_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "shaft"
+    },
+    {
+        "space_type_name": "sleeping quarters",
+        "lighting_space_type_name": "sleeping_quarters_lighting",
+        "ventilation_space_type_name": "sleeping_quarters_ventilation",
+        "electric_equipment_space_type_name": "firestation_sleeping_quarters_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "firestation_sleeping_quarters"
+    },
+    {
+        "space_type_name": "sports arena",
+        "lighting_space_type_name": "sports_arena_lighting",
+        "ventilation_space_type_name": "sports_arena_ventilation",
+        "electric_equipment_space_type_name": "sports_arena_playing_area_class_ii_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "sports_arena_playing_area_class_ii"
+    },
+    {
+        "space_type_name": "stairwell",
+        "lighting_space_type_name": "stairwell_lighting",
+        "ventilation_space_type_name": "stairwell_ventilation",
+        "electric_equipment_space_type_name": "stairwell_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "stairwell"
+    },
+    {
+        "space_type_name": "storage",
+        "lighting_space_type_name": "storage_lighting",
+        "ventilation_space_type_name": "storage_ventilation",
+        "electric_equipment_space_type_name": "storage_50_to_1000_sf_all_other_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "storage_50_to_1000_sf_all_other"
+    },
+    {
+        "space_type_name": "transportation",
+        "lighting_space_type_name": "transportation_lighting",
+        "ventilation_space_type_name": "transportation_ventilation",
+        "electric_equipment_space_type_name": "transportation_ticket_counter_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "transportation_ticket_counter"
     },
     {
         "space_type_name": "vehicular maintenance",
-        "lighting_space_type_name": "vehicular_maintenance",
-        "ventilation_space_type_name": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
-        "electric_equipment_space_type_name": "vehicular maintenance"
-    },
-    {
-        "space_type_name": "warehouse - bulk storage",
-        "lighting_space_type_name": "warehouse_bulk_storage",
-        "ventilation_space_type_name": "miscellaneous_spaces_warehouses",
-        "electric_equipment_space_type_name": "warehouse - bulk storage"
-    },
-    {
-        "space_type_name": "warehouse - fine storage",
-        "lighting_space_type_name": "warehouse_fine_storage",
-        "ventilation_space_type_name": "miscellaneous_spaces_warehouses",
-        "electric_equipment_space_type_name": "warehouse - fine storage"
+        "lighting_space_type_name": "vehicular_maintenance_lighting",
+        "ventilation_space_type_name": "vehicular_maintenance_ventilation",
+        "electric_equipment_space_type_name": "vehicular_maintenance_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "vehicular_maintenance"
     },
     {
         "space_type_name": "workshop",
-        "lighting_space_type_name": "workshop",
-        "ventilation_space_type_name": "miscellaneous_spaces_manufacturing_wo_hazardous_materials",
-        "electric_equipment_space_type_name": "workshop"
+        "lighting_space_type_name": "workshop_lighting",
+        "ventilation_space_type_name": "workshop_ventilation",
+        "electric_equipment_space_type_name": "workshop_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "workshop"
     },
     {
-        "space_type_name": "sales",
-        "lighting_space_type_name": "sales",
-        "ventilation_space_type_name": "retail_sales",
-        "electric_equipment_space_type_name": "sales"
-    },
-    {
-        "space_type_name": "sales - display type 1",
-        "lighting_space_type_name": "sales_display_type_1",
-        "ventilation_space_type_name": "retail_sales",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "sales - display type 2",
-        "lighting_space_type_name": "sales_display_type_2",
-        "ventilation_space_type_name": "retail_sales",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "sales - display type 3",
-        "lighting_space_type_name": "sales_display_type_3",
-        "ventilation_space_type_name": "retail_sales",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "sales - display type 4",
-        "lighting_space_type_name": "sales_display_type_4",
-        "ventilation_space_type_name": "retail_sales",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "guest room - highway",
-        "lighting_space_type_name": "guest_room",
-        "ventilation_space_type_name": "hotels_motels_resorts_dormitories_barracks_sleeping_areas",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "lodging dining - highway",
-        "lighting_space_type_name": "dining_general",
-        "ventilation_space_type_name": "food_beverage_service_restaurant_dining_rooms",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "audience seating - classroom/lecture/training",
-        "lighting_space_type_name": "audience_seating_general",
-        "ventilation_space_type_name": "public_assembly_spaces_auditorium_seating_area",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "audience seating - conference/meeting/multipurpose",
-        "lighting_space_type_name": "audience_seating_general",
-        "ventilation_space_type_name": "public_assembly_spaces_auditorium_seating_area",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "audience seating - corridor/transition",
-        "lighting_space_type_name": "audience_seating_general",
-        "ventilation_space_type_name": "public_assembly_spaces_auditorium_seating_area",
-        "electric_equipment_space_type_name": null
-    },
-    {
-        "space_type_name": "guest room - bathroom",
-        "lighting_space_type_name": "guest_room",
-        "ventilation_space_type_name": "hotels_motels_resorts_dormitories_barracks_sleeping_areas",
-        "electric_equipment_space_type_name": null
+        "space_type_name": "worship",
+        "lighting_space_type_name": "worship_lighting",
+        "ventilation_space_type_name": "worship_ventilation",
+        "electric_equipment_space_type_name": "worship_pulpit_choir_area_electric_equipment",
+        "natural_gas_equipment_space_type_name": null,
+        "schedule_set_name": "worship_pulpit_choir_area"
     }
 ]

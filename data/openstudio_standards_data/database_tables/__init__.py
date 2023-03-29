@@ -41,6 +41,7 @@ __all__ = [
     "support_electric_equipment_space_type_name_tags",
     "support_materials",
     "support_performance_curves",
+    "support_schedules",
     "system_requirement_energy_recovery_90_1",
     "system_requirement_economizer_90_1",
     # tables with foreign keys
