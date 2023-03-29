@@ -1,464 +1,161 @@
 [
     {
-        "support_electric_equipment_space_type_name_tags": "corridor - all other"
+        "support_electric_equipment_space_type_name_tags": "airport_concourse_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "dining - all other"
+        "support_electric_equipment_space_type_name_tags": "atrium_lt_20_ft_height_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "electrical/mechanical"
+        "support_electric_equipment_space_type_name_tags": "attic_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "kitchen"
+        "support_electric_equipment_space_type_name_tags": "audience_seating_all_other_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "laboratory"
+        "support_electric_equipment_space_type_name_tags": "baggage_carousel_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "lobby - all other"
+        "support_electric_equipment_space_type_name_tags": "banking_activity_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "locker room"
+        "support_electric_equipment_space_type_name_tags": "classroom_lecture_training_all_other_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "lounge/breakroom - all other"
+        "support_electric_equipment_space_type_name_tags": "computer_room_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "office - enclosed <= 250 sf"
+        "support_electric_equipment_space_type_name_tags": "conference_meeting_multipurpose_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "office - enclosed > 250 sf"
+        "support_electric_equipment_space_type_name_tags": "confinement_cells_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "office - open"
+        "support_electric_equipment_space_type_name_tags": "corridor_all_other_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "restroom - all other"
+        "support_electric_equipment_space_type_name_tags": "courtroom_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "stairwell"
+        "support_electric_equipment_space_type_name_tags": "dining_all_other_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "storage < 50 sf - all other"
+        "support_electric_equipment_space_type_name_tags": "performing_arts_dressing_room_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "storage 50 to 1000 sf - all other"
+        "support_electric_equipment_space_type_name_tags": "electrical_mechanical_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "vehicular maintenance"
+        "support_electric_equipment_space_type_name_tags": "emergency_room_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "atrium - first three floors"
+        "support_electric_equipment_space_type_name_tags": "emergency_vehicle_garage_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "audience seating - convention center"
+        "support_electric_equipment_space_type_name_tags": "exam_treatment_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "classroom/lecture/training - all other"
+        "support_electric_equipment_space_type_name_tags": "gymnasium_exercise_area_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "conference/meeting/multipurpose"
+        "support_electric_equipment_space_type_name_tags": "museum_exhibit_area_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "exhibit - convention center"
+        "support_electric_equipment_space_type_name_tags": "guest_room_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "gymnasium exercise area"
+        "support_electric_equipment_space_type_name_tags": "parking_area_interior_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "gymnasium playing area"
+        "support_electric_equipment_space_type_name_tags": "judges_chambers_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "laundry/washing"
+        "support_electric_equipment_space_type_name_tags": "kitchen_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "lobby - elevator"
+        "support_electric_equipment_space_type_name_tags": "laboratory_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "nurses station"
+        "support_electric_equipment_space_type_name_tags": "laundry_washing_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "post office - sorting area"
+        "support_electric_equipment_space_type_name_tags": "library_stacks_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "sports arena playing area, class IV"
+        "support_electric_equipment_space_type_name_tags": "dormitory_living_quarters_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "audience seating - all other"
+        "support_electric_equipment_space_type_name_tags": "lobby_all_other_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "confinement cells"
+        "support_electric_equipment_space_type_name_tags": "locker_room_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "judges chambers"
+        "support_electric_equipment_space_type_name_tags": "lounge_breakroom_all_other_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "library - stacks"
+        "support_electric_equipment_space_type_name_tags": "manufacturing_low_bay_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "storage - inactive"
+        "support_electric_equipment_space_type_name_tags": "pharmacy_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "dining - bar/lounge/leisure"
+        "support_electric_equipment_space_type_name_tags": "patient_room_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "dining - cafeteria/fast food"
+        "support_electric_equipment_space_type_name_tags": "nurses_station_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "dining - family"
+        "support_electric_equipment_space_type_name_tags": "office_open_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "computer room"
+        "support_electric_equipment_space_type_name_tags": "office_enclosed_lte_250_sf_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "dormitory - living quarters"
+        "support_electric_equipment_space_type_name_tags": "operating_room_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "audience seating - exercise center"
+        "support_electric_equipment_space_type_name_tags": "physical_therapy_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "exam/treatment"
+        "support_electric_equipment_space_type_name_tags": "gymnasium_playing_area_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "library - reading"
+        "support_electric_equipment_space_type_name_tags": "plenum_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "emergency vehicle garage"
+        "support_electric_equipment_space_type_name_tags": "post_office_sorting_area_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "firestation - sleeping quarters"
+        "support_electric_equipment_space_type_name_tags": "restroom_all_other_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "parking area, interior"
+        "support_electric_equipment_space_type_name_tags": "sales_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "audience seating - gymnasium"
+        "support_electric_equipment_space_type_name_tags": "shaft_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "emergency room"
+        "support_electric_equipment_space_type_name_tags": "firestation_sleeping_quarters_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "patient room"
+        "support_electric_equipment_space_type_name_tags": "sports_arena_playing_area_class_ii_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "corridor - hospital"
+        "support_electric_equipment_space_type_name_tags": "stairwell_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "fellowship hall - religious facility"
+        "support_electric_equipment_space_type_name_tags": "storage_50_to_1000_sf_all_other_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "lounge/breakroom - healthcare facility"
+        "support_electric_equipment_space_type_name_tags": "transportation_ticket_counter_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "operating room"
+        "support_electric_equipment_space_type_name_tags": "vehicular_maintenance_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "physical therapy"
+        "support_electric_equipment_space_type_name_tags": "workshop_electric_equipment"
     },
     {
-        "support_electric_equipment_space_type_name_tags": "storage < 50 sf - hospital"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "storage 50 to 1000 sf - hospital"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "guest room"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "lobby - hotel"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "library - cataloging"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "museum exhibit area"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "corridor - manufacturing facility"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "manufacturing equipment room"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "manufacturing low bay"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "performing arts dressing room"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "audience seating - auditorium"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "audience seating - motion picture theater"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "lobby - motion picture theater"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "Dwelling Unit"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "museum restoration"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "banking activity"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "warehouse - fine storage"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "classroom/lecture/training - penitentiary"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "dining - penitentiary"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "audience seating - performing arts theater"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "lobby - performing arts theater"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "audience seating - religious facility"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "worship/pulpit/choir area"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "classroom/lecture/training - preschool to 12th"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "sports arena playing area, class II"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "audience seating - sports arena"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "airport concourse"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "atrium < 20 ft height"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "atrium > 40 ft height"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "atrium >= 20 ft and <= 40 ft in height"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "baggage/carousel"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "seating area, general"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "transportation ticket counter"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "warehouse - bulk storage"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "workshop"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "gymnasium_playing_area"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "gymnasium_exercise_area"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "courtroom"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "confinement_cells"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "judges_chambers"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "emergency_vehicle_garage"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "firestation_sleeping_quarters"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "post_office_sorting_area"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "exhibit_convention_center"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "library_cataloging"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "library_stacks"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "library_reading"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "emergency_room"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "recovery"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "nurses_station"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "exam_treatment"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "pharmacy"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "patient_room"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "operating_room"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "nursery"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "medical_supply"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "physical_therapy"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "imaging"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "laundry_washing"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "automotive"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "manufacturing_low_bay"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "manufacturing_high_bay"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "detailed_manufacuring"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "manufacturing_equipment_room"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "manufacturing_control"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "manufacturing_extra_high_bay"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "guest_room"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "dormitory_living_quarters"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "museum_exhibit_area"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "museum_restoration"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "banking_activity"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "worship_pulpit_choir_area"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "fellowship_hall_religious_facility"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "sales"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "retail_mall_concourse"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "retail_dressing_room"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "sports_arena_ring_sports_area"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "sports_arena_court_sports_area"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "sports_arena_indoor_playing_field"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "sports_arena_playing_area_class_I"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "sports_arena_playing_area_class_II"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "sports_arena_playing_area_class_III"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "sports_arena_playing_area_class_IV"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "warehouse_fine_storage"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "warehouse_bulk_storage"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "parking_area_interior"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "airport_concourse"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "baggage_carousel"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "transportation_ticket_counter"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "sales_display_type_1"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "sales_display_type_2"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "sales_display_type_3"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "sales_display_type_4"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "breakroom"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "copy_print"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "computer_room"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "loading_dock"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "locker_room"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "seating_area_general"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "vehicular_maintenance"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "chapel_visually_impaired"
-    },
-    {
-        "support_electric_equipment_space_type_name_tags": "recreation_common_living_visually_impaired"
+        "support_electric_equipment_space_type_name_tags": "worship_pulpit_choir_area_electric_equipment"
     }
 ]

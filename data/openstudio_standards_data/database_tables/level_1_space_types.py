@@ -9,6 +9,8 @@ space_type_name: TEXT
 lighting_space_type_name: TEXT
 ventilation_space_type_name: TEXT
 electric_equipment_space_type_name: TEXT
+natural_gas_equipment_space_type_name: TEXT
+schedule_set_name: TEXT
 """
 
 CREATE_LEVEL_1_SPACE_TYPES = f"""
@@ -18,6 +20,8 @@ space_type_name TEXT NOT NULL,
 lighting_space_type_name TEXT,
 ventilation_space_type_name TEXT,
 electric_equipment_space_type_name TEXT,
+natural_gas_equipment_space_type_name TEXT,
+schedule_set_name TEXT,
 FOREIGN KEY(lighting_space_type_name) REFERENCES support_lighting_space_type_name_tags(lighting_space_type_name)
 FOREIGN KEY(ventilation_space_type_name) REFERENCES support_ventilation_space_type_name_tags(ventilation_space_type_name)
 FOREIGN KEY(electric_equipment_space_type_name) REFERENCES support_electric_equipment_space_type_name_tags(support_electric_equipment_space_type_name_tags)
@@ -26,8 +30,15 @@ FOREIGN KEY(electric_equipment_space_type_name) REFERENCES support_electric_equi
 
 INSERT_LEVEL_1_SPACE_TYPES = f"""
     INSERT INTO %s
-    (space_type_name, lighting_space_type_name, ventilation_space_type_name, electric_equipment_space_type_name)
-    VALUES (?, ?, ?, ?);
+    (
+        space_type_name,
+        lighting_space_type_name,
+        ventilation_space_type_name,
+        electric_equipment_space_type_name,
+        natural_gas_equipment_space_type_name,
+        schedule_set_name
+    )
+    VALUES (?, ?, ?, ?, ?, ?);
 """
 
 
@@ -36,6 +47,8 @@ RECORD_TEMPLATE = {
     "lighting_space_type_name": "",
     "ventilation_space_type_name": "",
     "electric_equipment_space_type_name": "",
+    "natural_gas_equipment_space_type_name": "",
+    "schedule_set_name": "",
 }
 
 
@@ -56,6 +69,12 @@ class GeneralBuildingSpaceTypeTable(DBOperation):
         """
         return RECORD_HELP
 
+    def _get_weak_foreign_key_value(self, record):
+        associate_table = getattr_either("support_schedules", record)
+        key = "name"
+        value = getattr_either("schedule_set_name", record)
+        return associate_table, key, value
+
     def _preprocess_record(self, record):
         """
 
@@ -69,4 +88,6 @@ class GeneralBuildingSpaceTypeTable(DBOperation):
             getattr_either("lighting_space_type_name", record),
             getattr_either("ventilation_space_type_name", record),
             getattr_either("electric_equipment_space_type_name", record),
+            getattr_either("natural_gas_equipment_space_type_name", record),
+            getattr_either("schedule_set_name", record),
         )
