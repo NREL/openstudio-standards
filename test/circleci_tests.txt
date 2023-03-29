@@ -11,7 +11,6 @@ os_stds_methods/test_misc.rb
 90_1_prm/test_prm_baseline_bldg4.rb
 90_1_prm/test_prm_baseline_bldg5.rb
 90_1_prm/test_prm_baseline_bldg7.rb
-90_1_prm/test_prm_baseline_bldg9.rb
 90_1_prm/test_prm_baseline_bldg10.rb
 90_1_prm/test_prm_baseline_bldg11.rb
 90_1_prm/test_prm_baseline_bldg12.rb

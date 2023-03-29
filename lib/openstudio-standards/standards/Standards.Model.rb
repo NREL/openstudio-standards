@@ -4674,8 +4674,11 @@ class Standard
       vals['wwr_res'] *= vals['mult_res_red']
       vals['wwr_sh'] *= vals['mult_sh_red']
       wwrs = [vals['wwr_nr'], vals['wwr_res'], vals['wwr_sh']]
-      wwrs = wwrs.reject! &:nan?
-      base_wwr[bat] = wwrs.max
+      max_wwrs = []
+      wwrs.each do |w|
+        max_wwrs << w unless w.nan?
+      end
+      base_wwr[bat] = max_wwrs.max
 
       # Reduce the window area if any of the categories necessary
       model.getSpaces.sort.each do |space|

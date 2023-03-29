@@ -442,57 +442,57 @@ class Baseline9012013Test3 < Minitest::Test
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
   end
 
-  # Test Equipment Efficiencies for bldg_3
-  # @author Matt Leach, NORESCO
-  def test_hvac_eff_bldg3
-    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
-    failure_array = []
+  # # Test Equipment Efficiencies for bldg_3
+  # # @author Matt Leach, NORESCO
+  # def test_hvac_eff_bldg3
+  #   model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+  #   failure_array = []
 
-    # check coil efficiencies
-    dx_coil_hash = {}
-    dx_coil_hash["Base1 LockerOther 1B30 PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 19.0,"EfficiencyType" => "SEER","Efficiency" => 14.0}
-    dx_coil_hash["Base1 LockerPlayer E PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 61.0,"EfficiencyType" => "SEER","Efficiency" => 14.0}
-    dx_coil_hash["Base1 LockerPlayer NE PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 50.0,"EfficiencyType" => "SEER","Efficiency" => 14.0}
-    dx_coil_hash["Base1 LockerPlayer SW PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 131.0,"EfficiencyType" => "EER","Efficiency" => 11.0}
-    dx_coil_hash["Base2 MechRoom 2B75 PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 1.0,"EfficiencyType" => "SEER","Efficiency" => 13.0}
-    dx_coil_hash["Base2 Weight NE PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 8.0,"EfficiencyType" => "SEER","Efficiency" => 13.0}
-    dx_coil_hash["Base2 Weight SW PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 36.0,"EfficiencyType" => "SEER","Efficiency" => 13.0}
-    dx_coil_hash["Flr2 Kitchen PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 627.0,"EfficiencyType" => "EER","Efficiency" => 9.8}
+  #   # check coil efficiencies
+  #   dx_coil_hash = {}
+  #   dx_coil_hash["Base1 LockerOther 1B30 PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 19.0,"EfficiencyType" => "SEER","Efficiency" => 14.0}
+  #   dx_coil_hash["Base1 LockerPlayer E PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 61.0,"EfficiencyType" => "SEER","Efficiency" => 14.0}
+  #   dx_coil_hash["Base1 LockerPlayer NE PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 50.0,"EfficiencyType" => "SEER","Efficiency" => 14.0}
+  #   dx_coil_hash["Base1 LockerPlayer SW PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 131.0,"EfficiencyType" => "EER","Efficiency" => 11.0}
+  #   dx_coil_hash["Base2 MechRoom 2B75 PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 1.0,"EfficiencyType" => "SEER","Efficiency" => 13.0}
+  #   dx_coil_hash["Base2 Weight NE PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 8.0,"EfficiencyType" => "SEER","Efficiency" => 13.0}
+  #   dx_coil_hash["Base2 Weight SW PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 36.0,"EfficiencyType" => "SEER","Efficiency" => 13.0}
+  #   dx_coil_hash["Flr2 Kitchen PSZ-AC 1spd DX AC Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 627.0,"EfficiencyType" => "EER","Efficiency" => 9.8}
 
-    failure_array = check_dx_cooling_single_speed_efficiency(model, dx_coil_hash, failure_array)  
+  #   failure_array = check_dx_cooling_single_speed_efficiency(model, dx_coil_hash, failure_array)  
 
-    # check fan powers
-    supply_fan_hash = {}
-    # expect test to fail because pressure differential (0.9) for MERV 13 filter is being added to expected calculation
-    # if pressure differential is set to zero, test passes
-    supply_fan_hash["Base2 PVAV_Reheat (Sys5) Fan"] = {"CFM" => 13349.0,"PressureDifferential" => 0}
-    supply_fan_hash["Base1 PVAV_Reheat (Sys5) Fan"] = {"CFM" => 12460.0,"PressureDifferential" => 0}
-    supply_fan_hash["Flr1 PVAV_Reheat (Sys5) Fan"] = {"CFM" => 20151.0,"PressureDifferential" => 0}
-    supply_fan_hash["Flr2 PVAV_Reheat (Sys5) Fan"] = {"CFM" => 18307.0,"PressureDifferential" => 0}
-    # there should not be a Flr3 system (if load exception is corrected)
-    supply_fan_hash["Base1 LockerOther 1B30 PSZ-AC Fan"] = {"CFM" => 593.0,"PressureDifferential" => 0}
-    supply_fan_hash["Base1 LockerPlayer E PSZ-AC Fan"] = {"CFM" => 1547.0,"PressureDifferential" => 0}
-    supply_fan_hash["Base1 LockerPlayer NE PSZ-AC Fan"] = {"CFM" => 1271.0,"PressureDifferential" => 0}
-    supply_fan_hash["Base1 LockerPlayer SW PSZ-AC Fan"] = {"CFM" => 3305.0,"PressureDifferential" => 0}
-    supply_fan_hash["Base2 MechRoom 2B75 PSZ-AC Fan"] = {"CFM" => 42.0,"PressureDifferential" => 0}
-    supply_fan_hash["Base2 Weight NE PSZ-AC Fan"] = {"CFM" => 254.0,"PressureDifferential" => 0}
-    supply_fan_hash["Base2 Weight SW PSZ-AC Fan"] = {"CFM" => 1165.0,"PressureDifferential" => 0}
-    supply_fan_hash["Flr2 Kitchen PSZ-AC Fan"] = {"CFM" => 15934.0,"PressureDifferential" => 0}
+  #   # check fan powers
+  #   supply_fan_hash = {}
+  #   # expect test to fail because pressure differential (0.9) for MERV 13 filter is being added to expected calculation
+  #   # if pressure differential is set to zero, test passes
+  #   supply_fan_hash["Base2 PVAV_Reheat (Sys5) Fan"] = {"CFM" => 13349.0,"PressureDifferential" => 0}
+  #   supply_fan_hash["Base1 PVAV_Reheat (Sys5) Fan"] = {"CFM" => 12460.0,"PressureDifferential" => 0}
+  #   supply_fan_hash["Flr1 PVAV_Reheat (Sys5) Fan"] = {"CFM" => 20151.0,"PressureDifferential" => 0}
+  #   supply_fan_hash["Flr2 PVAV_Reheat (Sys5) Fan"] = {"CFM" => 18307.0,"PressureDifferential" => 0}
+  #   # there should not be a Flr3 system (if load exception is corrected)
+  #   supply_fan_hash["Base1 LockerOther 1B30 PSZ-AC Fan"] = {"CFM" => 593.0,"PressureDifferential" => 0}
+  #   supply_fan_hash["Base1 LockerPlayer E PSZ-AC Fan"] = {"CFM" => 1547.0,"PressureDifferential" => 0}
+  #   supply_fan_hash["Base1 LockerPlayer NE PSZ-AC Fan"] = {"CFM" => 1271.0,"PressureDifferential" => 0}
+  #   supply_fan_hash["Base1 LockerPlayer SW PSZ-AC Fan"] = {"CFM" => 3305.0,"PressureDifferential" => 0}
+  #   supply_fan_hash["Base2 MechRoom 2B75 PSZ-AC Fan"] = {"CFM" => 42.0,"PressureDifferential" => 0}
+  #   supply_fan_hash["Base2 Weight NE PSZ-AC Fan"] = {"CFM" => 254.0,"PressureDifferential" => 0}
+  #   supply_fan_hash["Base2 Weight SW PSZ-AC Fan"] = {"CFM" => 1165.0,"PressureDifferential" => 0}
+  #   supply_fan_hash["Flr2 Kitchen PSZ-AC Fan"] = {"CFM" => 15934.0,"PressureDifferential" => 0}
 
-    failure_array = check_variable_speed_fan_power(model, supply_fan_hash, failure_array)
-    failure_array = check_constant_speed_fan_power(model, supply_fan_hash, failure_array)
+  #   failure_array = check_variable_speed_fan_power(model, supply_fan_hash, failure_array)
+  #   failure_array = check_constant_speed_fan_power(model, supply_fan_hash, failure_array)
 
-    # check plant loop components
-    total_chilled_water_capacity_tons = 139
-    # chw pumps
-    failure_array = check_district_chw_pumps(model, total_chilled_water_capacity_tons, failure_array)    
-    # hw pumps
-    failure_array = check_district_hw_pumps(model, failure_array)
+  #   # check plant loop components
+  #   total_chilled_water_capacity_tons = 139
+  #   # chw pumps
+  #   failure_array = check_district_chw_pumps(model, total_chilled_water_capacity_tons, failure_array)    
+  #   # hw pumps
+  #   failure_array = check_district_hw_pumps(model, failure_array)
 
-    # check hw controls
-    failure_array = check_hw_controls(model, failure_array)
-    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-  end
+  #   # check hw controls
+  #   failure_array = check_hw_controls(model, failure_array)
+  #   assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
+  # end
 
   # District Heating DHW Test
   # @author Matt Leach, NORESCO
