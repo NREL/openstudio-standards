@@ -1,0 +1,76 @@
+          "building_type":
+          "space_type":
+          "rgb":
+          "lighting_standard":
+          "lighting_primary_space_type":
+          "lighting_secondary_space_type":
+          "lighting_per_area": W/ft^2
+          "lighting_per_person": W/person
+          "additional_lighting_per_area":
+          "lighting_fraction_to_return_air":
+          "lighting_fraction_radiant":
+          "lighting_fraction_visible":
+          "lighting_fraction_replaceable":
+          "lpd_fraction_linear_fluorescent":
+          "lpd_fraction_compact_fluorescent":
+          "lpd_fraction_high_bay":
+          "lpd_fraction_specialty_lighting":
+          "lpd_fraction_exit_lighting":
+          "lighting_schedule":
+          "compact_fluorescent_lighting_schedule":
+          "high_bay_lighting_schedule":
+          "specialty_lighting_schedule":
+          "exit_lighting_schedule":
+          "target_illuminance_setpoint":
+          "psa_nongeometry_fraction":
+          "ssa_nongeometry_fraction":
+          "ventilation_standard":
+          "ventilation_primary_space_type":
+          "ventilation_secondary_space_type":
+          "ventilation_per_area": cfm/ft^2
+          "ventilation_per_person": cfm/person
+          "ventilation_air_changes": air changes/hour
+          "minimum_total_air_changes":
+          "occupancy_per_area": people/ft^2
+          "occupancy_schedule":
+          "occupancy_activity_schedule":
+          "infiltration_per_exterior_area": cfm/ft^2
+          "infiltration_per_exterior_wall_area": cfm/ft^2
+          "infiltration_air_changes": air changes/hour
+          "infiltration_schedule":
+          "infiltration_schedule_perimeter":
+          "gas_equipment_per_area": Btu/(hr*ft^2)
+          "gas_equipment_fraction_latent":
+          "gas_equipment_fraction_radiant":
+          "gas_equipment_fraction_lost":
+          "gas_equipment_schedule":
+          "electric_equipment_per_area": W/ft^2
+          "electric_equipment_fraction_latent":
+          "electric_equipment_fraction_radiant":
+          "electric_equipment_fraction_lost":
+          "electric_equipment_schedule":
+          "additional_electric_equipment_schedule":
+          "additional_gas_equipment_schedule":
+          "heating_setpoint_schedule":
+          "cooling_setpoint_schedule":
+          "service_water_heating_peak_flow_rate": US Gal/hr
+          "service_water_heating_area": US Gal/(hr*ft^2)
+          "service_water_heating_peak_flow_per_area": US Gal/(hr*ft^2)
+          "service_water_heating_target_temperature": deg. C
+          "service_water_heating_fraction_sensible":
+          "service_water_heating_fraction_latent":
+          "service_water_heating_schedule":
+          "exhaust_per_area": N/A,
+          "exhaust_fan_efficiency": N/A
+          "exhaust_fan_power": N/A
+          "exhaust_fan_pressure_rise": N/A
+          "exhaust_fan_maximum_flow_rate": N/A
+          "exhaust_schedule":
+          "balanced_exhaust_fraction_schedule":
+          "is_residential":
+          "necb_hvac_system_selection_type":
+          "necb_schedule_type":
+          "notes":
+          "ventilation_occupancy_rate_people_per_1000ft2": people/1000 ft^2
+          "ventilation_occupancy_standard":
+          "ventilation_standard_space_type":

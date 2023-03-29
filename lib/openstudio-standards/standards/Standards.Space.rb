@@ -835,12 +835,22 @@ class Standard
   def space_add_daylighting_controls(space, remove_existing_controls, draw_daylight_areas_for_debugging = false)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "******For #{space.name}, adding daylight controls.")
 
+    # Get the space thermal zone
+    zone = space.thermalZone
+    if zone.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', "Space #{space.name} has no thermal zone; cannot set daylighting controls for zone.")
+    else
+      zone = zone.get
+    end
+
     # Check for existing daylighting controls
     # and remove if specified in the input
     existing_daylighting_controls = space.daylightingControls
     unless existing_daylighting_controls.empty?
       if remove_existing_controls
         space_remove_daylighting_controls(space)
+        zone.resetFractionofZoneControlledbyPrimaryDaylightingControl
+        zone.resetFractionofZoneControlledbySecondaryDaylightingControl
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}, daylight controls were already present, no additional controls added.")
         return false
@@ -992,24 +1002,31 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Space #{space_type} is an unknown space type, assuming #{daylight_stpt_lux} Lux daylight setpoint")
     else
       space_type = space_type.get
-      standards_building_type = if space_type.standardsBuildingType.is_initialized
-                                  space_type.standardsBuildingType.get
-                                end
-      standards_space_type = if space_type.standardsSpaceType.is_initialized
-                               space_type.standardsSpaceType.get
-                             end
+      standards_building_type = nil
+      standards_space_type = nil
+      data = nil
+      if space_type.standardsBuildingType.is_initialized
+        standards_building_type = space_type.standardsBuildingType.get
+      end
+      if space_type.standardsSpaceType.is_initialized
+        standards_space_type = space_type.standardsSpaceType.get
+      end
 
-      # use the building type (standards_building_type) and space type (standards_space_type)
-      # as well as template to locate the space type data
-      search_criteria = {
-        'template' => template,
-        'building_type' => standards_building_type,
-        'space_type' => standards_space_type
-      }
+      unless standards_building_type.nil? || standards_space_type.nil?
+        # use the building type (standards_building_type) and space type (standards_space_type)
+        # as well as template to locate the space type data
+        search_criteria = {
+          'template' => template,
+          'building_type' => standards_building_type,
+          'space_type' => standards_space_type
+        }
+        data = model_find_object(standards_data['space_types'], search_criteria)
+      end
 
-      data = model_find_object(standards_data['space_types'], search_criteria)
-      if data.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "No data available for #{space_type.name}: #{standards_space_type} of #{standards_building_type} at #{template}, assuming a #{daylight_stpt_lux} Lux daylight setpoint!")
+      if standards_building_type.nil? || standards_space_type.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Unable to determine standards building type and standards space type for space '#{space.name}' with space type '#{space_type.name}'. Assign a standards building type and standards space type to the space type object. Defaulting to a #{daylight_stpt_lux} Lux daylight setpoint.")
+      elsif data.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Unable to find target illuminance setpoint data for space type '#{space_type.name}' with #{template} space type '#{standards_space_type}' in building type '#{standards_building_type}'. Defaulting to a #{daylight_stpt_lux} Lux daylight setpoint.")
       else
         # Read the illuminance setpoint value
         # If 'na', daylighting is not appropriate for this space type for some reason
@@ -1035,14 +1052,6 @@ class Standard
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}: assuming only #{(ssa_nongeo_frac * 100).round}% of the secondary sidelit area is daylightable based on typical design practice.")
         end
       end
-    end
-
-    # Get the zone that the space is in
-    zone = space.thermalZone
-    if zone.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', "Space #{space.name} has no thermal zone")
-    else
-      zone = zone.get
     end
 
     # Sort by priority; first by facade, then by area,
@@ -1077,16 +1086,6 @@ class Standard
     if standards_building_type == 'Office' && standards_space_type.include?('WholeBuilding')
       sensor_1_frac *= psa_nongeo_frac unless psa_nongeo_frac.nil?
       sensor_2_frac *= ssa_nongeo_frac unless ssa_nongeo_frac.nil?
-    end
-
-    # Place the sensors and set control fractions
-    # get the zone that the space is in
-    zone = space.thermalZone
-    if zone.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', "Space #{space.name}, cannot determine daylighted areas.")
-      return false
-    else
-      zone = space.thermalZone.get
     end
 
     # Ensure that total controlled fraction
@@ -1149,6 +1148,9 @@ class Standard
 
       # @todo rotate sensor to face window (only needed for glare calcs)
       zone.setPrimaryDaylightingControl(sensor_1)
+      if zone.fractionofZoneControlledbyPrimaryDaylightingControl + sensor_1_frac > 1
+        zone.resetFractionofZoneControlledbySecondaryDaylightingControl
+      end
       zone.setFractionofZoneControlledbyPrimaryDaylightingControl(sensor_1_frac)
     end
 
@@ -1191,6 +1193,9 @@ class Standard
 
       # @todo rotate sensor to face window (only needed for glare calcs)
       zone.setSecondaryDaylightingControl(sensor_2)
+      if zone.fractionofZoneControlledbySecondaryDaylightingControl + sensor_2_frac > 1
+        zone.resetFractionofZoneControlledbyPrimaryDaylightingControl
+      end
       zone.setFractionofZoneControlledbySecondaryDaylightingControl(sensor_2_frac)
     end
 

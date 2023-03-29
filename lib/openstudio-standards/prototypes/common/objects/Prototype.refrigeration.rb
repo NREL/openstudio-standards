@@ -108,7 +108,9 @@ class Standard
       ref_case.setCaseAntiSweatHeaterPowerperUnitLength(anti_sweat_power)
     end
     ref_case.setFractionofAntiSweatHeaterEnergytoCase(fractionofantisweatheaterenergytocase)
-    ref_case.setFractionofLightingEnergytoCase(fraction_of_lighting_energy_to_case)
+    if props['fraction_of_lighting_energy_to_case']
+      ref_case.setFractionofLightingEnergytoCase(fraction_of_lighting_energy_to_case)
+    end
     if props['minimum_anti_sweat_heater_power_per_unit_length']
       ref_case.setMinimumAntiSweatHeaterPowerperUnitLength(minimum_anti_sweat_heater_power_per_unit_length)
     end
@@ -221,6 +223,8 @@ class Standard
     end
     if props['reachin_door_area']
       reachin_door_area = OpenStudio.convert(props['reachin_door_area'], 'ft^2', 'm^2').get
+    else
+      reachin_door_area = 0.0
     end
     if props['total_insulated_surface_area']
       total_insulated_surface_area = OpenStudio.convert(props['total_insulated_surface_area'], 'ft^2', 'm^2').get
@@ -249,9 +253,6 @@ class Standard
     end
     if total_insulated_surface_area.nil?
       total_insulated_surface_area = 1.7226 * floor_surface_area + 28.653
-    end
-    if reachin_door_area.nil?
-      reachin_door_area = reachin_door_area_mult * floor_surface_area
     end
     if fan_power.nil?
       fan_power = fan_power_mult * rated_cooling_capacity

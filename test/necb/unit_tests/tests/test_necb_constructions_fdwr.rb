@@ -17,7 +17,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
       'CAN_NU_Resolute.AP.719240_CWEC2016.epw' # CZ 8HDD = 12570
   ]
   #Set Compliance vintage
-  Templates = ['NECB2011','NECB2015','NECB2017', 'BTAPPRE1980', 'BTAP1980TO2010']
+  Templates = ['NECB2011','NECB2015','NECB2017',  'NECB2020', 'BTAPPRE1980', 'BTAP1980TO2010']
 
   # Create scaffolding to create a model with windows, then reset to appropriate values.
   # Will require large windows and constructions that have high U-values.    
@@ -158,6 +158,11 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
 
         #Store hdd for classifing results.
         @hdd = standard.get_necb_hdd18(@model)
+		
+        #Set the infiltration rate at each space
+        @model.getSpaces.sort.each do |space|
+          standard.space_apply_infiltration_rate(space)
+        end
 
         #Get Surfaces by type.
         outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(@model.getSurfaces(), "Outdoors")

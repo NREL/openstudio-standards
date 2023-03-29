@@ -56,16 +56,16 @@ class ASHRAE9012019 < ASHRAE901
     # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
     flow_m3_per_s = if pump.to_PumpVariableSpeed.is_initialized || pump.to_PumpConstantSpeed.is_initialized
-                      if pump.autosizedRatedFlowRate.is_initialized
-                        pump.autosizedRatedFlowRate.get
-                      else
+                      if pump.ratedFlowRate.is_initialized
                         pump.ratedFlowRate.get
+                      elsif pump.autosizedRatedFlowRate.is_initialized
+                        pump.autosizedRatedFlowRate.get
                       end
                     elsif pump.to_HeaderedPumpsVariableSpeed.is_initialized || pump.to_HeaderedPumpsConstantSpeed.is_initialized
-                      if pump.autosizedTotalRatedFlowRate.is_initialized
-                        pump.autosizedTotalRatedFlowRate.get / pump.numberofPumpsinBank
-                      else
+                      if pump.totalRatedFlowRate.is_initialized
                         pump.totalRatedFlowRate.get / pump.numberofPumpsinBank
+                      elsif pump.autosizedTotalRatedFlowRate.is_initialized
+                        pump.autosizedTotalRatedFlowRate.get / pump.numberofPumpsinBank
                       end
                     end
     flow_gpm = OpenStudio.convert(flow_m3_per_s, 'm^3/s', 'gal/min').get
