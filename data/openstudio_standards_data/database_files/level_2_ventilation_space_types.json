@@ -2547,81 +2547,81 @@
     {
         "ventilation_space_type_name": "emergency_room_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 75
     },
     {
         "ventilation_space_type_name": "emergency_vehicle_garage_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 58
     },
     {
         "ventilation_space_type_name": "exam_treatment_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 75
     },
     {
         "ventilation_space_type_name": "imaging_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 75
     },
     {
         "ventilation_space_type_name": "interior_parking_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 58
     },
     {
         "ventilation_space_type_name": "food_preparation_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 9
     },
     {
         "ventilation_space_type_name": "laundry_washing_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 4
     },
     {
         "ventilation_space_type_name": "locker_room_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 26
     },
     {
         "ventilation_space_type_name": "lounge_breakroom_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 26
     },
     {
         "ventilation_space_type_name": "nursery_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 77
     },
     {
         "ventilation_space_type_name": "operating_room_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 76
     },
     {
         "ventilation_space_type_name": "patient_room_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 77
     },
     {
         "ventilation_space_type_name": "physical_therapy_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 79
     },
     {
         "ventilation_space_type_name": "recovery_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 77
     },
     {
         "ventilation_space_type_name": "restroom_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 25
     },
     {
         "ventilation_space_type_name": "vehicular_maintenance_ventilation",
         "level_3_ventilation_definition_table": "level_3_ventilation_62_1_1999",
-        "level_3_ventilation_definition_id": 83
+        "level_3_ventilation_definition_id": 10
     }
 ]
