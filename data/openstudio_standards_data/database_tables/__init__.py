@@ -34,6 +34,7 @@ __all__ = [
     "level_3_ventilation_62_1_2004",
     "level_3_ventilation_62_1_1999",
     "level_2_electric_equipment",
+    "level_2_natural_gas_equipment",
     "support_lighting_technologies",
     "support_standard_templates",
     "support_lighting_space_type_name_tags",
