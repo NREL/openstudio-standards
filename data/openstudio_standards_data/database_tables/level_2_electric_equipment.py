@@ -113,6 +113,6 @@ class EquipLoadTable(DBOperation):
             getattr_either("electric_equipment_epd_unit", record, ""),
             getattr_either("electric_equipment_fraction_latent", record),
             getattr_either("electric_equipment_fraction_radiant", record),
-            getattr_either("electric_equipment_fraction_lost", record)
+            getattr_either("electric_equipment_fraction_lost", record),
         )
         return record_tuple

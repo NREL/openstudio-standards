@@ -190,7 +190,7 @@ def create_openstudio_standards_space_data_json(
                         ]
                     )
                     for f in equipment_tech_fields:
-                        space_type_data[f] = electric_equipment_space_type_data[0][f]                   
+                        space_type_data[f] = electric_equipment_space_type_data[0][f]
                 else:
                     space_type_data["electric_equipment_per_area"] = 0.0
                     for f in equipment_tech_fields:
