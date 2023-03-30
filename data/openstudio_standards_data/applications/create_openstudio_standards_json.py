@@ -177,6 +177,11 @@ def create_openstudio_standards_space_data_json(
                     "electric_equipment_space_type_name": electric_equipment_space_type_name
                 },
             )
+            equipment_tech_fields = [
+                "electric_equipment_fraction_latent",
+                "electric_equipment_fraction_radiant",
+                "electric_equipment_fraction_lost",
+            ]
             if isinstance(electric_equipment_space_type_data, list):
                 if len(electric_equipment_space_type_data) > 0:
                     space_type_data["electric_equipment_per_area"] = float(
@@ -184,10 +189,17 @@ def create_openstudio_standards_space_data_json(
                             "electric_equipment_average_epd"
                         ]
                     )
+                    for f in equipment_tech_fields:
+                        space_type_data[f] = electric_equipment_space_type_data[0][f]                   
                 else:
                     space_type_data["electric_equipment_per_area"] = 0.0
+                    for f in equipment_tech_fields:
+                        space_type_data[f] = 0.0
             else:
                 space_type_data["electric_equipment_per_area"] = 0.0
+                space_type_data["electric_equipment_per_area"] = 0.0
+                for f in equipment_tech_fields:
+                    space_type_data[f] = 0.0
 
             natural_gas_equipment_space_type_name = space_type_infos[
                 "EGS.natural_gas_equipment_space_type_name"
@@ -199,6 +211,11 @@ def create_openstudio_standards_space_data_json(
                     "natural_gas_equipment_space_type_name": natural_gas_equipment_space_type_name
                 },
             )
+            equipment_tech_fields = [
+                "natural_gas_equipment_fraction_latent",
+                "natural_gas_equipment_fraction_radiant",
+                "natural_gas_equipment_fraction_lost",
+            ]
             if isinstance(natural_gas_equipment_space_type_data, list):
                 if len(natural_gas_equipment_space_type_data) > 0:
                     space_type_data["natural_gas_equipment_per_area"] = float(
@@ -206,10 +223,16 @@ def create_openstudio_standards_space_data_json(
                             "natural_gas_equipment_average_epd"
                         ]
                     )
+                    for f in equipment_tech_fields:
+                        space_type_data[f] = natural_gas_equipment_space_type_data[0][f]
                 else:
                     space_type_data["natural_gas_equipment_per_area"] = 0.0
+                    for f in equipment_tech_fields:
+                        space_type_data[f] = 0.0
             else:
                 space_type_data["natural_gas_equipment_per_area"] = 0.0
+                for f in equipment_tech_fields:
+                    space_type_data[f] = 0.0
 
             # Get ventilation and occupancy space type data
             ventilation_space_type_name = space_type_infos[

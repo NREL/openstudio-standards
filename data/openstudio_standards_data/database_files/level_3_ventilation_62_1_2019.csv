@@ -47,7 +47,7 @@ Food and Beverage Service,Restaurant dining rooms,7.5,cfm/person,0.18,cfm/ft2,70
 Miscellaneous Spaces,Banks or bank lobbies,7.5,cfm/person,0.06,cfm/ft2,15,ppl/1000 ft2,1,yes,
 Miscellaneous Spaces,Bank vaults/safe deposit,5,cfm/person,0.06,cfm/ft2,5,ppl/1000 ft2,2,yes,
 Miscellaneous Spaces,Computer (not printing),5,cfm/person,0.06,cfm/ft2,4,ppl/1000 ft2,1,yes,
-Miscellaneous Spaces,Freezer and refrigerated spaces (<50ÃƒÂ¯Ã‚Â¿Ã‚Â½F [10ÃƒÂ¯Ã‚Â¿Ã‚Â½C]),10,cfm/person,0,cfm/ft2,0,ppl/1000 ft2,2,,
+Miscellaneous Spaces,Freezer and refrigerated spaces (<50degF [10degC]),10,cfm/person,0,cfm/ft2,0,ppl/1000 ft2,2,,
 Miscellaneous Spaces,Manufacturing where hazardous materials are not used,10,cfm/person,0.18,cfm/ft2,7,ppl/1000 ft2,2,,
 Miscellaneous Spaces,Manufacturing where hazardous materials are used (excludes heavy industrial and chemical processes),10,cfm/person,0.18,cfm/ft2,7,ppl/1000 ft2,3,,
 Miscellaneous Spaces,Pharmacy (prep. area),5,cfm/person,0.18,cfm/ft2,10,ppl/1000 ft2,2,,
