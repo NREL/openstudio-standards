@@ -1387,7 +1387,7 @@
     },
     {
         "method": "SS",
-        "lighting_primary_space_type": "Sports Arena\u00e2\u20ac\u201dplaying Area",
+        "lighting_primary_space_type": "Sports Arena-playing Area",
         "lighting_secondary_space_type": "Class I Facility",
         "lighting_power_density": 2.47,
         "unit": "W/ft2",
@@ -1401,7 +1401,7 @@
     },
     {
         "method": "SS",
-        "lighting_primary_space_type": "Sports Arena\u00e2\u20ac\u201dplaying Area",
+        "lighting_primary_space_type": "Sports Arena-playing Area",
         "lighting_secondary_space_type": "Class II Facility",
         "lighting_power_density": 1.96,
         "unit": "W/ft2",
@@ -1415,7 +1415,7 @@
     },
     {
         "method": "SS",
-        "lighting_primary_space_type": "Sports Arena\u00e2\u20ac\u201dplaying Area",
+        "lighting_primary_space_type": "Sports Arena-playing Area",
         "lighting_secondary_space_type": "Class Iii Facility",
         "lighting_power_density": 1.7,
         "unit": "W/ft2",
@@ -1429,7 +1429,7 @@
     },
     {
         "method": "SS",
-        "lighting_primary_space_type": "Sports Arena\u00e2\u20ac\u201dplaying Area",
+        "lighting_primary_space_type": "Sports Arena-playing Area",
         "lighting_secondary_space_type": "Class Iv Facility",
         "lighting_power_density": 1.13,
         "unit": "W/ft2",
@@ -1555,7 +1555,7 @@
     },
     {
         "method": "SS",
-        "lighting_primary_space_type": "Convention Center\u00e2\u20ac\u201dexhibit Space",
+        "lighting_primary_space_type": "Convention Center-exhibit Space",
         "lighting_secondary_space_type": "General",
         "lighting_power_density": 0.88,
         "unit": "W/ft2",
@@ -1569,7 +1569,7 @@
     },
     {
         "method": "SS",
-        "lighting_primary_space_type": "Dormitory\u00e2\u20ac\u201dliving Quarters",
+        "lighting_primary_space_type": "Dormitory-living Quarters",
         "lighting_secondary_space_type": "General",
         "lighting_power_density": 0.54,
         "unit": "W/ft2",
@@ -1583,7 +1583,7 @@
     },
     {
         "method": "SS",
-        "lighting_primary_space_type": "Fire Station\u00e2\u20ac\u201dsleeping Quarters",
+        "lighting_primary_space_type": "Fire Station-sleeping Quarters",
         "lighting_secondary_space_type": "General",
         "lighting_power_density": 0.2,
         "unit": "W/ft2",
@@ -1597,7 +1597,7 @@
     },
     {
         "method": "SS",
-        "lighting_primary_space_type": "Performing Arts Theater\u00e2\u20ac\u201ddressing Room",
+        "lighting_primary_space_type": "Performing Arts Theater-dressing Room",
         "lighting_secondary_space_type": "General",
         "lighting_power_density": 0.36,
         "unit": "W/ft2",
@@ -1611,7 +1611,7 @@
     },
     {
         "method": "SS",
-        "lighting_primary_space_type": "Post Office\u00e2\u20ac\u201dsorting Area",
+        "lighting_primary_space_type": "Post Office-sorting Area",
         "lighting_secondary_space_type": "General",
         "lighting_power_density": 0.68,
         "unit": "W/ft2",
@@ -1709,7 +1709,7 @@
     },
     {
         "method": "SS",
-        "lighting_primary_space_type": "Warehouse\u00e2\u20ac\u201dstorage Area",
+        "lighting_primary_space_type": "Warehouse-storage Area",
         "lighting_secondary_space_type": "Medium To Bulky, Palletized Items",
         "lighting_power_density": 0.35,
         "unit": "W/ft2",
@@ -1724,7 +1724,7 @@
     {
         "method": "SS",
         "lighting_primary_space_type": "Healthcare Facility",
-        "lighting_secondary_space_type": "Nurse\u00e2\u20ac\u2122s Station",
+        "lighting_secondary_space_type": "Nurse\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u201e\u00a2s Station",
         "lighting_power_density": 0.81,
         "unit": "W/ft2",
         "rcr_threshold": 6,
@@ -1919,7 +1919,7 @@
     },
     {
         "method": "SS",
-        "lighting_primary_space_type": "Warehouse\u00e2\u20ac\u201dstorage Area",
+        "lighting_primary_space_type": "Warehouse-storage Area",
         "lighting_secondary_space_type": "Smaller, Hand-carried Items",
         "lighting_power_density": 0.69,
         "unit": "W/ft2",

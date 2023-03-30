@@ -5,7 +5,10 @@
         "natural_gas_equipment_average_epd": 361.7807576,
         "natural_gas_equipment_median_epd": 302.6,
         "natural_gas_equipment_maximum_epd": 767,
-        "natural_gas_equipment_epd_unit": "Btu/hr.ft2"
+        "natural_gas_equipment_epd_unit": "Btu/hr.ft2",
+        "natural_gas_equipment_fraction_latent": 0.1,
+        "natural_gas_equipment_fraction_radiant": 0.2,
+        "natural_gas_equipment_fraction_lost": 0.7
     },
     {
         "natural_gas_equipment_space_type_name": "laundry",
@@ -13,7 +16,10 @@
         "natural_gas_equipment_average_epd": 138.4291667,
         "natural_gas_equipment_median_epd": 129.9,
         "natural_gas_equipment_maximum_epd": 170,
-        "natural_gas_equipment_epd_unit": "Btu/hr.ft2"
+        "natural_gas_equipment_epd_unit": "Btu/hr.ft2",
+        "natural_gas_equipment_fraction_latent": 0,
+        "natural_gas_equipment_fraction_radiant": 0.5,
+        "natural_gas_equipment_fraction_lost": 0
     },
     {
         "natural_gas_equipment_space_type_name": "or",
@@ -21,15 +27,21 @@
         "natural_gas_equipment_average_epd": 23.223,
         "natural_gas_equipment_median_epd": 23.87,
         "natural_gas_equipment_maximum_epd": 23.87,
-        "natural_gas_equipment_epd_unit": "Btu/hr.ft2"
+        "natural_gas_equipment_epd_unit": "Btu/hr.ft2",
+        "natural_gas_equipment_fraction_latent": 0,
+        "natural_gas_equipment_fraction_radiant": 0,
+        "natural_gas_equipment_fraction_lost": 0.5
     },
     {
-        "natural_gas_equipment_space_type_name": "Deli/Bakery",
+        "natural_gas_equipment_space_type_name": "deli",
         "natural_gas_equipment_minimum_epd": 8.52,
         "natural_gas_equipment_average_epd": 8.5225,
         "natural_gas_equipment_median_epd": 8.52,
         "natural_gas_equipment_maximum_epd": 8.53,
-        "natural_gas_equipment_epd_unit": "Btu/hr.ft2"
+        "natural_gas_equipment_epd_unit": "Btu/hr.ft2",
+        "natural_gas_equipment_fraction_latent": 0.1,
+        "natural_gas_equipment_fraction_radiant": 0.2,
+        "natural_gas_equipment_fraction_lost": 0.7
     },
     {
         "natural_gas_equipment_space_type_name": "bakery",
@@ -37,7 +49,10 @@
         "natural_gas_equipment_average_epd": 8.5375,
         "natural_gas_equipment_median_epd": 8.54,
         "natural_gas_equipment_maximum_epd": 8.54,
-        "natural_gas_equipment_epd_unit": "Btu/hr.ft2"
+        "natural_gas_equipment_epd_unit": "Btu/hr.ft2",
+        "natural_gas_equipment_fraction_latent": 0.1,
+        "natural_gas_equipment_fraction_radiant": 0.2,
+        "natural_gas_equipment_fraction_lost": 0.7
     },
     {
         "natural_gas_equipment_space_type_name": "deli/bakery",
@@ -45,6 +60,9 @@
         "natural_gas_equipment_average_epd": 6.25,
         "natural_gas_equipment_median_epd": 6.25,
         "natural_gas_equipment_maximum_epd": 6.25,
-        "natural_gas_equipment_epd_unit": "Btu/hr.ft2"
+        "natural_gas_equipment_epd_unit": "Btu/hr.ft2",
+        "natural_gas_equipment_fraction_latent": 0.1,
+        "natural_gas_equipment_fraction_radiant": 0.2,
+        "natural_gas_equipment_fraction_lost": 0.7
     }
 ]
