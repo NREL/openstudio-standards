@@ -248,7 +248,8 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_to_generate = {}
     prototype_list.each do |utest, prototypes|
       prototypes.each do |prototype|
-        if !prototypes_to_generate.values.include?(prototype) && tests.include?(utest)
+        # TODO temporarily remove LargeOffice from the unit test due to known issue with OS 3.5 (Eplus v22)
+        if !prototypes_to_generate.values.include?(prototype) && tests.include?(utest) && prototype != "LargeOffice"
           prototypes_to_generate[id] = prototype
           id += 1
         end
@@ -269,6 +270,10 @@ class AppendixGPRMTests < Minitest::Test
     tests.each do |test|
       test_prototypes[test] = {}
       @@prototype_list[test].each do |prototype|
+        # TODO Temporarily remove large offices in the test case due to a know issue in OS 3.5 (Eplus v22)
+        if prototype[0] == "LargeOffice"
+          next
+        end
         # Find prototype id in mapping
         prototype_id = -9999.0
         id_prototype_mapping.each do |id, prototype_description|
