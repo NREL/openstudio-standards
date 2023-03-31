@@ -6,6 +6,9 @@ class Standard
   # @param space_type [OpenStudio::Model::SpaceType] space type object
   # @return [hash] hash of internal loads for different load types
   def space_type_get_standards_data(space_type)
+    standards_building_type = if space_type.standardsBuildingType.is_initialized
+      space_type.standardsBuildingType.get
+    end
     standards_space_type = if space_type.standardsSpaceType.is_initialized
                              space_type.standardsSpaceType.get
                            end

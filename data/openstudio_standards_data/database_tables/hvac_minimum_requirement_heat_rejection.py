@@ -54,6 +54,9 @@ class HVACMinimumRequirementHeatRejection(DBOperation):
             table_name=table_name,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=initial_data_directory,
+            create_table_query=CREATE_HVAC_REQUIREMENT_HEAT_REJECTION_TABLE
+            % table_name,
+            insert_record_query=INSERT_A_HEAT_REJECTION_RECORD % table_name,
         )
 
     def get_record_info(self):
@@ -82,6 +85,7 @@ class HVACMinimumRequirementHeatRejection(DBOperation):
             assert is_float(
                 record.get("minimum_performance_gpm_per_hp")
             ), f"minimum_performance_gpm_per_hp requires to be numeric data type, instead got {record['minimum_performance_gpm_per_hp']}"
+        return True
 
     def _preprocess_record(self, record):
         """
@@ -99,9 +103,3 @@ class HVACMinimumRequirementHeatRejection(DBOperation):
             getattr_either("minimum_performance_gpm_per_hp", record),
             getattr_either("annotation", record),
         )
-
-    def _get_create_table_query(self):
-        return CREATE_HVAC_REQUIREMENT_HEAT_REJECTION_TABLE % self.data_table_name
-
-    def _get_insert_record_query(self):
-        return INSERT_A_HEAT_REJECTION_RECORD % self.data_table_name

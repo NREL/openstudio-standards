@@ -19,7 +19,7 @@ from query.util import match_dict_data_by_key
 
 SPACE_TABLE_HEADER = [
     "space_type",
-    "level_3_lighting_defintion_id",
+    "level_3_lighting_code_definition_id",
     "level_3_ventilation_defintion_id",
 ]
 
@@ -27,7 +27,7 @@ FETCH_SPACE_TO_TABLE_QUEYR = f"""
 SELECT {','.join(SPACE_TABLE_HEADER)} FROM {GENERAL_SPACE_TYPE_TABLE_NAME}
     LEFT JOIN {LIGHT_SUBSPACES_TABLE_NAME} ON {GENERAL_SPACE_TYPE_TABLE_NAME}.lighting_space_type_name = {LIGHT_SUBSPACES_TABLE_NAME}.lighting_space_type_name
     LEFT JOIN {VENT_SUBSPACES_TABLE_NAME} ON {GENERAL_SPACE_TYPE_TABLE_NAME}.ventilation_space_type_name = {VENT_SUBSPACES_TABLE_NAME}.ventilation_space_type_name
-    WHERE space_type = '%s' AND level_3_lighting_definition_table = '%s' AND level_3_ventilation_definition_table = '%s'
+    WHERE space_type = '%s' AND level_3_lighting_code_definition_table = '%s' AND level_3_ventilation_definition_table = '%s'
 """
 
 
@@ -77,11 +77,11 @@ def update_openstudio_standards_space_data(
 
         # loop through the rows in table
         for row in cur:
-            level_3_lighting_defintion_id = row[
-                SPACE_TABLE_HEADER.index("level_3_lighting_defintion_id")
+            level_3_lighting_code_definition_id = row[
+                SPACE_TABLE_HEADER.index("level_3_lighting_code_definition_id")
             ]
-            level_3_ventilation_defintion_id = row[
-                SPACE_TABLE_HEADER.index("level_3_ventilation_defintion_id")
+            level_3_ventilation_definition_id = row[
+                SPACE_TABLE_HEADER.index("level_3_ventilation_definition_id")
             ]
 
             # update lighting
@@ -102,7 +102,7 @@ def update_openstudio_standards_space_data(
             search_condition = (
                 "id=%s AND lighting_primary_space_type='%s' AND lighting_secondary_space_type='%s'"
                 % (
-                    level_3_lighting_defintion_id,
+                    level_3_lighting_code_definition_id,
                     lighting_primary_space_type,
                     lighting_secondary_space_type,
                 )
@@ -113,13 +113,13 @@ def update_openstudio_standards_space_data(
 
             # update ventilation
             ventilation_update_dict = {
-                "ventilation_per_person": space_data.get("ventilation_per_person"),
-                "ventilation_per_person_unit": space_data.get(
-                    "ventilation_per_person_unit"
+                "ventilation_rate": space_data.get("ventilation_rate"),
+                "ventilation_rate_occupant_unit": space_data.get(
+                    "ventilation_rate_occupant_unit"
                 ),
-                "ventilation_per_area": space_data.get("ventilation_per_area"),
-                "ventilation_per_area_unit": space_data.get(
-                    "ventilation_per_area_unit"
+                "ventilation_rate_area": space_data.get("ventilation_rate_area"),
+                "ventilation_rate_area_unit": space_data.get(
+                    "ventilation_rate_area_unit"
                 ),
                 "occupancy_per_area": space_data.get("occupancy_per_area"),
                 "occupancy_per_area_unit": space_data.get("occupancy_per_area_unit"),
@@ -129,7 +129,7 @@ def update_openstudio_standards_space_data(
             search_condition = (
                 "id=%s AND ventilation_primary_space_type='%s' AND ventilation_secondary_space_type='%s'"
                 % (
-                    level_3_ventilation_defintion_id,
+                    level_3_ventilation_definition_id,
                     ventilation_primary_space_type,
                     ventilation_secondary_space_type,
                 )

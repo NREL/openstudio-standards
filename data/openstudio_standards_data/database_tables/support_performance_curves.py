@@ -32,7 +32,7 @@ annotation: TEXT
 """
 
 CREATE_PERFORMANCE_CURVES_TABLE = f"""
-CREATE TABLE IF NOT EXISTS {TABLE_NAME}
+CREATE TABLE IF NOT EXISTS %s
 (
 id INTEGER PRIMARY KEY, 
 name TEXT NOT NULL,
@@ -62,7 +62,7 @@ annotation TEXT
 """
 
 INSERT_PERFORMANCE_CURVE = f"""
-    INSERT INTO {TABLE_NAME}
+    INSERT INTO %s
     (
 name,
 category,
@@ -124,6 +124,8 @@ class VentSpaceTagTable(DBOperation):
             table_name=TABLE_NAME,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
+            create_table_query=CREATE_PERFORMANCE_CURVES_TABLE % TABLE_NAME,
+            insert_record_query=INSERT_PERFORMANCE_CURVE % TABLE_NAME,
         )
 
     def get_record_info(self):
@@ -171,6 +173,7 @@ class VentSpaceTagTable(DBOperation):
                 assert is_float(
                     record.get(coeff)
                 ), f"{coeff} requires to be numeric data type, instead got {record_id}"
+        return True
 
     def _preprocess_record(self, record):
         """
@@ -204,9 +207,3 @@ class VentSpaceTagTable(DBOperation):
             getattr_either("maximum_dependent_variable_output", record),
             getattr_either("annotation", record),
         )
-
-    def _get_create_table_query(self):
-        return CREATE_PERFORMANCE_CURVES_TABLE
-
-    def _get_insert_record_query(self):
-        return INSERT_PERFORMANCE_CURVE

@@ -8,15 +8,15 @@ Must provide a dict that contains following key value pairs:
 ventilation_space_type_name: TEXT
 """
 
-CREATE_ventilation_space_type_name = f"""
-CREATE TABLE IF NOT EXISTS {TABLE_NAME}
+CREATE_VENTILATION_SPACE_TYPE_NAME = f"""
+CREATE TABLE IF NOT EXISTS %s
 (
 ventilation_space_type_name TEXT UNIQUE NOT NULL PRIMARY KEY
 );
 """
 
 INSERT_SPACE_TAG = f"""
-    INSERT INTO {TABLE_NAME}
+    INSERT INTO %s
     (ventilation_space_type_name)
     VALUES (?);
 """
@@ -33,6 +33,8 @@ class VentSpaceTagTable(DBOperation):
             table_name=TABLE_NAME,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
+            create_table_query=CREATE_VENTILATION_SPACE_TYPE_NAME % TABLE_NAME,
+            insert_record_query=INSERT_SPACE_TAG % TABLE_NAME,
         )
 
     def get_record_info(self):
@@ -50,9 +52,3 @@ class VentSpaceTagTable(DBOperation):
         """
 
         return (getattr_either("ventilation_space_type_name", record),)
-
-    def _get_create_table_query(self):
-        return CREATE_ventilation_space_type_name
-
-    def _get_insert_record_query(self):
-        return INSERT_SPACE_TAG

@@ -1,3 +1,4 @@
+from database_engine.assertions import assert_
 from database_engine.database import DBOperation
 from database_engine.database_util import is_float, getattr_either
 
@@ -98,6 +99,8 @@ class EnvelopeRequirementTable(DBOperation):
             table_name=TABLE_NAME,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=f"database_files/{TABLE_NAME}",
+            create_table_query=CREATE_ENVELOPE_REQUIREMENTS_TABLE % TABLE_NAME,
+            insert_record_query=INSERT_A_ENVELOPE_REQUIREMENT_RECORD % TABLE_NAME,
         )
 
     def get_record_info(self):
@@ -122,9 +125,10 @@ class EnvelopeRequirementTable(DBOperation):
 
         for f in str_expected:
             if record.get(f):
-                assert isinstance(
-                    record[f], str
-                ), f"{f} requires to be a string, instead got {record[f]}"
+                assert_(
+                    isinstance(record[f], str),
+                    f"{f} requires to be a string, instead got {record[f]}",
+                )
 
         float_expected = [
             "minimum_percent_of_surface",
@@ -138,9 +142,11 @@ class EnvelopeRequirementTable(DBOperation):
 
         for f in float_expected:
             if record.get(f):
-                assert is_float(
-                    record.get(f)
-                ), f"{f} requires to be numeric data type, instead got {record[f]}"
+                assert_(
+                    is_float(record.get(f)),
+                    f"{f} requires to be numeric data type, instead got {record[f]}",
+                )
+        return True
 
     def _preprocess_record(self, record):
         """
@@ -168,9 +174,3 @@ class EnvelopeRequirementTable(DBOperation):
             getattr_either("assembly_minimum_vt_shgc", record),
             getattr_either("annotation", record),
         )
-
-    def _get_create_table_query(self):
-        return CREATE_ENVELOPE_REQUIREMENTS_TABLE % self.data_table_name
-
-    def _get_insert_record_query(self):
-        return INSERT_A_ENVELOPE_REQUIREMENT_RECORD % self.data_table_name

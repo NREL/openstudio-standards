@@ -1,0 +1,18 @@
+[
+    {
+        "lighting_technology_definition_name": "default",
+        "lighting_fraction_to_return_air": 0,
+        "lighting_fraction_radiant": 0.7,
+        "lighting_fraction_visible": 0.2,
+        "lighting_fraction_replaceable": 1,
+        "lpd_fraction_linear_fluorescent": 1,
+        "lpd_fraction_compact_fluorescent": 0,
+        "lpd_fraction_high_bay": 0,
+        "lpd_fraction_specialty_lighting": 0,
+        "lpd_fraction_exit_lighting": 0,
+        "compact_fluorescent_lighting_schedule": null,
+        "high_bay_lighting_schedule": null,
+        "specialty_lighting_schedule": null,
+        "exit_lighting_schedule": null
+    }
+]

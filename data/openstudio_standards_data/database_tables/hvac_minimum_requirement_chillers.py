@@ -90,6 +90,8 @@ class HVACMinimumRequirementChillers(DBOperation):
             table_name=table_name,
             record_template=RECORD_TEMPLATE,
             initial_data_directory=initial_data_directory,
+            create_table_query=CREATE_HVAC_REQUIREMENT_CHILLERS_TABLE % table_name,
+            insert_record_query=INSERT_A_CHILLER_RECORD % table_name,
         )
 
     def get_record_info(self):
@@ -132,6 +134,7 @@ class HVACMinimumRequirementChillers(DBOperation):
                 assert is_float(
                     record.get(f)
                 ), f"{f} requires to be numeric data type, instead got {record[f]}"
+        return True
 
     def _preprocess_record(self, record):
         """
@@ -158,9 +161,3 @@ class HVACMinimumRequirementChillers(DBOperation):
             getattr_either("eirfplr", record),
             getattr_either("annotation", record),
         )
-
-    def _get_create_table_query(self):
-        return CREATE_HVAC_REQUIREMENT_CHILLERS_TABLE % self.data_table_name
-
-    def _get_insert_record_query(self):
-        return INSERT_A_CHILLER_RECORD % self.data_table_name
