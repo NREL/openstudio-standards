@@ -11,28 +11,6 @@ class Baseline9012013TestBldg7 < Minitest::Test
   def test_lpd_bldg7
     model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
     failure_array = []
-    
-    lpd_test_hash = {}
-    lpd_test_hash["L1-ES_apt"] = {"LPD" => 0.45,"Space_Type" => "Apartment"}
-    lpd_test_hash["L1-E_corr"] = {"LPD" => 0.792,"Space_Type" => "Corridor"}
-    lpd_test_hash["L1-W_ret"] = {"LPD" => 2.22,"Space_Type" => "Office"} # Apartment offices have 1.11 W/f^2 extra task lighting according to the DOE prototype buildings
-    lpd_test_hash.keys.each do |space_name|
-      space = model.getSpaceByName(space_name).get
-      lpd_w_per_m2 = space.lightingPowerPerFloorArea
-      lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
-      
-      unless (lpd_test_hash[space_name]["LPD"] - lpd_w_per_ft2).abs < 0.01
-        failure_array << "Expected LPD of #{lpd_test_hash[space_name]["LPD"]} W/ft2 for Space #{space_name} of Type #{lpd_test_hash[space_name]["Space_Type"]}; got #{lpd_w_per_ft2.round(2)} W/ft2 instead"
-      end
-    end
-    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-  end  
-
-  # Test LPDs for bldg_7
-  # @author Matt Leach, NORESCO
-  def test_lpd2_bldg7
-    model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
-    failure_array = []
 
     lpd_test_hash = {}
     lpd_test_hash["L1-ES_apt"] = {"LPD" => 1.34,"Space_Type" => "Apartment"}
