@@ -11,6 +11,7 @@ ventilation_space_type_name: TEXT
 electric_equipment_space_type_name: TEXT
 natural_gas_equipment_space_type_name: TEXT
 schedule_set_name: TEXT
+annotation: TEXT
 """
 
 CREATE_LEVEL_1_SPACE_TYPES = f"""
@@ -22,6 +23,7 @@ ventilation_space_type_name TEXT,
 electric_equipment_space_type_name TEXT,
 natural_gas_equipment_space_type_name TEXT,
 schedule_set_name TEXT,
+annotation TEXT,
 FOREIGN KEY(lighting_space_type_name) REFERENCES support_lighting_space_type_name_tags(lighting_space_type_name)
 FOREIGN KEY(ventilation_space_type_name) REFERENCES support_ventilation_space_type_name_tags(ventilation_space_type_name)
 FOREIGN KEY(electric_equipment_space_type_name) REFERENCES support_electric_equipment_space_type_name_tags(support_electric_equipment_space_type_name_tags)
@@ -36,9 +38,10 @@ INSERT_LEVEL_1_SPACE_TYPES = f"""
         ventilation_space_type_name,
         electric_equipment_space_type_name,
         natural_gas_equipment_space_type_name,
-        schedule_set_name
+        schedule_set_name,
+        annotation
     )
-    VALUES (?, ?, ?, ?, ?, ?);
+    VALUES (?, ?, ?, ?, ?, ?, ?);
 """
 
 
@@ -49,6 +52,7 @@ RECORD_TEMPLATE = {
     "electric_equipment_space_type_name": "",
     "natural_gas_equipment_space_type_name": "",
     "schedule_set_name": "",
+    "annotation": "",
 }
 
 
@@ -90,4 +94,5 @@ class GeneralBuildingSpaceTypeTable(DBOperation):
             getattr_either("electric_equipment_space_type_name", record),
             getattr_either("natural_gas_equipment_space_type_name", record),
             getattr_either("schedule_set_name", record),
+            getattr_either("annotation", record),
         )

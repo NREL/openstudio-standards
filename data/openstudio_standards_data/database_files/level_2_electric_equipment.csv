@@ -92,3 +92,5 @@ warehouse_bulk_storage_electric_equipment,0.11,0.11,0.11,0.11,W/ft2,0,0,0
 attic_electric_equipment,0,0,0,0,W/ft2,0,0,0
 plenum_electric_equipment,0,0,0,0,W/ft2,0,0,0
 shaft_electric_equipment,0,0,0,0,W/ft2,0,0,0
+datacenter_high_ite_equipment,100,300,300,500,W/ft2,0,0.1,0
+datacenter_low_ite_equipment,40,70,70,100,W/ft2,0,0.1,0

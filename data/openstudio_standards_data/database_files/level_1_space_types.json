@@ -1,19 +1,12 @@
 [
     {
-        "space_type_name": "airport concourse",
-        "lighting_space_type_name": "airport_concourse_lighting",
-        "ventilation_space_type_name": "airport_concourse_ventilation",
-        "electric_equipment_space_type_name": "airport_concourse_electric_equipment",
-        "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "airport_concourse"
-    },
-    {
         "space_type_name": "atrium",
         "lighting_space_type_name": "atrium_lighting",
         "ventilation_space_type_name": "atrium_ventilation",
         "electric_equipment_space_type_name": "atrium_lt_20_ft_height_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "atrium_lt_20_ft_height"
+        "schedule_set_name": "atrium_lt_20_ft_height",
+        "annotation": null
     },
     {
         "space_type_name": "attic",
@@ -21,7 +14,8 @@
         "ventilation_space_type_name": "attic_ventilation",
         "electric_equipment_space_type_name": "attic_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "attic"
+        "schedule_set_name": "attic",
+        "annotation": null
     },
     {
         "space_type_name": "audience seating",
@@ -29,15 +23,8 @@
         "ventilation_space_type_name": "audience_seating_ventilation",
         "electric_equipment_space_type_name": "audience_seating_all_other_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "audience_seating_all_other"
-    },
-    {
-        "space_type_name": "baggage/carousel",
-        "lighting_space_type_name": "baggage_carousel_lighting",
-        "ventilation_space_type_name": "baggage_carousel_ventilation",
-        "electric_equipment_space_type_name": "baggage_carousel_electric_equipment",
-        "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "baggage_carousel"
+        "schedule_set_name": "audience_seating_all_other",
+        "annotation": null
     },
     {
         "space_type_name": "banking",
@@ -45,15 +32,17 @@
         "ventilation_space_type_name": "banking_ventilation",
         "electric_equipment_space_type_name": "banking_activity_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "banking_activity"
+        "schedule_set_name": "banking_activity",
+        "annotation": null
     },
     {
-        "space_type_name": "classroom/lecture/training",
+        "space_type_name": "classroom, lecture, training",
         "lighting_space_type_name": "classroom_lecture_training_lighting",
         "ventilation_space_type_name": "classroom_lecture_training_ventilation",
         "electric_equipment_space_type_name": "classroom_lecture_training_all_other_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "classroom_lecture_training_all_other"
+        "schedule_set_name": "classroom_lecture_training_all_other",
+        "annotation": null
     },
     {
         "space_type_name": "computer room",
@@ -61,15 +50,17 @@
         "ventilation_space_type_name": "computer_room_ventilation",
         "electric_equipment_space_type_name": "computer_room_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "computer_room"
+        "schedule_set_name": "computer_room",
+        "annotation": null
     },
     {
-        "space_type_name": "conference/meeting/multipurpose",
+        "space_type_name": "conference, meeting, multipurpose",
         "lighting_space_type_name": "conference_meeting_multipurpose_lighting",
         "ventilation_space_type_name": "conference_meeting_multipurpose_ventilation",
         "electric_equipment_space_type_name": "conference_meeting_multipurpose_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "conference_meeting_multipurpose"
+        "schedule_set_name": "conference_meeting_multipurpose",
+        "annotation": null
     },
     {
         "space_type_name": "confinement cells",
@@ -77,15 +68,17 @@
         "ventilation_space_type_name": "confinement_cells_ventilation",
         "electric_equipment_space_type_name": "confinement_cells_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "confinement_cells"
+        "schedule_set_name": "confinement_cells",
+        "annotation": null
     },
     {
-        "space_type_name": "copy/print",
+        "space_type_name": "copy, print",
         "lighting_space_type_name": "copy_print_lighting",
         "ventilation_space_type_name": "copy_print_ventilation",
         "electric_equipment_space_type_name": null,
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": null
+        "schedule_set_name": null,
+        "annotation": null
     },
     {
         "space_type_name": "corridor",
@@ -93,7 +86,8 @@
         "ventilation_space_type_name": "corridor_ventilation",
         "electric_equipment_space_type_name": "corridor_all_other_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "corridor_all_other"
+        "schedule_set_name": "corridor_all_other",
+        "annotation": null
     },
     {
         "space_type_name": "courtroom",
@@ -101,23 +95,26 @@
         "ventilation_space_type_name": "courtroom_ventilation",
         "electric_equipment_space_type_name": "courtroom_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "courtroom"
+        "schedule_set_name": "courtroom",
+        "annotation": null
     },
     {
-        "space_type_name": "datacenterHighITE",
+        "space_type_name": "datacenter, high ite",
         "lighting_space_type_name": "datacenterhighite_lighting",
         "ventilation_space_type_name": "datacenterhighite_ventilation",
-        "electric_equipment_space_type_name": null,
+        "electric_equipment_space_type_name": "datacenter_high_ite_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": null
+        "schedule_set_name": null,
+        "annotation": null
     },
     {
-        "space_type_name": "datacenterLowITE",
+        "space_type_name": "datacenter, low ite",
         "lighting_space_type_name": "datacenterlowite_lighting",
         "ventilation_space_type_name": "datacenterlowite_ventilation",
-        "electric_equipment_space_type_name": null,
+        "electric_equipment_space_type_name": "datacenter_low_ite_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": null
+        "schedule_set_name": null,
+        "annotation": null
     },
     {
         "space_type_name": "dining",
@@ -125,7 +122,8 @@
         "ventilation_space_type_name": "dining_ventilation",
         "electric_equipment_space_type_name": "dining_all_other_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "dining_all_other"
+        "schedule_set_name": "dining_all_other",
+        "annotation": null
     },
     {
         "space_type_name": "dressing room",
@@ -133,15 +131,17 @@
         "ventilation_space_type_name": "dressing_room_ventilation",
         "electric_equipment_space_type_name": "performing_arts_dressing_room_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "performing_arts_dressing_room"
+        "schedule_set_name": "performing_arts_dressing_room",
+        "annotation": null
     },
     {
-        "space_type_name": "electrical/mechanical",
+        "space_type_name": "electrical, mechanical",
         "lighting_space_type_name": "electrical_mechanical_lighting",
         "ventilation_space_type_name": "electrical_mechanical_ventilation",
         "electric_equipment_space_type_name": "electrical_mechanical_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "electrical_mechanical"
+        "schedule_set_name": "electrical_mechanical",
+        "annotation": null
     },
     {
         "space_type_name": "emergency room",
@@ -149,7 +149,8 @@
         "ventilation_space_type_name": "emergency_room_ventilation",
         "electric_equipment_space_type_name": "emergency_room_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "emergency_room"
+        "schedule_set_name": "emergency_room",
+        "annotation": null
     },
     {
         "space_type_name": "emergency vehicle garage",
@@ -157,15 +158,17 @@
         "ventilation_space_type_name": "emergency_vehicle_garage_ventilation",
         "electric_equipment_space_type_name": "emergency_vehicle_garage_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "emergency_vehicle_garage"
+        "schedule_set_name": "emergency_vehicle_garage",
+        "annotation": null
     },
     {
-        "space_type_name": "exam/treatment",
+        "space_type_name": "exam, treatment",
         "lighting_space_type_name": "exam_treatment_lighting",
         "ventilation_space_type_name": "exam_treatment_ventilation",
         "electric_equipment_space_type_name": "exam_treatment_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "exam_treatment"
+        "schedule_set_name": "exam_treatment",
+        "annotation": null
     },
     {
         "space_type_name": "exercise area",
@@ -173,7 +176,8 @@
         "ventilation_space_type_name": "exercise_area_ventilation",
         "electric_equipment_space_type_name": "gymnasium_exercise_area_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "gymnasium_exercise_area"
+        "schedule_set_name": "gymnasium_exercise_area",
+        "annotation": null
     },
     {
         "space_type_name": "exhibit",
@@ -181,7 +185,8 @@
         "ventilation_space_type_name": "exhibit_ventilation",
         "electric_equipment_space_type_name": "museum_exhibit_area_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "museum_exhibit_area"
+        "schedule_set_name": "museum_exhibit_area",
+        "annotation": null
     },
     {
         "space_type_name": "guest room",
@@ -189,7 +194,8 @@
         "ventilation_space_type_name": "guest_room_ventilation",
         "electric_equipment_space_type_name": "guest_room_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "guest_room"
+        "schedule_set_name": "guest_room",
+        "annotation": null
     },
     {
         "space_type_name": "imaging",
@@ -197,7 +203,8 @@
         "ventilation_space_type_name": "imaging_ventilation",
         "electric_equipment_space_type_name": null,
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": null
+        "schedule_set_name": null,
+        "annotation": null
     },
     {
         "space_type_name": "interior parking",
@@ -205,7 +212,8 @@
         "ventilation_space_type_name": "interior_parking_ventilation",
         "electric_equipment_space_type_name": "parking_area_interior_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "parking_area_interior"
+        "schedule_set_name": "parking_area_interior",
+        "annotation": null
     },
     {
         "space_type_name": "judges chambers",
@@ -213,7 +221,8 @@
         "ventilation_space_type_name": "judges_chambers_ventilation",
         "electric_equipment_space_type_name": "judges_chambers_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "judges_chambers"
+        "schedule_set_name": "judges_chambers",
+        "annotation": null
     },
     {
         "space_type_name": "food preparation",
@@ -221,7 +230,8 @@
         "ventilation_space_type_name": "food_preparation_ventilation",
         "electric_equipment_space_type_name": "kitchen_electric_equipment",
         "natural_gas_equipment_space_type_name": "kitchen",
-        "schedule_set_name": "kitchen"
+        "schedule_set_name": "kitchen",
+        "annotation": null
     },
     {
         "space_type_name": "laboratory",
@@ -229,15 +239,17 @@
         "ventilation_space_type_name": "laboratory_ventilation",
         "electric_equipment_space_type_name": "laboratory_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "laboratory"
+        "schedule_set_name": "laboratory",
+        "annotation": null
     },
     {
-        "space_type_name": "laundry/washing",
+        "space_type_name": "laundry, washing",
         "lighting_space_type_name": "laundry_washing_lighting",
         "ventilation_space_type_name": "laundry_washing_ventilation",
         "electric_equipment_space_type_name": "laundry_washing_electric_equipment",
         "natural_gas_equipment_space_type_name": "laundry",
-        "schedule_set_name": "laundry_washing"
+        "schedule_set_name": "laundry_washing",
+        "annotation": null
     },
     {
         "space_type_name": "library",
@@ -245,7 +257,8 @@
         "ventilation_space_type_name": "library_ventilation",
         "electric_equipment_space_type_name": "library_stacks_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "library_stacks"
+        "schedule_set_name": "library_stacks",
+        "annotation": null
     },
     {
         "space_type_name": "living quarters",
@@ -253,7 +266,8 @@
         "ventilation_space_type_name": "living_quarters_ventilation",
         "electric_equipment_space_type_name": "dormitory_living_quarters_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "dormitory_living_quarters"
+        "schedule_set_name": "dormitory_living_quarters",
+        "annotation": "living quarters such as in a fire station"
     },
     {
         "space_type_name": "loading dock",
@@ -261,7 +275,8 @@
         "ventilation_space_type_name": "loading_dock_ventilation",
         "electric_equipment_space_type_name": null,
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": null
+        "schedule_set_name": null,
+        "annotation": null
     },
     {
         "space_type_name": "lobby",
@@ -269,7 +284,8 @@
         "ventilation_space_type_name": "lobby_ventilation",
         "electric_equipment_space_type_name": "lobby_all_other_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "lobby_all_other"
+        "schedule_set_name": "lobby_all_other",
+        "annotation": null
     },
     {
         "space_type_name": "locker room",
@@ -277,15 +293,17 @@
         "ventilation_space_type_name": "locker_room_ventilation",
         "electric_equipment_space_type_name": "locker_room_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "locker_room"
+        "schedule_set_name": "locker_room",
+        "annotation": null
     },
     {
-        "space_type_name": "lounge/breakroom",
+        "space_type_name": "lounge, breakroom",
         "lighting_space_type_name": "lounge_breakroom_lighting",
         "ventilation_space_type_name": "lounge_breakroom_ventilation",
         "electric_equipment_space_type_name": "lounge_breakroom_all_other_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "lounge_breakroom_all_other"
+        "schedule_set_name": "lounge_breakroom_all_other",
+        "annotation": null
     },
     {
         "space_type_name": "manufacturing",
@@ -293,7 +311,8 @@
         "ventilation_space_type_name": "manufacturing_ventilation",
         "electric_equipment_space_type_name": "manufacturing_low_bay_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "manufacturing_low_bay"
+        "schedule_set_name": "manufacturing_low_bay",
+        "annotation": null
     },
     {
         "space_type_name": "medical supply",
@@ -301,7 +320,8 @@
         "ventilation_space_type_name": "medical_supply_ventilation",
         "electric_equipment_space_type_name": "pharmacy_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "pharmacy"
+        "schedule_set_name": "pharmacy",
+        "annotation": null
     },
     {
         "space_type_name": "multifamily",
@@ -309,7 +329,8 @@
         "ventilation_space_type_name": "multifamily_ventilation",
         "electric_equipment_space_type_name": null,
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": null
+        "schedule_set_name": null,
+        "annotation": "common areas in a multifamily building, NOT dwelling units"
     },
     {
         "space_type_name": "nursery",
@@ -317,7 +338,8 @@
         "ventilation_space_type_name": "nursery_ventilation",
         "electric_equipment_space_type_name": "patient_room_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "patient_room"
+        "schedule_set_name": "patient_room",
+        "annotation": null
     },
     {
         "space_type_name": "nurses station",
@@ -325,7 +347,8 @@
         "ventilation_space_type_name": "nurses_station_ventilation",
         "electric_equipment_space_type_name": "nurses_station_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "nurses_station"
+        "schedule_set_name": "nurses_station",
+        "annotation": null
     },
     {
         "space_type_name": "office",
@@ -333,7 +356,8 @@
         "ventilation_space_type_name": "office_ventilation",
         "electric_equipment_space_type_name": "office_open_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "office_open"
+        "schedule_set_name": "office_open",
+        "annotation": null
     },
     {
         "space_type_name": "office, enclosed",
@@ -341,7 +365,8 @@
         "ventilation_space_type_name": "office_enclosed_ventilation",
         "electric_equipment_space_type_name": "office_enclosed_lte_250_sf_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "office_enclosed_lte_250_sf"
+        "schedule_set_name": "office_enclosed_lte_250_sf",
+        "annotation": null
     },
     {
         "space_type_name": "operating room",
@@ -349,7 +374,8 @@
         "ventilation_space_type_name": "operating_room_ventilation",
         "electric_equipment_space_type_name": "operating_room_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "operating_room"
+        "schedule_set_name": "operating_room",
+        "annotation": null
     },
     {
         "space_type_name": "patient room",
@@ -357,7 +383,8 @@
         "ventilation_space_type_name": "patient_room_ventilation",
         "electric_equipment_space_type_name": "patient_room_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "patient_room"
+        "schedule_set_name": "patient_room",
+        "annotation": null
     },
     {
         "space_type_name": "pharmacy",
@@ -365,7 +392,8 @@
         "ventilation_space_type_name": "pharmacy_ventilation",
         "electric_equipment_space_type_name": "pharmacy_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "pharmacy"
+        "schedule_set_name": "pharmacy",
+        "annotation": null
     },
     {
         "space_type_name": "physical therapy",
@@ -373,7 +401,8 @@
         "ventilation_space_type_name": "physical_therapy_ventilation",
         "electric_equipment_space_type_name": "physical_therapy_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "physical_therapy"
+        "schedule_set_name": "physical_therapy",
+        "annotation": null
     },
     {
         "space_type_name": "playing area",
@@ -381,7 +410,8 @@
         "ventilation_space_type_name": "playing_area_ventilation",
         "electric_equipment_space_type_name": "gymnasium_playing_area_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "gymnasium_playing_area"
+        "schedule_set_name": "gymnasium_playing_area",
+        "annotation": null
     },
     {
         "space_type_name": "plenum",
@@ -389,7 +419,8 @@
         "ventilation_space_type_name": "plenum_ventilation",
         "electric_equipment_space_type_name": "plenum_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "plenum"
+        "schedule_set_name": "plenum",
+        "annotation": null
     },
     {
         "space_type_name": "post office",
@@ -397,7 +428,8 @@
         "ventilation_space_type_name": "post_office_ventilation",
         "electric_equipment_space_type_name": "post_office_sorting_area_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "post_office_sorting_area"
+        "schedule_set_name": "post_office_sorting_area",
+        "annotation": null
     },
     {
         "space_type_name": "recovery",
@@ -405,15 +437,17 @@
         "ventilation_space_type_name": "recovery_ventilation",
         "electric_equipment_space_type_name": "patient_room_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "patient_room"
+        "schedule_set_name": "patient_room",
+        "annotation": null
     },
     {
-        "space_type_name": "recreation/common living",
+        "space_type_name": "recreation, common living",
         "lighting_space_type_name": "recreation_common_living_lighting",
         "ventilation_space_type_name": "recreation_common_living_ventilation",
         "electric_equipment_space_type_name": "lounge_breakroom_all_other_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "lounge_breakroom_all_other"
+        "schedule_set_name": "lounge_breakroom_all_other",
+        "annotation": null
     },
     {
         "space_type_name": "restroom",
@@ -421,7 +455,8 @@
         "ventilation_space_type_name": "restroom_ventilation",
         "electric_equipment_space_type_name": "restroom_all_other_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "restroom_all_other"
+        "schedule_set_name": "restroom_all_other",
+        "annotation": null
     },
     {
         "space_type_name": "retail",
@@ -429,7 +464,8 @@
         "ventilation_space_type_name": "retail_sales_ventilation",
         "electric_equipment_space_type_name": "sales_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "sales"
+        "schedule_set_name": "sales",
+        "annotation": null
     },
     {
         "space_type_name": "shaft",
@@ -437,7 +473,8 @@
         "ventilation_space_type_name": "shaft_ventilation",
         "electric_equipment_space_type_name": "shaft_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "shaft"
+        "schedule_set_name": "shaft",
+        "annotation": null
     },
     {
         "space_type_name": "sleeping quarters",
@@ -445,7 +482,8 @@
         "ventilation_space_type_name": "sleeping_quarters_ventilation",
         "electric_equipment_space_type_name": "firestation_sleeping_quarters_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "firestation_sleeping_quarters"
+        "schedule_set_name": "firestation_sleeping_quarters",
+        "annotation": "sleeping quarters such as in a dormitory"
     },
     {
         "space_type_name": "sports arena",
@@ -453,7 +491,8 @@
         "ventilation_space_type_name": "sports_arena_ventilation",
         "electric_equipment_space_type_name": "sports_arena_playing_area_class_ii_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "sports_arena_playing_area_class_ii"
+        "schedule_set_name": "sports_arena_playing_area_class_ii",
+        "annotation": null
     },
     {
         "space_type_name": "stairwell",
@@ -461,7 +500,8 @@
         "ventilation_space_type_name": "stairwell_ventilation",
         "electric_equipment_space_type_name": "stairwell_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "stairwell"
+        "schedule_set_name": "stairwell",
+        "annotation": null
     },
     {
         "space_type_name": "storage",
@@ -469,7 +509,8 @@
         "ventilation_space_type_name": "storage_ventilation",
         "electric_equipment_space_type_name": "storage_50_to_1000_sf_all_other_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "storage_50_to_1000_sf_all_other"
+        "schedule_set_name": "storage_50_to_1000_sf_all_other",
+        "annotation": null
     },
     {
         "space_type_name": "transportation",
@@ -477,7 +518,8 @@
         "ventilation_space_type_name": "transportation_ventilation",
         "electric_equipment_space_type_name": "transportation_ticket_counter_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "transportation_ticket_counter"
+        "schedule_set_name": "transportation_ticket_counter",
+        "annotation": null
     },
     {
         "space_type_name": "vehicular maintenance",
@@ -485,7 +527,8 @@
         "ventilation_space_type_name": "vehicular_maintenance_ventilation",
         "electric_equipment_space_type_name": "vehicular_maintenance_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "vehicular_maintenance"
+        "schedule_set_name": "vehicular_maintenance",
+        "annotation": null
     },
     {
         "space_type_name": "workshop",
@@ -493,7 +536,8 @@
         "ventilation_space_type_name": "workshop_ventilation",
         "electric_equipment_space_type_name": "workshop_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "workshop"
+        "schedule_set_name": "workshop",
+        "annotation": null
     },
     {
         "space_type_name": "worship",
@@ -501,6 +545,7 @@
         "ventilation_space_type_name": "worship_ventilation",
         "electric_equipment_space_type_name": "worship_pulpit_choir_area_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": "worship_pulpit_choir_area"
+        "schedule_set_name": "worship_pulpit_choir_area",
+        "annotation": null
     }
 ]
