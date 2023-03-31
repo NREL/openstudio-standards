@@ -18,19 +18,19 @@ As shown in the figure above, the database contains two types of data: space typ
 - The third and final level, level 3, is a collection of data tables that contains raw information from building energy codes, such as lighting power allowances and required ventilation rates.
 The list of space type provided in the level 1 table is a concise yet exhaustive list of space type that can be used to model most commercial building spaces. Assumptions for these space types are contained in the level 2 and level 3 tables, however these tables contain additional information about more specific space type requirements (or less specific, e.g., through the building area method lighting power allowances).
 
-This approach lends itself to customization, for example, the mapping of a particular space type name to sub-space type can be overwritten by changing the reference to the sub-space types (level 2) in the level 1 table. Another possible use of the database is to only access level 3 data tables to get a direct access to the raw code information in a tabulated format which, again, contains more data that what is used to derive the modeling assumptions for the space types listed in the level 1 table.
+This approach lends itself to customization, for example, the mapping of a particular space type name to sub-space type can be overwritten by changing the reference to the sub-space types (level 2) in the level 1 table. Another possible use of the database is to only access the level 3 data tables to get a direct access to the raw code information in a tabulated format which, again, contains more data than what is used to derive the modeling assumptions for the space types listed in the level 1 table.
 
 The non-space type related data, contains all other data needed by OpenStudio-Standards, this includes constructions/materials tables, performance curves tables, minimum code required HVAC efficiency, system requirements, etc.
 
 ## Space Type Data
 ### Space Type Names
-The space type names list has been created using engineering judgment and the space type name list from the ASHRAE Standard 90.1 lighting building area and space-by-space tables. Space type names were either concatenated or simplify to be easy to understand.
+The space type names list has been created using engineering judgment and the space type name list from the ASHRAE Standard 90.1 lighting building area and space-by-space tables. Space type names were either concatenated or simplified to be self-descriptive.
 ### Lighting
 Lighting assumptions for each space type comes from actual building energy code requirements. As the space type names referenced in each version of ASHRAE Standard 90.1 changes from one version to another, a mapping effort was conducted to reconcile the requirements for each space type for all versions of the code.
 ### People density and Ventilation
-The people density and ventilation data originate from values specified in ASHRAE Standard 62.1. Similarly, to lighting, a mapping effort was conducted to reconcile the requirements for each space type for all versions of the code. While OpenStudio-Standards currently offers data for the 2004 version of 90.1 up to the 2019 version of 90.1, ventilation/people density values for some space type could not be found for all versions of 62.1. In this instance, if available, older values were used, all the way to 62.1-1999 if when needed.
+The people density and ventilation data originate from values specified in ASHRAE Standard 62.1. Similarly to the lighting data, a mapping effort was conducted to reconcile the requirements for each space type for all versions of the code. While OpenStudio-Standards currently offers data for the 2004 version of 90.1 up to the 2019 version of 90.1, ventilation/people density values for some space type could not be found for all versions of 62.1. In this instance, if available, older values were used, all the way to 62.1-1999 when needed.
 ### Equipment
-The equipment assumptions are based on a plug-load values derived from a project led at PNNL named *Development of Building-Space-Specific Loads for Performance Rating Methods*. Plug-load for each space type were determined using a bottom-up approach, see the figure below. Minimum, maximum, average, and median equipment power density values are provided (average values are currently used when exporting the data to the JSON files used by OpenStudio-Standards).
+The equipment assumptions are based on a plug-load values derived from a project led at the Pacific Northwest National Laboratory (PNNL) named *Development of Building-Space-Specific Loads for Performance Rating Methods*. Plug-load for each space type were determined using a bottom-up approach, see the figure below. Minimum, maximum, average, and median equipment power density values are provided (average values are currently used when exporting the data to the JSON files used by OpenStudio-Standards).
 
 ![Equipment Power Density Determination Using Plug-Load Data](plug_loads_methodology.png "Equipment Power Density Determination Using Plug-Load Data")
 ### Schedules
@@ -60,7 +60,7 @@ conn = sqlite3.connect('openstudio_standards.db')
 export_openstudio_standards_database_to_csv(conn, save_dir='./database_files/')
 ```
 ### Modifying the Database
-The database data can be updated by modifying the JSON files directly, or the exported CSV files and then regenerate the database using the following code block.
+The database data can be updated by modifying the JSON files directly, or the exported CSV files and then be regenerated using the following code block.
 ```python
 import sqlite3
 from applications.database_maintenance import create_openstudio_standards_database_from_csv
@@ -69,16 +69,16 @@ conn = sqlite3.connect('openstudio_standards.db')
 create_openstudio_standards_database_from_csv(conn)
 conn.close()
 ```
-New tables can be added to the database, but they have to first be defined programmatically. A new file should be created in `./database_tables`. Each file defines the "schema" of a table and how it relates to other tables. The content of the new file can be adapted from an existing one. A JSON files, or CSV, containing the initial data to populate the database should be added to `./database_files`.
+New tables can be added to the database, but they have to first be defined programmatically first. A new file should be created in `./database_tables`. Each file defines the "schema" of a table and how it relates to other tables. The content of the new file can be adapted from an existing file. A JSON or CSV file containing the initial data to populate the database should be added to `./database_files` and added to the `__init__.py` file located in `./database_tables`.
 
 ### Logging
-Logs can be generated when running the following lines of code before any of the code blocks above.
+Logs can be generated when running some of the previously mentioned code by using the following lines first.
 ```python
 import logging
 logging.getLogger().setLevel(logging.INFO)
 ```
 ### Generate OpenStudio-Standards Data
-The following code block can be used to generate the non-space type related data needed by Openstudio-Standards to operate for several versions of ASHRAE Standard 90.1. The function will export the JSON file data in the right directory.
+The following code block can be used to generate the non-space type related data needed by Openstudio-Standards to operate for several versions of ASHRAE Standard 90.1. The function will export the JSON files in the right directory.
 ```python
 import sqlite3
 conn = sqlite3.connect('openstudio_standards.db')
@@ -87,7 +87,7 @@ for t in ["2004", "2007", "2010", "2013", "2016", "2019"]:
     create_openstudio_standards_data_json_ashrae_90_1(conn=conn, version_90_1=t)
 conn.close()
 ```
-The following code block can be used to generate the space type related data needed by Openstudio-Standards to operate for several versions of ASHRAE Standard 90.1. The function will export the JSON file data in the right directory.
+The following code block can be used to generate the space type related data needed by Openstudio-Standards to operate for several versions of ASHRAE Standard 90.1. The function will export the JSON files in the right directory.
 ```python
 import sqlite3
 conn = sqlite3.connect('openstudio_standards.db')
@@ -99,10 +99,9 @@ conn.close()
 ## Future Enhancements
 - Add input validation to the functions used to generate/export the database and the OpenStudio-Standards data
 - Add a command line interface to perform the generation/export/modification
-- Additional code versions
-- Direct query to the database to avoid having to store two sets of JSON data files
-- Move database to a different repository; updates to the OpenStudio-Standards data would be made through automated PRs every time updates would be made to the data repository
-
+- Add data for additional code versions
+- Support queries to the database to avoid having to store two sets of JSON data files when running OpenStudio-Standards
+- Move database to a different repository; Updates to the OpenStudio-Standards data would be made through automated PRs every time updates would be made to the data repository
 ## Contribute
 ### Code Formatting
 Consistent code formatting is enforced by using the [Black Python code formatter](https://github.com/psf/black). Tests are run to make sure that any changes to the code is consistent with Black's formatting standards. Before creating a pull request and after installing Black, run `black -l 88 ./` to format all Python files within this directory.
