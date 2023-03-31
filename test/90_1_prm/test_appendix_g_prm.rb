@@ -249,7 +249,7 @@ class AppendixGPRMTests < Minitest::Test
     prototype_list.each do |utest, prototypes|
       prototypes.each do |prototype|
         # TODO temporarily remove LargeOffice from the unit test due to known issue with OS 3.5 (Eplus v22)
-        if !prototypes_to_generate.values.include?(prototype) && tests.include?(utest) && prototype != "LargeOffice"
+        if !prototypes_to_generate.values.include?(prototype) && tests.include?(utest) && prototype[0] != "LargeOffice"
           prototypes_to_generate[id] = prototype
           id += 1
         end
