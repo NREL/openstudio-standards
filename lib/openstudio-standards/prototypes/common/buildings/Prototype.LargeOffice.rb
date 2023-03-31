@@ -100,11 +100,13 @@ module LargeOffice
       end
     end
 
-    model.getPlantLoops.sort.each do |plant_loop|
-      if plant_loop.name.to_s == 'Heat Pump Loop'
-        plant_loop.setFluidType('EthyleneGlycol')
-        plant_loop.setGlycolConcentration(40)
-      end
+    hp_loop = model.getPlantLoopByName('Heat Pump Loop')
+    if hp_loop.is_initialized
+      hp_loop = hp_loop.get
+
+      # set working fluid to ethylene glycol
+      hp_loop.setFluidType('EthyleneGlycol')
+      hp_loop.setGlycolConcentration(40)
     end
 
     return true
