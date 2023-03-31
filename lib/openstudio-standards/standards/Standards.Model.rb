@@ -75,8 +75,8 @@ class Standard
           raise "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created."
         end
       else
-        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Simulation failed. Check the model to make sure no severe errors.")
-        raise "Simulation on proposed model failed. Baseline generation is stopped."
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', 'Simulation failed. Check the model to make sure no severe errors.')
+        raise 'Simulation on proposed model failed. Baseline generation is stopped.'
       end
     end
 
@@ -4674,8 +4674,11 @@ class Standard
       vals['wwr_res'] *= vals['mult_res_red']
       vals['wwr_sh'] *= vals['mult_sh_red']
       wwrs = [vals['wwr_nr'], vals['wwr_res'], vals['wwr_sh']]
-      wwrs = wwrs.reject! &:nan?
-      base_wwr[bat] = wwrs.max
+      max_wwrs = []
+      wwrs.each do |w|
+        max_wwrs << w unless w.nan?
+      end
+      base_wwr[bat] = max_wwrs.max
 
       # Reduce the window area if any of the categories necessary
       model.getSpaces.sort.each do |space|
