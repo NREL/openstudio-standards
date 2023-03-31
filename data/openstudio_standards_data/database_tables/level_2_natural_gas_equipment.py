@@ -9,11 +9,14 @@ TABLE_NAME = "level_2_natural_gas_equipment"
 RECORD_HELP = """
 Must provide a tuple that contains:
 natural_gas_equipment_space_type_name: TEXT
-natural_gas_equipment_minimum_epd: REAL
-natural_gas_equipment_average_epd: REAL
-natural_gas_equipment_median_epd: REAL
-natural_gas_equipment_maximum_epd: REAL
+natural_gas_equipment_minimum_epd: NUMERIC
+natural_gas_equipment_average_epd: NUMERIC
+natural_gas_equipment_median_epd: NUMERIC
+natural_gas_equipment_maximum_epd: NUMERIC
 natural_gas_equipment_epd_unit: TEXT
+natural_gas_equipment_fraction_latent: NUMERIC
+natural_gas_equipment_fraction_radiant: NUMERIC
+natural_gas_equipment_fraction_lost: NUMERIC
 """
 
 CREATE_NATURAL_GAS_EQUIPMENT_TABLE = """
@@ -24,13 +27,27 @@ natural_gas_equipment_minimum_epd NUMERIC,
 natural_gas_equipment_average_epd NUMERIC, 
 natural_gas_equipment_median_epd NUMERIC, 
 natural_gas_equipment_maximum_epd NUMERIC, 
-natural_gas_equipment_epd_unit TEXT);
+natural_gas_equipment_epd_unit TEXT,
+natural_gas_equipment_fraction_latent NUMERIC,
+natural_gas_equipment_fraction_radiant NUMERIC,
+natural_gas_equipment_fraction_lost NUMERIC
+);
 """
 
 INSERT_NATURAL_GAS_EQUIP_LOAD_RECORD = """
     INSERT INTO %s
-    (natural_gas_equipment_space_type_name, natural_gas_equipment_minimum_epd, natural_gas_equipment_average_epd, natural_gas_equipment_median_epd, natural_gas_equipment_maximum_epd, natural_gas_equipment_epd_unit)
-    VALUES (?, ?, ?, ? , ? ,?);
+    (
+        natural_gas_equipment_space_type_name,
+        natural_gas_equipment_minimum_epd,
+        natural_gas_equipment_average_epd,
+        natural_gas_equipment_median_epd,
+        natural_gas_equipment_maximum_epd,
+        natural_gas_equipment_epd_unit,
+        natural_gas_equipment_fraction_latent,
+        natural_gas_equipment_fraction_radiant,
+        natural_gas_equipment_fraction_lost
+        )
+    VALUES (?, ?, ?, ?, ? , ?, ?, ?, ?);
 """
 
 RECORD_TEMPLATE = {
@@ -40,6 +57,9 @@ RECORD_TEMPLATE = {
     "natural_gas_equipment_median_epd": "",
     "natural_gas_equipment_maximum_epd": "",
     "natural_gas_equipment_epd_unit": "Btu/hr.ft2",
+    "natural_gas_equipment_fraction_latent": 0.0,
+    "natural_gas_equipment_fraction_radiant": 0.0,
+    "natural_gas_equipment_fraction_lost": 0.0,
 }
 
 
@@ -66,6 +86,9 @@ class EquipLoadTable(DBOperation):
             "natural_gas_equipment_average_epd",
             "natural_gas_equipment_median_epd",
             "natural_gas_equipment_maximum_epd",
+            "natural_gas_equipment_fraction_latent",
+            "natural_gas_equipment_fraction_radiant",
+            "natural_gas_equipment_fraction_lost",
         ]
 
         for f in float_expected:
@@ -88,5 +111,8 @@ class EquipLoadTable(DBOperation):
             getattr_either("natural_gas_equipment_median_epd", record),
             getattr_either("natural_gas_equipment_maximum_epd", record),
             getattr_either("natural_gas_equipment_epd_unit", record, ""),
+            getattr_either("natural_gas_equipment_fraction_latent", record),
+            getattr_either("natural_gas_equipment_fraction_radiant", record),
+            getattr_either("natural_gas_equipment_fraction_lost", record),
         )
         return record_tuple

@@ -157,5 +157,11 @@
     },
     {
         "support_electric_equipment_space_type_name_tags": "worship_pulpit_choir_area_electric_equipment"
+    },
+    {
+        "support_electric_equipment_space_type_name_tags": "datacenter_high_ite_equipment"
+    },
+    {
+        "support_electric_equipment_space_type_name_tags": "datacenter_low_ite_equipment"
     }
 ]

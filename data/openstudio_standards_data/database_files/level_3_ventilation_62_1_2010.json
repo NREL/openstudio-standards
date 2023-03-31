@@ -729,7 +729,7 @@
     },
     {
         "ventilation_primary_space_type": "Public Assembly Spaces",
-        "ventilation_secondary_space_type": "Museums (children\u00c3\u0192\u00c2\u00af\u00c3\u201a\u00c2\u00bf\u00c3\u201a\u00c2\u00bds)",
+        "ventilation_secondary_space_type": "Museums (children's)",
         "ventilation_rate_occupant": 7.5,
         "ventilation_rate_occupant_unit": "cfm/person",
         "ventilation_rate_area": 0.12,
