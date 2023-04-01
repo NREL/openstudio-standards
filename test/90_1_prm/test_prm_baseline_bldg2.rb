@@ -253,7 +253,7 @@ class Baseline9012013Test2 < Minitest::Test
         end
         # check tank losses
         if capacity_kw < 12
-          energy_factor = 0.97 - (0.00035*volume_gal)
+          energy_factor = 0.97 - (0.00132*volume_gal)
           ua_btu_per_hr_per_f = (41_094 * (1 / energy_factor - 1)) / (24 * 67.5)
           expected_ua_watts_per_k = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
           unless (expected_ua_watts_per_k - ua_watts_per_k).abs < 0.02
