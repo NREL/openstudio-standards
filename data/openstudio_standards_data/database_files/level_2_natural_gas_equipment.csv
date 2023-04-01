@@ -1,7 +1,0 @@
-natural_gas_equipment_space_type_name,natural_gas_equipment_minimum_epd,natural_gas_equipment_average_epd,natural_gas_equipment_median_epd,natural_gas_equipment_maximum_epd,natural_gas_equipment_epd_unit,natural_gas_equipment_fraction_latent,natural_gas_equipment_fraction_radiant,natural_gas_equipment_fraction_lost
-kitchen,51.16,361.7807576,302.6,767,Btu/hr.ft2,0.1,0.2,0.7
-laundry,42.6,138.4291667,129.9,170,Btu/hr.ft2,0,0.5,0
-or,17.4,23.223,23.87,23.87,Btu/hr.ft2,0,0,0.5
-deli,8.52,8.5225,8.52,8.53,Btu/hr.ft2,0.1,0.2,0.7
-bakery,8.53,8.5375,8.54,8.54,Btu/hr.ft2,0.1,0.2,0.7
-deli/bakery,6.25,6.25,6.25,6.25,Btu/hr.ft2,0.1,0.2,0.7
