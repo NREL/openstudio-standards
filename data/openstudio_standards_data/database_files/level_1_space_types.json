@@ -75,10 +75,10 @@
         "space_type_name": "copy, print",
         "lighting_space_type_name": "copy_print_lighting",
         "ventilation_space_type_name": "copy_print_ventilation",
-        "electric_equipment_space_type_name": null,
+        "electric_equipment_space_type_name": "office_enclosed_lte_250_sf_electric_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": null,
-        "annotation": null
+        "schedule_set_name": "office_enclosed_lte_250_sf",
+        "annotation": "to be revised"
     },
     {
         "space_type_name": "corridor",
@@ -104,8 +104,8 @@
         "ventilation_space_type_name": "datacenterhighite_ventilation",
         "electric_equipment_space_type_name": "datacenter_high_ite_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": null,
-        "annotation": null
+        "schedule_set_name": "computer_room",
+        "annotation": "to be revised"
     },
     {
         "space_type_name": "datacenter, low ite",
@@ -113,8 +113,8 @@
         "ventilation_space_type_name": "datacenterlowite_ventilation",
         "electric_equipment_space_type_name": "datacenter_low_ite_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": null,
-        "annotation": null
+        "schedule_set_name": "computer_room",
+        "annotation": "to be revised"
     },
     {
         "space_type_name": "dining",
@@ -201,9 +201,9 @@
         "space_type_name": "imaging",
         "lighting_space_type_name": "imaging_lighting",
         "ventilation_space_type_name": "imaging_ventilation",
-        "electric_equipment_space_type_name": null,
+        "electric_equipment_space_type_name": "imaging_room_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": null,
+        "schedule_set_name": "exam_treatment",
         "annotation": null
     },
     {
@@ -273,10 +273,10 @@
         "space_type_name": "loading dock",
         "lighting_space_type_name": "loading_dock_lighting",
         "ventilation_space_type_name": "loading_dock_ventilation",
-        "electric_equipment_space_type_name": null,
+        "electric_equipment_space_type_name": "loading_dock_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": null,
-        "annotation": null
+        "schedule_set_name": "workshop",
+        "annotation": "to be revised"
     },
     {
         "space_type_name": "lobby",
@@ -327,10 +327,10 @@
         "space_type_name": "multifamily",
         "lighting_space_type_name": "multifamily_lighting",
         "ventilation_space_type_name": "multifamily_ventilation",
-        "electric_equipment_space_type_name": null,
+        "electric_equipment_space_type_name": "multifamily_equipment",
         "natural_gas_equipment_space_type_name": null,
-        "schedule_set_name": null,
-        "annotation": "common areas in a multifamily building, NOT dwelling units"
+        "schedule_set_name": "lounge_breakroom_all_other",
+        "annotation": "common areas in a multifamily building, NOT dwelling units; schedule to be revised"
     },
     {
         "space_type_name": "nursery",

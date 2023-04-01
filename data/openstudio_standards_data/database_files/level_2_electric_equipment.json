@@ -1043,5 +1043,38 @@
         "electric_equipment_fraction_latent": 0,
         "electric_equipment_fraction_radiant": 0.1,
         "electric_equipment_fraction_lost": 0
+    },
+    {
+        "electric_equipment_space_type_name": "multifamily_equipment",
+        "electric_equipment_minimum_epd": 0.15,
+        "electric_equipment_average_epd": 0.15,
+        "electric_equipment_median_epd": 0.15,
+        "electric_equipment_maximum_epd": 0.15,
+        "electric_equipment_epd_unit": "W/ft2",
+        "electric_equipment_fraction_latent": 0,
+        "electric_equipment_fraction_radiant": 0,
+        "electric_equipment_fraction_lost": 0
+    },
+    {
+        "electric_equipment_space_type_name": "imaging_room_equipment",
+        "electric_equipment_minimum_epd": 0.46,
+        "electric_equipment_average_epd": 0.46,
+        "electric_equipment_median_epd": 0.46,
+        "electric_equipment_maximum_epd": 0.46,
+        "electric_equipment_epd_unit": "W/ft2",
+        "electric_equipment_fraction_latent": 0,
+        "electric_equipment_fraction_radiant": 0,
+        "electric_equipment_fraction_lost": 0
+    },
+    {
+        "electric_equipment_space_type_name": "loading_dock_equipment",
+        "electric_equipment_minimum_epd": 0.48,
+        "electric_equipment_average_epd": 0.48,
+        "electric_equipment_median_epd": 0.48,
+        "electric_equipment_maximum_epd": 0.48,
+        "electric_equipment_epd_unit": "W/ft2",
+        "electric_equipment_fraction_latent": 0,
+        "electric_equipment_fraction_radiant": 0,
+        "electric_equipment_fraction_lost": 0
     }
 ]
