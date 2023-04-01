@@ -163,5 +163,14 @@
     },
     {
         "support_electric_equipment_space_type_name_tags": "datacenter_low_ite_equipment"
+    },
+    {
+        "support_electric_equipment_space_type_name_tags": "multifamily_equipment"
+    },
+    {
+        "support_electric_equipment_space_type_name_tags": "imaging_room_equipment"
+    },
+    {
+        "support_electric_equipment_space_type_name_tags": "loading_dock_equipment"
     }
 ]
