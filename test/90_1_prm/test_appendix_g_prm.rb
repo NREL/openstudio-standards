@@ -298,7 +298,10 @@ class AppendixGPRMTests < Minitest::Test
       # Get WWR of baseline model
       std = Standard.build('90.1-PRM-2019')
       wwr_baseline = std.run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Conditioned Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
-
+      if building_type == 'MediumOffice'
+        # In 3.5 the conditioned window-wall ratio table does not consider plenum as indirectly conditioned space, so we need to take out the value from window-wall ratio table.
+        wwr_baseline = std.run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
+      end
       # Check WWR against expected WWR
       wwr_goal = 100 * @@wwr_values[building_type].to_f
       if building_type == 'MidriseApartment' && climate_zone == 'ASHRAE 169-2013-3A'
@@ -550,12 +553,16 @@ class AppendixGPRMTests < Minitest::Test
       space_name = JSON.parse(File.read("#{@@json_dir}/lpd.json"))[run_id]
 
       std = Standard.build('90.1-PRM-2019')
-      
+      sql = model_baseline.sqlFile.get
+      unless sql.connectionOpen
+        sql.reopen
+      end
       # Get LPD in baseline model
       lpd_baseline = {}
       space_name.each do |val|
         lpd_baseline[val[0]] = std.run_query_tabulardatawithstrings(model_baseline, 'LightingSummary', 'Interior Lighting', val[0], 'Lighting Power Density', 'W/m2').to_f
       end
+      sql.close
 
       # Check LPD against expected LPD
       space_name.each do |key, value|

@@ -2009,7 +2009,7 @@ class Standard
     v_ps = if air_loop_hvac.designSupplyAirFlowRate.is_initialized
              air_loop_hvac.designSupplyAirFlowRate.get
            elsif air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
-             air_loop_hvac.autosizedDesignSupplyAirFlowRate.get         
+             air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
            end
     v_ps_cfm = OpenStudio.convert(v_ps, 'm^3/s', 'cfm').get
 
