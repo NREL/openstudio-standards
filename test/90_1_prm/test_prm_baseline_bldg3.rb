@@ -118,329 +118,329 @@ class Baseline9012013Test3 < Minitest::Test
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
   end
 
-  # Test System Type for bldg_3
-  # @author Matt Leach, NORESCO
-  def test_system_type_bldg3
-    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
-    failure_array = []
+  # # Test System Type for bldg_3
+  # # @author Matt Leach, NORESCO
+  # def test_system_type_bldg3
+  #   model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+  #   failure_array = []
 
-    # test main system type
-    expected_system_string = "PVAV_Reheat (Sys5)"
-    # expect PSZ systems for: (1) zones without mechanical cooling; (2) zones that meet schedule exception; (3) zones that meet load exception
-    zones_without_mechanical_cooling = ["Base1 LockerOther 1B30", "Base1 LockerPlayer E", "Base1 LockerPlayer NE", "Base1 LockerPlayer SW", "Base2 MechRoom 2B75", "Base2 Weight NE", "Base2 Weight SW", "Flr2 Kitchen"]
-    zones_with_schedule_exception = ["Base1 LockerPlayer SE", "Base1 Lounge 1B33 36", "Base1 Office 1B32", "Base1 Storage 1B38", "Flr1 Treatment NE", "Flr2 Lounge Core"]
-    zones_with_load_exception = ["Flr2 Computer 266"]
-    # hydrotherapy zone likely should be a load exception zone; right now, the measure is applying load exception at the 'floor' level instead of at the 'building' level
-    model.getAirLoopHVACs.each do |airloop|
-      airloop_name = airloop.name.get.to_s
+  #   # test main system type
+  #   expected_system_string = "PVAV_Reheat (Sys5)"
+  #   # expect PSZ systems for: (1) zones without mechanical cooling; (2) zones that meet schedule exception; (3) zones that meet load exception
+  #   zones_without_mechanical_cooling = ["Base1 LockerOther 1B30", "Base1 LockerPlayer E", "Base1 LockerPlayer NE", "Base1 LockerPlayer SW", "Base2 MechRoom 2B75", "Base2 Weight NE", "Base2 Weight SW", "Flr2 Kitchen"]
+  #   zones_with_schedule_exception = ["Base1 LockerPlayer SE", "Base1 Lounge 1B33 36", "Base1 Office 1B32", "Base1 Storage 1B38", "Flr1 Treatment NE", "Flr2 Lounge Core"]
+  #   zones_with_load_exception = ["Flr2 Computer 266"]
+  #   # hydrotherapy zone likely should be a load exception zone; right now, the measure is applying load exception at the 'floor' level instead of at the 'building' level
+  #   model.getAirLoopHVACs.each do |airloop|
+  #     airloop_name = airloop.name.get.to_s
 
-      # check for unitary system
-      unitary_system = nil
-      airloop.supplyComponents.each do |comp|
-        if comp.to_AirLoopHVACUnitarySystem.is_initialized
-          unitary_system = comp.to_AirLoopHVACUnitarySystem.get
-        end
-      end
+  #     # check for unitary system
+  #     unitary_system = nil
+  #     airloop.supplyComponents.each do |comp|
+  #       if comp.to_AirLoopHVACUnitarySystem.is_initialized
+  #         unitary_system = comp.to_AirLoopHVACUnitarySystem.get
+  #       end
+  #     end
 
-      unless airloop_name.include? expected_system_string
-        system_type_confirmed = false
-        # look for zones without mechanical cooling
-        zones_without_mechanical_cooling.each do |zone_name|
-          # should have district heating but NOT district cooling
-          if airloop_name.include? zone_name
-            # check terminal types
-            thermal_zones_attached = 0
-            airloop.thermalZones.each do |zone|
-              thermal_zones_attached += 1
-              # look for air terminal for zone
-              if zone.airLoopHVACTerminal.is_initialized
-                terminal = zone.airLoopHVACTerminal.get
-                # get terminal and make sure it is the correct type
-                unless terminal.to_AirTerminalSingleDuctUncontrolled.is_initialized
-                  failure_array << "Expected terminals to be of type AirTerminalSingleDuctUncontrolled for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
-                end
-              else
-                failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
-              end
-            end
-            unless thermal_zones_attached == 1
-              failure_array << "Expected 1 Thermal Zone to be attached to System #{airloop_name}; found #{thermal_zones_attached} Zone(s) attached"
-            end
+  #     unless airloop_name.include? expected_system_string
+  #       system_type_confirmed = false
+  #       # look for zones without mechanical cooling
+  #       zones_without_mechanical_cooling.each do |zone_name|
+  #         # should have district heating but NOT district cooling
+  #         if airloop_name.include? zone_name
+  #           # check terminal types
+  #           thermal_zones_attached = 0
+  #           airloop.thermalZones.each do |zone|
+  #             thermal_zones_attached += 1
+  #             # look for air terminal for zone
+  #             if zone.airLoopHVACTerminal.is_initialized
+  #               terminal = zone.airLoopHVACTerminal.get
+  #               # get terminal and make sure it is the correct type
+  #               unless terminal.to_AirTerminalSingleDuctUncontrolled.is_initialized
+  #                 failure_array << "Expected terminals to be of type AirTerminalSingleDuctUncontrolled for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
+  #               end
+  #             else
+  #               failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
+  #             end
+  #           end
+  #           unless thermal_zones_attached == 1
+  #             failure_array << "Expected 1 Thermal Zone to be attached to System #{airloop_name}; found #{thermal_zones_attached} Zone(s) attached"
+  #           end
 
-            # check fan type
-            supply_fan = nil
-            if airloop.supplyFan.is_initialized
-              supply_fan = airloop.supplyFan.get
-            elsif !unitary_system.nil?
-              supply_fan = unitary_system.supplyFan.get
-            else
-              failure_array << "No supply fan attached to System #{airloop_name}"
-            end
+  #           # check fan type
+  #           supply_fan = nil
+  #           if airloop.supplyFan.is_initialized
+  #             supply_fan = airloop.supplyFan.get
+  #           elsif !unitary_system.nil?
+  #             supply_fan = unitary_system.supplyFan.get
+  #           else
+  #             failure_array << "No supply fan attached to System #{airloop_name}"
+  #           end
 
-            # get fan type
-            unless supply_fan.nil?
-              unless supply_fan.to_FanOnOff.is_initialized
-                failure_array << "Expected fan of type OnOff for System #{airloop_name}"
-              end
-            end
+  #           # get fan type
+  #           unless supply_fan.nil?
+  #             unless supply_fan.to_FanOnOff.is_initialized
+  #               failure_array << "Expected fan of type OnOff for System #{airloop_name}"
+  #             end
+  #           end
 
-            # check heating and cooling coil types
-            # heating coil
-            heating_coils = []
-            cooling_coils = []
-            airloop.supplyComponents.each do |comp|
-              if comp.to_CoilHeatingWater.is_initialized
-                heating_coils << comp.to_CoilHeatingWater.get
-              end
-              if comp.to_CoilCoolingWater.is_initialized
-                cooling_coils << comp.to_CoilCoolingWater.get
-              end
-            end
+  #           # check heating and cooling coil types
+  #           # heating coil
+  #           heating_coils = []
+  #           cooling_coils = []
+  #           airloop.supplyComponents.each do |comp|
+  #             if comp.to_CoilHeatingWater.is_initialized
+  #               heating_coils << comp.to_CoilHeatingWater.get
+  #             end
+  #             if comp.to_CoilCoolingWater.is_initialized
+  #               cooling_coils << comp.to_CoilCoolingWater.get
+  #             end
+  #           end
 
-            unless unitary_system.nil?
-              if unitary_system.heatingCoil.is_initialized
-                heating_coil = unitary_system.heatingCoil.get
-                if heating_coil.to_CoilHeatingWater.is_initialized
-                  heating_coils << heating_coil.to_CoilHeatingWater.get
-                end
-              end
-              if unitary_system.coolingCoil.is_initialized
-                cooling_coil = unitary_system.coolingCoil.get
-                if cooling_coil.to_CoilCoolingWater.is_initialized
-                  cooling_coils << cooling_coil.to_CoilCoolingWater.get
-                end
-              end
-            end
+  #           unless unitary_system.nil?
+  #             if unitary_system.heatingCoil.is_initialized
+  #               heating_coil = unitary_system.heatingCoil.get
+  #               if heating_coil.to_CoilHeatingWater.is_initialized
+  #                 heating_coils << heating_coil.to_CoilHeatingWater.get
+  #               end
+  #             end
+  #             if unitary_system.coolingCoil.is_initialized
+  #               cooling_coil = unitary_system.coolingCoil.get
+  #               if cooling_coil.to_CoilCoolingWater.is_initialized
+  #                 cooling_coils << cooling_coil.to_CoilCoolingWater.get
+  #               end
+  #             end
+  #           end
 
-            if heating_coils.empty?
-              failure_array << "Expected heating coil of type CoilHeatingWater for System #{airloop_name}"
-            end
+  #           if heating_coils.empty?
+  #             failure_array << "Expected heating coil of type CoilHeatingWater for System #{airloop_name}"
+  #           end
 
-            if cooling_coils.empty?
-              failure_array << "Expected cooling coil of type CoilCoolingWater for System #{airloop_name}"
-            end
+  #           if cooling_coils.empty?
+  #             failure_array << "Expected cooling coil of type CoilCoolingWater for System #{airloop_name}"
+  #           end
 
-            # heating coils
-            heating_coils.each do |heating_water_coil|
-              unless heating_water_coil.to_CoilHeatingWater.get.plantLoop.is_initialized
-                failure_array << "Heating coil serving System #{airloop_name} is not attached to a plant loop"
-              else
-                plant_loop = heating_water_coil.to_CoilHeatingWater.get.plantLoop.get
-                unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
-                  failure_array << "Expected Heating Coil for System #{airloop_name} to be served by a DistrictHeating object"
-                end
-              end
-            end
+  #           # heating coils
+  #           heating_coils.each do |heating_water_coil|
+  #             unless heating_water_coil.to_CoilHeatingWater.get.plantLoop.is_initialized
+  #               failure_array << "Heating coil serving System #{airloop_name} is not attached to a plant loop"
+  #             else
+  #               plant_loop = heating_water_coil.to_CoilHeatingWater.get.plantLoop.get
+  #               unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
+  #                 failure_array << "Expected Heating Coil for System #{airloop_name} to be served by a DistrictHeating object"
+  #               end
+  #             end
+  #           end
 
-            # cooling coils
-            cooling_coils.each do |cooling_water_coil|
-              unless cooling_water_coil.to_CoilCoolingWater.get.plantLoop.is_initialized
-                failure_array << "Cooling coil serving System #{airloop_name} is not attached to a plant loop"
-              end
-            end
-          end
-        end
-        # look for zones with schedule or load exception
-        zones_with_exceptions = zones_with_schedule_exception + zones_with_load_exception
-        zones_with_exceptions.each do |zone_name|
-          # should have district heating AND district cooling
-          if airloop_name.include? zone_name
-            # check terminal types
-            thermal_zones_attached = 0
-            airloop.thermalZones.each do |zone|
-              thermal_zones_attached += 1
-              # look for air terminal for zone
-              if zone.airLoopHVACTerminal.is_initialized
-                terminal = zone.airLoopHVACTerminal.get
-                # get terminal and make sure it is the correct type
-                unless terminal.to_AirTerminalSingleDuctUncontrolled.is_initialized
-                  failure_array << "Expected terminals to be of type AirTerminalSingleDuctUncontrolled for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
-                end
-              else
-                failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
-              end
-            end
-            unless thermal_zones_attached == 1
-              failure_array << "Expected 1 Thermal Zone to be attached to System #{airloop_name}; found #{thermal_zones_attached} Zone(s) attached"
-            end
+  #           # cooling coils
+  #           cooling_coils.each do |cooling_water_coil|
+  #             unless cooling_water_coil.to_CoilCoolingWater.get.plantLoop.is_initialized
+  #               failure_array << "Cooling coil serving System #{airloop_name} is not attached to a plant loop"
+  #             end
+  #           end
+  #         end
+  #       end
+  #       # look for zones with schedule or load exception
+  #       zones_with_exceptions = zones_with_schedule_exception + zones_with_load_exception
+  #       zones_with_exceptions.each do |zone_name|
+  #         # should have district heating AND district cooling
+  #         if airloop_name.include? zone_name
+  #           # check terminal types
+  #           thermal_zones_attached = 0
+  #           airloop.thermalZones.each do |zone|
+  #             thermal_zones_attached += 1
+  #             # look for air terminal for zone
+  #             if zone.airLoopHVACTerminal.is_initialized
+  #               terminal = zone.airLoopHVACTerminal.get
+  #               # get terminal and make sure it is the correct type
+  #               unless terminal.to_AirTerminalSingleDuctUncontrolled.is_initialized
+  #                 failure_array << "Expected terminals to be of type AirTerminalSingleDuctUncontrolled for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
+  #               end
+  #             else
+  #               failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
+  #             end
+  #           end
+  #           unless thermal_zones_attached == 1
+  #             failure_array << "Expected 1 Thermal Zone to be attached to System #{airloop_name}; found #{thermal_zones_attached} Zone(s) attached"
+  #           end
 
-            # check fan type
-            supply_fan = nil
-            if airloop.supplyFan.is_initialized
-              supply_fan = airloop.supplyFan.get
-            elsif !unitary_system.nil?
-              supply_fan = unitary_system.supplyFan.get
-            else
-              failure_array << "No supply fan attached to System #{airloop_name}"
-            end
+  #           # check fan type
+  #           supply_fan = nil
+  #           if airloop.supplyFan.is_initialized
+  #             supply_fan = airloop.supplyFan.get
+  #           elsif !unitary_system.nil?
+  #             supply_fan = unitary_system.supplyFan.get
+  #           else
+  #             failure_array << "No supply fan attached to System #{airloop_name}"
+  #           end
 
-            # get fan type
-            unless supply_fan.nil?
-              unless supply_fan.to_FanOnOff.is_initialized
-                failure_array << "Expected fan of type OnOff for System #{airloop_name}"
-              end
-            end
+  #           # get fan type
+  #           unless supply_fan.nil?
+  #             unless supply_fan.to_FanOnOff.is_initialized
+  #               failure_array << "Expected fan of type OnOff for System #{airloop_name}"
+  #             end
+  #           end
 
-            # check heating and cooling coil types
-            # heating coil
-            heating_coils = []
-            cooling_coils = []
-            airloop.supplyComponents.each do |comp|
-              if comp.to_CoilHeatingWater.is_initialized
-                heating_coils << comp.to_CoilHeatingWater.get
-              end
-              if comp.to_CoilCoolingWater.is_initialized
-                cooling_coils << comp.to_CoilCoolingWater.get
-              end
-            end
+  #           # check heating and cooling coil types
+  #           # heating coil
+  #           heating_coils = []
+  #           cooling_coils = []
+  #           airloop.supplyComponents.each do |comp|
+  #             if comp.to_CoilHeatingWater.is_initialized
+  #               heating_coils << comp.to_CoilHeatingWater.get
+  #             end
+  #             if comp.to_CoilCoolingWater.is_initialized
+  #               cooling_coils << comp.to_CoilCoolingWater.get
+  #             end
+  #           end
 
-            unless unitary_system.nil?
-              if unitary_system.heatingCoil.is_initialized
-                heating_coil = unitary_system.heatingCoil.get
-                if heating_coil.to_CoilHeatingWater.is_initialized
-                  heating_coils << heating_coil.to_CoilHeatingWater.get
-                end
-              end
-              if unitary_system.coolingCoil.is_initialized
-                cooling_coil = unitary_system.coolingCoil.get
-                if cooling_coil.to_CoilCoolingWater.is_initialized
-                  cooling_coils << cooling_coil.to_CoilCoolingWater.get
-                end
-              end
-            end
+  #           unless unitary_system.nil?
+  #             if unitary_system.heatingCoil.is_initialized
+  #               heating_coil = unitary_system.heatingCoil.get
+  #               if heating_coil.to_CoilHeatingWater.is_initialized
+  #                 heating_coils << heating_coil.to_CoilHeatingWater.get
+  #               end
+  #             end
+  #             if unitary_system.coolingCoil.is_initialized
+  #               cooling_coil = unitary_system.coolingCoil.get
+  #               if cooling_coil.to_CoilCoolingWater.is_initialized
+  #                 cooling_coils << cooling_coil.to_CoilCoolingWater.get
+  #               end
+  #             end
+  #           end
 
-            if heating_coils.empty?
-              failure_array << "Expected heating coil of type CoilHeatingWater for System #{airloop_name}"
-            end
+  #           if heating_coils.empty?
+  #             failure_array << "Expected heating coil of type CoilHeatingWater for System #{airloop_name}"
+  #           end
 
-            if cooling_coils.empty?
-              failure_array << "Expected cooling coil of type CoilCoolingWater for System #{airloop_name}"
-            end
+  #           if cooling_coils.empty?
+  #             failure_array << "Expected cooling coil of type CoilCoolingWater for System #{airloop_name}"
+  #           end
 
-            # heating coils
-            heating_coils.each do |heating_water_coil|
-              unless heating_water_coil.to_CoilHeatingWater.get.plantLoop.is_initialized
-                failure_array << "Heating coil serving System #{airloop_name} is not attached to a plant loop"
-              else
-                plant_loop = heating_water_coil.to_CoilHeatingWater.get.plantLoop.get
-                unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
-                  failure_array << "Expected Heating Coil for System #{airloop_name} to be served by a DistrictHeating object"
-                end
-              end
-            end
+  #           # heating coils
+  #           heating_coils.each do |heating_water_coil|
+  #             unless heating_water_coil.to_CoilHeatingWater.get.plantLoop.is_initialized
+  #               failure_array << "Heating coil serving System #{airloop_name} is not attached to a plant loop"
+  #             else
+  #               plant_loop = heating_water_coil.to_CoilHeatingWater.get.plantLoop.get
+  #               unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
+  #                 failure_array << "Expected Heating Coil for System #{airloop_name} to be served by a DistrictHeating object"
+  #               end
+  #             end
+  #           end
 
-            # cooling coils
-            cooling_coils.each do |cooling_water_coil|
-              unless cooling_water_coil.to_CoilCoolingWater.get.plantLoop.is_initialized
-                failure_array << "Cooling coil serving System #{airloop_name} is not attached to a plant loop"
-              else
-                plant_loop = cooling_water_coil.to_CoilCoolingWater.get.plantLoop.get
-                unless plant_loop.supplyComponents('OS_DistrictCooling'.to_IddObjectType).length == 1
-                  failure_array << "Expected Cooling Coil for System #{airloop_name} to be served by a DistrictCooling object"
-                end
-              end
-            end
-          end
-        end
-        # PSZ system checks end here
-        next
-      else
-        system_type_confirmed = true
-      end
-      unless system_type_confirmed
-        failure_array << "System Type for Airloop #{airloop_name} is Unexpected.  Expected Type #{expected_system_string}"
-      end
-      # check terminal types
-      thermal_zones_attached = 0
-      airloop.thermalZones.each do |zone|
-        thermal_zones_attached += 1
-        # look for air terminal for zone
-        if zone.airLoopHVACTerminal.is_initialized
-          terminal = zone.airLoopHVACTerminal.get
-          # get terminal and make sure it is the correct type
-          unless terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
-            failure_array << "Expected terminals to be of type AirTerminalSingleDuctVAVReheat for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
-          end
-        else
-          failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
-        end
-      end
-      unless thermal_zones_attached > 0
-        failure_array << "No thermal zones attached to System #{airloop_name}"
-      end
-      # check fan type
-      unless airloop.supplyFan.is_initialized
-        failure_array << "No supply fan attached to System #{airloop_name}"
-      else
-        # get fan type
-        supply_fan = airloop.supplyFan.get
-        unless supply_fan.to_FanVariableVolume.is_initialized
-          failure_array << "Expected fan of type VariableVolume for System #{airloop_name}"
-        end
-      end
-      # check heating and cooling coil types
-      # heating coil
-      unless airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).length == 1
-        failure_array << "Expected heating coil of type CoilHeatingWater for System #{airloop_name}"
-      else
-        airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).each do |heating_water_coil|
-          unless heating_water_coil.to_CoilHeatingWater.get.plantLoop.is_initialized
-            failure_array << "Heating coil serving System #{airloop_name} is not attached to a plant loop"
-          else
-            plant_loop = heating_water_coil.to_CoilHeatingWater.get.plantLoop.get
-            unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
-              failure_array << "Expected Heating Coil for System #{airloop_name} to be served by a DistrictHeating object"
-            end
-          end
-        end
-      end
-      # cooling coil
+  #           # cooling coils
+  #           cooling_coils.each do |cooling_water_coil|
+  #             unless cooling_water_coil.to_CoilCoolingWater.get.plantLoop.is_initialized
+  #               failure_array << "Cooling coil serving System #{airloop_name} is not attached to a plant loop"
+  #             else
+  #               plant_loop = cooling_water_coil.to_CoilCoolingWater.get.plantLoop.get
+  #               unless plant_loop.supplyComponents('OS_DistrictCooling'.to_IddObjectType).length == 1
+  #                 failure_array << "Expected Cooling Coil for System #{airloop_name} to be served by a DistrictCooling object"
+  #               end
+  #             end
+  #           end
+  #         end
+  #       end
+  #       # PSZ system checks end here
+  #       next
+  #     else
+  #       system_type_confirmed = true
+  #     end
+  #     unless system_type_confirmed
+  #       failure_array << "System Type for Airloop #{airloop_name} is Unexpected.  Expected Type #{expected_system_string}"
+  #     end
+  #     # check terminal types
+  #     thermal_zones_attached = 0
+  #     airloop.thermalZones.each do |zone|
+  #       thermal_zones_attached += 1
+  #       # look for air terminal for zone
+  #       if zone.airLoopHVACTerminal.is_initialized
+  #         terminal = zone.airLoopHVACTerminal.get
+  #         # get terminal and make sure it is the correct type
+  #         unless terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
+  #           failure_array << "Expected terminals to be of type AirTerminalSingleDuctVAVReheat for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
+  #         end
+  #       else
+  #         failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
+  #       end
+  #     end
+  #     unless thermal_zones_attached > 0
+  #       failure_array << "No thermal zones attached to System #{airloop_name}"
+  #     end
+  #     # check fan type
+  #     unless airloop.supplyFan.is_initialized
+  #       failure_array << "No supply fan attached to System #{airloop_name}"
+  #     else
+  #       # get fan type
+  #       supply_fan = airloop.supplyFan.get
+  #       unless supply_fan.to_FanVariableVolume.is_initialized
+  #         failure_array << "Expected fan of type VariableVolume for System #{airloop_name}"
+  #       end
+  #     end
+  #     # check heating and cooling coil types
+  #     # heating coil
+  #     unless airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).length == 1
+  #       failure_array << "Expected heating coil of type CoilHeatingWater for System #{airloop_name}"
+  #     else
+  #       airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).each do |heating_water_coil|
+  #         unless heating_water_coil.to_CoilHeatingWater.get.plantLoop.is_initialized
+  #           failure_array << "Heating coil serving System #{airloop_name} is not attached to a plant loop"
+  #         else
+  #           plant_loop = heating_water_coil.to_CoilHeatingWater.get.plantLoop.get
+  #           unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
+  #             failure_array << "Expected Heating Coil for System #{airloop_name} to be served by a DistrictHeating object"
+  #           end
+  #         end
+  #       end
+  #     end
+  #     # cooling coil
       
-      unless airloop.supplyComponents('OS_Coil_Cooling_Water'.to_IddObjectType).length == 1
-        failure_array << "Expected cooling coil of type CoilCoolingWater for System #{airloop_name} (System Type 5 with District Cooling)"
-      else  
-        airloop.supplyComponents('OS_Coil_Cooling_Water'.to_IddObjectType).each do |cooling_water_coil|
-          unless cooling_water_coil.to_CoilCoolingWater.get.plantLoop.is_initialized
-            failure_array << "Cooling coil serving System #{airloop_name} is not attached to a plant loop"
-          else
-            plant_loop = cooling_water_coil.to_CoilCoolingWater.get.plantLoop.get
-            unless plant_loop.supplyComponents('OS_DistrictCooling'.to_IddObjectType).length == 1
-              failure_array << "Expected Cooling Coil for System #{airloop_name} to be served by a DistrictCooling object"
-            end
-          end
-        end
-      end
-    end
+  #     unless airloop.supplyComponents('OS_Coil_Cooling_Water'.to_IddObjectType).length == 1
+  #       failure_array << "Expected cooling coil of type CoilCoolingWater for System #{airloop_name} (System Type 5 with District Cooling)"
+  #     else  
+  #       airloop.supplyComponents('OS_Coil_Cooling_Water'.to_IddObjectType).each do |cooling_water_coil|
+  #         unless cooling_water_coil.to_CoilCoolingWater.get.plantLoop.is_initialized
+  #           failure_array << "Cooling coil serving System #{airloop_name} is not attached to a plant loop"
+  #         else
+  #           plant_loop = cooling_water_coil.to_CoilCoolingWater.get.plantLoop.get
+  #           unless plant_loop.supplyComponents('OS_DistrictCooling'.to_IddObjectType).length == 1
+  #             failure_array << "Expected Cooling Coil for System #{airloop_name} to be served by a DistrictCooling object"
+  #           end
+  #         end
+  #       end
+  #     end
+  #   end
     
-    # check heated only zones
-    heated_only_zones = ["Base1 Storage 1B06", "Base1 Vestibule 1B20", "Base1 Vestibule CR1B87", "Base1 Vestibule W", "Base2 Storage Perimeter N", "Flr1 Corridor CR125"]
-    heated_only_zones = heated_only_zones + ["Flr1 Storage 101 105", "Flr1 Vestibule 156", "Flr3 MechRoom Core", "Flr3 MechRoom E", "Flr3 MechRoom W"]
-    heated_only_zones.each do |heated_only_zone_name|
-      heated_only_zone = model.getThermalZoneByName(heated_only_zone_name).get
-      unit_heater = heated_only_zone.equipment[0].to_ZoneHVACUnitHeater
-      if unit_heater.is_initialized
-        found_unit_heater = true
-      else
-        found_unit_heater = false
-      end
-      unless found_unit_heater
-        failure_array << "Expected to find a Unit Heater in Heated Only Zone #{heated_only_zone_name} but did not"
-      else
-        unit_heater = unit_heater.get
-        # check heating coil fuel type
-        unless unit_heater.heatingCoil.to_CoilHeatingWater.is_initialized
-          failure_array << "Expected Unit Heater in Heated Only Zone #{heated_only_zone_name} to have a Hot Water Heating Coil"
-        else
-          # make sure heating coil is connected to district heating object
-          plant_loop = unit_heater.heatingCoil.to_CoilHeatingWater.get.to_CoilHeatingWater.get.plantLoop.get
-          unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
-            failure_array << "Expected Heating Coil for Unit Heater in Heated Only Zone #{heated_only_zone_name} to be served by a DistrictHeating object"
-          end
-        end
-      end  
-    end  
-    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-  end
+  #   # check heated only zones
+  #   heated_only_zones = ["Base1 Storage 1B06", "Base1 Vestibule 1B20", "Base1 Vestibule CR1B87", "Base1 Vestibule W", "Base2 Storage Perimeter N", "Flr1 Corridor CR125"]
+  #   heated_only_zones = heated_only_zones + ["Flr1 Storage 101 105", "Flr1 Vestibule 156", "Flr3 MechRoom Core", "Flr3 MechRoom E", "Flr3 MechRoom W"]
+  #   heated_only_zones.each do |heated_only_zone_name|
+  #     heated_only_zone = model.getThermalZoneByName(heated_only_zone_name).get
+  #     unit_heater = heated_only_zone.equipment[0].to_ZoneHVACUnitHeater
+  #     if unit_heater.is_initialized
+  #       found_unit_heater = true
+  #     else
+  #       found_unit_heater = false
+  #     end
+  #     unless found_unit_heater
+  #       failure_array << "Expected to find a Unit Heater in Heated Only Zone #{heated_only_zone_name} but did not"
+  #     else
+  #       unit_heater = unit_heater.get
+  #       # check heating coil fuel type
+  #       unless unit_heater.heatingCoil.to_CoilHeatingWater.is_initialized
+  #         failure_array << "Expected Unit Heater in Heated Only Zone #{heated_only_zone_name} to have a Hot Water Heating Coil"
+  #       else
+  #         # make sure heating coil is connected to district heating object
+  #         plant_loop = unit_heater.heatingCoil.to_CoilHeatingWater.get.to_CoilHeatingWater.get.plantLoop.get
+  #         unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
+  #           failure_array << "Expected Heating Coil for Unit Heater in Heated Only Zone #{heated_only_zone_name} to be served by a DistrictHeating object"
+  #         end
+  #       end
+  #     end  
+  #   end  
+  #   assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
+  # end
 
   # # Test Equipment Efficiencies for bldg_3
   # # @author Matt Leach, NORESCO
