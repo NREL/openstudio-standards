@@ -833,6 +833,7 @@ module BTAP
 
           # Move to the next field if no difference was found
           next if true_value == compare_value
+          next if true_value.to_f.zero? && compare_value.to_f.zero?
 
           # Check numeric values if numeric
           if (compare_value.is_a? Numeric) && (true_value.is_a? Numeric)

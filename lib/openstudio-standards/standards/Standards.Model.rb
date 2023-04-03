@@ -3237,16 +3237,19 @@ class Standard
           skylights_frame_added = 0
           model.getSubSurfaces.each do |sub_surface|
             next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && sub_surface.subSurfaceType == 'Skylight'
-
-            # @todo enable proper window frame setting after https://github.com/NREL/OpenStudio/issues/2895 is fixed
-            sub_surface.setString(8, frame.name.get.to_s)
-            skylights_frame_added += 1
-            # if sub_surface.allowWindowPropertyFrameAndDivider
-            #   sub_surface.setWindowPropertyFrameAndDivider(frame)
-            #   skylights_frame_added += 1
-            # else
-            #   OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "For #{sub_surface.name}: cannot add a frame to this skylight.")
-            # end
+            
+            if model.version < OpenStudio::VersionString.new('3.1.0')
+              # window frame setting before https://github.com/NREL/OpenStudio/issues/2895 was fixed
+              sub_surface.setString(8, frame.name.get.to_s)
+              skylights_frame_added += 1
+            else
+              if sub_surface.allowWindowPropertyFrameAndDivider
+                sub_surface.setWindowPropertyFrameAndDivider(frame)
+                skylights_frame_added += 1
+              else
+                OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "For #{sub_surface.name}: cannot add a frame to this skylight.")
+              end
+            end
           end
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding #{frame.name} to #{skylights_frame_added} skylights.") if skylights_frame_added > 0
         else
