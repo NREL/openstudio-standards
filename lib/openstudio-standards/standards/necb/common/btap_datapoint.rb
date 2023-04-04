@@ -226,7 +226,7 @@ class BTAPDatapoint
         model.setSqlFile(sql)
 
         @cost_result = nil
-        if @options[:enable_costing] == true
+        if defined?(BTAPCosting)
           # Perform costing
           costing = BTAPCosting.new
           costing.load_database
