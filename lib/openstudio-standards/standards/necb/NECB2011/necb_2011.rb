@@ -523,7 +523,7 @@ class NECB2011 < Standard
 
     # -------- Performace, Efficiencies, Controls and Sensors ------------
     #
-    # Set code standard equipment charecteristics.
+    # Set code standard equipment characteristics.
     sql_db_vars_map = apply_standard_efficiencies(model: model,
                                                   sizing_run_dir: sizing_run_dir,
                                                   necb_reference_hp: self.fuel_type_set.necb_reference_hp)
