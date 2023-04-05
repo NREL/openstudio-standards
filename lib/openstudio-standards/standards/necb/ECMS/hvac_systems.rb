@@ -1253,13 +1253,16 @@ class ECMS
       coil_cooling_dx_variable_speed_apply_curves(clg_dx_coil, eqpt_name)
       coil_heating_dx_variable_speed_apply_curves(htg_dx_coil, eqpt_name)
       # add zone equipment and diffuser
-      zone_htg_eqpt_type = 'baseboard_hotwater' if heating_fuel == 'NaturalGas'
-      zone_htg_eqpt_type = 'baseboard_electric' if heating_fuel == 'Electricity'
-      zone_htg_eqpt_type = 'ptac_electric_off' if sys_info['sys_vent_type'] == 'doas'
-      zone_clg_eqpt_type = 'none'
-      zone_clg_eqpt_type = 'ptac_electric_off' if sys_info['sys_vent_type'] == 'doas'
-      zone_fan_type = 'none'
-      zone_fan_type = 'constant_volume' if sys_info['sys_vent_type'] == 'doas'
+      if sys_info['sys_vent_type'] == 'doas'
+        zone_htg_eqpt_type = 'ptac_electric_off'
+        zone_clg_eqpt_type = 'ptac_electric_off'
+        zone_fan_type = 'constant_volume'
+      else
+        zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
+        zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
+        zone_clg_eqpt_type = 'none'
+        zone_fan_type = 'none'
+      end
       add_zone_eqpt(model: model,
                     airloop: airloop,
                     zones: zones,
@@ -1271,9 +1274,9 @@ class ECMS
                     zone_fan_type: zone_fan_type,
                     hw_loop: hw_loop)
       # for doas use baseboard electric or hotwater as backup for PTAC units
-      zone_htg_eqpt_type = 'baseboard_hotwater' if heating_fuel == 'NaturalGas'
-      zone_htg_eqpt_type = 'baseboard_electric' if heating_fuel == 'Electricity'
       if sys_info['sys_vent_type'] == 'doas'
+        zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
+        zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
         add_zone_eqpt(model: model,
                       airloop: airloop,
                       zones: zones,
@@ -1576,13 +1579,16 @@ class ECMS
       coil_cooling_dx_single_speed_apply_curves(clg_dx_coil,eqpt_name)
       coil_heating_dx_single_speed_apply_curves(htg_dx_coil,eqpt_name)
       # add zone equipment and diffuser
-      zone_htg_eqpt_type = 'baseboard_hotwater' if heating_fuel == 'NaturalGas'
-      zone_htg_eqpt_type = 'baseboard_electric' if heating_fuel == 'Electricity'
-      zone_htg_eqpt_type = 'ptac_electric_off' if sys_info['sys_vent_type'] == 'doas'
-      zone_clg_eqpt_type = 'none'
-      zone_clg_eqpt_type = 'ptac_electric_off' if sys_info['sys_vent_type'] == 'doas'
-      zone_fan_type = 'none'
-      zone_fan_type = 'constant_volume' if sys_info['sys_vent_type'] == 'doas'
+      if sys_info['sys_vent_type'] == 'doas'
+        zone_htg_eqpt_type = 'ptac_electric_off'
+        zone_clg_eqpt_type = 'ptac_electric_off'
+        zone_fan_type = 'constant_volume'
+      else
+        zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
+        zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
+        zone_clg_eqpt_type = 'none'
+        zone_fan_type = 'none'
+      end
       add_zone_eqpt(model: model,
                     airloop: airloop,
                     zones: zones,
@@ -1595,6 +1601,8 @@ class ECMS
                     hw_loop: hw_loop)
       # for doas use baseboard electric or hotwater as backup for PTAC units
       if sys_info['sys_vent_type'] == 'doas'
+        zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
+        zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
         add_zone_eqpt(model: model,
                       airloop: airloop,
                       zones: zones,
