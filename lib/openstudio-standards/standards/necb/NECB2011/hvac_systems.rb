@@ -519,7 +519,11 @@ class NECB2011
         boiler_capacity = capacity_w / 2
       elsif (capacity_w / 1000.0) <= 176.0
         if boiler_hot_water.name.to_s.include?('Primary Boiler')
-          boiler_capacity = capacity_w
+          if capacity_w <= 1.0
+            boiler_capacity = 1.0
+          else
+            boiler_capacity = capacity_w
+          end
         elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
           boiler_capacity = 0.001
         end
