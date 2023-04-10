@@ -256,7 +256,7 @@ class Baseline9012013TestBldg1 < Minitest::Test
           failure_array << "Expected Chiller #{chiller.name} to be connected to a Condenser Loop"
         end
       end
-    end          
+    end
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
   end
 
