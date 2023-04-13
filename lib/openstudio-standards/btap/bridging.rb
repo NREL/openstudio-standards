@@ -18,6 +18,7 @@
 # **************************************************************************** /
 
 require "tbd"
+require "csv"
 
 module BTAP
   module BridgingData
@@ -1998,8 +1999,56 @@ module BTAP
 
       true
     end
+    def get_material_quantities()
+      material_quantities = {}
+      csv = CSV.read('data/inventory/thermal_bridging.csv', headers: true)
+      #tally_edges  = @tally[:edges]
+      tally_edges = JSON.parse('{"edges":{"jamb":{"BTAP-ExteriorWall-SteelFramed-1 good":13.708557548340757},"sill":{"BTAP-ExteriorWall-SteelFramed-1 good":90.13000000000001},"head":{"BTAP-ExteriorWall-SteelFramed-1 good":90.13000000000001},"gradeconvex":{"BTAP-ExteriorWall-SteelFramed-1 good":90.4348},"parapetconvex":{"BTAP-ExteriorWall-SteelFramed-1 good":45.2174},"parapet":{"BTAP-ExteriorWall-SteelFramed-1 good":45.2174},"transition":{"BTAP-ExteriorWall-SteelFramed-1 good":71.16038874419307},"cornerconvex":{"BTAP-ExteriorWall-SteelFramed-1 good":12.1952}}}')['edges']
+
+      tally_edges.each do |edge_type_full, value|
+        edge_type  = edge_type_full.delete_suffix('convex')
+        if ['head','jamb','sill'].include?(edge_type)
+          edge_type = 'fenestration'
+        end
+        value.each do |wall_ref_and_quality, quantity|
+          /(.*)\s(.*)/ =~ wall_ref_and_quality
+          wall_reference =$1
+          quality = $2
+          puts edge_type,wall_reference,quality
+
+          result =  csv.find {|row| row['edge_type'] == edge_type &&
+            row['quality'] == quality &&
+            row['wall_reference'] == wall_reference
+          }
+          material_opaque_id_layers = result['material_opaque_id_layers'].split(",")
+          id_layers_quantity_multipliers = result['id_layers_quantity_multipliers'].split(",")
+          material_opaque_id_layers.zip(id_layers_quantity_multipliers).each do |id,scale|
+            material_quantities[id] =+ scale * quantity
+        end
+      end
+
+
+
+
+
+
+      end
+      return material_quantities
+
+
+
+
+
+
+
+
+
+    end
   end
 end
+
+
+
 
 # NOTE: BTAP supports Uo variants for each of the aforementioned wall
 #       constructions, e.g. meeting NECB2011 and NECB2015 prescriptive "Uo"
@@ -2097,3 +2146,4 @@ end
 #       ... yet all (public) washrooms, corridors, stairwells, etc. are
 #       steel-framed (regardless of building type). Overview of possible fixes.
 #       TO-DO.
+BTAP::Bridging.new().get_material_quantities()

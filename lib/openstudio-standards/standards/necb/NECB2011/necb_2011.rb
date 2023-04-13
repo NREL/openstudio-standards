@@ -910,7 +910,7 @@ class NECB2011 < Standard
   def apply_thermal_bridging(model: nil, tbd_option: nil)
     return false unless model.is_a?(OpenStudio::Model::Model)
     return false unless tbd_option.respond_to?(:to_s)
-
+    tbd_option = 'good'
     tbd_option = tbd_option.to_s
     # 4x options:
     #  - nil or 'none'(TBD is ignored)
@@ -939,6 +939,10 @@ class NECB2011 < Standard
     end    # default == :bad
 
     @tbd = BTAP::Bridging.new(model, argh)
+
+    puts @tbd.tally.to_json
+    puts @tbd.get_material_quantities()
+    raise('hell')
     true
   end
 
