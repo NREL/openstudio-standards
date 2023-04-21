@@ -23,7 +23,7 @@ class Standard
                                               early_reset_out_arg: 20,
                                               switch_over_time: 24.0)
 
-    zone_name = zone.name.to_s.gsub(/[ +-.]/, '_')
+    zone_name = ems_friendly_name(zone.name)
     zone_timestep = model.getTimestep.numberOfTimestepsPerHour
 
     if model.version < OpenStudio::VersionString.new('3.1.1')
