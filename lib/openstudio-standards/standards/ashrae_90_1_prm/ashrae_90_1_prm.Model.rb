@@ -444,6 +444,8 @@ class ASHRAE901PRM < Standard
 
             # Identify this surface as exterior
             surface_category[surf] = 'ExteriorSurface'
+            # Added for output.
+            surf.additionalProperties.setFeature('surface_conditioning_category', 'ExteriorSurface')
 
             # Temporary change the surface's boundary condition to 'Outdoors' so it can be assigned a baseline construction
             surf.setOutsideBoundaryCondition('Outdoors')
@@ -2070,6 +2072,14 @@ class ASHRAE901PRM < Standard
   # @param file_directory [String] file directory
   def generate_baseline_log(file_directory)
     log_messages_to_file_prm("#{file_directory}/prm.log", false)
+  end
+
+  # Generate baseline outputs
+  # @param model OpenStudio::Model::Model
+  # @param file_path string
+  def generate_prm_output(model, file_path)
+    output_json = extract_additional_properties(model)
+    export_baseline_report(output_json, file_path)
   end
 
   # Retrieve zone HVAC user specified compliance inputs from CSV file

@@ -512,6 +512,10 @@ class Standard
           nb_adjustments += 1
         end
       end
+
+      if degs == 0
+        generate_prm_output(model, sizing_run_dir)
+      end
     end
 
     if debug
@@ -4736,6 +4740,7 @@ class Standard
           #
           # daylighting control isn't modeled
           surface_wwr = surface_get_wwr_of_a_surface(surface)
+          surface.additionalProperties.setFeature('surface_wwr', surface_wwr)
           red = model_get_wwr_reduction_ratio(mult,
                                               surface_wwr: surface_wwr,
                                               surface_dr: surface_get_door_ratio_of_a_surface(surface),
@@ -7200,6 +7205,13 @@ class Standard
   # Generate baseline log to a specific file directory
   # @param file_directory [String] file directory
   def generate_baseline_log(file_directory)
+    return true
+  end
+
+  # Generate baseline outputs for verification
+  # @param model OpenStudio::Model::Model
+  # @param file_path string
+  def generate_prm_output(model, file_path)
     return true
   end
 
