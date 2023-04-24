@@ -9688,7 +9688,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {9cc3bdca-53fc-43e3-8775-1bedac017cdb}, !- Handle
-  sys3mixedshrnonescdxshcessfcvzhbezcnonesrfnone3OptimumStartCallingManager0, !- Name
+  ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__3_OptimumStartCallingManager0, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {5d75b71f-7a8c-494b-b12e-fafc1ecb800b}; !- Program Name 1
 

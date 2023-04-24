@@ -18239,7 +18239,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {8479f326-5c0f-4442-aa4e-6a7f2bba4dc3}, !- Handle
-  sys4mixedshrnonescashpshashpssfcvzhbhwzcnonesrfnoneOptimumStartCallingManager0, !- Name
+  ems_sys_4_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_hw_zc_none_srf_none__OptimumStartCallingManager0, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {aa6ca493-43df-4e2c-a43a-680088def46a}; !- Program Name 1
 

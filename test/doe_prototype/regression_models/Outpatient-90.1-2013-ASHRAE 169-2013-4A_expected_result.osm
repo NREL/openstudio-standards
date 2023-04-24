@@ -64604,7 +64604,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {312bb076-4f97-491c-ad9a-63234b74086e}, !- Handle
-  PVAVOutpatientF1OptimumStartCallingManager0, !- Name
+  ems_PVAV_Outpatient_F1_OptimumStartCallingManager0, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {909e4215-609a-4c0c-9f9e-203896ef2d8b}; !- Program Name 1
 
@@ -64646,7 +64646,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {f3178f2e-1a6f-4259-917f-41d1b9e25b15}, !- Handle
-  PVAVOutpatientF1OptimumStartCallingManager1, !- Name
+  ems_PVAV_Outpatient_F1_OptimumStartCallingManager1, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {aa91efe8-3e9f-43e3-9006-d5aa66b32fc9}; !- Program Name 1
 
@@ -64688,7 +64688,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {9809f5e8-de41-4104-af3b-6ad5390d359f}, !- Handle
-  PVAVOutpatientF1OptimumStartCallingManager2, !- Name
+  ems_PVAV_Outpatient_F1_OptimumStartCallingManager2, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {37dcb67c-b165-43e9-aa56-96eed6b7eb50}; !- Program Name 1
 
@@ -64845,7 +64845,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {11d9fcea-e19b-4302-a22f-b30149024802}, !- Handle
-  PVAVOutpatientF2F3OptimumStartCallingManager0, !- Name
+  ems_PVAV_Outpatient_F2_F3_OptimumStartCallingManager0, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {289a8e68-8a2f-4808-aa17-2502f4d6a293}; !- Program Name 1
 
@@ -64887,7 +64887,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {5a6015da-27c9-433a-bfc9-2adde111a4f7}, !- Handle
-  PVAVOutpatientF2F3OptimumStartCallingManager1, !- Name
+  ems_PVAV_Outpatient_F2_F3_OptimumStartCallingManager1, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {c10c691a-6cd8-4bbf-9ae5-3d3f56530118}; !- Program Name 1
 

@@ -39617,13 +39617,13 @@ OS:SetpointManager:OutdoorAirPretreat,
 
 OS:Schedule:Ruleset,
   {91da8eb1-7305-47b8-9ec2-3d0ffc4b5383}, !- Handle
-  FrontLoungeFlr1ZNSACmaxOASch,           !- Name
+  ems_FrontLoungeFlr1_ZN_SAC_maxOASch,           !- Name
   {034d8d5d-f465-462f-a0c5-7e353956a25f}, !- Schedule Type Limits Name
   {18053bbd-9a9e-4c7b-a9b7-a68427a2d9c3}; !- Default Day Schedule Name
 
 OS:Schedule:Day,
   {18053bbd-9a9e-4c7b-a9b7-a68427a2d9c3}, !- Handle
-  FrontLoungeFlr1ZNSACmaxOASchDefault,    !- Name
+  ems_FrontLoungeFlr1_ZN_SAC_maxOASch_Default,    !- Name
   {034d8d5d-f465-462f-a0c5-7e353956a25f}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1
@@ -39662,22 +39662,22 @@ OS:EnergyManagementSystem:Sensor,
 
 OS:EnergyManagementSystem:InternalVariable,
   {0d4acfdd-4f14-468c-bce6-3ea96f12df35}, !- Handle
-  FrontLoungeFlr1ZNSACOADesignMass,       !- Name
+  ems_FrontLoungeFlr1_ZN_SAC_OADesignMass,       !- Name
   FrontLoungeFlr1 ZN SAC OA System Controller, !- Internal Data Index Key Name
   Outdoor Air Controller Minimum Mass Flow Rate; !- Internal Data Type
 
 OS:EnergyManagementSystem:GlobalVariable,
   {f779b352-2084-4afe-8070-fa15f5fbf9b6}, !- Handle
-  FrontLoungeFlr1ZNSACNumberofStages;     !- Name
+  ems_FrontLoungeFlr1_ZN_SAC_NumberofStages;     !- Name
 
 OS:EnergyManagementSystem:Program,
   {f54fe0d5-af33-42fb-b408-77f471bfba17}, !- Handle
   FrontLoungeFlr1ZNSACSetNumberofStages,  !- Name
-  SET FrontLoungeFlr1ZNSACNumberofStages = 2; !- Program Line 1
+  SET ems_FrontLoungeFlr1_ZN_SAC_NumberofStages = 2; !- Program Line 1
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {2f589bf1-e034-4bb8-9438-9b19d861872f}, !- Handle
-  FrontLoungeFlr1ZNSACSetNumberofStagesCallingManager, !- Name
+  ems_FrontLoungeFlr1_ZN_SAC_SetNumberofStagesCallingManager, !- Name
   BeginNewEnvironment,                    !- EnergyPlus Model Calling Point
   {f54fe0d5-af33-42fb-b408-77f471bfba17}; !- Program Name 1
 
@@ -39807,13 +39807,13 @@ OS:SetpointManager:OutdoorAirPretreat,
 
 OS:Schedule:Ruleset,
   {02a7ceea-080d-4101-b36f-d63323086193}, !- Handle
-  FrontOfficeFlr1ZNSACmaxOASch,           !- Name
+  ems_FrontOfficeFlr1_ZN_SAC_maxOASch,           !- Name
   {034d8d5d-f465-462f-a0c5-7e353956a25f}, !- Schedule Type Limits Name
   {fec2da6c-0bcd-4b7e-828e-62c770b5376f}; !- Default Day Schedule Name
 
 OS:Schedule:Day,
   {fec2da6c-0bcd-4b7e-828e-62c770b5376f}, !- Handle
-  FrontOfficeFlr1ZNSACmaxOASchDefault,    !- Name
+  ems_FrontOfficeFlr1_ZN_SAC_maxOASch_Default,    !- Name
   {034d8d5d-f465-462f-a0c5-7e353956a25f}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1
@@ -39852,22 +39852,22 @@ OS:EnergyManagementSystem:Sensor,
 
 OS:EnergyManagementSystem:InternalVariable,
   {988753a5-8f46-4c93-8b9a-c4cf0170b8ba}, !- Handle
-  FrontOfficeFlr1ZNSACOADesignMass,       !- Name
+  ems_FrontOfficeFlr1_ZN_SAC_OADesignMass,       !- Name
   FrontOfficeFlr1 ZN SAC OA System Controller, !- Internal Data Index Key Name
   Outdoor Air Controller Minimum Mass Flow Rate; !- Internal Data Type
 
 OS:EnergyManagementSystem:GlobalVariable,
   {497dc82a-b8c3-468c-9b2a-e197b790f7a8}, !- Handle
-  FrontOfficeFlr1ZNSACNumberofStages;     !- Name
+  ems_FrontOfficeFlr1_ZN_SAC_NumberofStages;     !- Name
 
 OS:EnergyManagementSystem:Program,
   {192704d9-13bb-4cc1-8590-a97f59df2580}, !- Handle
   FrontOfficeFlr1ZNSACSetNumberofStages,  !- Name
-  SET FrontOfficeFlr1ZNSACNumberofStages = 1; !- Program Line 1
+  SET ems_FrontOfficeFlr1_ZN_SAC_NumberofStages = 1; !- Program Line 1
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {4c6e5149-4198-48f5-b53a-eb76cbffd9df}, !- Handle
-  FrontOfficeFlr1ZNSACSetNumberofStagesCallingManager, !- Name
+  ems_FrontOfficeFlr1_ZN_SAC_SetNumberofStagesCallingManager, !- Name
   BeginNewEnvironment,                    !- EnergyPlus Model Calling Point
   {192704d9-13bb-4cc1-8590-a97f59df2580}; !- Program Name 1
 
@@ -39903,13 +39903,13 @@ OS:ModelObjectList,
 
 OS:Schedule:Ruleset,
   {8639f915-f2cc-4cb9-aa40-86389becc1d8}, !- Handle
-  MeetingRoomFlr1ZNSACmaxOASch,           !- Name
+  ems_MeetingRoomFlr1_ZN_SAC_maxOASch,           !- Name
   {034d8d5d-f465-462f-a0c5-7e353956a25f}, !- Schedule Type Limits Name
   {3955f367-f1b6-4c2b-8631-3808dd923253}; !- Default Day Schedule Name
 
 OS:Schedule:Day,
   {3955f367-f1b6-4c2b-8631-3808dd923253}, !- Handle
-  MeetingRoomFlr1ZNSACmaxOASchDefault,    !- Name
+  ems_MeetingRoomFlr1_ZN_SAC_maxOASch_Default,    !- Name
   {034d8d5d-f465-462f-a0c5-7e353956a25f}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1
@@ -39948,22 +39948,22 @@ OS:EnergyManagementSystem:Sensor,
 
 OS:EnergyManagementSystem:InternalVariable,
   {5cefe682-95b3-4257-86d5-4c523e9767c6}, !- Handle
-  MeetingRoomFlr1ZNSACOADesignMass,       !- Name
+  ems_MeetingRoomFlr1_ZN_SAC_OADesignMass,       !- Name
   MeetingRoomFlr1 ZN SAC OA System Controller, !- Internal Data Index Key Name
   Outdoor Air Controller Minimum Mass Flow Rate; !- Internal Data Type
 
 OS:EnergyManagementSystem:GlobalVariable,
   {7989c14c-ae12-43b9-b417-5d1c37ecd260}, !- Handle
-  MeetingRoomFlr1ZNSACNumberofStages;     !- Name
+  ems_MeetingRoomFlr1_ZN_SAC_NumberofStages;     !- Name
 
 OS:EnergyManagementSystem:Program,
   {c7250dce-fcf1-420e-873d-700540c3143d}, !- Handle
   MeetingRoomFlr1ZNSACSetNumberofStages,  !- Name
-  SET MeetingRoomFlr1ZNSACNumberofStages = 1; !- Program Line 1
+  SET ems_MeetingRoomFlr1_ZN_SAC_NumberofStages = 1; !- Program Line 1
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {63a7d346-35d4-488c-b48c-58756ab64058}, !- Handle
-  MeetingRoomFlr1ZNSACSetNumberofStagesCallingManager, !- Name
+  ems_MeetingRoomFlr1_ZN_SAC_SetNumberofStagesCallingManager, !- Name
   BeginNewEnvironment,                    !- EnergyPlus Model Calling Point
   {c7250dce-fcf1-420e-873d-700540c3143d}; !- Program Name 1
 

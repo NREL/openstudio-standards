@@ -7423,7 +7423,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {2521d469-0198-4f7a-a399-2c6b94169ed8}, !- Handle
-  sys4mixedshrnonescashpshashpssfcvzhbhwzcnonesrfnoneOptimumStartCallingManager0, !- Name
+  ems_sys_4_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_hw_zc_none_srf_none__OptimumStartCallingManager0, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {1918a2d3-6149-45c7-a069-8d7cc225b03b}; !- Program Name 1
 
@@ -7696,7 +7696,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {3234131b-9d28-4b8e-9e7e-9878935d3eeb}, !- Handle
-  sys4mixedshrnonescashpshashpssfcvzhbhwzcnonesrfnone1OptimumStartCallingManager0, !- Name
+  ems_sys_4_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_hw_zc_none_srf_none__1_OptimumStartCallingManager0, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {126a67d5-54eb-471b-b9ee-71cb911aaa1c}; !- Program Name 1
 

@@ -33769,7 +33769,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {3feb91f1-2da5-475a-ae3c-c992b2ba2106}, !- Handle
-  sys3mixedshrnonescdxshcessfcvzhbezcnonesrfnoneOptimumStartCallingManager0, !- Name
+  ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__OptimumStartCallingManager0, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {e9e4c8cd-ee78-4c4c-af2a-3b49a7a40269}; !- Program Name 1
 
@@ -34584,7 +34584,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {1f2b8fd2-e212-4b63-bfd2-2c88a3957f27}, !- Handle
-  sys3mixedshrnonescdxshcessfcvzhbezcnonesrfnone13OptimumStartCallingManager0, !- Name
+  ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__13_OptimumStartCallingManager0, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {9ece354b-43fc-4d7d-9b92-0989d5a03e50}; !- Program Name 1
 
@@ -34908,7 +34908,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {299dbfd9-b777-460a-bee0-d05f4ca8f94f}, !- Handle
-  sys3mixedshrnonescdxshcessfcvzhbezcnonesrfnone15OptimumStartCallingManager0, !- Name
+  ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__15_OptimumStartCallingManager0, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {194659dd-d6d5-4ae6-a6a1-41d17a30a78c}; !- Program Name 1
 
@@ -35411,7 +35411,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {a2871952-b4cd-4491-8e59-1f5fa37d9f3a}, !- Handle
-  sys3mixedshrnonescdxshcessfcvzhbezcnonesrfnone2OptimumStartCallingManager0, !- Name
+  ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__2_OptimumStartCallingManager0, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {2f075fef-95e4-4aca-8078-b4203ad333ad}; !- Program Name 1
 
@@ -35596,7 +35596,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {1c2b02e9-210a-4b49-88f3-ac90ca205ebd}, !- Handle
-  sys3mixedshrnonescdxshcessfcvzhbezcnonesrfnone3OptimumStartCallingManager0, !- Name
+  ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__3_OptimumStartCallingManager0, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {73d72ec3-6718-48cb-b98e-376fa9a729ab}; !- Program Name 1
 
@@ -35920,7 +35920,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {7a3d835a-d602-4ff3-ac18-40676f907a04}, !- Handle
-  sys3mixedshrnonescdxshcessfcvzhbezcnonesrfnone5OptimumStartCallingManager0, !- Name
+  ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__5_OptimumStartCallingManager0, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {60972ec5-f758-4c76-b87a-4ac224a5bb38}; !- Program Name 1
 
@@ -36244,7 +36244,7 @@ OS:EnergyManagementSystem:Program,
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {c96b09d5-1c22-46ec-8dda-85fa8a7cdd99}, !- Handle
-  sys3mixedshrnonescdxshcessfcvzhbezcnonesrfnone7OptimumStartCallingManager0, !- Name
+  ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__7_OptimumStartCallingManager0, !- Name
   BeginTimestepBeforePredictor,           !- EnergyPlus Model Calling Point
   {766ce12e-c0da-4cd3-b41f-8225b37c305e}; !- Program Name 1
 
