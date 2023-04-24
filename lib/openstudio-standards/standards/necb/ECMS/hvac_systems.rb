@@ -1987,6 +1987,7 @@ class ECMS
     chlr_props = model_find_object(standards_data['tables']['chillers_ecm']['table'], search_criteria, chlr_cap_ton)
     cop = chlr_props['minimum_coefficient_of_performance_cooling'].to_f
     chiller_air_cooled.setReferenceCOP(cop)
+    chiller_air_cooled.setName("Chiller AirCooled #{chlr_props['chiller_type']}")
   end
 
   #=============================================================================================================================
