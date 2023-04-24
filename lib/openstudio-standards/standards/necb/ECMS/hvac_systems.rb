@@ -1979,6 +1979,14 @@ class ECMS
     end
     chiller_water_cooled.setReferenceCapacity(chiller_siz_f*cap)
     chiller_air_cooled.setReferenceCapacity((1.0-chiller_siz_f)*cap)
+    # set cop of air-cooled chiller
+    chlr_cap_w = (1.0-chiller_siz_f)*cap
+    chlr_cap_ton = OpenStudio.convert(chlr_cap_w, 'W', 'ton').get
+    search_criteria = {}
+    search_criteria['name'] = 'NECB2020_AirCooledChiller'
+    chlr_props = model_find_object(standards_data['tables']['chillers_ecm']['table'], search_criteria, chlr_cap_ton)
+    cop = chlr_props['minimum_coefficient_of_performance_cooling'].to_f
+    chiller_air_cooled.setReferenceCOP(cop)
   end
 
   #=============================================================================================================================

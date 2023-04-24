@@ -1,0 +1,21 @@
+{
+  "tables": {
+    "chillers_ecm": {
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "name": "NECB2020_AirCooledChiller",
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 9999.0,
+          "minimum_coefficient_of_performance_cooling": 2.866,
+          "capft": null,
+          "eirft": null,
+          "eirfplr": null,
+          "notes": "NECB 2020 Air Cooled Chiller COP. Capacity in ton"
+        }
+      ]
+    }
+  }
+}
