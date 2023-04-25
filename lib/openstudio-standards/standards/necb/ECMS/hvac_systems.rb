@@ -467,10 +467,10 @@ class ECMS
   # =============================================================================================================================
   # The first 5 letters of the air loop name designate the system type (sys_abbr). This method updates the system type designation 
   # in the air loop name. At the same time the chosen air loop names are checked to avoid duplicate names from being used in the 
-  # hash for system to zomes.
+  # hash for system to zones.
   def update_system_zones_map_keys(system_zones_map,sys_abbr)
     updated_system_zones_map = {}
-    system_zones_map.sort.each do |sname,zones|
+    system_zones_map.each do |sname,zones|
       updated_sys_name = "#{sys_abbr}#{sname[5..-1]}"
       if !updated_system_zones_map.has_key? updated_sys_name
         updated_system_zones_map[updated_sys_name] = zones
@@ -1833,7 +1833,7 @@ class ECMS
                                              loop_spm_type: 'Scheduled',
                                              loop_setpoint: 50.0,
                                              loop_temp_diff: 5.0)
-    model.getCoilHeatingWaters.each {|coil| hw_loop.addDemandBranchForComponent(coil)}
+    model.getCoilHeatingWaters.sort.each {|coil| hw_loop.addDemandBranchForComponent(coil)}
     hcapf_curve_name = "HEATPUMP_WATERTOWATER_HCAPF"
     hcapf_curve = model_add_curve(model, hcapf_curve_name)
     if hcapf_curve
@@ -1865,7 +1865,7 @@ class ECMS
     
     chw_loop_clg_eqpt.setName('ChillerWaterCooled')
     chw_loop_clg_eqpt.setCondenserType("WaterCooled")
-    model.getCoilCoolingWaters.each {|coil| chw_loop.addDemandBranchForComponent(coil)}
+    model.getCoilCoolingWaters.sort.each {|coil| chw_loop.addDemandBranchForComponent(coil)}
     sec_chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
     chw_loop_clg_eqpt_outlet_node = chw_loop_clg_eqpt.supplyOutletModelObject.get.to_Node.get
     sec_chiller.addToNode(chw_loop_clg_eqpt_outlet_node)
