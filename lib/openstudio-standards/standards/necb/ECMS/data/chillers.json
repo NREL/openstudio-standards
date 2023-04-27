@@ -1,0 +1,33 @@
+{
+  "tables": {
+    "chillers_ecm": {
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "name": "NECB2020_AirCooledChiller",
+          "chiller_type": "Scroll",
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 150.0,
+          "minimum_coefficient_of_performance_cooling": 2.866,
+          "capft": null,
+          "eirft": null,
+          "eirfplr": null,
+          "notes": "NECB 2020 Air Cooled Chiller COP. Capacity in ton. Capacity range based on survey of manufacturers data"
+        },
+        {
+          "name": "NECB2020_AirCooledChiller",
+          "chiller_type": "Screw",
+          "minimum_capacity": 150.0,
+          "maximum_capacity": 999.0,
+          "minimum_coefficient_of_performance_cooling": 2.866,
+          "capft": null,
+          "eirft": null,
+          "eirfplr": null,
+          "notes": "NECB 2020 Air Cooled Chiller COP. Capacity in ton. Capacity range based on survey of manufacturers data"
+        }
+      ]
+    }
+  }
+}

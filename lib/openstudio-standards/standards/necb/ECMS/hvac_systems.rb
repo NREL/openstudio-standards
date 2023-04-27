@@ -467,10 +467,10 @@ class ECMS
   # =============================================================================================================================
   # The first 5 letters of the air loop name designate the system type (sys_abbr). This method updates the system type designation 
   # in the air loop name. At the same time the chosen air loop names are checked to avoid duplicate names from being used in the 
-  # hash for system to zomes.
+  # hash for system to zones.
   def update_system_zones_map_keys(system_zones_map,sys_abbr)
     updated_system_zones_map = {}
-    system_zones_map.sort.each do |sname,zones|
+    system_zones_map.each do |sname,zones|
       updated_sys_name = "#{sys_abbr}#{sname[5..-1]}"
       if !updated_system_zones_map.has_key? updated_sys_name
         updated_system_zones_map[updated_sys_name] = zones
@@ -1833,7 +1833,7 @@ class ECMS
                                              loop_spm_type: 'Scheduled',
                                              loop_setpoint: 50.0,
                                              loop_temp_diff: 5.0)
-    model.getCoilHeatingWaters.each {|coil| hw_loop.addDemandBranchForComponent(coil)}
+    model.getCoilHeatingWaters.sort.each {|coil| hw_loop.addDemandBranchForComponent(coil)}
     hcapf_curve_name = "HEATPUMP_WATERTOWATER_HCAPF"
     hcapf_curve = model_add_curve(model, hcapf_curve_name)
     if hcapf_curve
@@ -1865,7 +1865,7 @@ class ECMS
     
     chw_loop_clg_eqpt.setName('ChillerWaterCooled')
     chw_loop_clg_eqpt.setCondenserType("WaterCooled")
-    model.getCoilCoolingWaters.each {|coil| chw_loop.addDemandBranchForComponent(coil)}
+    model.getCoilCoolingWaters.sort.each {|coil| chw_loop.addDemandBranchForComponent(coil)}
     sec_chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
     chw_loop_clg_eqpt_outlet_node = chw_loop_clg_eqpt.supplyOutletModelObject.get.to_Node.get
     sec_chiller.addToNode(chw_loop_clg_eqpt_outlet_node)
@@ -1911,17 +1911,20 @@ class ECMS
   def apply_efficiency_ecm_hs14_cgshp_fancoils(model)
     heatpump_siz_f = 0.4  # sizing factor for water-source heat pump (heating mode)
     chiller_siz_f = 0.4  # sizing factor for water-cooled chiller 
-    # get water-source heat pump
+    # get water-source heat pump and boiler
     hw_loops = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'heating'}
     hw_heatpump_loop = nil
     hw_heatpump = nil
+    hw_boiler = nil
     hw_loops.each do |hw_loop|
       hw_heatpumps = hw_loop.supplyComponents.select {|comp| comp.to_HeatPumpWaterToWaterEquationFitHeating.is_initialized}
       if !hw_heatpumps.empty?
         hw_heatpump_loop = hw_loop
         hw_heatpump = hw_heatpumps[0].to_HeatPumpWaterToWaterEquationFitHeating.get
-        break
       end
+      hw_boilers = hw_loop.supplyComponents.select {|comp| comp.to_BoilerHotWater.is_initialized}
+      hw_boiler = hw_boilers[0].to_BoilerHotWater.get if !hw_boilers.empty?
+      break if !hw_heatpump_loop.nil? && !hw_heatpump.nil? && !hw_boiler.nil?
     end
     raise("apply_efficiency_ecm_hs14_cgshp_fancoils: no water-source heat pump found in heating loop #{hw_loops.name.to_s}") if hw_heatpump.nil?
     cw_loop = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'condenser'}[0]
@@ -1945,7 +1948,7 @@ class ECMS
     cw_loop.setMaximumLoopFlowRate(cw_loop_max_flow)
     cw_loop_pump = cw_loop.supplyComponents.select {|comp| comp.to_PumpVariableSpeed.is_initialized}[0].to_PumpVariableSpeed.get
     cw_loop_pump.setRatedFlowRate(cw_loop_max_flow)
-    # set heating capacity of water-source heat pump
+    # set heating capacity of water-source heat pump and boiler
     if hw_heatpump.autosizedRatedHeatingCapacity.is_initialized
       cap = hw_heatpump.autosizedRatedHeatingCapacity.to_f
     elsif hw_heatpump.ratedHeatingCapacity.is_initialized
@@ -1954,17 +1957,19 @@ class ECMS
       raise("apply_efficiency_ecm_hs14_cgshp_fancoils: capacity of water-source heat pump #{hw_heatpump.name.to_s} is not defined")
     end
     hw_heatpump.setRatedHeatingCapacity(heatpump_siz_f*cap)
-    # set cooling capacity of water-cooled chiller
+    hw_boiler.setNominalCapacity((1.0-heatpump_siz_f)*cap)
+    # set cooling capacity of chillers
     chillers = chw_loop.supplyComponents.select {|comp| comp.to_ChillerElectricEIR.is_initialized}
     chiller_water_cooled = nil
+    chiller_air_cooled = nil
     chillers.each do |comp|
       chlr = comp.to_ChillerElectricEIR.get
-      if chlr.name.to_s.include? 'ChillerWaterCooled'
-        chiller_water_cooled = chlr
-        break
-      end
-    end
+      chiller_water_cooled = chlr if chlr.name.to_s.include? 'ChillerWaterCooled'
+      chiller_air_cooled = chlr if chlr.name.to_s.include? 'ChillerAirCooled'
+      break if !chiller_water_cooled.nil? && !chiller_air_cooled.nil?
+    end 
     raise("apply_efficiency_ecm_hs14_cgshp_fancoils: no water-cooled chiller found in cooling loop #{chw_loop.name.to_s}") if chiller_water_cooled.nil?
+    raise("apply_efficiency_ecm_hs14_cgshp_fancoils: no air-cooled chiller found in cooling loop #{chw_loop.name.to_s}") if chiller_air_cooled.nil?
     if chiller_water_cooled.autosizedReferenceCapacity.is_initialized
       cap = chiller_water_cooled.autosizedReferenceCapacity.to_f
     elsif chiller_water_cooled.referenceCapacity.is_initialized
@@ -1973,6 +1978,16 @@ class ECMS
       raise("apply_efficiency_ecm_hs14_cgshp_fancoils: cooling capacity of chiller #{chiller_water_cooled.name.to_s} is not defined")
     end
     chiller_water_cooled.setReferenceCapacity(chiller_siz_f*cap)
+    chiller_air_cooled.setReferenceCapacity((1.0-chiller_siz_f)*cap)
+    # set cop of air-cooled chiller
+    chlr_cap_w = (1.0-chiller_siz_f)*cap
+    chlr_cap_ton = OpenStudio.convert(chlr_cap_w, 'W', 'ton').get
+    search_criteria = {}
+    search_criteria['name'] = 'NECB2020_AirCooledChiller'
+    chlr_props = model_find_object(standards_data['tables']['chillers_ecm']['table'], search_criteria, chlr_cap_ton)
+    cop = chlr_props['minimum_coefficient_of_performance_cooling'].to_f
+    chiller_air_cooled.setReferenceCOP(cop)
+    chiller_air_cooled.setName("Chiller AirCooled #{chlr_props['chiller_type']}")
   end
 
   #=============================================================================================================================
