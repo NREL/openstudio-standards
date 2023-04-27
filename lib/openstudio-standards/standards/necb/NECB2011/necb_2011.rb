@@ -940,8 +940,6 @@ class NECB2011 < Standard
 
     @tbd = BTAP::Bridging.new(model, argh)
 
-    #puts @tbd.tally.to_json
-    puts @tbd.get_material_quantities()
     true
   end
 
