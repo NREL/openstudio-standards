@@ -910,8 +910,6 @@ class NECB2011 < Standard
   def apply_thermal_bridging(model: nil, tbd_option: nil)
     return false unless model.is_a?(OpenStudio::Model::Model)
     return false unless tbd_option.respond_to?(:to_s)
-    tbd_option = 'good'
-    tbd_option = tbd_option.to_s
     # 4x options:
     #  - nil or 'none'(TBD is ignored)
     #  - derate using 'bad' PSI factors (BTAP-costed)
