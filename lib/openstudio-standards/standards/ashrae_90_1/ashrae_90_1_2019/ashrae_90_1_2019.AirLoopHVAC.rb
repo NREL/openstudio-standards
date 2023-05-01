@@ -624,6 +624,7 @@ class ASHRAE9012019 < ASHRAE901
       max_oa_frac_sch_type = 'Schedule:Constant'
       oa_ctrl.setMaximumFractionofOutdoorAirSchedule(max_oa_frac_sch)
     else
+      max_oa_frac_sch = max_oa_frac_sch.get
       if max_oa_frac_sch.to_ScheduleRuleset.is_initialized
         max_oa_frac_sch = max_oa_frac_sch.to_ScheduleRuleset.get
         max_oa_frac_sch_type = 'Schedule:Year'
