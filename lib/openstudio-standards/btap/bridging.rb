@@ -1956,59 +1956,60 @@ module BTAP
 
       true
     end
-  end
 
+    def get_material_quantities()
+      material_quantities = {}
+      csv = CSV.read("#{File.dirname(__FILE__)}/../../../data/inventory/thermal_bridging.csv", headers: true)
+      tally_edges  = @tally[:edges].transform_keys(&:to_s)
 
-  def get_material_quantities()
-    material_quantities = {}
-    csv = CSV.read("#{File.dirname(__FILE__)}/../../../data/inventory/thermal_bridging.csv", headers: true)
-    tally_edges  = @tally[:edges].transform_keys(&:to_s)
+      #tally_edges = JSON.parse('{"edges":{"jamb":{"BTAP-ExteriorWall-SteelFramed-1 good":13.708557548340757},"sill":{"BTAP-ExteriorWall-SteelFramed-1 good":90.13000000000001},"head":{"BTAP-ExteriorWall-SteelFramed-1 good":90.13000000000001},"gradeconvex":{"BTAP-ExteriorWall-SteelFramed-1 good":90.4348},"parapetconvex":{"BTAP-ExteriorWall-SteelFramed-1 good":45.2174},"parapet":{"BTAP-ExteriorWall-SteelFramed-1 good":45.2174},"transition":{"BTAP-ExteriorWall-SteelFramed-1 good":71.16038874419307},"cornerconvex":{"BTAP-ExteriorWall-SteelFramed-1 good":12.1952}}}')['edges']
+      tally_edges.each do |edge_type_full, value|
+        edge_type = edge_type_full.delete_suffix('convex')
+        if ['head', 'jamb', 'sill'].include?(edge_type)
+          edge_type = 'fenestration'
+        end
+        value.each do |wall_ref_and_quality, quantity|
+          /(.*)\s(.*)/ =~ wall_ref_and_quality
+          wall_reference = $1
+          quality = $2
 
-    #tally_edges = JSON.parse('{"edges":{"jamb":{"BTAP-ExteriorWall-SteelFramed-1 good":13.708557548340757},"sill":{"BTAP-ExteriorWall-SteelFramed-1 good":90.13000000000001},"head":{"BTAP-ExteriorWall-SteelFramed-1 good":90.13000000000001},"gradeconvex":{"BTAP-ExteriorWall-SteelFramed-1 good":90.4348},"parapetconvex":{"BTAP-ExteriorWall-SteelFramed-1 good":45.2174},"parapet":{"BTAP-ExteriorWall-SteelFramed-1 good":45.2174},"transition":{"BTAP-ExteriorWall-SteelFramed-1 good":71.16038874419307},"cornerconvex":{"BTAP-ExteriorWall-SteelFramed-1 good":12.1952}}}')['edges']
-    tally_edges.each do |edge_type_full, value|
-      edge_type = edge_type_full.delete_suffix('convex')
-      if ['head', 'jamb', 'sill'].include?(edge_type)
-        edge_type = 'fenestration'
+          if wall_reference =='BTAP-ExteriorWall-SteelFramed-1'
+            wall_reference = 'BTAP-ExteriorWall-SteelFramed-2'
+          end
+
+          if edge_type == 'transition'
+            next
+          end
+
+          result = csv.find { |row| row['edge_type'] == edge_type &&
+            row['quality'] == quality &&
+            row['wall_reference'] == wall_reference
+          }
+          if result.nil?
+            puts ("#{edge_type}-#{wall_reference}-#{quality}")
+            puts "not found in tb database"
+            next
+          end
+
+          # Split
+          material_opaque_id_layers = result['material_opaque_id_layers'].split(",")
+          id_layers_quantity_multipliers = result['id_layers_quantity_multipliers'].split(",")
+
+          material_opaque_id_layers.zip(id_layers_quantity_multipliers).each do |id, scale|
+            if material_quantities[id].nil? then material_quantities[id] = 0.0 end
+            material_quantities[id] = material_quantities[id] + scale.to_f * quantity.to_f
+          end
+        end
       end
-      value.each do |wall_ref_and_quality, quantity|
-        /(.*)\s(.*)/ =~ wall_ref_and_quality
-        wall_reference = $1
-        quality = $2
-
-        if wall_reference =='BTAP-ExteriorWall-SteelFramed-1'
-          wall_reference = 'BTAP-ExteriorWall-SteelFramed-2'
-        end
-
-        if edge_type == 'transition'
-          next
-        end
-
-        result = csv.find { |row| row['edge_type'] == edge_type &&
-          row['quality'] == quality &&
-          row['wall_reference'] == wall_reference
-        }
-        if result.nil?
-          puts ("#{edge_type}-#{wall_reference}-#{quality}")
-          puts "not found in tb database"
-          next
-        end
-
-        # Split
-        material_opaque_id_layers = result['material_opaque_id_layers'].split(",")
-        id_layers_quantity_multipliers = result['id_layers_quantity_multipliers'].split(",")
-
-        material_opaque_id_layers.zip(id_layers_quantity_multipliers).each do |id, scale|
-          if material_quantities[id].nil? then material_quantities[id] = 0.0 end
-          material_quantities[id] = material_quantities[id] + scale.to_f * quantity.to_f
-        end
+      material_opaque_id_quantities = []
+      material_quantities.each do |id,quantity|
+        material_opaque_id_quantities << { 'materials_opaque_id' => id, 'quantity' => quantity, 'domain'=> 'thermal_bridging' }
       end
-    end
-    material_opaque_id_quantities = []
-    material_quantities.each do |id,quantity|
-      material_opaque_id_quantities << { 'materials_opaque_id' => id, 'quantity' => quantity, 'domain'=> 'thermal_bridging' }
+
+      return material_opaque_id_quantities
     end
 
-    return material_opaque_id_quantities
+
   end
 
 
