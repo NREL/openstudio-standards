@@ -95,7 +95,7 @@ class Standard
       cop = kw_per_ton_to_cop(kw_per_ton)
     end
 
-    return cop
+    return cop, capacity_tons, kw_per_ton
   end
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
