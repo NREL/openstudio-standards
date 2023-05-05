@@ -179,7 +179,7 @@
         {
           "cooling_type": "WaterCooled",
           "condenser_type": null,
-          "compressor_type": "Screw",
+          "compressor_type": "Rotary Screw",
           "absorption_type": null,
           "variable_speed_drive": null,
           "minimum_capacity": 0.0,
@@ -196,7 +196,7 @@
         {
           "cooling_type": "WaterCooled",
           "condenser_type": null,
-          "compressor_type": "Screw",
+          "compressor_type": "Rotary Screw",
           "absorption_type": null,
           "variable_speed_drive": null,
           "minimum_capacity": 75.0,
@@ -213,7 +213,7 @@
         {
           "cooling_type": "WaterCooled",
           "condenser_type": null,
-          "compressor_type": "Screw",
+          "compressor_type": "Rotary Screw",
           "absorption_type": null,
           "variable_speed_drive": null,
           "minimum_capacity": 150.0,
@@ -230,7 +230,7 @@
         {
           "cooling_type": "WaterCooled",
           "condenser_type": null,
-          "compressor_type": "Screw",
+          "compressor_type": "Rotary Screw",
           "absorption_type": null,
           "variable_speed_drive": null,
           "minimum_capacity": 300.0,
@@ -247,7 +247,7 @@
         {
           "cooling_type": "WaterCooled",
           "condenser_type": null,
-          "compressor_type": "Screw",
+          "compressor_type": "Rotary Screw",
           "absorption_type": null,
           "variable_speed_drive": null,
           "minimum_capacity": 600.0,

@@ -1863,7 +1863,7 @@ class ECMS
                                                loop_setpoint: 7.0,
                                                loop_temp_diff: 6.0)
     
-    chw_loop_clg_eqpt.setName('ChillerWaterCooled Scroll')
+    chw_loop_clg_eqpt.setName('ChillerWaterCooled')
     chw_loop_clg_eqpt.setCondenserType("WaterCooled")
     model.getCoilCoolingWaters.sort.each {|coil| chw_loop.addDemandBranchForComponent(coil)}
     sec_chiller = OpenStudio::Model::ChillerElectricEIR.new(model)

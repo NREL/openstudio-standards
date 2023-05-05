@@ -601,6 +601,7 @@ class NECB2011
     search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
     cooling_type = search_criteria['cooling_type']
     condenser_type = search_criteria['condenser_type']
+    compressor_type = search_criteria['compressor_type']
 
     # Get the chiller capacity
     capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir)
@@ -627,18 +628,22 @@ class NECB2011
     # Convert capacity to tons
     capacity_tons = OpenStudio.convert(chiller_capacity, 'W', 'ton').get
 
-    # Get chiller compressor type
-    chlr_type_search_criteria = {}
-    chlr_type_search_criteria['cooling_type'] = cooling_type
-    chlr_types_table = @standards_data['chiller_types']
-    chlr_type_props = model_find_object(chlr_types_table, chlr_type_search_criteria, capacity_tons)
-    unless chlr_type_props
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find chiller properties, cannot find chiller type information")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
+    # Get chiller compressor type if needed
+    chiller_types = ['reciprocating','scroll','rotary screw','centrifugal']
+    chiller_name_has_type = chiller_types.any? {|type| chiller_electric_eir.name.to_s.downcase.include? type}
+    unless chiller_name_has_type
+      chlr_type_search_criteria = {}
+      chlr_type_search_criteria['cooling_type'] = cooling_type
+      chlr_types_table = @standards_data['chiller_types']
+      chlr_type_props = model_find_object(chlr_types_table, chlr_type_search_criteria, capacity_tons)
+      unless chlr_type_props
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find chiller type information")
+        successfully_set_all_properties = false
+        return successfully_set_all_properties
+      end
+      compressor_type = chlr_type_props['compressor_type']
+      chiller_electric_eir.setName(chiller_electric_eir.name.to_s + ' ' + compressor_type)
     end
-    compressor_type = chlr_type_props['compressor_type']
-    chiller_electric_eir.setName(chiller_electric_eir.name.to_s.gsub('Scroll',compressor_type))
     # Get the chiller properties
     search_criteria['compressor_type'] = compressor_type
     chlr_table = @standards_data['chillers']
@@ -1678,9 +1683,9 @@ class NECB2011
     chiller2 = OpenStudio::Model::ChillerElectricEIR.new(model)
     chiller1.setCondenserType('WaterCooled')
     chiller2.setCondenserType('WaterCooled')
-    chiller1_name = "Primary Chiller WaterCooled #{chiller_type}"
+    chiller1_name = "Primary Chiller WaterCooled #{chiller_type}".strip
     chiller1.setName(chiller1_name)
-    chiller2_name = "Secondary Chiller WaterCooled #{chiller_type}"
+    chiller2_name = "Secondary Chiller WaterCooled #{chiller_type}".strip
     chiller2.setName(chiller2_name)
 
     chiller_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
