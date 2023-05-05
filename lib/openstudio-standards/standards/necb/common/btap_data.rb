@@ -158,6 +158,7 @@ class BTAPData
     building_data['cost_rs_means_prov'] = cost_result['rs_means_prov']
     building_data['cost_rs_means_city'] = cost_result['rs_means_city']
     building_data['cost_equipment_envelope_total_cost_per_m_sq'] = (cost_result['totals']['envelope']) / @conditioned_floor_area_m_sq
+    building_data['cost_equipment_thermal_bridging_total_cost_per_m_sq'] = (cost_result['totals']['thermal_bridging']) / @conditioned_floor_area_m_sq
     building_data['cost_equipment_lighting_total_cost_per_m_sq'] = (cost_result['totals']['lighting']) / @conditioned_floor_area_m_sq
     building_data['cost_equipment_heating_and_cooling_total_cost_per_m_sq'] = (cost_result['totals']['heating_and_cooling']) / @conditioned_floor_area_m_sq
     building_data['cost_equipment_shw_total_cost_per_m_sq'] = (cost_result['totals']['shw']) / @conditioned_floor_area_m_sq
