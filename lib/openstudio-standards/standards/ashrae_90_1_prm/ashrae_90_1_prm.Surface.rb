@@ -26,7 +26,6 @@ class ASHRAE901PRM < Standard
       end
       # Save doors to a temp list
       door_list = []
-      fenestration_construction = ''
       surface.subSurfaces.sort.each do |sub|
         if sub.subSurfaceType == 'Door'
           door = {}
@@ -34,8 +33,6 @@ class ASHRAE901PRM < Standard
           door['vertices'] = sub.vertices
           door['construction'] = sub.construction.get
           door_list << door
-        else
-          fenestration_construction = sub.construction.get
         end
       end
       # remove all existing windows and set the window to wall ratio to the calculated new WWR
@@ -43,11 +40,6 @@ class ASHRAE901PRM < Standard
       surface.subSurfaces.sort.each(&:remove)
       # Apply default construction to the subsurface - the standard construction will be applied later.
       surface.setWindowToWallRatio(wwr_adjusted, 0.6, true)
-      # Need to assign at least one construction so that the
-      # baseline construction material can be added to the new surface
-      surface.subSurfaces.each do |sub|
-        sub.setConstruction(fenestration_construction)
-      end
       # add door back.
       unless door_list.empty?
         door_list.each do |door|

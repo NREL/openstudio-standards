@@ -54,6 +54,8 @@ class ASHRAE901PRM < Standard
         cons_set = space.model.building.get.defaultConstructionSet.get
         construction = get_default_surface_cons_from_surface_type(surface_category, surface_type, cons_set)
       end
+      OpenStudio.logFree(OpenStudio::Debug, 'prm.log', "Search for #{planar_surface.name.get} defaultConstructionSet, find #{construction ? construction.name.get: "Nil"}")
+      raise "No defaultConstructionSet defined for space #{space.name.get}, failed to find default construction for surface #{planar_surface.name.get}" unless construction
 
       return previous_construction_map if construction.nil?
     end
