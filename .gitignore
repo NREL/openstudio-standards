@@ -48,6 +48,7 @@ coverage/
 /data/standards/openstudio_standards_duplicates_log.csv
 /data/standards/export
 /data/geometry/../*.osw
+/data/openstudio_standards_data/Pipfile.lock
 
 ## Python ignores
 # Byte-compiled / optimized / DLL files
