@@ -2,8 +2,11 @@
 class PRMError < StandardError
 end
 
-# Finds capacity in W
+# PRM assertion method
+# Raise assertion if the test (bool) is failed
 #
+# Before raise the exception, the method will generate the prm.log for debugging
+# 
 # @param bool [Boolean, Object] an object for truthy evaluation
 # @param log_dir [String] log file directory
 # @param log_msg [String] message add to the log
