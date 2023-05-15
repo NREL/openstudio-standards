@@ -10,16 +10,20 @@ For all HVAC zones, the minimum ventilation system outdoor air intake flow shall
   - Loop through Sizing:Zones
     - Get the DesignSpecification:OutdoorAir, if matches to the user_data_oa then check the current ventilation settings.
     - Split into four sub-routines:
-      - calculate total OA by occupants: occupant_oa = zone_total_occupants * airflow_per_occupant
-      - calculate total OA by floor area: floor_area_oa = zone_floor_area * airflow_per_floor_area
-      - calculate total OA by zone: zone_oa = airflow_per_zone
-      - calculate total OA by ACH: ach_oa = ach * height(m) / 3.6 / 1000
-      - calculate sum OA: sum_oa = occupant_oa + floor_area_oa + zone_oa + ach_oa
+      - calculate total OA by occupants in model: occupant_oa_p = zone_total_occupants * airflow_per_occupant_u
+      - calculate total OA by occupants in user data: occupant_oa_u = zone_total_occupants * airflow_per_occupant_u
+      - calculate total OA by floor area in model: floor_area_oa_p = zone_floor_area * airflow_per_floor_area_p
+      - calculate total OA by floor area in user data: floor_area_oa_u = zone_floor_area * airflow_per_floor_area_u
+      - calculate total OA by zone in model: zone_oa_p = airflow_per_zone_p
+      - calculate total OA by zone in user data: zone_oa_u = airflow_per_zone_u
+      - calculate total OA by ACH in model: ach_oa_p = ach_p * height(m) / 3.6 / 1000
+      - calculate total OA by ACH in user data: ach_oa_u = ach_u * height(m) / 3.6 / 1000
+      - calculate sum OA: sum_oa = occupant_oa_p + floor_area_oa_p + zone_oa_p + ach_oa_p
+      - calculate sum user data oa: user_data_oa = occupant_oa_u + floor_area_oa_u + zone_oa_u + ach_oa_u
       - if sum_oa > user_data_oa:
-        - duplicate a DesignSpecifcation:OutdoorAir object
-        - Enter the ventilation methods to the object
-        - Reassign the object to the Sizing:Zones
-
+        - Modify the ventilation methods in the object.
+      - else:
+        - Issue a warning in the log
 NOTE: 
 1. There are some details relate to Zone-Space relationship needs to be explored in the above logic
 2. When assigning user specified ventilation methods, it will likely require to create a new space type and override the ventilation object in the new space type - this could cause multiple space types in the baseline model (similar case is in ligthing)
