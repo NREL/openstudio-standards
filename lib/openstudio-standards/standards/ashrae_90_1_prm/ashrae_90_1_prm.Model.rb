@@ -1466,12 +1466,37 @@ class ASHRAE901PRM < Standard
     handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     # load user data from proposed model
     handle_airloop_user_input_data(model)
+    # load OA data from user data
+    handle_outdoor_air_user_input_data(model)
     # load air loop DOAS user data from the proposed model
     handle_airloop_doas_user_input_data(model)
     # load zone HVAC user data from proposed model
     handle_zone_hvac_user_input_data(model)
     # load thermal zone user data from proposed model
     handle_thermal_zone_user_input_data(model)
+  end
+
+  # A function to load outdoor air data from user data csv files
+  # The file name is userdata_design_specification_outdoor_air.csv
+  # @param [OpenStudio::Model::Model] model
+  def handle_outdoor_air_user_input_data(model)
+    user_data_oas = @standards_data.key?('userdata_oa') ? @standards_data['userdata_oa'] : nil
+    if user_data_oas && user_data_oas.length > 1
+      # get design specification outdoor air object.
+      user_data_oas.each do |user_oa|
+        zone_oa = model.getDesignSpecificationOutdoorAirByName(user_oa['name'])
+        if !zone_oa.is_initialize?
+          OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "The DesignSpecification:OutdoorAir named #{user_oa['name']} in the userdata_design_specification_outdoor_air was not found in the model, user specified data associated with it will be ignored.")
+          next
+        else
+          zone_oa = zone_oa.get
+        end
+
+        user_oa.keys.each do |info_key|
+          zone_oa.additionalProperties.setFeature(info_key, user_oa['info_key'])
+        end
+      end
+    end
   end
 
   # A function to load airloop data from userdata csv files
