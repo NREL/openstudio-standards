@@ -1487,19 +1487,17 @@ class ASHRAE901PRM < Standard
         user_airloops.each do |user_airloop|
           if air_loop_name == user_airloop['name']
             # gas phase air cleaning is system base - add proposed hvac system name to zones
-            if user_airloop.key?('economizer_exception_for_gas_phase_air_cleaning') && !user_airloop['economizer_exception_for_gas_phase_air_cleaning'].nil?
-              if user_airloop['economizer_exception_for_gas_phase_air_cleaning'].downcase == 'yes'
-                air_loop.thermalZones.each do |thermal_zone|
-                  thermal_zone.additionalProperties.setFeature('economizer_exception_for_gas_phase_air_cleaning', air_loop_name)
-                end
+            economizer_exception_for_gas_phase_air_cleaning = prm_read_user_data(user_airloop, 'economizer_exception_for_gas_phase_air_cleaning', 'no')
+            if economizer_exception_for_gas_phase_air_cleaning.downcase == 'yes'
+              air_loop.thermalZones.each do |thermal_zone|
+                thermal_zone.additionalProperties.setFeature('economizer_exception_for_gas_phase_air_cleaning', air_loop_name)
               end
             end
+            economizer_exception_for_open_refrigerated_cases = prm_read_user_data(user_airloop, 'economizer_exception_for_open_refrigerated_cases', 'no')
             # Open refrigerated cases is zone based - add yes or no to zones
-            if user_airloop.key?('economizer_exception_for_open_refrigerated_cases') && !user_airloop['economizer_exception_for_open_refrigerated_cases'].nil?
-              if user_airloop['economizer_exception_for_open_refrigerated_cases'].downcase == 'yes'
-                air_loop.thermalZones.each do |thermal_zone|
-                  thermal_zone.additionalProperties.setFeature('economizer_exception_for_open_refrigerated_cases', 'yes')
-                end
+            if economizer_exception_for_open_refrigerated_cases.downcase == 'yes'
+              air_loop.thermalZones.each do |thermal_zone|
+                thermal_zone.additionalProperties.setFeature('economizer_exception_for_open_refrigerated_cases', 'yes')
               end
             end
             # Fan power credits, exhaust air energy recovery
