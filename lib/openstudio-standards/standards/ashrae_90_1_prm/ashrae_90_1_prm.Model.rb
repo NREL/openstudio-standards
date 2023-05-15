@@ -1491,9 +1491,9 @@ class ASHRAE901PRM < Standard
         else
           zone_oa = zone_oa.get
         end
-
+        # Todo this will need to update with a function to handle nil, none or empty string.
         user_oa.keys.each do |info_key|
-          zone_oa.additionalProperties.setFeature(info_key, user_oa['info_key'])
+          zone_oa.additionalProperties.setFeature(info_key, user_oa[info_key])
         end
       end
     end
