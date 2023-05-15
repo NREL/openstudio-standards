@@ -43,10 +43,10 @@ module Fan
   def fan_adjust_pressure_rise_to_meet_fan_power(fan, target_fan_power)
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
-    dsn_air_flow_m3_per_s = if fan.autosizedMaximumFlowRate.is_initialized
-                              fan.autosizedMaximumFlowRate.get
-                            else
+    dsn_air_flow_m3_per_s = if fan.maximumFlowRate.is_initialized
                               fan.maximumFlowRate.get
+                            elsif fan.autosizedMaximumFlowRate.is_initialized
+                              fan.autosizedMaximumFlowRate.get
                             end
 
     # Get the current fan power
@@ -356,10 +356,10 @@ module Fan
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Fan', "For #{fan.name}, could not find rated fan power from Equipment Summary. Will calculate it based on current pressure rise and total fan efficiency")
     end
 
-    if fan.autosizedMaximumFlowRate.is_initialized
-      max_m3_per_s = fan.autosizedMaximumFlowRate.get
-    elsif fan.maximumFlowRate.is_initialized
+    if fan.maximumFlowRate.is_initialized
       max_m3_per_s = fan.ratedFlowRate.get
+    elsif fan.autosizedMaximumFlowRate.is_initialized
+      max_m3_per_s = fan.autosizedMaximumFlowRate.get
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find fan Maximum Flow Rate, cannot determine w per cfm correctly.")
       return false

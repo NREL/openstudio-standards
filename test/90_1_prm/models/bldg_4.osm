@@ -3988,7 +3988,7 @@ OS:Rendering:Color,
 
 OS:ThermalZone,
   {d0925ce4-271b-4301-958c-fd645a985c74}, !- Handle
-  Parking Level 2B ParkingLot,            !- Name
+  Parking Level 2B ParkingLot ZN,         !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -4074,7 +4074,7 @@ OS:Rendering:Color,
 
 OS:ThermalZone,
   {a15b33bf-95a8-4c35-af8c-ddecb61c0f47}, !- Handle
-  Parking Level 1B ParkingLot,            !- Name
+  Parking Level 1B ParkingLot ZN,         !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -4160,7 +4160,7 @@ OS:Rendering:Color,
 
 OS:ThermalZone,
   {6f6da13e-8cc0-4b66-ba77-f3f7916b1f52}, !- Handle
-  IndoorPracticeField,                    !- Name
+  IndoorPracticeField ZN,                 !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -4246,7 +4246,7 @@ OS:Rendering:Color,
 
 OS:ThermalZone,
   {55cace87-0ec6-41e9-b1b6-9a51b675d042}, !- Handle
-  SW Elevator,                            !- Name
+  SW Elevator ZN,                         !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}

@@ -507,7 +507,7 @@ Standard.class_eval do
 
     # loop through ceiling surfaces and assign the plenum acoustical tile construction if the adjacent surface is a plenum floor
     model.getSurfaces.each do |surface|
-      next unless surface.surfaceType == 'RoofCeiling' && surface.outsideBoundaryCondition == 'Surface'
+      next unless surface.surfaceType == 'RoofCeiling' && surface.outsideBoundaryCondition == 'Surface' && surface.adjacentSurface.is_initialized
 
       adj_surface = surface.adjacentSurface.get
       adj_space = adj_surface.space.get

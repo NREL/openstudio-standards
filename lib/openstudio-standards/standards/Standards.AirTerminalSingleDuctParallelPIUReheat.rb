@@ -25,10 +25,10 @@ class Standard
 
     # Get the maximum flow rate through the terminal
     max_primary_air_flow_rate = nil
-    if air_terminal_single_duct_parallel_piu_reheat.autosizedMaximumPrimaryAirFlowRate.is_initialized
-      max_primary_air_flow_rate = air_terminal_single_duct_parallel_piu_reheat.autosizedMaximumPrimaryAirFlowRate.get
-    elsif air_terminal_single_duct_parallel_piu_reheat.maximumPrimaryAirFlowRate.is_initialized
+    if air_terminal_single_duct_parallel_piu_reheat.maximumPrimaryAirFlowRate.is_initialized
       max_primary_air_flow_rate = air_terminal_single_duct_parallel_piu_reheat.maximumPrimaryAirFlowRate.get
+    elsif air_terminal_single_duct_parallel_piu_reheat.autosizedMaximumPrimaryAirFlowRate.is_initialized
+      max_primary_air_flow_rate = air_terminal_single_duct_parallel_piu_reheat.autosizedMaximumPrimaryAirFlowRate.get
     end
 
     # Set the max secondary air flow rate

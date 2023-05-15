@@ -15,10 +15,10 @@ class Standard
     return false unless plant_loop_type == 'Heating' || plant_loop_type == 'Cooling'
 
     # Get rated pump power
-    if pump.autosizedRatedPowerConsumption.is_initialized
-      pump_rated_power_w = pump.autosizedRatedPowerConsumption.get
-    elsif pump.ratedPowerConsumption.is_initialized
+    if pump.ratedPowerConsumption.is_initialized
       pump_rated_power_w = pump.ratedPowerConsumption.get
+    elsif pump.autosizedRatedPowerConsumption.is_initialized
+      pump_rated_power_w = pump.autosizedRatedPowerConsumption.get
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find rated pump power consumption, cannot determine w per gpm correctly.")
       return false

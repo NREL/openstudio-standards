@@ -3032,10 +3032,10 @@ class ASHRAE901PRM < Standard
 
         # Get the maximum flow rate through the terminal
         max_primary_air_flow_rate = nil
-        if pfp_term.autosizedMaximumPrimaryAirFlowRate.is_initialized
-          max_primary_air_flow_rate = pfp_term.autosizedMaximumPrimaryAirFlowRate.get
-        elsif pfp_term.maximumPrimaryAirFlowRate.is_initialized
+        if pfp_term.maximumPrimaryAirFlowRate.is_initialized
           max_primary_air_flow_rate = pfp_term.maximumPrimaryAirFlowRate.get
+        elsif pfp_term.autosizedMaximumPrimaryAirFlowRate.is_initialized
+          max_primary_air_flow_rate = pfp_term.autosizedMaximumPrimaryAirFlowRate.get
         end
 
         max_sec_flow_rate_m3_per_s = max_primary_air_flow_rate * sec_flow_frac
