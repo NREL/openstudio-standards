@@ -59,7 +59,11 @@ def extract_additional_properties(model)
           'surface_area' => surface.grossArea * space.multiplier,
           'surface_wwr' => surface_additional_properties.hasFeature('surface_wwr') ? surface_additional_properties.getFeatureAsDouble('surface_wwr').get : 0.0,
           'adjusted_wwr' => surface_additional_properties.hasFeature('adjusted_wwr') ? surface_additional_properties.getFeatureAsDouble('adjusted_wwr').get : 0.0,
-          'added_wwr' => surface_additional_properties.hasFeature('added_wwr') ? surface_additional_properties.getFeatureAsDouble('added_wwr').get : 0.0
+          # 'new_window_added' => surface_additional_properties.hasFeature('added_wwr') ? surface_additional_properties.getFeatureAsDouble('added_wwr').get : 0.0,
+          'target_u_factor_ip' => surface_additional_properties.hasFeature('target_u_value_ip') ? surface_additional_properties.getFeatureAsDouble('target_u_value_ip').get : nil,
+          'target_f_factor_ip' => surface_additional_properties.hasFeature('target_f_factor_ip') ? surface_additional_properties.getFeatureAsDouble('target_f_factor_ip').get : nil,
+          'target_c_factor_ip' => surface_additional_properties.hasFeature('target_c_factor_ip') ? surface_additional_properties.getFeatureAsDouble('target_c_factor_ip').get : nil,
+          'target_shgc' => surface_additional_properties.hasFeature('target_shgc') ? surface_additional_properties.getFeatureAsDouble('target_shgc').get : nil
         }
         surfaces_output[surface.name.get] = surface_output
       end
@@ -92,7 +96,7 @@ def extract_additional_properties(model)
       airloops_output[airloop.name.get] = airloop_output
     end
   end
-  output_json['airlooops'] = airloops_output
+  output_json['airloops'] = airloops_output
   return output_json
 end
 

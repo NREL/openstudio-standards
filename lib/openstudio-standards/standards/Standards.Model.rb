@@ -3162,6 +3162,14 @@ class Standard
       u_includes_int_film = construction_props['u_value_includes_interior_film_coefficient']
       u_includes_ext_film = construction_props['u_value_includes_exterior_film_coefficient']
 
+      # Added for reporting purpose
+      unless surface.nil?
+        surface.additionalProperties.setFeature('target_u_value_ip', target_u_value_ip) unless target_u_value_ip.nil?
+        surface.additionalProperties.setFeature('target_f_factor_ip', target_f_factor_ip) unless target_f_factor_ip.nil?
+        surface.additionalProperties.setFeature('target_c_factor_ip', target_c_factor_ip) unless target_c_factor_ip.nil?
+        surface.additionalProperties.setFeature('target_shgc', target_shgc) unless target_shgc.nil?
+      end
+
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{data['intended_surface_type']} u_val #{target_u_value_ip} f_fac #{target_f_factor_ip} c_fac #{target_c_factor_ip}")
 
       if target_u_value_ip
