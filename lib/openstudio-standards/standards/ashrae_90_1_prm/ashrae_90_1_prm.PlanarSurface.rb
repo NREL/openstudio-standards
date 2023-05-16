@@ -54,8 +54,10 @@ class ASHRAE901PRM < Standard
         cons_set = space.model.building.get.defaultConstructionSet.get
         construction = get_default_surface_cons_from_surface_type(surface_category, surface_type, cons_set)
       end
-
-      return previous_construction_map if construction.nil?
+      prm_raise(construction,
+                @sizing_run_dir,
+                "Surface #{planar_surface.name.get} does not have a construction. Failed to find defaultConstructionSet for #{planar_surface.name.get}. Add a construction for the surface or add a defaultConstructionSet to Space #{space.name.get} or SpaceType #{space_type.name.get}.",
+                "Failed to find defaultConstructionSet for #{planar_surface.name.get}. Check inputs.")
     end
 
     # Determine if residential or nonresidential

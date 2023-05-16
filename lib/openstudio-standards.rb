@@ -26,6 +26,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/utilities/array'
   require_relative 'openstudio-standards/utilities/object_info'
   require_relative 'openstudio-standards/utilities/prm_output'
+  require_relative 'openstudio-standards/utilities/assertion'
 
   stds = 'openstudio-standards/standards'
   proto = 'openstudio-standards/prototypes'

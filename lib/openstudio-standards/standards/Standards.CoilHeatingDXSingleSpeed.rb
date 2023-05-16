@@ -129,7 +129,7 @@ class Standard
     end
 
     # If PTHP, use equations
-    if sub_category == 'PTHP'
+    if sub_category == 'PTHP' && !ac_props['pthp_cop_coefficient_1'].nil? && !ac_props['pthp_cop_coefficient_2'].nil?
       pthp_cop_coeff_1 = ac_props['pthp_cop_coefficient_1']
       pthp_cop_coeff_2 = ac_props['pthp_cop_coefficient_2']
       # TABLE 6.8.1D
