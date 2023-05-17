@@ -1461,7 +1461,9 @@ class ASHRAE901PRM < Standard
   # @param [String] default_swh_building_type
   # @param [Hash] bldg_type_hvac_zone_hash A hash maps building type for hvac to a list of thermal zones
   # @return True
-  def handle_user_input_data(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
+  def handle_user_input_data(model, climate_zone, sizing_run_dir, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
+    # Set sizing run directory
+    @sizing_run_dir = sizing_run_dir
     # load the multiple building area types from user data
     handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     # load user data from proposed model
@@ -1510,19 +1512,17 @@ class ASHRAE901PRM < Standard
         user_airloops.each do |user_airloop|
           if air_loop_name == user_airloop['name']
             # gas phase air cleaning is system base - add proposed hvac system name to zones
-            if user_airloop.key?('economizer_exception_for_gas_phase_air_cleaning') && !user_airloop['economizer_exception_for_gas_phase_air_cleaning'].nil?
-              if user_airloop['economizer_exception_for_gas_phase_air_cleaning'].downcase == 'yes'
-                air_loop.thermalZones.each do |thermal_zone|
-                  thermal_zone.additionalProperties.setFeature('economizer_exception_for_gas_phase_air_cleaning', air_loop_name)
-                end
+            economizer_exception_for_gas_phase_air_cleaning = prm_read_user_data(user_airloop, 'economizer_exception_for_gas_phase_air_cleaning', 'no')
+            if economizer_exception_for_gas_phase_air_cleaning.downcase == 'yes'
+              air_loop.thermalZones.each do |thermal_zone|
+                thermal_zone.additionalProperties.setFeature('economizer_exception_for_gas_phase_air_cleaning', air_loop_name)
               end
             end
+            economizer_exception_for_open_refrigerated_cases = prm_read_user_data(user_airloop, 'economizer_exception_for_open_refrigerated_cases', 'no')
             # Open refrigerated cases is zone based - add yes or no to zones
-            if user_airloop.key?('economizer_exception_for_open_refrigerated_cases') && !user_airloop['economizer_exception_for_open_refrigerated_cases'].nil?
-              if user_airloop['economizer_exception_for_open_refrigerated_cases'].downcase == 'yes'
-                air_loop.thermalZones.each do |thermal_zone|
-                  thermal_zone.additionalProperties.setFeature('economizer_exception_for_open_refrigerated_cases', 'yes')
-                end
+            if economizer_exception_for_open_refrigerated_cases.downcase == 'yes'
+              air_loop.thermalZones.each do |thermal_zone|
+                thermal_zone.additionalProperties.setFeature('economizer_exception_for_open_refrigerated_cases', 'yes')
               end
             end
             # Fan power credits, exhaust air energy recovery
