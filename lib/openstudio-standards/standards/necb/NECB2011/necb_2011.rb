@@ -1292,6 +1292,7 @@ class NECB2011 < Standard
 
   def model_add_daylighting_controls(model:, daylighting_type:)
 
+    return if daylighting_type == 'none'
     ##### Find spaces with exterior fenestration including fixed window, operable window, and skylight.
     daylight_spaces = []
     daylight_spaces_target_illuminance_setpoint_hash = {}
