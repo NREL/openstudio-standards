@@ -1476,13 +1476,15 @@ class ASHRAE901PRM < Standard
     handle_zone_hvac_user_input_data(model)
     # load thermal zone user data from proposed model
     handle_thermal_zone_user_input_data(model)
+    # load outdoor air data from user spreadsheet
+    handle_outdoor_air_user_input_data(model)
   end
 
   # A function to load outdoor air data from user data csv files
   # The file name is userdata_design_specification_outdoor_air.csv
   # @param [OpenStudio::Model::Model] model
   def handle_outdoor_air_user_input_data(model)
-    user_data_oas = @standards_data.key?('userdata_oa') ? @standards_data['userdata_oa'] : nil
+    user_data_oas = @standards_data.key?('userdata_design_specification_outdoor_air') ? @standards_data['userdata_design_specification_outdoor_air'] : nil
     if user_data_oas && user_data_oas.length > 1
       # get design specification outdoor air object.
       user_data_oas.each do |user_oa|
@@ -1495,7 +1497,11 @@ class ASHRAE901PRM < Standard
         end
         # Todo this will need to update with a function to handle nil, none or empty string.
         user_oa.keys.each do |info_key|
-          zone_oa.additionalProperties.setFeature(info_key, user_oa[info_key])
+          if info_key == 'name'
+            zone_oa.additionalProperties.setFeature('has_user_data', true)
+          else
+            zone_oa.additionalProperties.setFeature(info_key, user_oa[info_key])
+          end
         end
       end
     end

@@ -187,6 +187,9 @@ class Standard
       # Calculate infiltration as per 90.1 PRM rules
       model_baseline_apply_infiltration_standard(model, climate_zone)
 
+      # Apply user outdoor air specs as per 90.1 PRM rules exceptions
+      model_apply_userdata_outdoor_air(model)
+
       # If any of the lights are missing schedules, assign an always-off schedule to those lights.
       # This is assumed to be the user's intent in the proposed model.
       model.getLightss.sort.each do |lights|
@@ -6147,6 +6150,10 @@ class Standard
   end
 
   private
+
+  def model_apply_userdata_outdoor_air(model)
+    return true
+  end
 
   # This function checks whether it is required to adjust the window to wall ratio based on the model WWR and wwr limit.
   # @param wwr_limit [Float] return wwr_limit
