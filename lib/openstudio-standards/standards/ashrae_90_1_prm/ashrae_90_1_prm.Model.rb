@@ -1485,11 +1485,11 @@ class ASHRAE901PRM < Standard
   # @param [OpenStudio::Model::Model] model
   def handle_outdoor_air_user_input_data(model)
     user_data_oas = @standards_data.key?('userdata_design_specification_outdoor_air') ? @standards_data['userdata_design_specification_outdoor_air'] : nil
-    if user_data_oas && user_data_oas.length > 1
+    if user_data_oas && user_data_oas.length > 0
       # get design specification outdoor air object.
       user_data_oas.each do |user_oa|
         zone_oa = model.getDesignSpecificationOutdoorAirByName(user_oa['name'])
-        if !zone_oa.is_initialize?
+        if !zone_oa.is_initialized
           OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "The DesignSpecification:OutdoorAir named #{user_oa['name']} in the userdata_design_specification_outdoor_air was not found in the model, user specified data associated with it will be ignored.")
           next
         else
@@ -1500,7 +1500,7 @@ class ASHRAE901PRM < Standard
           if info_key == 'name'
             zone_oa.additionalProperties.setFeature('has_user_data', true)
           else
-            zone_oa.additionalProperties.setFeature(info_key, user_oa[info_key])
+            zone_oa.additionalProperties.setFeature(info_key, user_oa[info_key].to_f)
           end
         end
       end

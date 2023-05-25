@@ -34,13 +34,9 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       if design_spec_oa.additionalProperties.hasFeature('has_user_data')
         outdoor_air_method = design_spec_oa.outdoorAirMethod
 
-        # cfm/person
-        outdoor_airflow_per_person = OpenStudio.convert(get_additional_property_as_double(design_spec_oa, 'outdoor_airflow_per_person'), 'cfm', 'm^3/s').get
-        # cfm/ft2
-        outdoor_airflow_per_floor_area = OpenStudio.convert(get_additional_property_as_double(design_spec_oa, 'outdoor_airflow_per_floor_area'), 'cfm', 'm^3/s').get / OpenStudio.convert(1.0, 'ft^2', 'm^2')
-        # cfm
-        outdoor_air_flowrate = OpenStudio.convert(get_additional_property_as_double(design_spec_oa, 'outdoor_air_flowrate'), 'cfm', 'm^3/s').get
-        # ach
+        outdoor_airflow_per_person = get_additional_property_as_double(design_spec_oa, 'outdoor_airflow_per_person')
+        outdoor_airflow_per_floor_area = get_additional_property_as_double(design_spec_oa, 'outdoor_airflow_per_floor_area')
+        outdoor_air_flowrate = get_additional_property_as_double(design_spec_oa, 'outdoor_air_flowrate')
         outdoor_air_flow_air_changes_per_hour = get_additional_property_as_double(design_spec_oa, 'outdoor_air_flow_air_changes_per_hour')
 
         # Area SQL - TabularDataWithStrings -> InputVerificationResultsSummary -> Entire Facility -> Zone Summary -> Zone Name -> Area
@@ -59,7 +55,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
           total_modeled_area_oa += floor_area * design_spec_oa.outdoorAirFlowperFloorArea
           total_user_area_oa += floor_area * outdoor_airflow_per_floor_area
 
-          total_modeled_people_oa += number_people * outdoorAirFlowperPerson
+          total_modeled_people_oa += number_people * design_spec_oa.outdoorAirFlowperPerson
           total_user_people_oa += number_people * outdoor_airflow_per_person
 
           total_modeled_airflow_oa += design_spec_oa.outdoorAirFlowRate
@@ -87,6 +83,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         end
 
         if total_modeled_airflow < total_user_airflow
+          # Do not modify the model outdoor air if the total user airflow is lower than total modeled airflow
           OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "The calculated total airflow for DesignSpecification:OutdoorAir is #{total_modeled_airflow} m3/s, which is smaller than the calculated user total airflow #{total_user_airflow} m3/s. Skip modifying the Outdoor Air.")
         else
           # set values.
