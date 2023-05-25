@@ -1500,6 +1500,8 @@ class ASHRAE901PRM < Standard
           if info_key == 'name'
             zone_oa.additionalProperties.setFeature('has_user_data', true)
           else
+            # this will capture the invalid string to 0.0, need to add note
+            OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Add user provided outdoor air field: #{info_key}, value: #{user_oa[info_key].to_f} to DesignSpecification:OutdoorAir #{zone_oa.name.get} ")
             zone_oa.additionalProperties.setFeature(info_key, user_oa[info_key].to_f)
           end
         end
