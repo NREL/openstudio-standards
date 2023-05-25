@@ -31,7 +31,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # Step 2: Loop the hash (oa_spec_name -> space_lists)
     oa_spec_to_spaces.each do |oa_spec_name, space_list|
       design_spec_oa = oa_spec_hash[oa_spec_name]
-      if design_spec_oa.additionalProperties.getFeatureAsBoolean('has_user_data').get
+      if design_spec_oa.additionalProperties.hasFeature('has_user_data')
         outdoor_air_method = design_spec_oa.outdoorAirMethod
 
         # cfm/person

@@ -2370,11 +2370,12 @@ class ASHRAE901PRM < Standard
     model.getThermalZones.sort.each do |zone|
       # Check if this zone includes laboratory space
       zone.spaces.each do |space|
-        spacetype = space.spaceType.get.standardsSpaceType.get
-        has_lab_spaces[zone.name.get] = false
-        if space.spaceType.get.standardsSpaceType.get == 'laboratory'
+        space_type = prm_get_optional_handler(prm_get_optional_handler(space,'spaceType', @sizing_run_dir), 'standardsSpaceType', @sizing_run_dir)
+        zone_name = zone.name.get
+        has_lab_spaces[zone_name] = false
+        if space_type == 'laboratory'
           lab_zones << zone
-          has_lab_spaces[zone.name.get] = true
+          has_lab_spaces[zone_name] = true
           break
         end
       end
