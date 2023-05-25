@@ -213,5 +213,8 @@
     "elevators": [
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_elevator_offmed", [["remove_transformer", []]]],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_elevator_offmed_hydraulic", [["remove_transformer", []]]]
+    ],
+    "baseline_outdoor_air": [
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_oa_01", [["remove_transformer", []]]]
     ]
 }
