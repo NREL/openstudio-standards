@@ -2348,7 +2348,7 @@ class ASHRAE901PRM < Standard
       has_computer_room = false
       # First check if any space in zone has a computer room
       zn['zone'].spaces.each do |space|
-        if space.spaceType.get.standardsSpaceType.get == 'computer room'
+        if prm_get_optional_handler(space, @sizing_run_dir, 'spaceType','standardsSpaceType') == 'computer room'
           has_computer_room = true
           break
         end
@@ -2370,7 +2370,7 @@ class ASHRAE901PRM < Standard
     model.getThermalZones.sort.each do |zone|
       # Check if this zone includes laboratory space
       zone.spaces.each do |space|
-        space_type = prm_get_optional_handler(prm_get_optional_handler(space,'spaceType', @sizing_run_dir), 'standardsSpaceType', @sizing_run_dir)
+        space_type = prm_get_optional_handler(space, @sizing_run_dir, 'spaceType', 'standardsSpaceType')
         zone_name = zone.name.get
         has_lab_spaces[zone_name] = false
         if space_type == 'laboratory'

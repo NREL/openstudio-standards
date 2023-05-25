@@ -31,17 +31,19 @@ end
 # The handler will try to access the optional OpenStudio object
 # If failed, it will raise PRMError Exception and add it to the prm log for debug
 # @param component [OpenStudio] an OpenStudio object
-# @param data_key [string] The data key to retrieve the data from the OpenStudio object
 # @param log_dir [string] directory to save the log
+# @param data_key [string] The data key to retrieve the data from the OpenStudio object
+# @param remaining_keys [str] Any additional keys in the path
 # @return the OpenStudio Object or exception raise
-def prm_get_optional_handler(component, data_key, log_dir)
+def prm_get_optional_handler(component, log_dir, data_key, *remaining_keys)
   target_data = component.send(data_key)
   prm_raise(target_data.is_initialized,
             log_dir,
             "#{component.name.get} does not contain the required data key #{data_key}. Retrieve the data cause failure.",
             "Failed to retrieve data from #{component.name.get}"
             )
-  return target_data.get
+  target_data_get = target_data.get
+  return remaining_keys.length == 0 ? target_data_get : prm_get_optional_handler(target_data_get, log_dir, remaining_keys[0], *remaining_keys[1...])
 end
 
 # PRM get an additional property from an OpenStudio object as a boolean,
