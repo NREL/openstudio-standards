@@ -594,8 +594,6 @@ class NECB2011
   #
   # @return [Bool] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
-    chillers = standards_data['chillers']
-
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
     search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
@@ -627,7 +625,6 @@ class NECB2011
 
     # Convert capacity to tons
     capacity_tons = OpenStudio.convert(chiller_capacity, 'W', 'ton').get
-
     # Get chiller compressor type if needed
     chiller_types = ['reciprocating','scroll','rotary screw','centrifugal']
     chiller_name_has_type = chiller_types.any? {|type| chiller_electric_eir.name.to_s.downcase.include? type}
