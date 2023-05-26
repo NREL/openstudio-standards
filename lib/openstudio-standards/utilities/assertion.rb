@@ -24,12 +24,13 @@ end
 # @param key [String] key string
 # @param default [Object] values assigned if the data is not available.
 def prm_read_user_data(user_data, key, default = nil)
-  return user_data.key?(key) && !user_data[key].nil && !user_data[key].to_s.empty? ? user_data[key] : default
+  return user_data.key?(key) && user_data[key] != nil && !user_data[key].to_s.empty? ? user_data[key] : default
 end
 
 # This is a PRM handler function handles the .get from an optional object
-# The handler will try to access the optional OpenStudio object
-# If failed, it will raise PRMError Exception and add it to the prm log for debug
+# The handler will try to access the OpenStudio Object data key
+# And do it recursively until all the keys have been checked and final object get or raise exception
+# for non_initialized objects.
 # @param component [OpenStudio] an OpenStudio object
 # @param log_dir [string] directory to save the log
 # @param data_key [string] The data key to retrieve the data from the OpenStudio object
