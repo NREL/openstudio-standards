@@ -74,6 +74,7 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
 
       # Generate the osm files for all relevant cases to generate the test data for system 2
       actual_chiller_cop = {}
+
       actual_chiller_cop['Rotary Screw'] = []
       actual_chiller_cop['Reciprocating'] = []
       actual_chiller_cop['Scroll'] = []
@@ -129,7 +130,7 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
 
       # Write actual results file
       test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_chiller_cop_test_results.csv")
-      File.open(test_result_file, 'w') { |f| f.write(chiller_res_file_output_text.chomp) }
+      File.open(test_result_file, 'w') { |f| f.write(chiller_res_file_output_text) }
       # Test that the values are correct by doing a file compare.
       expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_chiller_cop_expected_results.csv")
       b_result = FileUtils.compare_file(expected_result_file, test_result_file)
@@ -297,7 +298,7 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
 
     # Write actual results file
     test_result_file = File.join(@test_results_folder, 'compliance_chiller_curves_test_results.csv')
-    File.open(test_result_file, 'w') { |f| f.write(chiller_res_file_output_text.chomp) }
+    File.open(test_result_file, 'w') { |f| f.write(chiller_res_file_output_text) }
     # Test that the values are correct by doing a file compare.
     expected_result_file = File.join(@expected_results_folder, 'compliance_chiller_curves_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)

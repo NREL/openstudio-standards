@@ -201,12 +201,15 @@ class BTAPPRE1980
     new_name = chiller_name
     # Go through each chiller compressor type from the chiller table and see if it is in the chiller name.  If it is,
     # then replace the old compressor type in the name with the new one.
+    chlr_name_updated = false
     chiller_types.each do |chill_type|
       if chiller_name.include? chill_type['compressor_type']
         new_name = chiller_name.sub(chill_type['compressor_type'], comp_type)
+        chlr_name_updated = true
         break
       end
     end
+    new_name = chiller_name + ' ' + comp_type if !chlr_name_updated
     chiller.setName(new_name)
     return chiller
   end

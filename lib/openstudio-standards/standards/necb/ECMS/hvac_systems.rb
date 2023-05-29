@@ -1987,11 +1987,14 @@ class ECMS
     chlr_cap_w = (1.0-chiller_siz_f)*cap
     chlr_cap_ton = OpenStudio.convert(chlr_cap_w, 'W', 'ton').get
     search_criteria = {}
+    search_criteria['cooling_type'] = 'AirCooled'
+    chlr_props = model_find_object(standards_data['tables']['chiller_types_ecm']['table'], search_criteria, chlr_cap_ton)
+    chiller_air_cooled.setName("Chiller AirCooled #{chlr_props['compressor_type']}")
+    search_criteria = {}
     search_criteria['name'] = 'NECB2020_AirCooledChiller'
     chlr_props = model_find_object(standards_data['tables']['chillers_ecm']['table'], search_criteria, chlr_cap_ton)
     cop = chlr_props['minimum_coefficient_of_performance_cooling'].to_f
     chiller_air_cooled.setReferenceCOP(cop)
-    chiller_air_cooled.setName("Chiller AirCooled #{chlr_props['chiller_type']}")
   end
 
   #=============================================================================================================================
