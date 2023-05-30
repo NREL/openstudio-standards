@@ -1,5 +1,5 @@
 """
-This module fetches the lighting standards
+This module contains functions that help to fetch data from tables
 """
 import sqlite3
 
