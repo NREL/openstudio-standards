@@ -595,12 +595,12 @@ class ECMS
 
   # =============================================================================================================================
   # Apply efficiencies for ECM 'hs08_ccashp_vrf'
-  def apply_efficiency_ecm_hs08_ccashp_vrf(model, air_sys_eqpt_type: 'ccashp')
+  def apply_efficiency_ecm_hs08_ccashp_vrf(model, standard, air_sys_eqpt_type: 'ccashp')
     # Use same performance data as ECM 'hs09_ccashpsys' for air system
     if air_sys_eqpt_type == 'ccashp'
-      apply_efficiency_ecm_hs09_ccashp_baseboard(model)
+      apply_efficiency_ecm_hs09_ccashp_baseboard(model,standard)
     elsif air_sys_eqpt_type == 'ashp'
-      apply_efficiency_ecm_hs12_ashp_baseboard(model)
+      apply_efficiency_ecm_hs12_ashp_baseboard(model,standard)
     end
     # Apply efficiency for VRF units
     eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit'
@@ -1297,7 +1297,7 @@ class ECMS
 
   # =============================================================================================================================
   # Apply effiencies for ECM "hs09_ccashp_baseboard"
-  def apply_efficiency_ecm_hs09_ccashp_baseboard(model)
+  def apply_efficiency_ecm_hs09_ccashp_baseboard(model,standard)
     # fraction of electric backup heating coil capacity assigned to dx heating coil
     fr_backup_coil_cap_as_dx_coil_cap = 0.5
     model.getAirLoopHVACs.sort.each do |isys|
@@ -1467,9 +1467,9 @@ class ECMS
 
   # =============================================================================================================================
   # Apply efficiencies and performance curves for ECM "hs11_ashp_pthp"
-  def apply_efficiency_ecm_hs11_ashp_pthp(model)
+  def apply_efficiency_ecm_hs11_ashp_pthp(model,standard)
     fr_backup_coil_cap_as_dx_coil_cap = 0.5 # fraction of electric backup heating coil capacity assigned to dx heating coil
-    apply_efficiency_ecm_hs12_ashp_baseboard(model)
+    apply_efficiency_ecm_hs12_ashp_baseboard(model,standard)
     pthp_eqpt_name = 'HS11_PTHP'
     model.getAirLoopHVACs.sort.each do |isys|
       isys.thermalZones.each do |zone|
@@ -1638,7 +1638,7 @@ class ECMS
 
   # =============================================================================================================================
   # Apply efficiencies and performance curves for ECM "hs12_ashp_baseboard"
-  def apply_efficiency_ecm_hs12_ashp_baseboard(model)
+  def apply_efficiency_ecm_hs12_ashp_baseboard(model,standard)
     fr_backup_coil_cap_as_dx_coil_cap = 0.5 # fraction of electric backup heating coil capacity assigned to dx heating coil
     ashp_eqpt_name = 'NECB2015_ASHP'
     model.getAirLoopHVACs.sort.each do |isys|
@@ -1714,9 +1714,9 @@ class ECMS
 
   # =============================================================================================================================
   # Apply efficiencies and performance curves for ECM "hs12_ashp_vrf"
-  def apply_efficiency_ecm_hs13_ashp_vrf(model)
+  def apply_efficiency_ecm_hs13_ashp_vrf(model,standard)
     # call method for ECM hs08 with ASHP in air system
-    apply_efficiency_ecm_hs08_ccashp_vrf(model, air_sys_eqpt_type: 'ashp')
+    apply_efficiency_ecm_hs08_ccashp_vrf(model, standard, air_sys_eqpt_type: 'ashp')
   end
 
   # =============================================================================================================================
@@ -1908,7 +1908,7 @@ class ECMS
 
   #=============================================================================================================================
   # Appy efficiencies for ECM "hs14_cgshp_fancoils"
-  def apply_efficiency_ecm_hs14_cgshp_fancoils(model)
+  def apply_efficiency_ecm_hs14_cgshp_fancoils(model,standard)
     heatpump_siz_f = 0.4  # sizing factor for water-source heat pump (heating mode)
     chiller_siz_f = 0.4  # sizing factor for water-cooled chiller 
     # get water-source heat pump and boiler
@@ -1983,18 +1983,23 @@ class ECMS
     end
     chiller_water_cooled.setReferenceCapacity(chiller_siz_f*cap)
     chiller_air_cooled.setReferenceCapacity((1.0-chiller_siz_f)*cap)
-    # set cop of air-cooled chiller
+    # call standard efficiency method again for water-cooled chiller
+    new_chlr_name = chiller_water_cooled.name.to_s.chomp!(chiller_water_cooled.name.to_s.split.last).strip
+    new_chlr_name = new_chlr_name.chomp!(new_chlr_name.split.last).strip
+    new_chlr_name = new_chlr_name.chomp!(new_chlr_name.split.last).strip
+    chiller_water_cooled.setName(new_chlr_name)
+    standard.chiller_electric_eir_apply_efficiency_and_curves(chiller_water_cooled,nil)
+    # set curves and cop of air-cooled chiller
     chlr_cap_w = (1.0-chiller_siz_f)*cap
     chlr_cap_ton = OpenStudio.convert(chlr_cap_w, 'W', 'ton').get
     search_criteria = {}
     search_criteria['cooling_type'] = 'AirCooled'
     chlr_props = model_find_object(standards_data['tables']['chiller_types_ecm']['table'], search_criteria, chlr_cap_ton)
-    chiller_air_cooled.setName("Chiller AirCooled #{chlr_props['compressor_type']}")
+    chiller_air_cooled.setName("ChillerAirCooled #{chlr_props['compressor_type']}")
     search_criteria = {}
     search_criteria['name'] = 'NECB2020_AirCooledChiller'
-    chlr_props = model_find_object(standards_data['tables']['chillers_ecm']['table'], search_criteria, chlr_cap_ton)
-    cop = chlr_props['minimum_coefficient_of_performance_cooling'].to_f
-    chiller_air_cooled.setReferenceCOP(cop)
+    search_criteria['compressor_type'] = chlr_props['compressor_type']
+    chiller_electric_eir_apply_curves_and_cop(chiller_air_cooled, search_criteria)
   end
 
   #=============================================================================================================================
@@ -2131,14 +2136,13 @@ class ECMS
     capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed)
     capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
-    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies
     props = model_find_object(standards_data['tables']['heat_pump_heating_ecm']['table'], search_criteria, capacity_btu_per_hr)
 
     # Check to make sure properties were found
     if props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}.")
       successfully_set_all_properties = false
     end
 
@@ -2199,6 +2203,62 @@ class ECMS
   end
 
   # =============================================================================================================================
+  # Applies the performance curves "ChillerElectricEIR" object.
+  def chiller_electric_eir_apply_curves_and_cop(chiller_electric_eir, search_criteria)
+    successfully_set_all_properties = true
+
+    # Get the capacity
+    capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir)
+    capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
+
+    # Lookup performance curves
+    chlr_props = model_find_object(standards_data['tables']['chillers_ecm']['table'], search_criteria, capacity_tons)
+
+    # Check to make sure properties were found
+    if chlr_props.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find efficiency info using #{search_criteria}")
+      successfully_set_all_properties = false
+    end
+
+    # CAP-FT curve
+    capft = model_add_curve(chiller_electric_eir.model, chlr_props['capft'])
+    if capft
+      chiller_electric_eir.setCoolingCapacityFunctionOfTemperature(capft)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find cap_ft curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # EIR-FT curve
+    eirft = model_add_curve(chiller_electric_eir.model, chlr_props['eirft'])
+    if eirft
+      chiller_electric_eir.setElectricInputToCoolingOutputRatioFunctionOfTemperature(eirft)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find eir_ft curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # EIR-FPLR curve
+    eirfplr = model_add_curve(chiller_electric_eir.model, chlr_props['eirfplr'])
+    if eirfplr
+      chiller_electric_eir.setElectricInputToCoolingOutputRatioFunctionOfPLR(eirfplr)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find eir_fplr curve, will not be set.")
+      successfully_set_all_properties = false
+    end
+
+    # set COP
+    cop = chlr_props['minimum_coefficient_of_performance_cooling'].to_f
+    if cop
+      chiller_electric_eir.setReferenceCOP(cop)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find cop, will not be set.")
+      successfully_set_all_properties = false
+    end
+    
+  end
+
+  # =============================================================================================================================
   # Applies the performance curves "CoilCoolingDXVariableSpeed" object.
   def coil_cooling_dx_variable_speed_apply_curves(coil_cooling_dx_variable_speed, eqpt_name)
     successfully_set_all_properties = true
@@ -2207,7 +2267,6 @@ class ECMS
     capacity_w = coil_cooling_dx_variable_speed_find_capacity(coil_cooling_dx_variable_speed)
     capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
-    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Lookup performance curves
     search_criteria = {}
@@ -2280,14 +2339,13 @@ class ECMS
     capacity_w = coil_heating_dx_variable_speed_find_capacity(coil_heating_dx_variable_speed)
     capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
-    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Lookup performance curves
     props = model_find_object(standards_data['tables']['heat_pump_heating_ecm']['table'], search_criteria, capacity_btu_per_hr)
 
     # Check to make sure properties were found
     if props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{coil_heating_dx_variable_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{coil_heating_dx_variable_speed.name}, cannot find efficiency info using #{search_criteria}.")
       successfully_set_all_properties = false
     end
 
@@ -2358,7 +2416,6 @@ class ECMS
     capacity_w = airconditioner_variablerefrigerantflow_cooling_find_capacity(airconditioner_variablerefrigerantflow)
     capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
-    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Lookup performance curves
     props = model_find_object(standards_data['tables']['heat_pump_cooling_ecm']['table'], search_criteria, capacity_btu_per_hr)
@@ -2490,7 +2547,6 @@ class ECMS
     capacity_w = airconditioner_variablerefrigerantflow_heating_find_capacity(airconditioner_variablerefrigerantflow)
     capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
-    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Lookup performance curves
     props = model_find_object(standards_data['tables']['heat_pump_heating_ecm']['table'], search_criteria, capacity_btu_per_hr)
@@ -2617,12 +2673,12 @@ class ECMS
 
     # Check to make sure properties were found
     if ac_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
 
-    # Get the minimum efficiency standards
+    # Get the minimum efficiency
     cop = nil
 
     # If specified as SEER
@@ -2689,12 +2745,12 @@ class ECMS
 
     # Check to make sure properties were found
     if props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
 
-    # Get the minimum efficiency standards
+    # Get the minimum efficiency
     cop = nil
 
     # If specified as EER
@@ -2753,12 +2809,12 @@ class ECMS
 
     # Check to make sure properties were found
     if ac_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXVariableSpeed', "For #{coil_cooling_dx_variable_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXVariableSpeed', "For #{coil_cooling_dx_variable_speed.name}, cannot find efficiency info using #{search_criteria}.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
 
-    # Get the minimum efficiency standards
+    # Get the minimum efficiency
     cop = nil
 
     # If specified as SEER
@@ -2825,12 +2881,12 @@ class ECMS
 
     # Check to make sure properties were found
     if props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{coil_heating_dx_variable_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{coil_heating_dx_variable_speed.name}, cannot find efficiency info using #{search_criteria}.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
 
-    # Get the minimum efficiency standards
+    # Get the minimum efficiency
     cop = nil
 
     # If specified as EER
@@ -2889,12 +2945,12 @@ class ECMS
 
     # Check to make sure properties were found
     if props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find efficiency info using #{search_criteria}.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
 
-    # Get the minimum efficiency standards
+    # Get the minimum efficiency
     cop = nil
 
     # If specified as EER
@@ -2953,12 +3009,12 @@ class ECMS
 
     # Check to make sure properties were found
     if props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find heating efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name}, cannot find heating efficiency info using #{search_criteria}.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
 
-    # Get the minimum efficiency standards
+    # Get the minimum efficiency
     cop = nil
 
     # If specified as EER
@@ -3011,7 +3067,7 @@ class ECMS
     elsif coil_cooling_dx_variable_speed.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
       capacity_w = coil_cooling_dx_variable_speed.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.get
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXVariableSpeed', "For #{coil_cooling_dx_variable_speed.name} capacity is not available, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXVariableSpeed', "For #{coil_cooling_dx_variable_speed.name} capacity is not available.")
       return 0.0
     end
 
@@ -3027,7 +3083,7 @@ class ECMS
     elsif coil_heating_dx_variable_speed.autosizedRatedHeatingCapacityAtSelectedNominalSpeedLevel.is_initialized
       capacity_w = coil_heating_dx_variable_speed.autosizedRatedHeatingCapacityAtSelectedNominalSpeedLevel.get
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{coil_heating_dx_variable_speed.name} capacity is not available, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{coil_heating_dx_variable_speed.name} capacity is not available.")
       return 0.0
     end
 
@@ -3044,7 +3100,7 @@ class ECMS
       capacity_w = airconditioner_variablerefrigerantflow.autosizedRatedTotalCoolingCapacity.get
       airconditioner_variablerefrigerantflow.setRatedTotalCoolingCapacity(capacity_w)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name} cooling capacity is not available, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name} cooling capacity is not available.")
       return 0.0
     end
 
@@ -3061,7 +3117,24 @@ class ECMS
       capacity_w = airconditioner_variablerefrigerantflow.autosizedRatedTotalHeatingCapacity.get
       airconditioner_variablerefrigerantflow.setRatedTotalHeatingCapacity(capacity_w)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name} heating capacity is not available, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name} heating capacity is not available.")
+      return 0.0
+    end
+
+    return capacity_w
+  end
+
+  # =============================================================================================================================
+  # Find cooling capacity for "ChillerElectricEIR" object
+  def chiller_electric_eir_find_capacity(chiller_electric_eir)
+    capacity_w = nil
+    if chiller_electric_eir.referenceCapacity.is_initialized
+      capacity_w = chiller_electric_eir.referenceCapacity.get
+    elsif chiller_electric_eir.autosizedRererenceCapacity.is_initialized
+      capacity_w = chiller_electric_eir.autosizedRerenceCapacity.get
+      chiller_electric_eir.setReferenceCapacity(capacity_w)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name} capacity not available")
       return 0.0
     end
 
