@@ -536,7 +536,7 @@ class NECB2011 < Standard
                                                   sizing_run_dir: sizing_run_dir,
                                                   necb_reference_hp: self.fuel_type_set.necb_reference_hp)
     # Apply System
-    ecm.apply_system_efficiencies_ecm(model: model, ecm_system_name: ecm_system_name)
+    ecm.apply_system_efficiencies_ecm(model: model, ecm_system_name: ecm_system_name, template_standard: self)
     # Apply ECM ERV charecteristics as required. Part 2 of above ECM.
     ecm.apply_erv_ecm_efficiency(model: model, erv_package: erv_package)
     # Apply DCV as required
