@@ -8,15 +8,15 @@ from query.util import _convert_list_tuple_to_list_dict
 
 SPACE_DATA_HEADER = [
     "space_type_name",
-    "BS.lighting_space_type_name",
-    "BS.ventilation_space_type_name",
-    "LS.level_3_lighting_code_definition_table",
-    "LS.level_3_lighting_code_definition_id",
-    "VS.level_3_ventilation_definition_table",
-    "VS.level_3_ventilation_definition_id",
-    "ES.electric_equipment_space_type_name",
-    "EGS.natural_gas_equipment_space_type_name",
-    "BS.schedule_set_name",
+    "lighting_space_type_name",
+    "ventilation_space_type_name",
+    "level_3_lighting_code_definition_table",
+    "level_3_lighting_code_definition_id",
+    "level_3_ventilation_definition_table",
+    "level_3_ventilation_definition_id",
+    "electric_equipment_space_type_name",
+    "natural_gas_equipment_space_type_name",
+    "schedule_set_name",
 ]
 
 

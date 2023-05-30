@@ -92,7 +92,7 @@ def create_openstudio_standards_space_data_json(
         rec
         for rec in space_map_table
         if f"{code.replace('ashrae_', '')}_{code_version}"
-        in rec["LS.level_3_lighting_code_definition_table"]
+        in rec["level_3_lighting_code_definition_table"]
     ]
 
     space_types = {"space_types": []}
@@ -101,7 +101,7 @@ def create_openstudio_standards_space_data_json(
         space_type_name = space_type_infos["space_type_name"]
         if not space_type_name in space_type_names:
             space_type_names.append(space_type_name)
-            lighting_space_type_name = space_type_infos["BS.lighting_space_type_name"]
+            lighting_space_type_name = space_type_infos["lighting_space_type_name"]
             space_type_data = {"template": template, "space_type": space_type_name}
 
             # Get lighting space type data
@@ -168,7 +168,7 @@ def create_openstudio_standards_space_data_json(
 
             # Get equipment space type data
             electric_equipment_space_type_name = space_type_infos[
-                "ES.electric_equipment_space_type_name"
+                "electric_equipment_space_type_name"
             ]
             electric_equipment_space_type_data = fetch_records_from_table_by_key_values(
                 conn,
@@ -202,7 +202,7 @@ def create_openstudio_standards_space_data_json(
                     space_type_data[f] = 0.0
 
             natural_gas_equipment_space_type_name = space_type_infos[
-                "EGS.natural_gas_equipment_space_type_name"
+                "natural_gas_equipment_space_type_name"
             ]
             natural_gas_equipment_space_type_data = fetch_records_from_table_by_key_values(
                 conn,
@@ -236,7 +236,7 @@ def create_openstudio_standards_space_data_json(
 
             # Get ventilation and occupancy space type data
             ventilation_space_type_name = space_type_infos[
-                "BS.ventilation_space_type_name"
+                "ventilation_space_type_name"
             ]
             ventilation_space_type_data = fetch_records_from_table_by_key_values(
                 conn,
@@ -280,7 +280,7 @@ def create_openstudio_standards_space_data_json(
             ] = occ_per_area  # assume unit is people / 1000 ft2; TODO: unit check
 
             # Schedules
-            schedule_set_name = space_type_infos["BS.schedule_set_name"]
+            schedule_set_name = space_type_infos["schedule_set_name"]
             space_type_data[
                 "electric_equipment_schedule"
             ] = f"{schedule_set_name}_equipment"
