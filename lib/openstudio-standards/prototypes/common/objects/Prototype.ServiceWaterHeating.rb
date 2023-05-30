@@ -624,15 +624,15 @@ class Standard
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Prototype.ServiceWaterHeating', "Unsupported schedule type for HPWH setpoint schedule #{swh_temp_sch.name}.")
         return false
       end
-      hpwhschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(swh_temp_sch,schedule_type,'Schedule Value')
+      hpwhschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(swh_temp_sch,schedule_type, 'Schedule Value')
       hpwhschedoverride_actuator.setName("#{hpwh_name_ems_friendly}_HPWHSchedOverride")
 
       # create actuator for lower heating element in water tank
-      leschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(hpwh_bottom_element_sp,'Schedule:Constant','Schedule Value')
+      leschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(hpwh_bottom_element_sp, 'Schedule:Constant', 'Schedule Value')
       leschedoverride_actuator.setName("#{hpwh_name_ems_friendly}_LESchedOverride")
 
       # create actuator for upper heating element in water tank
-      ueschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(hpwh_top_element_sp,'Schedule:Constant','Schedule Value')
+      ueschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(hpwh_top_element_sp, 'Schedule:Constant', 'Schedule Value')
       ueschedoverride_actuator.setName("#{hpwh_name_ems_friendly}_UESchedOverride")
 
       # create sensor for heat pump compressor
@@ -640,7 +640,7 @@ class Standard
       t_set_sensor.setName("#{hpwh_name_ems_friendly}_T_set")
       t_set_sensor.setKeyName(swh_temp_sch.name.to_s)
 
-      # define control configuration 
+      # define control configuration
       t_offset = 9.0 # deg-C
 
       # get tank specifications
@@ -663,7 +663,7 @@ class Standard
       hpwh_ctrl_program.addLine("SET #{leschedoverride_actuator.name} = 0")
       # lower element disabled
       hpwh_ctrl_program.addLine("SET #{leschedoverride_actuator.name}_cut_in = 0")
-      hpwh_ctrl_program.addLine('ENDIF')    
+      hpwh_ctrl_program.addLine('ENDIF')
 
       # create a program calling manager
       program_calling_manager = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)

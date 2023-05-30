@@ -1336,17 +1336,17 @@ class ECMS
           # There is an error in EnergyPlus in the estimated capacity of the coil "CoilCoolingDXVariableSpeed".
           # Here the capacity reported by OS is adjusted to estimate an appropriate capacity for the cooling coil.
           # The autosized capacity is corrected for the actual fan flow rate and fan power.
-          if supply_fan.autosizedMaximumFlowRate.is_initialized
-            fan_max_afr = supply_fan.autosizedMaximumFlowRate.to_f
-          elsif supply_fan.maximumFlowRate.is_initialized
+          if supply_fan.maximumFlowRate.is_initialized
             fan_max_afr = supply_fan.maximumFlowRate.to_f
+          elsif supply_fan.autosizedMaximumFlowRate.is_initialized
+            fan_max_afr = supply_fan.autosizedMaximumFlowRate.to_f
           else
             raise "Fan flow rate is undefined for fan #{supply_fan.name.to_s}"
           end
-          if clg_dx_coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.is_initialized
+          if clg_dx_coil.ratedAirFlowRateAtSelectedNominalSpeedLevel.is_initialized
+            clg_dx_coil_afr = clg_dx_coil.ratedAirFlowRateAtSelectedNominalSpeedLevel.to_f
+          elsif clg_dx_coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.is_initialized
             clg_dx_coil_afr = clg_dx_coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.to_f
-          elsif clg_dx_coil.ratedAirFlowRateAtSelectedNominalSpeedLevel.is_initialized
-             clg_dx_coil_afr = clg_dx_coil.ratedAirFlowRateAtSelectedNominalSpeedLevel.to_f
           else
             raise "Rated air flow rate at selected nominal speed level is undefined for coil #{clg_dx_coil.name.to_s}"
           end
@@ -1360,10 +1360,10 @@ class ECMS
         end
         htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, false)
         htg_dx_coil.setName(htg_dx_coil_init_name)
-        if backup_coil.autosizedNominalCapacity.is_initialized
+        if backup_coil.nominalCapacity.is_initialized
+          backup_coil_cap = backup_coil.nominalCapacity.to_f
+        elsif backup_coil.autosizedNominalCapacity.is_initialized
            backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
-        elsif backup_coil.nominalCapacity.is_initialized
-           backup_coil_cap = backup_coil.nominalCapacity.to_f
         else
           raise "Nominal capacity is undefiled for coil #{backup_coil.name.to_s}"
         end
@@ -1495,19 +1495,19 @@ class ECMS
           if clg_dx_coil && htg_dx_coil && backup_coil && fan
             clg_dx_coil_init_name = get_hvac_comp_init_name(clg_dx_coil, false)
             clg_dx_coil.setName(clg_dx_coil_init_name)
-            if clg_dx_coil.autosizedRatedTotalCoolingCapacity.is_initialized
-              clg_dx_coil_cap = clg_dx_coil.autosizedRatedTotalCoolingCapacity.to_f
-            elsif clg_dx_coil.ratedTotalCoolingCapacity.is_initialized
+            if clg_dx_coil.ratedTotalCoolingCapacity.is_initialized
               clg_dx_coil_cap = clg_dx_coil.ratedTotalCoolingCapacity.to_f
+            elsif clg_dx_coil.autosizedRatedTotalCoolingCapacity.is_initialized
+              clg_dx_coil_cap = clg_dx_coil.autosizedRatedTotalCoolingCapacity.to_f
             else
               raise "The total cooling capacity is undefined for coil #{clg_dx_coil_cap.name.to_s}"
             end
             htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, true)
             htg_dx_coil.setName(htg_dx_coil_init_name)
-            if backup_coil.autosizedNominalCapacity.is_initialized
-              backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
-            elsif backup_coil.nominalCapacity.is_initialized
+            if backup_coil.nominalCapacity.is_initialized
               backup_coil_cap = backup_coil.nominalCapacity.to_f
+            elsif backup_coil.autosizedNominalCapacity.is_initialized
+              backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
             else
               raise "The nominal capacity is undefined for coil #{backup_coil.name.to_s}"
             end
@@ -1661,19 +1661,19 @@ class ECMS
         # update names of dx coils
         clg_dx_coil_init_name = get_hvac_comp_init_name(clg_dx_coil, false)
         clg_dx_coil.setName(clg_dx_coil_init_name)
-        if clg_dx_coil.autosizedRatedTotalCoolingCapacity.is_initialized
-          clg_dx_coil_cap = clg_dx_coil.autosizedRatedTotalCoolingCapacity.to_f
-        elsif clg_dx_coil.ratedTotalCoolingCapacity.is_initialized
+        if clg_dx_coil.ratedTotalCoolingCapacity.is_initialized
           clg_dx_coil_cap = clg_dx_coil.ratedTotalCoolingCapacity.to_f
+        elsif clg_dx_coil.autosizedRatedTotalCoolingCapacity.is_initialized
+          clg_dx_coil_cap = clg_dx_coil.autosizedRatedTotalCoolingCapacity.to_f
         else
           raise "Rated total cooling capacity is undefined for coil #{clg_dx_coil.name.to_s}"
         end
         htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, true)
         htg_dx_coil.setName(htg_dx_coil_init_name)
-        if backup_coil.autosizedNominalCapacity.is_initialized
-          backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
-        elsif backup_coil.nominalCapacity.is_initialized
+        if backup_coil.nominalCapacity.is_initialized
           backup_coil_cap = backup_coil.nominalCapacity.to_f
+        elsif backup_coil.autosizedNominalCapacity.is_initialized
+          backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
         else
           raise "Nominal capacity is undefined for coil #{backup_coil.name.to_s}"
         end
@@ -1930,18 +1930,18 @@ class ECMS
     cw_loop = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'condenser'}[0]
     # condenser flow rate is set based on heating loop flow rate and cooling loop flow rate (adjusted for sizing factors)
     cw_loop_max_flow = 0.0
-    if hw_heatpump_loop.autosizedMaximumLoopFlowRate.is_initialized
-      cw_loop_max_flow += heatpump_siz_f*hw_heatpump_loop.autosizedMaximumLoopFlowRate.to_f
-    elsif hw_heatpump_loop.maximumLoopFlowRate.is_initialized
+    if hw_heatpump_loop.maximumLoopFlowRate.is_initialized
       cw_loop_max_flow += heatpump_siz_f*hw_heatpump_loop.maximumLoopFlowRate.to_f
+    elsif hw_heatpump_loop.autosizedMaximumLoopFlowRate.is_initialized
+      cw_loop_max_flow += heatpump_siz_f*hw_heatpump_loop.autosizedMaximumLoopFlowRate.to_f
     else
       raise("apply_efficiency_ecm_hs14_cgshp_fancoils: heating loop #{hw_heatpump_loop.name.to_s} flow rate is not defined")
     end
     chw_loop = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'cooling'}[0]
-    if chw_loop.autosizedMaximumLoopFlowRate.is_initialized
-      cw_loop_max_flow += chiller_siz_f*chw_loop.autosizedMaximumLoopFlowRate.to_f
-    elsif chw_loop.maximumLoopFlowRate.is_initialized
+    if chw_loop.maximumLoopFlowRate.is_initialized
       cw_loop_max_flow += chiller_siz_f*chw_loop.maximumLoopFlowRate.to_f
+    elsif chw_loop.autosizedMaximumLoopFlowRate.is_initialized
+      cw_loop_max_flow += chiller_siz_f*chw_loop.autosizedMaximumLoopFlowRate.to_f
     else
       raise("apply_efficiency_ecm_hs14_cgshp_fancoils: cooling loop #{chw_loop.name.to_s} is not defined")
     end
@@ -1953,6 +1953,8 @@ class ECMS
       cap = hw_heatpump.autosizedRatedHeatingCapacity.to_f
     elsif hw_heatpump.ratedHeatingCapacity.is_initialized
       cap = hw_heatpump.ratedHeatingCapacity.to_f
+    elsif hw_heatpump.autosizedRatedHeatingCapacity.is_initialized
+      cap = hw_heatpump.autosizedRatedHeatingCapacity.to_f
     else
       raise("apply_efficiency_ecm_hs14_cgshp_fancoils: capacity of water-source heat pump #{hw_heatpump.name.to_s} is not defined")
     end
@@ -1974,6 +1976,8 @@ class ECMS
       cap = chiller_water_cooled.autosizedReferenceCapacity.to_f
     elsif chiller_water_cooled.referenceCapacity.is_initialized
       cap = chiller_water_cooled.referenceCapacity.to_f
+    elsif chiller_water_cooled.autosizedReferenceCapacity.is_initialized
+      cap = chiller_water_cooled.autosizedReferenceCapacity.to_f
     else
       raise("apply_efficiency_ecm_hs14_cgshp_fancoils: cooling capacity of chiller #{chiller_water_cooled.name.to_s} is not defined")
     end
@@ -3219,14 +3223,14 @@ class ECMS
     raise "There was a problem setting the boiler part load curve named #{part_load_curve_name} for #{component.name}.  Please ensure that the curve is entered and referenced correctly in the ECMS class curves.json and boiler_set.json files." unless part_load_curve
 
     component.setNormalizedBoilerEfficiencyCurve(part_load_curve)
-    if component.isNominalCapacityAutosized
-      boiler_size_W = component.autosizedNominalCapacity.get
-    else
-      boiler_size_W = component.nominalCapacity.to_f
+    if component.nominalCapacity.is_initialized
+      boiler_size_w = component.nominalCapacity.to_f
+    elsif component.isNominalCapacityAutosized
+      boiler_size_w = component.autosizedNominalCapacity.get
     end
-    boiler_size_kbtu_per_hour = OpenStudio.convert(boiler_size_W, 'W', 'kBtu/h').get
+    boiler_size_kbtu_per_hour = OpenStudio.convert(boiler_size_w, 'W', 'kBtu/h').get
     boiler_primacy = 'Primary '
-    if boiler_size_W < 1.0
+    if boiler_size_w < 1.0
       boiler_primacy = 'Secondary '
     end
     if eff['name'].nil?
@@ -3394,17 +3398,17 @@ class ECMS
 
     component.setPartLoadFactorCurve(part_load_curve)
     # Get the volume and capacity of the SHW tank.
-    if component.isTankVolumeAutosized
-      shw_vol_gal = 'auto_size'
-    else
+    if component.tankVolume.is_initialized
       shw_vol_m3 = component.tankVolume.to_f
       shw_vol_gal = OpenStudio.convert(shw_vol_m3, 'm^3', 'gal').get.to_f.round(0)
+    elsif component.isTankVolumeAutosized
+      shw_vol_gal = 'auto_size'
     end
-    if component.isHeaterMaximumCapacityAutosized
-      shw_capacity_kBtu_hr = 'auto_cap'
-    else
+    if component.heaterMaximumCapacity.is_initialized
       shw_capacity_W = component.heaterMaximumCapacity.to_f
       shw_capacity_kBtu_hr = OpenStudio.convert(shw_capacity_W, 'W', 'kBtu/h').get.to_f.round(0)
+    elsif component.isHeaterMaximumCapacityAutosized
+      shw_capacity_kBtu_hr = 'auto_cap'
     end
     # Set a default revised shw tank name if no name is present in the eff hash.
     if eff['name'].nil?

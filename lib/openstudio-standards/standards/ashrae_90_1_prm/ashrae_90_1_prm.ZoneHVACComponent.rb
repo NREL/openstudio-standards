@@ -56,10 +56,10 @@ class ASHRAE901PRM < Standard
       # Get design supply air flow rate (whether autosized or hard-sized)
       dsn_air_flow_m3_per_s = 0
       dsn_air_flow_cfm = 0
-      if fan.isMaximumFlowRateAutosized
-        dsn_air_flow_m3_per_s = fan.autosizedMaximumFlowRate.get
-      else
+      if fan.maximumFlowRate.is_initialized
         dsn_air_flow_m3_per_s = fan.maximumFlowRate.get
+      elsif fan.isMaximumFlowRateAutosized
+        dsn_air_flow_m3_per_s = fan.autosizedMaximumFlowRate.get
       end
       dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
 
@@ -91,10 +91,10 @@ class ASHRAE901PRM < Standard
 
       # Get the maximum flow rate through the fan
       max_air_flow_rate = nil
-      if fan.autosizedMaximumFlowRate.is_initialized
-        max_air_flow_rate = fan.autosizedMaximumFlowRate.get
-      elsif fan.maximumFlowRate.is_initialized
+      if fan.maximumFlowRate.is_initialized
         max_air_flow_rate = fan.maximumFlowRate.get
+      elsif fan.autosizedMaximumFlowRate.is_initialized
+        max_air_flow_rate = fan.autosizedMaximumFlowRate.get
       end
       max_air_flow_rate_cfm = OpenStudio.convert(max_air_flow_rate, 'm^3/s', 'ft^3/min').get
 

@@ -4,12 +4,7 @@ require 'fileutils'
 require 'parallel'
 require 'open3'
 
-
 ProcessorsUsed = (Parallel.processor_count - 1).floor
-
-
-
-
 
 class String
   # colorization
@@ -42,7 +37,6 @@ class String
   end
 end
 
-
 def write_results(result, test_file, test_name)
   test_file_output = File.join(@test_output_folder, "#{File.basename(test_file)}_#{test_name}_test_output.json")
   File.delete(test_file_output) if File.exist?(test_file_output)
@@ -61,7 +55,6 @@ def write_results(result, test_file, test_name)
                   "std_err" => result[1].split(/\r?\n/)
               }
     }
-
 
     #puts test_file_output
     File.open(test_file_output, 'w') {|f| f.write(JSON.pretty_generate(output))}

@@ -625,6 +625,7 @@ class NECB2011
 
     # Convert capacity to tons
     capacity_tons = OpenStudio.convert(chiller_capacity, 'W', 'ton').get
+
     # Get chiller compressor type if needed
     chiller_types = ['reciprocating','scroll','rotary screw','centrifugal']
     chiller_name_has_type = chiller_types.any? {|type| chiller_electric_eir.name.to_s.downcase.include? type}

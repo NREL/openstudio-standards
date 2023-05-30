@@ -49,7 +49,7 @@ class TestDOEPrototypesRegression < CreateDOEPrototypeBuildingTest
     ]
 
   all_comp =  @building_types.product @templates, @climate_zones
-  all_comp.each do |building_type, template, climate_zone|
+  all_comp.sort.each do |building_type, template, climate_zone|
     result, msg = TestDOEPrototypesRegression.create_building(building_type, template, climate_zone, nil, true, false, false, false, 'annual', true, 'regression-')
   end
 end
