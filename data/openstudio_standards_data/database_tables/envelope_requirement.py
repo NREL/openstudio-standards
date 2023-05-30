@@ -16,10 +16,13 @@ orientation: TEXT
 minimum_percent_of_surface: NUMERIC
 maximum_percent_of_surface: NUMERIC
 assembly_maximum_u_value: NUMERIC
+assembly_maximum_u_value_unit: TEXT
 u_value_includes_interior_film_coefficient: TEXT
 u_value_includes_exterior_film_coefficient: TEXT
 assembly_maximum_f_factor: NUMERIC
+assembly_maximum_f_factor_unit: TEXT
 assembly_maximum_c_factor: NUMERIC
+assembly_maximum_c_factor_unit: TEXT
 assembly_maximum_solar_heat_gain_coefficient: NUMERIC
 assembly_minimum_vt_SHGC: NUMERIC
 annotation: TEXT (optional)
@@ -38,10 +41,13 @@ orientation TEXT,
 minimum_percent_of_surface NUMERIC,
 maximum_percent_of_surface NUMERIC,
 assembly_maximum_u_value NUMERIC,
+assembly_maximum_u_value_unit TEXT,
 u_value_includes_interior_film_coefficient TEXT,
 u_value_includes_exterior_film_coefficient TEXT,
 assembly_maximum_f_factor NUMERIC,
+assembly_maximum_f_factor_unit TEXT,
 assembly_maximum_c_factor NUMERIC,
+assembly_maximum_c_factor_unit TEXT,
 assembly_maximum_solar_heat_gain_coefficient NUMERIC,
 assembly_minimum_vt_shgc NUMERIC,
 annotation TEXT,
@@ -61,15 +67,18 @@ orientation,
 minimum_percent_of_surface,
 maximum_percent_of_surface,
 assembly_maximum_u_value,
+assembly_maximum_u_value_unit,
 u_value_includes_interior_film_coefficient,
 u_value_includes_exterior_film_coefficient,
 assembly_maximum_f_factor,
+assembly_maximum_f_factor_unit,
 assembly_maximum_c_factor,
+assembly_maximum_c_factor_unit,
 assembly_maximum_solar_heat_gain_coefficient,
 assembly_minimum_vt_shgc,
 annotation
 ) 
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ? , ?);
 """
 
 RECORD_TEMPLATE = {
@@ -83,10 +92,13 @@ RECORD_TEMPLATE = {
     "minimum_percent_of_surface": 0.0,
     "maximum_percent_of_surface": 0.0,
     "assembly_maximum_u_value": 0.0,
+    "assembly_maximum_u_value_unit": "btu/h-ft2-F",
     "u_value_includes_interior_film_coefficient": 0.0,
     "u_value_includes_exterior_film_coefficient": 0.0,
     "assembly_maximum_f_factor": 0.0,
+    "assembly_maximum_f_factor_unit": "btu/h-ft-F",
     "assembly_maximum_c_factor": 0.0,
+    "assembly_maximum_c_factor_unit": "btu/h-ft2-F",
     "assembly_maximum_solar_heat_gain_coefficient": 0.0,
     "assembly_minimum_vt_shgc": 0.0,
     "annotation": "",
@@ -166,10 +178,13 @@ class EnvelopeRequirementTable(DBOperation):
             getattr_either("minimum_percent_of_surface", record),
             getattr_either("maximum_percent_of_surface", record),
             getattr_either("assembly_maximum_u_value", record),
+            getattr_either("assembly_maximum_u_value_unit", record, "btu/h-ft2-F"),
             getattr_either("u_value_includes_interior_film_coefficient", record),
             getattr_either("u_value_includes_exterior_film_coefficient", record),
             getattr_either("assembly_maximum_f_factor", record),
+            getattr_either("assembly_maximum_f_factor_unit", record, "btu/h-ft-F"),
             getattr_either("assembly_maximum_c_factor", record),
+            getattr_either("assembly_maximum_c_factor_unit", record, "btu/h-ft2-F"),
             getattr_either("assembly_maximum_solar_heat_gain_coefficient", record),
             getattr_either("assembly_minimum_vt_shgc", record),
             getattr_either("annotation", record),

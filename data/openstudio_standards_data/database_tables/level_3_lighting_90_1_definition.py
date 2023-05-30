@@ -9,7 +9,7 @@ method: [BA, CS, SS]
 lighting_primary_space_type: TEXT
 lighting_secondary_space_type: TEXT
 lighting_per_area: REAL
-unit: TEXT
+lighting_power_density_unit: TEXT
 rcr_threshold: NUMERIC
 automatic_daylight_responsive_controls_for_sidelighting: TEXT
 automatic_daylight_responsive_controls_for_toplighting: TEXT
@@ -26,7 +26,7 @@ method TEXT DEFAULT 'BA' NOT NULL,
 lighting_primary_space_type TEXT,
 lighting_secondary_space_type TEXT, 
 lighting_power_density NUMERIC NOT NULL,
-unit TEXT DEFAULT 'w/ft2' NOT NULL,
+lighting_power_density_unit TEXT DEFAULT 'w/ft2' NOT NULL,
 rcr_threshold NUMERIC,
 automatic_daylight_responsive_controls_for_sidelighting TEXT,
 automatic_daylight_responsive_controls_for_toplighting TEXT,
@@ -43,7 +43,7 @@ INSERT_A_LIGHT_RECORD = """
         lighting_primary_space_type,
         lighting_secondary_space_type,
         lighting_power_density,
-        unit,
+        lighting_power_density_unit,
         rcr_threshold,
         automatic_daylight_responsive_controls_for_sidelighting,
         automatic_daylight_responsive_controls_for_toplighting,
@@ -60,7 +60,7 @@ RECORD_TEMPLATE = {
     "lighting_primary_space_type": "",
     "lighting_secondary_space_type": "",
     "lighting_power_density": 0.0,
-    "unit": "W/ft2",
+    "lighting_power_density_unit": "W/ft2",
     "rcr_threshold": 0.0,
     "automatic_daylight_responsive_controls_for_sidelighting": "",
     "automatic_daylight_responsive_controls_for_toplighting": "",
@@ -112,7 +112,7 @@ class LightDef901(DBOperation):
             getattr_either("lighting_primary_space_type", record),
             getattr_either("lighting_secondary_space_type", record),
             getattr_either("lighting_power_density", record),
-            getattr_either("unit", record, "W/ft2"),
+            getattr_either("lighting_power_density_unit", record, "W/ft2"),
             getattr_either("rcr_threshold", record),
             getattr_either(
                 "automatic_daylight_responsive_controls_for_sidelighting", record
