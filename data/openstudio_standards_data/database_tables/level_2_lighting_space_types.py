@@ -88,7 +88,9 @@ class LightSubspaceTable(DBOperation):
             getattr_either("level_3_lighting_code_definition_id", record),
             getattr_either("lighting_technology_name", record),
             getattr_either("lighting_space_type_target_illuminance_setpoint", record),
-            getattr_either("lighting_space_type_target_illuminance_setpoint_unit", record, "lux"),
+            getattr_either(
+                "lighting_space_type_target_illuminance_setpoint_unit", record, "lux"
+            ),
             getattr_either("annotation", record),
         )
 
