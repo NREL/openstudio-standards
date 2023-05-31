@@ -10,6 +10,7 @@ level_3_lighting_code_definition_table: TEXT
 level_3_lighting_code_definition_id: id from level_3_lighting_definition index
 lighting_technology_name: TEXT
 lighting_space_type_target_illuminance_setpoint: NUMERIC
+lighting_space_type_target_illuminance_setpoint_unit: TEXT
 """
 
 CREATE_LIGHT_SUBSPACE_TABLE = f"""
@@ -20,6 +21,7 @@ level_3_lighting_code_definition_table TEXT NOT NULL,
 level_3_lighting_code_definition_id INTEGER NOT NULL,
 lighting_technology_name TEXT,
 lighting_space_type_target_illuminance_setpoint NUMERIC,
+lighting_space_type_target_illuminance_setpoint_unit TEXT,
 annotation TEXT,
 FOREIGN KEY(lighting_space_type_name) REFERENCES support_lighting_space_type_name_tags(lighting_space_type_name)
 FOREIGN KEY(lighting_technology_name) REFERENCES support_lighting_technologies(lighting_technology_definition_name)
@@ -34,9 +36,10 @@ INSERT_LIGHT_SUBSPACE = f"""
         level_3_lighting_code_definition_id,
         lighting_technology_name,
         lighting_space_type_target_illuminance_setpoint,
+        lighting_space_type_target_illuminance_setpoint_unit,
         annotation
     )
-    VALUES (?, ?, ?, ?, ?, ?);
+    VALUES (?, ?, ?, ?, ?, ?, ?);
 """
 
 RECORD_TEMPLATE = {
@@ -45,6 +48,7 @@ RECORD_TEMPLATE = {
     "level_3_lighting_code_definition_id": "",
     "lighting_technology_name": "",
     "lighting_space_type_target_illuminance_setpoint": 0.0,
+    "lighting_space_type_target_illuminance_setpoint_unit": "lux",
     "annotation": "",
 }
 
@@ -84,6 +88,7 @@ class LightSubspaceTable(DBOperation):
             getattr_either("level_3_lighting_code_definition_id", record),
             getattr_either("lighting_technology_name", record),
             getattr_either("lighting_space_type_target_illuminance_setpoint", record),
+            getattr_either("lighting_space_type_target_illuminance_setpoint_unit", record, "lux"),
             getattr_either("annotation", record),
         )
 
