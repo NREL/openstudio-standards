@@ -1,6 +1,5 @@
-from applications.create_openstudio_standards_json import (
-    create_openstudio_standards_building_data_json,
-)
+import logging
+
 from applications.database_maintenance import (
     export_openstudio_standards_database_to_json,
     export_openstudio_standards_database_to_csv,
@@ -14,6 +13,13 @@ from applications.form.update_space_data import update_openstudio_standards_spac
 from database_engine.database import create_connect
 from query.fetch.database_table import fetch_a_record_from_table_by_id
 
+logging.basicConfig(
+    filename="new_log",
+    filemode="a",
+    format="%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s",
+    datefmt="%H:%M:%S",
+    level=logging.DEBUG,
+)
 conn = create_connect(None)
 # create_openstudio_standards_database_from_csv(conn)
 # a = fetch_a_record_from_table_by_id(conn, "level_3_lighting_90_1_2019", 1)
@@ -52,4 +58,4 @@ update_json = [
     }
 ]
 
-update_openstudio_standards_space_data(conn, update_json)
+# update_openstudio_standards_space_data(conn, update_json)
