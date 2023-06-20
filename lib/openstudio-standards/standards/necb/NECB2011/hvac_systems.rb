@@ -1718,7 +1718,10 @@ class NECB2011
     cw_sizing_plant.setDesignLoopExitTemperature(29.0)
     cw_sizing_plant.setLoopDesignTemperatureDifference(6.0)
 
-    cw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+    # Note: pump of 'Condenser water loop' has been changed to the variable one as the constant one caused fatal errors for LargeOffice-Montreal-NaturalGas for some ECMs and inputs.
+    # Fatal error was: 'Plant temperatures are getting far too cold, check controls and relative loads and capacities'.
+    # Note that the variable speed pump has been already used for 'Hot Water Loop' and 'Chilled Water Loop'.
+    cw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
 
     clg_tower = OpenStudio::Model::CoolingTowerSingleSpeed.new(model)
 
