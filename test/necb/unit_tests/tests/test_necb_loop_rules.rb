@@ -219,7 +219,7 @@ class NECB_HVAC_Loop_Rules_Tests < MiniTest::Test
             pump_is_constant_speed = true
           end
         end
-        assert(pump_is_constant_speed,'test_cw_loop_rules: Hot water loop pump is not constant speed')
+        assert(pump_is_constant_speed,'test_cw_loop_rules: Hot water loop pump is not variable speed')
         supply_out_node = iloop.supplyOutletNode
         set_point_manager = supply_out_node.setpointManagers[0].to_SetpointManagerScheduled.get
         setpoint_sch = set_point_manager.schedule.to_ScheduleRuleset.get
