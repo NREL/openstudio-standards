@@ -548,6 +548,7 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
     list_metadata = [list_of_sheets, list_of_names, list_of_units].transpose
     list_metadata.insert(0, ['Sheet', 'Name', 'Unit']) # [1, 2, 2.5, 3, 4]
     File.write("data/standards/metadata_units_#{filename_out}.csv", list_metadata.map(&:to_csv).join)
+
     # Check for duplicate data in space_types_* sheets
     standards_data.each_pair do |sheet_name, objs|
       skip_duplicate_check = []
@@ -698,6 +699,10 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
 
         # Write out a file for each template with all objects on the sheet
         template_dirs.each do |template_dir|
+
+          # avoid duplicating comstock data
+          next if template_dir.include? 'comstock'
+
           data_dir = "#{template_dir}/data"
           Dir.mkdir(data_dir) unless Dir.exist?(data_dir)
           json_path = "#{data_dir}/#{parent_dir}.#{shorten_sheet_name(sheet_name)}.json"
