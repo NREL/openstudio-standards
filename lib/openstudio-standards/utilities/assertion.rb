@@ -10,9 +10,9 @@ end
 # @param log_dir [String] log file directory
 # @param log_msg [String] message add to the log
 # @param err_msg [String] message raise the exception
-def prm_raise(bool, log_dir, log_msg, err_msg)
+def prm_raise(bool, log_dir, err_msg)
   unless bool
-    OpenStudio.logFree(OpenStudio::Debug, 'prm.log', log_msg)
+    # OpenStudio.logFree(OpenStudio::Debug, 'prm.log', log_msg)
     log_messages_to_file_prm("#{log_dir}/prm.log", true)
     raise PRMError, "#{err_msg} - Check debug log at #{log_dir}/prm.log for more information"
   end
@@ -38,9 +38,10 @@ end
 # @return the OpenStudio Object or exception raise
 def prm_get_optional_handler(component, log_dir, data_key, *remaining_keys)
   target_data = component.send(data_key)
+  OpenStudio.logFree(OpenStudio::Error, 'prm.log', "#{component.name.get} does not contain the required data key #{data_key}. Retrieve the data cause failure.")
+
   prm_raise(target_data.is_initialized,
             log_dir,
-            "#{component.name.get} does not contain the required data key #{data_key}. Retrieve the data cause failure.",
             "Failed to retrieve data from #{component.name.get}"
             )
   target_data_get = target_data.get

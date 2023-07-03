@@ -76,9 +76,9 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
           # No outdoor air method specified or match to the options available in OpenStudio
           # Raise exception to flag the modeling error
           error_msg = "DesignSpecification:OutdoorAir: #{design_spec_oa.name.get} is missing a method or the method is not one of the options {'Maximum', 'Sum'}."
+          OpenStudio.logFree(OpenStudio::Warn, 'prm.log', error_msg)
           prm_raise(false,
                     @sizing_run_dir,
-                    error_msg,
                     error_msg)
         end
 
