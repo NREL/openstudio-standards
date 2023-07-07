@@ -44,14 +44,18 @@ class Standard
     end
 
     #####
-    # List of schedule objects used to hold calculation results
+    # Define radiant system parameters
     ####
-
-    # Calculated active slab heating and cooling temperature setpoint. Default temperature is taken at the slab surface.
 
     # set radiant system temperature and setpoint control type
     radiant_loop.setTemperatureControlType(radiant_temp_control_type)
     radiant_loop.setSetpointControlType(radiant_setpoint_control_type)
+
+    #####
+    # List of schedule objects used to hold calculation results
+    ####
+
+    
 
     # get existing switchover time schedule or create one if needed
     sch_radiant_switchover = model.getScheduleRulesetByName("Radiant System Switchover")
@@ -66,8 +70,9 @@ class Standard
 
     # set radiant system switchover schedule
     radiant_loop.setChangeoverDelayTimePeriodSchedule(sch_radiant_switchover.to_Schedule.get)
-
-    # cold water control actuator
+    
+    # Calculated active slab heating and cooling temperature setpoint.
+    # radiant system cooling control actuator
     sch_radiant_clgsetp = model_add_constant_schedule_ruleset(model,
                                                               26.0,
                                                               name = "#{zone_name}_Sch_Radiant_ClgSetP")
@@ -77,7 +82,7 @@ class Standard
                                                                                 'Schedule Value')
     cmd_cold_water_ctrl.setName("#{zone_name}_CMD_COLD_WATER_CTRL")
 
-    # hot water control actuator
+    # radiant system heating control actuator
     sch_radiant_htgsetp = model_add_constant_schedule_ruleset(model,
                                                               20,
                                                               name = "#{zone_name}_Sch_Radiant_HtgSetP")
@@ -134,7 +139,7 @@ class Standard
       prp_k = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'prp_k')
     end
 
-    # Upper slab temperature setpoint limit
+    # Upper slab temperature setpoint limit (recommended no higher than 29C (84F))
     upper_slab_sp_lim = model.getEnergyManagementSystemGlobalVariableByName('upper_slab_sp_lim')
     if upper_slab_sp_lim.is_initialized
       upper_slab_sp_lim = upper_slab_sp_lim.get
@@ -142,7 +147,7 @@ class Standard
       upper_slab_sp_lim = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'upper_slab_sp_lim')
     end
 
-    # Lower slab temperature setpoint limit
+    # Lower slab temperature setpoint limit (recommended no lower than 19C (66F))
     lower_slab_sp_lim = model.getEnergyManagementSystemGlobalVariableByName('lower_slab_sp_lim')
     if lower_slab_sp_lim.is_initialized
       lower_slab_sp_lim = lower_slab_sp_lim.get
@@ -150,7 +155,7 @@ class Standard
       lower_slab_sp_lim = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'lower_slab_sp_lim')
     end
 
-    # Temperature offset used to modify.
+    # Temperature offset used as a safety factor for thermal control (recommend 0.5C (1F)).
     ctrl_temp_offset = model.getEnergyManagementSystemGlobalVariableByName('ctrl_temp_offset')
     if ctrl_temp_offset.is_initialized
       ctrl_temp_offset = ctrl_temp_offset.get
@@ -158,7 +163,9 @@ class Standard
       ctrl_temp_offset = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'ctrl_temp_offset')
     end
 
-    # zone specific variables
+    #####
+    # List of zone specific variables used in EMS scripts
+    ####
 
     # Maximum 'measured' temperature in zone during occupied times. Default setup uses mean air temperature.
     # Other possible choices are operative and mean radiant temperature.
