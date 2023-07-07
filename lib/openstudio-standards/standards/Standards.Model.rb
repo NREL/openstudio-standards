@@ -71,12 +71,18 @@ class Standard
       if model_run_simulation_and_log_errors(user_model, run_dir = "#{sizing_run_dir}/PROP")
         umlh = model_get_unmet_load_hours(user_model)
         if umlh > 300
-          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created.")
-          raise "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created."
+          prm_raise(false,
+                    sizing_run_dir,
+                    "Proposed model unmet load hours (#{umlh}) exceed 300. Baseline model(s) wont be created.",
+                    'Proposed model unmet load hours exceed 300. Baseline model(s) wont be created.'
+                    )
         end
       else
-        OpenStudio.logFree(OpenStudio::Error, 'prm.log', 'Simulation failed. Check the model to make sure no severe errors.')
-        raise 'Simulation on proposed model failed. Baseline generation is stopped.'
+        prm_raise(false,
+                  sizing_run_dir,
+                  'Simulation failed. Check the model to make sure no severe errors.',
+                  'Simulation on proposed model failed. Baseline generation is stopped.'
+                  )
       end
     end
 
@@ -186,6 +192,9 @@ class Standard
 
       # Calculate infiltration as per 90.1 PRM rules
       model_baseline_apply_infiltration_standard(model, climate_zone)
+
+      # Apply user outdoor air specs as per 90.1 PRM rules exceptions
+      model_apply_userdata_outdoor_air(model)
 
       # If any of the lights are missing schedules, assign an always-off schedule to those lights.
       # This is assumed to be the user's intent in the proposed model.
@@ -6147,6 +6156,10 @@ class Standard
   end
 
   private
+
+  def model_apply_userdata_outdoor_air(model)
+    return true
+  end
 
   # This function checks whether it is required to adjust the window to wall ratio based on the model WWR and wwr limit.
   # @param wwr_limit [Float] return wwr_limit

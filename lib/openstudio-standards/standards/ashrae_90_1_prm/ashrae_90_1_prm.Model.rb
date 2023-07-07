@@ -1468,12 +1468,45 @@ class ASHRAE901PRM < Standard
     handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     # load user data from proposed model
     handle_airloop_user_input_data(model)
+    # load OA data from user data
+    handle_outdoor_air_user_input_data(model)
     # load air loop DOAS user data from the proposed model
     handle_airloop_doas_user_input_data(model)
     # load zone HVAC user data from proposed model
     handle_zone_hvac_user_input_data(model)
     # load thermal zone user data from proposed model
     handle_thermal_zone_user_input_data(model)
+    # load outdoor air data from user spreadsheet
+    handle_outdoor_air_user_input_data(model)
+  end
+
+  # A function to load outdoor air data from user data csv files
+  # The file name is userdata_design_specification_outdoor_air.csv
+  # @param [OpenStudio::Model::Model] model
+  def handle_outdoor_air_user_input_data(model)
+    user_data_oas = @standards_data.key?('userdata_design_specification_outdoor_air') ? @standards_data['userdata_design_specification_outdoor_air'] : nil
+    if user_data_oas && user_data_oas.length > 0
+      # get design specification outdoor air object.
+      user_data_oas.each do |user_oa|
+        zone_oa = model.getDesignSpecificationOutdoorAirByName(user_oa['name'])
+        if !zone_oa.is_initialized
+          OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "The DesignSpecification:OutdoorAir named #{user_oa['name']} in the userdata_design_specification_outdoor_air was not found in the model, user specified data associated with it will be ignored.")
+          next
+        else
+          zone_oa = zone_oa.get
+        end
+        # Todo this will need to update with a function to handle nil, none or empty string.
+        user_oa.keys.each do |info_key|
+          if info_key == 'name'
+            zone_oa.additionalProperties.setFeature('has_user_data', true)
+          else
+            # this will capture the invalid string to 0.0, need to add note
+            OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Add user provided outdoor air field: #{info_key}, value: #{user_oa[info_key].to_f} to DesignSpecification:OutdoorAir #{zone_oa.name.get} ")
+            zone_oa.additionalProperties.setFeature(info_key, user_oa[info_key].to_f)
+          end
+        end
+      end
+    end
   end
 
   # A function to load airloop data from userdata csv files
@@ -2317,7 +2350,7 @@ class ASHRAE901PRM < Standard
       has_computer_room = false
       # First check if any space in zone has a computer room
       zn['zone'].spaces.each do |space|
-        if space.spaceType.get.standardsSpaceType.get == 'computer room'
+        if prm_get_optional_handler(space, @sizing_run_dir, 'spaceType','standardsSpaceType') == 'computer room'
           has_computer_room = true
           break
         end
@@ -2339,11 +2372,12 @@ class ASHRAE901PRM < Standard
     model.getThermalZones.sort.each do |zone|
       # Check if this zone includes laboratory space
       zone.spaces.each do |space|
-        spacetype = space.spaceType.get.standardsSpaceType.get
-        has_lab_spaces[zone.name.get] = false
-        if space.spaceType.get.standardsSpaceType.get == 'laboratory'
+        space_type = prm_get_optional_handler(space, @sizing_run_dir, 'spaceType', 'standardsSpaceType')
+        zone_name = zone.name.get
+        has_lab_spaces[zone_name] = false
+        if space_type == 'laboratory'
           lab_zones << zone
-          has_lab_spaces[zone.name.get] = true
+          has_lab_spaces[zone_name] = true
           break
         end
       end

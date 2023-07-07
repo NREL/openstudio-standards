@@ -312,6 +312,19 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # Check baseline outdoor air setting
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_baseline_oa(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+      model_baseline.getDesignSpecificationOutdoorAirs.each do |dsoa|
+        if dsoa.name.get == 'Office WholeBuilding - Md Office Ventilation'
+          assert((dsoa.outdoorAirFlowperFloorArea - 0.0004).abs < 0.00001, "The baseline design specification outdoor air fail to updated to 0.0004 m3/s-m2, get actual #{dsoa.outdoorAirFlowperFloorArea}")
+        end
+      end
+    end
+  end
+
   # Check Skylight-to-Roof Ratio (SRR) for the baseline models
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -3665,5 +3678,10 @@ class AppendixGPRMTests < Minitest::Test
   def test_elevators
     model_hash = prm_test_helper('elevators', require_prototype=false, require_baseline=true)
     check_elevators(model_hash['baseline'])
+  end
+
+  def test_baseline_oa
+    model_hash = prm_test_helper('baseline_outdoor_air', require_prototype=false, require_baseline=true)
+    check_baseline_oa(model_hash['baseline'])
   end
 end
