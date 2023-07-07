@@ -1,0 +1,32 @@
+{
+  "tables": {
+    "chiller_types": {
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "cooling_type": "WaterCooled",
+          "compressor_type": "Scroll",
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 30.0,
+          "notes": "Chiller type set based on survey of major chiller manufacturer data"
+        },
+        {
+          "cooling_type": "WaterCooled",
+          "compressor_type": "Rotary Screw",
+          "minimum_capacity": 30.0,
+          "maximum_capacity": 200.0,
+          "notes": "Chiller type set based on survey of major chiller manufacturer data"
+        },
+        {
+          "cooling_type": "WaterCooled",
+          "compressor_type": "Centrifugal",
+          "minimum_capacity": 200.0,
+          "maximum_capacity": 9999.0,
+          "notes": "Chiller type set based on survey of major chiller manufacturer data"
+        }
+      ]
+    }
+  }
+}

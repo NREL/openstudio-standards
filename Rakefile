@@ -38,21 +38,6 @@ namespace :test do
     t.verbose = false
   end
 
-  desc 'parallel_run_necb_building_regression_tests'
-  Rake::TestTask.new('parallel_run_necb_building_regression_tests_locally') do |t|
-    file_list = FileList.new('test/necb/building_regression_tests/locally_run_tests.rb')
-    t.libs << 'test'
-    t.test_files = file_list
-    t.verbose = false
-  end
-
-  desc 'parallel_run_necb_system_tests_tests'
-  Rake::TestTask.new('parallel_run_necb_system_tests_tests_locally') do |t|
-    file_list = FileList.new('test/necb/system_tests/locally_run_tests.rb')
-    t.libs << 'test'
-    t.test_files = file_list
-    t.verbose = false
-  end
 
   # These tests only available in the CI environment
   if ENV['CI'] == 'true'

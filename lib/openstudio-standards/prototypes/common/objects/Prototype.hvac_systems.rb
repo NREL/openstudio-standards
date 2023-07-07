@@ -371,6 +371,19 @@ class Standard
         chiller.setChillerFlowMode('ConstantFlow')
         chiller.setSizingFactor(chiller_sizing_factor)
 
+        # use default efficiency from 90.1-2019
+        # 1.188 kw/ton for a 150 ton AirCooled chiller
+        # 0.66 kw/ton for a 150 ton Water Cooled positive displacement chiller
+        case chiller_cooling_type
+        when 'AirCooled'
+          default_cop = kw_per_ton_to_cop(1.188)
+        when 'WaterCooled'
+          default_cop = kw_per_ton_to_cop(0.66)
+        else
+          default_cop = kw_per_ton_to_cop(0.66)
+        end
+        chiller.setReferenceCOP(default_cop)
+
         # connect the chiller to the condenser loop if one was supplied
         if condenser_water_loop.nil?
           chiller.setCondenserType('AirCooled')
@@ -1764,7 +1777,7 @@ class Standard
         avail_mgr = avail_mgr.get
       else
         avail_mgr = nil
-      end 
+      end
     else 
       avail_mgr = air_loop.availabilityManagers[0]
     end
@@ -2128,7 +2141,7 @@ class Standard
         avail_mgr = avail_mgr.get
       else
         avail_mgr = nil
-      end 
+      end
     else 
       avail_mgr = air_loop.availabilityManagers[0]
     end
@@ -2750,7 +2763,7 @@ class Standard
           avail_mgr = avail_mgr.get
         else
           avail_mgr = nil
-        end 
+        end
       else 
         avail_mgr = air_loop.availabilityManagers[0]
       end
@@ -4516,7 +4529,7 @@ class Standard
   #   Ending hour of building occupancy.
   # @param control_strategy [String] name of control strategy.  Options are 'proportional_control' and 'none'.
   #   If control strategy is 'proportional_control', the method will apply the CBE radiant control sequences
-  #   detailed in Raftery et al. (2017), “A new control strategy for high thermal mass radiant systems”.
+  #   detailed in Raftery et al. (2017), 'A new control strategy for high thermal mass radiant systems'.
   #   Otherwise no control strategy will be applied and the radiant system will assume the EnergyPlus default controls.
   # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Proportional gain constant (recommended 0.3 or less).

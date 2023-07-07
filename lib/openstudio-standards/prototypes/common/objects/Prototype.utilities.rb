@@ -971,6 +971,21 @@ class Standard
     return model
   end
 
+  # converts existing string to ems friendly string
+  #
+  # @param name [String] original name
+  # @return [String] the resulting EMS friendly string
+  def ems_friendly_name(name)
+    # replace white space and special characters with underscore
+    # \W is equivalent to [^a-zA-Z0-9_]
+    new_name = name.to_s.gsub(/\W/, '_')
+
+    # prepend ems_ in case the name starts with a number
+    new_name = 'ems_' + new_name
+
+    return new_name
+  end
+
   def true?(obj)
     obj.to_s.downcase == 'true'
   end
