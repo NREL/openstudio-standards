@@ -3,34 +3,20 @@ class Standard
   # @ref [References::CBERadiantSystems]
   # @param zone [OpenStudio::Model::ThermalZone>] zone to add radiant controls
   # @param radiant_loop [OpenStudio::Model::ZoneHVACLowTempRadiantVarFlow>] radiant loop in thermal zone
-  # @param radiant_type [String] determines the surface of the radiant system for surface temperature output reporting
-  #   options are 'floor' and 'ceiling'
+  # @param radiant_temperature_control_type [String] determines the controlled temperature for the radiant system
+  #   options are 'SurfaceFaceTemperature', 'SurfaceInteriorTemperature'
   # @param model_occ_hr_start [Double] Starting hour of building occupancy
   # @param model_occ_hr_end [Double] Ending hour of building occupancy
   # @todo model_occ_hr_start and model_occ_hr_end from zone occupancy schedules
   # @param proportional_gain [Double] Proportional gain constant (recommended 0.3 or less).
-  # @param minimum_operation [Double] Minimum number of hours of operation for radiant system before it shuts off.
-  # @param weekend_temperature_reset [Double] Weekend temperature reset for slab temperature setpoint in degree Celsius.
-  # @param early_reset_out_arg [Double] Time at which the weekend temperature reset is removed.
   # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
   def model_add_radiant_proportional_controls(model, zone, radiant_loop,
-                                              radiant_type: 'floor',
+                                              radiant_temperature_control_type: 'SurfaceFaceTemperature',
                                               model_occ_hr_start: 6.0,
                                               model_occ_hr_end: 18.0,
                                               proportional_gain: 0.3,
-                                              minimum_operation: 1,
-                                              weekend_temperature_reset: 2,
-                                              early_reset_out_arg: 20,
                                               switch_over_time: 24.0)
 
-    ## POSSIBLE INPUT PARAMETERS
-    radiant_temp_control_type = "SurfaceFaceTemperature"
-    radiant_setpoint_control_type = "ZeroFlowPower"
-    use_zone_occ_schedule = true
-
-    ## INPUT PARAMETERS not need anymore
-    # radiant_type
-    # minimum_operation
 
     zone_name = zone.name.to_s.gsub(/[ +-.]/, '_')
     zone_timestep = model.getTimestep.numberOfTimestepsPerHour
@@ -46,10 +32,14 @@ class Standard
     #####
     # Define radiant system parameters
     ####
-
     # set radiant system temperature and setpoint control type
-    radiant_loop.setTemperatureControlType(radiant_temp_control_type)
-    radiant_loop.setSetpointControlType(radiant_setpoint_control_type)
+    unless ['surfacefacetemperature', 'surfaceinteriortemperature'].include? radiant_temperature_control_type.downcase
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model',
+        "Control sequences not compatible with '#{radiant_temperature_control_type}' radiant system control. Defaulting to 'SurfaceFaceTemperature'.")
+      radiant_temperature_control_type = "SurfaceFaceTemperature"
+    end
+
+    radiant_loop.setTemperatureControlType(radiant_temperature_control_type)
 
     #####
     # List of schedule objects used to hold calculation results

@@ -4521,6 +4521,11 @@ class Standard
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] the hot water loop that serves the radiant loop.
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] the chilled water loop that serves the radiant loop.
   # @param radiant_type [String] type of radiant system, floor or ceiling, to create in zone.
+  # @param radiant_temperature_control_type [String] determines the controlled temperature for the radiant system
+  #   options are 'MeanAirTemperature', 'MeanRadiantTemperature', 'OperativeTemperature', 'OutdoorDryBulbTemperature',
+  #   'OutdoorWetBulbTemperature', 'SurfaceFaceTemperature', 'SurfaceInteriorTemperature'
+  # @param radiant_setpoint_control_type [String] determines the response of the radiant system at setpoint temperature
+  #   options are 'ZeroFlowPower', 'HalfFlowPower'
   # @param include_carpet [Bool] boolean to include thin carpet tile over radiant slab, default to true
   # @param carpet_thickness_in [Double] thickness of carpet in inches
   # @param model_occ_hr_start [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
@@ -4533,12 +4538,6 @@ class Standard
   #   Otherwise no control strategy will be applied and the radiant system will assume the EnergyPlus default controls.
   # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Proportional gain constant (recommended 0.3 or less).
-  # @param minimum_operation [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
-  #   Minimum number of hours of operation for radiant system before it shuts off.
-  # @param weekend_temperature_reset [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
-  #   Weekend temperature reset for slab temperature setpoint in degree Celsius.
-  # @param early_reset_out_arg [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
-  #   Time at which the weekend temperature reset is removed.
   # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
   # @param radiant_lockout [Bool] True if system contains a radiant lockout
   # @param radiant_lockout_start_time [double] decimal hour of when radiant lockout starts
@@ -4553,15 +4552,14 @@ class Standard
                                  hot_water_loop,
                                  chilled_water_loop,
                                  radiant_type: 'floor',
+                                 radiant_temperature_control_type: 'SurfaceFaceTemperature',
+                                 radiant_setpoint_control_type: 'ZeroFlowPower',
                                  include_carpet: true,
                                  carpet_thickness_in: 0.25,
                                  model_occ_hr_start: 6.0,
                                  model_occ_hr_end: 18.0,
                                  control_strategy: 'proportional_control',
                                  proportional_gain: 0.3,
-                                 minimum_operation: 1,
-                                 weekend_temperature_reset: 2,
-                                 early_reset_out_arg: 20,
                                  switch_over_time: 24.0,
                                  radiant_lockout: false,
                                  radiant_lockout_start_time: 12.0,
@@ -4854,8 +4852,11 @@ class Standard
       radiant_loop.setNumberofCircuits('CalculateFromCircuitLength')
       radiant_loop.setCircuitLength(106.7)
 
-      # radiant loop controls
-      radiant_loop.setTemperatureControlType('MeanAirTemperature')
+      # radiant loop temperature controls
+      radiant_loop.setTemperatureControlType(radiant_temperature_control_type)
+
+      # radiant loop setpoint temperature response
+      radiant_loop.setSetpointControlType(radiant_setpoint_control_type)
       radiant_loop.addToThermalZone(zone)
       radiant_loops << radiant_loop
 
@@ -4865,13 +4866,10 @@ class Standard
       # set radiant loop controls
       if control_strategy == 'proportional_control'
         model_add_radiant_proportional_controls(model, zone, radiant_loop,
-                                                radiant_type: radiant_type,
+                                                radiant_temperature_control_type: radiant_temperature_control_type,
                                                 model_occ_hr_start: model_occ_hr_start,
                                                 model_occ_hr_end: model_occ_hr_end,
                                                 proportional_gain: proportional_gain,
-                                                minimum_operation: minimum_operation,
-                                                weekend_temperature_reset: weekend_temperature_reset,
-                                                early_reset_out_arg: early_reset_out_arg,
                                                 switch_over_time: switch_over_time)
       end
     end
