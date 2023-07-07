@@ -55,8 +55,6 @@ class Standard
     # List of schedule objects used to hold calculation results
     ####
 
-    
-
     # get existing switchover time schedule or create one if needed
     sch_radiant_switchover = model.getScheduleRulesetByName("Radiant System Switchover")
     if sch_radiant_switchover.is_initialized
@@ -80,7 +78,7 @@ class Standard
     cmd_cold_water_ctrl = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_radiant_clgsetp,
                                                                                 'Schedule:Year',
                                                                                 'Schedule Value')
-    cmd_cold_water_ctrl.setName("#{zone_name}_CMD_COLD_WATER_CTRL")
+    cmd_cold_water_ctrl.setName("#{zone_name}_cmd_cold_water_ctrl")
 
     # radiant system heating control actuator
     sch_radiant_htgsetp = model_add_constant_schedule_ruleset(model,
@@ -90,7 +88,7 @@ class Standard
     cmd_hot_water_ctrl = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_radiant_htgsetp,
                                                                                'Schedule:Year',
                                                                                'Schedule Value')
-    cmd_hot_water_ctrl.setName("#{zone_name}_CMD_HOT_WATER_CTRL")
+    cmd_hot_water_ctrl.setName("#{zone_name}_cmd_hot_water_ctrl")
 
     # Calculated cooling setpoint error. Calculated from upper comfort limit minus setpoint offset and 'measured' controlled zone temperature.
     sch_csp_error = model_add_constant_schedule_ruleset(model,
@@ -99,7 +97,7 @@ class Standard
     cmd_csp_error = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_csp_error,
                                                                           'Schedule:Year',
                                                                           'Schedule Value')
-    cmd_csp_error.setName("#{zone_name}_CMD_CSP_ERROR")
+    cmd_csp_error.setName("#{zone_name}_cmd_csp_error")
 
     # Calculated heating setpoint error. Calculated from lower comfort limit plus setpoint offset and 'measured' controlled zone temperature.
     sch_hsp_error = model_add_constant_schedule_ruleset(model,
@@ -108,7 +106,7 @@ class Standard
     cmd_hsp_error = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_hsp_error,
                                                                           'Schedule:Year',
                                                                           'Schedule Value')
-    cmd_hsp_error.setName("#{zone_name}_CMD_HSP_ERROR")
+    cmd_hsp_error.setName("#{zone_name}_cmd_hsp_error")
 
 
     #####
@@ -181,7 +179,7 @@ class Standard
 
     # Controlled zone temperature for the zone.
     zone_ctrl_temperature = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Air Temperature')
-    zone_ctrl_temperature.setName("#{zone_name}_Ctrl_Temperature")
+    zone_ctrl_temperature.setName("#{zone_name}_ctrl_temperature")
     zone_ctrl_temperature.setKeyName(zone.name.get)
 
     # check for zone thermostats
@@ -196,42 +194,42 @@ class Standard
 
     # Upper comfort limit for the zone. Taken from existing thermostat schedules in the zone.
     zone_upper_comfort_limit = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
-    zone_upper_comfort_limit.setName("#{zone_name}_Upper_Comfort_Limit")
+    zone_upper_comfort_limit.setName("#{zone_name}_upper_comfort_limit")
     zone_upper_comfort_limit.setKeyName(zone_clg_thermostat.name.get)
 
     # Lower comfort limit for the zone. Taken from existing thermostat schedules in the zone.
     zone_lower_comfort_limit = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
-    zone_lower_comfort_limit.setName("#{zone_name}_Lower_Comfort_Limit")
+    zone_lower_comfort_limit.setName("#{zone_name}_lower_comfort_limit")
     zone_lower_comfort_limit.setKeyName(zone_htg_thermostat.name.get)
 
     # Radiant system water flow rate used to determine if there is active hydronic cooling in the radiant system.
     zone_rad_cool_operation = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'System Node Mass Flow Rate')
-    zone_rad_cool_operation.setName("#{zone_name}_Rad_Cool_Operation")
+    zone_rad_cool_operation.setName("#{zone_name}_rad_cool_operation")
     zone_rad_cool_operation.setKeyName(coil_cooling_radiant.to_StraightComponent.get.inletModelObject.get.name.get)
 
     # Radiant system water flow rate used to determine if there is active hydronic heating in the radiant system.
     zone_rad_heat_operation = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'System Node Mass Flow Rate')
-    zone_rad_heat_operation.setName("#{zone_name}_Rad_Heat_Operation")
+    zone_rad_heat_operation.setName("#{zone_name}_rad_heat_operation")
     zone_rad_heat_operation.setKeyName(coil_heating_radiant.to_StraightComponent.get.inletModelObject.get.name.get)
 
     # Radiant system switchover delay time period schedule 
     # used to determine if there is active hydronic cooling/heating in the radiant system.
-    zone_rad_switch_over = model.getEnergyManagementSystemSensorByName("RADIANT_SWITCH_OVER_TIME")
+    zone_rad_switch_over = model.getEnergyManagementSystemSensorByName("radiant_switch_over_time")
 
     unless zone_rad_switch_over.is_initialized
       zone_rad_switch_over = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
-      zone_rad_switch_over.setName("RADIANT_SWITCH_OVER_TIME")
+      zone_rad_switch_over.setName("radiant_switch_over_time")
       zone_rad_switch_over.setKeyName(sch_radiant_switchover.name.get)
     end
 
     # Last 24 hours trend for radiant system in cooling mode.
     zone_rad_cool_operation_trend = OpenStudio::Model::EnergyManagementSystemTrendVariable.new(model, zone_rad_cool_operation)
-    zone_rad_cool_operation_trend.setName("#{zone_name}_Rad_Cool_Operation_Trend")
+    zone_rad_cool_operation_trend.setName("#{zone_name}_rad_cool_operation_trend")
     zone_rad_cool_operation_trend.setNumberOfTimestepsToBeLogged(zone_timestep * 48)
 
     # Last 24 hours trend for radiant system in heating mode.
     zone_rad_heat_operation_trend = OpenStudio::Model::EnergyManagementSystemTrendVariable.new(model, zone_rad_heat_operation)
-    zone_rad_heat_operation_trend.setName("#{zone_name}_Rad_Heat_Operation_Trend")
+    zone_rad_heat_operation_trend.setName("#{zone_name}_rad_heat_operation_trend")
     zone_rad_heat_operation_trend.setNumberOfTimestepsToBeLogged(zone_timestep * 48)
 
     #####
@@ -258,12 +256,12 @@ class Standard
     set_constant_zone_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     set_constant_zone_values_prg.setName("#{zone_name}_Set_Constant_Values")
     set_constant_zone_values_prg_body = <<-EMS
-      SET #{zone_name}_max_ctrl_temp      = #{zone_name}_Lower_Comfort_Limit,
-      SET #{zone_name}_min_ctrl_temp      = #{zone_name}_Upper_Comfort_Limit,
-      SET #{zone_name}_CMD_CSP_ERROR      = 0,
-      SET #{zone_name}_CMD_HSP_ERROR      = 0,
-      SET #{zone_name}_CMD_COLD_WATER_CTRL = #{zone_name}_Upper_Comfort_Limit,
-      SET #{zone_name}_CMD_HOT_WATER_CTRL  = #{zone_name}_Lower_Comfort_Limit
+      SET #{zone_name}_max_ctrl_temp      = #{zone_name}_lower_comfort_limit,
+      SET #{zone_name}_min_ctrl_temp      = #{zone_name}_upper_comfort_limit,
+      SET #{zone_name}_cmd_csp_error      = 0,
+      SET #{zone_name}_cmd_hsp_error      = 0,
+      SET #{zone_name}_cmd_cold_water_ctrl = #{zone_name}_upper_comfort_limit,
+      SET #{zone_name}_cmd_hot_water_ctrl  = #{zone_name}_lower_comfort_limit
     EMS
     set_constant_zone_values_prg.setBody(set_constant_zone_values_prg_body)
 
@@ -272,15 +270,15 @@ class Standard
     calculate_minmax_ctrl_temp_prg.setName("#{zone_name}_Calculate_Extremes_In_Zone")
     calculate_minmax_ctrl_temp_prg_body = <<-EMS
       IF ((CurrentTime >= occ_hr_start) && (CurrentTime <= occ_hr_end)),
-          IF #{zone_name}_Ctrl_Temperature > #{zone_name}_max_ctrl_temp,
-              SET #{zone_name}_max_ctrl_temp = #{zone_name}_Ctrl_Temperature,
+          IF #{zone_name}_ctrl_temperature > #{zone_name}_max_ctrl_temp,
+              SET #{zone_name}_max_ctrl_temp = #{zone_name}_ctrl_temperature,
           ENDIF,
-          IF #{zone_name}_Ctrl_Temperature < #{zone_name}_min_ctrl_temp,
-              SET #{zone_name}_min_ctrl_temp = #{zone_name}_Ctrl_Temperature,
+          IF #{zone_name}_ctrl_temperature < #{zone_name}_min_ctrl_temp,
+              SET #{zone_name}_min_ctrl_temp = #{zone_name}_ctrl_temperature,
           ENDIF,
       ELSE,
-        SET #{zone_name}_max_ctrl_temp = #{zone_name}_Lower_Comfort_Limit,
-        SET #{zone_name}_min_ctrl_temp = #{zone_name}_Upper_Comfort_Limit,
+        SET #{zone_name}_max_ctrl_temp = #{zone_name}_lower_comfort_limit,
+        SET #{zone_name}_min_ctrl_temp = #{zone_name}_upper_comfort_limit,
       ENDIF
     EMS
     calculate_minmax_ctrl_temp_prg.setBody(calculate_minmax_ctrl_temp_prg_body)
@@ -290,8 +288,8 @@ class Standard
     calculate_errors_from_comfort_prg.setName("#{zone_name}_Calculate_Errors_From_Comfort")
     calculate_errors_from_comfort_prg_body = <<-EMS
       IF (CurrentTime >= (occ_hr_end - ZoneTimeStep)) && (CurrentTime <= (occ_hr_end)),
-          SET #{zone_name}_CMD_CSP_ERROR = (#{zone_name}_Upper_Comfort_Limit - ctrl_temp_offset) - #{zone_name}_max_ctrl_temp,
-          SET #{zone_name}_CMD_HSP_ERROR = (#{zone_name}_Lower_Comfort_Limit + ctrl_temp_offset) - #{zone_name}_min_ctrl_temp,
+          SET #{zone_name}_cmd_csp_error = (#{zone_name}_upper_comfort_limit - ctrl_temp_offset) - #{zone_name}_max_ctrl_temp,
+          SET #{zone_name}_cmd_hsp_error = (#{zone_name}_lower_comfort_limit + ctrl_temp_offset) - #{zone_name}_min_ctrl_temp,
       ENDIF
     EMS
     calculate_errors_from_comfort_prg.setBody(calculate_errors_from_comfort_prg_body)
@@ -300,21 +298,21 @@ class Standard
     calculate_slab_ctrl_setpoint_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     calculate_slab_ctrl_setpoint_prg.setName("#{zone_name}_Calculate_Slab_Ctrl_Setpoint")
     calculate_slab_ctrl_setpoint_prg_body = <<-EMS
-      SET #{zone_name}_cont_cool_oper = @TrendSum #{zone_name}_Rad_Cool_Operation_Trend RADIANT_SWITCH_OVER_TIME/ZoneTimeStep,
-      SET #{zone_name}_cont_heat_oper = @TrendSum #{zone_name}_Rad_Heat_Operation_Trend RADIANT_SWITCH_OVER_TIME/ZoneTimeStep,
+      SET #{zone_name}_cont_cool_oper = @TrendSum #{zone_name}_rad_cool_operation_trend radiant_switch_over_time/ZoneTimeStep,
+      SET #{zone_name}_cont_heat_oper = @TrendSum #{zone_name}_rad_heat_operation_trend radiant_switch_over_time/ZoneTimeStep,
       IF (#{zone_name}_cont_cool_oper > 0) && (CurrentTime == occ_hr_end),
-        SET #{zone_name}_CMD_HOT_WATER_CTRL = #{zone_name}_CMD_HOT_WATER_CTRL + (#{zone_name}_CMD_CSP_ERROR*prp_k),
+        SET #{zone_name}_cmd_hot_water_ctrl = #{zone_name}_cmd_hot_water_ctrl + (#{zone_name}_cmd_csp_error*prp_k),
       ELSEIF (#{zone_name}_cont_heat_oper > 0) && (CurrentTime == occ_hr_end),
-        SET #{zone_name}_CMD_HOT_WATER_CTRL = #{zone_name}_CMD_HOT_WATER_CTRL + (#{zone_name}_CMD_HSP_ERROR*prp_k),
+        SET #{zone_name}_cmd_hot_water_ctrl = #{zone_name}_cmd_hot_water_ctrl + (#{zone_name}_cmd_hsp_error*prp_k),
       ELSE,
-        SET #{zone_name}_CMD_HOT_WATER_CTRL = #{zone_name}_CMD_HOT_WATER_CTRL,
+        SET #{zone_name}_cmd_hot_water_ctrl = #{zone_name}_cmd_hot_water_ctrl,
       ENDIF,
-      IF (#{zone_name}_CMD_HOT_WATER_CTRL < lower_slab_sp_lim),
-        SET #{zone_name}_CMD_HOT_WATER_CTRL = lower_slab_sp_lim,
-      ELSEIF (#{zone_name}_CMD_HOT_WATER_CTRL > upper_slab_sp_lim),
-        SET #{zone_name}_CMD_HOT_WATER_CTRL = upper_slab_sp_lim,
+      IF (#{zone_name}_cmd_hot_water_ctrl < lower_slab_sp_lim),
+        SET #{zone_name}_cmd_hot_water_ctrl = lower_slab_sp_lim,
+      ELSEIF (#{zone_name}_cmd_hot_water_ctrl > upper_slab_sp_lim),
+        SET #{zone_name}_cmd_hot_water_ctrl = upper_slab_sp_lim,
       ENDIF,
-      SET #{zone_name}_CMD_COLD_WATER_CTRL = #{zone_name}_CMD_HOT_WATER_CTRL + 0.01
+      SET #{zone_name}_cmd_cold_water_ctrl = #{zone_name}_cmd_hot_water_ctrl + 0.01
     EMS
     calculate_slab_ctrl_setpoint_prg.setBody(calculate_slab_ctrl_setpoint_prg_body)
 
