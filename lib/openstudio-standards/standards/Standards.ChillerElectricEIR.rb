@@ -77,7 +77,7 @@ class Standard
   #
   # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
   # @return [Double] full load efficiency (COP)
-  def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
+  def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir, type_of_return = 'cop')
     # Get the chiller properties
     search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
     capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir)
@@ -95,7 +95,12 @@ class Standard
       cop = kw_per_ton_to_cop(kw_per_ton)
     end
 
-    return cop, capacity_tons, kw_per_ton
+    case type_of_return
+    when 'cop'
+      return cop
+    else
+      return cop, capacity_tons, kw_per_ton
+    end
   end
 
   # Applies the standard efficiency ratings and typical performance curves to this object.

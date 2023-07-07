@@ -39,7 +39,7 @@ class ASHRAE901PRM < Standard
   # @return [Bool] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir)
     # Set the efficiency value
-    cop, capacity_tons, kw_per_ton = chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
+    cop, capacity_tons, kw_per_ton = chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir, 'cop_capacity_kw')
     if cop.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency, will not be set.")
       successfully_set_all_properties = false
