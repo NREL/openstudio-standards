@@ -61,21 +61,11 @@ class Standard
       sch_radiant_switchover = model_add_constant_schedule_ruleset(model,
                                                                    switch_over_time,
                                                                    name = "Radiant System Switchover",
-                                                                   sch_type_limit: "fraction")
-      sch_type_limits = model.getScheduleTypeLimitsByName("Hours")
-      unless sch_type_limits.is_initialized
-        sch_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-        sch_type_limits.setName("Hours")
-        sch_type_limits.setLowerLimitValue(0.0)
-        sch_type_limits.setUpperLimitValue(72.0)
-        sch_type_limits.setNumericType("Continuous")
-      end
-      # TODO: Resolve error when trying to define set schedule type limits
-      # sch_radiant_switchover.setScheduleTypeLimits(sch_type_limits)
+                                                                   sch_type_limit: "Dimensionless")
     end
 
     # set radiant system switchover schedule
-    radiant_loop.setChangeoverDelayTimePeriodSchedule(sch_radiant_switchover)
+    radiant_loop.setChangeoverDelayTimePeriodSchedule(sch_radiant_switchover.to_Schedule.get)
 
     # cold water control actuator
     # Command to turn ON/OFF the cold water through the radiant system. 0=ON and 100=OFF
