@@ -4680,8 +4680,15 @@ class Standard
     radiant_interior_floor_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
     radiant_interior_floor_slab_construction.setName('Radiant Interior Floor Slab Construction')
     radiant_interior_floor_slab_construction.setSourcePresentAfterLayerNumber(1)
-    radiant_interior_floor_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(2)
+    radiant_interior_floor_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(1)
     radiant_interior_floor_slab_construction.setTubeSpacing(0.2286) # 9 inches
+
+    # create reversed interior floor construction
+    rev_radiant_interior_floor_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers.reverse())
+    rev_radiant_interior_floor_slab_construction.setName('Radiant Interior Floor Slab Construction - Reversed')
+    rev_radiant_interior_floor_slab_construction.setSourcePresentAfterLayerNumber(layers.length - 1)
+    rev_radiant_interior_floor_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(layers.length - 1)
+    rev_radiant_interior_floor_slab_construction.setTubeSpacing(0.2286) # 9 inches
 
     layers = []
     layers << mat_thin_carpet_tile if include_carpet
@@ -4691,8 +4698,15 @@ class Standard
     radiant_interior_ceiling_slab_construction.setName('Radiant Interior Ceiling Slab Construction')
     slab_src_loc = include_carpet ? 2 : 1
     radiant_interior_ceiling_slab_construction.setSourcePresentAfterLayerNumber(slab_src_loc)
-    radiant_interior_ceiling_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(slab_src_loc + 1)
+    radiant_interior_ceiling_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(slab_src_loc)
     radiant_interior_ceiling_slab_construction.setTubeSpacing(0.2286) # 9 inches
+
+    # create reversed interior ceiling construction
+    rev_radiant_interior_ceiling_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers.reverse())
+    rev_radiant_interior_ceiling_slab_construction.setName('Radiant Interior Ceiling Slab Construction - Reversed')
+    rev_radiant_interior_ceiling_slab_construction.setSourcePresentAfterLayerNumber(layers.length - slab_src_loc)
+    rev_radiant_interior_ceiling_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(layers.length - slab_src_loc)
+    rev_radiant_interior_ceiling_slab_construction.setTubeSpacing(0.2286) # 9 inches
 
     layers = []
     layers << mat_refl_roof_membrane
@@ -4822,6 +4836,10 @@ class Standard
                 surface.setConstruction(radiant_exterior_slab_construction)
               else # interior floor
                 surface.setConstruction(radiant_interior_floor_slab_construction)
+
+                # also assign construciton to adjacent surface
+                adjacent_surface = surface.adjacentSurface.get
+                adjacent_surface.setConstruction(rev_radiant_interior_floor_slab_construction)
               end
             end
           elsif radiant_type == 'ceiling'
@@ -4830,6 +4848,10 @@ class Standard
                 surface.setConstruction(radiant_ceiling_slab_construction)
               else # interior ceiling
                 surface.setConstruction(radiant_interior_ceiling_slab_construction)
+
+                # also assign construciton to adjacent surface
+                adjacent_surface = surface.adjacentSurface.get
+                adjacent_surface.setConstruction(rev_radiant_interior_ceiling_slab_construction)
               end
             end
           end
