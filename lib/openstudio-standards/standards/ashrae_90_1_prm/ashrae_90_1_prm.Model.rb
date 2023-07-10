@@ -1979,32 +1979,50 @@ class ASHRAE901PRM < Standard
 
   # Check whether the baseline model generation needs to run all four orientations
   # The default shall be true
+  # The orientation takes priority of:
+  # 1. Appx G
+  # 2. Method user input.
+  # 3. User data override.
   #
   # @param [Boolean] run_all_orients: user inputs to indicate whether it is required to run all orientations
   # @param [OpenStudio::Model::Model] OpenStudio model
   def run_all_orientations(run_all_orients, user_model)
-    # Step 0, assign the default value
-    run_orients_flag = run_all_orients
-    # Step 1 check orientation variations - priority 2
+    run_orients_flag = false
+    # Step 1 check orientation variations - priority 3
     fenestration_area_hash = get_model_fenestration_area_by_orientation(user_model)
     fenestration_area_hash.each do |orientation, fenestration_area|
+      OpenStudio.logFree(OpenStudio::Error, 'prm.log',
+                         "#{orientation} orientation has total fenestration area of #{fenestration_area} m2")
       fenestration_area_hash.each do |other_orientation, other_fenestration_area|
         next unless orientation != other_orientation
 
         variance = (other_fenestration_area - fenestration_area) / fenestration_area
         if variance.abs > 0.05
           # if greater then 0.05
+          OpenStudio.logFree(OpenStudio::Error,
+                             'prm.log',
+                             "#{orientation} has total fenestration area of #{fenestration_area} m2, which is higher than 5% variance compare to #{other_fenestration_area} at #{other_orientation}")
           run_orients_flag = true
         end
       end
     end
-    # Step 2 read user data - priority 1 - user data will override the priority 2
+    # Step 2, assign method user input if it is provided as false.
+    unless run_all_orients
+      OpenStudio.logFree(OpenStudio::Error,
+                         'prm.log',
+                         "The run_all_orientation flag is set to False, update the run to a single orientation PRM generation.")
+      run_orients_flag = run_all_orients
+    end
+    # Step 3 read user data - priority 1 - user data will override the priority 2
     user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
     if user_buildings
       building_name = user_model.building.get.name.get
       user_building_index = user_buildings.index { |user_building| building_name.include? user_building['name'] }
       unless user_building_index.nil? || user_buildings[user_building_index]['is_exempt_from_rotations'].nil?
         # user data exempt the rotation, No indicates true for running orients.
+        OpenStudio.logFree(OpenStudio::Error,
+                           'prm.log',
+                           "User data in the userdata_building.csv indicate building #{building_name} is exempted from rotation. Update the run to a single orientation PRM generation.")
         run_orients_flag = user_buildings[user_building_index]['is_exempt_from_rotations'].casecmp('No') == 0
       end
     end
@@ -2024,7 +2042,7 @@ class ASHRAE901PRM < Standard
       next if space_cond_type == 'Unconditioned'
 
       # Get zone multiplier
-      multiplier = space.thermalZone.get.multiplier
+      multiplier = prm_get_optional_handler(space, @sizing_run_dir, 'thermalZone').multiplier
       space.surfaces.each do |surface|
         next if surface.surfaceType != 'Wall'
         next if surface.outsideBoundaryCondition != 'Outdoors'
