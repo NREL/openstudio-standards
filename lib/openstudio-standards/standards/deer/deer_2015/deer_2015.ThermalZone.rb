@@ -9,7 +9,7 @@ class DEER2015 < DEER
     # and the minimum occupancy density in m^2/person.  Returns nil
     # if there is no requirement.
     def thermal_zone_demand_control_ventilation_limits(thermal_zone)
-      min_area_ft2 = nil # No minimum area
+      min_area_ft2 = 150
       min_ft2_per_occ = 40
       
       # Convert to SI
