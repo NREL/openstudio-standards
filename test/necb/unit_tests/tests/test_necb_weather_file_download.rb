@@ -5,7 +5,7 @@ require 'json'
 
 #This test will check that the ERVs are added and the assignment from the erv.json library works.
 
-class Download_Weather_Files_Test < Minitest::Test
+class NECB_Download_Weather_Files_Test < Minitest::Test
 
   def test_weather_file_download()
 
