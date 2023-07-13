@@ -2233,43 +2233,65 @@ class NECB2011 < Standard
   #                      url of the historical weather data folder or the future weather data folder.
   def download_and_save_file(weather_list_url:, weather_loc:, git_folder:)
     status = false
-    # Download the list of weather files on the repository
-    URI.open(weather_list_url) do |web_data|
-      # Convert the weather file list to an array
-      weather_files = (JSON.parse(web_data.read)).to_a
-      # Check to see if the requested weather file is on the list
-      zip_name = weather_files.find{ |weather_file| weather_file.match(weather_loc) }
-      # If the weather file is on the list proceed, otherwise report that it could not be found
-      unless zip_name.nil?
-        # Found the weather file on the list
-        status = true
-        # Define the full url of the weather zip file we want to download
-        save_file_url = git_folder + zip_name
-        # Define teh local location of where the weather zip file will be saved
-        weather_dir = File.join(Dir.pwd, "data/weather")
-        save_file = File.join(weather_dir, zip_name)
-        # Download the weather zip file from teh repository
-        URI.open(save_file_url) do |file_url|
-          # Save the zip file in the /data/weather folder
-          File.open(save_file, 'wb') { |f| f.write(file_url.read) }
-          puts "Downloaded #{save_file_url} to #{save_file}"
-          # Extract the individual weother files from the zip file
-          Zip::File.open(save_file) do |zip_file|
-            puts "Expanding #{save_file}"
-            # Cycle through each file in the zip file
-            zip_file.each do |entry|
-              # Define the location of where the file will be saved locally
-              curr_save_file = File.join(weather_dir, entry.name.to_s)
-              puts "Extracting #{entry.name} to #{curr_save_file}"
-              # entry.extract # This was required before but now it isn't.  I'm confused so am saving this comment to
-              # remind me if there are ploblems later
-              # Read the data from the file
-              content = entry.get_input_stream.read
-              # Save the data locally
-              File.open(curr_save_file, 'wb') { |save_f| save_f.write(content) }
+    attempt = 1
+    # Try to download the list of weather files 5 times, waiting 5 seconds between each attempt.
+    until attempt > 5
+      begin
+        puts "Beginning attempt #{attempt} to download #{weather_list_url}"
+        # Download the list of weather files on the repository
+        URI.open(weather_list_url) do |web_data|
+          # Convert the weather file list to an array
+          weather_files = (JSON.parse(web_data.read)).to_a
+          # Check to see if the requested weather file is on the list
+          zip_name = weather_files.find{ |weather_file| weather_file.match(weather_loc) }
+          # If the weather file is on the list proceed, otherwise report that it could not be found
+          unless zip_name.nil?
+            # Found the weather file on the list
+            status = true
+            # Define the full url of the weather zip file we want to download
+            save_file_url = git_folder + zip_name
+            # Define teh local location of where the weather zip file will be saved
+            weather_dir = File.join(Dir.pwd, "data/weather")
+            save_file = File.join(weather_dir, zip_name)
+            attemptb = 1
+            # Try to download the weather file up to 5 times, waiting 5 seconds between each attempt.
+            until attemptb > 5
+              begin
+                puts "Beginning attempt #{attemptb} to download #{save_file_url}"
+                # Download the weather zip file from the repository
+                URI.open(save_file_url) do |file_url|
+                  # Save the zip file in the /data/weather folder
+                  File.open(save_file, 'wb') { |f| f.write(file_url.read) }
+                  puts "Downloaded #{save_file_url} to #{save_file}"
+                  # Extract the individual weother files from the zip file
+                  Zip::File.open(save_file) do |zip_file|
+                    puts "Expanding #{save_file}"
+                    # Cycle through each file in the zip file
+                    zip_file.each do |entry|
+                      # Define the location of where the file will be saved locally
+                      curr_save_file = File.join(weather_dir, entry.name.to_s)
+                      puts "Extracting #{entry.name} to #{curr_save_file}"
+                      # entry.extract # This was required before but now it isn't.  I'm confused so am saving this comment to
+                      # remind me if there are ploblems later
+                      # Read the data from the file
+                      content = entry.get_input_stream.read
+                      # Save the data locally
+                      File.open(curr_save_file, 'wb') { |save_f| save_f.write(content) }
+                    end
+                  end
+                end
+                attemptb = 10
+              rescue
+                sleep(5)
+                attemptb += 1
+              end
             end
           end
         end
+        attempt = 10
+      rescue
+        sleep(5)
+        attempt += 1
       end
     end
     return status
